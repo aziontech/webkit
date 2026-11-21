@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
   import OtpInput from '@aziontech/webkit/otp-input'
   import PageHeader from '@aziontech/webkit/page-header'
   import { computed, nextTick, onMounted, ref } from 'vue'
+
+  import SignInFrame from '../parts/sign-in-frame.vue'
 
   const account = 'jane.doe@example.com'
 
@@ -77,139 +77,100 @@
       signedIn.value = true
     }, 600)
   }
-
-  const FORM_COLUMN_CLASS =
-    'm-auto flex w-full flex-col items-center gap-(--spacing-md) transition-[translate,opacity] duration-slow-01 ease-expressive-entrance ' +
-    'starting:-translate-x-6 starting:opacity-0 rtl:starting:translate-x-6 motion-reduce:transition-none'
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <AppHeader
-      aria-label="Console"
-      class="shrink-0"
-    >
-      <AppHeader.Brand
-        href="/home"
-        aria-label="Azion home"
+  <SignInFrame>
+    <div class="flex w-full flex-col items-center">
+      <Card
+        class="w-full max-w-(--container-sm)"
+        :padded="false"
       >
-        <Brand
-          variant="default"
-          size="small"
-        />
-      </AppHeader.Brand>
-      <AppHeader.Center />
-      <AppHeader.End>
-        <Button
-          label="Documentation"
-          variant="outline"
-          size="medium"
-          icon="az az-book"
-          href="/docs"
-        />
-      </AppHeader.End>
-    </AppHeader>
+        <template #default>
+          <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)">
+            <PageHeader
+              title="Verify it's you"
+              :description="
+                recovery
+                  ? 'Enter a recovery code to sign in without your authenticator app.'
+                  : 'Open your authenticator app and enter the code it shows.'
+              "
+            />
 
-    <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
-      <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">
-        <div class="flex flex-1 flex-col py-(--spacing-xl) lg:min-h-0 lg:overflow-y-auto">
-          <div :class="FORM_COLUMN_CLASS">
-            <div class="flex w-full flex-col items-center">
-              <Card
-                class="w-full max-w-(--container-sm)"
-                :padded="false"
+            <Alert
+              key="alert-1"
+              v-if="signedIn"
+              severity="success"
+              size="small"
+              label="Signed in."
+            />
+            <Alert
+              key="alert-2"
+              v-else-if="unreachable"
+              severity="warning"
+              size="small"
+            >
+              We could not check the code. Your entry is kept; try again in a moment.
+              <template #actions>
+                <Button
+                  label="Retry"
+                  variant="secondary"
+                  size="small"
+                  :loading="verifying"
+                  @click="verify"
+                />
+              </template>
+            </Alert>
+
+            <form
+              class="flex flex-col gap-(--spacing-lg)"
+              novalidate
+              @submit.prevent="verify"
+            >
+              <Field :invalid="!!codeError">
+                <Field.Label for="mfa-code">{{ codeField.label }}</Field.Label>
+                <OtpInput
+                  id="mfa-code"
+                  :key="recovery ? 'recovery' : 'app'"
+                  v-model="code"
+                  name="code"
+                  :length="codeField.length"
+                  :mode="recovery ? 'alphanumeric' : 'numeric'"
+                  :group="recovery ? 4 : 0"
+                  :disabled="verifying || signedIn"
+                  @update:model-value="codeError = ''"
+                  @complete="verify"
+                />
+                <Field.Description>{{ codeError || codeField.description }}</Field.Description>
+              </Field>
+
+              <Button
+                type="submit"
+                label="Verify"
+                variant="primary"
+                size="large"
+                class="w-full"
+                :loading="verifying"
+                :disabled="signedIn"
+              />
+            </form>
+
+            <div class="flex flex-col items-start gap-(--spacing-xs)">
+              <Button
+                type="button"
+                :label="recovery ? 'Use your authenticator app' : 'Use a recovery code'"
+                variant="link"
+                @click="switchMethod"
+              />
+              <a
+                class="text-link text-body-sm"
+                href="/login"
+                >Sign in with another account</a
               >
-                <template #default>
-                  <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)">
-                    <PageHeader
-                      title="Verify it's you"
-                      :description="
-                        recovery
-                          ? 'Enter a recovery code to sign in without your authenticator app.'
-                          : 'Open your authenticator app and enter the code it shows.'
-                      "
-                    />
-
-                    <Alert
-                      key="alert-1"
-                      v-if="signedIn"
-                      severity="success"
-                      size="small"
-                      label="Signed in."
-                    />
-                    <Alert
-                      key="alert-2"
-                      v-else-if="unreachable"
-                      severity="warning"
-                      size="small"
-                    >
-                      We could not check the code. Your entry is kept; try again in a moment.
-                      <template #actions>
-                        <Button
-                          label="Retry"
-                          variant="secondary"
-                          size="small"
-                          :loading="verifying"
-                          @click="verify"
-                        />
-                      </template>
-                    </Alert>
-
-                    <form
-                      class="flex flex-col gap-(--spacing-lg)"
-                      novalidate
-                      @submit.prevent="verify"
-                    >
-                      <Field :invalid="!!codeError">
-                        <Field.Label for="mfa-code">{{ codeField.label }}</Field.Label>
-                        <OtpInput
-                          id="mfa-code"
-                          :key="recovery ? 'recovery' : 'app'"
-                          v-model="code"
-                          name="code"
-                          :length="codeField.length"
-                          :mode="recovery ? 'alphanumeric' : 'numeric'"
-                          :group="recovery ? 4 : 0"
-                          :disabled="verifying || signedIn"
-                          @update:model-value="codeError = ''"
-                          @complete="verify"
-                        />
-                        <Field.Description>{{
-                          codeError || codeField.description
-                        }}</Field.Description>
-                      </Field>
-
-                      <Button
-                        type="submit"
-                        label="Verify"
-                        variant="primary"
-                        size="large"
-                        class="w-full"
-                        :loading="verifying"
-                        :disabled="signedIn"
-                      />
-                    </form>
-
-                    <div class="flex flex-col items-start gap-(--spacing-xs)">
-                      <Button
-                        type="button"
-                        :label="recovery ? 'Use your authenticator app' : 'Use a recovery code'"
-                        variant="link"
-                        @click="switchMethod"
-                      />
-                      <a
-                        class="text-link text-body-sm"
-                        href="/login"
-                        >Sign in with another account</a
-                      >
-                    </div>
-                  </div>
-                </template>
-              </Card>
             </div>
           </div>
-        </div>
-      </div>
-    </main>
-  </div>
+        </template>
+      </Card>
+    </div>
+  </SignInFrame>
 </template>

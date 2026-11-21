@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/vue'
+import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { h } from 'vue'
@@ -200,7 +200,7 @@ describe('ClientStoryColumnsSection', () => {
     it('opens the card under the pointer', async () => {
       const { getAllByRole } = render(RevealHover)
       const items = getAllByRole('listitem')
-      await fireEvent.mouseEnter(items[2])
+      await fireEvent.mouseEnter(within(items[2]).getByRole('link'))
       expect(items[2]).toHaveAttribute('data-state', 'open')
     })
 

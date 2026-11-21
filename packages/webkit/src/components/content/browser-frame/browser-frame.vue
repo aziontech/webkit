@@ -3,6 +3,7 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import CopyButton from '../../action/copy-button/copy-button.vue'
@@ -60,6 +61,8 @@
   const { t } = useTranslate({ browserFrame: en.browserFrame })
   const sizerEl = ref<globalThis.HTMLElement | null>(null)
   const iframeEl = ref<globalThis.HTMLIFrameElement | null>(null)
+  const widthHandleEl = ref<globalThis.HTMLElement | null>(null)
+  const heightHandleEl = ref<globalThis.HTMLElement | null>(null)
   const { width: containerWidth } = useElementSize(sizerEl)
   const { bodyEl: frameBodyEl } = useFrameDocument(iframeEl)
   const viewportId = useId()
@@ -147,6 +150,9 @@
     event.preventDefault()
     height.value = clamp(next, props.minHeight, props.maxHeight)
   }
+
+  useElementListener(widthHandleEl, 'keydown', onWidthKeydown)
+  useElementListener(heightHandleEl, 'keydown', onHeightKeydown)
 
   const startResize = (event: globalThis.PointerEvent, axis: ResizeAxis) => {
     if (event.button !== 0) return
@@ -305,9 +311,9 @@
         :aria-valuetext="t('browserFrame.widthValue', { value: String(widthValueNow) })"
         :aria-controls="viewportId"
         :aria-label="widthHandleAriaLabel || t('browserFrame.resizeWidth')"
+        ref="widthHandleEl"
         :data-testid="`${testId}__width-handle`"
         :class="WIDTH_HANDLE_CLASS"
-        @keydown="onWidthKeydown"
         @focus="focused = true"
         @blur="focused = false"
         @pointerdown="startResize($event, 'width')"
@@ -328,9 +334,9 @@
         :aria-valuetext="t('browserFrame.heightValue', { value: String(heightValueNow) })"
         :aria-controls="viewportId"
         :aria-label="heightHandleAriaLabel || t('browserFrame.resizeHeight')"
+        ref="heightHandleEl"
         :data-testid="`${testId}__height-handle`"
         :class="HEIGHT_HANDLE_CLASS"
-        @keydown="onHeightKeydown"
         @focus="focused = true"
         @blur="focused = false"
         @pointerdown="startResize($event, 'height')"

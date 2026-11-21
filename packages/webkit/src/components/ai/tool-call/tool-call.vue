@@ -5,6 +5,7 @@
   import * as en from '../../../locales/en'
   import type { StatusIndicatorSeverity } from '../../feedback/status-indicator/status-indicator.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
+  import ToolCallHeading from './parts/tool-call-heading.vue'
 
   export type ToolCallStatus =
     'pending' | 'streaming' | 'running' | 'success' | 'error' | 'canceled' | 'denied'
@@ -89,21 +90,10 @@
           class="az az-wrench shrink-0 text-(--text-muted)"
           aria-hidden="true"
         />
-        <span
-          class="flex min-w-0 flex-1 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs)"
-        >
-          <span
-            v-if="title"
-            class="line-clamp-2 min-w-0 text-label-sm break-words text-(--text-default)"
-          >
-            {{ title }}
-          </span>
-          <code
-            dir="ltr"
-            class="max-w-full truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code-sm text-(--text-muted)"
-            >{{ name }}</code
-          >
-        </span>
+        <ToolCallHeading
+          :title="title"
+          :name="name"
+        />
         <i
           :data-state="isOpen ? 'open' : 'closed'"
           class="az az-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
@@ -118,21 +108,10 @@
           class="az az-wrench shrink-0 text-(--text-muted)"
           aria-hidden="true"
         />
-        <span
-          class="flex min-w-0 flex-1 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs)"
-        >
-          <span
-            v-if="title"
-            class="line-clamp-2 min-w-0 text-label-sm break-words text-(--text-default)"
-          >
-            {{ title }}
-          </span>
-          <code
-            dir="ltr"
-            class="max-w-full truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code-sm text-(--text-muted)"
-            >{{ name }}</code
-          >
-        </span>
+        <ToolCallHeading
+          :title="title"
+          :name="name"
+        />
       </div>
       <span
         role="status"

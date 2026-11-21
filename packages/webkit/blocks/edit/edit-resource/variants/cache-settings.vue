@@ -1,22 +1,19 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import NumberInput from '@aziontech/webkit/number-input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
-  import { toast } from '@aziontech/webkit/toast'
-  import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 
-  type FieldProblem = { type: 'helper' | 'invalid' | 'required'; message: string }
+  import SettingsSaveBar from '../parts/settings-save-bar.vue'
+  import { type DeployToastText, type FieldProblems, useDeployOnSave } from '../use-deploy-on-save'
+
   type LabeledOption = SelectOptionItem
 
   const browserBehaviors = [
@@ -48,122 +45,67 @@
     options.find((option) => option.value === value)?.label ?? value
   const methodsLabel = (values: unknown[] | undefined) => (values?.length ? values.join(', ') : '')
 
-  const form = reactive({
-    name: 'static-assets',
-    browserBehavior: 'override',
-    browserMaxAge: 604800,
-    edgeBehavior: 'override',
-    edgeMaxAge: 2592000,
-    staleCache: true,
-    largeFileCache: false,
-    largeFileOffset: 1024,
-    tieredCache: true,
-    tieredTopology: 'nearest-region',
-    varyByMethod: [] as string[],
-    queryStringBehavior: 'allowlist',
-    queryStringFields: 'v, lang',
-    cookieBehavior: 'ignore',
-    cookieNames: ''
-  })
-  const baseline = ref(JSON.stringify(form))
-  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
-  const saving = ref(false)
-  const errors = reactive<Record<string, FieldProblem | undefined>>({})
+  const { form, saving, dirty, errors, clear, save, discard } = useDeployOnSave(
+    {
+      name: 'static-assets',
+      browserBehavior: 'override',
+      browserMaxAge: 604800,
+      edgeBehavior: 'override',
+      edgeMaxAge: 2592000,
+      staleCache: true,
+      largeFileCache: false,
+      largeFileOffset: 1024,
+      tieredCache: true,
+      tieredTopology: 'nearest-region',
+      varyByMethod: [] as string[],
+      queryStringBehavior: 'allowlist',
+      queryStringFields: 'v, lang',
+      cookieBehavior: 'ignore',
+      cookieNames: ''
+    },
+    {
+      toastId: 'cache-settings-deploy',
+      fieldPrefix: 'cache',
+      fieldOrder: ['name', 'edgeMaxAge', 'queryStringFields', 'cookieNames'],
+      check,
+      loading: (): DeployToastText => ({
+        title: `Deploying ${form.name}…`,
+        description: 'storefront-app keeps serving the current cache rules until it finishes.'
+      }),
+      success: (): DeployToastText => ({
+        title: `${form.name} is live.`,
+        description: 'Production caches with the new rules from now on.'
+      })
+    }
+  )
 
-  const clear = (key: string) => {
-    delete errors[key]
-  }
-
-  const validate = () => {
-    Object.keys(errors).forEach((key) => delete errors[key])
+  function check(problems: FieldProblems): void {
     if (!form.name.trim()) {
-      errors.name = { type: 'required', message: 'Enter a name for this cache setting.' }
+      problems.name = { type: 'required', message: 'Enter a name for this cache setting.' }
     } else if (!/^[a-z0-9-]+$/.test(form.name.trim())) {
-      errors.name = {
+      problems.name = {
         type: 'invalid',
         message: 'Use lowercase letters, numbers and hyphens only.'
       }
     }
     if (form.edgeBehavior === 'override' && form.edgeMaxAge < 60) {
-      errors.edgeMaxAge = {
+      problems.edgeMaxAge = {
         type: 'invalid',
         message: 'The edge keeps an object for at least 60 seconds.'
       }
     }
     if (['allowlist', 'denylist'].includes(form.queryStringBehavior)) {
       if (!form.queryStringFields.trim()) {
-        errors.queryStringFields = {
+        problems.queryStringFields = {
           type: 'required',
           message: 'List at least one query string field.'
         }
       }
     }
     if (['allowlist', 'denylist'].includes(form.cookieBehavior) && !form.cookieNames.trim()) {
-      errors.cookieNames = { type: 'required', message: 'List at least one cookie name.' }
+      problems.cookieNames = { type: 'required', message: 'List at least one cookie name.' }
     }
-    return Object.keys(errors).length === 0
   }
-
-  const ERROR_ORDER = ['name', 'edgeMaxAge', 'queryStringFields', 'cookieNames']
-  const focusFirstError = () =>
-    nextTick(() => {
-      const first = ERROR_ORDER.find((key) => errors[key])
-      if (first) document.getElementById(`cache-${first}`)?.focus()
-    })
-
-  const RUN_TOAST = 'cache-settings-deploy'
-  let timer: ReturnType<typeof setTimeout> | undefined
-
-  const editAgain = () => {
-    toast.dismiss(RUN_TOAST)
-    nextTick(() => document.getElementById('cache-name')?.focus())
-  }
-
-  const deploy = () => {
-    toast.loading(`Deploying ${form.name}…`, {
-      id: RUN_TOAST,
-      description: 'storefront-app keeps serving the current cache rules until it finishes.'
-    })
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      saving.value = false
-      baseline.value = JSON.stringify(form)
-      toast.success(`${form.name} is live.`, {
-        id: RUN_TOAST,
-        description: 'Production caches with the new rules from now on.',
-        duration: 0,
-        closable: true,
-        actions: [
-          { label: 'Edit', onClick: editAgain },
-          { label: 'Redeploy', onClick: deploy }
-        ]
-      })
-    }, 1200)
-  }
-
-  const save = () => {
-    if (!validate()) {
-      focusFirstError()
-      return
-    }
-    saving.value = true
-    deploy()
-  }
-
-  const onSaveShortcut = () => {
-    if (!dirty.value || saving.value) return
-    save()
-  }
-
-  const discard = () => {
-    Object.assign(form, JSON.parse(baseline.value) as typeof form)
-    Object.keys(errors).forEach((key) => delete errors[key])
-  }
-
-  onBeforeUnmount(() => {
-    clearTimeout(timer)
-    toast.dismiss(RUN_TOAST)
-  })
 </script>
 
 <template>
@@ -582,46 +524,15 @@
         </fieldset>
       </div>
 
-      <Transition
-        enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-        enter-from-class="translate-y-2 opacity-0"
-        leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-        leave-to-class="translate-y-2 opacity-0"
+      <SettingsSaveBar
+        :visible="dirty || saving"
+        :saving="saving"
+        @save="save"
+        @discard="discard"
       >
-        <SaveBar
-          v-if="dirty || saving"
-          @save="onSaveShortcut"
-        >
-          Cache settings changed.
-          <span class="text-(--text-muted)">Saving deploys storefront-app to Production.</span>
-
-          <template #actions>
-            <Button
-              type="button"
-              label="Discard"
-              variant="outline"
-              size="medium"
-              :disabled="saving"
-              @click="discard"
-            />
-            <Button
-              variant="primary"
-              size="medium"
-              :loading="saving"
-              @click="save"
-              aria-keyshortcuts="Meta+S Control+S"
-            >
-              Save
-              <Kbd
-                meta
-                size="small"
-                aria-hidden="true"
-                >S</Kbd
-              >
-            </Button>
-          </template>
-        </SaveBar>
-      </Transition>
+        Cache settings changed.
+        <span class="text-(--text-muted)">Saving deploys storefront-app to Production.</span>
+      </SettingsSaveBar>
     </form>
   </div>
 </template>

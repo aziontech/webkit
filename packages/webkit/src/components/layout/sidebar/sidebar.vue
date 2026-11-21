@@ -11,6 +11,7 @@
   } from 'vue'
 
   import { logicalArrowKey } from '../../../composables/use-direction'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
@@ -168,6 +169,19 @@
     else return
     event.preventDefault()
   }
+
+  const handleEl = ref<globalThis.HTMLElement | null>(null)
+
+  const expandHandleEl = ref<globalThis.HTMLElement | null>(null)
+
+  useElementListener(handleEl, 'keydown', (event: globalThis.KeyboardEvent) => onHandleKey(event))
+  useElementListener(handleEl, 'dblclick', () => {
+    collapsed.value = true
+  })
+  useElementListener(expandHandleEl, 'keydown', (event: globalThis.KeyboardEvent) =>
+    onHandleKey(event, true)
+  )
+  useElementListener(expandHandleEl, 'click', tapToExpand)
 
   defineExpose({ measure })
 
@@ -328,7 +342,6 @@
     :data-hydrated="hydrated ? '' : undefined"
     :data-settled="settled ? '' : undefined"
     :inert="isOut ? true : undefined"
-    :aria-hidden="isOut ? 'true' : undefined"
   >
     <div
       :class="innerClass"
@@ -414,11 +427,10 @@
       :aria-valuemax="valueMax"
       :data-resizing="resizing ? '' : undefined"
       :data-preview="previewing ? '' : undefined"
+      ref="handleEl"
       :data-testid="`${testId}__handle`"
       class="group absolute inset-y-0 end-0 z-10 w-(--spacing-xs) cursor-col-resize touch-none outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
       @pointerdown="startResize"
-      @keydown="onHandleKey($event)"
-      @dblclick="collapsed = true"
     >
       <span :class="RESIZE_INDICATOR_CLASS" />
     </div>
@@ -445,6 +457,7 @@
         v-if="resizable"
         role="separator"
         aria-orientation="vertical"
+        ref="expandHandleEl"
         :aria-label="t('sidebar.expandByDragging', { label: labels.expand })"
         tabindex="0"
         :aria-valuenow="valueNow"
@@ -452,8 +465,6 @@
         :aria-valuemax="valueMax"
         class="absolute inset-y-0 start-0 w-full cursor-col-resize touch-none outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
         @pointerdown="startResize"
-        @click="tapToExpand"
-        @keydown="onHandleKey($event, true)"
       />
 
       <div :class="EXPAND_HINT_CLASS">

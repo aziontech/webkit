@@ -1,25 +1,17 @@
 <script setup lang="ts">
-  import { useElementSize, useMounted, usePreferredReducedMotion } from '@vueuse/core'
-  import {
-    computed,
-    inject,
-    onMounted,
-    onScopeDispose,
-    ref,
-    shallowRef,
-    useAttrs,
-    useId,
-    watch
-  } from 'vue'
+  import { useElementSize, useMounted } from '@vueuse/core'
+  import { computed, onMounted, ref, shallowRef, useAttrs, useId, watch } from 'vue'
 
+  import { useChartEntrance } from '../../../composables/use-chart-entrance'
+  import { useChartLabelling } from '../../../composables/use-chart-labelling'
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { NETWORK_MAP_LAND, NETWORK_MAP_REGIONS } from '../../content/network-map/network-map-data'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { ChartCardInjectionKey } from '../chart-card/injection-key'
   import { type ChartColor, colorToken, formatCompact, isFiniteNumber, maxOf, minOf } from '../lib'
 
   defineOptions({ name: 'MapChart', inheritAttrs: false })
@@ -115,16 +107,12 @@
 
   const attrs = useAttrs()
   const { t, locale } = useTranslate({ mapChart: en.mapChart })
-  const card = inject(ChartCardInjectionKey, null)
   const direction = useDirection()
   const mounted = useMounted()
-  const reducedMotion = usePreferredReducedMotion()
   const uid = useId()
   const stageEl = ref<globalThis.HTMLElement | null>(null)
   const { width: stageWidth, height: stageHeight } = useElementSize(stageEl)
   const geometry = shallowRef<Readonly<Record<string, string>> | null>(null)
-  const entered = ref(false)
-  let frame = 0
 
   const X0 = 741
   const KX = 4.83
@@ -317,12 +305,9 @@
     }
   })
 
-  const accessibleName = computed(() => props.ariaLabel || undefined)
-  const labelledBy = computed(() =>
-    !props.ariaLabel && card?.hasTitle.value ? card.titleId : undefined
-  )
-  const describedBy = computed(() =>
-    card?.hasDescription.value ? `${card.descriptionId} ${summaryId}` : summaryId
+  const { accessibleName, labelledBy, describedBy } = useChartLabelling(
+    () => props.ariaLabel,
+    summaryId
   )
 
   async function loadGeometry() {
@@ -342,39 +327,7 @@
     }
   )
 
-  function cancelEnter() {
-    if (frame) globalThis.cancelAnimationFrame(frame)
-    frame = 0
-  }
-
-  function scheduleEnter() {
-    cancelEnter()
-    entered.value = false
-    if (reducedMotion.value === 'reduce') {
-      entered.value = true
-      return
-    }
-    frame = globalThis.requestAnimationFrame(() => {
-      frame = globalThis.requestAnimationFrame(() => {
-        frame = 0
-        entered.value = true
-      })
-    })
-  }
-
-  watch(
-    [showMap, mounted],
-    ([show, ready]) => {
-      if (show && ready) scheduleEnter()
-      else if (!show) {
-        cancelEnter()
-        entered.value = false
-      }
-    },
-    { immediate: true }
-  )
-
-  onScopeDispose(cancelEnter)
+  const { entered } = useChartEntrance({ show: showMap, ready: mounted })
 
   function setActive(id: string | null) {
     if (activeKey.value !== id) activeKey.value = id
@@ -411,6 +364,9 @@
     setActive(id)
     activate(event, item)
   }
+
+  useElementListener(stageEl, 'keydown', onKeydown)
+  useElementListener(stageEl, 'click', onClick)
 
   const dimmed = (id: string) => activeKey.value !== null && activeKey.value !== id
 
@@ -552,8 +508,6 @@
         :data-testid="`${testId}__plot`"
         :style="{ aspectRatio: `${box.width} / ${box.height}` }"
         class="relative w-full min-w-0 rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-        @keydown="onKeydown"
-        @click="onClick"
       >
         <svg
           :viewBox="viewBox"

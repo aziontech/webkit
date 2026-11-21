@@ -2,6 +2,7 @@
   import { computed, onBeforeUnmount, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
   import { usePortalLocale } from '../../../composables/use-translate'
@@ -201,6 +202,14 @@
     { immediate: true }
   )
 
+  useElementListener(triggerEl, 'mouseenter', () => scheduleOpen())
+  useElementListener(triggerEl, 'mouseleave', () => scheduleClose())
+  useElementListener(triggerEl, 'pointerdown', onPointerdown)
+  useElementListener(triggerEl, 'pointerup', onPointerup)
+  useElementListener(triggerEl, 'pointercancel', onPointerup)
+  useElementListener(triggerEl, 'focusin', () => setOpen(true))
+  useElementListener(triggerEl, 'focusout', onFocusout)
+
   onBeforeUnmount(() => {
     clearHoverTimer()
     clearCloseTimer()
@@ -227,13 +236,6 @@
     :data-disabled="disabled || null"
     :data-side="resolvedSide"
     :data-align="resolvedAlign"
-    @mouseenter="scheduleOpen"
-    @mouseleave="scheduleClose()"
-    @pointerdown="onPointerdown"
-    @pointerup="onPointerup"
-    @pointercancel="onPointerup"
-    @focusin="setOpen(true)"
-    @focusout="onFocusout"
   >
     <slot />
   </span>
@@ -258,6 +260,8 @@
         :aria-hidden="!isOpen"
         @mouseenter="clearCloseTimer"
         @mouseleave="scheduleClose()"
+        @focusin="clearCloseTimer"
+        @focusout="scheduleClose()"
         :style="panelStyle"
         :class="PANEL_CLASS"
       >

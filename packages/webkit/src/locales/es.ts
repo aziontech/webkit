@@ -1128,7 +1128,6 @@ export const es: Messages = {
     label: 'Exportar CSV'
   },
   tableHeadCell: {
-    resize: 'Redimensionar columna',
     sortBy: 'Ordenar por'
   },
   tableRefreshButton: {

@@ -30,7 +30,10 @@ import { hostable } from './hostable'
 const Select = hostable(SelectRoot)
 
 const modules = {
-  ...import.meta.glob<{ default: Component }>('../../blocks/**/*.vue'),
+  ...import.meta.glob<{ default: Component }>([
+    '../../blocks/**/*.vue',
+    '!../../blocks/**/parts/**'
+  ]),
   ...import.meta.glob<{ default: Component }>('../../examples/**/*.vue')
 }
 

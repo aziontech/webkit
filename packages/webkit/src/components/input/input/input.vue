@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, useSlots } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
-  import { useFieldControl } from '../../../composables/use-field-control'
+  import { useElementListener } from '../../../composables/use-element-listener'
+  import { useFieldAttrs } from '../../../composables/use-field-attrs'
   import { passwordManagerHints } from '../../../utils/autofill'
 
   export type InputSize = 'small' | 'medium' | 'large'
@@ -67,43 +68,22 @@
   }>()
 
   const attrs = useAttrs()
-  const slots = useSlots()
 
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
   const inputEl = ref<globalThis.HTMLInputElement | null>(null)
 
   const {
     controlId,
     describedBy,
+    passthroughAttrs,
     invalid: isInvalid,
     disabled: isDisabled,
     required: isRequired
-  } = useFieldControl({
-    id: () => attrs['id'] as string | undefined,
-    describedBy: () => attrs['aria-describedby'] as string | undefined,
-    invalid: () => props.invalid,
-    disabled: () => props.disabled,
-    required: () => props.required
-  })
+  } = useFieldAttrs(props)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input')
 
-  const passthroughAttrs = computed(() => {
-    const rest: Record<string, unknown> = { ...attrs }
-    delete rest['class']
-    delete rest['data-testid']
-    return rest
-  })
-
-  const autofillHints = computed(() =>
-    passwordManagerHints({
-      autocomplete: props.autocomplete,
-      type: props.type,
-      readonly: props.readonly
-    })
-  )
-
-  const hasLeading = () => Boolean(slots['leading'])
-  const hasTrailing = () => Boolean(slots['trailing'])
+  const autofillHints = computed(() => passwordManagerHints(props))
 
   const onInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement
@@ -116,6 +96,8 @@
     event.preventDefault()
     inputEl.value?.focus()
   }
+
+  useElementListener(rootEl, 'mousedown', onChromeMousedown)
 
   defineExpose({
     /** Moves focus to the native field. */
@@ -142,6 +124,7 @@
 
 <template>
   <span
+    ref="rootEl"
     data-slot="input"
     :data-size="size"
     :data-disabled="isDisabled || null"
@@ -149,10 +132,9 @@
     :data-invalid="isInvalid || null"
     :data-required="isRequired || null"
     :data-monospace="monospace || null"
-    :data-leading="hasLeading() || null"
-    :data-trailing="hasTrailing() || null"
+    :data-leading="!!$slots['leading'] || null"
+    :data-trailing="!!$slots['trailing'] || null"
     :class="[ROOT_CLASS, attrs.class]"
-    @mousedown="onChromeMousedown"
   >
     <span
       aria-hidden="true"
@@ -160,7 +142,7 @@
       class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
     />
     <span
-      v-if="hasLeading()"
+      v-if="$slots['leading']"
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >
@@ -190,7 +172,7 @@
     />
 
     <span
-      v-if="hasTrailing()"
+      v-if="$slots['trailing']"
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >

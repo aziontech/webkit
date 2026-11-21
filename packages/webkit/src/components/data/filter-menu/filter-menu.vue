@@ -9,6 +9,7 @@
     watch
   } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import Button from '../../action/button/button.vue'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Avatar from '../../content/avatar/avatar.vue'
@@ -279,6 +280,13 @@
     items[(index + step + items.length) % items.length]?.focus()
   }
 
+  const onPanelKeydown = (event: KeyboardEvent): void => {
+    if (event.key === 'ArrowDown') move(event, 1)
+    else if (event.key === 'ArrowUp') move(event, -1)
+  }
+
+  useElementListener(panelEl, 'keydown', onPanelKeydown)
+
   watch(levelKey, async () => {
     await nextTick()
     levelRows()[0]?.focus()
@@ -345,8 +353,6 @@
       <div
         ref="panelEl"
         class="flex flex-col"
-        @keydown.down="move($event, 1)"
-        @keydown.up="move($event, -1)"
       >
         <div
           :ref="setRegion"

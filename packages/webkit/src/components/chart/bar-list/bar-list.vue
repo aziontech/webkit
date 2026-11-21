@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { usePreferredReducedMotion } from '@vueuse/core'
-  import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
+  import { computed, onMounted, useAttrs } from 'vue'
 
+  import { useChartEntrance } from '../../../composables/use-chart-entrance'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
@@ -85,9 +85,7 @@
     props.formatValue === formatCompact
       ? formatCompact(value, locale.value)
       : props.formatValue(value)
-  const reducedMotion = usePreferredReducedMotion()
-  const entered = ref(false)
-  let frame = 0
+  const { entered, scheduleEnter } = useChartEntrance()
 
   const SKELETON_WIDTHS = ['100%', '72%', '48%', '30%', '16%']
 
@@ -129,22 +127,7 @@
     emit('item-click', event, item)
   }
 
-  onMounted(() => {
-    if (reducedMotion.value === 'reduce') {
-      entered.value = true
-      return
-    }
-    frame = globalThis.requestAnimationFrame(() => {
-      frame = globalThis.requestAnimationFrame(() => {
-        frame = 0
-        entered.value = true
-      })
-    })
-  })
-
-  onScopeDispose(() => {
-    if (frame) globalThis.cancelAnimationFrame(frame)
-  })
+  onMounted(scheduleEnter)
 
   const ROW_CLASS =
     'relative flex w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-control) pe-(--spacing-xs) ' +

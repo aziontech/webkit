@@ -1,0 +1,78 @@
+<script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+  import type { TableColumn } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+  import Subheader from '@aziontech/webkit/subheader'
+
+  /** One deployment row of the Deployments tab. */
+  export interface ApplicationDeploymentRow {
+    /** The deployment id. */
+    id: string
+    /** The version it deployed. */
+    version: string
+    /** The environment it went to. */
+    environment: string
+    /** The status label, a key of the severity map. */
+    status: string
+    /** When it ran, already formatted. */
+    createdAgo: string
+  }
+
+  export interface ApplicationDeploymentsTabProps {
+    /** The deployments of the application. */
+    deployments: ApplicationDeploymentRow[]
+    /** The status color, by status label. */
+    severity: Record<string, StatusIndicatorSeverity>
+  }
+
+  defineProps<ApplicationDeploymentsTabProps>()
+
+  const deploymentColumns: TableColumn[] = [
+    { accessorKey: 'id', header: 'Deployment', principal: true, hideable: false },
+    { accessorKey: 'version', header: 'Version' },
+    { accessorKey: 'environment', header: 'Environment' },
+    { accessorKey: 'status', header: 'Status', minWidth: 104 },
+    { accessorKey: 'createdAgo', header: 'Created', minWidth: 96 }
+  ]
+</script>
+
+<template>
+  <section
+    class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-section-gap)"
+  >
+    <Subheader
+      title="Deployments"
+      size="small"
+    />
+    <Card :padded="false">
+      <template #default>
+        <DataTable
+          :data="deployments"
+          :columns="deploymentColumns"
+          row-key="id"
+          paginated
+          :page-size="10"
+          :bordered="false"
+          aria-label="Deployments"
+        >
+          <template #cell-status="{ value }">
+            <StatusIndicator
+              :severity="severity[value]"
+              :label="value"
+            />
+          </template>
+          <template #empty>
+            <EmptyState
+              size="medium"
+              icon="az az-cloud-upload"
+              title="No deployments yet"
+              description="Deploy this application and each run lands here."
+            />
+          </template>
+        </DataTable>
+      </template>
+    </Card>
+  </section>
+</template>

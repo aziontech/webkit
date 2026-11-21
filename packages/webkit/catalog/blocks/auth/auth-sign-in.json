@@ -89,6 +89,7 @@
  "sfcFile": "blocks/auth/auth-sign-in/auth-sign-in.vue",
  "guidelinesFile": "blocks/auth/auth-sign-in/guidelines.md",
  "fileSources": {
-  "token-sign-in.vue": "blocks/auth/auth-sign-in/token-sign-in.vue"
+  "token-sign-in.vue": "blocks/auth/auth-sign-in/token-sign-in.vue",
+  "parts/sign-in-frame.vue": "blocks/auth/auth-sign-in/parts/sign-in-frame.vue"
  }
 }

@@ -1001,7 +1001,6 @@ export const tableExportButton = {
 } as const
 
 export const tableHeadCell = {
-  resize: 'Resize column',
   sortBy: 'Sort by'
 } as const
 

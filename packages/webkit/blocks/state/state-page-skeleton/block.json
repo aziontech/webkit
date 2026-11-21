@@ -21,6 +21,7 @@
     "shell skeleton"
   ],
   "skills": ["webkit-ui-states"],
+  "files": ["parts/session-fields.vue", "parts/session-header.vue", "parts/session-wire.vue"],
   "primary": {
     "name": "Overview",
     "file": "state-page-skeleton.vue"

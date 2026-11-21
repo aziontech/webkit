@@ -1,13 +1,11 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Button from '../../action/button/button.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Diagram, { type DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
+  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
 
   defineOptions({
     name: 'ArchitectureTabsSection',
@@ -76,80 +74,45 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'architecture-tabs-section'
   )
 
-  const hasTabs = computed(() => props.tabs.length > 0)
-
-  const hasHeader = computed(() => props.title.length > 0)
-
   const items = computed(() =>
     props.tabs.map((tab) => ({ title: tab.title, description: tab.description }))
   )
 </script>
 
 <template>
-  <section
+  <FeatureTabsSectionShell
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
+    :tab-count="tabs.length"
+    header-padding="small"
+    :primary-action="primaryAction"
   >
-    <Module
-      v-if="hasTabs"
-      :divided="false"
-      :padded="false"
+    <RegistrationFrame
+      flush
+      borders="top"
+      marks="none"
     >
-      <template
-        v-if="hasHeader"
-        #header
+      <MediaTabs
+        :tabs-side="tabsSide"
+        size="small"
+        :items="items"
+        :autoplay="autoplay"
+        :autoplay-interval="autoplayInterval"
+        class="[--media-tabs-media-bg:var(--bg-surface)] [--media-tabs-media-min-lg:28rem] [--media-tabs-media-min:24rem]"
       >
-        <ModuleHeader
-          align="split"
-          padding="small"
-          :eyebrow="eyebrow"
-          :title="title"
-          :description="description"
-        >
-          <template
-            v-if="primaryAction"
-            #actions
-          >
-            <Button
-              :label="primaryAction.label"
-              :href="primaryAction.href"
-              variant="secondary"
-              size="large"
-              :target="primaryAction.target"
-              :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
-              icon-position="trailing"
-              :animated="Boolean(primaryAction.trailing)"
-            />
-          </template>
-        </ModuleHeader>
-      </template>
-
-      <RegistrationFrame
-        flush
-        borders="top"
-        marks="none"
-      >
-        <MediaTabs
-          :tabs-side="tabsSide"
-          size="small"
-          :items="items"
-          :autoplay="autoplay"
-          :autoplay-interval="autoplayInterval"
-          class="[--media-tabs-media-bg:var(--bg-surface)] [--media-tabs-media-min-lg:28rem] [--media-tabs-media-min:24rem]"
-        >
-          <template #media="{ index }">
-            <Diagram
-              :key="tabs[index]?.value"
-              :name="tabs[index]?.diagram"
-              :aria-label="tabs[index]?.diagramAriaLabel ?? ''"
-              class="w-full"
-            />
-          </template>
-        </MediaTabs>
-      </RegistrationFrame>
-    </Module>
-  </section>
+        <template #media="{ index }">
+          <Diagram
+            :key="tabs[index]?.value"
+            :name="tabs[index]?.diagram"
+            :aria-label="tabs[index]?.diagramAriaLabel ?? ''"
+            class="w-full"
+          />
+        </template>
+      </MediaTabs>
+    </RegistrationFrame>
+  </FeatureTabsSectionShell>
 </template>

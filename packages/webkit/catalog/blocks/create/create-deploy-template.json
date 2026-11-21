@@ -39,6 +39,8 @@
  "sfcFile": "blocks/create/create-deploy-template/create-deploy-template.vue",
  "guidelinesFile": "blocks/create/create-deploy-template/guidelines.md",
  "fileSources": {
-  "sample.ts": "blocks/create/create-deploy-template/sample.ts"
+  "sample.ts": "blocks/create/create-deploy-template/sample.ts",
+  "parts/build-preset-field.vue": "blocks/create/create-deploy-template/parts/build-preset-field.vue",
+  "parts/deploy-heading.vue": "blocks/create/create-deploy-template/parts/deploy-heading.vue"
  }
 }

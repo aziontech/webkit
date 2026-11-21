@@ -103,7 +103,7 @@
     "name": "Login",
     "file": "auth-sign-in.vue"
   },
-  "files": ["token-sign-in.vue"],
+  "files": ["token-sign-in.vue", "parts/sign-in-frame.vue"],
   "variants": [
     {
       "name": "SignUp",

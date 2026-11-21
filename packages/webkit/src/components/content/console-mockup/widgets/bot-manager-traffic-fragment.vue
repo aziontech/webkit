@@ -3,8 +3,8 @@
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import Card from '../../card/card.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'BotManagerTrafficFragment' })
 
@@ -76,15 +76,10 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupFragment
     shell="legacy"
-    fade="bottom"
     class="[--console-mockup-fade-start:80%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
   >
     <div class="py-(--spacing-xs)">
       <ConsoleMockupShellItem :order="0">
@@ -172,5 +167,5 @@
         </Card>
       </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

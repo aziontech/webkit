@@ -38,4 +38,11 @@ export interface TransferListContext {
   setLoading: (side: TransferListSide, value: boolean) => void
 }
 
+/** What a list hands its `item` slot for one option. */
+export interface TransferListItemSlotProps {
+  item: unknown
+  index: number
+  list: TransferListSide
+}
+
 export const TransferListInjectionKey: InjectionKey<TransferListContext> = Symbol('TransferList')

@@ -8,8 +8,7 @@
   import Field from '../../input/field/field.vue'
   import FieldError from '../../input/field/field-error/field-error.vue'
   import Textarea from '../../input/textarea/textarea.vue'
-  import MarkdownInline from '../lib/markdown-inline'
-  import { parseInline } from '../lib/parse-markdown'
+  import AgentQuestionHeading from '../agent-question/parts/agent-question-heading.vue'
 
   export type ToolApprovalStatus = 'pending' | 'approved' | 'denied' | 'expired'
   export type ToolApprovalVariant = 'primary' | 'danger'
@@ -80,10 +79,8 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'tool-approval'
   )
-  const headingEl = ref<HTMLElement | null>(null)
+  const headingEl = ref<InstanceType<typeof AgentQuestionHeading> | null>(null)
   const typed = ref<string>('')
-  const titleNodes = computed(() => parseInline(props.title))
-  const descriptionNodes = computed(() => parseInline(props.description))
   const confirmed = computed<boolean>(
     () =>
       (!props.confirmationPhrase || typed.value.trim() === props.confirmationPhrase) &&
@@ -151,24 +148,15 @@
         class="az az-shield mt-0.5 shrink-0 text-(--text-muted) data-[variant=danger]:text-(--danger-foreground)"
         aria-hidden="true"
       />
-      <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-        <h3
-          :id="titleId"
-          ref="headingEl"
-          tabindex="-1"
-          :data-testid="`${testId}__title`"
-          class="m-0 text-heading-2xs [overflow-wrap:anywhere] text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-        >
-          <MarkdownInline :nodes="titleNodes" />
-        </h3>
-        <p
-          v-if="description"
-          :id="descriptionId"
-          class="m-0 text-body-sm text-(--text-muted)"
-        >
-          <MarkdownInline :nodes="descriptionNodes" />
-        </p>
-      </div>
+      <AgentQuestionHeading
+        ref="headingEl"
+        :title-id="titleId"
+        :description-id="descriptionId"
+        :title="title"
+        :description="description"
+        :test-id="testId"
+        title-class="[overflow-wrap:anywhere]"
+      />
     </div>
     <div
       v-if="slots.default"

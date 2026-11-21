@@ -516,68 +516,72 @@ Each variant is the same screen in another state: `get_block("state/state-async-
 ```ts
 import type { AsyncSubmitDeployment, AsyncSubmitStep } from './state-async-submit.vue'
 
+const tokenStep: AsyncSubmitStep = {
+  id: 'token',
+  title: 'Access token',
+  description: 'Deploy token created and added to the CLI',
+  status: 'success',
+  duration: '3s',
+  lines: [
+    {
+      id: '0',
+      time: '13:47:33',
+      type: 'success',
+      message: '[TASK] - #. Deploy started successfully!'
+    },
+    {
+      id: '1',
+      time: '13:47:33',
+      type: 'text',
+      message: '[TASK] - #. Creating access token!'
+    },
+    {
+      id: '2',
+      time: '13:47:35',
+      type: 'text',
+      message: '[TASK] - #. Adding token to the CLI!'
+    },
+    {
+      id: '3',
+      time: '13:47:36',
+      type: 'success',
+      message: '[TASK] - #. Token added successfully!'
+    }
+  ]
+}
+
+const cloneStep: AsyncSubmitStep = {
+  id: 'clone',
+  title: 'Clone template',
+  description: 'Template cloned into the GitHub scope',
+  status: 'success',
+  duration: '4s',
+  lines: [
+    {
+      id: '0',
+      time: '13:47:37',
+      type: 'text',
+      message: '[TASK] - # Current directory: vue/vue3-vite-static/'
+    },
+    { id: '1', time: '13:47:38', type: 'text', message: '[TASK] - #. Cloning template!' },
+    {
+      id: '2',
+      time: '13:47:39',
+      type: 'text',
+      message: 'Receiving objects: 100% (312/312), 1.14 MiB'
+    },
+    {
+      id: '3',
+      time: '13:47:40',
+      type: 'success',
+      message: '[TASK] - #. Template cloned successfully!'
+    }
+  ]
+}
+
 export const sampleRunningSteps: AsyncSubmitStep[] = [
-  {
-    id: 'token',
-    title: 'Access token',
-    description: 'Deploy token created and added to the CLI',
-    status: 'success',
-    duration: '3s',
-    lines: [
-      {
-        id: '0',
-        time: '13:47:33',
-        type: 'success',
-        message: '[TASK] - #. Deploy started successfully!'
-      },
-      {
-        id: '1',
-        time: '13:47:33',
-        type: 'text',
-        message: '[TASK] - #. Creating access token!'
-      },
-      {
-        id: '2',
-        time: '13:47:35',
-        type: 'text',
-        message: '[TASK] - #. Adding token to the CLI!'
-      },
-      {
-        id: '3',
-        time: '13:47:36',
-        type: 'success',
-        message: '[TASK] - #. Token added successfully!'
-      }
-    ]
-  },
-  {
-    id: 'clone',
-    title: 'Clone template',
-    description: 'Template cloned into the GitHub scope',
-    status: 'success',
-    duration: '4s',
-    lines: [
-      {
-        id: '0',
-        time: '13:47:37',
-        type: 'text',
-        message: '[TASK] - # Current directory: vue/vue3-vite-static/'
-      },
-      { id: '1', time: '13:47:38', type: 'text', message: '[TASK] - #. Cloning template!' },
-      {
-        id: '2',
-        time: '13:47:39',
-        type: 'text',
-        message: 'Receiving objects: 100% (312/312), 1.14 MiB'
-      },
-      {
-        id: '3',
-        time: '13:47:40',
-        type: 'success',
-        message: '[TASK] - #. Template cloned successfully!'
-      }
-    ]
-  },
+  tokenStep,
+  cloneStep,
   {
     id: 'install',
     title: 'Install dependencies',
@@ -637,67 +641,8 @@ export const sampleRunningSteps: AsyncSubmitStep[] = [
 ]
 
 export const sampleFailedSteps: AsyncSubmitStep[] = [
-  {
-    id: 'token',
-    title: 'Access token',
-    description: 'Deploy token created and added to the CLI',
-    status: 'success',
-    duration: '3s',
-    lines: [
-      {
-        id: '0',
-        time: '13:47:33',
-        type: 'success',
-        message: '[TASK] - #. Deploy started successfully!'
-      },
-      {
-        id: '1',
-        time: '13:47:33',
-        type: 'text',
-        message: '[TASK] - #. Creating access token!'
-      },
-      {
-        id: '2',
-        time: '13:47:35',
-        type: 'text',
-        message: '[TASK] - #. Adding token to the CLI!'
-      },
-      {
-        id: '3',
-        time: '13:47:36',
-        type: 'success',
-        message: '[TASK] - #. Token added successfully!'
-      }
-    ]
-  },
-  {
-    id: 'clone',
-    title: 'Clone template',
-    description: 'Template cloned into the GitHub scope',
-    status: 'success',
-    duration: '4s',
-    lines: [
-      {
-        id: '0',
-        time: '13:47:37',
-        type: 'text',
-        message: '[TASK] - # Current directory: vue/vue3-vite-static/'
-      },
-      { id: '1', time: '13:47:38', type: 'text', message: '[TASK] - #. Cloning template!' },
-      {
-        id: '2',
-        time: '13:47:39',
-        type: 'text',
-        message: 'Receiving objects: 100% (312/312), 1.14 MiB'
-      },
-      {
-        id: '3',
-        time: '13:47:40',
-        type: 'success',
-        message: '[TASK] - #. Template cloned successfully!'
-      }
-    ]
-  },
+  tokenStep,
+  cloneStep,
   {
     id: 'install',
     title: 'Install dependencies',

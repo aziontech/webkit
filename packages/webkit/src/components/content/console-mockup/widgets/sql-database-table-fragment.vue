@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
+  import { computed } from 'vue'
 
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../action/button/button.vue'
   import IconButton from '../../../action/icon-button/icon-button.vue'
   import Checkbox from '../../../input/checkbox/checkbox.vue'
   import Input from '../../../input/input/input.vue'
   import Select from '../../../input/select/index'
   import Card from '../../card/card.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'SqlDatabaseTableFragment' })
 
@@ -21,9 +21,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const COLUMNS = [
     { name: 'id', type: 'int8', glyph: '#', defaultValue: '', primaryKey: true },
@@ -68,44 +65,11 @@
     { ...REST, added: true, name: 'email', forward: 520, back: 220 }
   ]
 
-  const LAST = FRAMES.length - 1
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const goingBack = ref(false)
-
-  const frame = computed(() => FRAMES[step.value])
+  const { frame, goingBack } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
+  })
   const pressed = computed(() => frame.value.pressed && !goingBack.value)
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    goingBack.value = !forward
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
 
   const shown = (value: unknown) => String(value)
 
@@ -121,11 +85,8 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    fade="bottom"
+  <MockupFragment
     class="[--console-mockup-fade-start:78%]"
-    :chrome="false"
     :active="active"
     :width="520"
     :mobile-width="460"
@@ -304,5 +265,5 @@
         </Card>
       </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

@@ -1,29 +1,16 @@
 <script setup lang="ts">
-  import {
-    useElementSize,
-    useEventListener,
-    useMounted,
-    usePreferredReducedMotion
-  } from '@vueuse/core'
-  import {
-    computed,
-    inject,
-    onScopeDispose,
-    provide,
-    ref,
-    shallowReactive,
-    useAttrs,
-    useId,
-    watch
-  } from 'vue'
+  import { useElementSize, useEventListener, useMounted } from '@vueuse/core'
+  import { computed, provide, ref, shallowReactive, useAttrs, useId } from 'vue'
 
+  import { useChartEntrance } from '../../../composables/use-chart-entrance'
+  import { useChartLabelling } from '../../../composables/use-chart-labelling'
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { ChartCardInjectionKey } from '../chart-card/injection-key'
   import {
     categoryLayout,
     type ChartLabel,
@@ -153,9 +140,7 @@
     props.formatLabel === formatCategoryLabel
       ? formatCategoryLabel(label, locale.value, labelZone.value, labelSpan.value)
       : props.formatLabel(label)
-  const card = inject(ChartCardInjectionKey, null)
   const uid = useId()
-  const reducedMotion = usePreferredReducedMotion()
   const direction = useDirection()
   const rtl = computed(() => direction.value === 'rtl')
   const stageEl = ref<globalThis.HTMLElement | null>(null)
@@ -169,8 +154,6 @@
   const focusedSeries = ref<string | null>(null)
   const draft = ref<ChartRange | null>(null)
   const committed = ref(false)
-  const entered = ref(false)
-  let frame = 0
 
   const LABEL_CHAR_WIDTH = 7
   const LABEL_GUTTER = 12
@@ -327,12 +310,9 @@
   })
   const hasBrush = computed(() => brushes.size > 0)
 
-  const accessibleName = computed(() => props.ariaLabel || undefined)
-  const labelledBy = computed(() =>
-    !props.ariaLabel && card?.hasTitle.value ? card.titleId : undefined
-  )
-  const describedBy = computed(() =>
-    card?.hasDescription.value ? `${card.descriptionId} ${summaryId}` : summaryId
+  const { accessibleName, labelledBy, describedBy } = useChartLabelling(
+    () => props.ariaLabel,
+    summaryId
   )
 
   const summary = computed(() => {
@@ -400,39 +380,7 @@
   const formatCell = (value: number | null | undefined) =>
     isFiniteNumber(value) ? valueText(value) : ''
 
-  function cancelEnter() {
-    if (frame) globalThis.cancelAnimationFrame(frame)
-    frame = 0
-  }
-
-  function scheduleEnter() {
-    cancelEnter()
-    entered.value = false
-    if (reducedMotion.value === 'reduce') {
-      entered.value = true
-      return
-    }
-    frame = globalThis.requestAnimationFrame(() => {
-      frame = globalThis.requestAnimationFrame(() => {
-        frame = 0
-        entered.value = true
-      })
-    })
-  }
-
-  watch(
-    [showMarks, () => stageWidth.value > 0],
-    ([show, measured]) => {
-      if (show && measured) scheduleEnter()
-      else if (!show) {
-        cancelEnter()
-        entered.value = false
-      }
-    },
-    { immediate: true }
-  )
-
-  onScopeDispose(cancelEnter)
+  const { entered } = useChartEntrance({ show: showMarks, ready: () => stageWidth.value > 0 })
 
   function setActiveIndex(index: number | null) {
     committed.value = false
@@ -609,6 +557,9 @@
     event.preventDefault()
   }
 
+  useElementListener(stageEl, 'click', onClick)
+  useElementListener(stageEl, 'keydown', onKeydown)
+
   provide(ChartInjectionKey, {
     testId: testId.value,
     orientation: computed(() => props.orientation),
@@ -780,8 +731,6 @@
         @pointerup="onPointerup"
         @pointercancel="onPointercancel"
         @pointerleave="onPointerleave"
-        @click="onClick"
-        @keydown="onKeydown"
       />
       <slot />
     </template>

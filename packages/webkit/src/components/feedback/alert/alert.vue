@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, onUnmounted, ref, useAttrs } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import type { Severity } from '../../../utils/severity'
@@ -99,6 +100,7 @@
   )
 
   const visible = ref(true)
+  const rootEl = ref<HTMLElement | null>(null)
 
   let dismissTimer: ReturnType<typeof setTimeout> | undefined
   let dismissEvent: Event | undefined
@@ -139,6 +141,8 @@
     }
   }
 
+  useElementListener(rootEl, 'keydown', onEscape)
+
   onMounted(() => {
     if (props.life > 0) {
       dismissTimer = setTimeout(() => dismiss(), props.life)
@@ -178,6 +182,7 @@
   >
     <div
       v-if="visible"
+      ref="rootEl"
       v-bind="$attrs"
       :role="role"
       :data-testid="testId"
@@ -187,7 +192,6 @@
       :data-titled="title ? true : null"
       tabindex="-1"
       :class="ROOT_CLASS"
-      @keydown="onEscape"
     >
       <div class="flex min-w-0 flex-1 items-start gap-(--spacing-sm)">
         <span

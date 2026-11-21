@@ -1,13 +1,8 @@
 <script setup lang="ts">
-  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import FieldError from '@aziontech/webkit/field-error'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
@@ -19,10 +14,11 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
-  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, onMounted, reactive, ref } from 'vue'
+
+  import CreationHeader from '../parts/creation-header.vue'
+  import DiscardDialog from '../parts/discard-dialog.vue'
+  import { useCreateForm } from '../use-create-form'
 
   interface MarkOption {
     value: string
@@ -41,7 +37,6 @@
   const OWNER = { name: 'Jane Doe', email: 'jane.doe@example.com' }
   const EXISTING_ORGANIZATIONS = ['Acme Inc.', 'Acme Labs']
   const DEFAULT_WORKSPACE = 'Default workspace'
-  const SAVE_FAILURES = 0
 
   const MARKS: MarkOption[] = [
     {
@@ -125,33 +120,6 @@
     workspace: ''
   })
   const advancedOpen = ref(false)
-  const submitting = ref(false)
-
-  const guard = useUnsavedChanges(() => form, {
-    enabled: () => !submitting.value
-  })
-  const discardDialog = guard.dialogProps
-  const discardLabels = guard.labels
-
-  const onLeave = () => guard.confirmLeave()
-
-  useEscapeToCancel(onLeave, { enabled: () => !submitting.value })
-
-  const formEl = ref<HTMLFormElement | null>(null)
-  const nameEl = ref<InstanceType<typeof Input> | null>(null)
-
-  useShortcuts({
-    keys: 'meta+enter',
-    label: 'Create organization',
-    group: 'Page',
-    element: formEl,
-    when: () => !submitting.value,
-    handler: () => formEl.value?.requestSubmit()
-  })
-
-  onMounted(() => nameEl.value?.focus())
-
-  let failuresLeft = SAVE_FAILURES
 
   const initials = (value: string) =>
     value
@@ -184,40 +152,23 @@
     return !errors.name && !errors.workspace
   }
 
-  const createOrganization = () =>
-    new Promise<void>((resolve, reject) => {
-      setTimeout(() => {
-        if (failuresLeft > 0) {
-          failuresLeft -= 1
-          reject(new Error('The service did not answer. Check your connection and try again.'))
-          return
-        }
-        resolve()
-      }, 900)
-    })
+  const nameEl = ref<InstanceType<typeof Input> | null>(null)
 
-  const submit = async () => {
-    if (submitting.value || !validate()) return
-    submitting.value = true
-    try {
-      await createOrganization()
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  const { guard, submitting, submitButton, leave, submit } = useCreateForm({
+    source: () => form,
+    formEl,
+    shortcutLabel: 'Create organization',
+    validate,
+    onCreated: () =>
       toast.success(`${form.name.trim()} created.`, {
         description: `You are now in it, as its owner. ${form.workspace.trim()} is ready for your first deploy.`
-      })
-    } catch (error) {
-      toast.error('Could not create the organization.', {
-        description: error instanceof Error ? error.message : 'Try again.',
-        action: { label: 'Retry', onClick: () => submit() }
-      })
-    } finally {
-      submitting.value = false
-    }
-  }
+      }),
+    failureTitle: 'Could not create the organization.'
+  })
 
-  const ACCOUNT_BUTTON_CLASS =
-    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
-    'motion-reduce:transition-none'
+  onMounted(() => nameEl.value?.focus())
 
   const HEADER_PREVIEW_CLASS =
     'inline-flex min-w-0 max-w-(--container-3xs) items-center gap-(--spacing-xs) self-start rounded-(--shape-button) border border-(--border-muted) bg-(--bg-canvas) px-(--spacing-xs) ' +
@@ -226,42 +177,13 @@
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <AppHeader aria-label="Console">
-      <AppHeader.Start>
-        <IconButton
-          icon="az az-chevron-left"
-          aria-label="Back to console"
-          variant="outline"
-          size="small"
-          @click="onLeave"
-        />
-        <AppHeader.Brand
-          href="/home"
-          aria-label="Azion home"
-        >
-          <Brand
-            variant="default"
-            size="small"
-          />
-        </AppHeader.Brand>
-        <Breadcrumb :items="breadcrumb" />
-      </AppHeader.Start>
-      <AppHeader.Center />
-      <AppHeader.End>
-        <button
-          type="button"
-          aria-label="Account settings"
-          :class="ACCOUNT_BUTTON_CLASS"
-        >
-          <Avatar
-            label="JD"
-            alt="Jane Doe"
-            size="medium"
-            variant="square"
-          />
-        </button>
-      </AppHeader.End>
-    </AppHeader>
+    <CreationHeader
+      back-label="Back to console"
+      :breadcrumb="breadcrumb"
+      account-label="JD"
+      account-alt="Jane Doe"
+      @back="leave"
+    />
 
     <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
       <form
@@ -512,14 +434,12 @@
                 variant="outline"
                 size="medium"
                 :disabled="submitting"
-                @click="onLeave"
+                @click="leave"
               />
               <Button
                 variant="primary"
                 size="medium"
-                type="submit"
-                :loading="submitting"
-                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+                v-bind="submitButton"
               >
                 Create Organization
                 <Kbd
@@ -534,25 +454,6 @@
         </div>
       </form>
     </main>
-    <ConfirmDialog
-      v-bind="discardDialog"
-      data-testid="unsaved-changes-dialog"
-    >
-      <template #actions>
-        <Button
-          :label="discardLabels.keepEditing"
-          variant="ghost"
-          size="medium"
-          data-autofocus
-          @click="guard.keepEditing"
-        />
-        <Button
-          :label="discardLabels.discard"
-          variant="danger"
-          size="medium"
-          @click="guard.discardAndLeave"
-        />
-      </template>
-    </ConfirmDialog>
+    <DiscardDialog :guard="guard" />
   </div>
 </template>

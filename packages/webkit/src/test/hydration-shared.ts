@@ -2,7 +2,10 @@ import { afterEach, beforeEach, vi } from 'vitest'
 import { type Component, createSSRApp, nextTick } from 'vue'
 
 export const modules = {
-  ...import.meta.glob<{ default: Component }>('../../blocks/**/*.vue'),
+  ...import.meta.glob<{ default: Component }>([
+    '../../blocks/**/*.vue',
+    '!../../blocks/**/parts/**'
+  ]),
   ...import.meta.glob<{ default: Component }>('../../examples/**/*.vue')
 }
 

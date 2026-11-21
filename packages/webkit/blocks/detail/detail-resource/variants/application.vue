@@ -2,22 +2,16 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import type { TableColumn } from '@aziontech/webkit/data-table'
-  import DataTable from '@aziontech/webkit/data-table'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
   import FlowDiagramBind from '@aziontech/webkit/flow-diagram-bind'
   import type {
-    FlowDiagramBindOption,
     FlowDiagramEdgeData,
     FlowDiagramNodeData
   } from '@aziontech/webkit/flow-diagram-root'
   import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -26,10 +20,14 @@
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Subheader from '@aziontech/webkit/subheader'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+  import Tag from '@aziontech/webkit/tag'
+  import { computed, ref } from 'vue'
+
+  import ApplicationAddressBand from '../parts/application-address-band.vue'
+  import ApplicationDeploymentsTab from '../parts/application-deployments-tab.vue'
+  import ApplicationVersionsTab from '../parts/application-versions-tab.vue'
+  import DeployAction from '../parts/deploy-action.vue'
+  import { type TopologyTarget, useTopologyStaging } from '../use-topology-staging'
 
   const APP = {
     name: 'storefront-app',
@@ -53,12 +51,6 @@
     { label: 'Created', value: '2 weeks ago by Mara Lin', author: 'Mara Lin' }
   ]
 
-  const versionColumns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Version', principal: true, hideable: false },
-    { accessorKey: 'description', header: 'Description', grow: 2 },
-    { accessorKey: 'state', header: 'Status', minWidth: 104 },
-    { accessorKey: 'createdAgo', header: 'Created', minWidth: 96 }
-  ]
   const versions = [
     {
       id: 'BX7Q2LMA',
@@ -81,19 +73,6 @@
       state: 'Ready',
       createdAgo: '4 days ago'
     }
-  ]
-  const versionSeverity: Record<string, TagSeverity> = {
-    Active: 'success',
-    Ready: 'neutral',
-    Draft: 'warning'
-  }
-
-  const deploymentColumns: TableColumn[] = [
-    { accessorKey: 'id', header: 'Deployment', principal: true, hideable: false },
-    { accessorKey: 'version', header: 'Version' },
-    { accessorKey: 'environment', header: 'Environment' },
-    { accessorKey: 'status', header: 'Status', minWidth: 104 },
-    { accessorKey: 'createdAgo', header: 'Created', minWidth: 96 }
   ]
   const deployments = [
     {
@@ -124,10 +103,7 @@
     Building: 'info'
   }
 
-  const targets: Record<
-    string,
-    { kind: string; icon: string; options: FlowDiagramBindOption[]; unbound: string }
-  > = {
+  const targets: Record<string, TopologyTarget> = {
     firewall: {
       kind: 'Firewall',
       icon: 'az az-shield',
@@ -148,44 +124,29 @@
     }
   }
 
-  const deployed = reactive<Record<string, string>>({ firewall: 'edge-guard', function: '' })
-  const staged = reactive<Record<string, string>>({})
   const expanded = ref(['firewall'])
-  const stagedCount = computed(() => Object.keys(staged).length)
-  const stagedNote = ref('')
+  const deployOpen = ref(false)
 
-  const slotNode = (key: string): FlowDiagramNodeData => {
-    const target = targets[key]
-    const pick = staged[key]
-    const removing = pick === ''
-    const value = pick === undefined ? deployed[key] : pick
-    const base = {
-      id: key,
-      eyebrow: target.kind,
-      icon: target.icon,
-      bindable: true,
-      bindOptions: target.options,
-      removable: true
+  const {
+    stagedCount,
+    stagedChanges,
+    stagedNote,
+    deploying,
+    slotNode,
+    bind,
+    unbind,
+    createTarget,
+    deploy
+  } = useTopologyStaging({
+    targets,
+    bound: { firewall: 'edge-guard', function: '' },
+    name: APP.name,
+    toastId: 'application-deploy',
+    dismissOnLeave: true,
+    onEdit: () => {
+      activeTab.value = 'topology'
     }
-    if (!value) {
-      return {
-        ...base,
-        status: removing ? 'Staged' : '',
-        severity: removing ? 'warning' : 'neutral',
-        dashed: true,
-        message: removing ? `Deploy to remove this ${target.kind.toLowerCase()}.` : target.unbound
-      }
-    }
-    return {
-      ...base,
-      title: value,
-      boundValue: value,
-      status: pick === undefined ? 'Active' : 'Staged',
-      severity: pick === undefined ? 'success' : 'warning',
-      dashed: pick !== undefined,
-      message: pick === undefined ? '' : `Deploy to apply this ${target.kind.toLowerCase()}.`
-    }
-  }
+  })
 
   const nodes = computed<FlowDiagramNodeData[]>(() => [
     {
@@ -223,78 +184,10 @@
     { from: 'application', to: 'function' }
   ]
 
-  const stagedChanges = computed(() =>
-    Object.entries(staged).map(([key, value]) => ({
-      key,
-      kind: targets[key].kind,
-      from: deployed[key] || 'Not bound',
-      to: value || 'Removed'
-    }))
-  )
-
-  const bind = (key: string, value: string) => {
-    if (value === deployed[key]) delete staged[key]
-    else staged[key] = value
-    stagedNote.value = `${value} staged on ${targets[key].kind.toLowerCase()}.`
-  }
-  const unbind = (key: string) => {
-    if (staged[key] !== undefined && staged[key] !== '') delete staged[key]
-    else if (deployed[key]) staged[key] = ''
-    stagedNote.value = `${targets[key].kind} staged for removal.`
-  }
-  const createTarget = (key: string) => {
-    stagedNote.value = `Opens the create flow for a new ${targets[key].kind.toLowerCase()}.`
-  }
-
-  const deployOpen = ref(false)
-  const deploying = ref(false)
-  const RUN_TOAST = 'application-deploy'
-  let timer: ReturnType<typeof setTimeout> | undefined
-
-  const editStaged = () => {
-    toast.dismiss(RUN_TOAST)
-    activeTab.value = 'topology'
-  }
-
   const runDeploy = () => {
     deployOpen.value = false
-    deploying.value = true
-    const changes = stagedChanges.value.length
-    toast.loading(`Deploying ${APP.name}…`, {
-      id: RUN_TOAST,
-      description: 'It keeps running if you leave this page.'
-    })
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      for (const [key, value] of Object.entries(staged)) {
-        deployed[key] = value
-        delete staged[key]
-      }
-      deploying.value = false
-      stagedNote.value = ''
-      toast.success(`${APP.name} is live.`, {
-        id: RUN_TOAST,
-        description: changes
-          ? `${changes} topology ${changes === 1 ? 'change' : 'changes'} now serve Production.`
-          : 'Production serves the active version.',
-        duration: 0,
-        closable: true,
-        actions: [
-          { label: 'Edit', onClick: editStaged },
-          { label: 'Redeploy', onClick: runDeploy }
-        ]
-      })
-    }, 1500)
+    deploy()
   }
-
-  onBeforeUnmount(() => {
-    clearTimeout(timer)
-    toast.dismiss(RUN_TOAST)
-  })
-
-  const DETAIL_LINK_CLASS =
-    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -308,22 +201,11 @@
           :label="tab.label"
         />
         <template #actions>
-          <div class="flex items-center gap-(--spacing-xs)">
-            <Tag
-              v-if="stagedCount"
-              :label="`${stagedCount} ${stagedCount === 1 ? 'change' : 'changes'}`"
-              severity="warning"
-              size="small"
-            />
-            <Button
-              label="Deploy"
-              variant="outline"
-              size="medium"
-              icon="az az-cloud-upload"
-              :loading="deploying"
-              @click="deployOpen = true"
-            />
-          </div>
+          <DeployAction
+            :staged-count="stagedCount"
+            :loading="deploying"
+            @deploy="deployOpen = true"
+          />
         </template>
       </PageTabs>
     </div>
@@ -336,77 +218,10 @@
         >
           <Card :padded="false">
             <template #default>
-              <div
-                class="flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
-              >
-                <div
-                  class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
-                >
-                  <i
-                    class="az az-box shrink-0 text-body-lg text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                  <div class="flex min-w-0">
-                    <Tooltip
-                      :content="`Open ${APP.host} in a new tab`"
-                      class="w-full"
-                    >
-                      <a
-                        :href="`https://${APP.host}`"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        :class="DETAIL_LINK_CLASS"
-                      >
-                        <span class="truncate underline-offset-2 group-hover/link:underline">{{
-                          APP.host
-                        }}</span>
-                        <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                        <i
-                          class="az az-external-link shrink-0 text-body-xs leading-none"
-                          aria-hidden="true"
-                        />
-                      </a>
-                    </Tooltip>
-                  </div>
-                </div>
-                <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
-                  <Button
-                    label="Visit"
-                    :href="`https://${APP.host}`"
-                    target="_blank"
-                    variant="secondary"
-                    size="medium"
-                    icon="az az-external-link"
-                  />
-                  <DropdownMenu
-                    side="bottom"
-                    align="end"
-                  >
-                    <DropdownMenu.Trigger>
-                      <Tooltip content="Application actions">
-                        <IconButton
-                          icon="az az-ellipsis"
-                          variant="outline"
-                          size="medium"
-                          aria-label="Application actions"
-                        />
-                      </Tooltip>
-                    </DropdownMenu.Trigger>
-                    <DropdownMenu.Group>
-                      <DropdownMenu.Item
-                        value="copy-url"
-                        label="Copy URL"
-                      />
-                    </DropdownMenu.Group>
-                    <DropdownMenu.Group>
-                      <DropdownMenu.Item
-                        value="settings"
-                        label="Settings"
-                      />
-                    </DropdownMenu.Group>
-                  </DropdownMenu>
-                </div>
-              </div>
+              <ApplicationAddressBand
+                :host="APP.host"
+                icon="az az-box"
+              />
 
               <dl
                 class="m-0 grid grid-cols-1 gap-(--spacing-sm) border-t border-(--border-muted) p-(--spacing-md) sm:grid-cols-3 lg:grid-cols-6"
@@ -475,103 +290,17 @@
           </Card>
         </section>
 
-        <section
+        <ApplicationVersionsTab
           v-else-if="activeTab === 'versions'"
-          class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-section-gap)"
-        >
-          <Subheader
-            title="Versions"
-            size="small"
-          >
-            <template #actions>
-              <Button
-                label="Add Version"
-                variant="outline"
-                size="medium"
-                icon="az az-plus"
-              />
-            </template>
-          </Subheader>
-          <Card :padded="false">
-            <template #default>
-              <DataTable
-                :data="versions"
-                :columns="versionColumns"
-                row-key="id"
-                paginated
-                :page-size="10"
-                :bordered="false"
-                aria-label="Versions"
-              >
-                <template #cell-name="{ value }">
-                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                    <span class="truncate font-(family-name:--font-code) text-body-sm">{{
-                      value
-                    }}</span>
-                    <span
-                      v-if="value === APP.version"
-                      class="shrink-0 text-body-sm text-(--text-muted)"
-                      >Latest</span
-                    >
-                  </span>
-                </template>
-                <template #cell-state="{ value }">
-                  <Tag
-                    :label="value"
-                    :severity="versionSeverity[value]"
-                    size="small"
-                  />
-                </template>
-                <template #empty>
-                  <EmptyState
-                    size="medium"
-                    icon="az az-history"
-                    title="No versions yet"
-                    description="Every deploy creates a version of this application."
-                  />
-                </template>
-              </DataTable>
-            </template>
-          </Card>
-        </section>
+          :versions="versions"
+          :latest="APP.version"
+        />
 
-        <section
+        <ApplicationDeploymentsTab
           v-else-if="activeTab === 'deployments'"
-          class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-section-gap)"
-        >
-          <Subheader
-            title="Deployments"
-            size="small"
-          />
-          <Card :padded="false">
-            <template #default>
-              <DataTable
-                :data="deployments"
-                :columns="deploymentColumns"
-                row-key="id"
-                paginated
-                :page-size="10"
-                :bordered="false"
-                aria-label="Deployments"
-              >
-                <template #cell-status="{ value }">
-                  <StatusIndicator
-                    :severity="deploymentSeverity[value]"
-                    :label="value"
-                  />
-                </template>
-                <template #empty>
-                  <EmptyState
-                    size="medium"
-                    icon="az az-cloud-upload"
-                    title="No deployments yet"
-                    description="Deploy this application and each run lands here."
-                  />
-                </template>
-              </DataTable>
-            </template>
-          </Card>
-        </section>
+          :deployments="deployments"
+          :severity="deploymentSeverity"
+        />
 
         <section
           v-else

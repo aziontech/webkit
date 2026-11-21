@@ -1,9 +1,7 @@
 <script setup lang="ts">
-  import { usePreferredReducedMotion } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../locales/en'
+  import { useAutoplayProgress } from '../../../composables/use-autoplay-progress'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Texture, {
     type TextureFade,
@@ -85,17 +83,7 @@
   }>()
 
   const attrs = useAttrs()
-  const reducedMotion = usePreferredReducedMotion()
-  const { t } = useTranslate({ common: en.common })
-
-  const PROGRESS_TICK_MS = 100
   const MAX_TABS = { vertical: 3, horizontal: 5 } as const
-
-  const elapsed = ref(0)
-  const paused = ref(false)
-  const pointerInside = ref(false)
-  const focusInside = ref(false)
-  let marquee: ReturnType<typeof globalThis.setInterval> | null = null
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'media-tabs')
 
@@ -114,34 +102,32 @@
     sideBySide.value = Boolean(wideQuery?.matches)
   }
 
-  const autoplayEnabled = computed(
-    () =>
-      props.autoplay &&
-      sideBySide.value &&
-      tabs.value.length > 1 &&
-      reducedMotion.value !== 'reduce'
-  )
-
-  const autoplayRunning = computed(
-    () => autoplayEnabled.value && !paused.value && !pointerInside.value && !focusInside.value
-  )
-
-  const pauseLabel = computed(() =>
-    paused.value ? t('common.resumeRotation') : t('common.pauseRotation')
-  )
-
-  const progress = computed(() =>
-    Math.min(100, Math.max(0, (elapsed.value / props.autoplayInterval) * 100))
-  )
-
-  watch(autoplayRunning, (running) => (running ? start() : stop()))
+  const {
+    autoplayEnabled,
+    autoplayRunning,
+    paused,
+    pauseLabel,
+    progress,
+    restartProgress,
+    togglePause,
+    enterPointer,
+    leavePointer,
+    enterFocus,
+    leaveFocus
+  } = useAutoplayProgress({
+    enabled: () => props.autoplay && sideBySide.value && tabs.value.length > 1,
+    interval: () => props.autoplayInterval,
+    onAdvance: () => {
+      activeIndex.value = (activeIndex.value + 1) % tabs.value.length
+    }
+  })
 
   watch(
     () => tabs.value.length,
     (length) => {
       if (activeIndex.value < length) return
       activeIndex.value = 0
-      elapsed.value = 0
+      restartProgress()
     }
   )
 
@@ -149,55 +135,16 @@
     wideQuery = globalThis.matchMedia?.(WIDE) ?? null
     wideQuery?.addEventListener('change', onWideChange)
     onWideChange()
-    if (autoplayRunning.value) start()
   })
 
-  onScopeDispose(() => {
-    stop()
-    wideQuery?.removeEventListener('change', onWideChange)
-  })
+  onScopeDispose(() => wideQuery?.removeEventListener('change', onWideChange))
 
   function isActive(index: number): boolean {
     return activeIndex.value === index
   }
 
-  function stop(): void {
-    if (marquee === null) return
-    globalThis.clearInterval(marquee)
-    marquee = null
-  }
-
-  function start(): void {
-    stop()
-    marquee = globalThis.setInterval(tick, PROGRESS_TICK_MS)
-  }
-
-  function tick(): void {
-    elapsed.value += PROGRESS_TICK_MS
-    if (elapsed.value < props.autoplayInterval) return
-    elapsed.value = 0
-    activeIndex.value = (activeIndex.value + 1) % tabs.value.length
-  }
-
-  function enterPointer(): void {
-    pointerInside.value = true
-  }
-
-  function leavePointer(): void {
-    pointerInside.value = false
-  }
-
-  function enterFocus(event: globalThis.FocusEvent): void {
-    const target = event.target as globalThis.Element
-    focusInside.value = target.matches(':focus-visible')
-  }
-
-  function leaveFocus(): void {
-    focusInside.value = false
-  }
-
   function move(index: number): void {
-    elapsed.value = 0
+    restartProgress()
     if (index === activeIndex.value) return
     activeIndex.value = index
   }
@@ -207,12 +154,8 @@
     move(index)
   }
 
-  function togglePause(): void {
-    paused.value = !paused.value
-  }
-
   function select(index: number): void {
-    pointerInside.value = false
+    leavePointer()
     move(index)
   }
 

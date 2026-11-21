@@ -1,6 +1,7 @@
 <script setup lang="ts" generic="TItem extends object = Record<string, unknown>">
   import { computed, nextTick, ref, toRaw, useAttrs, useId } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
@@ -111,6 +112,7 @@
   const { t } = useTranslate({ attributeEditor: en.attributeEditor })
   const baseId = useId()
   const rootEl = ref<HTMLElement | null>(null)
+  const rowEls = ref<HTMLElement[]>([])
   const addEl = ref<{ $el?: HTMLElement } | null>(null)
   const announcement = ref('')
 
@@ -381,9 +383,10 @@
     scope: DragScope,
     key: string,
     index: number,
-    groupIndex: number | undefined
+    groupIndex: number | undefined,
+    owner: EventTarget | null = event.currentTarget
   ) => {
-    if (event.target !== event.currentTarget || armed.value !== key || props.disabled) return
+    if (event.target !== owner || armed.value !== key || props.disabled) return
     drag.value = { scope, index, groupIndex }
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move'
@@ -400,12 +403,13 @@
     event: DragEvent,
     scope: DragScope,
     index: number,
-    groupIndex: number | undefined
+    groupIndex: number | undefined,
+    owner: HTMLElement = event.currentTarget as HTMLElement
   ) => {
     if (!sameList(scope, groupIndex)) return
     event.preventDefault()
     if (event.dataTransfer) event.dataTransfer.dropEffect = 'move'
-    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+    const rect = owner.getBoundingClientRect()
     const edge = event.clientY > rect.top + rect.height / 2 ? 'after' : 'before'
     drop.value = { index, groupIndex: scope === 'group' ? undefined : groupIndex, edge }
   }
@@ -426,6 +430,44 @@
     if (scope === 'group') moveGroup(from, to)
     else moveRow(from, groupIndex, to)
   }
+
+  const rowOf = (event: Event) => {
+    let el =
+      event.target instanceof Element ? event.target.closest<HTMLElement>('li[data-row]') : null
+    while (el && !rowEls.value.includes(el)) {
+      el = el.parentElement?.closest<HTMLElement>('li[data-row]') ?? null
+    }
+    if (!el) return null
+    const index = Number(el.dataset['row'])
+    const groupIndex = grouped.value ? Number(el.dataset['group']) : undefined
+    const item = groupList.value[groupIndex ?? 0]?.[index]
+    return item ? { el, index, groupIndex, item } : null
+  }
+
+  const onRootKeydown = (event: KeyboardEvent) => {
+    const row = rowOf(event)
+    if (row) onRowKeydown(event, row.index, row.groupIndex)
+  }
+
+  const onRootDragstart = (event: DragEvent) => {
+    const row = rowOf(event)
+    if (row) onDragstart(event, 'row', rowKey(row.item), row.index, row.groupIndex, row.el)
+  }
+
+  const onRootDragover = (event: DragEvent) => {
+    const row = rowOf(event)
+    if (row) onDragover(event, 'row', row.index, row.groupIndex, row.el)
+  }
+
+  const onRootDrop = (event: DragEvent) => {
+    const row = rowOf(event)
+    if (row) onDrop(event, 'row', row.groupIndex)
+  }
+
+  useElementListener(rootEl, 'keydown', onRootKeydown)
+  useElementListener(rootEl, 'dragstart', onRootDragstart)
+  useElementListener(rootEl, 'dragover', onRootDragover)
+  useElementListener(rootEl, 'drop', onRootDrop)
 
   const dragging = (scope: DragScope, index: number, groupIndex: number | undefined) =>
     sameList(scope, groupIndex) && drag.value?.index === index ? '' : undefined
@@ -633,6 +675,7 @@
               <li
                 v-for="(item, index) in group"
                 :key="rowKey(item)"
+                ref="rowEls"
                 :class="ROW_CLASS"
                 :data-row="index"
                 :data-group="grouped ? groupIndex : undefined"
@@ -641,13 +684,6 @@
                 :data-drop="dropEdge('row', index, grouped ? groupIndex : undefined)"
                 :draggable="armed === rowKey(item) ? 'true' : undefined"
                 :data-testid="`${testId}__row`"
-                @keydown="onRowKeydown($event, index, grouped ? groupIndex : undefined)"
-                @dragstart="
-                  onDragstart($event, 'row', rowKey(item), index, grouped ? groupIndex : undefined)
-                "
-                @dragover="onDragover($event, 'row', index, grouped ? groupIndex : undefined)"
-                @drop="onDrop($event, 'row', grouped ? groupIndex : undefined)"
-                @dragend="onDragend"
               >
                 <span
                   v-if="grouped && index > 0"

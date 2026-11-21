@@ -1,10 +1,8 @@
 <script setup lang="ts" generic="TValue = unknown">
-  import { computed, provide, ref, shallowReactive, useAttrs, useId } from 'vue'
+  import { computed, provide, type Ref, ref, shallowReactive, useAttrs } from 'vue'
 
-  import { useFieldControl } from '../../../composables/use-field-control'
-  import type { ListboxFocusIntent } from '../../../composables/use-listbox-content'
+  import { useSelectRoot } from '../../../composables/use-select-root'
   import { useTranslate } from '../../../composables/use-translate'
-  import { FieldInjectionKey } from '../field/injection-key'
   import { FormValue } from '../parts/form-value'
   import {
     type MultiSelectCommitEvent,
@@ -94,29 +92,9 @@
   const attrs = useAttrs()
   const { locale } = useTranslate()
 
-  const {
-    controlId,
-    describedBy,
-    labelledBy,
-    invalid: isInvalid,
-    disabled: isDisabled,
-    required: isRequired
-  } = useFieldControl({
-    invalid: () => props.invalid,
-    disabled: () => props.disabled,
-    required: () => props.required
-  })
-
-  provide(FieldInjectionKey, null)
+  const root = useSelectRoot('multi-select', props, openModel)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'multi-select')
-
-  const rootAttrs = computed(() => {
-    const { 'aria-label': _label, 'aria-labelledby': _labelledby, ...rest } = attrs
-    return rest
-  })
-
-  const openState = computed(() => openModel.value ?? props.defaultOpen)
 
   const query = ref('')
 
@@ -127,8 +105,8 @@
   }
 
   const setOpen = (value: boolean) => {
-    if (isDisabled.value || props.readonly) return
-    openModel.value = value
+    if (root.locked()) return
+    root.setOpen(value)
     if (!value) setQuery('')
   }
 
@@ -139,7 +117,7 @@
   const isSelected = (value: unknown): boolean => selectedSet.value.has(value)
 
   const toggleValue = (value: unknown) => {
-    if (isDisabled.value || props.readonly) return
+    if (root.locked()) return
     const next = [...currentArray()]
     const index = next.indexOf(value)
     if (index === -1) next.push(value)
@@ -147,16 +125,11 @@
     model.value = next as TValue[]
   }
 
+  const labelOf = (value: unknown): string => root.labels.get(value) ?? String(value)
+
   const filled = computed(() => currentArray().length > 0)
 
-  const labels = shallowReactive(new Map<unknown, string>())
-  const registerLabel = (value: unknown, label: string) => {
-    if (label && labels.get(value) !== label) labels.set(value, label)
-  }
-
-  const labelsPending = computed(() => currentArray().some((value) => !labels.has(value)))
-
-  const labelOf = (value: unknown): string => labels.get(value) ?? String(value)
+  const labelsPending = computed(() => currentArray().some((value) => !root.labels.has(value)))
 
   const fold = (text: string) =>
     text
@@ -192,9 +165,8 @@
   })
 
   const controlEl = ref<globalThis.HTMLElement | null>(null)
-  const triggerEl = ref<globalThis.HTMLElement | null>(null)
   const focusControl = () => {
-    ;(controlEl.value ?? triggerEl.value)?.focus()
+    ;(controlEl.value ?? root.triggerEl.value)?.focus()
   }
 
   const create = (event: MultiSelectCommitEvent) => {
@@ -212,28 +184,14 @@
   })
 
   provide(MultiSelectInjectionKey, {
-    contentId: `multi-select-${useId()}`,
-    triggerEl,
-    open: openState,
+    ...root,
     setOpen,
-    modelValue: model as unknown as import('vue').Ref<unknown[]>,
+    modelValue: model as unknown as Ref<unknown[]>,
     toggleValue,
     isSelected,
-    size: computed(() => props.size),
-    disabled: isDisabled,
-    readonly: computed(() => props.readonly),
-    invalid: isInvalid,
-    required: isRequired,
-    controlId,
-    describedBy,
-    labelledBy,
-    pendingFocus: ref<ListboxFocusIntent>(''),
-    ariaLabel: computed(() => attrs['aria-label'] as string | undefined),
-    ariaLabelledby: computed(() => attrs['aria-labelledby'] as string | undefined),
     placeholder: computed(() => props.placeholder),
     displayValue: displayValueComputed,
     filled,
-    registerLabel,
     labelsPending,
     labelOf,
     variant: computed(() => props.variant),
@@ -259,14 +217,8 @@
 
 <template>
   <div
-    v-bind="rootAttrs"
+    v-bind="root.rootAttrs.value"
     :data-testid="testId"
-    :data-state="openState ? 'open' : 'closed'"
-    :data-size="size"
-    :data-disabled="isDisabled || null"
-    :data-readonly="readonly || null"
-    :data-invalid="isInvalid || null"
-    :data-required="isRequired || null"
     :data-filled="filled || null"
     :data-variant="variant"
     :class="attrs.class"
@@ -276,8 +228,8 @@
     <FormValue
       :name="name"
       :value="model as unknown[]"
-      :required="isRequired"
-      :disabled="isDisabled"
+      :required="root.required.value"
+      :disabled="root.disabled.value"
     />
   </div>
 </template>

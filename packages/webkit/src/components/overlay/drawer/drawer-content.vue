@@ -1,24 +1,11 @@
 <script setup lang="ts">
-  import { defaultDocument, useEventListener, useScrollLock } from '@vueuse/core'
-  import {
-    computed,
-    inject,
-    nextTick,
-    onBeforeUnmount,
-    provide,
-    ref,
-    unref,
-    useAttrs,
-    watch
-  } from 'vue'
+  import { computed, inject, provide, ref, unref, useAttrs } from 'vue'
 
-  import { useFocusTrap } from '../../../composables/use-focus-trap'
-  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
+  import { useModalOverlay } from '../../../composables/use-modal-overlay'
   import { usePortalLocale } from '../../../composables/use-translate'
   import { cn } from '../../../utils/cn'
   import { PanelHeaderEndInjectionKey } from '../panel/injection-key'
   import Panel from '../panel/panel.vue'
-  import { useDrawerMotionState } from './composables/use-drawer-motion-state'
   import DrawerClose from './drawer-close.vue'
   import { DrawerInjectionKey, DrawerPanelScrollInjectionKey } from './injection-key'
   import { DRAWER_EXIT_MS } from './presets/transitions'
@@ -35,12 +22,13 @@
   const attrs = useAttrs()
   const ctx = inject(DrawerInjectionKey)
   const contentEl = ref<HTMLElement | null>(null)
-  const isOpen = computed(() => ctx?.isOpen.value ?? false)
   const isModal = computed(() => ctx?.modal ?? true)
-  const { motionState } = useDrawerMotionState(isOpen)
+  const { isPresent, motionState, onBackdropClick } = useModalOverlay(ctx, contentEl, {
+    exitMs: DRAWER_EXIT_MS,
+    openFrames: 2,
+    modal: isModal
+  })
   const portalLocale = usePortalLocale()
-  const isScrollLocked = useScrollLock(defaultDocument?.body)
-  const { isTop, isFocusTop } = useOverlayLayer(isOpen, { element: contentEl })
   const testId = computed(() => ctx?.testId ?? 'drawer')
 
   const forwardedAttrs = computed(() =>
@@ -53,67 +41,8 @@
   })
   provide(DrawerPanelScrollInjectionKey, true)
 
-  const isPresent = ref(isOpen.value)
-  let exitTimer: ReturnType<typeof setTimeout> | undefined
-
-  const clearExitTimer = () => {
-    if (!exitTimer) return
-    clearTimeout(exitTimer)
-    exitTimer = undefined
-  }
-
-  watch(
-    isOpen,
-    (open) => {
-      clearExitTimer()
-      if (open) {
-        isPresent.value = true
-        return
-      }
-      if (!isPresent.value) return
-      exitTimer = setTimeout(() => {
-        isPresent.value = false
-        exitTimer = undefined
-      }, DRAWER_EXIT_MS)
-    },
-    { flush: 'sync' }
-  )
-
-  onBeforeUnmount(clearExitTimer)
-
-  watch(
-    [isOpen, isModal],
-    ([open, modal]) => {
-      isScrollLocked.value = open && modal
-    },
-    { immediate: true }
-  )
-  useFocusTrap(contentEl, isOpen, () => isModal.value && isFocusTop.value, {
-    initialFocus: 'field'
-  })
-
-  useEventListener(defaultDocument, 'keydown', (event: globalThis.KeyboardEvent) => {
-    if (!isOpen.value || event.key !== 'Escape' || event.defaultPrevented) return
-    if (!isTop.value) return
-    if (!ctx?.dismissible) return
-    event.preventDefault()
-    ctx.dismiss()
-  })
-
-  watch(isOpen, async (open, wasOpen) => {
-    if (open || !wasOpen || !ctx) return
-    await nextTick()
-    const target = ctx.triggerEl.value ?? ctx.returnFocusEl.value
-    if (target?.isConnected) target.focus()
-  })
-
   const side = computed(() => (ctx?.side === 'start' ? 'start' : 'end'))
   const drawerSize = computed(() => unref(ctx?.size) ?? 'large')
-
-  const onOverlayClick = () => {
-    if (!ctx?.dismissible) return
-    ctx.dismiss()
-  }
 
   const BACKDROP_CLASS =
     'fixed inset-0 z-1000 bg-(--bg-backdrop) opacity-0 ' +
@@ -156,7 +85,7 @@
         :data-state="motionState"
         :data-testid="`${testId}__backdrop`"
         aria-hidden="true"
-        @click="onOverlayClick"
+        @click="onBackdropClick"
       />
       <div
         ref="contentEl"

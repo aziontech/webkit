@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import {
   basename,
   dirname,
@@ -265,6 +265,52 @@ function extraFile(stem, file) {
   return `${stem}.${basename(file)}`
 }
 
+const isFile = (p) => existsSync(p) && statSync(p).isFile()
+const pascal = (s) => s.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase())
+
+export function blockImports(content, fromFile, blockDir) {
+  const out = new Set()
+  for (const m of String(content).matchAll(LOCAL_SPECIFIER)) {
+    const resolved = posix.normalize(
+      posix.join(posix.dirname(fromFile), m[3].replace(/[?#].*$/, ''))
+    )
+    if (resolved.startsWith('..')) continue
+    const suffix = RESOLVE_SUFFIXES.find((s) => isFile(join(blockDir, resolved + s)))
+    if (suffix !== undefined) out.add(resolved + suffix)
+  }
+  return [...out]
+}
+
+function dependencyPiece(file, block, paths, taken) {
+  const declared = (block.meta.variants || []).find((v) => posix.normalize(v.file) === file)
+  const sibling =
+    declared ||
+    (file.startsWith('variants/') && file.endsWith('.vue')
+      ? { name: pascal(basename(file, '.vue')), file }
+      : null)
+  const short = paths.at(sibling ? variantFile(paths.stem, sibling) : extraFile(paths.stem, file))
+  const long = paths.at(extraFile(paths.stem, file.split('/').join('.')))
+  return { path: taken.has(short) ? long : short, file, variant: declared ? declared.name : 'Data' }
+}
+
+function dependencyPieces(block, paths, targets) {
+  const taken = new Set(Object.values(targets))
+  const queue = Object.keys(targets)
+  const found = []
+  for (let i = 0; i < queue.length; i += 1) {
+    const content = read(join(block.dir, queue[i])) ?? ''
+    for (const file of blockImports(content, queue[i], block.dir)) {
+      if (targets[file]) continue
+      const piece = dependencyPiece(file, block, paths, taken)
+      targets[file] = piece.path
+      taken.add(piece.path)
+      queue.push(file)
+      found.push(piece)
+    }
+  }
+  return found
+}
+
 function targetPaths(projectDir, block, dest) {
   const name = block.id.split('/').pop() || kebab(block.meta.name)
   let dir
@@ -286,6 +332,8 @@ function targetPaths(projectDir, block, dest) {
   const at = (file) => (relDir === '.' ? file : `${relDir}/${file}`)
   return {
     viewsReason,
+    at,
+    stem,
     primary: at(primaryName),
     variant: block.variant ? at(variantFile(stem, block.variant)) : null,
     extras: (block.meta.files || []).map((file) => ({ file, path: at(extraFile(stem, file)) })),
@@ -306,6 +354,12 @@ export function planAdd(projectDir, webkit, catalog, id, opts = {}) {
     recorded.some((f) => f.path === paths.primary)
   const keepExtra = (path) =>
     keepPrimary && existsSync(join(projectDir, path)) && recorded.some((f) => f.path === path)
+  const targets = Object.fromEntries([
+    [posix.normalize(block.meta.primary.file), paths.primary],
+    ...paths.extras.map((extra) => [posix.normalize(extra.file), extra.path]),
+    ...(block.variant ? [[posix.normalize(block.variant.file), paths.variant]] : [])
+  ])
+  const dependencies = dependencyPieces(block, paths, targets)
   const pieces = [
     ...(keepPrimary
       ? []
@@ -313,15 +367,11 @@ export function planAdd(projectDir, webkit, catalog, id, opts = {}) {
     ...paths.extras
       .filter((extra) => !keepExtra(extra.path))
       .map((extra) => ({ path: extra.path, file: extra.file, variant: 'Data' })),
+    ...dependencies.filter((piece) => !keepExtra(piece.path)),
     ...(block.variant
       ? [{ path: paths.variant, file: block.variant.file, variant: block.variant.name }]
       : [])
   ]
-  const targets = Object.fromEntries([
-    [posix.normalize(block.meta.primary.file), paths.primary],
-    ...paths.extras.map((extra) => [posix.normalize(extra.file), extra.path]),
-    ...(block.variant ? [[posix.normalize(block.variant.file), paths.variant]] : [])
-  ])
   const files = pieces.map((piece) => {
     const original = readFileSync(join(block.dir, piece.file), 'utf8')
     const imports = localImports(original, posix.normalize(piece.file), targets, piece.path)

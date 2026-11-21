@@ -1,14 +1,11 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
-
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../action/button/button.vue'
   import Tag from '../../tag/tag.vue'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupScrollFrames } from '../composables/use-mockup-scroll-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import LegacySwitch from '../parts/legacy-switch.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupScrollColumn from '../parts/mockup-scroll-column.vue'
+  import ModuleSwitchCard from '../parts/module-switch-card.vue'
 
   defineOptions({ name: 'ImageProcessorModuleFragment' })
 
@@ -20,9 +17,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const MODULES = [
     {
@@ -74,158 +68,73 @@
     { ...REST, anchor: 1, cursor: SWITCH, enabled: true, forward: 160, back: 120 }
   ]
 
-  const LAST = FRAMES.length - 1
-  const LEAD = 150
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
-
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-  const columnEl = ref<globalThis.HTMLElement | null>(null)
-  const offsets = ref<number[]>([])
-
-  const measure = () => {
-    const anchors = columnEl.value?.querySelectorAll<globalThis.HTMLElement>('[data-anchor]')
-    if (!anchors?.length) return
-    offsets.value = [...anchors].map((anchor) => anchor.offsetTop)
-  }
-
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor, columnEl)
-
-  const atRest = computed(() => frame.value.anchor === 0)
-
-  const scrollStyle = computed(() => ({
-    translate: `0 ${atRest.value ? 0 : LEAD - (offsets.value[frame.value.anchor] ?? 0)}px`
-  }))
+  const { frame, bindColumn } = useMockupScrollFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered,
+    stepOnTouch: true
+  })
 
   const enabled = (key: string) => key !== 'image-processor' || frame.value.enabled
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-  let observer: globalThis.ResizeObserver | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value) {
-      step.value = target
-      return
-    }
-    measure()
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onMounted(() => {
-    observer = new globalThis.ResizeObserver(measure)
-    if (columnEl.value) observer.observe(columnEl.value)
-    measure()
-  })
-
-  onScopeDispose(() => {
-    halt()
-    observer?.disconnect()
-  })
-
-  const MODULE_CARD_CLASS =
-    'flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) transition-colors duration-moderate-01 ease-productive-entrance ' +
-    'data-on:border-(--primary) ' +
-    'motion-reduce:transition-none'
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupScrollColumn
+    :ref="bindColumn"
     shell="legacy"
-    :fade="atRest ? 'bottom' : 'y'"
     class="[--console-mockup-fade-edge:20%] [--console-mockup-fade-start:74%]"
-    :chrome="false"
+    column-class="flex flex-col gap-(--spacing-sm)"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    :anchor="frame.anchor || null"
+    :lead="150"
+    observe
+    :cursor="frame.cursor"
+    cursor-name="Priya"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative"
+    <span
+      data-anchor
+      class="text-label-md text-(--text-default)"
     >
-      <div
-        ref="columnEl"
-        :style="scrollStyle"
-        class="relative flex flex-col gap-(--spacing-sm) py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
+      Default Modules
+    </span>
+
+    <ConsoleMockupShellItem
+      v-for="(module, index) in MODULES"
+      :key="module.key"
+      :order="index"
+      :data-anchor="module.key === 'image-processor' || undefined"
+    >
+      <ModuleSwitchCard
+        :title="module.title"
+        :description="module.subtitle"
+        :checked="enabled(module.key)"
+        :disabled="module.locked"
+        :cursor-key="module.key"
       >
         <span
-          data-anchor
-          class="text-label-md text-(--text-default)"
+          v-if="module.locked"
+          class="mt-(--spacing-xs) flex"
         >
-          Default Modules
+          <Tag
+            label="Automatically enabled in all accounts."
+            icon="az az-lock"
+            severity="neutral"
+            size="small"
+          />
         </span>
+      </ModuleSwitchCard>
+    </ConsoleMockupShellItem>
 
-        <ConsoleMockupShellItem
-          v-for="(module, index) in MODULES"
-          :key="module.key"
-          :order="index"
-          :data-anchor="module.key === 'image-processor' || undefined"
-        >
-          <div
-            :data-on="enabled(module.key) || null"
-            :class="MODULE_CARD_CLASS"
-          >
-            <LegacySwitch
-              :checked="enabled(module.key)"
-              :disabled="module.locked"
-              :data-cursor="module.key"
-            />
-            <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
-              <span class="text-label-md text-(--text-default)">{{ module.title }}</span>
-              <span class="text-body-xs text-(--text-muted)">{{ module.subtitle }}</span>
-              <span
-                v-if="module.locked"
-                class="mt-(--spacing-xs) flex"
-              >
-                <Tag
-                  label="Automatically enabled in all accounts."
-                  icon="az az-lock"
-                  severity="neutral"
-                  size="small"
-                />
-              </span>
-            </span>
-          </div>
-        </ConsoleMockupShellItem>
-
-        <div class="flex flex-col gap-(--spacing-xs) pt-(--spacing-md)">
-          <span class="text-label-md text-(--text-default)">Subscription modules</span>
-          <span class="flex">
-            <Button
-              label="Contact sales"
-              variant="outline"
-              size="medium"
-              icon="az az-shopping-cart"
-            />
-          </span>
-        </div>
-      </div>
-
-      <MockupCursor
-        name="Priya"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
-      />
+    <div class="flex flex-col gap-(--spacing-xs) pt-(--spacing-md)">
+      <span class="text-label-md text-(--text-default)">Subscription modules</span>
+      <span class="flex">
+        <Button
+          label="Contact sales"
+          variant="outline"
+          size="medium"
+          icon="az az-shopping-cart"
+        />
+      </span>
     </div>
-  </ConsoleMockupShell>
+  </MockupScrollColumn>
 </template>

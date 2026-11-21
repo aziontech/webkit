@@ -4,8 +4,8 @@
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import ToggleGroup from '../../../action/toggle-group/toggle-group.vue'
   import Card from '../../card/card.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'BotManagerMetricsFragment' })
 
@@ -71,15 +71,10 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupFragment
     shell="legacy"
-    fade="bottom"
     class="[--console-mockup-fade-start:80%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
   >
     <div class="flex flex-col gap-(--spacing-md) py-(--spacing-xs)">
       <ConsoleMockupShellItem :order="0">
@@ -168,5 +163,5 @@
         </div>
       </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

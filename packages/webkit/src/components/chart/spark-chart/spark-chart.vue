@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { usePreferredReducedMotion, useResizeObserver } from '@vueuse/core'
+  import { useResizeObserver } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs, useId } from 'vue'
 
+  import { useChartEntrance } from '../../../composables/use-chart-entrance'
   import {
     areaPath,
     barPath,
@@ -48,11 +49,9 @@
 
   const attrs = useAttrs()
   const gradientId = `spark-chart-${useId()}`
-  const reducedMotion = usePreferredReducedMotion()
-  const entered = ref(false)
+  const { entered, scheduleEnter } = useChartEntrance()
   const rootEl = ref<globalThis.HTMLDivElement | null>(null)
   const measuredWidth = ref(0)
-  let frame = 0
   let measureFrame = 0
 
   useResizeObserver(rootEl, ([entry]) => {
@@ -124,21 +123,9 @@
     })
   })
 
-  onMounted(() => {
-    if (reducedMotion.value === 'reduce') {
-      entered.value = true
-      return
-    }
-    frame = globalThis.requestAnimationFrame(() => {
-      frame = globalThis.requestAnimationFrame(() => {
-        frame = 0
-        entered.value = true
-      })
-    })
-  })
+  onMounted(scheduleEnter)
 
   onScopeDispose(() => {
-    if (frame) globalThis.cancelAnimationFrame(frame)
     if (measureFrame) globalThis.cancelAnimationFrame(measureFrame)
   })
 

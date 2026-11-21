@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: b0626e3a7b6d30f162e879a69bbe9e3e10b62d607853e0261d490b01b5dbe0a1
+checksum: e55a66e7e90b7a8ed6c3872110eb3264f97742d9e84f5fa4fde5e28799a8ccd7
 created: 2026-05-22
 last_updated: 2026-11-16
 ---
@@ -279,7 +279,7 @@ Six things make it hold together:
   `TAP_SLOP` (3 px): the browser fires `click` after every `pointerup`, so without that guard a
   pull the user aborted below the commit threshold would be answered by expanding the rail anyway
   — the opposite of what they did.
-- **A preview is not a restore.** The rail stays `inert` + `aria-hidden` throughout, so the sliver
+- **A preview is not a restore.** The rail stays `inert` throughout, so the sliver
   itself is never the thing that is clicked — the click lands on the splitter zone in front of it.
   The button and the drag remain, so the preview is additive to the affordance rather than a
   replacement for it: it costs a keyboard user nothing and gives a pointer user the whole edge as
@@ -427,7 +427,7 @@ The only events are the `update:*` of the models above.
   control; see Accessibility), `__header`, `__nav`, `__scroll`, `__footer`, `__collapse` (the
   trigger), `__handle` (the drag separator), `__expand` / `__expand-button` (the collapsed
   affordance)
-- A collapsed offcanvas rail carries `inert` + `aria-hidden`, so it holds no tab stops while it is out; an icon rail keeps its rows reachable
+- A collapsed offcanvas rail carries `inert`, which also removes it from the accessibility tree, so it holds no tab stops while it is out; an icon rail keeps its rows reachable
 
 ## Motion & Animations
 
@@ -491,7 +491,7 @@ sample). Leaving it at `translate: 0` pins the content in place while the rail's
 it — the reading that the content sits on a layer _beneath_ the rail rather than being carried by
 it. Sliding it by pull progress while the rail stands still is the same failure, louder.
 
-**`inert` / `aria-hidden` commit on release, not mid-gesture.** `collapsed` flips while the pointer
+**`inert` commits on release, not mid-gesture.** `collapsed` flips while the pointer
 is still down, so the collapsed _semantics_ are gated on `!resizing`: a rail that is visible and
 tracking the pointer is never removed from the accessibility tree.
 
@@ -590,7 +590,7 @@ canvas the tokens fall back to.
   1 px and the minimum, and reporting the token bound would put the collapsed position outside the
   range the control announces. Without these, `axe` reports `aria-required-attr` and a screen reader
   announces a separator carrying no information at all.
-- A **collapsed rail carries `inert` and `aria-hidden`** — the content is still mounted so its width
+- A **collapsed rail carries `inert`**, which also removes it from the accessibility tree — the content is still mounted so its width
   can animate, and it must not be reachable while it is out of the layout. That is why the control
   that brings it back is a sibling of the rail rather than inside it.
 - The **hidden checkbox that mirrors the collapsed state (`!open`)** (`__collapse-input`) carries `aria-hidden="true"`

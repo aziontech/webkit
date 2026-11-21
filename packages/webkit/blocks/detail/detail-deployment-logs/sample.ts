@@ -328,3 +328,381 @@ export const sampleCreateFlowFailedSteps: DeploymentLogsStep[] = sampleFailedSte
   description: step.description?.replace('Routing Rules', 'Routing rules'),
   lines: step.lines.map((line) => ({ ...line, message: line.message.replace(/!$/, '.') }))
 }))
+
+interface DeploymentRun {
+  command: string
+  prefix: string
+}
+
+const deploymentSteps = (run: DeploymentRun): DeploymentLogsStep[] => [
+  {
+    id: 'build',
+    title: 'Build',
+    description: 'Bundle written to .build/worker.js',
+    status: 'success',
+    duration: '28s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:11',
+        type: 'text',
+        message: `[build] Running deploy command · ${run.command}`
+      },
+      {
+        id: '1',
+        time: '14:02:11',
+        type: 'text',
+        message: '[build] Getting presets available'
+      },
+      {
+        id: '2',
+        time: '14:02:12',
+        type: 'text',
+        message: '[build] Building with preset"vue" (platform bundler)'
+      },
+      {
+        id: '3',
+        time: '14:02:38',
+        type: 'text',
+        message: '[build] vite build · 1.69 MB in dist/'
+      },
+      {
+        id: '4',
+        time: '14:02:39',
+        type: 'text',
+        message: '[build] Wrote .build/worker.js and .build/manifest.json'
+      },
+      {
+        id: '5',
+        time: '14:02:39',
+        type: 'success',
+        message: '[build] Build finished successfully'
+      }
+    ]
+  },
+  {
+    id: 'upload',
+    title: 'Upload',
+    description: 'Static assets uploaded to storage',
+    status: 'success',
+    duration: '8.1s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:39',
+        type: 'text',
+        message: '[upload] Uploading .build/assets to storage web-app-assets'
+      },
+      {
+        id: '1',
+        time: '14:02:40',
+        type: 'text',
+        message: `[upload] Prefix ${run.prefix} (rotate-prefix)`
+      },
+      {
+        id: '2',
+        time: '14:02:46',
+        type: 'success',
+        message: '[upload] 24 files updated successfully'
+      },
+      {
+        id: '3',
+        time: '14:02:47',
+        type: 'success',
+        message: '[upload] Storage web-app-assets successfully updated'
+      }
+    ]
+  },
+  {
+    id: 'manifest',
+    title: 'Manifest',
+    description: 'manifest.json read, every resource resolved',
+    status: 'success',
+    duration: '1.9s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:47',
+        type: 'text',
+        message: '[manifest] Reading manifest.json file'
+      },
+      {
+        id: '1',
+        time: '14:02:48',
+        type: 'text',
+        message: '[manifest] Resolved 4 resources to apply: function, resource, origin, service'
+      },
+      {
+        id: '2',
+        time: '14:02:48',
+        type: 'text',
+        message: '[manifest] 3 rules declared in the request phase'
+      },
+      {
+        id: '3',
+        time: '14:02:49',
+        type: 'success',
+        message: '[manifest] manifest.json read successfully'
+      }
+    ]
+  },
+  {
+    id: 'function',
+    title: 'Function',
+    description: 'Function bound to the bundle',
+    status: 'success',
+    duration: '3.6s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:49',
+        type: 'text',
+        message: '[manifest] Updated function __DEFAULT__ with ID 53089'
+      },
+      {
+        id: '1',
+        time: '14:02:51',
+        type: 'text',
+        message: '[manifest] Bound .build/worker.js to function 53089'
+      },
+      {
+        id: '2',
+        time: '14:02:53',
+        type: 'success',
+        message: '[manifest] Function binding __DEFAULT__ with id 47458 successfully updated'
+      }
+    ]
+  },
+  {
+    id: 'resource',
+    title: 'Resource',
+    description: 'Resource and cache settings applied',
+    status: 'success',
+    duration: '2.8s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:53',
+        type: 'text',
+        message: '[manifest] Updated resource web-app with ID 1784552864'
+      },
+      {
+        id: '1',
+        time: '14:02:55',
+        type: 'success',
+        message: '[manifest] Cache setting __DEFAULT__ successfully updated'
+      },
+      {
+        id: '2',
+        time: '14:02:56',
+        type: 'success',
+        message: '[manifest] Resource web-app successfully updated'
+      }
+    ]
+  },
+  {
+    id: 'origin',
+    title: 'Origin',
+    description: 'Origin pointed at the storage',
+    status: 'success',
+    duration: '1.9s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:56',
+        type: 'text',
+        message: '[manifest] Creating origin storage-default (storage)'
+      },
+      {
+        id: '1',
+        time: '14:02:57',
+        type: 'text',
+        message: `[manifest] Storage web-app-assets · prefix ${run.prefix}`
+      },
+      {
+        id: '2',
+        time: '14:02:58',
+        type: 'success',
+        message: '[manifest] Origin storage-default with id 263718 successfully updated'
+      }
+    ]
+  },
+  {
+    id: 'rules',
+    title: 'Rules',
+    description: 'Request-phase rules applied',
+    status: 'success',
+    duration: '4.8s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:59',
+        type: 'success',
+        message:
+          '[manifest] Rule"Set storage origin for all requests" with id 604943 successfully updated'
+      },
+      {
+        id: '1',
+        time: '14:03:00',
+        type: 'success',
+        message: '[manifest] Rule"Deliver static assets" with id 604944 successfully updated'
+      },
+      {
+        id: '2',
+        time: '14:03:01',
+        type: 'success',
+        message: '[manifest] Rule"Redirect to index.html" with id 604945 successfully updated'
+      },
+      {
+        id: '3',
+        time: '14:03:03',
+        type: 'success',
+        message: '[manifest] 3 rules applied in the request phase'
+      }
+    ]
+  },
+  {
+    id: 'service',
+    title: 'Service',
+    description: 'Service deployment published to the domain',
+    status: 'success',
+    duration: '3.7s',
+    lines: [
+      {
+        id: '0',
+        time: '14:03:04',
+        type: 'success',
+        message: '[manifest] Service web-app with id 1784675753 successfully updated'
+      },
+      {
+        id: '1',
+        time: '14:03:05',
+        type: 'success',
+        message: '[manifest] Service deployment d_7Kq2mVbHZ with id 5591028 successfully created'
+      },
+      {
+        id: '2',
+        time: '14:03:06',
+        type: 'text',
+        message: '[manifest] Environment production'
+      },
+      {
+        id: '3',
+        time: '14:03:07',
+        type: 'text',
+        message: '[manifest] Updated domain web-app with ID 1784675753'
+      }
+    ]
+  },
+  {
+    id: 'purge',
+    title: 'Cache purge',
+    description: 'Cache purged for the domain',
+    status: 'success',
+    duration: '3.4s',
+    lines: [
+      {
+        id: '0',
+        time: '14:03:08',
+        type: 'text',
+        message: '[purge] purge_on_publish · Initializing cache warming...'
+      },
+      {
+        id: '1',
+        time: '14:03:09',
+        type: 'text',
+        message: '[purge] Purge request accepted for web-app-mh2saq.example.com'
+      },
+      {
+        id: '2',
+        time: '14:03:10',
+        type: 'text',
+        message: '[purge] Cache warmed for 3 locations'
+      },
+      {
+        id: '3',
+        time: '14:03:11',
+        type: 'success',
+        message: '[purge] Purge finished executing'
+      }
+    ]
+  },
+  {
+    id: 'finish',
+    title: 'Live',
+    description: 'Deployment serving traffic at the domain',
+    status: 'success',
+    duration: '0.9s',
+    lines: [
+      {
+        id: '0',
+        time: '14:03:12',
+        type: 'text',
+        message:
+          '[deploy] To visualize your resource access the domain: https://web-app-mh2saq.example.com'
+      },
+      {
+        id: '1',
+        time: '14:03:12',
+        type: 'success',
+        message: '[deploy] Deployed finished executing'
+      }
+    ]
+  }
+]
+
+const failedDeploymentDurations: Record<string, string> = {
+  build: '26s',
+  upload: '7.8s',
+  manifest: '1.7s',
+  function: '3.4s',
+  resource: '2.6s',
+  origin: '1.8s'
+}
+
+const failedDeploymentRules = (step: DeploymentLogsStep): DeploymentLogsStep => ({
+  ...step,
+  description: 'The rules rejected this deployment (409 Conflict).',
+  status: 'error',
+  duration: '4.1s',
+  lines: [
+    { ...step.lines[0], type: 'text' },
+    {
+      id: '1',
+      time: '14:03:01',
+      type: 'text',
+      level: 'error',
+      message: '[ERROR] [manifest] Error while creating rule"Deliver static assets"'
+    },
+    {
+      id: '2',
+      time: '14:03:02',
+      type: 'text',
+      level: 'error',
+      message: '409 Conflict: a rule with this behavior is already bound to service web-app'
+    },
+    {
+      id: '3',
+      time: '14:03:03',
+      type: 'text',
+      level: 'error',
+      message: '[ERROR] [manifest] Deploy aborted. Nothing was published.'
+    }
+  ]
+})
+
+export const sampleDeploymentSteps: DeploymentLogsStep[] = deploymentSteps({
+  command: 'platform deploy --auto --local',
+  prefix: '20260722112530'
+})
+
+export const sampleDeploymentFailedSteps: DeploymentLogsStep[] = deploymentSteps({
+  command: 'Console (UI)',
+  prefix: '20260730140211'
+}).map((step) => {
+  if (step.id === 'rules') return failedDeploymentRules(step)
+  const duration = failedDeploymentDurations[step.id]
+  return duration
+    ? { ...step, duration }
+    : notRun(step, 'skipped', 'Never ran. The deployment stopped at Rules')
+})

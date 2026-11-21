@@ -1,7 +1,6 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
+  import { computed } from 'vue'
 
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../action/button/button.vue'
   import FieldDescription from '../../../input/field/field-description/field-description.vue'
   import FieldLabel from '../../../input/field/field-label/field-label.vue'
@@ -10,10 +9,10 @@
   import InputGroupAddon from '../../../input/input-group/input-group-addon/input-group-addon.vue'
   import Select from '../../../input/select/index'
   import Switch from '../../../input/switch/switch.vue'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'AiInferenceModelFragment' })
 
@@ -25,9 +24,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const MODEL = 'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8'
 
@@ -62,45 +58,12 @@
     { ...TYPED, cursor: DEPLOY, focused: false, forward: 360, back: 420 }
   ]
 
-  const LAST = FRAMES.length - 1
+  const { frame } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
+  })
 
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-
-  const frame = computed(() => FRAMES[step.value])
   const model = computed(() => MODEL.slice(0, frame.value.typed))
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
-
   const shown = (value: unknown) => String(value)
 
   const FIELD_RING_CLASS =
@@ -110,117 +73,105 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    fade="bottom"
+  <MockupFragment
     class="[--console-mockup-fade-start:82%]"
-    :chrome="false"
     :active="active"
     :width="480"
     :mobile-width="420"
+    :cursor="frame.cursor"
+    cursor-name="Jane"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative"
-    >
-      <div class="flex flex-col gap-(--spacing-lg) py-(--spacing-xs)">
-        <ConsoleMockupShellItem :order="0">
-          <div class="grid grid-cols-2 items-start gap-(--spacing-lg)">
-            <div class="flex flex-col gap-(--spacing-xs)">
-              <FieldLabel
-                required
-                for="ai-inference-scope"
-                >Scope</FieldLabel
-              >
-              <Select
-                model-value="gab-az"
-                size="large"
-                placeholder="Select a scope"
-                :display-value="shown"
-              >
-                <Select.Trigger aria-label="Scope" />
-              </Select>
-            </div>
-
-            <div class="flex flex-col gap-(--spacing-xs)">
-              <FieldLabel
-                required
-                for="ai-inference-repo"
-                >Public Repository Name</FieldLabel
-              >
-              <InputGroupRoot size="large">
-                <Input
-                  id="ai-inference-repo"
-                  model-value="ai-inference-starter-kit"
-                  size="large"
-                  placeholder="my-repository"
-                  class="flex-1"
-                />
-                <InputGroupAddon>
-                  <Switch
-                    :model-value="true"
-                    variant="privacy"
-                    aria-label="Repository is public — toggle to make it private"
-                  />
-                </InputGroupAddon>
-              </InputGroupRoot>
-            </div>
-          </div>
-        </ConsoleMockupShellItem>
-
-        <ConsoleMockupShellItem :order="1">
-          <h3 class="text-heading-2xs text-(--text-default)">Template Settings</h3>
-        </ConsoleMockupShellItem>
-
-        <ConsoleMockupShellItem :order="2">
+    <div class="flex flex-col gap-(--spacing-lg) py-(--spacing-xs)">
+      <ConsoleMockupShellItem :order="0">
+        <div class="grid grid-cols-2 items-start gap-(--spacing-lg)">
           <div class="flex flex-col gap-(--spacing-xs)">
             <FieldLabel
               required
-              for="ai-inference-model"
-              >Model</FieldLabel
+              for="ai-inference-scope"
+              >Scope</FieldLabel
             >
-            <span
-              :data-focused="frame.focused || null"
-              data-cursor="model"
-              :class="FIELD_RING_CLASS"
-            >
-              <Input
-                id="ai-inference-model"
-                :model-value="model"
-                size="large"
-                placeholder="llama-3.2-3b-instruct"
-                class="flex-1"
-                aria-describedby="ai-inference-model-helper"
-              />
-            </span>
-            <FieldDescription id="ai-inference-model-helper"
-              >The model the application loads on the first request.</FieldDescription
-            >
-          </div>
-        </ConsoleMockupShellItem>
-
-        <ConsoleMockupShellItem :order="3">
-          <span
-            data-cursor="deploy"
-            class="flex"
-          >
-            <Button
-              class="w-full"
-              label="Deploy"
-              variant="primary"
+            <Select
+              model-value="gab-az"
               size="large"
-              :disabled="!model"
+              placeholder="Select a scope"
+              :display-value="shown"
+            >
+              <Select.Trigger aria-label="Scope" />
+            </Select>
+          </div>
+
+          <div class="flex flex-col gap-(--spacing-xs)">
+            <FieldLabel
+              required
+              for="ai-inference-repo"
+              >Public Repository Name</FieldLabel
+            >
+            <InputGroupRoot size="large">
+              <Input
+                id="ai-inference-repo"
+                model-value="ai-inference-starter-kit"
+                size="large"
+                placeholder="my-repository"
+                class="flex-1"
+              />
+              <InputGroupAddon>
+                <Switch
+                  :model-value="true"
+                  variant="privacy"
+                  aria-label="Repository is public — toggle to make it private"
+                />
+              </InputGroupAddon>
+            </InputGroupRoot>
+          </div>
+        </div>
+      </ConsoleMockupShellItem>
+
+      <ConsoleMockupShellItem :order="1">
+        <h3 class="text-heading-2xs text-(--text-default)">Template Settings</h3>
+      </ConsoleMockupShellItem>
+
+      <ConsoleMockupShellItem :order="2">
+        <div class="flex flex-col gap-(--spacing-xs)">
+          <FieldLabel
+            required
+            for="ai-inference-model"
+            >Model</FieldLabel
+          >
+          <span
+            :data-focused="frame.focused || null"
+            data-cursor="model"
+            :class="FIELD_RING_CLASS"
+          >
+            <Input
+              id="ai-inference-model"
+              :model-value="model"
+              size="large"
+              placeholder="llama-3.2-3b-instruct"
+              class="flex-1"
+              aria-describedby="ai-inference-model-helper"
             />
           </span>
-        </ConsoleMockupShellItem>
-      </div>
+          <FieldDescription id="ai-inference-model-helper"
+            >The model the application loads on the first request.</FieldDescription
+          >
+        </div>
+      </ConsoleMockupShellItem>
 
-      <MockupCursor
-        name="Jane"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
-      />
+      <ConsoleMockupShellItem :order="3">
+        <span
+          data-cursor="deploy"
+          class="flex"
+        >
+          <Button
+            class="w-full"
+            label="Deploy"
+            variant="primary"
+            size="large"
+            :disabled="!model"
+          />
+        </span>
+      </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

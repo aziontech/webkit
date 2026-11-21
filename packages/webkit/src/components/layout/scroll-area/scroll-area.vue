@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { cn } from '../../../utils/cn'
   import { useScrollFade } from './composables/use-scroll-fade'
 
@@ -110,6 +111,8 @@
         break
     }
   }
+
+  useElementListener(viewportEl, 'keydown', onKeydown)
 </script>
 
 <template>
@@ -123,7 +126,6 @@
     :data-testid="testId"
     :aria-label="ariaLabel || undefined"
     :tabindex="tabIndex"
-    @keydown="onKeydown"
   >
     <slot />
   </div>

@@ -44,6 +44,12 @@
     "name": "Default",
     "file": "create-page.vue"
   },
+  "files": [
+    "domain-validation.ts",
+    "use-create-form.ts",
+    "parts/creation-header.vue",
+    "parts/discard-dialog.vue"
+  ],
   "variants": [
     {
       "name": "CreateZone",

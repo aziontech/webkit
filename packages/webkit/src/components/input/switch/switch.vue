@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, ref, useAttrs } from 'vue'
 
-  import { useFieldControl } from '../../../composables/use-field-control'
+  import { useFieldAttrs } from '../../../composables/use-field-attrs'
   import { FormValue } from '../parts/form-value'
 
   defineOptions({
@@ -43,23 +43,11 @@
     labelledBy,
     invalid: isInvalid,
     disabled: isDisabled,
-    required: isRequired
-  } = useFieldControl({
-    id: () => attrs['id'] as string | undefined,
-    describedBy: () => attrs['aria-describedby'] as string | undefined,
-    labelledBy: () => attrs['aria-labelledby'] as string | undefined,
-    invalid: () => props.invalid,
-    disabled: () => props.disabled
-  })
+    required: isRequired,
+    passthroughAttrs
+  } = useFieldAttrs(props)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'switch')
-
-  const passthroughAttrs = computed(() => {
-    const rest = { ...attrs }
-    delete rest.class
-    delete rest['data-testid']
-    return rest
-  })
 
   const isChecked = computed(() => model.value === true)
 

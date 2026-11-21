@@ -1,26 +1,12 @@
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
   import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import Separator from '@aziontech/webkit/separator'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import Tag from '@aziontech/webkit/tag'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { computed, ref, watch } from 'vue'
+
+  import DeployDrawerFrame from '../parts/deploy-drawer-frame.vue'
+  import DeployResourcesCard from '../parts/deploy-resources-card.vue'
 
   interface Version {
     id: string
@@ -186,8 +172,7 @@
   ]
 
   const open = ref(false)
-  const picks = reactive<Record<string, string>>({})
-  const versionOpen = reactive<Record<string, boolean>>({})
+  const picks = ref<Record<string, string>>({})
   const environment = ref('Production')
 
   const setting = computed(
@@ -200,440 +185,67 @@
 
   const sharedWith = computed(() => (setting.value.shared ? setting.value.projects : []))
 
-  const versionOf = (row: Dependency) =>
-    row.versions.find((entry) => entry.id === picks[row.key]) ?? row.versions[0]
-
-  const versionSummary = (row: Dependency) =>
-    row.total > row.versions.length
-      ? `${row.versions.length} of ${row.total} Ready versions`
-      : `${row.total} Ready versions`
-
-  const pickVersion = (row: Dependency, id: string) => {
-    picks[row.key] = id
-    versionOpen[row.key] = false
-  }
-
   watch(open, (isOpen) => {
     if (!isOpen) return
-    Object.keys(picks).forEach((key) => delete picks[key])
-    Object.keys(versionOpen).forEach((key) => delete versionOpen[key])
+    picks.value = {}
     environment.value = 'Production'
-  })
-
-  const formEl = ref<HTMLFormElement | null>(null)
-
-  useShortcuts({
-    keys: 'meta+enter',
-    label: 'Deploy',
-    group: 'Drawer',
-    element: formEl,
-    when: () => open.value,
-    handler: () => formEl.value?.requestSubmit()
   })
 </script>
 
 <template>
-  <Drawer
+  <DeployDrawerFrame
     v-model:open="open"
-    size="large"
-    side="end"
+    description="Deploy project-01. Review what goes live and where."
   >
-    <DrawerTrigger>
-      <Button
-        label="Deploy"
-        variant="outline"
-        size="medium"
-        icon="az az-cloud-upload"
-      />
-    </DrawerTrigger>
-
-    <DrawerContent>
-      <form
-        ref="formEl"
-        class="flex min-h-0 flex-1 flex-col"
-        aria-label="Deploy"
-        novalidate
-        @submit.prevent="open = false"
+    <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
+      <legend class="sr-only">Deploy</legend>
+      <SettingsGroup
+        label="Resources"
+        hint="Everything this project serves, at the version this deployment sends live, with the version of every dependency they reference."
       >
-        <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>Deploy</DrawerTitle>
-            <p class="text-body-sm text-(--text-muted)">
-              Deploy project-01. Review what goes live and where.
-            </p>
-          </div>
-        </PanelHeader>
+        <DeployResourcesCard
+          v-model:picks="picks"
+          :resources="resources"
+        />
+      </SettingsGroup>
 
-        <PanelBody>
-          <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
-            <legend class="sr-only">Deploy</legend>
-            <SettingsGroup
-              label="Resources"
-              hint="Everything this project serves, at the version this deployment sends live, with the version of every dependency they reference."
+      <SettingsGroup
+        label="Environment"
+        hint="Where the deployment goes live. Each environment goes live with its own Deployment Settings."
+      >
+        <RadioGroup
+          v-model="environment"
+          variant="card"
+          name="project-deploy-environment"
+          aria-label="Environment"
+        >
+          <RadioGroup.Item
+            v-for="entry in environmentChoices"
+            :key="entry.name"
+            :value="entry.name"
+            :description="entry.description"
+          >
+            {{ entry.name }}
+            <template
+              v-if="entry.tag"
+              #tag
             >
-              <Card :padded="false">
-                <template #default>
-                  <template
-                    v-for="(row, index) in resources"
-                    :key="row.key"
-                  >
-                    <Separator v-if="index" />
-                    <Item
-                      variant="inline"
-                      size="small"
-                    >
-                      <Item.Media>
-                        <span
-                          class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-                        >
-                          <i
-                            :class="row.icon"
-                            class="text-body-xs text-(--text-default)"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </Item.Media>
-                      <Item.Content>
-                        <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-                          <span class="shrink-0 text-body-sm text-(--text-muted)">
-                            {{ row.label }}
-                          </span>
-                          <Item.Title>{{ row.name }}</Item.Title>
-                          <Tag
-                            v-if="!row.note"
-                            :label="row.versions.length ? 'Ready' : 'No ready version'"
-                            :severity="row.versions.length ? 'success' : 'warning'"
-                            size="small"
-                            class="shrink-0"
-                          />
-                        </span>
-                        <Item.Description>
-                          {{ row.note || versionOf(row).name }}
-                        </Item.Description>
-                      </Item.Content>
-                      <Item.Actions
-                        v-if="!row.note"
-                        class="basis-full sm:basis-auto"
-                      >
-                        <DropdownMenu
-                          v-model:open="versionOpen[row.key]"
-                          side="bottom"
-                          align="end"
-                          @select="(_event, id) => pickVersion(row, String(id))"
-                        >
-                          <DropdownMenu.Trigger>
-                            <Button
-                              label="Change version"
-                              :aria-label="`Change version of ${row.name}`"
-                              variant="outline"
-                              size="small"
-                              icon="az az-chevron-down"
-                              icon-position="trailing"
-                              :disabled="!row.versions.length"
-                            />
-                          </DropdownMenu.Trigger>
-                          <template #header>
-                            <div
-                              class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
-                            >
-                              <p class="text-label-sm text-(--text-muted)">
-                                {{ versionSummary(row) }}
-                              </p>
-                              <Input
-                                v-if="row.total > row.versions.length"
-                                size="medium"
-                                placeholder="Search versions"
-                                aria-label="Search versions"
-                              >
-                                <template #leading>
-                                  <i
-                                    class="az az-search"
-                                    aria-hidden="true"
-                                  />
-                                </template>
-                              </Input>
-                            </div>
-                          </template>
-                          <DropdownMenu.Group>
-                            <DropdownMenu.Item
-                              v-for="entry in row.versions"
-                              :key="entry.id"
-                              :value="entry.id"
-                              :label="entry.name"
-                              :selected="entry.id === versionOf(row).id"
-                              :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
-                            >
-                              <template #leading>
-                                <Avatar
-                                  :alt="entry.author"
-                                  :label="entry.author"
-                                  size="small"
-                                  variant="square"
-                                />
-                              </template>
-                              <span class="inline-flex min-w-0 items-center gap-(--spacing-xs)">
-                                <span class="truncate">{{ entry.name }}</span>
-                                <Tag
-                                  v-if="entry.active"
-                                  label="Active"
-                                  severity="success"
-                                  size="small"
-                                  class="shrink-0"
-                                />
-                              </span>
-                              <template #trailing>
-                                <span class="text-body-xs text-(--text-muted)">{{
-                                  entry.createdAgo
-                                }}</span>
-                              </template>
-                            </DropdownMenu.Item>
-                          </DropdownMenu.Group>
-                          <template
-                            v-if="row.total > row.versions.length"
-                            #bottom
-                          >
-                            <div
-                              class="border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-2xs)"
-                            >
-                              <Button
-                                :label="`Load ${Math.min(row.versions.length, row.total - row.versions.length)} more`"
-                                variant="ghost"
-                                size="small"
-                                class="w-full"
-                              />
-                            </div>
-                          </template>
-                        </DropdownMenu>
-                      </Item.Actions>
-                    </Item>
-                    <template v-if="row.owner">
-                      <Separator />
-                      <Accordion
-                        type="single"
-                        collapsible
-                        size="medium"
-                      >
-                        <Accordion.Item value="dependencies">
-                          <Accordion.Trigger>
-                            <span class="text-label-sm text-(--text-default)">Dependencies</span>
-                          </Accordion.Trigger>
-                          <Accordion.Content>
-                            <div class="min-w-0">
-                              <p
-                                v-if="!row.dependencies.length"
-                                class="text-body-sm text-(--text-muted)"
-                              >
-                                {{ row.name }} references no other resources.
-                              </p>
-                              <Item.Group v-else>
-                                <Item
-                                  v-for="dependency in row.dependencies"
-                                  :key="dependency.key"
-                                  variant="inline"
-                                  size="small"
-                                >
-                                  <Item.Media>
-                                    <span class="flex size-5 items-center justify-center">
-                                      <i
-                                        :class="dependency.icon"
-                                        class="text-body-xs text-(--text-muted)"
-                                        aria-hidden="true"
-                                      />
-                                    </span>
-                                  </Item.Media>
-                                  <Item.Content>
-                                    <span
-                                      class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
-                                    >
-                                      <span class="shrink-0 text-body-sm text-(--text-muted)">
-                                        {{ dependency.label }}
-                                      </span>
-                                      <Item.Title>{{ dependency.name }}</Item.Title>
-                                      <Tag
-                                        v-if="!dependency.note"
-                                        :label="
-                                          dependency.versions.length ? 'Ready' : 'No ready version'
-                                        "
-                                        :severity="
-                                          dependency.versions.length ? 'success' : 'warning'
-                                        "
-                                        size="small"
-                                        class="shrink-0"
-                                      />
-                                    </span>
-                                    <Item.Description>
-                                      {{ dependency.note || versionOf(dependency).name }}
-                                    </Item.Description>
-                                  </Item.Content>
-                                  <Item.Actions v-if="!dependency.note">
-                                    <DropdownMenu
-                                      v-model:open="versionOpen[dependency.key]"
-                                      side="bottom"
-                                      align="end"
-                                      @select="(_event, id) => pickVersion(dependency, String(id))"
-                                    >
-                                      <DropdownMenu.Trigger>
-                                        <Button
-                                          label="Change version"
-                                          :aria-label="`Change version of ${dependency.name}`"
-                                          variant="outline"
-                                          size="small"
-                                          icon="az az-chevron-down"
-                                          icon-position="trailing"
-                                          :disabled="!dependency.versions.length"
-                                        />
-                                      </DropdownMenu.Trigger>
-                                      <template #header>
-                                        <div
-                                          class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
-                                        >
-                                          <p class="text-label-sm text-(--text-muted)">
-                                            {{ versionSummary(dependency) }}
-                                          </p>
-                                          <Input
-                                            v-if="dependency.total > dependency.versions.length"
-                                            size="medium"
-                                            placeholder="Search versions"
-                                            aria-label="Search versions"
-                                          >
-                                            <template #leading>
-                                              <i
-                                                class="az az-search"
-                                                aria-hidden="true"
-                                              />
-                                            </template>
-                                          </Input>
-                                        </div>
-                                      </template>
-                                      <DropdownMenu.Group>
-                                        <DropdownMenu.Item
-                                          v-for="entry in dependency.versions"
-                                          :key="entry.id"
-                                          :value="entry.id"
-                                          :label="entry.name"
-                                          :selected="entry.id === versionOf(dependency).id"
-                                          :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
-                                        >
-                                          <template #leading>
-                                            <Avatar
-                                              :alt="entry.author"
-                                              :label="entry.author"
-                                              size="small"
-                                              variant="square"
-                                            />
-                                          </template>
-                                          <span
-                                            class="inline-flex min-w-0 items-center gap-(--spacing-xs)"
-                                          >
-                                            <span class="truncate">{{ entry.name }}</span>
-                                            <Tag
-                                              v-if="entry.active"
-                                              label="Active"
-                                              severity="success"
-                                              size="small"
-                                              class="shrink-0"
-                                            />
-                                          </span>
-                                          <template #trailing>
-                                            <span class="text-body-xs text-(--text-muted)">{{
-                                              entry.createdAgo
-                                            }}</span>
-                                          </template>
-                                        </DropdownMenu.Item>
-                                      </DropdownMenu.Group>
-                                      <template
-                                        v-if="dependency.total > dependency.versions.length"
-                                        #bottom
-                                      >
-                                        <div
-                                          class="border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-2xs)"
-                                        >
-                                          <Button
-                                            :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
-                                            variant="ghost"
-                                            size="small"
-                                            class="w-full"
-                                          />
-                                        </div>
-                                      </template>
-                                    </DropdownMenu>
-                                  </Item.Actions>
-                                </Item>
-                              </Item.Group>
-                              <span
-                                class="sr-only"
-                                role="status"
-                              />
-                            </div>
-                          </Accordion.Content>
-                        </Accordion.Item>
-                      </Accordion>
-                    </template>
-                  </template>
-                </template>
-              </Card>
-            </SettingsGroup>
-
-            <SettingsGroup
-              label="Environment"
-              hint="Where the deployment goes live. Each environment goes live with its own Deployment Settings."
-            >
-              <RadioGroup
-                v-model="environment"
-                variant="card"
-                name="project-deploy-environment"
-                aria-label="Environment"
-              >
-                <RadioGroup.Item
-                  v-for="entry in environmentChoices"
-                  :key="entry.name"
-                  :value="entry.name"
-                  :description="entry.description"
-                >
-                  {{ entry.name }}
-                  <template
-                    v-if="entry.tag"
-                    #tag
-                  >
-                    <Tag
-                      :label="entry.tag"
-                      severity="info"
-                      size="small"
-                    />
-                  </template>
-                </RadioGroup.Item>
-              </RadioGroup>
-
-              <Alert
-                v-if="sharedWith.length"
-                severity="warning"
+              <Tag
+                :label="entry.tag"
+                severity="info"
                 size="small"
-                :label="`Deploying with ${setting.name} also deploys to ${sharedWith.join(', ')}.`"
               />
-            </SettingsGroup>
-          </fieldset>
-        </PanelBody>
+            </template>
+          </RadioGroup.Item>
+        </RadioGroup>
 
-        <PanelFooter>
-          <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
-            <div class="flex min-w-0 items-center gap-(--spacing-sm)" />
-            <Button
-              variant="primary"
-              size="medium"
-              type="submit"
-              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
-            >
-              Deploy
-              <Kbd
-                meta
-                key-name="enter"
-                size="small"
-                aria-hidden="true"
-              />
-            </Button>
-          </div>
-        </PanelFooter>
-      </form>
-    </DrawerContent>
-  </Drawer>
+        <Alert
+          v-if="sharedWith.length"
+          severity="warning"
+          size="small"
+          :label="`Deploying with ${setting.name} also deploys to ${sharedWith.join(', ')}.`"
+        />
+      </SettingsGroup>
+    </fieldset>
+  </DeployDrawerFrame>
 </template>

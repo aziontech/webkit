@@ -20,6 +20,8 @@
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, nextTick, onMounted, onScopeDispose, reactive, ref, watch } from 'vue'
 
+  import SignInFrame from './parts/sign-in-frame.vue'
+
   /** The step the card shows. */
   export type SignInStep = 'email' | 'password' | 'reset' | 'sent' | 'new-password'
 
@@ -502,423 +504,397 @@
       }
     } else backToSignIn()
   }
-
-  const FORM_COLUMN_CLASS =
-    'm-auto flex w-full flex-col items-center gap-(--spacing-md) transition-[translate,opacity] duration-slow-01 ease-expressive-entrance ' +
-    'starting:-translate-x-6 starting:opacity-0 rtl:starting:translate-x-6 motion-reduce:transition-none'
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <AppHeader
-      :aria-label="copy.console"
-      class="shrink-0"
-    >
-      <AppHeader.Brand
-        :href="homeHref"
-        :aria-label="copy.home"
+  <SignInFrame>
+    <template #header>
+      <AppHeader
+        :aria-label="copy.console"
+        class="shrink-0"
       >
-        <Brand
-          variant="default"
-          size="small"
-        />
-      </AppHeader.Brand>
-      <AppHeader.Center />
-      <AppHeader.End>
-        <Button
-          :label="copy.documentation"
-          variant="outline"
-          size="medium"
-          icon="az az-book"
-          :href="docsHref"
-        />
-      </AppHeader.End>
-    </AppHeader>
+        <AppHeader.Brand
+          :href="homeHref"
+          :aria-label="copy.home"
+        >
+          <Brand
+            variant="default"
+            size="small"
+          />
+        </AppHeader.Brand>
+        <AppHeader.Center />
+        <AppHeader.End>
+          <Button
+            :label="copy.documentation"
+            variant="outline"
+            size="medium"
+            icon="az az-book"
+            :href="docsHref"
+          />
+        </AppHeader.End>
+      </AppHeader>
+    </template>
 
-    <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
-      <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">
-        <div class="flex flex-1 flex-col py-(--spacing-xl) lg:min-h-0 lg:overflow-y-auto">
-          <div :class="FORM_COLUMN_CLASS">
-            <Card
-              class="w-full max-w-(--container-sm)"
-              :padded="false"
+    <Card
+      class="w-full max-w-(--container-sm)"
+      :padded="false"
+    >
+      <template #default>
+        <div class="p-(--spacing-lg)">
+          <div
+            :style="cardHeight ? { height: `${cardHeight}px` } : undefined"
+            :data-resizing="resizing || null"
+            class="transition-[height] duration-moderate-02 ease-productive-entrance motion-safe:data-resizing:overflow-hidden motion-reduce:transition-none"
+            @transitionend.self="resizing = false"
+          >
+            <form
+              ref="cardContentEl"
+              class="flex flex-col gap-(--spacing-lg)"
+              :aria-label="copy.form"
+              :aria-busy="verifying || undefined"
+              novalidate
+              @submit.prevent="onPrimary"
             >
-              <template #default>
-                <div class="p-(--spacing-lg)">
+              <PageHeader
+                :title="heading.title"
+                :description="heading.description"
+                size="small"
+              />
+
+              <Alert
+                v-if="cardNotice"
+                :key="cardNotice.label"
+                :severity="cardNotice.severity"
+                size="small"
+                :label="cardNotice.label"
+              >
+                <template
+                  v-if="cardNotice.retry"
+                  #actions
+                >
+                  <Button
+                    :label="copy.retry"
+                    variant="secondary"
+                    size="small"
+                    :loading="verifying"
+                    @click="signIn"
+                  />
+                </template>
+              </Alert>
+
+              <fieldset
+                class="m-0 flex min-w-0 flex-col border-0 p-0"
+                :disabled="verifying"
+              >
+                <legend class="sr-only">{{ heading.title }}</legend>
+                <div
+                  v-if="step === 'email'"
+                  class="flex flex-col gap-(--spacing-lg) pb-(--spacing-lg)"
+                >
                   <div
-                    :style="cardHeight ? { height: `${cardHeight}px` } : undefined"
-                    :data-resizing="resizing || null"
-                    class="transition-[height] duration-moderate-02 ease-productive-entrance motion-safe:data-resizing:overflow-hidden motion-reduce:transition-none"
-                    @transitionend.self="resizing = false"
+                    v-if="providersLoading"
+                    role="status"
+                    :aria-label="copy.preparingProviders"
+                    class="flex flex-col gap-(--spacing-sm)"
                   >
-                    <form
-                      ref="cardContentEl"
-                      class="flex flex-col gap-(--spacing-lg)"
-                      :aria-label="copy.form"
-                      :aria-busy="verifying || undefined"
-                      novalidate
-                      @submit.prevent="onPrimary"
-                    >
-                      <PageHeader
-                        :title="heading.title"
-                        :description="heading.description"
-                        size="small"
+                    <Skeleton height="2.5rem" />
+                    <Skeleton height="2.5rem" />
+                  </div>
+                  <div
+                    v-else
+                    class="flex flex-col gap-(--spacing-sm)"
+                  >
+                    <div class="relative">
+                      <Button
+                        type="button"
+                        :label="copy.continueWithGoogle"
+                        variant="outline"
+                        size="large"
+                        icon="az-color az-google"
+                        class="w-full"
+                        @click="(event: MouseEvent) => emit('provider-click', event, 'google')"
                       />
-
-                      <Alert
-                        v-if="cardNotice"
-                        :key="cardNotice.label"
-                        :severity="cardNotice.severity"
-                        size="small"
-                        :label="cardNotice.label"
+                      <div
+                        v-if="lastUsed === 'google'"
+                        class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
                       >
-                        <template
-                          v-if="cardNotice.retry"
-                          #actions
-                        >
-                          <Button
-                            :label="copy.retry"
-                            variant="secondary"
-                            size="small"
-                            :loading="verifying"
-                            @click="signIn"
-                          />
-                        </template>
-                      </Alert>
-
-                      <fieldset
-                        class="m-0 flex min-w-0 flex-col border-0 p-0"
-                        :disabled="verifying"
-                      >
-                        <legend class="sr-only">{{ heading.title }}</legend>
-                        <div
-                          v-if="step === 'email'"
-                          class="flex flex-col gap-(--spacing-lg) pb-(--spacing-lg)"
-                        >
-                          <div
-                            v-if="providersLoading"
-                            role="status"
-                            :aria-label="copy.preparingProviders"
-                            class="flex flex-col gap-(--spacing-sm)"
-                          >
-                            <Skeleton height="2.5rem" />
-                            <Skeleton height="2.5rem" />
-                          </div>
-                          <div
-                            v-else
-                            class="flex flex-col gap-(--spacing-sm)"
-                          >
-                            <div class="relative">
-                              <Button
-                                type="button"
-                                :label="copy.continueWithGoogle"
-                                variant="outline"
-                                size="large"
-                                icon="az-color az-google"
-                                class="w-full"
-                                @click="
-                                  (event: MouseEvent) => emit('provider-click', event, 'google')
-                                "
-                              />
-                              <div
-                                v-if="lastUsed === 'google'"
-                                class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
-                              >
-                                <Tag
-                                  :label="copy.lastUsed"
-                                  severity="info"
-                                  size="small"
-                                />
-                              </div>
-                            </div>
-                            <div class="relative">
-                              <Button
-                                type="button"
-                                :label="copy.continueWithGithub"
-                                variant="outline"
-                                size="large"
-                                icon="az az-github"
-                                class="w-full"
-                                @click="
-                                  (event: MouseEvent) => emit('provider-click', event, 'github')
-                                "
-                              />
-                              <div
-                                v-if="lastUsed === 'github'"
-                                class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
-                              >
-                                <Tag
-                                  :label="copy.lastUsed"
-                                  severity="info"
-                                  size="small"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          <Separator :label="copy.or" />
-                        </div>
-
-                        <div v-if="step === 'email'">
-                          <Field
-                            required
-                            :invalid="!!errors.email"
-                          >
-                            <Field.Label for="login-email">{{ copy.email }}</Field.Label>
-                            <Input
-                              id="login-email"
-                              v-model="email"
-                              type="email"
-                              name="email"
-                              size="large"
-                              autocomplete="username"
-                              class="w-full"
-                              placeholder="m@example.com"
-                              required
-                              :invalid="!!errors.email"
-                              :aria-describedby="errors.email ? 'login-email-error' : undefined"
-                              @update:model-value="errors.email = ''"
-                            />
-                            <FieldError
-                              v-if="errors.email"
-                              id="login-email-error"
-                              >{{ errors.email }}</FieldError
-                            >
-                          </Field>
-                        </div>
-
-                        <div
-                          v-else-if="step === 'password'"
-                          class="flex flex-col gap-(--spacing-lg)"
-                        >
-                          <div class="flex items-center gap-(--spacing-sm)">
-                            <Tooltip :content="copy.changeEmail">
-                              <IconButton
-                                icon="az az-chevron-left"
-                                :aria-label="copy.changeEmail"
-                                variant="outline"
-                                size="small"
-                                @click="backToEmail"
-                              />
-                            </Tooltip>
-                            <span class="truncate text-label-sm text-(--text-default)">{{
-                              email
-                            }}</span>
-                          </div>
-
-                          <div class="flex flex-col items-start gap-(--spacing-xs)">
-                            <Field
-                              class="w-full"
-                              required
-                              :invalid="!!errors.password"
-                            >
-                              <Field.Label for="login-password">{{ copy.password }}</Field.Label>
-                              <PasswordInput
-                                id="login-password"
-                                v-model="password"
-                                name="password"
-                                autocomplete="current-password"
-                                :placeholder="copy.passwordPlaceholder"
-                                @update:model-value="errors.password = ''"
-                              />
-                              <Field.Error v-if="errors.password">{{
-                                errors.password
-                              }}</Field.Error>
-                            </Field>
-
-                            <Button
-                              type="button"
-                              :label="copy.forgotPassword"
-                              variant="link"
-                              @click="forgotPassword"
-                            />
-                          </div>
-                        </div>
-
-                        <div
-                          v-else-if="step === 'reset'"
-                          class="flex flex-col gap-(--spacing-lg)"
-                        >
-                          <div class="flex items-center gap-(--spacing-sm)">
-                            <Tooltip :content="copy.backToSignIn">
-                              <IconButton
-                                icon="az az-chevron-left"
-                                :aria-label="copy.backToSignIn"
-                                variant="outline"
-                                size="small"
-                                @click="backToSignIn"
-                              />
-                            </Tooltip>
-                            <span class="truncate text-label-sm text-(--text-default)">{{
-                              copy.backToSignIn
-                            }}</span>
-                          </div>
-
-                          <Field
-                            required
-                            :invalid="!!errors.resetEmail"
-                          >
-                            <Field.Label for="reset-email">{{ copy.email }}</Field.Label>
-                            <Input
-                              id="reset-email"
-                              v-model="resetEmail"
-                              type="email"
-                              name="reset-email"
-                              size="large"
-                              autocomplete="email"
-                              class="w-full"
-                              placeholder="m@example.com"
-                              required
-                              :invalid="!!errors.resetEmail"
-                              :aria-describedby="
-                                errors.resetEmail ? 'reset-email-error' : undefined
-                              "
-                              @update:model-value="errors.resetEmail = ''"
-                            />
-                            <FieldError
-                              v-if="errors.resetEmail"
-                              id="reset-email-error"
-                              >{{ errors.resetEmail }}</FieldError
-                            >
-                          </Field>
-                        </div>
-
-                        <div
-                          v-else-if="step === 'new-password'"
-                          class="flex flex-col gap-(--spacing-lg)"
-                        >
-                          <Field
-                            required
-                            :invalid="!!errors.newPassword"
-                          >
-                            <Field.Label for="new-password">{{ copy.newPassword }}</Field.Label>
-                            <PasswordInput
-                              id="new-password"
-                              v-model="newPassword"
-                              name="new-password"
-                              autocomplete="new-password"
-                              :placeholder="copy.newPasswordPlaceholder"
-                              @update:model-value="errors.newPassword = ''"
-                            />
-                            <Field.Error v-if="errors.newPassword">{{
-                              errors.newPassword
-                            }}</Field.Error>
-                            <PasswordRequirements :value="newPassword" />
-                          </Field>
-
-                          <Field
-                            required
-                            :invalid="!!errors.confirmPassword"
-                          >
-                            <Field.Label for="confirm-password">{{
-                              copy.confirmPassword
-                            }}</Field.Label>
-                            <PasswordInput
-                              id="confirm-password"
-                              v-model="confirmPassword"
-                              name="confirm-password"
-                              autocomplete="new-password"
-                              :placeholder="copy.confirmPasswordPlaceholder"
-                              @update:model-value="errors.confirmPassword = ''"
-                            />
-                            <Field.Error v-if="errors.confirmPassword">{{
-                              errors.confirmPassword
-                            }}</Field.Error>
-                          </Field>
-                        </div>
-
-                        <div
-                          v-else
-                          class="flex flex-col gap-(--spacing-xs)"
-                        >
-                          <div class="flex items-center gap-(--spacing-xs)">
-                            <p class="text-body-sm text-(--text-default)">
-                              {{ copy.didNotReceive }}
-                            </p>
-                            <Button
-                              type="button"
-                              :label="copy.resendEmail"
-                              variant="link"
-                              @click="resendEmail"
-                            />
-                          </div>
-                          <div class="flex items-center gap-(--spacing-xs)">
-                            <p class="text-body-sm text-(--text-default)">
-                              {{ copy.alreadyOpened }}
-                            </p>
-                            <Button
-                              type="button"
-                              :label="copy.setNewPassword"
-                              variant="link"
-                              @click="openResetLink"
-                            />
-                          </div>
-                        </div>
-                      </fieldset>
-
-                      <div class="relative">
-                        <Button
-                          :label="primaryAction.label"
-                          :variant="primaryAction.variant"
-                          size="large"
-                          class="w-full"
-                          type="submit"
-                          :loading="verifying"
+                        <Tag
+                          :label="copy.lastUsed"
+                          severity="info"
+                          size="small"
                         />
-
-                        <div
-                          v-if="step === 'email' && lastUsed === 'email'"
-                          class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
-                        >
-                          <Tag
-                            :label="copy.lastUsed"
-                            severity="info"
-                            size="small"
-                          />
-                        </div>
                       </div>
-                    </form>
+                    </div>
+                    <div class="relative">
+                      <Button
+                        type="button"
+                        :label="copy.continueWithGithub"
+                        variant="outline"
+                        size="large"
+                        icon="az az-github"
+                        class="w-full"
+                        @click="(event: MouseEvent) => emit('provider-click', event, 'github')"
+                      />
+                      <div
+                        v-if="lastUsed === 'github'"
+                        class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
+                      >
+                        <Tag
+                          :label="copy.lastUsed"
+                          severity="info"
+                          size="small"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <Separator :label="copy.or" />
+                </div>
+
+                <div v-if="step === 'email'">
+                  <Field
+                    required
+                    :invalid="!!errors.email"
+                  >
+                    <Field.Label for="login-email">{{ copy.email }}</Field.Label>
+                    <Input
+                      id="login-email"
+                      v-model="email"
+                      type="email"
+                      name="email"
+                      size="large"
+                      autocomplete="username"
+                      class="w-full"
+                      placeholder="m@example.com"
+                      required
+                      :invalid="!!errors.email"
+                      :aria-describedby="errors.email ? 'login-email-error' : undefined"
+                      @update:model-value="errors.email = ''"
+                    />
+                    <FieldError
+                      v-if="errors.email"
+                      id="login-email-error"
+                      >{{ errors.email }}</FieldError
+                    >
+                  </Field>
+                </div>
+
+                <div
+                  v-else-if="step === 'password'"
+                  class="flex flex-col gap-(--spacing-lg)"
+                >
+                  <div class="flex items-center gap-(--spacing-sm)">
+                    <Tooltip :content="copy.changeEmail">
+                      <IconButton
+                        icon="az az-chevron-left"
+                        :aria-label="copy.changeEmail"
+                        variant="outline"
+                        size="small"
+                        @click="backToEmail"
+                      />
+                    </Tooltip>
+                    <span class="truncate text-label-sm text-(--text-default)">{{ email }}</span>
+                  </div>
+
+                  <div class="flex flex-col items-start gap-(--spacing-xs)">
+                    <Field
+                      class="w-full"
+                      required
+                      :invalid="!!errors.password"
+                    >
+                      <Field.Label for="login-password">{{ copy.password }}</Field.Label>
+                      <PasswordInput
+                        id="login-password"
+                        v-model="password"
+                        name="password"
+                        autocomplete="current-password"
+                        :placeholder="copy.passwordPlaceholder"
+                        @update:model-value="errors.password = ''"
+                      />
+                      <Field.Error v-if="errors.password">{{ errors.password }}</Field.Error>
+                    </Field>
+
+                    <Button
+                      type="button"
+                      :label="copy.forgotPassword"
+                      variant="link"
+                      @click="forgotPassword"
+                    />
                   </div>
                 </div>
-              </template>
-            </Card>
 
-            <div
-              class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)"
-            >
-              <div class="flex items-center justify-center gap-(--spacing-xs)">
-                <p class="text-body-xs text-(--text-default)">{{ copy.noAccount }}</p>
-                <a
-                  class="text-link text-body-xs"
-                  :href="signUpHref"
-                  >{{ copy.signUp }}</a
+                <div
+                  v-else-if="step === 'reset'"
+                  class="flex flex-col gap-(--spacing-lg)"
                 >
-              </div>
+                  <div class="flex items-center gap-(--spacing-sm)">
+                    <Tooltip :content="copy.backToSignIn">
+                      <IconButton
+                        icon="az az-chevron-left"
+                        :aria-label="copy.backToSignIn"
+                        variant="outline"
+                        size="small"
+                        @click="backToSignIn"
+                      />
+                    </Tooltip>
+                    <span class="truncate text-label-sm text-(--text-default)">{{
+                      copy.backToSignIn
+                    }}</span>
+                  </div>
 
-              <template v-if="step === 'email' || step === 'password'">
-                <p class="text-center text-body-xs text-(--text-muted)">
-                  {{ copy.agreeStart }}
-                  <a
-                    class="text-link"
-                    :href="termsHref"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >{{ copy.terms }}</a
+                  <Field
+                    required
+                    :invalid="!!errors.resetEmail"
                   >
-                  {{ copy.and }}
-                  <a
-                    class="text-link"
-                    :href="privacyHref"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >{{ copy.privacy }}</a
-                  >.
-                </p>
-              </template>
-            </div>
+                    <Field.Label for="reset-email">{{ copy.email }}</Field.Label>
+                    <Input
+                      id="reset-email"
+                      v-model="resetEmail"
+                      type="email"
+                      name="reset-email"
+                      size="large"
+                      autocomplete="email"
+                      class="w-full"
+                      placeholder="m@example.com"
+                      required
+                      :invalid="!!errors.resetEmail"
+                      :aria-describedby="errors.resetEmail ? 'reset-email-error' : undefined"
+                      @update:model-value="errors.resetEmail = ''"
+                    />
+                    <FieldError
+                      v-if="errors.resetEmail"
+                      id="reset-email-error"
+                      >{{ errors.resetEmail }}</FieldError
+                    >
+                  </Field>
+                </div>
+
+                <div
+                  v-else-if="step === 'new-password'"
+                  class="flex flex-col gap-(--spacing-lg)"
+                >
+                  <Field
+                    required
+                    :invalid="!!errors.newPassword"
+                  >
+                    <Field.Label for="new-password">{{ copy.newPassword }}</Field.Label>
+                    <PasswordInput
+                      id="new-password"
+                      v-model="newPassword"
+                      name="new-password"
+                      autocomplete="new-password"
+                      :placeholder="copy.newPasswordPlaceholder"
+                      @update:model-value="errors.newPassword = ''"
+                    />
+                    <Field.Error v-if="errors.newPassword">{{ errors.newPassword }}</Field.Error>
+                    <PasswordRequirements :value="newPassword" />
+                  </Field>
+
+                  <Field
+                    required
+                    :invalid="!!errors.confirmPassword"
+                  >
+                    <Field.Label for="confirm-password">{{ copy.confirmPassword }}</Field.Label>
+                    <PasswordInput
+                      id="confirm-password"
+                      v-model="confirmPassword"
+                      name="confirm-password"
+                      autocomplete="new-password"
+                      :placeholder="copy.confirmPasswordPlaceholder"
+                      @update:model-value="errors.confirmPassword = ''"
+                    />
+                    <Field.Error v-if="errors.confirmPassword">{{
+                      errors.confirmPassword
+                    }}</Field.Error>
+                  </Field>
+                </div>
+
+                <div
+                  v-else
+                  class="flex flex-col gap-(--spacing-xs)"
+                >
+                  <div class="flex items-center gap-(--spacing-xs)">
+                    <p class="text-body-sm text-(--text-default)">
+                      {{ copy.didNotReceive }}
+                    </p>
+                    <Button
+                      type="button"
+                      :label="copy.resendEmail"
+                      variant="link"
+                      @click="resendEmail"
+                    />
+                  </div>
+                  <div class="flex items-center gap-(--spacing-xs)">
+                    <p class="text-body-sm text-(--text-default)">
+                      {{ copy.alreadyOpened }}
+                    </p>
+                    <Button
+                      type="button"
+                      :label="copy.setNewPassword"
+                      variant="link"
+                      @click="openResetLink"
+                    />
+                  </div>
+                </div>
+              </fieldset>
+
+              <div class="relative">
+                <Button
+                  :label="primaryAction.label"
+                  :variant="primaryAction.variant"
+                  size="large"
+                  class="w-full"
+                  type="submit"
+                  :loading="verifying"
+                />
+
+                <div
+                  v-if="step === 'email' && lastUsed === 'email'"
+                  class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
+                >
+                  <Tag
+                    :label="copy.lastUsed"
+                    severity="info"
+                    size="small"
+                  />
+                </div>
+              </div>
+            </form>
           </div>
         </div>
+      </template>
+    </Card>
+
+    <div class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)">
+      <div class="flex items-center justify-center gap-(--spacing-xs)">
+        <p class="text-body-xs text-(--text-default)">{{ copy.noAccount }}</p>
+        <a
+          class="text-link text-body-xs"
+          :href="signUpHref"
+          >{{ copy.signUp }}</a
+        >
       </div>
-    </main>
-  </div>
+
+      <template v-if="step === 'email' || step === 'password'">
+        <p class="text-center text-body-xs text-(--text-muted)">
+          {{ copy.agreeStart }}
+          <a
+            class="text-link"
+            :href="termsHref"
+            target="_blank"
+            rel="noopener noreferrer"
+            >{{ copy.terms }}</a
+          >
+          {{ copy.and }}
+          <a
+            class="text-link"
+            :href="privacyHref"
+            target="_blank"
+            rel="noopener noreferrer"
+            >{{ copy.privacy }}</a
+          >.
+        </p>
+      </template>
+    </div>
+  </SignInFrame>
 </template>

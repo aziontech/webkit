@@ -2,9 +2,9 @@
   import Button from '../../../action/button/button.vue'
   import IconButton from '../../../action/icon-button/icon-button.vue'
   import Input from '../../../input/input/input.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import MockupElevator from '../parts/mockup-elevator.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'DdosHttpEventsFragment' })
 
@@ -84,13 +84,10 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupFragment
     shell="legacy"
-    :chrome="false"
+    fade="none"
     :active="active"
-    :width="420"
-    :mobile-width="380"
   >
     <div class="flex h-full flex-col gap-(--spacing-sm) py-(--spacing-xs)">
       <ConsoleMockupShellItem :order="0">
@@ -176,5 +173,5 @@
         </div>
       </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

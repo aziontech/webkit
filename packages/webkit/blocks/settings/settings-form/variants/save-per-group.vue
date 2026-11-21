@@ -12,8 +12,15 @@
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, type Ref, ref } from 'vue'
 
+  export interface SavePerGroupProps {
+    /** General opens with its save in flight: its rows are disabled and its Save spins. */
+    defaultSavingGeneral?: boolean
+  }
+
+  const props = withDefaults(defineProps<SavePerGroupProps>(), { defaultSavingGeneral: false })
+
   const general = reactive({ fullName: 'Alex Morgan', language: 'en-US' })
-  const savingGeneral = ref(false)
+  const savingGeneral = ref(props.defaultSavingGeneral)
 
   const notifications = reactive({ productUpdates: true, securityAlerts: true })
   const savingNotifications = ref(false)

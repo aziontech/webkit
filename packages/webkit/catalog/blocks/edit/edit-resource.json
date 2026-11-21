@@ -59,6 +59,12 @@
  "sfcFile": "blocks/edit/edit-resource/edit-resource.vue",
  "guidelinesFile": "blocks/edit/edit-resource/guidelines.md",
  "fileSources": {
-  "sample.ts": "blocks/edit/edit-resource/sample.ts"
+  "sample.ts": "blocks/edit/edit-resource/sample.ts",
+  "use-settings-draft.ts": "blocks/edit/edit-resource/use-settings-draft.ts",
+  "use-deploy-on-save.ts": "blocks/edit/edit-resource/use-deploy-on-save.ts",
+  "parts/settings-save-bar.vue": "blocks/edit/edit-resource/parts/settings-save-bar.vue",
+  "parts/settings-tab-page.vue": "blocks/edit/edit-resource/parts/settings-tab-page.vue",
+  "parts/policy-groups.vue": "blocks/edit/edit-resource/parts/policy-groups.vue",
+  "parts/policy-settings-page.vue": "blocks/edit/edit-resource/parts/policy-settings-page.vue"
  }
 }

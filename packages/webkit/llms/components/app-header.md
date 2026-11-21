@@ -76,7 +76,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 
 ## Accessibility
 
-- Root renders as `<header role="banner">` with `aria-label` from `ariaLabel`.
+- Root renders as `<header>`, which is the page banner when it is not nested in `<main>` or a sectioning element; `aria-label` comes from `ariaLabel`.
 - Keyboard map: none on the shell; interactive children supply Tab order.
 - ARIA: landmark only on root. `AppHeader.Brand` with `href` is a native anchor named by `ariaLabel` (locale fallback `appHeader.home`), so the logo link always has an accessible name; without `href` it stays a non-interactive `div`.
 - Brand label: with `href` the visible `label` is `aria-hidden` and the link name says where it goes, product included (`appHeader.productHome`, `Azion Docs home`), so the product is read once and the visible word is inside the name (WCAG 2.5.3); a consumer `aria-label` should keep the product word. Without `href` the label stays readable text after the mark. Spacing is logical (`gap`, `px`), so the label follows the mark in the inline direction under `dir="rtl"`.

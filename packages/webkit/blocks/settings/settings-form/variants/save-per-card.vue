@@ -10,6 +10,13 @@
   import { toast } from '@aziontech/webkit/toast'
   import { reactive, type Ref, ref } from 'vue'
 
+  export interface SavePerCardProps {
+    /** Preview Toolbar opens with its save in flight: its selects are disabled and its Save spins. */
+    defaultSavingToolbar?: boolean
+  }
+
+  const props = withDefaults(defineProps<SavePerCardProps>(), { defaultSavingToolbar: false })
+
   const toolbarOptions = [
     { label: 'Team default', value: 'default' },
     { label: 'Enabled', value: 'enabled' },
@@ -18,7 +25,7 @@
   const toolbarLabel = (value: string) =>
     toolbarOptions.find((option) => option.value === value)?.label ?? ''
   const toolbar = reactive({ preprod: 'default', prod: 'default' })
-  const savingToolbar = ref(false)
+  const savingToolbar = ref(props.defaultSavingToolbar)
 
   const protectionOptions = [
     { label: 'Standard protection', value: 'standard' },

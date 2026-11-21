@@ -21,6 +21,8 @@
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, nextTick, ref, useId, watch } from 'vue'
 
+  import { closePastePanel, lineList } from '../paste-panel'
+
   type ListEntry = { value: string; note: string; pasted: boolean }
   type ListCopy = { column: string; placeholder: string; noun: string; rule: string; hint: string }
 
@@ -189,15 +191,12 @@
     })
     return { lines, duplicates, invalid }
   })
-  const lineList = (numbers: number[]) =>
-    numbers.length === 1
-      ? `Line ${numbers[0]} is`
-      : `Lines ${numbers.slice(0, -1).join(', ')} and ${numbers[numbers.length - 1]} are`
-
   const keptRows = () => rows.value.filter((entry) => entry.value.trim() || entry.note.trim())
   const pasteOverflow = computed(() =>
     Math.max(0, pasteReport.value.lines.length - (LIMIT - keptRows().length))
   )
+
+  const cancelPaste = () => closePastePanel(pasteOpen, pasteToggleEl)
 
   const applyPaste = async () => {
     const { invalid } = pasteReport.value
@@ -207,15 +206,8 @@
     status.value = `${lines.length} ${lines.length === 1 ? 'entry' : 'entries'} added from the pasted list.${
       invalid.length ? ` ${invalid.length} ${invalid.length === 1 ? 'needs' : 'need'} a fix.` : ''
     }`
-    pasteOpen.value = false
     pasteText.value = ''
-    await nextTick()
-    pasteToggleEl.value?.$el?.focus()
-  }
-  const cancelPaste = async () => {
-    pasteOpen.value = false
-    await nextTick()
-    pasteToggleEl.value?.$el?.focus()
+    await cancelPaste()
   }
 
   watch(drawerOpen, (isOpen) => {

@@ -310,59 +310,45 @@ const highlightShellLine = (line: string): CodeBlockHighlightToken[] => {
   return tokens.length ? tokens : [{ text: line || ' ', type: 'identifier' }]
 }
 
-const HCL_LITERALS = ['true', 'false', 'null'] as const
-
-const highlightHclLine = (line: string): CodeBlockHighlightToken[] => {
+const scanLine = (
+  line: string,
+  pattern: RegExp,
+  classify: (chunk: string, rest: string) => CodeBlockHighlightTokenType
+): CodeBlockHighlightToken[] => {
   const tokens: CodeBlockHighlightToken[] = []
-  const hclRegex =
-    /"(?:\\"|[^"])*"|-?\b\d+(?:\.\d+)?\b|[A-Za-z_][\w-]*|[{}[\]().,:=?<>!*/+-]|\s+|\S/g
 
-  let isFirstWord = true
-  let match: RegExpExecArray | null
-
-  while ((match = hclRegex.exec(line)) !== null) {
+  for (const match of line.matchAll(pattern)) {
     const chunk = match[0]
+    const blank = /^\s+$/.test(chunk)
     const rest = line.slice(match.index + chunk.length)
 
-    if (/^\s+$/.test(chunk)) {
-      pushToken(tokens, chunk, 'identifier')
-      continue
-    }
-
-    if (chunk.startsWith('"')) {
-      pushToken(tokens, chunk, 'string')
-      isFirstWord = false
-      continue
-    }
-
-    if (/^-?\d/.test(chunk)) {
-      pushToken(tokens, chunk, 'type')
-      isFirstWord = false
-      continue
-    }
-
-    if (!/^[A-Za-z_]/.test(chunk)) {
-      pushToken(tokens, chunk, 'punctuation')
-      isFirstWord = false
-      continue
-    }
-
-    if (HCL_LITERALS.includes(chunk as (typeof HCL_LITERALS)[number])) {
-      pushToken(tokens, chunk, 'type')
-    } else if (/^\s*\(/.test(rest)) {
-      pushToken(tokens, chunk, 'function')
-    } else if (isFirstWord && /^\s*=(?!=)/.test(rest)) {
-      pushToken(tokens, chunk, 'function')
-    } else if (isFirstWord && /^\s*(?:"|\{|[A-Za-z_])/.test(rest)) {
-      pushToken(tokens, chunk, 'keyword')
-    } else {
-      pushToken(tokens, chunk, 'identifier')
-    }
-
-    isFirstWord = false
+    pushToken(tokens, chunk, blank ? 'identifier' : classify(chunk, rest))
   }
 
   return tokens.length ? tokens : [{ text: line || ' ', type: 'identifier' }]
+}
+
+const HCL_LITERALS = ['true', 'false', 'null'] as const
+
+const HCL_PATTERN =
+  /"(?:\\"|[^"])*"|-?\b\d+(?:\.\d+)?\b|[A-Za-z_][\w-]*|[{}[\]().,:=?<>!*/+-]|\s+|\S/g
+
+const highlightHclLine = (line: string): CodeBlockHighlightToken[] => {
+  let isFirstWord = true
+
+  return scanLine(line, HCL_PATTERN, (chunk, rest) => {
+    const first = isFirstWord
+    isFirstWord = false
+
+    if (chunk.startsWith('"')) return 'string'
+    if (/^-?\d/.test(chunk)) return 'type'
+    if (!/^[A-Za-z_]/.test(chunk)) return 'punctuation'
+    if (HCL_LITERALS.includes(chunk as (typeof HCL_LITERALS)[number])) return 'type'
+    if (/^\s*\(/.test(rest)) return 'function'
+    if (first && /^\s*=(?!=)/.test(rest)) return 'function'
+    if (first && /^\s*(?:"|\{|[A-Za-z_])/.test(rest)) return 'keyword'
+    return 'identifier'
+  })
 }
 
 const GRAPHQL_KEYWORDS = [
@@ -386,54 +372,34 @@ const GRAPHQL_OPERATIONS = ['query', 'mutation', 'subscription', 'fragment'] as 
 
 const GRAPHQL_LITERALS = ['true', 'false', 'null'] as const
 
-const highlightGraphqlLine = (line: string): CodeBlockHighlightToken[] => {
-  const tokens: CodeBlockHighlightToken[] = []
-  const graphqlRegex =
-    /"(?:\\"|[^"])*"|\$[A-Za-z_]\w*|@[A-Za-z_]\w*|-?\b\d+(?:\.\d+)?\b|\.\.\.|[A-Za-z_]\w*|[{}[\]()!:=,|&]|\s+|\S/g
+const GRAPHQL_PATTERN =
+  /"(?:\\"|[^"])*"|\$[A-Za-z_]\w*|@[A-Za-z_]\w*|-?\b\d+(?:\.\d+)?\b|\.\.\.|[A-Za-z_]\w*|[{}[\]()!:=,|&]|\s+|\S/g
 
+const highlightGraphqlLine = (line: string): CodeBlockHighlightToken[] => {
   let isFirstWord = true
   let previousWord = ''
-  let match: RegExpExecArray | null
 
-  while ((match = graphqlRegex.exec(line)) !== null) {
-    const chunk = match[0]
-    const rest = line.slice(match.index + chunk.length)
-
-    if (/^\s+$/.test(chunk)) {
-      pushToken(tokens, chunk, 'identifier')
-      continue
-    }
-
-    if (chunk.startsWith('"')) {
-      pushToken(tokens, chunk, 'string')
-    } else if (chunk.startsWith('$') || /^-?\d/.test(chunk)) {
-      pushToken(tokens, chunk, 'type')
-    } else if (chunk.startsWith('@')) {
-      pushToken(tokens, chunk, 'keyword')
-    } else if (!/^[A-Za-z_]/.test(chunk)) {
-      pushToken(tokens, chunk, 'punctuation')
-    } else if (
-      (isFirstWord && GRAPHQL_KEYWORDS.includes(chunk as (typeof GRAPHQL_KEYWORDS)[number])) ||
-      (chunk === 'on' && previousWord !== '')
-    ) {
-      pushToken(tokens, chunk, 'keyword')
-    } else if (GRAPHQL_OPERATIONS.includes(previousWord as (typeof GRAPHQL_OPERATIONS)[number])) {
-      pushToken(tokens, chunk, 'function')
-    } else if (GRAPHQL_LITERALS.includes(chunk as (typeof GRAPHQL_LITERALS)[number])) {
-      pushToken(tokens, chunk, 'type')
-    } else if (/^\s*\(/.test(rest)) {
-      pushToken(tokens, chunk, 'function')
-    } else if (/^[A-Z]/.test(chunk)) {
-      pushToken(tokens, chunk, 'type')
-    } else {
-      pushToken(tokens, chunk, 'identifier')
-    }
-
-    previousWord = /^[A-Za-z_]/.test(chunk) ? chunk : ''
+  return scanLine(line, GRAPHQL_PATTERN, (chunk, rest) => {
+    const first = isFirstWord
+    const previous = previousWord
+    const word = /^[A-Za-z_]/.test(chunk)
     isFirstWord = false
-  }
+    previousWord = word ? chunk : ''
 
-  return tokens.length ? tokens : [{ text: line || ' ', type: 'identifier' }]
+    if (chunk.startsWith('"')) return 'string'
+    if (chunk.startsWith('$') || /^-?\d/.test(chunk)) return 'type'
+    if (chunk.startsWith('@')) return 'keyword'
+    if (!word) return 'punctuation'
+    if (first && GRAPHQL_KEYWORDS.includes(chunk as (typeof GRAPHQL_KEYWORDS)[number]))
+      return 'keyword'
+    if (chunk === 'on' && previous !== '') return 'keyword'
+    if (GRAPHQL_OPERATIONS.includes(previous as (typeof GRAPHQL_OPERATIONS)[number]))
+      return 'function'
+    if (GRAPHQL_LITERALS.includes(chunk as (typeof GRAPHQL_LITERALS)[number])) return 'type'
+    if (/^\s*\(/.test(rest)) return 'function'
+    if (/^[A-Z]/.test(chunk)) return 'type'
+    return 'identifier'
+  })
 }
 
 const JSON_LITERALS = ['true', 'false', 'null'] as const

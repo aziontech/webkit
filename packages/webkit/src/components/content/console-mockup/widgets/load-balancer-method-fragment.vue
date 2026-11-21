@@ -1,14 +1,12 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
-
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import FieldDescription from '../../../input/field/field-description/field-description.vue'
   import FieldLabel from '../../../input/field/field-label/field-label.vue'
   import NumberInput from '../../../input/number-input/number-input.vue'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
+  import { openAndPick, option } from '../lib/pick-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
   import MockupSelect from '../parts/mockup-select.vue'
 
   defineOptions({ name: 'LoadBalancerMethodFragment' })
@@ -21,9 +19,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const METHODS = ['Round Robin', 'Least Connections', 'IP Hash']
 
@@ -64,7 +59,6 @@
 
   const IDLE: MockupCursorTarget = { key: 'method', x: 0.86, y: 2.6 }
   const TRIGGER: MockupCursorTarget = { key: 'method', x: 0.4, y: 0.6 }
-  const option = (index: number): MockupCursorTarget => ({ key: `option-${index}`, x: 0.3, y: 0.6 })
 
   const REST = {
     cursor: IDLE,
@@ -75,131 +69,78 @@
     method: 'Round Robin'
   }
 
-  const PICKING = { ...REST, focused: true, open: true }
-
   const FRAMES: Frame[] = [
     { ...REST, forward: 0, back: 0 },
-    { ...REST, cursor: TRIGGER, forward: 120, back: 420 },
-    { ...REST, cursor: TRIGGER, press: true, focused: true, forward: 480, back: 160 },
-    { ...PICKING, cursor: option(0), highlight: 0, forward: 160, back: 300 },
-    { ...PICKING, cursor: option(1), highlight: 1, forward: 380, back: 300 },
-    { ...PICKING, cursor: option(2), highlight: 2, forward: 380, back: 420 },
-    { ...PICKING, cursor: option(2), highlight: 2, press: true, forward: 420, back: 120 },
-    {
-      ...PICKING,
-      cursor: option(2),
-      highlight: 2,
-      press: true,
-      method: 'IP Hash',
-      forward: 120,
-      back: 220
-    },
+    ...openAndPick(
+      REST,
+      TRIGGER,
+      [
+        [0, 160, 300],
+        [1, 380, 300],
+        [2, 380, 420]
+      ],
+      { method: 'IP Hash' }
+    ),
     { ...REST, cursor: option(2), focused: true, method: 'IP Hash', forward: 200, back: 260 },
     { ...REST, method: 'IP Hash', forward: 520, back: 420 }
   ]
 
-  const LAST = FRAMES.length - 1
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
-
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
+  const { frame } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered,
+    stepOnTouch: true
+  })
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupFragment
     shell="legacy"
-    fade="bottom"
     class="[--console-mockup-fade-start:74%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    stage-class="flex flex-col gap-(--spacing-lg) py-(--spacing-xs)"
+    :cursor="frame.cursor"
+    cursor-name="Jane"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative flex flex-col gap-(--spacing-lg) py-(--spacing-xs)"
+    <ConsoleMockupShellItem
+      :order="0"
+      :data-state="frame.open ? 'open' : 'closed'"
+      class="relative data-[state=open]:z-1"
     >
-      <ConsoleMockupShellItem
-        :order="0"
-        :data-state="frame.open ? 'open' : 'closed'"
-        class="relative data-[state=open]:z-1"
-      >
-        <div class="flex flex-col gap-(--spacing-xs)">
-          <FieldLabel for="load-balancer-method">Method</FieldLabel>
-          <MockupSelect
-            :value="frame.method"
-            :options="METHODS"
-            :open="frame.open"
-            :highlighted-index="frame.highlight"
-            :focused="frame.focused"
-            control-id="load-balancer-method"
-            data-cursor="method"
-            aria-label="Method"
-          />
-          <FieldDescription
-            >Select the load balancing method to define how traffic is distributed across multiple
-            origins.</FieldDescription
-          >
-        </div>
-      </ConsoleMockupShellItem>
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <FieldLabel for="load-balancer-method">Method</FieldLabel>
+        <MockupSelect
+          :value="frame.method"
+          :options="METHODS"
+          :open="frame.open"
+          :highlighted-index="frame.highlight"
+          :focused="frame.focused"
+          control-id="load-balancer-method"
+          data-cursor="method"
+          aria-label="Method"
+        />
+        <FieldDescription
+          >Select the load balancing method to define how traffic is distributed across multiple
+          origins.</FieldDescription
+        >
+      </div>
+    </ConsoleMockupShellItem>
 
-      <ConsoleMockupShellItem
-        v-for="(field, index) in TIMEOUTS"
-        :key="field.id"
-        :order="index + 1"
-      >
-        <div class="flex flex-col gap-(--spacing-xs)">
-          <FieldLabel :for="field.id">{{ field.label }}</FieldLabel>
-          <NumberInput
-            :id="field.id"
-            :model-value="field.value"
-            size="medium"
-            :aria-label="field.label"
-          />
-          <FieldDescription>{{ field.description }}</FieldDescription>
-        </div>
-      </ConsoleMockupShellItem>
-
-      <MockupCursor
-        name="Jane"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
-      />
-    </div>
-  </ConsoleMockupShell>
+    <ConsoleMockupShellItem
+      v-for="(field, index) in TIMEOUTS"
+      :key="field.id"
+      :order="index + 1"
+    >
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <FieldLabel :for="field.id">{{ field.label }}</FieldLabel>
+        <NumberInput
+          :id="field.id"
+          :model-value="field.value"
+          size="medium"
+          :aria-label="field.label"
+        />
+        <FieldDescription>{{ field.description }}</FieldDescription>
+      </div>
+    </ConsoleMockupShellItem>
+  </MockupFragment>
 </template>

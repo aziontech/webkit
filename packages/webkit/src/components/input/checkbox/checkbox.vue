@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="TModel = unknown">
   import { computed, nextTick, useAttrs } from 'vue'
 
-  import { useFieldControl } from '../../../composables/use-field-control'
+  import { useFieldAttrs } from '../../../composables/use-field-attrs'
 
   defineOptions({
     name: 'Checkbox',
@@ -48,25 +48,11 @@
     labelledBy,
     invalid: isInvalid,
     disabled: isDisabled,
-    required: isRequired
-  } = useFieldControl({
-    id: () => attrs['id'] as string | undefined,
-    describedBy: () => attrs['aria-describedby'] as string | undefined,
-    labelledBy: () => attrs['aria-labelledby'] as string | undefined,
-    invalid: () => props.invalid,
-    disabled: () => props.disabled
-  })
+    required: isRequired,
+    passthroughAttrs
+  } = useFieldAttrs(props)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'checkbox')
-
-  const passthroughAttrs = computed(() => {
-    const rest = { ...attrs }
-
-    delete rest.class
-    delete rest['data-testid']
-
-    return rest
-  })
 
   const isBinary = computed(() => props.value === undefined)
 

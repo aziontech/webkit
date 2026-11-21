@@ -51,7 +51,7 @@
     "name": "List",
     "file": "edit-variables.vue"
   },
-  "files": ["sample.ts"],
+  "files": ["sample.ts", "paste-panel.ts"],
   "variants": [
     {
       "name": "Create",

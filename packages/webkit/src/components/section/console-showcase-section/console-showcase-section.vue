@@ -4,7 +4,6 @@
   import { useMediaQuery } from '../../../composables/use-media-query'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../action/button/button.vue'
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
   import type { TextureFade, TextureVariant } from '../../content/texture/texture.vue'
   import Texture from '../../content/texture/texture.vue'
@@ -16,6 +15,7 @@
   } from '../../layout/module-header/module-header.vue'
   import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import CapabilityGridSectionActions from '../capability-grid-section/parts/capability-grid-section-actions.vue'
 
   defineOptions({ name: 'ConsoleShowcaseSection', inheritAttrs: false })
 
@@ -177,18 +177,7 @@
             v-if="tabs.length || buttons.length"
             #actions
           >
-            <Button
-              v-for="action in buttons"
-              :key="action.label"
-              :label="action.label"
-              :href="action.href"
-              :target="action.target"
-              :variant="action.variant"
-              size="large"
-              :icon="action.trailing ? 'az az-chevron-right' : ''"
-              icon-position="trailing"
-              :animated="Boolean(action.trailing)"
-            />
+            <CapabilityGridSectionActions :actions="buttons" />
             <ToggleGroup
               v-if="tabs.length"
               v-model="current"

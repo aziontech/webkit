@@ -1,16 +1,13 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
-
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import CopyButton from '../../../action/copy-button/copy-button.vue'
   import Input from '../../../input/input/input.vue'
   import InputGroupRoot from '../../../input/input-group/input-group.vue'
   import Switch from '../../../input/switch/switch.vue'
   import Item from '../../item/index'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'EdgeDnsDnssecFragment' })
 
@@ -22,9 +19,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const DNSSEC_KEYS = [
     {
@@ -78,166 +72,117 @@
     { ...ON, keys: 4, forward: 220, back: 220 }
   ]
 
-  const LAST = FRAMES.length - 1
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
-
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
+  const { frame } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
+  })
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    fade="bottom"
+  <MockupFragment
     class="[--console-mockup-fade-start:74%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    :cursor="frame.cursor"
+    cursor-name="Alex"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative"
-    >
-      <div class="flex flex-col py-(--spacing-xs)">
-        <ConsoleMockupShellItem :order="0">
-          <Item
-            variant="inline"
-            size="small"
-          >
-            <Item.Content>
-              <Item.Title>Enable DNSSEC</Item.Title>
-              <Item.Description>
-                Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing attacks.
-                Configure the Key Tag and Digest values in your domain provider to complete the
-                setup.
-              </Item.Description>
-            </Item.Content>
-            <Item.Actions>
-              <span
-                data-cursor="dnssec"
-                :data-focused="frame.focused || null"
-                class="inline-flex rounded-(--shape-control) data-[focused]:ring-2 data-[focused]:ring-(--ring-color) data-[focused]:ring-offset-2 data-[focused]:ring-offset-(--bg-canvas)"
-              >
-                <Switch
-                  :model-value="frame.dnssec"
-                  aria-label="Enable DNSSEC"
-                />
-              </span>
-            </Item.Actions>
-          </Item>
-        </ConsoleMockupShellItem>
-
-        <template
-          v-for="(key, index) in DNSSEC_KEYS"
-          :key="key.label"
+    <div class="flex flex-col py-(--spacing-xs)">
+      <ConsoleMockupShellItem :order="0">
+        <Item
+          variant="inline"
+          size="small"
         >
-          <Transition
-            enter-from-class="-translate-y-1 opacity-0"
-            enter-active-class="transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-            leave-to-class="-translate-y-1 opacity-0"
-            leave-active-class="transition-[opacity,translate] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-          >
-            <div
-              v-if="index < frame.keys"
-              class="overflow-hidden [interpolate-size:allow-keywords]"
+          <Item.Content>
+            <Item.Title>Enable DNSSEC</Item.Title>
+            <Item.Description>
+              Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing attacks.
+              Configure the Key Tag and Digest values in your domain provider to complete the setup.
+            </Item.Description>
+          </Item.Content>
+          <Item.Actions>
+            <span
+              data-cursor="dnssec"
+              :data-focused="frame.focused || null"
+              class="inline-flex rounded-(--shape-control) data-[focused]:ring-2 data-[focused]:ring-(--ring-color) data-[focused]:ring-offset-2 data-[focused]:ring-offset-(--bg-canvas)"
             >
-              <div class="pt-(--spacing-lg)">
-                <Item
-                  variant="inline"
-                  size="small"
-                  class="flex-col items-stretch gap-(--spacing-sm)"
-                >
-                  <Item.Content>
-                    <Item.Title>{{ key.label }}</Item.Title>
-                    <Item.Description>{{ key.description }}</Item.Description>
-                  </Item.Content>
-                  <Item.Actions class="w-full justify-start">
-                    <InputGroupRoot class="w-full">
-                      <Input
-                        :model-value="key.value"
-                        size="medium"
-                        class="flex-1 font-code"
-                        :aria-label="key.label"
-                        readonly
-                      />
-                      <CopyButton
-                        variant="ghost"
-                        :value="key.value"
-                        :aria-label="`Copy ${key.label}`"
-                        size="small"
-                      />
-                    </InputGroupRoot>
-                  </Item.Actions>
-                </Item>
-              </div>
-            </div>
-          </Transition>
-        </template>
-
-        <ConsoleMockupShellItem
-          :order="1"
-          class="pt-(--spacing-lg)"
-        >
-          <Item
-            variant="inline"
-            size="small"
-          >
-            <Item.Content>
-              <Item.Title>Active</Item.Title>
-              <Item.Description>
-                When active, the zone answers authoritative DNS queries for the domain.
-              </Item.Description>
-            </Item.Content>
-            <Item.Actions>
               <Switch
-                :model-value="true"
-                aria-label="Active"
+                :model-value="frame.dnssec"
+                aria-label="Enable DNSSEC"
               />
-            </Item.Actions>
-          </Item>
-        </ConsoleMockupShellItem>
-      </div>
+            </span>
+          </Item.Actions>
+        </Item>
+      </ConsoleMockupShellItem>
 
-      <MockupCursor
-        name="Alex"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
-      />
+      <template
+        v-for="(key, index) in DNSSEC_KEYS"
+        :key="key.label"
+      >
+        <Transition
+          enter-from-class="-translate-y-1 opacity-0"
+          enter-active-class="transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+          leave-to-class="-translate-y-1 opacity-0"
+          leave-active-class="transition-[opacity,translate] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+        >
+          <div
+            v-if="index < frame.keys"
+            class="overflow-hidden [interpolate-size:allow-keywords]"
+          >
+            <div class="pt-(--spacing-lg)">
+              <Item
+                variant="inline"
+                size="small"
+                class="flex-col items-stretch gap-(--spacing-sm)"
+              >
+                <Item.Content>
+                  <Item.Title>{{ key.label }}</Item.Title>
+                  <Item.Description>{{ key.description }}</Item.Description>
+                </Item.Content>
+                <Item.Actions class="w-full justify-start">
+                  <InputGroupRoot class="w-full">
+                    <Input
+                      :model-value="key.value"
+                      size="medium"
+                      class="flex-1 font-code"
+                      :aria-label="key.label"
+                      readonly
+                    />
+                    <CopyButton
+                      variant="ghost"
+                      :value="key.value"
+                      :aria-label="`Copy ${key.label}`"
+                      size="small"
+                    />
+                  </InputGroupRoot>
+                </Item.Actions>
+              </Item>
+            </div>
+          </div>
+        </Transition>
+      </template>
+
+      <ConsoleMockupShellItem
+        :order="1"
+        class="pt-(--spacing-lg)"
+      >
+        <Item
+          variant="inline"
+          size="small"
+        >
+          <Item.Content>
+            <Item.Title>Active</Item.Title>
+            <Item.Description>
+              When active, the zone answers authoritative DNS queries for the domain.
+            </Item.Description>
+          </Item.Content>
+          <Item.Actions>
+            <Switch
+              :model-value="true"
+              aria-label="Active"
+            />
+          </Item.Actions>
+        </Item>
+      </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

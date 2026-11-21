@@ -121,7 +121,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   control; see Accessibility), `__header`, `__nav`, `__scroll`, `__footer`, `__collapse` (the
   trigger), `__handle` (the drag separator), `__expand` / `__expand-button` (the collapsed
   affordance)
-- A collapsed offcanvas rail carries `inert` + `aria-hidden`, so it holds no tab stops while it is out; an icon rail keeps its rows reachable
+- A collapsed offcanvas rail carries `inert`, which also removes it from the accessibility tree, so it holds no tab stops while it is out; an icon rail keeps its rows reachable
 
 ## Accessibility
 
@@ -157,7 +157,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   1 px and the minimum, and reporting the token bound would put the collapsed position outside the
   range the control announces. Without these, `axe` reports `aria-required-attr` and a screen reader
   announces a separator carrying no information at all.
-- A **collapsed rail carries `inert` and `aria-hidden`** — the content is still mounted so its width
+- A **collapsed rail carries `inert`**, which also removes it from the accessibility tree — the content is still mounted so its width
   can animate, and it must not be reachable while it is out of the layout. That is why the control
   that brings it back is a sibling of the rail rather than inside it.
 - The **hidden checkbox that mirrors the collapsed state (`!open`)** (`__collapse-input`) carries `aria-hidden="true"`

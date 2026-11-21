@@ -2,8 +2,8 @@
   import { ref } from 'vue'
 
   import CodeBlock from '../../../code/code-block/code-block.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'FunctionCodeFragment' })
 
@@ -65,10 +65,7 @@ addEventListener("fetch", (event) =>
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    fade="bottom"
-    :chrome="false"
+  <MockupFragment
     :active="active"
     interactive
     :width="500"
@@ -87,5 +84,5 @@ addEventListener("fetch", (event) =>
         </div>
       </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

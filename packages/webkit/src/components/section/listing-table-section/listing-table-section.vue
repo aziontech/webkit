@@ -2,6 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import LazyNodes from '../../../composables/use-lazy-chunks/lib/lazy-nodes'
+  import { followRowLink } from '../../../utils/follow-row-link'
   import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import Item from '../../content/item/item.vue'
@@ -92,23 +93,6 @@
   const descriptionKey = computed(() => props.columns[1]?.key ?? '')
 
   const lastIndex = computed(() => props.columns.length - 1)
-
-  const followRow = (event: MouseEvent): void => {
-    const target = event.target as Element | null
-    if (!target || target.closest('a, button')) return
-    if (window.getSelection()?.toString()) return
-    const link = (event.currentTarget as Element | null)?.querySelector('a[href]')
-    link?.dispatchEvent(
-      new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true,
-        ctrlKey: event.ctrlKey,
-        metaKey: event.metaKey,
-        shiftKey: event.shiftKey,
-        altKey: event.altKey
-      })
-    )
-  }
 </script>
 
 <template>
@@ -207,7 +191,7 @@
                 v-for="row in data"
                 :key="row.href"
                 class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!"
-                @click="followRow"
+                @click="followRowLink"
               >
                 <TableCell
                   v-for="(column, index) in columns"

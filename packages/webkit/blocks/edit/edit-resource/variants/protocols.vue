@@ -10,23 +10,27 @@
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast } from '@aziontech/webkit/toast'
-  import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
+  import { computed, reactive, ref } from 'vue'
 
-  type FieldProblem = { type: 'helper' | 'invalid' | 'required'; message: string }
+  import SettingsSaveBar from '../parts/settings-save-bar.vue'
+  import {
+    type DeployToastText,
+    type FieldProblem,
+    type FieldProblems,
+    useDeployOnSave
+  } from '../use-deploy-on-save'
+
   type LabeledOption = SelectOptionItem<string | number>
 
   const port = (value: number, label = String(value)) => ({ value, label })
@@ -72,28 +76,38 @@
   const portsLabel = (values: unknown[] | undefined) => (values ?? []).join(', ')
   const listLabel = (values: unknown[] | undefined) => (values ?? []).join(', ')
 
-  const form = reactive({
-    httpPorts: [80],
-    useHttps: true,
-    httpsPorts: [443],
-    useHttp3: false,
-    http3Ports: [443],
-    minimumTls: 'tls_1_3',
-    cipherSuite: 'modern-2025',
-    mtls: false,
-    mtlsMode: 'enforce',
-    trustedCa: '',
-    crl: [] as string[]
-  })
-  const baseline = ref(JSON.stringify(form))
-  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
-  const saving = ref(false)
-  const errors = reactive<Record<string, FieldProblem | undefined>>({})
+  const { form, saving, dirty, errors, clear, save, discard } = useDeployOnSave(
+    {
+      httpPorts: [80],
+      useHttps: true,
+      httpsPorts: [443],
+      useHttp3: false,
+      http3Ports: [443],
+      minimumTls: 'tls_1_3',
+      cipherSuite: 'modern-2025',
+      mtls: false,
+      mtlsMode: 'enforce',
+      trustedCa: '',
+      crl: [] as string[]
+    },
+    {
+      toastId: 'protocols-deploy',
+      fieldPrefix: 'protocols',
+      fieldOrder: ['httpPorts', 'httpsPorts', 'http3Ports', 'trustedCa'],
+      check,
+      loading: (): DeployToastText => ({
+        title: 'Deploying storefront…',
+        description: 'Clients keep connecting with the current settings until it finishes.'
+      }),
+      success: (): DeployToastText => ({
+        title: 'storefront is live.',
+        description: armed.value
+          ? 'Production now asks every client for a certificate.'
+          : 'Production answers on the new ports and TLS settings.'
+      })
+    }
+  )
   const armed = computed(() => form.useHttps && form.mtls)
-
-  const clear = (key: string) => {
-    delete errors[key]
-  }
 
   const setHttps = (value: boolean) => {
     form.useHttps = value
@@ -148,88 +162,23 @@
     uploadOpen.value = false
   }
 
-  const validate = () => {
-    Object.keys(errors).forEach((key) => delete errors[key])
+  function check(problems: FieldProblems): void {
     if (!form.httpPorts.length) {
-      errors.httpPorts = { type: 'required', message: 'Select at least one HTTP port.' }
+      problems.httpPorts = { type: 'required', message: 'Select at least one HTTP port.' }
     }
     if (form.useHttps && !form.httpsPorts.length) {
-      errors.httpsPorts = { type: 'required', message: 'Select at least one HTTPS port.' }
+      problems.httpsPorts = { type: 'required', message: 'Select at least one HTTPS port.' }
     }
     if (form.useHttp3 && !form.http3Ports.length) {
-      errors.http3Ports = { type: 'required', message: 'Select at least one HTTP/3 port.' }
+      problems.http3Ports = { type: 'required', message: 'Select at least one HTTP/3 port.' }
     }
     if (armed.value && !form.trustedCa) {
-      errors.trustedCa = {
+      problems.trustedCa = {
         type: 'required',
         message: 'Mutual authentication needs a trusted CA certificate.'
       }
     }
-    return Object.keys(errors).length === 0
   }
-
-  const ERROR_ORDER = ['httpPorts', 'httpsPorts', 'http3Ports', 'trustedCa']
-  const focusFirstError = () =>
-    nextTick(() => {
-      const first = ERROR_ORDER.find((key) => errors[key])
-      if (first) document.getElementById(`protocols-${first}`)?.focus()
-    })
-
-  const RUN_TOAST = 'protocols-deploy'
-  let timer: ReturnType<typeof setTimeout> | undefined
-
-  const editAgain = () => {
-    toast.dismiss(RUN_TOAST)
-    nextTick(() => document.getElementById('protocols-httpPorts')?.focus())
-  }
-
-  const deploy = () => {
-    toast.loading('Deploying storefront…', {
-      id: RUN_TOAST,
-      description: 'Clients keep connecting with the current settings until it finishes.'
-    })
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      saving.value = false
-      baseline.value = JSON.stringify(form)
-      toast.success('storefront is live.', {
-        id: RUN_TOAST,
-        description: armed.value
-          ? 'Production now asks every client for a certificate.'
-          : 'Production answers on the new ports and TLS settings.',
-        duration: 0,
-        closable: true,
-        actions: [
-          { label: 'Edit', onClick: editAgain },
-          { label: 'Redeploy', onClick: deploy }
-        ]
-      })
-    }, 1200)
-  }
-
-  const save = () => {
-    if (!validate()) {
-      focusFirstError()
-      return
-    }
-    saving.value = true
-    deploy()
-  }
-
-  const onSaveShortcut = () => {
-    if (!dirty.value || saving.value) return
-    save()
-  }
-
-  const discard = () => {
-    Object.assign(form, JSON.parse(baseline.value) as typeof form)
-    Object.keys(errors).forEach((key) => delete errors[key])
-  }
-
-  onBeforeUnmount(() => {
-    clearTimeout(timer)
-    toast.dismiss(RUN_TOAST)
-  })
 </script>
 
 <template>
@@ -639,46 +588,15 @@
         </fieldset>
       </div>
 
-      <Transition
-        enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-        enter-from-class="translate-y-2 opacity-0"
-        leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-        leave-to-class="translate-y-2 opacity-0"
+      <SettingsSaveBar
+        :visible="dirty || saving"
+        :saving="saving"
+        @save="save"
+        @discard="discard"
       >
-        <SaveBar
-          v-if="dirty || saving"
-          @save="onSaveShortcut"
-        >
-          Protocol settings changed.
-          <span class="text-(--text-muted)">Saving deploys storefront to Production.</span>
-
-          <template #actions>
-            <Button
-              type="button"
-              label="Discard"
-              variant="outline"
-              size="medium"
-              :disabled="saving"
-              @click="discard"
-            />
-            <Button
-              variant="primary"
-              size="medium"
-              :loading="saving"
-              @click="save"
-              aria-keyshortcuts="Meta+S Control+S"
-            >
-              Save
-              <Kbd
-                meta
-                size="small"
-                aria-hidden="true"
-                >S</Kbd
-              >
-            </Button>
-          </template>
-        </SaveBar>
-      </Transition>
+        Protocol settings changed.
+        <span class="text-(--text-muted)">Saving deploys storefront to Production.</span>
+      </SettingsSaveBar>
     </form>
 
     <Drawer

@@ -603,6 +603,39 @@
     reorder(form.behaviors, dnd.from, index)
     onDragend()
   }
+  const behaviorListEl = ref<HTMLElement | null>(null)
+  const rowIndexOf = (event: DragEvent) => {
+    const row = (event.target as Element | null)?.closest?.('[data-drag-row]')
+    return row instanceof HTMLElement ? Number(row.dataset.index) : -1
+  }
+  const onBehaviorDragenter = (event: DragEvent) => {
+    const index = rowIndexOf(event)
+    if (index < 0) return
+    event.preventDefault()
+    onDragenter('behavior', index)
+  }
+  const onBehaviorDragover = (event: DragEvent) => {
+    if (rowIndexOf(event) >= 0) event.preventDefault()
+  }
+  const onBehaviorDrop = (event: DragEvent) => {
+    const index = rowIndexOf(event)
+    if (index >= 0) dropOnBehavior(index)
+  }
+  watch(
+    behaviorListEl,
+    (listEl, _previous, onCleanup) => {
+      if (!listEl) return
+      listEl.addEventListener('dragenter', onBehaviorDragenter)
+      listEl.addEventListener('dragover', onBehaviorDragover)
+      listEl.addEventListener('drop', onBehaviorDrop)
+      onCleanup(() => {
+        listEl.removeEventListener('dragenter', onBehaviorDragenter)
+        listEl.removeEventListener('dragover', onBehaviorDragover)
+        listEl.removeEventListener('drop', onBehaviorDrop)
+      })
+    },
+    { flush: 'sync' }
+  )
 
   const behaviorFilled = (behavior: Behavior) => {
     const argument = behaviorArgument(behavior.type)
@@ -947,17 +980,18 @@
                         <span class="h-px flex-1 bg-(--border-default)" />
                       </div>
 
-                      <div class="relative flex flex-col gap-(--spacing-sm)">
+                      <div
+                        ref="behaviorListEl"
+                        class="relative flex flex-col gap-(--spacing-sm)"
+                      >
                         <div
                           v-for="(behavior, bIdx) in form.behaviors"
                           :key="behavior.id"
                           data-drag-row
+                          :data-index="bIdx"
                           :data-dragging="isDragging('behavior', bIdx) || null"
                           :data-drop="isDropTarget('behavior', bIdx) || null"
                           :class="BEHAVIOR_ROW_CLASS"
-                          @dragenter.prevent="onDragenter('behavior', bIdx)"
-                          @dragover.prevent
-                          @drop="dropOnBehavior(bIdx)"
                         >
                           <div class="w-full min-w-0">
                             <Select

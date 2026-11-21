@@ -181,6 +181,7 @@
         <div
           v-if="isOpenRef"
           ref="panelEl"
+          role="presentation"
           :dir="portalLocale.dir"
           :lang="portalLocale.lang"
           :data-testid="`${testId}__panel`"

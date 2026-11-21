@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
+  import { computed } from 'vue'
 
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../action/button/button.vue'
   import IconButton from '../../../action/icon-button/icon-button.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'LoadBalancerOriginsFragment' })
 
@@ -17,9 +17,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const ADDRESSES = [
     { address: 'origin-aws.example.com', role: 'primary', weight: 2 },
@@ -42,14 +39,11 @@
     { pressed: false, added: true, forward: 360, back: 360 }
   ]
 
-  const LAST = FRAMES.length - 1
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const goingBack = ref(false)
-
-  const frame = computed(() => FRAMES[step.value])
+  const { frame, goingBack } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered,
+    stepOnTouch: true
+  })
   const pressed = computed(() => frame.value.pressed && !goingBack.value)
 
   const meta = (row: { role: string; weight: number }) => [
@@ -59,35 +53,6 @@
     { label: 'Weight:', value: String(row.weight) }
   ]
 
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    goingBack.value = !forward
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
-
   const BUTTON_RING_CLASS =
     'inline-flex rounded-(--shape-button) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance ' +
     'data-pressed:ring-2 data-pressed:ring-offset-2 ' +
@@ -95,15 +60,10 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupFragment
     shell="legacy"
-    fade="bottom"
     class="[--console-mockup-fade-start:80%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
   >
     <div class="flex flex-col gap-(--spacing-md) py-(--spacing-xs)">
       <div class="flex flex-col">
@@ -204,5 +164,5 @@
         </span>
       </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

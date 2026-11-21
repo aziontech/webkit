@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, useId } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import CopyButton from '../../action/copy-button/copy-button.vue'
@@ -59,6 +60,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ artifactCanvas: en.artifactCanvas })
   const titleId = `${useId()}-title`
+  const rootEl = ref<HTMLElement | null>(null)
   const headingEl = ref<HTMLElement | null>(null)
 
   const testId = computed<string>(
@@ -78,6 +80,8 @@
     emit('close', event)
   }
 
+  useElementListener(rootEl, 'keydown', onKeydown)
+
   function focus(): void {
     headingEl.value?.focus()
   }
@@ -87,13 +91,13 @@
 
 <template>
   <section
+    ref="rootEl"
     v-bind="$attrs"
     :aria-labelledby="titleId"
     :data-testid="testId"
     :data-type="type"
     :data-streaming="streaming || null"
     class="flex h-full w-full min-w-0 flex-col overflow-hidden bg-(--bg-surface)"
-    @keydown="onKeydown"
   >
     <header
       class="flex items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"

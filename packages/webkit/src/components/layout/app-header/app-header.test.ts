@@ -80,11 +80,11 @@ describe('AppHeader', () => {
 
   describe('root rendering (grounded in app-header.vue)', () => {
     it('renders a <header> banner carrying the default data-testid', () => {
-      const { getByTestId } = render(AppHeader)
+      const { getByTestId, getByRole } = render(AppHeader)
       const root = getByTestId('app-header')
       expect(root.tagName).toBe('HEADER')
-      // Template: role="banner" is hardcoded on the <header>.
-      expect(root.getAttribute('role')).toBe('banner')
+      expect(root.hasAttribute('role')).toBe(false)
+      expect(getByRole('banner')).toBe(root)
     })
 
     it('exposes a banner landmark named from the default ariaLabel', () => {

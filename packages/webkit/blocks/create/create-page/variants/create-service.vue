@@ -1,13 +1,7 @@
 <script setup lang="ts">
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import FieldError from '@aziontech/webkit/field-error'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
@@ -19,15 +13,23 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
-  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, onMounted, reactive, ref } from 'vue'
+
+  import CreationHeader from '../parts/creation-header.vue'
+  import DiscardDialog from '../parts/discard-dialog.vue'
+  import { useCreateForm } from '../use-create-form'
+
+  export interface CreateServiceProps {
+    /** Starts as the form looks after Save was pressed: each empty required field is flagged. */
+    validated?: boolean
+  }
 
   interface PortOption {
     label: string
     value: string
   }
+
+  const props = withDefaults(defineProps<CreateServiceProps>(), { validated: false })
 
   const breadcrumb = [{ label: 'Services', href: '/services' }, { label: 'Create Service' }]
 
@@ -104,31 +106,7 @@
   })
   const httpsEnabled = computed(() => form.protocolUsage !== 'http')
   const errors = reactive({ name: '', httpPorts: '', address: '', hostHeader: '' })
-  const submitting = ref(false)
-
-  const guard = useUnsavedChanges(() => form, {
-    enabled: () => !submitting.value
-  })
-  const discardDialog = guard.dialogProps
-  const discardLabels = guard.labels
-
-  const onLeave = () => guard.confirmLeave()
-
-  useEscapeToCancel(onLeave, { enabled: () => !submitting.value })
-
-  const formEl = ref<HTMLFormElement | null>(null)
   const nameEl = ref<InstanceType<typeof Input> | null>(null)
-
-  useShortcuts({
-    keys: 'meta+enter',
-    label: 'Create service',
-    group: 'Page',
-    element: formEl,
-    when: () => !submitting.value,
-    handler: () => formEl.value?.requestSubmit()
-  })
-
-  onMounted(() => nameEl.value?.focus())
 
   const validate = () => {
     errors.name = form.name.trim() ? '' : 'This field is required.'
@@ -138,41 +116,20 @@
     return !errors.name && !errors.httpPorts && !errors.address && !errors.hostHeader
   }
 
-  const SAVE_FAILURES = 0
-  let failuresLeft = SAVE_FAILURES
+  if (props.validated) validate()
 
-  const sendRequest = () =>
-    new Promise<void>((resolve, reject) => {
-      setTimeout(() => {
-        if (failuresLeft > 0) {
-          failuresLeft -= 1
-          reject(new Error('The service did not answer. Check your connection and try again.'))
-          return
-        }
-        resolve()
-      }, 900)
-    })
+  const formEl = ref<HTMLFormElement | null>(null)
 
-  const submit = async () => {
-    if (submitting.value || !validate()) return
-    submitting.value = true
-    try {
-      await sendRequest()
-      toast.success(`${form.name.trim()} created.`)
-    } catch (error) {
-      toast.error('Could not create the service.', {
-        description: error instanceof Error ? error.message : 'Try again.',
-        action: { label: 'Retry', onClick: () => submit() }
-      })
-    } finally {
-      submitting.value = false
-    }
-  }
+  const { guard, submitting, submitButton, leave, submit } = useCreateForm({
+    source: () => form,
+    formEl,
+    shortcutLabel: 'Create service',
+    validate,
+    onCreated: () => toast.success(`${form.name.trim()} created.`),
+    failureTitle: 'Could not create the service.'
+  })
 
-  const ACCOUNT_BUTTON_CLASS =
-    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
-    'motion-reduce:transition-none'
+  onMounted(() => nameEl.value?.focus())
 
   const MAXIMUM_TTL_DESCRIPTION =
     'In seconds. Enable dynamic acceleration in the Main Settings tab to use values lower than 60 seconds. A secondary cache requires a cache TTL equal to or greater than 3 seconds.'
@@ -180,41 +137,11 @@
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <AppHeader aria-label="Console">
-      <AppHeader.Start>
-        <IconButton
-          icon="az az-chevron-left"
-          aria-label="Back to Services"
-          variant="outline"
-          size="small"
-          @click="onLeave"
-        />
-        <AppHeader.Brand
-          href="/home"
-          aria-label="Azion home"
-        >
-          <Brand
-            variant="default"
-            size="small"
-          />
-        </AppHeader.Brand>
-        <Breadcrumb :items="breadcrumb" />
-      </AppHeader.Start>
-      <AppHeader.Center />
-      <AppHeader.End>
-        <button
-          type="button"
-          aria-label="Account settings"
-          :class="ACCOUNT_BUTTON_CLASS"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            variant="square"
-          />
-        </button>
-      </AppHeader.End>
-    </AppHeader>
+    <CreationHeader
+      back-label="Back to Services"
+      :breadcrumb="breadcrumb"
+      @back="leave"
+    />
     <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
       <form
         ref="formEl"
@@ -590,14 +517,14 @@
               variant="outline"
               size="medium"
               :disabled="submitting"
-              @click="onLeave"
+              @click="leave"
             />
             <Button
               variant="primary"
               size="medium"
-              :loading="submitting"
+              v-bind="submitButton"
+              type="button"
               @click="submit"
-              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
             >
               Save
               <Kbd
@@ -611,25 +538,6 @@
         </SaveBar>
       </form>
     </main>
-    <ConfirmDialog
-      v-bind="discardDialog"
-      data-testid="unsaved-changes-dialog"
-    >
-      <template #actions>
-        <Button
-          :label="discardLabels.keepEditing"
-          variant="ghost"
-          size="medium"
-          data-autofocus
-          @click="guard.keepEditing"
-        />
-        <Button
-          :label="discardLabels.discard"
-          variant="danger"
-          size="medium"
-          @click="guard.discardAndLeave"
-        />
-      </template>
-    </ConfirmDialog>
+    <DiscardDialog :guard="guard" />
   </div>
 </template>

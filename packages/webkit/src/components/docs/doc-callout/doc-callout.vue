@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs } from 'vue'
+  import { computed, reactive, ref, useAttrs } from 'vue'
 
   import { useInlineCodeCopy } from '../../../composables/use-inline-code-copy'
-  import { usePortalLocale } from '../../../composables/use-translate'
   import Alert from '../../feedback/alert/alert.vue'
+  import DocProseCopyTip from '../doc-prose/parts/doc-prose-copy-tip.vue'
 
   defineOptions({ name: 'DocCallout', inheritAttrs: false })
 
@@ -38,8 +38,7 @@
 
   const attrs = useAttrs()
   const copyEl = ref<HTMLElement | null>(null)
-  const { tipFor, tipLabel, tipLeft, tipTop, announcement } = useInlineCodeCopy(copyEl)
-  const portalLocale = usePortalLocale()
+  const copy = reactive(useInlineCodeCopy(copyEl))
 
   const preset = computed(() => VARIANTS[props.variant] ?? VARIANTS.note)
 
@@ -57,10 +56,6 @@
     'data-[neutral]:[&_code:not(pre_*)]:inset-ring-(--border-default)! data-[neutral]:[&_code:not(pre_*)]:bg-(--bg-hover)! ' +
     '[&_:not(a,pre)>code:not([data-testid])]:cursor-pointer [&_:not(a,pre)>code:not([data-testid])]:hover:ring-1 [&_:not(a,pre)>code:not([data-testid])]:hover:ring-(--border-default) ' +
     '[&_code[data-command]]:outline-none [&_code[data-command]:focus-visible]:ring-2 [&_code[data-command]:focus-visible]:ring-(--ring-color)'
-
-  const COPY_TIP_CLASS =
-    'pointer-events-none fixed z-(--z-control-overlay) -translate-x-1/2 -translate-y-[calc(100%+var(--spacing-2xs))] rounded-(--shape-control) bg-(--bg-contrast) px-(--spacing-xs) ' +
-    'py-(--spacing-2xs) text-body-xs whitespace-nowrap text-(--text-contrast)'
 </script>
 
 <template>
@@ -85,30 +80,9 @@
     >
       <slot>{{ label }}</slot>
     </div>
-    <Teleport to="body">
-      <Transition
-        enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
-        leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
-      >
-        <span
-          v-if="tipFor"
-          :dir="portalLocale.dir"
-          :lang="portalLocale.lang"
-          role="tooltip"
-          :data-testid="`${testId}__copy-tip`"
-          :style="{ left: `${tipLeft}px`, top: `${tipTop}px` }"
-          :class="COPY_TIP_CLASS"
-          >{{ tipLabel }}</span
-        >
-      </Transition>
-      <span
-        :dir="portalLocale.dir"
-        :lang="portalLocale.lang"
-        aria-live="polite"
-        class="sr-only"
-        :data-testid="`${testId}__copy-status`"
-        >{{ announcement }}</span
-      >
-    </Teleport>
+    <DocProseCopyTip
+      :copy="copy"
+      :test-id="testId"
+    />
   </Alert>
 </template>

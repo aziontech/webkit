@@ -1,17 +1,16 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
+  import { computed } from 'vue'
 
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import SplitButton from '../../../action/split-button/split-button.vue'
   import DataTable from '../../../data/data-table/data-table.vue'
   import Input from '../../../input/input/input.vue'
   import Breadcrumb from '../../../navigation/breadcrumb/breadcrumb.vue'
   import Avatar from '../../avatar/avatar.vue'
   import Card from '../../card/card.vue'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'ObjectStorageBrowserFragment' })
 
@@ -23,9 +22,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const BUCKET = 'site-assets'
   const MODIFIED = '4 months ago'
@@ -124,12 +120,10 @@
     { ...REST, cursor: INSIDE, opened: true, forward: 360, back: 260 }
   ]
 
-  const LAST = FRAMES.length - 1
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
+  const { frame } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
+  })
 
   const rows = computed(() => (frame.value.opened ? ASSETS_ROWS : ROOT_ROWS))
 
@@ -141,153 +135,108 @@
         ]
       : [{ label: BUCKET, href: '0' }]
   )
-
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    fade="bottom"
+  <MockupFragment
     class="[--console-mockup-fade-start:78%]"
-    :chrome="false"
     :active="active"
     :width="520"
     :mobile-width="460"
+    stage-class="py-(--spacing-xs)"
+    :cursor="frame.cursor"
+    cursor-name="Alex"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative py-(--spacing-xs)"
-    >
-      <ConsoleMockupShellItem :order="0">
-        <Card :padded="false">
-          <template #default>
-            <DataTable
-              :data="rows"
-              :columns="COLUMNS"
-              row-key="id"
-              :bordered="false"
-            >
-              <template #toolbar>
-                <div class="flex w-full flex-col gap-(--spacing-sm)">
-                  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                    <i
-                      class="az az-object-storage shrink-0 text-body-lg text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                    <span class="min-w-0 truncate text-heading-2xs text-(--text-default)">
-                      {{ BUCKET }}
-                    </span>
-                  </div>
-
-                  <Input
-                    model-value=""
-                    size="large"
-                    placeholder="Search in folder"
-                    aria-label="Search in folder"
-                    class="w-full"
-                  >
-                    <template #leading>
-                      <i
-                        class="az az-search"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </Input>
-
-                  <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
-                    <Breadcrumb
-                      :items="crumbs"
-                      class="min-w-0"
-                    />
-                    <span class="flex shrink-0">
-                      <SplitButton
-                        label="Add to files"
-                        icon="az az-plus"
-                        variant="primary"
-                        size="medium"
-                        :items="ADD_TO_FILES"
-                      />
-                    </span>
-                  </div>
-                </div>
-              </template>
-
-              <template #cell-name="cell">
-                <div
-                  :data-cursor="`row-${cellValue(cell)}`"
-                  class="flex w-full min-w-0 items-center gap-(--spacing-xs)"
-                >
+    <ConsoleMockupShellItem :order="0">
+      <Card :padded="false">
+        <template #default>
+          <DataTable
+            :data="rows"
+            :columns="COLUMNS"
+            row-key="id"
+            :bordered="false"
+          >
+            <template #toolbar>
+              <div class="flex w-full flex-col gap-(--spacing-sm)">
+                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <i
-                    :data-type="cellRow(cell).kind"
-                    :class="cellRow(cell).icon"
-                    class="shrink-0 text-body-lg text-(--text-muted) data-[kind=folder]:text-(--text-link)"
+                    class="az az-object-storage shrink-0 text-body-lg text-(--text-muted)"
                     aria-hidden="true"
                   />
-                  <span class="truncate">{{ cellValue(cell) }}</span>
+                  <span class="min-w-0 truncate text-heading-2xs text-(--text-default)">
+                    {{ BUCKET }}
+                  </span>
                 </div>
-              </template>
 
-              <template #cell-size="cell">
-                <span class="text-(--text-muted)">{{ cellValue(cell) }}</span>
-              </template>
-
-              <template #cell-lastModified="cell">
-                <div
-                  v-if="cellValue(cell)"
-                  class="flex min-w-0 items-center gap-(--spacing-xs)"
+                <Input
+                  model-value=""
+                  size="large"
+                  placeholder="Search in folder"
+                  aria-label="Search in folder"
+                  class="w-full"
                 >
-                  <Avatar
-                    :label="cellRow(cell).author"
-                    size="small"
-                    variant="square"
-                  />
-                  <span class="truncate text-body-sm text-(--text-muted)">{{
-                    cellValue(cell)
-                  }}</span>
-                </div>
-              </template>
-            </DataTable>
-          </template>
-        </Card>
-      </ConsoleMockupShellItem>
+                  <template #leading>
+                    <i
+                      class="az az-search"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </Input>
 
-      <MockupCursor
-        name="Alex"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
-      />
-    </div>
-  </ConsoleMockupShell>
+                <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
+                  <Breadcrumb
+                    :items="crumbs"
+                    class="min-w-0"
+                  />
+                  <span class="flex shrink-0">
+                    <SplitButton
+                      label="Add to files"
+                      icon="az az-plus"
+                      variant="primary"
+                      size="medium"
+                      :items="ADD_TO_FILES"
+                    />
+                  </span>
+                </div>
+              </div>
+            </template>
+
+            <template #cell-name="cell">
+              <div
+                :data-cursor="`row-${cellValue(cell)}`"
+                class="flex w-full min-w-0 items-center gap-(--spacing-xs)"
+              >
+                <i
+                  :data-type="cellRow(cell).kind"
+                  :class="cellRow(cell).icon"
+                  class="shrink-0 text-body-lg text-(--text-muted) data-[kind=folder]:text-(--text-link)"
+                  aria-hidden="true"
+                />
+                <span class="truncate">{{ cellValue(cell) }}</span>
+              </div>
+            </template>
+
+            <template #cell-size="cell">
+              <span class="text-(--text-muted)">{{ cellValue(cell) }}</span>
+            </template>
+
+            <template #cell-lastModified="cell">
+              <div
+                v-if="cellValue(cell)"
+                class="flex min-w-0 items-center gap-(--spacing-xs)"
+              >
+                <Avatar
+                  :label="cellRow(cell).author"
+                  size="small"
+                  variant="square"
+                />
+                <span class="truncate text-body-sm text-(--text-muted)">{{ cellValue(cell) }}</span>
+              </div>
+            </template>
+          </DataTable>
+        </template>
+      </Card>
+    </ConsoleMockupShellItem>
+  </MockupFragment>
 </template>

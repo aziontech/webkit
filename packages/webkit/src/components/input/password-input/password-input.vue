@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, useSlots } from 'vue'
 
-  import { useFieldControl } from '../../../composables/use-field-control'
+  import { useFieldAttrs } from '../../../composables/use-field-attrs'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
@@ -61,29 +61,17 @@
   const {
     controlId,
     describedBy,
+    passthroughAttrs,
     invalid: isInvalid,
     disabled: isDisabled,
     required: isRequired
-  } = useFieldControl({
-    id: () => attrs['id'] as string | undefined,
-    describedBy: () => attrs['aria-describedby'] as string | undefined,
-    invalid: () => props.invalid,
-    disabled: () => props.disabled,
-    required: () => props.required
-  })
+  } = useFieldAttrs(props)
   const slots = useSlots()
 
   const visible = ref(false)
   const inputEl = ref<globalThis.HTMLInputElement | null>(null)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'password-input')
-
-  const passthroughAttrs = computed(() => {
-    const rest: Record<string, unknown> = { ...attrs }
-    delete rest['class']
-    delete rest['data-testid']
-    return rest
-  })
 
   const hasLeading = () => Boolean(slots['leading'])
   const hasTrailing = () => !props.toggleable && Boolean(slots['trailing'])

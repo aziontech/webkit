@@ -229,6 +229,7 @@
             <a
               v-else
               :href="safeHref(cell.href) ?? undefined"
+              :aria-label="cell.logoAlt"
               :data-fill="cell.fill ?? 'canvas'"
               :data-theme="cell.fill === 'white' ? 'light' : undefined"
               :class="LOGO_CELL_LINK_CLASS"

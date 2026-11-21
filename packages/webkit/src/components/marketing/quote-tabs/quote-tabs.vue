@@ -1,13 +1,10 @@
 <script setup lang="ts">
-  import { usePreferredReducedMotion } from '@vueuse/core'
   import {
     type Component,
     type ComponentPublicInstance,
     computed,
     defineAsyncComponent,
     nextTick,
-    onMounted,
-    onScopeDispose,
     ref,
     useAttrs,
     useId,
@@ -15,9 +12,8 @@
   } from 'vue'
 
   import { brandMarkLabel, resolveBrandMark } from '../../../assets/brands/registry'
+  import { useAutoplayProgress } from '../../../composables/use-autoplay-progress'
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
@@ -87,21 +83,11 @@
 
   const attrs = useAttrs()
   const baseId = useId()
-  const reducedMotion = usePreferredReducedMotion()
-  const { t } = useTranslate({ common: en.common })
-
-  const PROGRESS_TICK_MS = 100
-
   const loaded = new Map<string, Component>()
   const tabElements: Array<globalThis.HTMLButtonElement | null> = []
   let pendingDirection: QuoteTabsDirection | null = null
-  let marquee: ReturnType<typeof globalThis.setInterval> | null = null
 
   const direction = ref<QuoteTabsDirection>('forward')
-  const elapsed = ref(0)
-  const pointerInside = ref(false)
-  const focusInside = ref(false)
-  const paused = ref(false)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'quote-tabs')
 
@@ -130,35 +116,32 @@
     () => !current.value.logo && Boolean(current.value.art || current.value.label)
   )
 
-  const autoplayEnabled = computed(
-    () => props.autoplay && props.items.length > 1 && reducedMotion.value !== 'reduce'
-  )
-
-  const autoplayRunning = computed(
-    () => autoplayEnabled.value && !paused.value && !pointerInside.value && !focusInside.value
-  )
-
-  const pauseLabel = computed(() =>
-    paused.value ? t('common.resumeRotation') : t('common.pauseRotation')
-  )
-
-  const progress = computed(() =>
-    Math.min(100, Math.max(0, (elapsed.value / props.autoplayInterval) * 100))
-  )
+  const {
+    autoplayEnabled,
+    autoplayRunning,
+    paused,
+    pauseLabel,
+    progress,
+    restartProgress,
+    togglePause,
+    enterPointer,
+    leavePointer,
+    enterFocus,
+    leaveFocus
+  } = useAutoplayProgress({
+    enabled: () => props.autoplay && props.items.length > 1,
+    interval: () => props.autoplayInterval,
+    onAdvance: () => {
+      pendingDirection = 'forward'
+      select(selected.value >= props.items.length - 1 ? 0 : selected.value + 1)
+    }
+  })
 
   watch(selected, (next, previous) => {
     direction.value = pendingDirection ?? (next > previous ? 'forward' : 'back')
     pendingDirection = null
-    elapsed.value = 0
+    restartProgress()
   })
-
-  watch(autoplayRunning, (running) => (running ? start() : stop()))
-
-  onMounted(() => {
-    if (autoplayRunning.value) start()
-  })
-
-  onScopeDispose(stop)
 
   function isActive(index: number): boolean {
     return selected.value === index
@@ -169,52 +152,13 @@
   }
 
   function select(index: number): void {
-    elapsed.value = 0
+    restartProgress()
     model.value = index
   }
 
   function onTabClick(index: number): void {
-    pointerInside.value = false
+    leavePointer()
     select(index)
-  }
-
-  function stop(): void {
-    if (marquee === null) return
-    globalThis.clearInterval(marquee)
-    marquee = null
-  }
-
-  function start(): void {
-    stop()
-    marquee = globalThis.setInterval(tick, PROGRESS_TICK_MS)
-  }
-
-  function tick(): void {
-    elapsed.value += PROGRESS_TICK_MS
-    if (elapsed.value < props.autoplayInterval) return
-    pendingDirection = 'forward'
-    select(selected.value >= props.items.length - 1 ? 0 : selected.value + 1)
-  }
-
-  function togglePause(): void {
-    paused.value = !paused.value
-  }
-
-  function enterPointer(): void {
-    pointerInside.value = true
-  }
-
-  function leavePointer(): void {
-    pointerInside.value = false
-  }
-
-  function enterFocus(event: globalThis.FocusEvent): void {
-    const target = event.target as globalThis.Element
-    focusInside.value = target.matches(':focus-visible')
-  }
-
-  function leaveFocus(): void {
-    focusInside.value = false
   }
 
   function targetOf(key: string): number | null {

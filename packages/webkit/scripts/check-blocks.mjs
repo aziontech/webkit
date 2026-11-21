@@ -7,7 +7,12 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { checkBlockCodeNames } from './lib/block-code-names.mjs'
 import { checkDataContract } from './lib/block-data.mjs'
 import { readBlocks } from './lib/blocks.mjs'
-import { checkGuidelines, checkToastRegion, primaryComponents } from './lib/guidelines.mjs'
+import {
+  checkGuidelines,
+  checkToastRegion,
+  partSfcs,
+  primaryComponents
+} from './lib/guidelines.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
@@ -43,13 +48,15 @@ export function checkSummaryComponents(blocks) {
   const errors = []
   for (const [id, p] of Object.entries(blocks)) {
     const imported = new Set(
-      [p.sfc, ...(p.variants || []).map((v) => v.sfc)].flatMap((sfc) => primaryComponents(sfc))
+      [p.sfc, ...(p.variants || []).map((v) => v.sfc), ...partSfcs(p)].flatMap((sfc) =>
+        primaryComponents(sfc)
+      )
     )
     const named = [...String(p.summary || '').matchAll(/`([A-Z][A-Za-z0-9]*)`/g)].map((m) => m[1])
     for (const name of new Set(named)) {
       if (!imported.has(name))
         errors.push(
-          `blocks/${id}/block.json: the summary names \`${name}\`, which neither the primary nor a variant SFC imports`
+          `blocks/${id}/block.json: the summary names \`${name}\`, which no SFC of the block (primary, variant or part) imports`
         )
     }
   }

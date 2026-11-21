@@ -12,6 +12,7 @@
     watch
   } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
@@ -338,6 +339,10 @@
     textareaEl.value?.focus()
   }
 
+  function onBoxDrag(event: DragEvent): void {
+    attach.value?.drag(event)
+  }
+
   function onBoxPointerdown(event: PointerEvent): void {
     if (props.disabled || event.button !== 0) return
     const target = event.target as HTMLElement | null
@@ -394,6 +399,10 @@
   onMounted(resize)
 
   const boxEl = ref<globalThis.HTMLElement | null>(null)
+  useElementListener(boxEl, 'dragenter', onBoxDrag)
+  useElementListener(boxEl, 'dragover', onBoxDrag)
+  useElementListener(boxEl, 'dragleave', onBoxDrag)
+  useElementListener(boxEl, 'drop', onBoxDrag)
   const menuEl = ref<globalThis.HTMLElement | null>(null)
   const menuSide = ref<'top' | 'bottom'>('top')
   function placeMenu() {
@@ -461,10 +470,6 @@
       :data-testid="`${testId}__box`"
       :class="BOX_CLASS"
       @pointerdown="onBoxPointerdown"
-      @dragenter="attach?.drag"
-      @dragover="attach?.drag"
-      @dragleave="attach?.drag"
-      @drop="attach?.drag"
     >
       <div
         v-if="dragging && !disabled"
@@ -516,6 +521,7 @@
           :id="optionId(index)"
           :key="option.value"
           role="option"
+          tabindex="-1"
           :aria-selected="index === activeIndex"
           :data-active="index === activeIndex || null"
           :class="OPTION_CLASS"

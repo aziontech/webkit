@@ -19,6 +19,7 @@
  "sfcFile": "blocks/edit/edit-variables/edit-variables.vue",
  "guidelinesFile": "blocks/edit/edit-variables/guidelines.md",
  "fileSources": {
-  "sample.ts": "blocks/edit/edit-variables/sample.ts"
+  "sample.ts": "blocks/edit/edit-variables/sample.ts",
+  "paste-panel.ts": "blocks/edit/edit-variables/paste-panel.ts"
  }
 }

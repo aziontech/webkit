@@ -293,6 +293,35 @@ test('checkSummaryComponents flags a backticked component the primary and varian
   )
 })
 
+test('checkSummaryComponents and checkGuidelines count a component only a part listed in files imports', () => {
+  const part = [
+    '<script setup>',
+    "import PropertyFilter from '@aziontech/webkit/property-filter'",
+    '</script>',
+    '<template><PropertyFilter /></template>'
+  ].join('\n')
+  const files = {
+    'parts/x-filters.vue': part,
+    'sample.ts': "import Hint from '@aziontech/webkit/hint'"
+  }
+  const summary = 'A `PageHeader` over `PropertyFilter` and `Hint`.'
+  assert.deepEqual(checkSummaryComponents({ 'platform/x': { summary, sfc: SFC, files } }), [
+    'blocks/platform/x/block.json: the summary names `Hint`, which no SFC of the block (primary, variant or part) imports'
+  ])
+  const named = guide({
+    blocks: [
+      '### A. Page heading — `PageHeader`',
+      'x',
+      '### B. Primary action — `Button`',
+      'x',
+      '### C. Filters — `PropertyFilter`',
+      'x'
+    ].join('\n')
+  })
+  assert.deepEqual(checkGuidelines('platform/x', { ...block(named), files }), [])
+  assert.equal(checkGuidelines('platform/x', block(named)).length, 1)
+})
+
 test('every block.json summary names only components its SFCs import', () => {
   const blocks = readBlocks(fileURLToPath(new URL('../..', import.meta.url)))
   assert.deepEqual(checkSummaryComponents(blocks), [])
@@ -496,7 +525,10 @@ test('checkGuidelines fails on a component the SFC does not import, or one it im
     ].join('\n')
   })
   const [error] = checkGuidelines('platform/x', block(invented))
-  assert.match(error, /names `PropertyFilter`, which blocks\/platform\/x\/x.vue does not import/)
+  assert.match(
+    error,
+    /names `PropertyFilter`, which neither blocks\/platform\/x\/x.vue nor one of its parts imports/
+  )
   const uncovered = guide({ blocks: '### A. Page heading — `PageHeader`\nx' })
   assert.match(
     checkGuidelines('platform/x', block(uncovered))[0],
@@ -657,12 +689,18 @@ test('every block with "files" ships them and reads them into the catalog entry'
     for (const [file, text] of Object.entries(block.files || {})) {
       assert.ok(text.length > 0, `${id}: ${file} is empty`)
       if (!file.endsWith('.vue')) continue
-      const shared = block.variants.filter((variant) =>
-        new RegExp(`from '\\.\\./${file.replaceAll('.', '\\.')}'`).test(variant.sfc)
-      )
+      const name = file.split('/').pop().replaceAll('.', '\\.')
+      const importsIt = new RegExp(`from '\\.{1,2}/(?:[\\w-]+/)*${name}'`)
+      const users = [
+        block.sfc,
+        ...block.variants.map((variant) => variant.sfc),
+        ...Object.entries(block.files)
+          .filter(([other]) => other !== file && other.endsWith('.vue'))
+          .map(([, sfc]) => sfc)
+      ].filter((sfc) => importsIt.test(sfc))
       assert.ok(
-        shared.length > 0,
-        `${id}: ${file} is an SFC no variant renders; list it as a variant instead`
+        users.length > 0,
+        `${id}: ${file} is an SFC no primary, variant or part renders; list it as a variant instead`
       )
     }
   }

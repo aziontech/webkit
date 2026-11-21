@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, provide, ref, useAttrs, useId, watch } from 'vue'
 
-  import { useControllable } from '../../../composables/use-controllable'
   import { useMenuRoot } from '../../../composables/use-menu-root'
+  import { useOpenState } from '../../../composables/use-open-state'
   import { usePlacement } from '../../../composables/use-placement'
   import { usePortalLocale } from '../../../composables/use-translate'
   import type { DropdownMenuAlign, DropdownMenuItemValue, DropdownMenuSide } from './injection-key'
@@ -75,18 +75,11 @@
   const triggerId = `${uid}-trigger`
   const panelId = `${uid}-panel`
 
-  const openProp = computed<boolean | undefined>(() => openModel.value)
-
-  const isOpenState = useControllable<boolean>({
-    prop: openProp,
-    defaultProp: props.defaultOpen,
-    onChange: (value) => {
-      openModel.value = value
-    }
-  })
-
-  const isOpenRef = computed(() => isOpenState.value)
   const disabledRef = computed(() => props.disabled)
+  const { isOpen: isOpenRef, setOpen } = useOpenState(openModel, {
+    defaultOpen: props.defaultOpen,
+    disabled: disabledRef
+  })
   const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
     triggerRef: triggerEl,
     panelRef: panelEl,
@@ -97,11 +90,6 @@
     autoSides: ['bottom', 'top'],
     onDismiss: () => setOpen(false)
   })
-
-  function setOpen(value: boolean) {
-    if (value && props.disabled) return
-    isOpenState.set(value)
-  }
 
   function focusTrigger() {
     triggerEl.value?.focus({ preventScroll: true })

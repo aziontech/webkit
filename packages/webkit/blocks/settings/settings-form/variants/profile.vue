@@ -19,6 +19,18 @@
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, ref } from 'vue'
 
+  export interface ProfileProps {
+    /** The page opens on its first load: Skeleton rows stand in for the sections. */
+    defaultLoading?: boolean
+    /** The page opens on a failed load: a danger Alert with Retry replaces the sections. */
+    defaultLoadFailed?: boolean
+  }
+
+  const props = withDefaults(defineProps<ProfileProps>(), {
+    defaultLoading: false,
+    defaultLoadFailed: false
+  })
+
   const form = reactive({
     accountName: 'Acme',
     clientId: '9757a',
@@ -79,8 +91,8 @@
     if (!dirty.value || saving.value) return
     save()
   }
-  const loading = ref(false)
-  const loadFailed = ref(false)
+  const loading = ref(props.defaultLoading)
+  const loadFailed = ref(props.defaultLoadFailed)
   const retryLoad = () => {
     loadFailed.value = false
     loading.value = true

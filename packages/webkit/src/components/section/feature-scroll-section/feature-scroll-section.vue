@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { type Component, computed, defineAsyncComponent, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, useAttrs } from 'vue'
 
-  import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
+  import type { SceneRef } from '../../../assets/scene-registry'
+  import { resolveItemScenes } from '../../../utils/item-scenes'
   import Button from '../../action/button/button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
   import Texture from '../../content/texture/texture.vue'
@@ -105,9 +106,7 @@
 
   const hasHeader = computed(() => props.title.length > 0)
 
-  const scenes = computed<(Component | null)[]>(() =>
-    props.items.map((item) => (item.scene ? resolveScene(item.scene.component) : null))
-  )
+  const scenes = computed(() => resolveItemScenes(props.items))
 
   const sampleTabs = (sample: FeatureScrollSectionCode) => [
     {

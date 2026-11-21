@@ -333,6 +333,7 @@
         />
         <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
+            tabindex="-1"
             label="Create"
             variant="primary"
             size="small"
@@ -344,6 +345,7 @@
             icon="az az-ask-azion"
           />
           <Button
+            tabindex="-1"
             label="Feedback"
             variant="outline"
             size="small"
@@ -450,6 +452,7 @@
                 >
               </span>
               <Button
+                tabindex="-1"
                 label="Create"
                 variant="primary"
                 size="medium"

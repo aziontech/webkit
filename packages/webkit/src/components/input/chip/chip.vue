@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
@@ -54,6 +55,9 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ chip: en.chip })
 
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
+  const bodyEl = ref<globalThis.HTMLElement | null>(null)
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chip')
 
   const interactive = computed(() => props.clickable || props.selectable)
@@ -87,15 +91,19 @@
   }
 
   function onKeydown(event: KeyboardEvent) {
-    if (!active.value || event.target !== event.currentTarget) {
+    const control = splitBody.value ? bodyEl.value : rootEl.value
+    if (!active.value || !control || event.target !== control) {
       return
     }
 
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      ;(event.currentTarget as globalThis.HTMLElement).click()
+      control.click()
     }
   }
+
+  useElementListener(rootEl, 'click', onClick)
+  useElementListener(rootEl, 'keydown', onKeydown)
 
   const ROOT_CLASS =
     'relative inline-flex w-fit items-center justify-center overflow-hidden rounded-full border border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) ' +
@@ -122,6 +130,7 @@
 
 <template>
   <span
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-variant="variant"
@@ -135,14 +144,13 @@
     :aria-pressed="selectable && !splitBody ? selected : undefined"
     :aria-disabled="disabled ? 'true' : undefined"
     :class="[ROOT_CLASS, attrs.class]"
-    @click="onClick"
-    @keydown="splitBody ? undefined : onKeydown($event)"
   >
     <span
       class="relative z-(--z-control) inline-flex min-w-0 items-center justify-center gap-(--spacing-2xs)"
     >
       <span
         v-if="splitBody"
+        ref="bodyEl"
         data-slot="chip-body"
         role="button"
         :tabindex="active ? 0 : undefined"
@@ -150,7 +158,6 @@
         :aria-disabled="disabled ? 'true' : undefined"
         :data-testid="`${testId}__body`"
         class="inline-flex min-w-0 items-center gap-(--spacing-2xs) outline-none"
-        @keydown="onKeydown"
       >
         <slot v-if="$slots['default']" />
         <span

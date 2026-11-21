@@ -5,6 +5,7 @@
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { followRowLink } from '../../../utils/follow-row-link'
   import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import Item from '../../content/item/item.vue'
@@ -264,23 +265,6 @@
       ? t('listingIndexSection.filtersApplied', { label, count: applied.value.length })
       : label
   })
-
-  const followRow = (event: MouseEvent): void => {
-    const target = event.target as Element | null
-    if (!target || target.closest('a, button')) return
-    if (window.getSelection()?.toString()) return
-    const link = (event.currentTarget as Element | null)?.querySelector('a[href]')
-    link?.dispatchEvent(
-      new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true,
-        ctrlKey: event.ctrlKey,
-        metaKey: event.metaKey,
-        shiftKey: event.shiftKey,
-        altKey: event.altKey
-      })
-    )
-  }
 
   const facetDisplay = (facet: ListingIndexSectionFacet) => (value: unknown) =>
     facet.options.find((option) => option.value === value)?.label ?? facet.allLabel
@@ -599,7 +583,7 @@
                   v-for="row in entry.rows"
                   :key="row.href"
                   class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!"
-                  @click="followRow"
+                  @click="followRowLink"
                 >
                   <TableCell
                     v-for="(column, cellIndex) in columns"

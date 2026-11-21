@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
@@ -7,7 +6,6 @@
   import DrawerDescription from '@aziontech/webkit/drawer-description'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -23,6 +21,8 @@
   import { computed, reactive, ref, watch } from 'vue'
 
   import DetailVersion from '../detail-version.vue'
+  import ModifiedBy from '../parts/modified-by.vue'
+  import TableEmpty from '../parts/table-empty.vue'
 
   type DeviceGroup = {
     id: string
@@ -233,56 +233,21 @@
                       }}</span>
                     </template>
                     <template #cell-modifiedAgo="{ row }">
-                      <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                        <Tooltip :content="row.author">
-                          <Avatar
-                            :alt="row.author"
-                            :label="row.author"
-                            size="small"
-                            variant="square"
-                          />
-                        </Tooltip>
-                        <span class="truncate text-body-sm text-(--text-muted)">{{
-                          row.modifiedAgo
-                        }}</span>
-                      </div>
+                      <ModifiedBy
+                        :author="row.author"
+                        :modified-ago="row.modifiedAgo"
+                      />
                     </template>
                     <template #empty>
-                      <EmptyState
-                        key="empty-state-1"
-                        v-if="search.trim()"
-                        size="medium"
-                        icon="az az-search"
-                        title="No matching device groups"
-                        :description="`Nothing matches ${search.trim()}.`"
-                      >
-                        <template #actions>
-                          <Button
-                            label="Clear search"
-                            variant="outline"
-                            size="small"
-                            @click="search = ''"
-                          />
-                        </template>
-                      </EmptyState>
-                      <EmptyState
-                        key="empty-state-2"
-                        v-else
-                        size="medium"
+                      <TableEmpty
+                        :search="search"
+                        no-match="No matching device groups"
+                        empty-title="No device groups yet"
                         icon="az az-mobile"
-                        title="No device groups yet"
-                        description="Add the first one to this version."
-                      >
-                        <template #actions>
-                          <Button
-                            label="Add Device Group"
-                            icon="az az-plus"
-                            variant="secondary"
-                            size="small"
-                            @click="openGroup()"
-                          />
-                        </template>
-                      </EmptyState>
+                        empty-action-label="Add Device Group"
+                        @clear="search = ''"
+                        @add="openGroup()"
+                      />
                     </template>
                   </DataTable>
                 </template>

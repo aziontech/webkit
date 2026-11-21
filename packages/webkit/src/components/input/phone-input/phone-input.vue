@@ -2,7 +2,7 @@
   import { computed, onMounted, provide, shallowRef, useAttrs, useId, watch } from 'vue'
 
   import { useAnnouncer } from '../../../composables/use-announcer'
-  import { useFieldControl } from '../../../composables/use-field-control'
+  import { useFieldAttrs } from '../../../composables/use-field-attrs'
   import { useSelectSearch } from '../../../composables/use-select-search'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -88,13 +88,7 @@
     invalid: isInvalid,
     disabled: isDisabled,
     required: isRequired
-  } = useFieldControl({
-    id: () => attrs['id'] as string | undefined,
-    describedBy: () => attrs['aria-describedby'] as string | undefined,
-    invalid: () => props.invalid,
-    disabled: () => props.disabled,
-    required: () => props.required
-  })
+  } = useFieldAttrs(props)
 
   provide(FieldInjectionKey, null)
 

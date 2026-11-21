@@ -197,6 +197,7 @@
     >
       <div class="flex min-w-0 items-center gap-(--spacing-xs)">
         <div
+          role="presentation"
           class="min-w-0 flex-1"
           @keydown="onSessionKeydown"
           @dblclick="onSessionDblclick"

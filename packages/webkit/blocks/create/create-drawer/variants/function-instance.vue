@@ -5,7 +5,6 @@
     type CodeEditorMarker,
     type CodeEditorMonacoModule
   } from '@aziontech/webkit/code-editor'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
@@ -24,8 +23,10 @@
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
+
+  import { useDrawerGuard } from '../composables/use-drawer-guard'
+  import UnsavedChangesDialog from '../parts/unsaved-changes-dialog.vue'
 
   interface FunctionOption {
     value: string
@@ -273,19 +274,11 @@
     }, 600)
   }
 
-  const guard = useUnsavedChanges(() => ({ ...form, json: json.value }), {
-    enabled: () => open.value && !submitting.value
+  const { guard, onOpenChange } = useDrawerGuard({
+    open,
+    busy: () => submitting.value,
+    source: () => ({ ...form, json: json.value })
   })
-  const guardDialog = guard.dialogProps
-  const guardLabels = guard.labels
-
-  const onOpenChange = async (next: boolean) => {
-    if (next) {
-      open.value = true
-      return
-    }
-    if (await guard.confirmLeave()) open.value = false
-  }
 
   const formEl = ref<HTMLFormElement | null>(null)
 
@@ -510,24 +503,8 @@
     </DrawerContent>
   </Drawer>
 
-  <ConfirmDialog
-    v-bind="guardDialog"
+  <UnsavedChangesDialog
+    :guard="guard"
     data-testid="unsaved-changes-dialog"
-  >
-    <template #actions>
-      <Button
-        :label="guardLabels.keepEditing"
-        variant="ghost"
-        size="medium"
-        data-autofocus
-        @click="guard.keepEditing"
-      />
-      <Button
-        :label="guardLabels.discard"
-        variant="danger"
-        size="medium"
-        @click="guard.discardAndLeave"
-      />
-    </template>
-  </ConfirmDialog>
+  />
 </template>

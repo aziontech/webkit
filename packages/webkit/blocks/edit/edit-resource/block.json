@@ -75,7 +75,15 @@
     "name": "ProjectSettings",
     "file": "edit-resource.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "use-settings-draft.ts",
+    "use-deploy-on-save.ts",
+    "parts/settings-save-bar.vue",
+    "parts/settings-tab-page.vue",
+    "parts/policy-groups.vue",
+    "parts/policy-settings-page.vue"
+  ],
   "variants": [
     {
       "name": "DeployableSettings",

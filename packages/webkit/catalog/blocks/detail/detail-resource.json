@@ -54,6 +54,12 @@
  "sfcFile": "blocks/detail/detail-resource/detail-resource.vue",
  "guidelinesFile": "blocks/detail/detail-resource/guidelines.md",
  "fileSources": {
-  "sample.ts": "blocks/detail/detail-resource/sample.ts"
+  "sample.ts": "blocks/detail/detail-resource/sample.ts",
+  "use-topology-staging.ts": "blocks/detail/detail-resource/use-topology-staging.ts",
+  "parts/application-address-band.vue": "blocks/detail/detail-resource/parts/application-address-band.vue",
+  "parts/application-deployments-tab.vue": "blocks/detail/detail-resource/parts/application-deployments-tab.vue",
+  "parts/application-versions-tab.vue": "blocks/detail/detail-resource/parts/application-versions-tab.vue",
+  "parts/deploy-action.vue": "blocks/detail/detail-resource/parts/deploy-action.vue",
+  "parts/resource-build-page.vue": "blocks/detail/detail-resource/parts/resource-build-page.vue"
  }
 }

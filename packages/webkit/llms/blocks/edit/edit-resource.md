@@ -250,11 +250,9 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
@@ -263,6 +261,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
+  import SettingsSaveBar from './parts/settings-save-bar.vue'
   import { sampleProject } from './sample'
 
   /** The saved project settings, and the values a save sends. */
@@ -438,11 +437,6 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
   const overwrite = (event: MouseEvent) => {
     overwriteOpen.value = false
     submit(event)
-  }
-
-  const onSaveShortcut = (event: KeyboardEvent) => {
-    if (!dirty.value || saving.value) return
-    save(event)
   }
 
   const showFailure = () => {
@@ -681,54 +675,25 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
               </fieldset>
             </div>
 
-            <Transition
-              enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-              enter-from-class="translate-y-2 opacity-0"
-              leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-              leave-to-class="translate-y-2 opacity-0"
+            <SettingsSaveBar
+              :visible="dirty || saving"
+              :saving="saving"
+              :discard-label="freshness === 'conflict' ? 'Discard and reload' : 'Discard'"
+              @save="save"
+              @discard="discard"
             >
-              <SaveBar
-                v-if="dirty || saving"
-                @save="onSaveShortcut"
+              Project settings changed.
+              <span
+                v-if="freshness === 'conflict'"
+                class="text-(--text-muted)"
+                >Saving overwrites the version saved elsewhere.</span
               >
-                Project settings changed.
-                <span
-                  v-if="freshness === 'conflict'"
-                  class="text-(--text-muted)"
-                  >Saving overwrites the version saved elsewhere.</span
-                >
-                <span
-                  v-else
-                  class="text-(--text-muted)"
-                  >Saving publishes them on the next deployment.</span
-                >
-                <template #actions>
-                  <Button
-                    type="button"
-                    :label="freshness === 'conflict' ? 'Discard and reload' : 'Discard'"
-                    variant="outline"
-                    size="medium"
-                    :disabled="saving"
-                    @click="discard"
-                  />
-                  <Button
-                    variant="primary"
-                    size="medium"
-                    :loading="saving"
-                    @click="save"
-                    aria-keyshortcuts="Meta+S Control+S"
-                  >
-                    Save
-                    <Kbd
-                      meta
-                      size="small"
-                      aria-hidden="true"
-                      >S</Kbd
-                    >
-                  </Button>
-                </template>
-              </SaveBar>
-            </Transition>
+              <span
+                v-else
+                class="text-(--text-muted)"
+                >Saving publishes them on the next deployment.</span
+              >
+            </SettingsSaveBar>
           </form>
 
           <ConfirmDialog
@@ -752,6 +717,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
 
 ```ts
 import type { EditResourceProject } from './edit-resource.vue'
+import type { PolicyModuleField, PolicySettingsRecord } from './parts/policy-groups.vue'
 
 export const sampleProject: EditResourceProject = {
   name: 'web-app',
@@ -775,4 +741,706 @@ export const sampleStaleProject: EditResourceProject = {
   ...sampleProject,
   modules: { ...sampleProject.modules, image_optimization: true }
 }
+
+export const samplePolicyTabs = [
+  { value: 'overview', label: 'Overview' },
+  { value: 'rules', label: 'Rules' },
+  { value: 'main-settings', label: 'Settings' }
+]
+
+export const samplePolicyModules: PolicyModuleField[] = [
+  {
+    key: 'ddos',
+    title: 'DDoS Protection',
+    description: 'Absorbs volumetric attacks at the network layer.',
+    locked: true
+  },
+  {
+    key: 'request-inspection',
+    title: 'Request Inspection',
+    description: 'Inspects each request and blocks the OWASP Top 10 attack classes.'
+  },
+  {
+    key: 'ip-blocking',
+    title: 'IP Blocking',
+    description: 'Blocks traffic by country, ASN or IP range using access lists.'
+  },
+  {
+    key: 'bot-protection',
+    title: 'Bot Protection',
+    description: 'Scores automated traffic and challenges the requests that fail.'
+  },
+  {
+    key: 'custom-code',
+    title: 'Custom Code',
+    description: 'Runs your own code inside the policy, before the request is served.'
+  }
+]
+
+export const samplePolicy: PolicySettingsRecord = {
+  name: 'production-policy',
+  active: true,
+  debugRules: false,
+  modules: ['ddos', 'request-inspection', 'ip-blocking', 'bot-protection']
+}
+```
+
+## `use-settings-draft.ts`
+
+```ts
+import { computed, type ComputedRef, onScopeDispose, reactive, readonly, type Ref, ref } from 'vue'
+
+export interface UseSettingsDraftOptions<T> {
+  /** Unsaved edits the form opens with on top of the record, so it starts dirty. */
+  draft?: Partial<T>
+  /** Opens with the save already in flight. */
+  saving?: boolean
+  /** How long the sample save takes, in milliseconds. */
+  delay?: number
+  /** Checks the form before a save; false stops it. */
+  validate?: () => boolean
+  /** Runs when the save request starts. */
+  onStart?: () => void
+  /** Runs once the save landed and the form is the new baseline. */
+  onSaved?: () => void
+}
+
+export interface UseSettingsDraftReturn<T> {
+  /** The editable copy of the record. */
+  form: T
+  /** The save is in flight. */
+  saving: Readonly<Ref<boolean>>
+  /** The form differs from the last saved record. */
+  dirty: ComputedRef<boolean>
+  /** Validates, then saves. */
+  save: () => void
+  /** Saves again without validating, as a Retry or Redeploy action does. */
+  commit: () => void
+  /** Puts the last saved record back. */
+  discard: () => void
+}
+
+export function useSettingsDraft<T extends object>(
+  record: T,
+  options: UseSettingsDraftOptions<T> = {}
+): UseSettingsDraftReturn<T> {
+  const form = reactive(structuredClone(record)) as T
+  const baseline = ref(JSON.stringify(record))
+  Object.assign(form, options.draft)
+  const saving = ref(options.saving ?? false)
+  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
+  let timer: ReturnType<typeof setTimeout> | undefined
+
+  const commit = () => {
+    options.onStart?.()
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      baseline.value = JSON.stringify(form)
+      saving.value = false
+      options.onSaved?.()
+    }, options.delay ?? 900)
+  }
+
+  const save = () => {
+    if (options.validate && !options.validate()) return
+    saving.value = true
+    commit()
+  }
+
+  const discard = () => Object.assign(form, JSON.parse(baseline.value) as T)
+
+  onScopeDispose(() => clearTimeout(timer))
+
+  return { form, saving: readonly(saving), dirty, save, commit, discard }
+}
+```
+
+## `use-deploy-on-save.ts`
+
+```ts
+import { toast } from '@aziontech/webkit/toast'
+import { type ComputedRef, nextTick, onScopeDispose, reactive, type Ref } from 'vue'
+
+import { useSettingsDraft } from './use-settings-draft'
+
+/** What is wrong with one field, shown under it. */
+export interface FieldProblem {
+  /** Whether the value is missing, malformed, or only needs a hint. */
+  type: 'helper' | 'invalid' | 'required'
+  /** The sentence under the field. */
+  message: string
+}
+
+/** The problems of a form, by field key. */
+export type FieldProblems = Record<string, FieldProblem | undefined>
+
+/** The title and description of a toast. */
+export interface DeployToastText {
+  /** The toast title. */
+  title: string
+  /** The sentence under the title. */
+  description: string
+}
+
+export interface UseDeployOnSaveOptions {
+  /** The id of the toast that follows the deployment. */
+  toastId: string
+  /** Prefix of the field ids: a field is `<prefix>-<key>`. */
+  fieldPrefix: string
+  /** The field keys in reading order; the first invalid one takes focus, and Edit returns to the first. */
+  fieldOrder: string[]
+  /** Records every problem of the form in the given map. */
+  check: (problems: FieldProblems) => void
+  /** The toast while the deployment runs. */
+  loading: () => DeployToastText
+  /** The toast once the deployment is live. */
+  success: () => DeployToastText
+}
+
+export interface UseDeployOnSaveReturn<T> {
+  /** The editable copy of the record. */
+  form: T
+  /** The deployment is in flight. */
+  saving: Readonly<Ref<boolean>>
+  /** The form differs from the deployed record. */
+  dirty: ComputedRef<boolean>
+  /** The problems the last save found, by field key. */
+  errors: FieldProblems
+  /** Drops the problem of one field once it is edited. */
+  clear: (key: string) => void
+  /** Validates, then deploys. */
+  save: () => void
+  /** Puts the deployed record back and drops every problem. */
+  discard: () => void
+}
+
+export function useDeployOnSave<T extends object>(
+  record: T,
+  options: UseDeployOnSaveOptions
+): UseDeployOnSaveReturn<T> {
+  const errors = reactive<FieldProblems>({})
+  const focusField = (key: string) =>
+    nextTick(() => document.getElementById(`${options.fieldPrefix}-${key}`)?.focus())
+
+  const clear = (key: string) => {
+    delete errors[key]
+  }
+  const clearAll = () => Object.keys(errors).forEach(clear)
+
+  const validate = () => {
+    clearAll()
+    options.check(errors)
+    const first = options.fieldOrder.find((key) => errors[key])
+    if (first) focusField(first)
+    return Object.keys(errors).length === 0
+  }
+
+  const editAgain = () => {
+    toast.dismiss(options.toastId)
+    focusField(options.fieldOrder[0])
+  }
+
+  const draft = useSettingsDraft(record, {
+    delay: 1200,
+    validate,
+    onStart: () => {
+      const { title, description } = options.loading()
+      toast.loading(title, { id: options.toastId, description })
+    },
+    onSaved: () => {
+      const { title, description } = options.success()
+      toast.success(title, {
+        id: options.toastId,
+        description,
+        duration: 0,
+        closable: true,
+        actions: [
+          { label: 'Edit', onClick: editAgain },
+          { label: 'Redeploy', onClick: draft.commit }
+        ]
+      })
+    }
+  })
+
+  const discard = () => {
+    draft.discard()
+    clearAll()
+  }
+
+  onScopeDispose(() => toast.dismiss(options.toastId))
+
+  return {
+    form: draft.form,
+    saving: draft.saving,
+    dirty: draft.dirty,
+    errors,
+    clear,
+    save: draft.save,
+    discard
+  }
+}
+```
+
+## `parts/settings-save-bar.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Kbd from '@aziontech/webkit/kbd'
+  import SaveBar from '@aziontech/webkit/save-bar'
+
+  export interface SettingsSaveBarProps {
+    /** Whether the bar is up: the form holds edits or a save is in flight. */
+    visible?: boolean
+    /** The save is in flight: Discard locks and Save spins. */
+    saving?: boolean
+    /** Label of the Discard button. */
+    discardLabel?: string
+  }
+
+  const props = withDefaults(defineProps<SettingsSaveBarProps>(), {
+    visible: false,
+    saving: false,
+    discardLabel: 'Discard'
+  })
+
+  const emit = defineEmits<{
+    save: [event: Event]
+    discard: [event: MouseEvent]
+  }>()
+
+  defineSlots<{
+    /** The status sentence, such as You have unsaved changes. */
+    default(): unknown
+  }>()
+
+  const onShortcut = (event: KeyboardEvent) => {
+    if (!props.saving) emit('save', event)
+  }
+</script>
+
+<template>
+  <Transition
+    enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+    enter-from-class="translate-y-2 opacity-0"
+    leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+    leave-to-class="translate-y-2 opacity-0"
+  >
+    <SaveBar
+      v-if="visible"
+      @save="onShortcut"
+    >
+      <slot />
+      <template #actions>
+        <Button
+          type="button"
+          :label="discardLabel"
+          variant="outline"
+          size="medium"
+          :disabled="saving"
+          @click="(event: MouseEvent) => emit('discard', event)"
+        />
+        <Button
+          variant="primary"
+          size="medium"
+          :loading="saving"
+          @click="(event: MouseEvent) => emit('save', event)"
+          aria-keyshortcuts="Meta+S Control+S"
+        >
+          Save
+          <Kbd
+            meta
+            size="small"
+            aria-hidden="true"
+            >S</Kbd
+          >
+        </Button>
+      </template>
+    </SaveBar>
+  </Transition>
+</template>
+```
+
+## `parts/settings-tab-page.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import PageTabs from '@aziontech/webkit/page-tabs'
+  import Tabs from '@aziontech/webkit/tabs'
+
+  import SettingsSaveBar from './settings-save-bar.vue'
+
+  export interface SettingsTabPageProps {
+    /** The tabs of the resource; the settings page is one of them. */
+    tabs: { value: string; label: string }[]
+    /** The page heading. */
+    title: string
+    /** The sentence under the heading. */
+    description: string
+    /** Where the Documentation button leads. */
+    docsHref: string
+    /** The form holds edits. */
+    dirty?: boolean
+    /** The save is in flight. */
+    saving?: boolean
+    /** The tab that carries the unsaved-changes dot while the form holds edits. */
+    dirtyTab?: string
+  }
+
+  withDefaults(defineProps<SettingsTabPageProps>(), {
+    dirty: false,
+    saving: false,
+    dirtyTab: ''
+  })
+
+  const emit = defineEmits<{
+    save: [event: Event]
+    discard: [event: MouseEvent]
+  }>()
+
+  const activeTab = defineModel<string>('tab', { default: 'main-settings' })
+
+  defineSlots<{
+    /** The settings groups. */
+    default(): unknown
+    /** The sentence of the save bar. */
+    message(): unknown
+    /** Dialogs the page opens, after the save bar. */
+    dialogs(): unknown
+  }>()
+</script>
+
+<template>
+  <div class="flex min-h-0 flex-1 flex-col">
+    <div class="sticky top-0 z-1 bg-(--bg-canvas)">
+      <PageTabs v-model="activeTab">
+        <Tabs.Trigger
+          v-for="tab in tabs"
+          :key="tab.value"
+          :value="tab.value"
+          :label="tab.label"
+          :dirty="dirty && tab.value === dirtyTab"
+        />
+      </PageTabs>
+    </div>
+
+    <section class="min-h-0 flex-1">
+      <div class="flex min-h-full flex-col">
+        <div class="flex min-w-0 flex-1 flex-col">
+          <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col pb-0">
+            <PageHeader
+              :title="title"
+              :description="description"
+              size="small"
+            >
+              <template #actions>
+                <Button
+                  label="Documentation"
+                  icon="az az-book"
+                  variant="outline"
+                  :href="docsHref"
+                  target="_blank"
+                  size="medium"
+                />
+              </template>
+            </PageHeader>
+
+            <section
+              class="layout-section-start flex min-w-0 flex-1 flex-col pb-(--layout-boundary-end)"
+            >
+              <slot />
+            </section>
+          </div>
+
+          <SettingsSaveBar
+            :visible="dirty || saving"
+            :saving="saving"
+            @save="(event) => emit('save', event)"
+            @discard="(event) => emit('discard', event)"
+          >
+            <slot name="message" />
+          </SettingsSaveBar>
+
+          <slot name="dialogs" />
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+```
+
+## `parts/policy-groups.vue`
+
+```ts
+<script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+  import FieldError from '@aziontech/webkit/field-error'
+  import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Switch from '@aziontech/webkit/switch'
+  import Tooltip from '@aziontech/webkit/tooltip'
+
+  /** The saved settings of a security policy. */
+  export interface PolicySettingsRecord {
+    /** The policy name. */
+    name: string
+    /** Whether the policy evaluates rules. */
+    active: boolean
+    /** Whether the rules that ran are logged for each request. */
+    debugRules: boolean
+    /** The keys of the modules that are on, in module order. */
+    modules: string[]
+  }
+
+  /** One module row of the policy. */
+  export interface PolicyModuleField {
+    /** The key in the record's modules. */
+    key: string
+    /** The row title. */
+    title: string
+    /** The sentence under the title. */
+    description: string
+    /** Always on: the switch is locked and explains why. */
+    locked?: boolean
+  }
+
+  export interface PolicyGroupsProps {
+    /** The module rows. */
+    modules: PolicyModuleField[]
+    /** The name failed validation: the field is marked and the message shows. */
+    nameInvalid?: boolean
+    /** Locks the name field while a save is in flight. */
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<PolicyGroupsProps>(), {
+    nameInvalid: false,
+    disabled: false
+  })
+
+  const name = defineModel<string>('name', { required: true })
+  const active = defineModel<boolean>('active', { required: true })
+  const debugRules = defineModel<boolean>('debugRules', { required: true })
+  const selectedKeys = defineModel<string[]>('selectedKeys', { required: true })
+
+  const setModule = (key: string, on: boolean) => {
+    selectedKeys.value = props.modules
+      .map((field) => field.key)
+      .filter((fieldKey) => (fieldKey === key ? on : selectedKeys.value.includes(fieldKey)))
+  }
+</script>
+
+<template>
+  <SettingsGroup label="General">
+    <Card :padded="false">
+      <template #default>
+        <Item.List>
+          <SettingsRow
+            title="Name"
+            description="Give a unique and descriptive name to identify this policy."
+          >
+            <div class="flex w-full flex-col gap-(--spacing-xs)">
+              <Input
+                id="resource-name"
+                v-model="name"
+                size="large"
+                :disabled="disabled"
+                class="w-full"
+                aria-label="Name"
+                autocomplete="off"
+                required
+                :invalid="nameInvalid"
+                :aria-describedby="nameInvalid ? 'resource-name-message' : undefined"
+              />
+              <FieldError
+                v-if="nameInvalid"
+                id="resource-name-message"
+                >This field is required.</FieldError
+              >
+            </div>
+          </SettingsRow>
+          <SettingsRow
+            title="Project"
+            description="The project this policy runs in front of."
+            variant="compact"
+          >
+            <span class="text-body-md text-(--text-default)">web-app</span>
+          </SettingsRow>
+        </Item.List>
+      </template>
+    </Card>
+  </SettingsGroup>
+
+  <SettingsGroup
+    label="Modules"
+    hint="A module is what makes a rule act: a rule can only apply a capability that is switched on here."
+  >
+    <Card :padded="false">
+      <template #default>
+        <Item.List>
+          <SettingsRow
+            v-for="field in modules"
+            :key="field.key"
+            :title="field.title"
+            :description="field.description"
+            variant="compact"
+          >
+            <Tooltip
+              v-if="field.locked"
+              content="DDoS Protection is always on, on every policy."
+            >
+              <span class="flex">
+                <Switch
+                  :model-value="true"
+                  :aria-label="field.title"
+                  disabled
+                />
+              </span>
+            </Tooltip>
+            <Switch
+              v-else
+              :model-value="selectedKeys.includes(field.key)"
+              @update:model-value="(on) => setModule(field.key, on)"
+              :aria-label="field.title"
+            />
+          </SettingsRow>
+        </Item.List>
+      </template>
+    </Card>
+  </SettingsGroup>
+
+  <SettingsGroup
+    label="Debug rules"
+    hint="Query the logged executions from the event log or the logs API."
+  >
+    <Card :padded="false">
+      <template #default>
+        <Item.List>
+          <SettingsRow
+            title="Active"
+            description="Logs which rules ran for a request, under the trace field of each logged event."
+            variant="compact"
+          >
+            <Switch
+              v-model="debugRules"
+              aria-label="Debug rules"
+            />
+          </SettingsRow>
+        </Item.List>
+      </template>
+    </Card>
+  </SettingsGroup>
+
+  <SettingsGroup label="Status">
+    <Card :padded="false">
+      <template #default>
+        <Item.List>
+          <SettingsRow
+            title="Active"
+            description="An inactive policy stops evaluating rules."
+            variant="compact"
+          >
+            <Switch
+              v-model="active"
+              aria-label="Active"
+            />
+          </SettingsRow>
+        </Item.List>
+      </template>
+    </Card>
+  </SettingsGroup>
+</template>
+```
+
+## `parts/policy-settings-page.vue`
+
+```ts
+<script setup lang="ts">
+  import { nextTick, ref, watch } from 'vue'
+
+  import { samplePolicy, samplePolicyModules, samplePolicyTabs } from '../sample'
+  import { useSettingsDraft } from '../use-settings-draft'
+  import PolicyGroups, { type PolicySettingsRecord } from './policy-groups.vue'
+  import SettingsTabPage from './settings-tab-page.vue'
+
+  export interface PolicySettingsPageProps {
+    /** Unsaved edits the form opens with, so the save bar is up. */
+    defaultDraft?: Partial<PolicySettingsRecord>
+    /** Opens with the save in flight: the fieldset and Discard lock and Save spins. */
+    defaultSaving?: boolean
+  }
+
+  const props = withDefaults(defineProps<PolicySettingsPageProps>(), {
+    defaultDraft: () => ({}),
+    defaultSaving: false
+  })
+
+  const activeTab = ref('main-settings')
+  const nameError = ref(false)
+
+  const validate = () => {
+    if (form.name.trim()) return true
+    nameError.value = true
+    nextTick(() => document.getElementById('resource-name')?.focus())
+    return false
+  }
+
+  const { form, saving, dirty, save, discard } = useSettingsDraft(samplePolicy, {
+    draft: props.defaultDraft,
+    saving: props.defaultSaving,
+    validate
+  })
+
+  watch(
+    () => form.name,
+    () => {
+      nameError.value = false
+    }
+  )
+</script>
+
+<template>
+  <SettingsTabPage
+    v-model:tab="activeTab"
+    :tabs="samplePolicyTabs"
+    title="Settings"
+    description="Core configuration for this policy."
+    docs-href="https://example.com/docs/security-policies"
+    :dirty="dirty"
+    :saving="saving"
+    @save="save"
+    @discard="discard"
+  >
+    <fieldset
+      v-if="defaultSaving"
+      class="m-0 flex min-w-0 flex-col border-0 p-0"
+      :disabled="saving"
+    >
+      <legend class="sr-only">Settings</legend>
+      <PolicyGroups
+        v-model:name="form.name"
+        v-model:active="form.active"
+        v-model:debug-rules="form.debugRules"
+        v-model:selected-keys="form.modules"
+        :modules="samplePolicyModules"
+        :name-invalid="nameError"
+        :disabled="saving"
+      />
+    </fieldset>
+    <PolicyGroups
+      v-else
+      v-model:name="form.name"
+      v-model:active="form.active"
+      v-model:debug-rules="form.debugRules"
+      v-model:selected-keys="form.modules"
+      :modules="samplePolicyModules"
+      :name-invalid="nameError"
+    />
+    <template #message> You have unsaved changes. </template>
+  </SettingsTabPage>
+</template>
 ```

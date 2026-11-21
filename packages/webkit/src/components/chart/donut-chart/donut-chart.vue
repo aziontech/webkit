@@ -1,9 +1,10 @@
 <script setup lang="ts">
   import { duration } from '@aziontech/theme/animations'
-  import { usePreferredReducedMotion } from '@vueuse/core'
-  import { computed, onMounted, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
+  import { useChartEntrance } from '../../../composables/use-chart-entrance'
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Alert from '../../feedback/alert/alert.vue'
@@ -85,6 +86,7 @@
 
   const attrs = useAttrs()
   const dir = useDirection()
+  const ringEl = ref<globalThis.HTMLElement | null>(null)
   const { t, locale } = useTranslate({ donutChart: en.donutChart })
   const valueText = (value: number): string =>
     props.formatValue === formatCompact
@@ -93,9 +95,7 @@
   const shareText = (value: number, whole: number): string =>
     formatShare(value, whole, locale.value)
   const uid = useId()
-  const reducedMotion = usePreferredReducedMotion()
-  const entered = ref(false)
-  let frame = 0
+  const { entered, scheduleEnter, resetEnter } = useChartEntrance()
 
   const RADIUS = { donut: 40, pie: 25 } as const
   const WIDTH = { donut: 14, pie: 50 } as const
@@ -175,39 +175,14 @@
       : ''
   )
 
-  function cancelEnter() {
-    if (frame) globalThis.cancelAnimationFrame(frame)
-    frame = 0
-  }
-
-  function scheduleEnter() {
-    cancelEnter()
-    entered.value = false
-    if (reducedMotion.value === 'reduce') {
-      entered.value = true
-      return
-    }
-    frame = globalThis.requestAnimationFrame(() => {
-      frame = globalThis.requestAnimationFrame(() => {
-        frame = 0
-        entered.value = true
-      })
-    })
-  }
-
   onMounted(() => {
     if (showRing.value) scheduleEnter()
   })
 
   watch(showRing, (show) => {
     if (show) scheduleEnter()
-    else {
-      cancelEnter()
-      entered.value = false
-    }
+    else resetEnter()
   })
-
-  onScopeDispose(cancelEnter)
 
   function setActive(index: number | null) {
     if (activeIndex.value !== index) activeIndex.value = index
@@ -237,6 +212,9 @@
     } else return
     event.preventDefault()
   }
+
+  useElementListener(ringEl, 'keydown', onKeydown)
+  useElementListener(ringEl, 'click', onRingClick)
 
   function toggle(event: MouseEvent, id: string) {
     const target = series.value.find((entry) => entry.id === id)
@@ -367,6 +345,7 @@
     </table>
     <template v-else>
       <div
+        ref="ringEl"
         role="group"
         :aria-roledescription="t('donutChart.roleDescription')"
         tabindex="0"
@@ -375,8 +354,6 @@
         :data-size="size"
         :data-testid="`${testId}__ring`"
         class="relative shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[size=large]:size-60 data-[size=medium]:size-44 data-[size=small]:size-32"
-        @keydown="onKeydown"
-        @click="onRingClick"
       >
         <svg
           viewBox="0 0 100 100"

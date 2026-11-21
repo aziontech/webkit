@@ -1164,13 +1164,13 @@
           :min="280"
           :max="560"
           aria-label="Version history"
+          @keydown.esc="historyExpanded = false"
         >
           <aside
             :inert="!historyExpanded"
             aria-labelledby="version-history-title"
             class="flex min-h-0 min-w-0 flex-1 flex-col bg-(--bg-surface)"
             data-testid="version-detail-history"
-            @keydown.esc="historyExpanded = false"
           >
             <header
               class="flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) py-(--spacing-xs) ps-(--spacing-lg) pe-(--spacing-sm)"

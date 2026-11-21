@@ -2,12 +2,12 @@
   import { useMediaQuery, useMounted } from '@vueuse/core'
   import { computed, defineAsyncComponent, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
+  import { useLoadMore } from '../../../composables/use-load-more'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import type { ThirdPartyLogoMark } from '../../content/third-party-logo/third-party-logo.vue'
-  import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Input from '../../input/input/input.vue'
   import Select from '../../input/select/select.vue'
   import SelectContent from '../../input/select/select-content/select-content.vue'
@@ -16,6 +16,8 @@
   import Module from '../../layout/module/module.vue'
   import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import ArticleIndexSectionEmpty from '../article-index-section/parts/article-index-section-empty.vue'
+  import ArticleIndexSectionMore from '../article-index-section/parts/article-index-section-more.vue'
 
   defineOptions({
     name: 'StoryIndexSection',
@@ -123,8 +125,6 @@
 
   const optionQuery = ref<Record<string, string>>({})
 
-  const pages = ref(1)
-
   const filtersOpen = ref(false)
 
   const panelId = useId()
@@ -158,13 +158,9 @@
     })
   })
 
-  const paged = computed(() => props.moreLabel.length > 0 && props.pageSize > 0)
-
-  const visible = computed(() =>
-    paged.value ? matches.value.slice(0, pages.value * props.pageSize) : matches.value
+  const { visible, hasMore, loadMore, resetPages } = useLoadMore(matches, () =>
+    props.moreLabel ? props.pageSize : 0
   )
-
-  const hasMore = computed(() => paged.value && visible.value.length < matches.value.length)
 
   const hasSearch = computed(() => Boolean(props.searchPlaceholder || props.searchAriaLabel))
 
@@ -190,9 +186,7 @@
       : label
   })
 
-  watch([query, selection], () => {
-    pages.value = 1
-  })
+  watch([query, selection], resetPages)
 
   onMounted(() => {
     if (!props.seedFromQuery) return
@@ -435,48 +429,20 @@
           </ul>
         </RegistrationFrame>
 
-        <RegistrationFrame
+        <ArticleIndexSectionMore
           v-if="hasMore"
-          flush
-          borders="y"
-          marks="bottom"
-        >
-          <div class="flex justify-center p-(--spacing-xl)">
-            <Button
-              :label="moreLabel"
-              variant="outline"
-              size="large"
-              @click="pages += 1"
-            />
-          </div>
-        </RegistrationFrame>
+          :label="moreLabel"
+          @more="loadMore"
+        />
       </template>
 
-      <RegistrationFrame
-        key="empty"
+      <ArticleIndexSectionEmpty
         v-else-if="emptyTitle"
-        flush
-        borders="y"
-        marks="bottom"
-      >
-        <EmptyState
-          :title="emptyTitle"
-          icon="az az-search"
-          class="p-(--spacing-2xl)"
-        >
-          <template
-            v-if="emptyActionLabel"
-            #actions
-          >
-            <Button
-              :label="emptyActionLabel"
-              variant="secondary"
-              size="large"
-              @click="clear"
-            />
-          </template>
-        </EmptyState>
-      </RegistrationFrame>
+        key="empty"
+        :title="emptyTitle"
+        :action-label="emptyActionLabel"
+        @clear="clear"
+      />
     </Module>
   </section>
 </template>

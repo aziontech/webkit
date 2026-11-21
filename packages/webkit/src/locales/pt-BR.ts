@@ -1128,7 +1128,6 @@ export const ptBR: Messages = {
     label: 'Exportar CSV'
   },
   tableHeadCell: {
-    resize: 'Redimensionar coluna',
     sortBy: 'Ordenar por'
   },
   tableRefreshButton: {

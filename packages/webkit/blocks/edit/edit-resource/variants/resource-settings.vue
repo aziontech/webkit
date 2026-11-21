@@ -1,17 +1,17 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Textarea from '@aziontech/webkit/textarea'
-  import { computed, reactive, ref } from 'vue'
+  import { reactive } from 'vue'
+
+  import SettingsSaveBar from '../parts/settings-save-bar.vue'
+  import { useSettingsDraft } from '../use-settings-draft'
 
   type FieldProblem = { type: 'helper' | 'invalid' | 'required'; message: string }
 
@@ -39,11 +39,6 @@
     type: 'ip_cidr',
     items: '192.0.2.10\n198.51.100.24\n203.0.113.7 #comment'
   }
-
-  const form = reactive(structuredClone(record))
-  const saving = ref(false)
-  const baseline = ref(JSON.stringify(record))
-  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
 
   const errors = reactive<Record<string, FieldProblem | undefined>>({})
 
@@ -75,21 +70,7 @@
     return Object.keys(errors).length === 0
   }
 
-  const save = () => {
-    if (!validate()) return
-    saving.value = true
-    setTimeout(() => {
-      baseline.value = JSON.stringify(form)
-      saving.value = false
-    }, 900)
-  }
-
-  const onSaveShortcut = () => {
-    if (!dirty.value || saving.value) return
-    save()
-  }
-
-  const discard = () => Object.assign(form, JSON.parse(baseline.value) as typeof form)
+  const { form, saving, dirty, save, discard } = useSettingsDraft(record, { validate })
 </script>
 
 <template>
@@ -268,44 +249,13 @@
       </fieldset>
     </div>
 
-    <Transition
-      enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-      enter-from-class="translate-y-2 opacity-0"
-      leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-      leave-to-class="translate-y-2 opacity-0"
+    <SettingsSaveBar
+      :visible="dirty || saving"
+      :saving="saving"
+      @save="save"
+      @discard="discard"
     >
-      <SaveBar
-        v-if="dirty || saving"
-        @save="onSaveShortcut"
-      >
-        You have unsaved changes.
-
-        <template #actions>
-          <Button
-            type="button"
-            label="Discard"
-            variant="outline"
-            size="medium"
-            :disabled="saving"
-            @click="discard"
-          />
-          <Button
-            variant="primary"
-            size="medium"
-            :loading="saving"
-            @click="save"
-            aria-keyshortcuts="Meta+S Control+S"
-          >
-            Save
-            <Kbd
-              meta
-              size="small"
-              aria-hidden="true"
-              >S</Kbd
-            >
-          </Button>
-        </template>
-      </SaveBar>
-    </Transition>
+      You have unsaved changes.
+    </SettingsSaveBar>
   </form>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, provide, ref, useAttrs, useId, watch } from 'vue'
 
-  import { useControllable } from '../../../composables/use-controllable'
+  import { useOpenState } from '../../../composables/use-open-state'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
   import type { PopoverAlign, PopoverSide, PopoverSize } from './injection-key'
@@ -66,18 +66,11 @@
   const titleId = `${uid}-title`
   const descriptionId = `${uid}-description`
 
-  const openProp = computed<boolean | undefined>(() => openModel.value)
-
-  const isOpenState = useControllable<boolean>({
-    prop: openProp,
-    defaultProp: props.defaultOpen,
-    onChange: (value) => {
-      openModel.value = value
-    }
-  })
-
-  const isOpenRef = computed(() => isOpenState.value)
   const disabledRef = computed(() => props.disabled)
+  const { isOpen: isOpenRef, setOpen } = useOpenState(openModel, {
+    defaultOpen: props.defaultOpen,
+    disabled: disabledRef
+  })
   const sizeRef = computed(() => props.size)
 
   const hasTitle = ref(false)
@@ -97,11 +90,6 @@
     element: panelEl
   })
 
-  function setOpen(value: boolean) {
-    if (value && props.disabled) return
-    isOpenState.set(value)
-  }
-
   function focusTrigger() {
     const trigger = triggerEl.value
     if (!trigger) return
@@ -118,7 +106,7 @@
   }
 
   function onDocumentMousedown(event: globalThis.MouseEvent) {
-    if (!isOpenState.value) return
+    if (!isOpenRef.value) return
     if (!props.dismissible) return
     const target = event.target as globalThis.Node | null
     if (!target) return
@@ -145,7 +133,7 @@
   }
 
   function onDocumentKeydown(event: globalThis.KeyboardEvent) {
-    if (!isOpenState.value || event.defaultPrevented) return
+    if (!isOpenRef.value || event.defaultPrevented) return
 
     if (event.key === 'Escape') {
       if (!isTop.value || !props.dismissible) return

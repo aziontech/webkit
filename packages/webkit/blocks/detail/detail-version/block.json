@@ -42,7 +42,7 @@
     "name": "Draft",
     "file": "detail-version.vue"
   },
-  "files": ["sample.ts"],
+  "files": ["sample.ts", "parts/modified-by.vue", "parts/table-empty.vue"],
   "variants": [
     {
       "name": "Deployed",

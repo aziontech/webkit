@@ -51,7 +51,15 @@
     "name": "ResourceOverview",
     "file": "detail-resource.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "use-topology-staging.ts",
+    "parts/application-address-band.vue",
+    "parts/application-deployments-tab.vue",
+    "parts/application-versions-tab.vue",
+    "parts/deploy-action.vue",
+    "parts/resource-build-page.vue"
+  ],
   "variants": [
     {
       "name": "Resource",

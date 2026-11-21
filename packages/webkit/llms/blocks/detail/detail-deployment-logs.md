@@ -613,4 +613,891 @@ export const sampleCreateFlowFailedSteps: DeploymentLogsStep[] = sampleFailedSte
   description: step.description?.replace('Routing Rules', 'Routing rules'),
   lines: step.lines.map((line) => ({ ...line, message: line.message.replace(/!$/, '.') }))
 }))
+
+interface DeploymentRun {
+  command: string
+  prefix: string
+}
+
+const deploymentSteps = (run: DeploymentRun): DeploymentLogsStep[] => [
+  {
+    id: 'build',
+    title: 'Build',
+    description: 'Bundle written to .build/worker.js',
+    status: 'success',
+    duration: '28s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:11',
+        type: 'text',
+        message: `[build] Running deploy command · ${run.command}`
+      },
+      {
+        id: '1',
+        time: '14:02:11',
+        type: 'text',
+        message: '[build] Getting presets available'
+      },
+      {
+        id: '2',
+        time: '14:02:12',
+        type: 'text',
+        message: '[build] Building with preset"vue" (platform bundler)'
+      },
+      {
+        id: '3',
+        time: '14:02:38',
+        type: 'text',
+        message: '[build] vite build · 1.69 MB in dist/'
+      },
+      {
+        id: '4',
+        time: '14:02:39',
+        type: 'text',
+        message: '[build] Wrote .build/worker.js and .build/manifest.json'
+      },
+      {
+        id: '5',
+        time: '14:02:39',
+        type: 'success',
+        message: '[build] Build finished successfully'
+      }
+    ]
+  },
+  {
+    id: 'upload',
+    title: 'Upload',
+    description: 'Static assets uploaded to storage',
+    status: 'success',
+    duration: '8.1s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:39',
+        type: 'text',
+        message: '[upload] Uploading .build/assets to storage web-app-assets'
+      },
+      {
+        id: '1',
+        time: '14:02:40',
+        type: 'text',
+        message: `[upload] Prefix ${run.prefix} (rotate-prefix)`
+      },
+      {
+        id: '2',
+        time: '14:02:46',
+        type: 'success',
+        message: '[upload] 24 files updated successfully'
+      },
+      {
+        id: '3',
+        time: '14:02:47',
+        type: 'success',
+        message: '[upload] Storage web-app-assets successfully updated'
+      }
+    ]
+  },
+  {
+    id: 'manifest',
+    title: 'Manifest',
+    description: 'manifest.json read, every resource resolved',
+    status: 'success',
+    duration: '1.9s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:47',
+        type: 'text',
+        message: '[manifest] Reading manifest.json file'
+      },
+      {
+        id: '1',
+        time: '14:02:48',
+        type: 'text',
+        message: '[manifest] Resolved 4 resources to apply: function, resource, origin, service'
+      },
+      {
+        id: '2',
+        time: '14:02:48',
+        type: 'text',
+        message: '[manifest] 3 rules declared in the request phase'
+      },
+      {
+        id: '3',
+        time: '14:02:49',
+        type: 'success',
+        message: '[manifest] manifest.json read successfully'
+      }
+    ]
+  },
+  {
+    id: 'function',
+    title: 'Function',
+    description: 'Function bound to the bundle',
+    status: 'success',
+    duration: '3.6s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:49',
+        type: 'text',
+        message: '[manifest] Updated function __DEFAULT__ with ID 53089'
+      },
+      {
+        id: '1',
+        time: '14:02:51',
+        type: 'text',
+        message: '[manifest] Bound .build/worker.js to function 53089'
+      },
+      {
+        id: '2',
+        time: '14:02:53',
+        type: 'success',
+        message: '[manifest] Function binding __DEFAULT__ with id 47458 successfully updated'
+      }
+    ]
+  },
+  {
+    id: 'resource',
+    title: 'Resource',
+    description: 'Resource and cache settings applied',
+    status: 'success',
+    duration: '2.8s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:53',
+        type: 'text',
+        message: '[manifest] Updated resource web-app with ID 1784552864'
+      },
+      {
+        id: '1',
+        time: '14:02:55',
+        type: 'success',
+        message: '[manifest] Cache setting __DEFAULT__ successfully updated'
+      },
+      {
+        id: '2',
+        time: '14:02:56',
+        type: 'success',
+        message: '[manifest] Resource web-app successfully updated'
+      }
+    ]
+  },
+  {
+    id: 'origin',
+    title: 'Origin',
+    description: 'Origin pointed at the storage',
+    status: 'success',
+    duration: '1.9s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:56',
+        type: 'text',
+        message: '[manifest] Creating origin storage-default (storage)'
+      },
+      {
+        id: '1',
+        time: '14:02:57',
+        type: 'text',
+        message: `[manifest] Storage web-app-assets · prefix ${run.prefix}`
+      },
+      {
+        id: '2',
+        time: '14:02:58',
+        type: 'success',
+        message: '[manifest] Origin storage-default with id 263718 successfully updated'
+      }
+    ]
+  },
+  {
+    id: 'rules',
+    title: 'Rules',
+    description: 'Request-phase rules applied',
+    status: 'success',
+    duration: '4.8s',
+    lines: [
+      {
+        id: '0',
+        time: '14:02:59',
+        type: 'success',
+        message:
+          '[manifest] Rule"Set storage origin for all requests" with id 604943 successfully updated'
+      },
+      {
+        id: '1',
+        time: '14:03:00',
+        type: 'success',
+        message: '[manifest] Rule"Deliver static assets" with id 604944 successfully updated'
+      },
+      {
+        id: '2',
+        time: '14:03:01',
+        type: 'success',
+        message: '[manifest] Rule"Redirect to index.html" with id 604945 successfully updated'
+      },
+      {
+        id: '3',
+        time: '14:03:03',
+        type: 'success',
+        message: '[manifest] 3 rules applied in the request phase'
+      }
+    ]
+  },
+  {
+    id: 'service',
+    title: 'Service',
+    description: 'Service deployment published to the domain',
+    status: 'success',
+    duration: '3.7s',
+    lines: [
+      {
+        id: '0',
+        time: '14:03:04',
+        type: 'success',
+        message: '[manifest] Service web-app with id 1784675753 successfully updated'
+      },
+      {
+        id: '1',
+        time: '14:03:05',
+        type: 'success',
+        message: '[manifest] Service deployment d_7Kq2mVbHZ with id 5591028 successfully created'
+      },
+      {
+        id: '2',
+        time: '14:03:06',
+        type: 'text',
+        message: '[manifest] Environment production'
+      },
+      {
+        id: '3',
+        time: '14:03:07',
+        type: 'text',
+        message: '[manifest] Updated domain web-app with ID 1784675753'
+      }
+    ]
+  },
+  {
+    id: 'purge',
+    title: 'Cache purge',
+    description: 'Cache purged for the domain',
+    status: 'success',
+    duration: '3.4s',
+    lines: [
+      {
+        id: '0',
+        time: '14:03:08',
+        type: 'text',
+        message: '[purge] purge_on_publish · Initializing cache warming...'
+      },
+      {
+        id: '1',
+        time: '14:03:09',
+        type: 'text',
+        message: '[purge] Purge request accepted for web-app-mh2saq.example.com'
+      },
+      {
+        id: '2',
+        time: '14:03:10',
+        type: 'text',
+        message: '[purge] Cache warmed for 3 locations'
+      },
+      {
+        id: '3',
+        time: '14:03:11',
+        type: 'success',
+        message: '[purge] Purge finished executing'
+      }
+    ]
+  },
+  {
+    id: 'finish',
+    title: 'Live',
+    description: 'Deployment serving traffic at the domain',
+    status: 'success',
+    duration: '0.9s',
+    lines: [
+      {
+        id: '0',
+        time: '14:03:12',
+        type: 'text',
+        message:
+          '[deploy] To visualize your resource access the domain: https://web-app-mh2saq.example.com'
+      },
+      {
+        id: '1',
+        time: '14:03:12',
+        type: 'success',
+        message: '[deploy] Deployed finished executing'
+      }
+    ]
+  }
+]
+
+const failedDeploymentDurations: Record<string, string> = {
+  build: '26s',
+  upload: '7.8s',
+  manifest: '1.7s',
+  function: '3.4s',
+  resource: '2.6s',
+  origin: '1.8s'
+}
+
+const failedDeploymentRules = (step: DeploymentLogsStep): DeploymentLogsStep => ({
+  ...step,
+  description: 'The rules rejected this deployment (409 Conflict).',
+  status: 'error',
+  duration: '4.1s',
+  lines: [
+    { ...step.lines[0], type: 'text' },
+    {
+      id: '1',
+      time: '14:03:01',
+      type: 'text',
+      level: 'error',
+      message: '[ERROR] [manifest] Error while creating rule"Deliver static assets"'
+    },
+    {
+      id: '2',
+      time: '14:03:02',
+      type: 'text',
+      level: 'error',
+      message: '409 Conflict: a rule with this behavior is already bound to service web-app'
+    },
+    {
+      id: '3',
+      time: '14:03:03',
+      type: 'text',
+      level: 'error',
+      message: '[ERROR] [manifest] Deploy aborted. Nothing was published.'
+    }
+  ]
+})
+
+export const sampleDeploymentSteps: DeploymentLogsStep[] = deploymentSteps({
+  command: 'platform deploy --auto --local',
+  prefix: '20260722112530'
+})
+
+export const sampleDeploymentFailedSteps: DeploymentLogsStep[] = deploymentSteps({
+  command: 'Console (UI)',
+  prefix: '20260730140211'
+}).map((step) => {
+  if (step.id === 'rules') return failedDeploymentRules(step)
+  const duration = failedDeploymentDurations[step.id]
+  return duration
+    ? { ...step, duration }
+    : notRun(step, 'skipped', 'Never ran. The deployment stopped at Rules')
+})
+```
+
+## `parts/deployment-page.vue`
+
+```ts
+<script setup lang="ts">
+  import Accordion from '@aziontech/webkit/accordion'
+  import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
+  import Avatar from '@aziontech/webkit/avatar'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import CopyButton from '@aziontech/webkit/copy-button'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import LogViewer, {
+    type LogViewerStep,
+    type LogViewerStepStatus,
+    type LogViewerStepsView
+  } from '@aziontech/webkit/log-viewer'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { computed, ref } from 'vue'
+
+  export interface DeploymentPageProps {
+    /** Color of the banner over the page. */
+    severity: AlertSeverity
+    /** Text of the banner over the page. */
+    message: string
+    /** The run failed and can be started again from the banner. */
+    redeployable?: boolean
+    /** The deployment serves traffic, so Visit opens its address. */
+    live?: boolean
+    /** Who started the deployment. */
+    author: string
+    /** The full date and time the deployment was created at. */
+    createdAt: string
+    /** How long ago the deployment was created. */
+    createdAgo: string
+    /** The status of the deployment, in the details and beside an unfinished log. */
+    status: { severity: StatusIndicatorSeverity; label: string }
+    /** How long the run took; left empty, it reads Not started. */
+    duration?: string
+    /** The environment the deployment targets. */
+    environment: string
+    /** What started the deployment: its name, its icon and the command behind it. */
+    trigger: { label: string; icon: string; command: string }
+    /** The storage prefix the assets were uploaded under. */
+    storagePrefix: string
+    /** The steps of the run; left empty, the logs card reads not started. */
+    steps?: LogViewerStep[]
+  }
+
+  const props = withDefaults(defineProps<DeploymentPageProps>(), {
+    redeployable: false,
+    live: false,
+    duration: '',
+    steps: () => []
+  })
+
+  const DOMAIN = 'web-app-mh2saq.example.com'
+  const URL = `https://${DOMAIN}`
+
+  const SETTINGS = [
+    { label: 'Binding policy', value: 'Strict' },
+    { label: 'Deployment policy', value: 'Single' },
+    { label: 'Canary', value: '' },
+    { label: 'Skew protection', value: '' }
+  ]
+
+  const STEP_TAGS: Partial<Record<LogViewerStepStatus, { label: string; severity: TagSeverity }>> =
+    {
+      error: { label: 'Failed', severity: 'danger' },
+      skipped: { label: 'Skipped', severity: 'neutral' }
+    }
+
+  const logViews = [
+    { label: 'Phased', value: 'phased' },
+    { label: 'Complete', value: 'complete' }
+  ]
+
+  const failedStep = computed(() => props.steps.find((step) => step.status === 'error'))
+
+  const logViewer = ref<LogViewerStepsView>('phased')
+  const openStep = ref((failedStep.value ?? props.steps.at(-1))?.id)
+
+  const DETAIL_LINK_CLASS =
+    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
+
+  const DEPLOYMENT_SETTINGS_SUMMARY_CLASS =
+    'flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-md) pb-(--spacing-md) ' +
+    '@lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) ' +
+    '@lg/band:pb-0'
+</script>
+
+<template>
+  <div class="layout-boundary flex min-h-0 w-full flex-1 flex-col">
+    <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+      <div class="[--popup-origin:top] animate-popup-scale-in motion-reduce:animate-none">
+        <Alert
+          :severity="severity"
+          size="small"
+          :label="message"
+        >
+          <template
+            v-if="redeployable"
+            #actions
+          >
+            <Button
+              label="Redeploy"
+              variant="secondary"
+              size="medium"
+              icon="az az-refresh"
+            />
+          </template>
+        </Alert>
+      </div>
+
+      <Card :padded="false">
+        <template #header>
+          <p class="text-heading-xs text-(--text-default)">Deployment details</p>
+
+          <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+            <Tooltip :content="live ? URL : 'Available once the deployment is live'">
+              <Button
+                label="Visit"
+                variant="secondary"
+                size="medium"
+                icon="az az-external-link"
+                v-bind="live ? { href: URL, target: '_blank' } : { disabled: true }"
+              />
+            </Tooltip>
+
+            <DropdownMenu
+              side="bottom"
+              align="end"
+            >
+              <DropdownMenu.Trigger>
+                <Tooltip content="Deployment actions">
+                  <IconButton
+                    icon="az az-ellipsis"
+                    variant="outline"
+                    size="medium"
+                    aria-label="Deployment actions"
+                  />
+                </Tooltip>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Item
+                  value="logs"
+                  label="Logs"
+                >
+                  <template #leading>
+                    <i
+                      class="az az-align-left"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item
+                  value="requests"
+                  label="Requests"
+                >
+                  <template #leading>
+                    <i
+                      class="az az-arrow-right-left"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </DropdownMenu.Item>
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
+                <DropdownMenu.Item
+                  value="redeploy"
+                  label="Redeploy"
+                >
+                  <template #leading>
+                    <i
+                      class="az az-refresh"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </DropdownMenu.Item>
+              </DropdownMenu.Group>
+            </DropdownMenu>
+          </div>
+        </template>
+
+        <template #default>
+          <div
+            class="grid grid-cols-1 gap-(--spacing-lg) p-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3"
+          >
+            <div class="flex flex-col gap-(--spacing-2xs)">
+              <span class="text-label-sm text-(--text-muted)">Created</span>
+              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                <Tooltip :content="`${author} · ${createdAt}`">
+                  <Avatar
+                    :alt="author"
+                    :label="author"
+                    size="small"
+                    variant="square"
+                  />
+                </Tooltip>
+                <span class="truncate text-body-sm text-(--text-default)">{{ author }}</span>
+                <span class="shrink-0 text-body-sm text-(--text-muted)">{{ createdAgo }}</span>
+              </div>
+            </div>
+            <div class="flex flex-col gap-(--spacing-2xs)">
+              <span class="text-label-sm text-(--text-muted)">Status</span>
+              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                <StatusIndicator v-bind="status" />
+              </div>
+            </div>
+            <div class="flex flex-col gap-(--spacing-2xs)">
+              <span class="text-label-sm text-(--text-muted)">Duration</span>
+              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                <i
+                  class="az az-clock shrink-0 text-(--text-muted)"
+                  aria-hidden="true"
+                />
+                <span
+                  v-if="duration"
+                  class="truncate text-body-sm text-(--text-default)"
+                  >{{ duration }}</span
+                >
+                <span
+                  v-else
+                  class="truncate text-body-sm text-(--text-muted)"
+                >
+                  Not started
+                </span>
+              </div>
+            </div>
+            <div class="flex flex-col gap-(--spacing-2xs)">
+              <span class="text-label-sm text-(--text-muted)">Environment</span>
+              <div class="flex min-w-0 items-center">
+                <Tag
+                  severity="neutral"
+                  size="medium"
+                  :label="environment"
+                />
+              </div>
+            </div>
+            <div class="flex flex-col gap-(--spacing-2xs)">
+              <span class="text-label-sm text-(--text-muted)">Service</span>
+              <Tooltip content="Open web-app in Services">
+                <a
+                  href="/services/1784675753"
+                  :class="DETAIL_LINK_CLASS"
+                >
+                  <span class="truncate underline-offset-2 group-hover/link:underline">
+                    web-app
+                  </span>
+                  <i
+                    class="az az-external-link shrink-0 text-body-xs leading-none"
+                    aria-hidden="true"
+                  />
+                </a>
+              </Tooltip>
+            </div>
+            <div class="flex flex-col gap-(--spacing-2xs)">
+              <span class="text-label-sm text-(--text-muted)">Resource</span>
+              <Tooltip content="Open web-app in Resources">
+                <a
+                  href="/resources/1784552864"
+                  :class="DETAIL_LINK_CLASS"
+                >
+                  <span class="truncate underline-offset-2 group-hover/link:underline">
+                    web-app
+                  </span>
+                  <i
+                    class="az az-external-link shrink-0 text-body-xs leading-none"
+                    aria-hidden="true"
+                  />
+                </a>
+              </Tooltip>
+            </div>
+            <div class="flex flex-col gap-(--spacing-2xs)">
+              <span class="text-label-sm text-(--text-muted)">Triggered by</span>
+              <div class="flex min-w-0 items-center">
+                <Tooltip :content="trigger.command">
+                  <Tag
+                    severity="neutral"
+                    size="medium"
+                    :icon="trigger.icon"
+                    :label="trigger.label"
+                  />
+                </Tooltip>
+              </div>
+            </div>
+            <div class="flex flex-col gap-(--spacing-2xs)">
+              <span class="text-label-sm text-(--text-muted)">Preset</span>
+              <div class="flex min-w-0 items-center">
+                <Tooltip content="build.preset in platform.config.js">
+                  <Tag
+                    severity="neutral"
+                    size="medium"
+                    icon="az az-wrench"
+                    label="vue"
+                  />
+                </Tooltip>
+              </div>
+            </div>
+            <div class="flex flex-col gap-(--spacing-2xs) sm:col-span-2 lg:col-span-3">
+              <span class="text-label-sm text-(--text-muted)">Storage</span>
+              <div
+                class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
+              >
+                <i
+                  class="az az-inbox shrink-0 text-(--text-muted)"
+                  aria-hidden="true"
+                />
+                <span class="truncate">web-app-assets</span>
+                <span
+                  class="text-body-xs text-(--text-muted)"
+                  aria-hidden="true"
+                  >·</span
+                >
+                <span class="text-label-code-sm text-(--text-muted)">{{ storagePrefix }}</span>
+              </div>
+            </div>
+            <div class="flex flex-col gap-(--spacing-2xs) sm:col-span-2 lg:col-span-3">
+              <span class="text-label-sm text-(--text-muted)">Domains</span>
+              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                <i
+                  class="az az-globe shrink-0 text-body-lg text-(--text-muted)"
+                  aria-hidden="true"
+                />
+                <Tooltip :content="`Open ${DOMAIN} in a new tab`">
+                  <a
+                    :href="URL"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    :class="DETAIL_LINK_CLASS"
+                  >
+                    <span class="truncate underline-offset-2 group-hover/link:underline">{{
+                      DOMAIN
+                    }}</span>
+                    <i
+                      class="az az-external-link shrink-0 text-body-xs leading-none"
+                      aria-hidden="true"
+                    />
+                  </a>
+                </Tooltip>
+                <CopyButton
+                  variant="outline"
+                  :value="DOMAIN"
+                  aria-label="Copy domain name"
+                  class="shrink-0"
+                  size="small"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas)"
+          >
+            <Accordion
+              type="single"
+              icon-position="leading"
+              collapsible
+            >
+              <Accordion.Item value="deployment-settings">
+                <div class="relative">
+                  <Accordion.Trigger :heading-level="3">
+                    <span class="flex min-h-12 items-center">
+                      <span class="text-label-md text-(--text-default)">Deployment Settings</span>
+                    </span>
+                  </Accordion.Trigger>
+
+                  <div :class="DEPLOYMENT_SETTINGS_SUMMARY_CLASS">
+                    <div class="pointer-events-auto">
+                      <Tooltip content="Open Default in Build and deployment settings">
+                        <a
+                          href="/account/build-deployment"
+                          :class="DETAIL_LINK_CLASS"
+                        >
+                          <span class="truncate underline-offset-2 group-hover/link:underline">
+                            Default
+                          </span>
+                          <i
+                            class="az az-external-link shrink-0 text-body-xs leading-none"
+                            aria-hidden="true"
+                          />
+                        </a>
+                      </Tooltip>
+                    </div>
+                  </div>
+                </div>
+
+                <Accordion.Content>
+                  <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2 lg:grid-cols-4">
+                    <div
+                      v-for="setting in SETTINGS"
+                      :key="setting.label"
+                      class="flex min-w-0 flex-col gap-(--spacing-2xs)"
+                    >
+                      <span class="text-label-sm text-(--text-muted)">{{ setting.label }}</span>
+                      <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
+                        <template v-if="setting.value">
+                          <span class="truncate text-body-sm text-(--text-default)">{{
+                            setting.value
+                          }}</span>
+                        </template>
+                        <template v-else>
+                          <svg
+                            class="h-(--size-4) w-(--size-4) shrink-0 text-(--text-muted)"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            fill-rule="evenodd"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M8 0a8 8 0 100 16A8 8 0 008 0z M4.25 8a.75.75 0 01.75-.75h6a.75.75 0 010 1.5H5A.75.75 0 014.25 8z"
+                            />
+                          </svg>
+                          <span class="truncate text-body-sm text-(--text-muted)"> Disabled </span>
+                        </template>
+                      </span>
+                    </div>
+                  </div>
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
+          </div>
+        </template>
+      </Card>
+
+      <Card
+        :padded="false"
+        class="w-full"
+      >
+        <template #header>
+          <p class="min-w-0 truncate text-heading-xs text-(--text-default)">Deployment logs</p>
+
+          <StatusIndicator
+            v-if="!steps.length"
+            v-bind="status"
+          />
+          <div
+            v-else
+            class="flex shrink-0 items-center gap-(--spacing-sm)"
+          >
+            <StatusIndicator
+              v-if="failedStep"
+              v-bind="status"
+            />
+            <span
+              v-else
+              class="text-label-sm text-(--text-muted)"
+              >{{ duration }}</span
+            >
+            <ToggleGroup
+              v-model="logViewer"
+              :options="logViews"
+              size="medium"
+              aria-label="Log view"
+            />
+          </div>
+        </template>
+
+        <template #default>
+          <div
+            v-if="!steps.length"
+            class="py-(--spacing-xl)"
+          >
+            <EmptyState
+              icon="az az-clock"
+              title="Queued, not started"
+              description="The steps appear here as soon as the deployment starts running."
+            />
+          </div>
+          <LogViewer.Steps
+            v-else
+            v-model:view="logViewer"
+            v-model:open-step="openStep"
+            :steps="steps"
+            :view-switch="false"
+          >
+            <template
+              v-if="failedStep"
+              #step-meta="{ step }"
+            >
+              <Tag
+                v-if="STEP_TAGS[step.status]"
+                v-bind="STEP_TAGS[step.status]"
+                size="small"
+              />
+            </template>
+            <template
+              v-if="failedStep"
+              #step-empty="{ step }"
+            >
+              {{
+                step.status === 'skipped'
+                  ? `Never ran. The deployment stopped at ${failedStep.title}.`
+                  : 'No log lines yet.'
+              }}
+            </template>
+          </LogViewer.Steps>
+        </template>
+      </Card>
+    </section>
+  </div>
+</template>
 ```

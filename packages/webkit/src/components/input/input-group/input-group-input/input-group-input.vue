@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useFieldControl } from '../../../../composables/use-field-control'
+  import { useFieldAttrs } from '../../../../composables/use-field-attrs'
   import { passwordManagerHints } from '../../../../utils/autofill'
 
   defineOptions({ name: 'InputGroupInput', inheritAttrs: false })
@@ -44,13 +44,7 @@
     invalid: isInvalid,
     disabled: isDisabled,
     required: isRequired
-  } = useFieldControl({
-    id: () => attrs['id'] as string | undefined,
-    describedBy: () => attrs['aria-describedby'] as string | undefined,
-    invalid: () => props.invalid,
-    disabled: () => props.disabled,
-    required: () => props.required
-  })
+  } = useFieldAttrs(props)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-group-input')
 

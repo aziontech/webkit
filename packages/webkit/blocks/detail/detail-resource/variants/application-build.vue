@@ -4,15 +4,10 @@
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import type { TableColumn } from '@aziontech/webkit/data-table'
-  import DataTable from '@aziontech/webkit/data-table'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Item from '@aziontech/webkit/item'
@@ -28,11 +23,14 @@
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Subheader from '@aziontech/webkit/subheader'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+
+  import ApplicationAddressBand from '../parts/application-address-band.vue'
+  import ApplicationDeploymentsTab from '../parts/application-deployments-tab.vue'
+  import ApplicationVersionsTab from '../parts/application-versions-tab.vue'
 
   const APP = {
     name: 'storefront-app',
@@ -50,12 +48,6 @@
   ]
   const currentTab = ref('overview')
 
-  const versionColumns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Version', principal: true, hideable: false },
-    { accessorKey: 'description', header: 'Description', grow: 2 },
-    { accessorKey: 'state', header: 'Status', minWidth: 104 },
-    { accessorKey: 'createdAgo', header: 'Created', minWidth: 96 }
-  ]
   const versions = [
     {
       id: 'BX7Q2LMA',
@@ -78,19 +70,6 @@
       state: 'Ready',
       createdAgo: '4 days ago'
     }
-  ]
-  const versionSeverity: Record<string, TagSeverity> = {
-    Active: 'success',
-    Ready: 'neutral',
-    Draft: 'warning'
-  }
-
-  const deploymentColumns: TableColumn[] = [
-    { accessorKey: 'id', header: 'Deployment', principal: true, hideable: false },
-    { accessorKey: 'version', header: 'Version' },
-    { accessorKey: 'environment', header: 'Environment' },
-    { accessorKey: 'status', header: 'Status', minWidth: 104 },
-    { accessorKey: 'createdAgo', header: 'Created', minWidth: 96 }
   ]
   const deployments = [
     {
@@ -197,6 +176,20 @@
     deployOpen.value = true
   }
 
+  const dropZoneEl = ref<HTMLElement | null>(null)
+  onMounted(() => {
+    dropZoneEl.value?.addEventListener('dragenter', onDragenter)
+    dropZoneEl.value?.addEventListener('dragover', onDragover)
+    dropZoneEl.value?.addEventListener('dragleave', onDragleave)
+    dropZoneEl.value?.addEventListener('drop', onDrop)
+  })
+  onBeforeUnmount(() => {
+    dropZoneEl.value?.removeEventListener('dragenter', onDragenter)
+    dropZoneEl.value?.removeEventListener('dragover', onDragover)
+    dropZoneEl.value?.removeEventListener('dragleave', onDragleave)
+    dropZoneEl.value?.removeEventListener('drop', onDrop)
+  })
+
   const openDeploy = () => {
     dropped.value = ''
     deployOpen.value = true
@@ -243,10 +236,6 @@
     'truncate rounded-(--shape-button) text-body-sm text-(--text-default) underline-offset-2 ' +
     'hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 
-  const DETAIL_LINK_CLASS =
-    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
-
   const FOOTER_BAND_CLASS =
     '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
     'py-(--spacing-xs)'
@@ -254,11 +243,8 @@
 
 <template>
   <div
+    ref="dropZoneEl"
     class="flex min-h-0 flex-1 flex-col"
-    @dragenter="onDragenter"
-    @dragover="onDragover"
-    @dragleave="onDragleave"
-    @drop="onDrop"
   >
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
@@ -533,91 +519,12 @@
         >
           <Card :padded="false">
             <template #default>
-              <div
-                class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
-              >
-                <div
-                  class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
-                >
-                  <i
-                    class="az az-globe shrink-0 text-body-lg text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                  <div class="flex min-w-0">
-                    <Tooltip
-                      :content="`Open ${APP.host} in a new tab`"
-                      class="w-full"
-                    >
-                      <a
-                        :href="`https://${APP.host}`"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        :class="DETAIL_LINK_CLASS"
-                      >
-                        <span class="truncate underline-offset-2 group-hover/link:underline">{{
-                          APP.host
-                        }}</span>
-                        <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                        <i
-                          class="az az-external-link shrink-0 text-body-xs leading-none"
-                          aria-hidden="true"
-                        />
-                      </a>
-                    </Tooltip>
-                  </div>
-                </div>
-                <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
-                  <Button
-                    label="Visit"
-                    variant="secondary"
-                    size="medium"
-                    icon="az az-external-link"
-                    :href="`https://${APP.host}`"
-                    target="_blank"
-                  />
-                  <DropdownMenu
-                    side="bottom"
-                    align="end"
-                  >
-                    <DropdownMenu.Trigger>
-                      <Tooltip content="Application actions">
-                        <IconButton
-                          icon="az az-ellipsis"
-                          variant="outline"
-                          size="medium"
-                          aria-label="Application actions"
-                        />
-                      </Tooltip>
-                    </DropdownMenu.Trigger>
-                    <DropdownMenu.Group>
-                      <DropdownMenu.Item
-                        value="copy-url"
-                        label="Copy URL"
-                      >
-                        <template #leading>
-                          <i
-                            class="az az-copy"
-                            aria-hidden="true"
-                          />
-                        </template>
-                      </DropdownMenu.Item>
-                    </DropdownMenu.Group>
-                    <DropdownMenu.Group>
-                      <DropdownMenu.Item
-                        value="settings"
-                        label="Settings"
-                      >
-                        <template #leading>
-                          <i
-                            class="az az-settings"
-                            aria-hidden="true"
-                          />
-                        </template>
-                      </DropdownMenu.Item>
-                    </DropdownMenu.Group>
-                  </DropdownMenu>
-                </div>
-              </div>
+              <ApplicationAddressBand
+                class="@container/band"
+                :host="APP.host"
+                icon="az az-globe"
+                show-menu-icons
+              />
 
               <div
                 class="grid grid-cols-1 gap-(--spacing-sm) border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) sm:grid-cols-3 lg:grid-cols-6"
@@ -734,103 +641,17 @@
           </Card>
         </section>
 
-        <section
+        <ApplicationVersionsTab
           v-else-if="activeTab === 'versions'"
-          class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-section-gap)"
-        >
-          <Subheader
-            title="Versions"
-            size="small"
-          >
-            <template #actions>
-              <Button
-                label="Add Version"
-                variant="outline"
-                size="medium"
-                icon="az az-plus"
-              />
-            </template>
-          </Subheader>
-          <Card :padded="false">
-            <template #default>
-              <DataTable
-                :data="versions"
-                :columns="versionColumns"
-                row-key="id"
-                paginated
-                :page-size="10"
-                :bordered="false"
-                aria-label="Versions"
-              >
-                <template #cell-name="{ value }">
-                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                    <span class="truncate font-(family-name:--font-code) text-body-sm">{{
-                      value
-                    }}</span>
-                    <span
-                      v-if="value === APP.version"
-                      class="shrink-0 text-body-sm text-(--text-muted)"
-                      >Latest</span
-                    >
-                  </span>
-                </template>
-                <template #cell-state="{ value }">
-                  <Tag
-                    :label="value"
-                    :severity="versionSeverity[value]"
-                    size="small"
-                  />
-                </template>
-                <template #empty>
-                  <EmptyState
-                    size="medium"
-                    icon="az az-history"
-                    title="No versions yet"
-                    description="Every deploy creates a version of this application."
-                  />
-                </template>
-              </DataTable>
-            </template>
-          </Card>
-        </section>
+          :versions="versions"
+          :latest="APP.version"
+        />
 
-        <section
+        <ApplicationDeploymentsTab
           v-else
-          class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-section-gap)"
-        >
-          <Subheader
-            title="Deployments"
-            size="small"
-          />
-          <Card :padded="false">
-            <template #default>
-              <DataTable
-                :data="deployments"
-                :columns="deploymentColumns"
-                row-key="id"
-                paginated
-                :page-size="10"
-                :bordered="false"
-                aria-label="Deployments"
-              >
-                <template #cell-status="{ value }">
-                  <StatusIndicator
-                    :severity="deploymentSeverity[value]"
-                    :label="value"
-                  />
-                </template>
-                <template #empty>
-                  <EmptyState
-                    size="medium"
-                    icon="az az-cloud-upload"
-                    title="No deployments yet"
-                    description="Deploy this application and each run lands here."
-                  />
-                </template>
-              </DataTable>
-            </template>
-          </Card>
-        </section>
+          :deployments="deployments"
+          :severity="deploymentSeverity"
+        />
       </div>
     </section>
 

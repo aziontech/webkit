@@ -19,6 +19,7 @@ export default TransferListRoot
 export { TransferListControls, TransferListSource, TransferListTarget }
 export type {
   TransferListItems,
+  TransferListItemSlotProps,
   TransferListMoveDirection,
   TransferListSide,
   TransferListValue

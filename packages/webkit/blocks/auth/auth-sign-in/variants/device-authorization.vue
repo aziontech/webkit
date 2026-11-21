@@ -1,8 +1,6 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
-  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
-  import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
@@ -11,6 +9,8 @@
   import OtpInput from '@aziontech/webkit/otp-input'
   import PageHeader from '@aziontech/webkit/page-header'
   import { computed, nextTick, ref } from 'vue'
+
+  import SignInFrame from '../parts/sign-in-frame.vue'
 
   const account = { name: 'Jane Doe', initials: 'JD', email: 'jane.doe@example.com' }
 
@@ -97,257 +97,213 @@
       outcome.value = answer === 'confirm' ? 'connected' : 'cancelled'
     }, 600)
   }
-
-  const FORM_COLUMN_CLASS =
-    'm-auto flex w-full flex-col items-center gap-(--spacing-md) transition-[translate,opacity] duration-slow-01 ease-expressive-entrance ' +
-    'starting:-translate-x-6 starting:opacity-0 rtl:starting:translate-x-6 motion-reduce:transition-none'
 </script>
 <template>
-  <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <AppHeader
-      aria-label="Console"
-      class="shrink-0"
-    >
-      <AppHeader.Brand
-        href="/home"
-        aria-label="Azion home"
+  <SignInFrame>
+    <div class="flex w-full flex-col items-center">
+      <Card
+        class="w-full max-w-(--container-sm)"
+        :padded="false"
       >
-        <Brand
-          variant="default"
-          size="small"
-        />
-      </AppHeader.Brand>
-      <AppHeader.Center />
-      <AppHeader.End>
-        <Button
-          label="Documentation"
-          variant="outline"
-          size="medium"
-          icon="az az-book"
-          href="/docs"
-        />
-      </AppHeader.End>
-    </AppHeader>
+        <template #default>
+          <section
+            class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
+            aria-labelledby="device-authorization-title"
+          >
+            <PageHeader
+              title-id="device-authorization-title"
+              :title="`Connect ${request.client}`"
+              :description="
+                entering
+                  ? 'Enter the code your terminal shows to connect it to your account.'
+                  : 'Check that this code matches the one in your terminal, then confirm.'
+              "
+            />
 
-    <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
-      <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">
-        <div class="flex flex-1 flex-col py-(--spacing-xl) lg:min-h-0 lg:overflow-y-auto">
-          <div :class="FORM_COLUMN_CLASS">
-            <div class="flex w-full flex-col items-center">
-              <Card
-                class="w-full max-w-(--container-sm)"
-                :padded="false"
+            <Alert
+              key="alert-1"
+              v-if="outcome === 'connected'"
+              severity="success"
+              size="small"
+              label="Device connected. Go back to your terminal; you can close this tab."
+            />
+            <Alert
+              key="alert-2"
+              v-else-if="outcome === 'cancelled'"
+              severity="info"
+              size="small"
+              label="Request cancelled. The device was not connected."
+            />
+            <Alert
+              key="alert-3"
+              v-else-if="unreachable"
+              severity="warning"
+              size="small"
+            >
+              We could not check the code. Your entry is kept; try again in a moment.
+              <template #actions>
+                <Button
+                  label="Retry"
+                  variant="secondary"
+                  size="small"
+                  :loading="pending === 'check'"
+                  @click="check"
+                />
+              </template>
+            </Alert>
+
+            <form
+              v-if="entering"
+              class="flex flex-col gap-(--spacing-lg)"
+              aria-label="Enter the device code"
+              novalidate
+              @submit.prevent="check"
+            >
+              <Field :invalid="!!codeError">
+                <Field.Label for="device-code">Device code</Field.Label>
+                <OtpInput
+                  id="device-code"
+                  v-model="code"
+                  name="code"
+                  :length="8"
+                  mode="alphanumeric"
+                  :group="4"
+                  :disabled="pending === 'check'"
+                  @update:model-value="codeError = ''"
+                  @complete="check"
+                />
+                <Field.Description>{{
+                  codeError || `Codes expire ${request.expires} after the terminal shows them.`
+                }}</Field.Description>
+              </Field>
+              <Button
+                type="submit"
+                label="Continue"
+                variant="primary"
+                size="large"
+                class="w-full"
+                :loading="pending === 'check'"
+              />
+            </form>
+
+            <template v-else>
+              <div
+                class="flex flex-col items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-md)"
               >
-                <template #default>
-                  <section
-                    class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
-                    aria-labelledby="device-authorization-title"
+                <span class="text-label-sm text-(--text-muted)">Device code</span>
+                <span class="text-label-code-lg text-(--text-default)">{{ grouped }}</span>
+              </div>
+
+              <KeyValueList
+                variant="split"
+                aria-label="Request details"
+              >
+                <KeyValueList.Item label="Application">{{ request.client }}</KeyValueList.Item>
+                <KeyValueList.Item label="Device">{{ request.device }}</KeyValueList.Item>
+                <KeyValueList.Item label="IP address">{{ request.address }}</KeyValueList.Item>
+                <KeyValueList.Item label="Requested">{{ request.requested }}</KeyValueList.Item>
+              </KeyValueList>
+
+              <div class="flex flex-col gap-(--spacing-xs)">
+                <h2 class="text-label-md text-(--text-muted)">Signed in as</h2>
+                <Item
+                  variant="outline"
+                  size="small"
+                >
+                  <Item.Media>
+                    <Avatar
+                      :label="account.initials"
+                      size="medium"
+                    />
+                  </Item.Media>
+                  <Item.Content>
+                    <Item.Title class="max-w-full">
+                      <span
+                        class="min-w-0 truncate"
+                        :title="account.name"
+                        >{{ account.name }}</span
+                      >
+                    </Item.Title>
+                    <Item.Description>
+                      <span
+                        class="block truncate"
+                        :title="account.email"
+                        >{{ account.email }}</span
+                      >
+                    </Item.Description>
+                  </Item.Content>
+                  <Item.Actions>
+                    <Button
+                      label="Switch account"
+                      variant="outline"
+                      size="small"
+                      href="/login?prompt=select_account"
+                      :disabled="!!pending || settled"
+                    />
+                  </Item.Actions>
+                </Item>
+              </div>
+
+              <div class="flex flex-col gap-(--spacing-xs)">
+                <h2
+                  id="device-authorization-scopes"
+                  class="text-label-md text-(--text-muted)"
+                >
+                  {{ request.client }} will be able to
+                </h2>
+                <Item.List aria-labelledby="device-authorization-scopes">
+                  <Item
+                    v-for="scope in scopes"
+                    :key="scope.id"
+                    size="small"
+                    role="listitem"
                   >
-                    <PageHeader
-                      title-id="device-authorization-title"
-                      :title="`Connect ${request.client}`"
-                      :description="
-                        entering
-                          ? 'Enter the code your terminal shows to connect it to your account.'
-                          : 'Check that this code matches the one in your terminal, then confirm.'
-                      "
-                    />
-
-                    <Alert
-                      key="alert-1"
-                      v-if="outcome === 'connected'"
-                      severity="success"
-                      size="small"
-                      label="Device connected. Go back to your terminal; you can close this tab."
-                    />
-                    <Alert
-                      key="alert-2"
-                      v-else-if="outcome === 'cancelled'"
-                      severity="info"
-                      size="small"
-                      label="Request cancelled. The device was not connected."
-                    />
-                    <Alert
-                      key="alert-3"
-                      v-else-if="unreachable"
-                      severity="warning"
-                      size="small"
-                    >
-                      We could not check the code. Your entry is kept; try again in a moment.
-                      <template #actions>
-                        <Button
-                          label="Retry"
-                          variant="secondary"
-                          size="small"
-                          :loading="pending === 'check'"
-                          @click="check"
-                        />
-                      </template>
-                    </Alert>
-
-                    <form
-                      v-if="entering"
-                      class="flex flex-col gap-(--spacing-lg)"
-                      aria-label="Enter the device code"
-                      novalidate
-                      @submit.prevent="check"
-                    >
-                      <Field :invalid="!!codeError">
-                        <Field.Label for="device-code">Device code</Field.Label>
-                        <OtpInput
-                          id="device-code"
-                          v-model="code"
-                          name="code"
-                          :length="8"
-                          mode="alphanumeric"
-                          :group="4"
-                          :disabled="pending === 'check'"
-                          @update:model-value="codeError = ''"
-                          @complete="check"
-                        />
-                        <Field.Description>{{
-                          codeError ||
-                          `Codes expire ${request.expires} after the terminal shows them.`
-                        }}</Field.Description>
-                      </Field>
-                      <Button
-                        type="submit"
-                        label="Continue"
-                        variant="primary"
-                        size="large"
-                        class="w-full"
-                        :loading="pending === 'check'"
+                    <Item.Media type="icon">
+                      <i
+                        :class="scope.icon"
+                        aria-hidden="true"
                       />
-                    </form>
+                    </Item.Media>
+                    <Item.Content>
+                      <Item.Title>{{ scope.title }}</Item.Title>
+                      <Item.Description>{{ scope.description }}</Item.Description>
+                    </Item.Content>
+                  </Item>
+                </Item.List>
+              </div>
 
-                    <template v-else>
-                      <div
-                        class="flex flex-col items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-md)"
-                      >
-                        <span class="text-label-sm text-(--text-muted)">Device code</span>
-                        <span class="text-label-code-lg text-(--text-default)">{{ grouped }}</span>
-                      </div>
+              <div class="grid grid-cols-2 gap-(--spacing-sm)">
+                <Button
+                  label="Cancel"
+                  variant="secondary"
+                  size="large"
+                  class="w-full"
+                  :loading="pending === 'cancel'"
+                  :disabled="pending === 'confirm' || settled"
+                  @click="respond('cancel')"
+                />
+                <Button
+                  label="Confirm"
+                  variant="primary"
+                  size="large"
+                  class="w-full"
+                  :loading="pending === 'confirm'"
+                  :disabled="pending === 'cancel' || settled"
+                  @click="respond('confirm')"
+                />
+              </div>
 
-                      <KeyValueList
-                        variant="split"
-                        aria-label="Request details"
-                      >
-                        <KeyValueList.Item label="Application">{{
-                          request.client
-                        }}</KeyValueList.Item>
-                        <KeyValueList.Item label="Device">{{ request.device }}</KeyValueList.Item>
-                        <KeyValueList.Item label="IP address">{{
-                          request.address
-                        }}</KeyValueList.Item>
-                        <KeyValueList.Item label="Requested">{{
-                          request.requested
-                        }}</KeyValueList.Item>
-                      </KeyValueList>
-
-                      <div class="flex flex-col gap-(--spacing-xs)">
-                        <h2 class="text-label-md text-(--text-muted)">Signed in as</h2>
-                        <Item
-                          variant="outline"
-                          size="small"
-                        >
-                          <Item.Media>
-                            <Avatar
-                              :label="account.initials"
-                              size="medium"
-                            />
-                          </Item.Media>
-                          <Item.Content>
-                            <Item.Title class="max-w-full">
-                              <span
-                                class="min-w-0 truncate"
-                                :title="account.name"
-                                >{{ account.name }}</span
-                              >
-                            </Item.Title>
-                            <Item.Description>
-                              <span
-                                class="block truncate"
-                                :title="account.email"
-                                >{{ account.email }}</span
-                              >
-                            </Item.Description>
-                          </Item.Content>
-                          <Item.Actions>
-                            <Button
-                              label="Switch account"
-                              variant="outline"
-                              size="small"
-                              href="/login?prompt=select_account"
-                              :disabled="!!pending || settled"
-                            />
-                          </Item.Actions>
-                        </Item>
-                      </div>
-
-                      <div class="flex flex-col gap-(--spacing-xs)">
-                        <h2
-                          id="device-authorization-scopes"
-                          class="text-label-md text-(--text-muted)"
-                        >
-                          {{ request.client }} will be able to
-                        </h2>
-                        <Item.List aria-labelledby="device-authorization-scopes">
-                          <Item
-                            v-for="scope in scopes"
-                            :key="scope.id"
-                            size="small"
-                            role="listitem"
-                          >
-                            <Item.Media type="icon">
-                              <i
-                                :class="scope.icon"
-                                aria-hidden="true"
-                              />
-                            </Item.Media>
-                            <Item.Content>
-                              <Item.Title>{{ scope.title }}</Item.Title>
-                              <Item.Description>{{ scope.description }}</Item.Description>
-                            </Item.Content>
-                          </Item>
-                        </Item.List>
-                      </div>
-
-                      <div class="grid grid-cols-2 gap-(--spacing-sm)">
-                        <Button
-                          label="Cancel"
-                          variant="secondary"
-                          size="large"
-                          class="w-full"
-                          :loading="pending === 'cancel'"
-                          :disabled="pending === 'confirm' || settled"
-                          @click="respond('cancel')"
-                        />
-                        <Button
-                          label="Confirm"
-                          variant="primary"
-                          size="large"
-                          class="w-full"
-                          :loading="pending === 'confirm'"
-                          :disabled="pending === 'cancel' || settled"
-                          @click="respond('confirm')"
-                        />
-                      </div>
-
-                      <a
-                        v-if="!settled"
-                        class="text-link self-start text-body-sm"
-                        href="#"
-                        @click.prevent="enterCode"
-                        >The code does not match? Enter the code from your terminal</a
-                      >
-                    </template>
-                  </section>
-                </template>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+              <a
+                v-if="!settled"
+                class="text-link self-start text-body-sm"
+                href="#"
+                @click.prevent="enterCode"
+                >The code does not match? Enter the code from your terminal</a
+              >
+            </template>
+          </section>
+        </template>
+      </Card>
+    </div>
+  </SignInFrame>
 </template>

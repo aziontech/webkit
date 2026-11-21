@@ -2,15 +2,13 @@
   import { computed, useAttrs } from 'vue'
 
   import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
-  import Button from '../../action/button/button.vue'
   import CodeBlock, { type CodeBlockTab } from '../../code/code-block/code-block.vue'
   import Illustration from '../../content/illustration/illustration.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
   import Link from '../../navigation/link/link.vue'
+  import FeatureTabsSectionShell from './parts/feature-tabs-section-shell.vue'
 
   defineOptions({
     name: 'FeatureTabsSection',
@@ -88,8 +86,6 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'feature-tabs-section'
   )
 
-  const hasTabs = computed(() => props.tabs.length > 0)
-
   const hasHeader = computed(() => props.title.length > 0)
 
   const items = computed(() =>
@@ -104,105 +100,75 @@
 </script>
 
 <template>
-  <section
+  <FeatureTabsSectionShell
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
+    :tab-count="tabs.length"
+    :primary-action="primaryAction"
   >
-    <Module
-      v-if="hasTabs"
-      :divided="false"
-      :padded="false"
+    <RegistrationFrame
+      flush
+      :borders="primaryAction && !hasHeader ? 'y' : 'none'"
+      marks="bottom"
     >
-      <template
-        v-if="hasHeader"
-        #header
+      <div
+        :data-code="hasCode || null"
+        class="-mx-px [--media-tabs-media-min:24rem] data-[code]:[--media-tabs-media-min:30rem]"
       >
-        <ModuleHeader
-          align="split"
-          :eyebrow="eyebrow"
-          :title="title"
-          :description="description"
+        <MediaTabs
+          :items="items"
+          size="medium"
+          :texture="hasCode ? 'pixelate' : 'none'"
+          texture-size="small"
+          texture-fade="top"
+          :autoplay="autoplay"
+          :autoplay-interval="autoplayInterval"
         >
-          <template
-            v-if="primaryAction"
-            #actions
-          >
-            <Button
-              :label="primaryAction.label"
-              :href="primaryAction.href"
-              :target="primaryAction.target"
-              variant="secondary"
-              :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
-              icon-position="trailing"
-              :animated="Boolean(primaryAction.trailing)"
+          <template #media="{ index, active }">
+            <div
+              v-if="codeFiles[index]?.length"
+              class="w-full min-w-0 p-(--spacing-xl)"
+            >
+              <div class="min-w-0 rounded-(--shape-control) shadow-(--shadow-sm)">
+                <CodeBlock
+                  :tabs="codeFiles[index]"
+                  show-line-numbers
+                  v-bind="{ animateLines: active }"
+                  :copy-aria-label="copyAriaLabel || undefined"
+                />
+              </div>
+            </div>
+            <component
+              :is="sceneComponent"
+              v-else-if="sceneComponent"
+              v-bind="{ ...scene?.props, tab: tabs[index]?.value, active }"
+              class="size-full"
+            />
+            <Illustration
+              v-else-if="tabs[index]?.illustration"
+              :name="tabs[index]?.illustration ?? ''"
+              :aria-label="tabs[index]?.illustrationLabel ?? ''"
+              class="size-full"
             />
           </template>
-        </ModuleHeader>
-      </template>
+        </MediaTabs>
+      </div>
 
-      <RegistrationFrame
-        flush
-        :borders="primaryAction && !hasHeader ? 'y' : 'none'"
-        marks="bottom"
+      <div
+        v-if="primaryAction && !hasHeader"
+        class="p-(--spacing-xl)"
       >
-        <div
-          :data-code="hasCode || null"
-          class="-mx-px [--media-tabs-media-min:24rem] data-[code]:[--media-tabs-media-min:30rem]"
-        >
-          <MediaTabs
-            :items="items"
-            size="medium"
-            :texture="hasCode ? 'pixelate' : 'none'"
-            texture-size="small"
-            texture-fade="top"
-            :autoplay="autoplay"
-            :autoplay-interval="autoplayInterval"
-          >
-            <template #media="{ index, active }">
-              <div
-                v-if="codeFiles[index]?.length"
-                class="w-full min-w-0 p-(--spacing-xl)"
-              >
-                <div class="min-w-0 rounded-(--shape-control) shadow-(--shadow-sm)">
-                  <CodeBlock
-                    :tabs="codeFiles[index]"
-                    show-line-numbers
-                    v-bind="{ animateLines: active }"
-                    :copy-aria-label="copyAriaLabel || undefined"
-                  />
-                </div>
-              </div>
-              <component
-                :is="sceneComponent"
-                v-else-if="sceneComponent"
-                v-bind="{ ...scene?.props, tab: tabs[index]?.value, active }"
-                class="size-full"
-              />
-              <Illustration
-                v-else-if="tabs[index]?.illustration"
-                :name="tabs[index]?.illustration ?? ''"
-                :aria-label="tabs[index]?.illustrationLabel ?? ''"
-                class="size-full"
-              />
-            </template>
-          </MediaTabs>
-        </div>
-
-        <div
-          v-if="primaryAction && !hasHeader"
-          class="p-(--spacing-xl)"
-        >
-          <Link
-            :label="primaryAction.label"
-            :href="primaryAction.href"
-            :target="primaryAction.target"
-            :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
-          />
-        </div>
-      </RegistrationFrame>
-    </Module>
-  </section>
+        <Link
+          :label="primaryAction.label"
+          :href="primaryAction.href"
+          :target="primaryAction.target"
+          :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
+        />
+      </div>
+    </RegistrationFrame>
+  </FeatureTabsSectionShell>
 </template>

@@ -9,10 +9,8 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import FlowDiagramBind from '@aziontech/webkit/flow-diagram-bind'
   import type {
-    FlowDiagramBindOption,
     FlowDiagramEdgeData,
-    FlowDiagramNodeData,
-    FlowDiagramNodeField
+    FlowDiagramNodeData
   } from '@aziontech/webkit/flow-diagram-root'
   import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -26,10 +24,11 @@
   import Subheader from '@aziontech/webkit/subheader'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+  import { computed, ref } from 'vue'
 
+  import DeployAction from '../parts/deploy-action.vue'
+  import { type TopologyTarget, useTopologyStaging } from '../use-topology-staging'
   import DetailResourceService from './service.vue'
 
   type ProductionStep = {
@@ -40,15 +39,6 @@
     actionLabel: string
     done: boolean
     doneNote?: string
-  }
-  type Target = {
-    kind: string
-    icon: string
-    options: FlowDiagramBindOption[]
-    unbound?: string
-    bound?: string
-    removable?: boolean
-    fields?: FlowDiagramNodeField[]
   }
 
   const environments = [
@@ -104,7 +94,7 @@
 
   const detailOpen = ref(false)
 
-  const targets: Record<string, Target> = {
+  const targets: Record<string, TopologyTarget> = {
     policy: {
       kind: 'Policy',
       icon: 'az az-shield',
@@ -150,52 +140,27 @@
     }
   }
 
-  const deployed = reactive<Record<string, string>>({
-    policy: '',
-    errorPage: '',
-    origin: 'web-app-storage'
-  })
-  const staged = reactive<Record<string, string>>({})
   const expanded = ref<string[]>([])
-  const stagedCount = computed(() => Object.keys(staged).length)
-  const stagedNote = ref('')
+  const deployOpen = ref(false)
+  const topologyEl = ref<HTMLElement | null>(null)
 
-  const slotNode = (key: string): FlowDiagramNodeData => {
-    const target = targets[key]
-    const pick = staged[key]
-    const removing = pick === ''
-    const value = pick === undefined ? deployed[key] : pick
-    const base = {
-      id: key,
-      eyebrow: target.kind,
-      icon: target.icon,
-      bindable: true,
-      bindOptions: target.options,
-      removable: target.removable !== false
-    }
-    if (!value) {
-      return {
-        ...base,
-        status: removing ? 'Staged' : '',
-        severity: removing ? 'warning' : 'neutral',
-        dashed: true,
-        message: removing ? `Deploy to remove this ${target.kind.toLowerCase()}.` : target.unbound
-      }
-    }
-    return {
-      ...base,
-      title: value,
-      boundValue: value,
-      status: pick === undefined ? 'Active' : 'Staged',
-      severity: pick === undefined ? 'success' : 'warning',
-      dashed: pick !== undefined,
-      message:
-        pick === undefined
-          ? target.bound || ''
-          : `Deploy to apply this ${target.kind.toLowerCase()}.`,
-      fields: pick === undefined ? target.fields : undefined
-    }
-  }
+  const {
+    stagedCount,
+    stagedChanges,
+    stagedNote,
+    deploying,
+    slotNode,
+    bind,
+    unbind,
+    createTarget,
+    deploy
+  } = useTopologyStaging({
+    targets,
+    bound: { policy: '', errorPage: '', origin: 'web-app-storage' },
+    name: SERVICE.name,
+    toastId: 'service-deploy',
+    onEdit: () => topologyEl.value?.scrollIntoView({ block: 'start' })
+  })
 
   const topologyNodes = computed<FlowDiagramNodeData[]>(() => [
     {
@@ -275,78 +240,16 @@
     { from: 'origin', to: 'storage' }
   ]
 
-  const stagedChanges = computed(() =>
-    Object.entries(staged).map(([key, value]) => ({
-      key,
-      kind: targets[key].kind,
-      from: deployed[key] || 'Not bound',
-      to: value || 'Removed'
-    }))
-  )
-
-  const bind = (key: string, value: string) => {
-    if (value === deployed[key]) delete staged[key]
-    else staged[key] = value
-    stagedNote.value = `${value} staged on ${targets[key].kind.toLowerCase()}.`
-  }
-  const unbind = (key: string) => {
-    if (staged[key] !== undefined && staged[key] !== '') delete staged[key]
-    else if (deployed[key]) staged[key] = ''
-    stagedNote.value = `${targets[key].kind} staged for removal.`
-  }
-  const createTarget = (key: string) => {
-    stagedNote.value = `Opens the create flow for a new ${targets[key].kind.toLowerCase()}.`
-  }
-
-  const topologyEl = ref<HTMLElement | null>(null)
   const showTopology = (key: string) => {
     detailOpen.value = false
     if (!expanded.value.includes(key)) expanded.value = [...expanded.value, key]
     topologyEl.value?.scrollIntoView({ block: 'start' })
   }
 
-  const deployOpen = ref(false)
-  const deploying = ref(false)
-  const RUN_TOAST = 'service-deploy'
-  let timer: ReturnType<typeof setTimeout> | undefined
-
-  const editStaged = () => {
-    toast.dismiss(RUN_TOAST)
-    topologyEl.value?.scrollIntoView({ block: 'start' })
-  }
-
   const runDeploy = () => {
     deployOpen.value = false
-    deploying.value = true
-    const changes = stagedChanges.value.length
-    toast.loading(`Deploying ${SERVICE.name}…`, {
-      id: RUN_TOAST,
-      description: 'It keeps running if you leave this page.'
-    })
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      for (const [key, value] of Object.entries(staged)) {
-        deployed[key] = value
-        delete staged[key]
-      }
-      deploying.value = false
-      stagedNote.value = ''
-      toast.success(`${SERVICE.name} is live.`, {
-        id: RUN_TOAST,
-        description: changes
-          ? `${changes} topology ${changes === 1 ? 'change' : 'changes'} now serve Production.`
-          : 'Production serves the active version.',
-        duration: 0,
-        closable: true,
-        actions: [
-          { label: 'Edit', onClick: editStaged },
-          { label: 'Redeploy', onClick: runDeploy }
-        ]
-      })
-    }, 1500)
+    deploy()
   }
-
-  onBeforeUnmount(() => clearTimeout(timer))
 
   const doneCount = computed(() => productionSteps.filter((step) => step.done).length)
   const complete = computed(
@@ -450,22 +353,11 @@
           :label="tab.label"
         />
         <template #actions>
-          <div class="flex items-center gap-(--spacing-xs)">
-            <Tag
-              v-if="stagedCount"
-              :label="`${stagedCount} ${stagedCount === 1 ? 'change' : 'changes'}`"
-              severity="warning"
-              size="small"
-            />
-            <Button
-              label="Deploy"
-              variant="outline"
-              size="medium"
-              icon="az az-cloud-upload"
-              :loading="deploying"
-              @click="deployOpen = true"
-            />
-          </div>
+          <DeployAction
+            :staged-count="stagedCount"
+            :loading="deploying"
+            @deploy="deployOpen = true"
+          />
         </template>
       </PageTabs>
     </div>

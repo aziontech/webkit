@@ -805,6 +805,7 @@
                 :id="`${uid}-option-${index}`"
                 :key="item.id"
                 role="option"
+                tabindex="-1"
                 :aria-selected="index === active"
                 :data-active="index === active || null"
                 :data-group="item.group"

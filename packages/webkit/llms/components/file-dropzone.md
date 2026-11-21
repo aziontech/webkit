@@ -128,6 +128,7 @@
       ref="inputEl"
       type="file"
       multiple
+      aria-label="Browse files"
       class="hidden"
     />
   </div>

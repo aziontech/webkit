@@ -1,13 +1,11 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
-
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../action/button/button.vue'
   import Input from '../../../input/input/input.vue'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupScrollFrames } from '../composables/use-mockup-scroll-frames'
+  import { openAndPick, option } from '../lib/pick-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupScrollColumn from '../parts/mockup-scroll-column.vue'
   import MockupSelect from '../parts/mockup-select.vue'
 
   defineOptions({ name: 'BotManagerRuleFragment' })
@@ -20,9 +18,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const PLACEHOLDER = 'Select a Function'
   const INSTANCES = ['bot-manager-lite', 'secure-token', 'massive-redirect']
@@ -41,7 +36,6 @@
 
   const IDLE: MockupCursorTarget = { key: 'instance', x: -0.35, y: -0.9 }
   const TRIGGER: MockupCursorTarget = { key: 'instance', x: 0.35, y: 0.6 }
-  const option = (index: number): MockupCursorTarget => ({ key: `option-${index}`, x: 0.3, y: 0.6 })
 
   const REST = {
     cursor: IDLE,
@@ -54,194 +48,127 @@
   }
 
   const LIFTED = { ...REST, lifted: true }
-  const PICKING = { ...LIFTED, focused: true, open: true }
   const PICKED = INSTANCES[0]
 
   const FRAMES: Frame[] = [
     { ...REST, forward: 0, back: 0 },
-    { ...LIFTED, cursor: TRIGGER, forward: 120, back: 440 },
-    { ...LIFTED, cursor: TRIGGER, press: true, focused: true, forward: 560, back: 160 },
-    { ...PICKING, cursor: option(2), highlight: 2, forward: 160, back: 300 },
-    { ...PICKING, cursor: option(0), highlight: 0, forward: 460, back: 420 },
-    { ...PICKING, cursor: option(0), highlight: 0, press: true, forward: 420, back: 120 },
-    {
-      ...PICKING,
-      cursor: option(0),
-      highlight: 0,
-      press: true,
-      instance: PICKED,
-      forward: 120,
-      back: 220
-    },
+    ...openAndPick(
+      LIFTED,
+      TRIGGER,
+      [
+        [2, 160, 300],
+        [0, 460, 420]
+      ],
+      { instance: PICKED },
+      [
+        [120, 440],
+        [560, 160]
+      ]
+    ),
     { ...LIFTED, cursor: option(0), focused: true, instance: PICKED, forward: 200, back: 260 },
     { ...LIFTED, cursor: TRIGGER, instance: PICKED, forward: 260, back: 160 }
   ]
 
-  const LAST = FRAMES.length - 1
-  const LEAD = 20
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
-
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-  const columnEl = ref<globalThis.HTMLElement | null>(null)
-  const thenTop = ref(0)
-
-  const measure = () => {
-    thenTop.value =
-      columnEl.value?.querySelector<globalThis.HTMLElement>('[data-anchor]')?.offsetTop ?? 0
-  }
-
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor, columnEl)
-
-  const scrollStyle = computed(() => ({
-    translate: `0 ${frame.value.lifted ? LEAD - thenTop.value : 0}px`
-  }))
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    measure()
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onMounted(measure)
-
-  onScopeDispose(halt)
+  const { frame, bindColumn } = useMockupScrollFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
+  })
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupScrollColumn
+    :ref="bindColumn"
     shell="legacy"
-    :fade="frame.lifted ? 'y' : 'bottom'"
     class="[--console-mockup-fade-edge:16%] [--console-mockup-fade-start:76%]"
-    :chrome="false"
+    column-class="flex flex-col gap-(--spacing-md)"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    :anchor="frame.lifted ? 0 : null"
+    :lead="20"
+    :cursor="frame.cursor"
+    cursor-name="Jane"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative"
-    >
-      <div
-        ref="columnEl"
-        :style="scrollStyle"
-        class="relative flex flex-col gap-(--spacing-md) py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
-      >
-        <ConsoleMockupShellItem :order="0">
-          <div class="flex flex-col gap-(--spacing-sm)">
-            <span class="flex items-center gap-(--spacing-sm)">
-              <span class="text-body-sm text-(--text-default)">If</span>
-              <span class="h-0 flex-1 border-t border-(--border-default)" />
-            </span>
-            <span class="grid min-w-0 grid-cols-[5fr_4fr_3fr] gap-(--spacing-xs)">
-              <MockupSelect
-                value="Request Uri"
-                aria-label="Variable"
-              >
-                <template #leading>
-                  <span class="text-body-sm text-(--text-muted)">$</span>
-                </template>
-              </MockupSelect>
-              <MockupSelect
-                value="starts with"
-                aria-label="Operator"
-              />
-              <Input
-                model-value="/login"
-                size="medium"
-                aria-label="Argument"
-              />
-            </span>
-          </div>
-        </ConsoleMockupShellItem>
-
-        <ConsoleMockupShellItem :order="1">
-          <span class="flex gap-(--spacing-xs)">
-            <Button
-              label="And"
-              variant="outline"
-              size="small"
-              icon="az az-circle-plus"
-            />
-            <Button
-              label="Or"
-              variant="outline"
-              size="small"
-              icon="az az-circle-plus"
-            />
-          </span>
-        </ConsoleMockupShellItem>
-
-        <ConsoleMockupShellItem
-          :order="2"
-          :data-state="frame.open ? 'open' : 'closed'"
-          class="relative data-[state=open]:z-1"
-          data-anchor
-        >
-          <div class="flex flex-col gap-(--spacing-sm)">
-            <span class="flex items-center gap-(--spacing-sm)">
-              <span class="text-body-sm text-(--text-default)">Then</span>
-              <span class="h-0 flex-1 border-t border-(--border-default)" />
-            </span>
-            <span class="grid min-w-0 grid-cols-2 gap-(--spacing-xs)">
-              <MockupSelect
-                value="Run Function"
-                aria-label="Behavior"
-              />
-              <MockupSelect
-                :value="frame.instance"
-                :options="INSTANCES"
-                :open="frame.open"
-                :highlighted-index="frame.highlight"
-                :focused="frame.focused"
-                data-cursor="instance"
-                aria-label="Function"
-              />
-            </span>
-          </div>
-        </ConsoleMockupShellItem>
-
-        <ConsoleMockupShellItem :order="3">
-          <Button
-            label="Add Behavior"
-            variant="outline"
-            size="small"
-            icon="az az-circle-plus"
+    <ConsoleMockupShellItem :order="0">
+      <div class="flex flex-col gap-(--spacing-sm)">
+        <span class="flex items-center gap-(--spacing-sm)">
+          <span class="text-body-sm text-(--text-default)">If</span>
+          <span class="h-0 flex-1 border-t border-(--border-default)" />
+        </span>
+        <span class="grid min-w-0 grid-cols-[5fr_4fr_3fr] gap-(--spacing-xs)">
+          <MockupSelect
+            value="Request Uri"
+            aria-label="Variable"
+          >
+            <template #leading>
+              <span class="text-body-sm text-(--text-muted)">$</span>
+            </template>
+          </MockupSelect>
+          <MockupSelect
+            value="starts with"
+            aria-label="Operator"
           />
-        </ConsoleMockupShellItem>
+          <Input
+            model-value="/login"
+            size="medium"
+            aria-label="Argument"
+          />
+        </span>
       </div>
+    </ConsoleMockupShellItem>
 
-      <MockupCursor
-        name="Jane"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
+    <ConsoleMockupShellItem :order="1">
+      <span class="flex gap-(--spacing-xs)">
+        <Button
+          label="And"
+          variant="outline"
+          size="small"
+          icon="az az-circle-plus"
+        />
+        <Button
+          label="Or"
+          variant="outline"
+          size="small"
+          icon="az az-circle-plus"
+        />
+      </span>
+    </ConsoleMockupShellItem>
+
+    <ConsoleMockupShellItem
+      :order="2"
+      :data-state="frame.open ? 'open' : 'closed'"
+      class="relative data-[state=open]:z-1"
+      data-anchor
+    >
+      <div class="flex flex-col gap-(--spacing-sm)">
+        <span class="flex items-center gap-(--spacing-sm)">
+          <span class="text-body-sm text-(--text-default)">Then</span>
+          <span class="h-0 flex-1 border-t border-(--border-default)" />
+        </span>
+        <span class="grid min-w-0 grid-cols-2 gap-(--spacing-xs)">
+          <MockupSelect
+            value="Run Function"
+            aria-label="Behavior"
+          />
+          <MockupSelect
+            :value="frame.instance"
+            :options="INSTANCES"
+            :open="frame.open"
+            :highlighted-index="frame.highlight"
+            :focused="frame.focused"
+            data-cursor="instance"
+            aria-label="Function"
+          />
+        </span>
+      </div>
+    </ConsoleMockupShellItem>
+
+    <ConsoleMockupShellItem :order="3">
+      <Button
+        label="Add Behavior"
+        variant="outline"
+        size="small"
+        icon="az az-circle-plus"
       />
-    </div>
-  </ConsoleMockupShell>
+    </ConsoleMockupShellItem>
+  </MockupScrollColumn>
 </template>

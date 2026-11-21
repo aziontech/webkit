@@ -2,7 +2,6 @@
   import {
     type ComponentPublicInstance,
     computed,
-    type FunctionalComponent,
     inject,
     onMounted,
     shallowRef,
@@ -18,6 +17,7 @@
   import IconButton from '../../../action/icon-button/icon-button.vue'
   import { SidebarInjectionKey } from '../../../layout/sidebar/injection-key'
   import { useSidebarMenuSubContext } from '../composables/use-sidebar-menu-sub-context'
+  import { useSidebarMenuTip } from '../composables/use-sidebar-menu-tip'
   import type { SidebarMenuSubType } from '../injection-key'
 
   defineOptions({
@@ -72,18 +72,7 @@
 
   const showIcon = computed(() => Boolean(props.icon) && !isInline.value)
 
-  const rail = computed(() => sidebar?.rail === true)
-
-  const Passthrough: FunctionalComponent = (_, { slots: inner }) => inner['default']?.()
-
-  const tip = computed(() =>
-    rail.value && sidebar?.tooltip
-      ? {
-          is: sidebar.tooltip,
-          props: { content: props.label, side: 'end' }
-        }
-      : { is: Passthrough, props: {} }
-  )
+  const { rail, tip } = useSidebarMenuTip(() => props.label)
 
   const arrowAriaLabel = computed(() => {
     const name = props.label

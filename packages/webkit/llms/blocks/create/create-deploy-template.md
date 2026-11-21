@@ -459,6 +459,8 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 ## `sample.ts`
 
 ```ts
+import type { SelectOptionItem } from '@aziontech/webkit/select'
+
 import type { DeployTemplateTemplate } from './create-deploy-template.vue'
 
 export const sampleTemplate: DeployTemplateTemplate = {
@@ -496,4 +498,178 @@ export const sampleIntegration: DeployTemplateTemplate = {
     'Front an origin you already run. The service receives the traffic and passes it on.',
   icon: 'az az-arrow-right-left'
 }
+
+/** One text setting of the deploy form. */
+export interface DeployFormSetting {
+  /** The key its value is kept under. */
+  name: string
+  /** The field label, also named in its required message. */
+  label: string
+  /** The field placeholder. */
+  placeholder: string
+  /** The guidance under the field. */
+  description: string
+  /** Deploy flags the field while it is empty. */
+  required: boolean
+  /** The value the field starts with. */
+  defaultValue: string
+}
+
+/** One environment variable the template asks for. */
+export interface DeployFormVariable {
+  /** The key its value is kept under. */
+  name: string
+  /** The variable name, shown in the locked Key field. */
+  variable: string
+  /** The placeholder of the Value field. */
+  placeholder: string
+  /** Deploy flags the variable while its value is empty. */
+  required: boolean
+  /** The value is hidden until Show value is pressed. */
+  secret: boolean
+}
+
+export const sampleScopes: SelectOptionItem[] = [
+  { label: 'jane-doe', value: 'jane-doe' },
+  { label: 'acme', value: 'acme' },
+  { label: 'acme-templates', value: 'acme-templates' }
+]
+
+export const samplePresets: SelectOptionItem[] = [
+  { label: 'Nuxt', value: 'nuxt' },
+  { label: 'Next.js', value: 'next' },
+  { label: 'Vite', value: 'vite' },
+  { label: 'Astro', value: 'astro' },
+  { label: 'Static files', value: 'static' }
+]
+
+export const sampleSettings: DeployFormSetting[] = [
+  {
+    name: 'storeDomain',
+    label: 'Store domain',
+    placeholder: 'https://shop.example.com',
+    description: 'The domain your store answers on.',
+    required: false,
+    defaultValue: ''
+  }
+]
+
+export const sampleBuildSettings: DeployFormSetting[] = [
+  {
+    name: 'rootDirectory',
+    label: 'Root directory',
+    placeholder: '/',
+    description: "The folder that holds the project's package.json.",
+    required: true,
+    defaultValue: '/'
+  },
+  {
+    name: 'installCommand',
+    label: 'Install command',
+    placeholder: 'npm install',
+    description: "Installs the project's dependencies before the build runs.",
+    required: true,
+    defaultValue: 'npm install'
+  }
+]
+
+export const sampleVariables: DeployFormVariable[] = [
+  {
+    name: 'storeAccessToken',
+    variable: 'NUXT_STORE_ACCESS_TOKEN',
+    placeholder: 'Access token',
+    required: true,
+    secret: true
+  },
+  {
+    name: 'storeRevalidationSecret',
+    variable: 'NUXT_STORE_REVALIDATION_SECRET',
+    placeholder: 'Revalidation secret',
+    required: false,
+    secret: true
+  }
+]
+```
+
+## `parts/build-preset-field.vue`
+
+```ts
+<script setup lang="ts">
+  import Field from '@aziontech/webkit/field'
+  import Select from '@aziontech/webkit/select'
+  import { computed } from 'vue'
+
+  import { samplePresets } from '../sample'
+
+  export interface BuildPresetFieldProps {
+    /** The preset found in the project; empty when nothing in it names a framework. */
+    detectedPreset?: string
+  }
+
+  const props = withDefaults(defineProps<BuildPresetFieldProps>(), { detectedPreset: '' })
+
+  const preset = defineModel<string>({ default: '' })
+
+  const helper = computed(() => {
+    if (!preset.value)
+      return 'Nothing here names a framework. Pick one to build the project, or leave it empty to serve the files as they are.'
+    if (preset.value === props.detectedPreset)
+      return 'Detected from your project. Change it if it is wrong.'
+    return 'The project is built with this preset.'
+  })
+</script>
+
+<template>
+  <Field>
+    <Field.Label>Build preset</Field.Label>
+    <Select
+      v-model="preset"
+      size="large"
+      placeholder="Select a preset"
+    >
+      <Select.Trigger />
+      <Select.Content>
+        <Select.Item
+          v-for="option in samplePresets"
+          :key="String(option.value)"
+          :value="option.value"
+        >
+          {{ option.label }}
+        </Select.Item>
+      </Select.Content>
+    </Select>
+    <Field.Description>{{ helper }}</Field.Description>
+  </Field>
+</template>
+```
+
+## `parts/deploy-heading.vue`
+
+```ts
+<script setup lang="ts">
+  export interface DeployHeadingProps {
+    /** The project deploys once, from uploaded files, instead of on every push of a repository. */
+    once?: boolean
+  }
+
+  withDefaults(defineProps<DeployHeadingProps>(), { once: false })
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-2xs)">
+    <h2 class="text-heading-xs text-(--text-default)">Deploy your project</h2>
+    <p
+      v-if="once"
+      class="text-body-sm text-pretty text-(--text-muted)"
+    >
+      These files deploy once. Connect a Git provider later to ship every push automatically.
+    </p>
+    <p
+      v-else
+      class="text-body-sm text-pretty text-(--text-muted)"
+    >
+      This repository deploys on every push, automatically.
+    </p>
+  </div>
+</template>
 ```

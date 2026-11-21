@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, useAttrs, watch } from 'vue'
+  import { computed, onBeforeUnmount, ref, useAttrs, watch } from 'vue'
 
+  import { useElementListener } from '../../../../composables/use-element-listener'
   import { triggerControl } from '../../../../utils/trigger-control'
   import { useHoverCardContext } from '../composables/use-hover-card-context'
 
@@ -20,10 +21,13 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'hover-card-trigger'
   )
 
+  const hostEl = ref<globalThis.HTMLElement | null>(null)
+
   const isOpen = computed(() => ctx.isOpen.value)
 
   function setHostEl(el: unknown) {
-    ctx.triggerEl.value = el instanceof HTMLElement ? el : null
+    hostEl.value = el instanceof HTMLElement ? el : null
+    ctx.triggerEl.value = hostEl.value
   }
 
   function onPointerenter(event: globalThis.PointerEvent) {
@@ -46,6 +50,12 @@
     if (event.key !== 'Tab' || event.shiftKey || !isOpen.value) return
     if (ctx.focusContent()) event.preventDefault()
   }
+
+  useElementListener(hostEl, 'pointerenter', onPointerenter)
+  useElementListener(hostEl, 'pointerleave', onPointerleave)
+  useElementListener(hostEl, 'focusin', () => ctx.scheduleOpen())
+  useElementListener(hostEl, 'focusout', onFocusout)
+  useElementListener(hostEl, 'keydown', onKeydown)
 
   watch(
     () => (isOpen.value ? ctx.contentId : ''),
@@ -75,11 +85,6 @@
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
     class="inline-flex w-fit"
-    @pointerenter="onPointerenter"
-    @pointerleave="onPointerleave"
-    @focusin="ctx.scheduleOpen()"
-    @focusout="onFocusout"
-    @keydown="onKeydown"
   >
     <slot :is-open="isOpen" />
   </span>

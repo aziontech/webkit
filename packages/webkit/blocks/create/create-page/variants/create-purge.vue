@@ -1,14 +1,8 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import FieldDescription from '@aziontech/webkit/field-description'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -18,10 +12,11 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
-  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, onMounted, reactive, ref, watch } from 'vue'
+
+  import CreationHeader from '../parts/creation-header.vue'
+  import DiscardDialog from '../parts/discard-dialog.vue'
+  import { useCreateForm } from '../use-create-form'
 
   interface PurgeError {
     type: 'helper' | 'invalid' | 'required'
@@ -122,109 +117,32 @@
     return true
   }
 
-  const submitting = ref(false)
-
-  const guard = useUnsavedChanges(() => form, {
-    enabled: () => !submitting.value
-  })
-  const discardDialog = guard.dialogProps
-  const discardLabels = guard.labels
-
-  const onLeave = () => guard.confirmLeave()
-
-  useEscapeToCancel(onLeave, { enabled: () => !submitting.value })
-
   const formEl = ref<HTMLFormElement | null>(null)
 
-  useShortcuts({
-    keys: 'meta+enter',
-    label: 'Purge',
-    group: 'Page',
-    element: formEl,
-    when: () => !submitting.value,
-    handler: () => formEl.value?.requestSubmit()
+  const { guard, submitting, submitButton, leave, submit } = useCreateForm({
+    source: () => form,
+    formEl,
+    shortcutLabel: 'Purge',
+    validate,
+    onCreated: () =>
+      toast.success(
+        `Purge started for ${entries.value.length} ${entries.value.length === 1 ? 'entry' : 'entries'}.`
+      ),
+    failureTitle: 'Could not start the purge.'
   })
 
   onMounted(() =>
     formEl.value?.querySelector<HTMLInputElement>('input[name="purge-layer"]:checked')?.focus()
   )
-
-  const SAVE_FAILURES = 0
-  let failuresLeft = SAVE_FAILURES
-
-  const sendRequest = () =>
-    new Promise<void>((resolve, reject) => {
-      setTimeout(() => {
-        if (failuresLeft > 0) {
-          failuresLeft -= 1
-          reject(new Error('The service did not answer. Check your connection and try again.'))
-          return
-        }
-        resolve()
-      }, 900)
-    })
-
-  const submit = async () => {
-    if (submitting.value || !validate()) return
-    submitting.value = true
-    try {
-      await sendRequest()
-      toast.success(
-        `Purge started for ${entries.value.length} ${entries.value.length === 1 ? 'entry' : 'entries'}.`
-      )
-    } catch (error) {
-      toast.error('Could not start the purge.', {
-        description: error instanceof Error ? error.message : 'Try again.',
-        action: { label: 'Retry', onClick: () => submit() }
-      })
-    } finally {
-      submitting.value = false
-    }
-  }
-
-  const ACCOUNT_BUTTON_CLASS =
-    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
-    'motion-reduce:transition-none'
 </script>
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <AppHeader aria-label="Console">
-      <AppHeader.Start>
-        <IconButton
-          icon="az az-chevron-left"
-          aria-label="Back to Cache"
-          variant="outline"
-          size="small"
-          @click="onLeave"
-        />
-        <AppHeader.Brand
-          href="/home"
-          aria-label="Azion home"
-        >
-          <Brand
-            variant="default"
-            size="small"
-          />
-        </AppHeader.Brand>
-        <Breadcrumb :items="breadcrumb" />
-      </AppHeader.Start>
-      <AppHeader.Center />
-      <AppHeader.End>
-        <button
-          type="button"
-          aria-label="Account settings"
-          :class="ACCOUNT_BUTTON_CLASS"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            variant="square"
-          />
-        </button>
-      </AppHeader.End>
-    </AppHeader>
+    <CreationHeader
+      back-label="Back to Cache"
+      :breadcrumb="breadcrumb"
+      @back="leave"
+    />
 
     <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
       <form
@@ -360,14 +278,12 @@
                 label="Cancel"
                 variant="outline"
                 size="medium"
-                @click="onLeave"
+                @click="leave"
               />
               <Button
                 variant="primary"
                 size="medium"
-                type="submit"
-                :loading="submitting"
-                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+                v-bind="submitButton"
               >
                 Purge
                 <Kbd
@@ -382,25 +298,6 @@
         </div>
       </form>
     </main>
-    <ConfirmDialog
-      v-bind="discardDialog"
-      data-testid="unsaved-changes-dialog"
-    >
-      <template #actions>
-        <Button
-          :label="discardLabels.keepEditing"
-          variant="ghost"
-          size="medium"
-          data-autofocus
-          @click="guard.keepEditing"
-        />
-        <Button
-          :label="discardLabels.discard"
-          variant="danger"
-          size="medium"
-          @click="guard.discardAndLeave"
-        />
-      </template>
-    </ConfirmDialog>
+    <DiscardDialog :guard="guard" />
   </div>
 </template>

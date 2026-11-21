@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import Tag from '../../tag/tag.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import MockupElevator from '../parts/mockup-elevator.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'KvStoreSecurityListFragment' })
 
@@ -28,13 +28,10 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupFragment
     shell="legacy"
-    :chrome="false"
+    fade="none"
     :active="active"
-    :width="420"
-    :mobile-width="380"
   >
     <div class="flex h-full flex-col py-(--spacing-xs)">
       <ConsoleMockupShellItem
@@ -73,5 +70,5 @@
         </MockupElevator>
       </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

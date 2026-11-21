@@ -2,6 +2,7 @@
   import { computed, onScopeDispose, ref, useAttrs } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
+  import { useElementListener } from '../../../../composables/use-element-listener'
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import { useChartCardContext } from '../composables/use-chart-card-context'
@@ -109,6 +110,8 @@
     ctx.endResize(event)
   }
 
+  useElementListener(handleEl, 'keydown', onKeydown)
+
   onScopeDispose(release)
 
   const ROOT_CLASS =
@@ -135,7 +138,6 @@
     @pointermove="onPointermove"
     @pointerup="onPointerup"
     @pointercancel="onPointerup"
-    @keydown="onKeydown"
   >
     <svg
       viewBox="0 0 10 10"

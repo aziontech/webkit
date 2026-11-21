@@ -22,6 +22,8 @@
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { onMounted, reactive, ref, watch } from 'vue'
 
+  import { type CreatePageDomainErrors, validateDomainForm } from './domain-validation'
+
   /** The values of the Create Domain form. */
   export interface CreatePageValues {
     /** What the domain is called in the list. */
@@ -41,13 +43,6 @@
     loading?: boolean
     /** Why the create request failed, shown in an error toast with Retry. */
     error?: string
-  }
-
-  interface FormErrors {
-    name: string
-    nameKind: 'helper' | 'invalid' | 'required'
-    domain: string
-    domainKind: 'helper' | 'invalid' | 'required'
   }
 
   const props = withDefaults(defineProps<CreatePageProps>(), {
@@ -70,7 +65,7 @@
     active: true,
     ...props.defaultValues
   })
-  const errors = reactive<FormErrors>({
+  const errors = reactive<CreatePageDomainErrors>({
     name: '',
     nameKind: 'required',
     domain: '',
@@ -78,34 +73,7 @@
   })
   const advancedOpen = ref(false)
 
-  const NAME_MAX = 50
-  const DOMAIN_PATTERN = /^(?=.{4,253}$)((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$/
-
-  const validate = () => {
-    const name = form.name.trim()
-    if (!name) {
-      errors.nameKind = 'required'
-      errors.name = 'This field is required.'
-    } else if (name.length > NAME_MAX) {
-      errors.nameKind = 'invalid'
-      errors.name = 'Use at most ' + NAME_MAX + ' characters.'
-    } else {
-      errors.name = ''
-    }
-
-    const domain = form.domain.trim()
-    if (!domain) {
-      errors.domainKind = 'required'
-      errors.domain = 'This field is required.'
-    } else if (!DOMAIN_PATTERN.test(domain)) {
-      errors.domainKind = 'invalid'
-      errors.domain = 'Enter a valid domain name. Example: example.com.'
-    } else {
-      errors.domain = ''
-    }
-
-    return !errors.name && !errors.domain
-  }
+  const validate = () => validateDomainForm(form, errors)
 
   const values = (): CreatePageValues => ({
     ...form,

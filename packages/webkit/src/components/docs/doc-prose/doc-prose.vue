@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs } from 'vue'
+  import { computed, reactive, ref, useAttrs } from 'vue'
 
   import { useInlineCodeCopy } from '../../../composables/use-inline-code-copy'
-  import { usePortalLocale } from '../../../composables/use-translate'
+  import DocProseCopyTip from './parts/doc-prose-copy-tip.vue'
 
   defineOptions({ name: 'DocProse', inheritAttrs: false })
 
@@ -14,11 +14,9 @@
   const attrs = useAttrs()
 
   const proseEl = ref<HTMLElement | null>(null)
-  const { tipFor, tipLabel, tipLeft, tipTop, announcement } = useInlineCodeCopy(proseEl)
+  const copy = reactive(useInlineCodeCopy(proseEl))
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-prose')
-
-  const portalLocale = usePortalLocale()
 
   const ROOT_CLASS =
     'w-full text-(--text-default) [&>*:first-child]:mt-0! ' +
@@ -78,10 +76,6 @@
     '[&_h3+:is(h4,p,ul,ol,blockquote):not([data-doc-chrome],[data-doc-chrome]_*)]:pt-(--spacing-sm) ' +
     '[&_h4+:is(h4,p,ul,ol,blockquote):not([data-doc-chrome],[data-doc-chrome]_*)]:pt-(--spacing-xs) ' +
     '[&_h3+[data-doc-block]]:mt-(--spacing-sm) [&_h4+[data-doc-block]]:mt-(--spacing-xs)'
-
-  const COPY_TIP_CLASS =
-    'pointer-events-none fixed z-(--z-control-overlay) -translate-x-1/2 -translate-y-[calc(100%+var(--spacing-2xs))] rounded-(--shape-control) bg-(--bg-contrast) px-(--spacing-xs) ' +
-    'py-(--spacing-2xs) text-body-xs whitespace-nowrap text-(--text-contrast)'
 </script>
 
 <template>
@@ -94,30 +88,9 @@
   >
     <slot />
 
-    <Teleport to="body">
-      <Transition
-        enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
-        leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
-      >
-        <span
-          v-if="tipFor"
-          :dir="portalLocale.dir"
-          :lang="portalLocale.lang"
-          role="tooltip"
-          :data-testid="`${testId}__copy-tip`"
-          :style="{ left: `${tipLeft}px`, top: `${tipTop}px` }"
-          :class="COPY_TIP_CLASS"
-          >{{ tipLabel }}</span
-        >
-      </Transition>
-      <span
-        :dir="portalLocale.dir"
-        :lang="portalLocale.lang"
-        aria-live="polite"
-        class="sr-only"
-        :data-testid="`${testId}__copy-status`"
-        >{{ announcement }}</span
-      >
-    </Teleport>
+    <DocProseCopyTip
+      :copy="copy"
+      :test-id="testId"
+    />
   </div>
 </template>

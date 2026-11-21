@@ -4,12 +4,14 @@
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import Select from '@aziontech/webkit/select'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, onMounted, ref } from 'vue'
 
   import CreateDeployTemplate from '../create-deploy-template.vue'
+  import BuildPresetField from '../parts/build-preset-field.vue'
+  import DeployHeading from '../parts/deploy-heading.vue'
   import { sampleUploadedProject } from '../sample'
 
   interface ProjectFile {
@@ -17,14 +19,6 @@
     bytes: number
     glyph: string
   }
-
-  const presets: SelectOptionItem[] = [
-    { label: 'Nuxt', value: 'nuxt' },
-    { label: 'Next.js', value: 'next' },
-    { label: 'Vite', value: 'vite' },
-    { label: 'Astro', value: 'astro' },
-    { label: 'Static files', value: 'static' }
-  ]
 
   const files: ProjectFile[] = [
     { path: 'about.html', bytes: 4301, glyph: 'az az-code' },
@@ -89,14 +83,6 @@
     () => Boolean(projectName.value.trim()) && (Boolean(preset.value) || Boolean(root.value))
   )
 
-  const presetHelper = computed(() => {
-    if (!preset.value)
-      return 'Nothing here names a framework. Pick one to build the project, or leave it empty to serve the files as they are.'
-    if (preset.value === detectedPreset)
-      return 'Detected from your project. Change it if it is wrong.'
-    return 'The project is built with this preset.'
-  })
-
   const guard = useUnsavedChanges(() => ({
     projectName: projectName.value,
     preset: preset.value,
@@ -136,13 +122,7 @@
       <Card class="w-full">
         <template #default>
           <div class="flex flex-col gap-(--spacing-lg)">
-            <div class="flex flex-col gap-(--spacing-2xs)">
-              <h2 class="text-heading-xs text-(--text-default)">Deploy your project</h2>
-              <p class="text-body-sm text-pretty text-(--text-muted)">
-                These files deploy once. Connect a Git provider later to ship every push
-                automatically.
-              </p>
-            </div>
+            <DeployHeading once />
 
             <div class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2">
               <Field required>
@@ -153,26 +133,10 @@
                   placeholder="my-project"
                 />
               </Field>
-              <Field>
-                <Field.Label>Build preset</Field.Label>
-                <Select
-                  v-model="preset"
-                  size="large"
-                  placeholder="Select a preset"
-                >
-                  <Select.Trigger />
-                  <Select.Content>
-                    <Select.Item
-                      v-for="option in presets"
-                      :key="String(option.value)"
-                      :value="option.value"
-                    >
-                      {{ option.label }}
-                    </Select.Item>
-                  </Select.Content>
-                </Select>
-                <Field.Description>{{ presetHelper }}</Field.Description>
-              </Field>
+              <BuildPresetField
+                v-model="preset"
+                :detected-preset="detectedPreset"
+              />
             </div>
 
             <h3 class="text-heading-2xs text-(--text-default)">Project files</h3>

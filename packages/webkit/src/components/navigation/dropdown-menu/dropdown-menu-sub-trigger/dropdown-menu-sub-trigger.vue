@@ -83,7 +83,7 @@
     aria-haspopup="menu"
     :aria-expanded="isOpen ? 'true' : 'false'"
     :aria-controls="isOpen ? sub.contentId : undefined"
-    :tabindex="disabled ? -1 : 0"
+    tabindex="-1"
     :aria-disabled="disabled || undefined"
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"

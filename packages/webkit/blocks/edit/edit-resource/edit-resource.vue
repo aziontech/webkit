@@ -6,11 +6,9 @@
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
@@ -19,6 +17,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
+  import SettingsSaveBar from './parts/settings-save-bar.vue'
   import { sampleProject } from './sample'
 
   /** The saved project settings, and the values a save sends. */
@@ -194,11 +193,6 @@
   const overwrite = (event: MouseEvent) => {
     overwriteOpen.value = false
     submit(event)
-  }
-
-  const onSaveShortcut = (event: KeyboardEvent) => {
-    if (!dirty.value || saving.value) return
-    save(event)
   }
 
   const showFailure = () => {
@@ -437,54 +431,25 @@
               </fieldset>
             </div>
 
-            <Transition
-              enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-              enter-from-class="translate-y-2 opacity-0"
-              leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-              leave-to-class="translate-y-2 opacity-0"
+            <SettingsSaveBar
+              :visible="dirty || saving"
+              :saving="saving"
+              :discard-label="freshness === 'conflict' ? 'Discard and reload' : 'Discard'"
+              @save="save"
+              @discard="discard"
             >
-              <SaveBar
-                v-if="dirty || saving"
-                @save="onSaveShortcut"
+              Project settings changed.
+              <span
+                v-if="freshness === 'conflict'"
+                class="text-(--text-muted)"
+                >Saving overwrites the version saved elsewhere.</span
               >
-                Project settings changed.
-                <span
-                  v-if="freshness === 'conflict'"
-                  class="text-(--text-muted)"
-                  >Saving overwrites the version saved elsewhere.</span
-                >
-                <span
-                  v-else
-                  class="text-(--text-muted)"
-                  >Saving publishes them on the next deployment.</span
-                >
-                <template #actions>
-                  <Button
-                    type="button"
-                    :label="freshness === 'conflict' ? 'Discard and reload' : 'Discard'"
-                    variant="outline"
-                    size="medium"
-                    :disabled="saving"
-                    @click="discard"
-                  />
-                  <Button
-                    variant="primary"
-                    size="medium"
-                    :loading="saving"
-                    @click="save"
-                    aria-keyshortcuts="Meta+S Control+S"
-                  >
-                    Save
-                    <Kbd
-                      meta
-                      size="small"
-                      aria-hidden="true"
-                      >S</Kbd
-                    >
-                  </Button>
-                </template>
-              </SaveBar>
-            </Transition>
+              <span
+                v-else
+                class="text-(--text-muted)"
+                >Saving publishes them on the next deployment.</span
+              >
+            </SettingsSaveBar>
           </form>
 
           <ConfirmDialog

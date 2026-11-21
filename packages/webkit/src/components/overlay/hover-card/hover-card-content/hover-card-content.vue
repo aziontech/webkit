@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
+  import { useElementListener } from '../../../../composables/use-element-listener'
   import { usePortalLocale } from '../../../../composables/use-translate'
   import { useHoverCardContext } from '../composables/use-hover-card-context'
   import { HOVER_CARD_FOCUSABLE } from '../injection-key'
@@ -21,8 +22,11 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'hover-card-content'
   )
 
+  const panelEl = ref<globalThis.HTMLElement | null>(null)
+
   function setPanelEl(el: unknown) {
-    ctx.panelEl.value = el instanceof HTMLElement ? el : null
+    panelEl.value = el instanceof HTMLElement ? el : null
+    ctx.panelEl.value = panelEl.value
   }
 
   function onPointerleave(event: globalThis.PointerEvent) {
@@ -43,6 +47,12 @@
     if (event.shiftKey) event.preventDefault()
     ctx.focusTrigger()
   }
+
+  useElementListener(panelEl, 'pointerenter', () => ctx.cancelClose())
+  useElementListener(panelEl, 'pointerleave', onPointerleave)
+  useElementListener(panelEl, 'focusin', () => ctx.cancelClose())
+  useElementListener(panelEl, 'focusout', onFocusout)
+  useElementListener(panelEl, 'keydown', onKeydown)
 
   const portalLocale = usePortalLocale()
 
@@ -70,11 +80,6 @@
         :data-align="ctx.align.value"
         :style="ctx.panelStyle.value"
         :class="PANEL_CLASS"
-        @pointerenter="ctx.cancelClose()"
-        @pointerleave="onPointerleave"
-        @focusin="ctx.cancelClose()"
-        @focusout="onFocusout"
-        @keydown="onKeydown"
       >
         <slot />
       </div>

@@ -2,6 +2,7 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import DropdownMenu from '../../navigation/dropdown-menu/dropdown-menu.vue'
@@ -201,6 +202,8 @@
     event.preventDefault()
     list[next]?.focus()
   }
+
+  useElementListener(rootEl, 'keydown', onKeydown)
 </script>
 
 <template>
@@ -215,7 +218,6 @@
     :data-size="size"
     class="inline-flex max-w-full min-w-0 flex-wrap items-center gap-(--spacing-2xs)"
     @focusin="onFocusin"
-    @keydown="onKeydown"
   >
     <template
       v-for="item in visibleItems"

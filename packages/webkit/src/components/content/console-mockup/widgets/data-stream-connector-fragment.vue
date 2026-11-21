@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
+  import { computed } from 'vue'
 
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import FieldDescription from '../../../input/field/field-description/field-description.vue'
   import FieldLabel from '../../../input/field/field-label/field-label.vue'
   import Input from '../../../input/input/input.vue'
   import Textarea from '../../../input/textarea/textarea.vue'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
+  import { openAndPick, option } from '../lib/pick-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
   import MockupSelect from '../parts/mockup-select.vue'
 
   defineOptions({ name: 'DataStreamConnectorFragment' })
@@ -22,9 +22,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const CONNECTORS = [
     'Google BigQuery',
@@ -66,7 +63,6 @@
 
   const IDLE: MockupCursorTarget = { key: 'connector', x: 0.66, y: -0.9 }
   const TRIGGER: MockupCursorTarget = { key: 'connector', x: 0.4, y: 0.6 }
-  const option = (index: number): MockupCursorTarget => ({ key: `option-${index}`, x: 0.3, y: 0.6 })
 
   const REST = {
     cursor: IDLE,
@@ -77,156 +73,105 @@
     connector: 'Datadog' as Connector
   }
 
-  const PICKING = { ...REST, focused: true, open: true }
   const PICKED = { ...REST, connector: 'Splunk' as Connector }
 
   const FRAMES: Frame[] = [
     { ...REST, forward: 0, back: 0 },
-    { ...REST, cursor: TRIGGER, forward: 120, back: 420 },
-    { ...REST, cursor: TRIGGER, press: true, focused: true, forward: 480, back: 160 },
-    { ...PICKING, cursor: option(4), highlight: 4, forward: 160, back: 300 },
-    { ...PICKING, cursor: option(3), highlight: 3, forward: 300, back: 260 },
-    { ...PICKING, cursor: option(2), highlight: 2, forward: 300, back: 420 },
-    { ...PICKING, cursor: option(2), highlight: 2, press: true, forward: 420, back: 120 },
-    {
-      ...PICKING,
-      cursor: option(2),
-      highlight: 2,
-      press: true,
-      connector: 'Splunk' as Connector,
-      forward: 120,
-      back: 220
-    },
+    ...openAndPick(
+      REST,
+      TRIGGER,
+      [
+        [4, 160, 300],
+        [3, 300, 260],
+        [2, 300, 420]
+      ],
+      { connector: 'Splunk' as Connector }
+    ),
     { ...PICKED, cursor: option(2), focused: true, forward: 200, back: 260 },
     { ...PICKED, cursor: IDLE, forward: 420, back: 0 }
   ]
 
-  const LAST = FRAMES.length - 1
+  const { frame } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
+  })
 
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-
-  const frame = computed(() => FRAMES[step.value])
   const fields = computed(() => FIELDS[frame.value.connector])
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupFragment
     shell="legacy"
-    fade="bottom"
     class="[--console-mockup-fade-start:72%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    stage-class="flex h-full flex-col gap-(--spacing-lg) py-(--spacing-xs)"
+    :cursor="frame.cursor"
+    cursor-name="Chris"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative flex h-full flex-col gap-(--spacing-lg) py-(--spacing-xs)"
+    <ConsoleMockupShellItem
+      :order="0"
+      :data-state="frame.open ? 'open' : 'closed'"
+      class="relative data-[state=open]:z-1"
     >
-      <ConsoleMockupShellItem
-        :order="0"
-        :data-state="frame.open ? 'open' : 'closed'"
-        class="relative data-[state=open]:z-1"
-      >
-        <div class="flex flex-col gap-(--spacing-xs)">
-          <FieldLabel
-            for="data-stream-connector"
-            required
-            >Connector</FieldLabel
-          >
-          <MockupSelect
-            control-id="data-stream-connector"
-            :value="frame.connector"
-            :options="CONNECTORS"
-            :open="frame.open"
-            :highlighted-index="frame.highlight"
-            :focused="frame.focused"
-            data-cursor="connector"
-            aria-label="Connector"
-          />
-          <FieldDescription
-            >Each option represents a different platform and requires different
-            values.</FieldDescription
-          >
-        </div>
-      </ConsoleMockupShellItem>
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <FieldLabel
+          for="data-stream-connector"
+          required
+          >Connector</FieldLabel
+        >
+        <MockupSelect
+          control-id="data-stream-connector"
+          :value="frame.connector"
+          :options="CONNECTORS"
+          :open="frame.open"
+          :highlighted-index="frame.highlight"
+          :focused="frame.focused"
+          data-cursor="connector"
+          aria-label="Connector"
+        />
+        <FieldDescription
+          >Each option represents a different platform and requires different
+          values.</FieldDescription
+        >
+      </div>
+    </ConsoleMockupShellItem>
 
-      <ConsoleMockupShellItem :order="1">
-        <div class="flex flex-col gap-(--spacing-xs)">
-          <FieldLabel
-            for="data-stream-url"
-            required
-            >URL</FieldLabel
-          >
-          <Input
-            id="data-stream-url"
-            model-value=""
-            :placeholder="fields.url"
-            size="medium"
-            aria-label="URL"
-          />
-          <FieldDescription>{{ fields.urlHelp }}</FieldDescription>
-        </div>
-      </ConsoleMockupShellItem>
+    <ConsoleMockupShellItem :order="1">
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <FieldLabel
+          for="data-stream-url"
+          required
+          >URL</FieldLabel
+        >
+        <Input
+          id="data-stream-url"
+          model-value=""
+          :placeholder="fields.url"
+          size="medium"
+          aria-label="URL"
+        />
+        <FieldDescription>{{ fields.urlHelp }}</FieldDescription>
+      </div>
+    </ConsoleMockupShellItem>
 
-      <ConsoleMockupShellItem :order="2">
-        <div class="flex flex-col gap-(--spacing-xs)">
-          <FieldLabel
-            for="data-stream-api-key"
-            required
-            >API Key</FieldLabel
-          >
-          <Textarea
-            id="data-stream-api-key"
-            model-value=""
-            :placeholder="fields.key"
-            resize="none"
-            rows="2"
-            aria-label="API Key"
-          />
-          <FieldDescription>{{ fields.keyHelp }}</FieldDescription>
-        </div>
-      </ConsoleMockupShellItem>
-
-      <MockupCursor
-        name="Chris"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
-      />
-    </div>
-  </ConsoleMockupShell>
+    <ConsoleMockupShellItem :order="2">
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <FieldLabel
+          for="data-stream-api-key"
+          required
+          >API Key</FieldLabel
+        >
+        <Textarea
+          id="data-stream-api-key"
+          model-value=""
+          :placeholder="fields.key"
+          resize="none"
+          rows="2"
+          aria-label="API Key"
+        />
+        <FieldDescription>{{ fields.keyHelp }}</FieldDescription>
+      </div>
+    </ConsoleMockupShellItem>
+  </MockupFragment>
 </template>

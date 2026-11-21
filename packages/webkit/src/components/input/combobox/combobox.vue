@@ -591,6 +591,7 @@
                   :id="row.id"
                   :key="row.id"
                   role="option"
+                  tabindex="-1"
                   :aria-selected="row.kind === 'option' && row.option.value === model"
                   :aria-disabled="isDisabledRow(row) || undefined"
                   :data-active="(activeId === row.id && !isDisabledRow(row)) || null"

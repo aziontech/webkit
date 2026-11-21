@@ -112,8 +112,14 @@ export const GATES = [
     steps: [['node', 'scripts/check-look-alikes.mjs']]
   },
   {
+    id: 'duplication',
+    label: 'No copy-pasted code in components or inside a block',
+    steps: [['node', 'scripts/check-duplication.mjs']]
+  },
+  {
     id: 'quality-lint',
-    label: 'No line over 200 characters in components, blocks and examples',
+    label:
+      'No line over 200 characters and no accessibility lint finding in components, blocks and examples',
     root: true,
     steps: [['pnpm', '--filter', '@aziontech/webkit', 'run', 'lint:quality']]
   },

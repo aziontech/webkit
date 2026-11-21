@@ -1,13 +1,11 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
-
-  import { useMediaQuery } from '../../../../composables/use-media-query'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupScrollFrames } from '../composables/use-mockup-scroll-frames'
+  import { openAndPick, option } from '../lib/pick-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import LegacySwitch from '../parts/legacy-switch.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupScrollColumn from '../parts/mockup-scroll-column.vue'
   import MockupSelect from '../parts/mockup-select.vue'
+  import ModuleSwitchCard from '../parts/module-switch-card.vue'
 
   defineOptions({ name: 'WafThreatFragment' })
 
@@ -19,9 +17,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const THREATS = [
     {
@@ -82,7 +77,6 @@
 
   const IDLE: MockupCursorTarget = { key: 'sensitivity', x: 0.82, y: 2.4 }
   const TRIGGER: MockupCursorTarget = { key: 'sensitivity', x: 0.35, y: 0.6 }
-  const option = (index: number): MockupCursorTarget => ({ key: `option-${index}`, x: 0.3, y: 0.6 })
   const SWITCH: MockupCursorTarget = { key: 'upload', x: 0.6, y: 0.6 }
 
   const REST = {
@@ -96,25 +90,19 @@
     upload: false
   }
 
-  const PICKING = { ...REST, focused: true, open: true }
   const RAISED = { ...REST, raised: true }
 
   const FRAMES: Frame[] = [
     { ...REST, forward: 0, back: 0 },
-    { ...REST, cursor: TRIGGER, forward: 120, back: 420 },
-    { ...REST, cursor: TRIGGER, press: true, focused: true, forward: 480, back: 160 },
-    { ...PICKING, cursor: option(2), highlight: 2, forward: 160, back: 300 },
-    { ...PICKING, cursor: option(1), highlight: 1, forward: 460, back: 420 },
-    { ...PICKING, cursor: option(1), highlight: 1, press: true, forward: 420, back: 120 },
-    {
-      ...PICKING,
-      cursor: option(1),
-      highlight: 1,
-      press: true,
-      raised: true,
-      forward: 120,
-      back: 220
-    },
+    ...openAndPick(
+      REST,
+      TRIGGER,
+      [
+        [2, 160, 300],
+        [1, 460, 420]
+      ],
+      { raised: true }
+    ),
     { ...RAISED, cursor: option(1), focused: true, forward: 200, back: 260 },
     { ...RAISED, cursor: option(1), anchor: 2, forward: 360, back: 420 },
     { ...RAISED, cursor: option(1), anchor: 4, forward: 650, back: 420 },
@@ -124,31 +112,11 @@
     { ...RAISED, cursor: SWITCH, anchor: 4, upload: true, forward: 160, back: 120 }
   ]
 
-  const LAST = FRAMES.length - 1
-  const LEAD = 28
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
-
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-  const columnEl = ref<globalThis.HTMLElement | null>(null)
-  const offsets = ref<number[]>([])
-
-  const measure = () => {
-    const anchors = columnEl.value?.querySelectorAll<globalThis.HTMLElement>('[data-anchor]')
-    if (!anchors?.length) return
-    offsets.value = [...anchors].map((anchor) => anchor.offsetTop)
-  }
-
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor, columnEl)
-
-  const atRest = computed(() => frame.value.anchor === 0)
-
-  const scrollStyle = computed(() => ({
-    translate: `0 ${atRest.value ? 0 : LEAD - (offsets.value[frame.value.anchor] ?? 0)}px`
-  }))
+  const { frame, bindColumn } = useMockupScrollFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered,
+    stepOnTouch: true
+  })
 
   const enabled = (key: string) => key !== 'file-upload' || frame.value.upload
 
@@ -156,115 +124,50 @@
     key === 'sql-injection' && frame.value.raised ? 'Sensitivity High' : 'Sensitivity Medium'
 
   const picking = (key: string) => key === 'sql-injection'
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-  let observer: globalThis.ResizeObserver | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value) {
-      step.value = target
-      return
-    }
-    measure()
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onMounted(() => {
-    observer = new globalThis.ResizeObserver(measure)
-    if (columnEl.value) observer.observe(columnEl.value)
-    measure()
-  })
-
-  onScopeDispose(() => {
-    halt()
-    observer?.disconnect()
-  })
-
-  const THREAT_CARD_CLASS =
-    'flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) transition-colors duration-moderate-01 ease-productive-entrance ' +
-    'data-on:border-(--primary) ' +
-    'motion-reduce:transition-none'
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupScrollColumn
+    :ref="bindColumn"
     shell="legacy"
-    :fade="atRest ? 'bottom' : 'y'"
     class="[--console-mockup-fade-edge:20%] [--console-mockup-fade-start:74%]"
-    :chrome="false"
+    column-class="flex flex-col gap-(--spacing-sm)"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    :anchor="frame.anchor || null"
+    :lead="28"
+    observe
+    :cursor="frame.cursor"
+    cursor-name="Alex"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative"
+    <span class="text-label-md text-(--text-default)">Threat Type Configuration</span>
+
+    <ConsoleMockupShellItem
+      v-for="(threat, index) in THREATS"
+      :key="threat.key"
+      :order="Math.min(index, 3)"
+      :data-state="picking(threat.key) && frame.open ? 'open' : 'closed'"
+      class="relative data-[state=open]:z-1"
+      data-anchor
     >
-      <div
-        ref="columnEl"
-        :style="scrollStyle"
-        class="relative flex flex-col gap-(--spacing-sm) py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
+      <ModuleSwitchCard
+        :title="threat.title"
+        :description="threat.description"
+        :checked="enabled(threat.key)"
+        :cursor-key="threat.key === 'file-upload' ? 'upload' : undefined"
       >
-        <span class="text-label-md text-(--text-default)">Threat Type Configuration</span>
-
-        <ConsoleMockupShellItem
-          v-for="(threat, index) in THREATS"
-          :key="threat.key"
-          :order="Math.min(index, 3)"
-          :data-state="picking(threat.key) && frame.open ? 'open' : 'closed'"
-          class="relative data-[state=open]:z-1"
-          data-anchor
-        >
-          <div
-            :data-on="enabled(threat.key) || null"
-            :class="THREAT_CARD_CLASS"
-          >
-            <LegacySwitch
-              :checked="enabled(threat.key)"
-              :data-cursor="threat.key === 'file-upload' ? 'upload' : undefined"
-            />
-            <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
-              <span class="text-label-md text-(--text-default)">{{ threat.title }}</span>
-              <span class="text-body-xs text-(--text-muted)">{{ threat.description }}</span>
-              <span class="mt-(--spacing-xs) flex">
-                <MockupSelect
-                  :value="sensitivity(threat.key)"
-                  :options="picking(threat.key) ? SENSITIVITIES : []"
-                  :open="picking(threat.key) && frame.open"
-                  :highlighted-index="picking(threat.key) ? frame.highlight : -1"
-                  :focused="picking(threat.key) && frame.focused"
-                  :data-cursor="picking(threat.key) ? 'sensitivity' : undefined"
-                  :aria-label="`${threat.title} sensitivity`"
-                />
-              </span>
-            </span>
-          </div>
-        </ConsoleMockupShellItem>
-      </div>
-
-      <MockupCursor
-        name="Alex"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
-      />
-    </div>
-  </ConsoleMockupShell>
+        <span class="mt-(--spacing-xs) flex">
+          <MockupSelect
+            :value="sensitivity(threat.key)"
+            :options="picking(threat.key) ? SENSITIVITIES : []"
+            :open="picking(threat.key) && frame.open"
+            :highlighted-index="picking(threat.key) ? frame.highlight : -1"
+            :focused="picking(threat.key) && frame.focused"
+            :data-cursor="picking(threat.key) ? 'sensitivity' : undefined"
+            :aria-label="`${threat.title} sensitivity`"
+          />
+        </span>
+      </ModuleSwitchCard>
+    </ConsoleMockupShellItem>
+  </MockupScrollColumn>
 </template>

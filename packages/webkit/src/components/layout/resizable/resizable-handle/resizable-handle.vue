@@ -1,7 +1,9 @@
 <script setup lang="ts">
-  import { computed, inject, onScopeDispose, ref, useAttrs } from 'vue'
+  import { computed, inject, ref, useAttrs } from 'vue'
 
   import { useDirection } from '../../../../composables/use-direction'
+  import { useElementListener } from '../../../../composables/use-element-listener'
+  import { usePointerDrag } from '../../../../composables/use-pointer-drag'
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import { ResizableInjectionKey, type ResizablePaneApi } from '../injection-key'
@@ -37,7 +39,7 @@
   const NUDGE_STEP = 24
 
   const handleEl = ref<globalThis.HTMLElement | null>(null)
-  const resizing = ref(false)
+  const { dragging: resizing, startDrag } = usePointerDrag()
   const dir = useDirection(handleEl)
 
   const target = (): { pane: ResizablePaneApi; sign: 1 | -1 } | null => {
@@ -65,8 +67,6 @@
   const valueMin = computed(() => current.value?.min() ?? 0)
   const valueMax = computed(() => current.value?.max() ?? 0)
 
-  let stopDrag: (() => void) | null = null
-
   const startResize = (event: globalThis.PointerEvent) => {
     if (props.disabled) return
     const hit = target()
@@ -76,31 +76,15 @@
     const origin = horizontal ? event.clientX : event.clientY
     const start = hit.pane.measure()
 
-    resizing.value = true
-    handleEl.value?.setPointerCapture?.(event.pointerId)
-    globalThis.document.body.style.userSelect = 'none'
-    globalThis.document.body.style.cursor = horizontal ? 'col-resize' : 'row-resize'
-
-    const onMove = (moveEvent: globalThis.PointerEvent) => {
-      const physical = (horizontal ? moveEvent.clientX : moveEvent.clientY) - origin
-      const delta = horizontal && dir.value === 'rtl' ? -physical : physical
-      hit.pane.setBasis(start + delta * hit.sign)
-    }
-
-    stopDrag = () => {
-      resizing.value = false
-      globalThis.document.body.style.removeProperty('user-select')
-      globalThis.document.body.style.removeProperty('cursor')
-      globalThis.window.removeEventListener('pointermove', onMove)
-      globalThis.window.removeEventListener('pointerup', stopDrag as () => void)
-      globalThis.window.removeEventListener('pointercancel', stopDrag as () => void)
-      stopDrag = null
-    }
-
-    globalThis.window.addEventListener('pointermove', onMove)
-    globalThis.window.addEventListener('pointerup', stopDrag)
-    globalThis.window.addEventListener('pointercancel', stopDrag)
-    event.preventDefault()
+    startDrag(event, {
+      captureEl: handleEl.value,
+      cursor: horizontal ? 'col-resize' : 'row-resize',
+      onMove: (moveEvent) => {
+        const physical = (horizontal ? moveEvent.clientX : moveEvent.clientY) - origin
+        const delta = horizontal && dir.value === 'rtl' ? -physical : physical
+        hit.pane.setBasis(start + delta * hit.sign)
+      }
+    })
   }
 
   const nudge = (direction: -1 | 1) => {
@@ -124,7 +108,38 @@
     hit.pane.setBasis(hit.pane.collapsed() ? hit.pane.min() : 0)
   }
 
-  onScopeDispose(() => stopDrag?.())
+  const onKeydown = (event: globalThis.KeyboardEvent) => {
+    const horizontal = orientation.value === 'horizontal'
+    const rtl = dir.value === 'rtl'
+    switch (event.key) {
+      case 'ArrowLeft':
+        if (horizontal) nudge(rtl ? 1 : -1)
+        break
+      case 'ArrowRight':
+        if (horizontal) nudge(rtl ? -1 : 1)
+        break
+      case 'ArrowUp':
+        if (!horizontal) nudge(-1)
+        break
+      case 'ArrowDown':
+        if (!horizontal) nudge(1)
+        break
+      case 'Home':
+        toExtreme('min')
+        break
+      case 'End':
+        toExtreme('max')
+        break
+      case 'Enter':
+        toggleCollapse()
+        break
+      default:
+        return
+    }
+    event.preventDefault()
+  }
+
+  useElementListener(handleEl, 'keydown', onKeydown)
 
   const ROOT_CLASS =
     'relative z-10 shrink-0 touch-none bg-(--border-default) outline-none ' +
@@ -157,12 +172,5 @@
     :data-disabled="disabled || null"
     :class="ROOT_CLASS"
     @pointerdown="startResize"
-    @keydown.left.prevent="orientation === 'horizontal' && nudge(dir === 'rtl' ? 1 : -1)"
-    @keydown.right.prevent="orientation === 'horizontal' && nudge(dir === 'rtl' ? -1 : 1)"
-    @keydown.up.prevent="orientation === 'vertical' && nudge(-1)"
-    @keydown.down.prevent="orientation === 'vertical' && nudge(1)"
-    @keydown.home.prevent="toExtreme('min')"
-    @keydown.end.prevent="toExtreme('max')"
-    @keydown.enter.prevent="toggleCollapse"
   />
 </template>

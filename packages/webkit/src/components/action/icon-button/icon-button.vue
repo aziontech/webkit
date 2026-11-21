@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, Transition, useAttrs } from 'vue'
+  import { computed, type FunctionalComponent, h, Transition, useAttrs } from 'vue'
 
   import { directionalIconClass } from '../../../utils/directional-icons'
   import { safeHref } from '../../../utils/safe-href'
@@ -60,6 +60,12 @@
 
   const attrs = useAttrs()
 
+  const Root: FunctionalComponent<{ tag: 'a' | 'button' }> = (
+    { tag },
+    { attrs: rootAttrs, slots }
+  ) => h(tag, rootAttrs, slots['default']?.())
+  Root.props = ['tag']
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'icon-button')
 
   const isInert = computed(() => props.disabled || props.loading)
@@ -115,74 +121,21 @@
 </script>
 
 <template>
-  <a
-    v-if="isAnchor"
+  <Root
+    :tag="isAnchor ? 'a' : 'button'"
     v-bind="$attrs"
     :href="linkHref ?? undefined"
-    :target="target"
-    :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
-    :class="ROOT_CLASS"
-    :aria-label="ariaLabel || undefined"
-    :aria-disabled="isInert || undefined"
-    :aria-busy="loading || undefined"
-    :tabindex="isInert ? -1 : undefined"
-    :data-disabled="disabled ? '' : undefined"
-    :data-loading="loading ? '' : undefined"
-    :data-inert="isInert ? '' : undefined"
-    :data-variant="variant"
-    :data-size="size"
-    :data-testid="testId"
-    @click="onClick"
-  >
-    <span
-      :data-transition="iconTransition || null"
-      :class="ICON_CLASS"
-    >
-      <Spinner
-        v-if="loading"
-        class="size-3 group-data-[size=large]/icon-button:size-4"
-        :data-testid="loadingTestId"
-      />
-      <Transition
-        v-else-if="iconTransition"
-        mode="out-in"
-        :enter-active-class="ICON_ENTER_ACTIVE_CLASS"
-        enter-from-class="scale-0 opacity-0 motion-reduce:scale-100 motion-reduce:opacity-100"
-        enter-to-class="scale-100 opacity-100"
-        leave-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-        leave-from-class="opacity-100"
-        leave-to-class="opacity-0"
-      >
-        <i
-          :key="icon"
-          :class="[
-            icon,
-            directionalIconClass(icon),
-            'inline-flex shrink-0 items-center justify-center text-[length:inherit] leading-none pointer-events-none absolute inset-0 inline-flex items-center justify-center',
-            iconClass
-          ]"
-          aria-hidden="true"
-        />
-      </Transition>
-      <i
-        v-else
-        :class="[icon, directionalIconClass(icon), iconClass]"
-        class="inline-flex shrink-0 items-center justify-center text-[length:inherit] leading-none"
-        aria-hidden="true"
-      />
-    </span>
-    <span
-      aria-hidden="true"
-      data-slot="touch-target"
-      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-    />
-  </a>
-
-  <button
-    v-else
-    v-bind="$attrs"
-    :type="type"
-    :disabled="disabled"
+    :target="isAnchor ? target : undefined"
+    :rel="
+      isAnchor
+        ? target === '_blank'
+          ? 'noopener noreferrer'
+          : undefined
+        : (attrs['rel'] as string | undefined)
+    "
+    :type="isAnchor ? undefined : type"
+    :disabled="isAnchor ? undefined : disabled"
+    :tabindex="isAnchor ? (isInert ? -1 : undefined) : (attrs['tabindex'] as number | undefined)"
     :aria-label="ariaLabel || undefined"
     :aria-disabled="isInert || undefined"
     :aria-busy="loading || undefined"
@@ -237,5 +190,5 @@
       data-slot="touch-target"
       class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
     />
-  </button>
+  </Root>
 </template>

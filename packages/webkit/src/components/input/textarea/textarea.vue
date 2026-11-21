@@ -2,7 +2,7 @@
   import type { StyleValue } from 'vue'
   import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
 
-  import { useFieldControl } from '../../../composables/use-field-control'
+  import { useFieldAttrs } from '../../../composables/use-field-attrs'
 
   defineOptions({
     name: 'Textarea',
@@ -56,16 +56,11 @@
   const {
     controlId,
     describedBy,
+    passthroughAttrs,
     invalid: isInvalid,
     disabled: isDisabled,
     required: isRequired
-  } = useFieldControl({
-    id: () => attrs['id'] as string | undefined,
-    describedBy: () => attrs['aria-describedby'] as string | undefined,
-    invalid: () => props.invalid,
-    disabled: () => props.disabled,
-    required: () => props.required
-  })
+  } = useFieldAttrs(props)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'textarea')
   const isFilled = computed(() => (model.value ?? '').length > 0)
@@ -100,13 +95,6 @@
     () => [model.value, props.autoResize, props.minRows, props.maxRows],
     () => nextTick(fitHeight)
   )
-
-  const passthroughAttrs = computed(() => {
-    const rest: Record<string, unknown> = { ...attrs }
-    delete rest['class']
-    delete rest['data-testid']
-    return rest
-  })
 
   const onInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLTextAreaElement

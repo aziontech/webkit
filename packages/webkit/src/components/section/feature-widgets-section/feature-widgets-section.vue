@@ -1,10 +1,11 @@
 <script setup lang="ts">
-  import { type Component, computed, onScopeDispose, ref, useAttrs } from 'vue'
+  import { computed, onScopeDispose, ref, useAttrs } from 'vue'
 
-  import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
+  import type { SceneRef } from '../../../assets/scene-registry'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { copyText } from '../../../utils/clipboard'
+  import { resolveItemScenes } from '../../../utils/item-scenes'
   import Button from '../../action/button/button.vue'
   import HighlightButton from '../../action/highlight-button/highlight-button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
@@ -114,9 +115,7 @@
 
   const hasHeader = computed(() => props.title.length > 0)
 
-  const scenes = computed<(Component | null)[]>(() =>
-    props.items.map((item) => (item.scene ? resolveScene(item.scene.component) : null))
-  )
+  const scenes = computed(() => resolveItemScenes(props.items))
 
   const doneLabel = computed(() => props.copiedLabel || t('common.copied'))
 

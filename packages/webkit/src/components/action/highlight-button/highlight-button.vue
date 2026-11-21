@@ -112,16 +112,18 @@
 </script>
 
 <template>
-  <a
-    v-if="isAnchor"
+  <component
+    :is="isAnchor ? 'a' : 'button'"
     v-bind="$attrs"
-    :href="linkHref ?? undefined"
-    :target="target"
-    :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
+    :href="isAnchor ? (linkHref ?? undefined) : undefined"
+    :target="isAnchor ? target : undefined"
+    :rel="isAnchor && target === '_blank' ? 'noopener noreferrer' : undefined"
+    :type="isAnchor ? undefined : 'button'"
+    :disabled="isAnchor ? undefined : disabled"
     :class="ROOT_CLASS"
     :aria-disabled="isInert || undefined"
     :aria-busy="loading || undefined"
-    :tabindex="isInert ? -1 : undefined"
+    :tabindex="isAnchor && isInert ? -1 : undefined"
     :data-size="size"
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
@@ -160,53 +162,5 @@
       />
       {{ label }}
     </span>
-  </a>
-
-  <button
-    v-else
-    v-bind="$attrs"
-    type="button"
-    :disabled="disabled"
-    :aria-disabled="isInert || undefined"
-    :aria-busy="loading || undefined"
-    :class="ROOT_CLASS"
-    :data-size="size"
-    :data-disabled="disabled ? '' : undefined"
-    :data-loading="loading ? '' : undefined"
-    :data-inert="isInert ? '' : undefined"
-    :data-testid="testId"
-    @click="onClick"
-  >
-    <span
-      aria-hidden="true"
-      data-theme="dark"
-      :class="GLOW_CLASS"
-    />
-    <span
-      aria-hidden="true"
-      :class="BASE_CLASS"
-    />
-    <span
-      aria-hidden="true"
-      :class="SCRIM_CLASS"
-    />
-    <span
-      data-theme="dark"
-      :class="CONTENT_CLASS"
-      :data-size="size"
-    >
-      <Spinner
-        v-if="loading"
-        class="size-3 group-data-[size=large]/highlight:size-4"
-        :data-testid="loadingTestId"
-      />
-      <i
-        v-else-if="icon"
-        :class="[icon, directionalIconClass(icon)]"
-        class="shrink-0 text-[length:inherit] leading-none"
-        aria-hidden="true"
-      />
-      {{ label }}
-    </span>
-  </button>
+  </component>
 </template>

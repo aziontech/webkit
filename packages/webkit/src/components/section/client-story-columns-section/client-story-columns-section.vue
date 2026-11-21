@@ -2,6 +2,7 @@
   import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
   import { clientBrand } from '../../../assets/logos/clients/brands'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
@@ -105,6 +106,7 @@
   const story = computed(() => props.linkLabel || t('clientStoryColumnsSection.story'))
 
   const active = ref(-1)
+  const listEl = ref<HTMLUListElement | null>(null)
   const panelEls = ref<HTMLElement[]>([])
   const panelHeights = ref<number[]>([])
 
@@ -134,6 +136,9 @@
       return
     active.value = -1
   }
+
+  useElementListener(listEl, 'mouseleave', onLeave)
+  useElementListener(listEl, 'focusout', onLeave)
 
   let observer: ResizeObserver | undefined
   onMounted(() => {
@@ -192,18 +197,15 @@
         marks="none"
       >
         <ul
+          ref="listEl"
           :aria-label="listName"
           class="m-0 flex list-none flex-col gap-px border-y border-(--border-default) bg-(--border-default) p-0 lg:flex-row lg:gap-0 lg:border-y-0 lg:bg-transparent"
-          @mouseleave="onLeave"
-          @focusout="onLeave"
         >
           <li
             v-for="(cell, index) in cells"
             :key="cell.name"
             :data-state="active === index ? 'open' : 'closed'"
             class="group/spot aspect-[948/960] min-w-0 lg:flex-1 lg:not-first:-ms-px"
-            @mouseenter="active = index"
-            @focusin="active = index"
           >
             <RegistrationFrame
               :flush="flushOf(index)"
@@ -214,6 +216,8 @@
               <a
                 :href="safeHref(cell.href) ?? undefined"
                 :aria-label="`${story}, ${cell.name}: ${cell.story}`"
+                @mouseenter="active = index"
+                @focus="active = index"
                 class="@container relative block h-full overflow-hidden focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset"
               >
                 <div

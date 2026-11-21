@@ -11,6 +11,7 @@
     watch
   } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useFocusTrap } from '../../../composables/use-focus-trap'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
@@ -774,6 +775,8 @@
     }
   }
 
+  useElementListener(panelEl, 'keydown', onPanelKeydown)
+
   watch(
     () => isDisabled.value,
     (disabled) => {
@@ -997,7 +1000,6 @@
           :data-size="size"
           :style="panelStyle"
           :class="POPOVER_CLASS"
-          @keydown="onPanelKeydown"
         >
           <div
             v-if="offersRelative && offersAbsolute"

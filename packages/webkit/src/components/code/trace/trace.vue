@@ -2,6 +2,7 @@
   import { computed, nextTick, ref, useAttrs, useId } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
@@ -701,6 +702,32 @@
     if (target) void focusRow(target)
   }
 
+  const spanElement = (event: Event): HTMLElement | null =>
+    event.target instanceof Element
+      ? event.target.closest<HTMLElement>(
+          '[role="option"][data-span-id], [role="row"][data-span-id]'
+        )
+      : null
+
+  const onGridClick = (event: MouseEvent): void => {
+    const id = spanElement(event)?.dataset['spanId']
+    if (id) pick(id)
+  }
+
+  const onGridKeydown = (event: KeyboardEvent): void => {
+    const element = spanElement(event)
+    const id = element?.dataset['spanId']
+    if (!element || !id) return
+    if (element.getAttribute('role') === 'option') return onBarKeydown(event, id)
+    onKeydown(
+      event,
+      rows.value.findIndex((row) => row.span.id === id)
+    )
+  }
+
+  useElementListener(gridEl, 'click', onGridClick)
+  useElementListener(gridEl, 'keydown', onGridKeydown)
+
   const detailId = `${uid}-detail`
 
   const LOADING_ROWS = 5
@@ -1032,9 +1059,7 @@
                 '--trace-span-width': String(item.width)
               }"
               :class="FLAME_BAR_CLASS"
-              @click="pick(item.span.id)"
               @focus="focusedId = item.span.id"
-              @keydown="onBarKeydown($event, item.span.id)"
             >
               <span
                 v-if="item.wide"
@@ -1078,7 +1103,7 @@
         class="relative flex flex-col"
       >
         <div
-          v-for="(row, index) in rows"
+          v-for="row in rows"
           :key="row.span.id"
           role="row"
           :tabindex="row.span.id === tabStop ? 0 : -1"
@@ -1100,9 +1125,7 @@
           }"
           :data-view="layout"
           :class="ROW_CLASS"
-          @click="select(row)"
           @focus="focusedId = row.span.id"
-          @keydown="onKeydown($event, index)"
         >
           <span
             role="gridcell"

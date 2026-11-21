@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, provide, ref, useAttrs, watch } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useFocusTrap } from '../../../composables/use-focus-trap'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
@@ -237,6 +238,8 @@
     }
   }
 
+  useElementListener(panelEl, 'keydown', onPanelKeydown)
+
   watch(
     isOpen,
     (open) => {
@@ -449,7 +452,6 @@
           :data-align="resolvedAlign"
           :style="panelStyle"
           :class="POPOVER_CLASS"
-          @keydown="onPanelKeydown"
         >
           <div
             class="flex flex-col items-stretch data-[horizontal]:sm:flex-row"

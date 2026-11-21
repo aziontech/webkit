@@ -54,6 +54,8 @@
  "sfcFile": "blocks/create/create-drawer/create-drawer.vue",
  "guidelinesFile": "blocks/create/create-drawer/guidelines.md",
  "fileSources": {
-  "sample.ts": "blocks/create/create-drawer/sample.ts"
+  "sample.ts": "blocks/create/create-drawer/sample.ts",
+  "composables/use-drawer-guard.ts": "blocks/create/create-drawer/composables/use-drawer-guard.ts",
+  "parts/unsaved-changes-dialog.vue": "blocks/create/create-drawer/parts/unsaved-changes-dialog.vue"
  }
 }

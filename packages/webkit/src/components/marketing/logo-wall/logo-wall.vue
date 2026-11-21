@@ -7,6 +7,7 @@
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import LogoWallImage from './parts/logo-wall-image.vue'
 
   defineOptions({
     name: 'LogoWall',
@@ -140,14 +141,7 @@
               :item="item"
               :index="index"
             >
-              <img
-                :src="item.src"
-                :alt="item.alt"
-                :data-shape="item.shape ?? 'wide'"
-                loading="lazy"
-                decoding="async"
-                class="h-5 w-auto max-w-full object-contain data-[shape=compact]:h-7 sm:max-w-24"
-              />
+              <LogoWallImage :item="item" />
             </slot>
           </span>
           <span
@@ -168,14 +162,7 @@
               :item="item"
               :index="index"
             >
-              <img
-                :src="item.src"
-                :alt="item.alt"
-                :data-shape="item.shape ?? 'wide'"
-                loading="lazy"
-                decoding="async"
-                class="h-5 w-auto max-w-full object-contain data-[shape=compact]:h-7 sm:max-w-24"
-              />
+              <LogoWallImage :item="item" />
             </slot>
           </span>
         </div>

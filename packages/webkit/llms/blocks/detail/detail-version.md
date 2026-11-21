@@ -1378,13 +1378,13 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
           :min="280"
           :max="560"
           aria-label="Version history"
+          @keydown.esc="historyExpanded = false"
         >
           <aside
             :inert="!historyExpanded"
             aria-labelledby="version-history-title"
             class="flex min-h-0 min-w-0 flex-1 flex-col bg-(--bg-surface)"
             data-testid="version-detail-history"
-            @keydown.esc="historyExpanded = false"
           >
             <header
               class="flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) py-(--spacing-xs) ps-(--spacing-lg) pe-(--spacing-sm)"
@@ -1735,4 +1735,103 @@ export const sampleEnvironments: VersionDetailEnvironment[] = [
   { name: 'Preview', policy: 'Versioned', serves: 'AG1VVDJP' },
   { name: 'Staging', policy: 'Versioned', serves: '' }
 ]
+```
+
+## `parts/modified-by.vue`
+
+```ts
+<script setup lang="ts">
+  import Avatar from '@aziontech/webkit/avatar'
+  import Tooltip from '@aziontech/webkit/tooltip'
+
+  export interface ModifiedByProps {
+    /** Who made the last change; the avatar names them in a tooltip. */
+    author: string
+    /** When the last change was made, already formatted. */
+    modifiedAgo: string
+  }
+
+  defineProps<ModifiedByProps>()
+</script>
+
+<template>
+  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+    <Tooltip :content="author">
+      <Avatar
+        :alt="author"
+        :label="author"
+        size="small"
+        variant="square"
+      />
+    </Tooltip>
+    <span class="truncate text-body-sm text-(--text-muted)">{{ modifiedAgo }}</span>
+  </div>
+</template>
+```
+
+## `parts/table-empty.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import EmptyState from '@aziontech/webkit/empty-state'
+
+  export interface TableEmptyProps {
+    /** The search term; when set, the state says nothing matches it and offers to clear it. */
+    search: string
+    /** The title when the search matches nothing. */
+    noMatch: string
+    /** The title when the version holds no record yet. */
+    emptyTitle: string
+    /** The glyph of the no-record state. */
+    icon: string
+    /** The label of the button that adds the first record. */
+    emptyActionLabel: string
+  }
+
+  defineProps<TableEmptyProps>()
+
+  const emit = defineEmits<{
+    clear: [event: MouseEvent]
+    add: [event: MouseEvent]
+  }>()
+</script>
+
+<template>
+  <EmptyState
+    v-if="search.trim()"
+    key="no-match"
+    size="medium"
+    icon="az az-search"
+    :title="noMatch"
+    :description="`Nothing matches ${search.trim()}.`"
+  >
+    <template #actions>
+      <Button
+        label="Clear search"
+        variant="outline"
+        size="small"
+        @click="(event: MouseEvent) => emit('clear', event)"
+      />
+    </template>
+  </EmptyState>
+  <EmptyState
+    v-else
+    key="empty"
+    size="medium"
+    :icon="icon"
+    :title="emptyTitle"
+    description="Add the first one to this version."
+  >
+    <template #actions>
+      <Button
+        :label="emptyActionLabel"
+        icon="az az-plus"
+        variant="secondary"
+        size="small"
+        @click="(event: MouseEvent) => emit('add', event)"
+      />
+    </template>
+  </EmptyState>
+</template>
 ```

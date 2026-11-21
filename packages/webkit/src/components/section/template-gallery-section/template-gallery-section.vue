@@ -94,6 +94,9 @@
   const DEPLOY_BUTTON_CLASS =
     'z-1 mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5 ' +
     'rtl:group-hover/template:[&_[data-animated]]:-translate-x-0.5'
+
+  const CARD_LINK_CLASS =
+    'absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
 </script>
 
 <template>
@@ -162,13 +165,20 @@
                       </span>
                     </div>
                     <a
-                      v-if="template.href"
+                      v-if="template.href && deployLabel"
                       :href="safeHref(template.href) ?? undefined"
-                      :tabindex="deployLabel ? -1 : undefined"
-                      :aria-hidden="deployLabel ? 'true' : undefined"
-                      :aria-label="deployLabel ? undefined : template.title"
+                      tabindex="-1"
+                      aria-hidden="true"
+                      :aria-label="template.title"
                       :data-testid="`${testId}__card-link`"
-                      class="absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+                      :class="CARD_LINK_CLASS"
+                    />
+                    <a
+                      v-else-if="template.href"
+                      :href="safeHref(template.href) ?? undefined"
+                      :aria-label="template.title"
+                      :data-testid="`${testId}__card-link`"
+                      :class="CARD_LINK_CLASS"
                     />
                     <Button
                       v-if="deployLabel && template.href"

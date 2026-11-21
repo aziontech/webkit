@@ -124,6 +124,7 @@
     >
       <div
         v-if="isOpen"
+        role="presentation"
         v-bind="attrs"
         ref="panelEl"
         :dir="portalLocale.dir"

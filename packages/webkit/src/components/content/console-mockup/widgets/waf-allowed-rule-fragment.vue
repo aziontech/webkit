@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
+  import { computed } from 'vue'
 
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../action/button/button.vue'
   import IconButton from '../../../action/icon-button/icon-button.vue'
   import FieldLabel from '../../../input/field/field-label/field-label.vue'
   import Input from '../../../input/input/input.vue'
   import Select from '../../../input/select/index'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupScrollFrames } from '../composables/use-mockup-scroll-frames'
+  import { option, pickOption } from '../lib/pick-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupScrollColumn from '../parts/mockup-scroll-column.vue'
   import MockupSelect from '../parts/mockup-select.vue'
 
   defineOptions({ name: 'WafAllowedRuleFragment' })
@@ -23,9 +23,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const RULE =
     '1000 - Possible SQL Injection attack: SQL keywords found in Body, Path, Query String or Cookies'
@@ -54,7 +51,6 @@
   const IDLE: MockupCursorTarget = { key: 'add', x: 2.6, y: -0.4 }
   const ADD: MockupCursorTarget = { key: 'add', x: 0.55, y: 0.6 }
   const TRIGGER: MockupCursorTarget = { key: 'condition', x: 0.35, y: 0.6 }
-  const option = (index: number): MockupCursorTarget => ({ key: `option-${index}`, x: 0.3, y: 0.6 })
 
   const REST = {
     cursor: IDLE,
@@ -80,79 +76,24 @@
     { ...REST, cursor: ADD, added: true, forward: 160, back: 460 },
     { ...LIFTED, forward: 120, back: 420 },
     { ...LIFTED, press: true, focused: true, forward: 560, back: 160 },
-    { ...PICKING, cursor: option(0), highlight: 0, forward: 160, back: 300 },
-    { ...PICKING, cursor: option(1), highlight: 1, forward: 460, back: 420 },
-    { ...PICKING, cursor: option(1), highlight: 1, press: true, forward: 420, back: 120 },
-    {
-      ...PICKING,
-      cursor: option(1),
-      highlight: 1,
-      press: true,
-      condition: CONDITIONS[1],
-      forward: 120,
-      back: 220
-    },
+    ...pickOption(
+      PICKING,
+      [
+        [0, 160, 300],
+        [1, 460, 420]
+      ],
+      { condition: CONDITIONS[1] }
+    ),
     { ...PICKED, cursor: option(1), focused: true, forward: 200, back: 260 },
     { ...PICKED, forward: 260, back: 160 }
   ]
 
-  const LAST = FRAMES.length - 1
-  const LEAD = 20
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const goingBack = ref(false)
-
-  const frame = computed(() => FRAMES[step.value])
   const pressed = computed(() => frame.value.pressed && !goingBack.value)
 
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-  const columnEl = ref<globalThis.HTMLElement | null>(null)
-  const conditionsTop = ref(0)
-
-  const measure = () => {
-    conditionsTop.value =
-      columnEl.value?.querySelector<globalThis.HTMLElement>('[data-anchor]')?.offsetTop ?? 0
-  }
-
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor, columnEl)
-
-  const scrollStyle = computed(() => ({
-    translate: `0 ${frame.value.lifted ? LEAD - conditionsTop.value : 0}px`
-  }))
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    measure()
-    const forward = target > step.value
-    goingBack.value = !forward
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onMounted(measure)
-
-  onScopeDispose(halt)
+  const { frame, goingBack, bindColumn } = useMockupScrollFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
+  })
 
   const shown = (value: unknown) => String(value)
 
@@ -163,164 +104,146 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupScrollColumn
+    :ref="bindColumn"
     shell="legacy"
-    :fade="frame.lifted ? 'y' : 'bottom'"
     class="[--console-mockup-fade-edge:16%] [--console-mockup-fade-start:72%]"
-    :chrome="false"
+    column-class="flex flex-col gap-(--spacing-lg)"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    :anchor="frame.lifted ? 0 : null"
+    :lead="20"
+    :cursor="frame.cursor"
+    cursor-name="Alex"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative"
-    >
-      <div
-        ref="columnEl"
-        :style="scrollStyle"
-        class="relative flex flex-col gap-(--spacing-lg) py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
-      >
-        <ConsoleMockupShellItem :order="0">
-          <div class="flex flex-col gap-(--spacing-xs)">
-            <FieldLabel
-              for="waf-allowed-rule-id"
-              required
-              >Rule ID</FieldLabel
-            >
-            <Select
-              :model-value="RULE"
-              size="medium"
-              :display-value="shown"
-            >
-              <Select.Trigger
-                id="waf-allowed-rule-id"
-                aria-label="Rule ID"
-              />
-            </Select>
-          </div>
-        </ConsoleMockupShellItem>
+    <ConsoleMockupShellItem :order="0">
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <FieldLabel
+          for="waf-allowed-rule-id"
+          required
+          >Rule ID</FieldLabel
+        >
+        <Select
+          :model-value="RULE"
+          size="medium"
+          :display-value="shown"
+        >
+          <Select.Trigger
+            id="waf-allowed-rule-id"
+            aria-label="Rule ID"
+          />
+        </Select>
+      </div>
+    </ConsoleMockupShellItem>
 
-        <ConsoleMockupShellItem :order="1">
-          <div class="flex flex-col gap-(--spacing-xs)">
-            <FieldLabel for="waf-allowed-path">Path</FieldLabel>
-            <Input
-              id="waf-allowed-path"
-              model-value="/search"
-              size="medium"
-              aria-label="Path"
+    <ConsoleMockupShellItem :order="1">
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <FieldLabel for="waf-allowed-path">Path</FieldLabel>
+        <Input
+          id="waf-allowed-path"
+          model-value="/search"
+          size="medium"
+          aria-label="Path"
+        />
+      </div>
+    </ConsoleMockupShellItem>
+
+    <div
+      data-anchor
+      class="flex flex-col gap-(--spacing-md)"
+    >
+      <div class="flex flex-col">
+        <ConsoleMockupShellItem :order="2">
+          <div
+            class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+          >
+            <i
+              class="az az-chevron-right text-body-xs text-(--text-muted) rtl:-scale-x-100"
+              aria-hidden="true"
+            />
+            <span class="flex min-w-0 flex-1 flex-col">
+              <span class="truncate text-label-md text-(--text-default)">
+                Match Specific Query String Value
+              </span>
+              <span class="text-body-xs text-(--text-muted)">Value: q</span>
+            </span>
+            <IconButton
+              icon="az az-trash"
+              variant="outline"
+              size="small"
+              ariaLabel="Remove condition"
             />
           </div>
         </ConsoleMockupShellItem>
 
-        <div
-          data-anchor
-          class="flex flex-col gap-(--spacing-md)"
+        <Transition
+          enter-from-class="-translate-y-1 opacity-0"
+          enter-active-class="transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+          leave-to-class="-translate-y-1 opacity-0"
+          leave-active-class="transition-[opacity,translate] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
         >
-          <div class="flex flex-col">
-            <ConsoleMockupShellItem :order="2">
-              <div
-                class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-              >
-                <i
-                  class="az az-chevron-right text-body-xs text-(--text-muted) rtl:-scale-x-100"
-                  aria-hidden="true"
-                />
-                <span class="flex min-w-0 flex-1 flex-col">
-                  <span class="truncate text-label-md text-(--text-default)">
-                    Match Specific Query String Value
+          <div
+            v-if="frame.added"
+            :data-state="frame.open ? 'open' : 'closed'"
+            class="overflow-hidden [interpolate-size:allow-keywords] data-[state=open]:overflow-visible"
+          >
+            <div class="pt-(--spacing-md)">
+              <div class="flex flex-col rounded-(--shape-card) border border-(--border-default)">
+                <span
+                  class="flex items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+                >
+                  <i
+                    class="az az-chevron-down text-body-xs text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                  <span class="min-w-0 flex-1 truncate text-label-md text-(--text-default)">
+                    Match {{ frame.condition }}
                   </span>
-                  <span class="text-body-xs text-(--text-muted)">Value: q</span>
+                  <IconButton
+                    icon="az az-trash"
+                    variant="outline"
+                    size="small"
+                    ariaLabel="Remove condition"
+                  />
                 </span>
-                <IconButton
-                  icon="az az-trash"
-                  variant="outline"
-                  size="small"
-                  ariaLabel="Remove condition"
-                />
-              </div>
-            </ConsoleMockupShellItem>
-
-            <Transition
-              enter-from-class="-translate-y-1 opacity-0"
-              enter-active-class="transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-              leave-to-class="-translate-y-1 opacity-0"
-              leave-active-class="transition-[opacity,translate] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-            >
-              <div
-                v-if="frame.added"
-                :data-state="frame.open ? 'open' : 'closed'"
-                class="overflow-hidden [interpolate-size:allow-keywords] data-[state=open]:overflow-visible"
-              >
-                <div class="pt-(--spacing-md)">
-                  <div
-                    class="flex flex-col rounded-(--shape-card) border border-(--border-default)"
+                <span class="flex flex-col gap-(--spacing-xs) p-(--spacing-md)">
+                  <FieldLabel
+                    for="waf-allowed-condition"
+                    required
+                    >Condition</FieldLabel
                   >
-                    <span
-                      class="flex items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-                    >
-                      <i
-                        class="az az-chevron-down text-body-xs text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                      <span class="min-w-0 flex-1 truncate text-label-md text-(--text-default)">
-                        Match {{ frame.condition }}
-                      </span>
-                      <IconButton
-                        icon="az az-trash"
-                        variant="outline"
-                        size="small"
-                        ariaLabel="Remove condition"
-                      />
-                    </span>
-                    <span class="flex flex-col gap-(--spacing-xs) p-(--spacing-md)">
-                      <FieldLabel
-                        for="waf-allowed-condition"
-                        required
-                        >Condition</FieldLabel
-                      >
-                      <MockupSelect
-                        :value="frame.condition"
-                        :options="CONDITIONS"
-                        :open="frame.open"
-                        :highlighted-index="frame.highlight"
-                        :focused="frame.focused"
-                        side="top"
-                        data-cursor="condition"
-                        control-id="waf-allowed-condition"
-                        aria-label="Condition"
-                      />
-                    </span>
-                  </div>
-                </div>
+                  <MockupSelect
+                    :value="frame.condition"
+                    :options="CONDITIONS"
+                    :open="frame.open"
+                    :highlighted-index="frame.highlight"
+                    :focused="frame.focused"
+                    side="top"
+                    data-cursor="condition"
+                    control-id="waf-allowed-condition"
+                    aria-label="Condition"
+                  />
+                </span>
               </div>
-            </Transition>
+            </div>
           </div>
-
-          <ConsoleMockupShellItem :order="3">
-            <span
-              data-cursor="add"
-              :data-pressed="pressed || null"
-              :class="CONDITION_BUTTON_RING_CLASS"
-            >
-              <Button
-                label="Condition"
-                variant="outline"
-                size="small"
-                icon="az az-plus"
-              />
-            </span>
-          </ConsoleMockupShellItem>
-        </div>
+        </Transition>
       </div>
 
-      <MockupCursor
-        name="Alex"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
-      />
+      <ConsoleMockupShellItem :order="3">
+        <span
+          data-cursor="add"
+          :data-pressed="pressed || null"
+          :class="CONDITION_BUTTON_RING_CLASS"
+        >
+          <Button
+            label="Condition"
+            variant="outline"
+            size="small"
+            icon="az az-plus"
+          />
+        </span>
+      </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupScrollColumn>
 </template>

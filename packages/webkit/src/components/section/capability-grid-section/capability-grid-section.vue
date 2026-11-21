@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { computed, useAttrs, watch } from 'vue'
 
-  import Button from '../../action/button/button.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
   import Module from '../../layout/module/module.vue'
@@ -9,6 +8,7 @@
   import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import FeatureItem from '../../marketing/feature-item/feature-item.vue'
+  import CapabilityGridSectionActions from './parts/capability-grid-section-actions.vue'
 
   defineOptions({ name: 'CapabilityGridSection', inheritAttrs: false })
 
@@ -145,18 +145,7 @@
             v-if="buttons.length"
             #actions
           >
-            <Button
-              v-for="action in buttons"
-              :key="action.label"
-              :label="action.label"
-              :href="action.href"
-              :target="action.target"
-              :variant="action.variant"
-              size="large"
-              :icon="action.trailing ? 'az az-chevron-right' : ''"
-              icon-position="trailing"
-              :animated="Boolean(action.trailing)"
-            />
+            <CapabilityGridSectionActions :actions="buttons" />
           </template>
         </ModuleHeader>
       </template>

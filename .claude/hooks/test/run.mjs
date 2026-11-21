@@ -526,6 +526,48 @@ group('lib: spec-compliance animations per part', () => {
   })
 })
 
+group('lib: spec-compliance animations in private parts', () => {
+  const dir = 'packages/webkit/src/components/overlay'
+  const importing = (from, cls = 'flex') =>
+    `<script setup>\n  import Part from '${from}'\n</script>\n${motionVue(cls)}`
+  const rows = ['| open | `animate-fade-in` | semantic | `motion-reduce:animate-none` |']
+  writeMotion('.specs/demo-tip.md', motionSpec(rows).replace('demo-panel', 'demo-tip'))
+  writeMotion('.specs/demo-note.md', motionSpec(rows).replace('demo-panel', 'demo-note'))
+  const tip = writeMotion(`${dir}/demo-tip/demo-tip.vue`, importing('./parts/demo-tip-frame.vue'))
+  writeMotion(`${dir}/demo-tip/parts/demo-tip-frame.vue`, importing('./demo-tip-bubble.vue'))
+  const bubble = writeMotion(
+    `${dir}/demo-tip/parts/demo-tip-bubble.vue`,
+    motionVue('animate-fade-in motion-reduce:animate-none')
+  )
+  const note = writeMotion(
+    `${dir}/demo-note/demo-note.vue`,
+    importing('../demo-tip/parts/demo-tip-bubble.vue')
+  )
+  test('a root counts the animations of a private part it imports through another part', () => {
+    assertEqual(motionOf(tip), [])
+  })
+  test('a root counts the animations of a private part of another component', () => {
+    assertEqual(motionOf(note), [])
+  })
+  test('a file under parts/ is not checked against a spec on its own', () => {
+    assertEqual(collectSpecViolations(bubble, MOTION_ROOT, { requireSpec: true }), null)
+  })
+  test('an animation in an imported private part that the spec does not list is flagged on the importer', () => {
+    writeMotion(
+      `${dir}/demo-tip/parts/demo-tip-bubble.vue`,
+      motionVue('animate-fade-in animate-page-enter motion-reduce:animate-none')
+    )
+    assertEqual(motionOf(tip), ['Animation classes in .vue but not in spec: animate-page-enter'])
+    assertEqual(motionOf(note), ['Animation classes in .vue but not in spec: animate-page-enter'])
+    assertEqual(collectSpecViolations(bubble, MOTION_ROOT, { requireSpec: true }), null)
+  })
+  test('a root is flagged when the private part it imports stops rendering a spec row', () => {
+    writeMotion(`${dir}/demo-tip/parts/demo-tip-bubble.vue`, motionVue('flex'))
+    assertEqual(motionOf(tip), ['Animation classes in spec but missing in .vue: animate-fade-in'])
+    assertEqual(motionOf(note), ['Animation classes in spec but missing in .vue: animate-fade-in'])
+  })
+})
+
 group('hook: validate-authoring.mjs comments', () => {
   const write = (rel, content) =>
     runHook('.claude/hooks/validate-authoring.mjs', {
@@ -594,7 +636,10 @@ group('hook: validate-authoring.mjs texture backdrop', () => {
     assertEqual(write('packages/webkit/examples/chart/zz.json', entry).code, 2)
   })
   test('the diagram layout, which paints no texture, passes (exit 0)', () => {
-    assertEqual(write('packages/webkit/examples/chart/zz.vue', example(' variant="diagram"')).code, 0)
+    assertEqual(
+      write('packages/webkit/examples/chart/zz.vue', example(' variant="diagram"')).code,
+      0
+    )
   })
 })
 

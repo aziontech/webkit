@@ -1,16 +1,11 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
-
-  import { useMediaQuery } from '../../../../composables/use-media-query'
-  import Button from '../../../action/button/button.vue'
   import IconButton from '../../../action/icon-button/icon-button.vue'
-  import Input from '../../../input/input/input.vue'
-  import Badge from '../../badge/badge.vue'
   import Tag from '../../tag/tag.vue'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import EventsSearchBar from '../parts/events-search-bar.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'RealTimeEventsLogFragment' })
 
@@ -22,9 +17,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const LEVEL_SEVERITY: Record<string, 'danger' | 'warning' | 'info' | 'neutral'> = {
     Error: 'danger',
@@ -112,45 +104,12 @@
     { ...OPENED, cursor: DOWNLOAD, exporting: true, forward: 200, back: 160 }
   ]
 
-  const LAST = FRAMES.length - 1
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-
-  const frame = computed(() => FRAMES[step.value])
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
+  const { frame } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
+  })
 
   const selected = (index: number) => index === 0 && frame.value.selected
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
 
   const BUTTON_RING_CLASS =
     'inline-flex shrink-0 rounded-(--shape-button) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance ' +
@@ -192,139 +151,103 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    fade="bottom"
+  <MockupFragment
     class="[--console-mockup-fade-start:70%]"
-    :chrome="false"
     :active="active"
     :width="480"
     :mobile-width="420"
+    stage-class="flex flex-col gap-(--spacing-sm) py-(--spacing-xs)"
+    :cursor="frame.cursor"
+    cursor-name="Jordan"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative flex flex-col gap-(--spacing-sm) py-(--spacing-xs)"
-    >
-      <ConsoleMockupShellItem :order="0">
-        <div class="flex items-center gap-(--spacing-xs)">
-          <span class="relative shrink-0">
-            <Button
-              label="Filter"
-              variant="outline"
-              size="medium"
-              icon="az az-filter"
-            />
-            <Badge
-              label="1"
-              variant="primary"
-              size="small"
-              aria-hidden="true"
-              class="pointer-events-none absolute -top-2 -end-2 min-w-5"
-            />
-          </span>
-          <Input
-            model-value=""
-            size="medium"
-            placeholder="Search events, hosts, paths or addresses"
-            aria-label="Search events"
-            class="min-w-0 grow"
-          >
-            <template #leading>
-              <i
-                class="az az-search"
-                aria-hidden="true"
-              />
-            </template>
-          </Input>
+    <ConsoleMockupShellItem :order="0">
+      <EventsSearchBar
+        filter-label="Filter"
+        placeholder="Search events, hosts, paths or addresses"
+        aria-label="Search events"
+      >
+        <IconButton
+          icon="az az-refresh"
+          variant="outline"
+          size="medium"
+          ariaLabel="Refresh"
+        />
+        <span
+          data-cursor="download"
+          :data-pressed="frame.exporting || null"
+          :class="BUTTON_RING_CLASS"
+        >
           <IconButton
-            icon="az az-refresh"
+            icon="az az-download"
             variant="outline"
             size="medium"
-            ariaLabel="Refresh"
+            ariaLabel="Download CSV"
           />
+        </span>
+      </EventsSearchBar>
+    </ConsoleMockupShellItem>
+
+    <ConsoleMockupShellItem :order="1">
+      <div
+        class="grid grid-cols-[auto_auto_auto_auto_minmax(0,1fr)] border-t border-(--border-default)"
+      >
+        <span class="flex h-9 items-center border-b border-(--border-default) px-(--spacing-xs)">
+          <span class="sr-only">Open the event document</span>
+        </span>
+        <span
+          v-for="heading in ['Time', 'Level', 'Source', 'Event']"
+          :key="heading"
+          class="flex h-9 items-center border-b border-(--border-default) px-(--spacing-xs) text-label-sm text-(--text-muted)"
+        >
+          {{ heading }}
+        </span>
+
+        <template
+          v-for="(event, index) in EVENTS"
+          :key="event.time"
+        >
           <span
-            data-cursor="download"
-            :data-pressed="frame.exporting || null"
-            :class="BUTTON_RING_CLASS"
+            :data-selected="selected(index) || null"
+            :data-cursor="`row-${index}`"
+            :class="EXPAND_CELL_CLASS"
           >
-            <IconButton
-              icon="az az-download"
-              variant="outline"
-              size="medium"
-              ariaLabel="Download CSV"
+            <i
+              :data-state="selected(index) ? 'open' : 'closed'"
+              :class="EXPAND_CHEVRON_CLASS"
+              aria-hidden="true"
             />
           </span>
-        </div>
-      </ConsoleMockupShellItem>
-
-      <ConsoleMockupShellItem :order="1">
-        <div
-          class="grid grid-cols-[auto_auto_auto_auto_minmax(0,1fr)] border-t border-(--border-default)"
-        >
-          <span class="flex h-9 items-center border-b border-(--border-default) px-(--spacing-xs)">
-            <span class="sr-only">Open the event document</span>
+          <span
+            :data-selected="selected(index) || null"
+            :class="TIME_CELL_CLASS"
+          >
+            {{ event.time }}
           </span>
           <span
-            v-for="heading in ['Time', 'Level', 'Source', 'Event']"
-            :key="heading"
-            class="flex h-9 items-center border-b border-(--border-default) px-(--spacing-xs) text-label-sm text-(--text-muted)"
+            :data-selected="selected(index) || null"
+            :class="LEVEL_CELL_CLASS"
           >
-            {{ heading }}
+            <Tag
+              :label="event.level"
+              :severity="LEVEL_SEVERITY[event.level]"
+              size="medium"
+            />
           </span>
-
-          <template
-            v-for="(event, index) in EVENTS"
-            :key="event.time"
+          <span
+            :data-selected="selected(index) || null"
+            :class="SOURCE_CELL_CLASS"
           >
-            <span
-              :data-selected="selected(index) || null"
-              :data-cursor="`row-${index}`"
-              :class="EXPAND_CELL_CLASS"
-            >
-              <i
-                :data-state="selected(index) ? 'open' : 'closed'"
-                :class="EXPAND_CHEVRON_CLASS"
-                aria-hidden="true"
-              />
-            </span>
-            <span
-              :data-selected="selected(index) || null"
-              :class="TIME_CELL_CLASS"
-            >
-              {{ event.time }}
-            </span>
-            <span
-              :data-selected="selected(index) || null"
-              :class="LEVEL_CELL_CLASS"
-            >
-              <Tag
-                :label="event.level"
-                :severity="LEVEL_SEVERITY[event.level]"
-                size="medium"
-              />
-            </span>
-            <span
-              :data-selected="selected(index) || null"
-              :class="SOURCE_CELL_CLASS"
-            >
-              {{ event.source }}
-            </span>
-            <span
-              :data-selected="selected(index) || null"
-              :class="MESSAGE_CELL_CLASS"
-            >
-              <span class="min-w-0 truncate">{{ event.message }}</span>
-            </span>
-          </template>
-        </div>
-      </ConsoleMockupShellItem>
-
-      <MockupCursor
-        name="Jordan"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
-      />
-    </div>
-  </ConsoleMockupShell>
+            {{ event.source }}
+          </span>
+          <span
+            :data-selected="selected(index) || null"
+            :class="MESSAGE_CELL_CLASS"
+          >
+            <span class="min-w-0 truncate">{{ event.message }}</span>
+          </span>
+        </template>
+      </div>
+    </ConsoleMockupShellItem>
+  </MockupFragment>
 </template>

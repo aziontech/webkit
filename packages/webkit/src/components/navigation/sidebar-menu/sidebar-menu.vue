@@ -13,6 +13,7 @@
   } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
@@ -90,6 +91,7 @@
   const motion = ref<SidebarMenuMotion>('none')
   const leaving = ref<string[]>([])
   const backEl = shallowRef<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
   const levelHostEl = shallowRef<globalThis.HTMLElement | null>(null)
   const backHostEl = shallowRef<globalThis.HTMLElement | null>(null)
 
@@ -203,6 +205,8 @@
     pop()
   }
 
+  useElementListener(rootEl, 'keydown', onKeydown)
+
   const renderNode = (node: SidebarMenuNode): VNode => {
     const children = node.children ?? []
     const isDrill = (node.type ?? 'inline') === 'drill'
@@ -270,9 +274,9 @@
     v-bind="$attrs"
     :role="role"
     :aria-label="ariaLabelAttr"
+    ref="rootEl"
     :data-testid="testId"
     :class="rootClass"
-    @keydown="onKeydown"
   >
     <slot />
     <component

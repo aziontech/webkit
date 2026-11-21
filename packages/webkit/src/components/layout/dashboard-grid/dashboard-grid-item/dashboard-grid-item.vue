@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, onScopeDispose, provide, ref, useAttrs } from 'vue'
 
+  import { useElementListener } from '../../../../composables/use-element-listener'
   import { useDashboardGridContext } from '../composables/use-dashboard-grid-context'
   import {
     DashboardGridItemInjectionKey,
@@ -89,6 +90,10 @@
     board.drop(event, props.itemId)
   }
 
+  useElementListener(rootEl, 'dragover', onDragover)
+  useElementListener(rootEl, 'dragleave', onDragleave)
+  useElementListener(rootEl, 'drop', onDrop)
+
   provide(DashboardGridItemInjectionKey, {
     id: props.itemId,
     editing: board.editing,
@@ -130,9 +135,6 @@
     :data-over="over || null"
     :style="sizeVars"
     :class="ROOT_CLASS"
-    @dragover="onDragover"
-    @dragleave="onDragleave"
-    @drop="onDrop"
   >
     <slot />
   </li>

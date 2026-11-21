@@ -3,6 +3,8 @@
   import { computed, onMounted, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
   import { useDirection } from '../../../composables/use-direction'
+  import { useElementListener } from '../../../composables/use-element-listener'
+  import { usePointerDrag } from '../../../composables/use-pointer-drag'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
@@ -203,39 +205,24 @@
     splitSize.value = clamp(size.value + delta)
   }
 
-  const resizing = ref(false)
-  let stopDrag: (() => void) | null = null
+  useElementListener(separatorEl, 'keydown', nudge)
+
+  const { dragging: resizing, startDrag } = usePointerDrag()
 
   const startResize = (event: globalThis.PointerEvent) => {
     const side = position.value === 'side'
     const origin = side ? event.clientX : event.clientY
     const start = size.value
-    resizing.value = true
-    separatorEl.value?.setPointerCapture?.(event.pointerId)
-    globalThis.document.body.style.userSelect = 'none'
 
-    const onMove = (moveEvent: globalThis.PointerEvent) => {
-      const physical = (side ? moveEvent.clientX : moveEvent.clientY) - origin
-      const delta = side && dir.value === 'rtl' ? physical : -physical
-      splitSize.value = clamp(start + delta)
-    }
-
-    stopDrag = () => {
-      resizing.value = false
-      globalThis.document.body.style.removeProperty('user-select')
-      globalThis.window.removeEventListener('pointermove', onMove)
-      globalThis.window.removeEventListener('pointerup', stopDrag as () => void)
-      globalThis.window.removeEventListener('pointercancel', stopDrag as () => void)
-      stopDrag = null
-    }
-
-    globalThis.window.addEventListener('pointermove', onMove)
-    globalThis.window.addEventListener('pointerup', stopDrag)
-    globalThis.window.addEventListener('pointercancel', stopDrag)
-    event.preventDefault()
+    startDrag(event, {
+      captureEl: separatorEl.value,
+      onMove: (moveEvent) => {
+        const physical = (side ? moveEvent.clientX : moveEvent.clientY) - origin
+        const delta = side && dir.value === 'rtl' ? physical : -physical
+        splitSize.value = clamp(start + delta)
+      }
+    })
   }
-
-  onScopeDispose(() => stopDrag?.())
 
   interface Stored {
     navigationOpen?: boolean
@@ -395,7 +382,6 @@
               :data-resizing="resizing || null"
               :class="SPLIT_SEPARATOR_ROW_CLASS"
               @pointerdown="startResize"
-              @keydown="nudge"
             />
             <div
               class="flex h-(--spacing-2xl) shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md)"
@@ -457,7 +443,6 @@
             :data-resizing="resizing || null"
             :class="SPLIT_SEPARATOR_COLUMN_CLASS"
             @pointerdown="startResize"
-            @keydown="nudge"
           />
           <div
             class="flex h-(--spacing-2xl) shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md)"

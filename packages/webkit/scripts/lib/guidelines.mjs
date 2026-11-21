@@ -97,6 +97,12 @@ export function primaryComponents(sfc) {
   ]
 }
 
+export function partSfcs(block) {
+  return Object.entries(block.files || {})
+    .filter(([file]) => file.endsWith('.vue'))
+    .map(([, sfc]) => sfc)
+}
+
 export function checkGuidelines(id, block) {
   const errors = []
   const file = `blocks/${id}/${GUIDELINE_FILE}`
@@ -109,7 +115,7 @@ export function checkGuidelines(id, block) {
     else if (!g.sections[name]) errors.push(`${file}: section "## ${name}" is empty`)
   }
   const imported = primaryComponents(block.sfc)
-  const importedSet = new Set(imported)
+  const importedSet = new Set([...imported, ...partSfcs(block).flatMap(primaryComponents)])
   const named = new Set()
   g.buildingBlocks.forEach((b, i) => {
     const expected = String.fromCharCode(65 + i)
@@ -123,7 +129,7 @@ export function checkGuidelines(id, block) {
       named.add(c)
       if (!importedSet.has(c))
         errors.push(
-          `${file}: building block "${b.letter}. ${b.title}" names \`${c}\`, which ${block.source} does not import`
+          `${file}: building block "${b.letter}. ${b.title}" names \`${c}\`, which neither ${block.source} nor one of its parts imports`
         )
     }
   })

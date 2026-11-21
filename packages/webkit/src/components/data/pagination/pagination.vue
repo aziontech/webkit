@@ -156,6 +156,7 @@
     </div>
     <div class="flex flex-auto flex-wrap items-center justify-end gap-(--spacing-xs)">
       <div
+        role="presentation"
         class="inline-flex items-center rounded-(--shape-control) border-(length:--border-width-default) border-solid border-(--border-default)"
         @keydown="onControlsKeydown"
       >

@@ -9,7 +9,9 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
+  import { onBeforeUnmount, reactive, ref, watch } from 'vue'
+
+  import { usePagedList } from '../composables/use-paged-list'
 
   interface PickerOption {
     value: string
@@ -68,72 +70,29 @@
     }
   ]
   const projectName = 'web-app'
-  const PAGE_SIZE = 5
   const wireWidths = ['62%', '48%', '70%', '54%', '44%']
   const wireSubWidths = ['84%', '66%', '78%', '58%', '72%']
 
   const usePicker = (options: PickerOption[], noun: string, initial: PickerInitial = {}) => {
-    const query = ref('')
     const chosen = ref(initial.chosen ?? '')
     const message = ref(initial.message ?? '')
-    const shown = ref(PAGE_SIZE)
     const loading = ref(initial.loading ?? false)
     let timer: ReturnType<typeof setTimeout> | undefined
     onBeforeUnmount(() => clearTimeout(timer))
 
-    const chosenIndex = options.findIndex((option) => option.value === chosen.value)
-    if (chosenIndex >= PAGE_SIZE) shown.value = Math.ceil((chosenIndex + 1) / PAGE_SIZE) * PAGE_SIZE
-
-    const paged = computed(() => options.length > PAGE_SIZE)
-    const matches = computed(() => {
-      const text = query.value.trim().toLowerCase()
-      if (!text) return options
-      return options.filter(
-        (option) =>
-          option.label.toLowerCase().includes(text) ||
-          String(option.description ?? '')
-            .toLowerCase()
-            .includes(text)
-      )
-    })
-    const visible = computed(() => matches.value.slice(0, shown.value))
-    const remaining = computed(() => Math.max(0, matches.value.length - visible.value.length))
-    const nextBatch = computed(() => Math.min(PAGE_SIZE, remaining.value))
-
-    const summary = computed(() => {
-      if (loading.value) return 'Loading ' + nextBatch.value + ' more ' + noun + 's'
-      if (query.value.trim() && !matches.value.length)
-        return 'No ' + noun + ' matches ' + query.value
-      if (remaining.value)
-        return visible.value.length + ' of ' + matches.value.length + ' ' + noun + 's'
-      return query.value.trim()
-        ? matches.value.length + ' of ' + options.length + ' ' + noun + 's'
-        : options.length + ' ' + noun + 's'
-    })
+    const { showMore, ...list } = usePagedList(options, noun, loading, chosen)
 
     const loadMore = () => {
-      if (loading.value || !remaining.value) return
+      if (loading.value || !list.remaining.value) return
       loading.value = true
       clearTimeout(timer)
       timer = setTimeout(() => {
-        shown.value += PAGE_SIZE
+        showMore()
         loading.value = false
       }, 420)
     }
 
-    return reactive({
-      query,
-      chosen,
-      message,
-      loading,
-      paged,
-      matches,
-      visible,
-      remaining,
-      nextBatch,
-      summary,
-      loadMore
-    })
+    return reactive({ ...list, chosen, message, loading, loadMore })
   }
 
   const enabled = ref(true)

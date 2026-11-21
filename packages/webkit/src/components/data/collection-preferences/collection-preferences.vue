@@ -355,10 +355,12 @@
                     class="flex min-h-10 items-center gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) py-(--spacing-2xs)"
                   >
                     <label
+                      :for="`${uid}-column-${column.id}-switch`"
                       :data-locked="locked(column.id) || null"
                       class="flex min-w-0 flex-1 cursor-pointer items-center gap-(--spacing-sm) text-body-sm text-(--text-default) data-[locked]:cursor-default data-[locked]:text-(--text-muted)"
                     >
                       <Switch
+                        :id="`${uid}-column-${column.id}-switch`"
                         :model-value="locked(column.id) || column.visible"
                         :disabled="locked(column.id)"
                         @update:model-value="(value: boolean) => setVisible(column.id, value)"
@@ -398,10 +400,14 @@
 
               <label
                 v-else-if="section === 'wrap-lines'"
+                :for="`${uid}-wrap-lines`"
                 :data-testid="`${testId}__wrap-lines`"
                 class="flex cursor-pointer items-start gap-(--spacing-sm)"
               >
-                <Switch v-model="draftWrap" />
+                <Switch
+                  :id="`${uid}-wrap-lines`"
+                  v-model="draftWrap"
+                />
                 <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                   <span class="text-label-md text-(--text-default)">{{
                     t('collectionPreferences.wrapLines')
@@ -414,10 +420,14 @@
 
               <label
                 v-else-if="section === 'striped'"
+                :for="`${uid}-striped`"
                 :data-testid="`${testId}__striped`"
                 class="flex cursor-pointer items-start gap-(--spacing-sm)"
               >
-                <Switch v-model="draftStriped" />
+                <Switch
+                  :id="`${uid}-striped`"
+                  v-model="draftStriped"
+                />
                 <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                   <span class="text-label-md text-(--text-default)">{{
                     t('collectionPreferences.striped')

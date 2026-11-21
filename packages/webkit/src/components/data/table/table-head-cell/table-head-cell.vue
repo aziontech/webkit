@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs, useId } from 'vue'
+  import { computed, inject, ref, useAttrs, useId } from 'vue'
 
+  import { useElementListener } from '../../../../composables/use-element-listener'
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import { TableRowGroupInjectionKey, type TableSortDirection } from '../injection-key'
@@ -71,6 +72,7 @@
 
   const labelId = useId()
   const sortById = useId()
+  const rootEl = ref<HTMLElement | null>(null)
 
   const growAttr = computed<number | null>(() =>
     props.type === 'checkbox' || props.type === 'action'
@@ -90,6 +92,8 @@
     if (!props.sortable) return
     onSort(props.sortDirection === 'ascending' ? 'descending' : 'ascending')
   }
+
+  useElementListener(rootEl, 'click', toggleSort)
 
   const ROOT_CLASS =
     'group/head relative flex h-11 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm) ' +
@@ -126,6 +130,7 @@
 
 <template>
   <div
+    ref="rootEl"
     v-bind="$attrs"
     role="columnheader"
     :data-testid="testId"
@@ -137,9 +142,6 @@
     :data-frozen="frozen ?? null"
     :data-compact="compact || null"
     :aria-sort="ariaSort"
-    @click="toggleSort"
-    @keydown.enter.prevent="toggleSort"
-    @keydown.space.prevent="toggleSort"
     :class="ROOT_CLASS"
   >
     <slot v-if="type === 'checkbox' || type === 'action'" />
@@ -170,9 +172,7 @@
     </template>
     <span
       v-if="resizable"
-      role="separator"
-      aria-orientation="vertical"
-      :aria-label="t('tableHeadCell.resize')"
+      aria-hidden="true"
       :data-resizing="resizing || null"
       :class="RESIZE_CLASS"
       @mousedown.stop="resizeHandler"

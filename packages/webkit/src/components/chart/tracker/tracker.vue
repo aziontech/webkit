@@ -3,6 +3,7 @@
   import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -44,6 +45,7 @@
   const attrs = useAttrs()
   const dir = useDirection()
   const { t } = useTranslate({ tracker: en.tracker })
+  const rootEl = ref<globalThis.HTMLDivElement | null>(null)
   const stripEl = ref<globalThis.HTMLDivElement | null>(null)
   const { width: stripWidth } = useElementSize(stripEl)
 
@@ -127,6 +129,8 @@
     event.preventDefault()
   }
 
+  useElementListener(rootEl, 'keydown', onKeydown)
+
   function onPointermove(event: globalThis.PointerEvent) {
     const strip = stripEl.value
     if (!strip || !count.value) return
@@ -162,6 +166,7 @@
 
 <template>
   <div
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     data-plain-ground
@@ -174,7 +179,6 @@
     :data-error="hasError || null"
     tabindex="0"
     class="relative w-full min-w-0 rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)"
-    @keydown="onKeydown"
   >
     <Skeleton
       v-if="loading"

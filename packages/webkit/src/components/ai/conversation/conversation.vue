@@ -10,6 +10,7 @@
     watch
   } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
@@ -110,6 +111,8 @@
     if (intentTimer) clearTimeout(intentTimer)
     intentTimer = setTimeout(() => (intent = false), 400)
   }
+
+  useElementListener(viewportEl, 'keydown', markIntent)
 
   function firstMessage(): Element | null {
     const items = contentEl.value?.children
@@ -306,7 +309,6 @@
       @wheel.passive="markIntent"
       @touchmove.passive="markIntent"
       @pointerdown="markIntent"
-      @keydown="markIntent"
     >
       <div
         ref="contentEl"

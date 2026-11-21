@@ -1,14 +1,13 @@
 <script setup lang="ts">
   import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
 
+  import { useLoadMore } from '../../../composables/use-load-more'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
-  import Button from '../../action/button/button.vue'
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
   import Avatar from '../../content/avatar/avatar.vue'
   import type { ThirdPartyLogoMark } from '../../content/third-party-logo/third-party-logo.vue'
-  import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Input from '../../input/input/input.vue'
   import Select from '../../input/select/select.vue'
   import SelectContent from '../../input/select/select-content/select-content.vue'
@@ -16,6 +15,8 @@
   import SelectTrigger from '../../input/select/select-trigger/select-trigger.vue'
   import Module from '../../layout/module/module.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import ArticleIndexSectionEmpty from './parts/article-index-section-empty.vue'
+  import ArticleIndexSectionMore from './parts/article-index-section-more.vue'
 
   defineOptions({
     name: 'ArticleIndexSection',
@@ -160,8 +161,6 @@
 
   const optionQuery = ref<Record<string, string>>({})
 
-  const pages = ref(1)
-
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'article-index-section'
   )
@@ -215,17 +214,11 @@
     (filtering.value ? props.items : props.items.slice(props.leading)).filter(keeps)
   )
 
-  const paged = computed(() => props.moreLabel.length > 0 && props.pageSize > 0)
-
-  const visible = computed(() =>
-    paged.value ? matches.value.slice(0, pages.value * props.pageSize) : matches.value
+  const { visible, hasMore, loadMore, resetPages } = useLoadMore(matches, () =>
+    props.moreLabel ? props.pageSize : 0
   )
 
-  const hasMore = computed(() => paged.value && visible.value.length < matches.value.length)
-
-  watch([category, query, selection], () => {
-    pages.value = 1
-  })
+  watch([category, query, selection], resetPages)
 
   onMounted(async () => {
     if (faceted.value || !props.categoryParam) return
@@ -504,49 +497,21 @@
           </ul>
         </RegistrationFrame>
 
-        <RegistrationFrame
+        <ArticleIndexSectionMore
           v-if="hasMore"
-          flush
-          borders="y"
-          marks="bottom"
-        >
-          <div class="flex justify-center p-(--spacing-xl)">
-            <Button
-              :label="moreLabel"
-              variant="outline"
-              size="large"
-              @click="pages += 1"
-            />
-          </div>
-        </RegistrationFrame>
+          :label="moreLabel"
+          @more="loadMore"
+        />
       </template>
 
-      <RegistrationFrame
+      <ArticleIndexSectionEmpty
         v-else-if="emptyTitle"
         key="empty"
-        flush
-        borders="y"
-        marks="bottom"
-      >
-        <EmptyState
-          :title="emptyTitle"
-          :description="emptyDescription"
-          icon="az az-search"
-          class="p-(--spacing-2xl)"
-        >
-          <template
-            v-if="emptyActionLabel"
-            #actions
-          >
-            <Button
-              :label="emptyActionLabel"
-              variant="secondary"
-              size="large"
-              @click="clearFilters"
-            />
-          </template>
-        </EmptyState>
-      </RegistrationFrame>
+        :title="emptyTitle"
+        :description="emptyDescription"
+        :action-label="emptyActionLabel"
+        @clear="clearFilters"
+      />
     </Module>
   </section>
 </template>

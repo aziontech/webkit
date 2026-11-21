@@ -2,6 +2,7 @@
   import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useScrollEdges } from '../../../composables/use-scroll-edges'
   import { intlLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -146,6 +147,7 @@
     () => offset.value * SELECT_WIDTH + (props.frozenFirstColumn ? widthAt(offset.value) : 0)
   )
   const viewportEl = ref<HTMLElement | null>(null)
+  const gridEl = ref<HTMLElement | null>(null)
   const {
     start: overflowStart,
     end: overflowEnd,
@@ -561,6 +563,32 @@
     }
     active.value = { row: HEADER, col }
   }
+
+  const cellOf = (target: EventTarget | null): { row: number; col: number } | null => {
+    const cell =
+      target instanceof Element ? target.closest('[role="gridcell"], [role="columnheader"]') : null
+    const rowIndex = Number(cell?.parentElement?.getAttribute('aria-rowindex'))
+    const colIndex = Number(cell?.getAttribute('aria-colindex'))
+    if (!cell || !rowIndex || !colIndex) return null
+    return { row: rowIndex - 2, col: colIndex - 1 }
+  }
+
+  const onGridKeydown = (event: KeyboardEvent): void => {
+    const cell = cellOf(event.target)
+    if (!cell) return
+    const column = columnAt(cell.col)
+    if (column && event.target instanceof Element && event.target.matches('[role="separator"]'))
+      return onResizeKeydown(event, column, cell.col)
+    onCellKeydown(event, cell.row, cell.col)
+  }
+
+  const onGridDblclick = (event: MouseEvent): void => {
+    const cell = cellOf(event.target)
+    if (cell) startEdit(event, cell.row, cell.col)
+  }
+
+  useElementListener(gridEl, 'keydown', onGridKeydown)
+  useElementListener(gridEl, 'dblclick', onGridDblclick)
   onBeforeUnmount(() => stopResize?.())
 
   const ROOT_CLASS =
@@ -657,6 +685,7 @@
         @scroll.passive="measureEdges"
       >
         <div
+          ref="gridEl"
           v-bind="gridAttrs"
           role="grid"
           :aria-label="ariaLabel || undefined"
@@ -691,7 +720,6 @@
               :style="{ width: `${widthAt(col - 1)}px`, ...frozenStyle(col - 1) }"
               :class="SELECT_ALL_CLASS"
               @focus="onCellFocus(HEADER, col - 1)"
-              @keydown="(event) => onCellKeydown(event, HEADER, col - 1)"
               @pointerdown="(event) => onCellPointerdown(event, HEADER, col - 1)"
             >
               <Checkbox
@@ -721,9 +749,6 @@
                   :data-testid="`${testId}__resize-${columnAt(col - 1)?.id}`"
                   :class="RESIZE_HANDLE_CLASS"
                   @pointerdown="(event) => startResize(event, columnAt(col - 1) as DataGridColumn)"
-                  @keydown="
-                    (event) => onResizeKeydown(event, columnAt(col - 1) as DataGridColumn, col - 1)
-                  "
                 />
               </template>
             </div>
@@ -771,9 +796,7 @@
               :style="{ width: `${widthAt(col - 1)}px`, ...frozenStyle(col - 1) }"
               :class="CELL_CLASS"
               @focus="onCellFocus(r, col - 1)"
-              @keydown="(event) => onCellKeydown(event, r, col - 1)"
               @pointerdown="(event) => onCellPointerdown(event, r, col - 1)"
-              @dblclick="(event) => startEdit(event, r, col - 1)"
             >
               <Checkbox
                 v-if="col - 1 < offset"

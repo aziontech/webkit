@@ -10,6 +10,11 @@
     last.value = `${value} · ${target.value}`
   }
 
+  const onContextmenu = (event) => {
+    const row = event.target.closest?.('[data-resource]')
+    if (row) target.value = row.dataset.resource
+  }
+
   const RESOURCE_ROW_CLASS =
     'flex h-10 items-center border-b border-(--border-default) px-(--spacing-md) text-body-sm text-(--text-default) outline-none ' +
     'last:border-b-0 focus-visible:ring-2 focus-visible:ring-(--ring-color)'
@@ -21,7 +26,7 @@
       :aria-label="target ? `Actions for ${target}` : 'Resource actions'"
       @select="onSelect"
     >
-      <ContextMenu.Trigger>
+      <ContextMenu.Trigger @contextmenu="onContextmenu">
         <ul
           class="flex flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
         >
@@ -29,8 +34,8 @@
             v-for="name in resources"
             :key="name"
             tabindex="0"
+            :data-resource="name"
             :class="RESOURCE_ROW_CLASS"
-            @contextmenu="target = name"
             @focus="target = name"
           >
             {{ name }}

@@ -1,11 +1,6 @@
 <script setup lang="ts">
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -18,17 +13,12 @@
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
-  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, onMounted, reactive, ref } from 'vue'
 
-  interface FormErrors {
-    name: string
-    nameKind: 'helper' | 'invalid' | 'required'
-    domain: string
-    domainKind: 'helper' | 'invalid' | 'required'
-  }
+  import { type CreatePageDomainErrors, validateDomainForm } from '../domain-validation'
+  import CreationHeader from '../parts/creation-header.vue'
+  import DiscardDialog from '../parts/discard-dialog.vue'
+  import { useCreateForm } from '../use-create-form'
 
   interface ZoneRecord {
     name: string
@@ -45,7 +35,7 @@
   const breadcrumb = [{ label: 'Edge DNS', href: '/edge-dns' }, { label: 'Create Zone' }]
 
   const form = reactive({ name: 'example.com', domain: 'example.com', dnssec: false, active: true })
-  const errors = reactive<FormErrors>({
+  const errors = reactive<CreatePageDomainErrors>({
     name: '',
     nameKind: 'required',
     domain: '',
@@ -181,97 +171,22 @@
     )
   }
 
-  const NAME_MAX = 50
-  const DOMAIN_PATTERN = /^(?=.{4,253}$)((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$/
-
-  const validate = () => {
-    const name = form.name.trim()
-    if (!name) {
-      errors.nameKind = 'required'
-      errors.name = 'This field is required.'
-    } else if (name.length > NAME_MAX) {
-      errors.nameKind = 'invalid'
-      errors.name = 'Use at most ' + NAME_MAX + ' characters.'
-    } else {
-      errors.name = ''
-    }
-
-    const domain = form.domain.trim()
-    if (!domain) {
-      errors.domainKind = 'required'
-      errors.domain = 'This field is required.'
-    } else if (!DOMAIN_PATTERN.test(domain)) {
-      errors.domainKind = 'invalid'
-      errors.domain = 'Enter a valid domain name. Example: example.com.'
-    } else {
-      errors.domain = ''
-    }
-
-    return !errors.name && !errors.domain
-  }
-
-  const submitting = ref(false)
-
-  const guard = useUnsavedChanges(() => ({ form, records: records.value }), {
-    enabled: () => !submitting.value
-  })
-  const discardDialog = guard.dialogProps
-  const discardLabels = guard.labels
-
-  const onLeave = () => guard.confirmLeave()
-
-  useEscapeToCancel(onLeave, { enabled: () => !submitting.value })
-
-  const formEl = ref<HTMLFormElement | null>(null)
   const nameEl = ref<InstanceType<typeof Input> | null>(null)
 
-  useShortcuts({
-    keys: 'meta+enter',
-    label: 'Create zone',
-    group: 'Page',
-    element: formEl,
-    when: () => !submitting.value,
-    handler: () => formEl.value?.requestSubmit()
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  const { guard, submitting, submitButton, leave, submit } = useCreateForm({
+    source: () => ({ form, records: records.value }),
+    formEl,
+    shortcutLabel: 'Create zone',
+    validate: () => validateDomainForm(form, errors),
+    onCreated: () => toast.success(`${form.domain.trim()} zone created.`),
+    failureTitle: 'Could not create the zone.'
   })
 
   onMounted(() => nameEl.value?.focus())
 
-  const SAVE_FAILURES = 0
-  let failuresLeft = SAVE_FAILURES
-
-  const sendRequest = () =>
-    new Promise<void>((resolve, reject) => {
-      setTimeout(() => {
-        if (failuresLeft > 0) {
-          failuresLeft -= 1
-          reject(new Error('The service did not answer. Check your connection and try again.'))
-          return
-        }
-        resolve()
-      }, 900)
-    })
-
-  const submit = async () => {
-    if (submitting.value || !validate()) return
-    submitting.value = true
-    try {
-      await sendRequest()
-      toast.success(`${form.domain.trim()} zone created.`)
-    } catch (error) {
-      toast.error('Could not create the zone.', {
-        description: error instanceof Error ? error.message : 'Try again.',
-        action: { label: 'Retry', onClick: () => submit() }
-      })
-    } finally {
-      submitting.value = false
-    }
-  }
   const openImport = () => fileEl.value?.click()
-
-  const ACCOUNT_BUTTON_CLASS =
-    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
-    'motion-reduce:transition-none'
 
   const DNSSEC_DESCRIPTION =
     "Signs this zone's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
@@ -279,41 +194,11 @@
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <AppHeader aria-label="Console">
-      <AppHeader.Start>
-        <IconButton
-          icon="az az-chevron-left"
-          aria-label="Back to Edge DNS"
-          variant="outline"
-          size="small"
-          @click="onLeave"
-        />
-        <AppHeader.Brand
-          href="/home"
-          aria-label="Azion home"
-        >
-          <Brand
-            variant="default"
-            size="small"
-          />
-        </AppHeader.Brand>
-        <Breadcrumb :items="breadcrumb" />
-      </AppHeader.Start>
-      <AppHeader.Center />
-      <AppHeader.End>
-        <button
-          type="button"
-          aria-label="Account settings"
-          :class="ACCOUNT_BUTTON_CLASS"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            variant="square"
-          />
-        </button>
-      </AppHeader.End>
-    </AppHeader>
+    <CreationHeader
+      back-label="Back to Edge DNS"
+      :breadcrumb="breadcrumb"
+      @back="leave"
+    />
 
     <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
       <form
@@ -534,14 +419,12 @@
                 label="Cancel"
                 variant="outline"
                 size="medium"
-                @click="onLeave"
+                @click="leave"
               />
               <Button
                 variant="primary"
                 size="medium"
-                type="submit"
-                :loading="submitting"
-                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+                v-bind="submitButton"
               >
                 Save
                 <Kbd
@@ -556,25 +439,6 @@
         </div>
       </form>
     </main>
-    <ConfirmDialog
-      v-bind="discardDialog"
-      data-testid="unsaved-changes-dialog"
-    >
-      <template #actions>
-        <Button
-          :label="discardLabels.keepEditing"
-          variant="ghost"
-          size="medium"
-          data-autofocus
-          @click="guard.keepEditing"
-        />
-        <Button
-          :label="discardLabels.discard"
-          variant="danger"
-          size="medium"
-          @click="guard.discardAndLeave"
-        />
-      </template>
-    </ConfirmDialog>
+    <DiscardDialog :guard="guard" />
   </div>
 </template>

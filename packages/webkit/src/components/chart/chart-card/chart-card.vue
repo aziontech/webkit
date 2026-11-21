@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, provide, readonly, ref, useAttrs, useId } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { DashboardGridItemInjectionKey } from '../../layout/dashboard-grid/injection-key'
   import {
     ChartCardInjectionKey,
@@ -135,6 +136,9 @@
     emit('drag-end', event)
   }
 
+  useElementListener(rootEl, 'dragstart', onDragstart)
+  useElementListener(rootEl, 'dragend', onDragend)
+
   provide(ChartCardInjectionKey, {
     testId: testId.value,
     titleId,
@@ -199,8 +203,6 @@
     :aria-describedby="describedBy"
     :style="sizeVars"
     :class="ROOT_CLASS"
-    @dragstart="onDragstart"
-    @dragend="onDragend"
   >
     <slot />
   </div>

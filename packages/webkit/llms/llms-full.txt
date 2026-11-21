@@ -24900,6 +24900,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
       ref="inputEl"
       type="file"
       multiple
+      aria-label="Browse files"
       class="hidden"
     />
   </div>
@@ -27257,7 +27258,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 
 ## Accessibility
 
-- Root renders as `<header role="banner">` with `aria-label` from `ariaLabel`.
+- Root renders as `<header>`, which is the page banner when it is not nested in `<main>` or a sectioning element; `aria-label` comes from `ariaLabel`.
 - Keyboard map: none on the shell; interactive children supply Tab order.
 - ARIA: landmark only on root. `AppHeader.Brand` with `href` is a native anchor named by `ariaLabel` (locale fallback `appHeader.home`), so the logo link always has an accessible name; without `href` it stays a non-interactive `div`.
 - Brand label: with `href` the visible `label` is `aria-hidden` and the link name says where it goes, product included (`appHeader.productHome`, `Azion Docs home`), so the product is read once and the visible word is inside the name (WCAG 2.5.3); a consumer `aria-label` should keep the product word. Without `href` the label stays readable text after the mark. Spacing is logical (`gap`, `px`), so the label follows the mark in the inline direction under `dir="rtl"`.
@@ -29342,7 +29343,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   control; see Accessibility), `__header`, `__nav`, `__scroll`, `__footer`, `__collapse` (the
   trigger), `__handle` (the drag separator), `__expand` / `__expand-button` (the collapsed
   affordance)
-- A collapsed offcanvas rail carries `inert` + `aria-hidden`, so it holds no tab stops while it is out; an icon rail keeps its rows reachable
+- A collapsed offcanvas rail carries `inert`, which also removes it from the accessibility tree, so it holds no tab stops while it is out; an icon rail keeps its rows reachable
 
 ## Accessibility
 
@@ -29378,7 +29379,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   1 px and the minimum, and reporting the token bound would put the collapsed position outside the
   range the control announces. Without these, `axe` reports `aria-required-attr` and a screen reader
   announces a separator carrying no information at all.
-- A **collapsed rail carries `inert` and `aria-hidden`** — the content is still mounted so its width
+- A **collapsed rail carries `inert`**, which also removes it from the accessibility tree — the content is still mounted so its width
   can animate, and it must not be reachable while it is out of the layout. That is why the control
   that brings it back is a sibling of the rail rather than inside it.
 - The **hidden checkbox that mirrors the collapsed state (`!open`)** (`__collapse-input`) carries `aria-hidden="true"`
@@ -30040,6 +30041,11 @@ with `defineModel`, so their `update:*` events are not hand-declared.
     last.value = `${value} · ${target.value}`
   }
 
+  const onContextmenu = (event) => {
+    const row = event.target.closest?.('[data-resource]')
+    if (row) target.value = row.dataset.resource
+  }
+
   const RESOURCE_ROW_CLASS =
     'flex h-10 items-center border-b border-(--border-default) px-(--spacing-md) text-body-sm text-(--text-default) outline-none ' +
     'last:border-b-0 focus-visible:ring-2 focus-visible:ring-(--ring-color)'
@@ -30051,7 +30057,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
       :aria-label="target ? `Actions for ${target}` : 'Resource actions'"
       @select="onSelect"
     >
-      <ContextMenu.Trigger>
+      <ContextMenu.Trigger @contextmenu="onContextmenu">
         <ul
           class="flex flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
         >
@@ -30059,8 +30065,8 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             v-for="name in resources"
             :key="name"
             tabindex="0"
+            :data-resource="name"
             :class="RESOURCE_ROW_CLASS"
-            @contextmenu="target = name"
             @focus="target = name"
           >
             {{ name }}

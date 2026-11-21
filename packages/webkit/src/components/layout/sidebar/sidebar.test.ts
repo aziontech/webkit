@@ -319,7 +319,6 @@ describe('Sidebar', () => {
 
       const root = getByTestId('sidebar')
       expect(root.getAttribute('data-state')).toBe('closed')
-      expect(root.getAttribute('aria-hidden')).toBe('true')
       expect(root.hasAttribute('inert')).toBe(true)
       expect((getByTestId('sidebar__collapse-input') as HTMLInputElement).checked).toBe(true)
     })
@@ -407,7 +406,6 @@ describe('Sidebar', () => {
 
       expect(rail.style.width).toBe('40px')
       expect(rail.hasAttribute('inert')).toBe(true)
-      expect(rail.getAttribute('aria-hidden')).toBe('true')
       expect(rail.getAttribute('data-state')).toBe('closed')
     })
 

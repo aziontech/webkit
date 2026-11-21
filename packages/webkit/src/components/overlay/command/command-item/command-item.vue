@@ -184,6 +184,7 @@
     @keydown.enter.prevent="!disabled && activate($event)"
     @keydown.space.prevent="!disabled && activate($event)"
     @mouseenter="!disabled && ctx.setActive(value)"
+    @focus="!disabled && ctx.setActive(value)"
   >
     <span
       v-if="$slots['leading']"

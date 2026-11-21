@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="TNullable extends boolean = false">
   import { computed, useAttrs } from 'vue'
 
-  import { useFieldControl } from '../../../composables/use-field-control'
+  import { useFieldAttrs } from '../../../composables/use-field-attrs'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { PASSWORD_MANAGER_IGNORE } from '../../../utils/autofill'
@@ -77,25 +77,13 @@
   const {
     controlId,
     describedBy,
+    passthroughAttrs,
     invalid: isInvalid,
     disabled: isDisabled,
     required: isRequired
-  } = useFieldControl({
-    id: () => attrs['id'] as string | undefined,
-    describedBy: () => attrs['aria-describedby'] as string | undefined,
-    invalid: () => props.invalid,
-    disabled: () => props.disabled,
-    required: () => props.required
-  })
+  } = useFieldAttrs(props)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'number-input')
-
-  const passthroughAttrs = computed(() => {
-    const rest: Record<string, unknown> = { ...attrs }
-    delete rest['class']
-    delete rest['data-testid']
-    return rest
-  })
 
   const isNullable = computed(() => props.nullable !== false)
 

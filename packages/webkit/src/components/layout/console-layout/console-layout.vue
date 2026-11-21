@@ -9,6 +9,7 @@
     nextTick,
     onScopeDispose,
     provide,
+    proxyRefs,
     readonly,
     ref,
     shallowRef,
@@ -21,13 +22,9 @@
   import {
     type AppNavGroup,
     type AppNavItem,
-    matchActiveId,
-    navLeaves,
-    navPaletteGroups,
-    navTrail,
-    toMenuGroups,
     useAppNavigation
   } from '../../../composables/use-app-navigation'
+  import { useAppNavigationMenu } from '../../../composables/use-app-navigation-menu'
   import { useShortcuts } from '../../../composables/use-shortcuts'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -166,8 +163,6 @@
     'account-menu'(): unknown
   }>()
 
-  const { currentPath, hrefOf, follow } = useAppNavigation()
-
   provide(ConsoleLayoutInjectionKey, {
     openSearch: () => {
       searchOpen.value = true
@@ -194,7 +189,6 @@
 
   useShortcuts({ keys: 'meta+k', label: () => t('consoleLayout.searchShortcut') })
 
-  const query = ref('')
   const railWidth = ref<number | null>(null)
   const menuPath = ref<string[]>([])
   const menuExpanded = ref<string[]>([])
@@ -206,15 +200,19 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'console-layout')
 
-  const leaves = computed(
-    () =>
-      new Map(
-        navLeaves(props.navigation.flatMap((group) => group.items)).map((item) => [item.id, item])
-      )
-  )
+  const appNavigation = useAppNavigation()
+  const { currentPath, hrefOf, follow } = appNavigation
 
-  const currentId = computed(
-    () => props.activeId || matchActiveId(props.navigation, currentPath.value, hrefOf)
+  const appMenu = proxyRefs(
+    useAppNavigationMenu(appNavigation, {
+      navigation: () => props.navigation,
+      activeId: () => props.activeId,
+      menuPath,
+      menuExpanded,
+      searchOpen,
+      valuePrefix: NAV_VALUE,
+      emit
+    })
   )
 
   const accountTriggerLabel = computed(() => {
@@ -223,10 +221,6 @@
       ? t('consoleLayout.accountMenu')
       : t('consoleLayout.accountMenuFor', { initials })
   })
-
-  const menuGroups = computed(() => toMenuGroups(props.navigation, hrefOf))
-
-  const paletteGroups = computed(() => navPaletteGroups(props.navigation))
 
   const pageTrail = computed(() => trails.value[trails.value.length - 1] ?? null)
 
@@ -258,29 +252,10 @@
       h('li', { key: `control-${index}`, class: 'inline-flex min-w-0 items-center' }, [node])
     ])
 
-  watch(
-    currentId,
-    (id) => {
-      const ancestors = navTrail(props.navigation, id).slice(0, -1)
-      menuPath.value = ancestors
-        .filter((item) => item.groups || item.type === 'drill')
-        .map((item) => item.id)
-      const inline = ancestors
-        .filter((item) => item.children && !item.groups && item.type !== 'drill')
-        .map((item) => item.id)
-      menuExpanded.value = [...new Set([...menuExpanded.value, ...inline])]
-    },
-    { immediate: true }
-  )
-
-  watch([currentId, navEl], () => revealActive(), { flush: 'post' })
+  watch([() => appMenu.currentId, navEl], () => revealActive(), { flush: 'post' })
 
   watch(currentPath, (_next, previous) => {
     if (previous) pageKey.value += 1
-  })
-
-  watch(searchOpen, () => {
-    query.value = ''
   })
 
   if (dev) {
@@ -404,22 +379,14 @@
     emit('account-select', event, value)
   }
 
-  const activate = (
-    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-    item: ConsoleLayoutNavItem
-  ) => {
-    emit('navigate', event, item)
-    follow(event, item)
-  }
-
   const onMenuNavigate = (
     event: globalThis.MouseEvent,
     node: SidebarMenuNode,
     closeNavigation: () => void
   ) => {
-    const item = leaves.value.get(node.id)
+    const item = appMenu.leaves.get(node.id)
     if (!item || node.groups || node.children) return
-    activate(event, item)
+    appMenu.activate(event, item)
     closeNavigation()
   }
 
@@ -430,27 +397,6 @@
 
   const onPageCrumbClick = (event: globalThis.MouseEvent, crumb: BreadcrumbItemData) => {
     if (hrefOf(crumb)) follow(event, crumb)
-  }
-
-  const onPaletteSelect = (
-    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-    value: string | number
-  ) => {
-    const key = String(value)
-    if (key.startsWith(NAV_VALUE)) {
-      const item = leaves.value.get(key.slice(NAV_VALUE.length))
-      if (item) activate(event, item)
-      return
-    }
-    emit('search-select', event, value)
-  }
-
-  const onQuery = (value: unknown) => {
-    query.value = typeof value === 'string' ? value : ''
-  }
-
-  const openSearch = () => {
-    searchOpen.value = true
   }
 
   const DRAWER_HOME_LINK_CLASS =
@@ -532,8 +478,8 @@
             <SidebarMenu
               v-model:path="menuPath"
               v-model:open-keys="menuExpanded"
-              :groups="menuGroups"
-              :active-id="currentId"
+              :groups="appMenu.menuGroups"
+              :active-id="appMenu.currentId"
               role="presentation"
               @navigate="(event, node) => onMenuNavigate(event, node, closeNavigation)"
             >
@@ -673,7 +619,7 @@
               <SearchTrigger
                 collapsible
                 :data-testid="`${testId}__search`"
-                @open="openSearch"
+                @open="appMenu.openSearch"
               />
               <slot
                 name="actions"
@@ -741,19 +687,19 @@
 
     <Command
       v-model:open="searchOpen"
-      @select="onPaletteSelect"
+      @select="appMenu.onPaletteSelect"
     >
       <CommandInput
         :placeholder="searchPlaceholder || t('consoleLayout.searchPlaceholder')"
-        @update:model-value="onQuery"
+        @update:model-value="appMenu.onQuery"
       />
       <CommandList>
         <slot
           name="search"
-          :query="query"
+          :query="appMenu.query"
         />
         <CommandGroup
-          v-for="group in paletteGroups"
+          v-for="group in appMenu.paletteGroups"
           :key="group.key"
           :label="group.heading || t('consoleLayout.pages')"
         >

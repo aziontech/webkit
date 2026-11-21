@@ -53,7 +53,6 @@
 <template>
   <header
     v-bind="$attrs"
-    role="banner"
     :aria-label="ariaLabel || t('appHeader.label')"
     :data-testid="testId"
     :data-variant="variant"

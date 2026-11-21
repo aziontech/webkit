@@ -83,7 +83,7 @@
     "name": "Default",
     "file": "create-drawer.vue"
   },
-  "files": ["sample.ts"],
+  "files": ["sample.ts", "composables/use-drawer-guard.ts", "parts/unsaved-changes-dialog.vue"],
   "variants": [
     {
       "name": "AddEnvironment",

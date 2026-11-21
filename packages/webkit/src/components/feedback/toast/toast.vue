@@ -5,6 +5,7 @@
     nextTick,
     onBeforeUnmount,
     onMounted,
+    onScopeDispose,
     provide,
     ref,
     useAttrs,
@@ -278,10 +279,39 @@
   }
 
   const regionEls = new Map<ToastPosition, HTMLElement>()
-  const setRegionEl = (position: ToastPosition, el: unknown) => {
-    if (el instanceof HTMLElement) regionEls.set(position, el)
-    else regionEls.delete(position)
+  const regionCleanups = new Map<ToastPosition, () => void>()
+
+  const listenToRegion = (position: ToastPosition, el: HTMLElement) => {
+    const onMouseenter = () => onEnter(position)
+    const onRegionFocusin = () => onFocusin(position)
+    el.addEventListener('mouseenter', onMouseenter)
+    el.addEventListener('mouseleave', onLeave)
+    el.addEventListener('focusin', onRegionFocusin)
+    el.addEventListener('focusout', onFocusout)
+    el.addEventListener('keydown', onRegionKeydown)
+    return () => {
+      el.removeEventListener('mouseenter', onMouseenter)
+      el.removeEventListener('mouseleave', onLeave)
+      el.removeEventListener('focusin', onRegionFocusin)
+      el.removeEventListener('focusout', onFocusout)
+      el.removeEventListener('keydown', onRegionKeydown)
+    }
   }
+
+  const setRegionEl = (position: ToastPosition, el: unknown) => {
+    if (el instanceof HTMLElement && regionEls.get(position) === el) return
+    regionCleanups.get(position)?.()
+    regionCleanups.delete(position)
+    if (el instanceof HTMLElement) {
+      regionEls.set(position, el)
+      regionCleanups.set(position, listenToRegion(position, el))
+    } else regionEls.delete(position)
+  }
+
+  onScopeDispose(() => {
+    regionCleanups.forEach((cleanup) => cleanup())
+    regionCleanups.clear()
+  })
 
   let returnFocus: HTMLElement | null = null
 
@@ -470,11 +500,6 @@
         :ref="(el) => setRegionEl(region.position, el)"
         :style="regionStyle(region)"
         class="transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-        @mouseenter="onEnter(region.position)"
-        @mouseleave="onLeave"
-        @focusin="onFocusin(region.position)"
-        @focusout="onFocusout"
-        @keydown="onRegionKeydown"
       >
         <div
           v-for="(item, indexInAll) in region.all"

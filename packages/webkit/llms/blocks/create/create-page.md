@@ -201,6 +201,8 @@ Each variant is the same screen in another state: `get_block("create/create-page
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { onMounted, reactive, ref, watch } from 'vue'
 
+  import { type CreatePageDomainErrors, validateDomainForm } from './domain-validation'
+
   /** The values of the Create Domain form. */
   export interface CreatePageValues {
     /** What the domain is called in the list. */
@@ -220,13 +222,6 @@ Each variant is the same screen in another state: `get_block("create/create-page
     loading?: boolean
     /** Why the create request failed, shown in an error toast with Retry. */
     error?: string
-  }
-
-  interface FormErrors {
-    name: string
-    nameKind: 'helper' | 'invalid' | 'required'
-    domain: string
-    domainKind: 'helper' | 'invalid' | 'required'
   }
 
   const props = withDefaults(defineProps<CreatePageProps>(), {
@@ -249,7 +244,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
     active: true,
     ...props.defaultValues
   })
-  const errors = reactive<FormErrors>({
+  const errors = reactive<CreatePageDomainErrors>({
     name: '',
     nameKind: 'required',
     domain: '',
@@ -257,34 +252,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
   })
   const advancedOpen = ref(false)
 
-  const NAME_MAX = 50
-  const DOMAIN_PATTERN = /^(?=.{4,253}$)((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$/
-
-  const validate = () => {
-    const name = form.name.trim()
-    if (!name) {
-      errors.nameKind = 'required'
-      errors.name = 'This field is required.'
-    } else if (name.length > NAME_MAX) {
-      errors.nameKind = 'invalid'
-      errors.name = 'Use at most ' + NAME_MAX + ' characters.'
-    } else {
-      errors.name = ''
-    }
-
-    const domain = form.domain.trim()
-    if (!domain) {
-      errors.domainKind = 'required'
-      errors.domain = 'This field is required.'
-    } else if (!DOMAIN_PATTERN.test(domain)) {
-      errors.domainKind = 'invalid'
-      errors.domain = 'Enter a valid domain name. Example: example.com.'
-    } else {
-      errors.domain = ''
-    }
-
-    return !errors.name && !errors.domain
-  }
+  const validate = () => validateDomainForm(form, errors)
 
   const values = (): CreatePageValues => ({
     ...form,
@@ -553,5 +521,283 @@ Each variant is the same screen in another state: `get_block("create/create-page
       </template>
     </ConfirmDialog>
   </div>
+</template>
+```
+
+## `domain-validation.ts`
+
+```ts
+/** Why a field shows its message: an empty required field, a value the endpoint rejects, or guidance. */
+export type CreatePageErrorKind = 'helper' | 'invalid' | 'required'
+
+/** The messages of the Name and Domain name fields. */
+export interface CreatePageDomainErrors {
+  /** The message under Name; empty while the field is valid. */
+  name: string
+  /** Why Name shows its message. */
+  nameKind: CreatePageErrorKind
+  /** The message under Domain name; empty while the field is valid. */
+  domain: string
+  /** Why Domain name shows its message. */
+  domainKind: CreatePageErrorKind
+}
+
+const NAME_MAX = 50
+const DOMAIN_PATTERN = /^(?=.{4,253}$)((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$/
+
+export function validateDomainForm(
+  form: { name: string; domain: string },
+  errors: CreatePageDomainErrors
+): boolean {
+  const name = form.name.trim()
+  if (!name) {
+    errors.nameKind = 'required'
+    errors.name = 'This field is required.'
+  } else if (name.length > NAME_MAX) {
+    errors.nameKind = 'invalid'
+    errors.name = 'Use at most ' + NAME_MAX + ' characters.'
+  } else {
+    errors.name = ''
+  }
+
+  const domain = form.domain.trim()
+  if (!domain) {
+    errors.domainKind = 'required'
+    errors.domain = 'This field is required.'
+  } else if (!DOMAIN_PATTERN.test(domain)) {
+    errors.domainKind = 'invalid'
+    errors.domain = 'Enter a valid domain name. Example: example.com.'
+  } else {
+    errors.domain = ''
+  }
+
+  return !errors.name && !errors.domain
+}
+```
+
+## `use-create-form.ts`
+
+```ts
+import { toast } from '@aziontech/webkit/toast'
+import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
+import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
+import {
+  useUnsavedChanges,
+  type UseUnsavedChangesReturn
+} from '@aziontech/webkit/use-unsaved-changes'
+import { computed, type ComputedRef, readonly, type Ref, ref } from 'vue'
+
+/** Options of `useCreateForm`. */
+export interface UseCreateFormOptions<T> {
+  /** The draft the unsaved-changes guard watches. */
+  source: () => T
+  /** The form element: the submit shortcut belongs to it and submits it. */
+  formEl: Ref<HTMLFormElement | null>
+  /** The name of the submit shortcut in the shortcuts list. */
+  shortcutLabel: string
+  /** Checks the draft and flags its fields; false stops the submit. */
+  validate: () => boolean
+  /** Runs once the request succeeds, to confirm it in a toast. */
+  onCreated: () => void
+  /** The title of the error toast raised when the request fails. */
+  failureTitle: string
+}
+
+/** What `useCreateForm` returns. */
+export interface UseCreateFormReturn<T> {
+  /** The unsaved-changes guard, for the discard dialog. */
+  guard: UseUnsavedChangesReturn<T>
+  /** True while the request runs. */
+  submitting: Readonly<Ref<boolean>>
+  /** What makes a Button this form's submit: its type, its loading state and the shortcut it answers to. Bind it with `v-bind`. */
+  submitButton: ComputedRef<{ type: 'submit'; loading: boolean; 'aria-keyshortcuts': string }>
+  /** Asks before leaving a changed draft; Cancel, Back and Escape run it. */
+  leave: () => Promise<boolean>
+  /** Validates the draft, sends the request and confirms or reports it in a toast. */
+  submit: () => Promise<void>
+}
+
+const SAVE_FAILURES = 0
+const SUBMIT_KEYS = 'meta+enter'
+
+export function useCreateForm<T>(options: UseCreateFormOptions<T>): UseCreateFormReturn<T> {
+  const submitting = ref(false)
+  let failuresLeft = SAVE_FAILURES
+
+  const guard = useUnsavedChanges(options.source, {
+    enabled: () => !submitting.value
+  })
+
+  const leave = () => guard.confirmLeave()
+
+  useEscapeToCancel(leave, { enabled: () => !submitting.value })
+
+  useShortcuts({
+    keys: SUBMIT_KEYS,
+    label: options.shortcutLabel,
+    group: 'Page',
+    element: options.formEl,
+    when: () => !submitting.value,
+    handler: () => options.formEl.value?.requestSubmit()
+  })
+
+  const submitButton = computed(() => ({
+    type: 'submit' as const,
+    loading: submitting.value,
+    'aria-keyshortcuts': toAriaKeyshortcuts(SUBMIT_KEYS)
+  }))
+
+  const sendRequest = () =>
+    new Promise<void>((resolve, reject) => {
+      setTimeout(() => {
+        if (failuresLeft > 0) {
+          failuresLeft -= 1
+          reject(new Error('The service did not answer. Check your connection and try again.'))
+          return
+        }
+        resolve()
+      }, 900)
+    })
+
+  const submit = async () => {
+    if (submitting.value || !options.validate()) return
+    submitting.value = true
+    try {
+      await sendRequest()
+      options.onCreated()
+    } catch (error) {
+      toast.error(options.failureTitle, {
+        description: error instanceof Error ? error.message : 'Try again.',
+        action: { label: 'Retry', onClick: () => submit() }
+      })
+    } finally {
+      submitting.value = false
+    }
+  }
+
+  return { guard, submitting: readonly(submitting), submitButton, leave, submit }
+}
+```
+
+## `parts/creation-header.vue`
+
+```ts
+<script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
+  import Avatar from '@aziontech/webkit/avatar'
+  import Brand from '@aziontech/webkit/brand'
+  import Breadcrumb, { type BreadcrumbItemData } from '@aziontech/webkit/breadcrumb-root'
+  import IconButton from '@aziontech/webkit/icon-button'
+
+  export interface CreationHeaderProps {
+    /** Name of the back control, read by screen readers. */
+    backLabel: string
+    /** The trail beside the brand: the module, then the page title. */
+    breadcrumb: BreadcrumbItemData[]
+    /** The signed-in account, the avatar label. */
+    accountLabel?: string
+    /** The accessible name of the avatar when its label is initials. */
+    accountAlt?: string
+  }
+
+  withDefaults(defineProps<CreationHeaderProps>(), {
+    accountLabel: 'name@example.com',
+    accountAlt: ''
+  })
+
+  const emit = defineEmits<{
+    back: [event: MouseEvent]
+  }>()
+
+  const ACCOUNT_BUTTON_CLASS =
+    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
+    'motion-reduce:transition-none'
+</script>
+
+<template>
+  <AppHeader aria-label="Console">
+    <AppHeader.Start>
+      <IconButton
+        icon="az az-chevron-left"
+        :aria-label="backLabel"
+        variant="outline"
+        size="small"
+        @click="(event: MouseEvent) => emit('back', event)"
+      />
+      <AppHeader.Brand
+        href="/home"
+        aria-label="Azion home"
+      >
+        <Brand
+          variant="default"
+          size="small"
+        />
+      </AppHeader.Brand>
+      <Breadcrumb :items="breadcrumb" />
+    </AppHeader.Start>
+    <AppHeader.Center />
+    <AppHeader.End>
+      <button
+        type="button"
+        aria-label="Account settings"
+        :class="ACCOUNT_BUTTON_CLASS"
+      >
+        <Avatar
+          :label="accountLabel"
+          :alt="accountAlt"
+          size="medium"
+          variant="square"
+        />
+      </button>
+    </AppHeader.End>
+  </AppHeader>
+</template>
+```
+
+## `parts/discard-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import type { UseUnsavedChangesReturn } from '@aziontech/webkit/use-unsaved-changes'
+  import { computed } from 'vue'
+
+  export interface DiscardDialogProps {
+    /** The unsaved-changes guard of the form this dialog asks about. */
+    guard: Pick<
+      UseUnsavedChangesReturn<unknown>,
+      'dialogProps' | 'labels' | 'keepEditing' | 'discardAndLeave'
+    >
+  }
+
+  const props = defineProps<DiscardDialogProps>()
+
+  const dialogProps = computed(() => props.guard.dialogProps.value)
+  const labels = computed(() => props.guard.labels.value)
+</script>
+
+<template>
+  <ConfirmDialog
+    v-bind="dialogProps"
+    data-testid="unsaved-changes-dialog"
+  >
+    <template #actions>
+      <Button
+        :label="labels.keepEditing"
+        variant="ghost"
+        size="medium"
+        data-autofocus
+        @click="guard.keepEditing"
+      />
+      <Button
+        :label="labels.discard"
+        variant="danger"
+        size="medium"
+        @click="guard.discardAndLeave"
+      />
+    </template>
+  </ConfirmDialog>
 </template>
 ```

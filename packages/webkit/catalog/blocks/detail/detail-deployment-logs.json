@@ -49,6 +49,7 @@
  "sfcFile": "blocks/detail/detail-deployment-logs/detail-deployment-logs.vue",
  "guidelinesFile": "blocks/detail/detail-deployment-logs/guidelines.md",
  "fileSources": {
-  "sample.ts": "blocks/detail/detail-deployment-logs/sample.ts"
+  "sample.ts": "blocks/detail/detail-deployment-logs/sample.ts",
+  "parts/deployment-page.vue": "blocks/detail/detail-deployment-logs/parts/deployment-page.vue"
  }
 }

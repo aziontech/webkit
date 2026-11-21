@@ -28,6 +28,8 @@
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
+  import { closePastePanel, lineList } from '../paste-panel'
+
   type ScopeRef = { type: string; id: string; name: string }
   type VariableDraft = { key: string; value: string; secret: boolean; scope: ScopeRef[] }
   type Entry = { id: number; key: string; value: string; secret: boolean; visible: boolean }
@@ -342,10 +344,7 @@
     return { pairs: [...byKey.values()], invalidLines, repeated, replaced }
   })
 
-  const lineList = (lines: number[]) =>
-    lines.length === 1
-      ? `Line ${lines[0]} is`
-      : `Lines ${lines.slice(0, -1).join(', ')} and ${lines.at(-1)} are`
+  const cancelPaste = () => closePastePanel(pasteOpen, pasteToggleEl)
 
   const applyPaste = async () => {
     const { pairs } = pasteReport.value
@@ -357,16 +356,8 @@
     const known = new Set(merged.map((entry) => entry.key.trim()))
     entries.value = [...merged, ...toEntries(pairs.filter((pair) => !known.has(pair.key)))]
     pasteStatus.value = `${pairs.length} ${pairs.length === 1 ? 'variable' : 'variables'} added from the pasted text.`
-    pasteOpen.value = false
     pasteText.value = ''
-    await nextTick()
-    pasteToggleEl.value?.$el?.focus()
-  }
-
-  const cancelPaste = async () => {
-    pasteOpen.value = false
-    await nextTick()
-    pasteToggleEl.value?.$el?.focus()
+    await cancelPaste()
   }
 
   watch(drawerOpen, (isOpen) => {

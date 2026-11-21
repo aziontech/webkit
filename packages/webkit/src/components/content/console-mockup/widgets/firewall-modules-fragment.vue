@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
-
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Tag from '../../tag/tag.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import { useMockupScrollFrames } from '../composables/use-mockup-scroll-frames'
+  import { FIREWALL_MODULES } from '../lib/firewall-modules'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
+  import MockupScrollColumn from '../parts/mockup-scroll-column.vue'
+  import ModuleSwitchCard from '../parts/module-switch-card.vue'
 
   defineOptions({ name: 'FirewallModulesFragment' })
 
@@ -17,38 +17,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
-
-  const MODULES = [
-    {
-      key: 'ddos',
-      title: 'DDoS Protection Unmetered',
-      description:
-        'Mitigate large and complex network, transport, presentation, and application-layer DDoS attacks.',
-      locked: true
-    },
-    {
-      key: 'functions',
-      title: 'Functions',
-      description: 'Build low-latency functions that run close to users.',
-      locked: false
-    },
-    {
-      key: 'network',
-      title: 'Network Shield',
-      description:
-        'Create lists to configure a programmable security perimeter for inbound and outbound traffic.',
-      locked: false
-    },
-    {
-      key: 'waf',
-      title: 'Web Application Firewall',
-      description: 'Protect applications against threats and attacks.',
-      locked: false
-    }
-  ]
 
   interface Frame {
     scrolled: boolean
@@ -65,138 +33,68 @@
     { scrolled: true, network: true, waf: true, forward: 520, back: 360 }
   ]
 
-  const LAST = FRAMES.length - 1
-  const LEAD = 28
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
-
-  const columnEl = ref<globalThis.HTMLElement | null>(null)
-  const anchorTop = ref(0)
-
-  const measure = () => {
-    anchorTop.value =
-      columnEl.value?.querySelector<globalThis.HTMLElement>('[data-anchor]')?.offsetTop ?? 0
-  }
-
-  const scrollStyle = computed(() => ({
-    translate: `0 ${frame.value.scrolled ? LEAD - anchorTop.value : 0}px`
-  }))
+  const { frame, bindColumn } = useMockupScrollFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered,
+    stepOnTouch: true
+  })
 
   const enabled = (key: string) => {
-    if (key === 'network') return frame.value.network
+    if (key === 'network-shield') return frame.value.network
     if (key === 'waf') return frame.value.waf
     return true
   }
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-  let observer: globalThis.ResizeObserver | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value) {
-      step.value = target
-      return
-    }
-    measure()
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onMounted(() => {
-    observer = new globalThis.ResizeObserver(measure)
-    if (columnEl.value) observer.observe(columnEl.value)
-    measure()
-  })
-
-  onScopeDispose(() => {
-    halt()
-    observer?.disconnect()
-  })
-
-  const MODULE_CARD_CLASS =
-    'flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) transition-colors duration-moderate-01 ease-productive-entrance ' +
-    'data-on:border-(--primary) ' +
-    'motion-reduce:transition-none'
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupScrollColumn
+    :ref="bindColumn"
     shell="legacy"
-    :fade="frame.scrolled ? 'y' : 'bottom'"
     class="[--console-mockup-fade-edge:16%] [--console-mockup-fade-start:74%]"
-    :chrome="false"
+    column-class="flex flex-col gap-(--spacing-sm)"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    :anchor="frame.scrolled ? 0 : null"
+    :lead="28"
+    observe
   >
-    <div
-      ref="columnEl"
-      :style="scrollStyle"
-      class="relative flex flex-col gap-(--spacing-sm) py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
+    <span class="text-label-md text-(--text-default)">Modules</span>
+
+    <ConsoleMockupShellItem
+      v-for="(module, index) in FIREWALL_MODULES"
+      :key="module.key"
+      :order="index"
+      :data-anchor="module.key === 'network-shield' || undefined"
     >
-      <span class="text-label-md text-(--text-default)">Modules</span>
-
-      <ConsoleMockupShellItem
-        v-for="(module, index) in MODULES"
-        :key="module.key"
-        :order="index"
-        :data-anchor="module.key === 'network' || undefined"
+      <ModuleSwitchCard
+        :title="module.title"
+        :description="module.description"
+        :checked="enabled(module.key)"
+        :disabled="module.locked"
       >
-        <div
-          :data-on="enabled(module.key) || null"
-          :class="MODULE_CARD_CLASS"
+        <span
+          v-if="module.locked"
+          class="mt-(--spacing-xs) flex"
         >
-          <LegacySwitch
-            :checked="enabled(module.key)"
-            :disabled="module.locked"
+          <Tag
+            label="Automatically enabled in all accounts"
+            icon="az az-lock"
+            severity="info"
+            size="small"
           />
-          <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
-            <span class="text-label-md text-(--text-default)">{{ module.title }}</span>
-            <span class="text-body-xs text-(--text-muted)">{{ module.description }}</span>
-            <span
-              v-if="module.locked"
-              class="mt-(--spacing-xs) flex"
-            >
-              <Tag
-                label="Automatically enabled in all accounts"
-                icon="az az-lock"
-                severity="info"
-                size="small"
-              />
-            </span>
-          </span>
-        </div>
-      </ConsoleMockupShellItem>
+        </span>
+      </ModuleSwitchCard>
+    </ConsoleMockupShellItem>
 
-      <span class="mt-(--spacing-sm) text-label-md text-(--text-default)">Debug Rules</span>
-      <span class="flex items-start gap-(--spacing-sm)">
-        <LegacySwitch :checked="true" />
-        <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-          <span class="text-label-md text-(--text-default)">Active</span>
-          <span class="text-body-xs text-(--text-muted)">
-            Rules that were successfully executed will be shown under the $traceback field in Data
-            Streaming and Real-Time Events or the $stacktrace variable in GraphQL.
-          </span>
+    <span class="mt-(--spacing-sm) text-label-md text-(--text-default)">Debug Rules</span>
+    <span class="flex items-start gap-(--spacing-sm)">
+      <LegacySwitch :checked="true" />
+      <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+        <span class="text-label-md text-(--text-default)">Active</span>
+        <span class="text-body-xs text-(--text-muted)">
+          Rules that were successfully executed will be shown under the $traceback field in Data
+          Streaming and Real-Time Events or the $stacktrace variable in GraphQL.
         </span>
       </span>
-    </div>
-  </ConsoleMockupShell>
+    </span>
+  </MockupScrollColumn>
 </template>
