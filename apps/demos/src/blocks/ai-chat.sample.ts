@@ -201,6 +201,7 @@ export const sampleAgentMessages: AiChatMessage[] = [
       {
         type: 'subagent',
         subagent: {
+          id: 'researcher-1',
           name: 'researcher',
           description: 'Comparing the two deployments',
           status: 'finished',

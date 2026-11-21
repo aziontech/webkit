@@ -13,6 +13,7 @@ import type {
   AiChatInterrupt,
   AiChatMessage,
   AiChatQueuedMessage,
+  AiChatSubagentPart,
   AiChatToolCallPart
 } from '../../../utils/ai-chat'
 
@@ -373,6 +374,7 @@ describe('ai/ai-chat', () => {
           {
             type: 'subagent',
             subagent: {
+              id: 'researcher-1',
               name: 'researcher',
               description: 'Comparing builds',
               status: 'running',
@@ -392,16 +394,16 @@ describe('ai/ai-chat', () => {
   })
 
   it('maps a stopped subagent to canceled and a finished one to success', () => {
-    const subagent = (status: 'error' | 'finished', message?: string) =>
-      ({
-        type: 'subagent',
-        subagent: {
-          name: 'researcher',
-          status,
-          messages: [],
-          error: message ? { message } : undefined
-        }
-      }) as const
+    const subagent = (status: 'error' | 'finished', message?: string): AiChatSubagentPart => ({
+      type: 'subagent',
+      subagent: {
+        id: `researcher-${status}`,
+        name: 'researcher',
+        status,
+        messages: [],
+        error: message ? { message } : undefined
+      }
+    })
     const view = render(AiChat, {
       props: { messages: answer([subagent('error', 'Stopped'), subagent('finished')]) }
     })
@@ -421,7 +423,7 @@ describe('ai/ai-chat', () => {
           {
             type: 'tool-result',
             toolCallId: 'c2',
-            content: null,
+            content: '',
             state: 'complete',
             outcome: 'cancelled'
           }

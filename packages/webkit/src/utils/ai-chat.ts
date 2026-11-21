@@ -1,4 +1,27 @@
 import type {
+  ActivityPart,
+  AudioPart,
+  BatchInterruptError,
+  ContentPart,
+  ContentPartDataSource,
+  ContentPartSource,
+  DocumentPart,
+  ImagePart,
+  MessagePart,
+  StructuredOutputPart,
+  SubagentPart,
+  SubagentStatus,
+  TextPart,
+  ThinkingPart,
+  ToolCallPart,
+  ToolCallState,
+  ToolResultPart,
+  UIMessage,
+  UIResourcePart,
+  VideoPart
+} from '@tanstack/ai'
+
+import type {
   AgentActivityStatus,
   AgentActivityStep
 } from '../components/ai/agent-activity/agent-activity.vue'
@@ -14,159 +37,62 @@ import type { ToolCallStatus } from '../components/ai/tool-call/tool-call.vue'
 import type { ImageGalleryItem } from '../components/content/image-gallery/image-gallery.vue'
 
 /** Who wrote a message; the conversation draws the reader's and the assistant's. */
-export type AiChatRole = 'system' | 'user' | 'assistant' | 'activity'
+export type AiChatRole = UIMessage['role']
 
 /** Text of a message: plain for the reader, Markdown for the assistant. */
-export interface AiChatTextPart {
-  type: 'text'
-  content: string
-}
+export type AiChatTextPart = TextPart
 
 /** How the assistant reached the answer, shown in the collapsible Reasoning. */
-export interface AiChatThinkingPart {
-  type: 'thinking'
-  content: string
-}
+export type AiChatThinkingPart = ThinkingPart
 
 /** Where a tool call stands. */
-export type AiChatToolCallState =
-  | 'awaiting-input'
-  | 'input-streaming'
-  | 'input-complete'
-  | 'approval-requested'
-  | 'approval-responded'
-  | 'complete'
-  | 'error'
+export type AiChatToolCallState = ToolCallState
 
 /** A tool the assistant calls; one that needs approval carries `approval`. */
-export interface AiChatToolCallPart {
-  type: 'tool-call'
-  id: string
-  name: string
-  arguments: string
-  input?: unknown
-  state: AiChatToolCallState
-  output?: unknown
-  approval?: {
-    id: string
-    needsApproval: boolean
-    approved?: boolean
-  }
-}
+export type AiChatToolCallPart = ToolCallPart
 
 /** What a tool returned, matched to its call by `toolCallId`. */
-export interface AiChatToolResultPart {
-  type: 'tool-result'
-  toolCallId: string
-  content: unknown
-  state: 'streaming' | 'complete' | 'error'
-  outcome?: 'cancelled' | 'denied'
-  error?: string
-}
+export type AiChatToolResultPart = ToolResultPart
 
 /** Where the bytes of an image, audio, video or document come from: a URL, base64 data, or a provider file the block cannot draw. */
-export interface AiChatMediaSource {
-  type: 'url' | 'data' | 'file'
-  value: string
-  mimeType?: string
-}
+export type AiChatMediaSource = ContentPartSource
 
 /** An image the message carries; consecutive images draw as one gallery. */
-export interface AiChatImagePart {
-  type: 'image'
-  id?: string
-  source: AiChatMediaSource
-  metadata?: unknown
-}
+export type AiChatImagePart = ImagePart
 
 /** An audio clip the message carries. */
-export interface AiChatAudioPart {
-  type: 'audio'
-  id?: string
-  source: AiChatMediaSource
-  metadata?: unknown
-}
+export type AiChatAudioPart = AudioPart
 
 /** A video the message carries. */
-export interface AiChatVideoPart {
-  type: 'video'
-  id?: string
-  source: AiChatMediaSource
-  metadata?: unknown
-}
+export type AiChatVideoPart = VideoPart
 
 /** A document the message carries, such as a PDF; `metadata.name` names it. */
-export interface AiChatDocumentPart {
-  type: 'document'
-  id?: string
-  source: AiChatMediaSource
-  metadata?: unknown
-}
+export type AiChatDocumentPart = DocumentPart
 
 /** A step the agent reports; `content.title`, `content.status` and `content.detail` draw it. */
-export interface AiChatActivityPart {
-  type: 'activity'
-  activityType: string
-  content: Record<string, unknown>
-}
+export type AiChatActivityPart = ActivityPart
 
 /** Where a helper agent stands. */
-export type AiChatSubagentStatus = 'running' | 'finished' | 'error' | 'suspended'
+export type AiChatSubagentStatus = SubagentStatus
 
-/** A helper agent the assistant started, with its own messages. */
-export interface AiChatSubagentPart {
-  type: 'subagent'
+/** A helper agent the assistant started, with its own messages; `useChat` adds `stop` and `input` to the card. */
+export type AiChatSubagentPart = SubagentPart & {
   subagent: {
-    name: string
-    description?: string
-    status: AiChatSubagentStatus
-    messages: ReadonlyArray<AiChatMessage>
+    /** Stops the helper agent. */
+    stop?: () => void
+    /** What the parent model wrote when it started the helper agent. */
     input?: unknown
-    error?: { message: string }
-    stop?: unknown
   }
 }
 
 /** An interactive widget a tool returned (an MCP app), drawn in a sandboxed frame. */
-export interface AiChatUiResourcePart {
-  type: 'ui-resource'
-  resource: { uri: string; mimeType: string; text?: string; blob?: string }
-  toolCallId: string
-  toolName: string
-  serverId?: string
-}
+export type AiChatUiResourcePart = UIResourcePart
 
 /** A typed answer the assistant returned against a schema; `data` is set once it is complete. */
-export interface AiChatStructuredOutputPart {
-  type: 'structured-output'
-  status: 'streaming' | 'complete' | 'error'
-  raw: string
-  data?: unknown
-  partial?: unknown
-  reasoning?: string
-  errorMessage?: string
-}
-
-/** A part the conversation does not draw. */
-export interface AiChatOtherPart {
-  type: string
-}
+export type AiChatStructuredOutputPart = StructuredOutputPart
 
 /** One piece of a message, in the order it arrived. */
-export type AiChatPart =
-  | AiChatTextPart
-  | AiChatThinkingPart
-  | AiChatToolCallPart
-  | AiChatToolResultPart
-  | AiChatImagePart
-  | AiChatAudioPart
-  | AiChatVideoPart
-  | AiChatDocumentPart
-  | AiChatActivityPart
-  | AiChatSubagentPart
-  | AiChatUiResourcePart
-  | AiChatStructuredOutputPart
-  | AiChatOtherPart
+export type AiChatPart = Exclude<MessagePart, SubagentPart> | AiChatSubagentPart
 
 /** What the app adds to a message beside its parts. */
 export interface AiChatMessageMetadata {
@@ -178,17 +104,11 @@ export interface AiChatMessageMetadata {
   stopped?: boolean
 }
 
-/** One message, in the shape TanStack AI's `useChat` returns. */
-export interface AiChatMessage {
-  /** Stable key. */
-  id: string
-  /** Who wrote it; `system` and `activity` messages are not drawn. */
-  role: AiChatRole
+/** One message, TanStack AI's `UIMessage` as `useChat` returns it, with the metadata the block reads typed. */
+export type AiChatMessage = Omit<UIMessage, 'parts' | 'metadata'> & {
   /** The text, reasoning and tool calls, in order. */
   parts: ReadonlyArray<AiChatPart>
-  /** When it was written. */
-  createdAt?: Date
-  /** Sources, the thinking time and the stopped flag. */
+  /** Sources, the thinking time and the stopped flag, beside TanStack's own keys. */
   metadata?: AiChatMessageMetadata & Record<string, unknown>
 }
 
@@ -228,12 +148,9 @@ export interface AiChatInterrupt {
   cancel?: unknown
 }
 
-/** A failed attempt to send the answers to pending requests, as `useChat` returns it in `interruptErrors`. */
-export interface AiChatInterruptError {
-  message: string
-  retryable?: boolean
-  code?: string
-}
+/** A failed attempt to send the answers to pending requests: the part of TanStack AI's `BatchInterruptError` the block reads. */
+export type AiChatInterruptError = Pick<BatchInterruptError, 'message'> &
+  Partial<Pick<BatchInterruptError, 'retryable' | 'code'>>
 
 /** The answer to a tool the reader answers, in the shape `addToolResult` takes. */
 export interface AiChatToolAnswer {
@@ -243,15 +160,10 @@ export interface AiChatToolAnswer {
 }
 
 /** Inline base64 bytes of a file the reader attached. */
-export interface AiChatDataSource {
-  type: 'data'
-  value: string
-  mimeType: string
-}
+export type AiChatDataSource = ContentPartDataSource
 
-/** A file the reader attached to a message, as a TanStack AI content part. */
-export interface AiChatAttachment {
-  type: 'image' | 'audio' | 'video' | 'document'
+/** A file the reader attached to a message, as a TanStack AI content part with inline data and a name. */
+export type AiChatAttachment = Exclude<ContentPart, TextPart> & {
   source: AiChatDataSource
   metadata: { name: string }
 }

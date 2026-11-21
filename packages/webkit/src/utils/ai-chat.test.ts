@@ -5,6 +5,7 @@ import {
   activityStepOf,
   type AiChatInterrupt,
   type AiChatMessage,
+  type AiChatPart,
   type AiChatToolCallPart,
   answerInterrupt,
   approvalOf,
@@ -65,7 +66,9 @@ describe('ai-chat', () => {
     expect(mediaUrl({ type: 'data', value: 'AAAA', mimeType: 'image/png' })).toBe(
       'data:image/png;base64,AAAA'
     )
-    expect(mediaUrl({ type: 'data', value: 'data:text/plain,hi' })).toBe('data:text/plain,hi')
+    expect(mediaUrl({ type: 'data', value: 'data:text/plain,hi', mimeType: 'text/plain' })).toBe(
+      'data:text/plain,hi'
+    )
     expect(mediaUrl({ type: 'file', value: 'file-1' })).toBe('')
   })
 
@@ -97,7 +100,7 @@ describe('ai-chat', () => {
         { type: 'tool-result', toolCallId: 'c1', content: 'ok', state: 'complete' },
         { type: 'image', source: { type: 'url', value: 'https://example.com/1.png' } },
         { type: 'image', source: { type: 'url', value: 'https://example.com/2.png' } },
-        { type: 'unknown' }
+        { type: 'unknown' } as unknown as AiChatPart
       ])
     )
     expect(segments.map((segment) => segment.type)).toEqual([
@@ -120,7 +123,7 @@ describe('ai-chat', () => {
       toolStatusOf(call(), {
         type: 'tool-result',
         toolCallId: 'call-1',
-        content: null,
+        content: '',
         state: 'complete',
         outcome: 'denied'
       })
@@ -219,7 +222,7 @@ describe('ai-chat', () => {
   it('maps a helper agent status', () => {
     const part = (status: 'running' | 'finished' | 'error' | 'suspended', message = '') => ({
       type: 'subagent' as const,
-      subagent: { name: 'helper', status, messages: [], error: { message } }
+      subagent: { id: 'helper-1', name: 'helper', status, messages: [], error: { message } }
     })
     expect(subagentStatusOf(part('finished'))).toBe('success')
     expect(subagentStatusOf(part('suspended'))).toBe('pending')

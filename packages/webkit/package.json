@@ -87,6 +87,7 @@
   "peerDependencies": {
     "@aziontech/icons": "^4.4.0 || ^5.0.0",
     "@aziontech/theme": "^5.2.2 || ^6.0.0",
+    "@tanstack/ai": "^1.5.0",
     "eslint": ">=9",
     "monaco-editor": ">=0.50",
     "stylelint": ">=16",
@@ -94,6 +95,9 @@
     "vue-eslint-parser": ">=9"
   },
   "peerDependenciesMeta": {
+    "@tanstack/ai": {
+      "optional": true
+    },
     "eslint": {
       "optional": true
     },
@@ -112,6 +116,7 @@
     "@aziontech/theme": "workspace:^",
     "@figma/code-connect": "^2.1.0",
     "@tailwindcss/vite": "^4.0.0",
+    "@tanstack/ai": "1.5.0",
     "@testing-library/user-event": "^14.5.2",
     "@testing-library/vue": "^8.1.0",
     "@vitejs/plugin-vue": "^5.2.4",
