@@ -39,7 +39,7 @@ describe('create-deploy-drawer', () => {
         total: 1,
         owner: true,
         dependencies: [],
-        versions: [{ id: 'B1', name: 'B1', author: 'Jane Doe', createdAgo: '1 hour ago' }]
+        versions: [{ id: 'B1', name: 'B1', author: 'Jane Doe', createdAt: '2026-11-10T11:00:00Z' }]
       }
     ]
     const view = render(CreateDeployDrawer, { props: { open: true, resources } })

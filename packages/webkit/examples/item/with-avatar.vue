@@ -15,7 +15,7 @@
     </Item.Media>
     <Item.Content>
       <Item.Title>Sam Lee</Item.Title>
-      <Item.Description>Last seen 5 months ago</Item.Description>
+      <Item.Description>Product designer</Item.Description>
     </Item.Content>
     <Item.Actions>
       <Button

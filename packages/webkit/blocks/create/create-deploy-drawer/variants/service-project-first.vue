@@ -20,6 +20,7 @@
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, reactive, ref, watch } from 'vue'
 
@@ -116,6 +117,9 @@
     when: () => open.value,
     handler: () => formEl.value?.requestSubmit()
   })
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -244,7 +248,7 @@
                               :value="entry.id"
                               :label="entry.name"
                               :selected="entry.id === versionOf(row).id"
-                              :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
+                              :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${ago(entry.createdAt)}`"
                             >
                               <template #leading>
                                 <Avatar
@@ -266,7 +270,7 @@
                               </span>
                               <template #trailing>
                                 <span class="text-body-xs text-(--text-muted)">{{
-                                  entry.createdAgo
+                                  ago(entry.createdAt)
                                 }}</span>
                               </template>
                             </DropdownMenu.Item>
@@ -395,7 +399,7 @@
                                           :value="entry.id"
                                           :label="entry.name"
                                           :selected="entry.id === versionOf(dependency).id"
-                                          :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
+                                          :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${ago(entry.createdAt)}`"
                                         >
                                           <template #leading>
                                             <Avatar
@@ -419,7 +423,7 @@
                                           </span>
                                           <template #trailing>
                                             <span class="text-body-xs text-(--text-muted)">{{
-                                              entry.createdAgo
+                                              ago(entry.createdAt)
                                             }}</span>
                                           </template>
                                         </DropdownMenu.Item>

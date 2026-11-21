@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/detail-deployment-logs/detail-deployment-logs.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-deployment-logs")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [LogViewer](../../components/log-viewer.md), [StatusIndicator](../../components/status-indicator.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [LogViewer](../../components/log-viewer.md), [StatusIndicator](../../components/status-indicator.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`
 - Skills: `webkit-ui-states`, `webkit-errors`, `webkit-layout`
 
 ## Asked as

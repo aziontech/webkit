@@ -20,6 +20,7 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, reactive, ref, watch } from 'vue'
 
   import DetailVersion from '../detail-version.vue'
@@ -29,13 +30,13 @@
     name: string
     userAgent: string
     author: string
-    modifiedAgo: string
+    modifiedAt: string
   }
 
   const groupColumns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', principal: true, hideable: false, sortable: true },
     { accessorKey: 'userAgent', header: 'User-Agent match', grow: 2 },
-    { accessorKey: 'modifiedAgo', header: 'Last modified', minWidth: 160 }
+    { accessorKey: 'modifiedAt', header: 'Last modified', minWidth: 160 }
   ]
   const groups = ref<DeviceGroup[]>([
     {
@@ -43,21 +44,21 @@
       name: 'mobile',
       userAgent: '(Mobile|iP(hone|od)|Android|IEMobile)',
       author: 'Jane Doe',
-      modifiedAgo: '2 days ago'
+      modifiedAt: '2026-11-08T12:00:00Z'
     },
     {
       id: '3102',
       name: 'tablet',
       userAgent: '(iPad|Tablet|Kindle|Silk)',
       author: 'Alex Morgan',
-      modifiedAgo: '1 week ago'
+      modifiedAt: '2026-11-03T12:00:00Z'
     },
     {
       id: '3103',
       name: 'crawlers',
       userAgent: '(Googlebot|Bingbot|DuckDuckBot)',
       author: 'Sam Lee',
-      modifiedAgo: '3 weeks ago'
+      modifiedAt: '2026-10-20T12:00:00Z'
     }
   ])
 
@@ -101,7 +102,7 @@
     if (!validate()) return
     const record = { name: form.name.trim(), userAgent: form.userAgent.trim() }
     const existing = groups.value.find((group) => group.id === editingId.value)
-    if (existing) Object.assign(existing, record, { modifiedAgo: 'Just now' })
+    if (existing) Object.assign(existing, record, { modifiedAt: new Date().toISOString() })
     else
       groups.value = [
         ...groups.value,
@@ -109,7 +110,7 @@
           id: String(3100 + groups.value.length + 1),
           ...record,
           author: 'John Smith',
-          modifiedAgo: 'Just now'
+          modifiedAt: new Date().toISOString()
         }
       ]
     drawerOpen.value = false
@@ -118,6 +119,9 @@
       { description: 'The change is part of this draft until you deploy it.' }
     )
   }
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -232,7 +236,7 @@
                         value
                       }}</span>
                     </template>
-                    <template #cell-modifiedAgo="{ row }">
+                    <template #cell-modifiedAt="{ row }">
                       <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                         <Tooltip :content="row.author">
                           <Avatar
@@ -243,7 +247,7 @@
                           />
                         </Tooltip>
                         <span class="truncate text-body-sm text-(--text-muted)">{{
-                          row.modifiedAgo
+                          ago(row.modifiedAt)
                         }}</span>
                       </div>
                     </template>

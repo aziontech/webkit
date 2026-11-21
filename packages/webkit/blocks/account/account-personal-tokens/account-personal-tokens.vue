@@ -218,7 +218,7 @@
     expiresAt: Date | null
   }>({ name: '', description: '', expiresIn: '30', expiresAt: null })
   const errors = reactive({ name: '', expiresAt: '' })
-  const expiresAtEl = ref<HTMLElement | null>(null)
+  const expiresAtEl = ref<InstanceType<typeof DatePickerRoot> | null>(null)
   const customExpiry = computed(() => form.expiresIn === CUSTOM_EXPIRY)
   const earliestExpiry = computed(() => new Date(referenceTime.value))
   const expiryMoment = computed(() =>
@@ -262,7 +262,7 @@
       return
     }
     if (!expiresAt || errors.expiresAt) {
-      nextTick(() => expiresAtEl.value?.querySelector('button')?.focus())
+      nextTick(() => expiresAtEl.value?.focus())
       return
     }
     emit('create', event, {
@@ -616,25 +616,22 @@
                   </Select>
                   <FieldDescription id="token-expiry-hint">{{ expiryHint }}</FieldDescription>
                 </Field>
-                <div
+                <Field
                   v-if="customExpiry"
-                  ref="expiresAtEl"
+                  required
+                  :invalid="!!errors.expiresAt"
                 >
-                  <Field
-                    required
-                    :invalid="!!errors.expiresAt"
-                  >
-                    <Field.Label>Expires at</Field.Label>
-                    <DatePickerRoot
-                      v-model="form.expiresAt"
-                      show-time
-                      size="large"
-                      :min="earliestExpiry"
-                      @update:model-value="errors.expiresAt = ''"
-                    />
-                    <Field.Error v-if="errors.expiresAt">{{ errors.expiresAt }}</Field.Error>
-                  </Field>
-                </div>
+                  <Field.Label>Expires at</Field.Label>
+                  <DatePickerRoot
+                    ref="expiresAtEl"
+                    v-model="form.expiresAt"
+                    show-time
+                    size="large"
+                    :min="earliestExpiry"
+                    @update:model-value="errors.expiresAt = ''"
+                  />
+                  <Field.Error v-if="errors.expiresAt">{{ errors.expiresAt }}</Field.Error>
+                </Field>
               </SettingsGroup>
             </fieldset>
           </PanelBody>

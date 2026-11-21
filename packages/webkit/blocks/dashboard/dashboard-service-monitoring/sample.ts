@@ -377,7 +377,7 @@ export const sampleAlerts: ServiceMonitoringAlert[] = [
     level: 'Critical',
     title: 'Status 5xx above 5%',
     service: 'web-app-staging',
-    opened: '12 minutes ago'
+    openedAt: '2026-11-10T11:48:00Z'
   },
   {
     id: 'eu-latency',
@@ -385,7 +385,7 @@ export const sampleAlerts: ServiceMonitoringAlert[] = [
     level: 'Warning',
     title: 'p95 latency above 800 ms',
     service: 'web-app-eu-prod',
-    opened: '34 minutes ago'
+    openedAt: '2026-11-10T11:26:00Z'
   },
   {
     id: 'eu-upstream',
@@ -393,7 +393,7 @@ export const sampleAlerts: ServiceMonitoringAlert[] = [
     level: 'Warning',
     title: 'Upstream timeouts rising',
     service: 'web-app-eu-prod',
-    opened: '1 hour ago'
+    openedAt: '2026-11-10T11:00:00Z'
   },
   {
     id: 'docs-disk',
@@ -401,6 +401,6 @@ export const sampleAlerts: ServiceMonitoringAlert[] = [
     level: 'Info',
     title: 'Disk usage above 80%',
     service: 'docs-site',
-    opened: '3 hours ago'
+    openedAt: '2026-11-10T09:00:00Z'
   }
 ]

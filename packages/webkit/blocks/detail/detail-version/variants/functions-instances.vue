@@ -24,6 +24,7 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, reactive, ref, watch } from 'vue'
 
   import DetailVersion from '../detail-version.vue'
@@ -40,7 +41,7 @@
     args: Record<string, unknown>
     active: boolean
     author: string
-    modifiedAgo: string
+    modifiedAt: string
   }
 
   const CREATE_FUNCTION = '__create-function__'
@@ -106,7 +107,7 @@
     { accessorKey: 'functionId', header: 'Function', minWidth: 160 },
     { accessorKey: 'args', header: 'Arguments', grow: 2 },
     { accessorKey: 'active', header: 'Status', minWidth: 104 },
-    { accessorKey: 'modifiedAgo', header: 'Last modified', minWidth: 160 }
+    { accessorKey: 'modifiedAt', header: 'Last modified', minWidth: 160 }
   ]
   const instances = ref<FunctionInstance[]>([
     {
@@ -116,7 +117,7 @@
       args: { width: 640, quality: 80, format: 'webp' },
       active: true,
       author: 'Priya Patel',
-      modifiedAgo: '5 hours ago'
+      modifiedAt: '2026-11-10T07:00:00Z'
     },
     {
       id: '5202',
@@ -125,7 +126,7 @@
       args: { set: { 'strict-transport-security': 'max-age=31536000' } },
       active: true,
       author: 'John Smith',
-      modifiedAgo: '3 days ago'
+      modifiedAt: '2026-11-07T12:00:00Z'
     },
     {
       id: '5203',
@@ -134,7 +135,7 @@
       args: { message: 'We are upgrading the store. Back soon.', retryAfter: 1800 },
       active: false,
       author: 'Alex Morgan',
-      modifiedAgo: '2 weeks ago'
+      modifiedAt: '2026-10-27T12:00:00Z'
     }
   ])
 
@@ -215,7 +216,7 @@
       args: parsedArgs() ?? {}
     }
     const existing = instances.value.find((instance) => instance.id === editingId.value)
-    if (existing) Object.assign(existing, record, { modifiedAgo: 'Just now' })
+    if (existing) Object.assign(existing, record, { modifiedAt: new Date().toISOString() })
     else
       instances.value = [
         ...instances.value,
@@ -224,7 +225,7 @@
           ...record,
           active: true,
           author: 'John Smith',
-          modifiedAgo: 'Just now'
+          modifiedAt: new Date().toISOString()
         }
       ]
     drawerOpen.value = false
@@ -233,6 +234,9 @@
       { description: 'The change is part of this draft until you deploy it.' }
     )
   }
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -379,7 +383,7 @@
                         size="medium"
                       />
                     </template>
-                    <template #cell-modifiedAgo="{ row }">
+                    <template #cell-modifiedAt="{ row }">
                       <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                         <Tooltip :content="row.author">
                           <Avatar
@@ -390,7 +394,7 @@
                           />
                         </Tooltip>
                         <span class="truncate text-body-sm text-(--text-muted)">{{
-                          row.modifiedAgo
+                          ago(row.modifiedAt)
                         }}</span>
                       </div>
                     </template>

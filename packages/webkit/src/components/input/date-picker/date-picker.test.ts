@@ -945,6 +945,17 @@ describe('DatePicker', () => {
     })
   })
 
+  describe('exposed', () => {
+    it('focus() moves focus to the trigger', async () => {
+      const picker = ref<InstanceType<typeof DatePicker> | null>(null)
+      const { getByTestId } = render(
+        defineComponent({ setup: () => () => h(DatePicker, { ref: picker }) })
+      )
+      picker.value?.focus()
+      expect(document.activeElement).toBe(getByTestId('date-picker__trigger'))
+    })
+  })
+
   describe('reference time', () => {
     it('opens on the ConfigProvider now and marks that day as today', async () => {
       const { getByTestId } = render(

@@ -11,6 +11,10 @@
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -110,7 +114,9 @@
                   />
                 </Tooltip>
                 <span class="truncate text-body-sm text-(--text-default)"> Taylor Reed </span>
-                <span class="shrink-0 text-body-sm text-(--text-muted)"> 2 minutes ago </span>
+                <span class="shrink-0 text-body-sm text-(--text-muted)">
+                  {{ ago('2026-11-10T11:58:00Z') }}
+                </span>
               </div>
             </div>
             <div class="flex flex-col gap-(--spacing-2xs)">

@@ -3,14 +3,14 @@ name: date-picker
 category: input
 structure: composition
 status: implemented
-spec_version: 14
+spec_version: 15
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 731a5a4a79fd5a9afd42c760a86c468ad38ffd8aa9f8a72ac33f1dc5bca25c2d
+checksum: 4f09f64785df14074e0332ed5f8903150ab45571295601a92a3a781a0dcb0879
 created: 2026-06-25
-last_updated: 2026-11-19
+last_updated: 2026-11-21
 ---
 
 # DatePicker — Component Spec
@@ -136,6 +136,12 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 | --------- | ------------------------------- | -------------------------------------------------------------------------------------------------- |
 | `trigger` | `{ open, value, displayValue }` | Replaces the default trigger button; scope exposes the open state, raw value, and formatted label. |
 | `footer`  | —                               | Custom footer/action-bar content (e.g. `<DatePicker.Clear>`) alongside Apply.                      |
+
+## Exposed
+
+| Method    | Notes                                                                                                                                                                                                                                          |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `focus()` | Moves focus to the trigger button. For a form that focuses the first field in error after a failed submit: `const picker = ref<InstanceType<typeof DatePicker> \| null>(null)` on `<DatePicker ref="picker" />`, then `picker.value?.focus()`. |
 
 ## States
 

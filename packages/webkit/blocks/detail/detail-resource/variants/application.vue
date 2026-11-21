@@ -25,11 +25,16 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Subheader from '@aziontech/webkit/subheader'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 
   const APP = {
     name: 'storefront-app',
@@ -50,14 +55,14 @@
     { label: 'Active version', value: APP.version, code: true },
     { label: 'Framework', value: 'Vite' },
     { label: 'Source', value: 'acme/storefront (main)' },
-    { label: 'Created', value: '2 weeks ago by Mara Lin', author: 'Mara Lin' }
+    { label: 'Created', value: `${ago('2026-10-27T12:00:00Z')} by Mara Lin`, author: 'Mara Lin' }
   ]
 
   const versionColumns: TableColumn[] = [
     { accessorKey: 'name', header: 'Version', principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 2 },
     { accessorKey: 'state', header: 'Status', minWidth: 104 },
-    { accessorKey: 'createdAgo', header: 'Created', minWidth: 96 }
+    { accessorKey: 'createdAt', header: 'Created', minWidth: 96 }
   ]
   const versions = [
     {
@@ -65,21 +70,21 @@
       name: 'BX7Q2LMA',
       description: 'Cache product images for 7 days',
       state: 'Active',
-      createdAgo: '3 hours ago'
+      createdAt: '2026-11-10T09:00:00Z'
     },
     {
       id: 'BW1K8RTE',
       name: 'BW1K8RTE',
       description: 'Add rule"Redirect old checkout"',
       state: 'Ready',
-      createdAgo: 'Yesterday'
+      createdAt: '2026-11-09T12:00:00Z'
     },
     {
       id: 'BV4N6PXD',
       name: 'BV4N6PXD',
       description: 'Bypass cache for /api/*',
       state: 'Ready',
-      createdAgo: '4 days ago'
+      createdAt: '2026-11-06T12:00:00Z'
     }
   ]
   const versionSeverity: Record<string, TagSeverity> = {
@@ -93,7 +98,7 @@
     { accessorKey: 'version', header: 'Version' },
     { accessorKey: 'environment', header: 'Environment' },
     { accessorKey: 'status', header: 'Status', minWidth: 104 },
-    { accessorKey: 'createdAgo', header: 'Created', minWidth: 96 }
+    { accessorKey: 'createdAt', header: 'Created', minWidth: 96 }
   ]
   const deployments = [
     {
@@ -101,21 +106,21 @@
       version: 'BX7Q2LMA',
       environment: 'Production',
       status: 'Live',
-      createdAgo: '3 hours ago'
+      createdAt: '2026-11-10T09:00:00Z'
     },
     {
       id: '4181877250',
       version: 'BW1K8RTE',
       environment: 'Preview',
       status: 'Live',
-      createdAgo: 'Yesterday'
+      createdAt: '2026-11-09T12:00:00Z'
     },
     {
       id: '4180412906',
       version: 'BW1K8RTE',
       environment: 'Production',
       status: 'Failed',
-      createdAgo: 'Yesterday'
+      createdAt: '2026-11-09T12:00:00Z'
     }
   ]
   const deploymentSeverity: Record<string, StatusIndicatorSeverity> = {
@@ -499,6 +504,9 @@
                 :bordered="false"
                 aria-label="Versions"
               >
+                <template #cell-createdAt="{ value }">
+                  <TableCellTime :value="value" />
+                </template>
                 <template #cell-name="{ value }">
                   <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <span class="truncate font-(family-name:--font-code) text-body-sm">{{
@@ -550,6 +558,9 @@
                 :bordered="false"
                 aria-label="Deployments"
               >
+                <template #cell-createdAt="{ value }">
+                  <TableCellTime :value="value" />
+                </template>
                 <template #cell-status="{ value }">
                   <StatusIndicator
                     :severity="deploymentSeverity[value]"

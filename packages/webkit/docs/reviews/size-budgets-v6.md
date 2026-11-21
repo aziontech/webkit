@@ -621,3 +621,5 @@ Budget-raise: toast 11.3 KB → 11.85 KB (measured 11.81 KB): the Button inside 
 Budget-raise: toast-root 11.05 KB → 11.55 KB (measured 11.51 KB): the Button inside it gained `disabledReason` and the loading announcement (code-quality pilot); see the `button` line.
 Budget-raise: toast-action 3.1 KB → 3.45 KB (measured 3.41 KB): the Button inside it gained `disabledReason` and the loading announcement (code-quality pilot); see the `button` line.
 Budget-raise: date-picker 42.4 KB → 42.95 KB (measured 42.91 KB): the Button inside it gained `disabledReason` and the loading announcement (code-quality pilot); see the `button` line.
+Budget-raise: date-range-picker 53.65 KB → 54.95 KB (measured 54.86 KB): owner decision AU-03 (2026-11-21), `Input` no longer takes `type="number"`, so the custom Duration field is a `NumberInput` instead of a text `Input` with a native type.
+Budget-raise: table-filter 6.5 KB → 6.55 KB (measured 6.51 KB): the same `NumberInput` in the DateRangePicker it opens (AU-03).

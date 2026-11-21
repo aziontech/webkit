@@ -5,7 +5,7 @@
   import { passwordManagerHints } from '../../../utils/autofill'
 
   export type InputSize = 'small' | 'medium' | 'large'
-  export type InputType = 'text' | 'email' | 'number'
+  export type InputType = 'text' | 'email'
 
   defineOptions({
     name: 'Input',

@@ -2075,6 +2075,10 @@ The codemod rewrites the renamed paths and bindings and prints `MANUAL` for a re
 6.0 removes the second names the input controls carried. The codemod rewrites the imports and
 bindings and prints `MANUAL` for everything below that it cannot rewrite.
 
+- **`Input` is text only.** `type="number"` is gone from `Input` (`InputType` is `'text' | 'email'`): a
+  number is `NumberInput`, bound to a number with `min`, `max` and `step`. The lint rule
+  `webkit/prefer-value-control` reports every `Input` left with a native `type` of `number`, `date`,
+  `time`, `tel` or `password`.
 - **Removed aliases.** `Checkbox` drops `binary`, `inputId` and the `tabindex` prop (a boolean
   `v-model` needs no flag; pass `id` and `tabindex` as attributes). `Input`, `PasswordInput`,
   `Select.Trigger` and `MultiSelect.Trigger` drop the `#iconLeft` / `#iconRight` slots (use

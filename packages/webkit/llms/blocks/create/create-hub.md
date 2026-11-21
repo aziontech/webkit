@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-hub/create-hub.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-hub")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), `use-locale`
 - Skills: `webkit-create-surface`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -194,6 +194,7 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, watch } from 'vue'
 
   import { sampleRepositories, sampleTemplates } from './sample'
@@ -210,8 +211,8 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
   export interface CreateHubRepository {
     /** The repository name. */
     name: string
-    /** When it was last pushed, already phrased (2 hours ago). */
-    age: string
+    /** When it was last pushed, as an ISO 8601 string. */
+    pushedAt: string
     /** The framework or kind glyph, an icon class. */
     icon: string
   }
@@ -357,6 +358,9 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
     emit('upload', event, picked)
     input.value = ''
   }
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -663,7 +667,7 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
                                         class="az az-history"
                                         aria-hidden="true"
                                       />
-                                      {{ repo.age }}
+                                      {{ ago(repo.pushedAt) }}
                                     </span>
                                   </Item.Description>
                                 </Item.Content>
@@ -876,18 +880,18 @@ export const sampleAccounts: CreateHubAccount[] = [
 ]
 
 export const sampleRepositories: CreateHubRepository[] = [
-  { name: 'next-js-boilerplate', age: '2 hours ago', icon: 'az-color az-nextjs' },
-  { name: 'docs-site', age: '5 hours ago', icon: 'az-color az-astro' },
-  { name: 'api-playground', age: 'yesterday', icon: 'az-color az-vue' },
-  { name: 'storefront-checkout', age: '3 days ago', icon: 'az-color az-react' },
-  { name: 'observability-dashboard', age: '6 days ago', icon: 'az-color az-svelte' },
-  { name: 'marketing-landing', age: '2 weeks ago', icon: 'az-color az-nuxt' },
-  { name: 'internal-admin', age: 'last month', icon: 'az-color az-angular' },
-  { name: 'image-resizer', age: 'last month', icon: 'az az-image' },
-  { name: 'status-page', age: '2 months ago', icon: 'az-color az-astro' },
-  { name: 'auth-gateway', age: '2 months ago', icon: 'az az-lock' },
-  { name: 'blog', age: '3 months ago', icon: 'az-color az-nuxt' },
-  { name: 'design-tokens', age: '5 months ago', icon: 'az az-palette' }
+  { name: 'next-js-boilerplate', pushedAt: '2026-11-10T10:00:00Z', icon: 'az-color az-nextjs' },
+  { name: 'docs-site', pushedAt: '2026-11-10T07:00:00Z', icon: 'az-color az-astro' },
+  { name: 'api-playground', pushedAt: '2026-11-09T12:00:00Z', icon: 'az-color az-vue' },
+  { name: 'storefront-checkout', pushedAt: '2026-11-07T12:00:00Z', icon: 'az-color az-react' },
+  { name: 'observability-dashboard', pushedAt: '2026-11-04T12:00:00Z', icon: 'az-color az-svelte' },
+  { name: 'marketing-landing', pushedAt: '2026-10-27T12:00:00Z', icon: 'az-color az-nuxt' },
+  { name: 'internal-admin', pushedAt: '2026-10-11T12:00:00Z', icon: 'az-color az-angular' },
+  { name: 'image-resizer', pushedAt: '2026-10-11T12:00:00Z', icon: 'az az-image' },
+  { name: 'status-page', pushedAt: '2026-09-11T12:00:00Z', icon: 'az-color az-astro' },
+  { name: 'auth-gateway', pushedAt: '2026-09-11T12:00:00Z', icon: 'az az-lock' },
+  { name: 'blog', pushedAt: '2026-08-12T12:00:00Z', icon: 'az-color az-nuxt' },
+  { name: 'design-tokens', pushedAt: '2026-06-13T12:00:00Z', icon: 'az az-palette' }
 ]
 
 export const sampleTemplates: CreateHubTemplateSection[] = [

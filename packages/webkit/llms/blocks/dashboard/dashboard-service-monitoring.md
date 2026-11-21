@@ -257,7 +257,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
     /** The service the alert belongs to. */
     service: string
     /** When the alert opened, relative. */
-    opened: string
+    openedAt: string
   }
 
   export interface ServiceMonitoringDashboardProps {
@@ -322,6 +322,9 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
     { label: '6h', value: '6h' },
     { label: '24h', value: '24h' }
   ]
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -507,7 +510,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             <Item.Content>
               <Item.Title>{{ alert.title }}</Item.Title>
               <Item.Description>{{ alert.service }}</Item.Description>
-              <Item.Description>Opened {{ alert.opened }}</Item.Description>
+              <Item.Description>Opened {{ ago(alert.openedAt) }}</Item.Description>
             </Item.Content>
             <Item.Actions>
               <Tag
@@ -913,7 +916,7 @@ export const sampleAlerts: ServiceMonitoringAlert[] = [
     level: 'Critical',
     title: 'Status 5xx above 5%',
     service: 'web-app-staging',
-    opened: '12 minutes ago'
+    openedAt: '2026-11-10T11:48:00Z'
   },
   {
     id: 'eu-latency',
@@ -921,7 +924,7 @@ export const sampleAlerts: ServiceMonitoringAlert[] = [
     level: 'Warning',
     title: 'p95 latency above 800 ms',
     service: 'web-app-eu-prod',
-    opened: '34 minutes ago'
+    openedAt: '2026-11-10T11:26:00Z'
   },
   {
     id: 'eu-upstream',
@@ -929,7 +932,7 @@ export const sampleAlerts: ServiceMonitoringAlert[] = [
     level: 'Warning',
     title: 'Upstream timeouts rising',
     service: 'web-app-eu-prod',
-    opened: '1 hour ago'
+    openedAt: '2026-11-10T11:00:00Z'
   },
   {
     id: 'docs-disk',
@@ -937,7 +940,7 @@ export const sampleAlerts: ServiceMonitoringAlert[] = [
     level: 'Info',
     title: 'Disk usage above 80%',
     service: 'docs-site',
-    opened: '3 hours ago'
+    openedAt: '2026-11-10T09:00:00Z'
   }
 ]
 ```

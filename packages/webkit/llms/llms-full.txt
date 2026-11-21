@@ -1833,7 +1833,7 @@ table is in `/webkit-form` ("Pick the control from the kind of value"); for a ch
 
 | The screen shows | Use | Never |
 | --- | --- | --- |
-| A moment in time (created, updated, expires, ran at) | `Timestamp`; in a `DataTable` column, `TableCellTime` | a string such as `'Nov 10'` or `'5 minutes ago'` |
+| A moment in time (created, updated, expires, ran at) | `Timestamp`; in a `DataTable` column, `TableCellTime`; inside a sentence, `useLocale().formatRelativeTime(date)` | a string such as `'Nov 10'` or `'5 minutes ago'` |
 | A monetary amount | `CurrencyAmount` | `'$' + value.toFixed(2)` |
 | A number, a file size, a percentage, a list of words | the `useLocale()` formatters (`formatNumber`, `formatFileSize`, `formatList`) | `toFixed`, `toLocaleString` or a hand-made unit ladder |
 | The state of a resource (Active, Failed, Paused) | `StatusIndicator` | a coloured `Tag`, a coloured dot drawn by hand |
@@ -4085,7 +4085,7 @@ What each prop and event does, and the go-live code: [blocks/auth/auth-sign-in.m
 - Surface: app
 - Source: `blocks/create/create-deploy-drawer/create-deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-drawer")`
-- Components: Accordion, Alert, Avatar, Button, Card, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Input, Item, Kbd, Link, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, RadioGroup, Separator, SettingsGroup, Skeleton, Spinner, Tag, Toast, ToggleGroup, Tooltip, `use-shortcuts`
+- Components: Accordion, Alert, Avatar, Button, Card, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Input, Item, Kbd, Link, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, RadioGroup, Separator, SettingsGroup, Skeleton, Spinner, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `use-shortcuts`
 - Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -4720,7 +4720,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-drawe
 - Surface: app
 - Source: `blocks/create/create-hub/create-hub.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-hub")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, EmptyState, IconButton, Input, IntegrationCard, Item, Link, PageHeader, ScrollArea, Select, Skeleton
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, EmptyState, IconButton, Input, IntegrationCard, Item, Link, PageHeader, ScrollArea, Select, Skeleton, `use-locale`
 - Skills: `webkit-create-surface`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -4959,7 +4959,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-page.
 - Surface: app
 - Source: `blocks/create/create-release-impact/create-release-impact.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-release-impact")`
-- Components: Accordion, Alert, Badge, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, Input, Kbd, OverflowCount, PageHeader, SaveBar, Select, Skeleton, Spinner, Switch, Tag, Toast, ToggleGroup, Tooltip, `use-shortcuts`
+- Components: Accordion, Alert, Badge, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, Input, Kbd, OverflowCount, PageHeader, SaveBar, Select, Skeleton, Spinner, Switch, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `use-shortcuts`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -6709,7 +6709,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Surface: app
 - Source: `blocks/detail/detail-deployment-logs/detail-deployment-logs.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-deployment-logs")`
-- Components: Accordion, Alert, Avatar, Button, Card, CopyButton, DropdownMenu, EmptyState, IconButton, LogViewer, StatusIndicator, Tag, ToggleGroup, Tooltip
+- Components: Accordion, Alert, Avatar, Button, Card, CopyButton, DropdownMenu, EmptyState, IconButton, LogViewer, StatusIndicator, Tag, ToggleGroup, Tooltip, `use-locale`
 - Skills: `webkit-ui-states`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -7379,7 +7379,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-produ
 - Surface: app
 - Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-resource")`
-- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FlowDiagramBind`, FlowDiagram, IconButton, Input, `InputGroupRoot`, Item, Kbd, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Subheader, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `use-unsaved-changes`
+- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FlowDiagramBind`, FlowDiagram, IconButton, Input, `InputGroupRoot`, Item, Kbd, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Subheader, `TableCellTime`, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -7534,7 +7534,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 - Surface: app
 - Source: `blocks/detail/detail-version/detail-version.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-version")`
-- Components: Avatar, Breadcrumb, Button, Card, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Resizable, SchemaForm, ScrollArea, Select, SettingsGroup, SettingsRow, Skeleton, Spinner, SplitButton, Switch, `TableCellTime`, Tabs, Tag, Textarea, Toast, Tooltip
+- Components: Avatar, Breadcrumb, Button, Card, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Resizable, SchemaForm, ScrollArea, Select, SettingsGroup, SettingsRow, Skeleton, Spinner, SplitButton, Switch, `TableCellTime`, Tabs, Tag, Textarea, Toast, Tooltip, `use-locale`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -24627,7 +24627,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 - Visual states: `default`, `hover`, `focus-visible`, `open`, `disabled`; the panel shows an inline error after an Apply that the draft cannot satisfy, and at once (without waiting for Apply) when both ends of an absolute range are set and the end is not after the start.
 - `data-state="open|closed"` on the root and the panel; `data-size`; `data-disabled`; `data-invalid` on the root and the trigger shell (own `invalid` or the enclosing `Field`'s, with `aria-invalid` on the trigger and the danger border); `data-empty` on the trigger with no value; `data-selected` on the chosen quick range.
 - The Next button is disabled while the range ends now (relative or `since`) or when the step would pass `max` (or now); Previous is disabled when the step would pass `min`.
-- `data-view="quick|custom"` on the Relative tab body: `quick` lists the quick ranges and the Custom range row, `custom` shows the Duration and Unit fields in their place. `data-selected` on the Custom range row and on the custom duration group when the draft is a custom duration (no quick range picked); the row then also shows that duration (`Last 2 days`).
+- `data-view="quick|custom"` on the Relative tab body: `quick` lists the quick ranges and the Custom range row, `custom` shows the Duration (a `number-input` with no stepper buttons) and Unit fields in their place. `data-selected` on the Custom range row and on the custom duration group when the draft is a custom duration (no quick range picked); the row then also shows that duration (`Last 2 days`).
 - Limits: days, months and years outside `min`/`max` are disabled in the calendar; while a start day is picked and the end is not, the days further than `maxDuration` from it are disabled too; quick ranges that start before `min` or run longer than `maxDuration` are not listed.
 - With an auto-refresh interval above 0 the trigger's accessible name ends with the interval (`…, refreshes every 30 seconds`); the trigger draws no refresh glyph (owner 2026-11-18: the interval lives in the panel's Refresh every select).
 - `data-view="calendar|fields"` on the Absolute tab body; `data-inline-labels` on its date fields.
@@ -25206,7 +25206,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `placeholder` | `string` | `''` | false | Placeholder shown when the field is empty. |
-| `type` | `'text' \| 'email' \| 'number'` | `'text'` | false | Native input type. Restricted to single-line variants the field treats identically. |
+| `type` | `'text' \| 'email'` | `'text'` | false | Native input type. Restricted to single-line text variants the field treats identically; a number is `number-input`, a secret `password-input`, a phone `phone-input`, a date `date-picker`. |
 | `maxLength` | `number \| undefined` | `undefined` | false | Native `maxlength` — maximum number of characters allowed. |
 | `autocomplete` | `string \| undefined` | `undefined` | false | Native `autocomplete` token on the `<input>` (e.g. `email`, `username`, `off`). Omitted when unset. |
 | `spellcheck` | `boolean \| undefined` | `undefined` | false | Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck="false"` on every field. |

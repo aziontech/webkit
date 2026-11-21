@@ -11,18 +11,18 @@ export const sampleAccounts: CreateHubAccount[] = [
 ]
 
 export const sampleRepositories: CreateHubRepository[] = [
-  { name: 'next-js-boilerplate', age: '2 hours ago', icon: 'az-color az-nextjs' },
-  { name: 'docs-site', age: '5 hours ago', icon: 'az-color az-astro' },
-  { name: 'api-playground', age: 'yesterday', icon: 'az-color az-vue' },
-  { name: 'storefront-checkout', age: '3 days ago', icon: 'az-color az-react' },
-  { name: 'observability-dashboard', age: '6 days ago', icon: 'az-color az-svelte' },
-  { name: 'marketing-landing', age: '2 weeks ago', icon: 'az-color az-nuxt' },
-  { name: 'internal-admin', age: 'last month', icon: 'az-color az-angular' },
-  { name: 'image-resizer', age: 'last month', icon: 'az az-image' },
-  { name: 'status-page', age: '2 months ago', icon: 'az-color az-astro' },
-  { name: 'auth-gateway', age: '2 months ago', icon: 'az az-lock' },
-  { name: 'blog', age: '3 months ago', icon: 'az-color az-nuxt' },
-  { name: 'design-tokens', age: '5 months ago', icon: 'az az-palette' }
+  { name: 'next-js-boilerplate', pushedAt: '2026-11-10T10:00:00Z', icon: 'az-color az-nextjs' },
+  { name: 'docs-site', pushedAt: '2026-11-10T07:00:00Z', icon: 'az-color az-astro' },
+  { name: 'api-playground', pushedAt: '2026-11-09T12:00:00Z', icon: 'az-color az-vue' },
+  { name: 'storefront-checkout', pushedAt: '2026-11-07T12:00:00Z', icon: 'az-color az-react' },
+  { name: 'observability-dashboard', pushedAt: '2026-11-04T12:00:00Z', icon: 'az-color az-svelte' },
+  { name: 'marketing-landing', pushedAt: '2026-10-27T12:00:00Z', icon: 'az-color az-nuxt' },
+  { name: 'internal-admin', pushedAt: '2026-10-11T12:00:00Z', icon: 'az-color az-angular' },
+  { name: 'image-resizer', pushedAt: '2026-10-11T12:00:00Z', icon: 'az az-image' },
+  { name: 'status-page', pushedAt: '2026-09-11T12:00:00Z', icon: 'az-color az-astro' },
+  { name: 'auth-gateway', pushedAt: '2026-09-11T12:00:00Z', icon: 'az az-lock' },
+  { name: 'blog', pushedAt: '2026-08-12T12:00:00Z', icon: 'az-color az-nuxt' },
+  { name: 'design-tokens', pushedAt: '2026-06-13T12:00:00Z', icon: 'az az-palette' }
 ]
 
 export const sampleTemplates: CreateHubTemplateSection[] = [

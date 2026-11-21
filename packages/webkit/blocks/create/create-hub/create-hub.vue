@@ -16,6 +16,7 @@
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, watch } from 'vue'
 
   import { sampleRepositories, sampleTemplates } from './sample'
@@ -32,8 +33,8 @@
   export interface CreateHubRepository {
     /** The repository name. */
     name: string
-    /** When it was last pushed, already phrased (2 hours ago). */
-    age: string
+    /** When it was last pushed, as an ISO 8601 string. */
+    pushedAt: string
     /** The framework or kind glyph, an icon class. */
     icon: string
   }
@@ -179,6 +180,9 @@
     emit('upload', event, picked)
     input.value = ''
   }
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -485,7 +489,7 @@
                                         class="az az-history"
                                         aria-hidden="true"
                                       />
-                                      {{ repo.age }}
+                                      {{ ago(repo.pushedAt) }}
                                     </span>
                                   </Item.Description>
                                 </Item.Content>

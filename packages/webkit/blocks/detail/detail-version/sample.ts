@@ -18,7 +18,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'draft',
     comment: 'Cache static assets for 30 days',
     author: 'John Smith',
-    createdAgo: '14 hours ago',
+    createdAt: '2026-11-09T22:00:00Z',
     createdOn: 'Nov 11, 2026'
   },
   {
@@ -27,7 +27,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'deployed',
     comment: 'Remove rule"Legacy load balancer"',
     author: 'Sam Lee',
-    createdAgo: '1 day ago',
+    createdAt: '2026-11-09T12:00:00Z',
     createdOn: 'Nov 5, 2026'
   },
   {
@@ -36,7 +36,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'ready',
     comment: 'Enable image optimization',
     author: 'Priya Patel',
-    createdAgo: '3 days ago',
+    createdAt: '2026-11-07T12:00:00Z',
     createdOn: 'Nov 5, 2026'
   },
   {
@@ -45,7 +45,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'ready',
     comment: 'Update function"ab-test" arguments',
     author: 'Chris Taylor',
-    createdAgo: '3 days ago',
+    createdAt: '2026-11-07T12:00:00Z',
     createdOn: 'Nov 5, 2026'
   },
   {
@@ -54,7 +54,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'ready',
     comment: 'Add variable"API_URL"',
     author: 'Riley Carter',
-    createdAgo: '4 days ago',
+    createdAt: '2026-11-06T12:00:00Z',
     createdOn: 'Nov 5, 2026'
   },
   {
@@ -63,7 +63,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'ready',
     comment: 'Cache static assets for 30 days',
     author: 'Ethan Brooks',
-    createdAgo: '6 days ago',
+    createdAt: '2026-11-04T12:00:00Z',
     createdOn: 'Nov 5, 2026'
   },
   {
@@ -72,7 +72,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'ready',
     comment: 'Remove rule"Legacy load balancer"',
     author: 'Jordan Kim',
-    createdAgo: '1 week ago',
+    createdAt: '2026-11-03T12:00:00Z',
     createdOn: 'Nov 5, 2026'
   }
 ]

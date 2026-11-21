@@ -15141,10 +15141,10 @@
     },
     {
      "name": "type",
-     "type": "'text' | 'email' | 'number'",
+     "type": "'text' | 'email'",
      "default": "'text'",
      "required": "false",
-     "doc": "Native input type. Restricted to single-line variants the field treats identically."
+     "doc": "Native input type. Restricted to single-line text variants the field treats identically; a number is `number-input`, a secret `password-input`, a phone `phone-input`, a date `date-picker`."
     },
     {
      "name": "maxLength",
@@ -33468,6 +33468,7 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
+    "use-locale",
     "use-shortcuts"
    ],
    "imports": [
@@ -33499,6 +33500,7 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale",
     "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "Service",
@@ -34043,7 +34045,8 @@
     "PageHeader",
     "ScrollArea",
     "Select",
-    "Skeleton"
+    "Skeleton",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -34062,7 +34065,8 @@
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/scroll-area",
     "@aziontech/webkit/select",
-    "@aziontech/webkit/skeleton"
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "The Creation Center, where a new project starts. The user arrives from Home or a Create action with something to deploy and needs to pick its source in one look: a repository from their Git account, a template, or a file or folder from their machine. The page puts the two main sources side by side, Import from GitHub and Start from template, under one heading, and offers file and folder upload in the heading.",
@@ -34257,6 +34261,7 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
+    "use-locale",
     "use-shortcuts"
    ],
    "imports": [
@@ -34282,6 +34287,7 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale",
     "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "Ready",
@@ -35554,7 +35560,8 @@
     "StatusIndicator",
     "Tag",
     "ToggleGroup",
-    "Tooltip"
+    "Tooltip",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
@@ -35570,7 +35577,8 @@
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toggle-group",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Running",
    "guidelinesSummary": "The user started a deployment and wants to know where it is, whether it went live and, when it did not, exactly which step failed and why. This block shows the pipeline as ordered steps, each with its status, its one-line outcome, its time and its own log output, so the user can follow the run as it streams, then read the full output once it settles. It is the one deploy-log block: the same steps sit in the deploy card of a create flow and on a deployment's own page.",
@@ -36048,6 +36056,7 @@
     "SettingsRow",
     "StatusIndicator",
     "Subheader",
+    "TableCellTime",
     "Tabs",
     "Tag",
     "toast",
@@ -36093,6 +36102,7 @@
     "@aziontech/webkit/settings-row",
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/subheader",
+    "@aziontech/webkit/table-cell-time",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
@@ -36219,7 +36229,8 @@
     "Tag",
     "Textarea",
     "toast",
-    "Tooltip"
+    "Tooltip",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/avatar",
@@ -36263,7 +36274,8 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Draft",
    "guidelinesSummary": "One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`. The workspace pins its own bars, so its root carries `data-layout-fill`: the layout's `main` stops scrolling, the root fills it (`h-dvh` only sizes a standalone preview) and its panes scroll.",

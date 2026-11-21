@@ -25,6 +25,7 @@
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, reactive, ref, useId, watch } from 'vue'
 
@@ -45,8 +46,8 @@
     name: string
     /** Who built it. */
     author: string
-    /** When it was built, already phrased (1 day ago). */
-    createdAgo: string
+    /** When it was built, as an ISO 8601 string. */
+    createdAt: string
     /** Whether it is the version live now. */
     active?: boolean
   }
@@ -385,6 +386,9 @@
     when: () => open.value && !blocked.value,
     handler: () => formEl.value?.requestSubmit()
   })
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -615,7 +619,7 @@
                               :value="entry.id"
                               :label="entry.name"
                               :selected="entry.id === versionOf(row)?.id"
-                              :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
+                              :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${ago(entry.createdAt)}`"
                             >
                               <template #leading>
                                 <Avatar
@@ -637,7 +641,7 @@
                               </span>
                               <template #trailing>
                                 <span class="text-body-xs text-(--text-muted)">{{
-                                  entry.createdAgo
+                                  ago(entry.createdAt)
                                 }}</span>
                               </template>
                             </DropdownMenu.Item>
@@ -834,7 +838,7 @@
                                             :value="entry.id"
                                             :label="entry.name"
                                             :selected="entry.id === versionOf(dependency)?.id"
-                                            :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
+                                            :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${ago(entry.createdAt)}`"
                                           >
                                             <template #leading>
                                               <Avatar
@@ -858,7 +862,7 @@
                                             </span>
                                             <template #trailing>
                                               <span class="text-body-xs text-(--text-muted)">{{
-                                                entry.createdAgo
+                                                ago(entry.createdAt)
                                               }}</span>
                                             </template>
                                           </DropdownMenu.Item>

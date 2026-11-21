@@ -7,6 +7,10 @@
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -133,7 +137,7 @@
           <span class="text-label-sm text-(--text-muted)">Last modified</span>
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <span class="truncate text-body-sm text-(--text-default)">
-              6 days ago by Ethan Brooks
+              {{ ago('2026-11-04T12:00:00Z') }} by Ethan Brooks
             </span>
             <Avatar
               alt="Ethan Brooks"

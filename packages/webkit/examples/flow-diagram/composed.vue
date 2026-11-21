@@ -21,7 +21,7 @@
         severity="info"
       />
       <FlowDiagram.Title href="#deploy">production</FlowDiagram.Title>
-      <FlowDiagram.Description>Started 2 minutes ago</FlowDiagram.Description>
+      <FlowDiagram.Description>Running on 3 of 5 locations</FlowDiagram.Description>
       <FlowDiagram.Footer>
         <FlowDiagram.Item label="Regions">38 of 120</FlowDiagram.Item>
       </FlowDiagram.Footer>

@@ -42,10 +42,10 @@
   },
   {
    "name": "type",
-   "type": "'text' | 'email' | 'number'",
+   "type": "'text' | 'email'",
    "default": "'text'",
    "required": "false",
-   "doc": "Native input type. Restricted to single-line variants the field treats identically."
+   "doc": "Native input type. Restricted to single-line text variants the field treats identically; a number is `number-input`, a secret `password-input`, a phone `phone-input`, a date `date-picker`."
   },
   {
    "name": "maxLength",

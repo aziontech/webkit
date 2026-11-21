@@ -1398,7 +1398,7 @@ const readBuild: AiActionApprovalToolCallPart = {
 
 const explanation: AiActionApprovalPart = {
   type: 'text',
-  content: 'Build `b-4821` passed its checks 6 minutes ago. Deploying it needs your approval.'
+  content: 'Build `b-4821` passed its checks. Deploying it needs your approval.'
 }
 
 const deploy = (

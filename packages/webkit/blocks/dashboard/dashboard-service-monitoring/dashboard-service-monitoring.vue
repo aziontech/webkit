@@ -56,7 +56,7 @@
     /** The service the alert belongs to. */
     service: string
     /** When the alert opened, relative. */
-    opened: string
+    openedAt: string
   }
 
   export interface ServiceMonitoringDashboardProps {
@@ -121,6 +121,9 @@
     { label: '6h', value: '6h' },
     { label: '24h', value: '24h' }
   ]
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -306,7 +309,7 @@
             <Item.Content>
               <Item.Title>{{ alert.title }}</Item.Title>
               <Item.Description>{{ alert.service }}</Item.Description>
-              <Item.Description>Opened {{ alert.opened }}</Item.Description>
+              <Item.Description>Opened {{ ago(alert.openedAt) }}</Item.Description>
             </Item.Content>
             <Item.Actions>
               <Tag

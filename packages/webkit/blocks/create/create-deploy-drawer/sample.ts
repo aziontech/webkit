@@ -23,27 +23,32 @@ export const sampleResources: DeployDrawerResource[] = [
         id: 'AEO25I38',
         name: 'AEO25I38',
         author: 'Sam Lee',
-        createdAgo: '1 day ago',
+        createdAt: '2026-11-09T12:00:00Z',
         active: true
       },
       {
         id: 'AG1VVDJP',
         name: 'AG1VVDJP',
         author: 'Priya Patel',
-        createdAgo: '3 days ago'
+        createdAt: '2026-11-07T12:00:00Z'
       },
       {
         id: 'AHFPL906',
         name: 'AHFPL906',
         author: 'Chris Taylor',
-        createdAgo: '3 days ago'
+        createdAt: '2026-11-07T12:00:00Z'
       },
-      { id: 'AITJB4GN', name: 'AITJB4GN', author: 'Riley Carter', createdAgo: '4 days ago' },
+      {
+        id: 'AITJB4GN',
+        name: 'AITJB4GN',
+        author: 'Riley Carter',
+        createdAt: '2026-11-06T12:00:00Z'
+      },
       {
         id: 'AK7D0ZX4',
         name: 'AK7D0ZX4',
         author: 'Ethan Brooks',
-        createdAgo: '6 days ago'
+        createdAt: '2026-11-04T12:00:00Z'
       }
     ],
     owner: true,
@@ -60,31 +65,31 @@ export const sampleResources: DeployDrawerResource[] = [
             id: 'APICRFV0',
             name: 'APICRFV0',
             author: 'Sam Lee',
-            createdAgo: '2 days ago'
+            createdAt: '2026-11-08T12:00:00Z'
           },
           {
             id: 'AQW6HBBH',
             name: 'AQW6HBBH',
             author: 'Priya Patel',
-            createdAgo: '3 days ago'
+            createdAt: '2026-11-07T12:00:00Z'
           },
           {
             id: 'ASA076RY',
             name: 'ASA076RY',
             author: 'Chris Taylor',
-            createdAgo: '5 days ago'
+            createdAt: '2026-11-05T12:00:00Z'
           },
           {
             id: 'ATNTX28F',
             name: 'ATNTX28F',
             author: 'Riley Carter',
-            createdAgo: '5 days ago'
+            createdAt: '2026-11-05T12:00:00Z'
           },
           {
             id: 'AV1NMXOW',
             name: 'AV1NMXOW',
             author: 'Ethan Brooks',
-            createdAgo: '6 days ago'
+            createdAt: '2026-11-04T12:00:00Z'
           }
         ]
       },
@@ -100,31 +105,31 @@ export const sampleResources: DeployDrawerResource[] = [
             id: 'AK16MQ4R',
             name: 'AK16MQ4R',
             author: 'John Smith',
-            createdAgo: '2 days ago'
+            createdAt: '2026-11-08T12:00:00Z'
           },
           {
             id: 'ALF0CLL8',
             name: 'ALF0CLL8',
             author: 'Sam Lee',
-            createdAgo: '4 days ago'
+            createdAt: '2026-11-06T12:00:00Z'
           },
           {
             id: 'AMSU2H1P',
             name: 'AMSU2H1P',
             author: 'Priya Patel',
-            createdAgo: '4 days ago'
+            createdAt: '2026-11-06T12:00:00Z'
           },
           {
             id: 'AO6NSCI6',
             name: 'AO6NSCI6',
             author: 'Chris Taylor',
-            createdAgo: '6 days ago'
+            createdAt: '2026-11-04T12:00:00Z'
           },
           {
             id: 'APKHI7YN',
             name: 'APKHI7YN',
             author: 'Riley Carter',
-            createdAgo: '6 days ago'
+            createdAt: '2026-11-04T12:00:00Z'
           }
         ]
       },
@@ -140,31 +145,31 @@ export const sampleResources: DeployDrawerResource[] = [
             id: 'ASEKWJQF',
             name: 'ASEKWJQF',
             author: 'Riley Carter',
-            createdAgo: '21 hours ago'
+            createdAt: '2026-11-09T15:00:00Z'
           },
           {
             id: 'ATSEMF6W',
             name: 'ATSEMF6W',
             author: 'Ethan Brooks',
-            createdAgo: '2 days ago'
+            createdAt: '2026-11-08T12:00:00Z'
           },
           {
             id: 'AV68CAND',
             name: 'AV68CAND',
             author: 'Jordan Kim',
-            createdAgo: '2 days ago'
+            createdAt: '2026-11-08T12:00:00Z'
           },
           {
             id: 'AWK2263U',
             name: 'AWK2263U',
             author: 'Taylor Reed',
-            createdAgo: '3 days ago'
+            createdAt: '2026-11-07T12:00:00Z'
           },
           {
             id: 'AXXVS1KB',
             name: 'AXXVS1KB',
             author: 'John Smith',
-            createdAgo: '5 days ago'
+            createdAt: '2026-11-05T12:00:00Z'
           }
         ]
       }
@@ -538,13 +543,13 @@ export const sampleEnvironmentReach: Record<string, DeployDrawerReach> = {
 const version = (
   id: string,
   author: string,
-  createdAgo: string,
+  createdAt: string,
   active = false
 ): DeployDrawerVersion => ({
   id,
   name: id,
   author,
-  createdAgo,
+  createdAt,
   active
 })
 
@@ -557,9 +562,9 @@ const authGateway = (prefix: string): DeployDrawerDependency => ({
   sharedWith: ['checkout-api', 'account-api'],
   total: 8,
   versions: [
-    version('APICRFV0', 'Sam Lee', '2 days ago', true),
-    version('AQW6HBBH', 'Priya Patel', '3 days ago'),
-    version('ASA076RY', 'Chris Taylor', '5 days ago')
+    version('APICRFV0', 'Sam Lee', '2026-11-08T12:00:00Z', true),
+    version('AQW6HBBH', 'Priya Patel', '2026-11-07T12:00:00Z'),
+    version('ASA076RY', 'Chris Taylor', '2026-11-05T12:00:00Z')
   ]
 })
 
@@ -584,9 +589,9 @@ const geoRedirect = (prefix: string, ready: boolean): DeployDrawerDependency => 
   total: ready ? 11 : 0,
   versions: ready
     ? [
-        version('AK16MQ4R', 'John Smith', '2 days ago', true),
-        version('ALF0CLL8', 'Sam Lee', '4 days ago'),
-        version('AMSU2H1P', 'Priya Patel', '4 days ago')
+        version('AK16MQ4R', 'John Smith', '2026-11-08T12:00:00Z', true),
+        version('ALF0CLL8', 'Sam Lee', '2026-11-06T12:00:00Z'),
+        version('AMSU2H1P', 'Priya Patel', '2026-11-06T12:00:00Z')
       ]
     : []
 })
@@ -605,11 +610,11 @@ const dependencyResources: Omit<DeployDrawerResource, 'dependencies'>[] = [
     note: '',
     total: 6,
     versions: [
-      version('AEO25I38', 'Sam Lee', '1 day ago', true),
-      version('AG1VVDJP', 'Priya Patel', '3 days ago'),
-      version('AHFPL906', 'Chris Taylor', '3 days ago'),
-      version('AITJB4GN', 'Riley Carter', '4 days ago'),
-      version('AK7D0ZX4', 'Ethan Brooks', '6 days ago')
+      version('AEO25I38', 'Sam Lee', '2026-11-09T12:00:00Z', true),
+      version('AG1VVDJP', 'Priya Patel', '2026-11-07T12:00:00Z'),
+      version('AHFPL906', 'Chris Taylor', '2026-11-07T12:00:00Z'),
+      version('AITJB4GN', 'Riley Carter', '2026-11-06T12:00:00Z'),
+      version('AK7D0ZX4', 'Ethan Brooks', '2026-11-04T12:00:00Z')
     ],
     owner: true
   },
@@ -621,8 +626,8 @@ const dependencyResources: Omit<DeployDrawerResource, 'dependencies'>[] = [
     note: '',
     total: 2,
     versions: [
-      version('AB3K9QX2', 'Riley Carter', '2 days ago', true),
-      version('AC71ZT0M', 'Jordan Kim', '8 days ago')
+      version('AB3K9QX2', 'Riley Carter', '2026-11-08T12:00:00Z', true),
+      version('AC71ZT0M', 'Jordan Kim', '2026-11-02T12:00:00Z')
     ],
     owner: true
   }

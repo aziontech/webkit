@@ -274,6 +274,11 @@
   })
 
   const portalLocale = usePortalLocale()
+
+  defineExpose({
+    /** Moves focus to the trigger button. */
+    focus: (): void => triggerEl.value?.querySelector<globalThis.HTMLElement>('button')?.focus()
+  })
 </script>
 
 <template>

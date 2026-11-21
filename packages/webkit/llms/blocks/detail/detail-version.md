@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/detail-version/detail-version.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-version")`
-- Components: [Avatar](../../components/avatar.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Resizable](../../components/resizable.md), [SchemaForm](../../components/schema-form.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [SplitButton](../../components/split-button.md), [Switch](../../components/switch.md), `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Avatar](../../components/avatar.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Resizable](../../components/resizable.md), [SchemaForm](../../components/schema-form.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [SplitButton](../../components/split-button.md), [Switch](../../components/switch.md), `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -239,6 +239,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, reactive, ref, watch } from 'vue'
 
   import { sampleResource, sampleRevertDiff, sampleSettings, sampleVersions } from './sample'
@@ -275,8 +276,8 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
     comment: string
     /** Who created the version. */
     author: string
-    /** Relative creation time, such as 1 day ago. */
-    createdAgo: string
+    /** When it was created, as an ISO 8601 string. */
+    createdAt: string
     /** Creation date shown in the tab row of a built version. */
     createdOn?: string
   }
@@ -455,7 +456,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
         state: 'ready',
         comment: '',
         author: '',
-        createdAgo: ''
+        createdAt: ''
       }
   )
   const isDraft = computed(() => viewed.value.state === 'draft')
@@ -558,6 +559,9 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
     confirmOpen.value = false
     emit('revert', event, viewed.value)
   }
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -1491,7 +1495,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
                           />
                         </span>
                         <span class="truncate"
-                          >{{ version.author }} · {{ version.createdAgo }}</span
+                          >{{ version.author }} · {{ ago(version.createdAt) }}</span
                         >
                       </span>
                     </template>
@@ -1582,7 +1586,9 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
                             variant="square"
                           />
                         </span>
-                        <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
+                        <span class="truncate"
+                          >{{ entry.author }} · {{ ago(entry.createdAt) }}</span
+                        >
                       </span>
                     </span>
                   </a>
@@ -1632,7 +1638,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'draft',
     comment: 'Cache static assets for 30 days',
     author: 'John Smith',
-    createdAgo: '14 hours ago',
+    createdAt: '2026-11-09T22:00:00Z',
     createdOn: 'Nov 11, 2026'
   },
   {
@@ -1641,7 +1647,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'deployed',
     comment: 'Remove rule"Legacy load balancer"',
     author: 'Sam Lee',
-    createdAgo: '1 day ago',
+    createdAt: '2026-11-09T12:00:00Z',
     createdOn: 'Nov 5, 2026'
   },
   {
@@ -1650,7 +1656,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'ready',
     comment: 'Enable image optimization',
     author: 'Priya Patel',
-    createdAgo: '3 days ago',
+    createdAt: '2026-11-07T12:00:00Z',
     createdOn: 'Nov 5, 2026'
   },
   {
@@ -1659,7 +1665,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'ready',
     comment: 'Update function"ab-test" arguments',
     author: 'Chris Taylor',
-    createdAgo: '3 days ago',
+    createdAt: '2026-11-07T12:00:00Z',
     createdOn: 'Nov 5, 2026'
   },
   {
@@ -1668,7 +1674,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'ready',
     comment: 'Add variable"API_URL"',
     author: 'Riley Carter',
-    createdAgo: '4 days ago',
+    createdAt: '2026-11-06T12:00:00Z',
     createdOn: 'Nov 5, 2026'
   },
   {
@@ -1677,7 +1683,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'ready',
     comment: 'Cache static assets for 30 days',
     author: 'Ethan Brooks',
-    createdAgo: '6 days ago',
+    createdAt: '2026-11-04T12:00:00Z',
     createdOn: 'Nov 5, 2026'
   },
   {
@@ -1686,7 +1692,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     state: 'ready',
     comment: 'Remove rule"Legacy load balancer"',
     author: 'Jordan Kim',
-    createdAgo: '1 week ago',
+    createdAt: '2026-11-03T12:00:00Z',
     createdOn: 'Nov 5, 2026'
   }
 ]

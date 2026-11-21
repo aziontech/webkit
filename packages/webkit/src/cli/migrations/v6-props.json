@@ -1174,6 +1174,12 @@
     "#bottom": "footer"
   },
   "input": {
+    "type": {
+      "to": "type",
+      "values": {
+        "number": "number"
+      }
+    },
     "#prefix": "leading",
     "#suffix": "trailing"
   },

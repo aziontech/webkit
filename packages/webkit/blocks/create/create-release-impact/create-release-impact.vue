@@ -18,6 +18,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 
@@ -33,8 +34,8 @@
     id: string
     /** The latest Ready version. */
     current?: boolean
-    /** How long ago it was built, e.g. 2 hours ago. */
-    age: string
+    /** When it was built, as an ISO 8601 string. */
+    builtAt: string
   }
 
   /** A dependency row inside a resource card. */
@@ -357,6 +358,9 @@
   onBeforeUnmount(() => {
     toast.dismiss(RUN_TOAST)
   })
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -556,7 +560,7 @@
                                     size="small"
                                   />
                                   <span class="text-body-xs text-(--text-muted)">
-                                    {{ version.age }}
+                                    {{ ago(version.builtAt) }}
                                   </span>
                                 </span>
                               </template>
@@ -691,7 +695,7 @@
                                             size="small"
                                           />
                                           <span class="text-body-xs text-(--text-muted)">
-                                            {{ version.age }}
+                                            {{ ago(version.builtAt) }}
                                           </span>
                                         </span>
                                       </template>

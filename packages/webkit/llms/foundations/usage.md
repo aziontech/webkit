@@ -136,28 +136,28 @@ table is in `/webkit-form` ("Pick the control from the kind of value"); for a ch
 
 ### Showing a value
 
-| The screen shows                                                  | Use                                                                           | Never                                                  |
-| ----------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------ |
-| A moment in time (created, updated, expires, ran at)              | `Timestamp`; in a `DataTable` column, `TableCellTime`                         | a string such as `'Nov 10'` or `'5 minutes ago'`       |
-| A monetary amount                                                 | `CurrencyAmount`                                                              | `'$' + value.toFixed(2)`                               |
-| A number, a file size, a percentage, a list of words              | the `useLocale()` formatters (`formatNumber`, `formatFileSize`, `formatList`) | `toFixed`, `toLocaleString` or a hand-made unit ladder |
-| The state of a resource (Active, Failed, Paused)                  | `StatusIndicator`                                                             | a coloured `Tag`, a coloured dot drawn by hand         |
-| How severe a finding is (critical, high, medium, low)             | `SeverityTag`                                                                 | a `Tag` with a hand-picked colour                      |
-| An HTTP method and status (`GET 200`)                             | `StatusCode`                                                                  | a `Tag`                                                |
-| A category or label word                                          | `Tag`                                                                         | a `Chip` (a chip is removable or selectable)           |
-| A count attached to something (unread, items in a section)        | `Badge`                                                                       | a `Tag` with a number                                  |
-| The first value of a list and "+3" for the rest                   | `OverflowCount`                                                               | a truncated string                                     |
-| A short value the reader pastes elsewhere (ID, CNAME, token name) | `CopyText` (the value shown) or `CopyButton` beside your own markup           | a hand-written clipboard call                          |
-| Code, config or JSON to read or copy                              | `CodeBlock`                                                                   | a `pre` element, a read-only `Textarea`                |
-| Build, deploy or runtime log lines                                | `LogViewer`                                                                   | a `CodeBlock`                                          |
-| The facts of one resource (ID, region, created at)                | `KeyValueList`                                                                | a two-column `Table`                                   |
-| A person, or the people on something                              | `Avatar`, `AvatarGroup`                                                       | an `img` in a circle                                   |
-| A key or a shortcut                                               | `Kbd`                                                                         | a styled `code` element                                |
-| A value a phone must pick up (an authenticator URI, a link)       | `QrCode`                                                                      | an image from a third-party service                    |
-| A payment card network                                            | `PaymentBrand`                                                                | a logo file of your own                                |
-| Another company's mark                                            | `ThirdPartyLogo`                                                              | a hand-picked SVG                                      |
-| Usage against a limit                                             | `Progress`                                                                    | a hand-drawn bar                                       |
-| A file opened from a list (image, text, JSON, PDF)                | `FilePreview`                                                                 | an `iframe` or `img` by hand                           |
+| The screen shows                                                  | Use                                                                                                              | Never                                                  |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| A moment in time (created, updated, expires, ran at)              | `Timestamp`; in a `DataTable` column, `TableCellTime`; inside a sentence, `useLocale().formatRelativeTime(date)` | a string such as `'Nov 10'` or `'5 minutes ago'`       |
+| A monetary amount                                                 | `CurrencyAmount`                                                                                                 | `'$' + value.toFixed(2)`                               |
+| A number, a file size, a percentage, a list of words              | the `useLocale()` formatters (`formatNumber`, `formatFileSize`, `formatList`)                                    | `toFixed`, `toLocaleString` or a hand-made unit ladder |
+| The state of a resource (Active, Failed, Paused)                  | `StatusIndicator`                                                                                                | a coloured `Tag`, a coloured dot drawn by hand         |
+| How severe a finding is (critical, high, medium, low)             | `SeverityTag`                                                                                                    | a `Tag` with a hand-picked colour                      |
+| An HTTP method and status (`GET 200`)                             | `StatusCode`                                                                                                     | a `Tag`                                                |
+| A category or label word                                          | `Tag`                                                                                                            | a `Chip` (a chip is removable or selectable)           |
+| A count attached to something (unread, items in a section)        | `Badge`                                                                                                          | a `Tag` with a number                                  |
+| The first value of a list and "+3" for the rest                   | `OverflowCount`                                                                                                  | a truncated string                                     |
+| A short value the reader pastes elsewhere (ID, CNAME, token name) | `CopyText` (the value shown) or `CopyButton` beside your own markup                                              | a hand-written clipboard call                          |
+| Code, config or JSON to read or copy                              | `CodeBlock`                                                                                                      | a `pre` element, a read-only `Textarea`                |
+| Build, deploy or runtime log lines                                | `LogViewer`                                                                                                      | a `CodeBlock`                                          |
+| The facts of one resource (ID, region, created at)                | `KeyValueList`                                                                                                   | a two-column `Table`                                   |
+| A person, or the people on something                              | `Avatar`, `AvatarGroup`                                                                                          | an `img` in a circle                                   |
+| A key or a shortcut                                               | `Kbd`                                                                                                            | a styled `code` element                                |
+| A value a phone must pick up (an authenticator URI, a link)       | `QrCode`                                                                                                         | an image from a third-party service                    |
+| A payment card network                                            | `PaymentBrand`                                                                                                   | a logo file of your own                                |
+| Another company's mark                                            | `ThirdPartyLogo`                                                                                                 | a hand-picked SVG                                      |
+| Usage against a limit                                             | `Progress`                                                                                                       | a hand-drawn bar                                       |
+| A file opened from a list (image, text, JSON, PDF)                | `FilePreview`                                                                                                    | an `iframe` or `img` by hand                           |
 
 ### Look-alikes: which one
 

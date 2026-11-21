@@ -15,6 +15,7 @@
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { ref } from 'vue'
 
   type DeployStep = LogViewerStep & { tag?: { label: string; severity: TagSeverity } }
@@ -287,6 +288,9 @@
 
   const logViewer = ref<LogViewerStepsView>('phased')
   const openStep = ref('rules')
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -396,7 +400,9 @@
                   />
                 </Tooltip>
                 <span class="truncate text-body-sm text-(--text-default)"> John Smith </span>
-                <span class="shrink-0 text-body-sm text-(--text-muted)"> 1 hour ago </span>
+                <span class="shrink-0 text-body-sm text-(--text-muted)">
+                  {{ ago('2026-11-10T11:00:00Z') }}
+                </span>
               </div>
             </div>
             <div class="flex flex-col gap-(--spacing-2xs)">

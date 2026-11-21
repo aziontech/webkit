@@ -70,7 +70,7 @@ describe('create-hub', () => {
   })
 
   it('renders the repositories it is given and emits import with the repository', async () => {
-    const repository = { name: 'acme-store', age: '1 hour ago', icon: 'az az-code' }
+    const repository = { name: 'acme-store', pushedAt: '2026-11-10T11:00:00Z', icon: 'az az-code' }
     const view = render(CreateHub, {
       props: { accounts: [{ label: 'acme', value: 'acme' }], repositories: [repository] }
     })

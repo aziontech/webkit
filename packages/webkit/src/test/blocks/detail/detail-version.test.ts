@@ -126,7 +126,7 @@ describe('detail-version data', () => {
       state: 'draft',
       comment: 'Tune the cache',
       author: 'Jane Doe',
-      createdAgo: '2 hours ago'
+      createdAt: '2026-11-10T10:00:00Z'
     },
     {
       id: 'B1LIVE01',
@@ -134,7 +134,7 @@ describe('detail-version data', () => {
       state: 'deployed',
       comment: 'Initial release',
       author: 'Alex Morgan',
-      createdAgo: '2 days ago',
+      createdAt: '2026-11-08T12:00:00Z',
       createdOn: 'Nov 14, 2026'
     },
     {
@@ -143,7 +143,7 @@ describe('detail-version data', () => {
       state: 'ready',
       comment: 'First import',
       author: 'Sam Lee',
-      createdAgo: '1 week ago'
+      createdAt: '2026-11-03T12:00:00Z'
     }
   ]
   const settings = { name: 'acme-store', active: true, modules: { cache: true } }

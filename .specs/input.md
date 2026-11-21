@@ -3,10 +3,10 @@ name: input
 category: input
 structure: monolithic
 status: implemented
-spec_version: 10
-checksum: f0dc2353799b028fe24cc88684986f5cc377763853b69ebf9f677f781615e5d2
+spec_version: 11
+checksum: 4b081536fe3e5d51e691f98c876a7bc107300003f7006e137de9769c85a789bb
 created: 2026-05-22
-last_updated: 2026-11-19
+last_updated: 2026-11-21
 ---
 
 # Input Text — Component Spec
@@ -72,7 +72,7 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 | Prop           | Type                             | Default     | Required | JSDoc                                                                                                                                                                                                                                                   |
 | -------------- | -------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `placeholder`  | `string`                         | `''`        | false    | Placeholder shown when the field is empty.                                                                                                                                                                                                              |
-| `type`         | `'text' \| 'email' \| 'number'`  | `'text'`    | false    | Native input type. Restricted to single-line variants the field treats identically.                                                                                                                                                                     |
+| `type`         | `'text' \| 'email'`              | `'text'`    | false    | Native input type. Restricted to single-line text variants the field treats identically; a number is `number-input`, a secret `password-input`, a phone `phone-input`, a date `date-picker`.                                                            |
 | `maxLength`    | `number \| undefined`            | `undefined` | false    | Native `maxlength` — maximum number of characters allowed.                                                                                                                                                                                              |
 | `autocomplete` | `string \| undefined`            | `undefined` | false    | Native `autocomplete` token on the `<input>` (e.g. `email`, `username`, `off`). Omitted when unset.                                                                                                                                                     |
 | `spellcheck`   | `boolean \| undefined`           | `undefined` | false    | Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck="false"` on every field. |

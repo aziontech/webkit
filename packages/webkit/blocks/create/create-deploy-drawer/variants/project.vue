@@ -19,6 +19,7 @@
   import Separator from '@aziontech/webkit/separator'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import Tag from '@aziontech/webkit/tag'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, reactive, ref, watch } from 'vue'
 
@@ -26,7 +27,7 @@
     id: string
     name: string
     author: string
-    createdAgo: string
+    createdAt: string
     active?: boolean
   }
   interface Dependency {
@@ -56,32 +57,32 @@
           id: 'AWPT11GA',
           name: 'AWPT11GA',
           author: 'Taylor Reed',
-          createdAgo: '21 hours ago',
+          createdAt: '2026-11-09T15:00:00Z',
           active: true
         },
         {
           id: 'AY3MQWWR',
           name: 'AY3MQWWR',
           author: 'John Smith',
-          createdAgo: '2 days ago'
+          createdAt: '2026-11-08T12:00:00Z'
         },
         {
           id: 'AZHGGSD8',
           name: 'AZHGGSD8',
           author: 'Sam Lee',
-          createdAgo: '4 days ago'
+          createdAt: '2026-11-06T12:00:00Z'
         },
         {
           id: 'A1VA6NTP',
           name: 'A1VA6NTP',
           author: 'Priya Patel',
-          createdAgo: '4 days ago'
+          createdAt: '2026-11-06T12:00:00Z'
         },
         {
           id: 'A393WJA6',
           name: 'A393WJA6',
           author: 'Chris Taylor',
-          createdAgo: '6 days ago'
+          createdAt: '2026-11-04T12:00:00Z'
         }
       ],
       owner: true,
@@ -98,31 +99,31 @@
               id: 'ATNSEE8Y',
               name: 'ATNSEE8Y',
               author: 'Taylor Reed',
-              createdAgo: '2 days ago'
+              createdAt: '2026-11-08T12:00:00Z'
             },
             {
               id: 'AV1M49PF',
               name: 'AV1M49PF',
               author: 'John Smith',
-              createdAgo: '3 days ago'
+              createdAt: '2026-11-07T12:00:00Z'
             },
             {
               id: 'AWFFU55W',
               name: 'AWFFU55W',
               author: 'Sam Lee',
-              createdAgo: '4 days ago'
+              createdAt: '2026-11-06T12:00:00Z'
             },
             {
               id: 'AXT9K0MD',
               name: 'AXT9K0MD',
               author: 'Priya Patel',
-              createdAgo: '6 days ago'
+              createdAt: '2026-11-04T12:00:00Z'
             },
             {
               id: 'AZ739W2U',
               name: 'AZ739W2U',
               author: 'Chris Taylor',
-              createdAgo: '6 days ago'
+              createdAt: '2026-11-04T12:00:00Z'
             }
           ]
         },
@@ -138,19 +139,19 @@
               id: 'AHMVCHSJ',
               name: 'AHMVCHSJ',
               author: 'John Smith',
-              createdAgo: '2 days ago'
+              createdAt: '2026-11-08T12:00:00Z'
             },
             {
               id: 'AJ0P2D90',
               name: 'AJ0P2D90',
               author: 'Sam Lee',
-              createdAgo: '4 days ago'
+              createdAt: '2026-11-06T12:00:00Z'
             },
             {
               id: 'AKEIS8PH',
               name: 'AKEIS8PH',
               author: 'Priya Patel',
-              createdAgo: '4 days ago'
+              createdAt: '2026-11-06T12:00:00Z'
             }
           ]
         }
@@ -230,6 +231,9 @@
     when: () => open.value,
     handler: () => formEl.value?.requestSubmit()
   })
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -361,7 +365,7 @@
                               :value="entry.id"
                               :label="entry.name"
                               :selected="entry.id === versionOf(row).id"
-                              :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
+                              :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${ago(entry.createdAt)}`"
                             >
                               <template #leading>
                                 <Avatar
@@ -383,7 +387,7 @@
                               </span>
                               <template #trailing>
                                 <span class="text-body-xs text-(--text-muted)">{{
-                                  entry.createdAgo
+                                  ago(entry.createdAt)
                                 }}</span>
                               </template>
                             </DropdownMenu.Item>
@@ -512,7 +516,7 @@
                                           :value="entry.id"
                                           :label="entry.name"
                                           :selected="entry.id === versionOf(dependency).id"
-                                          :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
+                                          :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${ago(entry.createdAt)}`"
                                         >
                                           <template #leading>
                                             <Avatar
@@ -536,7 +540,7 @@
                                           </span>
                                           <template #trailing>
                                             <span class="text-body-xs text-(--text-muted)">{{
-                                              entry.createdAgo
+                                              ago(entry.createdAt)
                                             }}</span>
                                           </template>
                                         </DropdownMenu.Item>

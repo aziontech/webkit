@@ -3,11 +3,11 @@ name: date-range-picker
 category: input
 structure: monolithic
 status: implemented
-spec_version: 15
+spec_version: 16
 template: 2
-checksum: e9d95f34dd69061084e38a647362f3b20ec0ca85b9e6751a1ca32717d77daa3c
+checksum: 93faf29e7d4326f98ea7d58c45470acec4ba833dabca3225759269c2e9288a82
 created: 2026-11-11
-last_updated: 2026-11-19
+last_updated: 2026-11-21
 ---
 
 # DateRangePicker — Component Spec
@@ -130,7 +130,7 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 - Visual states: `default`, `hover`, `focus-visible`, `open`, `disabled`; the panel shows an inline error after an Apply that the draft cannot satisfy, and at once (without waiting for Apply) when both ends of an absolute range are set and the end is not after the start.
 - `data-state="open|closed"` on the root and the panel; `data-size`; `data-disabled`; `data-invalid` on the root and the trigger shell (own `invalid` or the enclosing `Field`'s, with `aria-invalid` on the trigger and the danger border); `data-empty` on the trigger with no value; `data-selected` on the chosen quick range.
 - The Next button is disabled while the range ends now (relative or `since`) or when the step would pass `max` (or now); Previous is disabled when the step would pass `min`.
-- `data-view="quick|custom"` on the Relative tab body: `quick` lists the quick ranges and the Custom range row, `custom` shows the Duration and Unit fields in their place. `data-selected` on the Custom range row and on the custom duration group when the draft is a custom duration (no quick range picked); the row then also shows that duration (`Last 2 days`).
+- `data-view="quick|custom"` on the Relative tab body: `quick` lists the quick ranges and the Custom range row, `custom` shows the Duration (a `number-input` with no stepper buttons) and Unit fields in their place. `data-selected` on the Custom range row and on the custom duration group when the draft is a custom duration (no quick range picked); the row then also shows that duration (`Last 2 days`).
 - Limits: days, months and years outside `min`/`max` are disabled in the calendar; while a start day is picked and the end is not, the days further than `maxDuration` from it are disabled too; quick ranges that start before `min` or run longer than `maxDuration` are not listed.
 - With an auto-refresh interval above 0 the trigger's accessible name ends with the interval (`…, refreshes every 30 seconds`); the trigger draws no refresh glyph (owner 2026-11-18: the interval lives in the panel's Refresh every select).
 - `data-view="calendar|fields"` on the Absolute tab body; `data-inline-labels` on its date fields.
@@ -248,7 +248,7 @@ Below 640 px the same `animate-popup-scale-in` / `animate-popup-scale-out` run f
 
 ## Performance
 
-- Bundle budget: `./date-range-picker` in `.size-limit.json` (it carries the `date-picker` grid, fields and time zone selector, `select`, `combobox`, `toggle-group`, `button`, `input`, `checkbox` and the placement and focus-trap composables).
+- Bundle budget: `./date-range-picker` in `.size-limit.json` (it carries the `date-picker` grid, fields and time zone selector, `select`, `combobox`, `toggle-group`, `button`, `number-input`, `checkbox` and the placement and focus-trap composables).
 - Runtime budget: zone conversion is two `Intl.DateTimeFormat#formatToParts` calls per boundary; nothing runs per frame. Auto refresh is one `setInterval` per picker, only while the interval is above 0, cleared on unmount.
 - Heavy parts: none; the panel renders only while open.
 

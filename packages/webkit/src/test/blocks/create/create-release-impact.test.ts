@@ -29,7 +29,7 @@ describe('create-release-impact', () => {
         required: true,
         enabled: true,
         versionId: 'BX1Y2Z3A',
-        versions: [{ id: 'BX1Y2Z3A', current: true, age: '1 hour ago' }],
+        versions: [{ id: 'BX1Y2Z3A', current: true, builtAt: '2026-11-10T11:00:00Z' }],
         groups: []
       }
     ]

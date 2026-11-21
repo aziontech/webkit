@@ -89,7 +89,7 @@
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "53.65 KB"
+    "limit": "54.95 KB"
   },
   {
     "name": "table-root",
@@ -1711,7 +1711,7 @@
   {
     "name": "table-filter",
     "path": "src/components/data/table/table-filter/table-filter.vue",
-    "limit": "6.5 KB",
+    "limit": "6.55 KB",
     "entryOnly": true
   },
   {

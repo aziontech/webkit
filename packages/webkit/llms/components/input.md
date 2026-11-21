@@ -38,7 +38,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `placeholder` | `string` | `''` | false | Placeholder shown when the field is empty. |
-| `type` | `'text' \| 'email' \| 'number'` | `'text'` | false | Native input type. Restricted to single-line variants the field treats identically. |
+| `type` | `'text' \| 'email'` | `'text'` | false | Native input type. Restricted to single-line text variants the field treats identically; a number is `number-input`, a secret `password-input`, a phone `phone-input`, a date `date-picker`. |
 | `maxLength` | `number \| undefined` | `undefined` | false | Native `maxlength` — maximum number of characters allowed. |
 | `autocomplete` | `string \| undefined` | `undefined` | false | Native `autocomplete` token on the `<input>` (e.g. `email`, `username`, `off`). Omitted when unset. |
 | `spellcheck` | `boolean \| undefined` | `undefined` | false | Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck="false"` on every field. |

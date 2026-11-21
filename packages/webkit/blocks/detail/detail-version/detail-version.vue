@@ -25,6 +25,7 @@
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, reactive, ref, watch } from 'vue'
 
   import { sampleResource, sampleRevertDiff, sampleSettings, sampleVersions } from './sample'
@@ -61,8 +62,8 @@
     comment: string
     /** Who created the version. */
     author: string
-    /** Relative creation time, such as 1 day ago. */
-    createdAgo: string
+    /** When it was created, as an ISO 8601 string. */
+    createdAt: string
     /** Creation date shown in the tab row of a built version. */
     createdOn?: string
   }
@@ -241,7 +242,7 @@
         state: 'ready',
         comment: '',
         author: '',
-        createdAgo: ''
+        createdAt: ''
       }
   )
   const isDraft = computed(() => viewed.value.state === 'draft')
@@ -344,6 +345,9 @@
     confirmOpen.value = false
     emit('revert', event, viewed.value)
   }
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -1277,7 +1281,7 @@
                           />
                         </span>
                         <span class="truncate"
-                          >{{ version.author }} · {{ version.createdAgo }}</span
+                          >{{ version.author }} · {{ ago(version.createdAt) }}</span
                         >
                       </span>
                     </template>
@@ -1368,7 +1372,9 @@
                             variant="square"
                           />
                         </span>
-                        <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
+                        <span class="truncate"
+                          >{{ entry.author }} · {{ ago(entry.createdAt) }}</span
+                        >
                       </span>
                     </span>
                   </a>

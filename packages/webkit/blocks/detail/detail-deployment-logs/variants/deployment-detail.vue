@@ -15,6 +15,7 @@
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { ref } from 'vue'
 
   const steps: LogViewerStep[] = [
@@ -340,6 +341,9 @@
 
   const logViewer = ref<LogViewerStepsView>('phased')
   const openStep = ref('finish')
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -440,7 +444,9 @@
                   />
                 </Tooltip>
                 <span class="truncate text-body-sm text-(--text-default)"> Taylor Reed </span>
-                <span class="shrink-0 text-body-sm text-(--text-muted)"> 1 week ago </span>
+                <span class="shrink-0 text-body-sm text-(--text-muted)">
+                  {{ ago('2026-11-03T12:00:00Z') }}
+                </span>
               </div>
             </div>
             <div class="flex flex-col gap-(--spacing-2xs)">

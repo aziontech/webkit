@@ -27,10 +27,12 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Subheader from '@aziontech/webkit/subheader'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
@@ -54,7 +56,7 @@
     { accessorKey: 'name', header: 'Version', principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 2 },
     { accessorKey: 'state', header: 'Status', minWidth: 104 },
-    { accessorKey: 'createdAgo', header: 'Created', minWidth: 96 }
+    { accessorKey: 'createdAt', header: 'Created', minWidth: 96 }
   ]
   const versions = [
     {
@@ -62,21 +64,21 @@
       name: 'BX7Q2LMA',
       description: 'Cache product images for 7 days',
       state: 'Active',
-      createdAgo: '3 hours ago'
+      createdAt: '2026-11-10T09:00:00Z'
     },
     {
       id: 'BW1K8RTE',
       name: 'BW1K8RTE',
       description: 'Redirect the old checkout path',
       state: 'Ready',
-      createdAgo: 'Yesterday'
+      createdAt: '2026-11-09T12:00:00Z'
     },
     {
       id: 'BV4N6PXD',
       name: 'BV4N6PXD',
       description: 'Bypass cache for /api/*',
       state: 'Ready',
-      createdAgo: '4 days ago'
+      createdAt: '2026-11-06T12:00:00Z'
     }
   ]
   const versionSeverity: Record<string, TagSeverity> = {
@@ -90,7 +92,7 @@
     { accessorKey: 'version', header: 'Version' },
     { accessorKey: 'environment', header: 'Environment' },
     { accessorKey: 'status', header: 'Status', minWidth: 104 },
-    { accessorKey: 'createdAgo', header: 'Created', minWidth: 96 }
+    { accessorKey: 'createdAt', header: 'Created', minWidth: 96 }
   ]
   const deployments = [
     {
@@ -98,21 +100,21 @@
       version: 'BX7Q2LMA',
       environment: 'Production',
       status: 'Ready',
-      createdAgo: '3 hours ago'
+      createdAt: '2026-11-10T09:00:00Z'
     },
     {
       id: '4181877250',
       version: 'BW1K8RTE',
       environment: 'Preview',
       status: 'Ready',
-      createdAgo: 'Yesterday'
+      createdAt: '2026-11-09T12:00:00Z'
     },
     {
       id: '4180412906',
       version: 'BW1K8RTE',
       environment: 'Production',
       status: 'Error',
-      createdAgo: 'Yesterday'
+      createdAt: '2026-11-09T12:00:00Z'
     }
   ]
   const deploymentSeverity: Record<string, StatusIndicatorSeverity> = {
@@ -234,6 +236,9 @@
     clearTimeout(timer)
     toast.dismiss(RUN_TOAST)
   })
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
@@ -641,7 +646,7 @@
                   <span class="text-label-sm text-(--text-muted)">Created</span>
                   <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                     <span class="truncate text-body-sm text-(--text-default)"
-                      >3 hours ago by Priya Patel</span
+                      >{{ ago('2026-11-10T09:00:00Z') }} by Priya Patel</span
                     >
                     <Avatar
                       alt="Priya Patel"
@@ -748,6 +753,9 @@
                 :bordered="false"
                 aria-label="Versions"
               >
+                <template #cell-createdAt="{ value }">
+                  <TableCellTime :value="value" />
+                </template>
                 <template #cell-name="{ value }">
                   <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <span class="truncate font-(family-name:--font-code) text-body-sm">{{
@@ -799,6 +807,9 @@
                 :bordered="false"
                 aria-label="Deployments"
               >
+                <template #cell-createdAt="{ value }">
+                  <TableCellTime :value="value" />
+                </template>
                 <template #cell-status="{ value }">
                   <StatusIndicator
                     :severity="deploymentSeverity[value]"

@@ -39,7 +39,7 @@
   import DatePickerFields from '../date-picker/parts/date-picker-fields.vue'
   import DatePickerGrid from '../date-picker/parts/date-picker-grid.vue'
   import DatePickerTimezone from '../date-picker/parts/date-picker-timezone.vue'
-  import Input from '../input/input.vue'
+  import NumberInput from '../number-input/number-input.vue'
   import Select from '../select/select.vue'
   import SelectContent from '../select/select-content/select-content.vue'
   import SelectItem from '../select/select-item/select-item.vue'
@@ -1067,15 +1067,16 @@
                     class="text-label-sm text-(--text-default)"
                     >{{ t('dateRangePicker.amount') }}</label
                   >
-                  <Input
+                  <NumberInput
                     :id="customAmountId"
-                    :model-value="customAmount"
-                    type="number"
+                    :model-value="customAmount === '' ? null : Number(customAmount)"
+                    nullable
+                    :show-buttons="false"
                     :size="size"
                     :invalid="showError && !!rangeError"
                     :aria-describedby="showError && draftError ? errorId : undefined"
                     :data-testid="`${testId}__amount`"
-                    @update:model-value="editCustomAmount"
+                    @update:model-value="editCustomAmount($event === null ? '' : String($event))"
                   />
                 </div>
                 <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
