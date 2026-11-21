@@ -127,6 +127,74 @@ Structure and states first, polish last:
 - **Azion API:** `/webkit-azion-api` (CORS, the dev and edge proxy, where the personal token
   lives) · `/webkit-query-explorer` (a Metrics or Events GraphQL explorer from WebKit pieces)
 
+## Pick the component for the job
+
+Name the job first, then take the component made for it. A plain `Input`, a string in a `<span>`
+or a `Button` with extra markup is the answer only when no row below fits. For a form field, the
+table is in `/webkit-form` ("Pick the control from the kind of value"); for a chart,
+`/webkit-data-viz`; for an AI conversation, `/webkit-ai-surfaces`.
+
+### Showing a value
+
+| The screen shows                                                  | Use                                                                           | Never                                                  |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------ |
+| A moment in time (created, updated, expires, ran at)              | `Timestamp`; in a `DataTable` column, `TableCellTime`                         | a string such as `'Nov 10'` or `'5 minutes ago'`       |
+| A monetary amount                                                 | `CurrencyAmount`                                                              | `'$' + value.toFixed(2)`                               |
+| A number, a file size, a percentage, a list of words              | the `useLocale()` formatters (`formatNumber`, `formatFileSize`, `formatList`) | `toFixed`, `toLocaleString` or a hand-made unit ladder |
+| The state of a resource (Active, Failed, Paused)                  | `StatusIndicator`                                                             | a coloured `Tag`, a coloured dot drawn by hand         |
+| How severe a finding is (critical, high, medium, low)             | `SeverityTag`                                                                 | a `Tag` with a hand-picked colour                      |
+| An HTTP method and status (`GET 200`)                             | `StatusCode`                                                                  | a `Tag`                                                |
+| A category or label word                                          | `Tag`                                                                         | a `Chip` (a chip is removable or selectable)           |
+| A count attached to something (unread, items in a section)        | `Badge`                                                                       | a `Tag` with a number                                  |
+| The first value of a list and "+3" for the rest                   | `OverflowCount`                                                               | a truncated string                                     |
+| A short value the reader pastes elsewhere (ID, CNAME, token name) | `CopyText` (the value shown) or `CopyButton` beside your own markup           | a hand-written clipboard call                          |
+| Code, config or JSON to read or copy                              | `CodeBlock`                                                                   | a `pre` element, a read-only `Textarea`                |
+| Build, deploy or runtime log lines                                | `LogViewer`                                                                   | a `CodeBlock`                                          |
+| The facts of one resource (ID, region, created at)                | `KeyValueList`                                                                | a two-column `Table`                                   |
+| A person, or the people on something                              | `Avatar`, `AvatarGroup`                                                       | an `img` in a circle                                   |
+| A key or a shortcut                                               | `Kbd`                                                                         | a styled `code` element                                |
+| A value a phone must pick up (an authenticator URI, a link)       | `QrCode`                                                                      | an image from a third-party service                    |
+| A payment card network                                            | `PaymentBrand`                                                                | a logo file of your own                                |
+| Another company's mark                                            | `ThirdPartyLogo`                                                              | a hand-picked SVG                                      |
+| Usage against a limit                                             | `Progress`                                                                    | a hand-drawn bar                                       |
+| A file opened from a list (image, text, JSON, PDF)                | `FilePreview`                                                                 | an `iframe` or `img` by hand                           |
+
+### Look-alikes: which one
+
+| Pair                           | Use the first when                                                    | Use the second when                                                                                   |
+| ------------------------------ | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `DataTable` / `DataGrid`       | people read rows and act on them (sort, filter, select, open)         | people edit many cells of many records in place, like a spreadsheet                                   |
+| `DataTable` / `Table`          | the rows come from data (`data` + `columns`), with sort and pages     | a small static table composed by hand                                                                 |
+| `DataTable` / `CardList`       | records compare column by column                                      | each record reads as a card (a logo, a title, a few facts)                                            |
+| `Wizard` / `Stepper`           | an ordered create needs steps, content and Cancel, Previous, Next     | only the step rail is needed and the footer and gating are your own                                   |
+| `CodeBlock` / `CodeEditor`     | the person reads or copies the code                                   | the person edits the code                                                                             |
+| `DropdownMenu` / `SplitButton` | a button opens a list of actions                                      | one default action has a few related alternatives                                                     |
+| `DropdownMenu` / `ContextMenu` | the menu opens from a button                                          | the same actions open by right-click or long-press on an item                                         |
+| `Button` / `IconButton`        | the action has a text label                                           | the action is an icon alone (it needs `aria-label`)                                                   |
+| `Button` / `HighlightButton`   | every action                                                          | the one AI entry point of the screen                                                                  |
+| `ButtonGroup` / `ToggleGroup`  | several separate actions sit joined in one bar                        | one of several views or modes is chosen and stays selected                                            |
+| `CopyButton` / `CopyText`      | you already show the value and need only the copy control             | the component should show the value and copy it                                                       |
+| `Tabs` / `Accordion`           | one of a few peer views is visible at a time                          | sections expand and collapse in place, several may be open                                            |
+| `Tabs` / `PageTabs`            | the views switch inside a page region                                 | the tabs are the second-level strip of a resource page, under its header, with the resource's actions |
+| `Tree` / `SidebarMenu`         | the person browses or picks from nested data (files, folders)         | the rows are the app's navigation                                                                     |
+| `Dialog` / `Drawer`            | a short question or confirmation interrupts the task                  | a form or a detail opens over the screen that owns it                                                 |
+| `ConfirmDialog` / `Dialog`     | the person confirms one action, most often a destructive one          | the dialog holds anything else                                                                        |
+| `Tooltip` / `Popover`          | a short hint shows on hover or focus and holds no control             | the panel holds controls or longer content and opens on click                                         |
+| `Tooltip` / `Hint`             | an existing control needs a hint                                      | a label needs an info glyph that explains it                                                          |
+| `Alert` / `Toast`              | the message belongs to the page or a section and stays                | the message confirms something that just happened and leaves                                          |
+| `Skeleton` / `Spinner`         | content is loading and its shape is known                             | a short action is running inside a control                                                            |
+| `Progress` / `UploadProgress`  | one measured value against a total                                    | file transfers keep running while the person works elsewhere                                          |
+| `EmptyState` / `ErrorBoundary` | there is no data, or a load failed and you render the message         | a region may throw while rendering and must not take the page down                                    |
+| `Timestamp` / `DatePicker`     | the person reads a date                                               | the person picks a date                                                                               |
+| `Select` / `Combobox`          | the value must be one of the options                                  | the list only suggests and a typed value is valid                                                     |
+| `Card` / `IntegrationCard`     | any framed content                                                    | a catalog tile for an integration: logo, vendor, installed state, one action                          |
+| `HelpPanel` / `TutorialPanel`  | static help for the page                                              | a guided tutorial whose steps point at real controls                                                  |
+| `ScrollArea` / plain overflow  | a bounded region scrolls inside the page (a panel body, a wide table) | the page itself scrolls                                                                               |
+
+Also in the app shell: `SkipLink` is the first child of every page shell (the layouts place it
+for you). For a plan row use `PricingCard`; for an official product scene, `Illustration`; to run
+real components in a device-sized viewport in docs, `BrowserFrame`.
+
 ## How to find a component
 
 Do not guess a component name or import path. Look it up.

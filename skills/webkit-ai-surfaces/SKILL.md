@@ -2,7 +2,7 @@
 name: webkit-ai-surfaces
 description: Generative AI surfaces on @aziontech/webkit — a chat page or drawer, a streamed response, thinking and loading states, citations, feedback, follow-up questions, generated artifacts and actions the assistant may only run after the reader approves. Picks the right AI component for each moment (Conversation, ChatMessage, PromptInput, StreamingResponse, Reasoning, Sources, Citation, SuggestionGroup, ToolCall, ToolApproval, ArtifactPreview, ResponseLoading), wires the message lifecycle (pending → streaming → success or error) and holds the safety line — model output is never rendered as HTML and nothing with side effects runs without an explicit approval. Use when building or reviewing anything where a person talks with an AI assistant or reads its output.
 status: active
-last_updated: 2026-11-15
+last_updated: 2026-11-21
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -63,6 +63,17 @@ expired and irreversible for approval) as variants. Adapt the words and the data
 | Permission before something with side effects                           | `ToolApproval`                                                                  |
 | A file, snippet or table the assistant generated                        | `ArtifactPreview` (stacked under the message, not inside the text)              |
 | Before the first message                                                | `EmptyState` + vertical `SuggestionGroup`                                       |
+| The agent pauses to ask the reader something it cannot infer            | `AgentQuestion`                                                                 |
+| The steps an agent works through before or while it answers             | `AgentActivity`                                                                 |
+| A step handed to a helper agent with its own status                     | `SubagentCard`                                                                  |
+| Messages typed while a response is still streaming                      | `PromptQueue`                                                                   |
+| Several versions of one response (after Regenerate)                     | `ResponseBranches`                                                              |
+| A long generated document shown beside the thread                       | `ArtifactCanvas`                                                                |
+| A tool result that is a small app (an MCP app)                          | `McpAppFrame`                                                                   |
+| The reason after a thumbs down                                          | `FeedbackReasonDialog`                                                          |
+| Images, audio or video in a message                                     | `ImageGallery`, `AudioPlayer`, `VideoPlayer`                                    |
+| Past conversations                                                      | `ConversationHistory`                                                           |
+| The one AI entry point on a product screen                              | `HighlightButton`                                                               |
 
 ## The message lifecycle
 
