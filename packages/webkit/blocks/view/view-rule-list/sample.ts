@@ -7,7 +7,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Sends every request to the origin when no other rule matches first.',
     phase: 'request',
     author: 'Maya Chen',
-    modified: '3 months ago',
+    modified: '2026-08-12T12:00:00Z',
     active: true,
     locked: true
   },
@@ -17,7 +17,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Serves the maintenance page while the maintenance header is set.',
     phase: 'request',
     author: 'Leo Park',
-    modified: '1 month ago',
+    modified: '2026-10-11T12:00:00Z',
     active: false,
     locked: false
   },
@@ -27,7 +27,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Sends the www host to the apex domain.',
     phase: 'request',
     author: 'Emily Clark',
-    modified: '12 days ago',
+    modified: '2026-10-29T12:00:00Z',
     active: true,
     locked: false
   },
@@ -37,7 +37,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Sends API traffic to the gateway service, through the auth check.',
     phase: 'request',
     author: 'Maya Chen',
-    modified: '2 days ago',
+    modified: '2026-11-08T12:00:00Z',
     active: true,
     locked: false
   },
@@ -47,7 +47,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Rewrites the docs path and caches it as a static asset.',
     phase: 'request',
     author: 'Sam Okafor',
-    modified: '3 weeks ago',
+    modified: '2026-10-20T12:00:00Z',
     active: true,
     locked: false
   },
@@ -57,7 +57,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Keeps API responses out of the cache.',
     phase: 'response',
     author: 'Leo Park',
-    modified: '5 days ago',
+    modified: '2026-11-05T12:00:00Z',
     active: true,
     locked: false
   },
@@ -67,7 +67,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Adds the security header set to successful responses.',
     phase: 'response',
     author: 'Emily Clark',
-    modified: '9 days ago',
+    modified: '2026-11-01T12:00:00Z',
     active: true,
     locked: false
   },
@@ -77,7 +77,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Compresses script bundles on the way out.',
     phase: 'response',
     author: 'Sam Okafor',
-    modified: '7 weeks ago',
+    modified: '2026-09-22T12:00:00Z',
     active: false,
     locked: false
   }
@@ -90,7 +90,7 @@ export const sampleFirewallRules: RuleListRule[] = [
     description: 'Lets the office network through before any other rule looks at it.',
     phase: 'request',
     author: 'Maya Chen',
-    modified: '2 months ago',
+    modified: '2026-09-11T12:00:00Z',
     active: true,
     locked: false
   },
@@ -100,7 +100,7 @@ export const sampleFirewallRules: RuleListRule[] = [
     description: 'Refuses requests from the scanner network list.',
     phase: 'request',
     author: 'Leo Park',
-    modified: '3 weeks ago',
+    modified: '2026-10-20T12:00:00Z',
     active: true,
     locked: false
   },
@@ -110,7 +110,7 @@ export const sampleFirewallRules: RuleListRule[] = [
     description: 'Allows 20 sign-in requests per minute from one address.',
     phase: 'request',
     author: 'Emily Clark',
-    modified: '6 days ago',
+    modified: '2026-11-04T12:00:00Z',
     active: true,
     locked: false
   },
@@ -120,7 +120,7 @@ export const sampleFirewallRules: RuleListRule[] = [
     description: 'Refuses requests from countries outside the allowed list.',
     phase: 'request',
     author: 'Sam Okafor',
-    modified: '1 month ago',
+    modified: '2026-10-11T12:00:00Z',
     active: false,
     locked: false
   },

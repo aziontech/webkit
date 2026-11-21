@@ -27,6 +27,7 @@
   import TableCellId from '@aziontech/webkit/table-cell-id'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import TableCellTags from '@aziontech/webkit/table-cell-tags'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -60,8 +61,8 @@
     parentId: string | null
     /** Labels used for search, billing reports and policies. */
     labels?: string[]
-    /** When it was last accessed, as display text. */
-    lastAccessed?: string
+    /** When it was last accessed: a Date or an ISO 8601 string. */
+    lastAccessed?: Date | string
     /** Workspace state. */
     status?: AccountHierarchyResourceStatus
     /** Estimated month-to-date charges in USD. */
@@ -636,7 +637,7 @@
                     />
                   </template>
                   <template #cell-lastAccessed="{ value }">
-                    <span class="text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
+                    <TableCellTime :value="value" />
                   </template>
                   <template #cell-status="{ value }">
                     <TableCellStatus

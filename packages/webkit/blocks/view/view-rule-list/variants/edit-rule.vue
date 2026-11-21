@@ -706,7 +706,7 @@
         name: form.name.trim(),
         description: form.description.trim(),
         active: form.active,
-        modified: 'just now',
+        modified: new Date(),
         author: 'You'
       }
       rules.value = rules.value.map((item) => (item.id === row.id ? updated : item))
@@ -722,7 +722,7 @@
       description: form.description.trim(),
       phase,
       author: 'You',
-      modified: 'just now',
+      modified: new Date(),
       active: form.active,
       locked: false
     }

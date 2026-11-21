@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Checkbox from '@aziontech/webkit/checkbox'
@@ -34,6 +33,7 @@
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import TableCellId from '@aziontech/webkit/table-cell-id'
   import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -70,8 +70,8 @@
     lastEditor: string
     /** That person's avatar URL; empty shows the initials. */
     lastEditorAvatar: string
-    /** When it changed last, as relative text. */
-    lastModified: string
+    /** When it changed last: a Date or an ISO 8601 string. */
+    lastModified: Date | string
   }
 
   /** One pair the drawer saves, with the scope chosen for every pair. */
@@ -242,7 +242,7 @@
       ...variable,
       lastEditor: 'Jane Doe',
       lastEditorAvatar: '',
-      lastModified: 'just now'
+      lastModified: new Date()
     })
 
   const onCreated = (created: VariableDraft[]) => {
@@ -840,24 +840,11 @@
                 </template>
 
                 <template #cell-lastModified="{ row, value }">
-                  <div
-                    v-if="value"
-                    class="flex min-w-0 items-center gap-(--spacing-xs)"
-                  >
-                    <Tooltip
-                      v-if="row.lastEditor"
-                      :content="row.lastEditor"
-                    >
-                      <Avatar
-                        :src="row.lastEditorAvatar || undefined"
-                        :alt="row.lastEditor"
-                        :label="row.lastEditor"
-                        size="small"
-                        variant="square"
-                      />
-                    </Tooltip>
-                    <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
-                  </div>
+                  <TableCellTime
+                    :value="value"
+                    :author="row.lastEditor"
+                    :avatar-src="row.lastEditorAvatar || undefined"
+                  />
                 </template>
 
                 <template #cell-scope="{ value }">

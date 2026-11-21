@@ -2636,7 +2636,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-dep
 - Surface: app
 - Source: `blocks/account/account-hierarchy/account-hierarchy.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-hierarchy")`
-- Components: Alert, Avatar, Button, Card, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, KeyValueList, Link, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, Table, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, Tabs, Tag, Toast, Tooltip, `use-locale`
+- Components: Alert, Avatar, Button, Card, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, KeyValueList, Link, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, Table, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `TableCellTime`, Tabs, Tag, Toast, Tooltip, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2661,7 +2661,7 @@ Where an account admin arranges the account's hierarchy. Workspaces sit under gr
 
 - A. Page heading — `PageHeader`, `Button` (required)
 - B. Toolbar — `Button`, `Tooltip`, `IconButton` (required)
-- C. Resource tree — `Input`, `Card`, `DataTable`, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `Avatar`, `Tag`, `DropdownMenu`, `Link` (required)
+- C. Resource tree — `Input`, `Card`, `DataTable`, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `TableCellTime`, `Avatar`, `Tag`, `DropdownMenu`, `Link` (required)
 - D. Details panel — `Card`, `Tabs`, `KeyValueList`, `EmptyState`, `Tag` (required)
 - E. Move — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Select` (required)
 - F. Labels — `Dialog`, `Field`, `MultiSelect` (required)
@@ -8320,7 +8320,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-schema.md
 - Surface: app
 - Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-variables")`
-- Components: Alert, AttributeEditor, Avatar, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Kbd, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsGroup, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`, `use-shortcuts`
+- Components: Alert, AttributeEditor, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Kbd, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsGroup, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellTime`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -8347,7 +8347,7 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 - A. Page heading — `PageHeader`, `Button` (required)
 - B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
-- C. Variables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `Avatar`, `Tooltip` (required)
+- C. Variables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `TableCellTime`, `Tooltip` (required)
 - D. Row actions — `TableCellActions`, `DropdownMenu` (required)
 - E. Create and edit drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 - F. Variables section — `SettingsGroup`, `Button`, `ToggleGroup` (required)
@@ -10587,7 +10587,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-query-edi
 - Surface: app
 - Source: `blocks/view/view-rule-list/view-rule-list.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-rule-list")`
-- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, Item, Kbd, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Toast, Tooltip
+- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, Item, Kbd, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, `TableCellTime`, Tag, Toast, Tooltip
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -10615,7 +10615,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - A. Header — `PageHeader`, `Button` (required)
 - B. Search — `Input`, `Alert` (required)
 - C. Phases — `Card`, `Accordion` (required)
-- D. Rules table — `DataTable`, `Tag`, `Field`, `Switch` (required)
+- D. Rules table — `DataTable`, `Tag`, `Field`, `Switch`, `TableCellTime` (required)
 - E. Order controls — `Input`, `IconButton`, `Tooltip`, `DropdownMenu` (required)
 - F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert` (required)
 - G. States — `EmptyState`, `Alert` (required)

@@ -9,7 +9,7 @@ export const sampleVariables: VariablesVariable[] = [
     scope: [{ type: 'global', id: '', name: '' }],
     lastEditor: 'Ethan Brooks',
     lastEditorAvatar: '',
-    lastModified: '1 month ago'
+    lastModified: '2026-10-10T12:00:00Z'
   },
   {
     id: 'v-002',
@@ -19,7 +19,7 @@ export const sampleVariables: VariablesVariable[] = [
     scope: [{ type: 'environment', id: 'env-production', name: 'Production' }],
     lastEditor: 'Jordan Kim',
     lastEditorAvatar: '',
-    lastModified: '2 months ago'
+    lastModified: '2026-09-08T12:00:00Z'
   },
   {
     id: 'v-003',
@@ -29,7 +29,7 @@ export const sampleVariables: VariablesVariable[] = [
     scope: [{ type: 'service', id: '3344556677', name: 'storefront' }],
     lastEditor: 'Taylor Reed',
     lastEditorAvatar: '',
-    lastModified: '2 months ago'
+    lastModified: '2026-09-08T12:00:00Z'
   },
   {
     id: 'v-004',
@@ -39,7 +39,7 @@ export const sampleVariables: VariablesVariable[] = [
     scope: [{ type: 'policy', id: '5540117', name: 'production-policy' }],
     lastEditor: 'John Smith',
     lastEditorAvatar: '',
-    lastModified: '2 months ago'
+    lastModified: '2026-09-08T12:00:00Z'
   },
   {
     id: 'v-005',
@@ -49,6 +49,6 @@ export const sampleVariables: VariablesVariable[] = [
     scope: [{ type: 'global', id: '', name: '' }],
     lastEditor: 'Sam Lee',
     lastEditorAvatar: '',
-    lastModified: '3 months ago'
+    lastModified: '2026-08-06T12:00:00Z'
   }
 ]
