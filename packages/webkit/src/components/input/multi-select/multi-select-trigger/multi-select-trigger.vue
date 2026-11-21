@@ -36,8 +36,6 @@
 
   const { t } = useTranslate({ multiSelect: en.multiSelect })
 
-  // In field mode the wrapper is a plain container: the name, the description and the id belong to
-  // the combobox control inside it, so they are not copied onto the wrapper as well.
   const wrapperAttrs = computed(() => {
     const {
       id: _id,

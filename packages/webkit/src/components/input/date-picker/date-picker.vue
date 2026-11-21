@@ -121,8 +121,6 @@
 
   const toggleOpen = () => setOpen(!isOpen.value)
 
-  // The panel (grid, fields, bounds) works in wall-clock time of the time zone; the model is the
-  // instant. With no zone the two are the same local Date.
   const toPanel = (value: DatePickerValue | undefined): Date | null => {
     const date = asSingle(value ?? null)
     if (!date) return null

@@ -45,7 +45,7 @@ describe('NumberInput', () => {
       const value = ref<number | null>(null)
       const Host = defineComponent({
         setup: () => () =>
-          h(NumberInputRoot, {
+          h(NumberInput, {
             modelValue: value.value,
             nullable: true,
             'onUpdate:modelValue': (next: number | null) => (value.value = next)

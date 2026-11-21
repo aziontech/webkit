@@ -21,8 +21,6 @@ export default {
 
     return factory({
       VElement(node) {
-        // A native date type or a date format in the placeholder of an Input is
-        // prefer-value-control's error; this rule adds what it cannot see (the key, the label).
         if (valueControlMessage(node)) return
         const control = describeTextControl(node)
         if (!control) return

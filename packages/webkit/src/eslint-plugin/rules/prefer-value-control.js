@@ -25,10 +25,6 @@ function staticValue(node, name) {
   return attr ? String(attr.value?.value ?? '') : null
 }
 
-/**
- * The message id this rule reports for a template element, or null. `prefer-date-picker` calls it
- * so a field this rule already fails is not warned about twice.
- */
 export function valueControlMessage(node) {
   if (!TEXT_INPUTS.has(node.rawName ?? '')) return null
   const type = staticValue(node, 'type')
