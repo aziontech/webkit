@@ -36,6 +36,19 @@
 
   const { t } = useTranslate({ multiSelect: en.multiSelect })
 
+  // In field mode the wrapper is a plain container: the name, the description and the id belong to
+  // the combobox control inside it, so they are not copied onto the wrapper as well.
+  const wrapperAttrs = computed(() => {
+    const {
+      id: _id,
+      'aria-label': _label,
+      'aria-labelledby': _labelledby,
+      'aria-describedby': _describedby,
+      ...rest
+    } = attrs
+    return rest
+  })
+
   const field = computed(() => ctx.variant.value === 'chips' || ctx.searchable.value)
   const locked = computed(() => ctx.disabled.value || ctx.readonly.value)
 
@@ -198,7 +211,7 @@
         ctx.triggerEl.value = el as globalThis.HTMLElement | null
       }
     "
-    v-bind="$attrs"
+    v-bind="wrapperAttrs"
     :data-testid="testId"
     :data-state="ctx.open.value ? 'open' : 'closed'"
     :data-size="ctx.size.value"

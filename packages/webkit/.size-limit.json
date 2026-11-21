@@ -1104,7 +1104,7 @@
   {
     "name": "multi-select",
     "path": "src/components/input/multi-select/index.ts",
-    "limit": "29.85 KB"
+    "limit": "29.9 KB"
   },
   {
     "name": "code-block",
