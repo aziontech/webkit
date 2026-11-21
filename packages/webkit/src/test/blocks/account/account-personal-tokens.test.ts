@@ -89,7 +89,10 @@ describe('account/tokens', () => {
   it('asks for a date and time in a DatePicker when the expiry is custom', async () => {
     const view = render(Tokens)
     await fireEvent.click(buttonByText('Create Personal Token'))
-    const drawer = await waitFor(() => dialog())
+    const drawer = await waitFor(() => {
+      expect(dialog()).not.toBeNull()
+      return dialog() as HTMLElement
+    })
     await userEvent.type(within(drawer).getByLabelText(/^Name/), 'Release bot')
     await fireEvent.click(document.getElementById('token-expiry')!)
     const option = await waitFor(() =>
@@ -98,10 +101,11 @@ describe('account/tokens', () => {
       )
     )
     await fireEvent.click(option!)
-    const picker = await waitFor(() =>
-      drawer.querySelector<HTMLElement>('[data-testid="date-picker__trigger"]')
-    )
-    expect(picker).toBeTruthy()
+    const picker = await waitFor(() => {
+      const trigger = drawer.querySelector<HTMLElement>('[data-testid="date-picker__trigger"]')
+      expect(trigger).not.toBeNull()
+      return trigger as HTMLElement
+    })
     expect(within(drawer).getByLabelText(/^Expires at/)).toBe(picker)
     await fireEvent.click(buttonByText('Create Personal Token', drawer))
     await waitFor(() =>
