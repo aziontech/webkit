@@ -112,6 +112,11 @@ export const GATES = [
     steps: [['node', 'scripts/check-look-alikes.mjs']]
   },
   {
+    id: 'quality-lint',
+    label: 'No line over 200 characters in components, blocks and examples',
+    steps: [['pnpm', 'run', 'lint:quality']]
+  },
+  {
     id: 'hooks',
     label: 'Hook tests',
     steps: [['node', '../../.claude/hooks/test/run.mjs']]
