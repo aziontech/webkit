@@ -11,6 +11,7 @@
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import NumberInput from '@aziontech/webkit/number-input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -115,19 +116,13 @@
   const loadFailed = computed(() => props.error !== '')
   const noMatches = computed(() => !props.loading && !loadFailed.value && !source.value.length)
 
-  const threshold = ref('100')
+  const threshold = ref(100)
   const search = ref('')
   const selectedKeys = ref<string[]>([...props.defaultSelectedKeys])
   const sorting = ref([{ id: 'hits', desc: true }])
 
   const rangeLabel = (value: string) => RANGES.find((item) => item.value === value)?.label ?? ''
-  const minimumHits = computed(() => {
-    const value = Number.parseInt(threshold.value, 10)
-    return Number.isFinite(value) && value > 0 ? value : 0
-  })
-  const thresholdInvalid = computed(
-    () => threshold.value.trim() !== '' && !/^\d+$/.test(threshold.value.trim())
-  )
+  const minimumHits = computed(() => threshold.value)
 
   const rows = computed(() => source.value.filter((row) => row.hits >= minimumHits.value))
   const selected = computed(() =>
@@ -255,16 +250,14 @@
             </Field>
           </div>
           <div class="w-full sm:w-40">
-            <Field :invalid="thresholdInvalid">
+            <Field>
               <Field.Label>Minimum hits</Field.Label>
-              <Input
+              <NumberInput
                 v-model="threshold"
                 size="medium"
-                inputmode="numeric"
-                autocomplete="off"
+                :min="0"
                 :disabled="loading"
               />
-              <Field.Error v-if="thresholdInvalid">Use a whole number.</Field.Error>
             </Field>
           </div>
           <div class="min-w-36 grow basis-(--container-2xs)">

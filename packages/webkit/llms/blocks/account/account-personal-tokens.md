@@ -1,16 +1,16 @@
 # AccountPersonalTokens (`account/account-personal-tokens`)
 
-> The Personal tokens page of the account settings: a `PageHeader` with Documentation and Create Personal Token, the view-table controls row (`PropertyFilter` over name, description and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) over a `DataTable` of tokens (name, description, `TableCellStatus` for Active, Expires in N days, Expired or Revoked, the expiry date, `TableCellTime` for last use and creation, `TableCellActions` with Revoke or Delete), all on one `useCollection`. Create opens a `Drawer` (name, description, expiry `Select` that states the date), and the new secret appears once in a `Dialog` with a warning `Alert`, a read-only `PasswordInput` and a `CopyButton`. Revoke and Delete go through `ConfirmDialog`, and their outcome is a toast. A page body for ConsoleLayout, rendered in its default slot.
+> The Personal tokens page of the account settings: a `PageHeader` with Documentation and Create Personal Token, the view-table controls row (`PropertyFilter` over name, description and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) over a `DataTable` of tokens (name, description, `TableCellStatus` for Active, Expires in N days, Expired or Revoked, the expiry date, `TableCellTime` for last use and creation, `TableCellActions` with Revoke or Delete), all on one `useCollection`. Create opens a `Drawer` (name, description, expiry `Select` that states the date, or a custom date and time picked in a `DatePickerRoot` (the DatePicker) with `show-time`), and the new secret appears once in a `Dialog` with a warning `Alert`, a read-only `PasswordInput` and a `CopyButton`. Revoke and Delete go through `ConfirmDialog`, and their outcome is a toast. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/account-personal-tokens/account-personal-tokens.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-personal-tokens")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Textarea](../../components/textarea.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DatePickerRoot`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Textarea](../../components/textarea.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
-personal tokens; personal access tokens; api tokens; api keys; access tokens; create token; revoke token; copy token once; token expiration; tokens pessoais; token de acesso; chaves de api; criar token; revogar token
+personal tokens; personal access tokens; api tokens; api keys; access tokens; create token; revoke token; copy token once; token expiration; date and time field in a form; expiry date picker; tokens pessoais; token de acesso; chaves de api; criar token; revogar token
 
 The Personal tokens page of the account settings. A person creates a token for a script, a CI job or the CLI, copies its secret the one time it is shown, sees which tokens are still alive and when each expires or was last used, and revokes one that leaked or is no longer needed. The secret never comes back: the list shows only the name, status and dates, and a lost secret means a new token. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
 
@@ -55,9 +55,9 @@ When the list does not load, a danger `Alert` with Retry takes the table's place
 
 A large right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. Create emits `create` with the values; the fields lock while `creating` is set.
 
-### H. Fields — `Field`, `Input`, `Textarea`, `Select`, `FieldDescription` (required)
+### H. Fields — `Field`, `Input`, `Textarea`, `Select`, `DatePickerRoot`, `FieldDescription` (required)
 
-Name is required and unique; the error sits under the field (`This field is required.`, `A token with this name already exists. Use another name.`) and focus moves to it. Expires in is a `Select` of 7, 30, 60 and 90 days and 1 year (default 30), and the `FieldError` under it says the exact date it stops working.
+Name is required and unique; the error sits under the field (`This field is required.`, `A token with this name already exists. Use another name.`) and focus moves to it. Expires in is a `Select` of 7, 30, 60 and 90 days, 1 year (default 30) and Custom date and time; Custom shows a required Expires at `DatePickerRoot` (the DatePicker) with `show-time`, bound to a `Date` and limited to the future with `min` (never a text field that asks for a date format), and the `FieldError` under it says the exact date it stops working.
 
 ### I. One-time reveal — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
 
@@ -80,13 +80,13 @@ The block takes its tokens through props and emits every action; it fetches noth
 | `now`      | `Date`                         | The moment Status and the expiry hint count from.                                                                          |
 | `secret`   | `PersonalTokensSecret \| null` | `v-model:secret`: the token the create request returned; set, the reveal dialog opens; closing it sets `null`.             |
 
-| Event     | Payload                                         | When                                                                     |
-| --------- | ----------------------------------------------- | ------------------------------------------------------------------------ |
-| `refresh` | `(event)`                                       | Refresh.                                                                 |
-| `retry`   | `(event)`                                       | Retry in the error alert.                                                |
-| `create`  | `(event, { name, description, expiresInDays })` | The drawer passed validation and was submitted.                          |
-| `revoke`  | `(event, token)`                                | The revoke dialog was confirmed; the row already reads Revoked.          |
-| `delete`  | `(event, token)`                                | The delete dialog was confirmed; the row is already gone from the table. |
+| Event     | Payload                                                    | When                                                                     |
+| --------- | ---------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `refresh` | `(event)`                                                  | Refresh.                                                                 |
+| `retry`   | `(event)`                                                  | Retry in the error alert.                                                |
+| `create`  | `(event, { name, description, expiresInDays, expiresAt })` | The drawer passed validation and was submitted.                          |
+| `revoke`  | `(event, token)`                                           | The revoke dialog was confirmed; the row already reads Revoked.          |
+| `delete`  | `(event, token)`                                           | The delete dialog was confirmed; the row is already gone from the table. |
 
 To go live, render the block from a page that owns the requests and pass what they return:
 
@@ -195,6 +195,7 @@ Each variant is the same screen in another state: `get_block("account/account-pe
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DataTable from '@aziontech/webkit/data-table'
+  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
@@ -255,8 +256,10 @@ Each variant is the same screen in another state: `get_block("account/account-pe
     name: string
     /** Trimmed description, may be empty. */
     description: string
-    /** Days until the token expires. */
+    /** Days until the token expires, rounded up. */
     expiresInDays: number
+    /** The moment the token expires; send it as an ISO 8601 string. */
+    expiresAt: Date
   }
 
   /** The token the create request returned, shown once in the reveal dialog. */
@@ -383,28 +386,43 @@ Each variant is the same screen in another state: `get_block("account/account-pe
   const loadFailed = computed(() => props.error !== '')
   const refreshing = computed(() => props.loading && items.value.length > 0)
 
+  const CUSTOM_EXPIRY = 'custom'
   const expiryOptions = [
     { value: '7', label: '7 days' },
     { value: '30', label: '30 days' },
     { value: '60', label: '60 days' },
     { value: '90', label: '90 days' },
-    { value: '365', label: '1 year' }
+    { value: '365', label: '1 year' },
+    { value: CUSTOM_EXPIRY, label: 'Custom date and time' }
   ]
   const expiryLabel = (value: string) =>
     expiryOptions.find((option) => option.value === value)?.label ?? ''
 
   const createOpen = ref(false)
   const submitting = computed(() => props.creating)
-  const form = reactive({ name: '', description: '', expiresIn: '30' })
-  const errors = reactive({ name: '' })
-  const expiryHint = computed(
-    () =>
-      `The token stops working on ${formatDate(daysFrom(Number(form.expiresIn)))}. Create a new one before then.`
+  const form = reactive<{
+    name: string
+    description: string
+    expiresIn: string
+    expiresAt: Date | null
+  }>({ name: '', description: '', expiresIn: '30', expiresAt: null })
+  const errors = reactive({ name: '', expiresAt: '' })
+  const expiresAtEl = ref<HTMLElement | null>(null)
+  const customExpiry = computed(() => form.expiresIn === CUSTOM_EXPIRY)
+  const earliestExpiry = computed(() => new Date(referenceTime.value))
+  const expiryMoment = computed(() =>
+    customExpiry.value ? form.expiresAt : daysFrom(Number(form.expiresIn))
+  )
+  const expiryHint = computed(() =>
+    customExpiry.value
+      ? 'Pick the date and time the token stops working.'
+      : `The token stops working on ${formatDate(daysFrom(Number(form.expiresIn)))}. Create a new one before then.`
   )
 
   const openCreate = () => {
-    Object.assign(form, { name: '', description: '', expiresIn: '30' })
+    Object.assign(form, { name: '', description: '', expiresIn: '30', expiresAt: null })
     errors.name = ''
+    errors.expiresAt = ''
     createOpen.value = true
   }
 
@@ -423,14 +441,24 @@ Each variant is the same screen in another state: `get_block("account/account-pe
     else if (items.value.some((token) => token.name.toLowerCase() === name.toLowerCase())) {
       errors.name = 'A token with this name already exists. Use another name.'
     } else errors.name = ''
+    const expiresAt = expiryMoment.value
+    if (!expiresAt) errors.expiresAt = 'Pick the date and time the token expires.'
+    else if (expiresAt.getTime() <= referenceTime.value) {
+      errors.expiresAt = 'Pick a date and time in the future.'
+    } else errors.expiresAt = ''
     if (errors.name) {
       focusById('token-name')
+      return
+    }
+    if (!expiresAt || errors.expiresAt) {
+      nextTick(() => expiresAtEl.value?.querySelector('button')?.focus())
       return
     }
     emit('create', event, {
       name,
       description: form.description.trim(),
-      expiresInDays: Number(form.expiresIn)
+      expiresInDays: Math.ceil((expiresAt.getTime() - referenceTime.value) / DAY),
+      expiresAt
     })
   }
 
@@ -777,6 +805,25 @@ Each variant is the same screen in another state: `get_block("account/account-pe
                   </Select>
                   <FieldDescription id="token-expiry-hint">{{ expiryHint }}</FieldDescription>
                 </Field>
+                <div
+                  v-if="customExpiry"
+                  ref="expiresAtEl"
+                >
+                  <Field
+                    required
+                    :invalid="!!errors.expiresAt"
+                  >
+                    <Field.Label>Expires at</Field.Label>
+                    <DatePickerRoot
+                      v-model="form.expiresAt"
+                      show-time
+                      size="large"
+                      :min="earliestExpiry"
+                      @update:model-value="errors.expiresAt = ''"
+                    />
+                    <Field.Error v-if="errors.expiresAt">{{ errors.expiresAt }}</Field.Error>
+                  </Field>
+                </div>
               </SettingsGroup>
             </fieldset>
           </PanelBody>

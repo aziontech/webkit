@@ -464,7 +464,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
     if (change === undefined) return null
     const rising = change > 0
     return {
-      label: `${rising ? '+' : ''}${change.toFixed(2)}%`,
+      label: `${rising ? '+' : ''}${fixed(change, 2)}%`,
       severity: (rising ? 'danger' : 'success') as TagSeverity,
       icon: rising ? 'az az-arrow-up-right' : 'az az-arrow-down-left'
     }
@@ -489,11 +489,13 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const periodSlug = computed(() => currentPeriod.value.label.toLowerCase().replaceAll(' ', '-'))
 
   const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
   const compact = (value: number) =>
     formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
   const formatCount = (value: number) => compact(value)
-  const formatPercent = (value: number) => `${value.toFixed(value >= 10 ? 0 : 1)}%`
+  const formatPercent = (value: number) => `${fixed(value, value >= 10 ? 0 : 1)}%`
 
   const ipColumns: TableColumn[] = [
     {

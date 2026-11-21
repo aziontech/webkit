@@ -1,11 +1,11 @@
 # ViewWafTuning (`view/view-waf-tuning`)
 
-> The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow selected, then Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `DataTable` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, as `TableCellTags` whose `+N` popover lists the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it; a search that matches nothing shows No matching rules with Clear search, and a load failure shows a danger `Alert` with Retry. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `DataTable`, `TableCellTags`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Textarea`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow selected, then Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `NumberInput`, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `DataTable` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, as `TableCellTags` whose `+N` popover lists the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it; a search that matches nothing shows No matching rules with Clear search, and a load failure shows a danger `Alert` with Retry. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `NumberInput`, `Input`, `IconButton`, `Tooltip`, `Card`, `DataTable`, `TableCellTags`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Textarea`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/view/view-waf-tuning/view-waf-tuning.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-waf-tuning")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -34,9 +34,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 `PageHeader` at `size="small"` titled Tuning, with a description that says what the list is and what to do with it. Actions: outlined Export to CSV (disabled while loading or empty) and the allow action, which reads Allow selected and is disabled until rows are checked, then reads "Allow 2 selected".
 
-### B. Threshold settings — `Field`, `Select`, `Input`, `IconButton`, `Tooltip` (required)
+### B. Threshold settings — `Field`, `Select`, `NumberInput`, `Input`, `IconButton`, `Tooltip` (required)
 
-A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours, Last 7 days) and a Minimum hits `Input` (numeric; "Use a whole number." under it when it is not one), each a `Field` with a visible label; a search `Input` named "Search matched requests" that grows to fill the row; and an outlined Refresh `IconButton` with its `Tooltip`. Settings apply as they change, with no Apply button. Hidden when the rule set has no match at all.
+A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours, Last 7 days) and a Minimum hits `NumberInput` (whole numbers from 0), each a `Field` with a visible label; a search `Input` named "Search matched requests" that grows to fill the row; and an outlined Refresh `IconButton` with its `Tooltip`. Settings apply as they change, with no Apply button. Hidden when the rule set has no match at all.
 
 ### C. Matches table — `Card`, `DataTable`, `TableCellTags`, `EmptyState`, `Alert` (required)
 
@@ -182,6 +182,7 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import NumberInput from '@aziontech/webkit/number-input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -286,19 +287,13 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
   const loadFailed = computed(() => props.error !== '')
   const noMatches = computed(() => !props.loading && !loadFailed.value && !source.value.length)
 
-  const threshold = ref('100')
+  const threshold = ref(100)
   const search = ref('')
   const selectedKeys = ref<string[]>([...props.defaultSelectedKeys])
   const sorting = ref([{ id: 'hits', desc: true }])
 
   const rangeLabel = (value: string) => RANGES.find((item) => item.value === value)?.label ?? ''
-  const minimumHits = computed(() => {
-    const value = Number.parseInt(threshold.value, 10)
-    return Number.isFinite(value) && value > 0 ? value : 0
-  })
-  const thresholdInvalid = computed(
-    () => threshold.value.trim() !== '' && !/^\d+$/.test(threshold.value.trim())
-  )
+  const minimumHits = computed(() => threshold.value)
 
   const rows = computed(() => source.value.filter((row) => row.hits >= minimumHits.value))
   const selected = computed(() =>
@@ -426,16 +421,14 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
             </Field>
           </div>
           <div class="w-full sm:w-40">
-            <Field :invalid="thresholdInvalid">
+            <Field>
               <Field.Label>Minimum hits</Field.Label>
-              <Input
+              <NumberInput
                 v-model="threshold"
                 size="medium"
-                inputmode="numeric"
-                autocomplete="off"
+                :min="0"
                 :disabled="loading"
               />
-              <Field.Error v-if="thresholdInvalid">Use a whole number.</Field.Error>
             </Field>
           </div>
           <div class="min-w-36 grow basis-(--container-2xs)">

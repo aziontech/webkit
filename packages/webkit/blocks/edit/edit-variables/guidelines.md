@@ -26,9 +26,9 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 The same controls row as `view/view-table`, all bound to one client-mode `useCollection` call: a `PropertyFilter` labeled "Filter variables" (free text over key, ID, author and type, plus Key, Author and Type properties), outlined `IconButton`s for Refresh and Download CSV, each named by a `Tooltip`, and `CollectionPreferences` last. The filter, sort and page live in the URL; page size and columns are saved. See `skills/webkit-lists`.
 
-### C. Variables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `Avatar`, `Tooltip` (required)
+### C. Variables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `TableCellTime`, `Tooltip` (required)
 
-`Card :padded="false"` around a borderless data-driven `DataTable` bound with `v-bind="tableProps"`, with Key as the `principal`, unhideable column, then ID (hidden by default), Value, Scope and Last modified. ID is `TableCellId` ("Copy variable ID") and Value is `TableCellLink` with `copyable`; a secret value shows its mask and loses its copy control (`:copyable="!row.secret"`). Last modified pairs the author `Avatar`, named in a `Tooltip`, with the relative time. See `skills/webkit-tables`.
+`Card :padded="false"` around a borderless data-driven `DataTable` bound with `v-bind="tableProps"`, with Key as the `principal`, unhideable column, then ID (hidden by default), Value, Scope and Last modified. ID is `TableCellId` ("Copy variable ID") and Value is `TableCellLink` with `copyable`; a secret value shows its mask and loses its copy control (`:copyable="!row.secret"`). Last modified is `TableCellTime` with the row's instant (a `Date` or an ISO string, never typed text such as `2 days ago`) and its `author`, so the column sorts by time and the relative text follows the locale. See `skills/webkit-tables`.
 
 ### D. Row actions — `TableCellActions`, `DropdownMenu` (required)
 

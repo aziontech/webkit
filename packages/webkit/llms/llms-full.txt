@@ -1204,7 +1204,7 @@ A few components need **one-time wiring in the app entry before first use** — 
 
 - **Theme (light or dark)**: with no `data-theme` the theme follows the device (`prefers-color-scheme`). An app that is always dark sets `data-theme="dark"` on `<html>` in `index.html` (`<html lang="en" data-theme="dark">`), so the first paint is dark, and an app that is always light sets `data-theme="light"`; a toggle writes `document.documentElement.dataset.theme` (`'dark'` / `'light'`), and a `.dark` class on an ancestor works too. Every token switches with it — never add per-theme classes (`/webkit-theming-dark-mode`).
 
-- **ConfigProvider (languages)**: mount it once at the app root; pass `locale` when the user chose one, or leave it unset to follow the device locale (`en-US` on the server and until mount, then `navigator.language`). Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the locale's catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). English is built in; Portuguese and Spanish are opt-in: import them from `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es` and pass them through `catalogs` (`{ 'pt-BR': ptBR, es }`), or the provider falls back to English and warns in development. With no provider every component formats for the device locale and reads English text. Only what people read follows the locale: send the `v-model` value to your server (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs), never a printed label. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import ConfigProvider from '@aziontech/webkit/config-provider'`.
+- **ConfigProvider (languages)**: mount it once at the app root; pass `locale` when the user chose one, or leave it unset to follow the device locale (`en-US` on the server and until mount, then `navigator.language`). Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the locale's catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). English is built in; Portuguese and Spanish are opt-in: import them from `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es` and pass them through `catalogs` (`{ 'pt-BR': ptBR, es }`), or the provider falls back to English and warns in development. With no provider every component formats for the device locale and reads English text. Only what people read follows the locale: send the `v-model` value to your server (DatePicker a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs), never a printed label. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import ConfigProvider from '@aziontech/webkit/config-provider'`.
 
 ```vue
 <!-- App.vue -->
@@ -1824,6 +1824,74 @@ Structure and states first, polish last:
 - **Azion API:** `/webkit-azion-api` (CORS, the dev and edge proxy, where the personal token
   lives) · `/webkit-query-explorer` (a Metrics or Events GraphQL explorer from WebKit pieces)
 
+## Pick the component for the job
+
+Name the job first, then take the component made for it. A plain `Input`, a string in a `<span>`
+or a `Button` with extra markup is the answer only when no row below fits. For a form field, the
+table is in `/webkit-form` ("Pick the control from the kind of value"); for a chart,
+`/webkit-data-viz`; for an AI conversation, `/webkit-ai-surfaces`.
+
+### Showing a value
+
+| The screen shows | Use | Never |
+| --- | --- | --- |
+| A moment in time (created, updated, expires, ran at) | `Timestamp`; in a `DataTable` column, `TableCellTime` | a string such as `'Nov 10'` or `'5 minutes ago'` |
+| A monetary amount | `CurrencyAmount` | `'$' + value.toFixed(2)` |
+| A number, a file size, a percentage, a list of words | the `useLocale()` formatters (`formatNumber`, `formatFileSize`, `formatList`) | `toFixed`, `toLocaleString` or a hand-made unit ladder |
+| The state of a resource (Active, Failed, Paused) | `StatusIndicator` | a coloured `Tag`, a coloured dot drawn by hand |
+| How severe a finding is (critical, high, medium, low) | `SeverityTag` | a `Tag` with a hand-picked colour |
+| An HTTP method and status (`GET 200`) | `StatusCode` | a `Tag` |
+| A category or label word | `Tag` | a `Chip` (a chip is removable or selectable) |
+| A count attached to something (unread, items in a section) | `Badge` | a `Tag` with a number |
+| The first value of a list and "+3" for the rest | `OverflowCount` | a truncated string |
+| A short value the reader pastes elsewhere (ID, CNAME, token name) | `CopyText` (the value shown) or `CopyButton` beside your own markup | a hand-written clipboard call |
+| Code, config or JSON to read or copy | `CodeBlock` | a `pre` element, a read-only `Textarea` |
+| Build, deploy or runtime log lines | `LogViewer` | a `CodeBlock` |
+| The facts of one resource (ID, region, created at) | `KeyValueList` | a two-column `Table` |
+| A person, or the people on something | `Avatar`, `AvatarGroup` | an `img` in a circle |
+| A key or a shortcut | `Kbd` | a styled `code` element |
+| A value a phone must pick up (an authenticator URI, a link) | `QrCode` | an image from a third-party service |
+| A payment card network | `PaymentBrand` | a logo file of your own |
+| Another company's mark | `ThirdPartyLogo` | a hand-picked SVG |
+| Usage against a limit | `Progress` | a hand-drawn bar |
+| A file opened from a list (image, text, JSON, PDF) | `FilePreview` | an `iframe` or `img` by hand |
+
+### Look-alikes: which one
+
+| Pair | Use the first when | Use the second when |
+| --- | --- | --- |
+| `DataTable` / `DataGrid` | people read rows and act on them (sort, filter, select, open) | people edit many cells of many records in place, like a spreadsheet |
+| `DataTable` / `Table` | the rows come from data (`data` + `columns`), with sort and pages | a small static table composed by hand |
+| `DataTable` / `CardList` | records compare column by column | each record reads as a card (a logo, a title, a few facts) |
+| `Wizard` / `Stepper` | an ordered create needs steps, content and Cancel, Previous, Next | only the step rail is needed and the footer and gating are your own |
+| `CodeBlock` / `CodeEditor` | the person reads or copies the code | the person edits the code |
+| `DropdownMenu` / `SplitButton` | a button opens a list of actions | one default action has a few related alternatives |
+| `DropdownMenu` / `ContextMenu` | the menu opens from a button | the same actions open by right-click or long-press on an item |
+| `Button` / `IconButton` | the action has a text label | the action is an icon alone (it needs `aria-label`) |
+| `Button` / `HighlightButton` | every action | the one AI entry point of the screen |
+| `ButtonGroup` / `ToggleGroup` | several separate actions sit joined in one bar | one of several views or modes is chosen and stays selected |
+| `CopyButton` / `CopyText` | you already show the value and need only the copy control | the component should show the value and copy it |
+| `Tabs` / `Accordion` | one of a few peer views is visible at a time | sections expand and collapse in place, several may be open |
+| `Tabs` / `PageTabs` | the views switch inside a page region | the tabs are the second-level strip of a resource page, under its header, with the resource's actions |
+| `Tree` / `SidebarMenu` | the person browses or picks from nested data (files, folders) | the rows are the app's navigation |
+| `Dialog` / `Drawer` | a short question or confirmation interrupts the task | a form or a detail opens over the screen that owns it |
+| `ConfirmDialog` / `Dialog` | the person confirms one action, most often a destructive one | the dialog holds anything else |
+| `Tooltip` / `Popover` | a short hint shows on hover or focus and holds no control | the panel holds controls or longer content and opens on click |
+| `Tooltip` / `Hint` | an existing control needs a hint | a label needs an info glyph that explains it |
+| `Alert` / `Toast` | the message belongs to the page or a section and stays | the message confirms something that just happened and leaves |
+| `Skeleton` / `Spinner` | content is loading and its shape is known | a short action is running inside a control |
+| `Progress` / `UploadProgress` | one measured value against a total | file transfers keep running while the person works elsewhere |
+| `EmptyState` / `ErrorBoundary` | there is no data, or a load failed and you render the message | a region may throw while rendering and must not take the page down |
+| `Timestamp` / `DatePicker` | the person reads a date | the person picks a date |
+| `Select` / `Combobox` | the value must be one of the options | the list only suggests and a typed value is valid |
+| `Card` / `IntegrationCard` | any framed content | a catalog tile for an integration: logo, vendor, installed state, one action |
+| `HelpPanel` / `TutorialPanel` | static help for the page | a guided tutorial whose steps point at real controls |
+| `ScrollArea` / plain overflow | a bounded region scrolls inside the page (a panel body, a wide table) | the page itself scrolls |
+
+Also in the app shell: `SkipLink` is the first child of every page shell (the layouts place it
+for you). For a plan row use `PricingCard`; for an official product scene, `Illustration`; to run
+real components in a device-sized viewport in docs, `BrowserFrame`.
+
 ## How to find a component
 
 Do not guess a component name or import path. Look it up.
@@ -1847,7 +1915,7 @@ A few components need **one-time wiring in the app entry before first use** — 
 
 - **Theme (light or dark)**: with no `data-theme` the theme follows the device (`prefers-color-scheme`). An app that is always dark sets `data-theme="dark"` on `<html>` in `index.html` (`<html lang="en" data-theme="dark">`), so the first paint is dark, and an app that is always light sets `data-theme="light"`; a toggle writes `document.documentElement.dataset.theme` (`'dark'` / `'light'`), and a `.dark` class on an ancestor works too. Every token switches with it — never add per-theme classes (`/webkit-theming-dark-mode`).
 
-- **ConfigProvider (languages)**: mount it once at the app root; pass `locale` when the user chose one, or leave it unset to follow the device locale (`en-US` on the server and until mount, then `navigator.language`). Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the locale's catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). English is built in; Portuguese and Spanish are opt-in: import them from `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es` and pass them through `catalogs` (`{ 'pt-BR': ptBR, es }`), or the provider falls back to English and warns in development. With no provider every component formats for the device locale and reads English text. Only what people read follows the locale: send the `v-model` value to your server (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs), never a printed label. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import ConfigProvider from '@aziontech/webkit/config-provider'`.
+- **ConfigProvider (languages)**: mount it once at the app root; pass `locale` when the user chose one, or leave it unset to follow the device locale (`en-US` on the server and until mount, then `navigator.language`). Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the locale's catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). English is built in; Portuguese and Spanish are opt-in: import them from `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es` and pass them through `catalogs` (`{ 'pt-BR': ptBR, es }`), or the provider falls back to English and warns in development. With no provider every component formats for the device locale and reads English text. Only what people read follows the locale: send the `v-model` value to your server (DatePicker a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs), never a printed label. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import ConfigProvider from '@aziontech/webkit/config-provider'`.
 
 ```vue
 <!-- App.vue -->
@@ -2571,7 +2639,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-dep
 - Surface: app
 - Source: `blocks/account/account-hierarchy/account-hierarchy.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-hierarchy")`
-- Components: Alert, Avatar, Button, Card, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, KeyValueList, Link, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, Table, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, Tabs, Tag, Toast, Tooltip, `use-locale`
+- Components: Alert, Avatar, Button, Card, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, KeyValueList, Link, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, Table, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `TableCellTime`, Tabs, Tag, Toast, Tooltip, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2596,7 +2664,7 @@ Where an account admin arranges the account's hierarchy. Workspaces sit under gr
 
 - A. Page heading — `PageHeader`, `Button` (required)
 - B. Toolbar — `Button`, `Tooltip`, `IconButton` (required)
-- C. Resource tree — `Input`, `Card`, `DataTable`, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `Avatar`, `Tag`, `DropdownMenu`, `Link` (required)
+- C. Resource tree — `Input`, `Card`, `DataTable`, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `TableCellTime`, `Avatar`, `Tag`, `DropdownMenu`, `Link` (required)
 - D. Details panel — `Card`, `Tabs`, `KeyValueList`, `EmptyState`, `Tag` (required)
 - E. Move — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Select` (required)
 - F. Labels — `Dialog`, `Field`, `MultiSelect` (required)
@@ -2984,12 +3052,12 @@ What each prop and event does, and the go-live code: [blocks/account/account-pay
 - Surface: app
 - Source: `blocks/account/account-personal-tokens/account-personal-tokens.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-personal-tokens")`
-- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CopyButton, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, PropertyFilter, Select, SettingsGroup, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Textarea, Tooltip, `use-collection`, `use-locale`
+- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CopyButton, DataTable, `DatePickerRoot`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, PropertyFilter, Select, SettingsGroup, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Textarea, Tooltip, `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
-personal tokens; personal access tokens; api tokens; api keys; access tokens; create token; revoke token; copy token once; token expiration; tokens pessoais; token de acesso; chaves de api; criar token; revogar token
+personal tokens; personal access tokens; api tokens; api keys; access tokens; create token; revoke token; copy token once; token expiration; date and time field in a form; expiry date picker; tokens pessoais; token de acesso; chaves de api; criar token; revogar token
 
 The Personal tokens page of the account settings. A person creates a token for a script, a CI job or the CLI, copies its secret the one time it is shown, sees which tokens are still alive and when each expires or was last used, and revokes one that leaked or is no longer needed. The secret never comes back: the list shows only the name, status and dates, and a lost secret means a new token. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
 
@@ -3013,7 +3081,7 @@ The Personal tokens page of the account settings. A person creates a token for a
 - E. No match and empty — `EmptyState` (required)
 - F. Load failure — `Alert` (conditional)
 - G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsGroup`, `PanelFooter` (required)
-- H. Fields — `Field`, `Input`, `Textarea`, `Select`, `FieldDescription` (required)
+- H. Fields — `Field`, `Input`, `Textarea`, `Select`, `DatePickerRoot`, `FieldDescription` (required)
 - I. One-time reveal — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
 - J. Confirmations and outcomes — `ConfirmDialog` (required)
 
@@ -4770,7 +4838,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-hub.m
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, TagEditor, Textarea, Toast, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -4802,9 +4870,10 @@ The page a first-level resource is created on when everything it needs fits on o
 - C. Sections — `SettingsGroup`, `Card`, `Item` (required)
 - D. Field rows — `SettingsRow`, `Input`, `FieldError` (required)
 - E. Switch rows — `Switch` (optional)
-- F. Commit bar — `SaveBar`, `Button` (required)
-- G. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
-- H. Shortcut keycap — `Kbd` (optional)
+- F. Tags — `TagEditor` (optional)
+- G. Commit bar — `SaveBar`, `Button` (required)
+- H. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
+- I. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/create/create-page.md](blocks/create/create-page.md).
 
@@ -4858,11 +4927,11 @@ What each prop and event does, and the go-live code: [blocks/create/create-page.
 - Each message is tied to its control with `aria-describedby` and appears only on submit; `required` and `invalid` are announced through the control's own state.
 - The collapsed Advanced region is `inert` while closed, so keyboard focus never lands in hidden fields.
 - The back `IconButton` and the account trigger have `aria-label`s; decorative icons carry `aria-hidden="true"`.
-- Focus order follows reading order: header, heading, General, Advanced toggle, then the bar's Cancel and Save (CreateZone adds Import before them).
+- Focus order follows reading order: header, heading, General, Tags, Advanced toggle, then the bar's Cancel and Save (CreateZone adds Import before them).
 
 ## States
 
-- Default: the Create Domain page at rest (no `defaultValues`, not `loading`); General holds Name and Domain name, Advanced is collapsed, the bar shows Cancel and Save. `loading` locks the form and spins Save, and `error` raises the error toast with Retry. Importing a zone file belongs to CreateZone, not to this page.
+- Default: the Create Domain page at rest (no `defaultValues`, not `loading`); General holds Name and Domain name, Tags holds a `TagEditor` (key and value tags with key suggestions, checked on submit with `validate()`; never a comma-separated text field), Advanced is collapsed, the bar shows Cancel and Save. `loading` locks the form and spins Save, and `error` raises the error toast with Retry. Importing a zone file belongs to CreateZone, not to this page.
 - CreateZone: Create Zone after a zone file is imported; a Records section lists each imported record (type `Tag`, value, TTL) with a Remove `IconButton` per row and Discard import in the card footer; each removal and the discard confirm in a toast with Undo, which puts the records back. Import in the bar and a paste into Domain name both read a BIND zone file, skip the SOA and nameserver records, fill an empty Name and Domain name from `$ORIGIN`, and confirm in a toast; a file with no records raises an error toast. The list previews the first 50 records with an "and N more" line, and a re-import skips records already listed.
 - CreateOrganization: General with Name and a Mark color chosen from six `RadioGroup` cards (`variant="card"`) (each color built from semantic tokens: primary, warning, danger, success, info and the text grays, never palette primitives), each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
@@ -6403,7 +6472,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Surface: app
 - Source: `blocks/dashboard/dashboard-service-monitoring/dashboard-service-monitoring.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-service-monitoring")`
-- Components: Alert, Chart, ChartCard, EmptyState, Hint, Item, PageHeader, Skeleton, StatTile, StatusIndicator, Tag, ToggleGroup
+- Components: Alert, Chart, ChartCard, EmptyState, Hint, Item, PageHeader, Skeleton, StatTile, StatusIndicator, Tag, ToggleGroup, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-ui-states`
 
 ## Asked as
@@ -8254,7 +8323,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-schema.md
 - Surface: app
 - Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-variables")`
-- Components: Alert, AttributeEditor, Avatar, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Kbd, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsGroup, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`, `use-shortcuts`
+- Components: Alert, AttributeEditor, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Kbd, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsGroup, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellTime`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -8281,7 +8350,7 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 - A. Page heading — `PageHeader`, `Button` (required)
 - B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
-- C. Variables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `Avatar`, `Tooltip` (required)
+- C. Variables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `TableCellTime`, `Tooltip` (required)
 - D. Row actions — `TableCellActions`, `DropdownMenu` (required)
 - E. Create and edit drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 - F. Variables section — `SettingsGroup`, `Button`, `ToggleGroup` (required)
@@ -9551,7 +9620,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-page-sk
 - Surface: app
 - Source: `blocks/state/state-project-intake/state-project-intake.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-project-intake")`
-- Components: Alert, Button, FileDropzone, UploadProgress
+- Components: Alert, Button, FileDropzone, UploadProgress, `use-locale`
 - Skills: `webkit-ui-states`, `webkit-motion-polish`
 
 ## Asked as
@@ -9616,7 +9685,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-project
 - **Drop lead:** what is accepted, full sentences: `A project folder, or the files inside one. We detect what it is built with.`
 - **Overlay heading:** one word for the phase: `Initializing`.
 - **Overlay progress:** what is happening and how far, with a period: `Setting up your deployment. 2 of 5 files.`
-- **Summary:** count and total size: `5 files, 8.36 KB`.
+- **Summary:** count and total size: `5 files, 8.4 kB`.
 - **Failure:** what failed and what to do: `1 file could not be uploaded. Retry it, or remove it from the folder and drop the project again.`
 
 ## Accessibility
@@ -10105,7 +10174,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-events-ex
 - Surface: app
 - Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-file-browser")`
-- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress
+- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress, `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -10521,7 +10590,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-query-edi
 - Surface: app
 - Source: `blocks/view/view-rule-list/view-rule-list.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-rule-list")`
-- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, Item, Kbd, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Toast, Tooltip
+- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, Item, Kbd, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, `TableCellTime`, Tag, Toast, Tooltip
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -10549,7 +10618,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - A. Header — `PageHeader`, `Button` (required)
 - B. Search — `Input`, `Alert` (required)
 - C. Phases — `Card`, `Accordion` (required)
-- D. Rules table — `DataTable`, `Tag`, `Field`, `Switch` (required)
+- D. Rules table — `DataTable`, `Tag`, `Field`, `Switch`, `TableCellTime` (required)
 - E. Order controls — `Input`, `IconButton`, `Tooltip`, `DropdownMenu` (required)
 - F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert` (required)
 - G. States — `EmptyState`, `Alert` (required)
@@ -10903,7 +10972,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-template-
 - Surface: app
 - Source: `blocks/view/view-waf-tuning/view-waf-tuning.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-waf-tuning")`
-- Components: Alert, Button, Card, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, EmptyState, Field, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, `TableCellTags`, Textarea, Toast, Tooltip, `use-locale`
+- Components: Alert, Button, Card, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, EmptyState, Field, IconButton, Input, NumberInput, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, `TableCellTags`, Textarea, Toast, Tooltip, `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -10929,7 +10998,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## Building blocks
 
 - A. Header — `PageHeader`, `Button` (required)
-- B. Threshold settings — `Field`, `Select`, `Input`, `IconButton`, `Tooltip` (required)
+- B. Threshold settings — `Field`, `Select`, `NumberInput`, `Input`, `IconButton`, `Tooltip` (required)
 - C. Matches table — `Card`, `DataTable`, `TableCellTags`, `EmptyState`, `Alert` (required)
 - D. Allow dialog — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
 - E. Outcome — `Alert` (required)

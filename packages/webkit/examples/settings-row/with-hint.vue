@@ -1,12 +1,12 @@
 <script setup>
   import Card from '@aziontech/webkit/card'
-  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import NumberInput from '@aziontech/webkit/number-input'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { reactive } from 'vue'
 
-  const form = reactive({ ttl: '', stale: false })
+  const form = reactive({ ttl: 3600, stale: false })
 </script>
 
 <template>
@@ -18,13 +18,12 @@
           description="How long the edge keeps a copy of a response, in seconds."
           hint="The edge serves the cached copy until this many seconds pass, then asks the origin again. A Cache-Control max-age header from the origin takes precedence when it is lower. Use 0 to revalidate every request."
         >
-          <Input
+          <NumberInput
             v-model="form.ttl"
             size="large"
             class="w-full"
-            aria-label="Cache TTL"
-            inputmode="numeric"
-            placeholder="3600"
+            :min="0"
+            aria-label="Cache TTL in seconds"
           />
         </SettingsRow>
         <SettingsRow

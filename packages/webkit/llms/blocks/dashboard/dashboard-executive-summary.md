@@ -484,6 +484,8 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const failed = (card: string) => `Couldn't load ${card}. ${props.error}`
 
   const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
   const compact = (value: number) =>
     formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
@@ -499,10 +501,10 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const formatters: Record<ExecutiveSummaryDashboardFormat, (value: number) => string> = {
     currency: (value) => money(value),
     count: (value) => compact(value),
-    percentage: (value) => `${value.toFixed(0)}%`,
-    uptime: (value) => `${value.toFixed(2)}%`,
-    score: (value) => value.toFixed(0),
-    cost: (value) => `${value.toFixed(4)}`
+    percentage: (value) => `${fixed(value, 0)}%`,
+    uptime: (value) => `${fixed(value, 2)}%`,
+    score: (value) => fixed(value, 0),
+    cost: (value) => `${fixed(value, 4)}`
   }
 
   const reportColumns: CsvColumn[] = Object.entries({

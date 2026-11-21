@@ -2,7 +2,7 @@
 name: webkit-data-viz
 description: The token adapter that maps charts onto @aziontech/theme — every series color derived from the --color-* families (never hex), computed tokens re-read on a data-theme change so a canvas re-themes (SVG re-themes for free), and the chart's loading/empty/error surface rendered with webkit components. For chart-form and palette theory, use the generic dataviz skill; this skill covers only mapping that onto theme tokens. Use when building or reviewing a chart, dashboard, or KPI tile in a webkit app.
 status: active
-last_updated: 2026-11-16
+last_updated: 2026-11-21
 scope: general
 enforced_by: [webkit-tokens, webkit-component-states, ui-verify]
 ---
@@ -50,6 +50,22 @@ Never guess an import path or a hex value. Resolve both from the contract:
 - **Tokens**: the `--chart-*` role in the `tokens` tree of the same **`catalog.json`**, or the human
   catalog in **`node_modules/@aziontech/webkit/docs/STYLEGUIDE.md`**. Derive every chart color from
   it — never a raw hex.
+
+## Pick the chart for the question
+
+| The question                                              | Use                                                       | Never                                        |
+| --------------------------------------------------------- | --------------------------------------------------------- | -------------------------------------------- |
+| How a value changes over time                             | `Chart` with `Chart.Line` or `Chart.Area`                 | a `DonutChart` of time buckets               |
+| Separate categories compared                              | `Chart` with `Chart.Bar`                                  | a line between unrelated categories          |
+| Event volume per time bucket (a log histogram)            | `Chart.Bar type="histogram"`                              | gapped bars                                  |
+| Parts of a whole, up to about five                        | `DonutChart`                                              | a donut with ten slices (use `BarList`)      |
+| A ranked top list (top paths, top countries)              | `BarList`                                                 | a `Table` with hand-drawn bars               |
+| A value inside a fixed range (CPU, quota, cache hit rate) | `GaugeChart`                                              | a `DonutChart` with one slice                |
+| A metric by country                                       | `MapChart`                                                | `NetworkMap` (that is the Azion network map) |
+| The recent shape of a metric beside its number, in a row  | `SparkChart`                                              | a full `Chart` squeezed into a cell          |
+| Uptime or status day by day                               | `Tracker`                                                 | a row of hand-coloured boxes                 |
+| One headline number, with its change                      | `StatTile` (several in one card: `StatTileGroup`)         | a `Card` with a large number typed in        |
+| A chart with its title, period and actions on a dashboard | `ChartCard` (in a `DashboardGrid` when widgets rearrange) | a `Card` composed by hand around a chart     |
 
 ## Map the palette kind onto the `--chart-*` role
 

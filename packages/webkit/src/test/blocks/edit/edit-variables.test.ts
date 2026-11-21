@@ -146,7 +146,7 @@ describe('variables data contract', () => {
       scope: [{ type: 'global', id: '', name: '' }],
       lastEditor: 'Priya Patel',
       lastEditorAvatar: '',
-      lastModified: '5 minutes ago'
+      lastModified: '2026-11-10T11:55:00Z'
     }
   ]
 

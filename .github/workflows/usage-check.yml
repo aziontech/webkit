@@ -7,13 +7,20 @@ name: Usage check
 on:
   workflow_dispatch:
     inputs:
+      task:
+        description: 'A fixed task of packages/webkit/scripts/usage-tasks.json (token-expiry); leave empty to pass a target and a prompt'
+        required: false
+        default: ''
+        type: string
       target:
         description: 'Component export (date-picker) or block id (auth/auth-sign-in)'
-        required: true
+        required: false
+        default: ''
         type: string
       prompt:
         description: 'Intent-only prompt that needs the target without naming it'
-        required: true
+        required: false
+        default: ''
         type: string
       max_turns:
         description: 'Turns for the claude session'
@@ -25,12 +32,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.target }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.task || inputs.target }}
   cancel-in-progress: false
 
 jobs:
   usage-check:
-    name: Usage check (${{ inputs.target }})
+    name: Usage check (${{ inputs.task || inputs.target }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -55,12 +62,17 @@ jobs:
         working-directory: packages/webkit
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TASK: ${{ inputs.task }}
           TARGET: ${{ inputs.target }}
           PROMPT: ${{ inputs.prompt }}
           MAX_TURNS: ${{ inputs.max_turns }}
         run: |
           test -n "$ANTHROPIC_API_KEY" || { echo "::error::ANTHROPIC_API_KEY secret is not set"; exit 1; }
-          node scripts/check-usage.mjs "$TARGET" "$PROMPT" --max-turns "$MAX_TURNS" --report usage-report.md
+          if [ -n "$TASK" ]; then
+            node scripts/check-usage.mjs --task "$TASK" --max-turns "$MAX_TURNS" --report usage-report.md
+          else
+            node scripts/check-usage.mjs "$TARGET" "$PROMPT" --max-turns "$MAX_TURNS" --report usage-report.md
+          fi
 
       - name: Publish the report
         if: always()

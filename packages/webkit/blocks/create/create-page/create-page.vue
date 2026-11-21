@@ -16,6 +16,7 @@
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
+  import TagEditor, { type TagEditorTag } from '@aziontech/webkit/tag-editor'
   import { toast } from '@aziontech/webkit/toast'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
@@ -32,6 +33,8 @@
     dnssec: boolean
     /** Whether it answers authoritative DNS queries. */
     active: boolean
+    /** Key and value tags of the domain; a tag with an empty key is left out. */
+    tags: { key: string; value: string }[]
   }
 
   export interface CreatePageProps {
@@ -63,13 +66,16 @@
 
   const breadcrumb = [{ label: 'Domains', href: '/domains' }, { label: 'Create Domain' }]
 
-  const form = reactive<CreatePageValues>({
+  const form = reactive<Omit<CreatePageValues, 'tags'> & { tags: TagEditorTag[] }>({
     name: '',
     domain: '',
     dnssec: false,
     active: true,
-    ...props.defaultValues
+    ...props.defaultValues,
+    tags: (props.defaultValues.tags ?? []).map((tag) => ({ ...tag }))
   })
+  const tagKeySuggestions = ['team', 'environment', 'owner', 'cost-center']
+  const tagEditorEl = ref<InstanceType<typeof TagEditor> | null>(null)
   const errors = reactive<FormErrors>({
     name: '',
     nameKind: 'required',
@@ -104,13 +110,17 @@
       errors.domain = ''
     }
 
-    return !errors.name && !errors.domain
+    const tagsValid = tagEditorEl.value?.validate() ?? true
+    return !errors.name && !errors.domain && tagsValid
   }
 
   const values = (): CreatePageValues => ({
     ...form,
     name: form.name.trim(),
-    domain: form.domain.trim()
+    domain: form.domain.trim(),
+    tags: form.tags
+      .filter((tag) => tag.key.trim() && !tag.markedForRemoval)
+      .map((tag) => ({ key: tag.key.trim(), value: tag.value.trim() }))
   })
 
   const guard = useUnsavedChanges(() => form, {
@@ -277,6 +287,23 @@
                         >
                       </SettingsRow>
                     </Item.List>
+                  </template>
+                </Card>
+              </SettingsGroup>
+
+              <SettingsGroup
+                label="Tags"
+                hint="Labels for ownership, cost and search. The same keys across resources keep them easy to find."
+              >
+                <Card>
+                  <template #default>
+                    <TagEditor
+                      ref="tagEditorEl"
+                      v-model:tags="form.tags"
+                      :key-suggestions="tagKeySuggestions"
+                      :disabled="loading"
+                      aria-label="Domain tags"
+                    />
                   </template>
                 </Card>
               </SettingsGroup>

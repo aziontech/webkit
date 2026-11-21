@@ -13,6 +13,7 @@
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tracker, { type TrackerItem } from '@aziontech/webkit/tracker'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
   import {
@@ -148,7 +149,10 @@
     () => periods.find((option) => option.label === period.value)?.phrase ?? ''
   )
 
-  const formatScore = (value: number) => value.toFixed(0)
+  const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
+  const formatScore = (value: number) => fixed(value, 0)
 </script>
 
 <template>

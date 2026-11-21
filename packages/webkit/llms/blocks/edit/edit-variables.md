@@ -1,11 +1,11 @@
 # EditVariables (`edit/edit-variables`)
 
-> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the view-table recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a state-first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of edit-delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsGroup`, `DataTable`, `Card`, `EmptyState`, `TableCellId`, `TableCellLink`, `TableCellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `FieldError` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.
+> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the view-table recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a state-first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of edit-delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsGroup`, `DataTable`, `Card`, `EmptyState`, `TableCellId`, `TableCellLink`, `TableCellActions`, `TableCellTime`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `FieldError` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-variables")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-shortcuts`
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellTime`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -38,9 +38,9 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 The same controls row as `view/view-table`, all bound to one client-mode `useCollection` call: a `PropertyFilter` labeled "Filter variables" (free text over key, ID, author and type, plus Key, Author and Type properties), outlined `IconButton`s for Refresh and Download CSV, each named by a `Tooltip`, and `CollectionPreferences` last. The filter, sort and page live in the URL; page size and columns are saved. See `skills/webkit-lists`.
 
-### C. Variables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `Avatar`, `Tooltip` (required)
+### C. Variables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `TableCellTime`, `Tooltip` (required)
 
-`Card :padded="false"` around a borderless data-driven `DataTable` bound with `v-bind="tableProps"`, with Key as the `principal`, unhideable column, then ID (hidden by default), Value, Scope and Last modified. ID is `TableCellId` ("Copy variable ID") and Value is `TableCellLink` with `copyable`; a secret value shows its mask and loses its copy control (`:copyable="!row.secret"`). Last modified pairs the author `Avatar`, named in a `Tooltip`, with the relative time. See `skills/webkit-tables`.
+`Card :padded="false"` around a borderless data-driven `DataTable` bound with `v-bind="tableProps"`, with Key as the `principal`, unhideable column, then ID (hidden by default), Value, Scope and Last modified. ID is `TableCellId` ("Copy variable ID") and Value is `TableCellLink` with `copyable`; a secret value shows its mask and loses its copy control (`:copyable="!row.secret"`). Last modified is `TableCellTime` with the row's instant (a `Date` or an ISO string, never typed text such as `2 days ago`) and its `author`, so the column sorts by time and the relative text follows the locale. See `skills/webkit-tables`.
 
 ### D. Row actions — `TableCellActions`, `DropdownMenu` (required)
 
@@ -220,7 +220,6 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Checkbox from '@aziontech/webkit/checkbox'
@@ -253,6 +252,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import TableCellId from '@aziontech/webkit/table-cell-id'
   import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -289,8 +289,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
     lastEditor: string
     /** That person's avatar URL; empty shows the initials. */
     lastEditorAvatar: string
-    /** When it changed last, as relative text. */
-    lastModified: string
+    /** When it changed last: a Date or an ISO 8601 string. */
+    lastModified: Date | string
   }
 
   /** One pair the drawer saves, with the scope chosen for every pair. */
@@ -461,7 +461,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
       ...variable,
       lastEditor: 'Jane Doe',
       lastEditorAvatar: '',
-      lastModified: 'just now'
+      lastModified: new Date()
     })
 
   const onCreated = (created: VariableDraft[]) => {
@@ -1059,24 +1059,11 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
                 </template>
 
                 <template #cell-lastModified="{ row, value }">
-                  <div
-                    v-if="value"
-                    class="flex min-w-0 items-center gap-(--spacing-xs)"
-                  >
-                    <Tooltip
-                      v-if="row.lastEditor"
-                      :content="row.lastEditor"
-                    >
-                      <Avatar
-                        :src="row.lastEditorAvatar || undefined"
-                        :alt="row.lastEditor"
-                        :label="row.lastEditor"
-                        size="small"
-                        variant="square"
-                      />
-                    </Tooltip>
-                    <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
-                  </div>
+                  <TableCellTime
+                    :value="value"
+                    :author="row.lastEditor"
+                    :avatar-src="row.lastEditorAvatar || undefined"
+                  />
                 </template>
 
                 <template #cell-scope="{ value }">
@@ -1559,7 +1546,7 @@ export const sampleVariables: VariablesVariable[] = [
     scope: [{ type: 'global', id: '', name: '' }],
     lastEditor: 'Ethan Brooks',
     lastEditorAvatar: '',
-    lastModified: '1 month ago'
+    lastModified: '2026-10-10T12:00:00Z'
   },
   {
     id: 'v-002',
@@ -1569,7 +1556,7 @@ export const sampleVariables: VariablesVariable[] = [
     scope: [{ type: 'environment', id: 'env-production', name: 'Production' }],
     lastEditor: 'Jordan Kim',
     lastEditorAvatar: '',
-    lastModified: '2 months ago'
+    lastModified: '2026-09-08T12:00:00Z'
   },
   {
     id: 'v-003',
@@ -1579,7 +1566,7 @@ export const sampleVariables: VariablesVariable[] = [
     scope: [{ type: 'service', id: '3344556677', name: 'storefront' }],
     lastEditor: 'Taylor Reed',
     lastEditorAvatar: '',
-    lastModified: '2 months ago'
+    lastModified: '2026-09-08T12:00:00Z'
   },
   {
     id: 'v-004',
@@ -1589,7 +1576,7 @@ export const sampleVariables: VariablesVariable[] = [
     scope: [{ type: 'policy', id: '5540117', name: 'production-policy' }],
     lastEditor: 'John Smith',
     lastEditorAvatar: '',
-    lastModified: '2 months ago'
+    lastModified: '2026-09-08T12:00:00Z'
   },
   {
     id: 'v-005',
@@ -1599,7 +1586,7 @@ export const sampleVariables: VariablesVariable[] = [
     scope: [{ type: 'global', id: '', name: '' }],
     lastEditor: 'Sam Lee',
     lastEditorAvatar: '',
-    lastModified: '3 months ago'
+    lastModified: '2026-08-06T12:00:00Z'
   }
 ]
 ```

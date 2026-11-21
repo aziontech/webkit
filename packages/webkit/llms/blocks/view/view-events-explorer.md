@@ -476,6 +476,8 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
   }
 
   const { formatDate, formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
   const nowDate = computed(() => props.now ?? sampleNow)
 
@@ -838,7 +840,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
 
   const errorShareLabel = computed(() =>
     summary.value.total
-      ? `${((summary.value.errors / summary.value.total) * 100).toFixed(1)}% of events`
+      ? `${fixed((summary.value.errors / summary.value.total) * 100, 1)}% of events`
       : 'none'
   )
 

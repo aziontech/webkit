@@ -231,7 +231,26 @@ export const COMPONENT_TERMS = {
     'seletor de data',
     'selector de fecha',
     'calendário',
-    'calendario'
+    'calendario',
+    'date and time',
+    'date time',
+    'datetime input',
+    'date time input',
+    'datetime',
+    'date time picker',
+    'datetime picker',
+    'time picker',
+    'pick a time',
+    'schedule time',
+    'expiration date',
+    'expiry date',
+    'expires at',
+    'due date',
+    'deadline',
+    'date field',
+    'date input',
+    'data e hora',
+    'fecha y hora'
   ],
   'date-range-picker': [
     'date range picker',
@@ -242,7 +261,13 @@ export const COMPONENT_TERMS = {
     'last hour',
     'relative time range',
     'period',
-    'time window'
+    'time window',
+    'date range',
+    'time range filter',
+    'start and end date',
+    'from and to dates',
+    'intervalo de datas',
+    'rango de fechas'
   ],
   tabs: ['abas', 'guias', 'pestañas'],
   toast: ['notificação', 'notificación', 'aviso temporário'],
@@ -254,8 +279,31 @@ export const COMPONENT_TERMS = {
     'search field',
     'search input'
   ],
-  'password-input': ['password', 'password field', 'senha', 'contraseña', 'campo de senha'],
-  'phone-input': ['phone', 'phone number', 'telefone', 'teléfono', 'telefono'],
+  'password-input': [
+    'password',
+    'password field',
+    'senha',
+    'contraseña',
+    'campo de senha',
+    'secret field',
+    'api token field',
+    'token field',
+    'client secret',
+    'api key field',
+    'reveal password'
+  ],
+  'phone-input': [
+    'phone',
+    'phone number',
+    'telefone',
+    'teléfono',
+    'telefono',
+    'telephone',
+    'telephone field',
+    'phone field',
+    'mobile number',
+    'country code'
+  ],
   'context-menu': [
     'context menu',
     'right click',
@@ -266,7 +314,6 @@ export const COMPONENT_TERMS = {
   'dropdown-menu': [
     'menu suspenso',
     'menú desplegable',
-    'context menu',
     'actions menu',
     'kebab',
     'kebab menu',
@@ -337,7 +384,15 @@ export const COMPONENT_TERMS = {
     'compare code'
   ],
   kbd: ['keyboard shortcut', 'atalho de teclado', 'atajo de teclado'],
-  'file-dropzone': ['dropzone', 'drop zone', 'file upload', 'enviar arquivo', 'subir archivo'],
+  'file-dropzone': [
+    'dropzone',
+    'drag and drop files',
+    'drop files',
+    'drop zone',
+    'file upload',
+    'enviar arquivo',
+    'subir archivo'
+  ],
   tree: ['tree view', 'árvore', 'árbol'],
   'radio-group': [
     'radio',
@@ -356,7 +411,9 @@ export const COMPONENT_TERMS = {
     'pick several',
     'choose many',
     'select multiple',
-    'several'
+    'several',
+    'choose several',
+    'multiple choice dropdown'
   ],
   'transfer-list': ['transfer list', 'dual list', 'move items between lists'],
   'confirm-dialog': [
@@ -389,7 +446,17 @@ export const COMPONENT_TERMS = {
     'tags input',
     'chips input'
   ],
-  'attribute-editor': ['environment variables', 'env vars', 'headers', 'key value editor'],
+  'attribute-editor': [
+    'environment variables',
+    'env vars',
+    'headers',
+    'key value editor',
+    'repeatable rows',
+    'add and remove rows',
+    'list of pairs',
+    'http headers editor',
+    'rule criteria'
+  ],
   tooltip: ['dica de ferramenta', 'dica', 'información sobre herramientas'],
   hint: ['info icon', 'info tooltip', 'help icon'],
   breadcrumb: ['trilha de navegação', 'migas de pan'],
@@ -404,7 +471,13 @@ export const COMPONENT_TERMS = {
     'pick from a list',
     'choose from a list',
     'dropdown list',
-    'single select'
+    'single select',
+    'dropdown select',
+    'select box',
+    'picklist',
+    'option list',
+    'timezone select',
+    'country select'
   ],
   skeleton: ['loading', 'loading state', 'loading placeholder', 'placeholder', 'shimmer'],
   spinner: ['indicador de carregamento', 'indicador de carga', 'busy', 'loading spinner'],
@@ -427,14 +500,16 @@ export const COMPONENT_TERMS = {
     'info banner',
     'notice',
     'warning message',
+    'inline warning',
+    'inline error',
     'error message',
     'page banner'
   ],
   separator: ['divider', 'horizontal rule', 'separador', 'divisor'],
   accordion: ['acordeão', 'acordeón', 'collapsible section'],
-  stepper: ['etapas', 'pasos', 'progress steps'],
+  stepper: ['etapas', 'pasos', 'progress steps', 'step indicator', 'steps progress'],
   sidebar: ['menu lateral', 'barra lateral'],
-  slider: ['range slider', 'controle deslizante', 'deslizador'],
+  slider: ['range slider', 'controle deslizante', 'deslizador', 'percentage slider', 'range input'],
   'page-header': ['page title', 'title with actions', 'page heading', 'page header'],
   'app-header': ['top bar', 'app bar', 'header bar', 'top navigation bar', 'top navigation'],
   'console-layout': [
@@ -471,7 +546,6 @@ export const COMPONENT_TERMS = {
     'object preview',
     'image viewer',
     'image preview',
-    'json viewer',
     'text file viewer',
     'storage object',
     'pré-visualização de arquivo',
@@ -482,7 +556,23 @@ export const COMPONENT_TERMS = {
   brand: ['azion logo'],
   'hover-card': ['hover card', 'preview on hover', 'link preview', 'user card'],
   'status-code': ['http status', 'status code', 'http status code', 'http method', 'get post'],
-  timestamp: ['timestamp', 'relative time', 'time ago', 'date time display'],
+  timestamp: [
+    'timestamp',
+    'relative time',
+    'time ago',
+    'date time display',
+    'show a date',
+    'display a date',
+    'created at',
+    'updated at',
+    'last updated',
+    'last modified',
+    'date column',
+    'created at column',
+    'formatted date',
+    'absolute time',
+    'utc time'
+  ],
   'chart-reference': [
     'threshold',
     'threshold line',
@@ -500,12 +590,306 @@ export const COMPONENT_TERMS = {
   ],
   'stats-section': ['stats', 'stats band', 'proof figures'],
   'closing-call-to-action-section': ['cta', 'closing cta', 'call to action band'],
-  marquee: ['marquee', 'logo marquee', 'logo marquee'],
+  marquee: ['marquee', 'logo marquee'],
   'logo-wall': ['logo cloud', 'logo wall', 'customer logos'],
   'capability-grid-section': ['feature grid', 'features grid', 'capabilities grid'],
   'plan-comparison-section': ['comparison', 'plan comparison', 'feature matrix', 'compare plans'],
   'article-index-section': ['blog index', 'article index', 'resource hub', 'blog list'],
-  'newsletter-section': ['newsletter', 'newsletter signup', 'subscribe to newsletter']
+  'newsletter-section': ['newsletter', 'newsletter signup', 'subscribe to newsletter'],
+  'number-input': [
+    'number input',
+    'numeric input',
+    'numeric field',
+    'number field',
+    'quantity',
+    'quantity stepper',
+    'number stepper',
+    'ttl',
+    'ttl seconds',
+    'port number',
+    'timeout',
+    'retention days',
+    'duration input',
+    'integer',
+    'campo numérico',
+    'campo numerico'
+  ],
+  'otp-input': [
+    'otp',
+    'one time code',
+    'verification code',
+    '2fa code',
+    'mfa code',
+    'two factor code',
+    'six digit code',
+    'authenticator code',
+    'pin code',
+    'código de verificação',
+    'código de verificación'
+  ],
+  combobox: [
+    'autocomplete',
+    'typeahead',
+    'autosuggest',
+    'search with suggestions',
+    'suggestions as you type',
+    'free text with suggestions',
+    'editable select'
+  ],
+  'input-group': [
+    'input with prefix',
+    'input with suffix',
+    'input with addon',
+    'currency input',
+    'url input with prefix',
+    'input with button',
+    'input adornment'
+  ],
+  field: [
+    'form field',
+    'field label',
+    'label and error',
+    'field wrapper',
+    'form row',
+    'campo de formulário'
+  ],
+  'language-select': [
+    'language picker',
+    'language switcher',
+    'locale picker',
+    'choose language',
+    'seletor de idioma'
+  ],
+  'file-token-group': [
+    'selected files',
+    'file list',
+    'attached files',
+    'files to upload',
+    'file chips'
+  ],
+  'filter-menu': ['filter menu', 'add filter', 'filter dropdown', 'faceted filter'],
+  'property-filter': [
+    'query bar',
+    'filter by property',
+    'filter tokens',
+    'search and filter',
+    'structured filter'
+  ],
+  'password-requirements': ['password rules', 'password strength', 'password checklist'],
+  chip: ['filter chip', 'removable chip', 'removable filter', 'selectable chip'],
+  'theme-switcher': [
+    'theme switcher',
+    'dark mode toggle',
+    'dark mode',
+    'light dark toggle',
+    'theme toggle',
+    'tema escuro'
+  ],
+  'code-editor': [
+    'code editor',
+    'json editor',
+    'yaml editor',
+    'sql editor',
+    'edit code',
+    'monaco',
+    'editor de código'
+  ],
+  'schema-form': [
+    'json schema form',
+    'form from json schema',
+    'form from schema',
+    'generated form',
+    'dynamic form',
+    'openapi form'
+  ],
+  'button-group': ['button group', 'joined buttons', 'grouped buttons'],
+  'icon-button': ['icon button', 'icon only button', 'toolbar button'],
+  'split-button': [
+    'split button',
+    'button with dropdown',
+    'button with menu',
+    'primary action with more options'
+  ],
+  'highlight-button': ['highlight button', 'promoted action', 'upgrade button'],
+  'copy-text': ['copyable text', 'copyable value', 'copy id', 'copyable id', 'inline copy'],
+  'copy-prompt-button': ['copy prompt', 'copy as prompt'],
+  'search-trigger': ['search trigger', 'header search', 'open search', 'search button'],
+  eyebrow: ['eyebrow', 'overline label', 'kicker'],
+  tag: ['label pill', 'pill', 'category label', 'etiqueta'],
+  badge: ['count badge', 'notification count', 'unread count', 'counter badge'],
+  'severity-tag': [
+    'severity',
+    'severity level',
+    'critical high medium low',
+    'threat level',
+    'severidade'
+  ],
+  'avatar-group': ['avatar group', 'avatar stack', 'stacked avatars', 'team members avatars'],
+  'browser-frame': ['browser frame', 'browser window mockup', 'screenshot frame'],
+  card: ['cartão', 'tarjeta', 'panel card', 'content card', 'surface'],
+  'integration-card': ['integration card', 'connector card', 'marketplace card'],
+  'help-panel': ['help panel', 'contextual help', 'side help'],
+  'tutorial-panel': [
+    'tutorial panel',
+    'guided tutorial',
+    'getting started steps',
+    'onboarding checklist'
+  ],
+  'currency-amount': [
+    'currency amount',
+    'money',
+    'price',
+    'amount of money',
+    'show a price',
+    'monetary value',
+    'valor monetário'
+  ],
+  illustration: ['illustration', 'product illustration', 'ilustração'],
+  'third-party-logo': ['third party logo', 'vendor logo', 'framework logo', 'provider logo'],
+  'console-mockup': ['console mockup', 'product mockup', 'ui mockup'],
+  'overflow-count': ['overflow count', 'plus n more', 'and more count', 'truncated list count'],
+  'payment-brand': ['payment brand', 'card brand', 'credit card logo', 'visa mastercard'],
+  'qr-code': ['qr code', 'qr', 'código qr'],
+  'network-map': ['network map', 'world map', 'points of presence map', 'edge locations map'],
+  'map-chart': ['map chart', 'choropleth', 'geo chart', 'requests by country', 'data by country'],
+  'gauge-chart': ['gauge', 'gauge chart', 'radial gauge', 'score dial', 'speedometer'],
+  'spark-chart': ['sparkline', 'spark chart', 'tiny chart', 'inline chart', 'trend line in a row'],
+  tracker: [
+    'tracker',
+    'uptime bars',
+    'uptime',
+    'status history',
+    'availability bars',
+    'status timeline bars'
+  ],
+  'chart-card': ['chart card', 'chart in a card', 'dashboard widget', 'chart widget'],
+  'stat-tile-group': ['kpi row', 'row of metrics', 'metric tiles', 'summary numbers'],
+  trace: [
+    'trace',
+    'trace waterfall',
+    'waterfall',
+    'spans',
+    'distributed trace',
+    'request timeline'
+  ],
+  'data-table': [
+    'data table',
+    'datatable',
+    'sortable table',
+    'table with sorting',
+    'paginated table',
+    'table with pagination',
+    'table with selection',
+    'resource list table',
+    'list of resources'
+  ],
+  'card-list': ['card list', 'list of cards', 'grid of cards', 'card grid of resources'],
+  'flow-diagram': [
+    'flow diagram',
+    'node diagram',
+    'architecture diagram',
+    'pipeline diagram',
+    'fluxograma'
+  ],
+  'error-boundary': ['error boundary', 'catch render error', 'crash fallback'],
+  'outcome-icon': ['outcome icon', 'success icon', 'result icon', 'big check'],
+  'upload-progress': [
+    'upload progress',
+    'uploading files',
+    'background upload',
+    'transfer progress'
+  ],
+  footer: ['app footer', 'page footer', 'rodapé'],
+  'app-layout': ['app layout', 'application frame'],
+  'dashboard-grid': ['dashboard grid', 'widget grid', 'draggable dashboard', 'rearrange widgets'],
+  resizable: ['resizable panels', 'split pane', 'split view', 'resizable split', 'drag to resize'],
+  'scroll-area': ['scroll area', 'scrollable region', 'custom scrollbar', 'scroll container'],
+  subheader: ['section heading', 'section title', 'band heading', 'subheader'],
+  'settings-group': ['settings group', 'settings section', 'settings band'],
+  'settings-row': [
+    'settings row',
+    'setting row',
+    'label left control right',
+    'form row with description'
+  ],
+  'save-bar': ['save bar', 'unsaved changes bar', 'sticky save', 'save and discard bar'],
+  link: ['hyperlink', 'text link', 'anchor', 'external link'],
+  'skip-link': ['skip link', 'skip to content', 'skip navigation'],
+  'sidebar-menu': ['sidebar menu', 'navigation rail', 'side navigation items', 'nav tree'],
+  'page-tabs': ['page tabs', 'route tabs', 'tabs under the page header', 'section navigation tabs'],
+  wizard: ['wizard', 'multi step form', 'step by step form', 'guided setup', 'assistente'],
+  'navigation-menu': ['navigation menu', 'mega menu', 'top nav menu', 'site navigation'],
+  command: ['command palette', 'command menu', 'cmd k', 'quick actions search', 'spotlight'],
+  panel: ['inline panel', 'side panel inline', 'docked panel'],
+  popover: ['popover', 'floating panel', 'popup', 'anchored panel'],
+  'config-provider': [
+    'locale provider',
+    'i18n provider',
+    'set language',
+    'time zone provider',
+    'config provider'
+  ],
+  'shortcuts-dialog': ['shortcuts dialog', 'keyboard shortcuts list', 'shortcut help'],
+  'audio-player': ['audio player', 'play audio', 'sound player'],
+  'video-player': ['video player', 'play video', 'video'],
+  'image-gallery': ['image gallery', 'lightbox', 'photo gallery', 'image carousel'],
+  'plan-feature-list': ['plan features', 'feature checklist', 'included features list'],
+  'chat-message': ['chat message', 'message bubble', 'assistant message', 'user message'],
+  conversation: ['conversation', 'chat thread', 'chat messages', 'message list', 'chat transcript'],
+  'conversation-history': [
+    'conversation history',
+    'chat history',
+    'past chats',
+    'previous conversations'
+  ],
+  'prompt-input': ['prompt input', 'prompt box', 'chat input', 'message composer', 'ask ai box'],
+  'prompt-queue': ['prompt queue', 'queued messages', 'pending prompts'],
+  reasoning: ['reasoning', 'thinking block', 'model thinking', 'chain of thought'],
+  'response-branches': [
+    'response branches',
+    'regenerated answers',
+    'answer versions',
+    'switch between responses'
+  ],
+  'response-loading': [
+    'response loading',
+    'ai is typing',
+    'generating indicator',
+    'thinking indicator'
+  ],
+  sources: ['sources', 'source list', 'references of an answer'],
+  citation: ['citation', 'inline citation', 'footnote reference'],
+  'streaming-response': [
+    'streaming response',
+    'streamed markdown',
+    'ai answer',
+    'render markdown answer',
+    'markdown renderer'
+  ],
+  'suggestion-group': [
+    'suggested prompts',
+    'prompt suggestions',
+    'starter prompts',
+    'follow up suggestions'
+  ],
+  'subagent-card': ['subagent', 'sub agent card', 'delegated task card'],
+  'tool-call': ['tool call', 'function call', 'tool result', 'tool invocation'],
+  'agent-question': [
+    'agent question',
+    'ai asks the user',
+    'clarifying question',
+    'ask user to choose'
+  ],
+  'agent-activity': [
+    'agent activity',
+    'agent steps',
+    'what the agent is doing',
+    'activity timeline of an agent'
+  ],
+  'artifact-canvas': ['artifact canvas', 'canvas beside chat', 'generated document panel'],
+  'artifact-preview': ['artifact preview', 'generated file card', 'artifact card'],
+  'mcp-app-frame': ['mcp app', 'embedded mcp ui', 'mcp app frame'],
+  'feedback-reason-dialog': ['feedback reason', 'thumbs down reason', 'why was this answer bad']
 }
 
 export const STOPWORDS = new Set([

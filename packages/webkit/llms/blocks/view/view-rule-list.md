@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-rule-list/view-rule-list.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-rule-list")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -42,9 +42,9 @@ A medium `Input` with a search icon, named "Search rules", matching name, descri
 
 A flush `Card` holding an `Accordion` with `type="multiple"`, `size="large"`, the arrow on the start side, one item per phase, all open by default. Each trigger is an `h2` reading "Request phase" with the rule count in muted tabular figures. A resource with a single phase keeps the same anatomy with one item.
 
-### D. Rules table — `DataTable`, `Tag`, `Field`, `Switch` (required)
+### D. Rules table — `DataTable`, `Tag`, `Field`, `Switch`, `TableCellTime` (required)
 
-A data-driven `DataTable` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`; no `stackable`, so on a phone the grid keeps its columns and scrolls sideways inside the panel, after the narrow reorder below): the table's own grip column (Order), Position (168 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen"). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
+A data-driven `DataTable` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`; no `stackable`, so on a phone the grid keeps its columns and scrolls sideways inside the panel, after the narrow reorder below): the table's own grip column (Order), Position (168 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified (`TableCellTime` with the instant and its `author`: the relative time and who changed it; the data holds a `Date` or an ISO string, never typed text). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
 
 ### E. Order controls — `Input`, `IconButton`, `Tooltip`, `DropdownMenu` (required)
 
@@ -219,6 +219,7 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Switch from '@aziontech/webkit/switch'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -243,8 +244,8 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
     phase: RuleListPhase
     /** Who changed it last. */
     author: string
-    /** When it changed last, as shown. */
-    modified: string
+    /** When it changed last: a Date or an ISO 8601 string. */
+    modified: Date | string
     /** Whether it runs; an inactive rule keeps its place. */
     active: boolean
     /** Pinned first in its phase: it cannot move or turn off. */
@@ -947,9 +948,10 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
                         </div>
                       </template>
                       <template #cell-modified="{ row }">
-                        <span class="min-w-0 truncate text-body-sm text-(--text-muted)"
-                          >{{ row.modified }} by {{ row.author }}</span
-                        >
+                        <TableCellTime
+                          :value="row.modified"
+                          :author="row.author"
+                        />
                       </template>
                       <template #empty>
                         <EmptyState
@@ -1125,7 +1127,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Sends every request to the origin when no other rule matches first.',
     phase: 'request',
     author: 'Maya Chen',
-    modified: '3 months ago',
+    modified: '2026-08-12T12:00:00Z',
     active: true,
     locked: true
   },
@@ -1135,7 +1137,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Serves the maintenance page while the maintenance header is set.',
     phase: 'request',
     author: 'Leo Park',
-    modified: '1 month ago',
+    modified: '2026-10-11T12:00:00Z',
     active: false,
     locked: false
   },
@@ -1145,7 +1147,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Sends the www host to the apex domain.',
     phase: 'request',
     author: 'Emily Clark',
-    modified: '12 days ago',
+    modified: '2026-10-29T12:00:00Z',
     active: true,
     locked: false
   },
@@ -1155,7 +1157,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Sends API traffic to the gateway service, through the auth check.',
     phase: 'request',
     author: 'Maya Chen',
-    modified: '2 days ago',
+    modified: '2026-11-08T12:00:00Z',
     active: true,
     locked: false
   },
@@ -1165,7 +1167,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Rewrites the docs path and caches it as a static asset.',
     phase: 'request',
     author: 'Sam Okafor',
-    modified: '3 weeks ago',
+    modified: '2026-10-20T12:00:00Z',
     active: true,
     locked: false
   },
@@ -1175,7 +1177,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Keeps API responses out of the cache.',
     phase: 'response',
     author: 'Leo Park',
-    modified: '5 days ago',
+    modified: '2026-11-05T12:00:00Z',
     active: true,
     locked: false
   },
@@ -1185,7 +1187,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Adds the security header set to successful responses.',
     phase: 'response',
     author: 'Emily Clark',
-    modified: '9 days ago',
+    modified: '2026-11-01T12:00:00Z',
     active: true,
     locked: false
   },
@@ -1195,7 +1197,7 @@ export const sampleApplicationRules: RuleListRule[] = [
     description: 'Compresses script bundles on the way out.',
     phase: 'response',
     author: 'Sam Okafor',
-    modified: '7 weeks ago',
+    modified: '2026-09-22T12:00:00Z',
     active: false,
     locked: false
   }
@@ -1208,7 +1210,7 @@ export const sampleFirewallRules: RuleListRule[] = [
     description: 'Lets the office network through before any other rule looks at it.',
     phase: 'request',
     author: 'Maya Chen',
-    modified: '2 months ago',
+    modified: '2026-09-11T12:00:00Z',
     active: true,
     locked: false
   },
@@ -1218,7 +1220,7 @@ export const sampleFirewallRules: RuleListRule[] = [
     description: 'Refuses requests from the scanner network list.',
     phase: 'request',
     author: 'Leo Park',
-    modified: '3 weeks ago',
+    modified: '2026-10-20T12:00:00Z',
     active: true,
     locked: false
   },
@@ -1228,7 +1230,7 @@ export const sampleFirewallRules: RuleListRule[] = [
     description: 'Allows 20 sign-in requests per minute from one address.',
     phase: 'request',
     author: 'Emily Clark',
-    modified: '6 days ago',
+    modified: '2026-11-04T12:00:00Z',
     active: true,
     locked: false
   },
@@ -1238,7 +1240,7 @@ export const sampleFirewallRules: RuleListRule[] = [
     description: 'Refuses requests from countries outside the allowed list.',
     phase: 'request',
     author: 'Sam Okafor',
-    modified: '1 month ago',
+    modified: '2026-10-11T12:00:00Z',
     active: false,
     locked: false
   },

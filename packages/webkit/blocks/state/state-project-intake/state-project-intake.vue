@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, watch } from 'vue'
 
   /** One file of the upload, with its state and progress. */
@@ -50,6 +51,7 @@
       ? files.value
       : files.value.filter((file) => file.status !== 'success').slice(0, MAX_ROWS)
   )
+  const { formatFileSize } = useLocale()
   const totalSize = computed(() => files.value.reduce((sum, file) => sum + (file.size ?? 0), 0))
 
   const chooseFolder = () => folderInputEl.value?.click()
@@ -118,7 +120,7 @@
       />
 
       <p class="text-body-xs text-(--text-muted)">
-        {{ files.length }} files, {{ (totalSize / 1000).toFixed(2) }} KB
+        {{ files.length }} files, {{ formatFileSize(totalSize) }}
       </p>
     </div>
   </div>

@@ -178,7 +178,7 @@ describe('view/view-rule-list block', () => {
             description: 'Refuses known bots.',
             phase: 'request',
             author: 'Jane Doe',
-            modified: 'today',
+            modified: '2026-11-10T09:00:00Z',
             active: true,
             locked: false
           }

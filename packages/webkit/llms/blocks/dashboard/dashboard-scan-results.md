@@ -537,6 +537,8 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   )
 
   const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
   const count = (value: number) => formatNumber(value)
 
@@ -556,7 +558,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         size /= 1000
         unit += 1
       }
-      return `${size.toFixed(unit ? 1 : 0)} ${UNITS[unit]}`
+      return `${fixed(size, unit ? 1 : 0)} ${UNITS[unit]}`
     }
   }
 </script>

@@ -179,6 +179,14 @@ design opens the request and approves the merge, and nobody edits the code by ha
 3. **Review.** The head of design approves the PR; a rejection goes back to step 3 or 5 with the
    comments, never to a human fix.
 
+**Fixed usage tasks.** `packages/webkit/scripts/usage-tasks.json` holds intent-only tasks a product
+team would write (a token with an expiry time, a maintenance window, a phone number, cache settings,
+resource tags, a deployments list, a sign-in code) and the component a fresh agent must reach for.
+Run each before a release with `node scripts/check-usage.mjs --task <id>` (or the Usage check
+workflow with `task`); `--list-tasks` prints them. Each run is a paid agent session, so they are
+not part of CI. A task that fails means a skill, the search or a block does not lead to the
+component: fix that, not the prompt.
+
 **Machine gates.** One local runner prints the table the PR pastes:
 
 ```bash

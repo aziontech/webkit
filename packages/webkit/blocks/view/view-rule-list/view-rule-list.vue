@@ -20,6 +20,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Switch from '@aziontech/webkit/switch'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -44,8 +45,8 @@
     phase: RuleListPhase
     /** Who changed it last. */
     author: string
-    /** When it changed last, as shown. */
-    modified: string
+    /** When it changed last: a Date or an ISO 8601 string. */
+    modified: Date | string
     /** Whether it runs; an inactive rule keeps its place. */
     active: boolean
     /** Pinned first in its phase: it cannot move or turn off. */
@@ -748,9 +749,10 @@
                         </div>
                       </template>
                       <template #cell-modified="{ row }">
-                        <span class="min-w-0 truncate text-body-sm text-(--text-muted)"
-                          >{{ row.modified }} by {{ row.author }}</span
-                        >
+                        <TableCellTime
+                          :value="row.modified"
+                          :author="row.author"
+                        />
                       </template>
                       <template #empty>
                         <EmptyState

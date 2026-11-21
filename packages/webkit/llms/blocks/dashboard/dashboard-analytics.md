@@ -572,7 +572,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
     change === null
       ? null
       : {
-          label: `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`,
+          label: `${change >= 0 ? '+' : ''}${fixed(change, 2)}%`,
           severity: change >= 0 ? 'success' : 'danger',
           icon: change >= 0 ? 'az az-arrow-up-right' : 'az az-arrow-down-right'
         }
@@ -618,6 +618,8 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   ]
 
   const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
   const compact = (value: number) =>
     formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
@@ -632,9 +634,9 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         current /= 1000
         index += 1
       }
-      return `${current.toFixed(current >= 100 || index === 0 ? 0 : 1)} ${steps[index]}`
+      return `${fixed(current, current >= 100 || index === 0 ? 0 : 1)} ${steps[index]}`
     },
-    percentage: (value) => `${value.toFixed(0)}%`
+    percentage: (value) => `${fixed(value, 0)}%`
   }
 
   const requestsForm = ref('line')

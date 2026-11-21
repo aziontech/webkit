@@ -6,6 +6,7 @@
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DataTable from '@aziontech/webkit/data-table'
+  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
@@ -66,8 +67,10 @@
     name: string
     /** Trimmed description, may be empty. */
     description: string
-    /** Days until the token expires. */
+    /** Days until the token expires, rounded up. */
     expiresInDays: number
+    /** The moment the token expires; send it as an ISO 8601 string. */
+    expiresAt: Date
   }
 
   /** The token the create request returned, shown once in the reveal dialog. */
@@ -194,28 +197,43 @@
   const loadFailed = computed(() => props.error !== '')
   const refreshing = computed(() => props.loading && items.value.length > 0)
 
+  const CUSTOM_EXPIRY = 'custom'
   const expiryOptions = [
     { value: '7', label: '7 days' },
     { value: '30', label: '30 days' },
     { value: '60', label: '60 days' },
     { value: '90', label: '90 days' },
-    { value: '365', label: '1 year' }
+    { value: '365', label: '1 year' },
+    { value: CUSTOM_EXPIRY, label: 'Custom date and time' }
   ]
   const expiryLabel = (value: string) =>
     expiryOptions.find((option) => option.value === value)?.label ?? ''
 
   const createOpen = ref(false)
   const submitting = computed(() => props.creating)
-  const form = reactive({ name: '', description: '', expiresIn: '30' })
-  const errors = reactive({ name: '' })
-  const expiryHint = computed(
-    () =>
-      `The token stops working on ${formatDate(daysFrom(Number(form.expiresIn)))}. Create a new one before then.`
+  const form = reactive<{
+    name: string
+    description: string
+    expiresIn: string
+    expiresAt: Date | null
+  }>({ name: '', description: '', expiresIn: '30', expiresAt: null })
+  const errors = reactive({ name: '', expiresAt: '' })
+  const expiresAtEl = ref<HTMLElement | null>(null)
+  const customExpiry = computed(() => form.expiresIn === CUSTOM_EXPIRY)
+  const earliestExpiry = computed(() => new Date(referenceTime.value))
+  const expiryMoment = computed(() =>
+    customExpiry.value ? form.expiresAt : daysFrom(Number(form.expiresIn))
+  )
+  const expiryHint = computed(() =>
+    customExpiry.value
+      ? 'Pick the date and time the token stops working.'
+      : `The token stops working on ${formatDate(daysFrom(Number(form.expiresIn)))}. Create a new one before then.`
   )
 
   const openCreate = () => {
-    Object.assign(form, { name: '', description: '', expiresIn: '30' })
+    Object.assign(form, { name: '', description: '', expiresIn: '30', expiresAt: null })
     errors.name = ''
+    errors.expiresAt = ''
     createOpen.value = true
   }
 
@@ -234,14 +252,24 @@
     else if (items.value.some((token) => token.name.toLowerCase() === name.toLowerCase())) {
       errors.name = 'A token with this name already exists. Use another name.'
     } else errors.name = ''
+    const expiresAt = expiryMoment.value
+    if (!expiresAt) errors.expiresAt = 'Pick the date and time the token expires.'
+    else if (expiresAt.getTime() <= referenceTime.value) {
+      errors.expiresAt = 'Pick a date and time in the future.'
+    } else errors.expiresAt = ''
     if (errors.name) {
       focusById('token-name')
+      return
+    }
+    if (!expiresAt || errors.expiresAt) {
+      nextTick(() => expiresAtEl.value?.querySelector('button')?.focus())
       return
     }
     emit('create', event, {
       name,
       description: form.description.trim(),
-      expiresInDays: Number(form.expiresIn)
+      expiresInDays: Math.ceil((expiresAt.getTime() - referenceTime.value) / DAY),
+      expiresAt
     })
   }
 
@@ -588,6 +616,25 @@
                   </Select>
                   <FieldDescription id="token-expiry-hint">{{ expiryHint }}</FieldDescription>
                 </Field>
+                <div
+                  v-if="customExpiry"
+                  ref="expiresAtEl"
+                >
+                  <Field
+                    required
+                    :invalid="!!errors.expiresAt"
+                  >
+                    <Field.Label>Expires at</Field.Label>
+                    <DatePickerRoot
+                      v-model="form.expiresAt"
+                      show-time
+                      size="large"
+                      :min="earliestExpiry"
+                      @update:model-value="errors.expiresAt = ''"
+                    />
+                    <Field.Error v-if="errors.expiresAt">{{ errors.expiresAt }}</Field.Error>
+                  </Field>
+                </div>
               </SettingsGroup>
             </fieldset>
           </PanelBody>

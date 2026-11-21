@@ -1,0 +1,29 @@
+{
+  "description": "Blocks and examples that still type a relative time as text (\"2 days ago\") instead of keeping a Date and showing it with Timestamp or TableCellTime. test/standards/typed-times.test.mjs fails a new one and fails when an entry is higher than what the file holds: this list only shrinks.",
+  "known": {
+    "blocks/ai/ai-action-approval/sample.ts": 1,
+    "blocks/create/create-deploy-drawer/create-deploy-drawer.vue": 1,
+    "blocks/create/create-deploy-drawer/sample.ts": 33,
+    "blocks/create/create-deploy-drawer/variants/project.vue": 13,
+    "blocks/create/create-hub/create-hub.vue": 1,
+    "blocks/create/create-hub/sample.ts": 9,
+    "blocks/create/create-release-impact/create-release-impact.vue": 1,
+    "blocks/create/create-release-impact/sample.ts": 11,
+    "blocks/dashboard/dashboard-service-monitoring/sample.ts": 4,
+    "blocks/detail/detail-deployment-logs/variants/deployment-detail.vue": 1,
+    "blocks/detail/detail-deployment-logs/variants/deployment-error.vue": 1,
+    "blocks/detail/detail-deployment-logs/variants/deployment-queued.vue": 1,
+    "blocks/detail/detail-resource/variants/application-build.vue": 4,
+    "blocks/detail/detail-resource/variants/application.vue": 4,
+    "blocks/detail/detail-resource/variants/policy.vue": 1,
+    "blocks/detail/detail-resource/variants/resource-versions.vue": 13,
+    "blocks/detail/detail-resource/variants/resource.vue": 1,
+    "blocks/detail/detail-version/detail-version.vue": 1,
+    "blocks/detail/detail-version/sample.ts": 7,
+    "blocks/detail/detail-version/variants/cache-settings.vue": 3,
+    "blocks/detail/detail-version/variants/device-groups.vue": 3,
+    "blocks/detail/detail-version/variants/functions-instances.vue": 3,
+    "examples/flow-diagram/composed.vue": 1,
+    "examples/item/with-avatar.vue": 1
+  }
+}

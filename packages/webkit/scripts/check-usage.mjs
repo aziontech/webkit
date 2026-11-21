@@ -21,11 +21,15 @@ const ROOT = resolve(PKG, '../..')
 
 export const USAGE = [
   'usage: node scripts/check-usage.mjs <component-or-block> "<intent prompt>" [options]',
+  '       node scripts/check-usage.mjs --task <id> [options]   (a fixed task of usage-tasks.json)',
+  '       node scripts/check-usage.mjs --list-tasks',
   '',
   '  <component-or-block>  an export subpath (date-picker) or a block id (auth/auth-sign-in, sign-in)',
   '  "<intent prompt>"     what a product team would ask for, without naming the component',
   '',
   'options:',
+  '  --task <id>           run a fixed task: its target, its prompt and the other imports it expects',
+  '  --list-tasks          print the fixed tasks and exit',
   '  --max-turns <n>       turns for the claude session (default 40)',
   '  --min-coverage <r>    share of a block imports the app must use (default 0.8)',
   '  --report <file>       also write the Markdown report to <file>',
@@ -34,10 +38,17 @@ export const USAGE = [
   '  --dry-run             resolve the target and print the plan; no install, no claude'
 ].join('\n')
 
+export function readUsageTasks(pkgRoot = PKG) {
+  return JSON.parse(readFileSync(join(pkgRoot, 'scripts', 'usage-tasks.json'), 'utf8')).tasks
+}
+
 export function parseUsageArgs(argv) {
   const opts = {
     target: null,
     prompt: null,
+    task: null,
+    listTasks: false,
+    also: [],
     maxTurns: 40,
     minCoverage: 0.8,
     report: null,
@@ -52,16 +63,28 @@ export function parseUsageArgs(argv) {
     if (arg === '--keep') opts.keep = true
     else if (arg === '--dry-run') opts.dryRun = true
     else if (arg === '--skip-build') opts.skipBuild = true
+    else if (arg === '--list-tasks') opts.listTasks = true
+    else if (arg === '--task') opts.task = argv[++i] ?? ''
     else if (arg === '--max-turns') opts.maxTurns = Number(argv[++i])
     else if (arg === '--min-coverage') opts.minCoverage = Number(argv[++i])
     else if (arg === '--report') opts.report = argv[++i] ?? null
     else if (arg.startsWith('--')) throw new Error(`unknown option ${arg}`)
     else positional.push(arg)
   }
-  if (positional.length !== 2) {
-    throw new Error('expected exactly two arguments: <component-or-block> "<intent prompt>"')
+  if (opts.listTasks) return opts
+  if (opts.task !== null) {
+    if (positional.length) throw new Error('--task takes no <component-or-block> or prompt')
+    const task = readUsageTasks().find((t) => t.id === opts.task)
+    if (!task) throw new Error(`unknown task "${opts.task}"; see --list-tasks`)
+    opts.target = task.target
+    opts.prompt = task.prompt
+    opts.also = task.also ?? []
+  } else {
+    if (positional.length !== 2) {
+      throw new Error('expected exactly two arguments: <component-or-block> "<intent prompt>"')
+    }
+    ;[opts.target, opts.prompt] = positional.map((s) => s.trim())
   }
-  ;[opts.target, opts.prompt] = positional.map((s) => s.trim())
   if (!opts.target) throw new Error('the component or block is empty')
   if (!opts.prompt) throw new Error('the intent prompt is empty')
   if (!Number.isInteger(opts.maxTurns) || opts.maxTurns < 1) {
@@ -122,7 +145,7 @@ export function collectWebkitImports(appDir) {
   return { files: files.map((f) => relative(appDir, f).split('\\').join('/')), imports }
 }
 
-export function evaluateUsage({ target, scan, doctorExitCode, minCoverage = 0.8 }) {
+export function evaluateUsage({ target, scan, doctorExitCode, minCoverage = 0.8, also = [] }) {
   const checks = [
     {
       name: 'src/**/*.vue written',
@@ -145,6 +168,14 @@ export function evaluateUsage({ target, scan, doctorExitCode, minCoverage = 0.8 
       name: `uses block ${target.id}`,
       pass: coverage >= minCoverage,
       detail: `${used.length}/${target.expected.length} of its imports (need ${Math.round(minCoverage * 100)} %)${missing.length ? `; missing ${missing.join(', ')}` : ''}`
+    })
+  }
+  for (const subpath of also) {
+    const where = scan.imports.get(subpath)
+    checks.push({
+      name: `imports @aziontech/webkit/${subpath}`,
+      pass: Boolean(where),
+      detail: where ? where.join(', ') : 'not imported by any src/**/*.vue'
     })
   }
   checks.push({
@@ -229,6 +260,12 @@ function main() {
     process.stderr.write(`usage-check: ${e.message}\n\n${USAGE}\n`)
     return 2
   }
+  if (opts.listTasks) {
+    for (const task of readUsageTasks()) {
+      process.stdout.write(`${task.id}\t${task.target}\t${task.prompt}\n`)
+    }
+    return 0
+  }
   let target
   try {
     target = resolveTarget(opts.target)
@@ -287,7 +324,8 @@ function main() {
       target,
       scan: collectWebkitImports(app),
       doctorExitCode: doctor.status,
-      minCoverage: opts.minCoverage
+      minCoverage: opts.minCoverage,
+      also: opts.also
     })
     if (!session.ok)
       verdict.checks.unshift({ name: 'claude session', pass: false, detail: session.result })

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/state/state-project-intake/state-project-intake.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-project-intake")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [FileDropzone](../../components/file-dropzone.md), [UploadProgress](../../components/upload-progress.md)
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [FileDropzone](../../components/file-dropzone.md), [UploadProgress](../../components/upload-progress.md), `use-locale`
 - Skills: `webkit-ui-states`, `webkit-motion-polish`
 
 ## Asked as
@@ -106,7 +106,7 @@ Keep `uploads` `undefined` until the first file arrives, so the drop target show
 - **Drop lead:** what is accepted, full sentences: `A project folder, or the files inside one. We detect what it is built with.`
 - **Overlay heading:** one word for the phase: `Initializing`.
 - **Overlay progress:** what is happening and how far, with a period: `Setting up your deployment. 2 of 5 files.`
-- **Summary:** count and total size: `5 files, 8.36 KB`.
+- **Summary:** count and total size: `5 files, 8.4 kB`.
 - **Failure:** what failed and what to do: `1 file could not be uploaded. Retry it, or remove it from the folder and drop the project again.`
 
 ## Accessibility
@@ -145,6 +145,7 @@ Each variant is the same screen in another state: `get_block("state/state-projec
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, watch } from 'vue'
 
   /** One file of the upload, with its state and progress. */
@@ -192,6 +193,7 @@ Each variant is the same screen in another state: `get_block("state/state-projec
       ? files.value
       : files.value.filter((file) => file.status !== 'success').slice(0, MAX_ROWS)
   )
+  const { formatFileSize } = useLocale()
   const totalSize = computed(() => files.value.reduce((sum, file) => sum + (file.size ?? 0), 0))
 
   const chooseFolder = () => folderInputEl.value?.click()
@@ -260,7 +262,7 @@ Each variant is the same screen in another state: `get_block("state/state-projec
       />
 
       <p class="text-body-xs text-(--text-muted)">
-        {{ files.length }} files, {{ (totalSize / 1000).toFixed(2) }} KB
+        {{ files.length }} files, {{ formatFileSize(totalSize) }}
       </p>
     </div>
   </div>

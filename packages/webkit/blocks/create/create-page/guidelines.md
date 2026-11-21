@@ -40,15 +40,19 @@ A `SettingsRow` per field: its title names the field and its description carries
 
 On/off settings use `SettingsRow variant="compact"` with a `Switch` hard right at its natural size, named by an `aria-label` that matches the row title, e.g. "Enable DNSSEC".
 
-### F. Commit bar — `SaveBar`, `Button` (required)
+### F. Tags — `TagEditor` (optional)
+
+A Tags band between the required fields and Advanced: a padded `Card` holding one `TagEditor` bound with `v-model:tags`, with key suggestions. Submit calls its `validate()` with the other fields, and the values carry only the tags that have a key. Never a comma-separated text field.
+
+### G. Commit bar — `SaveBar`, `Button` (required)
 
 `SaveBar variant="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. On a phone the muted line hides, so Import keeps its label beside Cancel and Save; the Domain name description already says a paste imports. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
 
-### G. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
+### H. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
 
 Cancel and the header Back both leave the page, so both ask first once the form differs from what it opened with: `useUnsavedChanges(() => form)` tracks it, Cancel and Back `await guard.confirmLeave()` before the page emits `cancel`, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. A clean form leaves at once, with no dialog, and the browser's own prompt covers a reload or a tab close while dirty. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())` so a link or the browser Back asks too. Escape runs the same Cancel path through `useEscapeToCancel(onCancel)`.
 
-### H. Shortcut keycap — `Kbd` (optional)
+### I. Shortcut keycap — `Kbd` (optional)
 
 A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
 
@@ -131,11 +135,11 @@ To go live, render the block from a page that owns the request:
 - Each message is tied to its control with `aria-describedby` and appears only on submit; `required` and `invalid` are announced through the control's own state.
 - The collapsed Advanced region is `inert` while closed, so keyboard focus never lands in hidden fields.
 - The back `IconButton` and the account trigger have `aria-label`s; decorative icons carry `aria-hidden="true"`.
-- Focus order follows reading order: header, heading, General, Advanced toggle, then the bar's Cancel and Save (CreateZone adds Import before them).
+- Focus order follows reading order: header, heading, General, Tags, Advanced toggle, then the bar's Cancel and Save (CreateZone adds Import before them).
 
 ## States
 
-- Default: the Create Domain page at rest (no `defaultValues`, not `loading`); General holds Name and Domain name, Advanced is collapsed, the bar shows Cancel and Save. `loading` locks the form and spins Save, and `error` raises the error toast with Retry. Importing a zone file belongs to CreateZone, not to this page.
+- Default: the Create Domain page at rest (no `defaultValues`, not `loading`); General holds Name and Domain name, Tags holds a `TagEditor` (key and value tags with key suggestions, checked on submit with `validate()`; never a comma-separated text field), Advanced is collapsed, the bar shows Cancel and Save. `loading` locks the form and spins Save, and `error` raises the error toast with Retry. Importing a zone file belongs to CreateZone, not to this page.
 - CreateZone: Create Zone after a zone file is imported; a Records section lists each imported record (type `Tag`, value, TTL) with a Remove `IconButton` per row and Discard import in the card footer; each removal and the discard confirm in a toast with Undo, which puts the records back. Import in the bar and a paste into Domain name both read a BIND zone file, skip the SOA and nameserver records, fill an empty Name and Domain name from `$ORIGIN`, and confirm in a toast; a file with no records raises an error toast. The list previews the first 50 records with an "and N more" line, and a re-import skips records already listed.
 - CreateOrganization: General with Name and a Mark color chosen from six `RadioGroup` cards (`variant="card"`) (each color built from semantic tokens: primary, warning, danger, success, info and the text grays, never palette primitives), each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.

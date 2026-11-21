@@ -32,6 +32,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import { sampleFolders, sampleStorageName } from './sample'
@@ -196,11 +197,8 @@
   ]
 
   const LIMIT = 300 * 1024 * 1024
-  const formatBytes = (bytes: number) => {
-    if (bytes < 1024) return `${bytes} B`
-    if (bytes < 1024 * 1024) return `${Number((bytes / 1024).toFixed(2))} KB`
-    return `${Number((bytes / 1024 / 1024).toFixed(2))} MB`
-  }
+  const { formatFileSize } = useLocale()
+  const formatBytes = (bytes: number) => formatFileSize(bytes)
   const extensionOf = (name: string) => name.split('.').pop()?.toLowerCase() ?? ''
   const folderName = (name: string) => (name.endsWith('/') ? name : `${name}/`)
 

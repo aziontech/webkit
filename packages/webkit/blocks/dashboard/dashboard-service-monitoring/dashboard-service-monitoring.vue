@@ -11,6 +11,7 @@
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed } from 'vue'
 
   import { sampleAlerts, sampleErrorRate, sampleLatency, sampleServices } from './sample'
@@ -107,9 +108,12 @@
   const deltaLabel = computed(() => `p95 latency vs previous ${windowNames[timeWindow.value]}`)
 
   const formatLatency = (value: number) => `${Math.round(value)} ms`
+  const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
   const formatRate = (value: number) => {
     const digits = value === 0 || value >= 10 ? 0 : value >= 1 ? 1 : 2
-    return `${value.toFixed(digits)}%`
+    return `${fixed(value, digits)}%`
   }
 
   const windows = [

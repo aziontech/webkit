@@ -1,8 +1,8 @@
 ---
 name: webkit-form
-description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own invalid state as the feedback (required is static and draws no colour) — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
+description: Accessible forms on @aziontech/webkit, and which control each kind of value takes (a date or date and time is DatePicker, a range DateRangePicker, a number NumberInput, a phone PhoneInput, a secret PasswordInput — never a text Input that asks for a format). Use for any field, even one. Also: one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own invalid state as the feedback (required is static and draws no colour) — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
-last_updated: 2026-11-20
+last_updated: 2026-11-21
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -52,8 +52,10 @@ Pick one per form; don't mix row-fields and stacked-fields in the same section.
 
 webkit ships **one** form-field component, `Field` (`@aziontech/webkit/field`), and wraps **any** control
 in it: `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`,
-`InputGroup` (with `InputGroup.Input`), `Checkbox`, `RadioGroup`, `Switch`, `Slider`. **Default to a
-`Field`**; leave a control bare only when no label belongs next to it.
+`InputGroup` (with `InputGroup.Input`), `Checkbox`, `RadioGroup`, `Switch`, `Slider`, `DatePicker`,
+`DateRangePicker`, `Combobox`, `OtpInput`, `TagEditor`, `LanguageSelect`. **Default to a `Field`**; leave
+a control bare only when no label belongs next to it. Which control a value takes is the table in
+"Pick the control from the kind of value" below.
 
 - **`Field` (preferred):** `<Field>` + `<Field.Label>` + the control + `<Field.Description>` /
   `<Field.Error>`. State lives on the Field — `<Field required :invalid :disabled>` — and the control
@@ -98,6 +100,100 @@ in it: `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInp
   @update:model-value="errors.name = ''"
 />
 <FieldError v-if="errors.name" id="app-name-error">{{ errors.name }}</FieldError>
+```
+
+## Pick the control from the kind of value
+
+Before you write a field, name the **kind of value** it holds and take the control WebKit ships for
+it. A plain `Input` is for free text only. A typed value in a text box (a date as
+`2026-12-31T00:00:00Z`, a phone as digits, a port as text) makes the person learn a format, fails
+only at submit and loses the keyboard, locale and time zone handling the real control already has.
+
+| The field holds                                                 | Use                                                                                           | Bind                                                       | Never                                                         |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
+| One date (due date, expiry, birthday)                           | `DatePicker`                                                                                  | `Date \| null`                                             | an `Input` that asks for `YYYY-MM-DD`                         |
+| One date **and** time (a schedule, a start, an expiry instant)  | `DatePicker` with `show-time`                                                                 | `Date \| null`                                             | an `Input` that asks for ISO 8601 text, two loose text fields |
+| A start and an end, or "the last N" (a period, a window, a log) | `DateRangePicker` (`:show-time="false"` for whole days)                                       | a `DateRangeValue` (relative, absolute or since)           | two `DatePicker`s, two text fields                            |
+| A duration or a count (TTL, retention days, port, replicas)     | `NumberInput` with `min` / `max` / `step`; the unit in `Field.Description` or an `InputGroup` | `number`                                                   | `Input`, a date picker for a number of days                   |
+| An approximate value inside a bounded range                     | `Slider`                                                                                      | `number`                                                   | a `NumberInput` when the exact digit does not matter          |
+| A phone number                                                  | `PhoneInput`                                                                                  | national digits + `v-model:country`; send the E.164 number | `Input` with a mask or a `+1` placeholder                     |
+| A password or another secret (token, client secret)             | `PasswordInput` (+ `PasswordRequirements` under a new password)                               | `string`                                                   | `Input` with dots, a hand-made reveal button                  |
+| A one-time code                                                 | `OtpInput`                                                                                    | `string`                                                   | six `Input`s                                                  |
+| One choice of two to seven, all visible                         | `RadioGroup` (`variant="card"` for cards)                                                     | the option's value                                         | a `Select` for three options                                  |
+| One choice from a longer list                                   | `Select` (a search box in its panel for a long list)                                          | the option's value                                         | a typed id or name                                            |
+| A value the list only suggests (a new one is valid)             | `Combobox`                                                                                    | `string`                                                   | an `Input` beside a list of examples                          |
+| Several choices from a list                                     | `MultiSelect`; a `Checkbox` per option for two to five                                        | an array of values                                         | a comma-separated `Input`                                     |
+| On or off, saved with the form                                  | `Checkbox`                                                                                    | `boolean`                                                  | a `Select` with Yes and No                                    |
+| On or off, applied at once                                      | `Switch`                                                                                      | `boolean`                                                  | a checkbox that saves on click                                |
+| A list of same-shaped rows (variables, headers, criteria)       | `AttributeEditor`                                                                             | an array of rows                                           | a `Textarea` of `KEY=value` lines                             |
+| Key and value tags of a resource                                | `TagEditor`                                                                                   | `key` / `value` pairs                                      | a comma-separated `Input`                                     |
+| Files to upload                                                 | `FileDropzone` + a Browse files `Button`, the picked files in `FileTokenGroup`                | the `File` list your form keeps                            | a native file input left unstyled                             |
+| Code, a query, JSON or YAML the person edits                    | `CodeEditor`                                                                                  | `string`                                                   | a `Textarea`                                                  |
+| Several lines of free text                                      | `Textarea`                                                                                    | `string`                                                   | an `Input`                                                    |
+| Text with a fixed part in the same box (`https://`, `.com`)     | `InputGroup` with `InputGroup.Addon`                                                          | `string`                                                   | the fixed part typed into the value                           |
+| The interface language                                          | `LanguageSelect`                                                                              | a BCP 47 tag                                               | a hand-made `Select` of languages                             |
+| The colour theme (system, light, dark)                          | `ThemeSwitcher`                                                                               | the mode                                                   | a `Select` or three buttons                                   |
+| A form described by a JSON schema                               | `SchemaForm`                                                                                  | the value object                                           | fields written by hand from the schema                        |
+| One line of free text, an e-mail, a name, a slug                | `Input`                                                                                       | `string`                                                   | —                                                             |
+
+- **The model is the typed value, not its text.** A date field binds a `Date` (or `null` while empty)
+  and the picker prints it for the person's locale and time zone. Convert at the edge: send
+  `value.toISOString()` (or the ISO date) to the server and build the `Date` from the server's string
+  when the form loads. The person never reads or types ISO 8601.
+- **Bound what can be picked** with the control's own props (`min` / `max` on `DatePicker`,
+  `DateRangePicker` and `NumberInput`) instead of refusing the value after submit. A date that must
+  be in the future (a token expiry, a schedule) sets `:min` to today.
+- **Every one of these sits in a `Field`** and takes its label, description, `required`, `invalid`
+  and `disabled` from it, like an `Input` does.
+- **To show a value the person does not edit**, use `Timestamp` for a moment in time and a readonly
+  `Input` for text, never a disabled picker.
+- **Lint holds the clear cases.** `webkit/prefer-value-control` fails an `Input` with a native
+  `type` of `number`, `date`, `datetime-local`, `time`, `tel` or `password`, or with a date format in
+  its placeholder.
+- **Not sure a control exists?** Ask the webkit MCP `suggest_component` with the kind of value ("date
+  and time", "phone number") before you reach for `Input`; `Input` is the answer only for free text.
+
+```vue
+<!-- ❌ Wrong: the person must know and type ISO 8601, and the model is text -->
+<Field>
+  <Field.Label>Expires at</Field.Label>
+  <Input v-model="form.expiresAt" placeholder="2026-12-31T00:00:00Z" />
+</Field>
+```
+
+```vue
+<script setup lang="ts">
+  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
+  import Field from '@aziontech/webkit/field'
+  import { reactive } from 'vue'
+
+  const props = defineProps<{ today: Date }>()
+
+  const form = reactive<{ expiresAt: Date | null }>({ expiresAt: null })
+  const errors = reactive({ expiresAt: '' })
+
+  function payload() {
+    return { expires_at: form.expiresAt ? form.expiresAt.toISOString() : null }
+  }
+</script>
+
+<template>
+  <Field
+    required
+    :invalid="!!errors.expiresAt"
+  >
+    <Field.Label>Expires at</Field.Label>
+    <DatePickerRoot
+      v-model="form.expiresAt"
+      show-time
+      :min="props.today"
+      clearable
+      @update:model-value="errors.expiresAt = ''"
+    />
+    <Field.Description>The token stops working at this time.</Field.Description>
+    <Field.Error v-if="errors.expiresAt">{{ errors.expiresAt }}</Field.Error>
+  </Field>
+</template>
 ```
 
 ## Label association — every control names itself (both approaches)
@@ -1162,6 +1258,9 @@ there. `Input` takes `type`, `autocomplete` and `spellcheck` on its `<input>`; `
 | Slug, external ID, domain, token, code | `text`  | `off`              | `false`      |
 | Search, filter (not a credential)      | `text`  | `off`              | —            |
 
+- `Input`'s `type` is a keyboard and autofill hint for **text**. A date, a date and time, a phone
+  number, a password or a one-time code is never an `Input` with a `type`, a mask or a format in its
+  placeholder: each has its own control (see "Pick the control from the kind of value").
 - Give every control a meaningful `name` next to `autocomplete`; autofill needs both.
 - WebKit hides every field **without** `autocomplete` from password managers (`data-1p-ignore` and the
   LastPass, Bitwarden and Dashlane equivalents), so 1Password never offers a sign-in on an account name
@@ -1447,6 +1546,12 @@ For `/webkit-form <file>`, list gaps grouped by pattern. Each:
   fix: <Item size="small">.
 ```
 
+```
+✗ SomeForm.vue:NN  <Input v-model="form.expiresAt" placeholder="2026-12-31T00:00:00Z" />
+  pattern: pick the control from the kind of value — a date and time typed as text.
+  fix: <DatePicker v-model="form.expiresAt" show-time /> bound to a Date; send toISOString() in the request.
+```
+
 End with: `form is accessible` or `N gaps — fix before polish`.
 
 ## References
@@ -1465,6 +1570,11 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 
 ## Definition of Done
 
+- [ ] Every field uses the control for its kind of value (the "Pick the control" table): a date or a
+      date and time is a `DatePicker` (`show-time`), a range a `DateRangePicker`, a number a
+      `NumberInput`, a phone a `PhoneInput`, a secret a `PasswordInput`. No `Input` asks the person to
+      type a format (ISO 8601, `YYYY-MM-DD`, E.164), and the model holds the typed value (`Date`,
+      `number`), converted to the server's string only in the request.
 - [ ] Every labelled control sits in a `Field` (`Field.Label` + control + `Field.Description` /
       `Field.Error`, state on the `Field`); checkboxes/switches use `orientation="horizontal"`,
       their cards are `Field.Label` wrapping a horizontal `Field`, radios are one `RadioGroup` (`variant="card"` for cards); a bare control is used only when its

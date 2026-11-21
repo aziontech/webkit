@@ -22,9 +22,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 `PageHeader` at `size="small"` titled Tuning, with a description that says what the list is and what to do with it. Actions: outlined Export to CSV (disabled while loading or empty) and the allow action, which reads Allow selected and is disabled until rows are checked, then reads "Allow 2 selected".
 
-### B. Threshold settings — `Field`, `Select`, `Input`, `IconButton`, `Tooltip` (required)
+### B. Threshold settings — `Field`, `Select`, `NumberInput`, `Input`, `IconButton`, `Tooltip` (required)
 
-A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours, Last 7 days) and a Minimum hits `Input` (numeric; "Use a whole number." under it when it is not one), each a `Field` with a visible label; a search `Input` named "Search matched requests" that grows to fill the row; and an outlined Refresh `IconButton` with its `Tooltip`. Settings apply as they change, with no Apply button. Hidden when the rule set has no match at all.
+A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours, Last 7 days) and a Minimum hits `NumberInput` (whole numbers from 0), each a `Field` with a visible label; a search `Input` named "Search matched requests" that grows to fill the row; and an outlined Refresh `IconButton` with its `Tooltip`. Settings apply as they change, with no Apply button. Hidden when the rule set has no match at all.
 
 ### C. Matches table — `Card`, `DataTable`, `TableCellTags`, `EmptyState`, `Alert` (required)
 

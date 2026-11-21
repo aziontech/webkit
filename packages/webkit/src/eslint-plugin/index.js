@@ -23,6 +23,7 @@ import preferDatePicker from './rules/prefer-date-picker.js'
 import preferDefineModel from './rules/prefer-define-model.js'
 import preferHrefInMenuNode from './rules/prefer-href-in-menu-node.js'
 import preferTreeShakeableRoot from './rules/prefer-tree-shakeable-root.js'
+import preferValueControl from './rules/prefer-value-control.js'
 import preferWebkitComponent from './rules/prefer-webkit-component.js'
 import requireAccessibleName from './rules/require-accessible-name.js'
 import requireAuthoringStandards from './rules/require-authoring-standards.js'
@@ -54,6 +55,7 @@ const rules = {
   'prefer-href-in-menu-node': preferHrefInMenuNode,
   'no-gap-after-closing-section': noGapAfterClosingSection,
   'require-accessible-name': requireAccessibleName,
+  'prefer-value-control': preferValueControl,
   'no-dropped-children': noDroppedChildren,
   'no-viewport-height-calc': noViewportHeightCalc,
   'no-link-in-sentence': noLinkInSentence,
@@ -118,6 +120,7 @@ const RECOMMENDED = {
   'prefer-href-in-menu-node': 'error',
   'no-gap-after-closing-section': 'error',
   'require-accessible-name': 'error',
+  'prefer-value-control': 'error',
   'no-dropped-children': 'error',
   'no-viewport-height-calc': 'error',
   'no-link-in-sentence': 'error',

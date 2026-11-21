@@ -702,10 +702,31 @@ function isProductEntry(entry) {
   return (entry?.surface ?? 'app') === 'app'
 }
 
+const STRONG_SCORE = 45
+
+function isStrongMatch(catalog, match, query) {
+  if (match.exact || match.aliasOf || match.renamedFrom) return true
+  if (conceptHits(catalog, query).has(match.name)) return true
+  return match.score >= STRONG_SCORE
+}
+
 function componentSuggestion(catalog, need, opts) {
   if (!catalog.available) return NOT_AVAILABLE
   const q = String(need || '')
   const search = searchComponents(catalog, q, opts)
+  const strong = search.matches.filter((m) => isStrongMatch(catalog, m, q))
+  if (search.matches.length > 0 && strong.length === 0) {
+    return {
+      ok: true,
+      available: true,
+      need: q,
+      found: false,
+      best: null,
+      alternatives: [],
+      weakMatches: search.matches.slice(0, 3),
+      message: `No WebKit component is made for "${q}". The weak matches only share a word with it: do not bend one into this job. Build the smallest custom piece from @aziontech/theme tokens and compose it with WebKit components (rule webkit-prefer-over-custom).`
+    }
+  }
   if (search.matches.length > 0) {
     const [best, ...rest] = search.matches
     return {

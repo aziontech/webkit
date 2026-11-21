@@ -94,7 +94,7 @@ Keep `uploads` `undefined` until the first file arrives, so the drop target show
 - **Drop lead:** what is accepted, full sentences: `A project folder, or the files inside one. We detect what it is built with.`
 - **Overlay heading:** one word for the phase: `Initializing`.
 - **Overlay progress:** what is happening and how far, with a period: `Setting up your deployment. 2 of 5 files.`
-- **Summary:** count and total size: `5 files, 8.36 KB`.
+- **Summary:** count and total size: `5 files, 8.4 kB`.
 - **Failure:** what failed and what to do: `1 file could not be uploaded. Retry it, or remove it from the folder and drop the project again.`
 
 ## Accessibility

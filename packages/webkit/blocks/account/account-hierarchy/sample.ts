@@ -17,7 +17,7 @@ export const sampleResources: AccountHierarchyResource[] = [
     name: 'Storefront',
     type: 'workspace',
     parentId: 'grp-2101',
-    lastAccessed: '2 hours ago',
+    lastAccessed: '2026-11-10T10:00:00Z',
     status: 'Active',
     charges: 1284,
     labels: ['retail', 'production']
@@ -37,7 +37,7 @@ export const sampleResources: AccountHierarchyResource[] = [
     name: 'Loyalty program',
     type: 'workspace',
     parentId: 'grp-2101',
-    lastAccessed: '3 days ago',
+    lastAccessed: '2026-11-07T12:00:00Z',
     status: 'Pending',
     charges: 42.1
   },
@@ -46,7 +46,7 @@ export const sampleResources: AccountHierarchyResource[] = [
     name: 'Media library',
     type: 'workspace',
     parentId: 'grp-2102',
-    lastAccessed: '1 week ago',
+    lastAccessed: '2026-11-03T12:00:00Z',
     status: 'Active',
     charges: 3910.75,
     labels: ['media']
@@ -64,7 +64,7 @@ export const sampleResources: AccountHierarchyResource[] = [
     name: 'Partner portal',
     type: 'workspace',
     parentId: 'grp-2201',
-    lastAccessed: '1 month ago',
+    lastAccessed: '2026-10-11T12:00:00Z',
     status: 'Active',
     charges: 220
   }

@@ -77,6 +77,14 @@ product components in one file (`llms-full-site.txt` for the site and docs compo
   `@aziontech/webkit` component before writing custom UI — find one via the `webkit` MCP
   (`suggest_component`), `node_modules/@aziontech/webkit/llms/llms.txt` or
   `node_modules/@aziontech/webkit/catalog.json`.
+- **The component follows the kind of value.** A plain `Input` is for free text only. A date or a
+  date and time is `DatePicker` (`show-time`), a range `DateRangePicker`, a number `NumberInput`, a
+  phone `PhoneInput`, a secret `PasswordInput`, a one-time code `OtpInput`; no field asks the person
+  to type a format such as ISO 8601. To show a value: a moment in time is `Timestamp`, money
+  `CurrencyAmount`, a resource state `StatusIndicator`, a copyable value `CopyText`; a number or a
+  file size goes through the `useLocale()` formatters. The tables are in the `webkit-form` skill
+  ("Pick the control from the kind of value") and the `webkit-usage` skill ("Pick the component
+  for the job").
 - **Flat imports.** `import Button from '@aziontech/webkit/button'` (PascalCase binding = the subpath);
   page sections too (`@aziontech/webkit/pricing-plans-section`). Never category-prefixed, `/src/`,
   deep-internal, or a bare-package barrel.
