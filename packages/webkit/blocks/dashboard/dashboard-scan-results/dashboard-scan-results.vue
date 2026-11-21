@@ -329,6 +329,8 @@
   )
 
   const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
   const count = (value: number) => formatNumber(value)
 
@@ -348,7 +350,7 @@
         size /= 1000
         unit += 1
       }
-      return `${size.toFixed(unit ? 1 : 0)} ${UNITS[unit]}`
+      return `${fixed(size, unit ? 1 : 0)} ${UNITS[unit]}`
     }
   }
 </script>

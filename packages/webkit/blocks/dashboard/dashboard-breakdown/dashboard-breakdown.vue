@@ -210,6 +210,8 @@
   ]
 
   const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
   const spendFormat = (value: number) =>
     formatNumber(value, {
@@ -229,8 +231,8 @@
   const formatters = {
     spend: (value: number) => spendFormat(value),
     amount: (value: number) => amountFormat(value),
-    share: (value: number) => `${value.toFixed(1)}%`,
-    change: (value: number) => `${value > 0 ? '+' : ''}${value.toFixed(1)}%`
+    share: (value: number) => `${fixed(value, 1)}%`,
+    change: (value: number) => `${value > 0 ? '+' : ''}${fixed(value, 1)}%`
   }
 
   const trendForm = ref('area')

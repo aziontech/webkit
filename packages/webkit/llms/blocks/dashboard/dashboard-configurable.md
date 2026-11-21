@@ -335,6 +335,8 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const failed = (card: string) => `Couldn't load ${card}. ${props.error}`
 
   const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
   const formatters: Record<CardFormat, (value: number) => string> = {
     count: (value) => formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 }),
@@ -346,7 +348,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         current /= 1000
         index += 1
       }
-      return `${current.toFixed(current >= 100 || index === 0 ? 0 : 1)} ${steps[index]}`
+      return `${fixed(current, current >= 100 || index === 0 ? 0 : 1)} ${steps[index]}`
     },
     ms: (value) => `${Math.round(value)} ms`
   }

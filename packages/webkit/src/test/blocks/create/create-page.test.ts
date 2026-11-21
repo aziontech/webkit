@@ -35,7 +35,8 @@ describe('create-page', () => {
       name: 'acme-domain',
       domain: 'example.com',
       dnssec: false,
-      active: true
+      active: true,
+      tags: []
     })
   })
 
@@ -293,7 +294,8 @@ describe('create-page keyboard', () => {
         name: 'acme-domain',
         domain: 'example.com',
         dnssec: false,
-        active: true
+        active: true,
+        tags: []
       })
     } finally {
       unmount()

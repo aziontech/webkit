@@ -283,7 +283,9 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
     Running: 'warning'
   }
 
-  const { formatDate } = useLocale()
+  const { formatDate, formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
   const formatTime = (value: Date) =>
     `${formatDate(value, {
       month: 'short',
@@ -296,7 +298,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
     })} UTC`
 
   const formatDuration = (ms: number) =>
-    ms >= 1000 ? `${(ms / 1000).toFixed(2)} s` : `${Math.round(ms)} ms`
+    ms >= 1000 ? `${fixed(ms / 1000, 2)} s` : `${Math.round(ms)} ms`
 
   const run = computed<InvocationsInvocation | undefined>(
     () => runs.value.find((entry) => entry.id === invocationId.value) ?? runs.value[0]

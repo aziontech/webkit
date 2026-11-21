@@ -1,11 +1,11 @@
 # CreatePage (`create/create-page`)
 
-> The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `AppHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `FieldError`, `Switch`, `RadioGroup` (`variant="card"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.
+> The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section, a Tags section (`TagEditor`) and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `AppHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `FieldError`, `Switch`, `RadioGroup` (`variant="card"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.
 
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [TagEditor](../../components/tag-editor.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -52,15 +52,19 @@ A `SettingsRow` per field: its title names the field and its description carries
 
 On/off settings use `SettingsRow variant="compact"` with a `Switch` hard right at its natural size, named by an `aria-label` that matches the row title, e.g. "Enable DNSSEC".
 
-### F. Commit bar — `SaveBar`, `Button` (required)
+### F. Tags — `TagEditor` (optional)
+
+A Tags band between the required fields and Advanced: a padded `Card` holding one `TagEditor` bound with `v-model:tags`, with key suggestions. Submit calls its `validate()` with the other fields, and the values carry only the tags that have a key. Never a comma-separated text field.
+
+### G. Commit bar — `SaveBar`, `Button` (required)
 
 `SaveBar variant="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. On a phone the muted line hides, so Import keeps its label beside Cancel and Save; the Domain name description already says a paste imports. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
 
-### G. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
+### H. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
 
 Cancel and the header Back both leave the page, so both ask first once the form differs from what it opened with: `useUnsavedChanges(() => form)` tracks it, Cancel and Back `await guard.confirmLeave()` before the page emits `cancel`, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. A clean form leaves at once, with no dialog, and the browser's own prompt covers a reload or a tab close while dirty. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())` so a link or the browser Back asks too. Escape runs the same Cancel path through `useEscapeToCancel(onCancel)`.
 
-### H. Shortcut keycap — `Kbd` (optional)
+### I. Shortcut keycap — `Kbd` (optional)
 
 A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
 
@@ -143,11 +147,11 @@ To go live, render the block from a page that owns the request:
 - Each message is tied to its control with `aria-describedby` and appears only on submit; `required` and `invalid` are announced through the control's own state.
 - The collapsed Advanced region is `inert` while closed, so keyboard focus never lands in hidden fields.
 - The back `IconButton` and the account trigger have `aria-label`s; decorative icons carry `aria-hidden="true"`.
-- Focus order follows reading order: header, heading, General, Advanced toggle, then the bar's Cancel and Save (CreateZone adds Import before them).
+- Focus order follows reading order: header, heading, General, Tags, Advanced toggle, then the bar's Cancel and Save (CreateZone adds Import before them).
 
 ## States
 
-- Default: the Create Domain page at rest (no `defaultValues`, not `loading`); General holds Name and Domain name, Advanced is collapsed, the bar shows Cancel and Save. `loading` locks the form and spins Save, and `error` raises the error toast with Retry. Importing a zone file belongs to CreateZone, not to this page.
+- Default: the Create Domain page at rest (no `defaultValues`, not `loading`); General holds Name and Domain name, Tags holds a `TagEditor` (key and value tags with key suggestions, checked on submit with `validate()`; never a comma-separated text field), Advanced is collapsed, the bar shows Cancel and Save. `loading` locks the form and spins Save, and `error` raises the error toast with Retry. Importing a zone file belongs to CreateZone, not to this page.
 - CreateZone: Create Zone after a zone file is imported; a Records section lists each imported record (type `Tag`, value, TTL) with a Remove `IconButton` per row and Discard import in the card footer; each removal and the discard confirm in a toast with Undo, which puts the records back. Import in the bar and a paste into Domain name both read a BIND zone file, skip the SOA and nameserver records, fill an empty Name and Domain name from `$ORIGIN`, and confirm in a toast; a file with no records raises an error toast. The list previews the first 50 records with an "and N more" line, and a re-import skips records already listed.
 - CreateOrganization: General with Name and a Mark color chosen from six `RadioGroup` cards (`variant="card"`) (each color built from semantic tokens: primary, warning, danger, success, info and the text grays, never palette primitives), each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
@@ -195,6 +199,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
+  import TagEditor, { type TagEditorTag } from '@aziontech/webkit/tag-editor'
   import { toast } from '@aziontech/webkit/toast'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
@@ -211,6 +216,8 @@ Each variant is the same screen in another state: `get_block("create/create-page
     dnssec: boolean
     /** Whether it answers authoritative DNS queries. */
     active: boolean
+    /** Key and value tags of the domain; a tag with an empty key is left out. */
+    tags: { key: string; value: string }[]
   }
 
   export interface CreatePageProps {
@@ -242,13 +249,16 @@ Each variant is the same screen in another state: `get_block("create/create-page
 
   const breadcrumb = [{ label: 'Domains', href: '/domains' }, { label: 'Create Domain' }]
 
-  const form = reactive<CreatePageValues>({
+  const form = reactive<Omit<CreatePageValues, 'tags'> & { tags: TagEditorTag[] }>({
     name: '',
     domain: '',
     dnssec: false,
     active: true,
-    ...props.defaultValues
+    ...props.defaultValues,
+    tags: (props.defaultValues.tags ?? []).map((tag) => ({ ...tag }))
   })
+  const tagKeySuggestions = ['team', 'environment', 'owner', 'cost-center']
+  const tagEditorEl = ref<InstanceType<typeof TagEditor> | null>(null)
   const errors = reactive<FormErrors>({
     name: '',
     nameKind: 'required',
@@ -283,13 +293,17 @@ Each variant is the same screen in another state: `get_block("create/create-page
       errors.domain = ''
     }
 
-    return !errors.name && !errors.domain
+    const tagsValid = tagEditorEl.value?.validate() ?? true
+    return !errors.name && !errors.domain && tagsValid
   }
 
   const values = (): CreatePageValues => ({
     ...form,
     name: form.name.trim(),
-    domain: form.domain.trim()
+    domain: form.domain.trim(),
+    tags: form.tags
+      .filter((tag) => tag.key.trim() && !tag.markedForRemoval)
+      .map((tag) => ({ key: tag.key.trim(), value: tag.value.trim() }))
   })
 
   const guard = useUnsavedChanges(() => form, {
@@ -456,6 +470,23 @@ Each variant is the same screen in another state: `get_block("create/create-page
                         >
                       </SettingsRow>
                     </Item.List>
+                  </template>
+                </Card>
+              </SettingsGroup>
+
+              <SettingsGroup
+                label="Tags"
+                hint="Labels for ownership, cost and search. The same keys across resources keep them easy to find."
+              >
+                <Card>
+                  <template #default>
+                    <TagEditor
+                      ref="tagEditorEl"
+                      v-model:tags="form.tags"
+                      :key-suggestions="tagKeySuggestions"
+                      :disabled="loading"
+                      aria-label="Domain tags"
+                    />
                   </template>
                 </Card>
               </SettingsGroup>

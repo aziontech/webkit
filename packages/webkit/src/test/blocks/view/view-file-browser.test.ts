@@ -117,7 +117,7 @@ describe('view/view-file-browser block', () => {
         'index.html'
       ])
     )
-    expect(view.getByText('17.75 KB')).toBeTruthy()
+    expect(view.getByText('17.8 kB')).toBeTruthy()
     expect(view.queryByText('robots.txt')).toBeNull()
     expect(view.queryByText('favicon.svg')).toBeNull()
   })

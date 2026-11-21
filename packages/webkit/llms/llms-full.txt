@@ -3049,12 +3049,12 @@ What each prop and event does, and the go-live code: [blocks/account/account-pay
 - Surface: app
 - Source: `blocks/account/account-personal-tokens/account-personal-tokens.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-personal-tokens")`
-- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CopyButton, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, PropertyFilter, Select, SettingsGroup, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Textarea, Tooltip, `use-collection`, `use-locale`
+- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CopyButton, DataTable, `DatePickerRoot`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, PropertyFilter, Select, SettingsGroup, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Textarea, Tooltip, `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
-personal tokens; personal access tokens; api tokens; api keys; access tokens; create token; revoke token; copy token once; token expiration; tokens pessoais; token de acesso; chaves de api; criar token; revogar token
+personal tokens; personal access tokens; api tokens; api keys; access tokens; create token; revoke token; copy token once; token expiration; date and time field in a form; expiry date picker; tokens pessoais; token de acesso; chaves de api; criar token; revogar token
 
 The Personal tokens page of the account settings. A person creates a token for a script, a CI job or the CLI, copies its secret the one time it is shown, sees which tokens are still alive and when each expires or was last used, and revokes one that leaked or is no longer needed. The secret never comes back: the list shows only the name, status and dates, and a lost secret means a new token. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
 
@@ -3078,7 +3078,7 @@ The Personal tokens page of the account settings. A person creates a token for a
 - E. No match and empty — `EmptyState` (required)
 - F. Load failure — `Alert` (conditional)
 - G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsGroup`, `PanelFooter` (required)
-- H. Fields — `Field`, `Input`, `Textarea`, `Select`, `FieldDescription` (required)
+- H. Fields — `Field`, `Input`, `Textarea`, `Select`, `DatePickerRoot`, `FieldDescription` (required)
 - I. One-time reveal — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
 - J. Confirmations and outcomes — `ConfirmDialog` (required)
 
@@ -4835,7 +4835,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-hub.m
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, TagEditor, Textarea, Toast, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -4867,9 +4867,10 @@ The page a first-level resource is created on when everything it needs fits on o
 - C. Sections — `SettingsGroup`, `Card`, `Item` (required)
 - D. Field rows — `SettingsRow`, `Input`, `FieldError` (required)
 - E. Switch rows — `Switch` (optional)
-- F. Commit bar — `SaveBar`, `Button` (required)
-- G. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
-- H. Shortcut keycap — `Kbd` (optional)
+- F. Tags — `TagEditor` (optional)
+- G. Commit bar — `SaveBar`, `Button` (required)
+- H. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
+- I. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/create/create-page.md](blocks/create/create-page.md).
 
@@ -4923,11 +4924,11 @@ What each prop and event does, and the go-live code: [blocks/create/create-page.
 - Each message is tied to its control with `aria-describedby` and appears only on submit; `required` and `invalid` are announced through the control's own state.
 - The collapsed Advanced region is `inert` while closed, so keyboard focus never lands in hidden fields.
 - The back `IconButton` and the account trigger have `aria-label`s; decorative icons carry `aria-hidden="true"`.
-- Focus order follows reading order: header, heading, General, Advanced toggle, then the bar's Cancel and Save (CreateZone adds Import before them).
+- Focus order follows reading order: header, heading, General, Tags, Advanced toggle, then the bar's Cancel and Save (CreateZone adds Import before them).
 
 ## States
 
-- Default: the Create Domain page at rest (no `defaultValues`, not `loading`); General holds Name and Domain name, Advanced is collapsed, the bar shows Cancel and Save. `loading` locks the form and spins Save, and `error` raises the error toast with Retry. Importing a zone file belongs to CreateZone, not to this page.
+- Default: the Create Domain page at rest (no `defaultValues`, not `loading`); General holds Name and Domain name, Tags holds a `TagEditor` (key and value tags with key suggestions, checked on submit with `validate()`; never a comma-separated text field), Advanced is collapsed, the bar shows Cancel and Save. `loading` locks the form and spins Save, and `error` raises the error toast with Retry. Importing a zone file belongs to CreateZone, not to this page.
 - CreateZone: Create Zone after a zone file is imported; a Records section lists each imported record (type `Tag`, value, TTL) with a Remove `IconButton` per row and Discard import in the card footer; each removal and the discard confirm in a toast with Undo, which puts the records back. Import in the bar and a paste into Domain name both read a BIND zone file, skip the SOA and nameserver records, fill an empty Name and Domain name from `$ORIGIN`, and confirm in a toast; a file with no records raises an error toast. The list previews the first 50 records with an "and N more" line, and a re-import skips records already listed.
 - CreateOrganization: General with Name and a Mark color chosen from six `RadioGroup` cards (`variant="card"`) (each color built from semantic tokens: primary, warning, danger, success, info and the text grays, never palette primitives), each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
@@ -6468,7 +6469,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Surface: app
 - Source: `blocks/dashboard/dashboard-service-monitoring/dashboard-service-monitoring.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-service-monitoring")`
-- Components: Alert, Chart, ChartCard, EmptyState, Hint, Item, PageHeader, Skeleton, StatTile, StatusIndicator, Tag, ToggleGroup
+- Components: Alert, Chart, ChartCard, EmptyState, Hint, Item, PageHeader, Skeleton, StatTile, StatusIndicator, Tag, ToggleGroup, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-ui-states`
 
 ## Asked as
@@ -9616,7 +9617,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-page-sk
 - Surface: app
 - Source: `blocks/state/state-project-intake/state-project-intake.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-project-intake")`
-- Components: Alert, Button, FileDropzone, UploadProgress
+- Components: Alert, Button, FileDropzone, UploadProgress, `use-locale`
 - Skills: `webkit-ui-states`, `webkit-motion-polish`
 
 ## Asked as
@@ -9681,7 +9682,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-project
 - **Drop lead:** what is accepted, full sentences: `A project folder, or the files inside one. We detect what it is built with.`
 - **Overlay heading:** one word for the phase: `Initializing`.
 - **Overlay progress:** what is happening and how far, with a period: `Setting up your deployment. 2 of 5 files.`
-- **Summary:** count and total size: `5 files, 8.36 KB`.
+- **Summary:** count and total size: `5 files, 8.4 kB`.
 - **Failure:** what failed and what to do: `1 file could not be uploaded. Retry it, or remove it from the folder and drop the project again.`
 
 ## Accessibility
@@ -10170,7 +10171,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-events-ex
 - Surface: app
 - Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-file-browser")`
-- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress
+- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress, `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -10968,7 +10969,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-template-
 - Surface: app
 - Source: `blocks/view/view-waf-tuning/view-waf-tuning.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-waf-tuning")`
-- Components: Alert, Button, Card, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, EmptyState, Field, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, `TableCellTags`, Textarea, Toast, Tooltip, `use-locale`
+- Components: Alert, Button, Card, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, EmptyState, Field, IconButton, Input, NumberInput, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, `TableCellTags`, Textarea, Toast, Tooltip, `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -10994,7 +10995,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## Building blocks
 
 - A. Header — `PageHeader`, `Button` (required)
-- B. Threshold settings — `Field`, `Select`, `Input`, `IconButton`, `Tooltip` (required)
+- B. Threshold settings — `Field`, `Select`, `NumberInput`, `Input`, `IconButton`, `Tooltip` (required)
 - C. Matches table — `Card`, `DataTable`, `TableCellTags`, `EmptyState`, `Alert` (required)
 - D. Allow dialog — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
 - E. Outcome — `Alert` (required)

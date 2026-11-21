@@ -46,11 +46,12 @@ describe('account/tokens', () => {
     await userEvent.type(name, 'Release bot')
     await fireEvent.click(buttonByText('Create Personal Token', drawer))
     await waitFor(() => expect(view.emitted<unknown[]>('create')).toHaveLength(1))
-    expect(view.emitted<unknown[]>('create')![0][1]).toEqual({
-      name: 'Release bot',
-      description: '',
-      expiresInDays: 30
-    })
+    const created = view.emitted<unknown[]>('create')![0][1] as {
+      expiresAt: Date
+      expiresInDays: number
+    }
+    expect(created).toMatchObject({ name: 'Release bot', description: '', expiresInDays: 30 })
+    expect(created.expiresAt).toBeInstanceOf(Date)
     await view.rerender({ creating: true })
     await waitFor(() => expect(name).toBeDisabled())
     await view.rerender({
@@ -83,6 +84,31 @@ describe('account/tokens', () => {
     expect(view.emitted<unknown[]>('update:secret')).toBeUndefined()
     await fireEvent.click(buttonByText('I copied the token', reveal))
     expect(view.emitted<unknown[]>('update:secret')).toEqual([[null]])
+  })
+
+  it('asks for a date and time in a DatePicker when the expiry is custom', async () => {
+    const view = render(Tokens)
+    await fireEvent.click(buttonByText('Create Personal Token'))
+    const drawer = await waitFor(() => dialog())
+    await userEvent.type(within(drawer).getByLabelText(/^Name/), 'Release bot')
+    await fireEvent.click(document.getElementById('token-expiry')!)
+    const option = await waitFor(() =>
+      [...document.querySelectorAll<HTMLElement>('[role="option"]')].find((item) =>
+        item.textContent?.includes('Custom date and time')
+      )
+    )
+    await fireEvent.click(option!)
+    const picker = await waitFor(() =>
+      drawer.querySelector<HTMLElement>('[data-testid="date-picker__trigger"]')
+    )
+    expect(picker).toBeTruthy()
+    expect(within(drawer).getByLabelText(/^Expires at/)).toBe(picker)
+    await fireEvent.click(buttonByText('Create Personal Token', drawer))
+    await waitFor(() =>
+      expect(drawer.textContent).toContain('Pick the date and time the token expires.')
+    )
+    expect(view.emitted('create')).toBeUndefined()
+    expect(document.activeElement).toBe(picker)
   })
 
   it('renders the tokens it is given instead of the sample, and the empty card for none', async () => {

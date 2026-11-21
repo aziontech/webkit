@@ -265,13 +265,15 @@
   }
 
   const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
   const compact = (value: number) =>
     formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
 
   const formatters: Record<FigureFormat, (value: number) => string> = {
     count: (value) => compact(value),
-    percentage: (value) => `${value.toFixed(0)}%`
+    percentage: (value) => `${fixed(value, 0)}%`
   }
 </script>
 

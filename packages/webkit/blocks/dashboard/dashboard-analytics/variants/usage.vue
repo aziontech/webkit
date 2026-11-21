@@ -45,6 +45,8 @@
   const periodSlug = computed(() => currentPeriod.value.label.toLowerCase().replaceAll(' ', '-'))
 
   const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
   const compact = (value: number) =>
     formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
@@ -71,7 +73,7 @@
       current /= 1000
       index += 1
     }
-    return `${current.toFixed(current >= 100 || index === 0 ? 0 : 1)} ${steps[index]}`
+    return `${fixed(current, current >= 100 || index === 0 ? 0 : 1)} ${steps[index]}`
   }
 
   const loading = false
@@ -510,7 +512,7 @@
                 />
                 <Tag
                   v-if="comparison.delta !== null"
-                  :label="(comparison.delta > 0 ? '+' : '') + comparison.delta.toFixed(2) + '%'"
+                  :label="(comparison.delta > 0 ? '+' : '') + fixed(comparison.delta, 2) + '%'"
                   :severity="comparison.delta > 0 ? 'success' : 'danger'"
                   :icon="comparison.delta > 0 ? 'az az-arrow-up-right' : 'az az-arrow-down-left'"
                   size="small"

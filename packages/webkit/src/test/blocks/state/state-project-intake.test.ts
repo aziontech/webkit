@@ -58,7 +58,7 @@ describe('state/state-project-intake', () => {
       }
     })
     expect(view.container.textContent).toContain('Setting up your deployment. 1 of 2 files.')
-    expect(view.container.textContent).toContain('2 files, 5.00 KB')
+    expect(view.container.textContent).toContain('2 files, 4.9 kB')
     expect(view.container.textContent).not.toContain(sampleUploads[0].name)
     expect(view.queryByRole('button', { name: 'Choose a folder' })).toBeNull()
   })

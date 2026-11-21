@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-service-monitoring/dashboard-service-monitoring.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-service-monitoring")`
-- Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [StatusIndicator](../../components/status-indicator.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md)
+- Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [StatusIndicator](../../components/status-indicator.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
 - Skills: `webkit-data-viz`, `webkit-ui-states`
 
 ## Asked as
@@ -212,6 +212,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed } from 'vue'
 
   import { sampleAlerts, sampleErrorRate, sampleLatency, sampleServices } from './sample'
@@ -308,9 +309,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const deltaLabel = computed(() => `p95 latency vs previous ${windowNames[timeWindow.value]}`)
 
   const formatLatency = (value: number) => `${Math.round(value)} ms`
+  const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
   const formatRate = (value: number) => {
     const digits = value === 0 || value >= 10 ? 0 : value >= 1 ? 1 : 2
-    return `${value.toFixed(digits)}%`
+    return `${fixed(value, digits)}%`
   }
 
   const windows = [

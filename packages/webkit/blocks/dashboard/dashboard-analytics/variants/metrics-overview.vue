@@ -244,6 +244,8 @@
   ]
 
   const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
   const compact = (value: number) =>
     formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
@@ -259,9 +261,9 @@
         current /= 1000
         index += 1
       }
-      return `${current.toFixed(current >= 100 || index === 0 ? 0 : 1)} ${steps[index]}`
+      return `${fixed(current, current >= 100 || index === 0 ? 0 : 1)} ${steps[index]}`
     },
-    percentage: (value) => `${value.toFixed(1)}%`,
+    percentage: (value) => `${fixed(value, 1)}%`,
     ms: (value) => `${decimal(value)} ms`,
     seconds: (value) => `${compact(value)} s`
   }

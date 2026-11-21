@@ -362,6 +362,8 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   )
 
   const { formatNumber } = useLocale()
+  const fixed = (value: number, digits: number) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
   const formatCount = (value: number) =>
     formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
@@ -376,10 +378,10 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         scaled /= 1000
         unit += 1
       }
-      return `${scaled.toFixed(scaled >= 100 ? 0 : 1)} ${units[unit]}`
+      return `${fixed(scaled, scaled >= 100 ? 0 : 1)} ${units[unit]}`
     },
     ms: (value) => `${Math.round(value)} ms`,
-    percent: (value) => `${value.toFixed(value < 1 ? 2 : 1)}%`,
+    percent: (value) => `${fixed(value, value < 1 ? 2 : 1)}%`,
     usd: (value) =>
       formatNumber(value, {
         style: 'currency',

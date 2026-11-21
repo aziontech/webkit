@@ -43,9 +43,9 @@ When the list does not load, a danger `Alert` with Retry takes the table's place
 
 A large right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. Create emits `create` with the values; the fields lock while `creating` is set.
 
-### H. Fields — `Field`, `Input`, `Textarea`, `Select`, `FieldDescription` (required)
+### H. Fields — `Field`, `Input`, `Textarea`, `Select`, `DatePickerRoot`, `FieldDescription` (required)
 
-Name is required and unique; the error sits under the field (`This field is required.`, `A token with this name already exists. Use another name.`) and focus moves to it. Expires in is a `Select` of 7, 30, 60 and 90 days and 1 year (default 30), and the `FieldError` under it says the exact date it stops working.
+Name is required and unique; the error sits under the field (`This field is required.`, `A token with this name already exists. Use another name.`) and focus moves to it. Expires in is a `Select` of 7, 30, 60 and 90 days, 1 year (default 30) and Custom date and time; Custom shows a required Expires at `DatePickerRoot` (the DatePicker) with `show-time`, bound to a `Date` and limited to the future with `min` (never a text field that asks for a date format), and the `FieldError` under it says the exact date it stops working.
 
 ### I. One-time reveal — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
 
@@ -68,13 +68,13 @@ The block takes its tokens through props and emits every action; it fetches noth
 | `now`      | `Date`                         | The moment Status and the expiry hint count from.                                                                          |
 | `secret`   | `PersonalTokensSecret \| null` | `v-model:secret`: the token the create request returned; set, the reveal dialog opens; closing it sets `null`.             |
 
-| Event     | Payload                                         | When                                                                     |
-| --------- | ----------------------------------------------- | ------------------------------------------------------------------------ |
-| `refresh` | `(event)`                                       | Refresh.                                                                 |
-| `retry`   | `(event)`                                       | Retry in the error alert.                                                |
-| `create`  | `(event, { name, description, expiresInDays })` | The drawer passed validation and was submitted.                          |
-| `revoke`  | `(event, token)`                                | The revoke dialog was confirmed; the row already reads Revoked.          |
-| `delete`  | `(event, token)`                                | The delete dialog was confirmed; the row is already gone from the table. |
+| Event     | Payload                                                    | When                                                                     |
+| --------- | ---------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `refresh` | `(event)`                                                  | Refresh.                                                                 |
+| `retry`   | `(event)`                                                  | Retry in the error alert.                                                |
+| `create`  | `(event, { name, description, expiresInDays, expiresAt })` | The drawer passed validation and was submitted.                          |
+| `revoke`  | `(event, token)`                                           | The revoke dialog was confirmed; the row already reads Revoked.          |
+| `delete`  | `(event, token)`                                           | The delete dialog was confirmed; the row is already gone from the table. |
 
 To go live, render the block from a page that owns the requests and pass what they return:
 
