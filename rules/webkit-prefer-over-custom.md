@@ -11,6 +11,7 @@ Before you write UI, check whether the design system already has it. It almost a
 ## Don't
 
 - Do not hand-roll a button, input, modal, table, tooltip, badge, or any common UI when webkit already ships one.
+- Do not use a plain `Input` for a value that has its own control: a date or a date and time is `DatePicker` (`show-time`), a range `DateRangePicker`, a number `NumberInput`, a phone `PhoneInput`, a secret `PasswordInput`, a one-time code `OtpInput`. No field asks the person to type a format such as ISO 8601. The full table is in the `webkit-form` skill, "Pick the control from the kind of value".
 - Do not pull in another component library (a third-party UI kit, a headless UI kit, a random npm widget) for something webkit covers.
 - Do not copy a component's markup into your own file to tweak it — use the real component so it stays themed and accessible.
 
