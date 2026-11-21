@@ -1924,7 +1924,7 @@
   {
     "name": "number-input",
     "path": "src/components/input/number-input/number-input.vue",
-    "limit": "3.3 KB"
+    "limit": "3.45 KB"
   },
   {
     "name": "hint",

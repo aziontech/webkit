@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/number-input/default.vue'
@@ -40,6 +41,43 @@ describe('NumberInput', () => {
   })
 
   describe('v-model / typing', () => {
+    const typed = async (keys: string) => {
+      const value = ref<number | null>(null)
+      const Host = defineComponent({
+        setup: () => () =>
+          h(NumberInputRoot, {
+            modelValue: value.value,
+            nullable: true,
+            'onUpdate:modelValue': (next: number | null) => (value.value = next)
+          })
+      })
+      const { getByTestId } = render(Host)
+      const input = getByTestId('number-input') as HTMLInputElement
+      await userEvent.click(input)
+      if (keys) await userEvent.keyboard(keys)
+      return { input, value }
+    }
+
+    it('reads a typed comma as the decimal point instead of dropping it', async () => {
+      const { input, value } = await typed('12,5')
+      expect(input.value).toBe('12.5')
+      expect(value.value).toBe(12.5)
+    })
+
+    it('ignores a second decimal separator', async () => {
+      const { value } = await typed('12.5,7')
+      expect(value.value).toBe(12.57)
+    })
+
+    it('reads a pasted amount with a decimal comma', async () => {
+      const { input, value } = await typed('')
+      const clipboardData = new DataTransfer()
+      clipboardData.setData('text', '1234,56')
+      input.dispatchEvent(new ClipboardEvent('paste', { clipboardData, cancelable: true }))
+      await nextTick()
+      expect(value.value).toBe(1234.56)
+    })
+
     it('emits update:modelValue with the numeric value on input', async () => {
       const { getByTestId, emitted } = render(NumberInput, { props: { modelValue: 0 } })
       const input = getByTestId('number-input') as HTMLInputElement

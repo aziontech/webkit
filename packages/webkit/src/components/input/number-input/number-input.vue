@@ -126,6 +126,23 @@
     emit('change', readValue(event))
   }
 
+  // A native number field drops a typed comma (`12,5` reads 125), so a comma typed or pasted as
+  // the decimal separator goes in as a point; a second separator is ignored.
+  const insert = (event: Event, text: string) => {
+    event.preventDefault()
+    if (text !== '.' || !(event.target as HTMLInputElement).value.includes('.'))
+      globalThis.document.execCommand('insertText', false, text)
+  }
+
+  const onBeforeInput = (event: InputEvent) => {
+    if (event.data === ',') insert(event, '.')
+  }
+
+  const onPaste = (event: ClipboardEvent) => {
+    const text = event.clipboardData?.getData('text').trim() ?? ''
+    if (/^-?\d*,\d+$/.test(text)) insert(event, text.replace(',', '.'))
+  }
+
   const canInteract = computed(() => !isDisabled.value && !props.readonly)
 
   const stepBy = (delta: number): NumberInputValue<TNullable> => {
@@ -188,6 +205,8 @@
       dir="auto"
       v-bind="{ ...PASSWORD_MANAGER_IGNORE, ...passthroughAttrs }"
       class="relative z-(--z-control) w-full min-w-0 border-0 bg-transparent outline-none px-(--spacing-md) text-label-sm pointer-coarse:text-body-md text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+      @beforeinput="onBeforeInput"
+      @paste="onPaste"
       @input="onInput"
       @change="onChange"
     />
