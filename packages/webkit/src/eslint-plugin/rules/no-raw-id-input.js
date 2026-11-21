@@ -11,7 +11,7 @@ export default {
     schema: [],
     messages: {
       rawId:
-        '{{tag}} asks for an ID ({{evidence}}): people pick a resource by name, not by typing its identifier. Use a searchable resource picker: Select with a #search field, Load more in #footer and display-value resolving the chosen name, or Combobox with :filter="false", :allow-custom="false" and a debounced @search. Label the thing (\'Organization\'), not \'Organization ID\'. If the value is an identifier from another system that the person copies in, disable this rule on the line and say so. Skill webkit-form, Control by data type.'
+        '{{tag}} asks for an ID ({{evidence}}): people pick a resource by name, not by typing its identifier. Use a searchable resource picker: Select with a #search field, Load more in #footer and display-value resolving the chosen name, or Combobox with :filter="false", :allow-custom="false" and a debounced @search. Label the thing (\'Organization\'), not \'Organization ID\'. If the value is an identifier from another system that the person copies in, disable this rule on the line and say so. Skill webkit-form, Pick the control from the kind of value.'
     }
   },
   create(context) {

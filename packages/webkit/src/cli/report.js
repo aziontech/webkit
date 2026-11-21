@@ -9,8 +9,6 @@ export const UI_EXTENSIONS = ['vue', 'astro']
 
 export const RULE_PURPOSE = {
   'no-page-navigation-menu': 'free Menu in a page body (one navigation per level)',
-  'prefer-date-picker': 'date or time typed as text instead of DatePicker or DateRangePicker',
-  'no-raw-id-input': 'resource ID typed as text instead of a searchable picker',
   'no-viewport-height-calc':
     'page height hand-computed from the viewport (calc(100dvh - …)) instead of data-layout-fill',
   'no-root-relative-asset':
@@ -40,6 +38,8 @@ export const RULE_PURPOSE = {
   'require-accessible-name': 'IconButton or ButtonGroup with no aria-label or aria-labelledby',
   'prefer-value-control':
     'text Input used for a number, a date, a phone number or a secret (native type or a date format)',
+  'prefer-date-picker': 'date or time typed as text instead of DatePicker or DateRangePicker',
+  'no-raw-id-input': 'resource ID typed as text instead of a searchable picker',
   'no-dropped-children': 'content inside a webkit component with no default slot, never rendered'
 }
 
@@ -51,6 +51,8 @@ const TEMPLATE_ONLY_RULES = [
   'no-gap-after-closing-section',
   'require-accessible-name',
   'prefer-value-control',
+  'prefer-date-picker',
+  'no-raw-id-input',
   'no-dropped-children'
 ]
 
