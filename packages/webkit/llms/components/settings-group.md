@@ -50,6 +50,7 @@
 | --- | --- | --- |
 | `default` | — | The band body, usually a flush Card of SettingsRow rows. |
 | `label` | — | Rich label content; replaces the `label` prop text in the h2. |
+| `info` | — | An affordance beside the heading, after the `hint` glyph and outside the h2 and the disclosure button: a help button that opens the page's `HelpPanel`. Clicking it never folds the band. |
 
 ## Assets
 
@@ -71,10 +72,34 @@
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the copy-link and the disclosure button (plus `ring-offset` on the disclosure).
-- Keyboard map: `Tab` reaches the copy-link, the disclosure and then the body; `Enter`/`Space` toggles the disclosure.
+- Keyboard map: `Tab` reaches the copy-link, the disclosure, the `hint` glyph, the `info` slot's controls and then the body; `Enter`/`Space` toggles the disclosure.
+- ARIA: the `info` slot sits outside the h2, so its button's name never joins the heading's name or the disclosure's; name it after the topic (`Help: Advanced`).
 - ARIA: the disclosure is a `button` inside the h2 with `aria-expanded` and `aria-controls` pointing at the body (`useId`); a folded body is `inert` and `aria-hidden`. The copy-link button is named "Copy link to the {title} section"; after a successful copy its glyph turns into a check and its name into "Link copied" for two seconds, then both return.
 - Contrast ≥4.5:1 for the title.
 - `motion-reduce:transition-none` on every transition.
+
+## Right-to-left
+
+- Layout: logical utilities only (`-start-`, `gap-`, `text-start`); the copy-link floats outside the inline start edge, so it moves to the right under `rtl`, and the `hint` glyph and the `info` slot follow the title on its inline end.
+- Icons: the chevron and the link glyph do not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Internationalization
+
+| Key                        | English source                     | Override prop |
+| -------------------------- | ---------------------------------- | ------------- |
+| `settingsGroup.copyLink`   | `Copy link to the {title} section` | —             |
+| `settingsGroup.linkCopied` | `Link copied`                      | —             |
+
+- Formatting: none. The `label`, `hint` and the `info` slot are the consumer's text.
+
+## Responsive
+
+- Container queries: the body is `@container/settings-group`, so the rows inside lay out for the band, not the window.
+- Narrow (≤ 640 px or a narrow container): the title wraps (`text-balance`); the `hint` glyph and the `info` slot stay on the title's line.
+- Touch: the copy-link is shown inline after the title where the pointer cannot hover (`@media (hover: none)`).
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Examples
 

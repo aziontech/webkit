@@ -19285,6 +19285,11 @@
      "name": "actions",
      "scope": "—",
      "notes": "The band's own actions, on the right of the copy."
+    },
+    {
+     "name": "info",
+     "scope": "—",
+     "notes": "An affordance right after the title and outside the h2, before the copy-link: a help button that opens the page's `HelpPanel`."
     }
    ],
    "surface": "app",
@@ -19355,6 +19360,11 @@
      "name": "label",
      "scope": "—",
      "notes": "Rich label content; replaces the `label` prop text in the h2."
+    },
+    {
+     "name": "info",
+     "scope": "—",
+     "notes": "An affordance beside the heading, after the `hint` glyph and outside the h2 and the disclosure button: a help button that opens the page's `HelpPanel`. Clicking it never folds the band."
     }
    ],
    "surface": "app",

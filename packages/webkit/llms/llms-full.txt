@@ -28995,6 +28995,7 @@ context, so a consumer never wires one part to the other.
 | --- | --- | --- |
 | `default` | — | The band body, usually a flush Card of SettingsRow rows. |
 | `label` | — | Rich label content; replaces the `label` prop text in the h2. |
+| `info` | — | An affordance beside the heading, after the `hint` glyph and outside the h2 and the disclosure button: a help button that opens the page's `HelpPanel`. Clicking it never folds the band. |
 
 ## Assets
 
@@ -29016,7 +29017,8 @@ context, so a consumer never wires one part to the other.
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the copy-link and the disclosure button (plus `ring-offset` on the disclosure).
-- Keyboard map: `Tab` reaches the copy-link, the disclosure and then the body; `Enter`/`Space` toggles the disclosure.
+- Keyboard map: `Tab` reaches the copy-link, the disclosure, the `hint` glyph, the `info` slot's controls and then the body; `Enter`/`Space` toggles the disclosure.
+- ARIA: the `info` slot sits outside the h2, so its button's name never joins the heading's name or the disclosure's; name it after the topic (`Help: Advanced`).
 - ARIA: the disclosure is a `button` inside the h2 with `aria-expanded` and `aria-controls` pointing at the body (`useId`); a folded body is `inert` and `aria-hidden`. The copy-link button is named "Copy link to the {title} section"; after a successful copy its glyph turns into a check and its name into "Link copied" for two seconds, then both return.
 - Contrast ≥4.5:1 for the title.
 - `motion-reduce:transition-none` on every transition.
@@ -29720,6 +29722,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 | --- | --- | --- |
 | `description` | — | Rich description content (links, inline code); replaces the `description` prop. |
 | `actions` | — | The band's own actions, on the right of the copy. |
+| `info` | — | An affordance right after the title and outside the h2, before the copy-link: a help button that opens the page's `HelpPanel`. |
 
 ## States
 
@@ -29731,7 +29734,8 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 ## Accessibility
 
 - Visible focus: the copy-link `CopyButton` and the actions carry their own focus ring; focusing the copy-link reveals it.
-- Keyboard map: `Tab` reaches the copy-link button, then the actions; `Enter`/`Space` copies the link.
+- Keyboard map: `Tab` reaches the `info` slot's controls, the copy-link button, then the actions; `Enter`/`Space` copies the link.
+- ARIA: the `info` slot sits outside the h2, so its button's name never joins the heading's name; name it after the topic (`Help: Domains`).
 - ARIA: the copy-link button is named "Copy link to the {title} section" and announces "Link copied".
 - Contrast ≥4.5:1 for the title and the description.
 - `motion-reduce:transition-none` on the reveal.

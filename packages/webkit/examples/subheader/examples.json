@@ -16,6 +16,11 @@
       "name": "Sizes",
       "summary": "Medium, the band heading, and small, a muted label-sized heading.",
       "file": "sizes.vue"
+    },
+    {
+      "name": "WithInfo",
+      "summary": "A help button in the info slot, right after the title and outside the h2, that opens the page's HelpPanel in a drawer beside the page.",
+      "file": "with-info.vue"
     }
   ]
 }

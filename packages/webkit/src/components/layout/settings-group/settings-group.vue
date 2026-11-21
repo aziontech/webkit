@@ -38,6 +38,8 @@
     default(): unknown
     /** Rich label content; replaces the label prop text inside the h2. */
     label(): unknown
+    /** An affordance beside the heading, outside the h2 and the disclosure, such as a help button that opens the page's HelpPanel. */
+    info(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -134,6 +136,13 @@
         :content="hint"
         class="shrink-0"
       />
+      <span
+        v-if="$slots['info']"
+        :data-testid="`${testId}__info`"
+        class="flex shrink-0 items-center"
+      >
+        <slot name="info" />
+      </span>
     </div>
     <div
       :id="regionId"

@@ -3,10 +3,11 @@ name: settings-group
 category: layout
 structure: monolithic
 status: implemented
-checksum: dee1aca817a2ed758adce5ed1dcb37d614562be1cbd057b32355c2e52b2b10d4
-spec_version: 7
+checksum: 03dbc09a05be53ed001271343836f6ffc7556c2ab94c7bfb8a590224b3cbde18
+spec_version: 8
+template: 2
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-21
 ---
 
 # SettingsGroup — Component Spec
@@ -102,10 +103,11 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
 
 ## Slots
 
-| Slot      | Scope | Notes                                                         |
-| --------- | ----- | ------------------------------------------------------------- |
-| `default` | —     | The band body, usually a flush Card of SettingsRow rows.      |
-| `label`   | —     | Rich label content; replaces the `label` prop text in the h2. |
+| Slot      | Scope | Notes                                                                                                                                                                                     |
+| --------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | The band body, usually a flush Card of SettingsRow rows.                                                                                                                                  |
+| `label`   | —     | Rich label content; replaces the `label` prop text in the h2.                                                                                                                             |
+| `info`    | —     | An affordance beside the heading, after the `hint` glyph and outside the h2 and the disclosure button: a help button that opens the page's `HelpPanel`. Clicking it never folds the band. |
 
 ## States
 
@@ -145,16 +147,47 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the copy-link and the disclosure button (plus `ring-offset` on the disclosure).
-- Keyboard map: `Tab` reaches the copy-link, the disclosure and then the body; `Enter`/`Space` toggles the disclosure.
+- Keyboard map: `Tab` reaches the copy-link, the disclosure, the `hint` glyph, the `info` slot's controls and then the body; `Enter`/`Space` toggles the disclosure.
+- ARIA: the `info` slot sits outside the h2, so its button's name never joins the heading's name or the disclosure's; name it after the topic (`Help: Advanced`).
 - ARIA: the disclosure is a `button` inside the h2 with `aria-expanded` and `aria-controls` pointing at the body (`useId`); a folded body is `inert` and `aria-hidden`. The copy-link button is named "Copy link to the {title} section"; after a successful copy its glyph turns into a check and its name into "Link copied" for two seconds, then both return.
 - Contrast ≥4.5:1 for the title.
 - `motion-reduce:transition-none` on every transition.
+
+## Internationalization
+
+| Key                        | English source                     | Override prop |
+| -------------------------- | ---------------------------------- | ------------- |
+| `settingsGroup.copyLink`   | `Copy link to the {title} section` | —             |
+| `settingsGroup.linkCopied` | `Link copied`                      | —             |
+
+- Formatting: none. The `label`, `hint` and the `info` slot are the consumer's text.
+
+## Right-to-left
+
+- Layout: logical utilities only (`-start-`, `gap-`, `text-start`); the copy-link floats outside the inline start edge, so it moves to the right under `rtl`, and the `hint` glyph and the `info` slot follow the title on its inline end.
+- Icons: the chevron and the link glyph do not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Responsive
+
+- Container queries: the body is `@container/settings-group`, so the rows inside lay out for the band, not the window.
+- Narrow (≤ 640 px or a narrow container): the title wraps (`text-balance`); the `hint` glyph and the `info` slot stay on the title's line.
+- Touch: the copy-link is shown inline after the title where the pointer cannot hover (`@media (hover: none)`).
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 8.05 KB gzip for `settings-group` in `.size-limit.json` (it carries `Hint` and its `Tooltip`).
+- Runtime budget: none: static.
+- Heavy parts: none.
 
 ## Examples
 
 - Default — one anchored band.
 - Stacked — two bands stacked; justified because the stacking margin is part of the contract.
 - Collapsible — the Advanced disclosure, closed; justified because the disclosure is a distinct rendered state.
+- WithInfo — a help button in the `info` slot of a collapsible band, opening a `HelpPanel` in a non-modal `Drawer`; justified because the slot's place outside the disclosure is the contract.
 
 ## Constraints — DO NOT
 

@@ -1089,6 +1089,11 @@ copy-link appears in the gutter on hover or focus). An Advanced band whose defau
 Rules:
 
 - **Do not also set a `Card` `title`** on the card inside a band — the band's title would double it.
+- **A help button beside the title goes in the `info` slot** (`SettingsGroup` and `Subheader` both
+  have one): an `IconButton` `az az-circle-help`, `variant="ghost"`, `size="small"`, named after the
+  topic (`Help: Advanced`), that opens the page's `HelpPanel`. The slot sits outside the h2 and, on a
+  collapsible band, outside the disclosure, so pressing it never folds the band. A one-sentence note
+  stays in `hint`; never put a button in the `label` slot, which renders inside the h2 and the toggle.
 - **A band with a description line and its own actions** (Billing's Payment methods with Add payment
   method) is a `Subheader` (`@aziontech/webkit/subheader`) over its card, not a
   `SettingsGroup`.

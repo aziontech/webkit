@@ -3,10 +3,11 @@ name: subheader
 category: layout
 structure: monolithic
 status: implemented
-checksum: 0f207a232fe39dabdaa3dfe4a1a8569841007988b9207b8fd28b729c15514f5d
-spec_version: 5
+checksum: 64eb74fd3bef1afb5817d3f175d92d6ad5ca7ea796a9e8bc9ef0db23eec9fbb5
+spec_version: 6
+template: 2
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-21
 ---
 
 # Subheader — Component Spec
@@ -80,10 +81,11 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 
 ## Slots
 
-| Slot          | Scope | Notes                                                                           |
-| ------------- | ----- | ------------------------------------------------------------------------------- |
-| `description` | —     | Rich description content (links, inline code); replaces the `description` prop. |
-| `actions`     | —     | The band's own actions, on the right of the copy.                               |
+| Slot          | Scope | Notes                                                                                                                          |
+| ------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `description` | —     | Rich description content (links, inline code); replaces the `description` prop.                                                |
+| `actions`     | —     | The band's own actions, on the right of the copy.                                                                              |
+| `info`        | —     | An affordance right after the title and outside the h2, before the copy-link: a help button that opens the page's `HelpPanel`. |
 
 ## States
 
@@ -117,16 +119,47 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the copy-link `CopyButton` and the actions carry their own focus ring; focusing the copy-link reveals it.
-- Keyboard map: `Tab` reaches the copy-link button, then the actions; `Enter`/`Space` copies the link.
+- Keyboard map: `Tab` reaches the `info` slot's controls, the copy-link button, then the actions; `Enter`/`Space` copies the link.
+- ARIA: the `info` slot sits outside the h2, so its button's name never joins the heading's name; name it after the topic (`Help: Domains`).
 - ARIA: the copy-link button is named "Copy link to the {title} section" and announces "Link copied".
 - Contrast ≥4.5:1 for the title and the description.
 - `motion-reduce:transition-none` on the reveal.
+
+## Internationalization
+
+| Key                    | English source                     | Override prop |
+| ---------------------- | ---------------------------------- | ------------- |
+| `subheader.copyLink`   | `Copy link to the {title} section` | —             |
+| `subheader.linkCopied` | `Link copied`                      | —             |
+
+- Formatting: none. The `title`, `description` and slots are the consumer's text.
+
+## Right-to-left
+
+- Layout: logical utilities only (`px-`, `gap-`, `justify-between`); the `info` slot and the copy-link follow the title on its inline end, and the actions sit at the inline end of the row.
+- Icons: the copy glyph does not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Responsive
+
+- Container queries: the root is `@container/subheader`; the actions take the full width under the copy below `@md` and sit beside it from `@md`.
+- Narrow (≤ 640 px or a narrow container): the title wraps (`text-balance`); the `info` slot stays on the title's line.
+- Touch: the copy-link stays visible where the pointer cannot hover (`@media (hover: none)`).
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 10.6 KB gzip for `subheader` in `.size-limit.json` (it carries `CopyButton`).
+- Runtime budget: none: static.
+- Heavy parts: none.
 
 ## Examples
 
 - Default — an anchored heading with one action.
 - WithActions — the Billing payment-methods heading.
 - Sizes — every `size` value stacked.
+- WithInfo — a help button in the `info` slot opening a `HelpPanel` in a non-modal `Drawer`; justified because the slot's place, after the title and outside the h2, is the contract.
 
 ## Constraints — DO NOT
 
