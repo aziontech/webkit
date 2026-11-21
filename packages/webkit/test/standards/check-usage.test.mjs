@@ -15,6 +15,7 @@ import {
   parseClaudeResult,
   parseUsageArgs,
   pinMcpToInstalledPackage,
+  readUsageTasks,
   resolveTarget
 } from '../../scripts/check-usage.mjs'
 
@@ -167,4 +168,41 @@ test('the CLI dry run resolves the target without installing or calling claude',
   const bad = spawnSync(process.execPath, [SCRIPT, 'button'], { encoding: 'utf8' })
   assert.equal(bad.status, 2)
   assert.match(bad.stderr, /usage:/)
+})
+
+test('every fixed task names a real component and never tells the agent its name', () => {
+  const tasks = readUsageTasks()
+  assert.ok(tasks.length >= 5, `${tasks.length} tasks`)
+  const ids = new Set()
+  for (const task of tasks) {
+    assert.ok(!ids.has(task.id), `duplicate task ${task.id}`)
+    ids.add(task.id)
+    for (const subpath of [task.target, ...(task.also ?? [])]) {
+      assert.equal(resolveTarget(subpath).kind, 'component', `${task.id}: ${subpath}`)
+    }
+    const pascal = task.target
+      .split('-')
+      .map((word) => word[0].toUpperCase() + word.slice(1))
+      .join('')
+    const prompt = task.prompt.toLowerCase()
+    assert.ok(!prompt.includes(pascal.toLowerCase()), `${task.id}: the prompt names ${pascal}`)
+    assert.ok(!prompt.includes(task.target), `${task.id}: the prompt names ${task.target}`)
+    assert.ok(!prompt.includes('webkit'), `${task.id}: the prompt names WebKit`)
+  }
+})
+
+test('--task reads the target, the prompt and the other expected imports of a fixed task', () => {
+  const opts = parseUsageArgs(['--task', 'token-expiry'])
+  assert.equal(opts.target, 'date-picker')
+  assert.deepEqual(opts.also, ['field'])
+  assert.match(opts.prompt, /API token/)
+  assert.throws(() => parseUsageArgs(['--task', 'nope']), /unknown task/)
+  const scan = { files: ['src/App.vue'], imports: new Map([['date-picker', ['src/App.vue']]]) }
+  const verdict = evaluateUsage({
+    target: resolveTarget('date-picker'),
+    scan,
+    doctorExitCode: 0,
+    also: ['field']
+  })
+  assert.equal(verdict.pass, false)
 })
