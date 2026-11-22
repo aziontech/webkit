@@ -9,7 +9,8 @@ import {
   type Ref,
   ref,
   toValue,
-  watch
+  watch,
+  type WatchSource
 } from 'vue'
 
 import type { Direction } from '../../../../composables/use-direction'
@@ -95,13 +96,66 @@ function requestFrame(callback: () => void): () => void {
   return () => clearTimeout(id)
 }
 
-export function useNavigationMenuPositioner(
-  anchor: MaybeRefOrGetter<HTMLElement | null>,
-  floating: MaybeRefOrGetter<HTMLElement | null>,
-  arrow: MaybeRefOrGetter<HTMLElement | null>,
-  options: MaybeRefOrGetter<NavigationMenuPositionerOptions>,
-  targetSize?: MaybeRefOrGetter<Size | null>
-): UseNavigationMenuPositionerReturn {
+type ResolvedOptions = ReturnType<typeof resolveOptions>
+type PlacementResult = ReturnType<typeof computePlacement>
+type FixedFrame = ReturnType<typeof getFixedFrame>
+
+function resolveOptions(raw: NavigationMenuPositionerOptions) {
+  return {
+    side: isSide(raw.side) ? raw.side : 'bottom',
+    align: isAlign(raw.align) ? raw.align : 'center',
+    sideOffset: typeof raw.sideOffset === 'number' ? raw.sideOffset : 8,
+    alignOffset: typeof raw.alignOffset === 'number' ? raw.alignOffset : 0,
+    arrowPadding: typeof raw.arrowPadding === 'number' ? raw.arrowPadding : 8,
+    collisionPadding: normalizeCollisionPadding(raw.collisionPadding),
+    dir: raw.dir === 'rtl' ? ('rtl' as const) : ('ltr' as const)
+  }
+}
+
+function toPlacementState(result: PlacementResult, frame: FixedFrame): PlacementState {
+  return {
+    x: (result.left - frame.left) / frame.scaleX,
+    y: (result.top - frame.top) / frame.scaleY,
+    side: result.side,
+    physicalSide: result.physicalSide,
+    align: result.align,
+    width: result.width,
+    height: result.height,
+    maxWidth: result.maxWidth === null ? null : result.maxWidth / frame.scaleX,
+    maxHeight: result.maxHeight === null ? null : result.maxHeight / frame.scaleY
+  }
+}
+
+function computePopupOrigin(anchorRect: DOMRect, result: PlacementResult): string {
+  const physicalSide = result.physicalSide
+  const clamp = (value: number, max: number) => Math.min(Math.max(value, 0), Math.max(max, 0))
+  return physicalSide === 'top' || physicalSide === 'bottom'
+    ? `${clamp(anchorRect.left + anchorRect.width / 2 - result.left, result.width).toFixed(2)}px ${physicalSide === 'bottom' ? 'top' : 'bottom'}`
+    : `${physicalSide === 'right' ? 'left' : 'right'} ${clamp(anchorRect.top + anchorRect.height / 2 - result.top, result.height).toFixed(2)}px`
+}
+
+function computeArrowStyles(
+  anchorRect: DOMRect,
+  arrowEl: HTMLElement | null,
+  padding: number,
+  placement: PlacementState
+): CSSProperties {
+  const arrowSize = arrowEl ? arrowEl.offsetWidth || 8 : 8
+  const { x, y, physicalSide, width, height } = placement
+  if (physicalSide === 'top' || physicalSide === 'bottom') {
+    const offsetX = anchorRect.left + anchorRect.width / 2 - x - arrowSize / 2
+    return { left: `${Math.min(Math.max(offsetX, padding), width - arrowSize - padding)}px` }
+  }
+  const offsetY = anchorRect.top + anchorRect.height / 2 - y - arrowSize / 2
+  return { top: `${Math.min(Math.max(offsetY, padding), height - arrowSize - padding)}px` }
+}
+
+function createPlacement(
+  anchorEl: ComputedRef<HTMLElement | null>,
+  floatingEl: ComputedRef<HTMLElement | null>,
+  opts: ComputedRef<ResolvedOptions>,
+  readTargetSize: () => Size | null
+) {
   const state = ref<PlacementState>({
     x: 0,
     y: 0,
@@ -114,26 +168,7 @@ export function useNavigationMenuPositioner(
     maxHeight: null
   })
   const hasPlacement = ref(false)
-  const placed = ref(false)
   const popupOrigin = ref('top left')
-
-  const anchorEl = computed(() => toValue(anchor))
-  const floatingEl = computed(() => toValue(floating))
-
-  const opts = computed(() => {
-    const raw = toValue(options) ?? {}
-    return {
-      side: isSide(raw.side) ? raw.side : 'bottom',
-      align: isAlign(raw.align) ? raw.align : 'center',
-      sideOffset: typeof raw.sideOffset === 'number' ? raw.sideOffset : 8,
-      alignOffset: typeof raw.alignOffset === 'number' ? raw.alignOffset : 0,
-      arrowPadding: typeof raw.arrowPadding === 'number' ? raw.arrowPadding : 8,
-      collisionPadding: normalizeCollisionPadding(raw.collisionPadding),
-      dir: raw.dir === 'rtl' ? ('rtl' as const) : ('ltr' as const)
-    }
-  })
-
-  const readTargetSize = () => (targetSize ? toValue(targetSize) : null)
 
   const update = () => {
     const anchorElement = anchorEl.value
@@ -143,7 +178,6 @@ export function useNavigationMenuPositioner(
     if (!anchorElement || !anchorRect || !naturalSize) return
     const { side, align, sideOffset, alignOffset, collisionPadding, dir } = opts.value
     const viewport = { width: globalThis.innerWidth ?? 0, height: globalThis.innerHeight ?? 0 }
-
     const result = computePlacement({
       triggerRect: anchorRect,
       panelSize: { width: naturalSize.width, height: naturalSize.height },
@@ -156,35 +190,23 @@ export function useNavigationMenuPositioner(
       alignOffset,
       collisionPadding
     })
-    const physicalSide = result.physicalSide
-
-    const frame = getFixedFrame(floatingElement)
-    state.value = {
-      x: (result.left - frame.left) / frame.scaleX,
-      y: (result.top - frame.top) / frame.scaleY,
-      side: result.side,
-      physicalSide,
-      align: result.align,
-      width: result.width,
-      height: result.height,
-      maxWidth: result.maxWidth === null ? null : result.maxWidth / frame.scaleX,
-      maxHeight: result.maxHeight === null ? null : result.maxHeight / frame.scaleY
-    }
-
-    const clamp = (value: number, max: number) => Math.min(Math.max(value, 0), Math.max(max, 0))
-    popupOrigin.value =
-      physicalSide === 'top' || physicalSide === 'bottom'
-        ? `${clamp(anchorRect.left + anchorRect.width / 2 - result.left, result.width).toFixed(2)}px ${physicalSide === 'bottom' ? 'top' : 'bottom'}`
-        : `${physicalSide === 'right' ? 'left' : 'right'} ${clamp(anchorRect.top + anchorRect.height / 2 - result.top, result.height).toFixed(2)}px`
-
+    state.value = toPlacementState(result, getFixedFrame(floatingElement))
+    popupOrigin.value = computePopupOrigin(anchorRect, result)
     hasPlacement.value = true
   }
 
-  const resetPlacement = () => {
-    hasPlacement.value = false
-    placed.value = false
-  }
+  return { state, hasPlacement, popupOrigin, update }
+}
 
+function trackPlacementUpdates(
+  sources: [ComputedRef<HTMLElement | null>, ComputedRef<HTMLElement | null>],
+  watched: WatchSource<unknown>[],
+  hasPlacement: Ref<boolean>,
+  placed: Ref<boolean>,
+  update: () => void,
+  observeFloating: boolean
+) {
+  const [anchorEl, floatingEl] = sources
   let cancelUpdateFrame: (() => void) | null = null
   let cancelPlacedFrame: (() => void) | null = null
 
@@ -197,7 +219,7 @@ export function useNavigationMenuPositioner(
   }
 
   watch(
-    [anchorEl, floatingEl, opts, readTargetSize],
+    watched,
     () => {
       if (!hasPlacement.value) {
         update()
@@ -217,24 +239,50 @@ export function useNavigationMenuPositioner(
     })
   })
 
-  useEventListener(typeof window !== 'undefined' ? window : null, 'scroll', scheduleUpdate, {
-    passive: true,
-    capture: true
-  })
-  useEventListener(typeof window !== 'undefined' ? window : null, 'resize', scheduleUpdate, {
-    passive: true
-  })
-
-  if (!targetSize) {
-    useResizeObserver(floatingEl, scheduleUpdate)
-  }
-
+  const win = typeof window !== 'undefined' ? window : null
+  useEventListener(win, 'scroll', scheduleUpdate, { passive: true, capture: true })
+  useEventListener(win, 'resize', scheduleUpdate, { passive: true })
+  if (observeFloating) useResizeObserver(floatingEl, scheduleUpdate)
   useResizeObserver(anchorEl, scheduleUpdate)
 
   onScopeDispose(() => {
     cancelUpdateFrame?.()
     cancelPlacedFrame?.()
   })
+}
+
+export function useNavigationMenuPositioner(
+  anchor: MaybeRefOrGetter<HTMLElement | null>,
+  floating: MaybeRefOrGetter<HTMLElement | null>,
+  arrow: MaybeRefOrGetter<HTMLElement | null>,
+  options: MaybeRefOrGetter<NavigationMenuPositionerOptions>,
+  targetSize?: MaybeRefOrGetter<Size | null>
+): UseNavigationMenuPositionerReturn {
+  const placed = ref(false)
+  const anchorEl = computed(() => toValue(anchor))
+  const floatingEl = computed(() => toValue(floating))
+  const opts = computed(() => resolveOptions(toValue(options) ?? {}))
+  const readTargetSize = () => (targetSize ? toValue(targetSize) : null)
+  const { state, hasPlacement, popupOrigin, update } = createPlacement(
+    anchorEl,
+    floatingEl,
+    opts,
+    readTargetSize
+  )
+
+  const resetPlacement = () => {
+    hasPlacement.value = false
+    placed.value = false
+  }
+
+  trackPlacementUpdates(
+    [anchorEl, floatingEl],
+    [anchorEl, floatingEl, opts, readTargetSize],
+    hasPlacement,
+    placed,
+    update,
+    !targetSize
+  )
 
   const floatingStyles = computed<CSSProperties>(() => ({
     position: 'fixed',
@@ -245,34 +293,18 @@ export function useNavigationMenuPositioner(
     'min-width': 'max-content'
   }))
 
-  const resolvedSide = computed(() => state.value.side)
-  const resolvedAlign = computed(() => state.value.align)
-  const availableWidth = computed(() => state.value.maxWidth)
-  const availableHeight = computed(() => state.value.maxHeight)
-
   const arrowStyles = computed((): CSSProperties => {
     const anchorRect = readRect(anchorEl.value)
-    const arrowEl = toValue(arrow)
     if (!anchorRect || !hasPlacement.value) return {}
-
-    const arrowSize = arrowEl ? arrowEl.offsetWidth || 8 : 8
-    const padding = opts.value.arrowPadding
-    const { x, y, physicalSide, width, height } = state.value
-
-    if (physicalSide === 'top' || physicalSide === 'bottom') {
-      const offsetX = anchorRect.left + anchorRect.width / 2 - x - arrowSize / 2
-      return { left: `${Math.min(Math.max(offsetX, padding), width - arrowSize - padding)}px` }
-    }
-    const offsetY = anchorRect.top + anchorRect.height / 2 - y - arrowSize / 2
-    return { top: `${Math.min(Math.max(offsetY, padding), height - arrowSize - padding)}px` }
+    return computeArrowStyles(anchorRect, toValue(arrow), opts.value.arrowPadding, state.value)
   })
 
   return {
     floatingStyles,
-    resolvedSide,
-    resolvedAlign,
-    availableWidth,
-    availableHeight,
+    resolvedSide: computed(() => state.value.side),
+    resolvedAlign: computed(() => state.value.align),
+    availableWidth: computed(() => state.value.maxWidth),
+    availableHeight: computed(() => state.value.maxHeight),
     arrowStyles,
     placed: readonly(placed),
     popupOrigin: readonly(popupOrigin),

@@ -155,6 +155,69 @@ const route = (s: Box, t: Box, inset: number, radius: number): Route => {
   return drop(s, t, inset)
 }
 
+function nodeBox(
+  element: globalThis.HTMLElement,
+  frameBox: DOMRect,
+  rtl: boolean,
+  key: string
+): Box | null {
+  const node = element.querySelector(`[data-diagram-node="${key}"]`)
+  if (!node) return null
+  const inline = (x: number) => (rtl ? frameBox.width - x : x)
+  const r = node.getBoundingClientRect()
+  const start = inline(rtl ? r.right - frameBox.left : r.left - frameBox.left)
+  const end = inline(rtl ? r.left - frameBox.left : r.right - frameBox.left)
+  return {
+    left: start,
+    right: end,
+    top: r.top - frameBox.top,
+    bottom: r.bottom - frameBox.top,
+    middle: (r.top + r.bottom) / 2 - frameBox.top,
+    centre: (start + end) / 2,
+    tree: node.parentElement?.closest('[data-stack]')?.getAttribute('data-stack') === 'tree'
+  }
+}
+
+function layoutConnectors(element: globalThis.HTMLElement, edges: DiagramEdge[]) {
+  const frameBox = element.getBoundingClientRect()
+  const style = globalThis.getComputedStyle(element)
+  const rootSize =
+    globalThis.parseFloat(
+      globalThis.getComputedStyle(globalThis.document.documentElement).fontSize
+    ) || 16
+  const inset = toPx(style.getPropertyValue('--spacing-md'), rootSize)
+  const radius = toPx(style.getPropertyValue('--shape-card'), rootSize)
+  const rtl = style.direction === 'rtl'
+  const paths: DiagramPath[] = []
+  const labels: DiagramMarker[] = []
+  const ports = new Map<string, DiagramPort>()
+
+  for (const edge of edges) {
+    const source = nodeBox(element, frameBox, rtl, edge.from)
+    const target = nodeBox(element, frameBox, rtl, edge.to)
+    if (!source || !target) continue
+    const key = `${edge.from}-${edge.to}`
+    const active = Boolean(edge.active)
+    const logical = route(source, target, inset, radius)
+    const routed = rtl ? mirrorRoute(logical, frameBox.width) : logical
+    paths.push({ key, d: routed.d, active })
+    if (edge.label) labels.push({ key, ...routed.label, active, label: edge.label })
+    for (const end of routed.ends) {
+      const portKey = `${Math.round(end.x)}:${Math.round(end.y)}`
+      const known = ports.get(portKey)
+      ports.set(portKey, {
+        key: portKey,
+        ...end,
+        label: '',
+        active: active || Boolean(known?.active)
+      })
+    }
+  }
+
+  paths.sort((a, b) => Number(a.active) - Number(b.active))
+  return { frameBox, paths, labels, ports: [...ports.values()] }
+}
+
 export function useDiagramConnectors(
   canvas: MaybeRefOrGetter<globalThis.HTMLElement | null>,
   edges: MaybeRefOrGetter<DiagramEdge[]>
@@ -174,67 +237,12 @@ export function useDiagramConnectors(
     frame = 0
     const element = toValue(canvas)
     if (!element) return
-    const frameBox = element.getBoundingClientRect()
-    const style = globalThis.getComputedStyle(element)
-    const rootSize =
-      globalThis.parseFloat(
-        globalThis.getComputedStyle(globalThis.document.documentElement).fontSize
-      ) || 16
-    const inset = toPx(style.getPropertyValue('--spacing-md'), rootSize)
-    const radius = toPx(style.getPropertyValue('--shape-card'), rootSize)
-    const rtl = style.direction === 'rtl'
-    const span = frameBox.width
-    const inline = (x: number) => (rtl ? span - x : x)
-
-    const box = (key: string): Box | null => {
-      const node = element.querySelector(`[data-diagram-node="${key}"]`)
-      if (!node) return null
-      const r = node.getBoundingClientRect()
-      const start = inline(rtl ? r.right - frameBox.left : r.left - frameBox.left)
-      const end = inline(rtl ? r.left - frameBox.left : r.right - frameBox.left)
-      return {
-        left: start,
-        right: end,
-        top: r.top - frameBox.top,
-        bottom: r.bottom - frameBox.top,
-        middle: (r.top + r.bottom) / 2 - frameBox.top,
-        centre: (start + end) / 2,
-        tree: node.parentElement?.closest('[data-stack]')?.getAttribute('data-stack') === 'tree'
-      }
-    }
-
-    const nextPaths: DiagramPath[] = []
-    const nextLabels: DiagramMarker[] = []
-    const nextPorts = new Map<string, DiagramPort>()
-
-    for (const edge of toValue(edges)) {
-      const source = box(edge.from)
-      const target = box(edge.to)
-      if (!source || !target) continue
-      const key = `${edge.from}-${edge.to}`
-      const active = Boolean(edge.active)
-      const logical = route(source, target, inset, radius)
-      const routed = rtl ? mirrorRoute(logical, span) : logical
-      nextPaths.push({ key, d: routed.d, active })
-      if (edge.label) nextLabels.push({ key, ...routed.label, active, label: edge.label })
-      for (const end of routed.ends) {
-        const portKey = `${Math.round(end.x)}:${Math.round(end.y)}`
-        const known = nextPorts.get(portKey)
-        nextPorts.set(portKey, {
-          key: portKey,
-          ...end,
-          label: '',
-          active: active || Boolean(known?.active)
-        })
-      }
-    }
-
-    nextPaths.sort((a, b) => Number(a.active) - Number(b.active))
-    width.value = frameBox.width
-    height.value = frameBox.height
-    paths.value = nextPaths
-    labels.value = nextLabels
-    ports.value = [...nextPorts.values()]
+    const layout = layoutConnectors(element, toValue(edges))
+    width.value = layout.frameBox.width
+    height.value = layout.frameBox.height
+    paths.value = layout.paths
+    labels.value = layout.labels
+    ports.value = layout.ports
     ready.value = true
   }
 

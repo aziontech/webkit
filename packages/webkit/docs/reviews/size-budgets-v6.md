@@ -1119,3 +1119,18 @@ Budget-raise: property-filter 34.55 KB → 36.4 KB (measured 36.36 KB): CODE_QUA
 Budget-raise: tree 10.35 KB → 10.9 KB (measured 10.85 KB): CODE_QUALITY 3.1 split of the 600-line root into five composables and lib modules; the option and return keys between them are not mangled by the minifier.
 Budget-raise: data-grid 11.55 KB → 13.25 KB (measured 13.22 KB): CODE_QUALITY 3.1 split of the 844-line root into six composables, two private parts and lib modules; the option and return keys between them and the two part components are not mangled by the minifier.
 Budget-raise: data-table 58.05 KB → 58.5 KB (measured 58.46 KB): CODE_QUALITY 3.1 first split of the 2,156-line root (filter matchers as a table, row heights and row focus composables, lib helpers); the host and return keys between them are not mangled by the minifier.
+Budget-raise: navigation-menu 26.1 KB → 26.55 KB (measured 26.52 KB): split of the root, positioner and highlight composables into sub-60-line functions (CODE_QUALITY 3.1); esbuild cannot mangle the context keys the split functions share.
+Budget-raise: navigation-menu-root 15.55 KB → 15.8 KB (measured 15.76 KB): same split: the 290-line root composable becomes trigger registry, element slots, value state, popup state, timers and a keyboard composable that share their state through object keys.
+Budget-raise: navigation-menu-viewport 18.35 KB → 18.4 KB (measured 18.38 KB): carries the navigation menu root composable split.
+Budget-raise: sidebar-menu 21.95 KB → 22 KB (measured 21.98 KB): drill levels moved to use-sidebar-menu-levels to bring the script under 200 lines; the levels object is spread into the context.
+Budget-raise: sidebar-menu-root 21.5 KB → 21.6 KB (measured 21.55 KB): same levels composable split as sidebar-menu.
+Budget-raise: console-layout-root 81.6 KB → 81.7 KB (measured 81.66 KB): carries the sidebar menu and navigation menu splits.
+Budget-raise: console-layout 82.95 KB → 83 KB (measured 82.97 KB): carries the sidebar menu and navigation menu splits.
+Budget-raise: doc-layout 72.15 KB → 72.4 KB (measured 72.36 KB): carries the navigation menu, sidebar menu and command splits and the outline composable.
+Budget-raise: site-header-section 58.85 KB → 59.35 KB (measured 59.32 KB): carries the navigation menu composable split.
+Budget-raise: job-posting-section 58.6 KB → 58.65 KB (measured 58.61 KB): form state moved to use-job-posting-form and the rail to a part to bring the section under 400 lines.
+Budget-raise: diagram 11.65 KB → 11.7 KB (measured 11.65 KB): connector layout moved out of the measure callback into module functions (function limit 60).
+Budget-raise: button-group 16.7 KB → 16.75 KB (measured 16.70 KB): carries the popover and trigger-host keydown and attribute splits (complexity 12).
+Budget-raise: flow-diagram-bind 16 KB → 16.05 KB (measured 16.01 KB): carries the popover keydown split (complexity 12).
+Budget-raise: doc-markdown 40 KB → 40.2 KB (measured 40.15 KB): the renderer and the block parser move to lib/ (script 200, module 300, function 60 lines); the tag registry stays per instance so a resolved async tag never changes the hydration order, and the render functions read it through a context object esbuild cannot shorten.
+Budget-raise: command-root 21.55 KB → 21.6 KB (measured 21.57 KB): the base was already over at 21.56 KB; pages and roving move to use-command-pages and use-command-active, and the active value is returned read-only with a setter (composables rule).

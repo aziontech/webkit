@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "81.65 KB",
+    "limit": "81.7 KB",
     "entryOnly": true
   },
   {
@@ -24,12 +24,12 @@
   {
     "name": "doc-layout",
     "path": "src/components/docs/doc-layout/doc-layout.vue",
-    "limit": "72.3 KB"
+    "limit": "72.4 KB"
   },
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "40 KB",
+    "limit": "40.2 KB",
     "entryOnly": true
   },
   {
@@ -535,7 +535,7 @@
   {
     "name": "site-header-section",
     "path": "src/components/section/site-header-section/site-header-section.vue",
-    "limit": "58.9 KB"
+    "limit": "59.35 KB"
   },
   {
     "name": "competitor-comparison-section",
@@ -2254,12 +2254,12 @@
   {
     "name": "sidebar-menu",
     "path": "src/components/navigation/sidebar-menu/index.ts",
-    "limit": "21.95 KB"
+    "limit": "22 KB"
   },
   {
     "name": "sidebar-menu-root",
     "path": "src/components/navigation/sidebar-menu/sidebar-menu.vue",
-    "limit": "21.55 KB"
+    "limit": "21.6 KB"
   },
   {
     "name": "sidebar-menu-group",
@@ -2319,12 +2319,12 @@
   {
     "name": "navigation-menu",
     "path": "src/components/navigation/navigation-menu/index.ts",
-    "limit": "26.15 KB"
+    "limit": "26.55 KB"
   },
   {
     "name": "navigation-menu-root",
     "path": "src/components/navigation/navigation-menu/navigation-menu.vue",
-    "limit": "15.55 KB"
+    "limit": "15.8 KB"
   },
   {
     "name": "navigation-menu-list",

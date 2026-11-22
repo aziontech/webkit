@@ -132,51 +132,53 @@
     return after ?? (scope === globalThis.document?.body ? null : (all[0] ?? null))
   }
 
-  function onDocumentKeydown(event: globalThis.KeyboardEvent) {
-    if (!isOpenRef.value || event.defaultPrevented) return
-
-    if (event.key === 'Escape') {
-      if (!isTop.value || !props.dismissible) return
+  function tabOutOfPanel(
+    event: globalThis.KeyboardEvent,
+    active: globalThis.HTMLElement,
+    items: globalThis.HTMLElement[]
+  ) {
+    if (event.shiftKey && (active === items[0] || items.length === 0)) {
       event.preventDefault()
-      setOpen(false)
       focusTrigger()
       return
     }
 
-    if (event.key === 'Tab') {
-      if (!isFocusTop.value) return
-      const trigger = triggerEl.value
-      const panel = panelEl.value
-      if (!trigger || !panel) return
+    if (!event.shiftKey && (active === items[items.length - 1] || items.length === 0)) {
+      event.preventDefault()
+      const next = tabbableAfterTrigger()
+      setOpen(false)
+      if (next) next.focus({ preventScroll: true })
+      else focusTrigger()
+    }
+  }
 
-      const focusables = getFocusable()
-      const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
-      const first = focusables[0]
-      const last = focusables[focusables.length - 1]
-      const inPanel = Boolean(active && panel.contains(active))
-      const onTrigger = Boolean(active && trigger.contains(active))
+  function onTabKey(event: globalThis.KeyboardEvent) {
+    if (!isFocusTop.value) return
+    const trigger = triggerEl.value
+    const panel = panelEl.value
+    if (!trigger || !panel) return
 
-      if (onTrigger && !event.shiftKey && first) {
-        event.preventDefault()
-        first.focus({ preventScroll: true })
-        return
-      }
+    const focusables = getFocusable()
+    const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
+    const first = focusables[0]
 
-      if (!inPanel) return
+    if (active && trigger.contains(active) && !event.shiftKey && first) {
+      event.preventDefault()
+      first.focus({ preventScroll: true })
+      return
+    }
 
-      if (event.shiftKey && (active === first || focusables.length === 0)) {
-        event.preventDefault()
-        focusTrigger()
-        return
-      }
+    if (active && panel.contains(active)) tabOutOfPanel(event, active, focusables)
+  }
 
-      if (!event.shiftKey && (active === last || focusables.length === 0)) {
-        event.preventDefault()
-        const next = tabbableAfterTrigger()
-        setOpen(false)
-        if (next) next.focus({ preventScroll: true })
-        else focusTrigger()
-      }
+  function onDocumentKeydown(event: globalThis.KeyboardEvent) {
+    if (!isOpenRef.value || event.defaultPrevented) return
+
+    if (event.key === 'Tab') onTabKey(event)
+    else if (event.key === 'Escape' && isTop.value && props.dismissible) {
+      event.preventDefault()
+      setOpen(false)
+      focusTrigger()
     }
   }
 
