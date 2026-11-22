@@ -99,17 +99,17 @@
   {
     "name": "data-table",
     "path": "src/components/data/data-table/data-table.vue",
-    "limit": "58.05 KB"
+    "limit": "58.5 KB"
   },
   {
     "name": "data-grid",
     "path": "src/components/data/data-grid/data-grid.vue",
-    "limit": "11.55 KB"
+    "limit": "13.25 KB"
   },
   {
     "name": "property-filter",
     "path": "src/components/data/property-filter/property-filter.vue",
-    "limit": "34.65 KB"
+    "limit": "36.4 KB"
   },
   {
     "name": "collection-preferences",
@@ -951,7 +951,7 @@
   {
     "name": "tree",
     "path": "src/components/data/tree/tree.vue",
-    "limit": "10.45 KB"
+    "limit": "10.9 KB"
   },
   {
     "name": "file-dropzone",

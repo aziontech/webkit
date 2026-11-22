@@ -12,7 +12,6 @@
   import { useElementListener } from '../../../composables/use-element-listener'
   import Button from '../../action/button/button.vue'
   import IconButton from '../../action/icon-button/icon-button.vue'
-  import Avatar from '../../content/avatar/avatar.vue'
   import Badge from '../../content/badge/badge.vue'
   import type { DateRangeValue } from '../../input/date-range-picker/date-range'
   import Input from '../../input/input/input.vue'
@@ -23,20 +22,14 @@
   import { useAnimatedHeight } from './composables/use-animated-height'
   import { useFilterMenuChannel } from './composables/use-filter-menu-channel'
   import { useFilterMenuLabels } from './composables/use-filter-menu-labels'
-  import { appliedFields, clearField, isApplied, kindOf, toggleValue, valuesOf } from './summarize'
-  import type {
-    FilterMenuField,
-    FilterMenuModel,
-    FilterMenuOption,
-    FilterMenuRange,
-    FilterMenuSize,
-    FilterMenuValue
-  } from './types'
+  import { hasFocusIn, levelRows, moveRowFocus, returnFocus } from './lib/panel-focus'
+  import { withRange } from './lib/range'
+  import { ROW_CLASS } from './lib/row-class'
+  import FilterMenuRows from './parts/filter-menu-rows.vue'
+  import { appliedFields, clearField, isApplied, kindOf, toggleValue } from './summarize'
+  import type { FilterMenuField, FilterMenuModel, FilterMenuOption, FilterMenuSize } from './types'
 
-  defineOptions({
-    name: 'FilterMenu',
-    inheritAttrs: false
-  })
+  defineOptions({ name: 'FilterMenu', inheritAttrs: false })
 
   export interface FilterMenuProps {
     /** Fields the menu lists, in order, each with its type and values. */
@@ -107,32 +100,11 @@
   const customField = computed<FilterMenuField | undefined>(() =>
     customId.value ? activeField.value : undefined
   )
-  const activeKind = computed(() => (activeField.value ? kindOf(activeField.value) : 'multiple'))
 
   const levelKey = computed<string>(() => {
     if (customId.value) return `custom:${customId.value}`
     return activeId.value ? `values:${activeId.value}` : 'fields'
   })
-
-  const term = computed<string>(() => query.value.trim().toLocaleLowerCase(locale.value))
-  const matches = (label: string): boolean =>
-    !term.value || label.toLocaleLowerCase(locale.value).includes(term.value)
-  const fieldRows = computed<FilterMenuField[]>(() =>
-    props.fields.filter((field) => matches(field.label))
-  )
-  const MAX_OPTION_ROWS = 100
-  const matchingOptions = computed<FilterMenuOption[]>(() =>
-    activeField.value ? optionsOf(activeField.value).filter((option) => matches(option.label)) : []
-  )
-  const optionRows = computed<FilterMenuOption[]>(() =>
-    matchingOptions.value.slice(0, MAX_OPTION_ROWS)
-  )
-  const hiddenOptions = computed<number>(
-    () => matchingOptions.value.length - optionRows.value.length
-  )
-  const empty = computed<boolean>(() =>
-    activeField.value ? optionRows.value.length === 0 : fieldRows.value.length === 0
-  )
 
   const searchPlaceholder = computed<string>(() =>
     activeField.value
@@ -146,9 +118,6 @@
       ? t('filterMenu.searchValuesLabel', { field: activeField.value.label })
       : t('filterMenu.searchFieldsLabel')
   )
-
-  const isPicked = (value: FilterMenuValue): boolean =>
-    activeField.value ? valuesOf(model.value, activeField.value).includes(value) : false
 
   const fromEnd = computed<boolean>(() => (direction.value === 'forward') !== (dir.value === 'rtl'))
   const enterFrom = computed<string>(() =>
@@ -207,15 +176,7 @@
   const commitCustom = (value: unknown): void => {
     const field = customField.value
     if (!field) return
-    const picked = value as DateRangeValue | null
-    const range: FilterMenuRange | null =
-      picked?.type === 'absolute'
-        ? { start: new Date(picked.start), end: new Date(picked.end) }
-        : null
-    const next = { ...model.value }
-    if (range?.start || range?.end) next[field.id] = [{ start: range.start, end: range.end }]
-    else delete next[field.id]
-    model.value = next
+    model.value = withRange(model.value, field, value as DateRangeValue | null)
     open.value = false
   }
 
@@ -240,10 +201,7 @@
 
   watch(open, (isOpen) => {
     if (isOpen) return
-    const active = globalThis.document?.activeElement ?? null
-    const hadFocus = Boolean(
-      active && (panelEl.value?.contains(active) || triggerEl()?.contains(active))
-    )
+    const hadFocus = hasFocusIn(panelEl.value, triggerEl())
     const origin = returnFocusEl.value
     activeId.value = null
     customId.value = null
@@ -252,50 +210,21 @@
     query.value = ''
     direction.value = 'forward'
     returnFocusEl.value = null
-    if (!hadFocus) return
-    void nextTick(() => {
-      const trigger = triggerEl()
-      const target = origin?.isConnected
-        ? origin
-        : (trigger?.querySelector<HTMLElement>('button') ?? trigger)
-      target?.focus({ preventScroll: true })
-    })
+    if (hadFocus) void nextTick(() => returnFocus(origin, triggerEl()))
   })
 
   const setRegion = (el: Element | ComponentPublicInstance | null): void => {
     regionEl.value = el instanceof HTMLElement ? el : null
   }
 
-  const levelRows = (): HTMLElement[] => [
-    ...(panelEl.value?.querySelectorAll<HTMLElement>(
-      `[data-level="${levelKey.value}"] [data-filter-row]`
-    ) ?? [])
-  ]
-
-  const move = (event: KeyboardEvent, step: number): void => {
-    const items = levelRows()
-    if (!items.length) return
-    event.preventDefault()
-    const index = items.indexOf(event.target as HTMLElement)
-    items[(index + step + items.length) % items.length]?.focus()
-  }
-
-  const onPanelKeydown = (event: KeyboardEvent): void => {
-    if (event.key === 'ArrowDown') move(event, 1)
-    else if (event.key === 'ArrowUp') move(event, -1)
-  }
-
-  useElementListener(panelEl, 'keydown', onPanelKeydown)
+  useElementListener(panelEl, 'keydown', (event: KeyboardEvent) =>
+    moveRowFocus(event, () => levelRows(panelEl.value, levelKey.value))
+  )
 
   watch(levelKey, async () => {
     await nextTick()
-    levelRows()[0]?.focus()
+    levelRows(panelEl.value, levelKey.value)[0]?.focus()
   })
-
-  const ROW_CLASS =
-    'flex w-full min-h-8 pointer-coarse:min-h-11 items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm ' +
-    'text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance ' +
-    'hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 
   defineExpose({
     /** Opens the menu, at a field's values when fieldId names one, returning focus to returnFocus on close. */
@@ -424,99 +353,19 @@
                   </Input>
                 </div>
 
-                <div
-                  class="flex max-h-(--container-3xs) flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain p-(--spacing-2xs)"
-                >
-                  <template v-if="!activeField">
-                    <button
-                      v-for="field in fieldRows"
-                      :key="field.id"
-                      type="button"
-                      data-filter-row
-                      :data-testid="`${testId}__field-${field.id}`"
-                      :data-applied="isApplied(model, field) || null"
-                      :class="ROW_CLASS"
-                      @click="enter(field.id)"
-                    >
-                      <bdi class="grow truncate">{{ field.label }}</bdi>
-                      <bdi
-                        v-if="isApplied(model, field)"
-                        class="min-w-0 truncate text-(--text-muted)"
-                      >
-                        {{ summaryOf(field) }}
-                      </bdi>
-                      <i
-                        class="az az-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  </template>
-
-                  <div
-                    v-else
-                    :role="activeKind === 'multiple' ? 'group' : 'radiogroup'"
-                    :aria-label="activeField.label"
-                    class="flex flex-col gap-(--spacing-2xs)"
-                  >
-                    <button
-                      v-for="option in optionRows"
-                      :key="String(option.value)"
-                      type="button"
-                      data-filter-row
-                      :data-testid="`${testId}__option-${option.value}`"
-                      :role="activeKind === 'multiple' ? 'checkbox' : 'radio'"
-                      :aria-checked="isPicked(option.value)"
-                      :class="ROW_CLASS"
-                      @click="pick(activeField, option)"
-                    >
-                      <Avatar
-                        v-if="'avatar' in option"
-                        :src="option.avatar || undefined"
-                        :alt="option.label"
-                        :label="option.label"
-                        size="small"
-                        variant="square"
-                        class="shrink-0"
-                      />
-                      <bdi class="grow truncate">{{ option.label }}</bdi>
-                      <i
-                        class="az az-check shrink-0 text-(--text-default) data-[selected=false]:invisible"
-                        :data-selected="isPicked(option.value)"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  </div>
-
-                  <p
-                    v-if="activeField && hiddenOptions > 0"
-                    :data-testid="`${testId}__more-values`"
-                    class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
-                  >
-                    {{ t('filterMenu.moreValues', { count: hiddenOptions }) }}
-                  </p>
-
-                  <p
-                    v-if="empty"
-                    class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
-                  >
-                    {{ t('filterMenu.noMatch', { query }) }}
-                  </p>
-
-                  <button
-                    v-if="activeField && activeKind === 'date'"
-                    type="button"
-                    data-filter-row
-                    :data-testid="`${testId}__custom`"
-                    :class="ROW_CLASS"
-                    @click="enterCustom(activeField)"
-                  >
-                    <span class="grow truncate">{{ t('filterMenu.customRange') }}</span>
-                    <i
-                      class="az az-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
-                      aria-hidden="true"
-                    />
-                  </button>
-                </div>
+                <FilterMenuRows
+                  :fields="fields"
+                  :active-field="activeField"
+                  :query="query"
+                  :applied="model"
+                  :locale="locale"
+                  :options-of="optionsOf"
+                  :summary-of="summaryOf"
+                  :test-id="testId"
+                  @enter="(_event, fieldId) => enter(fieldId)"
+                  @pick="(_event, option) => activeField && pick(activeField, option)"
+                  @custom="activeField && enterCustom(activeField)"
+                />
 
                 <div
                   v-if="activeField && isApplied(model, activeField)"
