@@ -36,7 +36,6 @@
     watch
   } from 'vue'
 
-  import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { scrollParent } from '../../../composables/use-lazy-chunks'
   import { useScrollEdges } from '../../../composables/use-scroll-edges'
   import { useTranslate } from '../../../composables/use-translate'
@@ -71,6 +70,16 @@
   import TableHeadCell from '../table/table-head-cell/table-head-cell.vue'
   import TableHeader from '../table/table-header/table-header.vue'
   import TableRow from '../table/table-row/table-row.vue'
+  import { useDataTableRowFocus } from './composables/use-data-table-row-focus'
+  import { useDataTableRowHeights } from './composables/use-data-table-row-heights'
+  import { matchesApplied } from './lib/applied-filter'
+  import {
+    EXPAND_TOGGLE_CLASS,
+    FADE_END_CLASS,
+    FADE_START_CLASS,
+    ROOT_CLASS
+  } from './lib/data-table-classes'
+  import { indexAt } from './lib/row-offsets'
 
   type RowRecord = Record<string, unknown>
 
@@ -356,83 +365,6 @@
     () => filters.value ?? internalFilters.value
   )
   const filterFields = computed<TableFilterField[]>(() => props.filterFields)
-
-  const timeOf = (raw: unknown): number | null => {
-    if (raw instanceof Date) return raw.getTime()
-    if (typeof raw === 'number') return raw
-    if (typeof raw !== 'string' || raw === '') return null
-    const time = Date.parse(raw)
-    return Number.isNaN(time) ? null : time
-  }
-  const PERIOD_MS: Record<string, number> = {
-    '24h': 86_400_000,
-    '7d': 604_800_000,
-    '30d': 2_592_000_000
-  }
-  const periodStart = (period: string): number | null => {
-    if (period === '3m') {
-      const date = new Date()
-      date.setMonth(date.getMonth() - 3)
-      return date.getTime()
-    }
-    const span = PERIOD_MS[period]
-    return span === undefined ? null : Date.now() - span
-  }
-
-  const matchesApplied = (
-    raw: unknown,
-    operator: TableFilterOperator,
-    value: TableFilterValue
-  ): boolean => {
-    const text = (input: unknown): string => String(input ?? '').toLowerCase()
-    const list = Array.isArray(value) ? value.map(String) : []
-    switch (operator) {
-      case 'eq':
-        return raw === value
-      case 'neq':
-        return raw !== value
-      case 'contains':
-        return text(raw).includes(text(value))
-      case 'not-contains':
-        return !text(raw).includes(text(value))
-      case 'starts-with':
-        return text(raw).startsWith(text(value))
-      case 'ends-with':
-        return text(raw).endsWith(text(value))
-      case 'gt':
-        return Number(raw) > Number(value)
-      case 'gte':
-        return Number(raw) >= Number(value)
-      case 'lt':
-        return Number(raw) < Number(value)
-      case 'lte':
-        return Number(raw) <= Number(value)
-      case 'in':
-        return list.includes(String(raw))
-      case 'not-in':
-        return !list.includes(String(raw))
-      case 'is-empty':
-        return raw === null || raw === undefined || raw === ''
-      case 'is-not-empty':
-        return !(raw === null || raw === undefined || raw === '')
-      case 'within': {
-        const start = periodStart(String(value))
-        const time = timeOf(raw)
-        return start === null || (time !== null && time >= start)
-      }
-      case 'between': {
-        const [from, to] = Array.isArray(value) ? value : []
-        const time = timeOf(raw)
-        if (time === null) return false
-        return (
-          (from === undefined || from === '' || time >= Number(from)) &&
-          (to === undefined || to === '' || time <= Number(to))
-        )
-      }
-      default:
-        return true
-    }
-  }
 
   const appliedFilterFn: FilterFn<RowRecord> = (row, columnId, filterValue) => {
     const { operator, value } = filterValue as {
@@ -995,31 +927,6 @@
       lazyLimit.value < rowTotal.value
   )
 
-  const rowHeights = new Map<string, number>()
-  const heightsVersion = ref<number>(0)
-  const measuredEstimate = ref<number>(0)
-  const rowHeight = computed<number>(
-    () => measuredEstimate.value || Math.max(1, props.estimateRowHeight)
-  )
-  const rowOffsets = computed<Float64Array>(() => {
-    void heightsVersion.value
-    const total = rowTotal.value
-    const estimate = rowHeight.value
-    const offsets = new Float64Array(total + 1)
-    for (let i = 0; i < total; i++)
-      offsets[i + 1] = offsets[i] + (rowHeights.get(rowIdAt(i)) ?? estimate)
-    return offsets
-  })
-  const indexAt = (offsets: Float64Array, y: number): number => {
-    let lo = 0
-    let hi = offsets.length - 2
-    while (lo < hi) {
-      const mid = (lo + hi + 1) >> 1
-      if (offsets[mid] <= y) lo = mid
-      else hi = mid - 1
-    }
-    return Math.max(0, lo)
-  }
   const windowStart = computed<number>(() => {
     if (!virtualActive.value) return 0
     const first = Math.max(0, indexAt(rowOffsets.value, scrollTop.value) - VIRTUAL_OVERSCAN)
@@ -1074,68 +981,15 @@
           : rows.value.map((row, index) => [row.id, index])
       )
   )
-  const trackedRows = new Map<string, HTMLElement>()
-  const trackedIds = new WeakMap<Element, string>()
-  let rowObserver: ResizeObserver | null = null
-  let heightsFrame = 0
-  const onRowsResized = (entries: ResizeObserverEntry[]): void => {
-    const el = viewportElement()
-    const anchor = el ? indexAt(rowOffsets.value, el.scrollTop) : 0
-    const estimate = rowHeight.value
-    let shift = 0
-    let changed = false
-    let firstSum = 0
-    let firstCount = 0
-    for (const entry of entries) {
-      const target = entry.target as HTMLElement
-      const id = trackedIds.get(target)
-      const height = target.offsetHeight
-      if (id === undefined || height <= 0) continue
-      const previous = rowHeights.get(id)
-      if (previous !== undefined && Math.abs(previous - height) < 0.5) continue
-      const index = rowIndexById.value.get(id)
-      if (index !== undefined && index < anchor) shift += height - (previous ?? estimate)
-      rowHeights.set(id, height)
-      firstSum += height
-      firstCount += 1
-      changed = true
-    }
-    if (!changed) return
-    const estimateNext = measuredEstimate.value || (firstCount ? firstSum / firstCount : 0)
-    if (!measuredEstimate.value) shift = 0
-    if (el && shift) el.scrollTop += shift
-    globalThis.cancelAnimationFrame(heightsFrame)
-    heightsFrame = globalThis.requestAnimationFrame(() => {
-      measuredEstimate.value = estimateNext
-      heightsVersion.value += 1
-      if (el) scrollTop.value = el.scrollTop
-    })
-  }
-  const trackRow = (instance: unknown, id: string): void => {
-    const el = (instance as ComponentPublicInstance | null)?.$el as HTMLElement | undefined
-    const previous = trackedRows.get(id)
-    if (previous && previous !== el) {
-      rowObserver?.unobserve(previous)
-      trackedRows.delete(id)
-    }
-    if (!el || !virtualActive.value || previous === el) return
-    if (!rowObserver) {
-      if (typeof ResizeObserver === 'undefined') return
-      rowObserver = new ResizeObserver(onRowsResized)
-    }
-    trackedRows.set(id, el)
-    trackedIds.set(el, id)
-    rowObserver.observe(el)
-  }
-  const resetRowHeights = (): void => {
-    rowHeights.clear()
-    measuredEstimate.value = 0
-    heightsVersion.value += 1
-    for (const el of trackedRows.values()) {
-      rowObserver?.unobserve(el)
-      rowObserver?.observe(el)
-    }
-  }
+  const { rowHeight, rowOffsets, trackRow, resetRowHeights } = useDataTableRowHeights(
+    () => props.estimateRowHeight,
+    rowTotal,
+    rowIdAt,
+    (id) => rowIndexById.value.get(id),
+    viewportElement,
+    virtualActive,
+    scrollTop
+  )
   watch(
     () => [props.density, props.wrapLines, visibleColumnKey.value, resizeWidths.value],
     resetRowHeights
@@ -1262,8 +1116,6 @@
   onBeforeUnmount(() => {
     moreObserver?.disconnect()
     lazyObserver?.disconnect()
-    rowObserver?.disconnect()
-    globalThis.cancelAnimationFrame(heightsFrame)
   })
 
   const isStackedField = (column: ColumnLike): boolean => {
@@ -1583,175 +1435,32 @@
   const rowFocusActive = computed<boolean>(
     () => treeActive.value || hasListener('onRowClick') || hasListener('onRowRemove')
   )
-  const treeFocusId = ref<string | null>(null)
-  const treeTabStop = computed<string | undefined>(() =>
-    rowFocusActive.value
-      ? treeFocusId.value && rowIndexById.value.has(treeFocusId.value)
-        ? treeFocusId.value
-        : rows.value[0]?.id
-      : undefined
-  )
-  const treePlacement = computed<Map<string, { setsize: number; posinset: number }>>(() => {
-    const placement = new Map<string, { setsize: number; posinset: number }>()
-    if (!treeActive.value) return placement
-    const groups = new Map<string, string[]>()
-    for (const row of rows.value) {
-      const key = row.parentId ?? ''
-      const group = groups.get(key) ?? []
-      group.push(row.id)
-      groups.set(key, group)
-    }
-    for (const group of groups.values())
-      group.forEach((id, index) =>
-        placement.set(id, { setsize: group.length, posinset: index + 1 })
-      )
-    return placement
-  })
-  const treeRowEl = (id: string): HTMLElement | undefined =>
-    Array.from(rootEl.value?.querySelectorAll<HTMLElement>('[data-focus-row]') ?? []).find(
-      (el) => el.getAttribute('data-focus-row') === id
-    )
-  const focusTreeRow = async (id: string): Promise<void> => {
-    treeFocusId.value = id
-    await nextTick()
-    let el = treeRowEl(id)
-    const viewport = viewportElement()
-    const index = rowIndexById.value.get(id)
-    if (!el && virtualActive.value && viewport && index !== undefined) {
+  const rowFocus = useDataTableRowFocus({
+    active: rowFocusActive,
+    tree: treeActive,
+    rows,
+    index: rowIndexById,
+    root: () => rootEl.value,
+    scrollTo: (index) => {
+      const viewport = viewportElement()
+      if (!virtualActive.value || !viewport) return false
       viewport.scrollTop = rowOffsets.value[index] ?? 0
       scrollTop.value = viewport.scrollTop
-      await nextTick()
-      el = treeRowEl(id)
-    }
-    el?.focus()
-  }
-  const toggleTreeRow = (row: Row<RowRecord>, open?: boolean): void => {
-    const active = globalThis.document?.activeElement
-    const holder = active?.closest?.('[data-tree-row]')?.getAttribute('data-tree-row')
-    const closing = open === false || (open === undefined && row.getIsExpanded())
-    const inside =
-      closing && holder !== undefined && holder !== row.id
-        ? row.getLeafRows().some((leaf) => leaf.id === holder)
-        : false
-    row.toggleExpanded(open)
-    if (inside) void focusTreeRow(row.id)
-  }
-  let focusedIndex = -1
-  const onTreeFocusin = (row: Row<RowRecord>): void => {
-    treeFocusId.value = row.id
-    focusedIndex = rowIndexById.value.get(row.id) ?? -1
-  }
-  const focusLost = (): boolean => {
-    const active = globalThis.document?.activeElement
-    return !active || active === globalThis.document.body
-  }
-  const focusAfterRemoval = (attempt = 0): void => {
-    const list = rows.value
-    const id = treeFocusId.value
-    if (!id || rowIndexById.value.has(id) || focusedIndex < 0) return
-    const modalOpen = Boolean(globalThis.document?.querySelector('[aria-modal="true"]'))
-    if ((modalOpen || !focusLost()) && attempt < 60) {
-      globalThis.requestAnimationFrame(() => focusAfterRemoval(attempt + 1))
-      return
-    }
-    if (!focusLost()) return
-    const target = list[focusedIndex] ?? list[focusedIndex - 1]
-    if (target) {
-      void focusTreeRow(target.id)
-      return
-    }
-    treeFocusId.value = null
-    rootEl.value?.querySelector<HTMLElement>('[data-focus-table]')?.focus()
-  }
-  watch(
-    () => rowIndexById.value,
-    () => {
-      if (!rowFocusActive.value || !treeFocusId.value) return
-      if (rowIndexById.value.has(treeFocusId.value)) return
-      if (typeof globalThis.requestAnimationFrame !== 'function') return
-      void nextTick(() => focusAfterRemoval())
+      return true
     },
-    { flush: 'post' }
-  )
-  const onTreeKeydown = (event: KeyboardEvent, row: Row<RowRecord>): void => {
-    if (!rowFocusActive.value || event.target !== event.currentTarget) return
-    if (event.altKey || event.ctrlKey || event.metaKey) return
-    const list = rows.value
-    const index = rowIndexById.value.get(row.id) ?? -1
-    const go = (target: Row<RowRecord> | undefined): void => {
-      event.preventDefault()
-      if (target) void focusTreeRow(target.id)
-    }
-    switch (logicalArrowKey(event.key, eventDirection(event))) {
-      case 'ArrowDown':
-        return go(list[index + 1])
-      case 'ArrowUp':
-        return go(list[index - 1])
-      case 'Home':
-        return go(list[0])
-      case 'End':
-        return go(list[list.length - 1])
-      case 'ArrowRight':
-        if (!treeActive.value) return
-        event.preventDefault()
-        if (row.getCanExpand() && !row.getIsExpanded()) toggleTreeRow(row, true)
-        else if (row.getIsExpanded()) go(list[index + 1])
-        return
-      case 'ArrowLeft':
-        if (!treeActive.value) return
-        event.preventDefault()
-        if (row.getIsExpanded()) toggleTreeRow(row, false)
-        else {
-          const parent = row.getParentRow()
-          if (parent) void focusTreeRow(parent.id)
-        }
-        return
-      case 'Enter':
-        if (treeActive.value && row.getCanExpand()) {
-          event.preventDefault()
-          toggleTreeRow(row)
-          return
-        }
-        if (!hasListener('onRowClick')) return
-        event.preventDefault()
-        onRowClick(event, row)
-        return
-      case ' ':
-        if (!props.selectable || !row.getCanSelect()) return
-        event.preventDefault()
-        row.toggleSelected()
-        return
-      case 'Delete':
-      case 'Backspace':
-        if (!hasListener('onRowRemove') || event.shiftKey) return
-        event.preventDefault()
-        emit('row-remove', event, typed<TRow>(row.original))
-        return
-      default:
-    }
-  }
-
-  const ROOT_CLASS =
-    '@container/table ' +
-    'data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) ' +
-    'data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words ' +
-    'flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm ' +
-    'data-[bordered]:border-(length:--border-width-default) data-[bordered]:border-solid data-[bordered]:border-(--border-default)'
-
-  const EXPAND_TOGGLE_CLASS =
-    'flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-(--shape-button) border-(length:--border-width-default) border-solid border-(--border-default) ' +
-    'bg-(--bg-surface) text-(--text-default) transition-colors duration-150 ease-out ' +
-    'hover:bg-(--bg-canvas) motion-reduce:transition-none'
-
-  const FADE_START_CLASS =
-    'pointer-events-none absolute inset-y-0 start-0 z-5 hidden bg-gradient-to-l from-transparent to-(--bg-surface) ' +
-    'group-data-[overflow-start]/scroll:block ' +
-    'rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'
-
-  const FADE_END_CLASS =
-    'pointer-events-none absolute inset-y-0 end-0 z-5 hidden bg-gradient-to-r from-transparent to-(--bg-surface) ' +
-    'group-data-[overflow-end]/scroll:block ' +
-    'rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'
+    selectable: () => props.selectable,
+    canActivate: () => hasListener('onRowClick'),
+    activate: onRowClick,
+    canRemove: () => hasListener('onRowRemove'),
+    remove: (event, row) => emit('row-remove', event, typed<TRow>(row.original))
+  })
+  const {
+    tabStop: treeTabStop,
+    placement: treePlacement,
+    toggle: toggleTreeRow,
+    onFocusin: onTreeFocusin,
+    onKeydown: onTreeKeydown
+  } = rowFocus
 </script>
 
 <script lang="ts">

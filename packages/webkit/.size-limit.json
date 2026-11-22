@@ -99,7 +99,7 @@
   {
     "name": "data-table",
     "path": "src/components/data/data-table/data-table.vue",
-    "limit": "58.05 KB"
+    "limit": "58.5 KB"
   },
   {
     "name": "data-grid",
