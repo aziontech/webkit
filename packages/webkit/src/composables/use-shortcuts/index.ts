@@ -1,6 +1,8 @@
+export type { ShortcutCombination } from './lib/keys'
+export { matchesShortcut, parseShortcutKeys, shortcutKeyList, toAriaKeyshortcuts } from './lib/keys'
+export { isTypingTarget } from './lib/typing-target'
 export type {
   Shortcut,
-  ShortcutCombination,
   ShortcutListGroup,
   ShortcutListItem,
   ShortcutRegistry,
@@ -10,13 +12,8 @@ export type {
 } from './use-shortcuts'
 export {
   createShortcutRegistry,
-  isTypingTarget,
-  matchesShortcut,
-  parseShortcutKeys,
   provideShortcuts,
-  shortcutKeyList,
   ShortcutsInjectionKey,
-  toAriaKeyshortcuts,
   useShortcutList,
   useShortcuts
 } from './use-shortcuts'

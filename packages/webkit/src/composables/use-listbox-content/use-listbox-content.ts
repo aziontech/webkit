@@ -9,6 +9,16 @@ import {
 } from 'vue'
 
 import { useOverlayLayer } from '../use-overlay-layer'
+import {
+  activeElement,
+  createTypeahead,
+  enabledOptions,
+  focusOnOpen,
+  isTypeaheadKey,
+  type ListboxLazy,
+  outsidePress,
+  stepIndex
+} from './lib/option-focus'
 
 export type ListboxFocusIntent = '' | 'first' | 'last' | `type:${string}`
 
@@ -16,7 +26,7 @@ export interface UseListboxContentOptions {
   /** The floating panel element. */
   root: Ref<globalThis.HTMLElement | null>
   /** The lazy option renderer, revealed before keyboard moves that need every option. */
-  lazy: Ref<{ revealAll: () => void; hasHidden: () => boolean } | null>
+  lazy: Ref<ListboxLazy | null>
   open: MaybeRefOrGetter<boolean>
   setOpen: (value: boolean) => void
   triggerEl: Ref<globalThis.HTMLElement | null>
@@ -38,7 +48,26 @@ export interface UseListboxContentReturn {
   navigate: (key: string) => void
 }
 
-const OPTION_SELECTOR = '[role="option"]:not([data-disabled])'
+function listboxKeydown(
+  event: globalThis.KeyboardEvent,
+  close: (refocus: boolean) => void,
+  holdTab: boolean | undefined,
+  typeahead: (key: string) => boolean,
+  navigate: (key: string) => void
+): void {
+  const key = event.key
+  if (key === 'Escape' || key === 'Tab') {
+    if (key === 'Escape' || event.shiftKey || holdTab) event.preventDefault()
+    return close(key === 'Tab')
+  }
+  if (isTypeaheadKey(event)) {
+    if (typeahead(key)) event.preventDefault()
+    return
+  }
+  if (key !== 'ArrowDown' && key !== 'ArrowUp' && key !== 'Home' && key !== 'End') return
+  event.preventDefault()
+  navigate(key)
+}
 
 export function useListboxContent(options: UseListboxContentOptions): UseListboxContentReturn {
   const { root, lazy, setOpen, triggerEl, pendingFocus } = options
@@ -47,89 +76,16 @@ export function useListboxContent(options: UseListboxContentOptions): UseListbox
 
   useOverlayLayer(() => isOpen(), { element: root })
 
-  const enabledOptions = (): globalThis.HTMLElement[] =>
-    Array.from(root.value?.querySelectorAll<globalThis.HTMLElement>(OPTION_SELECTOR) ?? []).filter(
-      (option) => option.style.display !== 'none'
-    )
-
-  const activeElement = (): globalThis.HTMLElement | null =>
-    document.activeElement instanceof HTMLElement ? document.activeElement : null
-
   const moveFocus = (key: string) => {
-    const list = enabledOptions()
+    const list = enabledOptions(root.value)
     if (list.length === 0) return
     const active = activeElement()
-    const currentIndex = active ? list.indexOf(active) : -1
-    let nextIndex = currentIndex
-    if (key === 'ArrowDown') nextIndex = currentIndex < list.length - 1 ? currentIndex + 1 : 0
-    else if (key === 'ArrowUp') nextIndex = currentIndex > 0 ? currentIndex - 1 : list.length - 1
-    else if (key === 'Home') nextIndex = 0
-    else if (key === 'End') nextIndex = list.length - 1
-    list[nextIndex]?.focus()
+    list[stepIndex(key, active ? list.indexOf(active) : -1, list.length)]?.focus()
   }
 
-  let typed = ''
-  let typedAt = 0
+  const typeahead = createTypeahead(root, lazy, options.textFieldSelector)
 
-  const typeahead = (key: string): boolean => {
-    const el = root.value
-    if (!el) return false
-    if (
-      el.contains(document.activeElement) &&
-      document.activeElement?.matches(options.textFieldSelector)
-    )
-      return false
-    lazy.value?.revealAll()
-    const now = Date.now()
-    typed = now - typedAt > 500 ? key : typed + key
-    typedAt = now
-    const list = enabledOptions()
-    const query = typed.toLocaleLowerCase()
-    const active = activeElement()
-    const index = active ? list.indexOf(active) : -1
-    const start = index === -1 ? 0 : index + (typed.length === 1 ? 1 : 0)
-    const ordered = [...list.slice(start), ...list.slice(0, start)]
-    const match = ordered.find((option) =>
-      (option.textContent ?? '').trim().toLocaleLowerCase().startsWith(query)
-    )
-    match?.focus()
-    return Boolean(match)
-  }
-
-  const onKeydown = (event: globalThis.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      event.preventDefault()
-      setOpen(false)
-      return
-    }
-    if (event.key === 'Tab') {
-      if (event.shiftKey || toValue(options.holdTab)) event.preventDefault()
-      setOpen(false)
-      focusBack()
-      return
-    }
-    if (
-      event.key.length === 1 &&
-      event.key !== ' ' &&
-      !event.ctrlKey &&
-      !event.metaKey &&
-      !event.altKey
-    ) {
-      if (typeahead(event.key)) event.preventDefault()
-      return
-    }
-    if (
-      event.key !== 'ArrowDown' &&
-      event.key !== 'ArrowUp' &&
-      event.key !== 'Home' &&
-      event.key !== 'End'
-    )
-      return
-    event.preventDefault()
-    navigate(event.key)
-  }
-
-  function navigate(key: string) {
+  const navigate = (key: string) => {
     if (lazy.value?.hasHidden()) {
       lazy.value.revealAll()
       void nextTick(() => moveFocus(key))
@@ -138,51 +94,29 @@ export function useListboxContent(options: UseListboxContentOptions): UseListbox
     moveFocus(key)
   }
 
-  const onDocumentPointerdown = (event: globalThis.PointerEvent) => {
-    if (!isOpen()) return
-    const el = root.value
-    const target = event.target as globalThis.Node | null
-    if (!el || !target) return
-    if (el.contains(target)) return
-    if (triggerEl.value?.contains(target)) return
+  const close = (refocus: boolean) => {
     setOpen(false)
+    if (refocus) focusBack()
   }
 
-  const focusInitial = async () => {
-    const el = root.value
-    if (!el) return
-    const intent = pendingFocus.value
-    pendingFocus.value = ''
-    if (toValue(options.keepFocusOnOpen) && intent !== 'first' && intent !== 'last') return
-    const search = el.querySelector<globalThis.HTMLElement>(
-      'input:not([type="checkbox"]):not([type="radio"]):not([disabled])'
-    )
-    if (search) {
-      search.focus()
-      return
-    }
-    if (intent === 'first' || intent === 'last') {
-      if (intent === 'last' && lazy.value?.hasHidden()) {
-        lazy.value.revealAll()
-        await nextTick()
-      }
-      moveFocus(intent === 'first' ? 'Home' : 'End')
-      return
-    }
-    if (intent.startsWith('type:') && typeahead(intent.slice(5))) return
-    const target =
-      el.querySelector<globalThis.HTMLElement>(
-        `[role="option"][aria-selected="true"]:not([data-disabled])`
-      ) ?? el.querySelector<globalThis.HTMLElement>(OPTION_SELECTOR)
-    target?.focus()
-  }
+  const onKeydown = (event: globalThis.KeyboardEvent) =>
+    listboxKeydown(event, close, toValue(options.holdTab), typeahead, navigate)
+
+  const onDocumentPointerdown = outsidePress(root, triggerEl, isOpen, setOpen)
 
   watch(
     () => isOpen(),
     async (next) => {
       if (next) {
         await nextTick()
-        await focusInitial()
+        await focusOnOpen(
+          root.value,
+          pendingFocus,
+          toValue(options.keepFocusOnOpen),
+          lazy.value,
+          moveFocus,
+          typeahead
+        )
         document.addEventListener('pointerdown', onDocumentPointerdown, true)
       } else {
         const hadFocus = !!root.value?.contains(document.activeElement)

@@ -69,6 +69,15 @@ export interface UseAppNavigationReturn {
 const isRouter = (value: unknown): value is AppRouter =>
   typeof value === 'object' && value !== null && 'push' in value && 'currentRoute' in value
 
+const isAnchorClick = (event: Event): boolean =>
+  event.type === 'click' &&
+  event.target instanceof globalThis.Element &&
+  Boolean(event.target.closest('a[href]'))
+
+const opensNewTab = (event: Event): boolean =>
+  event instanceof globalThis.MouseEvent &&
+  (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0)
+
 export function useAppNavigation(): UseAppNavigationReturn {
   const instance = getCurrentInstance()
   const candidate: unknown = instance?.appContext.config.globalProperties['$router']
@@ -94,14 +103,8 @@ export function useAppNavigation(): UseAppNavigationReturn {
   const inApp = (href: string) => href.startsWith('/') && !href.startsWith('//')
 
   const follow = (event: Event, link: AppLinkTarget) => {
-    const onAnchor =
-      event.type === 'click' &&
-      event.target instanceof globalThis.Element &&
-      Boolean(event.target.closest('a[href]'))
-    const newTab =
-      event instanceof globalThis.MouseEvent &&
-      (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0)
-    if (onAnchor && newTab) return
+    const onAnchor = isAnchorClick(event)
+    if (onAnchor && opensNewTab(event)) return
     const href = hrefOf(link)
     if (!href) return
     if (router && inApp(href)) {

@@ -11,8 +11,7 @@ import {
   toValue
 } from 'vue'
 
-import * as en from '../../locales/en'
-import { useTranslate } from '../use-translate'
+import { useLeaveDialog } from './composables/use-leave-dialog'
 
 /** Options of `useUnsavedChanges`. */
 export interface UseUnsavedChangesOptions<T> {
@@ -72,23 +71,12 @@ export function useUnsavedChanges<T>(
   source: MaybeRefOrGetter<T>,
   options: UseUnsavedChangesOptions<T> = {}
 ): UseUnsavedChangesReturn<T> {
-  const { t } = useTranslate({ unsavedChanges: en.unsavedChanges })
   const baselineText = ref(snapshot(toValue(source)))
   const baseline = computed(() => JSON.parse(baselineText.value) as T)
-  const open = ref(false)
-  const saving = ref(false)
-  let release: ((allowed: boolean) => void) | null = null
 
   const enabled = () => toValue(options.enabled) ?? true
   const isDirty = computed(() => snapshot(toValue(source)) !== baselineText.value)
   const savable = computed(() => Boolean(options.onSave) && (toValue(options.savable) ?? true))
-
-  const settle = (allowed: boolean) => {
-    const resolve = release
-    release = null
-    open.value = false
-    resolve?.(allowed)
-  }
 
   const commit = (next?: T) => {
     baselineText.value = snapshot(next === undefined ? toValue(source) : next)
@@ -104,60 +92,7 @@ export function useUnsavedChanges<T>(
     return copy
   }
 
-  const confirmLeave = () => {
-    if (!enabled() || !isDirty.value) return Promise.resolve(true)
-    release?.(false)
-    open.value = true
-    return new Promise<boolean>((resolve) => {
-      release = resolve
-    })
-  }
-
-  const keepEditing = () => {
-    if (saving.value) return
-    settle(false)
-  }
-
-  const discardAndLeave = () => {
-    if (saving.value) return
-    discard()
-    settle(true)
-  }
-
-  const saveAndLeave = async () => {
-    if (!options.onSave || saving.value) return
-    saving.value = true
-    try {
-      await options.onSave()
-    } catch {
-      saving.value = false
-      return
-    }
-    saving.value = false
-    if (isDirty.value) return
-    settle(true)
-  }
-
-  const dialogProps = computed<UnsavedChangesDialogProps>(() => ({
-    open: open.value,
-    title: t('unsavedChanges.title'),
-    description: savable.value
-      ? t('unsavedChanges.descriptionSavable')
-      : t('unsavedChanges.description'),
-    variant: 'danger',
-    loading: saving.value,
-    'onUpdate:open': (next: boolean) => {
-      if (next) return
-      if (saving.value) return
-      settle(false)
-    }
-  }))
-
-  const labels = computed(() => ({
-    keepEditing: t('unsavedChanges.keepEditing'),
-    discard: t('unsavedChanges.discard'),
-    save: t('unsavedChanges.save')
-  }))
+  const { cancel, ...dialog } = useLeaveDialog(isDirty, enabled, savable, discard, options.onSave)
 
   if (options.beforeUnload !== false && typeof window !== 'undefined') {
     const onBeforeunload = (event: BeforeUnloadEvent) => {
@@ -169,7 +104,7 @@ export function useUnsavedChanges<T>(
     if (getCurrentScope()) {
       onScopeDispose(() => {
         window.removeEventListener('beforeunload', onBeforeunload)
-        release?.(false)
+        cancel()
       })
     }
   }
@@ -177,15 +112,9 @@ export function useUnsavedChanges<T>(
   return {
     isDirty,
     baseline: readonly(baseline) as Readonly<Ref<T>>,
-    saving: readonly(saving),
     commit,
     discard,
-    confirmLeave,
     savable,
-    dialogProps,
-    labels,
-    keepEditing,
-    discardAndLeave,
-    saveAndLeave
+    ...dialog
   }
 }

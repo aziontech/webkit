@@ -14,8 +14,6 @@ export type {
   PropertyFilterTokenGroup
 } from './lib/property-filter'
 export { matchesQuery, matchesText, parseFilterText, tokenText } from './lib/property-filter'
-export type { CollectionUrlAdapter, RouterLike } from './lib/url'
-export { historyAdapter, routerAdapter } from './lib/url'
 export type {
   CollectionCardListProps,
   CollectionColumn,
@@ -34,5 +32,7 @@ export type {
   CollectionTextFilterProps,
   UseCollectionOptions,
   UseCollectionReturn
-} from './use-collection'
+} from './lib/types'
+export type { CollectionUrlAdapter, RouterLike } from './lib/url'
+export { historyAdapter, routerAdapter } from './lib/url'
 export { useCollection } from './use-collection'

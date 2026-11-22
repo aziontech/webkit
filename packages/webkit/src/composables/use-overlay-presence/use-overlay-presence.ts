@@ -53,24 +53,11 @@ export function useOverlayPresence(
     requestFrame(count > 1 ? () => afterFrames(count - 1, callback) : callback)
   }
 
-  const paintOpen = async () => {
-    motionState.value = 'closed'
+  const paint = async (open: boolean) => {
+    if (open) motionState.value = 'closed'
     await nextTick()
-
-    afterFrames(options.openFrames ?? 1, () => {
-      if (toValue(isOpen)) {
-        motionState.value = 'open'
-      }
-    })
-  }
-
-  const paintClose = async () => {
-    await nextTick()
-
-    requestFrame(() => {
-      if (!toValue(isOpen)) {
-        motionState.value = 'closed'
-      }
+    afterFrames(open ? (options.openFrames ?? 1) : 1, () => {
+      if (toValue(isOpen) === open) motionState.value = open ? 'open' : 'closed'
     })
   }
 
@@ -83,38 +70,22 @@ export function useOverlayPresence(
   watch(
     () => toValue(isOpen),
     (open) => {
-      if (!open) {
-        void paintClose()
-        return
+      void paint(open)
+      clearExitTimer()
+      if (open) isPresent.value = true
+      else if (isPresent.value) {
+        exitTimer = setTimeout(() => {
+          isPresent.value = false
+          exitTimer = undefined
+        }, options.exitMs)
       }
-
-      void paintOpen()
     },
     { flush: 'sync' }
   )
 
   onMounted(() => {
-    if (toValue(isOpen)) {
-      void paintOpen()
-    }
+    if (toValue(isOpen)) void paint(true)
   })
-
-  watch(
-    () => toValue(isOpen),
-    (open) => {
-      clearExitTimer()
-      if (open) {
-        isPresent.value = true
-        return
-      }
-      if (!isPresent.value) return
-      exitTimer = setTimeout(() => {
-        isPresent.value = false
-        exitTimer = undefined
-      }, options.exitMs)
-    },
-    { flush: 'sync' }
-  )
 
   onScopeDispose(() => {
     disposed = true
