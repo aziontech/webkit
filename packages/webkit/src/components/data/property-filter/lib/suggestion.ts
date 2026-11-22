@@ -45,7 +45,7 @@ export const sectionOf = (operator: PropertyFilterOperator): OperatorSection => 
   return 'comparison'
 }
 
-export const MAX_SUGGESTIONS = 100
+const MAX_SUGGESTIONS = 100
 
 export const capSuggestions = (list: Suggestion[]): Suggestion[] => {
   if (list.length <= MAX_SUGGESTIONS) return list
