@@ -26,6 +26,8 @@
     titleId: string
     /** Test id of the layout that owns the panel. */
     layoutTestId: string
+    /** Receives the separator element. */
+    separatorRef: (el: unknown) => void
   }
 
   defineProps<Props>()
@@ -33,8 +35,6 @@
   const emit = defineEmits<{
     /** The separator was pressed to start a resize. */
     resize: [event: PointerEvent]
-    /** A key was pressed on the separator. */
-    'separator-keydown': [event: KeyboardEvent]
     /** The position toggle was pressed. */
     'toggle-position': [event: MouseEvent]
     /** The close control was pressed. */
@@ -74,6 +74,7 @@
     :style="side ? { width: `${size}px` } : { height: `${size}px` }"
   >
     <div
+      :ref="separatorRef"
       role="separator"
       tabindex="0"
       :aria-orientation="side ? 'vertical' : 'horizontal'"
@@ -86,7 +87,6 @@
       :data-resizing="resizing || null"
       :class="side ? SEPARATOR_COLUMN_CLASS : SEPARATOR_ROW_CLASS"
       @pointerdown="emit('resize', $event)"
-      @keydown="emit('separator-keydown', $event)"
     />
     <div
       class="flex h-(--spacing-2xl) shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md)"

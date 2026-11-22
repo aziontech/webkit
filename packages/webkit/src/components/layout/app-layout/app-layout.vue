@@ -3,6 +3,7 @@
   import { computed, onMounted, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
   import { useDirection } from '../../../composables/use-direction'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { usePointerDrag } from '../../../composables/use-pointer-drag'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -96,6 +97,10 @@
 
   const rootEl = ref<globalThis.HTMLElement | null>(null)
   const rowEl = ref<globalThis.HTMLElement | null>(null)
+  const separatorEl = ref<globalThis.HTMLElement | null>(null)
+  const setSeparatorEl = (el: unknown) => {
+    separatorEl.value = el instanceof globalThis.HTMLElement ? el : null
+  }
   const dir = useDirection(rootEl)
 
   const width = ref(0)
@@ -205,6 +210,8 @@
     splitSize.value = clamp(size.value + delta)
   }
 
+  useElementListener(separatorEl, 'keydown', nudge)
+
   const { dragging: resizing, startDrag } = usePointerDrag()
 
   const startResize = (event: globalThis.PointerEvent) => {
@@ -213,7 +220,7 @@
     const start = size.value
 
     startDrag(event, {
-      captureEl: event.currentTarget as globalThis.HTMLElement | null,
+      captureEl: separatorEl.value,
       onMove: (moveEvent) => {
         const physical = (side ? moveEvent.clientX : moveEvent.clientY) - origin
         const delta = side && dir.value === 'rtl' ? physical : -physical
@@ -242,7 +249,8 @@
     title: props.splitPanelTitle,
     panelId: splitId,
     titleId: splitTitleId,
-    layoutTestId: testId.value
+    layoutTestId: testId.value,
+    separatorRef: setSeparatorEl
   }))
 </script>
 
@@ -320,7 +328,6 @@
             v-bind="splitPanelProps"
             :side="false"
             @resize="startResize"
-            @separator-keydown="nudge"
             @toggle-position="togglePosition"
             @close="splitOpen = false"
           >
@@ -333,7 +340,6 @@
           v-bind="splitPanelProps"
           side
           @resize="startResize"
-          @separator-keydown="nudge"
           @toggle-position="togglePosition"
           @close="splitOpen = false"
         >
