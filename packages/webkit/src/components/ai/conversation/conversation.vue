@@ -10,13 +10,14 @@
     watch
   } from 'vue'
 
-  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
   import IconButton from '../../action/icon-button/icon-button.vue'
+  import { useConversationPin } from './composables/use-conversation-pin'
   import type { ConversationLayout } from './injection-key'
   import { ConversationInjectionKey } from './injection-key'
+  import { firstMessage, observeHistory } from './lib/conversation-dom'
 
   export type { ConversationLayout }
 
@@ -63,108 +64,16 @@
   const viewportEl = ref<HTMLElement | null>(null)
   const contentEl = ref<HTMLElement | null>(null)
   const olderEl = ref<HTMLElement | null>(null)
-  const pinned = ref<boolean>(true)
   const ready = ref<boolean>(false)
   const announcement = ref<string>('')
-  const THRESHOLD = 32
-  const LOOKAHEAD = 200
 
-  const showOlder = computed<boolean>(() => props.moreMessages || props.loadingMore)
-
-  function distanceFromEnd(): number {
-    const el = viewportEl.value
-    if (!el) return 0
-    return el.scrollHeight - el.scrollTop - el.clientHeight
-  }
-
-  function reducedMotion(): boolean {
-    return (
-      typeof window !== 'undefined' &&
-      typeof window.matchMedia === 'function' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    )
-  }
-
-  let intent = false
-  let intentTimer: ReturnType<typeof setTimeout> | undefined
-  let smoothing = false
-  let smoothTimer: ReturnType<typeof setTimeout> | undefined
-  let anchor: Element | null = null
-  let anchorTop = 0
-  let requested = false
-  let firstBefore: Element | null = null
-
-  function scrollToBottom(smooth = false): void {
-    const el = viewportEl.value
-    if (!el) return
-    pinned.value = true
-    const animate = smooth && !reducedMotion()
-    smoothing = animate
-    if (smoothTimer) clearTimeout(smoothTimer)
-    if (animate) smoothTimer = setTimeout(() => (smoothing = false), 1000)
-    el.scrollTo({ top: el.scrollHeight, behavior: animate ? 'smooth' : 'auto' })
-  }
-
-  function markIntent(): void {
-    intent = true
-    smoothing = false
-    if (intentTimer) clearTimeout(intentTimer)
-    intentTimer = setTimeout(() => (intent = false), 400)
-  }
-
-  useElementListener(viewportEl, 'keydown', markIntent)
-
-  function firstMessage(): Element | null {
-    const items = contentEl.value?.children
-    if (!items) return null
-    return (items[0] === olderEl.value ? items[1] : items[0]) ?? null
-  }
-
-  function findAnchor(): void {
-    const el = viewportEl.value
-    const items = contentEl.value?.children
-    anchor = null
-    if (!el || !items) return
-    const top = el.getBoundingClientRect().top
-    if (olderEl.value?.contains(document.activeElement)) {
-      anchor = olderEl.value
-      anchorTop = anchor.getBoundingClientRect().top - top
-      return
-    }
-    let low = items[0] === olderEl.value ? 1 : 0
-    let high = items.length - 1
-    let found = -1
-    while (low <= high) {
-      const middle = (low + high) >> 1
-      if (items[middle].getBoundingClientRect().bottom > top) {
-        found = middle
-        high = middle - 1
-      } else low = middle + 1
-    }
-    if (found < 0) return
-    anchor = items[found]
-    anchorTop = anchor.getBoundingClientRect().top - top
-  }
-
-  function holdAnchor(): void {
-    const el = viewportEl.value
-    if (el && anchor?.isConnected) {
-      const delta = anchor.getBoundingClientRect().top - el.getBoundingClientRect().top - anchorTop
-      if (Math.abs(delta) >= 1) el.scrollTop += delta
-    }
-    findAnchor()
-  }
-
-  function onScroll(): void {
-    const atEnd = distanceFromEnd() <= THRESHOLD
-    if (intent || atEnd) {
-      pinned.value = atEnd
-      findAnchor()
-      return
-    }
-    if (pinned.value && !smoothing) scrollToBottom()
-    findAnchor()
-  }
+  const pinned = ref<boolean>(true)
+  const { scrollToBottom, findAnchor, holdAnchor } = useConversationPin(
+    viewportEl,
+    contentEl,
+    olderEl,
+    pinned
+  )
 
   function say(text: string): void {
     announcement.value = ''
@@ -179,6 +88,12 @@
     say(t('conversation.announcement', { author, text: body }))
   }
 
+  const showOlder = computed<boolean>(() => props.moreMessages || props.loadingMore)
+  let requested = false
+  let firstBefore: Element | null = null
+  let observer: ResizeObserver | undefined
+  let watcher: IntersectionObserver | undefined
+
   function settle(): void {
     void nextTick(() => {
       ready.value = true
@@ -186,40 +101,41 @@
   }
 
   function hold(): void {
-    if (!requested) firstBefore = firstMessage()
+    if (!requested) firstBefore = firstMessage(contentEl.value, olderEl.value)
     requested = true
     ready.value = false
   }
 
-  function request(event: Event): void {
+  function onLoadMore(event: Event): void {
     if (!props.moreMessages || props.loadingMore) return
     hold()
     if (!pinned.value) findAnchor()
     emit('load-more', event)
   }
 
-  function onLoadMore(event: MouseEvent): void {
-    request(event)
-  }
-
-  let observer: ResizeObserver | undefined
-  let watcher: IntersectionObserver | undefined
-
-  function rearm(): void {
-    const el = olderEl.value
-    if (!watcher || !el) return
-    watcher.unobserve(el)
-    watcher.observe(el)
+  function swapOlder(now: HTMLElement | null, was?: HTMLElement | null): void {
+    if (was) watcher?.unobserve(was)
+    if (now) watcher?.observe(now)
   }
 
   function onResize(): void {
     if (pinned.value) scrollToBottom()
     else holdAnchor()
-    if (!requested || props.loadingMore || firstMessage() === firstBefore) return
+    if (
+      !requested ||
+      props.loadingMore ||
+      firstMessage(contentEl.value, olderEl.value) === firstBefore
+    )
+      return
     requested = false
     settle()
     say(t('conversation.moreLoaded'))
-    rearm()
+    if (olderEl.value) swapOlder(olderEl.value, olderEl.value)
+  }
+
+  function onNear(entries: IntersectionObserverEntry[]): void {
+    if (entries.some((entry) => entry.isIntersecting) && !requested)
+      onLoadMore(new Event('load-more'))
   }
 
   watch(
@@ -239,39 +155,23 @@
     void nextTick(() => viewportEl.value?.focus({ preventScroll: true }))
   })
 
-  watch(
-    olderEl,
-    (now, was) => {
-      if (was) watcher?.unobserve(was)
-      if (now) watcher?.observe(now)
-    },
-    { flush: 'post' }
-  )
+  watch(olderEl, swapOlder, { flush: 'post' })
 
   onMounted(() => {
     scrollToBottom()
     ready.value = true
-    if (typeof IntersectionObserver !== 'undefined' && viewportEl.value) {
-      watcher = new IntersectionObserver(
-        (entries) => {
-          if (entries.some((entry) => entry.isIntersecting) && !requested)
-            request(new Event('load-more'))
-        },
-        { root: viewportEl.value, rootMargin: `${LOOKAHEAD}px 0% 0% 0%` }
-      )
-      if (olderEl.value) watcher.observe(olderEl.value)
-    }
-    if (typeof ResizeObserver === 'undefined' || !contentEl.value || !viewportEl.value) return
-    observer = new ResizeObserver(onResize)
-    observer.observe(contentEl.value)
-    observer.observe(viewportEl.value)
+    ;[watcher, observer] = observeHistory(
+      viewportEl.value,
+      contentEl.value,
+      olderEl.value,
+      onNear,
+      onResize
+    )
   })
 
   onBeforeUnmount(() => {
     observer?.disconnect()
     watcher?.disconnect()
-    if (intentTimer) clearTimeout(intentTimer)
-    if (smoothTimer) clearTimeout(smoothTimer)
   })
 
   provide(ConversationInjectionKey, {
@@ -305,10 +205,6 @@
       :aria-busy="loadingMore || undefined"
       :data-testid="`${testId}__viewport`"
       :class="VIEWPORT_CLASS"
-      @scroll.passive="onScroll"
-      @wheel.passive="markIntent"
-      @touchmove.passive="markIntent"
-      @pointerdown="markIntent"
     >
       <div
         ref="contentEl"
