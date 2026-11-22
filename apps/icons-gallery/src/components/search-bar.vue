@@ -44,6 +44,8 @@
 </template>
 
 <style scoped>
+  @reference '../styles/main.css';
+
   #searchInput {
     @apply h-12 pl-10 box-border text-xs;
   }

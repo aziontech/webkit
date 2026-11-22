@@ -192,6 +192,12 @@ export const GATES = [
     steps: [['pnpm', 'run', 'check:unused']]
   },
   {
+    id: 'versions',
+    label: 'One version of each shared dependency, no lockfile duplicate (syncpack, pnpm dedupe)',
+    root: true,
+    steps: [['pnpm', 'run', 'check:versions']]
+  },
+  {
     id: 'spelling',
     label: 'No spelling mistake (typos)',
     root: true,

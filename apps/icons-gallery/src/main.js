@@ -1,9 +1,9 @@
-import { createApp } from 'vue'
-import Vue3ColorPicker from 'vue3-colorpicker'
-
 import './styles/main.css'
 import '@aziontech/icons'
 import 'vue3-colorpicker/style.css'
+
+import { createApp } from 'vue'
+import Vue3ColorPicker from 'vue3-colorpicker'
 
 import App from './app.vue'
 import { initializeTheme } from './lib/theme'

@@ -31,7 +31,7 @@ The application is deployed on **Azion's Edge Platform** for low-latency global 
 | ---------------- | ----------------------------------------- | ------------------------------------------ |
 | **Framework**    | Vue 3 (Composition API, `<script setup>`) | Reactive UI components                     |
 | **Build**        | Vite                                      | Dev server, bundling, preview              |
-| **Styling**      | Tailwind CSS                              | Utility-first CSS framework                |
+| **Styling**      | Tailwind CSS 4 (`@tailwindcss/vite`)      | Utility-first CSS framework                |
 | **Icons**        | `@aziontech/icons`                        | Icon font + catalog (workspace dependency) |
 | **Color Picker** | `vue3-colorpicker`                        | Color selection widget                     |
 | **Testing**      | Vitest + happy-dom                        | Unit testing                               |
@@ -93,7 +93,7 @@ apps/icons-gallery/
 │   ├── lib/
 │   │   └── theme.js         # Dark/light theme management
 │   ├── styles/
-│   │   └── main.css         # Global styles and Tailwind imports
+│   │   └── main.css         # Tailwind import, dark variant and global styles
 │   ├── app.vue              # Main application component
 │   └── main.js              # Application entry point
 ├── azion/
@@ -103,8 +103,6 @@ apps/icons-gallery/
 ├── index.html               # Vite HTML entry point
 ├── tsconfig.json            # Editor configuration (JavaScript allowed)
 ├── package.json             # Dependencies and scripts
-├── postcss.config.js        # PostCSS configuration
-├── tailwind.config.js       # Tailwind CSS configuration
 ├── vite.config.js           # Vite dev/build configuration
 └── vitest.config.js         # Vitest test configuration
 ```
@@ -214,13 +212,14 @@ export default defineConfig({
 })
 ```
 
-### Tailwind CSS (`tailwind.config.js`)
+### Tailwind CSS (`src/styles/main.css`)
 
-```javascript
-module.exports = {
-  content: ['./index.html', './src/**/*.{vue,js,ts}']
-  // Theme extensions defined inline.
-}
+Tailwind 4 runs as the `@tailwindcss/vite` plugin in `vite.config.js`, with a CSS-first config: `main.css` imports `tailwindcss`, declares the class-based `dark` variant and keeps the v3 border and placeholder colors. A scoped `<style>` that uses `@apply` starts with `@reference` to `main.css`.
+
+```css
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
 ```
 
 ### Azion Edge (`azion.config.cjs`)

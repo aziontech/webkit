@@ -1,0 +1,28 @@
+{
+  "$schema": "https://unpkg.com/syncpack@13.0.4/dist/schema.json",
+  "versionGroups": [
+    {
+      "label": "A peer range is the contract with the app that installs the package, not the version this repo installs",
+      "dependencyTypes": ["peer"],
+      "isIgnored": true
+    },
+    {
+      "label": "A published package depends on another workspace package with a caret range: pnpm publishes workspace:^ as ^x.y.z",
+      "packages": [
+        "@aziontech/icons",
+        "@aziontech/theme",
+        "@aziontech/webkit",
+        "@aziontech/webkit-mcp"
+      ],
+      "dependencies": ["$LOCAL"],
+      "dependencyTypes": ["prod"],
+      "pinVersion": "workspace:^"
+    },
+    {
+      "label": "Everywhere else a workspace package links to its local source",
+      "dependencies": ["$LOCAL"],
+      "dependencyTypes": ["dev", "prod"],
+      "pinVersion": "workspace:*"
+    }
+  ]
+}
