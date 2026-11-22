@@ -8,24 +8,6 @@ import DocChangelogEntry from '../../doc-changelog-entry/doc-changelog-entry.vue
 import DocSteps from '../../doc-steps/doc-steps.vue'
 import DocStepsStep from '../../doc-steps/doc-steps-step.vue'
 
-const DocAccordionGroup = defineAsyncComponent(
-  () => import('../../doc-accordion-group/doc-accordion-group.vue')
-)
-const DocAccordion = defineAsyncComponent(() => import('../../doc-accordion/doc-accordion.vue'))
-export const DocCodeGroup = defineAsyncComponent(
-  () => import('../../doc-code-group/doc-code-group.vue')
-)
-const DocFrame = defineAsyncComponent(() => import('../../doc-frame/doc-frame.vue'))
-const DocItem = defineAsyncComponent(() => import('../../doc-item/doc-item.vue'))
-const DocPrompt = defineAsyncComponent(() => import('../../doc-prompt/doc-prompt.vue'))
-const FlowDiagram = defineAsyncComponent(
-  () => import('../../../data/flow-diagram/flow-diagram.vue')
-)
-const contentTag = (name: ContentSceneName): Component =>
-  defineAsyncComponent(() =>
-    import('../../../../assets/content-scenes').then((module) => module.contentScenes[name]())
-  )
-
 const CONTENT_ROOTS: ContentSceneName[] = [
   'BarList',
   'Carousel',
@@ -68,44 +50,6 @@ const CONTENT_PARTS: ContentSceneName[] = [
   'KeyValueListItem'
 ]
 
-export const CONTENT_TAGS = Object.fromEntries(
-  [...CONTENT_ROOTS, ...CONTENT_PARTS, 'CarouselNext', 'CarouselPrevious'].map((name) => [
-    name,
-    contentTag(name as ContentSceneName)
-  ])
-) as Record<ContentSceneName, Component>
-
-const DocAgentCard = defineAsyncComponent(() => import('../../doc-agent-card/doc-agent-card.vue'))
-const DocCallToAction = defineAsyncComponent(
-  () => import('../../doc-call-to-action/doc-call-to-action.vue')
-)
-
-export const TableRoot = defineAsyncComponent(() => import('../../../data/table/table.vue'))
-export const TableHeader = defineAsyncComponent(
-  () => import('../../../data/table/table-header/table-header.vue')
-)
-export const TableBody = defineAsyncComponent(
-  () => import('../../../data/table/table-body/table-body.vue')
-)
-export const TableRow = defineAsyncComponent(
-  () => import('../../../data/table/table-row/table-row.vue')
-)
-export const TableHeadCell = defineAsyncComponent(
-  () => import('../../../data/table/table-head-cell/table-head-cell.vue')
-)
-export const TableCell = defineAsyncComponent(
-  () => import('../../../data/table/table-cell/table-cell.vue')
-)
-
-export const TabsRoot = defineAsyncComponent(() => import('../../../navigation/tabs/tabs.vue'))
-export const TabsList = defineAsyncComponent(() => import('../../../navigation/tabs/tabs-list.vue'))
-export const TabsTrigger = defineAsyncComponent(
-  () => import('../../../navigation/tabs/tabs-trigger.vue')
-)
-export const TabsContent = defineAsyncComponent(
-  () => import('../../../navigation/tabs/tabs-content.vue')
-)
-
 export const CALLOUT_VARIANTS: Record<string, string> = {
   Note: 'note',
   Info: 'info',
@@ -115,36 +59,6 @@ export const CALLOUT_VARIANTS: Record<string, string> = {
   Danger: 'danger'
 }
 
-export const BLOCK_COMPONENTS: Record<string, Component> = {
-  ...CONTENT_TAGS,
-  Note: DocCallout,
-  Info: DocCallout,
-  Tip: DocCallout,
-  Check: DocCallout,
-  Warning: DocCallout,
-  Danger: DocCallout,
-  Steps: DocSteps,
-  Step: DocStepsStep,
-  CardGroup: DocCardGroup,
-  Columns: DocCardGroup,
-  Card: DocCard,
-  Item: DocItem,
-  AccordionGroup: DocAccordionGroup,
-  Accordion: DocAccordion,
-  Frame: DocFrame,
-  Prompt: DocPrompt,
-  Update: DocChangelogEntry,
-  AgentCard: DocAgentCard,
-  CallToAction: DocCallToAction,
-  FlowDiagram
-}
-
-export const CHROME_BLOCKS = new Set<Component>([
-  DocCallToAction,
-  FlowDiagram,
-  ...CONTENT_ROOTS.map((name) => CONTENT_TAGS[name])
-])
-
 export const FRAMED_CLASS: Partial<Record<string, string>> = {
   ConsoleMockup:
     'relative block aspect-video w-full overflow-hidden rounded-(--shape-card) border border-(--border-default)',
@@ -152,4 +66,95 @@ export const FRAMED_CLASS: Partial<Record<string, string>> = {
     'relative block aspect-[2/1] w-full overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas)'
 }
 
-export const INLINE_BODY = new Set<Component>([DocCallout, DocItem, DocPrompt])
+const contentTag = (name: ContentSceneName): Component =>
+  defineAsyncComponent(() =>
+    import('../../../../assets/content-scenes').then((module) => module.contentScenes[name]())
+  )
+
+function createContentTags() {
+  return Object.fromEntries(
+    [...CONTENT_ROOTS, ...CONTENT_PARTS, 'CarouselNext', 'CarouselPrevious'].map((name) => [
+      name,
+      contentTag(name as ContentSceneName)
+    ])
+  ) as Record<ContentSceneName, Component>
+}
+
+function createDocTags() {
+  const DocAccordionGroup = defineAsyncComponent(
+    () => import('../../doc-accordion-group/doc-accordion-group.vue')
+  )
+  const DocAccordion = defineAsyncComponent(() => import('../../doc-accordion/doc-accordion.vue'))
+  const DocFrame = defineAsyncComponent(() => import('../../doc-frame/doc-frame.vue'))
+  const DocItem = defineAsyncComponent(() => import('../../doc-item/doc-item.vue'))
+  const DocPrompt = defineAsyncComponent(() => import('../../doc-prompt/doc-prompt.vue'))
+  const FlowDiagram = defineAsyncComponent(
+    () => import('../../../data/flow-diagram/flow-diagram.vue')
+  )
+  const DocAgentCard = defineAsyncComponent(() => import('../../doc-agent-card/doc-agent-card.vue'))
+  const DocCallToAction = defineAsyncComponent(
+    () => import('../../doc-call-to-action/doc-call-to-action.vue')
+  )
+  const blocks: Record<string, Component> = {
+    Note: DocCallout,
+    Info: DocCallout,
+    Tip: DocCallout,
+    Check: DocCallout,
+    Warning: DocCallout,
+    Danger: DocCallout,
+    Steps: DocSteps,
+    Step: DocStepsStep,
+    CardGroup: DocCardGroup,
+    Columns: DocCardGroup,
+    Card: DocCard,
+    Item: DocItem,
+    AccordionGroup: DocAccordionGroup,
+    Accordion: DocAccordion,
+    Frame: DocFrame,
+    Prompt: DocPrompt,
+    Update: DocChangelogEntry,
+    AgentCard: DocAgentCard,
+    CallToAction: DocCallToAction,
+    FlowDiagram
+  }
+  return {
+    blocks,
+    chrome: [DocCallToAction, FlowDiagram],
+    inlineBody: new Set<Component>([DocCallout, DocItem, DocPrompt])
+  }
+}
+
+function createLayoutTags() {
+  return {
+    DocCodeGroup: defineAsyncComponent(() => import('../../doc-code-group/doc-code-group.vue')),
+    TableRoot: defineAsyncComponent(() => import('../../../data/table/table.vue')),
+    TableHeader: defineAsyncComponent(
+      () => import('../../../data/table/table-header/table-header.vue')
+    ),
+    TableBody: defineAsyncComponent(() => import('../../../data/table/table-body/table-body.vue')),
+    TableRow: defineAsyncComponent(() => import('../../../data/table/table-row/table-row.vue')),
+    TableHeadCell: defineAsyncComponent(
+      () => import('../../../data/table/table-head-cell/table-head-cell.vue')
+    ),
+    TableCell: defineAsyncComponent(() => import('../../../data/table/table-cell/table-cell.vue')),
+    TabsRoot: defineAsyncComponent(() => import('../../../navigation/tabs/tabs.vue')),
+    TabsList: defineAsyncComponent(() => import('../../../navigation/tabs/tabs-list.vue')),
+    TabsTrigger: defineAsyncComponent(() => import('../../../navigation/tabs/tabs-trigger.vue')),
+    TabsContent: defineAsyncComponent(() => import('../../../navigation/tabs/tabs-content.vue'))
+  }
+}
+
+export function createDocMarkdownTags() {
+  const content = createContentTags()
+  const doc = createDocTags()
+  const blocks: Record<string, Component> = { ...content, ...doc.blocks }
+  return {
+    ...createLayoutTags(),
+    content,
+    blocks,
+    chrome: new Set<Component>([...doc.chrome, ...CONTENT_ROOTS.map((name) => content[name])]),
+    inlineBody: doc.inlineBody
+  }
+}
+
+export type DocMarkdownTags = ReturnType<typeof createDocMarkdownTags>

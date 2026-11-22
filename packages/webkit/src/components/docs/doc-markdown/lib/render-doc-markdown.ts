@@ -7,25 +7,7 @@ import Link from '../../../navigation/link/link.vue'
 import type { DocCodeGroupSample } from '../../doc-code-group/doc-code-group.vue'
 import DocHeading from '../../doc-heading/doc-heading.vue'
 import { type DocMarkdownNode, parseDocInline } from '../parse-doc-markdown'
-import {
-  BLOCK_COMPONENTS,
-  CALLOUT_VARIANTS,
-  CHROME_BLOCKS,
-  CONTENT_TAGS,
-  DocCodeGroup,
-  FRAMED_CLASS,
-  INLINE_BODY,
-  TableBody,
-  TableCell,
-  TableHeadCell,
-  TableHeader,
-  TableRoot,
-  TableRow,
-  TabsContent,
-  TabsList,
-  TabsRoot,
-  TabsTrigger
-} from './doc-markdown-tags'
+import { CALLOUT_VARIANTS, type DocMarkdownTags, FRAMED_CLASS } from './doc-markdown-tags'
 import { EXTERNAL, inline, renderTokens, text } from './render-doc-inline'
 
 export interface DocMarkdownRenderContext {
@@ -33,6 +15,7 @@ export interface DocMarkdownRenderContext {
   newTab: string
   follow: (event: globalThis.MouseEvent, target: { href: string }) => void
   overrides: Record<string, Component>
+  tags: DocMarkdownTags
 }
 
 type Ctx = DocMarkdownRenderContext
@@ -64,17 +47,17 @@ function renderTabs(ctx: Ctx, node: ComponentNode, key: number): VNodeChild {
       children: child.children
     }))
   return h(
-    TabsRoot,
+    ctx.tags.TabsRoot,
     { key, 'data-doc-block': '', defaultValue: panels[0]?.value ?? '' },
     {
       default: () => [
-        h(TabsList, null, () =>
+        h(ctx.tags.TabsList, null, () =>
           panels.map((panel) =>
-            h(TabsTrigger, { key: panel.value, value: panel.value, label: panel.title })
+            h(ctx.tags.TabsTrigger, { key: panel.value, value: panel.value, label: panel.title })
           )
         ),
         ...panels.map((panel) =>
-          h(TabsContent, { key: panel.value, value: panel.value }, () =>
+          h(ctx.tags.TabsContent, { key: panel.value, value: panel.value }, () =>
             renderNodes(ctx, panel.children, false)
           )
         )
@@ -100,7 +83,7 @@ function renderParts(ctx: Ctx, nodes: DocMarkdownNode[]): VNodeChild[] {
   return nodes.flatMap((child, index) => {
     if (child.type === 'paragraph') return [h('span', { key: index }, partInline(ctx, child.text))]
     if (child.type !== 'component') return []
-    const part = BLOCK_COMPONENTS[child.name]
+    const part = ctx.tags.blocks[child.name]
     if (!part) return []
     const inner = renderParts(ctx, child.children)
     return [
@@ -114,7 +97,7 @@ function renderBuiltIn(ctx: Ctx, node: ComponentNode, key: number): VNodeChild |
     const samples = node.children
       .filter((child): child is CodeNode => child.type === 'code')
       .map(toSample)
-    return h(DocCodeGroup, { key, samples })
+    return h(ctx.tags.DocCodeGroup, { key, samples })
   }
   if (node.name === 'Tabs') return renderTabs(ctx, node, key)
   if (node.name !== 'ItemGroup') return undefined
@@ -145,7 +128,10 @@ function renderChrome(
   const parts = renderParts(ctx, node.children)
   const slots: Record<string, () => VNodeChild> = parts.length ? { default: () => parts } : {}
   if (node.name === 'Carousel') {
-    slots['controls'] = () => [h(CONTENT_TAGS.CarouselPrevious), h(CONTENT_TAGS.CarouselNext)]
+    slots['controls'] = () => [
+      h(ctx.tags.content.CarouselPrevious),
+      h(ctx.tags.content.CarouselNext)
+    ]
   }
   const frame = FRAMED_CLASS[node.name]
   if (frame) {
@@ -164,7 +150,7 @@ function renderComponent(ctx: Ctx, node: ComponentNode, key: number): VNodeChild
   const override = toRaw(ctx.overrides)[node.name]
   const builtIn = override ? undefined : renderBuiltIn(ctx, node, key)
   if (builtIn !== undefined) return builtIn
-  const component = override ?? BLOCK_COMPONENTS[node.name]
+  const component = override ?? ctx.tags.blocks[node.name]
   if (!component) return null
   const values = blockValues(node, !override)
   const slots: Record<string, () => VNodeChild> = {}
@@ -173,9 +159,9 @@ function renderComponent(ctx: Ctx, node: ComponentNode, key: number): VNodeChild
     delete values['caption']
     slots['caption'] = () => inline(ctx, caption)
   }
-  if (!override && CHROME_BLOCKS.has(component))
+  if (!override && ctx.tags.chrome.has(component))
     return renderChrome(ctx, node, component, values, key)
-  const children = renderNodes(ctx, node.children, !override && INLINE_BODY.has(component))
+  const children = renderNodes(ctx, node.children, !override && ctx.tags.inlineBody.has(component))
   if (children.length) slots['default'] = () => children
   return h(component, { key, ...values }, slots)
 }
@@ -194,6 +180,7 @@ function renderList(ctx: Ctx, node: Extract<DocMarkdownNode, { type: 'list' }>, 
 }
 
 function renderNode(ctx: Ctx, node: DocMarkdownNode, key: number, inBody: boolean): VNodeChild {
+  const { TableRoot, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } = ctx.tags
   switch (node.type) {
     case 'heading':
       return h(
@@ -208,7 +195,7 @@ function renderNode(ctx: Ctx, node: DocMarkdownNode, key: number, inBody: boolea
     case 'list':
       return renderList(ctx, node, key)
     case 'code':
-      return h(DocCodeGroup, {
+      return h(ctx.tags.DocCodeGroup, {
         key,
         samples: [toSample(node)],
         showLineNumbers: node.meta['lineNumbers'] === true

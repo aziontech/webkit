@@ -4,6 +4,7 @@
   import { useAppNavigation } from '../../../composables/use-app-navigation'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { createDocMarkdownTags } from './lib/doc-markdown-tags'
   import { renderNodes } from './lib/render-doc-markdown'
   import { readDocMarkdown } from './parse-doc-markdown'
 
@@ -28,11 +29,19 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'doc-markdown')
 
+  const tags = createDocMarkdownTags()
+
   const parsed = computed(() => readDocMarkdown(props.source, Object.keys(props.components)))
 
   const Body = () =>
     renderNodes(
-      { testId: testId.value, newTab: t('common.newTab'), follow, overrides: props.components },
+      {
+        testId: testId.value,
+        newTab: t('common.newTab'),
+        follow,
+        overrides: props.components,
+        tags
+      },
       parsed.value.nodes,
       false
     )

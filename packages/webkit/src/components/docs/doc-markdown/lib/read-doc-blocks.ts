@@ -17,6 +17,8 @@ export type DocMarkdownReader = {
 type Reader = DocMarkdownReader
 type Block = { node?: DocMarkdownNode; next: number }
 
+const lineAt = (lines: string[], index: number): string => lines[index] ?? ''
+
 const dedent = (lines: string[]): string[] => {
   const widths = lines
     .filter((line) => line.trim() !== '')
@@ -39,8 +41,8 @@ const readTable = (lines: string[], start: number): Block | null => {
       .replace(/^\||\|$/g, '')
       .split('|')
       .map((cell) => cell.trim())
-  const head = cells(lines[start] as string)
-  const align = cells(lines[start + 1] as string).map((rule): DocMarkdownAlign => {
+  const head = cells(lineAt(lines, start))
+  const align = cells(lineAt(lines, start + 1)).map((rule): DocMarkdownAlign => {
     const left = rule.startsWith(':')
     const right = rule.endsWith(':')
     if (left && right) return 'center'
@@ -48,8 +50,8 @@ const readTable = (lines: string[], start: number): Block | null => {
   })
   const rows: string[][] = []
   let index = start + 2
-  while (index < lines.length && (lines[index] as string).trim().startsWith('|')) {
-    rows.push(cells(lines[index] as string))
+  while (index < lines.length && lineAt(lines, index).trim().startsWith('|')) {
+    rows.push(cells(lineAt(lines, index)))
     index += 1
   }
   return { node: { type: 'table', head, align, rows }, next: index }
@@ -62,14 +64,14 @@ const listItemOf = (line: string) => {
 }
 
 const readList = (lines: string[], start: number): Block & { node: DocMarkdownNode } => {
-  const { indent: baseIndent, ordered } = listItemOf(lines[start] as string) ?? {
+  const { indent: baseIndent, ordered } = listItemOf(lineAt(lines, start)) ?? {
     indent: 0,
     ordered: false
   }
   const items: DocMarkdownListItem[] = []
   let index = start
   while (index < lines.length) {
-    const line = lines[index] as string
+    const line = lineAt(lines, index)
     if (line.trim() === '') {
       if (!LIST_ITEM.test(lines[index + 1] ?? '')) break
       index += 1
@@ -91,11 +93,11 @@ const readList = (lines: string[], start: number): Block & { node: DocMarkdownNo
 
 const readTagHeader = (name: string, lines: string[], start: number) => {
   const tagPattern = new RegExp(`^\\s*<${name}\\b((?:"[^"]*"|'[^']*'|[^>"'])*?)(\\/?)>`)
-  let header = lines[start] as string
+  let header = lineAt(lines, start)
   let index = start
   while (!tagPattern.test(header) && index + 1 < lines.length) {
     index += 1
-    header = `${header} ${(lines[index] as string).trim()}`
+    header = `${header} ${lineAt(lines, index).trim()}`
   }
   const tag = header.match(tagPattern)
   return tag ? { tag, trailing: header.slice(tag[0].length), index } : null
@@ -109,7 +111,7 @@ const readTagBody = (name: string, lines: string[], from: number, trailing: stri
   const inner = trailing.trim() === '' ? [] : [trailing]
   let cursor = from
   while (cursor < lines.length) {
-    const line = lines[cursor] as string
+    const line = lineAt(lines, cursor)
     const opens = (line.match(open) ?? []).length - (line.match(selfClose) ?? []).length
     depth += opens - (line.match(close) ?? []).length
     cursor += 1
@@ -124,7 +126,7 @@ const readTagBody = (name: string, lines: string[], from: number, trailing: stri
 }
 
 const readComponent = (reader: Reader, lines: string[], start: number): Block | null => {
-  const name = (lines[start] as string).match(OPEN_TAG)?.[1]
+  const name = lineAt(lines, start).match(OPEN_TAG)?.[1]
   if (!name || !reader.blockTags.has(name)) return null
   const header = readTagHeader(name, lines, start)
   if (!header) return null
@@ -150,15 +152,15 @@ const readComponent = (reader: Reader, lines: string[], start: number): Block | 
 }
 
 const readFence = (lines: string[], start: number): Block | null => {
-  const fence = (lines[start] as string).match(FENCE)
+  const fence = lineAt(lines, start).match(FENCE)
   if (!fence) return null
   const marker = fence[1] as string
   const info = (fence[2] ?? '').trim()
   const lang = info.split(/\s+/)[0] ?? ''
   const code: string[] = []
   let index = start + 1
-  while (index < lines.length && !(lines[index] as string).trim().startsWith(marker)) {
-    code.push(lines[index] as string)
+  while (index < lines.length && !lineAt(lines, index).trim().startsWith(marker)) {
+    code.push(lineAt(lines, index))
     index += 1
   }
   const meta = parseAttributes(info.slice(lang.length))
@@ -176,8 +178,8 @@ const readHeading = (line: string, start: number): Block | null => {
 const readBlockquote = (reader: Reader, lines: string[], start: number): Block => {
   const quoted: string[] = []
   let index = start
-  while (index < lines.length && BLOCKQUOTE.test(lines[index] as string)) {
-    quoted.push(((lines[index] as string).match(BLOCKQUOTE) as RegExpMatchArray)[1] ?? '')
+  while (index < lines.length && BLOCKQUOTE.test(lineAt(lines, index))) {
+    quoted.push((lineAt(lines, index).match(BLOCKQUOTE) as RegExpMatchArray)[1] ?? '')
     index += 1
   }
   return { node: { type: 'blockquote', children: parseBlocks(reader, quoted) }, next: index }
@@ -195,8 +197,8 @@ const endsParagraph = (reader: Reader, line: string): boolean =>
 const readParagraph = (reader: Reader, lines: string[], start: number): Block => {
   const paragraph: string[] = []
   let index = start
-  while (index < lines.length && !endsParagraph(reader, lines[index] as string)) {
-    paragraph.push((lines[index] as string).trim())
+  while (index < lines.length && !endsParagraph(reader, lineAt(lines, index))) {
+    paragraph.push(lineAt(lines, index).trim())
     index += 1
   }
   if (!paragraph.length) return { next: index + 1 }
@@ -204,7 +206,7 @@ const readParagraph = (reader: Reader, lines: string[], start: number): Block =>
 }
 
 const readBlock = (reader: Reader, lines: string[], index: number): Block => {
-  const line = lines[index] as string
+  const line = lineAt(lines, index)
   return (
     readFence(lines, index) ??
     (isBlockTagLine(reader, line) ? readComponent(reader, lines, index) : null) ??
@@ -221,7 +223,7 @@ export const parseBlocks = (reader: Reader, lines: string[]): DocMarkdownNode[] 
   const nodes: DocMarkdownNode[] = []
   let index = 0
   while (index < lines.length) {
-    if ((lines[index] as string).trim() === '') {
+    if (lineAt(lines, index).trim() === '') {
       index += 1
       continue
     }
