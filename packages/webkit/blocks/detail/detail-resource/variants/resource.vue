@@ -1,225 +1,45 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Link from '@aziontech/webkit/link'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
 
-  const FOOTER_BAND_CLASS =
-    '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
-    'py-(--spacing-xs)'
+  import ResourceSummaryCard from '../parts/resource-summary-card.vue'
+  import { webAppResource } from '../sample'
 </script>
 
 <template>
-  <Card :padded="false">
-    <template #default>
-      <div
-        class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
-      >
-        <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
-          <i
-            class="az az-globe shrink-0 text-body-lg text-(--text-muted)"
-            aria-hidden="true"
+  <ResourceSummaryCard
+    :resource="webAppResource"
+    created="4 weeks ago by Riley Carter"
+  >
+    <template #source>
+      <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+        <i
+          class="az az-github shrink-0 text-(--text-muted)"
+          aria-hidden="true"
+        />
+        <div class="flex min-w-0">
+          <TableCellLink
+            label="acme/web-app"
+            href="https://github.com/acme/web-app"
           />
-          <div class="flex min-w-0">
-            <TableCellLink
-              label="web-app-y6u7i8.example.com"
-              href="https://web-app-y6u7i8.example.com"
-            />
-          </div>
-        </div>
-
-        <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
-          <Button
-            label="Visit"
-            href="https://web-app-y6u7i8.example.com"
-            target="_blank"
-            variant="secondary"
-            size="medium"
-            icon="az az-external-link"
-          />
-
-          <DropdownMenu
-            side="bottom"
-            align="end"
-          >
-            <DropdownMenu.Trigger>
-              <Tooltip content="Resource actions">
-                <IconButton
-                  icon="az az-ellipsis"
-                  variant="outline"
-                  size="medium"
-                  aria-label="Resource actions"
-                />
-              </Tooltip>
-            </DropdownMenu.Trigger>
-
-            <DropdownMenu.Group>
-              <DropdownMenu.Item
-                value="copy-url"
-                label="Copy URL"
-              >
-                <template #leading>
-                  <i
-                    class="az az-copy"
-                    aria-hidden="true"
-                  />
-                </template>
-              </DropdownMenu.Item>
-            </DropdownMenu.Group>
-
-            <DropdownMenu.Group>
-              <DropdownMenu.Item
-                value="settings"
-                label="Settings"
-              >
-                <template #leading>
-                  <i
-                    class="az az-settings"
-                    aria-hidden="true"
-                  />
-                </template>
-              </DropdownMenu.Item>
-            </DropdownMenu.Group>
-          </DropdownMenu>
         </div>
       </div>
-
-      <div
-        class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-3 lg:grid-cols-6"
-      >
-        <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
-          <span class="text-label-sm text-(--text-muted)">Deployment</span>
-          <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-            <div class="flex min-w-0">
-              <Tooltip
-                content="Open 1213284258 in Deployments"
-                class="w-full"
-              >
-                <Link
-                  label="1213284258"
-                  href="/deployments/1213284258"
-                  size="small"
-                />
-              </Tooltip>
-            </div>
-            <Tag
-              label="Production"
-              severity="neutral"
-              size="small"
-              class="shrink-0"
-            />
-          </div>
-        </div>
-
-        <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
-          <span class="text-label-sm text-(--text-muted)">Domains</span>
-          <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-            <div class="flex min-w-0">
-              <TableCellLink
-                label="web-app-y6u7i8.example.com"
-                href="https://web-app-y6u7i8.example.com"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
-          <span class="text-label-sm text-(--text-muted)">Status</span>
-          <div class="flex min-h-7 min-w-0 items-center">
-            <StatusIndicator
-              severity="success"
-              label="Ready"
-            />
-          </div>
-        </div>
-
-        <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
-          <span class="text-label-sm text-(--text-muted)">Created</span>
-          <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-            <span class="truncate text-body-sm text-(--text-default)">
-              4 weeks ago by Riley Carter
-            </span>
-            <Avatar
-              alt="Riley Carter"
-              label="Riley Carter"
-              size="small"
-              variant="square"
-              class="shrink-0"
-            />
-          </div>
-        </div>
-
-        <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
-          <span class="text-label-sm text-(--text-muted)">Source</span>
-          <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-sm)">
-            <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-              <i
-                class="az az-github shrink-0 text-(--text-muted)"
-                aria-hidden="true"
-              />
-              <div class="flex min-w-0">
-                <TableCellLink
-                  label="acme/web-app"
-                  href="https://github.com/acme/web-app"
-                />
-              </div>
-            </div>
-            <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
-              <i
-                class="az az-git-branch shrink-0 text-(--text-muted)"
-                aria-hidden="true"
-              />
-              <span class="truncate text-body-sm text-(--text-default)">develop</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
-          <span class="text-label-sm text-(--text-muted)">Framework</span>
-          <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-            <i
-              class="az-color az-nuxt shrink-0 text-body-lg"
-              aria-hidden="true"
-            />
-            <span class="truncate text-body-sm text-(--text-default)"> Nuxt </span>
-          </div>
-        </div>
-      </div>
-
-      <div :class="FOOTER_BAND_CLASS">
-        <p
-          class="min-w-0 flex-1 basis-(--container-2xs) text-pretty text-body-sm text-(--text-muted)"
-        >
-          Every push to
-          <code class="font-(family-name:--font-code) text-body-sm text-(--text-default)"
-            >develop</code
-          >
-          deploys this resource to Production. To ship from your machine, drop your project anywhere
-          on this page or run
-          <code class="font-(family-name:--font-code) text-body-sm text-(--text-default)"
-            >platform deploy</code
-          >
-          via the CLI.
-        </p>
-
-        <div class="w-full shrink-0 @lg/band:ms-auto @lg/band:w-fit">
-          <Button
-            class="w-full"
-            label="Documentation"
-            variant="outline"
-            size="medium"
-            icon="az az-book"
-            href="https://example.com/docs/cli"
-            target="_blank"
-          />
-        </div>
+      <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
+        <i
+          class="az az-git-branch shrink-0 text-(--text-muted)"
+          aria-hidden="true"
+        />
+        <span class="truncate text-body-sm text-(--text-default)">develop</span>
       </div>
     </template>
-  </Card>
+    <p class="min-w-0 flex-1 basis-(--container-2xs) text-pretty text-body-sm text-(--text-muted)">
+      Every push to
+      <code class="font-(family-name:--font-code) text-body-sm text-(--text-default)">develop</code>
+      deploys this resource to Production. To ship from your machine, drop your project anywhere on
+      this page or run
+      <code class="font-(family-name:--font-code) text-body-sm text-(--text-default)"
+        >platform deploy</code
+      >
+      via the CLI.
+    </p>
+  </ResourceSummaryCard>
 </template>
