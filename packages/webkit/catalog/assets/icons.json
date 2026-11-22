@@ -956,6 +956,30 @@
    ]
   },
   {
+   "name": "az-arrow-left-to-line",
+   "class": "az az-arrow-left-to-line",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move all the way to the start",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-right-to-line",
+   "class": "az az-arrow-right-to-line",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move all the way to the end",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
    "name": "az-arrow-right-left",
    "class": "az az-arrow-right-left",
    "set": "azionicons",

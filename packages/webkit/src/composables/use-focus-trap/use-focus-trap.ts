@@ -27,6 +27,28 @@ const isField = (el: HTMLElement): boolean => {
   return role === 'combobox' || role === 'textbox' || role === 'spinbutton'
 }
 
+function wrapTab(event: KeyboardEvent, root: HTMLElement): void {
+  const focusable = tabbableIn(root)
+  const first = focusable[0]
+  const last = focusable[focusable.length - 1]
+  if (!first || !last) {
+    event.preventDefault()
+    return
+  }
+  const activeEl = document.activeElement
+  if (event.shiftKey) {
+    if (activeEl === first || !root.contains(activeEl)) {
+      event.preventDefault()
+      last.focus()
+    }
+    return
+  }
+  if (activeEl === last || !root.contains(activeEl)) {
+    event.preventDefault()
+    first.focus()
+  }
+}
+
 export function useFocusTrap(
   containerEl: MaybeRefOrGetter<HTMLElement | null | undefined>,
   active: MaybeRefOrGetter<boolean>,
@@ -42,31 +64,7 @@ export function useFocusTrap(
       }
 
       const root = toValue(containerEl)
-      if (!root) return
-
-      const focusable = tabbableIn(root)
-
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      if (!first || !last) {
-        event.preventDefault()
-        return
-      }
-
-      const activeEl = document.activeElement
-
-      if (event.shiftKey) {
-        if (activeEl === first || !root.contains(activeEl)) {
-          event.preventDefault()
-          last.focus()
-        }
-        return
-      }
-
-      if (activeEl === last || !root.contains(activeEl)) {
-        event.preventDefault()
-        first.focus()
-      }
+      if (root) wrapTab(event, root)
     }
   )
 

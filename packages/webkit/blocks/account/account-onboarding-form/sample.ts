@@ -1,3 +1,5 @@
+import type { SelectOptionItem } from '@aziontech/webkit/select'
+
 import type { OnboardingFormAccount, OnboardingFormPlan } from './account-onboarding-form.vue'
 
 export const sampleAccount: OnboardingFormAccount = {
@@ -103,4 +105,24 @@ export const samplePlans: OnboardingFormPlan[] = [
       }
     }
   }
+]
+
+export const countryOptions: SelectOptionItem[] = [
+  { value: 'Brazil', label: 'Brazil' },
+  { value: 'Canada', label: 'Canada' },
+  { value: 'Germany', label: 'Germany' },
+  { value: 'Japan', label: 'Japan' },
+  { value: 'United Kingdom', label: 'United Kingdom' },
+  { value: 'United States', label: 'United States' }
+]
+export const stateOptions: SelectOptionItem[] = [
+  { value: 'California', label: 'California' },
+  { value: 'New York', label: 'New York' },
+  { value: 'Texas', label: 'Texas' },
+  { value: 'Washington', label: 'Washington' }
+]
+export const cityOptions: SelectOptionItem[] = [
+  { value: 'Los Angeles', label: 'Los Angeles' },
+  { value: 'San Diego', label: 'San Diego' },
+  { value: 'San Francisco', label: 'San Francisco' }
 ]

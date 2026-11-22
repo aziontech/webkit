@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -13,10 +13,14 @@ const TOKENS = {
   'Cardholder name': 'cc-name'
 }
 
-const FORMS = [
-  'account-change-plan-drawer/account-change-plan-drawer.vue',
-  'account-onboarding-form/account-onboarding-form.vue'
-]
+const FORMS = ['account-change-plan-drawer', 'account-onboarding-form']
+
+const blockSource = (dir) =>
+  readdirSync(dir, { recursive: true })
+    .filter((file) => String(file).endsWith('.vue') && !String(file).startsWith('variants'))
+    .sort()
+    .map((file) => readFileSync(join(dir, String(file)), 'utf8'))
+    .join('\n')
 
 const fieldTokens = (source) => {
   const found = {}
@@ -30,7 +34,7 @@ const fieldTokens = (source) => {
 
 for (const form of FORMS) {
   test(`${form} names every address and cardholder field for autofill`, () => {
-    const found = fieldTokens(readFileSync(join(BLOCKS, form), 'utf8'))
+    const found = fieldTokens(blockSource(join(BLOCKS, form)))
     for (const [label, token] of Object.entries(TOKENS)) {
       assert.equal(found[label], token, `${label} in ${form}`)
     }
@@ -38,10 +42,7 @@ for (const form of FORMS) {
 }
 
 test('profile address rows and company name carry autofill tokens', () => {
-  const source = readFileSync(
-    join(BLOCKS, '../settings/settings-form/variants/profile.vue'),
-    'utf8'
-  )
+  const source = blockSource(join(BLOCKS, '../settings/settings-form/parts'))
   for (const token of ['postal-code', 'address-line1', 'address-line2', 'organization']) {
     assert.match(source, new RegExp(`autocomplete="${token}"`))
   }

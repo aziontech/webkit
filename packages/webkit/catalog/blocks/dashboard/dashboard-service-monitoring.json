@@ -18,7 +18,7 @@
  ],
  "sfcFile": "blocks/dashboard/dashboard-service-monitoring/dashboard-service-monitoring.vue",
  "guidelinesFile": "blocks/dashboard/dashboard-service-monitoring/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/dashboard/dashboard-service-monitoring/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

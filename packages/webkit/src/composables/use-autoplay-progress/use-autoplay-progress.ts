@@ -37,6 +37,24 @@ export interface UseAutoplayProgressReturn {
 
 const PROGRESS_TICK_MS = 100
 
+const setTo =
+  <T>(target: Ref<T>, value: T) =>
+  (): void => {
+    target.value = value
+  }
+
+function tickEvery(
+  elapsed: Ref<number>,
+  options: UseAutoplayProgressOptions
+): ReturnType<typeof globalThis.setInterval> {
+  return globalThis.setInterval(() => {
+    elapsed.value += PROGRESS_TICK_MS
+    if (elapsed.value < toValue(options.interval)) return
+    elapsed.value = 0
+    options.onAdvance()
+  }, PROGRESS_TICK_MS)
+}
+
 export function useAutoplayProgress(
   options: UseAutoplayProgressOptions
 ): UseAutoplayProgressReturn {
@@ -73,39 +91,16 @@ export function useAutoplayProgress(
 
   function start(): void {
     stop()
-    marquee = globalThis.setInterval(tick, PROGRESS_TICK_MS)
-  }
-
-  function tick(): void {
-    elapsed.value += PROGRESS_TICK_MS
-    if (elapsed.value < toValue(options.interval)) return
-    elapsed.value = 0
-    options.onAdvance()
-  }
-
-  function restartProgress(): void {
-    elapsed.value = 0
+    marquee = tickEvery(elapsed, options)
   }
 
   function togglePause(): void {
     paused.value = !paused.value
   }
 
-  function enterPointer(): void {
-    pointerInside.value = true
-  }
-
-  function leavePointer(): void {
-    pointerInside.value = false
-  }
-
   function enterFocus(event: globalThis.FocusEvent): void {
     const target = event.target as globalThis.Element
     focusInside.value = target.matches(':focus-visible')
-  }
-
-  function leaveFocus(): void {
-    focusInside.value = false
   }
 
   watch(autoplayRunning, (running) => (running ? start() : stop()))
@@ -122,11 +117,11 @@ export function useAutoplayProgress(
     paused: readonly(paused),
     pauseLabel,
     progress,
-    restartProgress,
+    restartProgress: setTo(elapsed, 0),
     togglePause,
-    enterPointer,
-    leavePointer,
+    enterPointer: setTo(pointerInside, true),
+    leavePointer: setTo(pointerInside, false),
     enterFocus,
-    leaveFocus
+    leaveFocus: setTo(focusInside, false)
   }
 }

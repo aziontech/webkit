@@ -80,6 +80,15 @@ export function vueTscState(projectDir) {
 
 const RANGE_PART = /^(\^|~|>=|=)?\s*v?(\d+)(?:\.(\d+|x|\*))?(?:\.(\d+|x|\*))?(?:-[\w.]+)?$/
 
+const isWild = (part) => part == null || part === 'x' || part === '*'
+
+const IMPLIED_OP = { 1: '^', 2: '~', 3: '=' }
+
+function wildPosition(m) {
+  if (isWild(m[3])) return 1
+  return isWild(m[4]) ? 2 : 3
+}
+
 function rangeFloors(range) {
   const alts = String(range ?? '')
     .split('||')
@@ -88,14 +97,8 @@ function rangeFloors(range) {
   for (const alt of alts) {
     const m = RANGE_PART.exec(alt)
     if (!m) return null
-    const nums = m.slice(2, 5).map((n) => (n == null || n === 'x' || n === '*' ? 0 : Number(n)))
-    const wild =
-      m[3] == null || m[3] === 'x' || m[3] === '*'
-        ? 1
-        : m[4] == null || m[4] === 'x' || m[4] === '*'
-          ? 2
-          : 3
-    const op = m[1] || (wild === 1 ? '^' : wild === 2 ? '~' : '=')
+    const nums = m.slice(2, 5).map((n) => (isWild(n) ? 0 : Number(n)))
+    const op = m[1] || IMPLIED_OP[wildPosition(m)]
     floors.push({ op, version: nums })
   }
   return floors

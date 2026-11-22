@@ -56,7 +56,7 @@ For a resource made from the CLI, the `detail/detail-get-started` section follow
 
 ## Data
 
-The primary (ResourceOverview) takes the resource through a prop, owns the open tab as a model and emits its actions; it fetches nothing. `ResourceDetailResource`, `ResourceDetailTab` and `ResourceDetailProps` are exported from `detail-resource.vue`, and `sample.ts` holds the sample resource the block renders when `resource` is left out. The other variants are whole screens of their own (a service, a policy, an application with working tabs) and keep their own records.
+The primary (ResourceOverview) takes the resource through a prop, owns the open tab as a model and emits its actions; it fetches nothing. `ResourceDetailResource`, `ResourceDetailTab` and `ResourceDetailProps` are exported from `detail-resource.vue`, and `sample.ts` holds the sample resource the block renders when `resource` is left out. The other variants are whole screens of their own (a service, a policy, an application with working tabs); their records are in `sample.ts` too.
 
 | Prop / model  | Type                     | What it does                                                                                                     |
 | ------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------- |

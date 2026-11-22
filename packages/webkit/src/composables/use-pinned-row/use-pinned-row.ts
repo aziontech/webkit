@@ -11,6 +11,8 @@ import {
   watch
 } from 'vue'
 
+import { measurePinnedRow, observeRowSize, rowShift } from './lib/measure'
+
 /** The elements a pinned row is measured from. */
 export interface PinnedRowElements {
   /** The tall box the page scrolls through while the band stays pinned. */
@@ -49,17 +51,7 @@ export function usePinnedRow(
 
   const measure = () => {
     frame = null
-    const runway = toValue(elements.runway)
-    const pinned = toValue(elements.pinned)
-    const viewport = toValue(elements.viewport)
-    const track = toValue(elements.track)
-    if (!toValue(enabled) || !runway || !pinned || !viewport || !track) return reset()
-    if (getComputedStyle(pinned).position !== 'sticky') return reset()
-
-    const overflow = Math.max(0, track.scrollWidth - viewport.clientWidth)
-    runwayHeight.value = `${pinned.offsetHeight + overflow}px`
-    const travelled = pinned.getBoundingClientRect().top - runway.getBoundingClientRect().top
-    offset.value = Math.min(overflow, Math.max(0, travelled))
+    measurePinnedRow(elements, enabled, runwayHeight, offset)
   }
 
   const schedule = () => {
@@ -73,11 +65,7 @@ export function usePinnedRow(
     listening = true
     document.addEventListener('scroll', schedule, SCROLL_OPTIONS)
     window.addEventListener('resize', schedule, { passive: true })
-    observer = new ResizeObserver(schedule)
-    const pinned = toValue(elements.pinned)
-    const track = toValue(elements.track)
-    if (pinned) observer.observe(pinned)
-    if (track) observer.observe(track)
+    observer = observeRowSize(elements, schedule)
     measure()
   }
 
@@ -108,11 +96,7 @@ export function usePinnedRow(
 
   onScopeDispose(stop)
 
-  const shift = computed(() => {
-    if (!offset.value) return undefined
-    const rtl = toValue(elements.runway)?.closest('[dir]')?.getAttribute('dir') === 'rtl'
-    return `${rtl ? offset.value : -offset.value}px 0`
-  })
+  const shift = computed(() => rowShift(offset.value, toValue(elements.runway)))
 
   return { runwayHeight: readonly(runwayHeight), shift }
 }

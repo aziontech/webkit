@@ -79,6 +79,64 @@ function isInlineLink(node) {
   return classTokens(value).includes(INLINE_LINK_CLASS)
 }
 
+function createChecker(context) {
+  const owners = loadOwners()
+  const useOwners = context.options[0]?.owners === true
+  const rel = useOwners ? packagePath(context.filename ?? context.getFilename()) : null
+  const allowed = (entry) => useOwners && isOwnedBy(entry, rel)
+  return {
+    element(node, name) {
+      const hit = ownerOfElement(owners, name)
+      if (!hit || allowed(hit.entry)) return
+      if (hit.key === 'a' && isInlineLink(node)) return
+      context.report({
+        node: node.startTag,
+        messageId: 'element',
+        data: { name, use: hit.entry.use }
+      })
+    },
+    role(node, name) {
+      const entry = owners.roles[name]
+      if (!entry || allowed(entry)) return
+      context.report({ node, messageId: 'role', data: { name, use: entry.use } })
+    },
+    classText(node, text) {
+      for (const token of classTokens(text)) {
+        const entry = owners.classes[token]
+        if (!entry || allowed(entry)) continue
+        context.report({ node, messageId: 'className', data: { name: token, use: entry.use } })
+      }
+    }
+  }
+}
+
+function checkTag(check, node) {
+  if (node.namespace === HTML_NAMESPACE && node.rawName === node.name) {
+    check.element(node, node.name)
+  }
+  if (node.rawName !== 'component') return
+  const is = staticAttribute(node, 'is')
+  if (is?.value) check.element(node, is.value.value)
+  const bound = boundAttribute(node, 'is')
+  for (const name of stringsIn(bound?.value?.expression)) check.element(node, name)
+}
+
+function checkRoles(check, node) {
+  const role = staticAttribute(node, 'role')
+  for (const name of (role?.value?.value ?? '').split(/\s+/).filter(Boolean)) {
+    check.role(role, name)
+  }
+  const boundRole = boundAttribute(node, 'role')
+  for (const name of stringsIn(boundRole?.value?.expression)) check.role(boundRole, name)
+}
+
+function checkClasses(check, node) {
+  const staticClass = staticAttribute(node, 'class')
+  if (staticClass?.value) check.classText(staticClass, staticClass.value.value)
+  const boundClass = boundAttribute(node, 'class')
+  for (const text of stringsIn(boundClass?.value?.expression)) check.classText(boundClass, text)
+}
+
 export default {
   meta: {
     type: 'problem',
@@ -103,77 +161,24 @@ export default {
     }
   },
   create(context) {
-    const owners = loadOwners()
-    const useOwners = context.options[0]?.owners === true
-    const rel = useOwners ? packagePath(context.filename ?? context.getFilename()) : null
-    const allowed = (entry) => useOwners && isOwnedBy(entry, rel)
-
-    const reportElement = (node, name) => {
-      const hit = ownerOfElement(owners, name)
-      if (!hit || allowed(hit.entry)) return
-      if (hit.key === 'a' && isInlineLink(node)) return
-      context.report({
-        node: node.startTag,
-        messageId: 'element',
-        data: { name, use: hit.entry.use }
-      })
-    }
-
-    const reportRole = (node, name) => {
-      const entry = owners.roles[name]
-      if (!entry || allowed(entry)) return
-      context.report({ node, messageId: 'role', data: { name, use: entry.use } })
-    }
-
-    const checkClassText = (node, text) => {
-      for (const token of classTokens(text)) {
-        const entry = owners.classes[token]
-        if (!entry || allowed(entry)) continue
-        context.report({ node, messageId: 'className', data: { name: token, use: entry.use } })
-      }
-    }
-
+    const check = createChecker(context)
     const scriptVisitor = {
       Literal(node) {
-        if (typeof node.value === 'string') checkClassText(node, node.value)
+        if (typeof node.value === 'string') check.classText(node, node.value)
       },
       TemplateElement(node) {
-        checkClassText(node, node.value.cooked ?? '')
+        check.classText(node, node.value.cooked ?? '')
       }
     }
-
     const factory = templateBodyVisitorFactory(context)
     if (!factory) return scriptVisitor
-
-    return factory(
-      {
-        VElement(node) {
-          if (node.namespace === HTML_NAMESPACE && node.rawName === node.name) {
-            reportElement(node, node.name)
-          }
-          if (node.rawName === 'component') {
-            const is = staticAttribute(node, 'is')
-            if (is?.value) reportElement(node, is.value.value)
-            const bound = boundAttribute(node, 'is')
-            for (const name of stringsIn(bound?.value?.expression)) {
-              reportElement(node, name)
-            }
-          }
-          const role = staticAttribute(node, 'role')
-          for (const name of (role?.value?.value ?? '').split(/\s+/).filter(Boolean)) {
-            reportRole(role, name)
-          }
-          const boundRole = boundAttribute(node, 'role')
-          for (const name of stringsIn(boundRole?.value?.expression)) reportRole(boundRole, name)
-          const staticClass = staticAttribute(node, 'class')
-          if (staticClass?.value) checkClassText(staticClass, staticClass.value.value)
-          const boundClass = boundAttribute(node, 'class')
-          for (const text of stringsIn(boundClass?.value?.expression)) {
-            checkClassText(boundClass, text)
-          }
-        }
-      },
-      scriptVisitor
-    )
+    const templateVisitor = {
+      VElement(node) {
+        checkTag(check, node)
+        checkRoles(check, node)
+        checkClasses(check, node)
+      }
+    }
+    return factory(templateVisitor, scriptVisitor)
   }
 }

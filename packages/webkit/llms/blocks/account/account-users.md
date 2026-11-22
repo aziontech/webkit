@@ -182,43 +182,25 @@ Each variant is the same screen in another state: `get_block("account/account-us
 ```vue
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Select from '@aziontech/webkit/select'
-  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
+  import { type TableColumn } from '@aziontech/webkit/table'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, nextTick, reactive, ref, watch } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
+  import { displayName, teamsLabelOf } from './account-users-format'
+  import InviteUserDrawer from './parts/invite-user-drawer.vue'
+  import UserProfileDialog from './parts/user-profile-dialog.vue'
+  import UserRoleDialog from './parts/user-role-dialog.vue'
+  import UsersTable from './parts/users-table.vue'
   import { sampleTeams, sampleUsers } from './sample'
 
   /** Whether a person can sign in yet. */
@@ -309,26 +291,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
   )
   const teamOptions = computed<UsersTeam[]>(() => props.teams ?? sampleTeams)
 
-  const teamLabel = (value: string): string =>
-    teamOptions.value.find((team) => team.value === value)?.label ?? value
-  const teamsLabel = (values: string[]): string =>
-    values.length ? values.map(teamLabel).join(', ') : 'No team (no access)'
-
-  const ROLES: { value: Exclude<UsersRole, 'Owner'>; hint: string }[] = [
-    { value: 'Admin', hint: 'Manages people, teams, billing and every account setting.' },
-    { value: 'Developer', hint: 'Works on the resources their teams reach; no account settings.' },
-    { value: 'Viewer', hint: 'Reads the resources their teams reach; changes nothing.' }
-  ]
-  const roleSeverity = (value: UsersRole): TagSeverity | undefined =>
-    value === 'Owner'
-      ? undefined
-      : (({ Admin: 'info', Developer: 'neutral', Viewer: 'neutral' } as const)[value] ?? 'neutral')
-  const roleVariant = (value: UsersRole): TagVariant | undefined =>
-    value === 'Owner' ? 'highlight' : undefined
-
-  const displayName = (user: UsersUser): string => user.name || user.email
-  const statusSeverity = (value: UsersStatus): TagSeverity =>
-    (({ Active: 'success', Invited: 'warning', Inactive: 'neutral' }) as const)[value] ?? 'neutral'
+  const teamsLabel = (values: string[]): string => teamsLabelOf(teamOptions.value, values)
 
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
@@ -360,8 +323,8 @@ Each variant is the same screen in another state: `get_block("account/account-us
       preferences: { storageKey: 'account-users' }
     })
 
-  const usersTableEl = ref<TableExposed<UsersUser> | null>(null)
-  const exportCsv = () => usersTableEl.value?.exportCsv({ filename: 'users.csv' })
+  const usersTableEl = ref<InstanceType<typeof UsersTable> | null>(null)
+  const exportCsv = () => usersTableEl.value?.exportCsv()
 
   const alone = computed(() => !props.loading && items.value.length === 1 && items.value[0].owner)
 
@@ -402,7 +365,6 @@ Each variant is the same screen in another state: `get_block("account/account-us
   const profileOpen = ref(false)
   const roleOpen = ref(false)
   const nextRole = ref<UsersRole>('Developer')
-  const roleHint = computed(() => ROLES.find((role) => role.value === nextRole.value)?.hint ?? '')
   const openRole = (user: UsersUser) => {
     pending.value = user
     nextRole.value = user.role
@@ -474,35 +436,10 @@ Each variant is the same screen in another state: `get_block("account/account-us
   }
 
   const inviteOpen = ref(props.defaultInviteOpen)
-  const invite = reactive({ email: '', teams: ['developers'] })
-  const submitted = ref(false)
-  const formEl = ref<HTMLFormElement | null>(null)
-  const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  const errors = computed<{ email?: string; teams?: string }>(() => {
-    if (!submitted.value) return {}
-    const email = invite.email.trim().toLowerCase()
-    const out: { email?: string; teams?: string } = {}
-    if (!email) out.email = 'Enter the email address to invite.'
-    else if (!EMAIL.test(email)) out.email = 'Enter an email address like name@example.com.'
-    else if (items.value.some((user) => user.email === email))
-      out.email = 'This person is already in the account.'
-    if (!invite.teams.length) out.teams = 'Choose at least one team, or they get no access.'
-    return out
-  })
   const openInvite = () => {
-    invite.email = ''
-    invite.teams = ['developers']
-    submitted.value = false
     inviteOpen.value = true
   }
-  const sendInvite = (event: Event) => {
-    submitted.value = true
-    if (Object.keys(errors.value).length) {
-      nextTick(() => formEl.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
-      return
-    }
-    const email = invite.email.trim().toLowerCase()
-    const teams = [...invite.teams]
+  const sendInvite = (event: Event, { email, teams }: UsersInvitation) => {
     items.value = [
       ...items.value,
       {
@@ -611,156 +548,18 @@ Each variant is the same screen in another state: `get_block("account/account-us
           </template>
         </Alert>
 
-        <Card
+        <UsersTable
           v-else
-          :padded="false"
-        >
-          <template #default>
-            <DataTable
-              ref="usersTableEl"
-              v-bind="tableProps"
-              :loading="loading"
-              sortable
-              :bordered="false"
-              aria-label="Users"
-              @row-click="onRowOpen"
-              @row-remove="onRowRemove"
-            >
-              <template #cell-name="{ row }">
-                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <Avatar
-                    :label="displayName(row)"
-                    size="small"
-                    variant="square"
-                  />
-                  <div class="flex min-w-0 flex-col">
-                    <span class="truncate text-body-sm text-(--text-default)">{{
-                      displayName(row)
-                    }}</span>
-                  </div>
-                </div>
-              </template>
-              <template #cell-email="{ value }">
-                <span
-                  class="truncate"
-                  dir="ltr"
-                  >{{ value }}</span
-                >
-              </template>
-              <template #cell-role="{ value }">
-                <Tag
-                  :label="value"
-                  :variant="roleVariant(value)"
-                  :severity="roleSeverity(value)"
-                  size="small"
-                />
-              </template>
-              <template #cell-teams="{ row }">
-                <Tooltip
-                  :content="row.owner ? 'The account owner is always an administrator.' : ''"
-                  :disabled="!row.owner"
-                  class="w-full"
-                >
-                  <MultiSelect
-                    :model-value="row.teams"
-                    size="small"
-                    class="w-full"
-                    placeholder="No team"
-                    :disabled="row.owner || row.status === 'Inactive'"
-                    :display-value="() => teamsLabel(row.teams)"
-                    @update:model-value="(next) => setTeams(row, next)"
-                  >
-                    <MultiSelect.Trigger :aria-label="`Teams of ${displayName(row)}`" />
-                    <MultiSelect.Content>
-                      <MultiSelect.Item
-                        v-for="team in teamOptions"
-                        :key="team.value"
-                        :value="team.value"
-                      >
-                        {{ team.label }}
-                      </MultiSelect.Item>
-                    </MultiSelect.Content>
-                  </MultiSelect>
-                </Tooltip>
-              </template>
-              <template #cell-status="{ value }">
-                <TableCellStatus
-                  :label="value"
-                  :severity="statusSeverity(value)"
-                />
-              </template>
-              <template #cell-lastActive="{ row }">
-                <TableCellTime
-                  v-if="row.lastActive"
-                  :value="row.lastActive"
-                />
-                <span
-                  v-else
-                  class="text-body-sm text-(--text-muted)"
-                  >Not signed in yet</span
-                >
-              </template>
-              <template #header-actions>
-                <span class="sr-only">Actions</span>
-              </template>
-              <template #cell-actions="{ row }">
-                <TableCellActions
-                  :name="displayName(row)"
-                  @select="(event, value) => onAction(event, value, row)"
-                >
-                  <DropdownMenu.Group key="profile">
-                    <DropdownMenu.Item
-                      value="view"
-                      label="View profile"
-                    />
-                    <DropdownMenu.Item
-                      v-if="!row.owner"
-                      value="role"
-                      label="Edit role"
-                    />
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group
-                    v-if="row.status === 'Invited'"
-                    key="invitation"
-                  >
-                    <DropdownMenu.Item
-                      value="resend"
-                      label="Resend invitation"
-                    />
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group
-                    v-if="!row.owner"
-                    key="remove"
-                  >
-                    <DropdownMenu.Item
-                      value="remove"
-                      :label="
-                        row.status === 'Invited' ? 'Cancel invitation' : 'Remove from account'
-                      "
-                    />
-                  </DropdownMenu.Group>
-                </TableCellActions>
-              </template>
-              <template #empty>
-                <EmptyState
-                  size="small"
-                  icon="az az-search"
-                  title="No matching users"
-                  description="No user matches these filters."
-                >
-                  <template #actions>
-                    <Button
-                      label="Clear filters"
-                      variant="outline"
-                      size="small"
-                      @click="clearFilters"
-                    />
-                  </template>
-                </EmptyState>
-              </template>
-            </DataTable>
-          </template>
-        </Card>
+          ref="usersTableEl"
+          :table-props="tableProps"
+          :loading="loading"
+          :team-options="teamOptions"
+          @row-click="onRowOpen"
+          @row-remove="onRowRemove"
+          @action="onAction"
+          @teams="setTeams"
+          @clear="clearFilters"
+        />
 
         <EmptyState
           v-if="alone && !error"
@@ -782,228 +581,26 @@ Each variant is the same screen in another state: `get_block("account/account-us
       </section>
     </div>
 
-    <Drawer
+    <InviteUserDrawer
       v-model:open="inviteOpen"
-      side="end"
-      size="large"
-    >
-      <DrawerContent>
-        <form
-          ref="formEl"
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Invite User"
-          novalidate
-          @submit.prevent="sendInvite"
-        >
-          <PanelHeader class="w-full">
-            <DrawerTitle>Invite User</DrawerTitle>
-          </PanelHeader>
-          <PanelBody>
-            <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
-              <legend class="sr-only">Invite User</legend>
-              <DrawerDescription>
-                They get an email with a link to join this account. Their teams decide what they can
-                see and change.
-              </DrawerDescription>
-              <Field
-                required
-                :invalid="Boolean(errors.email)"
-              >
-                <Field.Label for="invite-email">Email</Field.Label>
-                <Input
-                  id="invite-email"
-                  v-model="invite.email"
-                  type="email"
-                  size="large"
-                  autocomplete="off"
-                  placeholder="name@example.com"
-                />
-                <Field.Error v-if="errors.email">{{ errors.email }}</Field.Error>
-              </Field>
-              <Field
-                required
-                :invalid="Boolean(errors.teams)"
-              >
-                <Field.Label for="invite-teams">Teams</Field.Label>
-                <MultiSelect
-                  v-model="invite.teams"
-                  size="large"
-                  class="w-full"
-                  placeholder="Choose teams"
-                  :display-value="() => teamsLabel(invite.teams)"
-                >
-                  <MultiSelect.Trigger
-                    id="invite-teams"
-                    aria-label="Teams"
-                  />
-                  <MultiSelect.Content>
-                    <MultiSelect.Item
-                      v-for="team in teamOptions"
-                      :key="team.value"
-                      :value="team.value"
-                    >
-                      {{ team.label }}
-                    </MultiSelect.Item>
-                  </MultiSelect.Content>
-                </MultiSelect>
-                <Field.Description v-if="!errors.teams"
-                  >Permissions add up across teams. Change them later from the
-                  list.</Field.Description
-                >
-                <Field.Error v-else>{{ errors.teams }}</Field.Error>
-              </Field>
-            </fieldset>
-          </PanelBody>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                type="button"
-                label="Cancel"
-                variant="outline"
-                @click="inviteOpen = false"
-              />
-              <Button
-                type="submit"
-                label="Send invitation"
-                variant="primary"
-                icon="az az-send"
-              />
-            </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </Drawer>
+      :team-options="teamOptions"
+      :emails="items.map((user) => user.email)"
+      @send="sendInvite"
+    />
 
-    <Dialog
+    <UserProfileDialog
       v-model:open="profileOpen"
-      size="medium"
-    >
-      <DialogContent>
-        <PanelHeader class="w-full">
-          <div class="flex min-w-0 items-center gap-(--spacing-sm)">
-            <Avatar
-              :label="pending ? displayName(pending) : ''"
-              size="medium"
-              variant="square"
-            />
-            <DialogTitle>{{ pending ? displayName(pending) : '' }}</DialogTitle>
-          </div>
-        </PanelHeader>
-        <PanelBody>
-          <div class="flex flex-col gap-(--spacing-md)">
-            <DialogDescription>
-              What this person can do comes from their role and their teams.
-            </DialogDescription>
-            <KeyValueList
-              v-if="pending"
-              :columns="2"
-              aria-label="Profile"
-            >
-              <KeyValueList.Item label="Email">
-                <span dir="ltr">{{ pending.email }}</span>
-              </KeyValueList.Item>
-              <KeyValueList.Item label="Role">
-                <Tag
-                  :label="pending.role"
-                  :variant="roleVariant(pending.role)"
-                  :severity="roleSeverity(pending.role)"
-                  size="small"
-                />
-              </KeyValueList.Item>
-              <KeyValueList.Item label="Teams">{{ teamsLabel(pending.teams) }}</KeyValueList.Item>
-              <KeyValueList.Item label="Status">{{ pending.status }}</KeyValueList.Item>
-              <KeyValueList.Item label="Last active">
-                <TableCellTime
-                  v-if="pending.lastActive"
-                  :value="pending.lastActive"
-                />
-                <span v-else>Not signed in yet</span>
-              </KeyValueList.Item>
-            </KeyValueList>
-          </div>
-        </PanelBody>
-        <PanelFooter>
-          <div class="flex w-full justify-end gap-(--spacing-xs)">
-            <Button
-              label="Close"
-              variant="outline"
-              size="medium"
-              @click="profileOpen = false"
-            />
-            <Button
-              v-if="pending && !pending.owner"
-              label="Edit role"
-              variant="primary"
-              size="medium"
-              @click="openRole(pending)"
-            />
-          </div>
-        </PanelFooter>
-      </DialogContent>
-    </Dialog>
+      :pending="pending"
+      :team-options="teamOptions"
+      @edit-role="openRole"
+    />
 
-    <Dialog
+    <UserRoleDialog
       v-model:open="roleOpen"
-      size="small"
-    >
-      <DialogContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Edit role"
-          novalidate
-          @submit.prevent="saveRole"
-        >
-          <PanelHeader class="w-full">
-            <DialogTitle>Edit role</DialogTitle>
-          </PanelHeader>
-          <PanelBody>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <DialogDescription>
-                Choose what {{ pending ? displayName(pending) : '' }} can do on the account. Their
-                teams still decide which resources they reach.
-              </DialogDescription>
-              <Field>
-                <Field.Label for="user-role">Role</Field.Label>
-                <Select
-                  v-model="nextRole"
-                  size="large"
-                  class="w-full"
-                >
-                  <Select.Trigger id="user-role" />
-                  <Select.Content>
-                    <Select.Item
-                      v-for="role in ROLES"
-                      :key="role.value"
-                      :value="role.value"
-                    >
-                      {{ role.value }}
-                    </Select.Item>
-                  </Select.Content>
-                </Select>
-                <Field.Description>{{ roleHint }}</Field.Description>
-              </Field>
-            </div>
-          </PanelBody>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                type="button"
-                label="Cancel"
-                variant="outline"
-                size="medium"
-                @click="roleOpen = false"
-              />
-              <Button
-                type="submit"
-                label="Save role"
-                variant="primary"
-                size="medium"
-              />
-            </div>
-          </PanelFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+      v-model:role="nextRole"
+      :pending="pending"
+      @save="saveRole"
+    />
 
     <ConfirmDialog
       v-model:open="removeOpen"
@@ -1099,4 +696,583 @@ export const sampleUsers: UsersUser[] = [
     lastActive: new Date(referenceTime - 64 * DAY)
   }
 ]
+```
+
+## `account-users-format.ts`
+
+```ts
+import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
+
+import type { UsersRole, UsersStatus, UsersTeam, UsersUser } from './account-users.vue'
+
+export const USERS_ROLES: { value: Exclude<UsersRole, 'Owner'>; hint: string }[] = [
+  { value: 'Admin', hint: 'Manages people, teams, billing and every account setting.' },
+  { value: 'Developer', hint: 'Works on the resources their teams reach; no account settings.' },
+  { value: 'Viewer', hint: 'Reads the resources their teams reach; changes nothing.' }
+]
+
+export const roleSeverity = (value: UsersRole): TagSeverity | undefined =>
+  value === 'Owner'
+    ? undefined
+    : (({ Admin: 'info', Developer: 'neutral', Viewer: 'neutral' } as const)[value] ?? 'neutral')
+
+export const roleVariant = (value: UsersRole): TagVariant | undefined =>
+  value === 'Owner' ? 'highlight' : undefined
+
+export const displayName = (user: UsersUser): string => user.name || user.email
+
+export const statusSeverity = (value: UsersStatus): TagSeverity =>
+  (({ Active: 'success', Invited: 'warning', Inactive: 'neutral' }) as const)[value] ?? 'neutral'
+
+export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
+  values.length
+    ? values.map((value) => teams.find((team) => team.value === value)?.label ?? value).join(', ')
+    : 'No team (no access)'
+```
+
+## `parts/invite-user-drawer.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import DrawerDescription from '@aziontech/webkit/drawer-description'
+  import Drawer from '@aziontech/webkit/drawer-root'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import MultiSelect from '@aziontech/webkit/multi-select'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
+
+  import type { UsersInvitation, UsersTeam } from '../account-users.vue'
+  import { teamsLabelOf } from '../account-users-format'
+
+  const props = defineProps<{ teamOptions: UsersTeam[]; emails: string[] }>()
+
+  const emit = defineEmits<{ send: [event: Event, invitation: UsersInvitation] }>()
+
+  const open = defineModel<boolean>('open', { required: true })
+
+  const invite = reactive({ email: '', teams: ['developers'] })
+  const submitted = ref(false)
+  const formEl = ref<HTMLFormElement | null>(null)
+  const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const errors = computed<{ email?: string; teams?: string }>(() => {
+    if (!submitted.value) return {}
+    const email = invite.email.trim().toLowerCase()
+    const out: { email?: string; teams?: string } = {}
+    if (!email) out.email = 'Enter the email address to invite.'
+    else if (!EMAIL.test(email)) out.email = 'Enter an email address like name@example.com.'
+    else if (props.emails.includes(email)) out.email = 'This person is already in the account.'
+    if (!invite.teams.length) out.teams = 'Choose at least one team, or they get no access.'
+    return out
+  })
+
+  watch(open, (now) => {
+    if (!now) return
+    invite.email = ''
+    invite.teams = ['developers']
+    submitted.value = false
+  })
+
+  const sendInvite = (event: Event) => {
+    submitted.value = true
+    if (Object.keys(errors.value).length) {
+      nextTick(() => formEl.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
+      return
+    }
+    emit('send', event, { email: invite.email.trim().toLowerCase(), teams: [...invite.teams] })
+  }
+</script>
+
+<template>
+  <Drawer
+    v-model:open="open"
+    side="end"
+    size="large"
+  >
+    <DrawerContent>
+      <form
+        ref="formEl"
+        class="flex min-h-0 flex-1 flex-col"
+        aria-label="Invite User"
+        novalidate
+        @submit.prevent="sendInvite"
+      >
+        <PanelHeader class="w-full">
+          <DrawerTitle>Invite User</DrawerTitle>
+        </PanelHeader>
+        <PanelBody>
+          <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
+            <legend class="sr-only">Invite User</legend>
+            <DrawerDescription>
+              They get an email with a link to join this account. Their teams decide what they can
+              see and change.
+            </DrawerDescription>
+            <Field
+              required
+              :invalid="Boolean(errors.email)"
+            >
+              <Field.Label for="invite-email">Email</Field.Label>
+              <Input
+                id="invite-email"
+                v-model="invite.email"
+                type="email"
+                size="large"
+                autocomplete="off"
+                placeholder="name@example.com"
+              />
+              <Field.Error v-if="errors.email">{{ errors.email }}</Field.Error>
+            </Field>
+            <Field
+              required
+              :invalid="Boolean(errors.teams)"
+            >
+              <Field.Label for="invite-teams">Teams</Field.Label>
+              <MultiSelect
+                v-model="invite.teams"
+                size="large"
+                class="w-full"
+                placeholder="Choose teams"
+                :display-value="() => teamsLabelOf(teamOptions, invite.teams)"
+              >
+                <MultiSelect.Trigger
+                  id="invite-teams"
+                  aria-label="Teams"
+                />
+                <MultiSelect.Content>
+                  <MultiSelect.Item
+                    v-for="team in teamOptions"
+                    :key="team.value"
+                    :value="team.value"
+                  >
+                    {{ team.label }}
+                  </MultiSelect.Item>
+                </MultiSelect.Content>
+              </MultiSelect>
+              <Field.Description v-if="!errors.teams"
+                >Permissions add up across teams. Change them later from the
+                list.</Field.Description
+              >
+              <Field.Error v-else>{{ errors.teams }}</Field.Error>
+            </Field>
+          </fieldset>
+        </PanelBody>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              type="button"
+              label="Cancel"
+              variant="outline"
+              @click="open = false"
+            />
+            <Button
+              type="submit"
+              label="Send invitation"
+              variant="primary"
+              icon="az az-send"
+            />
+          </div>
+        </PanelFooter>
+      </form>
+    </DrawerContent>
+  </Drawer>
+</template>
+```
+
+## `parts/user-profile-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import Avatar from '@aziontech/webkit/avatar'
+  import Button from '@aziontech/webkit/button'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import Dialog from '@aziontech/webkit/dialog-root'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
+  import Tag from '@aziontech/webkit/tag'
+
+  import type { UsersTeam, UsersUser } from '../account-users.vue'
+  import { displayName, roleSeverity, roleVariant, teamsLabelOf } from '../account-users-format'
+
+  defineProps<{ pending: UsersUser | null; teamOptions: UsersTeam[] }>()
+
+  const emit = defineEmits<{ 'edit-role': [user: UsersUser] }>()
+
+  const open = defineModel<boolean>('open', { required: true })
+</script>
+
+<template>
+  <Dialog
+    v-model:open="open"
+    size="medium"
+  >
+    <DialogContent>
+      <PanelHeader class="w-full">
+        <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+          <Avatar
+            :label="pending ? displayName(pending) : ''"
+            size="medium"
+            variant="square"
+          />
+          <DialogTitle>{{ pending ? displayName(pending) : '' }}</DialogTitle>
+        </div>
+      </PanelHeader>
+      <PanelBody>
+        <div class="flex flex-col gap-(--spacing-md)">
+          <DialogDescription>
+            What this person can do comes from their role and their teams.
+          </DialogDescription>
+          <KeyValueList
+            v-if="pending"
+            :columns="2"
+            aria-label="Profile"
+          >
+            <KeyValueList.Item label="Email">
+              <span dir="ltr">{{ pending.email }}</span>
+            </KeyValueList.Item>
+            <KeyValueList.Item label="Role">
+              <Tag
+                :label="pending.role"
+                :variant="roleVariant(pending.role)"
+                :severity="roleSeverity(pending.role)"
+                size="small"
+              />
+            </KeyValueList.Item>
+            <KeyValueList.Item label="Teams">{{
+              teamsLabelOf(teamOptions, pending.teams)
+            }}</KeyValueList.Item>
+            <KeyValueList.Item label="Status">{{ pending.status }}</KeyValueList.Item>
+            <KeyValueList.Item label="Last active">
+              <TableCellTime
+                v-if="pending.lastActive"
+                :value="pending.lastActive"
+              />
+              <span v-else>Not signed in yet</span>
+            </KeyValueList.Item>
+          </KeyValueList>
+        </div>
+      </PanelBody>
+      <PanelFooter>
+        <div class="flex w-full justify-end gap-(--spacing-xs)">
+          <Button
+            label="Close"
+            variant="outline"
+            size="medium"
+            @click="open = false"
+          />
+          <Button
+            v-if="pending && !pending.owner"
+            label="Edit role"
+            variant="primary"
+            size="medium"
+            @click="emit('edit-role', pending)"
+          />
+        </div>
+      </PanelFooter>
+    </DialogContent>
+  </Dialog>
+</template>
+```
+
+## `parts/user-role-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import Dialog from '@aziontech/webkit/dialog-root'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
+  import Field from '@aziontech/webkit/field'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Select from '@aziontech/webkit/select'
+  import { computed } from 'vue'
+
+  import type { UsersRole, UsersUser } from '../account-users.vue'
+  import { displayName, USERS_ROLES } from '../account-users-format'
+
+  defineProps<{ pending: UsersUser | null }>()
+
+  const emit = defineEmits<{ save: [event: Event] }>()
+
+  const open = defineModel<boolean>('open', { required: true })
+  const nextRole = defineModel<UsersRole>('role', { required: true })
+
+  const roleHint = computed(
+    () => USERS_ROLES.find((role) => role.value === nextRole.value)?.hint ?? ''
+  )
+</script>
+
+<template>
+  <Dialog
+    v-model:open="open"
+    size="small"
+  >
+    <DialogContent>
+      <form
+        class="flex min-h-0 flex-1 flex-col"
+        aria-label="Edit role"
+        novalidate
+        @submit.prevent="emit('save', $event)"
+      >
+        <PanelHeader class="w-full">
+          <DialogTitle>Edit role</DialogTitle>
+        </PanelHeader>
+        <PanelBody>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <DialogDescription>
+              Choose what {{ pending ? displayName(pending) : '' }} can do on the account. Their
+              teams still decide which resources they reach.
+            </DialogDescription>
+            <Field>
+              <Field.Label for="user-role">Role</Field.Label>
+              <Select
+                v-model="nextRole"
+                size="large"
+                class="w-full"
+              >
+                <Select.Trigger id="user-role" />
+                <Select.Content>
+                  <Select.Item
+                    v-for="role in USERS_ROLES"
+                    :key="role.value"
+                    :value="role.value"
+                  >
+                    {{ role.value }}
+                  </Select.Item>
+                </Select.Content>
+              </Select>
+              <Field.Description>{{ roleHint }}</Field.Description>
+            </Field>
+          </div>
+        </PanelBody>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              type="button"
+              label="Cancel"
+              variant="outline"
+              size="medium"
+              @click="open = false"
+            />
+            <Button
+              type="submit"
+              label="Save role"
+              variant="primary"
+              size="medium"
+            />
+          </div>
+        </PanelFooter>
+      </form>
+    </DialogContent>
+  </Dialog>
+</template>
+```
+
+## `parts/users-table.vue`
+
+```ts
+<script setup lang="ts">
+  import Avatar from '@aziontech/webkit/avatar'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import DataTable from '@aziontech/webkit/data-table'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import MultiSelect from '@aziontech/webkit/multi-select'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
+  import Tag from '@aziontech/webkit/tag'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import type { CollectionTableProps } from '@aziontech/webkit/use-collection'
+  import { ref } from 'vue'
+
+  import type { UsersTeam, UsersUser } from '../account-users.vue'
+  import {
+    displayName,
+    roleSeverity,
+    roleVariant,
+    statusSeverity,
+    teamsLabelOf
+  } from '../account-users-format'
+
+  defineProps<{
+    tableProps: CollectionTableProps<UsersUser, TableColumn>
+    loading: boolean
+    teamOptions: UsersTeam[]
+  }>()
+
+  const emit = defineEmits<{
+    'row-click': [event: MouseEvent | KeyboardEvent, user: UsersUser]
+    'row-remove': [event: KeyboardEvent, user: UsersUser]
+    action: [event: Event, value: DropdownMenuItemValue, user: UsersUser]
+    teams: [user: UsersUser, selected: unknown[]]
+    clear: []
+  }>()
+
+  const usersTableEl = ref<TableExposed<UsersUser> | null>(null)
+
+  defineExpose({ exportCsv: () => usersTableEl.value?.exportCsv({ filename: 'users.csv' }) })
+</script>
+
+<template>
+  <Card :padded="false">
+    <template #default>
+      <DataTable
+        ref="usersTableEl"
+        v-bind="tableProps"
+        :loading="loading"
+        sortable
+        :bordered="false"
+        aria-label="Users"
+        @row-click="(event, row) => emit('row-click', event, row)"
+        @row-remove="(event, row) => emit('row-remove', event, row)"
+      >
+        <template #cell-name="{ row }">
+          <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+            <Avatar
+              :label="displayName(row)"
+              size="small"
+              variant="square"
+            />
+            <div class="flex min-w-0 flex-col">
+              <span class="truncate text-body-sm text-(--text-default)">{{
+                displayName(row)
+              }}</span>
+            </div>
+          </div>
+        </template>
+        <template #cell-email="{ value }">
+          <span
+            class="truncate"
+            dir="ltr"
+            >{{ value }}</span
+          >
+        </template>
+        <template #cell-role="{ value }">
+          <Tag
+            :label="value"
+            :variant="roleVariant(value)"
+            :severity="roleSeverity(value)"
+            size="small"
+          />
+        </template>
+        <template #cell-teams="{ row }">
+          <Tooltip
+            :content="row.owner ? 'The account owner is always an administrator.' : ''"
+            :disabled="!row.owner"
+            class="w-full"
+          >
+            <MultiSelect
+              :model-value="row.teams"
+              size="small"
+              class="w-full"
+              placeholder="No team"
+              :disabled="row.owner || row.status === 'Inactive'"
+              :display-value="() => teamsLabelOf(teamOptions, row.teams)"
+              @update:model-value="(next) => emit('teams', row, next)"
+            >
+              <MultiSelect.Trigger :aria-label="`Teams of ${displayName(row)}`" />
+              <MultiSelect.Content>
+                <MultiSelect.Item
+                  v-for="team in teamOptions"
+                  :key="team.value"
+                  :value="team.value"
+                >
+                  {{ team.label }}
+                </MultiSelect.Item>
+              </MultiSelect.Content>
+            </MultiSelect>
+          </Tooltip>
+        </template>
+        <template #cell-status="{ value }">
+          <TableCellStatus
+            :label="value"
+            :severity="statusSeverity(value)"
+          />
+        </template>
+        <template #cell-lastActive="{ row }">
+          <TableCellTime
+            v-if="row.lastActive"
+            :value="row.lastActive"
+          />
+          <span
+            v-else
+            class="text-body-sm text-(--text-muted)"
+            >Not signed in yet</span
+          >
+        </template>
+        <template #header-actions>
+          <span class="sr-only">Actions</span>
+        </template>
+        <template #cell-actions="{ row }">
+          <TableCellActions
+            :name="displayName(row)"
+            @select="(event, value) => emit('action', event, value, row)"
+          >
+            <DropdownMenu.Group key="profile">
+              <DropdownMenu.Item
+                value="view"
+                label="View profile"
+              />
+              <DropdownMenu.Item
+                v-if="!row.owner"
+                value="role"
+                label="Edit role"
+              />
+            </DropdownMenu.Group>
+            <DropdownMenu.Group
+              v-if="row.status === 'Invited'"
+              key="invitation"
+            >
+              <DropdownMenu.Item
+                value="resend"
+                label="Resend invitation"
+              />
+            </DropdownMenu.Group>
+            <DropdownMenu.Group
+              v-if="!row.owner"
+              key="remove"
+            >
+              <DropdownMenu.Item
+                value="remove"
+                :label="row.status === 'Invited' ? 'Cancel invitation' : 'Remove from account'"
+              />
+            </DropdownMenu.Group>
+          </TableCellActions>
+        </template>
+        <template #empty>
+          <EmptyState
+            size="small"
+            icon="az az-search"
+            title="No matching users"
+            description="No user matches these filters."
+          >
+            <template #actions>
+              <Button
+                label="Clear filters"
+                variant="outline"
+                size="small"
+                @click="emit('clear')"
+              />
+            </template>
+          </EmptyState>
+        </template>
+      </DataTable>
+    </template>
+  </Card>
+</template>
 ```

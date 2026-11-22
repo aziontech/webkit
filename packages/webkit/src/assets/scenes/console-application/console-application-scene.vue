@@ -4,21 +4,14 @@
 
   import Button from '../../../components/action/button/button.vue'
   import IconButton from '../../../components/action/icon-button/icon-button.vue'
-  import CodeBlock from '../../../components/code/code-block/code-block.vue'
   import Card from '../../../components/content/card/card.vue'
   import ConsoleMockupShell from '../../../components/content/console-mockup/parts/console-mockup-shell.vue'
   import ItemList from '../../../components/content/item/item-list.vue'
   import Tag from '../../../components/content/tag/tag.vue'
   import DataTable from '../../../components/data/data-table/data-table.vue'
   import TableCellStatus from '../../../components/data/table/table-cell-status/table-cell-status.vue'
-  import Field from '../../../components/input/field/field.vue'
-  import FieldLabel from '../../../components/input/field/field-label/field-label.vue'
   import Input from '../../../components/input/input/input.vue'
-  import RadioGroup from '../../../components/input/radio-group/radio-group.vue'
-  import Select from '../../../components/input/select/select.vue'
-  import SelectTrigger from '../../../components/input/select/select-trigger/select-trigger.vue'
   import Switch from '../../../components/input/switch/switch.vue'
-  import Textarea from '../../../components/input/textarea/textarea.vue'
   import SaveBar from '../../../components/layout/save-bar/save-bar.vue'
   import SettingsRow from '../../../components/layout/settings-row/settings-row.vue'
   import TabsRoot from '../../../components/navigation/tabs/tabs.vue'
@@ -33,6 +26,7 @@
     type ConsoleApplicationFormRow,
     type ConsoleApplicationSceneTab
   } from './console-application-data'
+  import ConsoleApplicationDrawerField from './parts/console-application-drawer-field.vue'
 
   defineOptions({ name: 'ConsoleApplicationScene', inheritAttrs: false })
 
@@ -142,10 +136,6 @@
 
   function rowOn(row: ConsoleApplicationFormRow): boolean {
     return 'on' in row ? row.on : false
-  }
-
-  function displayAs(value: string): () => string {
-    return () => value
   }
 </script>
 
@@ -370,70 +360,11 @@
                   :data-columns="section.columns ?? 1"
                   class="grid items-end gap-(--spacing-sm) data-[columns=2]:grid-cols-2 data-[columns=3]:grid-cols-3"
                 >
-                  <template
+                  <ConsoleApplicationDrawerField
                     v-for="field in section.fields"
                     :key="field.label"
-                  >
-                    <RadioGroup
-                      v-if="field.kind === 'choice'"
-                      :model-value="field.value"
-                      variant="card"
-                      orientation="horizontal"
-                      :options="field.options.map((option) => ({ value: option, label: option }))"
-                      :aria-label="field.label"
-                    />
-                    <Field
-                      key="field-1"
-                      v-else-if="field.kind === 'switch'"
-                      orientation="horizontal"
-                    >
-                      <Switch
-                        :model-value="field.on"
-                        :aria-label="field.label"
-                      />
-                      <FieldLabel>{{ field.label }}</FieldLabel>
-                    </Field>
-                    <Field
-                      key="field-2"
-                      v-else
-                    >
-                      <FieldLabel>{{ field.label }}</FieldLabel>
-                      <Input
-                        v-if="field.kind === 'text'"
-                        :model-value="field.value"
-                        size="medium"
-                        readonly
-                      />
-                      <Textarea
-                        v-else-if="field.kind === 'textarea'"
-                        :model-value="field.value"
-                        readonly
-                      />
-                      <Select
-                        v-else-if="field.kind === 'select'"
-                        :model-value="field.value"
-                        :display-value="displayAs(field.value)"
-                        size="medium"
-                      >
-                        <SelectTrigger
-                          class="w-full"
-                          :aria-label="field.label"
-                        />
-                      </Select>
-                      <CodeBlock
-                        v-else
-                        :tabs="[
-                          {
-                            label: field.label,
-                            value: field.label,
-                            code: field.value,
-                            language: 'json'
-                          }
-                        ]"
-                        :copyable="false"
-                      />
-                    </Field>
-                  </template>
+                    :field="field"
+                  />
                 </div>
               </section>
             </div>

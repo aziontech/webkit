@@ -48,7 +48,7 @@
  ],
  "sfcFile": "blocks/state/state-form-validation/state-form-validation.vue",
  "guidelinesFile": "blocks/state/state-form-validation/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/state/state-form-validation/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

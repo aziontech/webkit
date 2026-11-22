@@ -1,5 +1,7 @@
 import { onScopeDispose, shallowRef } from 'vue'
 
+import { type ChunkHeight, releaseHidden, splitChunks } from './lib/chunks'
+
 export interface LazyChunk<T> {
   index: number
   start: number
@@ -39,32 +41,13 @@ export function useLazyChunks(options: UseLazyChunksOptions): UseLazyChunksRetur
   const mounted = shallowRef<ReadonlySet<number> | 'all'>(new Set([0]))
   const observed = new Map<number, Element>()
   const roles = new WeakMap<Element, 'chunk' | 'placeholder'>()
-  const heights = new Map<number, { count: number; height: number }>()
+  const heights = new Map<number, ChunkHeight>()
   let observer: IntersectionObserver | null = null
 
   const isMounted = (index: number) => mounted.value === 'all' || mounted.value.has(index)
 
-  const split = <T>(items: readonly T[]): LazyChunk<T>[] => {
-    if (items.length <= threshold) {
-      return [{ index: 0, start: 0, items, mounted: true, estimatedHeight: 0 }]
-    }
-    const out: LazyChunk<T>[] = []
-    for (let start = 0, index = 0; start < items.length; start += chunkSize, index += 1) {
-      const slice = items.slice(start, start + chunkSize)
-      const measured = heights.get(index)
-      out.push({
-        index,
-        start,
-        items: slice,
-        mounted: isMounted(index),
-        estimatedHeight:
-          measured && measured.count === slice.length
-            ? measured.height
-            : slice.length * options.rowHeight
-      })
-    }
-    return out
-  }
+  const split = <T>(items: readonly T[]): LazyChunk<T>[] =>
+    splitChunks(items, threshold, chunkSize, options.rowHeight, isMounted, heights)
 
   const reveal = (indexes: number[]) => {
     if (mounted.value === 'all') return
@@ -73,24 +56,8 @@ export function useLazyChunks(options: UseLazyChunksOptions): UseLazyChunksRetur
     mounted.value = next
   }
 
-  const release = (entries: IntersectionObserverEntry[]) => {
-    if (mounted.value === 'all') return
-    const next = new Set(mounted.value)
-    let changed = false
-    for (const entry of entries) {
-      const index = Number((entry.target as HTMLElement).dataset['chunk'])
-      const height = entry.boundingClientRect.height
-      if (index === 0 || height <= 0 || !next.has(index)) continue
-      if (observed.get(index) !== entry.target || roles.get(entry.target) !== 'chunk') continue
-      heights.set(index, {
-        count: Number((entry.target as HTMLElement).dataset['chunkCount']) || 0,
-        height
-      })
-      next.delete(index)
-      changed = true
-    }
-    if (changed) mounted.value = next
-  }
+  const release = (entries: IntersectionObserverEntry[]) =>
+    releaseHidden(entries, mounted, observed, roles, heights)
 
   const revealAll = () => {
     mounted.value = 'all'

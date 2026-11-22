@@ -215,27 +215,20 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DonutChart from '@aziontech/webkit/donut-chart'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Progress from '@aziontech/webkit/progress'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
+  import ContributorsTable from './parts/contributors-table.vue'
+  import SpendCard from './parts/spend-card.vue'
   import { sampleContributors, sampleKpis, sampleLabels, sampleSeries, sampleSplit } from './sample'
 
   /** A summary tile. */
@@ -351,53 +344,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
       !blocked.value &&
       (series.value.length > 0 || split.value.length > 0 || contributors.value.length > 0)
   )
-  const failed = (card: string) => `Couldn't load ${card}. ${props.error}`
-
-  const contributorColumns: TableColumn[] = [
-    {
-      accessorKey: 'rank',
-      header: 'Rank',
-      align: 'start',
-      sortable: true,
-      minWidth: 64
-    },
-    {
-      accessorKey: 'name',
-      header: 'Name',
-      align: 'start',
-      sortable: true,
-      principal: true,
-      grow: 2
-    },
-    {
-      accessorKey: 'category',
-      header: 'Category',
-      align: 'start',
-      sortable: true,
-      minWidth: 120
-    },
-    {
-      accessorKey: 'amount',
-      header: 'Amount',
-      align: 'end',
-      sortable: true,
-      minWidth: 104
-    },
-    {
-      accessorKey: 'share',
-      header: 'Share of total',
-      align: 'start',
-      sortable: true,
-      minWidth: 160
-    },
-    {
-      accessorKey: 'change',
-      header: 'Change',
-      align: 'end',
-      sortable: true,
-      minWidth: 104
-    }
-  ]
 
   const periods = [
     {
@@ -435,18 +381,8 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
       maximumFractionDigits: 1
     })
 
-  const amountFormat = (value: number) =>
-    formatNumber(value, {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0
-    })
-
   const formatters = {
-    spend: (value: number) => spendFormat(value),
-    amount: (value: number) => amountFormat(value),
-    share: (value: number) => `${value.toFixed(1)}%`,
-    change: (value: number) => `${value > 0 ? '+' : ''}${value.toFixed(1)}%`
+    spend: (value: number) => spendFormat(value)
   }
 
   const trendForm = ref('area')
@@ -580,246 +516,76 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
       <div
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
       >
-        <ChartCard :span="8">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Spend by category</ChartCard.Title>
-              <Hint
-                content="Monthly spend stacked by category; the top edge is the total. Legend totals sum the whole range."
-              />
-            </span>
-            <ChartCard.Action>
-              <ToggleGroup
-                v-model="trendForm"
-                :options="forms"
-                size="small"
-                aria-label="Chart form for Spend by category"
-              />
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(event, value) => onCardOption(event, 'spend-by-category', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Spend by category"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                    :disabled="!exportable"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="failed('spend by category')"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
+        <SpendCard
+          v-model:form="trendForm"
+          :span="8"
+          title="Spend by category"
+          hint="Monthly spend stacked by category; the top edge is the total. Legend totals sum the whole range."
+          :forms="forms"
+          :exportable="exportable"
+          :error="error"
+          @select="(event, value) => onCardOption(event, 'spend-by-category', value)"
+          @retry="(event) => emit('retry', event)"
+        >
+          <Chart
+            :series="series"
+            :labels="labels"
+            :format-value="formatters.spend"
+            empty-title="No spend in this range"
+            empty-description="Nothing was billed to the organization in the selected period."
+            :loading="loading"
+          >
+            <Chart.Grid />
+            <Chart.Axis type="y" />
+            <Chart.Axis type="x" />
+            <Chart.Bar
+              v-if="trendForm === 'bar'"
+              stacked
             />
-            <Chart
+            <Chart.Area
               v-else
-              :series="series"
-              :labels="labels"
-              :format-value="formatters.spend"
-              empty-title="No spend in this range"
-              empty-description="Nothing was billed to the organization in the selected period."
-              :loading="loading"
-            >
-              <Chart.Grid />
-              <Chart.Axis type="y" />
-              <Chart.Axis type="x" />
-              <Chart.Bar
-                v-if="trendForm === 'bar'"
-                stacked
-              />
-              <Chart.Area
-                v-else
-                stacked
-              />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend total />
-            </Chart>
-          </ChartCard.Content>
-        </ChartCard>
-
-        <ChartCard :span="4">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Current split</ChartCard.Title>
-              <Hint content="This month’s spend by category, with the total in the center." />
-            </span>
-            <ChartCard.Action>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(event, value) => onCardOption(event, 'current-split', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Current split"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                    :disabled="!exportable"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="failed('current split')"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
+              stacked
             />
-            <DonutChart
-              v-else
-              :series="split"
-              :format-value="formatters.spend"
-              total-label="This month"
-              empty-title="No spend in this range"
-              empty-description="Nothing was billed to the organization in the selected period."
-              :loading="loading"
-              aria-label="Current split"
-            />
-          </ChartCard.Content>
-        </ChartCard>
+            <Chart.Crosshair />
+            <Chart.Tooltip />
+            <Chart.Legend total />
+          </Chart>
+        </SpendCard>
 
-        <ChartCard :span="12">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Top contributors</ChartCard.Title>
-              <Hint
-                content="The resources that cost the most this month, their share of the total and the change against last month."
-              />
-            </span>
-            <ChartCard.Action>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(event, value) => onCardOption(event, 'top-contributors', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Top contributors"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                    :disabled="!exportable"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="failed('top contributors')"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <DataTable
-              v-else
-              :data="contributors"
-              :columns="contributorColumns"
-              row-key="id"
-              sortable
-              density="compact"
-              bordered
-              :loading="loading"
-            >
-              <template #empty>
-                <EmptyState
-                  size="small"
-                  icon="az az-chart-bar"
-                  title="No spend in this range"
-                  description="Nothing was billed to the organization in the selected period."
-                />
-              </template>
+        <SpendCard
+          :span="4"
+          title="Current split"
+          hint="This month’s spend by category, with the total in the center."
+          :exportable="exportable"
+          :error="error"
+          @select="(event, value) => onCardOption(event, 'current-split', value)"
+          @retry="(event) => emit('retry', event)"
+        >
+          <DonutChart
+            :series="split"
+            :format-value="formatters.spend"
+            total-label="This month"
+            empty-title="No spend in this range"
+            empty-description="Nothing was billed to the organization in the selected period."
+            :loading="loading"
+            aria-label="Current split"
+          />
+        </SpendCard>
 
-              <template #cell-rank="{ row }">
-                <span class="tabular-nums text-(--text-muted)">{{ row.rank }}</span>
-              </template>
-
-              <template #cell-name="{ row }">
-                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <i
-                    :class="row.icon"
-                    class="shrink-0 text-body-lg text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                  <span class="truncate">{{ row.name }}</span>
-                </div>
-              </template>
-
-              <template #cell-category="{ row }">
-                <Tag
-                  :label="row.category"
-                  severity="neutral"
-                  size="small"
-                />
-              </template>
-
-              <template #cell-amount="{ row }">
-                <span class="tabular-nums">{{ formatters.amount(row.amount) }}</span>
-              </template>
-
-              <template #cell-share="{ row }">
-                <div class="flex w-full min-w-0 items-center gap-(--spacing-sm)">
-                  <div class="w-16 shrink-0">
-                    <Progress
-                      :value="row.share"
-                      size="small"
-                      :aria-label="row.name + ' share of total'"
-                    />
-                  </div>
-                  <span class="tabular-nums">{{ formatters.share(row.share) }}</span>
-                </div>
-              </template>
-
-              <template #cell-change="{ row }">
-                <Tag
-                  :label="formatters.change(row.change)"
-                  :severity="row.change > 0 ? 'danger' : row.change < 0 ? 'success' : 'neutral'"
-                  :icon="
-                    row.change > 0
-                      ? 'az az-arrow-up-right'
-                      : row.change < 0
-                        ? 'az az-arrow-down-right'
-                        : 'az az-minus'
-                  "
-                  size="small"
-                />
-              </template>
-            </DataTable>
-          </ChartCard.Content>
-        </ChartCard>
+        <SpendCard
+          :span="12"
+          title="Top contributors"
+          hint="The resources that cost the most this month, their share of the total and the change against last month."
+          :exportable="exportable"
+          :error="error"
+          @select="(event, value) => onCardOption(event, 'top-contributors', value)"
+          @retry="(event) => emit('retry', event)"
+        >
+          <ContributorsTable
+            :contributors="contributors"
+            :loading="loading"
+          />
+        </SpendCard>
       </div>
     </div>
   </div>
@@ -1032,4 +798,248 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
     change: 7.14
   }
 ]
+```
+
+## `parts/contributors-table.vue`
+
+```ts
+<script setup lang="ts">
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Progress from '@aziontech/webkit/progress'
+  import Tag from '@aziontech/webkit/tag'
+  import { useLocale } from '@aziontech/webkit/use-locale'
+
+  import type { BreakdownDashboardContributor } from '../dashboard-breakdown.vue'
+
+  export interface ContributorsTableProps {
+    /** The resources that cost the most this month. */
+    contributors: BreakdownDashboardContributor[]
+    /** The rows are loading. */
+    loading: boolean
+  }
+
+  defineProps<ContributorsTableProps>()
+
+  const contributorColumns: TableColumn[] = [
+    {
+      accessorKey: 'rank',
+      header: 'Rank',
+      align: 'start',
+      sortable: true,
+      minWidth: 64
+    },
+    {
+      accessorKey: 'name',
+      header: 'Name',
+      align: 'start',
+      sortable: true,
+      principal: true,
+      grow: 2
+    },
+    {
+      accessorKey: 'category',
+      header: 'Category',
+      align: 'start',
+      sortable: true,
+      minWidth: 120
+    },
+    {
+      accessorKey: 'amount',
+      header: 'Amount',
+      align: 'end',
+      sortable: true,
+      minWidth: 104
+    },
+    {
+      accessorKey: 'share',
+      header: 'Share of total',
+      align: 'start',
+      sortable: true,
+      minWidth: 160
+    },
+    {
+      accessorKey: 'change',
+      header: 'Change',
+      align: 'end',
+      sortable: true,
+      minWidth: 104
+    }
+  ]
+
+  const { formatNumber } = useLocale()
+
+  const formatters = {
+    amount: (value: number) =>
+      formatNumber(value, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }),
+    share: (value: number) => `${value.toFixed(1)}%`,
+    change: (value: number) => `${value > 0 ? '+' : ''}${value.toFixed(1)}%`
+  }
+</script>
+
+<template>
+  <DataTable
+    :data="contributors"
+    :columns="contributorColumns"
+    row-key="id"
+    sortable
+    density="compact"
+    bordered
+    :loading="loading"
+  >
+    <template #empty>
+      <EmptyState
+        size="small"
+        icon="az az-chart-bar"
+        title="No spend in this range"
+        description="Nothing was billed to the organization in the selected period."
+      />
+    </template>
+
+    <template #cell-rank="{ row }">
+      <span class="tabular-nums text-(--text-muted)">{{ row.rank }}</span>
+    </template>
+
+    <template #cell-name="{ row }">
+      <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+        <i
+          :class="row.icon"
+          class="shrink-0 text-body-lg text-(--text-muted)"
+          aria-hidden="true"
+        />
+        <span class="truncate">{{ row.name }}</span>
+      </div>
+    </template>
+
+    <template #cell-category="{ row }">
+      <Tag
+        :label="row.category"
+        severity="neutral"
+        size="small"
+      />
+    </template>
+
+    <template #cell-amount="{ row }">
+      <span class="tabular-nums">{{ formatters.amount(row.amount) }}</span>
+    </template>
+
+    <template #cell-share="{ row }">
+      <div class="flex w-full min-w-0 items-center gap-(--spacing-sm)">
+        <div class="w-16 shrink-0">
+          <Progress
+            :value="row.share"
+            size="small"
+            :aria-label="row.name + ' share of total'"
+          />
+        </div>
+        <span class="tabular-nums">{{ formatters.share(row.share) }}</span>
+      </div>
+    </template>
+
+    <template #cell-change="{ row }">
+      <Tag
+        :label="formatters.change(row.change)"
+        :severity="row.change > 0 ? 'danger' : row.change < 0 ? 'success' : 'neutral'"
+        :icon="
+          row.change > 0
+            ? 'az az-arrow-up-right'
+            : row.change < 0
+              ? 'az az-arrow-down-right'
+              : 'az az-minus'
+        "
+        size="small"
+      />
+    </template>
+  </DataTable>
+</template>
+```
+
+## `parts/spend-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import ChartCard from '@aziontech/webkit/chart-card'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import Hint from '@aziontech/webkit/hint'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+
+  export interface SpendCardProps {
+    /** Columns of the 12-column grid the card spans. */
+    span: number
+    /** The card title; its lower case names the card in the error alert. */
+    title: string
+    /** One sentence on what the card shows. */
+    hint: string
+    /** The chart forms of the header toggle; empty hides it. */
+    forms?: ToggleGroupOption[]
+    /** Export CSV can run. */
+    exportable: boolean
+    /** Why the period could not load; shows a danger alert with Retry. */
+    error: string
+  }
+
+  withDefaults(defineProps<SpendCardProps>(), { forms: () => [] })
+
+  const emit = defineEmits<{
+    select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
+    retry: [event: MouseEvent]
+  }>()
+
+  const form = defineModel<string>('form', { default: '' })
+
+  defineSlots<{ default(): unknown }>()
+</script>
+
+<template>
+  <ChartCard :span="span">
+    <ChartCard.Header>
+      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
+        <ChartCard.Title>{{ title }}</ChartCard.Title>
+        <Hint :content="hint" />
+      </span>
+      <ChartCard.Action>
+        <ToggleGroup
+          v-if="forms.length"
+          v-model="form"
+          :options="forms"
+          size="small"
+          :aria-label="`Chart form for ${title}`"
+        />
+        <DropdownMenu
+          side="bottom"
+          align="end"
+          @select="(event, value) => emit('select', event, value)"
+        >
+          <DropdownMenu.Trigger>
+            <IconButton
+              icon="az az-ellipsis"
+              variant="ghost"
+              size="small"
+              :aria-label="`More options for ${title}`"
+            />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Group>
+            <DropdownMenu.Item
+              value="export"
+              label="Export CSV"
+              :disabled="!exportable"
+            />
+          </DropdownMenu.Group>
+        </DropdownMenu>
+      </ChartCard.Action>
+    </ChartCard.Header>
+    <ChartCard.Content>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load ${title.toLowerCase()}. ${error}`"
+        action-label="Retry"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
+      <slot v-else />
+    </ChartCard.Content>
+  </ChartCard>
+</template>
 ```

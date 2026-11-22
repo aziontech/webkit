@@ -18,7 +18,7 @@
  ],
  "sfcFile": "blocks/account/account-activity-history/account-activity-history.vue",
  "guidelinesFile": "blocks/account/account-activity-history/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/account/account-activity-history/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

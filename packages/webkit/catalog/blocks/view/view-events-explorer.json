@@ -38,7 +38,33 @@
  ],
  "sfcFile": "blocks/view/view-events-explorer/view-events-explorer.vue",
  "guidelinesFile": "blocks/view/view-events-explorer/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/view/view-events-explorer/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "composables/use-event-query-range.ts",
+  "composables/use-event-query.ts",
+  "composables/use-events-explorer-columns.ts",
+  "composables/use-events-explorer-document.ts",
+  "composables/use-events-explorer-format.ts",
+  "composables/use-events-explorer-layout.ts",
+  "composables/use-events-explorer-log.ts",
+  "composables/use-events-explorer-selection.ts",
+  "composables/use-events-explorer-volume.ts",
+  "composables/use-investigation-sessions.ts",
+  "composables/use-saved-queries.ts",
+  "composables/use-simulated-refresh.ts",
+  "lib/event-log.ts",
+  "lib/event-query.ts",
+  "parts/document-field-search.vue",
+  "parts/event-document.vue",
+  "parts/events-table.vue",
+  "parts/events-toolbar.vue",
+  "parts/field-row.vue",
+  "parts/fields-panel.vue",
+  "parts/filter-chips.vue",
+  "parts/investigation-tabs.vue",
+  "parts/query-toolbar.vue",
+  "parts/log-summary.vue",
+  "parts/recent-queries.vue",
+  "parts/saved-queries.vue"
+ ]
 }

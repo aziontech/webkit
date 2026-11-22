@@ -28,6 +28,12 @@ const Root: FunctionalComponent<{ tag: 'a' | 'button' }> = ({ tag }, { attrs, sl
   h(tag, attrs, slots['default']?.())
 Root.props = ['tag']
 
+const flag = (on: boolean) => (on ? '' : undefined)
+
+const aria = (on: boolean) => on || undefined
+
+const isDownload = (value: unknown) => value != null && value !== false
+
 export function useButtonRoot(
   props: UseButtonRootProps,
   name: string,
@@ -36,7 +42,7 @@ export function useButtonRoot(
   const attrs = useAttrs()
 
   const rootAttrs = computed(() => {
-    const href = safeHref(props.href, attrs['download'] != null && attrs['download'] !== false)
+    const href = safeHref(props.href, isDownload(attrs['download']))
     const anchor = href !== null
     const inert = props.disabled || props.loading
     return {
@@ -48,11 +54,11 @@ export function useButtonRoot(
       type: anchor ? undefined : (props.type ?? 'button'),
       disabled: !anchor && props.disabled,
       tabindex: anchor && inert ? -1 : attrs['tabindex'],
-      'aria-disabled': inert || undefined,
-      'aria-busy': props.loading || undefined,
-      'data-disabled': props.disabled ? '' : undefined,
-      'data-loading': props.loading ? '' : undefined,
-      'data-inert': inert ? '' : undefined,
+      'aria-disabled': aria(inert),
+      'aria-busy': aria(props.loading),
+      'data-disabled': flag(props.disabled),
+      'data-loading': flag(props.loading),
+      'data-inert': flag(inert),
       'data-testid': attrs['data-testid'] ?? name
     }
   })

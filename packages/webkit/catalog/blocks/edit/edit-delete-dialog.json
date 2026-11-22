@@ -13,7 +13,7 @@
  ],
  "sfcFile": "blocks/edit/edit-delete-dialog/edit-delete-dialog.vue",
  "guidelinesFile": "blocks/edit/edit-delete-dialog/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/edit/edit-delete-dialog/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

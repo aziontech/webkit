@@ -109,3 +109,130 @@ export const sampleRecents: HomeDashboardResource[] = [
 ]
 
 export const sampleRegisteredDomains: string[] = ['example.com', 'example.org', 'example.net']
+
+export type SummaryOperation = 'Created' | 'Edited' | 'Deleted'
+
+export interface SummaryZone {
+  id: string
+  name: string
+  domain: string
+  status: 'Active' | 'Inactive'
+  author: string
+  modifiedAt: string
+}
+
+export interface SummaryActivity {
+  id: string
+  date: string
+  operation: SummaryOperation
+  type: string
+  resource: string
+  email: string
+}
+
+export interface SummaryTemplate {
+  id: string
+  name: string
+  icon: string
+  description: string
+  vendor: string
+  version: string
+}
+
+export const sampleSummaryRange = 'Jul 14, 2026, 6:56 PM – Jul 14, 2026, 7:56 PM UTC'
+
+export const sampleSummaryZones: SummaryZone[] = [
+  {
+    id: '4410203040',
+    name: 'example-com',
+    domain: 'example.com',
+    status: 'Active',
+    author: 'jane.doe@example.com',
+    modifiedAt: '2026-07-18T09:12:00Z'
+  },
+  {
+    id: '5520304060',
+    name: 'acme-store',
+    domain: 'store.example.com',
+    status: 'Active',
+    author: 'john.smith@example.com',
+    modifiedAt: '2026-07-20T08:30:00Z'
+  }
+]
+
+export const sampleSummaryActivity: SummaryActivity[] = [
+  {
+    id: 'act-1',
+    date: 'Jul 13, 2026, 1:52 PM',
+    operation: 'Created',
+    type: 'User login',
+    resource: 'User login for Jane Doe',
+    email: 'jane.doe@example.com'
+  },
+  {
+    id: 'act-2',
+    date: 'Jun 30, 2026, 6:54 PM',
+    operation: 'Deleted',
+    type: 'DNS zone',
+    resource: 'DNS zone example.org',
+    email: 'jane.doe@example.com'
+  },
+  {
+    id: 'act-3',
+    date: 'Jun 30, 2026, 6:54 PM',
+    operation: 'Created',
+    type: 'DNS zone',
+    resource: 'DNS zone example.org',
+    email: 'jane.doe@example.com'
+  },
+  {
+    id: 'act-4',
+    date: 'Jun 30, 2026, 6:53 PM',
+    operation: 'Created',
+    type: 'User login',
+    resource: 'User login for Jane Doe',
+    email: 'jane.doe@example.com'
+  },
+  {
+    id: 'act-5',
+    date: 'Jun 24, 2026, 1:55 AM',
+    operation: 'Edited',
+    type: 'Response rule',
+    resource: 'Response rule Set storage origin for acme-store',
+    email: 'jane.doe@example.com'
+  }
+]
+
+export const sampleSummaryUsage = [
+  { id: 'dns-zones', label: 'DNS zones', value: '2' },
+  { id: 'applications', label: 'Applications', value: '5' },
+  { id: 'functions', label: 'Function invocations', value: '1.2M' }
+]
+
+export const sampleSummaryTemplates: SummaryTemplate[] = [
+  {
+    id: 'jwt',
+    name: 'JWT',
+    icon: 'az az-key',
+    description:
+      'Streamline authentication by processing and validating JSON Web Tokens (JWTs) before a request reaches your origin.',
+    vendor: 'Acme',
+    version: '1.1.0'
+  },
+  {
+    id: 'image-optimizer',
+    name: 'Image optimizer',
+    icon: 'az az-image',
+    description: 'Resize, crop and convert images on request, and cache every variant.',
+    vendor: 'Acme',
+    version: '2.4.0'
+  },
+  {
+    id: 'bot-detection',
+    name: 'Bot detection',
+    icon: 'az az-shield',
+    description: 'Score each request and block automated traffic before it costs you capacity.',
+    vendor: 'Acme',
+    version: '0.9.2'
+  }
+]

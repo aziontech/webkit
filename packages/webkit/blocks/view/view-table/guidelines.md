@@ -67,7 +67,7 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 
 ## Data
 
-The block takes its records through props and emits every action; it fetches nothing. `TableViewResource` and `TableViewProps` are exported from `view-table.vue`, and `sample.ts` holds the sample rows the block renders when `resources` is left out (and never while `loading` or `error` is set).
+The block takes its records through props and emits every action; it fetches nothing. `TableViewResource` and `TableViewProps` are exported from `view-table.vue`, and `sample.ts` holds the sample rows the block renders when `resources` is left out (and never while `loading` or `error` is set). The filter row (the `PropertyFilter`, Refresh, Download CSV and preferences) is the private part `parts/collection-controls.vue`; the Deployments state is `parts/deployments-page.vue`, which renders `parts/deployments-table.vue` with the columns, properties and statuses of `lib/deployments.ts` and the sample runs `sampleDeployments` of `sample.ts`.
 
 | Prop        | Type                  | What it does                                                                                                                                |
 | ----------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -104,7 +104,7 @@ To go live, render the block from a page that owns the request and pass what it 
 </template>
 ```
 
-Then delete `sample.ts` and its import. A list too large for the browser moves to `useCollection` server mode (`fetch`), which pages and filters on the server.
+Then delete `sampleResources` and its import (keep `sample.ts` only if you copied the Deployments state, which reads `sampleDeployments` from it). A list too large for the browser moves to `useCollection` server mode (`fetch`), which pages and filters on the server.
 
 ## Do
 

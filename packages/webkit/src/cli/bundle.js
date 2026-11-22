@@ -117,34 +117,33 @@ function headingsOf(text) {
   )
 }
 
+function lineAt(source, cursor) {
+  const lineEnd = source.indexOf('\n', cursor)
+  return { lineEnd, line: source.slice(cursor, lineEnd === -1 ? source.length : lineEnd) }
+}
+
+function blockEnd(source, start, nextMarker, ownHeadings) {
+  const cursorAfter = source.indexOf('\n', start)
+  let cursor = cursorAfter === -1 ? source.length : cursorAfter + 1
+  let firstLine = true
+  while (cursor < source.length) {
+    if (nextMarker !== undefined && cursor > nextMarker) break
+    const { lineEnd, line } = lineAt(source, cursor)
+    if (HEADING_RE.test(line) && !firstLine && !ownHeadings.has(line.trim())) return cursor
+    if (line.trim() !== '') firstLine = false
+    if (lineEnd === -1) break
+    cursor = lineEnd + 1
+  }
+  return source.length
+}
+
 function blocksFromMarkers(source, body, markerIndexes, boundaries = markerIndexes) {
   const ownHeadings = headingsOf(body)
-  const blocks = []
-  for (const start of markerIndexes) {
+  return markerIndexes.map((start) => {
     const nextMarker = boundaries.find((idx) => idx > start)
-    let end = source.length
-    let cursor = source.indexOf('\n', start)
-    cursor = cursor === -1 ? source.length : cursor + 1
-    let firstLine = true
-    while (cursor < source.length) {
-      if (nextMarker !== undefined && cursor > nextMarker) break
-      const lineEnd = source.indexOf('\n', cursor)
-      const line = source.slice(cursor, lineEnd === -1 ? source.length : lineEnd)
-      const isHeading = HEADING_RE.test(line)
-      if (isHeading && !firstLine && !ownHeadings.has(line.trim())) {
-        end = cursor
-        break
-      }
-      if (line.trim() !== '') firstLine = false
-      if (lineEnd === -1) {
-        break
-      }
-      cursor = lineEnd + 1
-    }
-    if (nextMarker !== undefined && end > nextMarker) end = nextMarker
-    blocks.push({ start, end })
-  }
-  return blocks
+    const end = blockEnd(source, start, nextMarker, ownHeadings)
+    return { start, end: nextMarker !== undefined && end > nextMarker ? nextMarker : end }
+  })
 }
 
 function findLegacyBlocks(source, body = '') {

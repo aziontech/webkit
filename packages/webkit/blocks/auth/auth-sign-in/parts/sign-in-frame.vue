@@ -8,16 +8,17 @@
     homeHref?: string
     /** Where the Documentation button leads. */
     docsHref?: string
+    /** The words of the signed-out bar in the app's language. */
+    labels?: { console: string; home: string; documentation: string }
   }
 
   withDefaults(defineProps<SignInFrameProps>(), {
     homeHref: '/home',
-    docsHref: '/docs'
+    docsHref: '/docs',
+    labels: () => ({ console: 'Console', home: 'Azion home', documentation: 'Documentation' })
   })
 
   defineSlots<{
-    /** The signed-out bar; left out, the English bar with the product mark and Documentation renders. */
-    header(): unknown
     /** The card and what sits under it, in the centred column. */
     default(): unknown
   }>()
@@ -29,32 +30,30 @@
 
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <slot name="header">
-      <AppHeader
-        aria-label="Console"
-        class="shrink-0"
+    <AppHeader
+      :aria-label="labels.console"
+      class="shrink-0"
+    >
+      <AppHeader.Brand
+        :href="homeHref"
+        :aria-label="labels.home"
       >
-        <AppHeader.Brand
-          :href="homeHref"
-          aria-label="Azion home"
-        >
-          <Brand
-            variant="default"
-            size="small"
-          />
-        </AppHeader.Brand>
-        <AppHeader.Center />
-        <AppHeader.End>
-          <Button
-            label="Documentation"
-            variant="outline"
-            size="medium"
-            icon="az az-book"
-            :href="docsHref"
-          />
-        </AppHeader.End>
-      </AppHeader>
-    </slot>
+        <Brand
+          variant="default"
+          size="small"
+        />
+      </AppHeader.Brand>
+      <AppHeader.Center />
+      <AppHeader.End>
+        <Button
+          :label="labels.documentation"
+          variant="outline"
+          size="medium"
+          icon="az az-book"
+          :href="docsHref"
+        />
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">

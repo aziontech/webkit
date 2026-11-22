@@ -18,7 +18,11 @@
  ],
  "sfcFile": "blocks/dashboard/dashboard-scan-results/dashboard-scan-results.vue",
  "guidelinesFile": "blocks/dashboard/dashboard-scan-results/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/dashboard/dashboard-scan-results/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "parts/filter-select.vue",
+  "parts/held-flagged-card.vue",
+  "parts/submissions-table.vue",
+  "scan-results-config.ts"
+ ]
 }

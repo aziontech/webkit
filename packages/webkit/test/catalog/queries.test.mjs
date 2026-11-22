@@ -393,7 +393,7 @@ test('getBlock returns the SFC, components, skills and steps; variants by name',
   const v = getBlock(catalog, 'auth/auth-sign-in', { variant: 'IncorrectCredentials' })
   assert.equal(v.variant, 'IncorrectCredentials')
   assert.match(v.sfc, /error="bad-credentials"/)
-  assert.match(p.sfc, /Incorrect email or password/)
+  assert.match(p.files['lib/sign-in-copy.ts'], /Incorrect email or password/)
   assert.equal(getBlock(catalog, 'auth/auth-sign-in', { variant: 'SignUp' }).variant, 'SignUp')
   assert.equal(getBlock(catalog, 'auth').id, 'auth/auth-sign-in')
   assert.equal(getBlock(catalog, 'nope-nope').found, false)

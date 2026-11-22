@@ -30,7 +30,13 @@
     "name": "Default",
     "file": "view-marketplace.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "parts/configure-page.vue",
+    "parts/integration-drawer.vue",
+    "parts/integration-tiles-loading.vue",
+    "parts/solution-page.vue"
+  ],
   "variants": [
     {
       "name": "Detail",

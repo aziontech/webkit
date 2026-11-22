@@ -18,7 +18,7 @@
  ],
  "sfcFile": "blocks/state/state-async-submit/state-async-submit.vue",
  "guidelinesFile": "blocks/state/state-async-submit/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/state/state-async-submit/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

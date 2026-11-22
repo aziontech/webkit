@@ -14,32 +14,30 @@ export interface UseListboxTriggerReturn {
   onKeydown: (event: globalThis.KeyboardEvent) => void
 }
 
-export function useListboxTrigger(options: UseListboxTriggerOptions): UseListboxTriggerReturn {
-  const openWith = (event: globalThis.KeyboardEvent, intent: ListboxFocusIntent) => {
-    event.preventDefault()
-    options.pendingFocus.value = intent
-    options.setOpen(true)
-  }
+function openIntent(event: globalThis.KeyboardEvent): ListboxFocusIntent | null {
+  const key = event.key
+  if (key === 'Enter' || key === ' ' || key === 'ArrowDown' || key === 'ArrowUp') return ''
+  if (key === 'Home') return 'first'
+  if (key === 'End') return 'last'
+  if (key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) return `type:${key}`
+  return null
+}
 
+export function useListboxTrigger(options: UseListboxTriggerOptions): UseListboxTriggerReturn {
   const onKeydown = (event: globalThis.KeyboardEvent) => {
     if (toValue(options.locked)) return
-    const key = event.key
-    if (key === 'Escape') {
+    if (event.key === 'Escape') {
       if (!toValue(options.open)) return
       event.preventDefault()
       options.setOpen(false)
       return
     }
     if (toValue(options.open)) return
-    if (key === 'Enter' || key === ' ' || key === 'ArrowDown' || key === 'ArrowUp') {
-      openWith(event, '')
-    } else if (key === 'Home') {
-      openWith(event, 'first')
-    } else if (key === 'End') {
-      openWith(event, 'last')
-    } else if (key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-      openWith(event, `type:${key}`)
-    }
+    const intent = openIntent(event)
+    if (intent === null) return
+    event.preventDefault()
+    options.pendingFocus.value = intent
+    options.setOpen(true)
   }
 
   return { onKeydown }

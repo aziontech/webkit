@@ -28,7 +28,7 @@
  ],
  "sfcFile": "blocks/create/create-release-impact/create-release-impact.vue",
  "guidelinesFile": "blocks/create/create-release-impact/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/create/create-release-impact/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

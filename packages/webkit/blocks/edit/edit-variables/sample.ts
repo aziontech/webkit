@@ -52,3 +52,24 @@ export const sampleVariables: VariablesVariable[] = [
     lastModified: '3 months ago'
   }
 ]
+
+export const sampleEnv = [
+  '# Copied from the project .env',
+  'API_BASE_URL=https://api.example.com',
+  'CACHE_TTL=300',
+  'export FEATURE_FLAGS="search,checkout"',
+  'api_token=example',
+  'CACHE_TTL=600'
+].join('\n')
+
+export const sampleNetworkList = [
+  '# Office and partner ranges',
+  '203.0.113.0/24  # head office',
+  '198.51.100.17',
+  '198.51.100.300',
+  '2001:db8::/32  # partner VPN',
+  '192.0.2.44',
+  '198.51.100.17',
+  '192.0.2.0/33',
+  '192.0.2.128/25  # staging'
+].join('\n')

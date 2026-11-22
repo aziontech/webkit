@@ -23,7 +23,7 @@
  ],
  "sfcFile": "blocks/create/create-hub/create-hub.vue",
  "guidelinesFile": "blocks/create/create-hub/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/create/create-hub/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

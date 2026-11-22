@@ -18,7 +18,10 @@
  ],
  "sfcFile": "blocks/dashboard/dashboard-executive-summary/dashboard-executive-summary.vue",
  "guidelinesFile": "blocks/dashboard/dashboard-executive-summary/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/dashboard/dashboard-executive-summary/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "executive-summary-metrics.ts",
+  "parts/commentary-card.vue",
+  "parts/goals-card.vue"
+ ]
 }

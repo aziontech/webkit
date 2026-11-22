@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-escape-to-cancel`, `use-file-picker`, `use-shortcuts`, `use-unsaved-changes`
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-escape-to-cancel`, `use-file-picker`, `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -179,7 +179,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
 ```vue
 <script setup lang="ts">
   import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
+  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
@@ -303,11 +303,6 @@ Each variant is the same screen in another state: `get_block("create/create-page
     { immediate: true }
   )
 
-  const ACCOUNT_BUTTON_CLASS =
-    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
-    'motion-reduce:transition-none'
-
   const DNSSEC_DESCRIPTION =
     "Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
 </script>
@@ -336,17 +331,10 @@ Each variant is the same screen in another state: `get_block("create/create-page
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>
-        <button
-          type="button"
+        <AppHeaderAccount
+          name="name@example.com"
           aria-label="Account settings"
-          :class="ACCOUNT_BUTTON_CLASS"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            variant="square"
-          />
-        </button>
+        />
       </AppHeader.End>
     </AppHeader>
 
@@ -684,7 +672,7 @@ export function useCreateForm<T>(options: UseCreateFormOptions<T>): UseCreateFor
 ```ts
 <script setup lang="ts">
   import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
+  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb, { type BreadcrumbItemData } from '@aziontech/webkit/breadcrumb-root'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -696,23 +684,15 @@ export function useCreateForm<T>(options: UseCreateFormOptions<T>): UseCreateFor
     breadcrumb: BreadcrumbItemData[]
     /** The signed-in account, the avatar label. */
     accountLabel?: string
-    /** The accessible name of the avatar when its label is initials. */
-    accountAlt?: string
   }
 
   withDefaults(defineProps<CreationHeaderProps>(), {
-    accountLabel: 'name@example.com',
-    accountAlt: ''
+    accountLabel: 'name@example.com'
   })
 
   const emit = defineEmits<{
     back: [event: MouseEvent]
   }>()
-
-  const ACCOUNT_BUTTON_CLASS =
-    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
-    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -738,18 +718,10 @@ export function useCreateForm<T>(options: UseCreateFormOptions<T>): UseCreateFor
     </AppHeader.Start>
     <AppHeader.Center />
     <AppHeader.End>
-      <button
-        type="button"
+      <AppHeaderAccount
+        :name="accountLabel"
         aria-label="Account settings"
-        :class="ACCOUNT_BUTTON_CLASS"
-      >
-        <Avatar
-          :label="accountLabel"
-          :alt="accountAlt"
-          size="medium"
-          variant="square"
-        />
-      </button>
+      />
     </AppHeader.End>
   </AppHeader>
 </template>

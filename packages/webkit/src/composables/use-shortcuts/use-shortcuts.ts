@@ -12,6 +12,9 @@ import {
   toValue
 } from 'vue'
 
+import { isSingleKey, matchesShortcut, parseShortcutKeys, shortcutKeyList } from './lib/keys'
+import { isTypingTarget } from './lib/typing-target'
+
 /** One keyboard shortcut a screen offers. */
 export interface Shortcut {
   /** Keys joined with `+`: `meta+s`, `meta+enter`, `/`, `?`. `meta` is Command on Apple platforms and Control elsewhere; `ctrl` is always Control. */
@@ -26,20 +29,6 @@ export interface Shortcut {
   when?: MaybeRefOrGetter<boolean>
   /** The element the shortcut belongs to. While a modal layer is open, only shortcuts whose element sits inside that layer fire. */
   element?: MaybeRefOrGetter<HTMLElement | null | undefined>
-}
-
-/** A parsed key combination. */
-export interface ShortcutCombination {
-  /** Command on Apple platforms, Control elsewhere. */
-  meta: boolean
-  /** Control on every platform. */
-  ctrl: boolean
-  /** Shift. */
-  shift: boolean
-  /** Alt, Option on Apple platforms. */
-  alt: boolean
-  /** The key, lowercase, as `KeyboardEvent.key` names it (`s`, `enter`, `/`). */
-  key: string
 }
 
 /** One row of the shortcuts list. */
@@ -92,166 +81,10 @@ export interface ShortcutRegistry {
 
 export const ShortcutsInjectionKey: InjectionKey<ShortcutRegistry> = Symbol('Shortcuts')
 
-const MODIFIER_ALIASES: Record<string, keyof Omit<ShortcutCombination, 'key'>> = {
-  meta: 'meta',
-  cmd: 'meta',
-  command: 'meta',
-  mod: 'meta',
-  ctrl: 'ctrl',
-  control: 'ctrl',
-  shift: 'shift',
-  alt: 'alt',
-  option: 'alt'
-}
-
-const KEY_ALIASES: Record<string, string> = {
-  esc: 'escape',
-  space: ' ',
-  del: 'delete',
-  return: 'enter',
-  up: 'arrowup',
-  down: 'arrowdown',
-  left: 'arrowleft',
-  right: 'arrowright',
-  plus: '+'
-}
-
-const ARIA_KEY_NAMES: Record<string, string> = {
-  ' ': 'Space',
-  escape: 'Escape',
-  enter: 'Enter',
-  delete: 'Delete',
-  backspace: 'Backspace',
-  tab: 'Tab',
-  arrowup: 'ArrowUp',
-  arrowdown: 'ArrowDown',
-  arrowleft: 'ArrowLeft',
-  arrowright: 'ArrowRight'
-}
-
-const TEXT_INPUT_TYPES = new Set([
-  'text',
-  'search',
-  'email',
-  'url',
-  'tel',
-  'password',
-  'number',
-  'date',
-  'datetime-local',
-  'month',
-  'time',
-  'week'
-])
-
-const TYPING_ROLES = new Set(['textbox', 'searchbox', 'combobox', 'spinbutton'])
-
-function splitKeys(keys: string): string[] {
-  const trimmed = keys.trim().toLowerCase()
-  if (!trimmed) return []
-  if (trimmed === '+') return ['+']
-  const tokens = trimmed.split('+').map((token) => token.trim())
-  if (trimmed.endsWith('++')) tokens.splice(-2, 2, '+')
-  return tokens.filter(Boolean)
-}
-
-export function parseShortcutKeys(keys: string): ShortcutCombination | null {
-  const combination: ShortcutCombination = {
-    meta: false,
-    ctrl: false,
-    shift: false,
-    alt: false,
-    key: ''
-  }
-  const tokens = splitKeys(keys)
-  if (!tokens.length) return null
-  const key = tokens[tokens.length - 1]!
-  for (const token of tokens.slice(0, -1)) {
-    const modifier = MODIFIER_ALIASES[token]
-    if (!modifier) return null
-    combination[modifier] = true
-  }
-  combination.key = KEY_ALIASES[key] ?? key
-  return combination
-}
-
-export function shortcutKeyList(keys: string): string[] {
-  const combination = parseShortcutKeys(keys)
-  if (!combination) return []
-  const list: string[] = []
-  if (combination.meta) list.push('meta')
-  if (combination.ctrl) list.push('ctrl')
-  if (combination.alt) list.push('alt')
-  if (combination.shift) list.push('shift')
-  list.push(combination.key === ' ' ? 'space' : combination.key)
-  return list
-}
-
-export function toAriaKeyshortcuts(keys: string): string {
-  const combination = parseShortcutKeys(keys)
-  if (!combination) return ''
-  const key =
-    ARIA_KEY_NAMES[combination.key] ??
-    (combination.key.length === 1 ? combination.key.toUpperCase() : combination.key)
-  const rest = [combination.alt && 'Alt', combination.shift && 'Shift', key].filter(
-    (part): part is string => Boolean(part)
-  )
-  if (combination.meta) {
-    const extra = combination.ctrl ? ['Control'] : []
-    return `${['Meta', ...extra, ...rest].join('+')} ${['Control', ...rest].join('+')}`
-  }
-  return [combination.ctrl && 'Control', ...rest]
-    .filter((part): part is string => Boolean(part))
-    .join('+')
-}
-
-function isApplePlatform(): boolean {
-  const nav = globalThis.navigator
-  if (!nav) return false
-  return /mac/i.test(nav.platform || nav.userAgent || '')
-}
-
-function isSingleKey(combination: ShortcutCombination): boolean {
-  return !combination.meta && !combination.ctrl && !combination.alt
-}
-
-function keyMatches(event: KeyboardEvent, key: string): boolean {
-  const pressed = event.key.toLowerCase()
-  if (pressed === key) return true
-  if (/^[a-z]$/.test(key)) return event.code === `Key${key.toUpperCase()}`
-  if (/^[0-9]$/.test(key)) return event.code === `Digit${key}`
-  return false
-}
-
-export function matchesShortcut(event: KeyboardEvent, combination: ShortcutCombination): boolean {
-  if (!keyMatches(event, combination.key)) return false
-  const apple = isApplePlatform()
-  const wantMeta = combination.meta && apple
-  const wantCtrl = combination.ctrl || (combination.meta && !apple)
-  if (event.metaKey !== wantMeta || event.ctrlKey !== wantCtrl) return false
-  if (event.altKey !== combination.alt) return false
-  const shiftAgnostic = combination.key.length === 1 && !/^[a-z0-9]$/.test(combination.key)
-  if (!shiftAgnostic && event.shiftKey !== combination.shift) return false
-  return true
-}
-
 function eventTarget(event: KeyboardEvent): Element | null {
   const path = typeof event.composedPath === 'function' ? event.composedPath() : []
   const first = path[0] ?? event.target
   return first instanceof Element ? first : null
-}
-
-export function isTypingTarget(target: Element | null): boolean {
-  if (!target) return false
-  if (target instanceof HTMLElement && target.isContentEditable) return true
-  const tag = target.tagName.toLowerCase()
-  if (tag === 'textarea' || tag === 'select') return true
-  if (tag === 'input') {
-    const type = ((target as HTMLInputElement).type || 'text').toLowerCase()
-    return TEXT_INPUT_TYPES.has(type)
-  }
-  const role = target.getAttribute('role')
-  return role !== null && TYPING_ROLES.has(role)
 }
 
 function topModalLayer(target: Element | null): Element | null {
@@ -267,6 +100,13 @@ function isEnabled(shortcut: Shortcut): boolean {
   return shortcut.when === undefined || toValue(shortcut.when) !== false
 }
 
+function matchesPress(shortcut: Shortcut, event: KeyboardEvent, typing: boolean): boolean {
+  if (!shortcut.handler || !isEnabled(shortcut)) return false
+  const combination = parseShortcutKeys(toValue(shortcut.keys))
+  if (!combination || (typing && isSingleKey(combination))) return false
+  return matchesShortcut(event, combination)
+}
+
 export function createShortcutRegistry(): ShortcutRegistry {
   const entries = shallowReactive<ShortcutRegistryEntry[]>([])
   let nextId = 0
@@ -280,19 +120,14 @@ export function createShortcutRegistry(): ShortcutRegistry {
     const typing = isTypingTarget(target)
     const layer = topModalLayer(target)
     for (let index = entries.length - 1; index >= 0; index -= 1) {
-      const entry = entries[index]!
-      const { shortcut } = entry
-      if (!shortcut.handler || !isEnabled(shortcut)) continue
-      const combination = parseShortcutKeys(toValue(shortcut.keys))
-      if (!combination) continue
-      if (typing && isSingleKey(combination)) continue
-      if (!matchesShortcut(event, combination)) continue
+      const { shortcut } = entries[index]!
+      if (!matchesPress(shortcut, event, typing)) continue
       if (layer) {
         const owner = toValue(shortcut.element)
         if (!owner || !layer.contains(owner)) continue
       }
       event.preventDefault()
-      shortcut.handler(event)
+      shortcut.handler?.(event)
       return
     }
   }

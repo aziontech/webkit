@@ -19,6 +19,7 @@
 - `header-actions` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
 - Set `:padded="false"` only when the content draws its own inset or needs flush dividers.
 - The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space.
+- To make the whole card one link (a template or a destination tile), set `href` instead of wrapping the card in an anchor or stretching a hand-made link over it. Keep buttons and other links out of a linked card: its content is the link's name.
 
 ## Don’t
 
@@ -45,6 +46,7 @@
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `''` | false | Heading rendered in the header when the `header` slot is empty. |
 | `padded` | `boolean` | `true` | false | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers. |
+| `href` | `string` | `''` | false | When set, the whole card is one link to this URL: the root renders as an anchor. Keep other interactive content out of a linked card. |
 
 ## Slots
 
@@ -60,13 +62,14 @@
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - Responsive: the content region is the `@container/card`, so `KeyValueList`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
 - Hover-free devices: the `header-actions` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
+- Link: with `href` (a safe URL) the root is an `a` with `data-link`, the text stays `--text-default` with no underline, and `focus-visible` draws the `--ring-color` ring offset against `--bg-canvas`; an empty or unsafe `href` keeps the `section`.
 - Header only: with `padded` off and nothing in the default slot, the empty content region collapses and the header draws no bottom rule, so the card's own frame is the only line under it.
 
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
+- ARIA: the root is a `section`; with `href` it is a native anchor whose name is the card's text, so the title comes first in the content.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.

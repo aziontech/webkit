@@ -123,6 +123,11 @@ function parseTokens(raw: string | null): PropertyFilterToken[] | undefined {
   }
 }
 
+function positiveInteger(raw: string | null): number {
+  const value = Number(raw)
+  return Number.isInteger(value) && value > 0 ? value : 0
+}
+
 export function readUrlState(params: URLSearchParams, prefix = ''): CollectionUrlState {
   const get = (key: string) => params.get(prefix + key)
   const state: CollectionUrlState = {}
@@ -143,11 +148,27 @@ export function readUrlState(params: URLSearchParams, prefix = ''): CollectionUr
         part.startsWith('-') ? { id: part.slice(1), desc: true } : { id: part, desc: false }
       )
   }
-  const page = Number(get('page'))
-  if (Number.isInteger(page) && page > 0) state.page = page
-  const size = Number(get('size'))
-  if (Number.isInteger(size) && size > 0) state.pageSize = size
+  const page = positiveInteger(get('page'))
+  if (page) state.page = page
+  const size = positiveInteger(get('size'))
+  if (size) state.pageSize = size
   return state
+}
+
+function writeQuery(params: URLSearchParams, query: PropertyFilterQuery, prefix: string): void {
+  const groups = (query.groups ?? []).filter((group) => group.tokens.length > 0)
+  if (query.tokens.length) {
+    params.set(`${prefix}filter`, JSON.stringify(tokenTuples(query.tokens)))
+  }
+  if (groups.length) {
+    params.set(
+      `${prefix}groups`,
+      JSON.stringify(groups.map((group) => [group.operation, tokenTuples(group.tokens)]))
+    )
+  }
+  if ((query.tokens.length || groups.length) && query.operation === 'or') {
+    params.set(`${prefix}op`, 'or')
+  }
 }
 
 export function writeUrlState(
@@ -159,19 +180,7 @@ export function writeUrlState(
   const params = new URLSearchParams(base)
   for (const key of URL_KEYS) params.delete(prefix + key)
   if (state.filteringText) params.set(`${prefix}q`, state.filteringText)
-  const groups = (state.query.groups ?? []).filter((group) => group.tokens.length > 0)
-  if (state.query.tokens.length) {
-    params.set(`${prefix}filter`, JSON.stringify(tokenTuples(state.query.tokens)))
-  }
-  if (groups.length) {
-    params.set(
-      `${prefix}groups`,
-      JSON.stringify(groups.map((group) => [group.operation, tokenTuples(group.tokens)]))
-    )
-  }
-  if ((state.query.tokens.length || groups.length) && state.query.operation === 'or') {
-    params.set(`${prefix}op`, 'or')
-  }
+  writeQuery(params, state.query, prefix)
   if (state.sorting.length) {
     params.set(`${prefix}sort`, state.sorting.map((s) => (s.desc ? `-${s.id}` : s.id)).join(','))
   }

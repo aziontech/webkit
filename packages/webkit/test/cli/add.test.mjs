@@ -197,10 +197,15 @@ test('add copies the block data files beside the SFC and points every local impo
     assert.equal(r.code, 0, r.stderr)
     const primary = readFileSync(join(dir, 'src/views/view-table.vue'), 'utf8')
     assert.match(primary, /from '\.\/view-table\.sample'/)
-    assert.equal(primary, shipped('view-table.vue').replace("'./sample'", "'./view-table.sample'"))
+    assert.equal(
+      primary,
+      shipped('view-table.vue')
+        .replace("'./sample'", "'./view-table.sample'")
+        .replace("'./parts/collection-controls.vue'", "'./view-table.collection-controls.vue'")
+    )
     assert.equal(
       readFileSync(join(dir, 'src/views/view-table.sample.ts'), 'utf8'),
-      shipped('sample.ts')
+      shipped('sample.ts').replace("'./lib/deployments'", "'./view-table.deployments'")
     )
     const variant = readFileSync(join(dir, 'src/views/view-table-empty.vue'), 'utf8')
     assert.match(variant, /import ViewTable from '\.\/view-table\.vue'/)
@@ -210,8 +215,36 @@ test('add copies the block data files beside the SFC and points every local impo
       files.map((f) => [f.path, f.variant, f.imports]),
       [
         ['src/views/view-table-empty.vue', 'Empty', { '../view-table.vue': './view-table.vue' }],
-        ['src/views/view-table.sample.ts', 'Data', undefined],
-        ['src/views/view-table.vue', 'Default', { './sample': './view-table.sample' }]
+        ['src/views/view-table.collection-controls.vue', 'Data', undefined],
+        [
+          'src/views/view-table.deployments-page.vue',
+          'Data',
+          {
+            '../lib/deployments': './view-table.deployments',
+            '../sample': './view-table.sample',
+            './collection-controls.vue': './view-table.collection-controls.vue',
+            './deployments-table.vue': './view-table.deployments-table.vue'
+          }
+        ],
+        [
+          'src/views/view-table.deployments-table.vue',
+          'Data',
+          { '../lib/deployments': './view-table.deployments' }
+        ],
+        ['src/views/view-table.deployments.ts', 'Data', undefined],
+        [
+          'src/views/view-table.sample.ts',
+          'Data',
+          { './lib/deployments': './view-table.deployments' }
+        ],
+        [
+          'src/views/view-table.vue',
+          'Default',
+          {
+            './parts/collection-controls.vue': './view-table.collection-controls.vue',
+            './sample': './view-table.sample'
+          }
+        ]
       ]
     )
     const diff = cliJson(dir, 'diff', 'view/view-table')
@@ -236,10 +269,23 @@ test('add renames the data files after a --dest name', () => {
     assert.equal(r.code, 0)
     assert.deepEqual(
       r.json.files.map((f) => f.path),
-      ['src/screens/Resources.vue', 'src/screens/Resources.sample.ts']
+      [
+        'src/screens/Resources.vue',
+        'src/screens/Resources.sample.ts',
+        'src/screens/Resources.deployments.ts',
+        'src/screens/Resources.collection-controls.vue',
+        'src/screens/Resources.deployments-page.vue',
+        'src/screens/Resources.deployments-table.vue'
+      ]
     )
-    assert.deepEqual(r.json.files[0].imports, { './sample': './Resources.sample' })
-    assert.deepEqual(r.json.files[1].imports, { './view-table.vue': './Resources.vue' })
+    assert.deepEqual(r.json.files[0].imports, {
+      './parts/collection-controls.vue': './Resources.collection-controls.vue',
+      './sample': './Resources.sample'
+    })
+    assert.deepEqual(r.json.files[1].imports, {
+      './lib/deployments': './Resources.deployments',
+      './view-table.vue': './Resources.vue'
+    })
   } finally {
     cleanup(dir)
   }
@@ -307,10 +353,19 @@ test('add copies the sibling variant a variant imports and points the import at 
     const files = manifest.blocks['settings/settings-form'].files
     assert.deepEqual(files.map((f) => f.variant).sort(), [
       'Data',
+      'Data',
+      'Data',
+      'Data',
       'SaveAll',
       'SavePerGroup',
       'SavingOneGroup'
     ])
+    for (const part of [
+      'general-group-card.vue',
+      'notifications-group-card.vue',
+      'settings-form-save.ts'
+    ])
+      assert.ok(existsSync(join(dir, `src/views/settings-form.${part}`)), part)
     assert.deepEqual(files.find((f) => f.variant === 'SavingOneGroup').imports, {
       './save-per-group.vue': './settings-form-save-per-group.vue'
     })

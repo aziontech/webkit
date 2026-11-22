@@ -37,7 +37,24 @@
     "name": "CreateTable",
     "file": "edit-schema.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "composables/use-csv-import.ts",
+    "lib/column-types.ts",
+    "lib/csv.ts",
+    "lib/draft-table.ts",
+    "parts/add-column-drawer.vue",
+    "parts/change-type-dialog.vue",
+    "parts/column-type-select.vue",
+    "parts/create-table-columns.vue",
+    "parts/create-table-drawer.vue",
+    "parts/create-table-relations.vue",
+    "parts/csv-import.vue",
+    "parts/insert-row-drawer.vue",
+    "parts/schema-columns-table.vue",
+    "parts/truncate-table-dialog.vue",
+    "parts/drawer-form-footer.vue"
+  ],
   "variants": [
     {
       "name": "AddColumn",

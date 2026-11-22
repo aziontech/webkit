@@ -1,26 +1,15 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DocProse from '@aziontech/webkit/doc-prose'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
   import IntegrationCard from '@aziontech/webkit/integration-card'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
   import { toast } from '@aziontech/webkit/toast'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 
+  import IntegrationDrawer from './parts/integration-drawer.vue'
+  import IntegrationTilesLoading from './parts/integration-tiles-loading.vue'
   import { sampleApplications, sampleIntegrations } from './sample'
 
   /** Where an integration runs. */
@@ -317,49 +306,7 @@
             aria-label="Search integrations"
             disabled
           />
-          <ul
-            class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 sm:grid-cols-2 xl:grid-cols-3"
-          >
-            <li
-              v-for="tile in 6"
-              :key="tile"
-              class="flex min-w-0"
-            >
-              <Card class="w-full">
-                <template #default>
-                  <div class="flex flex-col gap-(--spacing-md)">
-                    <div class="flex items-start gap-(--spacing-md)">
-                      <Skeleton
-                        width="2.5rem"
-                        height="2.5rem"
-                      />
-                      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
-                        <Skeleton
-                          width="50%"
-                          height="1rem"
-                        />
-                        <Skeleton height="0.875rem" />
-                        <Skeleton
-                          width="75%"
-                          height="0.875rem"
-                        />
-                      </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                      <Skeleton
-                        width="5rem"
-                        height="1.25rem"
-                      />
-                      <Skeleton
-                        width="4.5rem"
-                        height="2rem"
-                      />
-                    </div>
-                  </div>
-                </template>
-              </Card>
-            </li>
-          </ul>
+          <IntegrationTilesLoading />
         </section>
         <div
           v-else
@@ -466,196 +413,18 @@
       </div>
     </div>
 
-    <Drawer
+    <IntegrationDrawer
       v-if="selected"
       v-model:open="detailOpen"
-      size="large"
-      side="end"
-    >
-      <DrawerContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          :aria-label="`Install ${selected.name}`"
-          novalidate
-          @submit.prevent="install"
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 items-center gap-(--spacing-sm)">
-              <span
-                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-              >
-                <i
-                  :class="selected.logo"
-                  class="text-body-lg leading-none text-(--text-default)"
-                  aria-hidden="true"
-                />
-              </span>
-              <div class="flex min-w-0 flex-col">
-                <DrawerTitle>{{ selected.name }}</DrawerTitle>
-                <span class="text-body-xs text-(--text-muted)"
-                  >by <bdi>{{ selected.vendor }}</bdi></span
-                >
-              </div>
-            </div>
-          </PanelHeader>
-
-          <PanelBody>
-            <div class="flex flex-col gap-(--layout-section-gap)">
-              <Alert
-                key="alert-1"
-                v-if="run.state === 'succeeded'"
-                severity="success"
-                :label="`${selected.name} is installed on ${run.application}. It runs from the next request.`"
-              />
-              <Alert
-                key="alert-2"
-                v-else-if="run.state === 'failed'"
-                severity="danger"
-                :label="`${selected.name} wasn't installed on ${run.application}. ${run.reason}`"
-                action-label="Reinstall"
-                @action="reinstall"
-              />
-
-              <p class="m-0 text-body-sm text-(--text-muted)">{{ selected.description }}</p>
-
-              <KeyValueList
-                :columns="2"
-                aria-label="Integration details"
-              >
-                <KeyValueList.Item label="Publisher"
-                  ><bdi>{{ selected.vendor }}</bdi></KeyValueList.Item
-                >
-                <KeyValueList.Item label="Category">{{ selected.category }}</KeyValueList.Item>
-                <KeyValueList.Item label="Context">{{
-                  CONTEXTS[selected.context]
-                }}</KeyValueList.Item>
-                <KeyValueList.Item label="Version">{{ selected.version }}</KeyValueList.Item>
-                <KeyValueList.Item label="Updated">{{ selected.updated }}</KeyValueList.Item>
-                <KeyValueList.Item label="Installed on">{{
-                  selected.installedOn.length ? selected.installedOn.join(', ') : 'Not installed'
-                }}</KeyValueList.Item>
-              </KeyValueList>
-
-              <section
-                class="flex flex-col gap-(--layout-group-gap)"
-                aria-labelledby="integration-overview"
-              >
-                <h3
-                  id="integration-overview"
-                  class="text-heading-2xs text-(--text-default)"
-                >
-                  Overview
-                </h3>
-                <DocProse>
-                  <p>{{ selected.description }}</p>
-                  <p>
-                    Installing adds a function instance to the application you choose and one rule
-                    that runs it. Its settings can be changed at any time from Configure.
-                  </p>
-                </DocProse>
-              </section>
-
-              <section
-                class="flex flex-col gap-(--layout-group-gap)"
-                aria-labelledby="integration-permissions"
-              >
-                <h3
-                  id="integration-permissions"
-                  class="text-heading-2xs text-(--text-default)"
-                >
-                  Permissions
-                </h3>
-                <ul class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
-                  <li
-                    v-for="permission in [
-                      'Read the application’s rules',
-                      'Add a function instance to the application',
-                      'Add one rule that runs the function'
-                    ]"
-                    :key="permission"
-                    class="flex items-center gap-(--spacing-sm) text-body-sm text-(--text-muted)"
-                  >
-                    <i
-                      class="az az-check shrink-0 text-(--success-foreground)"
-                      aria-hidden="true"
-                    />
-                    {{ permission }}
-                  </li>
-                </ul>
-              </section>
-
-              <section
-                class="flex flex-col gap-(--layout-group-gap)"
-                aria-labelledby="integration-install"
-              >
-                <h3
-                  id="integration-install"
-                  class="text-heading-2xs text-(--text-default)"
-                >
-                  {{ selected.installedOn.length ? 'Install on another application' : 'Install' }}
-                </h3>
-                <Field
-                  v-if="available.length"
-                  :invalid="applicationInvalid"
-                  :disabled="installing"
-                  required
-                >
-                  <Field.Label>Application</Field.Label>
-                  <Select
-                    v-model="form.application"
-                    size="medium"
-                    placeholder="Select an application"
-                  >
-                    <Select.Trigger class="w-full" />
-                    <Select.Content>
-                      <Select.Item
-                        v-for="app in available"
-                        :key="app"
-                        :value="app"
-                        >{{ app }}</Select.Item
-                      >
-                    </Select.Content>
-                  </Select>
-                  <Field.Error v-if="applicationInvalid">
-                    Select the application to install {{ selected.name }} on.
-                  </Field.Error>
-                  <Field.Description v-else>
-                    The integration runs on every request to this application.
-                  </Field.Description>
-                </Field>
-                <p
-                  v-else
-                  class="m-0 text-body-sm text-(--text-muted)"
-                >
-                  {{ selected.name }} is installed on every application.
-                </p>
-              </section>
-            </div>
-          </PanelBody>
-
-          <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-              <Button
-                v-if="selected.installedOn.length"
-                label="Configure"
-                icon="az az-settings"
-                variant="outline"
-                size="medium"
-                :href="`/marketplace/${selected.id}/configure`"
-              />
-              <Button
-                key="button-2"
-                v-if="available.length"
-                label="Install"
-                variant="primary"
-                size="medium"
-                type="submit"
-                :loading="installing"
-              />
-            </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </Drawer>
+      v-model:application="form.application"
+      :integration="selected"
+      :context-label="CONTEXTS[selected.context]"
+      :available="available"
+      :installing="installing"
+      :invalid="applicationInvalid"
+      :run="run"
+      @submit="install"
+      @reinstall="reinstall"
+    />
   </div>
 </template>

@@ -69,6 +69,7 @@
    "--animate-slide-out-start",
    "--animate-spin",
    "--animate-spin-settle",
+   "--animate-status-pulse",
    "--animate-texture-wave-a",
    "--animate-texture-wave-b",
    "--aspect-video",
@@ -881,6 +882,7 @@
     "--animate-slide-out-start",
     "--animate-spin",
     "--animate-spin-settle",
+    "--animate-status-pulse",
     "--animate-texture-wave-a",
     "--animate-texture-wave-b"
    ],
@@ -1721,6 +1723,7 @@
    "slide-out-start",
    "spin",
    "spin-settle",
+   "status-pulse",
    "texture-wave-a",
    "texture-wave-b"
   ],
@@ -1832,6 +1835,10 @@
    "spin-settle": {
     "value": "spin 4200ms cubic-bezier(0.4, 0, 0.2, 1)",
     "useWhen": "One eased revolution, then still (4.2s): a decorative rotating glow that must stop by itself within 5 seconds (WCAG 2.2.2). Ends on its start frame."
+   },
+   "status-pulse": {
+    "value": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+    "useWhen": "A small status mark (a live dot, a streaming sparkle) pulsing for as long as the status it shows lasts: the signal is the motion, so it stops when the status ends. Never for loading placeholders (pulse, on Skeleton) or decoration (pulse-settle)."
    },
    "texture-wave-a": {
     "value": "textureWaveA 4800ms cubic-bezier(0.39, 0.57, 0.56, 1) forwards",
@@ -9157,6 +9164,13 @@
      "default": "true",
      "required": "false",
      "doc": "Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers."
+    },
+    {
+     "name": "href",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "When set, the whole card is one link to this URL: the root renders as an anchor. Keep other interactive content out of a linked card."
     }
    ],
    "slots": [
@@ -18118,6 +18132,20 @@
      "default": "'content'",
      "required": "false",
      "doc": "Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a plain full-width rule, like the header's, and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end."
+    },
+    {
+     "name": "homeHref",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "When set, the brand slot renders inside one home link to this URL, with the focus ring and the hover of a link."
+    },
+    {
+     "name": "homeAriaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the home link. Empty uses the locale catalog (`Azion home`)."
     }
    ],
    "slots": [
@@ -18129,7 +18157,7 @@
     {
      "name": "brand",
      "scope": "—",
-     "notes": "Root: the brand lockup that opens the bottom bar, its mark sized to 18px."
+     "notes": "Root: the brand lockup that opens the bottom bar, its mark sized to 18px; inside the home link when `homeHref` is set."
     },
     {
      "name": "social",
@@ -18183,6 +18211,20 @@
      "default": "'content'",
      "required": "false",
      "doc": "Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a plain full-width rule, like the header's, and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end."
+    },
+    {
+     "name": "homeHref",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "When set, the brand slot renders inside one home link to this URL, with the focus ring and the hover of a link."
+    },
+    {
+     "name": "homeAriaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the home link. Empty uses the locale catalog (`Azion home`)."
     }
    ],
    "slots": [
@@ -18194,7 +18236,7 @@
     {
      "name": "brand",
      "scope": "—",
-     "notes": "Root: the brand lockup that opens the bottom bar, its mark sized to 18px."
+     "notes": "Root: the brand lockup that opens the bottom bar, its mark sized to 18px; inside the home link when `homeHref` is set."
     },
     {
      "name": "social",
@@ -19512,7 +19554,9 @@
    "kind": "component",
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/app-header-root",
-   "subcomponents": [],
+   "subcomponents": [
+    "@aziontech/webkit/app-header-account"
+   ],
    "category": "layout",
    "structure": "composition",
    "props": [
@@ -19595,6 +19639,15 @@
    ],
    "surface": "app",
    "docsFile": "catalog/components/app-header-root.json"
+  },
+  "app-header-account": {
+   "import": "@aziontech/webkit/app-header-account",
+   "target": "./src/components/layout/app-header/app-header-account.vue",
+   "kind": "subcomponent",
+   "parent": "app-header",
+   "treeShakeableImport": "@aziontech/webkit/app-header-account",
+   "attached": false,
+   "surface": "app"
   },
   "sidebar": {
    "import": "@aziontech/webkit/sidebar",
@@ -29789,6 +29842,12 @@
    "kind": "util",
    "treeShakeableImport": "@aziontech/webkit/utils/ai-chat"
   },
+  "utils/ai-chat-questions": {
+   "import": "@aziontech/webkit/utils/ai-chat-questions",
+   "target": "./src/utils/ai-chat-questions.ts",
+   "kind": "util",
+   "treeShakeableImport": "@aziontech/webkit/utils/ai-chat-questions"
+  },
   "utils/csv": {
    "import": "@aziontech/webkit/utils/csv",
    "target": "./src/utils/csv.ts",
@@ -31675,7 +31734,7 @@
     "split-button",
     "tag"
    ],
-   "count": 552,
+   "count": 554,
    "file": "catalog/assets/icons.json"
   }
  },
@@ -32629,7 +32688,7 @@
     "SaveBar",
     "SettingsGroup",
     "Switch",
-    "table",
+    "Table",
     "TableCellActions",
     "TableCellLink",
     "TableCellStatus",
@@ -33037,6 +33096,7 @@
     "AudioPlayer",
     "Button",
     "ChatMessage",
+    "ChatMessage",
     "CodeBlock",
     "Conversation",
     "CopyButton",
@@ -33064,6 +33124,7 @@
     "ToolCall",
     "use-locale",
     "utils/ai-chat",
+    "utils/ai-chat-questions",
     "VideoPlayer"
    ],
    "imports": [
@@ -33078,6 +33139,7 @@
     "@aziontech/webkit/audio-player",
     "@aziontech/webkit/button",
     "@aziontech/webkit/chat-message",
+    "@aziontech/webkit/chat-message-root",
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/conversation",
     "@aziontech/webkit/copy-button",
@@ -33105,6 +33167,7 @@
     "@aziontech/webkit/tool-call",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/ai-chat",
+    "@aziontech/webkit/utils/ai-chat-questions",
     "@aziontech/webkit/video-player"
    ],
    "primary": "Empty",
@@ -33168,6 +33231,7 @@
     "Button",
     "Card",
     "ChatMessage",
+    "ChatMessage",
     "CodeBlock",
     "Conversation",
     "CopyButton",
@@ -33197,6 +33261,7 @@
     "ToolCall",
     "use-locale",
     "utils/ai-chat",
+    "utils/ai-chat-questions",
     "VideoPlayer"
    ],
    "imports": [
@@ -33207,6 +33272,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/chat-message",
+    "@aziontech/webkit/chat-message-root",
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/conversation",
     "@aziontech/webkit/copy-button",
@@ -33236,6 +33302,7 @@
     "@aziontech/webkit/tool-call",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/ai-chat",
+    "@aziontech/webkit/utils/ai-chat-questions",
     "@aziontech/webkit/video-player"
    ],
    "primary": "Empty",
@@ -33761,7 +33828,7 @@
    "components": [
     "Accordion",
     "AppHeader",
-    "Avatar",
+    "AppHeaderAccount",
     "Brand",
     "Breadcrumb",
     "Button",
@@ -33791,7 +33858,7 @@
    "imports": [
     "@aziontech/webkit/accordion",
     "@aziontech/webkit/app-header",
-    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/app-header-account",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
@@ -34087,7 +34154,7 @@
    "components": [
     "Alert",
     "AppHeader",
-    "Avatar",
+    "AppHeaderAccount",
     "Brand",
     "Breadcrumb",
     "Button",
@@ -34107,7 +34174,7 @@
    "imports": [
     "@aziontech/webkit/alert",
     "@aziontech/webkit/app-header",
-    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/app-header-account",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
@@ -34187,6 +34254,7 @@
    "components": [
     "Alert",
     "AppHeader",
+    "AppHeaderAccount",
     "Avatar",
     "Brand",
     "Breadcrumb",
@@ -34220,6 +34288,7 @@
    "imports": [
     "@aziontech/webkit/alert",
     "@aziontech/webkit/app-header",
+    "@aziontech/webkit/app-header-account",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb-root",
@@ -34488,7 +34557,7 @@
    "components": [
     "Alert",
     "AppHeader",
-    "Avatar",
+    "AppHeaderAccount",
     "Brand",
     "Breadcrumb",
     "Button",
@@ -34522,7 +34591,7 @@
    "imports": [
     "@aziontech/webkit/alert",
     "@aziontech/webkit/app-header",
-    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/app-header-account",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
@@ -35156,6 +35225,7 @@
     "Illustration",
     "Input",
     "Item",
+    "Item",
     "Link",
     "Popover",
     "SearchTrigger",
@@ -35189,6 +35259,7 @@
     "@aziontech/webkit/illustration",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/item-root",
     "@aziontech/webkit/link",
     "@aziontech/webkit/popover",
     "@aziontech/webkit/search-trigger",
@@ -36265,6 +36336,7 @@
     "IconButton",
     "Input",
     "Item",
+    "Item",
     "Link",
     "MultiSelect",
     "NumberInput",
@@ -36311,6 +36383,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/item-root",
     "@aziontech/webkit/link",
     "@aziontech/webkit/multi-select",
     "@aziontech/webkit/number-input",
@@ -37937,7 +38010,7 @@
    "components": [
     "Alert",
     "AppHeader",
-    "Avatar",
+    "AppHeaderAccount",
     "Brand",
     "Breadcrumb",
     "Button",
@@ -37966,7 +38039,7 @@
    "imports": [
     "@aziontech/webkit/alert",
     "@aziontech/webkit/app-header",
-    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/app-header-account",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
@@ -38205,7 +38278,7 @@
    ],
    "components": [
     "AppHeader",
-    "Avatar",
+    "AppHeaderAccount",
     "Brand",
     "Breadcrumb",
     "DropdownMenu",
@@ -38214,7 +38287,7 @@
    ],
    "imports": [
     "@aziontech/webkit/app-header",
-    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/app-header-account",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/dropdown-menu",
@@ -38369,6 +38442,7 @@
     "EmptyState",
     "Field",
     "FilterMenu",
+    "FilterMenu",
     "IconButton",
     "Input",
     "Item",
@@ -38405,6 +38479,7 @@
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/field",
     "@aziontech/webkit/filter-menu",
+    "@aziontech/webkit/filter-menu-root",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item-root",
@@ -38740,7 +38815,7 @@
    "components": [
     "Alert",
     "AppHeader",
-    "Avatar",
+    "AppHeaderAccount",
     "Brand",
     "Breadcrumb",
     "Button",
@@ -38784,7 +38859,7 @@
    "imports": [
     "@aziontech/webkit/alert",
     "@aziontech/webkit/app-header",
-    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/app-header-account",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",

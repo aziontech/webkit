@@ -53,9 +53,17 @@
  ],
  "sfcFile": "blocks/detail/detail-version/detail-version.vue",
  "guidelinesFile": "blocks/detail/detail-version/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/detail/detail-version/sample.ts",
-  "parts/modified-by.vue": "blocks/detail/detail-version/parts/modified-by.vue",
-  "parts/table-empty.vue": "blocks/detail/detail-version/parts/table-empty.vue"
- }
+ "fileSources": [
+  "sample.ts",
+  "detail-version-cache.ts",
+  "detail-version-states.ts",
+  "parts/creating-wire.vue",
+  "parts/environment-switcher.vue",
+  "parts/revert-diff.vue",
+  "parts/settings-panel.vue",
+  "parts/version-bar.vue",
+  "parts/version-history.vue",
+  "parts/version-switcher.vue",
+  "parts/version-tab-bar.vue"
+ ]
 }

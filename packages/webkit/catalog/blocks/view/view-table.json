@@ -23,7 +23,11 @@
  ],
  "sfcFile": "blocks/view/view-table/view-table.vue",
  "guidelinesFile": "blocks/view/view-table/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/view/view-table/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "lib/deployments.ts",
+  "parts/collection-controls.vue",
+  "parts/deployments-page.vue",
+  "parts/deployments-table.vue"
+ ]
 }

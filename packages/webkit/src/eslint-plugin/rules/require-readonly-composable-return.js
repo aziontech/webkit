@@ -10,19 +10,16 @@ const FUNCTION_TYPES = new Set([
   'ArrowFunctionExpression'
 ])
 
-function exportedComposables(program) {
-  const found = []
-  const add = (name, fn, typed) => {
-    if (name && COMPOSABLE_NAME.test(name) && fn && FUNCTION_TYPES.has(fn.type)) {
-      found.push({ name, fn, typed: typed || Boolean(fn.returnType) })
-    }
-  }
+function declarationOf(stmt) {
+  const exported =
+    stmt.type === 'ExportNamedDeclaration' || stmt.type === 'ExportDefaultDeclaration'
+  return exported ? stmt.declaration : stmt
+}
+
+function localFunctions(program) {
   const local = new Map()
   for (const stmt of program.body) {
-    const decl =
-      stmt.type === 'ExportNamedDeclaration' || stmt.type === 'ExportDefaultDeclaration'
-        ? stmt.declaration
-        : stmt
+    const decl = declarationOf(stmt)
     if (!decl) continue
     if (decl.type === 'FunctionDeclaration' && decl.id) {
       local.set(decl.id.name, { fn: decl, typed: false })
@@ -34,40 +31,62 @@ function exportedComposables(program) {
       }
     }
   }
+  return local
+}
+
+function namedExports(stmt) {
+  const names = []
+  const decl = stmt.declaration
+  if (decl?.type === 'FunctionDeclaration' && decl.id) names.push(decl.id.name)
+  if (decl?.type === 'VariableDeclaration') {
+    for (const d of decl.declarations) if (d.id.type === 'Identifier') names.push(d.id.name)
+  }
+  for (const s of stmt.specifiers ?? []) {
+    if (s.local?.type === 'Identifier') names.push(s.local.name)
+  }
+  return names
+}
+
+function defaultExports(stmt) {
+  const decl = stmt.declaration
+  if (decl.type === 'FunctionDeclaration' && decl.id) return [decl.id.name]
+  return decl.type === 'Identifier' ? [decl.name] : []
+}
+
+const EXPORT_NAMES = {
+  ExportNamedDeclaration: namedExports,
+  ExportDefaultDeclaration: defaultExports
+}
+
+function exportedNames(program) {
   const exported = new Set()
   for (const stmt of program.body) {
-    if (stmt.type === 'ExportNamedDeclaration') {
-      const decl = stmt.declaration
-      if (decl?.type === 'FunctionDeclaration' && decl.id) exported.add(decl.id.name)
-      if (decl?.type === 'VariableDeclaration') {
-        for (const d of decl.declarations) if (d.id.type === 'Identifier') exported.add(d.id.name)
-      }
-      for (const s of stmt.specifiers ?? []) {
-        if (s.local?.type === 'Identifier') exported.add(s.local.name)
-      }
-    } else if (stmt.type === 'ExportDefaultDeclaration') {
-      const decl = stmt.declaration
-      if (decl.type === 'FunctionDeclaration' && decl.id) exported.add(decl.id.name)
-      else if (decl.type === 'Identifier') exported.add(decl.name)
-    }
+    for (const name of EXPORT_NAMES[stmt.type]?.(stmt) ?? []) exported.add(name)
   }
-  for (const name of exported) {
+  return exported
+}
+
+function isComposable(name, fn) {
+  return Boolean(name) && COMPOSABLE_NAME.test(name) && Boolean(fn) && FUNCTION_TYPES.has(fn.type)
+}
+
+function exportedComposables(program) {
+  const local = localFunctions(program)
+  const found = []
+  for (const name of exportedNames(program)) {
     const entry = local.get(name)
-    if (entry) add(name, entry.fn, entry.typed)
+    if (entry && isComposable(name, entry.fn)) {
+      found.push({ name, fn: entry.fn, typed: entry.typed || Boolean(entry.fn.returnType) })
+    }
   }
   return found
 }
 
-function ownReturns(fn) {
-  if (fn.body.type !== 'BlockStatement') return [fn.body]
-  const out = []
+function walkOwnBody(fn, visit) {
   const walk = (node) => {
     if (!node || typeof node.type !== 'string') return
     if (node !== fn && FUNCTION_TYPES.has(node.type)) return
-    if (node.type === 'ReturnStatement') {
-      if (node.argument) out.push(node.argument)
-      return
-    }
+    if (visit(node)) return
     for (const key of Object.keys(node)) {
       if (key === 'parent') continue
       const value = node[key]
@@ -76,6 +95,16 @@ function ownReturns(fn) {
     }
   }
   walk(fn.body)
+}
+
+function ownReturns(fn) {
+  if (fn.body.type !== 'BlockStatement') return [fn.body]
+  const out = []
+  walkOwnBody(fn, (node) => {
+    if (node.type !== 'ReturnStatement') return false
+    if (node.argument) out.push(node.argument)
+    return true
+  })
   return out
 }
 
@@ -92,30 +121,58 @@ function holdsElement(declarator, init, sourceCode) {
   return [typeArgs, annotation].some((n) => n && ELEMENT_TYPE.test(sourceCode.getText(n)))
 }
 
+function isMutableRefDeclarator(node, sourceCode) {
+  if (node.type !== 'VariableDeclarator' || node.id.type !== 'Identifier') return false
+  const init = unwrap(node.init)
+  return (
+    init?.type === 'CallExpression' &&
+    MUTABLE_REF.has(calleeName(init)) &&
+    !holdsElement(node, init, sourceCode)
+  )
+}
+
 function mutableRefsDeclaredIn(fn, sourceCode) {
   const names = new Set()
-  const walk = (node) => {
-    if (!node || typeof node.type !== 'string') return
-    if (node !== fn && FUNCTION_TYPES.has(node.type)) return
-    if (node.type === 'VariableDeclarator' && node.id.type === 'Identifier') {
-      const init = unwrap(node.init)
-      if (
-        init?.type === 'CallExpression' &&
-        MUTABLE_REF.has(calleeName(init)) &&
-        !holdsElement(node, init, sourceCode)
-      ) {
-        names.add(node.id.name)
-      }
-    }
-    for (const key of Object.keys(node)) {
-      if (key === 'parent') continue
-      const value = node[key]
-      if (Array.isArray(value)) value.forEach(walk)
-      else if (value && typeof value.type === 'string') walk(value)
+  walkOwnBody(fn, (node) => {
+    if (isMutableRefDeclarator(node, sourceCode)) names.add(node.id.name)
+    return false
+  })
+  return names
+}
+
+function checkReturnedObject(context, name, refs, value) {
+  for (const prop of value.properties) {
+    if (prop.type !== 'Property') continue
+    const v = unwrap(prop.value)
+    if (v?.type === 'Identifier' && refs.has(v.name)) {
+      context.report({ node: prop, messageId: 'mutableRef', data: { name, ref: v.name } })
     }
   }
-  walk(fn.body)
-  return names
+}
+
+function checkReturn(context, name, refs, value) {
+  if (value.type === 'CallExpression' && calleeName(value) === 'reactive') {
+    context.report({ node: value, messageId: 'reactiveReturn', data: { name } })
+  } else if (value.type === 'Identifier' && refs.has(value.name)) {
+    context.report({ node: value, messageId: 'mutableRef', data: { name, ref: value.name } })
+  } else if (value.type === 'ObjectExpression') {
+    checkReturnedObject(context, name, refs, value)
+  }
+}
+
+function checkComposable(context, sourceCode, ts, { name, fn, typed }) {
+  if (ts && !typed) {
+    context.report({
+      node: fn,
+      messageId: 'missingReturnType',
+      data: { name, suffix: name.slice(3) }
+    })
+  }
+  const refs = mutableRefsDeclaredIn(fn, sourceCode)
+  for (const raw of ownReturns(fn)) {
+    const value = unwrap(raw)
+    if (value) checkReturn(context, name, refs, value)
+  }
 }
 
 export default {
@@ -145,40 +202,8 @@ export default {
 
     return {
       Program(program) {
-        for (const { name, fn, typed } of exportedComposables(program)) {
-          if (ts && !typed) {
-            context.report({
-              node: fn,
-              messageId: 'missingReturnType',
-              data: { name, suffix: name.slice(3) }
-            })
-          }
-          const refs = mutableRefsDeclaredIn(fn, sourceCode)
-          for (const raw of ownReturns(fn)) {
-            const value = unwrap(raw)
-            if (!value) continue
-            if (value.type === 'CallExpression' && calleeName(value) === 'reactive') {
-              context.report({ node: value, messageId: 'reactiveReturn', data: { name } })
-            } else if (value.type === 'Identifier' && refs.has(value.name)) {
-              context.report({
-                node: value,
-                messageId: 'mutableRef',
-                data: { name, ref: value.name }
-              })
-            } else if (value.type === 'ObjectExpression') {
-              for (const prop of value.properties) {
-                if (prop.type !== 'Property') continue
-                const v = unwrap(prop.value)
-                if (v?.type === 'Identifier' && refs.has(v.name)) {
-                  context.report({
-                    node: prop,
-                    messageId: 'mutableRef',
-                    data: { name, ref: v.name }
-                  })
-                }
-              }
-            }
-          }
+        for (const composable of exportedComposables(program)) {
+          checkComposable(context, sourceCode, ts, composable)
         }
       }
     }

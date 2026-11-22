@@ -23,7 +23,7 @@
  ],
  "sfcFile": "blocks/shell/shell-console/shell-console.vue",
  "guidelinesFile": "blocks/shell/shell-console/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/shell/shell-console/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

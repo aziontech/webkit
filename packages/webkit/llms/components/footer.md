@@ -17,7 +17,7 @@
 ## Do
 
 - Compose every band from existing DS components (`Brand`, `IconButton variant="ghost" size="small"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.
-- Put the brand in the `brand` slot as a home link around `Brand size="small"`; the footer sizes its mark to the header's 18px.
+- Put `Brand size="small"` in the `brand` slot and make it the home link with `homeHref` (`home-href="/"`) instead of wrapping it in a hand-made anchor: the footer owns the link's focus ring and hover. The footer sizes the mark to the header's 18px.
 - Keep column titles short (one or two words) — they are group labels, not headings for prose.
 - Give every social `IconButton` an `aria-label`; the footer cannot name them for you.
 - Keep the social `IconButton`s at `size="small"`: a 28px box keeps the brand and seven icons beside the status pair on one row from `md`.
@@ -44,13 +44,15 @@
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`). |
 | `variant` | `'content' \| 'site' \| 'console'` | `'content'` | false | Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a plain full-width rule, like the header's, and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end. |
+| `homeHref` | `string` | `''` | false | When set, the brand slot renders inside one home link to this URL, with the focus ring and the hover of a link. |
+| `homeAriaLabel` | `string` | `''` | false | Accessible name of the home link. Empty uses the locale catalog (`Azion home`). |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `default` | — | Root: the `Footer.Column` items; a 2-column grid that becomes 4 columns at `md`, or one inline row in `console`. |
-| `brand` | — | Root: the brand lockup that opens the bottom bar, its mark sized to 18px. |
+| `brand` | — | Root: the brand lockup that opens the bottom bar, its mark sized to 18px; inside the home link when `homeHref` is set. |
 | `social` | — | Root: the social icon buttons, after the brand at the start of the bottom bar. |
 | `status` | — | Root: the system status indicator, at the end of the bottom bar. |
 | `language` | — | Root: the language select, after the status. |
@@ -72,6 +74,7 @@
 - Visual states: `default` on the shell and columns; `default`, `hover`, `focus-visible`, `active`, `visited` on `footer-link`.
 - Placement: `data-variant="content" | "site" | "console"` on the root (from `variant`); the bands and `footer-column` read it through the named group (`group-data-[variant=…]/footer:`).
 - No `data-state`; the shell has no interactive states — slotted children own their own.
+- Home link (`homeHref` set to a safe URL): the brand cell holds an anchor (`${testId}__home`) with an opacity hover and the `--ring-color` focus ring offset against `--bg-canvas`; empty or unsafe renders the brand alone.
 
 ## Accessibility
 
@@ -79,6 +82,7 @@
 - Each `footer-column` renders a `<nav>` labelled via `aria-labelledby` pointing at its title (`useId`), so link groups are unique, navigable landmarks; in `console` the title is visually hidden and still names the `nav`.
 - Keyboard map: none on the shell; `Tab` moves through links and controls in DOM order (columns, brand, social, status, language); `Enter` activates.
 - Visible focus on links: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
+- The home link (`homeHref`) is a native anchor named by `homeAriaLabel` (locale fallback `footer.home`), so the logo link always has a name; the brand mark inside it is decoration of that name.
 - Contrast ≥4.5:1 for column titles and links on `--bg-canvas`.
 - `motion-reduce:transition-none` on the link color transition.
 - Touch target: text links are drawn at their text height with `--spacing-xs` between them on a fine pointer; on a coarse pointer each link is 44 px tall (`pointer-coarse:min-h-11`) and the column drops its gap, so the links tile the column without overlapping.
@@ -89,7 +93,7 @@
 
 ## Internationalization
 
-- Every string is the consumer's (links, titles, status, languages, brand label); the one built-in string, the landmark name `Footer`, comes from the locale catalog (`footer.label`) and `ariaLabel` overrides it.
+- Every string is the consumer's (links, titles, status, languages, brand label); the built-in strings come from the locale catalog: the landmark name `Footer` (`footer.label`, overridden by `ariaLabel`) and the home link name `Azion home` (`footer.home`, overridden by `homeAriaLabel`).
 - Long translations wrap: the bar is `flex-wrap`, the columns grow, nothing truncates.
 
 ## Responsive
@@ -118,7 +122,10 @@
 </script>
 
 <template>
-  <Footer aria-label="Footer">
+  <Footer
+    aria-label="Footer"
+    home-href="/"
+  >
     <Footer.Column title="Products">
       <Footer.Link href="/products/edge-application">Edge Application</Footer.Link>
       <Footer.Link href="/products/edge-firewall">Edge Firewall</Footer.Link>
@@ -140,12 +147,7 @@
       <Footer.Link href="https://status.azion.com/">System status</Footer.Link>
     </Footer.Column>
     <template #brand>
-      <a
-        href="/"
-        aria-label="Azion home"
-      >
-        <Brand size="small" />
-      </a>
+      <Brand size="small" />
     </template>
     <template #social>
       <IconButton
@@ -263,6 +265,7 @@
   <Footer
     variant="site"
     aria-label="Footer"
+    home-href="/"
   >
     <Footer.Column title="Products">
       <Footer.Link href="/products/edge-application">Edge Application</Footer.Link>
@@ -285,12 +288,7 @@
       <Footer.Link href="https://status.azion.com/">System status</Footer.Link>
     </Footer.Column>
     <template #brand>
-      <a
-        href="/"
-        aria-label="Azion home"
-      >
-        <Brand size="small" />
-      </a>
+      <Brand size="small" />
     </template>
     <template #social>
       <IconButton
@@ -407,6 +405,8 @@
   <Footer
     variant="console"
     aria-label="Footer"
+    home-href="/"
+    home-aria-label="Azion console home"
   >
     <Footer.Column title="Resources">
       <Footer.Link href="https://www.azion.com/en/documentation/">Docs</Footer.Link>
@@ -416,12 +416,7 @@
       >
     </Footer.Column>
     <template #brand>
-      <a
-        href="/"
-        aria-label="Azion console home"
-      >
-        <Brand size="small" />
-      </a>
+      <Brand size="small" />
     </template>
     <template #status>
       <StatusIndicator

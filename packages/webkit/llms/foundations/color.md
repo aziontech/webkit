@@ -150,6 +150,8 @@ and accent all move together.
 
 ```vue
 <script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+
   function toggleTheme() {
     const el = document.documentElement
     el.dataset.theme = el.dataset.theme === 'dark' ? 'light' : 'dark'
@@ -165,12 +167,12 @@ and accent all move together.
     <h3 class="text-(--text-default)">Workload health</h3>
     <p class="text-(--text-secondary)">Requests are within normal range.</p>
     <span class="text-(--primary)">View details</span>
-    <button
-      class="mt-(--spacing-sm) text-(--primary)"
+    <Button
+      label="Toggle theme"
+      variant="secondary"
+      class="mt-(--spacing-sm)"
       @click="toggleTheme"
-    >
-      Toggle theme
-    </button>
+    />
   </article>
 </template>
 ```

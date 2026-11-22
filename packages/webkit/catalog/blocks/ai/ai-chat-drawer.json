@@ -18,7 +18,15 @@
  ],
  "sfcFile": "blocks/ai/ai-chat-drawer/ai-chat-drawer.vue",
  "guidelinesFile": "blocks/ai/ai-chat-drawer/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/ai/ai-chat-drawer/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "parts/ai-chat-connection-status.vue",
+  "parts/ai-chat-media-segment.vue",
+  "parts/ai-chat-tool-segment.vue",
+  "parts/ai-chat-turn.vue",
+  "parts/drawer-chat-composer.vue",
+  "parts/drawer-chat-header.vue",
+  "parts/drawer-chat-start.vue",
+  "parts/workload-overview.vue"
+ ]
 }

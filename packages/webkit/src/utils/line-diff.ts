@@ -32,41 +32,51 @@ const intern = (a: string[], b: string[]): [Int32Array, Int32Array] => {
   return [encode(a), encode(b)]
 }
 
-const myers = (
+type DiffStep = ['=' | '-' | '+', number, number]
+
+const nextX = (v: Int32Array, offset: number, k: number, d: number): number =>
+  k === -d || (k !== d && v[offset + k - 1]! < v[offset + k + 1]!)
+    ? v[offset + k + 1]!
+    : v[offset + k - 1]! + 1
+
+const reachesEnd = (
+  a: Int32Array,
+  b: Int32Array,
+  v: Int32Array,
+  offset: number,
+  d: number
+): boolean => {
+  for (let k = -d; k <= d; k += 2) {
+    let x = nextX(v, offset, k, d)
+    let y = x - k
+    while (x < a.length && y < b.length && a[x] === b[y]) {
+      x += 1
+      y += 1
+    }
+    v[offset + k] = x
+    if (x >= a.length && y >= b.length) return true
+  }
+  return false
+}
+
+const searchEdits = (
   a: Int32Array,
   b: Int32Array,
   maxEdits: number
-): Array<['=' | '-' | '+', number, number]> | null => {
-  const n = a.length
-  const m = b.length
-  const max = n + m
+): { found: number; trace: Int32Array[] } => {
+  const max = a.length + b.length
   const offset = max + 1
   const v = new Int32Array(2 * max + 3)
   const trace: Int32Array[] = []
-  let found = -1
   for (let d = 0; d <= Math.min(max, maxEdits); d += 1) {
     trace.push(v.slice(offset - d - 1, offset + d + 2))
-    for (let k = -d; k <= d; k += 2) {
-      let x =
-        k === -d || (k !== d && v[offset + k - 1]! < v[offset + k + 1]!)
-          ? v[offset + k + 1]!
-          : v[offset + k - 1]! + 1
-      let y = x - k
-      while (x < n && y < m && a[x] === b[y]) {
-        x += 1
-        y += 1
-      }
-      v[offset + k] = x
-      if (x >= n && y >= m) {
-        found = d
-        break
-      }
-    }
-    if (found >= 0) break
+    if (reachesEnd(a, b, v, offset, d)) return { found: d, trace }
   }
-  if (found < 0) return null
+  return { found: -1, trace }
+}
 
-  const steps: Array<['=' | '-' | '+', number, number]> = []
+const backtrack = (trace: Int32Array[], found: number, n: number, m: number): DiffStep[] => {
+  const steps: DiffStep[] = []
   let x = n
   let y = m
   for (let d = found; d >= 0; d -= 1) {
@@ -81,10 +91,7 @@ const myers = (
       x -= 1
       y -= 1
     }
-    if (d > 0) {
-      if (x === prevX) steps.push(['+', x, y - 1])
-      else steps.push(['-', x - 1, y])
-    }
+    if (d > 0) steps.push(x === prevX ? ['+', x, y - 1] : ['-', x - 1, y])
     x = prevX
     y = prevY
   }
@@ -139,10 +146,14 @@ export const diffLines = (
   const middleBefore = before.slice(head, before.length - tail)
   const middleAfter = after.slice(head, after.length - tail)
   const [a, b] = intern(middleBefore, middleAfter)
-  const steps = myers(a, b, maxEdits) ?? [
-    ...Array.from(a, (_, index) => ['-', index, 0] as ['-', number, number]),
-    ...Array.from(b, (_, index) => ['+', 0, index] as ['+', number, number])
-  ]
+  const { found, trace } = searchEdits(a, b, maxEdits)
+  const steps =
+    found < 0
+      ? [
+          ...Array.from(a, (_, index) => ['-', index, 0] as ['-', number, number]),
+          ...Array.from(b, (_, index) => ['+', 0, index] as ['+', number, number])
+        ]
+      : backtrack(trace, found, a.length, b.length)
   const middle: LineDiffLine[] = steps.map(([op, x, y]) => {
     if (op === '-') return { change: 'removed', oldNumber: head + x + 1, newNumber: null }
     if (op === '+') return { change: 'added', oldNumber: null, newNumber: head + y + 1 }

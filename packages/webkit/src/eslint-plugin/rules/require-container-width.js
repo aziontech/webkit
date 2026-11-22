@@ -45,22 +45,22 @@ function utilities(classString) {
     })
 }
 
+function isBoundClass(attr) {
+  return (
+    attr.directive &&
+    attr.key?.name?.name === 'bind' &&
+    attr.key?.argument?.type === 'VIdentifier' &&
+    attr.key.argument.name === 'class'
+  )
+}
+
 function staticClass(element) {
   const attrs = element?.startTag?.attributes ?? []
   let value = null
-  let bound = false
   for (const attr of attrs) {
     if (!attr.directive && attr.key?.name === 'class') value = attr.value?.value ?? ''
-    if (
-      attr.directive &&
-      attr.key?.name?.name === 'bind' &&
-      attr.key?.argument?.type === 'VIdentifier' &&
-      attr.key.argument.name === 'class'
-    ) {
-      bound = true
-    }
   }
-  return { value, bound }
+  return { value, bound: attrs.some(isBoundClass) }
 }
 
 function collapsesChildren(classString) {

@@ -1267,9 +1267,6 @@
     "installed": {
       "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
     },
-    "href": {
-      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
-    },
     "featured": {
       "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
     }

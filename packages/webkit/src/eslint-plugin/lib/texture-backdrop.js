@@ -67,21 +67,31 @@ const ELEMENT = 1
 const ATTRIBUTE = 6
 const DIRECTIVE = 7
 
+const namesProp = (candidate, name, kebab) => candidate === name || candidate === kebab
+
+const isStaticBind = (prop, name, kebab) =>
+  prop.type === DIRECTIVE &&
+  prop.name === 'bind' &&
+  prop.arg?.isStatic &&
+  namesProp(prop.arg.content, name, kebab)
+
+const boundLiteral = (prop) => {
+  const literal = /^\s*(['"])([^'"]*)\1\s*$/.exec(prop.exp?.content ?? '')
+  return { value: literal ? literal[2] : undefined }
+}
+
+const propValue = (prop, name, kebab) => {
+  if (prop.type === ATTRIBUTE && namesProp(prop.name, name, kebab)) {
+    return { value: prop.value?.content ?? '' }
+  }
+  return isStaticBind(prop, name, kebab) ? boundLiteral(prop) : null
+}
+
 const staticProp = (node, name) => {
   const kebab = name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)
   for (const prop of node.props ?? []) {
-    if (prop.type === ATTRIBUTE && (prop.name === name || prop.name === kebab)) {
-      return { value: prop.value?.content ?? '' }
-    }
-    if (
-      prop.type === DIRECTIVE &&
-      prop.name === 'bind' &&
-      prop.arg?.isStatic &&
-      (prop.arg.content === name || prop.arg.content === kebab)
-    ) {
-      const literal = /^\s*(['"])([^'"]*)\1\s*$/.exec(prop.exp?.content ?? '')
-      return { value: literal ? literal[2] : undefined }
-    }
+    const found = propValue(prop, name, kebab)
+    if (found) return found
   }
   return null
 }

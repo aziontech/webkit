@@ -13,7 +13,7 @@
  ],
  "sfcFile": "blocks/detail/detail-production-checklist/detail-production-checklist.vue",
  "guidelinesFile": "blocks/detail/detail-production-checklist/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/detail/detail-production-checklist/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

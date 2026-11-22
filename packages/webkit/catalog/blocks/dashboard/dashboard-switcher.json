@@ -23,7 +23,7 @@
  ],
  "sfcFile": "blocks/dashboard/dashboard-switcher/dashboard-switcher.vue",
  "guidelinesFile": "blocks/dashboard/dashboard-switcher/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/dashboard/dashboard-switcher/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

@@ -18,7 +18,7 @@
  ],
  "sfcFile": "blocks/account/account-mfa-settings/account-mfa-settings.vue",
  "guidelinesFile": "blocks/account/account-mfa-settings/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/account/account-mfa-settings/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

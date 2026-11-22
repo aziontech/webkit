@@ -73,11 +73,11 @@ An "Install" `h3` ("Install on another application" once installed somewhere) ov
 
 ### K. Solution page — `Card`, `Select`, `Field`, `KeyValueList`, `DocProse` (optional)
 
-The drawer's content as a page, for the integration's own URL (the variant adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `TableCellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValueList`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
+The drawer's content as a page, for the integration's own URL (the variant renders `parts/solution-page.vue`, which adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `TableCellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValueList`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
 
 ### L. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
 
-The settings of one installed integration on one application (the variant adds `SettingsGroup`, `Item`, `SettingsRow`, `Switch`, `Input` and `SaveBar`). `SettingsGroup`s group them; an on/off setting is a compact `SettingsRow` in an `Item.List`, the rest are `Field`s. Errors follow `state/state-form-validation` (SectionRejected): nothing is red before Save; after it a danger `Alert` above and a `Field.Error` per field, focus on the first. Changes raise a `SaveBar` with Discard and Save. Saving settings is not a deploy, so the toast has no Edit or Redeploy.
+The settings of one installed integration on one application (the variant renders `parts/configure-page.vue`, which adds `SettingsGroup`, `Item`, `SettingsRow`, `Switch`, `Input` and `SaveBar`). `SettingsGroup`s group them; an on/off setting is a compact `SettingsRow` in an `Item.List`, the rest are `Field`s. Errors follow `state/state-form-validation` (SectionRejected): nothing is red before Save; after it a danger `Alert` above and a `Field.Error` per field, focus on the first. Changes raise a `SaveBar` with Discard and Save. Saving settings is not a deploy, so the toast has no Edit or Redeploy.
 
 ### M. Loading catalog — `Card`, `Skeleton` (required)
 
@@ -234,28 +234,17 @@ Each variant is the same screen in another state: `get_block("view/view-marketpl
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DocProse from '@aziontech/webkit/doc-prose'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
   import IntegrationCard from '@aziontech/webkit/integration-card'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
   import { toast } from '@aziontech/webkit/toast'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 
+  import IntegrationDrawer from './parts/integration-drawer.vue'
+  import IntegrationTilesLoading from './parts/integration-tiles-loading.vue'
   import { sampleApplications, sampleIntegrations } from './sample'
 
   /** Where an integration runs. */
@@ -552,49 +541,7 @@ Each variant is the same screen in another state: `get_block("view/view-marketpl
             aria-label="Search integrations"
             disabled
           />
-          <ul
-            class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 sm:grid-cols-2 xl:grid-cols-3"
-          >
-            <li
-              v-for="tile in 6"
-              :key="tile"
-              class="flex min-w-0"
-            >
-              <Card class="w-full">
-                <template #default>
-                  <div class="flex flex-col gap-(--spacing-md)">
-                    <div class="flex items-start gap-(--spacing-md)">
-                      <Skeleton
-                        width="2.5rem"
-                        height="2.5rem"
-                      />
-                      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
-                        <Skeleton
-                          width="50%"
-                          height="1rem"
-                        />
-                        <Skeleton height="0.875rem" />
-                        <Skeleton
-                          width="75%"
-                          height="0.875rem"
-                        />
-                      </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                      <Skeleton
-                        width="5rem"
-                        height="1.25rem"
-                      />
-                      <Skeleton
-                        width="4.5rem"
-                        height="2rem"
-                      />
-                    </div>
-                  </div>
-                </template>
-              </Card>
-            </li>
-          </ul>
+          <IntegrationTilesLoading />
         </section>
         <div
           v-else
@@ -701,197 +648,19 @@ Each variant is the same screen in another state: `get_block("view/view-marketpl
       </div>
     </div>
 
-    <Drawer
+    <IntegrationDrawer
       v-if="selected"
       v-model:open="detailOpen"
-      size="large"
-      side="end"
-    >
-      <DrawerContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          :aria-label="`Install ${selected.name}`"
-          novalidate
-          @submit.prevent="install"
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 items-center gap-(--spacing-sm)">
-              <span
-                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-              >
-                <i
-                  :class="selected.logo"
-                  class="text-body-lg leading-none text-(--text-default)"
-                  aria-hidden="true"
-                />
-              </span>
-              <div class="flex min-w-0 flex-col">
-                <DrawerTitle>{{ selected.name }}</DrawerTitle>
-                <span class="text-body-xs text-(--text-muted)"
-                  >by <bdi>{{ selected.vendor }}</bdi></span
-                >
-              </div>
-            </div>
-          </PanelHeader>
-
-          <PanelBody>
-            <div class="flex flex-col gap-(--layout-section-gap)">
-              <Alert
-                key="alert-1"
-                v-if="run.state === 'succeeded'"
-                severity="success"
-                :label="`${selected.name} is installed on ${run.application}. It runs from the next request.`"
-              />
-              <Alert
-                key="alert-2"
-                v-else-if="run.state === 'failed'"
-                severity="danger"
-                :label="`${selected.name} wasn't installed on ${run.application}. ${run.reason}`"
-                action-label="Reinstall"
-                @action="reinstall"
-              />
-
-              <p class="m-0 text-body-sm text-(--text-muted)">{{ selected.description }}</p>
-
-              <KeyValueList
-                :columns="2"
-                aria-label="Integration details"
-              >
-                <KeyValueList.Item label="Publisher"
-                  ><bdi>{{ selected.vendor }}</bdi></KeyValueList.Item
-                >
-                <KeyValueList.Item label="Category">{{ selected.category }}</KeyValueList.Item>
-                <KeyValueList.Item label="Context">{{
-                  CONTEXTS[selected.context]
-                }}</KeyValueList.Item>
-                <KeyValueList.Item label="Version">{{ selected.version }}</KeyValueList.Item>
-                <KeyValueList.Item label="Updated">{{ selected.updated }}</KeyValueList.Item>
-                <KeyValueList.Item label="Installed on">{{
-                  selected.installedOn.length ? selected.installedOn.join(', ') : 'Not installed'
-                }}</KeyValueList.Item>
-              </KeyValueList>
-
-              <section
-                class="flex flex-col gap-(--layout-group-gap)"
-                aria-labelledby="integration-overview"
-              >
-                <h3
-                  id="integration-overview"
-                  class="text-heading-2xs text-(--text-default)"
-                >
-                  Overview
-                </h3>
-                <DocProse>
-                  <p>{{ selected.description }}</p>
-                  <p>
-                    Installing adds a function instance to the application you choose and one rule
-                    that runs it. Its settings can be changed at any time from Configure.
-                  </p>
-                </DocProse>
-              </section>
-
-              <section
-                class="flex flex-col gap-(--layout-group-gap)"
-                aria-labelledby="integration-permissions"
-              >
-                <h3
-                  id="integration-permissions"
-                  class="text-heading-2xs text-(--text-default)"
-                >
-                  Permissions
-                </h3>
-                <ul class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
-                  <li
-                    v-for="permission in [
-                      'Read the application’s rules',
-                      'Add a function instance to the application',
-                      'Add one rule that runs the function'
-                    ]"
-                    :key="permission"
-                    class="flex items-center gap-(--spacing-sm) text-body-sm text-(--text-muted)"
-                  >
-                    <i
-                      class="az az-check shrink-0 text-(--success-foreground)"
-                      aria-hidden="true"
-                    />
-                    {{ permission }}
-                  </li>
-                </ul>
-              </section>
-
-              <section
-                class="flex flex-col gap-(--layout-group-gap)"
-                aria-labelledby="integration-install"
-              >
-                <h3
-                  id="integration-install"
-                  class="text-heading-2xs text-(--text-default)"
-                >
-                  {{ selected.installedOn.length ? 'Install on another application' : 'Install' }}
-                </h3>
-                <Field
-                  v-if="available.length"
-                  :invalid="applicationInvalid"
-                  :disabled="installing"
-                  required
-                >
-                  <Field.Label>Application</Field.Label>
-                  <Select
-                    v-model="form.application"
-                    size="medium"
-                    placeholder="Select an application"
-                  >
-                    <Select.Trigger class="w-full" />
-                    <Select.Content>
-                      <Select.Item
-                        v-for="app in available"
-                        :key="app"
-                        :value="app"
-                        >{{ app }}</Select.Item
-                      >
-                    </Select.Content>
-                  </Select>
-                  <Field.Error v-if="applicationInvalid">
-                    Select the application to install {{ selected.name }} on.
-                  </Field.Error>
-                  <Field.Description v-else>
-                    The integration runs on every request to this application.
-                  </Field.Description>
-                </Field>
-                <p
-                  v-else
-                  class="m-0 text-body-sm text-(--text-muted)"
-                >
-                  {{ selected.name }} is installed on every application.
-                </p>
-              </section>
-            </div>
-          </PanelBody>
-
-          <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-              <Button
-                v-if="selected.installedOn.length"
-                label="Configure"
-                icon="az az-settings"
-                variant="outline"
-                size="medium"
-                :href="`/marketplace/${selected.id}/configure`"
-              />
-              <Button
-                key="button-2"
-                v-if="available.length"
-                label="Install"
-                variant="primary"
-                size="medium"
-                type="submit"
-                :loading="installing"
-              />
-            </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </Drawer>
+      v-model:application="form.application"
+      :integration="selected"
+      :context-label="CONTEXTS[selected.context]"
+      :available="available"
+      :installing="installing"
+      :invalid="applicationInvalid"
+      :run="run"
+      @submit="install"
+      @reinstall="reinstall"
+    />
   </div>
 </template>
 ```
@@ -1041,4 +810,917 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'Close an application to traffic on a schedule, such as outside business hours.'
   )
 ]
+
+export const sampleSolution = {
+  id: 'waiting-room',
+  name: 'Waiting Room',
+  vendor: 'Acme',
+  category: 'Traffic management',
+  context: 'Application',
+  version: '1.4.0',
+  updated: 'Oct 30, 2026',
+  description: 'Queue visitors during a traffic surge and let them in as capacity frees up.'
+}
+
+export const sampleSolutionChangelog = [
+  {
+    version: '1.4.0',
+    date: 'Oct 30, 2026',
+    notes: [
+      'Visitors keep their place when they reload the queue page.',
+      'New setting: the queue page title.'
+    ]
+  },
+  {
+    version: '1.3.0',
+    date: 'Aug 12, 2026',
+    notes: ['Capacity can change without restarting the queue.']
+  },
+  {
+    version: '1.2.1',
+    date: 'Jun 3, 2026',
+    notes: ['Fixed the estimated wait for queues above 10,000 visitors.']
+  }
+]
+
+export const sampleSolutionInstalls = [
+  { application: 'storefront', version: '1.3.0' },
+  { application: 'checkout', version: '1.4.0' }
+]
+
+export const sampleSolutionApplications = ['storefront', 'checkout', 'docs', 'api']
+```
+
+## `parts/configure-page.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
+  import Link from '@aziontech/webkit/link'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import SaveBar from '@aziontech/webkit/save-bar'
+  import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Switch from '@aziontech/webkit/switch'
+  import { toast } from '@aziontech/webkit/toast'
+  import { computed, nextTick, reactive, ref } from 'vue'
+
+  interface FormErrors {
+    capacity?: string
+    title?: string
+  }
+
+  const SESSION_OPTIONS = [
+    { value: '5', label: '5 minutes' },
+    { value: '15', label: '15 minutes' },
+    { value: '30', label: '30 minutes' },
+    { value: '60', label: '1 hour' }
+  ]
+
+  const saved = ref({ enabled: true, capacity: '400', title: 'You are in line', session: '15' })
+  const form = reactive({ ...saved.value })
+  const dirty = computed(() => JSON.stringify(form) !== JSON.stringify(saved.value))
+  const submitted = ref(false)
+  const saving = ref(false)
+  const formEl = ref<HTMLElement | null>(null)
+
+  const errors = computed((): FormErrors => {
+    if (!submitted.value) return {}
+    const out: FormErrors = {}
+    const capacity = Number(form.capacity)
+    if (!form.capacity.trim()) out.capacity = 'Enter the requests per second to let in.'
+    else if (!Number.isInteger(capacity) || capacity < 1)
+      out.capacity = 'Enter a whole number of 1 or more.'
+    if (!form.title.trim()) out.title = 'Enter the title visitors see while they wait.'
+    return out
+  })
+
+  const discard = () => {
+    Object.assign(form, saved.value)
+    submitted.value = false
+  }
+
+  const save = () => {
+    submitted.value = true
+    if (saving.value) return
+    if (Object.keys(errors.value).length) {
+      nextTick(() => formEl.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
+      return
+    }
+    saving.value = true
+    setTimeout(() => {
+      saved.value = { ...form }
+      saving.value = false
+      submitted.value = false
+      toast.success('Waiting Room settings saved.', {
+        description: form.enabled
+          ? `storefront queues visitors above ${form.capacity} requests per second.`
+          : 'The queue is off; every visitor goes straight in.'
+      })
+    }, 800)
+  }
+
+  const onSaveShortcut = () => {
+    if (!dirty.value || saving.value) return
+    save()
+  }
+</script>
+
+<template>
+  <div class="layout-boundary">
+    <div class="layout-column flex min-h-full flex-col">
+      <nav
+        aria-label="Breadcrumb"
+        class="pt-(--layout-group-gap)"
+      >
+        <Link
+          href="/marketplace/waiting-room"
+          label="Back to Waiting Room"
+          size="medium"
+        />
+      </nav>
+      <PageHeader
+        title="Configure Waiting Room"
+        description="Settings of Waiting Room 1.4.0 on storefront. They apply from the next request."
+      />
+
+      <form
+        ref="formEl"
+        class="layout-section-start flex min-w-0 flex-col pb-(--layout-boundary-end)"
+        novalidate
+        aria-label="Waiting Room settings"
+        @submit.prevent="save"
+      >
+        <Alert
+          v-if="Object.keys(errors).length"
+          severity="danger"
+          label="Some settings need a fix before they can be saved."
+        />
+
+        <SettingsGroup
+          label="Queue"
+          hint="When the queue starts and what visitors see while they wait."
+        >
+          <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+            <Item.List>
+              <SettingsRow
+                title="Queue visitors"
+                description="Off lets every visitor in and keeps the settings below."
+                variant="compact"
+              >
+                <Switch
+                  v-model="form.enabled"
+                  aria-label="Queue visitors"
+                  :disabled="saving"
+                />
+              </SettingsRow>
+            </Item.List>
+            <Field
+              required
+              :invalid="Boolean(errors.capacity)"
+              :disabled="saving || !form.enabled"
+            >
+              <Field.Label>Capacity</Field.Label>
+              <Input
+                v-model="form.capacity"
+                size="large"
+                inputmode="numeric"
+                autocomplete="off"
+              />
+              <Field.Error v-if="errors.capacity">{{ errors.capacity }}</Field.Error>
+              <Field.Description v-else
+                >Requests per second let through. Above it, new visitors wait in
+                line.</Field.Description
+              >
+            </Field>
+            <Field
+              required
+              :invalid="Boolean(errors.title)"
+              :disabled="saving || !form.enabled"
+            >
+              <Field.Label>Queue page title</Field.Label>
+              <Input
+                v-model="form.title"
+                size="large"
+                autocomplete="off"
+              />
+              <Field.Error v-if="errors.title">{{ errors.title }}</Field.Error>
+            </Field>
+          </div>
+        </SettingsGroup>
+
+        <SettingsGroup
+          label="Sessions"
+          hint="How long a visitor who got in keeps their place."
+        >
+          <Field :disabled="saving || !form.enabled">
+            <Field.Label>Session length</Field.Label>
+            <Select
+              v-model="form.session"
+              size="large"
+            >
+              <Select.Trigger class="w-full" />
+              <Select.Content>
+                <Select.Item
+                  v-for="option in SESSION_OPTIONS"
+                  :key="option.value"
+                  :value="option.value"
+                  >{{ option.label }}</Select.Item
+                >
+              </Select.Content>
+            </Select>
+            <Field.Description
+              >Shorter sessions free places sooner when visitors leave.</Field.Description
+            >
+          </Field>
+        </SettingsGroup>
+      </form>
+
+      <SaveBar
+        v-if="dirty"
+        @save="onSaveShortcut"
+      >
+        Waiting Room settings changed, not saved yet.
+        <template #actions>
+          <Button
+            type="button"
+            label="Discard"
+            variant="outline"
+            size="medium"
+            :disabled="saving"
+            @click="discard"
+          />
+          <Button
+            type="button"
+            variant="primary"
+            size="medium"
+            :loading="saving"
+            @click="save"
+            aria-keyshortcuts="Meta+S Control+S"
+          >
+            Save
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </Button>
+        </template>
+      </SaveBar>
+    </div>
+  </div>
+</template>
+```
+
+## `parts/integration-drawer.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import DocProse from '@aziontech/webkit/doc-prose'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import Drawer from '@aziontech/webkit/drawer-root'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import Field from '@aziontech/webkit/field'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Select from '@aziontech/webkit/select'
+
+  import type { MarketplaceIntegration } from '../view-marketplace.vue'
+
+  export interface IntegrationDrawerRun {
+    /** idle, running, succeeded or failed. */
+    state: string
+    /** The application of the last run. */
+    application: string
+    /** Why the last run failed. */
+    reason: string
+  }
+
+  export interface IntegrationDrawerProps {
+    /** The integration the drawer shows. */
+    integration: MarketplaceIntegration
+    /** Display text of where it runs. */
+    contextLabel: string
+    /** The applications it can still be installed on. */
+    available: string[]
+    /** The install request is in flight. */
+    installing?: boolean
+    /** The application field shows its error. */
+    invalid?: boolean
+    /** The last install run. */
+    run: IntegrationDrawerRun
+  }
+
+  withDefaults(defineProps<IntegrationDrawerProps>(), { installing: false, invalid: false })
+
+  const emit = defineEmits<{
+    submit: [event: Event]
+    reinstall: [event: MouseEvent]
+  }>()
+
+  const open = defineModel<boolean>('open', { default: false })
+  const application = defineModel<string>('application', { default: '' })
+</script>
+
+<template>
+  <Drawer
+    v-model:open="open"
+    size="large"
+    side="end"
+  >
+    <DrawerContent>
+      <form
+        class="flex min-h-0 flex-1 flex-col"
+        :aria-label="`Install ${integration.name}`"
+        novalidate
+        @submit.prevent="(event: Event) => emit('submit', event)"
+      >
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+            <span
+              class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
+            >
+              <i
+                :class="integration.logo"
+                class="text-body-lg leading-none text-(--text-default)"
+                aria-hidden="true"
+              />
+            </span>
+            <div class="flex min-w-0 flex-col">
+              <DrawerTitle>{{ integration.name }}</DrawerTitle>
+              <span class="text-body-xs text-(--text-muted)"
+                >by <bdi>{{ integration.vendor }}</bdi></span
+              >
+            </div>
+          </div>
+        </PanelHeader>
+
+        <PanelBody>
+          <div class="flex flex-col gap-(--layout-section-gap)">
+            <Alert
+              key="alert-1"
+              v-if="run.state === 'succeeded'"
+              severity="success"
+              :label="`${integration.name} is installed on ${run.application}. It runs from the next request.`"
+            />
+            <Alert
+              key="alert-2"
+              v-else-if="run.state === 'failed'"
+              severity="danger"
+              :label="`${integration.name} wasn't installed on ${run.application}. ${run.reason}`"
+              action-label="Reinstall"
+              @action="(event: MouseEvent) => emit('reinstall', event)"
+            />
+
+            <p class="m-0 text-body-sm text-(--text-muted)">{{ integration.description }}</p>
+
+            <KeyValueList
+              :columns="2"
+              aria-label="Integration details"
+            >
+              <KeyValueList.Item label="Publisher"
+                ><bdi>{{ integration.vendor }}</bdi></KeyValueList.Item
+              >
+              <KeyValueList.Item label="Category">{{ integration.category }}</KeyValueList.Item>
+              <KeyValueList.Item label="Context">{{ contextLabel }}</KeyValueList.Item>
+              <KeyValueList.Item label="Version">{{ integration.version }}</KeyValueList.Item>
+              <KeyValueList.Item label="Updated">{{ integration.updated }}</KeyValueList.Item>
+              <KeyValueList.Item label="Installed on">{{
+                integration.installedOn.length
+                  ? integration.installedOn.join(', ')
+                  : 'Not installed'
+              }}</KeyValueList.Item>
+            </KeyValueList>
+
+            <section
+              class="flex flex-col gap-(--layout-group-gap)"
+              aria-labelledby="integration-overview"
+            >
+              <h3
+                id="integration-overview"
+                class="text-heading-2xs text-(--text-default)"
+              >
+                Overview
+              </h3>
+              <DocProse>
+                <p>{{ integration.description }}</p>
+                <p>
+                  Installing adds a function instance to the application you choose and one rule
+                  that runs it. Its settings can be changed at any time from Configure.
+                </p>
+              </DocProse>
+            </section>
+
+            <section
+              class="flex flex-col gap-(--layout-group-gap)"
+              aria-labelledby="integration-permissions"
+            >
+              <h3
+                id="integration-permissions"
+                class="text-heading-2xs text-(--text-default)"
+              >
+                Permissions
+              </h3>
+              <ul class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
+                <li
+                  v-for="permission in [
+                    'Read the application’s rules',
+                    'Add a function instance to the application',
+                    'Add one rule that runs the function'
+                  ]"
+                  :key="permission"
+                  class="flex items-center gap-(--spacing-sm) text-body-sm text-(--text-muted)"
+                >
+                  <i
+                    class="az az-check shrink-0 text-(--success-foreground)"
+                    aria-hidden="true"
+                  />
+                  {{ permission }}
+                </li>
+              </ul>
+            </section>
+
+            <section
+              class="flex flex-col gap-(--layout-group-gap)"
+              aria-labelledby="integration-install"
+            >
+              <h3
+                id="integration-install"
+                class="text-heading-2xs text-(--text-default)"
+              >
+                {{ integration.installedOn.length ? 'Install on another application' : 'Install' }}
+              </h3>
+              <Field
+                v-if="available.length"
+                :invalid="invalid"
+                :disabled="installing"
+                required
+              >
+                <Field.Label>Application</Field.Label>
+                <Select
+                  v-model="application"
+                  size="medium"
+                  placeholder="Select an application"
+                >
+                  <Select.Trigger class="w-full" />
+                  <Select.Content>
+                    <Select.Item
+                      v-for="app in available"
+                      :key="app"
+                      :value="app"
+                      >{{ app }}</Select.Item
+                    >
+                  </Select.Content>
+                </Select>
+                <Field.Error v-if="invalid">
+                  Select the application to install {{ integration.name }} on.
+                </Field.Error>
+                <Field.Description v-else>
+                  The integration runs on every request to this application.
+                </Field.Description>
+              </Field>
+              <p
+                v-else
+                class="m-0 text-body-sm text-(--text-muted)"
+              >
+                {{ integration.name }} is installed on every application.
+              </p>
+            </section>
+          </div>
+        </PanelBody>
+
+        <PanelFooter>
+          <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
+            <Button
+              v-if="integration.installedOn.length"
+              label="Configure"
+              icon="az az-settings"
+              variant="outline"
+              size="medium"
+              :href="`/marketplace/${integration.id}/configure`"
+            />
+            <Button
+              key="button-2"
+              v-if="available.length"
+              label="Install"
+              variant="primary"
+              size="medium"
+              type="submit"
+              :loading="installing"
+            />
+          </div>
+        </PanelFooter>
+      </form>
+    </DrawerContent>
+  </Drawer>
+</template>
+```
+
+## `parts/integration-tiles-loading.vue`
+
+```ts
+<script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+  import Skeleton from '@aziontech/webkit/skeleton'
+</script>
+
+<template>
+  <ul class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 sm:grid-cols-2 xl:grid-cols-3">
+    <li
+      v-for="tile in 6"
+      :key="tile"
+      class="flex min-w-0"
+    >
+      <Card class="w-full">
+        <template #default>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <div class="flex items-start gap-(--spacing-md)">
+              <Skeleton
+                width="2.5rem"
+                height="2.5rem"
+              />
+              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
+                <Skeleton
+                  width="50%"
+                  height="1rem"
+                />
+                <Skeleton height="0.875rem" />
+                <Skeleton
+                  width="75%"
+                  height="0.875rem"
+                />
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <Skeleton
+                width="5rem"
+                height="1.25rem"
+              />
+              <Skeleton
+                width="4.5rem"
+                height="2rem"
+              />
+            </div>
+          </div>
+        </template>
+      </Card>
+    </li>
+  </ul>
+</template>
+```
+
+## `parts/solution-page.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import DataTable from '@aziontech/webkit/data-table'
+  import DocProse from '@aziontech/webkit/doc-prose'
+  import Field from '@aziontech/webkit/field'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
+  import Link from '@aziontech/webkit/link'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import Select from '@aziontech/webkit/select'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import Tabs from '@aziontech/webkit/tabs'
+  import Tag from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
+  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+
+  import {
+    sampleSolution,
+    sampleSolutionApplications,
+    sampleSolutionChangelog,
+    sampleSolutionInstalls
+  } from '../sample'
+
+  const integration = sampleSolution
+  const changelog = sampleSolutionChangelog
+
+  const installs = ref(sampleSolutionInstalls.map((item) => ({ ...item })))
+  const APPLICATIONS = sampleSolutionApplications
+  const installedVersion = (app: string) =>
+    installs.value.find((item) => item.application === app)?.version
+  const outdated = (app: string) => {
+    const version = installedVersion(app)
+    return Boolean(version) && version !== integration.version
+  }
+  const options = computed(() =>
+    APPLICATIONS.map((app) => ({
+      value: app,
+      installed: Boolean(installedVersion(app)),
+      outdated: outdated(app)
+    }))
+  )
+
+  const activeTab = ref('overview')
+  const form = reactive({ application: '' })
+  const showErrors = ref(false)
+  const applicationInvalid = computed(() => showErrors.value && !form.application)
+  const running = ref('')
+  const RUN_TOAST = 'marketplace-solution-run'
+  let timer: ReturnType<typeof setTimeout> | undefined
+
+  const runOn = (app: string) => {
+    const updating = outdated(app)
+    running.value = app
+    toast.loading(
+      updating
+        ? `Updating ${integration.name} on ${app} to ${integration.version}…`
+        : `Installing ${integration.name} on ${app}…`,
+      { id: RUN_TOAST, description: 'It keeps running if you leave this page.' }
+    )
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      const existing = installs.value.find((item) => item.application === app)
+      if (existing) existing.version = integration.version
+      else installs.value = [...installs.value, { application: app, version: integration.version }]
+      running.value = ''
+      form.application = ''
+      showErrors.value = false
+      toast.success(
+        updating
+          ? `${app} runs ${integration.name} ${integration.version}.`
+          : `${integration.name} is installed on ${app}.`,
+        {
+          id: RUN_TOAST,
+          description: 'It runs from the next request to the application.',
+          closable: true,
+          actions: [
+            { label: 'Configure', onClick: () => toast.dismiss(RUN_TOAST) },
+            { label: 'Open application', onClick: () => toast.dismiss(RUN_TOAST) }
+          ]
+        }
+      )
+    }, 2000)
+  }
+
+  const submit = () => {
+    showErrors.value = true
+    if (!form.application || running.value) return
+    runOn(form.application)
+  }
+
+  const columns = [
+    { accessorKey: 'application', header: 'Application', principal: true, hideable: false },
+    { accessorKey: 'version', header: 'Version', minWidth: 100 },
+    { id: 'state', header: 'Status', minWidth: 150 },
+    { id: 'update', header: '', minWidth: 120, hideable: false }
+  ]
+
+  onBeforeUnmount(() => {
+    clearTimeout(timer)
+    toast.dismiss(RUN_TOAST)
+  })
+</script>
+
+<template>
+  <div class="layout-boundary">
+    <div class="layout-column flex min-h-full flex-col">
+      <nav
+        aria-label="Breadcrumb"
+        class="pt-(--layout-group-gap)"
+      >
+        <Link
+          href="/marketplace"
+          label="Back to Marketplace"
+          size="medium"
+        />
+      </nav>
+      <PageHeader
+        :title="integration.name"
+        :description="integration.description"
+      >
+        <template #actions>
+          <Button
+            label="Documentation"
+            icon="az az-book"
+            variant="outline"
+            size="medium"
+            href="https://example.com/docs/marketplace/waiting-room"
+            target="_blank"
+          />
+        </template>
+      </PageHeader>
+
+      <div
+        class="layout-section-start grid min-w-0 grid-cols-1 gap-(--layout-section-gap) lg:grid-cols-[minmax(0,1fr)_var(--container-2xs)]"
+      >
+        <Tabs v-model="activeTab">
+          <Tabs.List>
+            <Tabs.Trigger
+              value="overview"
+              label="Overview"
+            />
+            <Tabs.Trigger
+              value="usage"
+              label="Usage"
+            />
+            <Tabs.Trigger
+              value="changelog"
+              label="Changelog"
+            />
+            <Tabs.Trigger
+              value="applications"
+              label="Applications"
+            />
+          </Tabs.List>
+          <div class="relative isolate w-full">
+            <Tabs.Content value="overview">
+              <div>
+                <DocProse>
+                  <p>{{ integration.description }}</p>
+                  <p>
+                    When the requests per second pass the capacity you set, new visitors see a queue
+                    page with their place and the estimated wait. Visitors already inside are never
+                    queued.
+                  </p>
+                  <h2>What it needs</h2>
+                  <ul>
+                    <li>Read the visitor's session cookie.</li>
+                    <li>Answer requests with the queue page.</li>
+                  </ul>
+                </DocProse>
+              </div>
+            </Tabs.Content>
+            <Tabs.Content value="usage">
+              <div>
+                <DocProse>
+                  <h2>Set the capacity</h2>
+                  <p>
+                    Open Configure on the application and set <code>capacity</code> to the requests
+                    per second your origin serves comfortably. Start at 80 percent of your measured
+                    peak.
+                  </p>
+                  <h2>Let people in faster</h2>
+                  <p>
+                    Lower <code>session_minutes</code> so visitors who left free their place sooner.
+                  </p>
+                  <h2>Test it</h2>
+                  <p>
+                    Set the capacity to 1 on a preview environment and open the application in two
+                    browsers; the second one sees the queue page.
+                  </p>
+                </DocProse>
+              </div>
+            </Tabs.Content>
+            <Tabs.Content value="changelog">
+              <ol
+                class="m-0 flex list-none flex-col gap-(--layout-group-gap) p-0"
+                aria-label="Version history"
+              >
+                <li
+                  v-for="(entry, index) in changelog"
+                  :key="entry.version"
+                  class="flex flex-col gap-(--spacing-xs) border-b border-(--border-muted) pb-(--layout-group-gap) last:border-b-0"
+                >
+                  <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                    <h2 class="m-0 text-heading-2xs text-(--text-default)">
+                      {{ entry.version }}
+                    </h2>
+                    <Tag
+                      v-if="index === 0"
+                      label="Latest"
+                      severity="info"
+                      size="small"
+                    />
+                    <span class="text-body-sm text-(--text-muted)">{{ entry.date }}</span>
+                  </div>
+                  <ul class="m-0 flex flex-col gap-(--spacing-2xs) ps-(--spacing-lg)">
+                    <li
+                      v-for="note in entry.notes"
+                      :key="note"
+                      class="text-body-sm text-(--text-default)"
+                    >
+                      {{ note }}
+                    </li>
+                  </ul>
+                </li>
+              </ol>
+            </Tabs.Content>
+            <Tabs.Content value="applications">
+              <div>
+                <Card :padded="false">
+                  <template #default>
+                    <DataTable
+                      :data="installs"
+                      :columns="columns"
+                      row-key="application"
+                      :bordered="false"
+                      aria-label="Applications running this integration"
+                    >
+                      <template #cell-state="{ row }">
+                        <TableCellStatus
+                          :label="outdated(row.application) ? 'Update available' : 'Up to date'"
+                          :severity="outdated(row.application) ? 'warning' : 'success'"
+                        />
+                      </template>
+                      <template #header-update>
+                        <span class="sr-only">Update</span>
+                      </template>
+                      <template #cell-update="{ row }">
+                        <Button
+                          v-if="outdated(row.application)"
+                          :label="`Update to ${integration.version}`"
+                          variant="outline"
+                          size="small"
+                          :loading="running === row.application"
+                          :disabled="Boolean(running) && running !== row.application"
+                          @click="runOn(row.application)"
+                        />
+                      </template>
+                    </DataTable>
+                  </template>
+                </Card>
+              </div>
+            </Tabs.Content>
+          </div>
+        </Tabs>
+
+        <aside
+          class="flex min-w-0 flex-col gap-(--layout-group-gap)"
+          aria-label="Install"
+        >
+          <Card>
+            <template #default>
+              <form
+                class="flex flex-col gap-(--spacing-md)"
+                novalidate
+                aria-label="Install or update"
+                @submit.prevent="submit"
+              >
+                <Field
+                  required
+                  :invalid="applicationInvalid"
+                >
+                  <Field.Label>Application</Field.Label>
+                  <Select
+                    v-model="form.application"
+                    size="medium"
+                    placeholder="Select an application"
+                  >
+                    <Select.Trigger class="w-full" />
+                    <Select.Content>
+                      <Select.Item
+                        v-for="option in options"
+                        :key="option.value"
+                        :value="option.value"
+                        :disabled="option.installed && !option.outdated"
+                      >
+                        {{ option.value }}
+                        <template
+                          v-if="option.installed"
+                          #tag
+                        >
+                          <Tag
+                            :label="option.outdated ? 'Update available' : 'Installed'"
+                            :severity="option.outdated ? 'warning' : 'success'"
+                            size="small"
+                          />
+                        </template>
+                      </Select.Item>
+                    </Select.Content>
+                  </Select>
+                  <Field.Error v-if="applicationInvalid">
+                    Select the application to install {{ integration.name }} on.
+                  </Field.Error>
+                  <Field.Description v-else>
+                    Applications on an older version show Update available.
+                  </Field.Description>
+                </Field>
+                <Button
+                  type="submit"
+                  :label="form.application && outdated(form.application) ? 'Update' : 'Install'"
+                  variant="primary"
+                  :loading="Boolean(running)"
+                />
+              </form>
+            </template>
+          </Card>
+          <KeyValueList aria-label="Integration details">
+            <KeyValueList.Item label="Publisher"
+              ><bdi>{{ integration.vendor }}</bdi></KeyValueList.Item
+            >
+            <KeyValueList.Item label="Category">{{ integration.category }}</KeyValueList.Item>
+            <KeyValueList.Item label="Context">{{ integration.context }}</KeyValueList.Item>
+            <KeyValueList.Item label="Latest version">{{ integration.version }}</KeyValueList.Item>
+            <KeyValueList.Item label="Updated">{{ integration.updated }}</KeyValueList.Item>
+          </KeyValueList>
+        </aside>
+      </div>
+    </div>
+  </div>
+</template>
 ```

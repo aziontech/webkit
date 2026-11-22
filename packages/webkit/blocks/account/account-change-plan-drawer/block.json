@@ -46,7 +46,16 @@
     "name": "Default",
     "file": "account-change-plan-drawer.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "change-plan-card.ts",
+    "parts/change-plan-compare.vue",
+    "parts/upgrade-address-card.vue",
+    "parts/upgrade-charge-card.vue",
+    "parts/upgrade-included.vue",
+    "parts/upgrade-payment-card.vue",
+    "parts/upgrade-terms-field.vue"
+  ],
   "variants": [
     {
       "name": "Checkout",

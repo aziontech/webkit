@@ -33,9 +33,9 @@
  ],
  "sfcFile": "blocks/state/state-page-skeleton/state-page-skeleton.vue",
  "guidelinesFile": "blocks/state/state-page-skeleton/guidelines.md",
- "fileSources": {
-  "parts/session-fields.vue": "blocks/state/state-page-skeleton/parts/session-fields.vue",
-  "parts/session-header.vue": "blocks/state/state-page-skeleton/parts/session-header.vue",
-  "parts/session-wire.vue": "blocks/state/state-page-skeleton/parts/session-wire.vue"
- }
+ "fileSources": [
+  "parts/session-fields.vue",
+  "parts/session-header.vue",
+  "parts/session-wire.vue"
+ ]
 }

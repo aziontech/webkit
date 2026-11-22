@@ -72,61 +72,79 @@ export interface UseTopologyStagingReturn {
   deploy: () => void
 }
 
-export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopologyStagingReturn {
-  const { targets } = options
-  const deployed = reactive<Record<string, string>>({ ...options.bound })
-  const staged = reactive<Record<string, string>>({})
-  const stagedCount = computed(() => Object.keys(staged).length)
-  const stagedNote = ref('')
-  const deploying = ref(false)
-  let timer: ReturnType<typeof setTimeout> | undefined
-
-  const slotNode = (key: string): FlowDiagramNodeData => {
-    const target = targets[key]
-    const pick = staged[key]
-    const removing = pick === ''
-    const value = pick === undefined ? deployed[key] : pick
-    const base = {
-      id: key,
-      eyebrow: target.kind,
-      icon: target.icon,
-      bindable: true,
-      bindOptions: target.options,
-      removable: target.removable !== false
-    }
-    if (!value) {
-      return {
-        ...base,
-        status: removing ? 'Staged' : '',
-        severity: removing ? 'warning' : 'neutral',
-        dashed: true,
-        message: removing ? `Deploy to remove this ${target.kind.toLowerCase()}.` : target.unbound
-      }
-    }
+function topologySlotNode(
+  key: string,
+  target: TopologyTarget,
+  pick: string | undefined,
+  deployedValue: string | undefined
+): FlowDiagramNodeData {
+  const removing = pick === ''
+  const value = pick === undefined ? deployedValue : pick
+  const base = {
+    id: key,
+    eyebrow: target.kind,
+    icon: target.icon,
+    bindable: true,
+    bindOptions: target.options,
+    removable: target.removable !== false
+  }
+  if (!value) {
     return {
       ...base,
-      title: value,
-      boundValue: value,
-      status: pick === undefined ? 'Active' : 'Staged',
-      severity: pick === undefined ? 'success' : 'warning',
-      dashed: pick !== undefined,
-      message:
-        pick === undefined
-          ? target.bound || ''
-          : `Deploy to apply this ${target.kind.toLowerCase()}.`,
-      fields: pick === undefined ? target.fields : undefined
+      status: removing ? 'Staged' : '',
+      severity: removing ? 'warning' : 'neutral',
+      dashed: true,
+      message: removing ? `Deploy to remove this ${target.kind.toLowerCase()}.` : target.unbound
     }
   }
+  return {
+    ...base,
+    title: value,
+    boundValue: value,
+    status: pick === undefined ? 'Active' : 'Staged',
+    severity: pick === undefined ? 'success' : 'warning',
+    dashed: pick !== undefined,
+    message:
+      pick === undefined
+        ? target.bound || ''
+        : `Deploy to apply this ${target.kind.toLowerCase()}.`,
+    fields: pick === undefined ? target.fields : undefined
+  }
+}
 
-  const stagedChanges = computed(() =>
-    Object.entries(staged).map(([key, value]) => ({
-      key,
-      kind: targets[key].kind,
-      from: deployed[key] || 'Not bound',
-      to: value || 'Removed'
-    }))
-  )
+function announceLive(
+  options: UseTopologyStagingOptions,
+  changes: number,
+  onEdit: () => void,
+  onRedeploy: () => void
+): void {
+  toast.success(`${options.name} is live.`, {
+    id: options.toastId,
+    description: changes
+      ? `${changes} topology ${changes === 1 ? 'change' : 'changes'} now serve Production.`
+      : 'Production serves the active version.',
+    duration: 0,
+    closable: true,
+    actions: [
+      { label: 'Edit', onClick: onEdit },
+      { label: 'Redeploy', onClick: onRedeploy }
+    ]
+  })
+}
 
+function applyStaged(deployed: Record<string, string>, staged: Record<string, string>): void {
+  for (const [key, value] of Object.entries(staged)) {
+    deployed[key] = value
+    delete staged[key]
+  }
+}
+
+function stagingEdits(
+  targets: Record<string, TopologyTarget>,
+  deployed: Record<string, string>,
+  staged: Record<string, string>,
+  stagedNote: Ref<string>
+): Pick<UseTopologyStagingReturn, 'bind' | 'unbind' | 'createTarget'> {
   const bind = (key: string, value: string) => {
     if (value === deployed[key]) delete staged[key]
     else staged[key] = value
@@ -140,6 +158,31 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
   const createTarget = (key: string) => {
     stagedNote.value = `Opens the create flow for a new ${targets[key].kind.toLowerCase()}.`
   }
+  return { bind, unbind, createTarget }
+}
+
+export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopologyStagingReturn {
+  const { targets } = options
+  const deployed = reactive<Record<string, string>>({ ...options.bound })
+  const staged = reactive<Record<string, string>>({})
+  const stagedCount = computed(() => Object.keys(staged).length)
+  const stagedNote = ref('')
+  const deploying = ref(false)
+  let timer: ReturnType<typeof setTimeout> | undefined
+
+  const slotNode = (key: string): FlowDiagramNodeData =>
+    topologySlotNode(key, targets[key], staged[key], deployed[key])
+
+  const stagedChanges = computed(() =>
+    Object.entries(staged).map(([key, value]) => ({
+      key,
+      kind: targets[key].kind,
+      from: deployed[key] || 'Not bound',
+      to: value || 'Removed'
+    }))
+  )
+
+  const { bind, unbind, createTarget } = stagingEdits(targets, deployed, staged, stagedNote)
 
   const editStaged = () => {
     toast.dismiss(options.toastId)
@@ -155,24 +198,10 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
     })
     clearTimeout(timer)
     timer = setTimeout(() => {
-      for (const [key, value] of Object.entries(staged)) {
-        deployed[key] = value
-        delete staged[key]
-      }
+      applyStaged(deployed, staged)
       deploying.value = false
       stagedNote.value = ''
-      toast.success(`${options.name} is live.`, {
-        id: options.toastId,
-        description: changes
-          ? `${changes} topology ${changes === 1 ? 'change' : 'changes'} now serve Production.`
-          : 'Production serves the active version.',
-        duration: 0,
-        closable: true,
-        actions: [
-          { label: 'Edit', onClick: editStaged },
-          { label: 'Redeploy', onClick: deploy }
-        ]
-      })
+      announceLive(options, changes, editStaged, deploy)
     }, 1500)
   }
 

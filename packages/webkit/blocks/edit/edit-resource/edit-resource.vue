@@ -18,7 +18,12 @@
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import SettingsSaveBar from './parts/settings-save-bar.vue'
-  import { sampleProject } from './sample'
+  import {
+    sampleProject,
+    sampleProjectModules,
+    sampleProjectTabs,
+    sampleSubscriptionModules
+  } from './sample'
 
   /** The saved project settings, and the values a save sends. */
   export interface EditResourceProject {
@@ -62,56 +67,6 @@
     /** Sections after Subscription modules, inside the form, such as the Danger zone. */
     sections(): unknown
   }>()
-
-  const tabs = [
-    { value: 'overview', label: 'Overview' },
-    { value: 'build', label: 'Build' },
-    { value: 'deployments', label: 'Deployments' },
-    { value: 'variables', label: 'Variables' },
-    { value: 'caching', label: 'Caching' },
-    { value: 'integrations', label: 'Integrations' },
-    { value: 'rules', label: 'Rules' },
-    { value: 'main-settings', label: 'Settings' }
-  ]
-
-  const defaultModules = [
-    {
-      key: 'compression',
-      title: 'Compression',
-      description: 'Compress responses with gzip and Brotli before they are sent.'
-    },
-    { key: 'caching', title: 'Caching', description: 'Customize advanced cache settings.' },
-    {
-      key: 'device_detection',
-      title: 'Device Detection',
-      description: 'Expose device variables to build responsive rules.'
-    },
-    {
-      key: 'custom_code',
-      title: 'Custom Code',
-      description: 'Run your own code on each request, close to the user.'
-    },
-    {
-      key: 'image_optimization',
-      title: 'Image Optimization',
-      description: 'Resize and convert images on the fly.'
-    },
-    {
-      key: 'load_balancing',
-      title: 'Load Balancing',
-      description:
-        'Balance traffic across your upstreams for reliability and network congestion control.'
-    }
-  ]
-
-  const subscriptionModules = [
-    {
-      key: 'web_socket_proxy',
-      title: 'WebSocket Proxy',
-      description:
-        'Enhance real-time data exchange between your project and its backends using the WebSocket protocol.'
-    }
-  ]
 
   const copyOf = (project: EditResourceProject) =>
     JSON.parse(JSON.stringify(project)) as EditResourceProject
@@ -236,7 +191,7 @@
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
         <Tabs.Trigger
-          v-for="tab in tabs"
+          v-for="tab in sampleProjectTabs"
           :key="tab.value"
           :value="tab.value"
           :label="tab.label"
@@ -373,7 +328,7 @@
                     <template #default>
                       <Item.List>
                         <SettingsRow
-                          v-for="mod in defaultModules"
+                          v-for="mod in sampleProjectModules"
                           :key="mod.key"
                           :title="mod.title"
                           :description="mod.description"
@@ -399,7 +354,7 @@
                     <template #default>
                       <Item.List>
                         <SettingsRow
-                          v-for="mod in subscriptionModules"
+                          v-for="mod in sampleSubscriptionModules"
                           :key="mod.key"
                           :title="mod.title"
                           :description="mod.description"

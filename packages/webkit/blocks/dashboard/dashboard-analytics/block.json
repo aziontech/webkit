@@ -57,7 +57,17 @@
     "name": "Default",
     "file": "dashboard-analytics.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "analytics-cards.ts",
+    "analytics-report.ts",
+    "parts/expanded-dialog.vue",
+    "parts/expanded-table.vue",
+    "parts/metric-card.vue",
+    "parts/period-header.vue",
+    "parts/search-table.vue",
+    "parts/series-chart.vue"
+  ],
   "variants": [
     {
       "name": "Loading",

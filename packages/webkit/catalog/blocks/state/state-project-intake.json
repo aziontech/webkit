@@ -13,7 +13,7 @@
  ],
  "sfcFile": "blocks/state/state-project-intake/state-project-intake.vue",
  "guidelinesFile": "blocks/state/state-project-intake/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/state/state-project-intake/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

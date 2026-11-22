@@ -182,48 +182,28 @@ Each variant is the same screen in another state: `get_block("account/account-de
 
 ```vue
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
+  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Pagination from '@aziontech/webkit/pagination-root'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import SaveBar from '@aziontech/webkit/save-bar'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Switch from '@aziontech/webkit/switch'
-  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tag from '@aziontech/webkit/tag'
-  import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+  import { computed, onMounted, reactive, ref, watch } from 'vue'
 
+  import {
+    bindingLabel,
+    reachLabel,
+    servicesBoundTo,
+    settingNameIn,
+    type SettingsRowData
+  } from './deployment-policies'
+  import DeploymentDefaultsGroup from './parts/deployment-defaults-group.vue'
+  import DeploymentSaveBar from './parts/deployment-save-bar.vue'
+  import DeploymentServicesGroup from './parts/deployment-services-group.vue'
+  import DeploymentSettingDrawer, {
+    type DeploymentSettingDraftValues
+  } from './parts/deployment-setting-drawer.vue'
+  import DeploymentSettingsTable from './parts/deployment-settings-table.vue'
   import { sampleCurrentUser, sampleDefaults, sampleServices, sampleSettings } from './sample'
 
   /** Whether a version locks the resource IDs it shipped with. */
@@ -345,50 +325,6 @@ Each variant is the same screen in another state: `get_block("account/account-de
     delete: [event: Event, setting: DeploymentSettingsSetting]
   }>()
 
-  type SettingsRowData = DeploymentSettingsSetting & {
-    type: string
-    reach: 'Shared' | 'Dedicated' | 'Unused'
-    services: string[]
-  }
-
-  const BINDING_POLICIES: {
-    value: DeploymentSettingsBindingPolicy
-    label: string
-    description: string
-  }[] = [
-    {
-      value: 'STRICT',
-      label: 'Strict',
-      description: 'Lock resource IDs to each version. Promoted versions stay Strict.'
-    },
-    {
-      value: 'FLEXIBLE',
-      label: 'Flexible',
-      description: 'Allow resource IDs to change across versions.'
-    }
-  ]
-  const DEPLOYMENT_POLICIES: {
-    value: DeploymentSettingsDeploymentPolicy
-    label: string
-    description: string
-  }[] = [
-    {
-      value: 'single_version',
-      label: 'Single',
-      description: 'One version serves the environment. Deploying replaces what is live.'
-    },
-    {
-      value: 'versioned_urls',
-      label: 'Versioned',
-      description: 'Each version keeps its own URL, so several are reachable at once.'
-    }
-  ]
-  const bindingLabel = (value: unknown): string =>
-    BINDING_POLICIES.find((policy) => policy.value === value)?.label ?? String(value ?? '')
-  const deploymentLabel = (value: unknown): string =>
-    DEPLOYMENT_POLICIES.find((policy) => policy.value === value)?.label ?? String(value ?? '')
-
-  const SERVICES_PAGE_SIZE = 10
   const SAVE_TOAST = 'deployment-defaults-save'
 
   const settingsSource = computed<DeploymentSettingsSetting[]>(
@@ -499,46 +435,8 @@ Each variant is the same screen in another state: `get_block("account/account-de
 
   const systemId = computed(() => settingList.value.find((setting) => setting.system)?.id ?? '')
   const settingById = (id: string) => settingList.value.find((setting) => setting.id === id)
-  const settingName = (id: unknown): string => settingById(String(id))?.name ?? ''
-  const boundTo = (id: string) =>
-    serviceList.value.filter((service) =>
-      service.environments.some((environment) => environment.settingId === id)
-    )
-  const reachLabel = (count: number) =>
-    count === 0 ? 'No services' : count === 1 ? '1 service' : `${count} services`
-
-  const serviceRows = computed(() =>
-    serviceList.value.map((service) => ({
-      ...service,
-      settings: service.environments
-        .map((environment) => settingName(environment.settingId))
-        .join(' ')
-    }))
-  )
-  const {
-    items: pagedServices,
-    totalCount: matchingServiceCount,
-    filterProps: serviceFilterProps,
-    paginationProps: servicePaginationProps,
-    clearFilters: clearServiceSearch
-  } = useCollection({
-    items: serviceRows,
-    columns: [{ accessorKey: 'name' }, { accessorKey: 'settings' }],
-    filtering: { fields: ['name', 'settings'] },
-    pagination: { pageSize: SERVICES_PAGE_SIZE, pageSizeOptions: [SERVICES_PAGE_SIZE] }
-  })
-  const sharedCount = computed(
-    () =>
-      serviceList.value.filter((service) =>
-        service.environments.some((environment) => boundTo(environment.settingId).length > 1)
-      ).length
-  )
-  const optionsFor = (environment: DeploymentSettingsEnvironment) =>
-    settingList.value.filter(
-      (setting) =>
-        setting.deploymentPolicy === environment.deploymentPolicy ||
-        setting.id === environment.settingId
-    )
+  const settingName = (id: unknown): string => settingNameIn(settingList.value, id)
+  const boundTo = (id: string) => servicesBoundTo(serviceList.value, id)
 
   const rebind = (
     service: DeploymentSettingsService,
@@ -569,122 +467,13 @@ Each variant is the same screen in another state: `get_block("account/account-de
     toast.success(title, { description: 'It reaches this service only.' })
   }
 
-  const rows = computed<SettingsRowData[]>(() =>
-    settingList.value.map((setting) => {
-      const bound = boundTo(setting.id).map((service) => service.name)
-      return {
-        ...setting,
-        type: setting.system ? 'System' : 'Custom',
-        reach: bound.length > 1 ? 'Shared' : bound.length === 1 ? 'Dedicated' : 'Unused',
-        services: bound
-      }
-    })
-  )
+  const drawerEl = ref<InstanceType<typeof DeploymentSettingDrawer> | null>(null)
+  const openCreate = () => drawerEl.value?.openCreate()
 
-  const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
-    { accessorKey: 'services', header: 'Services', minWidth: 170 },
-    { accessorKey: 'type', header: 'Type', sortable: true, minWidth: 110 },
-    { accessorKey: 'bindingPolicy', header: 'Binding policy', sortable: true, minWidth: 140 },
-    {
-      accessorKey: 'deploymentPolicy',
-      header: 'Deployment policy',
-      sortable: true,
-      minWidth: 160
-    },
-    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
-    { accessorKey: 'updatedAt', header: 'Last modified', sortable: true, minWidth: 170 },
-    { id: 'actions', type: 'action', hideable: false }
-  ]
-
-  const properties: FilteringProperty[] = [
-    { key: 'name', label: 'Name' },
-    {
-      key: 'reach',
-      label: 'Reach',
-      options: [{ value: 'Shared' }, { value: 'Dedicated' }, { value: 'Unused' }]
-    },
-    {
-      key: 'bindingPolicy',
-      label: 'Binding policy',
-      options: BINDING_POLICIES.map((policy) => ({ value: policy.value, label: policy.label }))
-    },
-    { key: 'status', label: 'Status', options: [{ value: 'Active' }, { value: 'Inactive' }] }
-  ]
-
-  const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
-    useCollection({
-      items: rows,
-      columns,
-      filtering: { fields: ['name', 'description', 'reach', 'status'] },
-      propertyFiltering: { properties },
-      sorting: { defaultState: [{ desc: true, id: 'updatedAt' }] },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: {
-        storageKey: 'deployment-settings',
-        defaults: { columns: [{ id: 'type', visible: false }] }
-      }
-    })
-
-  const settingsTableEl = ref<TableExposed<SettingsRowData> | null>(null)
-  const exportCsv = () => settingsTableEl.value?.exportCsv({ filename: 'deployment-settings.csv' })
-
-  const blankDraft = () => ({
-    name: '',
-    description: '',
-    active: true,
-    bindingPolicy: saved.bindingPolicy,
-    deploymentPolicy: saved.deploymentPolicy
-  })
-  const drawerOpen = ref(false)
-  const editingId = ref('')
-  const draft = reactive(blankDraft())
-  const nameError = ref('')
-  const formEl = ref<HTMLFormElement | null>(null)
-  const drawerTitle = computed(() =>
-    editingId.value ? 'Edit Deployment Setting' : 'Create Deployment Setting'
-  )
-
-  const openCreate = () => {
-    editingId.value = ''
-    Object.assign(draft, blankDraft())
-    nameError.value = ''
-    drawerOpen.value = true
-  }
-  const openEdit = (setting: DeploymentSettingsSetting) => {
-    editingId.value = setting.id
-    Object.assign(draft, {
-      name: setting.name,
-      description: setting.description,
-      active: setting.status === 'Active',
-      bindingPolicy: setting.bindingPolicy,
-      deploymentPolicy: setting.deploymentPolicy
-    })
-    nameError.value = ''
-    drawerOpen.value = true
-  }
-
-  const submit = (event: Event) => {
-    const name = draft.name.trim()
-    nameError.value = !name
-      ? 'This field is required.'
-      : settingList.value.some((setting) => setting.name === name && setting.id !== editingId.value)
-        ? 'A Deployment Setting with this name already exists.'
-        : ''
-    if (nameError.value) {
-      nextTick(() => formEl.value?.querySelector<HTMLElement>('#deployment-settings-name')?.focus())
-      return
-    }
-    const values = {
-      name,
-      description: draft.description.trim(),
-      bindingPolicy: draft.bindingPolicy,
-      deploymentPolicy: draft.deploymentPolicy,
-      status: (draft.active ? 'Active' : 'Inactive') as DeploymentSettingsStatus,
-      updatedAt: new Date(),
-      updatedBy: author.value
-    }
-    const current = settingById(editingId.value)
+  const commitDraft = (event: Event, editingId: string, draft: DeploymentSettingDraftValues) => {
+    const values = { ...draft, updatedAt: new Date(), updatedBy: author.value }
+    const name = draft.name
+    const current = settingById(editingId)
     if (current) {
       const next = { ...current, ...values }
       settingList.value = settingList.value.map((setting) =>
@@ -706,7 +495,6 @@ Each variant is the same screen in another state: `get_block("account/account-de
         description: 'Point an environment at it under All services to start publishing with it.'
       })
     }
-    drawerOpen.value = false
   }
 
   const pending = ref<SettingsRowData | null>(null)
@@ -741,7 +529,7 @@ Each variant is the same screen in another state: `get_block("account/account-de
     const source = settingById(row.id)
     if (!source) return
     if (value === 'edit') {
-      openEdit(source)
+      drawerEl.value?.openEdit(source)
       return
     }
     if (value === 'clone') {
@@ -808,610 +596,45 @@ Each variant is the same screen in another state: `get_block("account/account-de
         />
 
         <div class="flex min-w-0 flex-col">
-          <SettingsGroup
-            label="New service defaults"
-            anchor="new-service-defaults"
-            hint="What the Deployment Setting created with the next service starts with."
-          >
-            <Card :padded="false">
-              <template #default>
-                <Item.List>
-                  <SettingsRow
-                    title="Binding policy"
-                    description="Whether a version locks the resource IDs it shipped with. Changing it does not touch the settings that already exist."
-                  >
-                    <Skeleton
-                      v-if="firstLoad"
-                      height="2.5rem"
-                    />
-                    <Select
-                      v-else
-                      v-model="form.bindingPolicy"
-                      size="large"
-                      class="w-full"
-                      :disabled="saving"
-                      :display-value="bindingLabel"
-                    >
-                      <Select.Trigger aria-label="Binding policy" />
-                      <Select.Content>
-                        <Select.Item
-                          v-for="policy in BINDING_POLICIES"
-                          :key="policy.value"
-                          :value="policy.value"
-                        >
-                          {{ policy.label }}
-                        </Select.Item>
-                      </Select.Content>
-                    </Select>
-                  </SettingsRow>
-                  <SettingsRow
-                    title="Deployment policy"
-                    description="Single serves one version and a deploy replaces it; Versioned gives each version its own URL. An environment can only use a setting that matches its own."
-                  >
-                    <Skeleton
-                      v-if="firstLoad"
-                      height="2.5rem"
-                    />
-                    <Select
-                      v-else
-                      v-model="form.deploymentPolicy"
-                      size="large"
-                      class="w-full"
-                      :disabled="saving"
-                      :display-value="deploymentLabel"
-                    >
-                      <Select.Trigger aria-label="Deployment policy" />
-                      <Select.Content>
-                        <Select.Item
-                          v-for="policy in DEPLOYMENT_POLICIES"
-                          :key="policy.value"
-                          :value="policy.value"
-                        >
-                          {{ policy.label }}
-                        </Select.Item>
-                      </Select.Content>
-                    </Select>
-                  </SettingsRow>
-                  <SettingsRow
-                    title="Apply to existing Deployment Settings"
-                    description="Give every setting this account already holds the binding policy above when you save. Default is never changed."
-                    variant="compact"
-                  >
-                    <Switch
-                      v-model="form.applyToExisting"
-                      :disabled="saving || firstLoad"
-                      aria-label="Apply to existing Deployment Settings"
-                    />
-                  </SettingsRow>
-                </Item.List>
-              </template>
-            </Card>
-          </SettingsGroup>
+          <DeploymentDefaultsGroup
+            :form="form"
+            :first-load="firstLoad"
+            :saving="saving"
+          />
 
-          <SettingsGroup
-            label="All services"
-            anchor="all-services"
-            hint="Every service, every environment, and the Deployment Setting each one publishes with."
-          >
-            <Card :padded="false">
-              <template #default>
-                <div
-                  v-if="firstLoad"
-                  class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)"
-                >
-                  <Skeleton
-                    width="40%"
-                    height="1.25rem"
-                  />
-                  <Skeleton height="2.5rem" />
-                </div>
-                <EmptyState
-                  v-else-if="!serviceList.length"
-                  size="small"
-                  icon="az az-server"
-                  title="No services yet"
-                  description="Each environment of a new service is linked to a matching Deployment Setting automatically."
-                />
-                <Accordion
-                  v-else
-                  type="single"
-                  icon-position="leading"
-                  collapsible
-                >
-                  <Accordion.Item value="all-services">
-                    <Accordion.Trigger :heading-level="3">
-                      <span class="flex flex-1 flex-wrap items-center gap-(--spacing-sm)">
-                        <span class="text-label-md text-(--text-default)">All services</span>
-                        <span class="text-body-sm text-(--text-muted)">{{
-                          reachLabel(serviceList.length)
-                        }}</span>
-                        <Tag
-                          v-if="sharedCount"
-                          :label="`${sharedCount} on a shared setting`"
-                          severity="warning"
-                          size="small"
-                        />
-                      </span>
-                    </Accordion.Trigger>
-                    <Accordion.Content>
-                      <div class="flex min-w-0 flex-col gap-(--spacing-md)">
-                        <Input
-                          v-bind="serviceFilterProps"
-                          size="medium"
-                          placeholder="Search services or settings"
-                          aria-label="Search services or Deployment Settings"
-                          class="w-full"
-                        >
-                          <template #leading>
-                            <i
-                              class="az az-search"
-                              aria-hidden="true"
-                            />
-                          </template>
-                        </Input>
-                        <div
-                          v-if="!matchingServiceCount"
-                          role="status"
-                        >
-                          <EmptyState
-                            size="small"
-                            icon="az az-search"
-                            title="No matching services"
-                            :description="`No service or setting matches “${serviceFilterProps.modelValue}”.`"
-                          >
-                            <template #actions>
-                              <Button
-                                label="Clear search"
-                                variant="outline"
-                                size="small"
-                                @click="clearServiceSearch"
-                              />
-                            </template>
-                          </EmptyState>
-                        </div>
-                        <ul
-                          v-else
-                          class="m-0 flex list-none flex-col p-0"
-                          aria-label="Services"
-                        >
-                          <li
-                            v-for="service in pagedServices"
-                            :key="service.id"
-                            class="flex min-w-0 flex-col gap-(--spacing-xs) border-b border-(--border-muted) py-(--spacing-sm) last:border-b-0"
-                          >
-                            <TableCellLink
-                              :label="service.name"
-                              :href="`/services/${service.id}`"
-                              destination="Services"
-                            />
-                            <div
-                              v-for="environment in service.environments"
-                              :key="environment.name"
-                              class="flex min-w-0 flex-wrap items-center gap-(--spacing-sm)"
-                            >
-                              <Tag
-                                :label="environment.name"
-                                severity="neutral"
-                                size="small"
-                              />
-                              <Tag
-                                :label="deploymentLabel(environment.deploymentPolicy)"
-                                severity="info"
-                                size="small"
-                              />
-                              <Select
-                                :model-value="environment.settingId"
-                                size="medium"
-                                class="min-w-0 grow basis-(--container-2xs)"
-                                :display-value="settingName"
-                                @update:model-value="(value) => rebind(service, environment, value)"
-                              >
-                                <Select.Trigger
-                                  :aria-label="`Deployment Setting for ${service.name} ${environment.name}`"
-                                />
-                                <Select.Content>
-                                  <Select.Item
-                                    v-for="option in optionsFor(environment)"
-                                    :key="option.id"
-                                    :value="option.id"
-                                    :disabled="option.status === 'Inactive'"
-                                  >
-                                    {{ option.name }}
-                                  </Select.Item>
-                                </Select.Content>
-                              </Select>
-                              <Tag
-                                v-if="environment.auto"
-                                key="auto"
-                                label="Linked automatically"
-                                severity="neutral"
-                                size="small"
-                              />
-                              <Tag
-                                key="shared"
-                                v-if="boundTo(environment.settingId).length > 1"
-                                :label="`Shared · ${reachLabel(boundTo(environment.settingId).length)}`"
-                                severity="warning"
-                                size="small"
-                              />
-                            </div>
-                          </li>
-                        </ul>
-                        <Pagination
-                          v-if="matchingServiceCount > SERVICES_PAGE_SIZE"
-                          v-bind="servicePaginationProps"
-                          aria-label="Services pages"
-                        />
-                      </div>
-                    </Accordion.Content>
-                  </Accordion.Item>
-                </Accordion>
-              </template>
-            </Card>
-          </SettingsGroup>
+          <DeploymentServicesGroup
+            :service-list="serviceList"
+            :setting-list="settingList"
+            :first-load="firstLoad"
+            @rebind="rebind"
+          />
 
-          <SettingsGroup
-            label="Deployment Settings"
-            anchor="deployment-settings"
-            hint="Every setting this account holds, and the services each one publishes to."
-          >
-            <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-              <header class="flex flex-wrap items-start gap-(--layout-group-gap)">
-                <div class="flex min-w-0 grow basis-(--container-2xs)">
-                  <PropertyFilter
-                    v-bind="propertyFilterProps"
-                    placeholder="Filter Deployment Settings"
-                    aria-label="Filter Deployment Settings"
-                  />
-                </div>
-                <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
-                  <Tooltip
-                    content="Refresh"
-                    class="shrink-0"
-                  >
-                    <IconButton
-                      icon="az az-refresh"
-                      variant="outline"
-                      size="medium"
-                      :loading="loading && !firstLoad"
-                      aria-label="Refresh"
-                      @click="emit('refresh', $event)"
-                    />
-                  </Tooltip>
-                  <Tooltip
-                    content="Download CSV"
-                    class="shrink-0"
-                  >
-                    <IconButton
-                      icon="az az-download"
-                      variant="outline"
-                      size="medium"
-                      :disabled="!matchingItems.length"
-                      aria-label="Download CSV"
-                      @click="exportCsv"
-                    />
-                  </Tooltip>
-                  <CollectionPreferences
-                    v-bind="preferencesProps"
-                    title="Table preferences"
-                  />
-                </div>
-              </header>
-
-              <Card :padded="false">
-                <template #default>
-                  <DataTable
-                    ref="settingsTableEl"
-                    v-bind="tableProps"
-                    :loading="loading"
-                    sortable
-                    :bordered="false"
-                    aria-label="Deployment Settings"
-                  >
-                    <template #cell-name="{ row }">
-                      <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                        <span class="truncate">{{ row.name }}</span>
-                        <Tag
-                          v-if="row.system"
-                          label="System"
-                          severity="neutral"
-                          size="small"
-                          class="shrink-0"
-                        />
-                      </span>
-                    </template>
-                    <template #cell-services="{ row }">
-                      <Tooltip
-                        :content="
-                          row.services.length
-                            ? row.services.join(' · ')
-                            : 'No environment publishes with this setting yet.'
-                        "
-                      >
-                        <span
-                          class="flex min-w-0 items-center gap-(--spacing-xs)"
-                          tabindex="0"
-                        >
-                          <Tag
-                            v-if="row.reach === 'Shared'"
-                            label="Shared"
-                            severity="warning"
-                            size="small"
-                            class="shrink-0"
-                          />
-                          <span
-                            class="truncate"
-                            :data-unused="row.reach === 'Unused' || null"
-                            >{{ reachLabel(row.services.length) }}</span
-                          >
-                        </span>
-                      </Tooltip>
-                    </template>
-                    <template #cell-type="{ value }">
-                      <Tag
-                        :label="value"
-                        severity="info"
-                        size="small"
-                      />
-                    </template>
-                    <template #cell-bindingPolicy="{ value }">
-                      <span class="truncate">{{ bindingLabel(value) }}</span>
-                    </template>
-                    <template #cell-deploymentPolicy="{ value }">
-                      <span class="truncate">{{ deploymentLabel(value) }}</span>
-                    </template>
-                    <template #cell-status="{ value }">
-                      <TableCellStatus
-                        :label="value"
-                        :severity="value === 'Active' ? 'success' : 'neutral'"
-                      />
-                    </template>
-                    <template #cell-updatedAt="{ row }">
-                      <TableCellTime
-                        :value="row.updatedAt"
-                        :author="row.system ? '' : row.updatedBy"
-                      />
-                    </template>
-                    <template #header-actions>
-                      <span class="sr-only">Actions</span>
-                    </template>
-                    <template #cell-actions="{ row }">
-                      <TableCellActions
-                        v-if="!row.system"
-                        :name="row.name"
-                        @select="(event, value) => onAction(event, value, row)"
-                      >
-                        <DropdownMenu.Group>
-                          <DropdownMenu.Item
-                            value="edit"
-                            label="Edit"
-                          />
-                          <DropdownMenu.Item
-                            value="clone"
-                            label="Clone"
-                          />
-                        </DropdownMenu.Group>
-                        <DropdownMenu.Group>
-                          <DropdownMenu.Item
-                            value="delete"
-                            label="Delete"
-                          />
-                        </DropdownMenu.Group>
-                      </TableCellActions>
-                    </template>
-                    <template #empty>
-                      <EmptyState
-                        size="small"
-                        icon="az az-search"
-                        title="No matching Deployment Settings"
-                        description="No setting matches these filters."
-                      >
-                        <template #actions>
-                          <Button
-                            label="Clear filters"
-                            variant="outline"
-                            size="small"
-                            @click="clearFilters"
-                          />
-                        </template>
-                      </EmptyState>
-                    </template>
-                  </DataTable>
-                </template>
-              </Card>
-            </div>
-          </SettingsGroup>
+          <DeploymentSettingsTable
+            :setting-list="settingList"
+            :service-list="serviceList"
+            :loading="loading"
+            :first-load="firstLoad"
+            @refresh="(event) => emit('refresh', event)"
+            @action="onAction"
+          />
         </div>
       </section>
 
-      <Transition
-        enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-        enter-from-class="translate-y-2 opacity-0"
-        leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-        leave-to-class="translate-y-2 opacity-0"
-      >
-        <SaveBar
-          v-if="dirty || saving"
-          @save="onSaveShortcut"
-        >
-          You have unsaved changes.
-          <template #actions>
-            <Button
-              type="button"
-              label="Discard"
-              variant="outline"
-              size="medium"
-              :disabled="saving"
-              @click="discard"
-            />
-            <Button
-              variant="primary"
-              size="medium"
-              :loading="saving"
-              @click="save"
-              aria-keyshortcuts="Meta+S Control+S"
-            >
-              Save
-              <Kbd
-                meta
-                size="small"
-                aria-hidden="true"
-                >S</Kbd
-              >
-            </Button>
-          </template>
-        </SaveBar>
-      </Transition>
+      <DeploymentSaveBar
+        :dirty="dirty"
+        :saving="saving"
+        @save-shortcut="onSaveShortcut"
+        @discard="discard"
+        @save="save"
+      />
     </div>
 
-    <Drawer
-      v-model:open="drawerOpen"
-      size="large"
-      side="end"
-      dismissible
-      closable
-    >
-      <DrawerContent>
-        <form
-          ref="formEl"
-          class="flex min-h-0 flex-1 flex-col"
-          :aria-label="drawerTitle"
-          novalidate
-          @submit.prevent="submit"
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-              <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                A Deployment Setting says how a deploy routes: whether versions lock the resource
-                IDs they shipped with, and how many of them take traffic. An environment publishes
-                with exactly one.
-              </p>
-            </div>
-          </PanelHeader>
-
-          <PanelBody>
-            <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
-              <legend class="sr-only">{{ drawerTitle }}</legend>
-              <SettingsGroup
-                label="General"
-                hint="How this setting reads in this list and in the field that applies it."
-              >
-                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                  <Field
-                    required
-                    :invalid="Boolean(nameError)"
-                  >
-                    <Field.Label for="deployment-settings-name">Name</Field.Label>
-                    <Input
-                      id="deployment-settings-name"
-                      v-model="draft.name"
-                      size="large"
-                      placeholder="production-hardened"
-                      autocomplete="off"
-                      @update:model-value="nameError = ''"
-                    />
-                    <Field.Description>{{
-                      nameError || 'Name it after the services or the traffic it serves.'
-                    }}</Field.Description>
-                  </Field>
-                  <Field>
-                    <Field.Label for="deployment-settings-description">Description</Field.Label>
-                    <Textarea
-                      id="deployment-settings-description"
-                      v-model="draft.description"
-                      :rows="3"
-                    />
-                    <Field.Description
-                      >Optional. Used for internal identification.</Field.Description
-                    >
-                  </Field>
-                  <Field orientation="horizontal">
-                    <Switch
-                      id="deployment-settings-active"
-                      v-model="draft.active"
-                    />
-                    <Field.Content>
-                      <Field.Label for="deployment-settings-active">Active</Field.Label>
-                      <Field.Description
-                        >When off, the setting stays in the list but no environment can choose
-                        it.</Field.Description
-                      >
-                    </Field.Content>
-                  </Field>
-                </div>
-              </SettingsGroup>
-
-              <SettingsGroup
-                label="Routing and policy"
-                hint="How versions bind to the resources they ship with, and how traffic reaches them."
-              >
-                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                  <fieldset
-                    class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
-                  >
-                    <Field.Legend type="label">Binding policy</Field.Legend>
-                    <RadioGroup
-                      v-model="draft.bindingPolicy"
-                      name="deployment-settings-binding"
-                      aria-label="Binding policy"
-                    >
-                      <RadioGroup.Item
-                        v-for="policy in BINDING_POLICIES"
-                        :key="policy.value"
-                        :value="policy.value"
-                        :description="policy.description"
-                        >{{ policy.label }}</RadioGroup.Item
-                      >
-                    </RadioGroup>
-                  </fieldset>
-                  <fieldset
-                    class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
-                  >
-                    <Field.Legend type="label">Deployment policy</Field.Legend>
-                    <RadioGroup
-                      v-model="draft.deploymentPolicy"
-                      name="deployment-settings-policy"
-                      aria-label="Deployment policy"
-                      :disabled="Boolean(editingId)"
-                    >
-                      <RadioGroup.Item
-                        v-for="policy in DEPLOYMENT_POLICIES"
-                        :key="policy.value"
-                        :value="policy.value"
-                        :description="policy.description"
-                        >{{ policy.label }}</RadioGroup.Item
-                      >
-                    </RadioGroup>
-                    <Field.Description
-                      >Cannot be changed after the setting is created.</Field.Description
-                    >
-                  </fieldset>
-                </div>
-              </SettingsGroup>
-            </fieldset>
-          </PanelBody>
-
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                type="button"
-                label="Cancel"
-                variant="outline"
-                size="medium"
-                @click="drawerOpen = false"
-              />
-              <Button
-                type="submit"
-                :label="editingId ? 'Save changes' : 'Create Deployment Setting'"
-                variant="primary"
-                size="medium"
-              />
-            </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </Drawer>
+    <DeploymentSettingDrawer
+      ref="drawerEl"
+      :setting-list="settingList"
+      :defaults="saved"
+      @submit="commitDraft"
+    />
 
     <ConfirmDialog
       v-model:open="deleteOpen"
@@ -1549,4 +772,1070 @@ export const sampleDefaults: DeploymentSettingsDefaults = {
 }
 
 export const sampleCurrentUser = 'jane.doe@example.com'
+```
+
+## `deployment-policies.ts`
+
+```ts
+import type {
+  DeploymentSettingsBindingPolicy,
+  DeploymentSettingsDeploymentPolicy,
+  DeploymentSettingsService,
+  DeploymentSettingsSetting
+} from './account-deployment-settings.vue'
+
+/** A row of the settings table: the setting and the services that publish with it. */
+export type SettingsRowData = DeploymentSettingsSetting & {
+  type: string
+  reach: 'Shared' | 'Dedicated' | 'Unused'
+  services: string[]
+}
+
+export const BINDING_POLICIES: {
+  value: DeploymentSettingsBindingPolicy
+  label: string
+  description: string
+}[] = [
+  {
+    value: 'STRICT',
+    label: 'Strict',
+    description: 'Lock resource IDs to each version. Promoted versions stay Strict.'
+  },
+  {
+    value: 'FLEXIBLE',
+    label: 'Flexible',
+    description: 'Allow resource IDs to change across versions.'
+  }
+]
+export const DEPLOYMENT_POLICIES: {
+  value: DeploymentSettingsDeploymentPolicy
+  label: string
+  description: string
+}[] = [
+  {
+    value: 'single_version',
+    label: 'Single',
+    description: 'One version serves the environment. Deploying replaces what is live.'
+  },
+  {
+    value: 'versioned_urls',
+    label: 'Versioned',
+    description: 'Each version keeps its own URL, so several are reachable at once.'
+  }
+]
+
+export const bindingLabel = (value: unknown): string =>
+  BINDING_POLICIES.find((policy) => policy.value === value)?.label ?? String(value ?? '')
+
+export const deploymentLabel = (value: unknown): string =>
+  DEPLOYMENT_POLICIES.find((policy) => policy.value === value)?.label ?? String(value ?? '')
+
+export const reachLabel = (count: number): string =>
+  count === 0 ? 'No services' : count === 1 ? '1 service' : `${count} services`
+
+export const settingNameIn = (settings: DeploymentSettingsSetting[], id: unknown): string =>
+  settings.find((setting) => setting.id === String(id))?.name ?? ''
+
+export const servicesBoundTo = (
+  services: DeploymentSettingsService[],
+  id: string
+): DeploymentSettingsService[] =>
+  services.filter((service) =>
+    service.environments.some((environment) => environment.settingId === id)
+  )
+
+export const settingRows = (
+  settings: DeploymentSettingsSetting[],
+  services: DeploymentSettingsService[]
+): SettingsRowData[] =>
+  settings.map((setting) => {
+    const bound = servicesBoundTo(services, setting.id).map((service) => service.name)
+    return {
+      ...setting,
+      type: setting.system ? 'System' : 'Custom',
+      reach: bound.length > 1 ? 'Shared' : bound.length === 1 ? 'Dedicated' : 'Unused',
+      services: bound
+    }
+  })
+```
+
+## `parts/deployment-defaults-group.vue`
+
+```ts
+<script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+  import Item from '@aziontech/webkit/item'
+  import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import Switch from '@aziontech/webkit/switch'
+
+  import type { DeploymentSettingsDefaultsValues } from '../account-deployment-settings.vue'
+  import {
+    BINDING_POLICIES,
+    bindingLabel,
+    DEPLOYMENT_POLICIES,
+    deploymentLabel
+  } from '../deployment-policies'
+
+  export interface DeploymentDefaultsGroupProps {
+    /** The first load is in flight: skeletons replace the controls. */
+    firstLoad: boolean
+    /** The defaults save is in flight. */
+    saving: boolean
+  }
+
+  defineProps<DeploymentDefaultsGroupProps>()
+
+  const form = defineModel<DeploymentSettingsDefaultsValues>('form', { required: true })
+</script>
+
+<template>
+  <SettingsGroup
+    label="New service defaults"
+    anchor="new-service-defaults"
+    hint="What the Deployment Setting created with the next service starts with."
+  >
+    <Card :padded="false">
+      <template #default>
+        <Item.List>
+          <SettingsRow
+            title="Binding policy"
+            description="Whether a version locks the resource IDs it shipped with. Changing it does not touch the settings that already exist."
+          >
+            <Skeleton
+              v-if="firstLoad"
+              height="2.5rem"
+            />
+            <Select
+              v-else
+              v-model="form.bindingPolicy"
+              size="large"
+              class="w-full"
+              :disabled="saving"
+              :display-value="bindingLabel"
+            >
+              <Select.Trigger aria-label="Binding policy" />
+              <Select.Content>
+                <Select.Item
+                  v-for="policy in BINDING_POLICIES"
+                  :key="policy.value"
+                  :value="policy.value"
+                >
+                  {{ policy.label }}
+                </Select.Item>
+              </Select.Content>
+            </Select>
+          </SettingsRow>
+          <SettingsRow
+            title="Deployment policy"
+            description="Single serves one version and a deploy replaces it; Versioned gives each version its own URL. An environment can only use a setting that matches its own."
+          >
+            <Skeleton
+              v-if="firstLoad"
+              height="2.5rem"
+            />
+            <Select
+              v-else
+              v-model="form.deploymentPolicy"
+              size="large"
+              class="w-full"
+              :disabled="saving"
+              :display-value="deploymentLabel"
+            >
+              <Select.Trigger aria-label="Deployment policy" />
+              <Select.Content>
+                <Select.Item
+                  v-for="policy in DEPLOYMENT_POLICIES"
+                  :key="policy.value"
+                  :value="policy.value"
+                >
+                  {{ policy.label }}
+                </Select.Item>
+              </Select.Content>
+            </Select>
+          </SettingsRow>
+          <SettingsRow
+            title="Apply to existing Deployment Settings"
+            description="Give every setting this account already holds the binding policy above when you save. Default is never changed."
+            variant="compact"
+          >
+            <Switch
+              v-model="form.applyToExisting"
+              :disabled="saving || firstLoad"
+              aria-label="Apply to existing Deployment Settings"
+            />
+          </SettingsRow>
+        </Item.List>
+      </template>
+    </Card>
+  </SettingsGroup>
+</template>
+```
+
+## `parts/deployment-save-bar.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Kbd from '@aziontech/webkit/kbd'
+  import SaveBar from '@aziontech/webkit/save-bar'
+
+  export interface DeploymentSaveBarProps {
+    /** The defaults differ from the saved ones. */
+    dirty: boolean
+    /** The defaults save is in flight. */
+    saving: boolean
+  }
+
+  defineProps<DeploymentSaveBarProps>()
+
+  const emit = defineEmits<{
+    'save-shortcut': [event: KeyboardEvent]
+    discard: [event: MouseEvent]
+    save: [event: MouseEvent]
+  }>()
+
+  const onSaveShortcut = (event: KeyboardEvent) => emit('save-shortcut', event)
+  const discard = (event: MouseEvent) => emit('discard', event)
+  const save = (event: MouseEvent) => emit('save', event)
+</script>
+
+<template>
+  <Transition
+    enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+    enter-from-class="translate-y-2 opacity-0"
+    leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+    leave-to-class="translate-y-2 opacity-0"
+  >
+    <SaveBar
+      v-if="dirty || saving"
+      @save="onSaveShortcut"
+    >
+      You have unsaved changes.
+      <template #actions>
+        <Button
+          type="button"
+          label="Discard"
+          variant="outline"
+          size="medium"
+          :disabled="saving"
+          @click="discard"
+        />
+        <Button
+          variant="primary"
+          size="medium"
+          :loading="saving"
+          @click="save"
+          aria-keyshortcuts="Meta+S Control+S"
+        >
+          Save
+          <Kbd
+            meta
+            size="small"
+            aria-hidden="true"
+            >S</Kbd
+          >
+        </Button>
+      </template>
+    </SaveBar>
+  </Transition>
+</template>
+```
+
+## `parts/deployment-services-group.vue`
+
+```ts
+<script setup lang="ts">
+  import Accordion from '@aziontech/webkit/accordion'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Input from '@aziontech/webkit/input'
+  import Pagination from '@aziontech/webkit/pagination-root'
+  import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import Tag from '@aziontech/webkit/tag'
+  import { useCollection } from '@aziontech/webkit/use-collection'
+  import { computed } from 'vue'
+
+  import type {
+    DeploymentSettingsEnvironment,
+    DeploymentSettingsService,
+    DeploymentSettingsSetting
+  } from '../account-deployment-settings.vue'
+  import {
+    deploymentLabel,
+    reachLabel,
+    servicesBoundTo,
+    settingNameIn
+  } from '../deployment-policies'
+
+  export interface DeploymentServicesGroupProps {
+    /** Every service and its environments. */
+    serviceList: DeploymentSettingsService[]
+    /** Every Deployment Setting of the account. */
+    settingList: DeploymentSettingsSetting[]
+    /** The first load is in flight. */
+    firstLoad: boolean
+  }
+
+  const props = defineProps<DeploymentServicesGroupProps>()
+
+  const emit = defineEmits<{
+    rebind: [
+      service: DeploymentSettingsService,
+      environment: DeploymentSettingsEnvironment,
+      value: unknown
+    ]
+  }>()
+
+  const SERVICES_PAGE_SIZE = 10
+
+  const settingName = (id: unknown): string => settingNameIn(props.settingList, id)
+  const boundTo = (id: string) => servicesBoundTo(props.serviceList, id)
+
+  const serviceRows = computed(() =>
+    props.serviceList.map((service) => ({
+      ...service,
+      settings: service.environments
+        .map((environment) => settingName(environment.settingId))
+        .join(' ')
+    }))
+  )
+  const {
+    items: pagedServices,
+    totalCount: matchingServiceCount,
+    filterProps: serviceFilterProps,
+    paginationProps: servicePaginationProps,
+    clearFilters: clearServiceSearch
+  } = useCollection({
+    items: serviceRows,
+    columns: [{ accessorKey: 'name' }, { accessorKey: 'settings' }],
+    filtering: { fields: ['name', 'settings'] },
+    pagination: { pageSize: SERVICES_PAGE_SIZE, pageSizeOptions: [SERVICES_PAGE_SIZE] }
+  })
+  const sharedCount = computed(
+    () =>
+      props.serviceList.filter((service) =>
+        service.environments.some((environment) => boundTo(environment.settingId).length > 1)
+      ).length
+  )
+  const optionsFor = (environment: DeploymentSettingsEnvironment) =>
+    props.settingList.filter(
+      (setting) =>
+        setting.deploymentPolicy === environment.deploymentPolicy ||
+        setting.id === environment.settingId
+    )
+
+  const rebind = (
+    service: DeploymentSettingsService,
+    environment: DeploymentSettingsEnvironment,
+    value: unknown
+  ) => emit('rebind', service, environment, value)
+</script>
+
+<template>
+  <SettingsGroup
+    label="All services"
+    anchor="all-services"
+    hint="Every service, every environment, and the Deployment Setting each one publishes with."
+  >
+    <Card :padded="false">
+      <template #default>
+        <div
+          v-if="firstLoad"
+          class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)"
+        >
+          <Skeleton
+            width="40%"
+            height="1.25rem"
+          />
+          <Skeleton height="2.5rem" />
+        </div>
+        <EmptyState
+          v-else-if="!serviceList.length"
+          size="small"
+          icon="az az-server"
+          title="No services yet"
+          description="Each environment of a new service is linked to a matching Deployment Setting automatically."
+        />
+        <Accordion
+          v-else
+          type="single"
+          icon-position="leading"
+          collapsible
+        >
+          <Accordion.Item value="all-services">
+            <Accordion.Trigger :heading-level="3">
+              <span class="flex flex-1 flex-wrap items-center gap-(--spacing-sm)">
+                <span class="text-label-md text-(--text-default)">All services</span>
+                <span class="text-body-sm text-(--text-muted)">{{
+                  reachLabel(serviceList.length)
+                }}</span>
+                <Tag
+                  v-if="sharedCount"
+                  :label="`${sharedCount} on a shared setting`"
+                  severity="warning"
+                  size="small"
+                />
+              </span>
+            </Accordion.Trigger>
+            <Accordion.Content>
+              <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+                <Input
+                  v-bind="serviceFilterProps"
+                  size="medium"
+                  placeholder="Search services or settings"
+                  aria-label="Search services or Deployment Settings"
+                  class="w-full"
+                >
+                  <template #leading>
+                    <i
+                      class="az az-search"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </Input>
+                <div
+                  v-if="!matchingServiceCount"
+                  role="status"
+                >
+                  <EmptyState
+                    size="small"
+                    icon="az az-search"
+                    title="No matching services"
+                    :description="`No service or setting matches “${serviceFilterProps.modelValue}”.`"
+                  >
+                    <template #actions>
+                      <Button
+                        label="Clear search"
+                        variant="outline"
+                        size="small"
+                        @click="clearServiceSearch"
+                      />
+                    </template>
+                  </EmptyState>
+                </div>
+                <ul
+                  v-else
+                  class="m-0 flex list-none flex-col p-0"
+                  aria-label="Services"
+                >
+                  <li
+                    v-for="service in pagedServices"
+                    :key="service.id"
+                    class="flex min-w-0 flex-col gap-(--spacing-xs) border-b border-(--border-muted) py-(--spacing-sm) last:border-b-0"
+                  >
+                    <TableCellLink
+                      :label="service.name"
+                      :href="`/services/${service.id}`"
+                      destination="Services"
+                    />
+                    <div
+                      v-for="environment in service.environments"
+                      :key="environment.name"
+                      class="flex min-w-0 flex-wrap items-center gap-(--spacing-sm)"
+                    >
+                      <Tag
+                        :label="environment.name"
+                        severity="neutral"
+                        size="small"
+                      />
+                      <Tag
+                        :label="deploymentLabel(environment.deploymentPolicy)"
+                        severity="info"
+                        size="small"
+                      />
+                      <Select
+                        :model-value="environment.settingId"
+                        size="medium"
+                        class="min-w-0 grow basis-(--container-2xs)"
+                        :display-value="settingName"
+                        @update:model-value="(value) => rebind(service, environment, value)"
+                      >
+                        <Select.Trigger
+                          :aria-label="`Deployment Setting for ${service.name} ${environment.name}`"
+                        />
+                        <Select.Content>
+                          <Select.Item
+                            v-for="option in optionsFor(environment)"
+                            :key="option.id"
+                            :value="option.id"
+                            :disabled="option.status === 'Inactive'"
+                          >
+                            {{ option.name }}
+                          </Select.Item>
+                        </Select.Content>
+                      </Select>
+                      <Tag
+                        v-if="environment.auto"
+                        key="auto"
+                        label="Linked automatically"
+                        severity="neutral"
+                        size="small"
+                      />
+                      <Tag
+                        key="shared"
+                        v-if="boundTo(environment.settingId).length > 1"
+                        :label="`Shared · ${reachLabel(boundTo(environment.settingId).length)}`"
+                        severity="warning"
+                        size="small"
+                      />
+                    </div>
+                  </li>
+                </ul>
+                <Pagination
+                  v-if="matchingServiceCount > SERVICES_PAGE_SIZE"
+                  v-bind="servicePaginationProps"
+                  aria-label="Services pages"
+                />
+              </div>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion>
+      </template>
+    </Card>
+  </SettingsGroup>
+</template>
+```
+
+## `parts/deployment-setting-drawer.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import Drawer from '@aziontech/webkit/drawer-root'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import RadioGroup from '@aziontech/webkit/radio-group'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import Switch from '@aziontech/webkit/switch'
+  import Textarea from '@aziontech/webkit/textarea'
+  import { computed, nextTick, reactive, ref } from 'vue'
+
+  import type {
+    DeploymentSettingsDefaults,
+    DeploymentSettingsSetting,
+    DeploymentSettingsStatus
+  } from '../account-deployment-settings.vue'
+  import { BINDING_POLICIES, DEPLOYMENT_POLICIES } from '../deployment-policies'
+
+  /** What a valid submit of the drawer sends. */
+  export type DeploymentSettingDraftValues = Pick<
+    DeploymentSettingsSetting,
+    'name' | 'description' | 'bindingPolicy' | 'deploymentPolicy' | 'status'
+  >
+
+  export interface DeploymentSettingDrawerProps {
+    /** Every Deployment Setting of the account; a name must be unique among them. */
+    settingList: DeploymentSettingsSetting[]
+    /** The policies a new setting starts with. */
+    defaults: DeploymentSettingsDefaults
+  }
+
+  const props = defineProps<DeploymentSettingDrawerProps>()
+
+  const emit = defineEmits<{
+    submit: [event: Event, editingId: string, values: DeploymentSettingDraftValues]
+  }>()
+
+  const blankDraft = () => ({
+    name: '',
+    description: '',
+    active: true,
+    bindingPolicy: props.defaults.bindingPolicy,
+    deploymentPolicy: props.defaults.deploymentPolicy
+  })
+  const drawerOpen = ref(false)
+  const editingId = ref('')
+  const draft = reactive(blankDraft())
+  const nameError = ref('')
+  const formEl = ref<HTMLFormElement | null>(null)
+  const drawerTitle = computed(() =>
+    editingId.value ? 'Edit Deployment Setting' : 'Create Deployment Setting'
+  )
+
+  const openCreate = () => {
+    editingId.value = ''
+    Object.assign(draft, blankDraft())
+    nameError.value = ''
+    drawerOpen.value = true
+  }
+  const openEdit = (setting: DeploymentSettingsSetting) => {
+    editingId.value = setting.id
+    Object.assign(draft, {
+      name: setting.name,
+      description: setting.description,
+      active: setting.status === 'Active',
+      bindingPolicy: setting.bindingPolicy,
+      deploymentPolicy: setting.deploymentPolicy
+    })
+    nameError.value = ''
+    drawerOpen.value = true
+  }
+
+  const submit = (event: Event) => {
+    const name = draft.name.trim()
+    nameError.value = !name
+      ? 'This field is required.'
+      : props.settingList.some((setting) => setting.name === name && setting.id !== editingId.value)
+        ? 'A Deployment Setting with this name already exists.'
+        : ''
+    if (nameError.value) {
+      nextTick(() => formEl.value?.querySelector<HTMLElement>('#deployment-settings-name')?.focus())
+      return
+    }
+    emit('submit', event, editingId.value, {
+      name,
+      description: draft.description.trim(),
+      bindingPolicy: draft.bindingPolicy,
+      deploymentPolicy: draft.deploymentPolicy,
+      status: (draft.active ? 'Active' : 'Inactive') as DeploymentSettingsStatus
+    })
+    drawerOpen.value = false
+  }
+
+  defineExpose({
+    /** Opens the drawer on a blank setting. */
+    openCreate,
+    /** Opens the drawer on a setting to edit. */
+    openEdit
+  })
+</script>
+
+<template>
+  <Drawer
+    v-model:open="drawerOpen"
+    size="large"
+    side="end"
+    dismissible
+    closable
+  >
+    <DrawerContent>
+      <form
+        ref="formEl"
+        class="flex min-h-0 flex-1 flex-col"
+        :aria-label="drawerTitle"
+        novalidate
+        @submit.prevent="submit"
+      >
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+            <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">
+              A Deployment Setting says how a deploy routes: whether versions lock the resource IDs
+              they shipped with, and how many of them take traffic. An environment publishes with
+              exactly one.
+            </p>
+          </div>
+        </PanelHeader>
+
+        <PanelBody>
+          <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
+            <legend class="sr-only">{{ drawerTitle }}</legend>
+            <SettingsGroup
+              label="General"
+              hint="How this setting reads in this list and in the field that applies it."
+            >
+              <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                <Field
+                  required
+                  :invalid="Boolean(nameError)"
+                >
+                  <Field.Label for="deployment-settings-name">Name</Field.Label>
+                  <Input
+                    id="deployment-settings-name"
+                    v-model="draft.name"
+                    size="large"
+                    placeholder="production-hardened"
+                    autocomplete="off"
+                    @update:model-value="nameError = ''"
+                  />
+                  <Field.Description>{{
+                    nameError || 'Name it after the services or the traffic it serves.'
+                  }}</Field.Description>
+                </Field>
+                <Field>
+                  <Field.Label for="deployment-settings-description">Description</Field.Label>
+                  <Textarea
+                    id="deployment-settings-description"
+                    v-model="draft.description"
+                    :rows="3"
+                  />
+                  <Field.Description>Optional. Used for internal identification.</Field.Description>
+                </Field>
+                <Field orientation="horizontal">
+                  <Switch
+                    id="deployment-settings-active"
+                    v-model="draft.active"
+                  />
+                  <Field.Content>
+                    <Field.Label for="deployment-settings-active">Active</Field.Label>
+                    <Field.Description
+                      >When off, the setting stays in the list but no environment can choose
+                      it.</Field.Description
+                    >
+                  </Field.Content>
+                </Field>
+              </div>
+            </SettingsGroup>
+
+            <SettingsGroup
+              label="Routing and policy"
+              hint="How versions bind to the resources they ship with, and how traffic reaches them."
+            >
+              <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
+                  <Field.Legend type="label">Binding policy</Field.Legend>
+                  <RadioGroup
+                    v-model="draft.bindingPolicy"
+                    name="deployment-settings-binding"
+                    aria-label="Binding policy"
+                  >
+                    <RadioGroup.Item
+                      v-for="policy in BINDING_POLICIES"
+                      :key="policy.value"
+                      :value="policy.value"
+                      :description="policy.description"
+                      >{{ policy.label }}</RadioGroup.Item
+                    >
+                  </RadioGroup>
+                </fieldset>
+                <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
+                  <Field.Legend type="label">Deployment policy</Field.Legend>
+                  <RadioGroup
+                    v-model="draft.deploymentPolicy"
+                    name="deployment-settings-policy"
+                    aria-label="Deployment policy"
+                    :disabled="Boolean(editingId)"
+                  >
+                    <RadioGroup.Item
+                      v-for="policy in DEPLOYMENT_POLICIES"
+                      :key="policy.value"
+                      :value="policy.value"
+                      :description="policy.description"
+                      >{{ policy.label }}</RadioGroup.Item
+                    >
+                  </RadioGroup>
+                  <Field.Description
+                    >Cannot be changed after the setting is created.</Field.Description
+                  >
+                </fieldset>
+              </div>
+            </SettingsGroup>
+          </fieldset>
+        </PanelBody>
+
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              type="button"
+              label="Cancel"
+              variant="outline"
+              size="medium"
+              @click="drawerOpen = false"
+            />
+            <Button
+              type="submit"
+              :label="editingId ? 'Save changes' : 'Create Deployment Setting'"
+              variant="primary"
+              size="medium"
+            />
+          </div>
+        </PanelFooter>
+      </form>
+    </DrawerContent>
+  </Drawer>
+</template>
+```
+
+## `parts/deployment-settings-table.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import DataTable from '@aziontech/webkit/data-table'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
+  import Tag from '@aziontech/webkit/tag'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
+  import { computed, ref } from 'vue'
+
+  import type {
+    DeploymentSettingsService,
+    DeploymentSettingsSetting
+  } from '../account-deployment-settings.vue'
+  import {
+    BINDING_POLICIES,
+    bindingLabel,
+    deploymentLabel,
+    reachLabel,
+    settingRows,
+    type SettingsRowData
+  } from '../deployment-policies'
+
+  export interface DeploymentSettingsTableProps {
+    /** Every Deployment Setting of the account. */
+    settingList: DeploymentSettingsSetting[]
+    /** Every service and its environments. */
+    serviceList: DeploymentSettingsService[]
+    /** The page data is loading. */
+    loading: boolean
+    /** The first load is in flight. */
+    firstLoad: boolean
+  }
+
+  const props = defineProps<DeploymentSettingsTableProps>()
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    action: [event: Event, value: DropdownMenuItemValue, row: SettingsRowData]
+  }>()
+
+  const rows = computed<SettingsRowData[]>(() => settingRows(props.settingList, props.serviceList))
+
+  const columns: TableColumn[] = [
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
+    { accessorKey: 'services', header: 'Services', minWidth: 170 },
+    { accessorKey: 'type', header: 'Type', sortable: true, minWidth: 110 },
+    { accessorKey: 'bindingPolicy', header: 'Binding policy', sortable: true, minWidth: 140 },
+    {
+      accessorKey: 'deploymentPolicy',
+      header: 'Deployment policy',
+      sortable: true,
+      minWidth: 160
+    },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
+    { accessorKey: 'updatedAt', header: 'Last modified', sortable: true, minWidth: 170 },
+    { id: 'actions', type: 'action', hideable: false }
+  ]
+
+  const properties: FilteringProperty[] = [
+    { key: 'name', label: 'Name' },
+    {
+      key: 'reach',
+      label: 'Reach',
+      options: [{ value: 'Shared' }, { value: 'Dedicated' }, { value: 'Unused' }]
+    },
+    {
+      key: 'bindingPolicy',
+      label: 'Binding policy',
+      options: BINDING_POLICIES.map((policy) => ({ value: policy.value, label: policy.label }))
+    },
+    { key: 'status', label: 'Status', options: [{ value: 'Active' }, { value: 'Inactive' }] }
+  ]
+
+  const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
+    useCollection({
+      items: rows,
+      columns,
+      filtering: { fields: ['name', 'description', 'reach', 'status'] },
+      propertyFiltering: { properties },
+      sorting: { defaultState: [{ desc: true, id: 'updatedAt' }] },
+      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+      preferences: {
+        storageKey: 'deployment-settings',
+        defaults: { columns: [{ id: 'type', visible: false }] }
+      }
+    })
+
+  const settingsTableEl = ref<TableExposed<SettingsRowData> | null>(null)
+  const exportCsv = () => settingsTableEl.value?.exportCsv({ filename: 'deployment-settings.csv' })
+
+  const onAction = (event: Event, value: DropdownMenuItemValue, row: SettingsRowData) =>
+    emit('action', event, value, row)
+</script>
+
+<template>
+  <SettingsGroup
+    label="Deployment Settings"
+    anchor="deployment-settings"
+    hint="Every setting this account holds, and the services each one publishes to."
+  >
+    <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+      <header class="flex flex-wrap items-start gap-(--layout-group-gap)">
+        <div class="flex min-w-0 grow basis-(--container-2xs)">
+          <PropertyFilter
+            v-bind="propertyFilterProps"
+            placeholder="Filter Deployment Settings"
+            aria-label="Filter Deployment Settings"
+          />
+        </div>
+        <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
+          <Tooltip
+            content="Refresh"
+            class="shrink-0"
+          >
+            <IconButton
+              icon="az az-refresh"
+              variant="outline"
+              size="medium"
+              :loading="loading && !firstLoad"
+              aria-label="Refresh"
+              @click="emit('refresh', $event)"
+            />
+          </Tooltip>
+          <Tooltip
+            content="Download CSV"
+            class="shrink-0"
+          >
+            <IconButton
+              icon="az az-download"
+              variant="outline"
+              size="medium"
+              :disabled="!matchingItems.length"
+              aria-label="Download CSV"
+              @click="exportCsv"
+            />
+          </Tooltip>
+          <CollectionPreferences
+            v-bind="preferencesProps"
+            title="Table preferences"
+          />
+        </div>
+      </header>
+
+      <Card :padded="false">
+        <template #default>
+          <DataTable
+            ref="settingsTableEl"
+            v-bind="tableProps"
+            :loading="loading"
+            sortable
+            :bordered="false"
+            aria-label="Deployment Settings"
+          >
+            <template #cell-name="{ row }">
+              <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                <span class="truncate">{{ row.name }}</span>
+                <Tag
+                  v-if="row.system"
+                  label="System"
+                  severity="neutral"
+                  size="small"
+                  class="shrink-0"
+                />
+              </span>
+            </template>
+            <template #cell-services="{ row }">
+              <Tooltip
+                :content="
+                  row.services.length
+                    ? row.services.join(' · ')
+                    : 'No environment publishes with this setting yet.'
+                "
+              >
+                <span
+                  class="flex min-w-0 items-center gap-(--spacing-xs)"
+                  tabindex="0"
+                >
+                  <Tag
+                    v-if="row.reach === 'Shared'"
+                    label="Shared"
+                    severity="warning"
+                    size="small"
+                    class="shrink-0"
+                  />
+                  <span
+                    class="truncate"
+                    :data-unused="row.reach === 'Unused' || null"
+                    >{{ reachLabel(row.services.length) }}</span
+                  >
+                </span>
+              </Tooltip>
+            </template>
+            <template #cell-type="{ value }">
+              <Tag
+                :label="value"
+                severity="info"
+                size="small"
+              />
+            </template>
+            <template #cell-bindingPolicy="{ value }">
+              <span class="truncate">{{ bindingLabel(value) }}</span>
+            </template>
+            <template #cell-deploymentPolicy="{ value }">
+              <span class="truncate">{{ deploymentLabel(value) }}</span>
+            </template>
+            <template #cell-status="{ value }">
+              <TableCellStatus
+                :label="value"
+                :severity="value === 'Active' ? 'success' : 'neutral'"
+              />
+            </template>
+            <template #cell-updatedAt="{ row }">
+              <TableCellTime
+                :value="row.updatedAt"
+                :author="row.system ? '' : row.updatedBy"
+              />
+            </template>
+            <template #header-actions>
+              <span class="sr-only">Actions</span>
+            </template>
+            <template #cell-actions="{ row }">
+              <TableCellActions
+                v-if="!row.system"
+                :name="row.name"
+                @select="(event, value) => onAction(event, value, row)"
+              >
+                <DropdownMenu.Group>
+                  <DropdownMenu.Item
+                    value="edit"
+                    label="Edit"
+                  />
+                  <DropdownMenu.Item
+                    value="clone"
+                    label="Clone"
+                  />
+                </DropdownMenu.Group>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Item
+                    value="delete"
+                    label="Delete"
+                  />
+                </DropdownMenu.Group>
+              </TableCellActions>
+            </template>
+            <template #empty>
+              <EmptyState
+                size="small"
+                icon="az az-search"
+                title="No matching Deployment Settings"
+                description="No setting matches these filters."
+              >
+                <template #actions>
+                  <Button
+                    label="Clear filters"
+                    variant="outline"
+                    size="small"
+                    @click="clearFilters"
+                  />
+                </template>
+              </EmptyState>
+            </template>
+          </DataTable>
+        </template>
+      </Card>
+    </div>
+  </SettingsGroup>
+</template>
 ```

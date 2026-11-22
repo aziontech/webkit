@@ -18,7 +18,12 @@
  ],
  "sfcFile": "blocks/dashboard/dashboard-home/dashboard-home.vue",
  "guidelinesFile": "blocks/dashboard/dashboard-home/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/dashboard/dashboard-home/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "home-metrics.ts",
+  "parts/home-domain-check.vue",
+  "parts/home-first-access.vue",
+  "parts/home-panels.vue",
+  "parts/home-usage-band.vue"
+ ]
 }

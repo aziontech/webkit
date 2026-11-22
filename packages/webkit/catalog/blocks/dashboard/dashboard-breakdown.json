@@ -18,7 +18,9 @@
  ],
  "sfcFile": "blocks/dashboard/dashboard-breakdown/dashboard-breakdown.vue",
  "guidelinesFile": "blocks/dashboard/dashboard-breakdown/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/dashboard/dashboard-breakdown/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "parts/contributors-table.vue",
+  "parts/spend-card.vue"
+ ]
 }
