@@ -1010,3 +1010,18 @@ Budget-raise: console-layout 82.8 KB → 82.95 KB (measured 82.90 KB): the accou
 Budget-raise: bento-grid 2.25 KB → 2.4 KB (measured 2.38 KB): BentoGrid.Cell href: the whole tile renders as one link.
 Budget-raise: bento-grid-cell 1.75 KB → 1.95 KB (measured 1.93 KB): BentoGrid.Cell href: the whole tile renders as one link.
 Budget-raise: popover-trigger 2.5 KB → 2.55 KB (measured 2.51 KB): TriggerHost recognises AppHeaderAccount as a control so the trigger state reaches it in the server render.
+Budget-raise: doc-code-group 33.25 KB → 34.1 KB (measured 34.09 KB): it renders CodeBlock, whose tabs, lines and motion moved to parts and a composable to meet the 400/200-line limits (CODE_QUALITY 3.1).
+Budget-raise: console-application-scene 119.9 KB → 120.6 KB (measured 120.58 KB): it renders CodeBlock and Chart, split into parts and composables to meet the 400/200-line limits (CODE_QUALITY 3.1).
+Budget-raise: console-trace-scene 83.85 KB → 84.5 KB (measured 84.45 KB): it renders Trace and CodeBlock, split into parts and composables to meet the 400/200-line limits (CODE_QUALITY 3.1).
+Budget-raise: cli-terminal-section 46.5 KB → 47 KB (measured 46.98 KB): it renders CodeBlock, split into parts and a composable to meet the 400/200-line limits (CODE_QUALITY 3.1).
+Budget-raise: feature-tabs-section 57.4 KB → 58 KB (measured 57.98 KB): it renders CodeBlock, split into parts and a composable to meet the 400/200-line limits (CODE_QUALITY 3.1).
+Budget-raise: chart 26.3 KB → 27 KB (measured 26.95 KB): the Chart root (528 script lines) split into series, scales, readout, interaction, pointer and keyboard composables to meet the 200-line script and 60-line function limits (CODE_QUALITY 3.1); each module adds its option object and return object.
+Budget-raise: chart-root 17.5 KB → 18.15 KB (measured 18.15 KB): the same Chart split, measured on the standalone root.
+Budget-raise: code-block 32.8 KB → 33.7 KB (measured 33.66 KB): the CodeBlock root (858 lines) split into the tabs and lines parts, the lines and motion composables and one grammar file per language to meet the 400/200-line, 60-line and complexity-12 limits (CODE_QUALITY 3.1); each part adds a component definition and its props.
+Budget-raise: trace 37.5 KB → 38.9 KB (measured 38.85 KB): the Trace root (1,274 lines) split into the minimap, timeline, rows and detail parts, the detail and navigation composables and the model lib to meet the 400/200-line limits (CODE_QUALITY 3.1); each part adds a component definition and its props.
+Budget-raise: tool-approval 15.8 KB → 15.95 KB (measured 15.94 KB): it renders the AI markdown parser and inline renderer, split into one scanner per syntax to meet the 60-line and complexity-12 limits (CODE_QUALITY 3.1).
+Budget-raise: agent-question 16.6 KB → 16.75 KB (measured 16.71 KB): the same AI markdown parser and inline renderer split.
+Budget-raise: prompt-input 13.1 KB → 13.85 KB (measured 13.84 KB): the PromptInput root (612 lines) split into the menu list part and the menu, submit, attach and autosize composables to meet the 400/200-line limits (CODE_QUALITY 3.1).
+Budget-raise: prompt-input-root 10 KB → 10.7 KB (measured 10.69 KB): the same PromptInput split, measured on the standalone root.
+Budget-raise: streaming-response 36.85 KB → 37.95 KB (measured 37.92 KB): it renders CodeBlock and the AI markdown parser, both split to meet the CODE_QUALITY 3.1 limits.
+Budget-raise: code-editor 10.6 KB → 11.5 KB (measured 11.49 KB): the CodeEditor root (737 lines) split into the pane and problems parts, the Monaco composable and session lib to meet the 400/200-line, 60-line and complexity-12 limits (CODE_QUALITY 3.1).
