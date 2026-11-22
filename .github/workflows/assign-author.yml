@@ -1,17 +1,47 @@
 name: Assign PR author
+
+# Runs on pull_request, never pull_request_target: it checks out nothing and runs no pull
+# request code, and a fork's pull request gets a read-only token, so a fork's author is not
+# assigned (a maintainer assigns them by hand).
+
 on:
   issues:
     types: [opened, reopened]
-  pull_request_target:
+  pull_request:
     types: [opened, reopened]
 
-permissions:
-  issues: write
-  pull-requests: write
+permissions: {}
 
 jobs:
-  assign-author:
+  assign-issue-author:
+    name: Assign the issue author
+    if: github.event_name == 'issues' && github.event.issue.user.type != 'Bot'
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
-      - name: Assign the PR author
-        uses: technote-space/assign-author@9558557c5c4816f38bd06176fbc324ba14bb3160 # v1
+      - name: Assign the issue author
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          AUTHOR: ${{ github.event.issue.user.login }}
+        run: gh api --method POST "repos/$GH_REPO/issues/$NUMBER/assignees" -f "assignees[]=$AUTHOR"
+
+  assign-pull-request-author:
+    name: Assign the pull request author
+    if: >-
+      github.event_name == 'pull_request'
+      && github.event.pull_request.head.repo.full_name == github.repository
+      && github.event.pull_request.user.type != 'Bot'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Assign the pull request author
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.pull_request.number }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: gh api --method POST "repos/$GH_REPO/issues/$NUMBER/assignees" -f "assignees[]=$AUTHOR"
