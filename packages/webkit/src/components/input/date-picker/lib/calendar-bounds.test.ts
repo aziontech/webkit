@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { clampMonth, dayOutOfBounds, monthOutOfBounds, yearRange } from './calendar-bounds'
 
-describe('calendar bounds', () => {
+describe('calendarBounds', () => {
   it('keeps days, months and years inside the bounds', () => {
     const min = new Date(2024, 2, 5)
     const max = new Date(2025, 5, 20)

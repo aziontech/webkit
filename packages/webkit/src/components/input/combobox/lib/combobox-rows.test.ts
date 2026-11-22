@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { buildSections, nextEnabled, optionLabel } from './combobox-rows'
 
-describe('combobox rows', () => {
+describe('comboboxRows', () => {
   const options = [
     { value: 'a', group: 'Two' },
     { value: 'b' },

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { buildWeeks, dayBand } from './calendar-weeks'
 
-describe('calendar weeks', () => {
+describe('calendarWeeks', () => {
   it('bands a range from its start to its end', () => {
     const draft = { start: new Date(2024, 0, 10), end: new Date(2024, 0, 12) }
     expect(dayBand(new Date(2024, 0, 10), 'range', draft)).toBe('start')
