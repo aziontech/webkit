@@ -1,5 +1,6 @@
 <script setup>
   import Alert from '@aziontech/webkit/alert'
+  import Link from '@aziontech/webkit/link'
 </script>
 
 <template>
@@ -20,7 +21,11 @@
       action-label="Upgrade plan"
     >
       Requests above the limit are throttled until the cycle resets.
-      <a href="/billing/usage">Review usage</a>.
+      <Link
+        inline
+        href="/billing/usage"
+        >Review usage</Link
+      >.
     </Alert>
     <Alert
       severity="danger"

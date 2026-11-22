@@ -3,10 +3,10 @@ name: doc-prose
 category: docs
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: f97ed442df1bf775f81dd96a9a48c8be4d0cd0920c885f339f1bc0a4c1192230
+spec_version: 5
+checksum: 01ef75527e3d71d1c008d05bfc178a571c28e2a3a2c496e3b058451a5e8a24ca
 created: 2026-08-21
-last_updated: 2026-11-18
+last_updated: 2026-11-21
 ---
 
 # DocProse — Component Spec
@@ -142,7 +142,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 
 ## Examples
 
-- Default — the full ladder over semantic HTML: headings, paragraphs, links, inline code, both list kinds, a table, a blockquote, an `hr` and a fenced block. The markup is hand-written, which is also the proof that the contract is not tied to any renderer.
+- Default — the full ladder over the semantic HTML a Markdown source renders to: headings, paragraphs, links, inline code, both list kinds, a blockquote and an `hr`. The source goes through `DocMarkdown`, the way a documentation page reaches `DocProse`; the Chrome boundary example keeps hand-written markup, which shows the contract is not tied to that renderer.
 - Chrome boundary — the same prose wrapping a subtree marked `data-doc-chrome`, whose headings and paragraphs keep their own styling. Justified in writing here because "styles descendants, but stops at a component's edge" is the component's other core promise, and it is invisible in the Default story.
 
 ## Constraints — DO NOT

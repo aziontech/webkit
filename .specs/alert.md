@@ -3,14 +3,14 @@ name: alert
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 726997d9489fef33a79ab75660e83566c10c238553d6c1b2d4fe8111dd3e63d0
+checksum: ad0f0383c33ec92247b8c7e5ede476c7a3db91ac4241fb507dbf3ba32eb9260c
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-21
 ---
 
 # Alert — Component Spec
@@ -44,7 +44,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 ## Best practices
 
 - Pick `severity` by meaning. `danger` and `warning` render with `role="alert"`.
-- Use `label` for plain copy and the default slot when the copy needs inline links.
+- Use `label` for plain copy and the default slot when the copy needs inline links; each link is a `Link` with `inline`.
 - Set `title` when the alert says two things: what happened (the title, a few words, no end period) and what it means or what to do (the copy). A one-sentence alert needs no title. A title alone, with no copy, is allowed for a short notice that still wants the heading weight.
 - Use either the built-in action (`actionLabel` with `@action`) or the `actions` slot, not both. The slot replaces the button.
 - Once `closable` or `life` dismisses the message, it stays hidden until it is remounted. Listen to `close` to keep your own state in sync.
@@ -55,6 +55,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 ```vue
 <script setup>
   import Alert from '@aziontech/webkit/alert'
+  import Link from '@aziontech/webkit/link'
 </script>
 
 <template>
@@ -67,7 +68,11 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
   <!-- Copy with inline links via the default slot -->
   <Alert severity="warning">
     Your plan is close to its request limit.
-    <a href="/billing">Upgrade the plan</a>
+    <Link
+      inline
+      href="/billing"
+      >Upgrade the plan</Link
+    >
     to avoid throttling.
   </Alert>
 
