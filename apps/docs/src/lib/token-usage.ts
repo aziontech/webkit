@@ -2,7 +2,7 @@ import type { Token, TokenUsage } from './types'
 
 export const usageKey = (usage: TokenUsage) => `${usage.job}\u0000${usage.usedBy}`
 
-export function sharedUsage(tokens: Token[]): { usage?: TokenUsage; tokens: Token[] } {
+function sharedUsage(tokens: Token[]): { usage?: TokenUsage; tokens: Token[] } {
   const keys = [...new Set(tokens.flatMap((token) => (token.usage ? [usageKey(token.usage)] : [])))]
   const first = tokens.find((token) => token.usage)?.usage
   if (keys.length === 1 && first)

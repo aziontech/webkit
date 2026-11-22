@@ -328,7 +328,7 @@ function bareName(name) {
   return name.replace(/^(az|ai|pi)-/, '')
 }
 
-export function iconKeywords(name) {
+function iconKeywords(name) {
   const bare = bareName(name)
   const words = bare.split('-').filter(Boolean)
   const found = new Set(words.length > 1 ? words.filter((w) => w.length > 2) : [])
@@ -343,10 +343,6 @@ export function iconKeywords(name) {
   if (words.some((w) => BRANDS.has(w))) found.add('brand').add('logo')
   found.delete(bare)
   return [...found]
-}
-
-export function iconKeywordString(name) {
-  return iconKeywords(name).join(', ')
 }
 
 export function entryKeywords(entry) {

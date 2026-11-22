@@ -79,14 +79,14 @@ function familyAnimations(abs, name, vueText) {
   return found
 }
 
-export function isPrivatePart(abs) {
+function isPrivatePart(abs) {
   return (
     abs.endsWith('.vue') &&
     abs.split('/src/components/').pop().split('/').slice(0, -1).includes('parts')
   )
 }
 
-export function privatePartFiles(abs, vueText, seen = new Set()) {
+function privatePartFiles(abs, vueText, seen = new Set()) {
   for (const m of vueText.matchAll(/\bfrom\s+['"](\.{1,2}\/[^'"]+\.vue)['"]/g)) {
     const file = resolve(dirname(abs), m[1])
     if (seen.has(file) || !isPrivatePart(file) || !existsSync(file)) continue
@@ -102,7 +102,7 @@ function diff(actualSet, expectedSet) {
   return { missing, extra }
 }
 
-export function toPascal(kebab) {
+function toPascal(kebab) {
   return kebab
     .split('-')
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
@@ -125,7 +125,7 @@ function normalizeDefault(raw) {
 }
 
 /** The component's own kebab name: no category, so moving a component never changes its test id. */
-export function testIdFallback(name) {
+function testIdFallback(name) {
   return name
 }
 

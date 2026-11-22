@@ -18,5 +18,3 @@ export const accent = {
     'brand-blue-foreground': tokenRef('primitives.base.white')
   }
 }
-
-export default { accent }

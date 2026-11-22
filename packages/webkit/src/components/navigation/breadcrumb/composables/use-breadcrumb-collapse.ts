@@ -10,7 +10,7 @@ import {
   toValue
 } from 'vue'
 
-export const breadcrumbCollapseWidth = 768
+const breadcrumbCollapseWidth = 768
 
 export function useBreadcrumbCollapse(
   target: MaybeRefOrGetter<globalThis.HTMLElement | null>

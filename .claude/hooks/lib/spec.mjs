@@ -8,10 +8,10 @@ import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { COMPONENT_CATEGORIES } from './component-categories.mjs'
 
-export const STRUCTURES = ['monolithic', 'composition']
-export const STATUSES = ['draft', 'approved', 'implemented', 'locked']
-export const KEBAB_RE = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/
-export const TEMPLATE_VERSIONS = [1, 2]
+const STRUCTURES = ['monolithic', 'composition']
+const STATUSES = ['draft', 'approved', 'implemented', 'locked']
+const KEBAB_RE = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/
+const TEMPLATE_VERSIONS = [1, 2]
 export const CURRENT_TEMPLATE = 2
 export const TEMPLATE_2_SINCE = '2026-11-12'
 export const TEMPLATE_2_SECTIONS = [
@@ -282,7 +282,7 @@ export function templateSectionErrors(fm, body) {
 
 // ---- Checksum ----
 
-export function sha256(text) {
+function sha256(text) {
   return createHash('sha256').update(text).digest('hex')
 }
 
@@ -521,7 +521,7 @@ function extractSlots(script) {
  * `{ … }`, then splits it at top level (string- and bracket-aware). Returns {} when
  * there is no withDefaults call. Used for the Default-column drift check.
  */
-export function extractDefaults(script) {
+function extractDefaults(script) {
   const idx = script.indexOf('withDefaults(')
   if (idx === -1) return {}
   const open = script.indexOf('(', idx)

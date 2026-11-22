@@ -63,7 +63,7 @@ function waitForDataAttribute(
   })
 }
 
-export async function waitForElementAnimations(element: Element | null | undefined): Promise<void> {
+async function waitForElementAnimations(element: Element | null | undefined): Promise<void> {
   if (!element || typeof element.getAnimations !== 'function') {
     return
   }

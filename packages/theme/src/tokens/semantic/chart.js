@@ -74,5 +74,3 @@ export const chart = {
     'chart-diverging-positive': tokenRef('primitives.blue.400')
   }
 }
-
-export default { chart }

@@ -22,7 +22,7 @@ import { zIndex } from './semantic/z-index.js'
 import { compileThemeCssVars, compileThemeVars } from './theme-colors.js'
 import { tokenPurpose } from './token-purpose.js'
 
-export const TOKEN_EXPORT_VERSION = 1
+const TOKEN_EXPORT_VERSION = 1
 
 const COLOR_GROUPS = {
   primary,
@@ -139,5 +139,3 @@ export const buildTokenExport = () => ({
   themes: ['light', 'dark'],
   tokens: [...colorTokens(), ...valueTokens(), ...typographyTokens()]
 })
-
-export default { buildTokenExport }

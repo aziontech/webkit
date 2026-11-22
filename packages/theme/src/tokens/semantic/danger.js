@@ -14,5 +14,3 @@ export const danger = {
     'danger-mark': tokenRef('primitives.red.300')
   }
 }
-
-export default { danger }

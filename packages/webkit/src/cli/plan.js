@@ -64,7 +64,7 @@ const CLAUDE_BUNDLE = listBundle()
 export const CLAUDE_FRAGMENT_MARKER = LEGACY_MARKER
 
 export const MCP_SERVER_NAME = 'webkit'
-export const MCP_SERVER_ENTRY = {
+const MCP_SERVER_ENTRY = {
   command: 'npx',
   args: ['-y', '@aziontech/webkit-mcp']
 }
@@ -90,7 +90,7 @@ function read(path) {
 }
 
 export const VITE_PLUGIN_SPECIFIER = '@aziontech/webkit/vite-plugin'
-export const VITE_PLUGIN_IMPORT = `import webkit from '${VITE_PLUGIN_SPECIFIER}'`
+const VITE_PLUGIN_IMPORT = `import webkit from '${VITE_PLUGIN_SPECIFIER}'`
 
 export function patchViteConfig(src) {
   if (src.includes(VITE_PLUGIN_SPECIFIER)) return src
@@ -149,9 +149,9 @@ export const BUILD_OUTPUT_DIRS = [
   'storybook-static'
 ]
 
-export const TOOL_CONFIG_FILES = '*.config.{js,cjs,mjs,ts,cts,mts}'
+const TOOL_CONFIG_FILES = '*.config.{js,cjs,mjs,ts,cts,mts}'
 
-export const LABEL_CONTROL_COMPONENTS = [
+const LABEL_CONTROL_COMPONENTS = [
   'Checkbox',
   'Combobox',
   'Input',
@@ -356,7 +356,7 @@ export function rawColourStylesheets(projectDir) {
   return found.sort()
 }
 
-export const NO_GIT_HOOKS_NOTE =
+const NO_GIT_HOOKS_NOTE =
   'Not a git repository, so no pre-commit hook was added (husky, "prepare", .husky/pre-commit). After `git init`, run `npx @aziontech/webkit init` again to add it.'
 
 export function wantsGitHooks(projectDir, git = gitState(projectDir)) {
@@ -497,7 +497,7 @@ const EARLIER_STYLE_ENTRIES = [
 
 const STYLE_ENTRY = 'src/webkit.css'
 
-export function patchStyleEntry(css) {
+function patchStyleEntry(css) {
   const lines = css.split('\n')
   const added = []
   const registered =
@@ -568,7 +568,7 @@ function referencedElsewhere(projectDir, needle, skip) {
   return walk('')
 }
 
-export function starterStylesheet(projectDir, entry) {
+function starterStylesheet(projectDir, entry) {
   if (!entry) return null
   const src = read(join(projectDir, entry)) || ''
   for (const starter of STARTER_STYLESHEETS) {
@@ -888,12 +888,6 @@ export const ALL_DEPS = [
   ...STYLE_DEV_DEPS.map((d) => d.dep)
 ]
 export const ENTRY_CANDIDATES = ['src/main.ts', 'src/main.js', 'src/main.mts', 'src/main.mjs']
-export const TAILWIND_CONFIG_CANDIDATES = [
-  'tailwind.config.js',
-  'tailwind.config.cjs',
-  'tailwind.config.mjs',
-  'tailwind.config.ts'
-]
 export const POSTCSS_CONFIG_CANDIDATES = [
   'postcss.config.js',
   'postcss.config.cjs',
@@ -916,7 +910,7 @@ export const ESLINT_CONFIG_CANDIDATES = [
   '.eslintrc.yml',
   '.eslintrc.yaml'
 ]
-export const PRETTIER_CONFIG_CANDIDATES = [
+const PRETTIER_CONFIG_CANDIDATES = [
   '.prettierrc',
   '.prettierrc.json',
   '.prettierrc.json5',
@@ -932,7 +926,7 @@ export const PRETTIER_CONFIG_CANDIDATES = [
   'prettier.config.mjs',
   'prettier.config.ts'
 ]
-export const PRETTIER_CONTENT = `${JSON.stringify(
+const PRETTIER_CONTENT = `${JSON.stringify(
   {
     semi: false,
     tabWidth: 2,

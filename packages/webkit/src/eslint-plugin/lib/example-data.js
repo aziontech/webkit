@@ -4,7 +4,7 @@ const DOMAIN = new RegExp(`(?<![\\w.-])(?:[a-z0-9-]+\\.)+${TLD}(?![\\w-]|\\.\\w)
 
 const RESERVED = /(?:^|\.)example\.(?:com|net|org)$/i
 
-export const EXAMPLE_DATA_ALLOWED_HOSTS = [
+const EXAMPLE_DATA_ALLOWED_HOSTS = [
   'azion.com',
   'azion.app',
   'azionedge.net',

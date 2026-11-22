@@ -1426,4 +1426,5 @@ export const ptBR: Messages = {
   }
 }
 
+/** @alias */
 export default ptBR

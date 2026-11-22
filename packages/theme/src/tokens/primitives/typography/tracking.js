@@ -6,5 +6,3 @@ export const tracking = {
   wider: '0.05rem',
   widest: '0.1rem'
 }
-
-export default { tracking }

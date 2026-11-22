@@ -557,7 +557,7 @@ const NORMALIZED_PAGES = MARKETING_PAGES.map((page) => ({
 const NORMALIZED_PAGE_NOT = MARKETING_PAGE_NOT.map(normalize)
 const NORMALIZED_PAGE_GENERIC = new Set(MARKETING_PAGE_GENERIC.map(normalize))
 
-export function marketingPageIntent(query, surface) {
+function marketingPageIntent(query, surface) {
   const nq = normalize(query)
   if (!nq || (surface && surface !== 'site')) return null
   if (NORMALIZED_PAGE_NOT.some((w) => hasPhrase(nq, w))) return null
@@ -962,7 +962,7 @@ function contentWords(q) {
     .filter((w) => w.length >= 3 && !STOPWORDS.has(w) && !NORMALIZED_SCREEN_WORDS.includes(w))
 }
 
-export function expandQuery(query) {
+function expandQuery(query) {
   const q = normalize(query)
   const candidates = NORMALIZED_GROUPS.flatMap((group, key) => group.map((term) => ({ key, term })))
   const hits = longestMatches(q, candidates)

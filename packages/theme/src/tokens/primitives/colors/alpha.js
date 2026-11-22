@@ -100,5 +100,3 @@ export const alpha = {
     white: '#FFFFFFE5'
   }
 }
-
-export default { alpha }

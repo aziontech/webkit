@@ -1,4 +1,4 @@
-export const TOKEN_CHECKS = [
+const TOKEN_CHECKS = [
   {
     id: 'hex-color',
     regex: /#[0-9a-fA-F]{3,8}\b/g,
@@ -180,7 +180,7 @@ export function tokenChecksApply(rel) {
 
 export const WIDE_TOKEN_DIRS = ['packages/webkit/blocks/', 'packages/webkit/examples/']
 
-export const WIDE_TOKEN_CHECKS = TOKEN_CHECKS.filter((c) => c.wide)
+const WIDE_TOKEN_CHECKS = TOKEN_CHECKS.filter((c) => c.wide)
 
 export function tokenChecksFor(rel, wideDirs = WIDE_TOKEN_DIRS) {
   if (tokenChecksApply(rel)) return TOKEN_CHECKS

@@ -51,7 +51,7 @@ const KEYWORDS: [Keyword, number, Intl.RelativeTimeFormatUnit][] = [
 
 const NATIVE_DIGITS = /[٠-٩۰-۹]/g
 
-export function normalizeText(text: string): string {
+function normalizeText(text: string): string {
   return text
     .replace(NATIVE_DIGITS, (digit) => String(digit.charCodeAt(0) & 0xf))
     .normalize('NFD')

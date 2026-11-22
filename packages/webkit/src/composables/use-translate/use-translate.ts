@@ -46,7 +46,7 @@ export const LocaleInjectionKey: InjectionKey<LocaleContext> = Symbol('Locale')
 
 export const DEFAULT_LOCALE = 'en'
 
-export const SERVER_LOCALE = 'en-US'
+const SERVER_LOCALE = 'en-US'
 
 const deviceTag = ref(SERVER_LOCALE)
 

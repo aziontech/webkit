@@ -22,5 +22,3 @@ export const codeSyntax = {
     'code-syntax-string': tokenRef('primitives.blue.200')
   }
 }
-
-export default { codeSyntax }

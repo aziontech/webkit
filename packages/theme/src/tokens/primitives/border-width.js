@@ -5,5 +5,3 @@ export const borderWidth = {
   3: '3px',
   4: '4px'
 }
-
-export default { borderWidth }

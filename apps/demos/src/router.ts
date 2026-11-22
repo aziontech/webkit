@@ -11,7 +11,7 @@ import { resources } from './lib/store'
 const SITE = 'Azion'
 const RESOURCES = 'Resources'
 
-export const routes: RouteRecordRaw[] = [
+const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/resources' },
   {
     path: '/onboarding',
@@ -103,7 +103,7 @@ export const router = createRouter({
   scrollBehavior: () => ({ top: 0 })
 })
 
-export function pageTitle(route: RouteLocationNormalized): string {
+function pageTitle(route: RouteLocationNormalized): string {
   const title = String(route.meta.title ?? '')
   if (!route.meta.resource) return [title, SITE].filter(Boolean).join(' - ')
   const id = String(route.params.id ?? '')
@@ -118,7 +118,9 @@ function samePage(to: RouteLocationNormalized, from: RouteLocationNormalized): b
 
 function pageTookFocus(): boolean {
   const active = document.activeElement
-  return active instanceof HTMLElement && active !== document.body && Boolean(active.closest('main'))
+  return (
+    active instanceof HTMLElement && active !== document.body && Boolean(active.closest('main'))
+  )
 }
 
 function focusPage(): boolean {

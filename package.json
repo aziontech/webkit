@@ -57,23 +57,17 @@
     "check:audit": "pnpm audit",
     "check:workflows": "if command -v actionlint >/dev/null; then actionlint -no-color; else echo \"check:workflows: actionlint is not on PATH, skipped\"; fi && if command -v zizmor >/dev/null; then zizmor --offline --no-progress --color never .github/workflows; else echo \"check:workflows: zizmor is not on PATH, skipped\"; fi",
     "check:spelling": "typos --format brief",
+    "check:unused": "npx --yes knip@5.88.1 --no-progress",
     "gates": "pnpm run lint:webkit && pnpm run lint:webkit:style && pnpm run check:webkit:format && pnpm run typecheck:webkit && pnpm run typecheck:webkit:tests && pnpm run typecheck:docs && pnpm run check:webkit:type-coverage && pnpm run check:audit"
   },
   "dependencies": {
-    "@tailwindcss/typography": "^0.5.19",
-    "autoprefixer": "^10.4.27",
-    "pnpm": "^11.9.0",
-    "tailwindcss": "^3.4.19",
-    "vue": "^3.5.29"
+    "tailwindcss": "^3.4.19"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.2",
     "@eslint/js": "^9.39.3",
-    "@rushstack/eslint-patch": "^1.16.1",
     "@typescript-eslint/eslint-plugin": "^8.58.2",
     "@typescript-eslint/parser": "^8.58.2",
-    "@vue/eslint-config-prettier": "^7.1.0",
-    "@vue/eslint-config-typescript": "^14.7.0",
     "eslint": "^9.39.3",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",

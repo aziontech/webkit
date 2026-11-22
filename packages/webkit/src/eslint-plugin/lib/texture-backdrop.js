@@ -27,7 +27,7 @@ export const BACKDROP_SCENES = [
   'SpinningGlobe'
 ]
 
-export const GROUND_COMPONENTS = ['ConsoleMockup', 'ConsoleMockupShell']
+const GROUND_COMPONENTS = ['ConsoleMockup', 'ConsoleMockupShell']
 
 export const TEXTURE_BACKDROP_DIRS = [
   'packages/webkit/src',

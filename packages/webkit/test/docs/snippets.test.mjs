@@ -210,7 +210,7 @@ test('partial snippets stay rare', () => {
   )
 })
 
-const require = createRequire(join(REPO_ROOT, 'apps', 'docs', 'package.json'))
+const require = createRequire(import.meta.url)
 const VUE_ROUTER = dirname(require.resolve('vue-router/package.json'))
 const ICONS_TYPES = join(REPO_ROOT, 'packages', 'icons', 'dist', 'index.d.ts')
 const APP_ENV = []

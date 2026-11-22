@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-export const APP = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+const APP = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 export const REPO = resolve(APP, '../..')
 export const WEBKIT = join(REPO, 'packages/webkit')
 export const THEME = join(REPO, 'packages/theme')
@@ -35,7 +35,7 @@ export type BlockManifest = {
   preview?: { layout?: string; background?: string; frame?: string }
 }
 
-export function slugify(value: string): string {
+function slugify(value: string): string {
   return value
     .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
     .toLowerCase()

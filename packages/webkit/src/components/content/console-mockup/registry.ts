@@ -4,7 +4,7 @@ import type { ConsoleMockupName } from './console-mockup.vue'
 
 export type ConsoleMockupLoader = () => Promise<{ default: Component }>
 
-export const consoleMockupScreens = {
+const consoleMockupScreens = {
   'application-version': () => import('./widgets/application-version-widget.vue'),
   'cli-terminal-deploy': () => import('./widgets/cli-terminal-deploy-widget.vue'),
   'cli-terminal-start': () => import('./widgets/cli-terminal-start-widget.vue'),
@@ -19,7 +19,7 @@ export const consoleMockupScreens = {
   'workloads-list': () => import('./widgets/workloads-list-widget.vue')
 } satisfies Partial<Record<ConsoleMockupName, ConsoleMockupLoader>>
 
-export const consoleMockupFragments = {
+const consoleMockupFragments = {
   'ai-inference-function': () => import('./widgets/ai-inference-function-fragment.vue'),
   'ai-inference-model': () => import('./widgets/ai-inference-model-fragment.vue'),
   'ai-inference-template': () => import('./widgets/ai-inference-template-fragment.vue'),

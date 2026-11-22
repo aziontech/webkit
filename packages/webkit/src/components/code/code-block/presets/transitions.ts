@@ -1,20 +1,16 @@
 import { curve, duration } from '@aziontech/theme/animations'
 
-export const codeBlockIndicatorMotion = {
+const codeBlockIndicatorMotion = {
   slide: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const
 
-export const codeBlockLineSwapMotion = {
+const codeBlockLineSwapMotion = {
   stagger: '24ms',
   maxSteps: 12,
   enter: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const
 
-export const codeBlockHeightMotion = {
-  resize: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
-} as const
-
-export const codeBlockLineEnterMotion = {
+const codeBlockLineEnterMotion = {
   stagger: '40ms',
   enter: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const

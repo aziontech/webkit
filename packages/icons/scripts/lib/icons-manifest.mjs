@@ -4,8 +4,8 @@ import { fileURLToPath } from 'node:url'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..')
 
-export const MANIFEST_PATH = join(ROOT, 'src/icons.json')
-export const SVG_ROOT = join(ROOT, 'src/svg-raw')
+const MANIFEST_PATH = join(ROOT, 'src/icons.json')
+const SVG_ROOT = join(ROOT, 'src/svg-raw')
 export const MONO_DIR = join(SVG_ROOT, 'az')
 export const COLOR_DIR = join(SVG_ROOT, 'az-color')
 

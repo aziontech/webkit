@@ -3,9 +3,9 @@ import { join, resolve } from 'node:path'
 
 import { bodyChecksum, parseSpecFile, templateSectionErrors, validateFrontmatter } from './spec.mjs'
 
-export const SHIPPABLE_STATUSES = ['approved', 'implemented', 'locked']
-export const SHIPPED_STATUSES = ['implemented', 'locked']
-export const SPEC_EXEMPT = new Set(['_template.md', 'README.md'])
+const SHIPPABLE_STATUSES = ['approved', 'implemented', 'locked']
+const SHIPPED_STATUSES = ['implemented', 'locked']
+const SPEC_EXEMPT = new Set(['_template.md', 'README.md'])
 
 export function specFiles(specsDir) {
   return readdirSync(specsDir, { withFileTypes: true })
@@ -14,14 +14,14 @@ export function specFiles(specsDir) {
     .sort()
 }
 
-export function componentShipped(frontmatter, repoRoot) {
+function componentShipped(frontmatter, repoRoot) {
   if (!frontmatter?.name || !frontmatter?.category) return false
   return existsSync(
     resolve(repoRoot, 'packages/webkit/src/components', frontmatter.category, frontmatter.name)
   )
 }
 
-export function specIntegrityErrors(parsed, { forWrite = false, shipped = false } = {}) {
+function specIntegrityErrors(parsed, { forWrite = false, shipped = false } = {}) {
   const { frontmatter, body } = parsed
   const fmErrors = validateFrontmatter(frontmatter)
   if (fmErrors.length) {

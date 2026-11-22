@@ -9,7 +9,7 @@ export type SidebarMenuMotionToken = {
   curve: string
 }
 
-export const menuMotion: Record<
+const menuMotion: Record<
   SidebarMenuMotionTarget,
   Record<SidebarMenuMotionPhase, SidebarMenuMotionToken>
 > = {
@@ -23,19 +23,17 @@ export const menuMotion: Record<
   }
 }
 
-export const MENU_COLLAPSE_EXIT_MS = Number.parseInt(menuMotion.collapse.leave.duration, 10)
+const MENU_COLLAPSE_EXIT_MS = Number.parseInt(menuMotion.collapse.leave.duration, 10)
 
 export const MENU_LEVEL_EXIT_MS = Number.parseInt(menuMotion.level.leave.duration, 10)
 
 export const MENU_LEVEL_ENTER_MS = Number.parseInt(menuMotion.level.enter.duration, 10)
 
-export const prefersReducedMotion = (): boolean =>
+const prefersReducedMotion = (): boolean =>
   typeof globalThis.matchMedia === 'function' &&
   globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-export const getMenuCollapseTransitionStyle = (
-  phase: SidebarMenuMotionPhase
-): { transition: string } => ({
+const getMenuCollapseTransitionStyle = (phase: SidebarMenuMotionPhase): { transition: string } => ({
   transition: `height ${menuMotion.collapse[phase].duration} ${menuMotion.collapse[phase].curve}`
 })
 

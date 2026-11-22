@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 import { loadCatalogFrom } from '../catalog/catalog.js'
 
 export const PACKAGE_NAME = '@aziontech/webkit'
-export const OWN_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
+const OWN_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
 
 function readJson(path) {
   try {

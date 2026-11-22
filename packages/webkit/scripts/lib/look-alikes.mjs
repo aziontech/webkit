@@ -3,7 +3,7 @@ import { basename, dirname, join, relative, resolve } from 'node:path'
 
 import { parse } from 'vue/compiler-sfc'
 
-export const WEIGHTS = {
+const WEIGHTS = {
   props: 0.25,
   behaviour: 0.3,
   classes: 0.2,
@@ -12,9 +12,9 @@ export const WEIGHTS = {
   name: 0.1
 }
 export const COPY_AT = 0.35
-export const CHECK_AT = 0.28
+const CHECK_AT = 0.28
 
-export const FEATURES = {
+const FEATURES = {
   'link-or-button': /\bisAnchor\b|\bisLink\b|'a' : 'button'|<a[\s\S]*v-if[\s\S]*<button/,
   spinner: /\bSpinner\b/,
   'inert-state': /isInert|data-inert/,
@@ -31,7 +31,7 @@ const STOP = new Set(
   )
 )
 
-export function listComponents(pkgDir) {
+function listComponents(pkgDir) {
   const exportsMap = JSON.parse(readFileSync(join(pkgDir, 'package.json'), 'utf8')).exports
   const components = new Map()
   const seen = new Set()
@@ -47,7 +47,7 @@ export function listComponents(pkgDir) {
   return components
 }
 
-export function propNames(script) {
+function propNames(script) {
   const named = script.match(/interface\s+\w*Props\s*\{([\s\S]*?)\n\s*\}/)
   const body = named ? named[1] : (script.match(/defineProps<\{([\s\S]*?)\}>\(\)/) || [])[1] || ''
   return new Set([...body.matchAll(/^\s*([a-zA-Z]\w*)\??\s*:/gm)].map((m) => m[1]))
@@ -95,7 +95,7 @@ function splitClasses(text, into) {
   for (const c of text.split(/\s+/)) if (c) into.add(c)
 }
 
-export function walkTemplate(ast) {
+function walkTemplate(ast) {
   const tags = []
   const classes = new Set()
   const attrs = new Set()
@@ -204,7 +204,7 @@ export function describeAll(pkgDir, root) {
   return all
 }
 
-export function weighWords(all) {
+function weighWords(all) {
   const df = new Map()
   for (const c of all) for (const w of new Set(c.words)) df.set(w, (df.get(w) || 0) + 1)
   for (const c of all) {
@@ -215,7 +215,7 @@ export function weighWords(all) {
   }
 }
 
-export const PRIOR = { props: 2, behaviour: 3, classes: 8, structure: 2 }
+const PRIOR = { props: 2, behaviour: 3, classes: 8, structure: 2 }
 
 const SET_SIGNALS = ['props', 'behaviour', 'classes', 'structure']
 
@@ -232,7 +232,7 @@ export const jaccard = (a, b, prior = 0, weight = () => 1) => {
   return shared / (union + prior)
 }
 
-export function weighSets(all) {
+function weighSets(all) {
   const weights = {}
   for (const signal of SET_SIGNALS) {
     const df = new Map()

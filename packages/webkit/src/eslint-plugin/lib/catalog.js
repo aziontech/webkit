@@ -142,6 +142,3 @@ export function _resetCatalogCache() {
   cache = null
   warned = false
 }
-
-export const WEBKIT_PREFIX = `${DEFAULT_PKG}/`
-export const WEBKIT_BARE = DEFAULT_PKG

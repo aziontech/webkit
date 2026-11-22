@@ -22,5 +22,3 @@ export const text = {
     'text-contrast': tokenRef('primitives.base.black')
   }
 }
-
-export default { text }

@@ -54,9 +54,9 @@ const LANGUAGE_NAMES: Record<string, string> = {
   plain: 'Text'
 }
 
-export const SHELL_LANGUAGES: readonly string[] = ['bash', 'sh', 'shell', 'zsh', 'console']
+const SHELL_LANGUAGES: readonly string[] = ['bash', 'sh', 'shell', 'zsh', 'console']
 
-export const isShellLanguage = (language?: string): boolean =>
+const isShellLanguage = (language?: string): boolean =>
   SHELL_LANGUAGES.includes((language ?? '').trim().toLowerCase())
 
 export const languageName = (language?: string): string => {
@@ -68,7 +68,7 @@ export const languageName = (language?: string): string => {
   )
 }
 
-export const SHELL_PROMPT = /^\$ /
+const SHELL_PROMPT = /^\$ /
 
 export const stripShellPrompts = (code: string, language?: string): string => {
   if (!isShellLanguage(language)) return code

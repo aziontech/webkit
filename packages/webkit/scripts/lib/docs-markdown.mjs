@@ -1,9 +1,9 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
-export const PAIR_WORDS = { do: 'Do', dont: "Don't" }
+const PAIR_WORDS = { do: 'Do', dont: "Don't" }
 
-export const BANNED_PAIR_WORDS = [
+const BANNED_PAIR_WORDS = [
   'correct',
   'incorrect',
   'wrong',

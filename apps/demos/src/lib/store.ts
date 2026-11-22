@@ -13,14 +13,7 @@ export type Resource = {
   dnssec: boolean
 }
 
-export const OWNERS = [
-  'Amy Chen',
-  'Ben Carter',
-  'Chloe Park',
-  'David Kim',
-  'Ella Grant',
-  'Frank Miller'
-]
+const OWNERS = ['Amy Chen', 'Ben Carter', 'Chloe Park', 'David Kim', 'Ella Grant', 'Frank Miller']
 
 const REFERENCE = Date.UTC(2026, 10, 10, 12)
 const AGES = ['just now', '3 weeks ago', '1 month ago', '2 months ago', '3 months ago']

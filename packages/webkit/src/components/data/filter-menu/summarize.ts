@@ -16,7 +16,7 @@ export const DATE_PERIODS = ['24h', '7d', '30d', '3m'] as const
 
 export const kindOf = (field: FilterMenuField): FilterMenuFieldType => field.type ?? 'multiple'
 
-export const isRange = (value: FilterMenuValue | undefined): value is FilterMenuRange =>
+const isRange = (value: FilterMenuValue | undefined): value is FilterMenuRange =>
   typeof value === 'object' && value !== null
 
 export const valuesOf = (model: FilterMenuModel, field: FilterMenuField): FilterMenuValue[] =>

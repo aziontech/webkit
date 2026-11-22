@@ -152,23 +152,6 @@ export interface SchemaFormIssue {
   line?: number
 }
 
-export const UNSUPPORTED_KEYWORDS = [
-  '$ref',
-  'allOf',
-  'anyOf',
-  'not',
-  'if',
-  'then',
-  'else',
-  'const',
-  'dependencies',
-  'patternProperties',
-  'propertyNames',
-  'uniqueItems',
-  'contains',
-  'multipleOf'
-] as const
-
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value)
 
@@ -189,7 +172,7 @@ const isStringMap = (schema: SchemaFormSchema) => {
   )
 }
 
-export function resolveType(schema: SchemaFormSchema): SchemaFormType | undefined {
+function resolveType(schema: SchemaFormSchema): SchemaFormType | undefined {
   if (schema.type) return schema.type
   if (schema.properties || discriminatorOf(schema)) return 'object'
   if (schema.items) return 'array'
@@ -510,7 +493,7 @@ export function seedDefaults(
   return seeded ? next : null
 }
 
-export const isEmpty = (value: unknown) =>
+const isEmpty = (value: unknown) =>
   value === undefined ||
   value === null ||
   value === '' ||

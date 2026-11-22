@@ -2,7 +2,7 @@ import { curve, duration } from '@aziontech/theme/animations'
 
 export type TabsSlideDirection = 'left' | 'right' | null
 
-export const tabViewPanelMotion = {
+const tabViewPanelMotion = {
   enter: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const
 

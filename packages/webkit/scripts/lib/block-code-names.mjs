@@ -36,7 +36,7 @@ export function sfcUserText(sfc, names = []) {
   return parts.join('\n')
 }
 
-export function proseUserText(markdown, names = []) {
+function proseUserText(markdown, names = []) {
   return String(markdown)
     .replace(/^# .*$/m, '')
     .replace(/```[^\n]*\n([\s\S]*?)```/g, (_, code) =>

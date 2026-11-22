@@ -43,7 +43,7 @@ export function highlight(hl: Highlighter, code: string, lang: string): string {
 const SOURCE_URL = 'https://github.com/aziontech/webkit/blob/main/'
 const ABSOLUTE_HREF = /^(?:[a-z][a-z0-9+.-]*:|\/|#)/i
 
-export function sourceHref(href: string, file: string): string {
+function sourceHref(href: string, file: string): string {
   if (!href || ABSOLUTE_HREF.test(href)) return href
   const [path = '', hash = ''] = href.split('#')
   const target = relative(REPO, resolve(dirname(file), path))
@@ -89,7 +89,7 @@ function dropInlineComments(children: InlineChildren): InlineChildren {
   return kept
 }
 
-export function dropHtmlComments(state: CoreState): void {
+function dropHtmlComments(state: CoreState): void {
   const comment = (at: number) =>
     state.tokens[at]?.type === 'paragraph_open' &&
     ONLY_COMMENTS.test(state.tokens[at + 1]?.content ?? '')
@@ -107,7 +107,7 @@ export function dropHtmlComments(state: CoreState): void {
   state.tokens = kept
 }
 
-export function dropTaskMarkers(state: CoreState): void {
+function dropTaskMarkers(state: CoreState): void {
   state.tokens.forEach((token, at) => {
     if (token.type !== 'list_item_open') return
     const inline = state.tokens.slice(at + 1, at + 4).find((next) => next.type === 'inline')

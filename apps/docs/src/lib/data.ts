@@ -19,10 +19,13 @@ const exampleSources = import.meta.glob<Highlighted>(
   '../../../../packages/webkit/examples/**/*.vue',
   { query: '?highlight', import: 'default' }
 )
-const exampleData = import.meta.glob<Highlighted>('../../../../packages/webkit/examples/**/*.json', {
-  query: '?highlight',
-  import: 'default'
-})
+const exampleData = import.meta.glob<Highlighted>(
+  '../../../../packages/webkit/examples/**/*.json',
+  {
+    query: '?highlight',
+    import: 'default'
+  }
+)
 const blockComponents = import.meta.glob<Component>('../../../../packages/webkit/blocks/**/*.vue', {
   import: 'default'
 })
@@ -50,7 +53,7 @@ const foundationDocs = import.meta.glob<MarkdownDoc>(
 
 export { index }
 
-export const cache = shallowReactive(new Map<string, unknown>())
+const cache = shallowReactive(new Map<string, unknown>())
 
 export function cached<T>(key: string): T | undefined {
   return cache.get(key) as T | undefined
@@ -76,7 +79,7 @@ export function findBlock(id: string) {
   return index.blocks.find((block) => block.id === id)
 }
 
-export async function preloadComponent(name: string) {
+async function preloadComponent(name: string) {
   const loader = (componentLoaders as Record<string, () => Promise<{ default: ComponentDoc }>>)[
     name
   ]
@@ -116,7 +119,7 @@ export async function preloadExample(dir: string, example: string) {
   await remember(keys.example(dir, file), exampleComponents[`${EXAMPLES}${dir}/${file}`])
 }
 
-export async function preloadBlock(id: string, withCode = true) {
+async function preloadBlock(id: string, withCode = true) {
   const block = findBlock(id)
   if (!block) return
   const base = `${BLOCKS}${block.dir}/`
@@ -136,7 +139,7 @@ export async function preloadBlock(id: string, withCode = true) {
   ])
 }
 
-export async function preloadMarkdown(path: string) {
+async function preloadMarkdown(path: string) {
   await remember(keys.markdown(path), foundationDocs[REPO + path])
 }
 

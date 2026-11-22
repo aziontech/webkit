@@ -46,7 +46,7 @@ const CI_ONLY = {
   'pnpm install --frozen-lockfile': 'setup',
   'pnpm exec playwright install --with-deps chromium': 'setup',
   'pnpm run check:audit': 'needs the npm advisory service; run pnpm gates at the root',
-  'npx depcheck --ignores="@types/*,eslint-*"': 'downloads depcheck on every run',
+  'pnpm run check:unused': 'downloads knip; pnpm check:unused at the root',
   'pnpm run lint:webkit': 'about 25 s; pnpm lint:webkit, or pnpm gates at the root',
   'pnpm run typecheck:webkit': 'about 25 s; pnpm gates at the root',
   'pnpm run typecheck:docs': 'pnpm gates at the root',

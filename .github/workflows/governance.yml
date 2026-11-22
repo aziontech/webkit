@@ -114,9 +114,8 @@ jobs:
           base: ${{ github.event.repository.default_branch }}
           extra_args: --only-verified
 
-      - name: Check unused and undeclared dependencies
-        run: npx --yes depcheck@1.4.7 --ignores="@types/*,eslint-*,@aziontech/webkit,@vitest/browser,figma,husky,jscpd"
-        working-directory: packages/webkit
+      - name: Check unused files, exports and dependencies
+        run: pnpm run check:unused
 
   lint-canaries:
     name: Lint canaries (broken samples must stay broken)

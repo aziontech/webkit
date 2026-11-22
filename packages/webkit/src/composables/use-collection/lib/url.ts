@@ -75,7 +75,7 @@ export interface CollectionUrlState {
   pageSize?: number
 }
 
-export const URL_KEYS = ['q', 'filter', 'op', 'groups', 'sort', 'page', 'size'] as const
+const URL_KEYS = ['q', 'filter', 'op', 'groups', 'sort', 'page', 'size'] as const
 
 const isOperator = (value: unknown): value is PropertyFilterOperator =>
   typeof value === 'string' && (PROPERTY_FILTER_OPERATORS as readonly string[]).includes(value)

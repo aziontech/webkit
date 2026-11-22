@@ -6,7 +6,7 @@ export type SceneLoader = () => Promise<{ default: Component }>
 
 const loadContentScenes = () => import('./content-scenes')
 
-export const contentScene =
+const contentScene =
   (name: ContentSceneName): SceneLoader =>
   () =>
     loadContentScenes().then((module) => module.contentScenes[name]())
@@ -59,7 +59,7 @@ export const sceneAssets = {
 /** Name of a scene a section draws, as the page data spells it. */
 export type SceneName = keyof typeof sceneAssets
 
-export const backdropScenes: readonly SceneName[] = [
+const backdropScenes: readonly SceneName[] = [
   'BrandGlobeScene',
   'ConsoleApplicationScene',
   'ConsoleMockup',
@@ -91,7 +91,7 @@ const Nothing: Component = { name: 'SceneUnavailable', render: () => null }
 
 const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
 
-export function isSceneName(name: string): name is SceneName {
+function isSceneName(name: string): name is SceneName {
   return Object.prototype.hasOwnProperty.call(sceneAssets, name)
 }
 

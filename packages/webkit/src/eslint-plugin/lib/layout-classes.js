@@ -32,7 +32,7 @@ export const LAYOUT_CLASS_FAMILIES = Object.freeze([
   'me-*'
 ])
 
-export const LAYOUT_BREAKPOINTS = Object.freeze(['sm', 'md', 'lg', 'xl', '2xl'])
+const LAYOUT_BREAKPOINTS = Object.freeze(['sm', 'md', 'lg', 'xl', '2xl'])
 
 const MATCHERS = LAYOUT_CLASS_FAMILIES.map((family) =>
   family.endsWith('*')

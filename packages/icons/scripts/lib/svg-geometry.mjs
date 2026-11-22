@@ -1,6 +1,6 @@
-export const ICON_CANVAS = 14
+const ICON_CANVAS = 14
 
-export const MIN_SQUARENESS = 0.6
+const MIN_SQUARENESS = 0.6
 
 export const INTENTIONALLY_NON_SQUARE = {
   'az/az-minus.svg': 'a single horizontal bar',

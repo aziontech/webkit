@@ -85,7 +85,7 @@ const wallParts = (instant: number, zone: string): number[] => {
   ]
 }
 
-export const zoneOffsetMs = (instant: number, zone: string): number => {
+const zoneOffsetMs = (instant: number, zone: string): number => {
   const [year, month, day, hour, minute, second] = wallParts(instant, zone)
   const asUtc = Date.UTC(year, month, day, hour, minute, second)
   return asUtc - (instant - (((instant % 1000) + 1000) % 1000))
@@ -129,12 +129,7 @@ export const shiftWallClock = (wall: Date, amount: number, unit: DateRangeUnit):
   return next
 }
 
-export const startOfUnit = (
-  instant: Date,
-  unit: DateRangeUnit,
-  zone = 'UTC',
-  weekStart = 0
-): Date => {
+const startOfUnit = (instant: Date, unit: DateRangeUnit, zone = 'UTC', weekStart = 0): Date => {
   const wall = toWallClock(instant, zone)
   const parts = [
     wall.getFullYear(),

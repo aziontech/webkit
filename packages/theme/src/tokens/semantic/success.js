@@ -14,5 +14,3 @@ export const success = {
     'success-mark': tokenRef('primitives.green.600')
   }
 }
-
-export default { success }

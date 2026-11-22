@@ -147,35 +147,6 @@ export const formatValueLabel = (
   return `${formatDate(s, timezone, locale)}${startTime} – ${formatDate(e, timezone, locale)}${endTime}`
 }
 
-const formatClock = (date: Date, timezone = '', locale = 'en-US'): string =>
-  new Intl.DateTimeFormat(intlLocale(locale), {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: tzOption(timezone)
-  }).format(date)
-
-export const formatWindowLabel = (
-  value: DatePickerDraft,
-  mode: DatePickerMode,
-  timezone = '',
-  locale = 'en-US'
-): string => {
-  if (mode !== 'range') {
-    const single = asSingle(value)
-    return single
-      ? `${formatDate(single, timezone, locale)}, ${formatClock(single, timezone, locale)}`
-      : ''
-  }
-
-  const { start, end } = asRange(value)
-  if (start && end && sameDay(start, end)) {
-    return `${formatClock(start, timezone, locale)} – ${formatClock(end, timezone, locale)}`
-  }
-
-  return formatValueLabel(value, mode, timezone, locale)
-}
-
 export const localTimezone = (): string => {
   try {
     return new Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'

@@ -4,7 +4,7 @@ import { copyText } from '@aziontech/webkit/utils/clipboard'
 import { messages } from './i18n'
 import type { Token } from './types'
 
-export { sharedUsage, type TokenGroup, usageGroups, usageSections } from './token-usage'
+export { type TokenGroup, usageGroups, usageSections } from './token-usage'
 
 export type TokenKind =
   | 'color'
@@ -78,9 +78,9 @@ export async function copyValue(value: string): Promise<void> {
 
 export const BREAKPOINT_ORDER = ['_', 'sm', 'md', 'lg', 'xl', '2xl']
 
-export const SIZE_STEPS = ['3xl', '2xl', 'xl', 'lg', 'md', 'sm', 'xs', '2xs']
+const SIZE_STEPS = ['3xl', '2xl', 'xl', 'lg', 'md', 'sm', 'xs', '2xs']
 
-export const TYPE_FAMILIES = [
+const TYPE_FAMILIES = [
   'heading',
   'title',
   'body',
@@ -98,7 +98,7 @@ function stepIndex(name: string): number {
   return step === -1 ? SIZE_STEPS.length : step
 }
 
-export function typeFamily(name: string): string {
+function typeFamily(name: string): string {
   return TYPE_FAMILIES.find((family) => name.startsWith(`text-${family}`)) ?? 'other'
 }
 

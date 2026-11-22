@@ -8,18 +8,19 @@ import { resolveEslintBin } from './report.js'
 
 export const CANARY_DIR = '.webkit-canary'
 
+const ASTRO_LINT_PACKAGES = ['astro-eslint-parser', 'eslint-plugin-astro']
+
 function astroParserAvailable(cwd) {
   const require = createRequire(join(cwd, '__webkit_canary__.js'))
   try {
-    require.resolve('astro-eslint-parser')
-    require.resolve('eslint-plugin-astro')
+    for (const name of ASTRO_LINT_PACKAGES) require.resolve(name)
     return true
   } catch {
     return false
   }
 }
 
-export function buildFixtures(cwd) {
+function buildFixtures(cwd) {
   const astroAvailable = astroParserAvailable(cwd)
   return [
     {
@@ -61,7 +62,7 @@ import Nope from '@aziontech/webkit/this-export-does-not-exist'
       file: 'hardcoded-color.astro',
       rule: 'webkit/no-hardcoded-color',
       optional: !astroAvailable,
-      why: 'astro-eslint-parser / eslint-plugin-astro is not installed in this project',
+      why: `${ASTRO_LINT_PACKAGES.join(' / ')} is not installed in this project`,
       content: `---
 const label = 'deliberately hardcoded'
 ---
