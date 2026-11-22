@@ -31,7 +31,26 @@
     "name": "Application",
     "file": "view-rule-list.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "composables/use-behavior-drag.ts",
+    "composables/use-narrow-viewport.ts",
+    "composables/use-rule-behaviors.ts",
+    "composables/use-rule-builder-form.ts",
+    "composables/use-rule-editing.ts",
+    "composables/use-rule-list-announcement.ts",
+    "composables/use-rule-list-draft.ts",
+    "composables/use-rule-list-position.ts",
+    "composables/use-rule-list-reorder.ts",
+    "lib/rule-builder.ts",
+    "lib/rule-list.ts",
+    "parts/rule-behaviors-card.vue",
+    "parts/rule-builder-drawer.vue",
+    "parts/rule-criteria-editor.vue",
+    "parts/rule-move-cell.vue",
+    "parts/rule-phase-table.vue",
+    "parts/rule-review-dialog.vue"
+  ],
   "variants": [
     {
       "name": "Firewall",
