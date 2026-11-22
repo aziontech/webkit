@@ -21,7 +21,14 @@ const blockTags = new Set(
     ...parser.match(/DOC_MARKDOWN_BLOCK_TAGS[^=]*=\s*\[([\s\S]*?)\]/)[1].matchAll(/'([A-Za-z]+)'/g)
   ].map((match) => match[1])
 )
-const renderer = read('src/components/docs/doc-markdown/doc-markdown.vue')
+const renderer = [
+  'src/components/docs/doc-markdown/doc-markdown.vue',
+  'src/components/docs/doc-markdown/lib/doc-markdown-tags.ts',
+  'src/components/docs/doc-markdown/lib/render-doc-inline.ts',
+  'src/components/docs/doc-markdown/lib/render-doc-markdown.ts'
+]
+  .map(read)
+  .join('\n')
 const scenes = read('src/assets/scene-registry.ts')
 const contentScenes = read('src/assets/content-scenes.ts')
 const loadsContent = (tag, name) =>
