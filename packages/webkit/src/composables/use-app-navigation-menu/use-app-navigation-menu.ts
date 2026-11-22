@@ -51,6 +51,25 @@ export interface UseAppNavigationMenuReturn {
   openSearch: () => void
 }
 
+const leafIndex = (groups: AppNavGroup[]): Map<string, AppNavItem> =>
+  new Map(navLeaves(groups.flatMap((group) => group.items)).map((item) => [item.id, item]))
+
+function revealActive(
+  groups: AppNavGroup[],
+  id: string,
+  menuPath: Ref<string[]>,
+  menuExpanded: Ref<string[]>
+): void {
+  const ancestors = navTrail(groups, id).slice(0, -1)
+  menuPath.value = ancestors
+    .filter((item) => item.groups || item.type === 'drill')
+    .map((item) => item.id)
+  const inline = ancestors
+    .filter((item) => item.children && !item.groups && item.type !== 'drill')
+    .map((item) => item.id)
+  menuExpanded.value = [...new Set([...menuExpanded.value, ...inline])]
+}
+
 export function useAppNavigationMenu(
   { currentPath, hrefOf, follow }: UseAppNavigationReturn,
   options: UseAppNavigationMenuOptions
@@ -60,12 +79,7 @@ export function useAppNavigationMenu(
 
   const query = ref('')
 
-  const leaves = computed(
-    () =>
-      new Map(
-        navLeaves(navigation().flatMap((group) => group.items)).map((item) => [item.id, item])
-      )
-  )
+  const leaves = computed(() => leafIndex(navigation()))
 
   const currentId = computed(
     () => toValue(options.activeId) || matchActiveId(navigation(), currentPath.value, hrefOf)
@@ -75,20 +89,9 @@ export function useAppNavigationMenu(
 
   const paletteGroups = computed(() => navPaletteGroups(navigation()))
 
-  watch(
-    currentId,
-    (id) => {
-      const ancestors = navTrail(navigation(), id).slice(0, -1)
-      menuPath.value = ancestors
-        .filter((item) => item.groups || item.type === 'drill')
-        .map((item) => item.id)
-      const inline = ancestors
-        .filter((item) => item.children && !item.groups && item.type !== 'drill')
-        .map((item) => item.id)
-      menuExpanded.value = [...new Set([...menuExpanded.value, ...inline])]
-    },
-    { immediate: true }
-  )
+  watch(currentId, (id) => revealActive(navigation(), id, menuPath, menuExpanded), {
+    immediate: true
+  })
 
   watch(searchOpen, () => {
     query.value = ''

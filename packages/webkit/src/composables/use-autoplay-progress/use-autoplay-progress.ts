@@ -37,17 +37,52 @@ export interface UseAutoplayProgressReturn {
 
 const PROGRESS_TICK_MS = 100
 
+interface ProgressTicker {
+  elapsed: Readonly<Ref<number>>
+  start: () => void
+  stop: () => void
+  reset: () => void
+}
+
+function createProgressTicker(options: UseAutoplayProgressOptions): ProgressTicker {
+  const elapsed = ref(0)
+  let marquee: ReturnType<typeof globalThis.setInterval> | null = null
+
+  function stop(): void {
+    if (marquee === null) return
+    globalThis.clearInterval(marquee)
+    marquee = null
+  }
+
+  function tick(): void {
+    elapsed.value += PROGRESS_TICK_MS
+    if (elapsed.value < toValue(options.interval)) return
+    elapsed.value = 0
+    options.onAdvance()
+  }
+
+  function start(): void {
+    stop()
+    marquee = globalThis.setInterval(tick, PROGRESS_TICK_MS)
+  }
+
+  function reset(): void {
+    elapsed.value = 0
+  }
+
+  return { elapsed: readonly(elapsed), start, stop, reset }
+}
+
 export function useAutoplayProgress(
   options: UseAutoplayProgressOptions
 ): UseAutoplayProgressReturn {
   const reducedMotion = usePreferredReducedMotion()
   const { t } = useTranslate({ common: en.common })
 
-  const elapsed = ref(0)
+  const ticker = createProgressTicker(options)
   const paused = ref(false)
   const pointerInside = ref(false)
   const focusInside = ref(false)
-  let marquee: ReturnType<typeof globalThis.setInterval> | null = null
 
   const autoplayEnabled = computed(
     () => toValue(options.enabled) && reducedMotion.value !== 'reduce'
@@ -62,30 +97,8 @@ export function useAutoplayProgress(
   )
 
   const progress = computed(() =>
-    Math.min(100, Math.max(0, (elapsed.value / toValue(options.interval)) * 100))
+    Math.min(100, Math.max(0, (ticker.elapsed.value / toValue(options.interval)) * 100))
   )
-
-  function stop(): void {
-    if (marquee === null) return
-    globalThis.clearInterval(marquee)
-    marquee = null
-  }
-
-  function start(): void {
-    stop()
-    marquee = globalThis.setInterval(tick, PROGRESS_TICK_MS)
-  }
-
-  function tick(): void {
-    elapsed.value += PROGRESS_TICK_MS
-    if (elapsed.value < toValue(options.interval)) return
-    elapsed.value = 0
-    options.onAdvance()
-  }
-
-  function restartProgress(): void {
-    elapsed.value = 0
-  }
 
   function togglePause(): void {
     paused.value = !paused.value
@@ -108,13 +121,13 @@ export function useAutoplayProgress(
     focusInside.value = false
   }
 
-  watch(autoplayRunning, (running) => (running ? start() : stop()))
+  watch(autoplayRunning, (running) => (running ? ticker.start() : ticker.stop()))
 
   onMounted(() => {
-    if (autoplayRunning.value) start()
+    if (autoplayRunning.value) ticker.start()
   })
 
-  onScopeDispose(stop)
+  onScopeDispose(ticker.stop)
 
   return {
     autoplayEnabled,
@@ -122,7 +135,7 @@ export function useAutoplayProgress(
     paused: readonly(paused),
     pauseLabel,
     progress,
-    restartProgress,
+    restartProgress: ticker.reset,
     togglePause,
     enterPointer,
     leavePointer,

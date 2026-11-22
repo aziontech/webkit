@@ -10,6 +10,10 @@ import {
   watch
 } from 'vue'
 
+import { useSelectSearchActive } from './composables/use-select-search-active'
+import { createSearchKeydowns } from './lib/keys'
+import { filterItems, focusById } from './lib/search'
+
 export interface SelectSearchItem {
   key: string
   text: string
@@ -44,49 +48,14 @@ export interface UseSelectSearchReturn {
   onSearchKeydown: (event: KeyboardEvent) => void
 }
 
-const normalize = (text: string) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim()
-
-const matches = (item: SelectSearchItem, term: string) => {
-  const text = normalize(item.text)
-  return (
-    text.startsWith(term) ||
-    text.includes(` ${term}`) ||
-    (item.keywords ?? []).some((keyword) => normalize(keyword).startsWith(term))
-  )
-}
-
-const isPrintable = (event: KeyboardEvent) =>
-  event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey
-
 export function useSelectSearch(options: UseSelectSearchOptions): UseSelectSearchReturn {
   const open = ref(false)
   const query = ref('')
-  const activeIndex = ref(0)
   const searchId = `${options.idPrefix}-search`
 
-  const focusById = (id: string) => document.getElementById(id)?.focus()
-
-  const filtered = computed(() => {
-    const term = normalize(query.value)
-    const items = toValue(options.items)
-    return term ? items.filter((item) => matches(item, term)) : items
-  })
-
-  const positionByKey = computed(
-    () => new Map(toValue(options.items).map((item, index) => [item.key, index]))
-  )
-  const optionId = (key: string) => `${options.idPrefix}-option-${positionByKey.value.get(key)}`
-
-  const activeKey = computed(() => {
-    const item = filtered.value[activeIndex.value]
-    return item && !item.disabled ? item.key : undefined
-  })
-
-  const scrollActiveIntoView = async () => {
-    await nextTick()
-    if (activeKey.value)
-      document.getElementById(optionId(activeKey.value))?.scrollIntoView({ block: 'nearest' })
-  }
+  const filtered = computed(() => filterItems(toValue(options.items), query.value))
+  const active = useSelectSearchActive(options.items, filtered, options.idPrefix)
+  const { activeKey, activeIndex, moveActive, firstEnabled } = active
 
   const setOpen = (next: boolean) => {
     open.value = next
@@ -96,73 +65,17 @@ export function useSelectSearch(options: UseSelectSearchOptions): UseSelectSearc
     query.value = next
   }
 
-  const setActive = (index: number) => {
-    activeIndex.value = index
-  }
-
-  const nextEnabled = (from: number, step: 1 | -1) => {
-    const items = filtered.value
-    for (let i = 1; i <= items.length; i++) {
-      const index = (((from + step * i) % items.length) + items.length) % items.length
-      if (!items[index].disabled) return index
-    }
-    return -1
-  }
-
-  const moveActive = (from: number, step: 1 | -1) => {
-    activeIndex.value = nextEnabled(from, step)
-    scrollActiveIntoView()
-  }
-
-  const commit = () => {
-    if (!activeKey.value || toValue(options.locked)) return
-    options.onPick(activeKey.value)
-    if (toValue(options.multiple)) return
-    open.value = false
-    if (options.onCommit) options.onCommit()
-    else focusById(toValue(options.triggerId))
-  }
-
-  const close = () => {
-    open.value = false
-    focusById(toValue(options.triggerId))
-  }
-
-  const onTriggerKeydown = (event: KeyboardEvent) => {
-    if (!isPrintable(event) || toValue(options.locked)) return
-    event.preventDefault()
-    query.value = open.value ? query.value + event.key : event.key
-    open.value = true
-  }
-
-  const onContentKeydown = (event: KeyboardEvent) => {
-    if (event.target instanceof HTMLElement && event.target.id === searchId) return
-    if (isPrintable(event)) focusById(searchId)
-  }
-
-  const onSearchKeydown = (event: KeyboardEvent) => {
-    if (event.key === 'Tab') {
-      close()
-      return
-    }
-    const keys: Record<string, () => void> = {
-      ArrowDown: () => moveActive(activeIndex.value, 1),
-      ArrowUp: () => moveActive(activeIndex.value, -1),
-      Home: () => moveActive(-1, 1),
-      End: () => moveActive(filtered.value.length, -1),
-      Enter: commit,
-      Escape: close
-    }
-    const handle = keys[event.key]
-    if (!handle) return
-    event.preventDefault()
-    event.stopPropagation()
-    handle()
-  }
-
-  watch(query, () => {
-    activeIndex.value = nextEnabled(-1, 1)
+  const keydowns = createSearchKeydowns(options, {
+    open,
+    query,
+    searchId,
+    activeKey,
+    activeIndex,
+    optionCount: () => filtered.value.length,
+    moveActive
   })
+
+  watch(query, () => active.setActive(firstEnabled()))
 
   watch(open, async (next) => {
     if (!next) {
@@ -171,10 +84,10 @@ export function useSelectSearch(options: UseSelectSearchOptions): UseSelectSearc
     }
     const selected = new Set(toValue(options.selectedKeys))
     const index = filtered.value.findIndex((item) => selected.has(item.key))
-    activeIndex.value = query.value || index < 0 ? nextEnabled(-1, 1) : index
+    active.setActive(query.value || index < 0 ? firstEnabled() : index)
     await nextTick()
     focusById(searchId)
-    scrollActiveIntoView()
+    active.scrollActiveIntoView()
   })
 
   return {
@@ -182,14 +95,12 @@ export function useSelectSearch(options: UseSelectSearchOptions): UseSelectSearc
     query: readonly(query),
     filtered,
     activeKey,
-    activeIndex: readonly(activeIndex),
+    activeIndex,
     searchId,
-    optionId,
+    optionId: active.optionId,
     setOpen,
     setQuery,
-    setActive,
-    onTriggerKeydown,
-    onContentKeydown,
-    onSearchKeydown
+    setActive: active.setActive,
+    ...keydowns
   }
 }

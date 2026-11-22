@@ -16,23 +16,43 @@ interface ShortcutEntry {
 const entries = new Set<ShortcutEntry>()
 let listening = false
 
+type Modifier = 'meta' | 'ctrl' | 'shift' | 'alt'
+
+const MODIFIER_TOKENS: Record<Modifier, string[]> = {
+  meta: ['⌘', 'cmd', 'meta'],
+  ctrl: ['⌃', 'ctrl', 'control'],
+  shift: ['⇧', 'shift'],
+  alt: ['⌥', 'alt', 'option', 'opt']
+}
+
+const MODIFIERS = Object.keys(MODIFIER_TOKENS) as Modifier[]
+
+function modifierOf(token: string): Modifier | null {
+  const lower = token.toLowerCase()
+  return (
+    MODIFIERS.find((modifier) => {
+      const [symbol, ...names] = MODIFIER_TOKENS[modifier]
+      return token === symbol || names.includes(lower)
+    }) ?? null
+  )
+}
+
 function parseShortcut(command: string): DropdownMenuShortcut | null {
-  let meta = false
-  let ctrl = false
-  let shift = false
-  let alt = false
-  let key = ''
+  const parsed: DropdownMenuShortcut = {
+    meta: false,
+    ctrl: false,
+    shift: false,
+    alt: false,
+    key: ''
+  }
   const tokens = command.split(/\s*\+\s*/).flatMap((part) => Array.from(part))
   for (const token of tokens) {
-    const lower = token.toLowerCase()
-    if (token === '⌘' || lower === 'cmd' || lower === 'meta') meta = true
-    else if (token === '⌃' || lower === 'ctrl' || lower === 'control') ctrl = true
-    else if (token === '⇧' || lower === 'shift') shift = true
-    else if (token === '⌥' || lower === 'alt' || lower === 'option' || lower === 'opt') alt = true
-    else key += token
+    const modifier = modifierOf(token)
+    if (modifier) parsed[modifier] = true
+    else parsed.key += token
   }
-  if (!key) return null
-  return { meta, ctrl, shift, alt, key: key.toLowerCase() }
+  if (!parsed.key) return null
+  return { ...parsed, key: parsed.key.toLowerCase() }
 }
 
 function matches(event: globalThis.KeyboardEvent, parsed: DropdownMenuShortcut): boolean {

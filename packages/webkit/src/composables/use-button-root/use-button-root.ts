@@ -28,6 +28,43 @@ const Root: FunctionalComponent<{ tag: 'a' | 'button' }> = ({ tag }, { attrs, sl
   h(tag, attrs, slots['default']?.())
 Root.props = ['tag']
 
+function anchorBindings(
+  props: UseButtonRootProps,
+  href: string,
+  inert: boolean,
+  attrs: Record<string, unknown>
+): Record<string, unknown> {
+  return {
+    tag: 'a',
+    href,
+    target: props.target,
+    rel: props.target === '_blank' ? 'noopener noreferrer' : attrs['rel'],
+    type: undefined,
+    disabled: false,
+    tabindex: inert ? -1 : attrs['tabindex']
+  }
+}
+
+function buttonBindings(props: UseButtonRootProps): Record<string, unknown> {
+  return {
+    tag: 'button',
+    href: null,
+    target: undefined,
+    type: props.type ?? 'button',
+    disabled: props.disabled
+  }
+}
+
+function stateBindings(props: UseButtonRootProps, inert: boolean): Record<string, unknown> {
+  return {
+    'aria-disabled': inert || undefined,
+    'aria-busy': props.loading || undefined,
+    'data-disabled': props.disabled ? '' : undefined,
+    'data-loading': props.loading ? '' : undefined,
+    'data-inert': inert ? '' : undefined
+  }
+}
+
 export function useButtonRoot(
   props: UseButtonRootProps,
   name: string,
@@ -37,22 +74,11 @@ export function useButtonRoot(
 
   const rootAttrs = computed(() => {
     const href = safeHref(props.href, attrs['download'] != null && attrs['download'] !== false)
-    const anchor = href !== null
     const inert = props.disabled || props.loading
     return {
       ...attrs,
-      tag: anchor ? 'a' : 'button',
-      href,
-      target: anchor ? props.target : undefined,
-      rel: anchor && props.target === '_blank' ? 'noopener noreferrer' : attrs['rel'],
-      type: anchor ? undefined : (props.type ?? 'button'),
-      disabled: !anchor && props.disabled,
-      tabindex: anchor && inert ? -1 : attrs['tabindex'],
-      'aria-disabled': inert || undefined,
-      'aria-busy': props.loading || undefined,
-      'data-disabled': props.disabled ? '' : undefined,
-      'data-loading': props.loading ? '' : undefined,
-      'data-inert': inert ? '' : undefined,
+      ...(href === null ? buttonBindings(props) : anchorBindings(props, href, inert, attrs)),
+      ...stateBindings(props, inert),
       'data-testid': attrs['data-testid'] ?? name
     }
   })
