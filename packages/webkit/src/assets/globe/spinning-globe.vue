@@ -16,34 +16,7 @@
 
   defineOptions({ name: 'SpinningGlobe', inheritAttrs: false })
 
-  interface Props {
-    /** Which part of the world has its data centers lit; the globe always shows the whole world. */
-    region?: NetworkMapRegion
-    /** How many data centers are lit, from `none` to `high`. */
-    density?: NetworkMapDensity
-    /** Spins the globe; static when false. */
-    animated?: boolean
-    /** Opacity of the landmass dots, from 0 to 1; the data centers stay at full strength. */
-    opacity?: number
-    /** Where the globe parks in the space the box leaves over. */
-    position?: NetworkMapPosition
-    /** Size of the globe relative to the box; 1 fits it, below 1 shrinks it toward its position, above 1 enlarges it. */
-    scale?: number
-    /** Horizontal shift as a fraction of the globe width; negative moves it left, positive right, past the box edge if large enough. */
-    offsetX?: number
-    /** Vertical shift as a fraction of the globe height; negative moves it up, positive down, past the box edge if large enough. */
-    offsetY?: number
-    /** Fades the globe out along an axis so it meets content without a hard edge. */
-    fade?: NetworkMapFade
-    /** Seconds one full turn of the globe takes. */
-    duration?: number
-    /** Degrees the north pole leans toward the viewer. */
-    tilt?: number
-    /** Longitude, in degrees, facing the viewer on the first frame. */
-    longitude?: number
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SpinningGlobeProps>(), {
     region: 'world',
     density: 'medium',
     animated: false,
@@ -224,6 +197,33 @@
 </script>
 
 <script lang="ts">
+  export interface SpinningGlobeProps {
+    /** Which part of the world has its data centers lit; the globe always shows the whole world. */
+    region?: NetworkMapRegion
+    /** How many data centers are lit, from `none` to `high`. */
+    density?: NetworkMapDensity
+    /** Spins the globe; static when false. */
+    animated?: boolean
+    /** Opacity of the landmass dots, from 0 to 1; the data centers stay at full strength. */
+    opacity?: number
+    /** Where the globe parks in the space the box leaves over. */
+    position?: NetworkMapPosition
+    /** Size of the globe relative to the box; 1 fits it, below 1 shrinks it toward its position, above 1 enlarges it. */
+    scale?: number
+    /** Horizontal shift as a fraction of the globe width; negative moves it left, positive right, past the box edge if large enough. */
+    offsetX?: number
+    /** Vertical shift as a fraction of the globe height; negative moves it up, positive down, past the box edge if large enough. */
+    offsetY?: number
+    /** Fades the globe out along an axis so it meets content without a hard edge. */
+    fade?: NetworkMapFade
+    /** Seconds one full turn of the globe takes. */
+    duration?: number
+    /** Degrees the north pole leans toward the viewer. */
+    tilt?: number
+    /** Longitude, in degrees, facing the viewer on the first frame. */
+    longitude?: number
+  }
+
   const GRID_STEP = Math.PI / 12
   const SAMPLE_STEP = Math.PI / 60
 
