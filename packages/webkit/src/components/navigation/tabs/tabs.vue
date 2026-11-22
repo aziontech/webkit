@@ -154,6 +154,25 @@
     panels.value = panels.value.filter((entry) => entry !== tabValue)
   }
 
+  const keyTarget = (
+    key: string,
+    focused: TabsValue | null,
+    enabled: TabsTabRegistration[]
+  ): TabsValue | null | undefined => {
+    switch (key) {
+      case 'ArrowRight':
+        return getNextTabValue(tabs.value, focused, 1)
+      case 'ArrowLeft':
+        return getNextTabValue(tabs.value, focused, -1)
+      case 'Home':
+        return enabled[0]?.value ?? null
+      case 'End':
+        return enabled[enabled.length - 1]?.value ?? null
+      default:
+        return undefined
+    }
+  }
+
   const onListKeydown = (event: globalThis.KeyboardEvent) => {
     const enabled = getEnabledTabs(tabs.value)
 
@@ -161,29 +180,14 @@
       return
     }
 
-    let next: TabsValue | null = null
     const manual = props.activationMode === 'manual'
     const focused = manual
       ? (enabled.find((tab) => tab.el.value === globalThis.document?.activeElement)?.value ??
         activeValue.value)
       : activeValue.value
 
-    switch (logicalArrowKey(event.key, dir.value)) {
-      case 'ArrowRight':
-        next = getNextTabValue(tabs.value, focused, 1)
-        break
-      case 'ArrowLeft':
-        next = getNextTabValue(tabs.value, focused, -1)
-        break
-      case 'Home':
-        next = enabled[0]?.value ?? null
-        break
-      case 'End':
-        next = enabled[enabled.length - 1]?.value ?? null
-        break
-      default:
-        return
-    }
+    const next = keyTarget(logicalArrowKey(event.key, dir.value), focused, enabled)
+    if (next === undefined) return
 
     event.preventDefault()
 
