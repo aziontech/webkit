@@ -993,3 +993,5 @@ Budget-raise: command-input 5.1 KB → 7.5 KB (measured 7.49 KB): the back contr
 Budget-raise: link 2.35 KB → 2.45 KB (measured 2.40 KB): the new `inline` mode, a second anchor branch for links inside a sentence, so blocks stop writing raw `<a class="text-link">`.
 Budget-raise: plan-comparison-section 38.95 KB → 39.05 KB (measured 39.00 KB): it renders Link, which gained the `inline` mode.
 Budget-raise: client-mosaic-section 7.45 KB → 7.55 KB (measured 7.48 KB): it renders Link, which gained the `inline` mode.
+Budget-raise: backdrop 10.65 KB → 10.8 KB (measured 10.78 KB): SpinningGlobe's drawing moved to `assets/globe/lib/draw-globe.ts` in small functions to meet the function limits of CODE_QUALITY 3.1.
+Budget-raise: console-application-scene 119.9 KB → 120.4 KB (measured 120.39 KB): the drawer fields moved to a private part (`parts/console-application-drawer-field.vue`) to bring the scene under the 400-line limit of CODE_QUALITY 3.1.

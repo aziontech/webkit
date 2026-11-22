@@ -8,7 +8,8 @@
     NetworkMapRegion
   } from '../../components/content/network-map/network-map.vue'
   import { NETWORK_MAP_REGIONS } from '../../components/content/network-map/network-map-data'
-  import { GLOBE_CELL_DEGREES, GLOBE_LAND, GLOBE_NODE_TIERS, type GlobeNode } from './globe-data'
+  import { GLOBE_NODE_TIERS, type GlobeNode } from './globe-data'
+  import { drawGlobe } from './lib/draw-globe'
 
   defineOptions({ name: 'SpinningGlobe', inheritAttrs: false })
 
@@ -64,22 +65,6 @@
     high: ['core', 'satellite', 'extra']
   }
 
-  const ANCHOR: Record<NetworkMapPosition, [number, number]> = {
-    center: [0.5, 0.5],
-    top: [0.5, 0],
-    bottom: [0.5, 1],
-    left: [0, 0.5],
-    right: [1, 0.5],
-    'top-left': [0, 0],
-    'top-right': [1, 0],
-    'bottom-left': [0, 1],
-    'bottom-right': [1, 1]
-  }
-
-  const GRID_STEP = Math.PI / 12
-  const SAMPLE_STEP = Math.PI / 60
-  const CELL_ARC = (GLOBE_CELL_DEGREES * Math.PI) / 180 / 2
-
   const nodes = computed<readonly GlobeNode[]>(() => {
     const [x, y, width, height] = NETWORK_MAP_REGIONS[props.region].split(' ').map(Number)
     return DENSITY_TIERS[props.density]
@@ -100,90 +85,8 @@
 
   const draw = () => {
     const el = canvasEl.value
-    const context = el?.getContext('2d')
-    if (!el || !context || !el.width || !el.height) return
-
-    const style = getComputedStyle(el)
-    const diameter = Math.min(el.width, el.height) * (props.scale > 0 ? props.scale : 1)
-    const radius = diameter / 2 - 1
-    const [anchorX, anchorY] = ANCHOR[props.position]
-    const centerX = (el.width - diameter) * anchorX + diameter / 2 + props.offsetX * diameter
-    const centerY = (el.height - diameter) * anchorY + diameter / 2 + props.offsetY * diameter
-    const unit = radius / 302
-    const lean = (props.tilt * Math.PI) / 180
-    const sinLean = Math.sin(lean)
-    const cosLean = Math.cos(lean)
-    const facing = (props.longitude * Math.PI) / 180 - turn
-
-    const project = (lon: number, lat: number) => {
-      const x = Math.cos(lat) * Math.sin(lon - facing)
-      const y = Math.sin(lat)
-      const z = Math.cos(lat) * Math.cos(lon - facing)
-      return [
-        centerX + radius * x,
-        centerY - radius * (y * cosLean - z * sinLean),
-        y * sinLean + z * cosLean
-      ]
-    }
-
-    const trace = (points: Array<[number, number]>) => {
-      let pen = false
-      for (const [lon, lat] of points) {
-        const [x, y, depth] = project(lon, lat)
-        if (depth < 0) {
-          pen = false
-          continue
-        }
-        if (pen) context.lineTo(x, y)
-        else context.moveTo(x, y)
-        pen = true
-      }
-    }
-
-    context.clearRect(0, 0, el.width, el.height)
-    context.lineWidth = Math.max(0.74 * unit, 0.5)
-    context.strokeStyle = style.getPropertyValue('--globe-grid')
-
-    context.beginPath()
-    context.arc(centerX, centerY, radius, 0, Math.PI * 2)
-    context.fillStyle = style.getPropertyValue('--globe-ground')
-    context.fill()
-    context.stroke()
-
-    context.beginPath()
-    for (let lon = 0; lon < Math.PI * 2; lon += GRID_STEP) {
-      const meridian: Array<[number, number]> = []
-      for (let lat = -Math.PI / 2; lat <= Math.PI / 2 + 1e-9; lat += SAMPLE_STEP)
-        meridian.push([lon, lat])
-      trace(meridian)
-    }
-    for (let lat = -Math.PI / 2 + GRID_STEP; lat < Math.PI / 2 - 1e-9; lat += GRID_STEP) {
-      const parallel: Array<[number, number]> = []
-      for (let lon = 0; lon <= Math.PI * 2 + 1e-9; lon += SAMPLE_STEP) parallel.push([lon, lat])
-      trace(parallel)
-    }
-    context.stroke()
-
-    const cell = Math.max(radius * CELL_ARC, 1)
-    context.beginPath()
-    for (const [lon, lat] of GLOBE_LAND) {
-      const [x, y, depth] = project(lon, lat)
-      if (depth <= 0) continue
-      context.rect(x - cell / 2, y - cell / 2, cell, cell)
-    }
-    context.globalAlpha = Math.min(Math.max(props.opacity, 0), 1)
-    context.fillStyle = style.color
-    context.fill()
-    context.globalAlpha = 1
-
-    context.beginPath()
-    for (const { point } of nodes.value) {
-      const [x, y, depth] = project(point[0], point[1])
-      if (depth <= 0) continue
-      context.rect(x - cell / 2, y - cell / 2, cell, cell)
-    }
-    context.fillStyle = style.getPropertyValue('--globe-node')
-    context.fill()
+    if (!el) return
+    drawGlobe(el, props, nodes.value, turn)
   }
 
   const tick = (now: number) => {

@@ -312,7 +312,7 @@
   {
     "name": "backdrop",
     "path": "src/components/marketing/backdrop/backdrop.vue",
-    "limit": "10.65 KB"
+    "limit": "10.8 KB"
   },
   {
     "name": "hero",
@@ -443,7 +443,7 @@
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "119.9 KB"
+    "limit": "120.4 KB"
   },
   {
     "name": "console-trace-scene",
