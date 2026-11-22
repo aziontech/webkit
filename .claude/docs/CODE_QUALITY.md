@@ -78,6 +78,26 @@ updates the spec, the examples, `MIGRATION_V6.md` and the `v6*.json` maps in the
 Reference: shadcn's largest component file is under 800 lines, and Cloudscape splits its table
 over 72 files. A file over its limit is split, never exempted; the split follows 3.2.
 
+How `check:maintainability` counts:
+
+- **A line counts when it holds code.** Blank lines and lines that hold only a comment (JS, TS
+  or HTML) are skipped, as ESLint's `skipBlankLines` and `skipComments` do.
+- **A `.vue` file** counts every block, tags included. Its script counts the lines between the
+  opening and closing `<script setup>` tags (the plain `<script>` when there is no setup).
+- **Functions** are every function in a script, a `.ts` or a `.js` file, measured by ESLint core
+  `max-lines-per-function` (blank and comment lines skipped, IIFEs included) and `complexity`
+  (classic). Template expressions are not functions.
+- **Line length** is the `max-len` rule of `eslint.quality.config.js` (`lint:quality`), reused as
+  is.
+- **Props** are the members of the type or object given to `defineProps`, with local interfaces,
+  their `extends` and intersections resolved; **models** are `defineModel` calls. Both apply to
+  every component `.vue` under `src/components`, parts included.
+- **Which limit applies:** a `.vue` under `src` or `examples` is a component; a `.vue` in a block
+  is a page file, or a variant file under `variants/`; every other `.ts` / `.js` is a module,
+  except data (`src/locales`, `.ts` under `src/assets`, `*-data.ts`, `map-chart-countries.ts`,
+  a block's `sample.ts`), which has no file limit but whose functions are still measured.
+- **Scope:** `src`, `blocks` and `examples`, without tests, test folders, `.figma.ts` and `.d.ts`.
+
 ### 3.2 One feature, one module
 
 A component over the limits is split by **feature**, not by line count:
