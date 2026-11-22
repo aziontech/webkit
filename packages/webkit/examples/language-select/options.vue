@@ -2,23 +2,23 @@
   import LanguageSelect from '@aziontech/webkit/language-select'
   import { ref } from 'vue'
 
-  const locale = ref('en-US')
+  const locale = ref('en')
   const options = [
-    { value: 'es-AR', label: 'Español (Argentina)' },
-    { value: 'nl-BE', label: 'Nederlands (België)' },
-    { value: 'fr-BE', label: 'Français (Belgique)' },
-    { value: 'pt-BR', label: 'Português (Brasil)' },
+    { value: 'en', label: 'English' },
     { value: 'en-CA', label: 'English (Canada)' },
+    { value: 'en-GB', label: 'English (United Kingdom)' },
+    { value: 'es', label: 'Español' },
+    { value: 'es-AR', label: 'Español (Argentina)' },
+    { value: 'es-MX', label: 'Español (México)' },
+    { value: 'fr-FR' },
+    { value: 'fr-BE', label: 'Français (Belgique)' },
     { value: 'fr-CA', label: 'Français (Canada)' },
     { value: 'de-DE', label: 'Deutsch (Deutschland)' },
-    { value: 'es-ES', label: 'Español (España)' },
-    { value: 'fr-FR' },
     { value: 'it-IT' },
-    { value: 'es-MX', label: 'Español (México)' },
     { value: 'ja-JP' },
+    { value: 'nl-BE', label: 'Nederlands (België)' },
+    { value: 'pt-BR', label: 'Português (Brasil)' },
     { value: 'pt-PT', label: 'Português (Portugal)' },
-    { value: 'en-GB', label: 'English (United Kingdom)' },
-    { value: 'en-US', label: 'English (United States)' },
     { value: 'ar', label: 'العربية', country: 'SA' }
   ]
 </script>

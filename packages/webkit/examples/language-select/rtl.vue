@@ -6,7 +6,7 @@
   const options = [
     { value: 'ar-SA', label: 'العربية (السعودية)' },
     { value: 'he-IL', label: 'עברית (ישראל)' },
-    { value: 'en-US', label: 'English (United States)' }
+    { value: 'en', label: 'English' }
   ]
 </script>
 

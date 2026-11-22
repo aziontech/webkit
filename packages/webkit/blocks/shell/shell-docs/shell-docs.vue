@@ -74,7 +74,7 @@
 
   const { mode: theme } = useColorMode()
 
-  const language = ref('en-US')
+  const language = ref('en')
 </script>
 
 <template>

@@ -15715,7 +15715,7 @@
      "type": "'outline' | 'ghost'",
      "default": "'outline'",
      "required": "false",
-     "doc": "Trigger look: `outline` is the full field (round flag and name) for forms and settings; `ghost` is the compact switcher (round flag and short code, no border until hover) for a header, a toolbar or a footer."
+     "doc": "Trigger look: `outline` is the full field (round flag and name) for forms and settings; `ghost` is the compact switcher (round flag and the BCP 47 tag in capitals, such as EN or PT-BR, no border until hover) for a header, a toolbar or a footer."
     },
     {
      "name": "placeholder",

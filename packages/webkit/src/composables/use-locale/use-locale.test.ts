@@ -235,6 +235,9 @@ describe('useLocale', () => {
       expect(pickCatalog('pt-BR', ALL)).toBe(ptBR)
       expect(pickCatalog('pt-pt', ALL)).toBe(ptBR)
       expect(pickCatalog('en-GB', ALL)).toBe(en)
+      const enGB = { ...en }
+      expect(pickCatalog('en-GB', { 'en-CA': ptBR, ...ALL, 'en-GB': enGB })).toBe(enGB)
+      expect(pickCatalog('en-AU', { 'en-GB': enGB, ...ALL })).toBe(en)
       expect(pickCatalog('de', ALL)).toBe(en)
     })
 

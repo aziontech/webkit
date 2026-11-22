@@ -184,7 +184,7 @@ describe('SiteFooterSection', () => {
     await userEvent.click(getByRole('option', { name: 'Português (Brasil)' }))
 
     expect(trigger.textContent).toContain('Português (Brasil)')
-    expect(getByTestId('language-select__code').textContent).toBe('BR')
+    expect(getByTestId('language-select__code').textContent).toBe('PT-BR')
   })
 
   it('emits update:language with the chosen option', async () => {

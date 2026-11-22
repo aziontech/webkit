@@ -264,7 +264,7 @@ do compose yourself follows rule `webkit-header-search` (lint `webkit/require-he
 
 When a header, a toolbar or a footer offers a language switch, it is
 `<LanguageSelect v-model="locale" variant="ghost" />` (`@aziontech/webkit/language-select`): a round
-flag and the country code (`US`), no border until hover, bound to the `locale` your `ConfigProvider`
+flag and the language tag (`EN`, `PT-BR`), no border until hover, bound to the `locale` your `ConfigProvider`
 reads. Never a field-sized `Select`, a globe `Select` or a `ToggleGroup` of codes: a field outline
 next to the header's outlined buttons draws two border colours in one row. A language setting on an
 account page is the full field (the default `variant`) in a `SettingsRow`. Add a switch only where

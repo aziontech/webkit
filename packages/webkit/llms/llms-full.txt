@@ -1248,9 +1248,11 @@ default, is stuck in one language and drifts from the rest of the product.
   locale).
 - Let people change the language with `LanguageSelect` (`@aziontech/webkit/language-select`)
   bound to the same `locale` the provider reads: `<LanguageSelect v-model="locale" variant="ghost" />`
-  in a header, a toolbar or a footer (a round flag and the country code), and the default full field
-  `<LanguageSelect v-model="locale" />` on a settings page or in a form. Give every option a region
-  (`en-US`, `pt-BR`, `es-ES`) so its flag is the right country. Your own
+  in a header, a toolbar or a footer (a round flag and the language tag, `EN` or `PT-BR`), and the default full field
+  `<LanguageSelect v-model="locale" />` on a settings page or in a form. Name every option with a
+  BCP 47 tag: the bare language for its main variant (`en`, `es`) and the ISO 3166-1 region for a
+  regional one (`pt-BR`, `en-GB`, never `en-UK`). A regional variant reads its language's catalog
+  (`en-GB` → `en`) unless you register one under its own tag. Your own
   screen copy follows it too: read `useLocale().locale` and pick the text from a table keyed by
   locale, as the `auth/auth-sign-in` block does.
 - Rename a built-in string for the whole app with `messages` on `ConfigProvider`:
@@ -1743,7 +1745,7 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   `data-layout-fill` on its root (never `calc(100dvh - …)`).
 - **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteHeaderSection` and `SiteFooterSection` data. The
   site is dark: `<html data-theme="dark">`. `SiteFooterSection` binds its language select (the compact
-  `LanguageSelect`, round flag and country code; `languages` are BCP 47 tags) with
+  `LanguageSelect`, round flag and language tag; `languages` are BCP 47 tags) with
   `v-model:language`; switch the locale from that value.
 - **Docs:** `DocLayout` — the docs tree, section links, `outline-groups`, and `actions`,
   `navigation-footer`, `aside`, `footer` slots. The document scrolls. The page feeds the "On this
@@ -25367,7 +25369,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 # Language Select
 
-> A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a locale with a country (a BCP 47 tag such as `en-US`, `pt-BR`, `es-ES`), shown with that country's round flag and the language named in itself (`English (United States)`, `Português (Brasil)`, `Español (España)`), and a search box at the top of the list filters by name, tag or country. `v-model` holds the BCP 47 tag of the picked option, ready to hand to `ConfigProvider`'s `locale`. It comes in two forms: the full field (`variant="outline"`, round flag and name, field-sized) for a form or a settings page, and the compact switcher (`variant="ghost"`, round flag and a short code such as `US`, no border until hover) for a header, a toolbar or a footer. It offers the languages WebKit ships catalogs for and takes the consumer's own list through `options`.
+> A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a BCP 47 language tag (`en`, `pt-BR`, `es`, `en-GB`), shown with its country's round flag and the language named in itself (`English`, `Português (Brasil)`, `Español`), and a search box at the top of the list filters by name, tag or country. `v-model` holds the BCP 47 tag of the picked option, ready to hand to `ConfigProvider`'s `locale`. It comes in two forms: the full field (`variant="outline"`, round flag and name, field-sized) for a form or a settings page, and the compact switcher (`variant="ghost"`, round flag and the tag in capitals such as `EN` or `PT-BR`, no border until hover) for a header, a toolbar or a footer. It offers the languages WebKit ships catalogs for and takes the consumer's own list through `options`.
 
 - Import: `import LanguageSelect from '@aziontech/webkit/language-select'`
 - Category: input · Surface: app · Structure: monolithic
@@ -25381,7 +25383,9 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 - Bind `v-model` to the same value as `ConfigProvider`'s `locale`, so the picker and the strings move together.
 - Name languages in their own language (`Português (Brasil)`, not `Portuguese (Brazil)`): a reader who cannot read the current language still finds theirs.
-- Give every option a region (`en-US`, not `en`): the flag stands for a country, and the region tells regional variants apart. A tag without one takes its likely region (`en` → `US`, `ar` → `EG`); set `country` when that is not the one you mean (`ar` → `SA`).
+- Name every option with a BCP 47 tag (RFC 5646): the ISO 639 language, then the ISO 3166-1 region only when the option is a regional variant. The main variant of a language is the bare language (`en`, `es`); each regional variant adds its region (`en-GB`, `en-CA`, `pt-BR`), never an invented one (`en-UK` is not a tag; the United Kingdom is `GB`). The compact switcher shows the tag as it is, in capitals (`EN`, `EN-GB`, `PT-BR`).
+- A regional variant needs no catalog of its own: `ConfigProvider` reads `en-GB` from the `en-GB` catalog when one is registered, else from `en`. Register one only where the wording differs.
+- A tag with no region takes the flag of its likely region (`en` → `US`, `ar` → `EG`); set `country` when that is not the one you mean (`ar` → `SA`).
 - Use `variant="ghost"` in a header, a toolbar or a footer, never the field: a field outline next to the toolbar's buttons draws two border colours in one row. Use the default `outline` in a form, where the field outline is the control's boundary (WCAG 1.4.11).
 - Put it in a `Field` with a `Field.Label` in a form; on a toolbar or a footer, give it an `aria-label` only if the built-in `Language` name does not fit.
 
@@ -25403,7 +25407,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `options` | `LanguageSelectOption[]` | `(the languages WebKit ships — see Notes)` | false | Languages offered, in order: `{ value, label?, country? }` where `value` is a BCP 47 tag, `label` the language named in itself (derived from the tag when omitted), and `country` the ISO 3166-1 alpha-2 code of the flag (taken from the tag's region, else its likely region, when omitted). |
-| `variant` | `'outline' \| 'ghost'` | `'outline'` | false | Trigger look: `outline` is the full field (round flag and name) for forms and settings; `ghost` is the compact switcher (round flag and short code, no border until hover) for a header, a toolbar or a footer. |
+| `variant` | `'outline' \| 'ghost'` | `'outline'` | false | Trigger look: `outline` is the full field (round flag and name) for forms and settings; `ghost` is the compact switcher (round flag and the BCP 47 tag in capitals, such as EN or PT-BR, no border until hover) for a header, a toolbar or a footer. |
 | `placeholder` | `string` | `''` | false | Trigger text while no language is picked. Empty uses the locale catalog (`Language`). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token forwarded to the Select trigger. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger and keeps the list closed. |
@@ -25423,7 +25427,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - Visual states delegated to `Select`: `default`, `hover`, `focus-visible`, `open`, `disabled`, and the `invalid` / `required` / `disabled` of an enclosing `Field`.
 - `data-state="open|closed"` lives on the `Select` trigger; `data-disabled` mirrors `disabled`; `data-variant` on the root, the trigger and the panel mirrors `variant`.
 - `variant="outline"`: the trigger is the field (`--border-input` outline, fills its container's width) and shows the picked option's round flag in its `#leading` slot and its name as the value; with nothing picked it shows the placeholder and no flag.
-- `variant="ghost"`: the trigger is Select's `ghost` trigger (no border or fill until hover, sized to its content) and shows the round flag and a short code, both `aria-hidden`; the name stays in the value as visually hidden text, so the combobox still announces `English (United States)`. The short code is the flag's country (`US`); when another option shares that country it is the whole tag upper-cased (`ES-US` beside `EN-US`), and with no country it is the language (`EO`). With nothing picked the placeholder shows.
+- `variant="ghost"`: the trigger is Select's `ghost` trigger (no border or fill until hover, sized to its content) and shows the round flag and a short code, both `aria-hidden`; the name stays in the value as visually hidden text, so the combobox still announces `Português (Brasil)`. The short code is the option's BCP 47 tag in capitals, exactly as the option names it: `EN` for `en`, `PT-BR` for `pt-BR`, `EN-GB` for `en-GB` (an underscore reads as a hyphen). With nothing picked the placeholder shows.
 - Flags are round: the sprite flag cropped to a 16 px circle with a 1 px inset `--border-muted` ring, so a white flag keeps its edge on a white panel.
 - `invalid` and `required` have no prop of their own: they come only from an enclosing `Field`, which `Select` reads, and show as the trigger's `data-invalid` / `aria-invalid` and `aria-required`.
 - States that cannot occur: `loading` and `error` (the options are static data, never fetched), and `readonly` (no prop; a fixed language is shown as text, or with `select` and its `readonly`).
@@ -25456,7 +25460,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
   import Pagination from '@aziontech/webkit/pagination-root'
   import { ref } from 'vue'
 
-  const locale = ref('en-US')
+  const locale = ref('en')
   const page = ref(1)
   const catalogs = { 'pt-BR': ptBR, es }
 </script>

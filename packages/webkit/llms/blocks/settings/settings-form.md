@@ -559,7 +559,7 @@ export const sampleProfile: SettingsFormProfile = {
   fullName: 'Alex Morgan',
   email: '',
   timezone: 'utc',
-  language: 'en-US',
+  language: 'en',
   productUpdates: true
 }
 

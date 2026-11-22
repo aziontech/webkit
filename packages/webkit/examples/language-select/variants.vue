@@ -5,7 +5,7 @@
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import { ref } from 'vue'
 
-  const locale = ref('en-US')
+  const locale = ref('en')
 </script>
 
 <template>

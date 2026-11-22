@@ -1,6 +1,6 @@
 # Language Select
 
-> A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a locale with a country (a BCP 47 tag such as `en-US`, `pt-BR`, `es-ES`), shown with that country's round flag and the language named in itself (`English (United States)`, `Português (Brasil)`, `Español (España)`), and a search box at the top of the list filters by name, tag or country. `v-model` holds the BCP 47 tag of the picked option, ready to hand to `ConfigProvider`'s `locale`. It comes in two forms: the full field (`variant="outline"`, round flag and name, field-sized) for a form or a settings page, and the compact switcher (`variant="ghost"`, round flag and a short code such as `US`, no border until hover) for a header, a toolbar or a footer. It offers the languages WebKit ships catalogs for and takes the consumer's own list through `options`.
+> A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a BCP 47 language tag (`en`, `pt-BR`, `es`, `en-GB`), shown with its country's round flag and the language named in itself (`English`, `Português (Brasil)`, `Español`), and a search box at the top of the list filters by name, tag or country. `v-model` holds the BCP 47 tag of the picked option, ready to hand to `ConfigProvider`'s `locale`. It comes in two forms: the full field (`variant="outline"`, round flag and name, field-sized) for a form or a settings page, and the compact switcher (`variant="ghost"`, round flag and the tag in capitals such as `EN` or `PT-BR`, no border until hover) for a header, a toolbar or a footer. It offers the languages WebKit ships catalogs for and takes the consumer's own list through `options`.
 
 - Import: `import LanguageSelect from '@aziontech/webkit/language-select'`
 - Category: input · Surface: app · Structure: monolithic
@@ -15,7 +15,9 @@
 
 - Bind `v-model` to the same value as `ConfigProvider`'s `locale`, so the picker and the strings move together.
 - Name languages in their own language (`Português (Brasil)`, not `Portuguese (Brazil)`): a reader who cannot read the current language still finds theirs.
-- Give every option a region (`en-US`, not `en`): the flag stands for a country, and the region tells regional variants apart. A tag without one takes its likely region (`en` → `US`, `ar` → `EG`); set `country` when that is not the one you mean (`ar` → `SA`).
+- Name every option with a BCP 47 tag (RFC 5646): the ISO 639 language, then the ISO 3166-1 region only when the option is a regional variant. The main variant of a language is the bare language (`en`, `es`); each regional variant adds its region (`en-GB`, `en-CA`, `pt-BR`), never an invented one (`en-UK` is not a tag; the United Kingdom is `GB`). The compact switcher shows the tag as it is, in capitals (`EN`, `EN-GB`, `PT-BR`).
+- A regional variant needs no catalog of its own: `ConfigProvider` reads `en-GB` from the `en-GB` catalog when one is registered, else from `en`. Register one only where the wording differs.
+- A tag with no region takes the flag of its likely region (`en` → `US`, `ar` → `EG`); set `country` when that is not the one you mean (`ar` → `SA`).
 - Use `variant="ghost"` in a header, a toolbar or a footer, never the field: a field outline next to the toolbar's buttons draws two border colours in one row. Use the default `outline` in a form, where the field outline is the control's boundary (WCAG 1.4.11).
 - Put it in a `Field` with a `Field.Label` in a form; on a toolbar or a footer, give it an `aria-label` only if the built-in `Language` name does not fit.
 
@@ -38,7 +40,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `options` | `LanguageSelectOption[]` | `(the languages WebKit ships — see Notes)` | false | Languages offered, in order: `{ value, label?, country? }` where `value` is a BCP 47 tag, `label` the language named in itself (derived from the tag when omitted), and `country` the ISO 3166-1 alpha-2 code of the flag (taken from the tag's region, else its likely region, when omitted). |
-| `variant` | `'outline' \| 'ghost'` | `'outline'` | false | Trigger look: `outline` is the full field (round flag and name) for forms and settings; `ghost` is the compact switcher (round flag and short code, no border until hover) for a header, a toolbar or a footer. |
+| `variant` | `'outline' \| 'ghost'` | `'outline'` | false | Trigger look: `outline` is the full field (round flag and name) for forms and settings; `ghost` is the compact switcher (round flag and the BCP 47 tag in capitals, such as EN or PT-BR, no border until hover) for a header, a toolbar or a footer. |
 | `placeholder` | `string` | `''` | false | Trigger text while no language is picked. Empty uses the locale catalog (`Language`). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token forwarded to the Select trigger. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger and keeps the list closed. |
@@ -49,16 +51,16 @@
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
-| `v-model` | `string` | `''` | `update:modelValue` | BCP 47 tag of the picked language (`'pt-BR'`). Empty shows the placeholder. Via `defineModel`, so the picker also works unbound. |
+| Model     | Type     | Default | Emits               | Notes                                                                                                                            |
+| --------- | -------- | ------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | BCP 47 tag of the picked language (`'pt-BR'`). Empty shows the placeholder. Via `defineModel`, so the picker also works unbound. |
 
 ## States
 
 - Visual states delegated to `Select`: `default`, `hover`, `focus-visible`, `open`, `disabled`, and the `invalid` / `required` / `disabled` of an enclosing `Field`.
 - `data-state="open|closed"` lives on the `Select` trigger; `data-disabled` mirrors `disabled`; `data-variant` on the root, the trigger and the panel mirrors `variant`.
 - `variant="outline"`: the trigger is the field (`--border-input` outline, fills its container's width) and shows the picked option's round flag in its `#leading` slot and its name as the value; with nothing picked it shows the placeholder and no flag.
-- `variant="ghost"`: the trigger is Select's `ghost` trigger (no border or fill until hover, sized to its content) and shows the round flag and a short code, both `aria-hidden`; the name stays in the value as visually hidden text, so the combobox still announces `English (United States)`. The short code is the flag's country (`US`); when another option shares that country it is the whole tag upper-cased (`ES-US` beside `EN-US`), and with no country it is the language (`EO`). With nothing picked the placeholder shows.
+- `variant="ghost"`: the trigger is Select's `ghost` trigger (no border or fill until hover, sized to its content) and shows the round flag and a short code, both `aria-hidden`; the name stays in the value as visually hidden text, so the combobox still announces `Português (Brasil)`. The short code is the option's BCP 47 tag in capitals, exactly as the option names it: `EN` for `en`, `PT-BR` for `pt-BR`, `EN-GB` for `en-GB` (an underscore reads as a hyphen). With nothing picked the placeholder shows.
 - Flags are round: the sprite flag cropped to a 16 px circle with a 1 px inset `--border-muted` ring, so a white flag keeps its edge on a white panel.
 - `invalid` and `required` have no prop of their own: they come only from an enclosing `Field`, which `Select` reads, and show as the trigger's `data-invalid` / `aria-invalid` and `aria-required`.
 - States that cannot occur: `loading` and `error` (the options are static data, never fetched), and `readonly` (no prop; a fixed language is shown as text, or with `select` and its `readonly`).
@@ -82,15 +84,15 @@
 - Layout: logical utilities only; the flag sits at the inline start of each row and of the trigger, and the short code follows it, so both swap sides under `dir="rtl"`.
 - Icons: the flags and the search glyph are not mirrored; the Select chevron is not directional.
 - Keyboard: `ArrowUp` / `ArrowDown` move through the vertical list in both directions; no horizontal arrows.
-- User data: the short code renders in a `dir="ltr"` span (`ES-US` keeps its order on a right-to-left page); each option label carries `lang` and `dir="auto"`, so an Arabic or Hebrew name reads right-to-left in a left-to-right list.
+- User data: the short code renders in a `dir="ltr"` span (`PT-BR` keeps its order on a right-to-left page); each option label carries `lang` and `dir="auto"`, so an Arabic or Hebrew name reads right-to-left in a left-to-right list.
 
 ## Internationalization
 
-| Key | English source | Override prop |
-|---|---|---|
-| `languageSelect.label` | `Language` | `placeholder`, `ariaLabel` |
-| `languageSelect.search` | `Search language` | `searchPlaceholder` |
-| `languageSelect.noMatch` | `No language found.` | `emptyTitle` |
+| Key                      | English source       | Override prop              |
+| ------------------------ | -------------------- | -------------------------- |
+| `languageSelect.label`   | `Language`           | `placeholder`, `ariaLabel` |
+| `languageSelect.search`  | `Search language`    | `searchPlaceholder`        |
+| `languageSelect.noMatch` | `No language found.` | `emptyTitle`               |
 
 - Formatting: `Intl.DisplayNames` (type `language`) in English and in the active locale, for search keywords only; option labels are never translated, since a language is named in itself.
 
@@ -115,7 +117,7 @@
   import Pagination from '@aziontech/webkit/pagination-root'
   import { ref } from 'vue'
 
-  const locale = ref('en-US')
+  const locale = ref('en')
   const page = ref(1)
   const catalogs = { 'pt-BR': ptBR, es }
 </script>
@@ -150,7 +152,7 @@
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import { ref } from 'vue'
 
-  const locale = ref('en-US')
+  const locale = ref('en')
 </script>
 
 <template>
@@ -188,23 +190,23 @@
   import LanguageSelect from '@aziontech/webkit/language-select'
   import { ref } from 'vue'
 
-  const locale = ref('en-US')
+  const locale = ref('en')
   const options = [
-    { value: 'es-AR', label: 'Español (Argentina)' },
-    { value: 'nl-BE', label: 'Nederlands (België)' },
-    { value: 'fr-BE', label: 'Français (Belgique)' },
-    { value: 'pt-BR', label: 'Português (Brasil)' },
+    { value: 'en', label: 'English' },
     { value: 'en-CA', label: 'English (Canada)' },
+    { value: 'en-GB', label: 'English (United Kingdom)' },
+    { value: 'es', label: 'Español' },
+    { value: 'es-AR', label: 'Español (Argentina)' },
+    { value: 'es-MX', label: 'Español (México)' },
+    { value: 'fr-FR' },
+    { value: 'fr-BE', label: 'Français (Belgique)' },
     { value: 'fr-CA', label: 'Français (Canada)' },
     { value: 'de-DE', label: 'Deutsch (Deutschland)' },
-    { value: 'es-ES', label: 'Español (España)' },
-    { value: 'fr-FR' },
     { value: 'it-IT' },
-    { value: 'es-MX', label: 'Español (México)' },
     { value: 'ja-JP' },
+    { value: 'nl-BE', label: 'Nederlands (België)' },
+    { value: 'pt-BR', label: 'Português (Brasil)' },
     { value: 'pt-PT', label: 'Português (Portugal)' },
-    { value: 'en-GB', label: 'English (United Kingdom)' },
-    { value: 'en-US', label: 'English (United States)' },
     { value: 'ar', label: 'العربية', country: 'SA' }
   ]
 </script>

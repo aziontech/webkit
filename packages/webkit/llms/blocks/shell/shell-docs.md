@@ -70,7 +70,7 @@ In the footer's status slot.
 
 ### L. Language — `LanguageSelect` (required)
 
-In the footer's language slot: `variant="ghost"`, the compact round flag and country code, named `Language` by its catalog. Never a field-sized `Select`: it would draw the field outline in the footer bar.
+In the footer's language slot: `variant="ghost"`, the compact round flag and language tag (`EN`, `PT-BR`), named `Language` by its catalog. Never a field-sized `Select`: it would draw the field outline in the footer bar.
 
 ## Data
 
@@ -219,7 +219,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
 
   const { mode: theme } = useColorMode()
 
-  const language = ref('en-US')
+  const language = ref('en')
 </script>
 
 <template>

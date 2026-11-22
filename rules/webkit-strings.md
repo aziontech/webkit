@@ -17,9 +17,11 @@ default, is stuck in one language and drifts from the rest of the product.
   locale).
 - Let people change the language with `LanguageSelect` (`@aziontech/webkit/language-select`)
   bound to the same `locale` the provider reads: `<LanguageSelect v-model="locale" variant="ghost" />`
-  in a header, a toolbar or a footer (a round flag and the country code), and the default full field
-  `<LanguageSelect v-model="locale" />` on a settings page or in a form. Give every option a region
-  (`en-US`, `pt-BR`, `es-ES`) so its flag is the right country. Your own
+  in a header, a toolbar or a footer (a round flag and the language tag, `EN` or `PT-BR`), and the default full field
+  `<LanguageSelect v-model="locale" />` on a settings page or in a form. Name every option with a
+  BCP 47 tag: the bare language for its main variant (`en`, `es`) and the ISO 3166-1 region for a
+  regional one (`pt-BR`, `en-GB`, never `en-UK`). A regional variant reads its language's catalog
+  (`en-GB` → `en`) unless you register one under its own tag. Your own
   screen copy follows it too: read `useLocale().locale` and pick the text from a table keyed by
   locale, as the `auth/auth-sign-in` block does.
 - Rename a built-in string for the whole app with `messages` on `ConfigProvider`:

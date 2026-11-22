@@ -13,7 +13,7 @@
 
   const props = withDefaults(defineProps<{ defaultSaving?: boolean }>(), { defaultSaving: false })
 
-  const general = reactive({ fullName: 'Alex Morgan', language: 'en-US' })
+  const general = reactive({ fullName: 'Alex Morgan', language: 'en' })
   const savingGeneral = ref(props.defaultSaving)
 
   const generalSubmitted = ref(false)

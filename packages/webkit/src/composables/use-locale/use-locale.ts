@@ -81,11 +81,15 @@ export function directionOf(locale: string): Direction {
 
 function findCatalog(locale: string, catalogs: Record<string, Messages>): Messages | undefined {
   const tag = locale.toLowerCase()
-  const entries = Object.entries(catalogs)
-  const exact = entries.find(([key]) => key.toLowerCase() === tag)
-  if (exact) return exact[1]
   const language = tag.split(/[-_]/)[0]
-  return entries.find(([key]) => key.toLowerCase().split(/[-_]/)[0] === language)?.[1]
+  const entries = Object.entries(catalogs)
+  const find = (test: (key: string) => boolean) =>
+    entries.find(([key]) => test(key.toLowerCase()))?.[1]
+  return (
+    find((key) => key === tag) ??
+    find((key) => key === language) ??
+    find((key) => key.split(/[-_]/)[0] === language)
+  )
 }
 
 export function pickCatalog(locale: string, catalogs: Record<string, Messages>): Messages {
