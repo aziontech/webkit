@@ -73,7 +73,7 @@ Reference: `packages/webkit/src/components/action/button/button.vue`.
 | `text-body-code-sm`                                                | Monospace prose — a mono paragraph that WRAPS (the `label-code-*` set is `leading-none`, made for one-row-per-line code)                                                                                                           |
 | `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in)                                                                                                                                                                                           |
 | `text-button-lg` / `text-button-md`                                | Button labels                                                                                                                                                                                                                      |
-| `text-link`                                                        | Inline `<a>` inside body/heading copy (inherits parent size; quiet underline at rest, full underline on hover)                                                                                                                     |
+| `text-link`                                                        | A link inside body/heading copy, rendered by `Link inline` (inherits parent size; quiet underline at rest, full underline on hover)                                                                                                                     |
 
 These classes are **mobile-first**: font sizes can change at `sm`, `md`, etc. Do not duplicate breakpoint logic in components.
 
@@ -103,22 +103,24 @@ Font family, line height, letter spacing, and responsive font size live in `typo
 
 ### Inline links vs navigation `Link`
 
-For anchors **inside** body or heading copy, use the `text-link` typography class on a plain `<a>` (inherits size from the parent `text-body-*` / `text-heading-*` class):
+For links **inside** body or heading copy, use `Link` with `inline` (`@aziontech/webkit/link`). It renders the `text-link` typography class, so it inherits the size of the parent `text-body-*` / `text-heading-*` class and wraps with the sentence:
 
-```html
+```vue
 <p class="text-body-md">
   Read the
-  <a
+  <Link
     href="/docs"
-    class="text-link"
-    >documentation</a
+    inline
+    >documentation</Link
   >.
 </p>
 ```
 
+Do not hand-write a plain `<a class="text-link">`: `Link` owns the anchor element (`webkit/no-unowned-element`), and a `Link` without `inline` inside a sentence is flagged by `webkit/no-link-in-sentence`.
+
 `text-link` draws a quiet underline at rest (40 % of the link colour) and a full 2px underline on hover. Never remove it from a link inside a sentence: the link blue is only about 3:1 against default text and close to 1:1 against muted text, so colour alone does not mark the link (WCAG 1.4.1).
 
-For **standalone** navigation links (icon, ghost hover surface, fixed height), use `@aziontech/webkit/link` — not `text-link` alone. A standalone `Link` underlines on hover only.
+For **standalone** navigation links (icon, ghost hover surface, fixed height), use `Link` without `inline`. A standalone `Link` underlines on hover only.
 
 ---
 
@@ -351,7 +353,7 @@ the animated and static states share the same base tone:
 class="bg-(--bg-placeholder)
 data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)]
 data-[animated]:motion-safe:bg-[length:200%_100%]
-data-[animated]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
+data-[animated]:motion-safe:animate-shimmer motion-reduce:animate-none"
 ```
 
 Reference: `skeleton.vue`. The sweep pairs with `--animate-shimmer` (see § Motion primitives) and is gated behind
