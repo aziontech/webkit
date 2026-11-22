@@ -75,6 +75,8 @@ A toast shows the result of a save that no field owns: `toast.error` with **Retr
 
 The block fetches nothing and fakes no request: Create validates the draft, then emits `submit` with the values, and the page that owns the request passes back what happened. `FormValidationValues`, `FormValidationSaved` and `FormValidationProps` are exported from `state-form-validation.vue`; the Section variants export `FormValidationOrigin`, `FormValidationService` and `FormValidationSectionProps` from `variants/section-rejected.vue`. `sample.ts` holds the filled entries, the origins and the rejection message the variants pass.
 
+The SectionRejected, SectionReloading and SectionReloaded variants render the Create Service form of `parts/service-form.vue` (its header in `parts/service-header.vue`, the protocol rows in `parts/protocol-section.vue`, the Origin band in `parts/origin-section.vue`), whose types live in `types.ts`.
+
 | Prop               | Type                            | What it does                                                                                          |
 | ------------------ | ------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `loading`          | `boolean`                       | The form's data is still arriving: `Skeleton` rows stand in for the fields and Create is disabled.    |
