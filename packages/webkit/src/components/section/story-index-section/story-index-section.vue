@@ -1,23 +1,19 @@
 <script setup lang="ts">
   import { useMediaQuery, useMounted } from '@vueuse/core'
-  import { computed, defineAsyncComponent, onMounted, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useLoadMore } from '../../../composables/use-load-more'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
-  import Button from '../../action/button/button.vue'
   import type { ThirdPartyLogoMark } from '../../content/third-party-logo/third-party-logo.vue'
-  import Input from '../../input/input/input.vue'
-  import Select from '../../input/select/select.vue'
-  import SelectContent from '../../input/select/select-content/select-content.vue'
-  import SelectItem from '../../input/select/select-item/select-item.vue'
-  import SelectTrigger from '../../input/select/select-trigger/select-trigger.vue'
   import Module from '../../layout/module/module.vue'
   import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import ArticleIndexSectionEmpty from '../article-index-section/parts/article-index-section-empty.vue'
   import ArticleIndexSectionMore from '../article-index-section/parts/article-index-section-more.vue'
+  import StoryIndexSectionFacetSelect from './parts/story-index-section-facet-select.vue'
+  import StoryIndexSectionToolbar from './parts/story-index-section-toolbar.vue'
 
   defineOptions({
     name: 'StoryIndexSection',
@@ -115,21 +111,12 @@
     ariaLabel: ''
   })
 
-  const Chip = defineAsyncComponent(() => import('../../input/chip/chip.vue'))
   const attrs = useAttrs()
   const { t } = useTranslate({ storyIndexSection: en.storyIndexSection, common: en.common })
 
   const query = ref('')
 
   const selection = ref<Record<string, string | undefined>>({})
-
-  const optionQuery = ref<Record<string, string>>({})
-
-  const filtersOpen = ref(false)
-
-  const panelId = useId()
-
-  const SEARCH_THRESHOLD = 7
 
   const wideQuery = useMediaQuery('(min-width: 64rem)')
   const mounted = useMounted()
@@ -199,11 +186,6 @@
     selection.value = seeded
   })
 
-  const optionsOf = (facet: StoryIndexSectionFacet): StoryIndexSectionFacetOption[] => {
-    const term = (optionQuery.value[facet.id] ?? '').trim().toLowerCase()
-    return facet.options.filter((option) => option.label.toLowerCase().includes(term))
-  }
-
   const lastRowFrom = (columns: number): number =>
     visible.value.length - (((visible.value.length - 1) % columns) + 1)
 
@@ -212,14 +194,6 @@
       ...selection.value,
       [key]: typeof value === 'string' && value.length > 0 ? value : undefined
     }
-  }
-
-  const resetOptionQuery = (key: string): void => {
-    optionQuery.value = { ...optionQuery.value, [key]: '' }
-  }
-
-  const setOptionQuery = (key: string, value: string): void => {
-    optionQuery.value = { ...optionQuery.value, [key]: value }
   }
 
   const clear = (): void => {
@@ -276,109 +250,34 @@
         flush
         borders="y"
       >
-        <div
-          role="search"
-          class="grid items-center gap-(--spacing-md) px-(--spacing-xl) py-(--spacing-lg) lg:grid-cols-[minmax(0,4fr)_repeat(3,minmax(0,1fr))]"
+        <StoryIndexSectionToolbar
+          v-model:query="query"
+          :test-id="testId"
+          :filterable="facets.length > 0"
+          :filter-label="filterButtonLabel"
+          :searchable="hasSearch"
+          :search-placeholder="placeholder"
+          :search-aria-label="searchAriaLabel"
+          :applied="applied"
+          class="items-center"
+          @remove="(_event, key) => select(key, '')"
         >
-          <div class="flex items-center gap-(--spacing-sm) lg:contents">
-            <Button
-              v-if="facets.length > 0"
-              :data-testid="`${testId}__filter`"
-              :label="filterButtonLabel"
-              variant="outline"
-              size="large"
-              icon="az az-filter"
-              :aria-expanded="filtersOpen ? 'true' : 'false'"
-              :aria-controls="panelId"
-              class="shrink-0 lg:hidden"
-              @click="filtersOpen = !filtersOpen"
-            />
-            <Input
-              v-if="hasSearch"
-              v-model="query"
-              size="large"
-              type="text"
-              :placeholder="placeholder"
-              :aria-label="searchAriaLabel || undefined"
-              class="min-w-0 flex-1"
-            >
-              <template #leading>
-                <i class="az az-search text-(--text-muted)" />
-              </template>
-            </Input>
-          </div>
-          <div
-            v-if="facets.length > 0"
-            :id="panelId"
-            :data-testid="`${testId}__filters`"
-            :data-state="filtersOpen ? 'open' : 'closed'"
-            class="flex flex-col gap-(--spacing-sm) max-lg:hidden max-lg:data-[state=open]:flex lg:contents"
-          >
-            <Select
-              v-for="facet in facets"
-              :key="facet.id"
-              :model-value="selection[facet.id]"
-              size="large"
-              :placeholder="facet.allLabel"
-              @update:model-value="select(facet.id, $event)"
-              @update:open="resetOptionQuery(facet.id)"
-            >
-              <SelectTrigger :aria-label="facet.label" />
-              <SelectContent>
-                <template
-                  v-if="facet.options.length > SEARCH_THRESHOLD"
-                  #search
-                >
-                  <Input
-                    :model-value="optionQuery[facet.id] ?? ''"
-                    size="small"
-                    :placeholder="t('storyIndexSection.search')"
-                    :aria-label="
-                      t('storyIndexSection.searchFacet', { facet: facet.label.toLowerCase() })
-                    "
-                    @update:model-value="setOptionQuery(facet.id, $event)"
-                  >
-                    <template #leading>
-                      <i
-                        class="az az-search"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </Input>
-                </template>
-                <SelectItem value="">{{ facet.allLabel }}</SelectItem>
-                <SelectItem
-                  v-for="option in optionsOf(facet)"
-                  :key="option.value"
-                  :value="option.value"
-                >
-                  {{ option.label }}
-                </SelectItem>
-                <p
-                  v-if="optionsOf(facet).length === 0"
-                  role="status"
-                  class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
-                >
-                  {{ t('storyIndexSection.noMatch') }}
-                </p>
-              </SelectContent>
-            </Select>
-          </div>
-          <div
-            v-if="applied.length > 0"
-            :data-testid="`${testId}__applied`"
-            class="flex flex-wrap gap-(--spacing-xs) lg:hidden"
-          >
-            <Chip
-              v-for="chip in applied"
-              :key="chip.key"
-              :label="chip.label"
-              removable
-              size="medium"
-              @remove="select(chip.key, '')"
-            />
-          </div>
-        </div>
+          <StoryIndexSectionFacetSelect
+            v-for="facet in facets"
+            :key="facet.id"
+            :model-value="selection[facet.id]"
+            :label="facet.label"
+            :options="facet.options"
+            :all-option="{ value: '', label: facet.allLabel }"
+            :placeholder="facet.allLabel"
+            :search-placeholder="t('storyIndexSection.search')"
+            :search-aria-label="
+              t('storyIndexSection.searchFacet', { facet: facet.label.toLowerCase() })
+            "
+            :no-match-label="t('storyIndexSection.noMatch')"
+            @update:model-value="select(facet.id, $event)"
+          />
+        </StoryIndexSectionToolbar>
       </RegistrationFrame>
 
       <template v-if="visible.length > 0">

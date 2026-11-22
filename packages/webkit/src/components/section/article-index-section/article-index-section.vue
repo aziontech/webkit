@@ -9,12 +9,9 @@
   import Avatar from '../../content/avatar/avatar.vue'
   import type { ThirdPartyLogoMark } from '../../content/third-party-logo/third-party-logo.vue'
   import Input from '../../input/input/input.vue'
-  import Select from '../../input/select/select.vue'
-  import SelectContent from '../../input/select/select-content/select-content.vue'
-  import SelectItem from '../../input/select/select-item/select-item.vue'
-  import SelectTrigger from '../../input/select/select-trigger/select-trigger.vue'
   import Module from '../../layout/module/module.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import StoryIndexSectionFacetSelect from '../story-index-section/parts/story-index-section-facet-select.vue'
   import ArticleIndexSectionEmpty from './parts/article-index-section-empty.vue'
   import ArticleIndexSectionMore from './parts/article-index-section-more.vue'
 
@@ -149,8 +146,6 @@
 
   const { t } = useTranslate({ articleIndexSection: en.articleIndexSection, common: en.common })
 
-  const SEARCH_THRESHOLD = 7
-
   const rootEl = ref<HTMLElement | null>(null)
 
   const category = ref<string | undefined>(props.allLabel)
@@ -158,8 +153,6 @@
   const query = ref('')
 
   const selection = ref<Record<string, string>>({})
-
-  const optionQuery = ref<Record<string, string>>({})
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'article-index-section'
@@ -235,27 +228,14 @@
     selection.value = {}
   }
 
-  const searchable = (facet: ArticleIndexSectionFacet): boolean =>
-    facet.options.length > SEARCH_THRESHOLD
-
-  const optionsOf = (facet: ArticleIndexSectionFacet): string[] => {
-    const term = (optionQuery.value[facet.id] ?? '').trim().toLowerCase()
-    return facet.options.filter((option) => option.toLowerCase().includes(term))
-  }
+  const choicesOf = (facet: ArticleIndexSectionFacet) =>
+    facet.options.map((option) => ({ value: option, label: option }))
 
   const select = (facet: ArticleIndexSectionFacet, value: unknown): void => {
     selection.value = {
       ...selection.value,
       [facet.id]: typeof value === 'string' ? value : facet.allLabel
     }
-  }
-
-  const resetOptionQuery = (key: string): void => {
-    optionQuery.value = { ...optionQuery.value, [key]: '' }
-  }
-
-  const setOptionQuery = (key: string, value: string): void => {
-    optionQuery.value = { ...optionQuery.value, [key]: value }
   }
 
   const ROW_CLASS =
@@ -337,57 +317,22 @@
             v-if="showFacets"
             class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:flex-wrap"
           >
-            <Select
+            <StoryIndexSectionFacetSelect
               v-for="facet in facets"
               :key="facet.id"
               :model-value="valueOf(facet)"
+              :label="facet.label"
+              :options="choicesOf(facet)"
+              :all-option="{ value: facet.allLabel, label: facet.allLabel }"
               size="medium"
+              :search-placeholder="t('articleIndexSection.search')"
+              :search-aria-label="
+                t('articleIndexSection.searchFacet', { facet: facet.label.toLowerCase() })
+              "
+              :no-match-label="t('articleIndexSection.noMatch')"
               class="w-full sm:w-56"
               @update:model-value="select(facet, $event)"
-              @update:open="resetOptionQuery(facet.id)"
-            >
-              <SelectTrigger :aria-label="facet.label" />
-              <SelectContent>
-                <template
-                  v-if="searchable(facet)"
-                  #search
-                >
-                  <Input
-                    :model-value="optionQuery[facet.id] ?? ''"
-                    size="small"
-                    :placeholder="t('articleIndexSection.search')"
-                    :aria-label="
-                      t('articleIndexSection.searchFacet', { facet: facet.label.toLowerCase() })
-                    "
-                    @update:model-value="setOptionQuery(facet.id, $event)"
-                  >
-                    <template #leading>
-                      <i
-                        class="az az-search"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </Input>
-                </template>
-                <SelectItem :value="facet.allLabel">
-                  {{ facet.allLabel }}
-                </SelectItem>
-                <SelectItem
-                  v-for="option in optionsOf(facet)"
-                  :key="option"
-                  :value="option"
-                >
-                  {{ option }}
-                </SelectItem>
-                <p
-                  v-if="optionsOf(facet).length === 0"
-                  role="status"
-                  class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
-                >
-                  {{ t('articleIndexSection.noMatch') }}
-                </p>
-              </SelectContent>
-            </Select>
+            />
           </div>
         </div>
       </RegistrationFrame>

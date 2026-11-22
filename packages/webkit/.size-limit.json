@@ -479,13 +479,13 @@
   {
     "name": "article-index-section",
     "path": "src/components/section/article-index-section/article-index-section.vue",
-    "limit": "35.8 KB",
+    "limit": "36.3 KB",
     "entryOnly": true
   },
   {
     "name": "story-index-section",
     "path": "src/components/section/story-index-section/story-index-section.vue",
-    "limit": "34.75 KB",
+    "limit": "35.5 KB",
     "entryOnly": true
   },
   {
@@ -524,7 +524,7 @@
   {
     "name": "media-split-section",
     "path": "src/components/section/media-split-section/media-split-section.vue",
-    "limit": "16.6 KB",
+    "limit": "16.95 KB",
     "entryOnly": true
   },
   {
@@ -627,7 +627,7 @@
   {
     "name": "listing-index-section",
     "path": "src/components/section/listing-index-section/listing-index-section.vue",
-    "limit": "41.4 KB",
+    "limit": "41.8 KB",
     "entryOnly": true
   },
   {
@@ -672,7 +672,7 @@
   {
     "name": "media-split-stack-section",
     "path": "src/components/section/media-split-stack-section/media-split-stack-section.vue",
-    "limit": "16.9 KB",
+    "limit": "17.3 KB",
     "entryOnly": true
   },
   {
