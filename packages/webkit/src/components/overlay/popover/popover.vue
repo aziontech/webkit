@@ -135,18 +135,15 @@
   function tabOutOfPanel(
     event: globalThis.KeyboardEvent,
     active: globalThis.HTMLElement,
-    focusables: globalThis.HTMLElement[]
+    items: globalThis.HTMLElement[]
   ) {
-    if (event.shiftKey && (active === focusables[0] || focusables.length === 0)) {
+    if (event.shiftKey && (active === items[0] || items.length === 0)) {
       event.preventDefault()
       focusTrigger()
       return
     }
 
-    if (
-      !event.shiftKey &&
-      (active === focusables[focusables.length - 1] || focusables.length === 0)
-    ) {
+    if (!event.shiftKey && (active === items[items.length - 1] || items.length === 0)) {
       event.preventDefault()
       const next = tabbableAfterTrigger()
       setOpen(false)
