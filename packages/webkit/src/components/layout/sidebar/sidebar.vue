@@ -1,51 +1,20 @@
 <script setup lang="ts">
-  import {
-    computed,
-    markRaw,
-    onMounted,
-    onScopeDispose,
-    provide,
-    ref,
-    useAttrs,
-    useSlots
-  } from 'vue'
+  import { computed, markRaw, onMounted, provide, ref, useAttrs, useSlots } from 'vue'
 
-  import { logicalArrowKey } from '../../../composables/use-direction'
-  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import ScrollArea from '../scroll-area/scroll-area.vue'
-  import {
-    SIDEBAR_ICON_RAIL_TOKEN,
-    SIDEBAR_NUDGE_STEP,
-    useSidebarRail
-  } from './composables/use-sidebar-rail'
+  import { useSidebarKeys } from './composables/use-sidebar-keys'
+  import { SIDEBAR_ICON_RAIL_TOKEN, useSidebarRail } from './composables/use-sidebar-rail'
   import { SidebarInjectionKey } from './injection-key'
 
   defineOptions({
     name: 'Sidebar',
     inheritAttrs: false
   })
-
-  /** How a collapsed sidebar leaves the layout: entirely, or down to an icon rail. */
-  export type SidebarCollapsible = 'offcanvas' | 'icon'
-
-  export interface SidebarProps {
-    ariaLabel?: string
-    resizable?: boolean
-    /** Adds the collapse trigger; true or offcanvas takes a collapsed sidebar out of the layout, icon keeps an icon rail. */
-    collapsible?: boolean | SidebarCollapsible
-    /** Lets Cmd+B or Ctrl+B toggle the collapsed state while the sidebar is collapsible. */
-    shortcut?: boolean
-    minWidthToken?: string
-    maxWidthToken?: string
-    collapseAriaLabel?: string
-    expandAriaLabel?: string
-    resizeAriaLabel?: string
-  }
 
   const props = withDefaults(defineProps<SidebarProps>(), {
     ariaLabel: '',
@@ -140,48 +109,17 @@
     }
   })
 
-  const isEditable = (target: EventTarget | null) => {
-    if (!(target instanceof globalThis.HTMLElement)) return false
-    if (target.isContentEditable) return true
-    return ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
-  }
-
-  const shortcutActive = computed(() => props.shortcut && collapseMode.value !== null)
-
-  const onShortcut = (event: globalThis.KeyboardEvent) => {
-    if (!shortcutActive.value || event.defaultPrevented) return
-    if (!(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey) return
-    if (event.key.toLowerCase() !== 'b' || isEditable(event.target)) return
-    event.preventDefault()
-    collapsed.value = !collapsed.value
-  }
-
-  onMounted(() => globalThis.document.addEventListener('keydown', onShortcut))
-
-  onScopeDispose(() => globalThis.document?.removeEventListener('keydown', onShortcut))
-
-  const keyShortcuts = computed(() => (shortcutActive.value ? 'Control+B Meta+B' : undefined))
-
-  const onHandleKey = (event: globalThis.KeyboardEvent, expandOnly = false) => {
-    const key = logicalArrowKey(event.key, dir.value)
-    if (key === 'ArrowRight') nudge(SIDEBAR_NUDGE_STEP)
-    else if (key === 'ArrowLeft' && !expandOnly) nudge(-SIDEBAR_NUDGE_STEP)
-    else return
-    event.preventDefault()
-  }
-
   const handleEl = ref<globalThis.HTMLElement | null>(null)
-
   const expandHandleEl = ref<globalThis.HTMLElement | null>(null)
-
-  useElementListener(handleEl, 'keydown', (event: globalThis.KeyboardEvent) => onHandleKey(event))
-  useElementListener(handleEl, 'dblclick', () => {
-    collapsed.value = true
-  })
-  useElementListener(expandHandleEl, 'keydown', (event: globalThis.KeyboardEvent) =>
-    onHandleKey(event, true)
+  const keyShortcuts = useSidebarKeys(
+    handleEl,
+    expandHandleEl,
+    () => props.shortcut && collapseMode.value !== null,
+    collapsed,
+    dir,
+    nudge,
+    tapToExpand
   )
-  useElementListener(expandHandleEl, 'click', tapToExpand)
 
   defineExpose({ measure })
 
@@ -198,23 +136,18 @@
 
   const settled = ref(false)
 
+  const settle = () => {
+    settled.value = true
+  }
+
   onMounted(() => {
     hydrated.value = true
     const raf = globalThis.requestAnimationFrame
-    if (typeof raf !== 'function') {
-      settled.value = true
-      return
-    }
-    raf(() =>
-      raf(() => {
-        settled.value = true
-      })
-    )
+    if (typeof raf === 'function') raf(() => raf(settle))
+    else settle()
   })
 
-  const setRailEl = (el: unknown) => {
-    railEl.value = (el as globalThis.HTMLElement | null) ?? null
-  }
+  const setRailEl = (el: unknown) => (railEl.value = (el as globalThis.HTMLElement | null) ?? null)
 
   const cssVars = computed(() => {
     if (!railEnabled.value) return {}
@@ -227,13 +160,6 @@
   })
 
   const asideStyle = computed(() => ({ ...cssVars.value, ...railStyle.value }))
-
-  const RAIL_MOTION_CLASS =
-    'transition-[width,min-width] duration-moderate-02 ease-expressive-entrance ' +
-    'has-[>div[data-state=closed]]:ease-productive-exit ' +
-    'data-[resizing]:transition-none ' +
-    'not-data-[settled]:transition-none ' +
-    'motion-reduce:transition-none'
 
   const rootClass = computed(() =>
     cn(
@@ -255,22 +181,12 @@
     )
   )
 
-  const NAV_CLASS =
-    'flex h-full min-h-0 flex-1 flex-col [--sidebar-menu-item-ring-offset:var(--bg-surface)] [--sidebar-menu-ring-offset:var(--bg-surface)]'
-
   const headerRegionClass = computed(() =>
     cn(
       'w-full shrink-0 p-(--spacing-md)',
       rail.value ? 'overflow-hidden px-(--spacing-xs)' : undefined
     )
   )
-
-  const INNER_MOTION_CLASS =
-    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance ' +
-    'data-[state=closed]:ease-productive-exit ' +
-    'data-[resizing]:transition-none ' +
-    'not-data-[settled]:transition-none ' +
-    'motion-reduce:transition-none motion-reduce:translate-none'
 
   const innerClass = computed(() =>
     cn(
@@ -314,6 +230,42 @@
       slots['header'] ? 'pt-(--spacing-2xs)' : undefined,
       rail.value ? 'px-(--spacing-xs)' : undefined
     )
+</script>
+
+<script lang="ts">
+  /** How a collapsed sidebar leaves the layout: entirely, or down to an icon rail. */
+  export type SidebarCollapsible = 'offcanvas' | 'icon'
+
+  export interface SidebarProps {
+    ariaLabel?: string
+    resizable?: boolean
+    /** Adds the collapse trigger; true or offcanvas takes a collapsed sidebar out of the layout, icon keeps an icon rail. */
+    collapsible?: boolean | SidebarCollapsible
+    /** Lets Cmd+B or Ctrl+B toggle the collapsed state while the sidebar is collapsible. */
+    shortcut?: boolean
+    minWidthToken?: string
+    maxWidthToken?: string
+    collapseAriaLabel?: string
+    expandAriaLabel?: string
+    resizeAriaLabel?: string
+  }
+
+  const RAIL_MOTION_CLASS =
+    'transition-[width,min-width] duration-moderate-02 ease-expressive-entrance ' +
+    'has-[>div[data-state=closed]]:ease-productive-exit ' +
+    'data-[resizing]:transition-none ' +
+    'not-data-[settled]:transition-none ' +
+    'motion-reduce:transition-none'
+
+  const NAV_CLASS =
+    'flex h-full min-h-0 flex-1 flex-col [--sidebar-menu-item-ring-offset:var(--bg-surface)] [--sidebar-menu-ring-offset:var(--bg-surface)]'
+
+  const INNER_MOTION_CLASS =
+    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance ' +
+    'data-[state=closed]:ease-productive-exit ' +
+    'data-[resizing]:transition-none ' +
+    'not-data-[settled]:transition-none ' +
+    'motion-reduce:transition-none motion-reduce:translate-none'
 
   const RESIZE_INDICATOR_CLASS =
     'pointer-events-none absolute inset-y-0 end-0 w-(--border-width-2) bg-(--accent) opacity-0 transition-opacity ' +
