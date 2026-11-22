@@ -117,12 +117,12 @@ describe('ai/ai-chat', () => {
 
   it('emits send with the text and clears the composer', async () => {
     const view = render(AiChat)
-    await userEvent.type(view.getByRole('textbox'), 'Purge styles.css')
+    await userEvent.type(view.getByRole('textbox', { name: 'Prompt' }), 'Purge styles.css')
     await userEvent.click(view.getByRole('button', { name: 'Submit' }))
     const [[event, text]] = view.emitted('send') as [[Event, string]]
     expect(event).toBeInstanceOf(Event)
     expect(text).toBe('Purge styles.css')
-    expect(view.getByRole('textbox')).toHaveValue('')
+    expect(view.getByRole('textbox', { name: 'Prompt' })).toHaveValue('')
   })
 
   it('emits send from a starter prompt', async () => {
@@ -168,6 +168,54 @@ describe('ai/ai-chat', () => {
     expect(view.container.textContent).not.toContain('fetch failed')
   })
 
+  it('floats the composer under the log, never inside it', () => {
+    const view = render(AiChat, { props: { messages: thread } })
+    const log = view.getByRole('log', { name: 'Conversation with the AI assistant' })
+    const composer = view.getByRole('textbox', { name: 'Prompt' })
+    expect(log.contains(composer)).toBe(false)
+    expect(composer.closest('[data-testid="conversation__composer"]')).not.toBeNull()
+  })
+
+  it('keeps the composer mounted from the empty state to the first message', async () => {
+    const view = render(AiChat)
+    const composer = view.getByRole('textbox', { name: 'Prompt' })
+    expect(view.getByRole('log').textContent).toContain('How can I help with your Azion account?')
+    await view.rerender({ messages: thread })
+    expect(view.getByRole('textbox', { name: 'Prompt' })).toBe(composer)
+  })
+
+  it('opens the conversation history and starts a new chat from it', async () => {
+    const view = render(AiChat, { props: { messages: thread } })
+    await userEvent.click(view.getByRole('button', { name: 'Open conversation history' }))
+    const drawer = await waitFor(() => {
+      const dialog = document.body.querySelector<HTMLElement>('[role="dialog"]')
+      expect(dialog).not.toBeNull()
+      return within(dialog!)
+    })
+    expect(drawer.getByText('Purge the cache after a deploy')).toBeTruthy()
+    await userEvent.click(drawer.getByRole('button', { name: 'New chat' }))
+    expect(view.emitted('new-chat')).toHaveLength(1)
+  })
+
+  it('reports the conversation picked in the history', async () => {
+    const view = render(AiChat, { props: { messages: thread } })
+    const panel = within(view.container.querySelector<HTMLElement>('#ai-chat-history')!)
+    await userEvent.click(panel.getByText('Purge the cache after a deploy'))
+    expect(view.emitted('update:activeKey')).toEqual([['h2']])
+  })
+
+  it('folds the history panel away from the header', async () => {
+    const view = render(AiChat, { props: { messages: thread } })
+    const toggle = view.getByRole('button', { name: 'Hide conversation history' })
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    await userEvent.click(toggle)
+    expect(view.container.querySelector('#ai-chat-history')).toBeNull()
+    expect(view.getByRole('button', { name: 'Show conversation history' })).toHaveAttribute(
+      'aria-expanded',
+      'false'
+    )
+  })
+
   it('reads sources from the message metadata', () => {
     const view = render(AiChat, {
       props: {
@@ -182,7 +230,8 @@ describe('ai/ai-chat', () => {
         ]
       }
     })
-    expect(view.container.textContent).toContain('1 source')
+    const actions = view.getByRole('group', { name: 'Message actions' })
+    expect(within(actions).getByRole('button', { name: '1 source' })).toBeTruthy()
   })
 
   it('draws a tool call with the title the tools prop gives it', () => {
@@ -666,7 +715,7 @@ describe('ai/ai-chat', () => {
     input.files = transfer.files
     input.dispatchEvent(new Event('change', { bubbles: true }))
     await nextTick()
-    await userEvent.type(view.getByRole('textbox'), 'Read these')
+    await userEvent.type(view.getByRole('textbox', { name: 'Prompt' }), 'Read these')
     await userEvent.click(view.getByRole('button', { name: 'Submit' }))
     await waitFor(() => expect(view.emitted('send')).toHaveLength(1))
     const [[event, content]] = view.emitted('send') as [[Event, AiChatContent]]
@@ -848,7 +897,7 @@ describe('ai/ai-chat', () => {
     expect(view.getByRole('status', { name: 'Loading the conversation' })).toBeTruthy()
     expect(view.container.querySelectorAll('[data-testid="skeleton"]').length).toBeGreaterThan(0)
     expect(view.queryByText('How can I help with your Azion account?')).toBeNull()
-    expect(view.getByRole('textbox')).toBeDisabled()
+    expect(view.getByRole('textbox', { name: 'Prompt' })).toBeDisabled()
   })
 
   it('says a response is being generated in another tab', async () => {

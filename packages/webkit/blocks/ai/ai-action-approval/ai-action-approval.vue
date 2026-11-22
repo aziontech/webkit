@@ -204,10 +204,10 @@
     aria-labelledby="ai-approval-title"
     class="flex min-h-0 w-full grow basis-0 flex-col"
   >
-    <header class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)">
+    <header class="px-(--spacing-md) py-(--spacing-sm)">
       <h1
         id="ai-approval-title"
-        class="text-heading-xs text-(--text-default)"
+        class="text-label-md text-(--text-default)"
       >
         AI assistant
       </h1>
@@ -343,9 +343,12 @@
           "
           #actions
         >
-          <ChatMessage.Actions>
+          <ChatMessage.Actions
+            show-read-aloud
+            :read-aloud-text="textOf(turn)"
+          >
             <CopyButton
-              size="small"
+              size="large"
               :value="textOf(turn)"
             />
             <Button
@@ -377,30 +380,28 @@
           @skip="skip(question)"
         />
       </ChatMessage>
+      <template #composer>
+        <Alert
+          v-if="interruptErrors.length"
+          severity="danger"
+          size="small"
+          title="Your decision was not sent"
+          :action-label="retryable ? 'Retry' : ''"
+          @action="emit('retry-interrupts', $event)"
+        >
+          {{ interruptErrorText(interruptErrors) }}
+        </Alert>
+        <PromptInput
+          v-model="prompt"
+          :status="state"
+          @submit="(event, { value }) => send(event, value)"
+          @stop="emit('stop', $event)"
+        >
+          <template #hint>
+            The assistant runs nothing in your account without your approval.
+          </template>
+        </PromptInput>
+      </template>
     </Conversation>
-    <footer
-      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-xs) pb-(--spacing-md)"
-    >
-      <Alert
-        v-if="interruptErrors.length"
-        severity="danger"
-        size="small"
-        title="Your decision was not sent"
-        :action-label="retryable ? 'Retry' : ''"
-        @action="emit('retry-interrupts', $event)"
-      >
-        {{ interruptErrorText(interruptErrors) }}
-      </Alert>
-      <PromptInput
-        v-model="prompt"
-        :status="state"
-        @submit="(event, { value }) => send(event, value)"
-        @stop="emit('stop', $event)"
-      >
-        <template #hint>
-          The assistant runs nothing in your account without your approval.
-        </template>
-      </PromptInput>
-    </footer>
   </section>
 </template>

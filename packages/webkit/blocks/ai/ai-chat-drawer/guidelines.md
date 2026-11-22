@@ -32,19 +32,19 @@ A medium right-side `Drawer` with no so the resource page beside it stays undimm
 
 ### D. Header — `PanelHeader`, `DrawerTitle`, `Tag`, `IconButton`
 
-`DrawerTitle` with the assistant's name, a Preview `Tag`, New chat as an `IconButton`, then the drawer's own close button.
+A `PanelHeader` on the drawer's surface over the canvas of the thread: `DrawerTitle` with the assistant's name, a Preview `Tag`, New chat as an `IconButton`, then the drawer's own close button. The drawer has no history panel; the full-page `ai/ai-chat` keeps the history.
 
 ### E. Empty state — `EmptyState`, `SuggestionGroup`
 
-A small `EmptyState` titled with the resource ("Ask about storefront") and three support prompts about it, stacked.
+A small `EmptyState` titled with the resource ("Ask about storefront") and three support prompts about it, stacked, centered inside the log so the composer stays mounted when the thread starts.
 
 ### F. Message log — `Conversation`
 
-`layout="start"`: every message at the inline start, distinguished by avatar and author line, as Cloudscape asks for dense side panels. It is the only part of the drawer that scrolls.
+The same layout as the full page: the reader's prompts in a bubble at the inline end, responses as plain text across the panel, no avatars. It is the only part of the drawer that scrolls, and it sits on the canvas, not the drawer's surface, so the prompt bubbles and the composer's fade read as on the full page; the composer floats over its foot.
 
 ### G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `CopyButton`
 
-The same prompt and response anatomy as the full page: loading, thinking, streaming with citations, sources, and `ChatMessage.Actions` with `CopyButton`, Regenerate and feedback. The files a reader attached draw under their prompt as media does in a response (section K).
+The same prompt and response anatomy as the full page: loading, thinking, streaming with site-name citation chips, and `ChatMessage.Actions` with `CopyButton`, feedback, Regenerate, Read aloud and the Sources pill at its end. The files a reader attached draw under their prompt as media does in a response (section K).
 
 ### H. Follow-up questions — `SuggestionGroup`
 
@@ -52,7 +52,7 @@ After the last complete response, aligned with its text.
 
 ### I. Composer — `PromptInput`, `PromptInputAttachButton`
 
-At the foot of the drawer above a divider: four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint. With `attachable`, a `PromptInputAttachButton` (and drop and paste) attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating pill at the foot of the drawer, no divider, four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint. With `attachable`, a `PromptInputAttachButton` (and drop and paste) attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. The composer is disabled while the conversation is restored.
 
 ### J. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 

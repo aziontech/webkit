@@ -1,3 +1,4 @@
+import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
 import type { AiChatInterrupt, AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
@@ -110,8 +111,27 @@ const history: [string, string][] = [
   ],
   [
     'How do I fix that?',
-    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page`.'
+    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page` [1]. Campaign parameters such as `utm_source` then stop creating new cache keys [3].'
   ]
+]
+
+const cacheKeySources: SourcesItem[] = [
+  {
+    title: 'Cache settings',
+    href: 'https://www.azion.com/en/documentation/',
+    description: 'Azion documentation · Cache'
+  },
+  {
+    title: 'aziontech/azion',
+    href: 'https://github.com/aziontech/azion',
+    description: 'Azion CLI on GitHub',
+    icon: 'az az-github'
+  },
+  {
+    title: 'HTTP Caching',
+    href: 'https://www.w3.org/Protocols/',
+    description: 'W3C · HTTP'
+  }
 ]
 
 export const sampleLongThread: AiChatMessage[] = history.flatMap(
@@ -120,7 +140,7 @@ export const sampleLongThread: AiChatMessage[] = history.flatMap(
     assistant(`a${index}`, answer, `09:${11 + index * 4}`, {
       reasoning: 'Reading the workload settings of storefront.',
       reasoningSeconds: 2,
-      sources: []
+      sources: index === history.length - 1 ? cacheKeySources : []
     })
   ]
 )
@@ -245,4 +265,15 @@ export const sampleAgentInterrupts: AiChatInterrupt[] = [
     status: 'pending',
     errors: []
   }
+]
+
+export const sampleHistoryNow = '2026-11-19T12:00:00'
+
+export const sampleHistory: ConversationHistoryItem[] = [
+  { id: 'h1', title: 'Why does storefront return 502 errors?', updatedAt: '2026-11-19T11:02:00' },
+  { id: 'h2', title: 'Purge the cache after a deploy', updatedAt: '2026-11-19T09:40:00' },
+  { id: 'h3', title: 'A WAF rule for login attempts', updatedAt: '2026-11-18T17:15:00' },
+  { id: 'h4', title: 'Top orders query for acme-store', updatedAt: '2026-11-16T10:20:00' },
+  { id: 'h5', title: 'Move DNS records to Azion', updatedAt: '2026-11-04T14:05:00' },
+  { id: 'h6', title: 'Image optimization for docs-site', updatedAt: '2026-09-28T08:30:00' }
 ]

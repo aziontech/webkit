@@ -348,21 +348,19 @@
             :empty="!turns.length"
             @new-chat="newChat"
           />
-          <div class="flex min-h-0 flex-1 flex-col">
-            <DrawerChatStart
-              v-if="!turns.length"
-              :hydrating="hydrating"
-              :starters="starters"
-              @select="(event, item) => send(event, item.label)"
-            />
+          <div class="flex min-h-0 flex-1 flex-col bg-(--bg-canvas)">
             <Conversation
-              v-else
-              layout="start"
               aria-label="Conversation with the AI assistant"
               :more-messages="moreMessages"
               :loading-more="loadingMore"
               @load-more="emit('load-more', $event)"
             >
+              <DrawerChatStart
+                v-if="!turns.length"
+                :hydrating="hydrating"
+                :starters="starters"
+                @select="(event, item) => send(event, item.label)"
+              />
               <AiChatTurn
                 v-for="turn in turns"
                 :key="turn.id"
@@ -397,57 +395,51 @@
                 :error-message="failure || undefined"
                 @retry="emit('retry', $event, last)"
               />
-              <div
+              <SuggestionGroup
                 v-if="lastAnswer && followUps?.length"
-                class="ps-[calc(2rem+var(--spacing-sm))]"
-              >
-                <SuggestionGroup
-                  :items="followUps"
-                  aria-label="Follow-up questions"
-                  @select="(event, item) => send(event, item.label)"
+                :items="followUps"
+                aria-label="Follow-up questions"
+                @select="(event, item) => send(event, item.label)"
+              />
+              <template #composer>
+                <AiChatConnectionStatus
+                  :connection="connection"
+                  :resuming="resuming"
+                  :session-generating="sessionGenerating"
+                  :loading="loading"
                 />
-              </div>
+                <Alert
+                  key="alert-2"
+                  v-if="interruptErrors.length"
+                  severity="danger"
+                  size="small"
+                  title="Your answer was not sent"
+                  :action-label="retryable ? 'Retry' : ''"
+                  @action="emit('retry-interrupts', $event)"
+                >
+                  {{ interruptErrorText(interruptErrors) }}
+                </Alert>
+                <PromptQueue
+                  v-if="queued.length"
+                  :items="queued"
+                  @remove="(event, item) => removeQueued(event, item.id)"
+                />
+                <DrawerChatComposer
+                  ref="composerEl"
+                  v-model="prompt"
+                  v-model:files="files"
+                  :state="state"
+                  :queueable="queueable"
+                  :hydrating="hydrating"
+                  :accept="accept"
+                  :max-files="maxFiles"
+                  :max-file-size="maxFileSize"
+                  :attachable="attachable"
+                  @submit="send"
+                  @stop="stop"
+                />
+              </template>
             </Conversation>
-          </div>
-          <div
-            class="flex flex-col gap-(--spacing-xs) border-t border-(--border-default) p-(--spacing-sm)"
-          >
-            <AiChatConnectionStatus
-              :connection="connection"
-              :resuming="resuming"
-              :session-generating="sessionGenerating"
-              :loading="loading"
-            />
-            <Alert
-              key="alert-2"
-              v-if="interruptErrors.length"
-              severity="danger"
-              size="small"
-              title="Your answer was not sent"
-              :action-label="retryable ? 'Retry' : ''"
-              @action="emit('retry-interrupts', $event)"
-            >
-              {{ interruptErrorText(interruptErrors) }}
-            </Alert>
-            <PromptQueue
-              v-if="queued.length"
-              :items="queued"
-              @remove="(event, item) => removeQueued(event, item.id)"
-            />
-            <DrawerChatComposer
-              ref="composerEl"
-              v-model="prompt"
-              v-model:files="files"
-              :state="state"
-              :queueable="queueable"
-              :hydrating="hydrating"
-              :accept="accept"
-              :max-files="maxFiles"
-              :max-file-size="maxFileSize"
-              :attachable="attachable"
-              @submit="send"
-              @stop="stop"
-            />
           </div>
         </div>
       </DrawerContent>

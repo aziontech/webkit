@@ -122,6 +122,10 @@ describe('ai', () => {
     })
     await waitFor(() => expect(document.body.textContent).toContain('Yes, at a 91% hit ratio.'))
     expect(document.body.textContent).not.toContain('reads this workload')
+    const log = document.querySelector<HTMLElement>('[role="log"]')!
+    const composer = document.querySelector<HTMLElement>('textarea[aria-label="Prompt"]')!
+    expect(log.contains(composer)).toBe(false)
+    expect(composer.closest('[data-testid="conversation__composer"]')).not.toBeNull()
     await fireEvent.click(document.querySelector<HTMLElement>('[aria-label="New chat"]')!)
     expect(view.emitted('new-chat')).toHaveLength(1)
   })

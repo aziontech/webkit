@@ -85,12 +85,12 @@
     class="flex min-h-0 w-full grow basis-0 flex-col"
   >
     <header
-      class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+      class="flex items-center justify-between gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-xs)"
     >
       <div class="flex items-center gap-(--spacing-xs)">
         <h1
           id="ai-chat-artifact-title"
-          class="text-heading-xs text-(--text-default)"
+          class="text-label-md text-(--text-default)"
         >
           AI assistant
         </h1>
@@ -144,36 +144,37 @@
                   v-if="turn.role === 'assistant'"
                   #actions
                 >
-                  <ChatMessage.Actions>
+                  <ChatMessage.Actions
+                    show-read-aloud
+                    :read-aloud-text="textOf(turn)"
+                  >
                     <CopyButton
-                      size="small"
+                      size="large"
                       :value="textOf(turn)"
                     />
                     <ChatMessage.Feedback v-model="ratings[turn.id]" />
                   </ChatMessage.Actions>
                 </template>
               </ChatMessage>
-              <div class="ps-[calc(2rem+var(--spacing-sm))]">
-                <SuggestionGroup
-                  :items="followUps"
-                  aria-label="Follow-up questions"
-                  @select="(_event, item) => (prompt = item.label)"
-                />
-              </div>
+              <SuggestionGroup
+                :items="followUps"
+                aria-label="Follow-up questions"
+                @select="(_event, item) => (prompt = item.label)"
+              />
+              <template #composer>
+                <PromptInput
+                  v-model="prompt"
+                  :max-length="4000"
+                  placeholder="Ask for a change"
+                  @submit="prompt = ''"
+                >
+                  <template #hint>
+                    The AI assistant can make mistakes. Check a query before you run it.
+                  </template>
+                </PromptInput>
+              </template>
             </Conversation>
           </div>
-          <footer class="layout-boundary-inline pb-(--spacing-md)">
-            <PromptInput
-              v-model="prompt"
-              :max-length="4000"
-              placeholder="Ask for a change to the query"
-              @submit="prompt = ''"
-            >
-              <template #hint>
-                The AI assistant can make mistakes. Check a query before you run it.
-              </template>
-            </PromptInput>
-          </footer>
         </Resizable.Pane>
         <Resizable.Handle
           v-if="canvasOpen && !narrow"
