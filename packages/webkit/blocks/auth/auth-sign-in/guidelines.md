@@ -37,9 +37,9 @@ Three roles, never more on one step:
 - **Continue with Google / GitHub** on the email step: `variant="outline"`, `size="large"`, full width, `type="button"` so they never submit the form.
 - **The primary action** at the foot of the card, `type="submit"`, full width, `size="large"`. Its label follows the step: `Continue with email`, `Sign in`, `Send reset link`, `Reset password`. On the `sent` step it drops to `variant="secondary"` with `Return to sign in`, because nothing is left to submit.
 
-### D. The card — `Card` (required)
+### D. The card — `Card`, `Link` (required)
 
-One `Card` with `:padded="false"`, capped at `max-w-(--container-sm)` and centred in the column. It holds the `<form novalidate>`, its heading (`PageHeader`, `size="small"`: the `h1` plus a muted lead), the notice slot, the step body inside one `fieldset` and the primary action. Prompts that are not part of the form (Don't have an account? Sign up, the terms line) sit under the card, outside it.
+One `Card` with `:padded="false"`, capped at `max-w-(--container-sm)` and centred in the column. It holds the `<form novalidate>`, its heading (`PageHeader`, `size="small"`: the `h1` plus a muted lead), the notice slot, the step body inside one `fieldset` and the primary action. Prompts that are not part of the form (Don't have an account? Sign up, the terms line) sit under the card, outside it; their links are `Link inline`, so they take the size of the sentence and keep the underline.
 
 ### E. Card notice — `Alert` (conditional)
 

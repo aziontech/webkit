@@ -4,6 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import { onBeforeUnmount, ref } from 'vue'
@@ -91,10 +92,10 @@
           <p class="m-0 text-body-sm text-(--text-muted)">
             The project will be deleted, along with its domains and every deployment it has
             published. Traffic to its domains stops. Check the
-            <a
+            <Link
               href="https://example.com/docs/projects/delete"
-              class="text-link"
-              >Help Center</a
+              inline
+              >Help Center</Link
             >
             for more details.
           </p>

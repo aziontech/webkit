@@ -10,6 +10,7 @@
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocProse from '@aziontech/webkit/doc-prose'
+  import Link from '@aziontech/webkit/link'
 
   const crumbs = [{ label: 'Applications', href: '/docs/applications' }, { label: 'Overview' }]
 
@@ -60,9 +61,19 @@
         Rolling out: this page describes API v4. Accounts still on v3 keep the previous reference.
       </DocCallout>
       <p>
-        An application holds the rules a <a href="/docs/workloads">workload</a> applies to every
-        request: where it goes, what is cached and which
-        <a href="/docs/functions">function</a> runs.
+        An application holds the rules a
+        <Link
+          inline
+          href="/docs/workloads"
+          >workload</Link
+        >
+        applies to every request: where it goes, what is cached and which
+        <Link
+          inline
+          href="/docs/functions"
+          >function</Link
+        >
+        runs.
       </p>
       <div
         data-doc-chrome

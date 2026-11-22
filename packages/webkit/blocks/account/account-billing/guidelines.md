@@ -32,9 +32,9 @@ When the billing data fails to load, a danger `Alert` with Retry takes the tab's
 
 A `Card` whose header holds the `Subscription plan` heading and the outlined `Change plan`, which opens `account/account-change-plan-drawer` (the copyable SFC links to the plans route so it stands alone). The body shows the plan name with a small secondary `Current plan` `Tag` (a `Skeleton` while loading), then split `KeyValueList` with Plan start date, Next charge date, Next charge value as `CurrencyAmount`, and the default card as a decorative `PaymentBrand` plate and its brand and last four. The footer says what an invoice includes. On wide containers it takes about half the row.
 
-### E. Upgrade card — `Card` (required)
+### E. Upgrade card — `Card`, `Link` (required)
 
-`Upgrade to Enterprise` beside the plan card: one sentence on what the tier adds, four perks with icons, a link to pricing and a primary `Contact sales`, the one primary action on the page (the tier is sold by the sales team). Show the next tier only; hide the card on the top tier.
+`Upgrade to Enterprise` beside the plan card: one sentence on what the tier adds, four perks with icons, a small `Link` to pricing that opens in a new tab and a primary `Contact sales`, the one primary action on the page (the tier is sold by the sales team). Show the next tier only; hide the card on the top tier.
 
 ### F. Invoices controls — `Subheader`, `PropertyFilter`, `CollectionPreferences` (required)
 

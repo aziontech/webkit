@@ -16,6 +16,7 @@
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { computed, ref, watch } from 'vue'
 
   import { sampleRepositories, sampleTemplates } from './sample'
@@ -112,8 +113,8 @@
   const search = ref('')
   const repoLimit = ref(REPO_PAGE)
   const templateSearch = ref('')
-  const fileInputEl = ref<HTMLInputElement | null>(null)
-  const folderInputEl = ref<HTMLInputElement | null>(null)
+  const filePicker = useFilePicker({ multiple: true })
+  const folderPicker = useFilePicker({ directory: true })
 
   const accounts = computed(() => props.accounts)
   const activeScope = computed(() => scope.value || props.accounts[0]?.value || '')
@@ -169,16 +170,12 @@
 
   const templateHref = (item: CreateHubTemplate) => `/create/templates/${item.slug}`
 
-  const openFilePicker = () => fileInputEl.value?.click()
-  const openFolderPicker = () => folderInputEl.value?.click()
-
-  const onPick = (event: Event) => {
-    const input = event.target as HTMLInputElement
-    const picked = input.files ? Array.from(input.files) : []
-    if (!picked.length) return
-    emit('upload', event, picked)
-    input.value = ''
+  const pickFrom = async (event: MouseEvent, picker: typeof filePicker) => {
+    const picked = await picker.open()
+    if (picked.length) emit('upload', event, picked)
   }
+  const openFilePicker = (event: MouseEvent) => pickFrom(event, filePicker)
+  const openFolderPicker = (event: MouseEvent) => pickFrom(event, folderPicker)
 
   const ACCOUNT_BUTTON_CLASS =
     'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
@@ -258,24 +255,6 @@
                 label="folder"
                 @click="openFolderPicker"
               />.
-              <input
-                ref="fileInputEl"
-                type="file"
-                multiple
-                class="sr-only"
-                tabindex="-1"
-                aria-hidden="true"
-                @change="onPick"
-              />
-              <input
-                ref="folderInputEl"
-                type="file"
-                webkitdirectory
-                class="sr-only"
-                tabindex="-1"
-                aria-hidden="true"
-                @change="onPick"
-              />
             </template>
           </PageHeader>
 

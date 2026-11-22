@@ -20,6 +20,7 @@
   import DocProse from '@aziontech/webkit/doc-prose'
   import DocSteps from '@aziontech/webkit/doc-steps'
   import ItemList from '@aziontech/webkit/item-list'
+  import Link from '@aziontech/webkit/link'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import Tag from '@aziontech/webkit/tag'
   import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
@@ -276,10 +277,6 @@
         'Check the header: Claude Code sends `Authorization: Bearer` followed by the token, with no quotes around the token.'
     }
   ]
-
-  const RESOURCE_LINK_CLASS =
-    'inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-flat) text-label-md text-(--text-muted) no-underline ' +
-    'hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)'
 </script>
 
 <template>
@@ -333,18 +330,13 @@
                 aria-hidden="true"
                 >·</span
               >
-              <a
+              <Link
                 :href="link.href"
                 target="_blank"
-                rel="noreferrer"
-                :class="RESOURCE_LINK_CLASS"
-              >
-                {{ link.label }}
-                <i
-                  class="az az-arrow-up-right text-body-xs"
-                  aria-hidden="true"
-                />
-              </a>
+                size="small"
+                icon="az az-arrow-up-right"
+                :label="link.label"
+              />
             </template>
           </div>
         </div>

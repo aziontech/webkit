@@ -13,6 +13,7 @@
   import Select from '@aziontech/webkit/select'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import { toast } from '@aziontech/webkit/toast'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { computed, onBeforeUnmount, ref } from 'vue'
 
   import { sampleTablesWithSubscribers } from '../sample'
@@ -77,7 +78,7 @@
     ].join('\n')
   }
   const importOpen = ref(true)
-  const importInputEl = ref<HTMLInputElement | null>(null)
+  const csvPicker = useFilePicker({ accept: '.csv,text/csv' })
   const importFile = ref<ImportFile | null>(null)
   const importFileError = ref('')
   const importHeaders = ref<string[]>([])
@@ -150,11 +151,7 @@
     }
     readCsv({ name: file.name, size: file.size, type: 'text/csv' }, await file.text())
   }
-  const onImportPick = (event: Event) => {
-    const input = event.target as HTMLInputElement
-    onImportFiles(input.files)
-    input.value = ''
-  }
+  const pickCsv = async () => onImportFiles(await csvPicker.open())
   const openImport = (files?: FileList | File[] | null) => {
     clearImport()
     importOpen.value = true
@@ -341,18 +338,9 @@
                     label="Browse files"
                     variant="secondary"
                     size="medium"
-                    @click="importInputEl?.click()"
+                    @click="pickCsv"
                   />
                 </FileDropzone>
-                <input
-                  ref="importInputEl"
-                  type="file"
-                  accept=".csv,text/csv"
-                  class="hidden"
-                  aria-hidden="true"
-                  tabindex="-1"
-                  @change="onImportPick"
-                />
                 <FileTokenGroup
                   v-if="importFile"
                   :items="importTokens"

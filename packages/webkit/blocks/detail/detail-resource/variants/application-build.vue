@@ -22,6 +22,7 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Subheader from '@aziontech/webkit/subheader'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -232,10 +233,6 @@
     'pointer-events-none absolute inset-[var(--drop-zone-inset,0)] z-40 overflow-hidden rounded-(--shape-card) border-2 border-dashed border-(--border-selected) bg-(--bg-canvas) ' +
     '[--drop-zone-inset:var(--layout-boundary-inline)]'
 
-  const REPOSITORY_LINK_CLASS =
-    'truncate rounded-(--shape-button) text-body-sm text-(--text-default) underline-offset-2 ' +
-    'hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
-
   const FOOTER_BAND_CLASS =
     '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
     'py-(--spacing-xs)'
@@ -338,14 +335,10 @@
                             class="az az-github shrink-0"
                             aria-hidden="true"
                           />
-                          <a
+                          <TableCellLink
+                            :label="APP.repository"
                             :href="`https://github.com/${APP.repository}`"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            :class="REPOSITORY_LINK_CLASS"
-                            >{{ APP.repository
-                            }}<span class="sr-only">{{ ' (opens in a new tab)' }}</span></a
-                          >
+                          />
                         </span>
                       </template>
                       <Button

@@ -8,6 +8,7 @@
   import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PasswordInput from '@aziontech/webkit/password-input'
   import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
@@ -867,30 +868,30 @@
     <div class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)">
       <div class="flex items-center justify-center gap-(--spacing-xs)">
         <p class="text-body-xs text-(--text-default)">{{ copy.noAccount }}</p>
-        <a
-          class="text-link text-body-xs"
-          :href="signUpHref"
-          >{{ copy.signUp }}</a
-        >
+        <span class="text-body-xs">
+          <Link
+            inline
+            :href="signUpHref"
+            >{{ copy.signUp }}</Link
+          >
+        </span>
       </div>
 
       <template v-if="step === 'email' || step === 'password'">
         <p class="text-center text-body-xs text-(--text-muted)">
           {{ copy.agreeStart }}
-          <a
-            class="text-link"
+          <Link
+            inline
             :href="termsHref"
             target="_blank"
-            rel="noopener noreferrer"
-            >{{ copy.terms }}</a
+            >{{ copy.terms }}</Link
           >
           {{ copy.and }}
-          <a
-            class="text-link"
+          <Link
+            inline
             :href="privacyHref"
             target="_blank"
-            rel="noopener noreferrer"
-            >{{ copy.privacy }}</a
+            >{{ copy.privacy }}</Link
           >.
         </p>
       </template>

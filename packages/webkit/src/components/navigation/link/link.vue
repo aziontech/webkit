@@ -27,6 +27,8 @@
     href?: string
     /** Link target when navigating. */
     target?: LinkTarget
+    /** Renders the link inside running prose: it inherits the size and line height of the text around it, wraps with it and keeps the underline at rest; `size` does not apply. */
+    inline?: boolean
   }
 
   const props = withDefaults(defineProps<LinkProps>(), {
@@ -35,7 +37,8 @@
     disabled: false,
     icon: '',
     href: '',
-    target: '_self'
+    target: '_self',
+    inline: false
   })
 
   const emit = defineEmits<{
@@ -59,6 +62,15 @@
     return props.target === '_blank' ? EXTERNAL_ICON : ''
   })
 
+  const anchorAttrs = computed(() => ({
+    target: props.target,
+    rel: props.target === '_blank' ? 'noopener noreferrer' : undefined,
+    ...attrs,
+    'aria-disabled': props.disabled || undefined,
+    tabindex: props.disabled ? -1 : undefined,
+    'data-disabled': props.disabled || null
+  }))
+
   const onClick = (event: MouseEvent) => {
     if (props.disabled) {
       event.preventDefault()
@@ -74,17 +86,33 @@
     'data-[size=large]:h-10 data-[size=large]:min-h-10 data-[size=large]:text-button-lg data-[size=medium]:h-8 data-[size=medium]:min-h-8 data-[size=medium]:text-button-md ' +
     'data-[size=small]:h-7 data-[size=small]:min-h-7 data-[size=small]:text-button-md ' +
     'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)!'
+
+  const INLINE_CLASS =
+    'text-link motion-reduce:transition-none ' +
+    'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)!'
 </script>
 
 <template>
   <a
+    v-if="inline"
     :href="safeHref(href) ?? '#'"
-    :target="target"
-    :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
-    v-bind="$attrs"
-    :aria-disabled="disabled || undefined"
-    :tabindex="disabled ? -1 : undefined"
-    :data-disabled="disabled || null"
+    v-bind="anchorAttrs"
+    data-inline
+    :data-testid="testId"
+    :class="INLINE_CLASS"
+    @click="onClick"
+    ><slot>{{ label || t('link.label') }}</slot
+    ><i
+      v-if="resolvedIcon"
+      :class="[resolvedIcon, directionalIconClass(resolvedIcon)]"
+      class="ms-(--spacing-2xs) inline-block text-[length:inherit] leading-none"
+      aria-hidden="true"
+      :data-testid="`${testId}__icon`"
+  /></a>
+  <a
+    v-else
+    :href="safeHref(href) ?? '#'"
+    v-bind="anchorAttrs"
     :data-size="size"
     :data-testid="testId"
     :class="ROOT_CLASS"

@@ -76,10 +76,6 @@
     projectOpen.value = false
     environment.value = 'Production'
   })
-
-  const PROJECT_OPTION_CLASS =
-    'flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start transition-colors duration-fast-02 ' +
-    'ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -167,12 +163,12 @@
                           Projects serving web-app
                         </p>
                         <div class="max-h-72 overflow-y-auto overscroll-contain">
-                          <button
+                          <Item
                             v-for="(entry, index) in boundProjects"
                             :key="entry.id"
-                            type="button"
+                            clickable
+                            variant="option"
                             :aria-current="entry.id === project.id || undefined"
-                            :class="PROJECT_OPTION_CLASS"
                             @click="pickProject(entry.id)"
                           >
                             <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
@@ -200,7 +196,7 @@
                               class="az az-check shrink-0 text-body-xs text-(--text-default)"
                               aria-hidden="true"
                             />
-                          </button>
+                          </Item>
                         </div>
                       </div>
                     </Popover.Content>

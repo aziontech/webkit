@@ -48,9 +48,9 @@ One per section, with an `anchor`: an anchored level 2 or 3 heading is an outlin
 
 In the `footer` slot, `variant="content"`, under a top rule: `Footer.Column` with `Footer.Link` items, then the brand, social, status and language slots. The footer lays the bottom bar out as one row (the brand and the social icons at the start, the status and the language at the end) and stacks it below `md`, in CSS.
 
-### J. Brand — `Brand` (required)
+### J. Brand — `Brand`, `Link` (required)
 
-In the footer only; the header mark belongs to the layout.
+In the footer only, as a home `Link inline` named `Azion home` around the mark; the header mark belongs to the layout.
 
 ### K. System status — `StatusIndicator` (required)
 

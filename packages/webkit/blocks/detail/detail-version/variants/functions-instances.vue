@@ -19,6 +19,7 @@
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
   import SettingsGroup from '@aziontech/webkit/settings-group'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -233,10 +234,6 @@
       { description: 'The change is part of this draft until you deploy it.' }
     )
   }
-
-  const FUNCTION_LINK_CLASS =
-    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -355,20 +352,10 @@
                             aria-label="JavaScript"
                           />
                         </Tooltip>
-                        <Tooltip :content="`Open ${value} in Functions`">
-                          <a
-                            :href="`/functions/${value}`"
-                            :class="FUNCTION_LINK_CLASS"
-                          >
-                            <span class="truncate underline-offset-2 group-hover/link:underline">{{
-                              value
-                            }}</span>
-                            <i
-                              class="az az-external-link shrink-0 text-body-xs leading-none"
-                              aria-hidden="true"
-                            />
-                          </a>
-                        </Tooltip>
+                        <TableCellLink
+                          :label="value"
+                          :href="`/functions/${value}`"
+                        />
                       </div>
                     </template>
                     <template #cell-args="{ value }">

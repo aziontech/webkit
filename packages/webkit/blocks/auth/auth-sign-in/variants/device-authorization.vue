@@ -293,13 +293,13 @@
                 />
               </div>
 
-              <a
+              <Button
                 v-if="!settled"
-                class="text-link self-start text-body-sm"
-                href="#"
-                @click.prevent="enterCode"
-                >The code does not match? Enter the code from your terminal</a
-              >
+                variant="link"
+                label="The code does not match? Enter the code from your terminal"
+                class="self-start"
+                @click="enterCode"
+              />
             </template>
           </section>
         </template>

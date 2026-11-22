@@ -39,6 +39,7 @@
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
@@ -344,7 +345,7 @@
   const view = ref('Form')
   const jsonText = ref('{}')
   const jsonError = ref('')
-  const fileInputEl = ref<HTMLInputElement | null>(null)
+  const envFilePicker = useFilePicker({ accept: '.env,.txt,text/plain' })
 
   const filledEntries = computed(() => entries.value.filter((entry) => !isEmptyEntry(entry)))
   const keyCounts = computed(() =>
@@ -469,10 +470,8 @@
     entries.value.splice(index, 1, ...toEntries(pairs))
   }
 
-  const onFilePicked = async (event: Event) => {
-    const input = event.target as HTMLInputElement
-    const [file] = input.files ?? []
-    input.value = ''
+  const pickEnvFile = async () => {
+    const [file] = await envFilePicker.open()
     if (!file) return
     const { parsed, invalidLines } = parseEnvFile(await file.text())
     if (!parsed.length && invalidLines.length) return
@@ -1003,16 +1002,7 @@
                       icon="az az-upload"
                       variant="outline"
                       size="medium"
-                      @click="fileInputEl?.click()"
-                    />
-                    <input
-                      ref="fileInputEl"
-                      type="file"
-                      accept=".env,.txt,text/plain"
-                      class="sr-only"
-                      tabindex="-1"
-                      aria-hidden="true"
-                      @change="onFilePicked"
+                      @click="pickEnvFile"
                     />
                     <ToggleGroup
                       v-model="view"

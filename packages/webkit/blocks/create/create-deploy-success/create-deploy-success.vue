@@ -232,11 +232,6 @@ jobs:
   const steps = computed(() =>
     path.value === 'actions' ? ACTIONS_STEPS : cliSteps(props.getStarted)
   )
-
-  const DOCS_LINK_CLASS =
-    'rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance ' +
-    'hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
-    'focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -445,12 +440,11 @@ jobs:
                 <template #description>
                   Two ways to build and deploy this resource. Select one and follow the steps, or
                   read the
-                  <a
+                  <Link
                     href="https://example.com/docs/cli"
                     target="_blank"
-                    rel="noopener noreferrer"
-                    :class="DOCS_LINK_CLASS"
-                    >CLI docs</a
+                    inline
+                    >CLI docs</Link
                   >.
                 </template>
                 <template #actions>

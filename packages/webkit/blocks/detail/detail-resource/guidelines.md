@@ -24,13 +24,13 @@ The second-level page of one resource. The user arrives from a list row or a dep
 
 A full-bleed `PageTabs` with one `Tabs.Trigger` per concern: Overview, Versions, Build, Deployments, first in the body and in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. On a tabbed page the primary action (an outlined Deploy) sits on the tab row at medium size. Each tab is its own route: a variant renders the open tab's panel (Application renders all of its panels), and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it, so no tab is dead.
 
-### B. Summary subject band — `Card`, `Tooltip`, `Button`, `DropdownMenu`, `IconButton` (required)
+### B. Summary subject band — `Card`, `TableCellLink`, `Button`, `DropdownMenu`, `IconButton` (required)
 
-`Card :padded="false"` opens the tab. Its first band holds the resource glyph and its primary link, the live address that opens in a new tab and is named by a `Tooltip`, then a secondary Visit `Button` that opens the same address in a new tab (`href`, `target="_blank"`) and an outlined Resource actions `IconButton` that opens a `DropdownMenu` placed `bottom-end` with Copy URL and, in its own group, Settings.
+`Card :padded="false"` opens the tab. Its first band holds the resource glyph and its primary link, the live address as a `TableCellLink`, which opens it in a new tab and names it in its tooltip, then a secondary Visit `Button` that opens the same address in a new tab (`href`, `target="_blank"`) and an outlined Resource actions `IconButton` that opens a `DropdownMenu` placed `bottom-end` with Copy URL and, in its own group, Settings.
 
 ### C. Summary facts band — `Link`, `Tag`, `StatusIndicator`, `Avatar`, `Tooltip` (required)
 
-A grid of label and value pairs, one column below `sm` so no value runs into the next: Deployment (the ID as a small `Link` with a Production `Tag`), Domains, Status as a `StatusIndicator`, Created as a relative time with the author `Avatar`, Source and Framework. Each label is a small muted span over its value; links carry a `Tooltip` that says where they go. A service adds custom domains (with a transparent small `IconButton`, Add a custom domain, inside a `Tooltip`), environments and its ID with a `CopyButton`; a policy adds its rules and modules.
+A grid of label and value pairs, one column below `sm` so no value runs into the next: Deployment (the ID as a small `Link` with a Production `Tag`), Domains, Status as a `StatusIndicator`, Created as a relative time with the author `Avatar`, Source and Framework. Each label is a small muted span over its value; links are `TableCellLink`s, whose tooltip says where they go. A service adds custom domains (with a transparent small `IconButton`, Add a custom domain, inside a `Tooltip`), environments and its ID with a `CopyButton`; a policy adds its rules and modules.
 
 ### D. Summary state band — `Button` (optional)
 

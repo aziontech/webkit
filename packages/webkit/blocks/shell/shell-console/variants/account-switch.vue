@@ -12,6 +12,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item-root'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -197,14 +198,6 @@
     document.removeEventListener('keydown', onShortcut)
     clearTimeout(loadTimer)
   })
-
-  const ACCOUNT_BUTTON_CLASS =
-    'flex h-10 w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance ' +
-    'hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
-
-  const ACCOUNT_BUTTON_COMPACT_CLASS =
-    'flex h-7 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance ' +
-    'hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -217,12 +210,12 @@
           side="end"
           class="w-full"
         >
-          <button
-            type="button"
+          <Item
+            clickable
+            variant="option"
             :aria-label="`Account: ${currentAccount.name}. Switch account`"
             aria-haspopup="dialog"
             aria-keyshortcuts="Control+O Meta+O"
-            :class="ACCOUNT_BUTTON_CLASS"
             @click="openSwitch"
           >
             <Avatar
@@ -237,7 +230,7 @@
               class="az az-sort shrink-0 text-body-xs text-(--text-muted)"
               aria-hidden="true"
             />
-          </button>
+          </Item>
         </Tooltip>
       </template>
 
@@ -247,24 +240,24 @@
           :content="`Switch account (${shortcut})`"
           side="bottom"
         >
-          <button
-            type="button"
+          <Button
+            variant="ghost"
+            size="small"
+            icon="az az-chevron-down"
+            icon-position="trailing"
             :aria-label="`Account: ${currentAccount.name}. Switch account`"
             aria-haspopup="dialog"
             aria-keyshortcuts="Control+O Meta+O"
-            :class="ACCOUNT_BUTTON_COMPACT_CLASS"
             @click="openSwitch"
           >
-            <Avatar
-              :label="currentAccount.name"
-              size="small"
-              variant="square"
-            />
-            <i
-              class="az az-chevron-down shrink-0 text-body-xs text-(--text-muted)"
-              aria-hidden="true"
-            />
-          </button>
+            <template #leading>
+              <Avatar
+                :label="currentAccount.name"
+                size="small"
+                variant="square"
+              />
+            </template>
+          </Button>
         </Tooltip>
       </template>
     </ShellConsole>

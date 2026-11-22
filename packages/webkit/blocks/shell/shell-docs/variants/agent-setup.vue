@@ -13,6 +13,7 @@
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocProse from '@aziontech/webkit/doc-prose'
+  import Item from '@aziontech/webkit/item-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
@@ -283,10 +284,6 @@
         'An index answers questions about code nobody opened, at the cost of a copy of the repository. A session only knows what it was shown.'
     }
   ]
-
-  const AGENT_LINK_CLASS =
-    'flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-flat) text-label-md text-(--text-default) no-underline ' +
-    'hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)'
 </script>
 
 <template>
@@ -372,9 +369,10 @@
           bordered
         >
           <template #cell-agent="{ row }">
-            <a
+            <Item
               :href="row.href"
-              :class="AGENT_LINK_CLASS"
+              variant="inline"
+              size="small"
             >
               <ThirdPartyLogo
                 v-if="row.logo"
@@ -391,7 +389,7 @@
                 aria-hidden="true"
               />
               <span class="truncate">{{ row.agent }}</span>
-            </a>
+            </Item>
           </template>
           <template
             v-for="column in flagColumns"

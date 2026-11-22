@@ -13,6 +13,7 @@
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tabs from '@aziontech/webkit/tabs'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref } from 'vue'
@@ -65,10 +66,6 @@
   const discard = () => {
     Object.assign(settings, JSON.parse(baseline.value) as typeof settings)
   }
-
-  const DETAIL_LINK_CLASS =
-    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -145,24 +142,10 @@
                                   class="az az-github shrink-0"
                                   aria-hidden="true"
                                 />
-                                <Tooltip :content="`Open ${repository} on GitHub`">
-                                  <a
-                                    :href="`https://github.com/${repository}`"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    :class="DETAIL_LINK_CLASS"
-                                  >
-                                    <span
-                                      class="truncate underline-offset-2 group-hover/link:underline"
-                                    >
-                                      {{ repository }}
-                                    </span>
-                                    <i
-                                      class="az az-external-link shrink-0 text-body-xs leading-none"
-                                      aria-hidden="true"
-                                    />
-                                  </a>
-                                </Tooltip>
+                                <TableCellLink
+                                  :label="repository"
+                                  :href="`https://github.com/${repository}`"
+                                />
                               </span>
                             </template>
                             <Button

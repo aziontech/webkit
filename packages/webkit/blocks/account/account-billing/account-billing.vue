@@ -10,6 +10,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import KeyValueList from '@aziontech/webkit/key-value-list'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
@@ -500,13 +501,12 @@
                   <div
                     class="flex w-full min-w-0 flex-wrap items-center justify-between gap-(--spacing-md)"
                   >
-                    <a
+                    <Link
                       href="https://example.com/pricing"
                       target="_blank"
-                      rel="noreferrer"
-                      class="text-body-xs text-(--text-link) hover:underline"
-                      >Pricing and plans</a
-                    >
+                      size="small"
+                      label="Pricing and plans"
+                    />
                     <Button
                       label="Contact sales"
                       variant="primary"

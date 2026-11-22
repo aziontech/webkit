@@ -31,6 +31,7 @@
   import Switch from '@aziontech/webkit/switch'
   import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag from '@aziontech/webkit/tag'
@@ -795,11 +796,11 @@
                             :key="service.id"
                             class="flex min-w-0 flex-col gap-(--spacing-xs) border-b border-(--border-muted) py-(--spacing-sm) last:border-b-0"
                           >
-                            <a
+                            <TableCellLink
+                              :label="service.name"
                               :href="`/services/${service.id}`"
-                              class="truncate text-label-md text-(--text-default) no-underline hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                              >{{ service.name }}</a
-                            >
+                              destination="Services"
+                            />
                             <div
                               v-for="environment in service.environments"
                               :key="environment.name"
