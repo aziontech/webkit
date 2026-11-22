@@ -38,13 +38,7 @@
 
   const attrs = useAttrs()
 
-  const {
-    controlId,
-    describedBy,
-    invalid: isInvalid,
-    disabled: isDisabled,
-    required: isRequired
-  } = useFieldAttrs(props)
+  const { controlId, describedBy, controlState } = useFieldAttrs(props)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-group-input')
 
@@ -69,13 +63,9 @@
     :value="model"
     :placeholder="placeholder"
     :autocomplete="autocomplete"
-    :disabled="isDisabled"
     :readonly="readonly"
-    :required="isRequired"
-    :aria-invalid="isInvalid || undefined"
-    :aria-required="isRequired || undefined"
     :data-testid="testId"
-    v-bind="{ ...autofillHints, ...$attrs }"
+    v-bind="{ ...controlState, ...autofillHints, ...$attrs }"
     :class="ROOT_CLASS"
     @input="onInput"
   />

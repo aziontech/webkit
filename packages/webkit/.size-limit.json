@@ -1929,7 +1929,7 @@
   {
     "name": "number-input",
     "path": "src/components/input/number-input/number-input.vue",
-    "limit": "3.35 KB"
+    "limit": "3.75 KB"
   },
   {
     "name": "hint",
@@ -1939,7 +1939,7 @@
   {
     "name": "password-input",
     "path": "src/components/input/password-input/password-input.vue",
-    "limit": "5.15 KB"
+    "limit": "5.35 KB"
   },
   {
     "name": "radio-group-root",

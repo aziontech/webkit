@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: cf6b3234265367d6e50171dcd36179144c330f20d74df7803ba9ab70b86c9435
+checksum: 23a52e2a867f681e934c2a93febf01db841f6dd3f5efdfe5c416944dde7ec93a
 created: 2026-06-16
 last_updated: 2026-11-19
 ---
@@ -104,10 +104,12 @@ _none_
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `invalid`
+- Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `readonly`, `invalid`
 - Single fixed height: 40px (large only)
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
+- `data-readonly` mirrors the `readonly` prop (no hover border, default cursor, as on `Input`)
+- The frame, its states, adornments and touch target are the private frame `Input` renders
 - `data-required` mirrors the `required` prop; it draws no border of its own: the Required marker on the wrapping `Field.Label` says a field is required, and a missing value is shown as `invalid` after a failed submit
 - `data-leading` mirrors `$slots.leading` presence
 - `data-trailing` mirrors `$slots.trailing` presence (only relevant when `toggleable=false`)
@@ -152,13 +154,13 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots and the visibility toggle.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2` on `var(--input-ring-offset, var(--bg-canvas))` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots and the visibility toggle.
 - Keyboard map: `Tab` focuses the input, then the visibility toggle button (when `toggleable=true`); `Enter` / `Space` on the toggle flips visibility; standard text-editing keys apply to the input.
 - Direction: the `<input>` renders `dir="auto"` so a value typed in another script keeps its own direction inside right-to-left UI; a `dir` attribute overrides it.
 - ARIA: the visibility toggle is a `<button type="button">` with `aria-pressed` reflecting the current visible state and an `aria-label` that switches between "Show password" and "Hide password"; `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; decorative icon slots and the eye glyph are `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.
 - `motion-reduce:transition-none` on every transition-bearing class.
-- Touch target: the input fills the field's single fixed 40 px height. The visibility toggle is the 28×28 px `small` `IconButton` the Figma frame specifies — above WCAG 2.2 SC 2.5.8 Target Size (Minimum) at 24×24 px, and centred in the 40 px row so the practical vertical reach is the full field height. It is below the 44×44 px of SC 2.5.5 (AAA), which this AA-scoped spec does not claim.
+- Touch target: the input fills the field's single fixed 40 px height; `Input`'s touch target extends it to 44 px on a coarse pointer, and a press on the frame focuses the input. The visibility toggle is the 28×28 px `small` `IconButton` the Figma frame specifies — above WCAG 2.2 SC 2.5.8 Target Size (Minimum) at 24×24 px, and centred in the 40 px row so the practical vertical reach is the full field height. It is below the 44×44 px of SC 2.5.5 (AAA), which this AA-scoped spec does not claim.
 - The toggle button never submits the surrounding form (`type="button"`).
 
 ## Right-to-left

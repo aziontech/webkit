@@ -37,6 +37,28 @@ describe('useFieldAttrs', () => {
     expect(sink.field?.passthroughAttrs.value).toEqual({ name: 'zone', 'aria-label': 'Zone' })
   })
 
+  it('gives the native control its disabled, required and ARIA state in one object', () => {
+    const sink: { field?: UseFieldAttrsReturn } = {}
+    render(host(sink), { props: { invalid: true, required: true } })
+    expect(sink.field?.controlState.value).toEqual({
+      disabled: false,
+      required: true,
+      'aria-invalid': true,
+      'aria-required': true
+    })
+  })
+
+  it('leaves the ARIA state out when the control is valid and optional', () => {
+    const sink: { field?: UseFieldAttrsReturn } = {}
+    render(host(sink))
+    expect(sink.field?.controlState.value).toEqual({
+      disabled: false,
+      required: false,
+      'aria-invalid': undefined,
+      'aria-required': undefined
+    })
+  })
+
   it('falls back to the enclosing Field', () => {
     const sink: { field?: UseFieldAttrsReturn } = {}
     const Child = host(sink)

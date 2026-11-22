@@ -415,4 +415,26 @@ describe('PasswordInput', () => {
       expect(document.activeElement).toBe(native)
     })
   })
+
+  describe('field frame', () => {
+    it('focuses the input when the press lands on the frame, not on the toggle', () => {
+      const { getByTestId, getByRole } = render(PasswordInput)
+      const input = getByTestId('password-input')
+      const root = input.parentElement as HTMLElement
+      const pressed = root.dispatchEvent(
+        new MouseEvent('mousedown', { bubbles: true, cancelable: true })
+      )
+      expect(pressed).toBe(false)
+      expect(document.activeElement).toBe(input)
+      const toggle = getByRole('button')
+      expect(
+        toggle.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }))
+      ).toBe(true)
+    })
+
+    it('marks a read-only field on the frame', () => {
+      const { getByTestId } = render(PasswordInput, { props: { readonly: true } })
+      expect(getByTestId('password-input').parentElement?.hasAttribute('data-readonly')).toBe(true)
+    })
+  })
 })

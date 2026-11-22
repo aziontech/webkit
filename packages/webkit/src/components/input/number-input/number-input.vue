@@ -5,6 +5,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { PASSWORD_MANAGER_IGNORE } from '../../../utils/autofill'
+  import InputFrame from '../parts/input-frame'
 
   export type NumberInputSize = 'small' | 'medium' | 'large'
   /** The model type: number, or number or null when nullable is set. */
@@ -77,6 +78,7 @@
   const {
     controlId,
     describedBy,
+    controlState,
     passthroughAttrs,
     invalid: isInvalid,
     disabled: isDisabled,
@@ -131,6 +133,10 @@
     model.value = stepBy(-props.step)
   }
 
+  const ROOT_CLASS =
+    'overflow-hidden pointer-coarse:overflow-visible ' +
+    '[&>[data-slot=leading]]:ps-(--spacing-md) [&>[data-slot=trailing]]:pe-(--spacing-md)'
+
   const INPUT_CLASS =
     'relative z-(--z-control) w-full min-w-0 border-0 bg-transparent outline-none px-(--spacing-md) text-label-sm ' +
     'pointer-coarse:text-body-md text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default ' +
@@ -147,31 +153,20 @@
 </script>
 
 <template>
-  <span
-    :data-size="size"
-    :data-disabled="isDisabled || null"
-    :data-invalid="isInvalid || null"
-    :data-required="isRequired || null"
-    :class="[
-      'relative inline-flex w-full items-center overflow-hidden pointer-coarse:overflow-visible',
-      'rounded-(--shape-control)',
-      'border border-(--border-input) bg-(--bg-surface) text-(--text-default)',
-      'transition-colors duration-150 ease-out motion-reduce:transition-none',
-      '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong)',
-      'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas)',
-      'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10',
-      'data-[invalid]:border-(--danger-border)',
-      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed',
-      'data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
-      attrs['class']
-    ]"
+  <InputFrame
+    :size="size"
+    :disabled="isDisabled"
+    :readonly="readonly"
+    :invalid="isInvalid"
+    :required="isRequired"
+    :class="[ROOT_CLASS, attrs['class']]"
   >
-    <span
+    <template
       v-if="$slots['leading']"
-      class="relative z-(--z-control) flex items-center ps-(--spacing-md) text-(--text-muted)"
+      #leading
     >
       <slot name="leading" />
-    </span>
+    </template>
 
     <input
       type="number"
@@ -179,77 +174,75 @@
       :aria-describedby="describedBy"
       :value="model"
       :placeholder="placeholder"
-      :disabled="isDisabled"
       :readonly="readonly"
-      :required="isRequired"
       :min="min"
       :max="max"
       :step="step"
-      :aria-invalid="isInvalid || undefined"
-      :aria-required="isRequired || undefined"
       :data-testid="testId"
       dir="auto"
-      v-bind="{ ...PASSWORD_MANAGER_IGNORE, ...passthroughAttrs }"
+      v-bind="{ ...controlState, ...PASSWORD_MANAGER_IGNORE, ...passthroughAttrs }"
       :class="INPUT_CLASS"
       @input="onInput"
       @change="onChange"
     />
 
-    <span
+    <template
       v-if="$slots['trailing']"
-      class="relative z-(--z-control) flex items-center pe-(--spacing-md) text-(--text-muted)"
+      #trailing
     >
       <slot name="trailing" />
-    </span>
+    </template>
 
-    <span
-      v-if="isDisabled"
-      class="relative z-(--z-control) flex items-center pe-(--spacing-md) text-(--text-disabled)"
-      aria-hidden="true"
-    >
-      <i class="az az-lock text-label-sm leading-none" />
-    </span>
+    <template #controls>
+      <span
+        v-if="isDisabled"
+        class="relative z-(--z-control) flex items-center pe-(--spacing-md) text-(--text-disabled)"
+        aria-hidden="true"
+      >
+        <i class="az az-lock text-label-sm leading-none" />
+      </span>
 
-    <span
-      v-if="showButtons"
-      class="relative z-(--z-control) flex h-full w-12 shrink-0 flex-col self-stretch border-s border-(--border-input) pointer-coarse:w-20 pointer-coarse:flex-row-reverse"
-    >
-      <button
-        type="button"
-        tabindex="-1"
-        :aria-label="t('numberInput.increment')"
-        :disabled="isDisabled || readonly"
-        :class="INCREMENT_CLASS"
-        @click="onIncrement"
+      <span
+        v-if="showButtons"
+        class="relative z-(--z-control) flex h-full w-12 shrink-0 flex-col self-stretch border-s border-(--border-input) pointer-coarse:w-20 pointer-coarse:flex-row-reverse"
       >
-        <span
-          aria-hidden="true"
-          data-slot="touch-target"
-          class="absolute hidden inset-x-0 inset-y-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-        />
-        <i
-          class="az az-chevron-up text-[0.625rem] leading-none"
-          aria-hidden="true"
-        />
-      </button>
-      <button
-        type="button"
-        tabindex="-1"
-        :aria-label="t('numberInput.decrement')"
-        :disabled="isDisabled || readonly"
-        :class="DECREMENT_CLASS"
-        @click="onDecrement"
-      >
-        <span
-          aria-hidden="true"
-          data-slot="touch-target"
-          class="absolute hidden inset-x-0 inset-y-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-        />
-        <i
-          class="az az-chevron-down text-[0.625rem] leading-none"
-          aria-hidden="true"
-        />
-      </button>
-    </span>
-  </span>
+        <button
+          type="button"
+          tabindex="-1"
+          :aria-label="t('numberInput.increment')"
+          :disabled="isDisabled || readonly"
+          :class="INCREMENT_CLASS"
+          @click="onIncrement"
+        >
+          <span
+            aria-hidden="true"
+            data-slot="touch-target"
+            class="absolute hidden inset-x-0 inset-y-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+          />
+          <i
+            class="az az-chevron-up text-[0.625rem] leading-none"
+            aria-hidden="true"
+          />
+        </button>
+        <button
+          type="button"
+          tabindex="-1"
+          :aria-label="t('numberInput.decrement')"
+          :disabled="isDisabled || readonly"
+          :class="DECREMENT_CLASS"
+          @click="onDecrement"
+        >
+          <span
+            aria-hidden="true"
+            data-slot="touch-target"
+            class="absolute hidden inset-x-0 inset-y-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+          />
+          <i
+            class="az az-chevron-down text-[0.625rem] leading-none"
+            aria-hidden="true"
+          />
+        </button>
+      </span>
+    </template>
+  </InputFrame>
 </template>
