@@ -98,7 +98,7 @@ export const moveWithin = <T>(list: T[], from: number, to: number): void => {
   list.splice(to, 0, ...list.splice(from, 1))
 }
 
-export const rowAt = (
+const rowAt = (
   event: Event,
   root: HTMLElement | null,
   grouped: boolean
