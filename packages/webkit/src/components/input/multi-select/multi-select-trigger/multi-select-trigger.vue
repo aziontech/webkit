@@ -70,41 +70,39 @@
     ctx.setOpen(true)
   }
 
+  const openAndNavigate = (key: string) => {
+    const edge = key === 'ArrowDown' ? 'Home' : 'End'
+    const wasOpen = ctx.open.value
+    ctx.setOpen(true)
+    if (wasOpen) ctx.navigate.value?.(edge)
+    else void nextTick(() => nextTick(() => ctx.navigate.value?.(edge)))
+  }
+
+  const onInputEscape = (event: globalThis.KeyboardEvent) => {
+    if (ctx.open.value) {
+      event.preventDefault()
+      ctx.setOpen(false)
+    } else if (ctx.query.value) {
+      event.preventDefault()
+      ctx.setQuery('')
+    }
+  }
+
   const onInputKeydown = (event: globalThis.KeyboardEvent) => {
     if (ctx.locked()) return
     const key = event.key
     if (key === 'ArrowDown' || key === 'ArrowUp') {
       event.preventDefault()
-      const wasOpen = ctx.open.value
-      ctx.setOpen(true)
-      if (wasOpen) ctx.navigate.value?.(key === 'ArrowDown' ? 'Home' : 'End')
-      else
-        void nextTick(() =>
-          nextTick(() => ctx.navigate.value?.(key === 'ArrowDown' ? 'Home' : 'End'))
-        )
-      return
-    }
-    if (key === 'Enter') {
+      openAndNavigate(key)
+    } else if (key === 'Enter') {
       event.preventDefault()
       if (ctx.showCreate.value) ctx.create(event)
       else ctx.setOpen(true)
-      return
-    }
-    if (key === 'Escape') {
-      if (ctx.open.value) {
-        event.preventDefault()
-        ctx.setOpen(false)
-      } else if (ctx.query.value) {
-        event.preventDefault()
-        ctx.setQuery('')
-      }
-      return
-    }
-    if (key === 'Tab') {
+    } else if (key === 'Escape') {
+      onInputEscape(event)
+    } else if (key === 'Tab') {
       if (ctx.open.value) ctx.setOpen(false)
-      return
-    }
-    if (key === 'Backspace' && !ctx.query.value && selection.value.length) {
+    } else if (key === 'Backspace' && !ctx.query.value && selection.value.length) {
       ctx.toggleValue(selection.value[selection.value.length - 1])
     }
   }
