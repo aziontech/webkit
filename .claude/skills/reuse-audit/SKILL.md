@@ -42,7 +42,7 @@ Before scaffolding, prove whatever logic the new component needs does not alread
      {
        "spec_needs": "loading state",
        "reuse": "@aziontech/webkit/utils/spinner",
-       "rationale": "Existing utility used in button.vue and pricing-card.vue"
+       "rationale": "Existing utility that Button and PricingCard already render"
      }
    ]
    ```

@@ -37,8 +37,9 @@ When in doubt, choose `monolithic`. Atoms (Button, IconButton, Tag, Badge, Spinn
    - Otherwise → `monolithic` (default when in doubt).
 2. **Reference the canonicals** to confirm:
    - Composition: Dialog, Tabs, Accordion, composed Card, DropdownMenu, Sheet/Drawer, Form fields.
-   - Monolithic with slots: `pricing-card.vue` (fixed layout, slot inversions).
-   - Atomic: `button.vue`, `icon-button.vue`.
+   - Monolithic with slots: PricingCard (fixed layout, slot inversions).
+   - Atomic: Button, IconButton.
+   - Look each one up through the webkit MCP (`get_component`) rather than by file name.
 3. **Emit** a single line with the verdict and a one-sentence rationale:
    ```
    structure: composition

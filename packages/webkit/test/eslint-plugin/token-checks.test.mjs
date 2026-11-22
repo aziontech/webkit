@@ -78,6 +78,22 @@ test('0rem inside a math function is the sanctioned form — both checks stay si
   }
 })
 
+test('a var() fallback inside a math function is math-function territory', () => {
+  for (const content of [
+    'min-h-[calc(100dvh-var(--offset,0rem))]',
+    'top-[calc(var(--offset,0rem)+var(--spacing-xl))]'
+  ]) {
+    const found = ids(content)
+    assert.ok(!found.includes('zero-with-unit'), `expected no zero-with-unit for: ${content}`)
+    assert.ok(!found.includes('zero-unit-in-calc'), `expected no zero-unit-in-calc for: ${content}`)
+  }
+  const wrong = ids('h-[calc(100dvh-var(--offset,0px))]')
+  assert.ok(wrong.includes('zero-unit-in-calc'), 'a px zero in a var() fallback inside calc()')
+  assert.ok(!wrong.includes('zero-with-unit'), 'not reported as a bare zero')
+  const after = ids('w-[calc(var(--a,0rem))] m-[0px]')
+  assert.ok(after.includes('zero-with-unit'), 'the zero after the closed calc() is a bare zero')
+})
+
 test('a closed math function does not leak its exemption to a later zero', () => {
   const found = ids('width: calc(100% - 1px); margin: 0px')
   assert.ok(found.includes('zero-with-unit'), 'the zero after the closed calc() is a bare zero')

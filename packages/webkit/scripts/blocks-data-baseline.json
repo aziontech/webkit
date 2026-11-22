@@ -1,6 +1,1 @@
-[
-  "shell/shell-console:inline-records",
-  "shell/shell-docs:inline-records",
-  "shell/shell-docs:no-props",
-  "shell/shell-site:no-props"
-]
+[]

@@ -21,19 +21,12 @@
   const drawerCtx = inject(DrawerInjectionKey, null)
   const drawerScrollHost = inject(DrawerPanelScrollInjectionKey, false)
 
-  const scrollAreaClasses = computed(() =>
-    cn('min-h-0 min-w-0 flex-1', drawerScrollHost ? (attrs.class as string | undefined) : undefined)
-  )
+  const CONTENT_CLASS =
+    '@container/panel min-h-24 p-(--spacing-lg) text-body-sm text-(--text-default)'
 
-  const contentClasses = computed(() =>
-    cn(
-      '@container/panel min-h-24 p-(--spacing-lg) text-body-sm text-(--text-default)',
-      !drawerScrollHost
-        ? 'flex-1 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
-        : undefined,
-      !drawerScrollHost ? (attrs.class as string | undefined) : undefined
-    )
-  )
+  const SCROLL_CONTENT_CLASS =
+    CONTENT_CLASS +
+    ' flex-1 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
 
   const FOCUSABLE =
     'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
@@ -53,11 +46,11 @@
 <template>
   <ScrollArea
     v-if="drawerScrollHost"
-    :class="scrollAreaClasses"
+    :class="cn('min-h-0 min-w-0 flex-1', attrs.class as string | undefined)"
     :data-testid="scrollTestId"
   >
     <div
-      :class="contentClasses"
+      :class="CONTENT_CLASS"
       :data-testid="`${ctx?.testId}__content`"
     >
       <slot />
@@ -67,7 +60,7 @@
     v-else
     ref="contentEl"
     :tabindex="needsFocus ? 0 : undefined"
-    :class="contentClasses"
+    :class="cn(SCROLL_CONTENT_CLASS, attrs.class as string | undefined)"
     :data-testid="`${ctx?.testId}__content`"
   >
     <slot />

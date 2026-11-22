@@ -36,8 +36,6 @@
     resolveLineState
   } from './lib/line-decorations'
   import {
-    codeBlockEnterOffsetClasses,
-    codeBlockLineEnterMotion,
     type CodeBlockLineMotionMode,
     type CodeBlockSlideDirection,
     getCodeBlockIndicatorTransitionStyle,
@@ -311,38 +309,13 @@
     transform: `translate3d(${indicatorOffsetX.value}px, 0, 0)`
   }))
 
-  const panelEnterOffsetClass = computed(() => {
-    if (slideDirection.value === 'right') {
-      return codeBlockEnterOffsetClasses.right
-    }
-
-    if (slideDirection.value === 'left') {
-      return codeBlockEnterOffsetClasses.left
-    }
-
-    return codeBlockEnterOffsetClasses.none
-  })
-
-  const lineEnterOffsetClass = computed(() =>
-    lineMotionMode.value === 'swap'
-      ? panelEnterOffsetClass.value
-      : codeBlockLineEnterMotion.offsetClass
+  const lineEnterFrom = computed(() =>
+    lineMotionMode.value === 'swap' ? (slideDirection.value ?? 'none') : 'line'
   )
 
-  const lineMotion = computed(() => {
-    if (!lineMotionMode.value) return null
-    const motion =
-      'transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none'
-    return {
-      shown: cn(motion, 'translate-x-0 opacity-100'),
-      hidden: cn(motion, lineEnterOffsetClass.value, 'opacity-0')
-    }
-  })
-
-  const getLineMotionClasses = (lineIndex: number) => {
-    const motion = lineMotion.value
-    if (!motion) return ''
-    return linesMotionReady.value && lineIndex < revealedLines.value ? motion.shown : motion.hidden
+  const getLineMotionState = (lineIndex: number) => {
+    if (!lineMotionMode.value) return undefined
+    return linesMotionReady.value && lineIndex < revealedLines.value ? 'shown' : 'hidden'
   }
 
   const getLineMotionStyle = (lineIndex: number) => {
@@ -702,6 +675,14 @@
     'group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-2xs) text-label-code-sm ' +
     'data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40'
 
+  const LINE_MOTION_CLASS =
+    'data-[motion]:transform data-[motion]:motion-reduce:transform-none data-[motion]:motion-reduce:opacity-100 data-[motion]:motion-reduce:transition-none ' +
+    'data-[motion=shown]:translate-x-0 data-[motion=shown]:opacity-100 data-[motion=hidden]:opacity-0 ' +
+    'data-[motion=hidden]:data-[enter-from=line]:-translate-x-2 ' +
+    'data-[motion=hidden]:data-[enter-from=right]:translate-x-(--spacing-md) data-[motion=hidden]:data-[enter-from=right]:rtl:-translate-x-(--spacing-md) ' +
+    'data-[motion=hidden]:data-[enter-from=left]:-translate-x-(--spacing-md) data-[motion=hidden]:data-[enter-from=left]:rtl:translate-x-(--spacing-md) ' +
+    'data-[motion=hidden]:data-[enter-from=none]:translate-x-0'
+
   const LINE_HOVER_CLASS =
     'pointer-events-none absolute inset-0 z-0 bg-(--bg-hover) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance ' +
     'motion-reduce:transition-none group-hover:opacity-100 ' +
@@ -891,8 +872,10 @@
                 <div
                   v-for="(line, offset) in chunk.items"
                   :key="`${activeTab.value}-${panelVersion}-${chunk.start + offset}`"
-                  :class="[LINE_CLASS, getLineMotionClasses(chunk.start + offset)]"
+                  :class="[LINE_CLASS, LINE_MOTION_CLASS]"
                   :style="getLineMotionStyle(chunk.start + offset)"
+                  :data-motion="getLineMotionState(chunk.start + offset)"
+                  :data-enter-from="lineMotionMode ? lineEnterFrom : undefined"
                   :data-testid="`${testId}__line`"
                   :data-state="line.state"
                 >

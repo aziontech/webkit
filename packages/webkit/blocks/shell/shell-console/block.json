@@ -48,6 +48,7 @@
     "name": "ListPage",
     "file": "shell-console.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "DetailPage",
