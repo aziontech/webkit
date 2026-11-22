@@ -1,7 +1,7 @@
 import { isCommentScoped, proseComments } from './comment-scan.js'
 
-export const isVue = (rel) => rel.endsWith('.vue')
-export const isComposable = (rel) => /(^|\/)use-[^/]*\.(ts|js)$/.test(rel)
+const isVue = (rel) => rel.endsWith('.vue')
+const isComposable = (rel) => /(^|\/)use-[^/]*\.(ts|js)$/.test(rel)
 export const isJsComposable = (rel) => /(^|\/)use-[^/]*\.js$/.test(rel)
 
 const SLOT_PRESENCE = /\b\$?slots(?:\.[\w$]+(?![\w$])|\[[^\]]+\])(?!\s*(?:\?\.)?\()/

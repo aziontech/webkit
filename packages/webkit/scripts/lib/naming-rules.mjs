@@ -87,7 +87,7 @@ export function isBlocking(rule, { strict = false } = {}) {
   return RULES[rule]?.stage === 'enforced' || strict || NAMING_STAGED_BLOCKS
 }
 
-export const CATEGORIES = [
+const CATEGORIES = [
   'action',
   'ai',
   'chart',
@@ -105,7 +105,7 @@ export const CATEGORIES = [
   'provider'
 ]
 
-export const CATEGORY_RENAMES = {
+const CATEGORY_RENAMES = {
   actions: 'action',
   inputs: 'input',
   sections: 'section',
@@ -116,7 +116,7 @@ export const CATEGORY_RENAMES = {
   documentation: 'docs'
 }
 
-export const BLOCK_GROUPS = [
+const BLOCK_GROUPS = [
   'account',
   'ai',
   'auth',
@@ -131,7 +131,7 @@ export const BLOCK_GROUPS = [
   'top-bar'
 ]
 
-export const BLOCK_GROUP_RENAMES = {
+const BLOCK_GROUP_RENAMES = {
   states: 'state',
   shells: 'shell',
   'top-bars': 'top-bar',
@@ -143,9 +143,9 @@ export const BLOCK_GROUP_RENAMES = {
   headers: 'top-bar'
 }
 
-export const BLOCK_SURFACES = ['platform', 'product', 'app', 'console', 'site', 'website', 'docs']
+const BLOCK_SURFACES = ['platform', 'product', 'app', 'console', 'site', 'website', 'docs']
 
-export const BLOCK_STATE_WORDS = {
+const BLOCK_STATE_WORDS = {
   failed: 'error',
   failure: 'error',
   fail: 'error',
@@ -160,9 +160,9 @@ export const BLOCK_STATE_WORDS = {
   spinner: 'loading'
 }
 
-export const STATE_WORDS = ['loading', 'empty', 'error', 'success']
+const STATE_WORDS = ['loading', 'empty', 'error', 'success']
 
-export const PART_WORDS = [
+const PART_WORDS = [
   'trigger',
   'content',
   'header',
@@ -178,7 +178,7 @@ export const PART_WORDS = [
   'list'
 ]
 
-export const DOMAIN_PARTS = {
+const DOMAIN_PARTS = {
   'bento-grid': ['cell'],
   'card-grid': ['cell'],
   carousel: ['next', 'previous'],
@@ -239,7 +239,7 @@ export const DOMAIN_PARTS = {
   wizard: ['step']
 }
 
-export const PART_RENAMES = {
+const PART_RENAMES = {
   option: 'item',
   panel: 'content',
   overlay: 'nothing (Content renders the overlay)',
@@ -250,9 +250,9 @@ export const PART_RENAMES = {
   options: 'items'
 }
 
-export const BODY_ROOTS = ['dialog', 'drawer', 'panel']
+const BODY_ROOTS = ['dialog', 'drawer', 'panel']
 
-export const TABS_PARTS = {
+const TABS_PARTS = {
   list: 'list',
   trigger: 'trigger',
   content: 'content',
@@ -260,7 +260,7 @@ export const TABS_PARTS = {
   panel: 'content'
 }
 
-export const ABBREVIATIONS = {
+const ABBREVIATIONS = {
   btn: 'button',
   img: 'image',
   nav: 'navigation',
@@ -284,7 +284,7 @@ export const ABBREVIATIONS = {
   ds: '(spell it out)'
 }
 
-export const SYNONYMS = {
+const SYNONYMS = {
   modal: 'dialog',
   sheet: 'drawer',
   popup: 'popover',
@@ -296,15 +296,15 @@ export const SYNONYMS = {
   helper: 'description (Field.Description)'
 }
 
-export const NAME_WORD_EXEMPT = new Set([
+const NAME_WORD_EXEMPT = new Set([
   'template-gallery-section',
   'create-deploy-template',
   'view-template-browser'
 ])
 
-export const PLURAL_ROOTS_ALLOWED = new Set(['tabs', 'steps', 'settings', 'stats', 'news'])
+const PLURAL_ROOTS_ALLOWED = new Set(['tabs', 'steps', 'settings', 'stats', 'news'])
 
-export const EXAMPLE_RENAMES = {
+const EXAMPLE_RENAMES = {
   types: 'variants',
   type: 'variants',
   kinds: 'variants',
@@ -332,7 +332,7 @@ export const EXAMPLE_RENAMES = {
   failure: 'error'
 }
 
-export const SCRIPT_VERBS = [
+const SCRIPT_VERBS = [
   'build',
   'check',
   'test',
@@ -356,7 +356,7 @@ export const SCRIPT_VERBS = [
   'watch'
 ]
 
-export const LIFECYCLE_SCRIPTS = new Set([
+const LIFECYCLE_SCRIPTS = new Set([
   'prepare',
   'prepack',
   'postpack',
@@ -371,13 +371,13 @@ export const LIFECYCLE_SCRIPTS = new Set([
   'predev'
 ])
 
-export const ESLINT_PREFIXES = ['no', 'prefer', 'require', 'valid', 'consistent']
+const ESLINT_PREFIXES = ['no', 'prefer', 'require', 'valid', 'consistent']
 
-export const REQUIRED_CHECKS = new Set(['OSSF Scorecard', 'Governance Gate'])
+const REQUIRED_CHECKS = new Set(['OSSF Scorecard', 'Governance Gate'])
 
-export const WORKFLOW_BANNED_WORDS = ['storybook', 'stories', 'story', 'chromatic']
+const WORKFLOW_BANNED_WORDS = ['storybook', 'stories', 'story', 'chromatic']
 
-export const SKILL_VERBS = [
+const SKILL_VERBS = [
   'add',
   'audit',
   'build',
@@ -406,20 +406,11 @@ export const SKILL_VERBS = [
   'write'
 ]
 
-export const HOOK_VERBS = ['validate', 'enforce', 'check']
+const HOOK_VERBS = ['validate', 'enforce', 'check']
 
-export const MCP_VERBS = [
-  'list',
-  'get',
-  'search',
-  'suggest',
-  'check',
-  'validate',
-  'explain',
-  'find'
-]
+const MCP_VERBS = ['list', 'get', 'search', 'suggest', 'check', 'validate', 'explain', 'find']
 
-export const LEGACY_ICON_WORDS = {
+const LEGACY_ICON_WORDS = {
   times: 'x',
   bars: 'menu',
   cog: 'settings',
@@ -431,7 +422,6 @@ export const LEGACY_ICON_WORDS = {
 
 const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/
 const CAMEL = /^[a-z][a-zA-Z0-9]*$/
-const PASCAL = /^[A-Z][A-Za-z0-9]*$/
 const DOC_FILE = /^[A-Z][A-Z0-9_]*\.md$/
 const LOCALE_TAG = /^[a-z]{2,3}(-[A-Z]{2})?$/
 const FILE_NAME_EXEMPT = new Set([
@@ -468,7 +458,7 @@ function wordProblem(word) {
   return null
 }
 
-export function nameWordProblems(name) {
+function nameWordProblems(name) {
   if (NAME_WORD_EXEMPT.has(name)) return []
   return words(name).map(wordProblem).filter(Boolean)
 }
@@ -485,7 +475,7 @@ const isTest = (rel) =>
     rel
   )
 
-export function checkComponentPath(rel, ctx = {}) {
+function checkComponentPath(rel, ctx = {}) {
   const cp = componentPath(rel)
   if (!cp) return []
   const out = []
@@ -573,9 +563,9 @@ export function checkComponentPath(rel, ctx = {}) {
   return out
 }
 
-export const SECTION_WRAPPER_WORDS = ['band', 'stack', 'block', 'module', 'strip']
+const SECTION_WRAPPER_WORDS = ['band', 'stack', 'block', 'module', 'strip']
 
-export function docsPrefixProblems(rel, category, stem) {
+function docsPrefixProblems(rel, category, stem) {
   const inDocs = category === 'docs' || category === 'documentation'
   if (inDocs === stem.startsWith('doc-')) return []
   return [
@@ -590,7 +580,7 @@ export function docsPrefixProblems(rel, category, stem) {
   ]
 }
 
-export function sectionWordProblems(rel, stem) {
+function sectionWordProblems(rel, stem) {
   if (!stem.split('-').includes('section')) return []
   return [
     v(
@@ -602,7 +592,7 @@ export function sectionWordProblems(rel, stem) {
   ]
 }
 
-export function sectionSuffixProblems(rel, stem) {
+function sectionSuffixProblems(rel, stem) {
   if (stem.endsWith('-section')) return []
   const ws = stem.split('-')
   const wrapper = ws.length > 1 && SECTION_WRAPPER_WORDS.includes(ws[ws.length - 1])
@@ -617,7 +607,7 @@ export function sectionSuffixProblems(rel, stem) {
   ]
 }
 
-export function checkFileName(rel) {
+function checkFileName(rel) {
   const out = []
   const segs = rel.split('/')
   for (const [i, seg] of segs.entries()) {
@@ -650,7 +640,7 @@ function staticTestidFallbacks(text) {
   return out
 }
 
-export function checkTestid(rel, text) {
+function checkTestid(rel, text) {
   const out = []
   const stem = rel
     .split('/')
@@ -687,7 +677,7 @@ const DOM_EVENT_CAMEL =
 const blankTemplateLiterals = (text) =>
   text.replace(/`(?:\\[\s\S]|\$\{[^}]*\}|[^`\\])*`/g, (lit) => lit.replace(/[^\n]/g, ' '))
 
-export function checkHandlers(rel, source) {
+function checkHandlers(rel, source) {
   const out = []
   const text = blankTemplateLiterals(source)
   for (const m of text.matchAll(
@@ -725,7 +715,7 @@ function templateOf(text) {
   return m ? { body: m[1], offset: m.index } : { body: '', offset: 0 }
 }
 
-export function checkDomRefs(rel, text) {
+function checkDomRefs(rel, text) {
   const out = []
   const seen = new Set()
   const { body, offset } = templateOf(text)
@@ -762,7 +752,7 @@ export function checkDomRefs(rel, text) {
   return out
 }
 
-export function checkInjectionKeys(rel, text) {
+function checkInjectionKeys(rel, text) {
   const out = []
   const re =
     /(?:export\s+)?const\s+(\w+)\s*(:\s*InjectionKey\s*<[^=]*?>)?\s*=\s*Symbol\s*\(\s*(?:(['"`])([^'"`]*)\3)?\s*\)/g
@@ -795,7 +785,7 @@ export function checkInjectionKeys(rel, text) {
   return out
 }
 
-export function checkComposableFile(rel, text) {
+function checkComposableFile(rel, text) {
   const out = []
   const file = rel.split('/').pop()
   const exported = [
@@ -844,7 +834,7 @@ const TYPOGRAPHY_SUFFIXES = [
   'color'
 ]
 
-export function ownedElsewhere(name, root, ctx = {}) {
+function ownedElsewhere(name, root, ctx = {}) {
   if (ctx.themeVars?.has(name)) return true
   const readers = ctx.cssVarReaders?.get(name)
   if (!readers) return false
@@ -852,7 +842,7 @@ export function ownedElsewhere(name, root, ctx = {}) {
   return false
 }
 
-export function checkCssVariables(rel, text, root, ctx = {}) {
+function checkCssVariables(rel, text, root, ctx = {}) {
   const out = []
   if (!root) return out
   const seen = new Set()
@@ -893,7 +883,7 @@ const TOKEN_BAD = [
   }
 ]
 
-export function checkTokenNames(rel, text) {
+function checkTokenNames(rel, text) {
   const out = []
   const seen = new Set()
   for (const { re, fix } of TOKEN_BAD) {
@@ -915,15 +905,7 @@ export function checkTokenNames(rel, text) {
   return out
 }
 
-export const FILL_FAMILIES = [
-  'primary',
-  'secondary',
-  'accent',
-  'success',
-  'warning',
-  'danger',
-  'info'
-]
+const FILL_FAMILIES = ['primary', 'secondary', 'accent', 'success', 'warning', 'danger', 'info']
 
 export function checkFillPairs(keys, file = 'packages/theme/src/tokens/theme') {
   const out = []
@@ -942,7 +924,7 @@ export function checkFillPairs(keys, file = 'packages/theme/src/tokens/theme') {
   return out
 }
 
-export function iconProblem(name, ctx) {
+function iconProblem(name, ctx) {
   if (name.startsWith('pi-')) return 'is from the removed pi icon set'
   if (!name.startsWith('az-')) return 'does not carry the "az-" prefix'
   const renamed = ctx?.iconRenames?.[name]
@@ -960,7 +942,7 @@ export function iconProblem(name, ctx) {
 
 const RETIRED_ICON_BASES = { ai: 'az', 'ai-cor': 'az-color', 'ai-color': 'az-color', pi: 'az' }
 
-export function checkIconUsage(rel, text, ctx) {
+function checkIconUsage(rel, text, ctx) {
   const out = []
   const seen = new Set()
   for (const m of text.matchAll(
@@ -993,7 +975,7 @@ export function checkIconUsage(rel, text, ctx) {
   return out
 }
 
-export function checkIconFile(rel) {
+function checkIconFile(rel) {
   const m = rel.match(/^packages\/icons\/src\/svg-raw\/([^/]+)\/([^/]+)\.svg$/)
   if (!m) return []
   const [, set, name] = m
@@ -1032,7 +1014,7 @@ function splitTop(text, sep) {
   return parts.map((x) => x.trim()).filter(Boolean)
 }
 
-export function collectTypes(text, into = new Map()) {
+function collectTypes(text, into = new Map()) {
   for (const m of text.matchAll(
     /(?:^|\n)\s*(?:export\s+)?type\s+([A-Za-z_$][\w$]*)\s*=\s*([^\n]+(?:\n\s*\|[^\n]+)*)/g
   )) {
@@ -1098,7 +1080,7 @@ export function extractModels(script) {
 const AXIS_PROP =
   /^(variant|size|severity|status|orientation)$|[a-z](Variant|Size|Severity|Status|Orientation)$/
 
-export function checkAxisTypeNames(rel, props, component, script = '') {
+function checkAxisTypeNames(rel, props, component, script = '') {
   const out = []
   const local = collectTypes(script)
   const pascal = kebabToPascal(component)
@@ -1173,7 +1155,7 @@ export function checkTemplateModels(rel, text) {
   return out
 }
 
-export function checkModelShapes(rel, props, models) {
+function checkModelShapes(rel, props, models) {
   const out = []
   for (const m of models) {
     if (Object.hasOwn(MODELS.banned, m.name)) {
@@ -1241,7 +1223,7 @@ export const PHYSICAL_EDGE_TYPES = Object.freeze([
 
 const PHYSICAL_WORD = /^(?:[a-z]+-)?(?:left|right)$/
 
-export function physicalSideMembers(typeText, script = '', types = new Map()) {
+function physicalSideMembers(typeText, script = '', types = new Map()) {
   const local = collectTypes(script)
   const seen = new Set()
   const found = []
@@ -1264,7 +1246,7 @@ export function physicalSideMembers(typeText, script = '', types = new Map()) {
   return found
 }
 
-export function checkPhysicalSides(rel, props, script = '', types = new Map()) {
+function checkPhysicalSides(rel, props, script = '', types = new Map()) {
   const out = []
   for (const p of props) {
     const words = physicalSideMembers(p.type, script, types)
@@ -1281,7 +1263,7 @@ export function checkPhysicalSides(rel, props, script = '', types = new Map()) {
   return out
 }
 
-export function checkSfcVocabulary(rel, text, component, ctx = {}, root = component) {
+function checkSfcVocabulary(rel, text, component, ctx = {}, root = component) {
   const out = []
   let sfc
   try {
@@ -1309,7 +1291,7 @@ export function checkSfcVocabulary(rel, text, component, ctx = {}, root = compon
   return out
 }
 
-export function checkDataAttributeUsage(rel, text) {
+function checkDataAttributeUsage(rel, text) {
   const out = []
   const names = new Set()
   for (const m of text.matchAll(/(?<![\w-]):?(data-[A-Za-z0-9-]+)\s*=/g)) names.add(m[1])
@@ -1321,7 +1303,7 @@ export function checkDataAttributeUsage(rel, text) {
   return out
 }
 
-export function checkTypeNames(rel, text, root) {
+function checkTypeNames(rel, text, root) {
   const out = []
   for (const m of text.matchAll(/export\s+(?:type|interface)\s+([A-Za-z0-9_]+)/g)) {
     const name = m[1]
@@ -1361,7 +1343,7 @@ export function checkTypeNames(rel, text, root) {
   return out
 }
 
-export function checkSpecVocabulary(rel, text, ctx = {}) {
+function checkSpecVocabulary(rel, text, ctx = {}) {
   const out = []
   const name = rel.split('/').pop().replace(/\.md$/, '')
   const body = text.replace(/^---[\s\S]*?---/, '')
@@ -1389,7 +1371,7 @@ export function checkSpecVocabulary(rel, text, ctx = {}) {
   return out
 }
 
-export function checkI18n(rel, text, ctx) {
+function checkI18n(rel, text, ctx) {
   const out = []
   const owners = [
     ...(ctx?.componentNames || []),
@@ -1444,7 +1426,7 @@ export function checkI18n(rel, text, ctx) {
 
 const EXAMPLE_PROP_WORDS = { type: 'type', types: 'type', levels: 'level' }
 
-export function checkExampleIndex(rel, text, ctx = {}) {
+function checkExampleIndex(rel, text, ctx = {}) {
   const out = []
   const comp = rel.split('/').slice(-2)[0]
   const ownsProp = (word) =>
@@ -1489,7 +1471,7 @@ export function checkExampleIndex(rel, text, ctx = {}) {
   return out
 }
 
-export function checkBlockFile(rel, text) {
+function checkBlockFile(rel, text) {
   const out = []
   const m = rel.match(/^packages\/webkit\/blocks\/(.+)\/block\.json$/)
   if (!m) return out
@@ -1544,7 +1526,7 @@ export function checkBlockFile(rel, text) {
   return out
 }
 
-export function blockGroupFirstProblems(group, block) {
+function blockGroupFirstProblems(group, block) {
   if (!block.startsWith(`${group}-`) || block === `${group}-`)
     return [`block "${group}/${block}" must start with its group word: "${group}/${group}-…"`]
   const rest = block.slice(group.length + 1)
@@ -1553,7 +1535,7 @@ export function blockGroupFirstProblems(group, block) {
   return []
 }
 
-export function blockStateProblems(rel, stem) {
+function blockStateProblems(rel, stem) {
   const out = []
   const parts = stem.split('-')
   const bad = parts.find((w) => Object.hasOwn(BLOCK_STATE_WORDS, w))
@@ -1578,7 +1560,7 @@ export function blockStateProblems(rel, stem) {
   return out
 }
 
-export function checkScripts(rel, text) {
+function checkScripts(rel, text) {
   const out = []
   let pkg
   try {
@@ -1627,7 +1609,7 @@ export function checkScripts(rel, text) {
   return out
 }
 
-export function checkFilters(rel, text) {
+function checkFilters(rel, text) {
   const out = []
   for (const m of text.matchAll(/--filter[= ]+(['"]?)([^\s'"\\]+)\1/g)) {
     const target = m[2]
@@ -1651,7 +1633,7 @@ export function checkFilters(rel, text) {
   return out
 }
 
-export const PROPER_NOUNS = new Set([
+const PROPER_NOUNS = new Set([
   'Azion',
   'GitHub',
   'Node.js',
@@ -1698,7 +1680,7 @@ function sentenceCaseProblem(name) {
   return null
 }
 
-export function checkWorkflow(rel, text) {
+function checkWorkflow(rel, text) {
   const out = []
   const file = rel.split('/').pop()
   if (!/^[a-z0-9]+(-[a-z0-9]+)*\.yml$/.test(file))
@@ -1741,7 +1723,7 @@ export function checkWorkflow(rel, text) {
   return out
 }
 
-export function checkEslintRuleFile(rel) {
+function checkEslintRuleFile(rel) {
   const m = rel.match(/^packages\/webkit\/src\/eslint-plugin\/rules\/([^/]+)\.js$/)
   if (!m) return []
   const name = m[1]
@@ -1759,7 +1741,7 @@ export function checkEslintRuleFile(rel) {
   return []
 }
 
-export function checkToolingName(rel) {
+function checkToolingName(rel) {
   const out = []
   let m
   const abbreviation = (name) =>
@@ -1835,7 +1817,7 @@ export function checkToolingName(rel) {
   return out
 }
 
-export function checkMcpTools(rel, text) {
+function checkMcpTools(rel, text) {
   const out = []
   for (const m of text.matchAll(/\btool\(\s*'([^']+)'/g)) {
     const name = m[1]
@@ -1874,7 +1856,7 @@ export function checkMcpTools(rel, text) {
   return out
 }
 
-export function checkCliCommands(rel, text) {
+function checkCliCommands(rel, text) {
   const out = []
   const m = text.match(/const\s+COMMANDS\s*=\s*new Set\(\[([\s\S]*?)\]\)/)
   if (!m) return out
@@ -1892,7 +1874,7 @@ export function checkCliCommands(rel, text) {
   return out
 }
 
-export function checkCatalogWords(rel, text) {
+function checkCatalogWords(rel, text) {
   const out = []
   for (const m of text.matchAll(
     /\b(patternAliases|search_patterns|get_pattern|catalog\/patterns)\b/g
@@ -1909,7 +1891,7 @@ export function checkCatalogWords(rel, text) {
   return out
 }
 
-export function checkExportKeys(rel, text) {
+function checkExportKeys(rel, text) {
   const out = []
   let pkg
   try {
@@ -1967,7 +1949,7 @@ export function checkExportKeys(rel, text) {
   return out
 }
 
-export function checkEnforcedExports(rel, text, ctx = {}) {
+function checkEnforcedExports(rel, text, ctx = {}) {
   let pkg
   try {
     pkg = JSON.parse(text)
@@ -2006,7 +1988,7 @@ export function checkPartExports(ctx) {
   return out
 }
 
-export function checkTokenTree(ctx) {
+function checkTokenTree(ctx) {
   return ctx?.tokenKeys ? checkFillPairs(ctx.tokenKeys) : []
 }
 
@@ -2082,8 +2064,7 @@ export function checkFile(rel, text, ctx = {}) {
   return out
 }
 
-export const MIGRATION_TOOLING =
-  /^packages\/webkit\/src\/cli\/(migrate[\w-]*\.js|cli\.js|migrations\/.+)$/
+const MIGRATION_TOOLING = /^packages\/webkit\/src\/cli\/(migrate[\w-]*\.js|cli\.js|migrations\/.+)$/
 
 const SKIP_DIRS = new Set([
   'node_modules',
@@ -2110,7 +2091,7 @@ function walk(abs, root, out) {
   return out
 }
 
-export const SCAN_ROOTS = [
+const SCAN_ROOTS = [
   'packages/webkit/src',
   'packages/webkit/blocks',
   'packages/webkit/examples',
@@ -2127,7 +2108,7 @@ export const SCAN_ROOTS = [
   'adapters/claude/agents'
 ]
 
-export function repoFiles(root) {
+function repoFiles(root) {
   const files = []
   for (const r of SCAN_ROOTS) walk(join(root, r), root, files)
   if (existsSync(join(root, 'apps')))
@@ -2283,5 +2264,3 @@ export function addedViolations(before, after) {
   }
   return out
 }
-
-export { KEBAB, PASCAL, kebabToCamel, kebabToPascal }

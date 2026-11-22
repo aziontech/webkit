@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url'
 
 import type { Plugin } from 'vite'
 
-export const CHUNK_GRAPH_FILE = '.vite/chunk-graph.json'
+const CHUNK_GRAPH_FILE = '.vite/chunk-graph.json'
 
 const CLIENT_ENTRY = fileURLToPath(new URL('../src/main.ts', import.meta.url))
 const RUNTIME_ANCHOR = 'virtual:docs-bundler-runtime'

@@ -48,4 +48,4 @@ function updateThemeIcon() {
 
 initializeTheme()
 
-export { isDarkMode, initializeTheme, toggleTheme, getThemeIcon }
+export { getThemeIcon, initializeTheme, toggleTheme }

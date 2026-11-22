@@ -343,8 +343,3 @@ export const STANDARDS = [
 ]
 
 export const STANDARDS_BY_ID = Object.fromEntries(STANDARDS.map((s) => [s.id, s]))
-
-/** Standards a consuming project should adopt — they ship out (guideline + eslint-plugin). */
-export const GENERAL_STANDARDS = STANDARDS.filter((s) => s.scope === 'general')
-/** Standards specific to authoring the webkit design system itself. */
-export const WEBKIT_STANDARDS = STANDARDS.filter((s) => s.scope === 'webkit')

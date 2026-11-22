@@ -14,5 +14,3 @@ export const info = {
     'info-mark': tokenRef('primitives.blue.400')
   }
 }
-
-export default { info }

@@ -68,7 +68,7 @@ export const brandMarks = {
 /** Every registered mark name. */
 export type BrandMarkName = keyof typeof brandMarks
 
-export const brandMarkLabels: Record<BrandMarkName, string> = {
+const brandMarkLabels: Record<BrandMarkName, string> = {
   agibank: 'Agibank',
   'america-movil': 'América Móvil',
   angular: 'Angular',
@@ -131,8 +131,6 @@ export const brandMarkLabels: Record<BrandMarkName, string> = {
   vue: 'Vue'
 }
 
-export const brandMarkNames = Object.keys(brandMarks).sort() as BrandMarkName[]
-
 export const brandWordmarks = {
   'amazon-kinesis': 'Amazon Kinesis',
   'amazon-s3': 'Amazon S3',
@@ -148,14 +146,12 @@ export const brandWordmarks = {
 /** A brand whose terms do not let WebKit ship its logo; it renders as its name in plain text. */
 export type BrandWordmarkName = keyof typeof brandWordmarks
 
-export const brandWordmarkNames = Object.keys(brandWordmarks).sort() as BrandWordmarkName[]
-
 export function resolveBrandMark(name: string): BrandMarkLoader | null {
   if (!Object.hasOwn(brandMarks, name)) return null
   return brandMarks[name as BrandMarkName]
 }
 
-export function isBrandWordmark(name: string): name is BrandWordmarkName {
+function isBrandWordmark(name: string): name is BrandWordmarkName {
   return Object.hasOwn(brandWordmarks, name)
 }
 

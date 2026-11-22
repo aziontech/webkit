@@ -5,8 +5,8 @@ import { GUIDELINE_FILE, guidelinesSummary } from './guidelines.mjs'
 
 const PKG_PREFIX = '@aziontech/webkit/'
 
-export const EXAMPLES_PER_COMPONENT = 3
-export const EXAMPLE_MAX_CHARS = 8000
+const EXAMPLES_PER_COMPONENT = 3
+const EXAMPLE_MAX_CHARS = 8000
 
 export function kebab(segment) {
   return String(segment)

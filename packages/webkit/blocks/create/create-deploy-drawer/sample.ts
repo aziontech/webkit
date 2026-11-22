@@ -591,7 +591,7 @@ const geoRedirect = (prefix: string, ready: boolean): DeployDrawerDependency => 
     : []
 })
 
-export const sampleDependenciesByVersion = (id: string): DeployDrawerDependency[] => {
+const sampleDependenciesByVersion = (id: string): DeployDrawerDependency[] => {
   const prefix = `service@${id}`
   return [authGateway(prefix), geoRedirect(prefix, id !== 'AG1VVDJP'), paymentsApi(prefix)]
 }

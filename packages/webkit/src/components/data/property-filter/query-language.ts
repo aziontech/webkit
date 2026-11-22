@@ -62,7 +62,7 @@ const OPERATORS_BY_LENGTH = [...PROPERTY_FILTER_OPERATORS].sort((a, b) => b.leng
 
 const isSpace = (char: string): boolean => /\s/.test(char)
 
-export function lexQuery(text: string): QueryLexeme[] {
+function lexQuery(text: string): QueryLexeme[] {
   const out: QueryLexeme[] = []
   let index = 0
   while (index < text.length) {
@@ -132,7 +132,7 @@ const connectiveOf = (lexeme: QueryLexeme | undefined): PropertyFilterOperation 
   return word === 'and' || word === 'or' ? word : null
 }
 
-export const findProperty = (
+const findProperty = (
   properties: FilteringProperty[],
   name: string
 ): FilteringProperty | undefined => {

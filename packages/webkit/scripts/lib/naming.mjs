@@ -38,7 +38,7 @@ export const MARKET_ALIASES = {
   transfer: 'transfer-list'
 }
 
-export const NON_ENGLISH_WORDS = [
+const NON_ENGLISH_WORDS = [
   'botao',
   'cabecalho',
   'cadastro',
@@ -82,7 +82,7 @@ export function removedNames(subpaths, migration) {
   )
 }
 
-export const RENAMED_OVERRIDES = {
+const RENAMED_OVERRIDES = {
   menu: null,
   'radio-button': 'radio-group'
 }

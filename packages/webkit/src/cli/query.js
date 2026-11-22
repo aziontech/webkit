@@ -13,7 +13,7 @@ const words = (s) =>
     .split(/[^a-z0-9]+/)
     .filter((w) => w.length >= 2)
 
-export function searchExamples(catalog, query, limit = 8) {
+function searchExamples(catalog, query, limit = 8) {
   const terms = words(query)
   if (!terms.length) return []
   const hits = []

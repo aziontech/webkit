@@ -100,7 +100,7 @@ function comparable(
   return [Number(raw), Number(value)]
 }
 
-export function matchesOperator(
+function matchesOperator(
   raw: unknown,
   operator: PropertyFilterOperator,
   value: string,
@@ -132,7 +132,7 @@ export function matchesOperator(
   return negated ? !values.some(test) : values.some(test)
 }
 
-export function textOf(item: unknown, fields?: string[]): string[] {
+function textOf(item: unknown, fields?: string[]): string[] {
   if (item === null || typeof item !== 'object') return [String(item ?? '')]
   const record = item as Record<string, unknown>
   const keys = fields?.length ? fields : Object.keys(record)
@@ -153,7 +153,7 @@ export function matchesText(item: unknown, text: string, fields?: string[]): boo
   return textOf(item, fields).some((entry) => lower(entry).includes(needle))
 }
 
-export function matchesToken(
+function matchesToken(
   item: unknown,
   token: PropertyFilterToken,
   properties: FilteringProperty[],

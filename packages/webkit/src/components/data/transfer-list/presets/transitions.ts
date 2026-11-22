@@ -1,6 +1,6 @@
 import { curve, duration } from '@aziontech/theme/animations'
 
-export const transferListItemMotion = {
+const transferListItemMotion = {
   duration: duration['moderate-01'],
   curve: curve['productive-entrance']
 } as const

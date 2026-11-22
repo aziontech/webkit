@@ -66,9 +66,3 @@ function finish() {
     actions
   })
 }
-
-export function resetDeploy() {
-  clearTimeout(timer)
-  toast.dismiss(RUN_TOAST)
-  run.status = 'idle'
-}

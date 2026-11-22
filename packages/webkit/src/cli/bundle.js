@@ -13,7 +13,6 @@ function resolveTemplatesRoot() {
 }
 
 export const AI_TEMPLATES = resolveTemplatesRoot()
-export const CLAUDE_TEMPLATES = AI_TEMPLATES
 
 export function agentsDir(templatesDir = AI_TEMPLATES) {
   return join(templatesDir, 'adapters/claude/agents')

@@ -7,5 +7,3 @@ export const blur = {
   '2xl': '40px',
   '3xl': '64px'
 }
-
-export default { blur }

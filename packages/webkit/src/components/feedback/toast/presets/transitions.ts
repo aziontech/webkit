@@ -7,7 +7,7 @@ export type ToastMotionToken = {
   curve: string
 }
 
-export const toastMotion: Record<ToastMotionPhase, ToastMotionToken> = {
+const toastMotion: Record<ToastMotionPhase, ToastMotionToken> = {
   enter: { duration: duration['moderate-02'], curve: curve['productive-entrance'] },
   exit: { duration: duration['slow-01'], curve: curve['productive-exit'] }
 }

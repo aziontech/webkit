@@ -8,6 +8,7 @@ const HTML_DIRECTIVE = /^(eslint-|prettier-ignore|webkit-migrate-ok$)/
 const CODE_CONNECT_FILE = /\.figma\.(ts|js)$/
 const CODE_CONNECT_DIRECTIVE = /^\/\/\s*(url|source|component)=\S/
 const DEPRECATED_TAG = /@deprecated\b/
+const KNIP_ALIAS_TAG = /^\/\*\*\s*@alias\s*\*\/$/
 const JS_TYPE_TAG =
   /@(type|typedef|template|satisfies|callback|import|overload)\b|@(param|arg|argument|returns?|prop|property)\s*\{/
 const API_DECL = /^(export\s+)?(declare\s+)?(type|interface)\s/
@@ -207,7 +208,7 @@ function keepTag(tag) {
   return parts.join(' ')
 }
 
-export function stripTypedJsdoc(body, indent = '') {
+function stripTypedJsdoc(body, indent = '') {
   const lines = body
     .replace(/^\/\*\*/, '')
     .replace(/\*\/$/, '')
@@ -240,7 +241,7 @@ function classify(text, cm) {
   const inner = (block ? body.slice(2, -2).replace(/^\*+/, '') : body.replace(/^\/+/, '')).trim()
   if (DIRECTIVE.test(inner)) return 'directive'
   if (!body.startsWith('/**')) return 'prose'
-  if (DEPRECATED_TAG.test(body)) return 'directive'
+  if (DEPRECATED_TAG.test(body) || KNIP_ALIAS_TAG.test(body)) return 'directive'
   if (cm.js && JS_TYPE_TAG.test(body)) {
     return squash(stripTypedJsdoc(body)) === squash(body) ? 'directive' : 'typed-prose'
   }

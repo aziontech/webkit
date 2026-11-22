@@ -1,9 +1,9 @@
-export const COPY_RATIO = 0.9
-export const FORK_RATIO = 0.6
+const COPY_RATIO = 0.9
+const FORK_RATIO = 0.6
 const FORK_MIN_LINES = 60
 const RECORD_LIMIT = 3
 
-export function scriptOf(sfc) {
+function scriptOf(sfc) {
   return [...String(sfc).matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)]
     .map((m) => m[1])
     .join('\n')
@@ -35,7 +35,7 @@ export function sharedLineRatio(base, other) {
   return prev[y.length] / y.length
 }
 
-export function inlineRecords(sfc) {
+function inlineRecords(sfc) {
   const script = scriptOf(sfc)
   const records = script.match(/\{\s*id\s*:/g)?.length ?? 0
   return records >= RECORD_LIMIT || /\bDate\.UTC\s*\(/.test(script)

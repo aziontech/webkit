@@ -556,8 +556,8 @@ const ASSET_KINDS = {
 
 function objectKeys(file, variable) {
   const src = readFileSync(resolve(PKG_ROOT, file), 'utf-8')
-  const start = src.search(new RegExp(`export const ${variable}\\b[^=]*= \\{`))
-  if (start === -1) throw new Error(`${file}: no "export const ${variable}" object`)
+  const start = src.search(new RegExp(`^(?:export )?const ${variable}\\b[^=]*= \\{`, 'm'))
+  if (start === -1) throw new Error(`${file}: no "const ${variable}" object`)
   const body = src.slice(src.indexOf('{', start) + 1, src.indexOf('\n}', start))
   const entries = []
   for (const m of body.matchAll(/^\s*'?([a-z0-9-]+)'?:\s*(?:'([^']*)')?/gm)) {

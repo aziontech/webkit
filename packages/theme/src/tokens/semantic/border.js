@@ -16,5 +16,3 @@ export const border = {
     'border-selected': tokenRef('theme.primary.primary')
   }
 }
-
-export default { border }

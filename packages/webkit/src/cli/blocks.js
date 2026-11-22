@@ -39,14 +39,14 @@ export function checksum(text) {
   return `sha256:${createHash('sha256').update(String(text)).digest('hex')}`
 }
 
-export function readManifest(projectDir) {
+function readManifest(projectDir) {
   const raw = read(join(projectDir, MANIFEST))
   if (!raw) return { package: PACKAGE_NAME, blocks: {} }
   const parsed = JSON.parse(raw)
   return { package: PACKAGE_NAME, ...parsed, blocks: parsed.blocks || {} }
 }
 
-export function writeManifest(projectDir, manifest) {
+function writeManifest(projectDir, manifest) {
   const blocks = Object.fromEntries(
     Object.keys(manifest.blocks)
       .sort()
@@ -74,7 +74,7 @@ function findVariant(meta, wanted) {
   )
 }
 
-export function resolveBlock(webkit, catalog, id, { variant } = {}) {
+function resolveBlock(webkit, catalog, id, { variant } = {}) {
   const key = String(id || '').trim()
   let resolvedId = existsSync(join(webkit.root, 'blocks', key, 'block.json')) ? key : null
   let wantedVariant = variant
@@ -140,7 +140,7 @@ function vueImportDirs(projectDir, routerRel) {
   return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([dir]) => dir)
 }
 
-export function detectViewsDir(projectDir) {
+function detectViewsDir(projectDir) {
   const router = firstExisting(projectDir, ROUTER_CANDIDATES)
   if (router) {
     const [top] = vueImportDirs(projectDir, router)
@@ -171,7 +171,7 @@ function kebab(s) {
     .toLowerCase()
 }
 
-export function suggestRoute(projectDir, { id, name, file }) {
+function suggestRoute(projectDir, { id, name, file }) {
   const router = firstExisting(projectDir, ROUTER_CANDIDATES)
   const abs = join(projectDir, file)
   let spec
@@ -201,7 +201,7 @@ function packageInstalled(projectDir, spec) {
   }
 }
 
-export function checkImports(projectDir, webkit, sources) {
+function checkImports(projectDir, webkit, sources) {
   const webkitSubpaths = new Set()
   const foreign = new Set()
   for (const src of sources) {
@@ -238,14 +238,14 @@ function variantFile(stem, variant) {
 const LOCAL_SPECIFIER = /(\bfrom\s+|\bimport\s*\(\s*)(['"])(\.{1,2}\/[^'"]+)\2/g
 const RESOLVE_SUFFIXES = ['', '.ts', '.vue', '.js', '/index.ts']
 
-export function rewriteImports(content, imports) {
+function rewriteImports(content, imports) {
   if (!imports || !Object.keys(imports).length) return content
   return String(content).replace(LOCAL_SPECIFIER, (match, lead, quote, spec) =>
     Object.hasOwn(imports, spec) ? `${lead}${quote}${imports[spec]}${quote}` : match
   )
 }
 
-export function localImports(content, fromFile, targets, toPath) {
+function localImports(content, fromFile, targets, toPath) {
   const out = {}
   for (const m of String(content).matchAll(LOCAL_SPECIFIER)) {
     const spec = m[3]
@@ -268,7 +268,7 @@ function extraFile(stem, file) {
 const isFile = (p) => existsSync(p) && statSync(p).isFile()
 const pascal = (s) => s.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase())
 
-export function blockImports(content, fromFile, blockDir) {
+function blockImports(content, fromFile, blockDir) {
   const out = new Set()
   for (const m of String(content).matchAll(LOCAL_SPECIFIER)) {
     const resolved = posix.normalize(
@@ -569,7 +569,7 @@ export function applyRemove(projectDir, plan) {
   return removed
 }
 
-export function inspectFile(projectDir, webkit, file) {
+function inspectFile(projectDir, webkit, file) {
   const canonicalPath = join(webkit.root, file.source)
   const shipped = read(canonicalPath)
   const canonical = shipped == null ? null : rewriteImports(shipped, file.imports)

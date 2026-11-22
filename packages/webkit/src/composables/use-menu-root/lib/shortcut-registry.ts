@@ -16,7 +16,7 @@ interface ShortcutEntry {
 const entries = new Set<ShortcutEntry>()
 let listening = false
 
-export function parseShortcut(command: string): DropdownMenuShortcut | null {
+function parseShortcut(command: string): DropdownMenuShortcut | null {
   let meta = false
   let ctrl = false
   let shift = false

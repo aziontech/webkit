@@ -1427,4 +1427,5 @@ export const es: Messages = {
   }
 }
 
+/** @alias */
 export default es

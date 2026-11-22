@@ -19,5 +19,3 @@ export const shadowDark = {
   xl: `${DARK_EDGE}, 0 20px 25px -5px rgb(0 0 0 / 0.6), 0 8px 10px -6px rgb(0 0 0 / 0.6)`,
   '2xl': `${DARK_EDGE}, 0 25px 50px -12px rgb(0 0 0 / 0.8)`
 }
-
-export default { shadow, shadowDark }

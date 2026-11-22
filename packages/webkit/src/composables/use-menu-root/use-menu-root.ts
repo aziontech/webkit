@@ -97,7 +97,7 @@ const ITEM_SELECTOR = '[role="menuitem"],[role="menuitemcheckbox"],[role="menuit
 
 const SUB_SWITCH_DELAY = 150
 
-export function menuItems(container: globalThis.HTMLElement | null): globalThis.HTMLElement[] {
+function menuItems(container: globalThis.HTMLElement | null): globalThis.HTMLElement[] {
   if (!container) return []
   return Array.from(container.querySelectorAll<globalThis.HTMLElement>(ITEM_SELECTOR)).filter(
     (el) => el.getAttribute('aria-disabled') !== 'true'

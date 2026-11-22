@@ -3,5 +3,3 @@ export const fontFamily = {
   code: "'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
   display: "'Proto Mono', 'Roboto Mono', ui-monospace, monospace"
 }
-
-export default { fontFamily }

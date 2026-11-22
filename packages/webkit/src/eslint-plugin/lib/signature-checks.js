@@ -32,8 +32,7 @@ export const STANDARD_BY_SIGNATURE = {
 
 const POLYMORPHIC_HINT = /\bas(Child)?\s*\??\s*:|['"]as(-child)?['"]/
 
-export const signatureChecksApply = (filename) =>
-  isComposableFile(filename) || /\.vue$/.test(filename)
+const signatureChecksApply = (filename) => isComposableFile(filename) || /\.vue$/.test(filename)
 
 const require = createRequire(import.meta.url)
 

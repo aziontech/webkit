@@ -14,5 +14,3 @@ export const secondary = {
     'secondary-foreground': tokenRef('primitives.base.black')
   }
 }
-
-export default { secondary }

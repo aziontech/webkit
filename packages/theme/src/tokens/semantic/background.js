@@ -32,5 +32,3 @@ export const background = {
     'bg-disabled': tokenRef('primitives.gray.800')
   }
 }
-
-export default { background }

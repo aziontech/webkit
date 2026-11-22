@@ -36,5 +36,3 @@ export const brandPrimitives = {
   accent: brand.accent,
   absolute: brand.absolute
 }
-
-export default { brand, brandPrimitives }

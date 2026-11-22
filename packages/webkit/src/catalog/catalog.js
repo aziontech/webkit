@@ -5,10 +5,6 @@ import { dirname, join } from 'node:path'
 const CANDIDATE_PKGS = ['@aziontech/webkit']
 const DEFAULT_PKG = CANDIDATE_PKGS[0]
 
-export function isWebkitBare(src) {
-  return typeof src === 'string' && CANDIDATE_PKGS.includes(src)
-}
-
 let cache = null
 let warned = false
 
@@ -252,6 +248,3 @@ export function _resetCatalogCache() {
   cache = null
   warned = false
 }
-
-export const WEBKIT_PREFIX = `${DEFAULT_PKG}/`
-export const WEBKIT_BARE = DEFAULT_PKG

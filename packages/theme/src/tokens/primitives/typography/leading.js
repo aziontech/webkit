@@ -6,5 +6,3 @@ export const leading = {
   relaxed: 1.625,
   loose: 2
 }
-
-export default { leading }

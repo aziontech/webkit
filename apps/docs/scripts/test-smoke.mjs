@@ -8,7 +8,8 @@ import { chromium } from 'playwright'
 import { serve } from './serve.mjs'
 
 const DIST = resolve(dirname(fileURLToPath(import.meta.url)), '../dist')
-const AXE = createRequire(import.meta.url).resolve('axe-core/axe.min.js')
+const require = createRequire(import.meta.url)
+const AXE = require.resolve('axe-core/axe.min.js')
 const KNOWN_FILE = resolve(
   dirname(fileURLToPath(import.meta.url)),
   '../../../packages/webkit/src/test/a11y-known.json'

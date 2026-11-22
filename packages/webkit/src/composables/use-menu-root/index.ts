@@ -7,4 +7,4 @@ export type {
   UseMenuRootOptions,
   UseMenuRootReturn
 } from './use-menu-root'
-export { focusMenuItem, menuItems, useMenuLevel, useMenuRoot } from './use-menu-root'
+export { focusMenuItem, useMenuLevel, useMenuRoot } from './use-menu-root'

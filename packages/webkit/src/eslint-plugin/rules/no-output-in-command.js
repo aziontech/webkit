@@ -23,7 +23,7 @@ function staticString(node) {
   return null
 }
 
-export function outputLine(code) {
+function outputLine(code) {
   const lines = code.split('\n').map((line) => line.trim())
   const prompted = lines.some((line) => PROMPT.test(line))
   if (prompted) {

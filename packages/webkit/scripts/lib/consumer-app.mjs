@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-export const BLANK_APP_VUE = `<script setup lang="ts"></script>\n<template>\n  <main></main>\n</template>\n`
+const BLANK_APP_VUE = `<script setup lang="ts"></script>\n<template>\n  <main></main>\n</template>\n`
 
 export function runLogged(cmd, args, cwd, extraEnv = {}) {
   process.stdout.write(`\n$ ${cmd} ${args.join(' ')}  (cwd: ${cwd})\n`)

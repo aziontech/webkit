@@ -141,7 +141,7 @@
 
   const widget = shallowRef<Component | null>(null)
   const declared = shallowRef<string[]>([])
-  const plates = shallowRef<typeof Plates | null>(null)
+  const plates = shallowRef<(typeof Plates)['default'] | null>(null)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'console-mockup')
 
@@ -191,7 +191,7 @@
           console.warn(`[webkit] <ConsoleMockup>: no widget registered under name "${name}".`)
         return
       }
-      Promise.all([load(), import('./plates')])
+      Promise.all([load(), import('./plates').then(({ default: module }) => module)])
         .then(([{ default: component }, module]) => {
           if (props.name !== name) return
           plates.value = module

@@ -19,7 +19,7 @@ export const SIDEBAR_NUDGE_STEP = 16
 
 const TAP_SLOP = 3
 
-export const SIDEBAR_PREVIEW_WIDTH_TOKEN = '--size-10'
+const SIDEBAR_PREVIEW_WIDTH_TOKEN = '--size-10'
 
 export const SIDEBAR_ICON_RAIL_TOKEN = '--size-14'
 const SIDEBAR_ICON_RAIL_FALLBACK = 56

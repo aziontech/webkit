@@ -487,7 +487,7 @@ export function resolveSectionEntry(
   return route(alias.target, alias.props ? alias.props(translated) : translated)
 }
 
-export function isSitePageSectionId(id: string): id is SitePageSectionId {
+function isSitePageSectionId(id: string): id is SitePageSectionId {
   return Object.prototype.hasOwnProperty.call(sitePageSections, id)
 }
 

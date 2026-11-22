@@ -1,9 +1,9 @@
-export function typeArg(node) {
+function typeArg(node) {
   const t = node.typeArguments || node.typeParameters
   return (t && t.params && t.params[0]) || null
 }
 
-export function memberKeyName(m) {
+function memberKeyName(m) {
   if (!m) return null
   if (m.key) {
     if (m.key.type === 'Identifier') return m.key.name
@@ -18,7 +18,7 @@ export function memberKeyName(m) {
   return null
 }
 
-export function membersOf(typeNode, interfaces) {
+function membersOf(typeNode, interfaces) {
   if (!typeNode) return []
   if (typeNode.type === 'TSTypeLiteral') return typeNode.members || []
   if (typeNode.type === 'TSTypeReference') {

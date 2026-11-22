@@ -28,5 +28,3 @@ export const illustration = {
   light: aliases,
   dark: aliases
 }
-
-export default { illustration }

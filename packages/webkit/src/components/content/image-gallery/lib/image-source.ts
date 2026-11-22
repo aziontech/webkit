@@ -26,7 +26,7 @@ export function imageSource(item: ImageGalleryItem): string {
   return `data:${item.mimeType || 'image/png'};base64,${item.data}`
 }
 
-export function imageMimeType(item: ImageGalleryItem): string {
+function imageMimeType(item: ImageGalleryItem): string {
   if (item.mimeType) return item.mimeType
   const match = /^data:([^;,]+)/.exec(imageSource(item))
   return match?.[1] ?? 'image/png'

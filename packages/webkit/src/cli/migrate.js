@@ -273,7 +273,7 @@ function mapLiteral(expr, values) {
 
 const STRING_LITERAL = /(['"`])((?:\\.|(?!\1)[^\\])*)\1/g
 
-export function boundValueKind(expr, values) {
+function boundValueKind(expr, values) {
   const literals = [...expr.matchAll(STRING_LITERAL)]
   if (!literals.length) return 'opaque'
   const old = (v) => Object.hasOwn(values, v) && values[v] !== v && !/^(true|false)$/.test(v)
@@ -451,7 +451,7 @@ export function legacyMarkers(migration) {
   )
 }
 
-export function referencedSubpaths(source) {
+function referencedSubpaths(source) {
   return new Set([...source.matchAll(SUBPATH_LITERAL)].map((m) => m[2]))
 }
 
@@ -530,7 +530,7 @@ function insideEveryTime(source, childRe, parentRe) {
   return true
 }
 
-export function attachToCompound(source, attached = {}) {
+function attachToCompound(source, attached = {}) {
   let out = source
   const changes = []
   for (const [subpath, { root, member }] of Object.entries(attached)) {
@@ -865,7 +865,7 @@ export function declaredMajor(projectDir) {
   return major == null ? null : { range, major, source: 'range' }
 }
 
-export function declaredRange(projectDir) {
+function declaredRange(projectDir) {
   const pkg = readJson(join(projectDir, 'package.json'))
   const range = {
     ...pkg.peerDependencies,

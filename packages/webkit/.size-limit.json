@@ -1137,7 +1137,7 @@
   {
     "name": "tool-approval",
     "path": "src/components/ai/tool-approval/tool-approval.vue",
-    "limit": "14.8 KB"
+    "limit": "14.81 KB"
   },
   {
     "name": "agent-question",
@@ -1223,7 +1223,7 @@
   {
     "name": "prompt-input-model-picker",
     "path": "src/components/ai/prompt-input/prompt-input-model-picker/prompt-input-model-picker.vue",
-    "limit": "15.15 KB",
+    "limit": "15.16 KB",
     "entryOnly": true
   },
   {
@@ -1415,7 +1415,7 @@
   {
     "name": "table-cell-actions",
     "path": "src/components/data/table/table-cell-actions/table-cell-actions.vue",
-    "limit": "12.35 KB"
+    "limit": "12.36 KB"
   },
   {
     "name": "file-token-group",

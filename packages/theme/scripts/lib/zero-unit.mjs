@@ -1,6 +1,6 @@
 const MATH_FN = '(?:calc|min|max|clamp)\\((?:[^()]|\\([^()]*\\)|[\\w-]+\\()*'
 
-export const LENGTH_UNITS =
+const LENGTH_UNITS =
   'px|rem|em|ex|rex|ch|rch|cap|rcap|ic|ric|lh|rlh|vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc'
 
 export const ZERO_WITH_UNIT = new RegExp(

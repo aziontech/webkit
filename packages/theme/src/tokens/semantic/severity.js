@@ -16,5 +16,3 @@ export const severity = {
     'severity-info': tokenRef('primitives.gray.400')
   }
 }
-
-export default { severity }

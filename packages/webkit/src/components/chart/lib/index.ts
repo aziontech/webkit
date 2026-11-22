@@ -21,8 +21,6 @@ export {
   isFiniteNumber,
   keepIds,
   normalizeSeries,
-  OTHER_SERIES_ID,
-  seriesTotal,
   thresholdToken
 } from './series'
 export type { StackLayer } from './stack'

@@ -37,14 +37,14 @@ const pinnedClass = (classString) =>
     .map(utilityOf)
     .some((u) => u === 'sticky' || u === 'fixed')
 
-export function viewportHeightClasses(classString) {
+function viewportHeightClasses(classString) {
   if (pinnedClass(classString)) return []
   const tokens = tokensOf(classString)
   const utilities = tokens.map(utilityOf)
   return tokens.filter((_, i) => CLASS_HACK.test(utilities[i]))
 }
 
-export function viewportHeightStyles(styleString) {
+function viewportHeightStyles(styleString) {
   const text = String(styleString || '')
   if (STYLE_PINNED.test(text)) return []
   return [...text.matchAll(STYLE_HACK)].map((m) => m[1].trim())

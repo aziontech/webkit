@@ -52,7 +52,7 @@ export type DocMarkdownNode =
   | { type: 'divider' }
   | { type: 'component'; name: string; props: DocMarkdownAttributes; children: DocMarkdownNode[] }
 
-export const DOC_MARKDOWN_BLOCK_TAGS: readonly string[] = [
+const DOC_MARKDOWN_BLOCK_TAGS: readonly string[] = [
   'Note',
   'Info',
   'Tip',
@@ -115,7 +115,7 @@ export const DOC_MARKDOWN_BLOCK_TAGS: readonly string[] = [
   'Tracker'
 ]
 
-export const DOC_MARKDOWN_INLINE_TAGS: readonly string[] = ['Tooltip']
+const DOC_MARKDOWN_INLINE_TAGS: readonly string[] = ['Tooltip']
 
 const FENCE = /^\s*(```|~~~)(.*)$/
 const HEADING = /^(#{1,4})\s+(.+?)\s*#*\s*$/

@@ -90,10 +90,8 @@ jobs:
           base: ${{ github.event.repository.default_branch }}
           extra_args: --only-verified
 
-      - name: Check unused dependencies
-        run: npx depcheck --ignores="@types/*,eslint-*"
-        working-directory: packages/webkit
-        continue-on-error: true
+      - name: Check unused files, exports and dependencies
+        run: pnpm run check:unused
 
   lint-canaries:
     name: Lint canaries (broken samples must stay broken)

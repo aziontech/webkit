@@ -212,7 +212,7 @@ const isGrammar = (value: unknown): value is MonarchGrammar =>
   'tokenizer' in value &&
   Array.isArray((value as MonarchGrammar).tokenizer['common'])
 
-export function withCallRules(grammar: MonarchGrammar): MonarchGrammar {
+function withCallRules(grammar: MonarchGrammar): MonarchGrammar {
   return {
     ...grammar,
     tokenizer: {
@@ -319,12 +319,12 @@ const expand = (hex: string) =>
         .join('')}`
     : hex
 
-export function readToken(element: Element, name: string): string | undefined {
+function readToken(element: Element, name: string): string | undefined {
   const value = getComputedStyle(element).getPropertyValue(name).trim()
   return HEX.test(value) ? expand(value).toLowerCase() : undefined
 }
 
-export function isDark(hex: string | undefined): boolean {
+function isDark(hex: string | undefined): boolean {
   if (!hex) return false
   const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255) as [
     number,

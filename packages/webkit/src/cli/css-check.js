@@ -28,9 +28,9 @@ const MATH_FUNCTION = /\b(calc|min|max|clamp)\(/i
 
 const toPosix = (p) => p.split(sep).join('/')
 
-export const STYLELINT_PATTERN = '**/*.{css,scss,vue}'
+const STYLELINT_PATTERN = '**/*.{css,scss,vue}'
 
-export function stylelintRoot(projectDir) {
+function stylelintRoot(projectDir) {
   return existsSync(join(projectDir, 'src')) ? 'src' : '.'
 }
 
@@ -39,7 +39,7 @@ function pattern(projectDir) {
   return root === '.' ? STYLELINT_PATTERN : `${root}/${STYLELINT_PATTERN}`
 }
 
-export function hasStylelintConfig(projectDir) {
+function hasStylelintConfig(projectDir) {
   if (firstExisting(projectDir, STYLELINT_CONFIG_CANDIDATES)) return true
   try {
     return Boolean(JSON.parse(readFileSync(join(projectDir, 'package.json'), 'utf8')).stylelint)

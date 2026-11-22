@@ -28,5 +28,3 @@ export const size = {
   80: '320px',
   96: '384px'
 }
-
-export default { size }

@@ -18,7 +18,7 @@ export const label = (mode: Mode) =>
     .filter(Boolean)
     .join('-')
 
-export const NOW = new Date('2026-11-10T12:00:00Z')
+const NOW = new Date('2026-11-10T12:00:00Z')
 
 export async function prepare(page: Page, mode: Mode, { freeze = false } = {}) {
   await page.setViewportSize({ width: mode.width, height: mode.width < 600 ? 844 : 900 })
@@ -95,7 +95,7 @@ export function exampleGroups(): ExampleGroup[] {
   })
 }
 
-export function slugify(value: string): string {
+function slugify(value: string): string {
   return value
     .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
     .toLowerCase()

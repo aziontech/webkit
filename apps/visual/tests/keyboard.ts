@@ -44,7 +44,7 @@ export const KEYBOARD_BASELINE = resolve(
   '../keyboard-baseline.json'
 )
 
-export const MAX_STOPS = 200
+const MAX_STOPS = 200
 
 export const DEMO_ROUTES: { name: string; path: string; target: KeyboardTarget }[] = [
   { name: 'resources', path: '/resources', target: { entry: 'page' } },
@@ -100,7 +100,7 @@ export function newViolations(found: string[], allowed: string[] = []): string[]
   return out
 }
 
-export function keyboardStart(entry: KeyboardEntry): KeyboardStart {
+function keyboardStart(entry: KeyboardEntry): KeyboardStart {
   type Probe = {
     ids: WeakMap<Element, number>
     elements: Element[]
@@ -240,7 +240,7 @@ export function keyboardStart(entry: KeyboardEntry): KeyboardStart {
   }
 }
 
-export function keyboardStop(): KeyboardStop {
+function keyboardStop(): KeyboardStop {
   type Probe = {
     ids: WeakMap<Element, number>
     elements: Element[]
@@ -386,7 +386,7 @@ export function keyboardStop(): KeyboardStop {
   }
 }
 
-export function keyboardReach(limited: boolean): KeyboardReach {
+function keyboardReach(limited: boolean): KeyboardReach {
   type Probe = {
     ids: WeakMap<Element, number>
     elements: Element[]

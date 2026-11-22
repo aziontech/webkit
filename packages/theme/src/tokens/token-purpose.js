@@ -203,5 +203,3 @@ export const tokenPurpose = {
   'text-button-md': 'The label of a medium or small button.',
   'text-link': 'An inline link inside body or heading copy; inherits the size.'
 }
-
-export default { tokenPurpose }

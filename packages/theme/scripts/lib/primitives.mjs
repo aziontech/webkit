@@ -23,7 +23,7 @@ import { leading } from '../../src/tokens/primitives/typography/leading.js'
 import { tracking } from '../../src/tokens/primitives/typography/tracking.js'
 import { assertResolvedRefs, isTokenRef } from '../../src/tokens/token-ref.js'
 
-export const buildTrees = () => {
+const buildTrees = () => {
   const { brand, chart: _chartHues, ...restColors } = colorPrimitives
   const color = {
     ...restColors,
@@ -99,7 +99,7 @@ const varNameFor = (path) => {
   return `--${segments.join('-')}`
 }
 
-export const flatten = (obj, refsTree, prefix = [], unresolved = null) => {
+const flatten = (obj, refsTree, prefix = [], unresolved = null) => {
   const result = {}
   Object.entries(obj).forEach(([key, value]) => {
     const nextPath = [...prefix, key]
@@ -126,20 +126,4 @@ export const compilePrimitivesVars = () => {
   const vars = flatten(varsTree, refsTree, [], unresolved)
   assertResolvedRefs('primitives', unresolved)
   return vars
-}
-
-export const compilePrimitivesCss = () => {
-  const vars = compilePrimitivesVars()
-  const body = Object.entries(vars)
-    .map(([k, v]) => `  ${k}: ${v};`)
-    .join('\n')
-  return `:root, [data-theme=light] {\n${body}\n}`
-}
-
-export const injectPrimitivesCss = () => {
-  const style = document.createElement('style')
-  style.setAttribute('data-azion-primitives', 'true')
-  style.textContent = compilePrimitivesCss()
-  document.head.appendChild(style)
-  return style
 }
