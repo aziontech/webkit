@@ -12,7 +12,7 @@ The block is a page body: render it in the default slot of `ConsoleLayout` (`she
 ## When to use
 
 - A route that matches nothing: the catch-all route renders the primary (404).
-- A session that ended while the user was away: SessionExpired (401).
+- A session that ended while the user was away: SessionExpired (401). Never for a first visit with no session; that goes straight to sign-in with no notice.
 - A route the user's role does not include: Forbidden (403), instead of hiding the page or sending them home.
 - A request the API refused for the rate limit: RateLimited (429).
 - A page whose server request failed as a whole: ServerError (500).
