@@ -31,7 +31,14 @@
     "name": "MainSettings",
     "file": "detail-dns-zone.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "dns-zone-file.ts",
+    "dns-zone-policy.ts",
+    "parts/dns-zone-records-tab.vue",
+    "parts/dns-zone-settings-tab.vue",
+    "parts/import-zone-file-drawer.vue"
+  ],
   "variants": [
     {
       "name": "Records",
