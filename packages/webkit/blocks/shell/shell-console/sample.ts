@@ -2,6 +2,7 @@ import type {
   ConsoleLayoutAccount,
   ConsoleLayoutNavGroup
 } from '@aziontech/webkit/console-layout-root'
+import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
 
 import type { ShellConsoleRecent } from './shell-console.vue'
 
@@ -176,4 +177,102 @@ export const sampleRecents: ShellConsoleRecent[] = [
   { id: 'azion-site', label: 'azion-site', icon: 'az az-applications', type: 'Application' },
   { id: 'edge-auth', label: 'edge-auth', icon: 'az az-functions', type: 'Function' },
   { id: 'shop-assets', label: 'shop-assets', icon: 'az az-object-storage', type: 'Bucket' }
+]
+
+/** The level of an account in the account tree. */
+export type ShellConsoleAccountType = 'organization' | 'group' | 'workspace'
+
+/** How the account switch draws one account level. */
+export interface ShellConsoleAccountTypeMeta {
+  /** The level's name. */
+  label: string
+  /** Icon class of the level. */
+  icon: string
+  /** Tag severity of the level. */
+  severity?: TagSeverity
+  /** Tag variant of the level. */
+  variant?: TagVariant
+}
+
+/** One account the account switch lists. */
+export interface ShellConsoleSwitchAccount {
+  /** Account ID. */
+  id: string
+  /** Client ID. */
+  clientId: string
+  /** Account name. */
+  name: string
+  /** Level in the tree. */
+  type: ShellConsoleAccountType
+  /** The parent account, or null for a root. */
+  parentId: string | null
+}
+
+export const sampleAccountTypes: Record<ShellConsoleAccountType, ShellConsoleAccountTypeMeta> = {
+  organization: { label: 'Organization', icon: 'az az-building', variant: 'primary' },
+  group: { label: 'Group', icon: 'az az-users', severity: 'info' },
+  workspace: { label: 'Workspace', icon: 'az az-layout-grid', severity: 'neutral' }
+}
+
+export const sampleSwitchAccounts: ShellConsoleSwitchAccount[] = [
+  {
+    id: '1001',
+    clientId: '7f3a1',
+    name: 'Acme Inc.',
+    type: 'organization',
+    parentId: null
+  },
+  { id: '1140', clientId: '7f3b9', name: 'Retail', type: 'group', parentId: '1001' },
+  { id: '2201', clientId: '8a0c2', name: 'Storefront EU', type: 'workspace', parentId: '1140' },
+  { id: '2202', clientId: '8a0c7', name: 'Storefront US', type: 'workspace', parentId: '1140' },
+  { id: '1150', clientId: '7f3c4', name: 'Media', type: 'group', parentId: '1001' },
+  { id: '2310', clientId: '8b114', name: 'Video platform', type: 'workspace', parentId: '1150' },
+  { id: '3001', clientId: '9c201', name: 'Acme Labs', type: 'organization', parentId: null },
+  { id: '3105', clientId: '9c2e8', name: 'Research', type: 'workspace', parentId: '3001' }
+]
+
+/** What a notification reports. */
+export type ShellConsoleNotificationKind = 'deploy-failed' | 'deploy-succeeded' | 'info'
+
+/** One entry of the notification list. */
+export interface ShellConsoleNotification {
+  /** Stable key. */
+  id: string
+  /** What it reports, which picks its icon. */
+  kind: ShellConsoleNotificationKind
+  /** The headline. */
+  title: string
+  /** One sentence of detail. */
+  description: string
+  /** When it happened, as shown. */
+  time: string
+  /** The user has seen it. */
+  read: boolean
+}
+
+export const sampleNotifications: ShellConsoleNotification[] = [
+  {
+    id: 'run-4182',
+    kind: 'deploy-failed',
+    title: 'azion-site failed to deploy',
+    description: 'The build stopped at step 3 of 5: a module could not be resolved.',
+    time: '2 min ago',
+    read: false
+  },
+  {
+    id: 'run-4181',
+    kind: 'deploy-succeeded',
+    title: 'edge-auth is live',
+    description: 'Deployed to production in 48 seconds.',
+    time: '25 min ago',
+    read: false
+  },
+  {
+    id: 'invite-77',
+    kind: 'info',
+    title: 'Sam joined the team',
+    description: 'Sam accepted your invitation and can now edit applications.',
+    time: 'Yesterday',
+    read: true
+  }
 ]
