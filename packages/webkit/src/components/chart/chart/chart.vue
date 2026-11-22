@@ -610,6 +610,7 @@
 <template>
   <ChartFrame
     v-bind="$attrs"
+    data-plain-ground
     :data-testid="testId"
     :data-orientation="orientation"
     :data-active="activeIndex !== null || null"

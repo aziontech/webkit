@@ -403,6 +403,7 @@
 <template>
   <ChartFrame
     v-bind="$attrs"
+    data-plain-ground
     :data-testid="testId"
     :data-view="view"
     :data-active="activeKey !== null || null"

@@ -5,7 +5,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { PASSWORD_MANAGER_IGNORE } from '../../../utils/autofill'
-  import InputFrame from '../parts/input-frame'
+  import InputFrame from '../input/parts/input-frame'
 
   export type NumberInputSize = 'small' | 'medium' | 'large'
   /** The model type: number, or number or null when nullable is set. */

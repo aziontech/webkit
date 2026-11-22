@@ -44,7 +44,7 @@
     <ConsoleMockup
       v-else-if="source.widget"
       :name="source.widget"
-      :hover="hovered"
+      :hovered="hovered"
       :cursor="false"
     />
   </div>

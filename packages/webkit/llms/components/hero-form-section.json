@@ -189,8 +189,8 @@
    "file": "examples/hero-form-section/under-attack.vue"
   },
   {
-   "name": "Loading",
-   "file": "examples/hero-form-section/loading.vue"
+   "name": "ScaleUp",
+   "file": "examples/hero-form-section/scale-up.vue"
   }
  ],
  "docs": "components/hero-form-section.md"

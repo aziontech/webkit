@@ -170,8 +170,8 @@
    "file": "examples/app-layout/full-height-page.vue"
   },
   {
-   "name": "SplitPanelSide",
-   "file": "examples/app-layout/split-panel-side.vue"
+   "name": "HelpOpen",
+   "file": "examples/app-layout/help-open.vue"
   }
  ],
  "docs": "components/app-layout.md"

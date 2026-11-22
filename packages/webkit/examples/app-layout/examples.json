@@ -14,7 +14,7 @@
     },
     {
       "name": "HelpOpen",
-      "summary": "The tools region open with a help panel for the page; the help button in the header closes and reopens it.",
+      "summary": "On a wide screen the tools region opens with a help panel for the page; the help button in the header closes and reopens it, and on a phone it opens the help as a drawer.",
       "file": "help-open.vue"
     },
     {

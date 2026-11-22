@@ -3,7 +3,7 @@ name: password-requirements
 category: input
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 checksum: 104b4254090f74617f1851b80cbc00ea292a07c697c996b463c8935b56a6e0d5
 created: 2026-11-10
 last_updated: 2026-11-21

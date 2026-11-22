@@ -3822,7 +3822,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat-drawer.m
 - Surface: app
 - Source: `blocks/auth/auth-sign-in/auth-sign-in.vue` in `@aziontech/webkit`
 - MCP: `get_block("auth/auth-sign-in")`
-- Components: Alert, AppHeader, Avatar, Brand, Button, Card, Checkbox, CopyButton, Field, `FieldError`, IconButton, Input, Item, KeyValueList, OtpInput, PageHeader, PasswordInput, PasswordRequirements, QrCode, Separator, Skeleton, Tag, Tooltip, `use-locale`
+- Components: Alert, AppHeader, Avatar, Brand, Button, Card, Checkbox, CopyButton, Field, `FieldError`, IconButton, Input, Item, KeyValueList, OtpInput, PageHeader, PasswordInput, PasswordRequirements, PasswordRequirements, QrCode, Separator, Skeleton, Tag, Tooltip, `use-locale`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -8557,7 +8557,7 @@ What each part takes: [blocks/shell/shell-console.md](blocks/shell/shell-console
 
 ## Data
 
-`navigation`, `account` and the recents are the shell's own constants, which the app replaces with its navigation file and signed-in user. The states render the shell and fill its slots instead of copying it:
+`navigation`, `account` and `recents` are props (`ShellConsoleProps`, `ShellConsoleRecent` are exported from `shell-console.vue`); left out, the console tree, the account and the recents in `sample.ts` render. The app passes its navigation file and signed-in user, then deletes `sample.ts` and its import. The states render the shell and fill its slots instead of copying it:
 
 Slot: default, `actions`, `sidebar-header`, `header-leading`, `notifications`, `tools`.
 
@@ -8666,6 +8666,10 @@ The documentation shell. A reader comes to learn one task and leave, so the shel
 - L. Language — `LanguageSelect` (required)
 
 What each part takes: [blocks/shell/shell-docs.md](blocks/shell/shell-docs.md).
+
+## Data
+
+The shell's data comes in through props (`ShellDocsProps`, `ShellDocsFooterColumn` and `ShellDocsSocial` are exported from `shell-docs.vue`): `sections`, `navigation`, `outline-groups`, `footer-columns` and `socials`. Left out, the sample docs tree, sections, outline links, footer columns and socials in `sample.ts` render; the app passes its own and deletes `sample.ts` and its import.
 
 ## Do
 
@@ -24439,7 +24443,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 - `date-picker-clear/date-picker-clear.vue` — context-aware button that clears the draft selection through injected context; disabled when there is no selection.
 
-Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid; its caption reads `‹ Month ⌄ Year ⌄ ›`: the previous and next month arrows, and between them two ghost `Select`s, Month (the twelve month names, a month fully outside `min`/`max` disabled) and Year (from `min`'s year to `max`'s year, or ten years either side of today when unbounded, always including the shown year); picking a month or a year moves the grid there and emits `month-change`, a year that would land outside `min`/`max` keeps the month inside them), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range; each time field is a `Combobox` with `allow-custom` that lists the day in 30-minute steps under the field — plus the current time when it is between two steps, so the list opens on it — shows a clock icon and takes any typed time), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows, a `Combobox` with `allow-custom` off that filters the zones by city, zone id or offset as the person types). No part renders a native `select`. A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
+Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid; its caption reads `‹ Month ⌄ Year ⌄ ›`: the previous and next month arrows, and between them two ghost `Select`s, Month (the twelve month names, a month fully outside `min`/`max` disabled) and Year (from `min`'s year to `max`'s year, or ten years either side of today when unbounded, always including the shown year); picking a month or a year moves the grid there and emits `month-change`, a year that would land outside `min`/`max` keeps the month inside them), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range; each time field is a `Combobox` with `allow-custom` that lists the day in 30-minute steps under the field — plus the current time when it is between two steps, so the list opens on it — shows a clock icon and takes any typed time), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows, a `Combobox` with `allow-custom` off that filters the zones by city, zone id or offset as the person types), and the trigger shell both pickers render: `parts/date-picker-control.vue` (the bordered control box), `parts/date-picker-trigger.vue` (the trigger button: icon, value, chevron), `parts/date-picker-control-button.vue` (a button inside the control box, such as the clear and split buttons here and the Previous and Next buttons of `date-range-picker`) and `parts/date-picker-popover.vue` (the panel: placement, backdrop on small screens, focus trap, Escape and outside click close it). No part renders a native `select`. A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
 
 ## v-model
 
@@ -24535,7 +24539,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ## Related
 
-- `date-picker` — the month grid, the date and time fields and the time zone selector come from its internal parts, so both pickers look and behave the same. Split: DatePicker picks one date (optionally with a time); DateRangePicker owns every range and keeps a relative window relative.
+- `date-picker` — the trigger control, the panel, the month grid, the date and time fields and the time zone selector come from its internal parts, so both pickers look and behave the same. Split: DatePicker picks one date (optionally with a time); DateRangePicker owns every range and keeps a relative window relative.
 - `timestamp` — displays a moment in time; both read the `ConfigProvider` `timeZone`.
 - `config-provider` — its `timeZone` is the zone the picker formats in while `v-model:time-zone` is unbound.
 - `field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.
@@ -25731,7 +25735,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `leading` | — | Content rendered before the input (e.g. `$`). |
+| `leading` | — | Content rendered before the input (e.g. `$`). Both slots: `aria-hidden`. |
 | `trailing` | — | Content rendered after the input, before the spinner buttons (e.g. `%`). |
 
 ## v-model
@@ -25742,20 +25746,22 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `disabled`, `invalid`, `filled`, `empty` (a `nullable` field whose value is `null` shows the placeholder)
+- Visual states: `default`, `hover`, `focus-visible`, `disabled`, `readonly`, `invalid`, `filled`, `empty` (a `nullable` field whose value is `null` shows the placeholder)
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
+- `data-readonly` mirrors the `readonly` prop (no hover border, default cursor, as on `Input`)
 - `data-size` mirrors the `size` prop
+- The frame, its states, adornments and touch target are the private frame `Input` renders
 
 ## Accessibility
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2` on `var(--input-ring-offset, var(--bg-canvas))`, as on `Input`
 - Keyboard map: `Tab` focuses the input; `ArrowUp`/`ArrowDown` increment/decrement by `step`; `Home`/`End` jump to `min`/`max` when defined; `Enter` commits and emits `change`.
 - Direction: the `<input>` renders `dir="auto"` (digits resolve to left-to-right inside right-to-left UI); a `dir` attribute overrides it.
 - ARIA: `role="spinbutton"` on the input (native `<input type="number">` provides this); `aria-valuenow`, `aria-valuemin`, `aria-valuemax` mirror the props; `aria-invalid` mirrors `invalid`; `aria-required` mirrors `required`; spinner buttons have `aria-label` ("Increment" / "Decrement") and `tabindex="-1"` so keyboard users use arrow keys.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none` on animated state changes.
-- Touch target: on a coarse pointer the two steppers sit side by side in an 80 px column (about 40 px each), and each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44 px tall (the frame stops clipping on a coarse pointer so the hit area is not cut). On a fine pointer the steppers stay stacked at the drawn size; arrow keys are the primary interaction.
+- Touch target: on a coarse pointer the two steppers sit side by side in an 80 px column (about 40 px each), and each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44 px tall (the frame stops clipping on a coarse pointer so the hit area is not cut). On a fine pointer the steppers stay stacked at the drawn size; arrow keys are the primary interaction. The field also has `Input`'s touch target; a press on the frame focuses the input.
 
 ## Examples
 
@@ -25962,10 +25968,12 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `invalid`
+- Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `readonly`, `invalid`
 - Single fixed height: 40px (large only)
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
+- `data-readonly` mirrors the `readonly` prop (no hover border, default cursor, as on `Input`)
+- The frame, its states, adornments and touch target are the private frame `Input` renders
 - `data-required` mirrors the `required` prop; it draws no border of its own: the Required marker on the wrapping `Field.Label` says a field is required, and a missing value is shown as `invalid` after a failed submit
 - `data-leading` mirrors `$slots.leading` presence
 - `data-trailing` mirrors `$slots.trailing` presence (only relevant when `toggleable=false`)
@@ -25976,13 +25984,13 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ## Accessibility
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots and the visibility toggle.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2` on `var(--input-ring-offset, var(--bg-canvas))` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots and the visibility toggle.
 - Keyboard map: `Tab` focuses the input, then the visibility toggle button (when `toggleable=true`); `Enter` / `Space` on the toggle flips visibility; standard text-editing keys apply to the input.
 - Direction: the `<input>` renders `dir="auto"` so a value typed in another script keeps its own direction inside right-to-left UI; a `dir` attribute overrides it.
 - ARIA: the visibility toggle is a `<button type="button">` with `aria-pressed` reflecting the current visible state and an `aria-label` that switches between "Show password" and "Hide password"; `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; decorative icon slots and the eye glyph are `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.
 - `motion-reduce:transition-none` on every transition-bearing class.
-- Touch target: the input fills the field's single fixed 40 px height. The visibility toggle is the 28×28 px `small` `IconButton` the Figma frame specifies — above WCAG 2.2 SC 2.5.8 Target Size (Minimum) at 24×24 px, and centred in the 40 px row so the practical vertical reach is the full field height. It is below the 44×44 px of SC 2.5.5 (AAA), which this AA-scoped spec does not claim.
+- Touch target: the input fills the field's single fixed 40 px height; `Input`'s touch target extends it to 44 px on a coarse pointer, and a press on the frame focuses the input. The visibility toggle is the 28×28 px `small` `IconButton` the Figma frame specifies — above WCAG 2.2 SC 2.5.8 Target Size (Minimum) at 24×24 px, and centred in the 40 px row so the practical vertical reach is the full field height. It is below the 44×44 px of SC 2.5.5 (AAA), which this AA-scoped spec does not claim.
 - The toggle button never submits the surrounding form (`type="button"`).
 
 ## Examples
@@ -26014,9 +26022,10 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 # Password Requirements
 
-> Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirementsRule` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirementsRule[]`, whose `test` may be a predicate.
+> Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirementsRule` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirementsRule[]`, whose `test` may be a predicate. `@aziontech/webkit/password-requirements-root` points straight at the component, for an app that only renders the checklist; the rules and types stay on `@aziontech/webkit/password-requirements`.
 
-- Import: `import PasswordRequirements from '@aziontech/webkit/password-requirements'`
+- Import: `import PasswordRequirementsRoot from '@aziontech/webkit/password-requirements-root'`
+- Compound import (dot notation, not tree-shakeable): `import PasswordRequirements from '@aziontech/webkit/password-requirements'`
 - Category: input · Surface: app · Structure: monolithic
 
 ## When to use
@@ -26069,7 +26078,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 <script setup>
   import Field from '@aziontech/webkit/field'
   import PasswordInput from '@aziontech/webkit/password-input'
-  import PasswordRequirements from '@aziontech/webkit/password-requirements'
+  import PasswordRequirements from '@aziontech/webkit/password-requirements-root'
   import { ref } from 'vue'
 
   const password = ref('')

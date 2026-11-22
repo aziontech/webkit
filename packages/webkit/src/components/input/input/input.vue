@@ -3,7 +3,7 @@
 
   import { useFieldAttrs } from '../../../composables/use-field-attrs'
   import { passwordManagerHints } from '../../../utils/autofill'
-  import InputFrame from '../parts/input-frame'
+  import InputFrame from './parts/input-frame'
 
   export type InputSize = 'small' | 'medium' | 'large'
   export type InputType = 'text' | 'email' | 'number'

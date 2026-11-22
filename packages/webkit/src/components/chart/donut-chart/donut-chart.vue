@@ -256,6 +256,7 @@
 <template>
   <ChartFrame
     v-bind="$attrs"
+    data-plain-ground
     :data-testid="testId"
     :data-type="type"
     :data-size="size"

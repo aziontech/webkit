@@ -5,7 +5,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
-  import InputFrame from '../parts/input-frame'
+  import InputFrame from '../input/parts/input-frame'
 
   export type PasswordInputAutocomplete = 'current-password' | 'new-password' | 'off'
 

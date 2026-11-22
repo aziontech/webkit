@@ -15456,7 +15456,7 @@
     {
      "name": "leading",
      "scope": "—",
-     "notes": "Content rendered before the input (e.g. `$`)."
+     "notes": "Content rendered before the input (e.g. `$`). Both slots: `aria-hidden`."
     },
     {
      "name": "trailing",
@@ -16363,8 +16363,7 @@
    "target": "./src/components/input/password-requirements/index.ts",
    "kind": "component",
    "compoundRoot": true,
-   "treeShakeableImport": null,
-   "treeShakeableNote": "No tree-shakeable root. Add \"./password-requirements-root\" -> the root .vue, or import sub-components individually.",
+   "treeShakeableImport": "@aziontech/webkit/password-requirements-root",
    "subcomponents": [],
    "category": "input",
    "structure": "monolithic",
@@ -16394,6 +16393,40 @@
    "surface": "app",
    "examplesFile": "catalog/examples/password-requirements.json",
    "docsFile": "catalog/components/password-requirements.json"
+  },
+  "password-requirements-root": {
+   "import": "@aziontech/webkit/password-requirements-root",
+   "target": "./src/components/input/password-requirements/password-requirements.vue",
+   "kind": "root",
+   "rootOf": "password-requirements",
+   "treeShakeableImport": "@aziontech/webkit/password-requirements-root",
+   "category": "input",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "requirements",
+     "type": "PasswordRequirementsRule[]",
+     "default": "DEFAULT_PASSWORD_REQUIREMENTS",
+     "required": "false",
+     "doc": "Rules rendered as chips, one per entry. Defaults to the built-in rule set; an empty array renders only the caption."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Caption that opens the row and names the group for assistive tech. Empty uses the locale catalog (`Must contain:`)."
+    },
+    {
+     "name": "value",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Password every rule is evaluated against; pass the PasswordInput value."
+    }
+   ],
+   "surface": "app",
+   "docsFile": "catalog/components/password-requirements-root.json"
   },
   "radio-group": {
    "import": "@aziontech/webkit/radio-group",
@@ -33327,6 +33360,7 @@
     "OtpInput",
     "PageHeader",
     "PasswordInput",
+    "password-requirements",
     "PasswordRequirements",
     "QrCode",
     "Separator",
@@ -33354,6 +33388,7 @@
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/password-input",
     "@aziontech/webkit/password-requirements",
+    "@aziontech/webkit/password-requirements-root",
     "@aziontech/webkit/qr-code",
     "@aziontech/webkit/separator",
     "@aziontech/webkit/skeleton",

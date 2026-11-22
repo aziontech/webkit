@@ -6,9 +6,13 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
-  import { ref } from 'vue'
+  import { onMounted, ref } from 'vue'
 
-  const toolsOpen = ref(true)
+  const toolsOpen = ref(false)
+
+  onMounted(() => {
+    toolsOpen.value = window.matchMedia('(min-width: 48rem)').matches
+  })
 
   const crumbs = [{ label: 'Workloads', href: '#' }, { label: 'Firewall' }]
 </script>

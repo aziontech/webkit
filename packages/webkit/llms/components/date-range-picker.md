@@ -33,7 +33,7 @@
 
 ## Related
 
-- [date-picker](date-picker.md) — the month grid, the date and time fields and the time zone selector come from its internal parts, so both pickers look and behave the same. Split: DatePicker picks one date (optionally with a time); DateRangePicker owns every range and keeps a relative window relative.
+- [date-picker](date-picker.md) — the trigger control, the panel, the month grid, the date and time fields and the time zone selector come from its internal parts, so both pickers look and behave the same. Split: DatePicker picks one date (optionally with a time); DateRangePicker owns every range and keeps a relative window relative.
 - [timestamp](timestamp.md) — displays a moment in time; both read the `ConfigProvider` `timeZone`.
 - [config-provider](config-provider.md) — its `timeZone` is the zone the picker formats in while `v-model:time-zone` is unbound.
 - [field](field.md) — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.

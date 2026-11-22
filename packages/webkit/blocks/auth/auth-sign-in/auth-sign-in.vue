@@ -10,9 +10,8 @@
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PasswordInput from '@aziontech/webkit/password-input'
-  import PasswordRequirements, {
-    DEFAULT_PASSWORD_REQUIREMENTS
-  } from '@aziontech/webkit/password-requirements'
+  import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
+  import PasswordRequirements from '@aziontech/webkit/password-requirements-root'
   import Separator from '@aziontech/webkit/separator'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'

@@ -1,8 +1,9 @@
 # Password Requirements
 
-> Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirementsRule` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirementsRule[]`, whose `test` may be a predicate.
+> Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirementsRule` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirementsRule[]`, whose `test` may be a predicate. `@aziontech/webkit/password-requirements-root` points straight at the component, for an app that only renders the checklist; the rules and types stay on `@aziontech/webkit/password-requirements`.
 
-- Import: `import PasswordRequirements from '@aziontech/webkit/password-requirements'`
+- Import: `import PasswordRequirementsRoot from '@aziontech/webkit/password-requirements-root'`
+- Compound import (dot notation, not tree-shakeable): `import PasswordRequirements from '@aziontech/webkit/password-requirements'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [password-requirements.json](password-requirements.json)
 
@@ -57,7 +58,7 @@
 <script setup>
   import Field from '@aziontech/webkit/field'
   import PasswordInput from '@aziontech/webkit/password-input'
-  import PasswordRequirements from '@aziontech/webkit/password-requirements'
+  import PasswordRequirements from '@aziontech/webkit/password-requirements-root'
   import { ref } from 'vue'
 
   const password = ref('')
