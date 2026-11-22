@@ -197,3 +197,109 @@ export const sampleSelectResult: QueryEditorResult = {
     }
   ]
 }
+
+/** One SQL quick template. */
+export interface QueryEditorTemplate {
+  title: string
+  description: string
+  icon: string
+  sql: string
+}
+
+export const sampleTemplates: QueryEditorTemplate[] = [
+  {
+    title: 'Create table',
+    description: 'Create a basic customers table with auto-increment ID and timestamp',
+    icon: 'az az-table',
+    sql: `CREATE TABLE IF NOT EXISTS customers (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);`
+  },
+  {
+    title: 'Insert data',
+    description: 'Insert sample customer records into the customers table',
+    icon: 'az az-circle-plus',
+    sql: `INSERT INTO customers (name, email) VALUES
+  ('Jane Doe', 'jane.doe@example.com'),
+  ('John Smith', 'john.smith@example.com'),
+  ('Alex Morgan', 'alex.morgan@example.com');`
+  },
+  {
+    title: 'Select all',
+    description: 'Retrieve all records from customers table with limit',
+    icon: 'az az-list',
+    sql: `SELECT id, name, email, created_at
+FROM customers
+ORDER BY created_at DESC
+LIMIT 100;`
+  },
+  {
+    title: 'Count records',
+    description: 'Count total number of records in customers table',
+    icon: 'az az-hash',
+    sql: 'SELECT COUNT(*) AS total_customers FROM customers;'
+  },
+  {
+    title: 'Related table',
+    description: 'Create an orders table that references the customers table',
+    icon: 'az az-box',
+    sql: `CREATE TABLE IF NOT EXISTS orders (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  customer_id INTEGER NOT NULL REFERENCES customers (id),
+  total NUMERIC NOT NULL
+);`
+  },
+  {
+    title: 'Insert related rows',
+    description: 'Insert sample orders for existing customers',
+    icon: 'az az-arrow-right-left',
+    sql: `INSERT INTO orders (customer_id, total) VALUES
+  (1, 42.50),
+  (3, 18.00);`
+  },
+  {
+    title: 'Join tables',
+    description: 'List every order with the name of the customer who placed it',
+    icon: 'az az-search',
+    sql: `SELECT orders.id, customers.name, orders.total
+FROM orders
+JOIN customers ON customers.id = orders.customer_id
+ORDER BY orders.id DESC;`
+  },
+  {
+    title: 'Create index',
+    description: 'Create an index to speed up lookups of orders by customer',
+    icon: 'az az-sitemap',
+    sql: `CREATE INDEX IF NOT EXISTS orders_customer_id_idx
+ON orders (customer_id);`
+  },
+  {
+    title: 'Top customers',
+    description: 'Find the 3 customers with the highest order totals',
+    icon: 'az az-arrow-down-wide-narrow',
+    sql: `SELECT customers.name, SUM(orders.total) AS total_spent
+FROM customers
+JOIN orders ON orders.customer_id = customers.id
+GROUP BY customers.id
+ORDER BY total_spent DESC
+LIMIT 3;`
+  }
+]
+
+/** The CSV the ImportCsv variant opens with. */
+export const sampleCsvOnStart = {
+  file: { name: 'subscribers-export.csv', size: 389, type: 'text/csv' },
+  text: [
+    'id,Email,plan_name,active,joined_at,referrer',
+    '1,jane.doe@example.com,pro,true,2026-03-02,newsletter',
+    '2,lin@example.com,free,true,2026-04-18,',
+    '3,ops@example.com,team,maybe,2026-05-07,partner',
+    '4,"kim, j@example.com",pro,true,2026-06-21,',
+    '5,,free,true,2026-07-30,search',
+    '6,ravi@example.com,free,false,2026-08-11,',
+    '7,noor@example.com,team,true,next week,ads'
+  ].join('\n')
+}
