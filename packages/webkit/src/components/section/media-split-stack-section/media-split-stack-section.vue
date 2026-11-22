@@ -1,15 +1,16 @@
 <script setup lang="ts">
-  import { type Component, computed, defineAsyncComponent, ref, useAttrs, watch } from 'vue'
+  import { computed, ref, useAttrs, watch } from 'vue'
 
-  import { resolveScene, type SceneName } from '../../../assets/scene-registry'
+  import type { SceneName } from '../../../assets/scene-registry'
   import Button from '../../action/button/button.vue'
   import type { ConsoleMockupName } from '../../content/console-mockup/console-mockup.vue'
-  import Illustration from '../../content/illustration/illustration.vue'
   import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import ModuleHeader from '../../layout/module-header/module-header.vue'
   import SplitStack from '../../layout/split-stack/split-stack.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
+  import { resolveMedia } from '../media-split-section/lib/media-split-media'
+  import MediaSplitSectionMedia from '../media-split-section/parts/media-split-section-media.vue'
 
   defineOptions({
     name: 'MediaSplitStackSection',
@@ -105,10 +106,6 @@
     bands: () => []
   })
 
-  const ConsoleMockup = defineAsyncComponent(
-    () => import('../../content/console-mockup/console-mockup.vue')
-  )
-
   const attrs = useAttrs()
 
   const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
@@ -125,18 +122,10 @@
 
   const views = computed<MediaSplitStackSectionBandFields[]>(() => props.bands)
 
-  const scenes = computed<(Component | null)[]>(() =>
-    views.value.map((band) =>
-      band.scene && band.scene.component !== ('Diagram' as SceneName)
-        ? resolveScene(band.scene.component)
-        : null
-    )
-  )
+  const media = computed(() => views.value.map((band) => resolveMedia(band)))
 
   const bare = computed(() =>
-    views.value
-      .filter((band, index) => !scenes.value[index] && !band.widget && !band.illustration)
-      .map((band) => band.title)
+    views.value.filter((_band, index) => !media.value[index]?.kind).map((band) => band.title)
   )
 
   if (dev)
@@ -154,9 +143,6 @@
     )
 
   const bandHref = (band: MediaSplitStackSectionBandFields) => band.href || band.action?.href || ''
-
-  const isMockup = (band: MediaSplitStackSectionBandFields, index: number) =>
-    scenes.value[index] ? band.scene?.component === 'ConsoleMockup' : Boolean(band.widget)
 </script>
 
 <template>
@@ -201,44 +187,18 @@
             :title="band.title"
             :description="band.description"
             :media-href="bandHref(band)"
-            :media-padded="isMockup(band, index)"
+            :media-padded="media[index]?.mockup"
             @pointerenter="hovered = index"
             @pointerleave="hovered = null"
           >
             <template
-              v-if="isMockup(band, index)"
+              v-if="media[index]?.kind"
               #media
             >
-              <div class="flex w-full self-stretch max-lg:min-h-(--size-80)">
-                <component
-                  :is="scenes[index]"
-                  v-if="scenes[index]"
-                  v-bind="band.scene?.props ?? {}"
-                />
-                <ConsoleMockup
-                  v-else-if="band.widget"
-                  :name="band.widget"
-                  :hover="hovered === index"
-                  :cursor="false"
-                />
-              </div>
-            </template>
-            <template
-              v-else-if="scenes[index]"
-              #media
-            >
-              <component
-                :is="scenes[index]"
-                v-bind="band.scene?.props ?? {}"
-              />
-            </template>
-            <template
-              v-else-if="band.illustration"
-              #media
-            >
-              <Illustration
-                :name="band.illustration"
-                :aria-label="band.illustrationLabel ?? ''"
+              <MediaSplitSectionMedia
+                :source="band"
+                :illustration-aria-label="band.illustrationLabel ?? ''"
+                :hovered="hovered === index"
               />
             </template>
             <template

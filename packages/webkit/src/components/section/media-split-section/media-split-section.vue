@@ -1,13 +1,14 @@
 <script setup lang="ts">
-  import { computed, defineAsyncComponent, ref, useAttrs, watch } from 'vue'
+  import { computed, ref, useAttrs, watch } from 'vue'
 
-  import { resolveScene, type SceneName } from '../../../assets/scene-registry'
+  import type { SceneName } from '../../../assets/scene-registry'
   import Button from '../../action/button/button.vue'
   import type { ConsoleMockupName } from '../../content/console-mockup/console-mockup.vue'
-  import Illustration from '../../content/illustration/illustration.vue'
   import type { TextureVariant } from '../../content/texture/texture.vue'
   import Module from '../../layout/module/module.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
+  import { resolveMedia } from './lib/media-split-media'
+  import MediaSplitSectionMedia from './parts/media-split-section-media.vue'
 
   defineOptions({
     name: 'MediaSplitSection',
@@ -102,10 +103,6 @@
     secondaryAction: undefined
   })
 
-  const ConsoleMockup = defineAsyncComponent(
-    () => import('../../content/console-mockup/console-mockup.vue')
-  )
-
   const attrs = useAttrs()
 
   const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
@@ -116,28 +113,17 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'media-split-section'
   )
 
-  const sceneComponent = computed(() =>
-    props.scene && props.scene.component !== ('Diagram' as SceneName)
-      ? resolveScene(props.scene.component)
-      : null
-  )
+  const source = computed(() => ({
+    scene: props.scene,
+    widget: props.widget,
+    illustration: props.illustration
+  }))
 
-  const media = computed(() => {
-    if (sceneComponent.value) return 'scene'
-    if (props.widget) return 'widget'
-    if (props.illustration.length > 0) return 'illustration'
-    return null
-  })
+  const media = computed(() => resolveMedia(source.value))
 
-  const hasMedia = computed(() => media.value !== null)
+  const hasMedia = computed(() => media.value.kind !== null)
 
-  const mediaPadded = computed(() => media.value === 'widget')
-
-  const mockup = computed(
-    () =>
-      media.value === 'widget' ||
-      (media.value === 'scene' && props.scene?.component === 'ConsoleMockup')
-  )
+  const mediaPadded = computed(() => media.value.kind === 'widget')
 
   const primary = computed(() =>
     props.primaryAction?.label && props.primaryAction.href ? props.primaryAction : null
@@ -205,32 +191,11 @@
           v-if="hasMedia"
           #media
         >
-          <div
-            v-if="mockup"
-            :data-orientation="orientation"
-            class="flex w-full self-stretch max-lg:min-h-(--size-80) data-[orientation=vertical]:min-h-(--size-80)"
-          >
-            <component
-              :is="sceneComponent"
-              v-if="media === 'scene'"
-              v-bind="scene?.props ?? {}"
-            />
-            <ConsoleMockup
-              v-else-if="widget"
-              :name="widget"
-              :hover="hovered"
-              :cursor="false"
-            />
-          </div>
-          <component
-            :is="sceneComponent"
-            v-else-if="media === 'scene'"
-            v-bind="scene?.props ?? {}"
-          />
-          <Illustration
-            v-else-if="media === 'illustration'"
-            :name="illustration"
-            :aria-label="illustrationAriaLabel"
+          <MediaSplitSectionMedia
+            :source="source"
+            :illustration-aria-label="illustrationAriaLabel"
+            :hovered="hovered"
+            :orientation="orientation"
           />
         </template>
         <template

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { useMediaQuery, useMounted } from '@vueuse/core'
-  import { computed, defineAsyncComponent, onMounted, ref, useAttrs, useId } from 'vue'
+  import { computed, onMounted, ref, useAttrs } from 'vue'
 
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-translate'
@@ -21,14 +21,11 @@
   import TableHeader from '../../data/table/table-header/table-header.vue'
   import TableRow from '../../data/table/table-row/table-row.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
-  import Input from '../../input/input/input.vue'
-  import Select from '../../input/select/select.vue'
-  import SelectContent from '../../input/select/select-content/select-content.vue'
-  import SelectItem from '../../input/select/select-item/select-item.vue'
-  import SelectTrigger from '../../input/select/select-trigger/select-trigger.vue'
   import Module from '../../layout/module/module.vue'
   import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import StoryIndexSectionFacetSelect from '../story-index-section/parts/story-index-section-facet-select.vue'
+  import StoryIndexSectionToolbar from '../story-index-section/parts/story-index-section-toolbar.vue'
 
   defineOptions({
     name: 'ListingIndexSection',
@@ -147,14 +144,9 @@
     filterLabel: ''
   })
 
-  const Chip = defineAsyncComponent(() => import('../../input/chip/chip.vue'))
   const attrs = useAttrs()
 
   const { t } = useTranslate({ listingIndexSection: en.listingIndexSection })
-
-  const panelId = useId()
-
-  const SEARCH_THRESHOLD = 7
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'listing-index-section'
@@ -165,10 +157,6 @@
   const selected = ref<Record<string, string>>(
     Object.fromEntries(props.facets.map((facet) => [facet.id, '']))
   )
-
-  const filtersOpen = ref(false)
-
-  const optionQuery = ref<Record<string, string>>({})
 
   const wideQuery = useMediaQuery('(min-width: 64rem)')
   const mounted = useMounted()
@@ -238,17 +226,6 @@
   const phoneBlocks = blocksOf(phoneChunks, 76)
   const tableBlocks = blocksOf(tableChunks, 56)
 
-  const SORT_KEY = '__sort'
-
-  const narrowed = <T extends { label: string }>(key: string, options: T[]): T[] => {
-    const term = (optionQuery.value[key] ?? '').trim().toLowerCase()
-    return term ? options.filter((option) => option.label.toLowerCase().includes(term)) : options
-  }
-
-  const setOptionQuery = (key: string, value: string) => {
-    optionQuery.value = { ...optionQuery.value, [key]: value }
-  }
-
   const applied = computed(() =>
     props.facets.flatMap((facet) => {
       const value = selected.value[facet.id]
@@ -317,159 +294,50 @@
           class="border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-2xl)"
         />
 
-        <div
+        <StoryIndexSectionToolbar
           v-if="hasSearch || facets.length > 0 || sorts.length > 0"
-          role="search"
+          v-model:query="query"
           :data-testid="`${testId}__toolbar`"
-          class="grid gap-(--spacing-md) border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) lg:grid-cols-[minmax(0,4fr)_repeat(3,minmax(0,1fr))] lg:items-center"
+          :test-id="testId"
+          :filterable="facets.length > 0 || sorts.length > 0"
+          :filter-label="filterButtonLabel"
+          :searchable="hasSearch"
+          :search-placeholder="placeholder"
+          :search-aria-label="searchAriaLabel"
+          :applied="applied"
+          class="border-b border-(--border-default) lg:items-center"
+          @remove="(_event, key) => updateFacet(key, '')"
         >
-          <div class="flex items-center gap-(--spacing-sm) lg:contents">
-            <Button
-              v-if="facets.length > 0 || sorts.length > 0"
-              :data-testid="`${testId}__filter`"
-              :label="filterButtonLabel"
-              variant="outline"
-              size="large"
-              icon="az az-filter"
-              :aria-expanded="filtersOpen ? 'true' : 'false'"
-              :aria-controls="panelId"
-              class="shrink-0 lg:hidden"
-              @click="filtersOpen = !filtersOpen"
-            />
-            <Input
-              v-if="hasSearch"
-              v-model="query"
-              size="large"
-              type="text"
-              :placeholder="placeholder"
-              :aria-label="searchAriaLabel || undefined"
-              class="min-w-0 flex-1"
-            >
-              <template #leading>
-                <i class="az az-search text-(--text-muted)" />
-              </template>
-            </Input>
-          </div>
-          <div
-            v-if="facets.length > 0 || sorts.length > 0"
-            :id="panelId"
-            :data-testid="`${testId}__filters`"
-            :data-state="filtersOpen ? 'open' : 'closed'"
-            class="flex flex-col gap-(--spacing-sm) max-lg:hidden max-lg:data-[state=open]:flex lg:contents"
-          >
-            <Select
-              v-for="facet in facets"
-              :key="facet.id"
-              :model-value="selected[facet.id]"
-              size="large"
-              :placeholder="facet.allLabel"
-              :display-value="facetDisplay(facet)"
-              @update:model-value="(value) => updateFacet(facet.id, value)"
-              @update:open="setOptionQuery(facet.id, '')"
-            >
-              <SelectTrigger :aria-label="facet.label" />
-              <SelectContent>
-                <template
-                  v-if="facet.options.length > SEARCH_THRESHOLD"
-                  #search
-                >
-                  <Input
-                    :model-value="optionQuery[facet.id] ?? ''"
-                    size="small"
-                    :placeholder="t('listingIndexSection.search')"
-                    :aria-label="
-                      t('listingIndexSection.searchFacet', { facet: facet.label.toLowerCase() })
-                    "
-                    @update:model-value="setOptionQuery(facet.id, $event)"
-                  >
-                    <template #leading>
-                      <i
-                        class="az az-search"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </Input>
-                </template>
-                <SelectItem value="">{{ facet.allLabel }}</SelectItem>
-                <SelectItem
-                  v-for="option in narrowed(facet.id, facet.options)"
-                  :key="option.value"
-                  :value="option.value"
-                >
-                  {{ option.label }}
-                </SelectItem>
-                <p
-                  v-if="narrowed(facet.id, facet.options).length === 0"
-                  role="status"
-                  class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
-                >
-                  {{ t('listingIndexSection.noMatch') }}
-                </p>
-              </SelectContent>
-            </Select>
-            <Select
-              v-if="sorts.length > 0"
-              :model-value="sort"
-              size="large"
-              :display-value="sortDisplay"
-              @update:model-value="updateSort"
-              @update:open="setOptionQuery(SORT_KEY, '')"
-            >
-              <SelectTrigger :aria-label="sortAriaLabel || undefined" />
-              <SelectContent>
-                <template
-                  v-if="sorts.length > SEARCH_THRESHOLD"
-                  #search
-                >
-                  <Input
-                    :model-value="optionQuery[SORT_KEY] ?? ''"
-                    size="small"
-                    :placeholder="t('listingIndexSection.search')"
-                    :aria-label="
-                      t('listingIndexSection.searchFacet', { facet: sortAriaLabel.toLowerCase() })
-                    "
-                    @update:model-value="setOptionQuery(SORT_KEY, $event)"
-                  >
-                    <template #leading>
-                      <i
-                        class="az az-search"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </Input>
-                </template>
-                <SelectItem
-                  v-for="option in narrowed(SORT_KEY, sorts)"
-                  :key="option.value"
-                  :value="option.value"
-                >
-                  {{ option.label }}
-                </SelectItem>
-                <p
-                  v-if="narrowed(SORT_KEY, sorts).length === 0"
-                  role="status"
-                  class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
-                >
-                  {{ t('listingIndexSection.noMatch') }}
-                </p>
-              </SelectContent>
-            </Select>
-          </div>
-          <div
-            v-if="applied.length > 0"
-            :data-testid="`${testId}__applied`"
-            class="flex flex-wrap gap-(--spacing-xs) lg:hidden"
-          >
-            <Chip
-              v-for="chip in applied"
-              :key="chip.key"
-              :label="chip.label"
-              removable
-              size="medium"
-              @remove="updateFacet(chip.key, '')"
-            />
-          </div>
-        </div>
+          <StoryIndexSectionFacetSelect
+            v-for="facet in facets"
+            :key="facet.id"
+            :model-value="selected[facet.id]"
+            :label="facet.label"
+            :options="facet.options"
+            :all-option="{ value: '', label: facet.allLabel }"
+            :placeholder="facet.allLabel"
+            :display-value="facetDisplay(facet)"
+            :search-placeholder="t('listingIndexSection.search')"
+            :search-aria-label="
+              t('listingIndexSection.searchFacet', { facet: facet.label.toLowerCase() })
+            "
+            :no-match-label="t('listingIndexSection.noMatch')"
+            @update:model-value="(value) => updateFacet(facet.id, value)"
+          />
+          <StoryIndexSectionFacetSelect
+            v-if="sorts.length > 0"
+            :model-value="sort"
+            :label="sortAriaLabel"
+            :options="sorts"
+            :display-value="sortDisplay"
+            :search-placeholder="t('listingIndexSection.search')"
+            :search-aria-label="
+              t('listingIndexSection.searchFacet', { facet: sortAriaLabel.toLowerCase() })
+            "
+            :no-match-label="t('listingIndexSection.noMatch')"
+            @update:model-value="updateSort"
+          />
+        </StoryIndexSectionToolbar>
 
         <template v-if="listed.length > 0">
           <div
