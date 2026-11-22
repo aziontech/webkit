@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { computed, type FunctionalComponent, h, Transition, useAttrs } from 'vue'
+  import { Transition } from 'vue'
 
+  import { useButtonRoot } from '../../../composables/use-button-root'
   import { directionalIconClass } from '../../../utils/directional-icons'
-  import { safeHref } from '../../../utils/safe-href'
   import Spinner from '../../feedback/spinner/spinner.vue'
 
   export type IconButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
@@ -58,23 +58,9 @@
     click: [event: MouseEvent]
   }>()
 
-  const attrs = useAttrs()
-
-  const Root: FunctionalComponent<{ tag: 'a' | 'button' }> = (
-    { tag },
-    { attrs: rootAttrs, slots }
-  ) => h(tag, rootAttrs, slots['default']?.())
-  Root.props = ['tag']
-
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'icon-button')
-
-  const isInert = computed(() => props.disabled || props.loading)
-
-  const linkHref = computed(() =>
-    safeHref(props.href, attrs['download'] != null && attrs['download'] !== false)
+  const { Root, rootAttrs, onClick } = useButtonRoot(props, 'icon-button', (event) =>
+    emit('click', event)
   )
-
-  const isAnchor = computed(() => linkHref.value !== null)
 
   const ROOT_CLASS =
     'group/icon-button [:where(&)]:relative inline-flex shrink-0 items-center justify-center rounded-(--shape-button) ' +
@@ -99,17 +85,6 @@
     'data-[disabled]:cursor-not-allowed ' +
     'data-[size=large]:size-10 data-[size=large]:text-button-lg data-[size=medium]:size-8 data-[size=medium]:text-button-md data-[size=small]:size-7 data-[size=small]:text-button-md'
 
-  const loadingTestId = computed(() => `${testId.value}__loading`)
-
-  const onClick = (event: MouseEvent) => {
-    if (isInert.value) {
-      event.preventDefault()
-      return
-    }
-
-    emit('click', event)
-  }
-
   const ICON_CLASS =
     'relative z-1 inline-flex items-center justify-center ' +
     'data-[transition]:shrink-0 data-[transition]:overflow-hidden data-[transition]:size-3 ' +
@@ -122,30 +97,11 @@
 
 <template>
   <Root
-    :tag="isAnchor ? 'a' : 'button'"
-    v-bind="$attrs"
-    :href="linkHref ?? undefined"
-    :target="isAnchor ? target : undefined"
-    :rel="
-      isAnchor
-        ? target === '_blank'
-          ? 'noopener noreferrer'
-          : undefined
-        : (attrs['rel'] as string | undefined)
-    "
-    :type="isAnchor ? undefined : type"
-    :disabled="isAnchor ? undefined : disabled"
-    :tabindex="isAnchor ? (isInert ? -1 : undefined) : (attrs['tabindex'] as number | undefined)"
+    v-bind="rootAttrs"
     :aria-label="ariaLabel || undefined"
-    :aria-disabled="isInert || undefined"
-    :aria-busy="loading || undefined"
-    :data-disabled="disabled ? '' : undefined"
-    :data-loading="loading ? '' : undefined"
-    :data-inert="isInert ? '' : undefined"
     :data-variant="variant"
     :data-size="size"
     :class="ROOT_CLASS"
-    :data-testid="testId"
     @click="onClick"
   >
     <span
@@ -155,7 +111,7 @@
       <Spinner
         v-if="loading"
         class="size-3 group-data-[size=large]/icon-button:size-4"
-        :data-testid="loadingTestId"
+        :data-testid="`${rootAttrs['data-testid']}__loading`"
       />
       <Transition
         v-else-if="iconTransition"

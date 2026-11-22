@@ -1,8 +1,6 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
-
+  import { useButtonRoot } from '../../../composables/use-button-root'
   import { directionalIconClass } from '../../../utils/directional-icons'
-  import { safeHref } from '../../../utils/safe-href'
   import Spinner from '../../feedback/spinner/spinner.vue'
 
   export type HighlightButtonSize = 'small' | 'medium' | 'large'
@@ -43,17 +41,9 @@
     click: [event: MouseEvent]
   }>()
 
-  const attrs = useAttrs()
-
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'highlight-button')
-
-  const loadingTestId = computed(() => `${testId.value}__loading`)
-
-  const isInert = computed(() => props.disabled || props.loading)
-
-  const linkHref = computed(() => safeHref(props.href))
-
-  const isAnchor = computed(() => linkHref.value !== null)
+  const { Root, rootAttrs, onClick } = useButtonRoot(props, 'highlight-button', (event) =>
+    emit('click', event)
+  )
 
   const ROOT_CLASS =
     'group/highlight relative inline-flex items-center justify-center isolate overflow-hidden whitespace-nowrap p-px ' +
@@ -100,35 +90,13 @@
     'data-[size=medium]:px-(--spacing-sm) data-[size=medium]:text-button-md ' +
     'data-[size=small]:px-(--spacing-xs) data-[size=small]:text-button-md ' +
     'group-data-[inert]/highlight:text-(--text-disabled)'
-
-  const onClick = (event: MouseEvent) => {
-    if (isInert.value) {
-      event.preventDefault()
-      return
-    }
-
-    emit('click', event)
-  }
 </script>
 
 <template>
-  <component
-    :is="isAnchor ? 'a' : 'button'"
-    v-bind="$attrs"
-    :href="isAnchor ? (linkHref ?? undefined) : undefined"
-    :target="isAnchor ? target : undefined"
-    :rel="isAnchor && target === '_blank' ? 'noopener noreferrer' : undefined"
-    :type="isAnchor ? undefined : 'button'"
-    :disabled="isAnchor ? undefined : disabled"
+  <Root
+    v-bind="rootAttrs"
     :class="ROOT_CLASS"
-    :aria-disabled="isInert || undefined"
-    :aria-busy="loading || undefined"
-    :tabindex="isAnchor && isInert ? -1 : undefined"
     :data-size="size"
-    :data-disabled="disabled ? '' : undefined"
-    :data-loading="loading ? '' : undefined"
-    :data-inert="isInert ? '' : undefined"
-    :data-testid="testId"
     @click="onClick"
   >
     <span
@@ -152,7 +120,7 @@
       <Spinner
         v-if="loading"
         class="size-3 group-data-[size=large]/highlight:size-4"
-        :data-testid="loadingTestId"
+        :data-testid="`${rootAttrs['data-testid']}__loading`"
       />
       <i
         v-else-if="icon"
@@ -162,5 +130,5 @@
       />
       {{ label }}
     </span>
-  </component>
+  </Root>
 </template>

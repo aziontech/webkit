@@ -2,6 +2,7 @@ import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/icon-button/default.vue'
+import IconTransition from '../../../../examples/icon-button/icon-transition.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { UNSAFE_URLS } from '../../../test/unsafe-urls'
 import IconButton from './icon-button.vue'
@@ -284,6 +285,19 @@ describe('IconButton', () => {
       const target = view.getByRole('button').querySelector('[data-slot="touch-target"]')
 
       expect(target?.className).toContain('pointer-coarse:block')
+    })
+  })
+
+  describe('icon transition example', () => {
+    it('swaps the icon and the accessible name on click', async () => {
+      const { container, getByRole } = render(IconTransition)
+      const button = getByRole('button', { name: 'Show token' })
+      expect(button.querySelector('.az-eye')).not.toBeNull()
+
+      await fireEvent.click(button)
+
+      expect(getByRole('button', { name: 'Hide token' })).toHaveAttribute('aria-pressed', 'true')
+      await expectNoA11yViolations(container)
     })
   })
 })
