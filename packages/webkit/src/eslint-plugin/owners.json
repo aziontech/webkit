@@ -122,7 +122,7 @@
         "src/components/section/job-posting-section": "JobPostingSection: the hidden file input its Browse button opens for the resume field.",
         "src/components/data/data-grid": "DataGrid: the in-cell text editor of an editable grid cell, sized to the cell.",
         "src/components/data/tree/parts/tree-node.vue": "Tree node: the in-place rename field of a tree item, sized to the row.",
-        "src/components/input/date-range-picker/date-range-picker.vue": "DateRangePicker: the quick ranges are a staged single choice (native radios, applied with Apply, the Cloudscape relative-range list) drawn as compact popover option rows with a trailing check in a column-filled two-column grid; RadioGroup draws circles or cards."
+        "src/components/input/date-range-picker/parts/date-range-relative.vue": "DateRangePicker: the quick ranges are a staged single choice (native radios, applied with Apply, the Cloudscape relative-range list) drawn as compact popover option rows with a trailing check in a column-filled two-column grid; RadioGroup draws circles or cards."
       }
     },
     "textarea": {
