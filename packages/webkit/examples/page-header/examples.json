@@ -24,7 +24,7 @@
     },
     {
       "name": "RichDescription",
-      "summary": "The `description` slot carries inline buttons or links when one plain sentence is not enough.",
+      "summary": "The `description` slot carries inline actions — Buttons with `variant=\"link\"` — when one plain sentence is not enough.",
       "file": "rich-description.vue"
     }
   ]

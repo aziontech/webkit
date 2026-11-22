@@ -1,6 +1,7 @@
 <script setup>
   import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'
   import Button from '@aziontech/webkit/button'
+  import Table from '@aziontech/webkit/table'
   import { onBeforeUnmount, ref } from 'vue'
 
   const rows = [
@@ -33,45 +34,29 @@
         :streaming="streaming"
         download-href="data:text/csv;charset=utf-8,country,requests,hit"
       >
-        <table class="w-full border-collapse text-body-sm">
-          <thead class="bg-(--bg-surface-raised)">
-            <tr>
-              <th
-                scope="col"
-                class="px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm"
-              >
-                Country
-              </th>
-              <th
-                scope="col"
-                class="px-(--spacing-sm) py-(--spacing-xs) text-end text-label-sm"
-              >
-                Requests
-              </th>
-              <th
-                scope="col"
-                class="px-(--spacing-sm) py-(--spacing-xs) text-end text-label-sm"
-              >
-                Hit ratio
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
+        <Table density="compact">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeadCell principal>Country</Table.HeadCell>
+              <Table.HeadCell align="end">Requests</Table.HeadCell>
+              <Table.HeadCell align="end">Hit ratio</Table.HeadCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            <Table.Row
               v-for="row in rows"
               :key="row.country"
-              class="border-t border-(--border-muted)"
             >
-              <td class="px-(--spacing-sm) py-(--spacing-xs)">{{ row.country }}</td>
-              <td class="px-(--spacing-sm) py-(--spacing-xs) text-end tabular-nums">
-                {{ row.requests }}
-              </td>
-              <td class="px-(--spacing-sm) py-(--spacing-xs) text-end tabular-nums">
-                {{ row.hit }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              <Table.Cell principal>{{ row.country }}</Table.Cell>
+              <Table.Cell align="end"
+                ><span class="tabular-nums">{{ row.requests }}</span></Table.Cell
+              >
+              <Table.Cell align="end"
+                ><span class="tabular-nums">{{ row.hit }}</span></Table.Cell
+              >
+            </Table.Row>
+          </Table.Body>
+        </Table>
       </ArtifactCanvas>
     </div>
     <Button
