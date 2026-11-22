@@ -45,6 +45,8 @@ write instead.
 
 ```vue
 <script setup lang="ts">
+  import Input from '@aziontech/webkit/input'
+
   // Primary value — consumer binds v-model="query".
   // Boundary transform: what leaves the component is always trimmed.
   const model = defineModel<string>({ default: '', set: (v) => v.trim() })
@@ -54,7 +56,10 @@ write instead.
 </script>
 
 <template>
-  <input :value="model" @input="model = ($event.target as HTMLInputElement).value" />
+  <Input
+    v-model="model"
+    aria-label="Search"
+  />
 </template>
 ```
 

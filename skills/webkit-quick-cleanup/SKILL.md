@@ -2,7 +2,7 @@
 name: webkit-quick-cleanup
 description: Fast deslop pass for UI built on @aziontech/webkit — enforce components-only, tokens-only (typography/color/shape/spacing/shadow), correct typography hierarchy, and consistent spacing rhythm. Use for a quick cleanup or polish review.
 status: active
-last_updated: 2026-11-18
+last_updated: 2026-11-21
 scope: general
 enforced_by: [webkit-tokens, webkit-prefer-over-custom, webkit-styling]
 ---
@@ -46,6 +46,10 @@ hand-rolled, nothing hardcoded.
   `<div class="border-t …">` / `<div class="h-px bg-…">`. If you're reaching for a border utility to draw
   a line between sections, that's the Separator component. (A real, observed failure: a `<div>` with border
   classes standing in for the Separator — do not.)
+- **NEVER** hand-roll an `<a>` or a hidden `<input type="file">`. A standalone link is `Link`; a link
+  inside a sentence is `Link` with `inline` (it renders the `text-link` style); a "Browse files" button
+  opens the system picker with `useFilePicker` from `@aziontech/webkit/use-file-picker`. A raw one
+  outside its owner is flagged by `webkit/no-unowned-element`.
 - **NEVER** mix another component library's primitives onto the same surface.
 - **MUST** use `@aziontech/webkit/icon-button` with an `aria-label` for icon-only actions.
 - **MUST** use `@aziontech/webkit/utils/cn` (clsx + tailwind-merge) for any class composition.
@@ -62,7 +66,7 @@ hand-rolled, nothing hardcoded.
 
 - **MUST** use only the `text-*` typography tokens (the webkit MCP lists them; they ship in
   `@aziontech/theme`): `text-heading-2xl … text-heading-sm`, `text-body-lg … text-body-2xs`,
-  `text-label-sm/md/lg`, `text-overline-xs/sm/md`, `text-button-md/lg`, `text-link`,
+  `text-label-sm/md/lg`, `text-overline-xs/sm/md`, `text-button-md/lg`, `text-link` (what `Link inline` renders),
   `text-big-number-*`.
 - **NEVER** raw `text-xs/sm/base/lg`, `leading-*` (except `leading-none` on an icon set to
   `text-[length:inherit]`), or `tracking-*` overrides — line-height and tracking are baked into the token.

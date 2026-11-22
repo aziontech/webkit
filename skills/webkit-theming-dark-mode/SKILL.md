@@ -2,7 +2,7 @@
 name: webkit-theming-dark-mode
 description: Every screen in a @aziontech/webkit app works in BOTH light and dark with zero per-theme edits, because it is styled only through semantic tokens (var(--bg-surface), var(--text-default), var(--primary)…) that carry a role and swap value per theme — never a hex, rgb/hsl, Tailwind palette color, or a value that reads in one theme only. Use when building or reviewing any screen, and before calling one done. Covers the data-theme mechanism, elevation-in-dark, and the two-theme check.
 status: active
-last_updated: 2026-11-15
+last_updated: 2026-11-21
 scope: general
 enforced_by: [webkit-tokens, ui-verify]
 ---
@@ -157,6 +157,8 @@ and accent all move together.
 
 ```vue
 <script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+
   function toggleTheme() {
     const el = document.documentElement
     el.dataset.theme = el.dataset.theme === 'dark' ? 'light' : 'dark'
@@ -172,12 +174,12 @@ and accent all move together.
     <h3 class="text-(--text-default)">Workload health</h3>
     <p class="text-(--text-secondary)">Requests are within normal range.</p>
     <span class="text-(--primary)">View details</span>
-    <button
-      class="mt-(--spacing-sm) text-(--primary)"
+    <Button
+      label="Toggle theme"
+      variant="secondary"
+      class="mt-(--spacing-sm)"
       @click="toggleTheme"
-    >
-      Toggle theme
-    </button>
+    />
   </article>
 </template>
 ```

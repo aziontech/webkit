@@ -1,6 +1,7 @@
 <script setup>
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
   import DocFrame from '@aziontech/webkit/doc-frame'
+  import Link from '@aziontech/webkit/link'
 </script>
 
 <template>
@@ -18,8 +19,12 @@
     >
       <template #caption>
         The application is live once <strong>Create and deploy</strong> finishes — see the
-        <a href="https://azion.com/documentation">CLI reference</a> or run
-        <code>azion deploy</code>.
+        <Link
+          inline
+          href="https://azion.com/documentation"
+          >CLI reference</Link
+        >
+        or run <code>azion deploy</code>.
       </template>
     </DocFrame>
   </div>

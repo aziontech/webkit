@@ -2,7 +2,7 @@
 name: webkit-form
 description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own invalid state as the feedback (required is static and draws no colour) — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
-last_updated: 2026-11-20
+last_updated: 2026-11-21
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -302,7 +302,11 @@ link on the left and Save on the right. Canonical pattern:
 
         <Alert severity="info">
           To use the toolbar in production your team members need the Chrome extension, or
-          <a href="/docs/toolbar">enable the toolbar for that domain</a>
+          <Link
+            inline
+            href="/docs/toolbar"
+            >enable the toolbar for that domain</Link
+          >
           in the toolbar menu.
         </Alert>
       </div>

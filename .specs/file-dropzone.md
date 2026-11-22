@@ -3,10 +3,10 @@ name: file-dropzone
 category: input
 structure: monolithic
 status: implemented
-checksum: 42ec08c5a9d06a4309f358706272ddf80147c3d5df0ab011623dd8d96faf6f89
-spec_version: 7
+checksum: 137869ad41d3341ee0f3fe0e84194615c43a69441558423fe974e47d7013db26
+spec_version: 8
 created: 2026-11-10
-last_updated: 2026-11-17
+last_updated: 2026-11-21
 ---
 
 # FileDropzone — Component Spec
@@ -45,7 +45,7 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
 
 ## Best practices
 
-- Always give the user a non-drag path. In `inline`, put a `Button` in the default slot that opens a native `<input type="file">`. In `overlay`, keep an upload button somewhere on the page. The drop target is pointer-only by design.
+- Always give the user a non-drag path. In `inline`, put a `Button` in the default slot that opens the system file picker through `useFilePicker`. In `overlay`, keep an upload button somewhere on the page. The drop target is pointer-only by design.
 - Pass the same `accept` string to the dropzone and to the native input behind your Browse button, so both paths filter the same way.
 - Handle `reject`. Tell the user which files were skipped and why (e.g. a `toast` naming the files and the accepted types). A silent rejection reads as a broken drop.
 - Announce the outcome of a drop yourself (a toast, or a live region on your file list). The dropzone does not announce drag states (see Accessibility).
@@ -61,8 +61,9 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
   import { ref } from 'vue'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import Button from '@aziontech/webkit/button'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
 
-  const picker = ref(null)
+  const picker = useFilePicker({ accept: 'image/png,image/jpeg', multiple: true })
   const files = ref([])
   const skipped = ref([])
 
@@ -74,8 +75,8 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
     skipped.value = rejected.map((file) => file.name)
   }
 
-  function onPick(event) {
-    files.value.push(...event.target.files)
+  async function onBrowse() {
+    files.value.push(...(await picker.open()))
   }
 
   function onDeploy(event, accepted) {
@@ -95,15 +96,7 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
       label="Browse files"
       variant="outline"
       size="medium"
-      @click="picker.click()"
-    />
-    <input
-      ref="picker"
-      type="file"
-      accept="image/png,image/jpeg"
-      multiple
-      hidden
-      @change="onPick"
+      @click="onBrowse"
     />
   </FileDropzone>
 
@@ -132,7 +125,7 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
 | `invalid`     | `boolean`               | `false`    | false    | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work.                                                                              |
 | `icon`        | `string`                | `''`       | false    | Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph (`az az-cloud-upload`).                                                                                      |
 
-`multiple` defaults to `true` on purpose, against the "booleans default to `false`" habit. Most drops carry several files (a folder's contents, a batch of assets), and the positive name `multiple` matches the native `<input multiple>` attribute the consumer pairs it with. The inverse (`single`) would be a new term with no native counterpart.
+`multiple` defaults to `true` on purpose, against the "booleans default to `false`" habit. Most drops carry several files (a folder's contents, a batch of assets), and the positive name `multiple` matches the native `multiple` attribute of a file input and the `multiple` option of `useFilePicker`, which the consumer pairs it with. The inverse (`single`) would be a new term with no native counterpart.
 
 No `v-model`: the dropzone holds no value. The accumulated file list belongs to the consumer (composed with a `Field`).
 
@@ -174,7 +167,7 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 - **Disabled inline:** `dragover` still calls `preventDefault()` but sets `dropEffect = 'none'` (the not-allowed cursor, and the browser does not open the file), the state never becomes `active`, and no event is emitted.
 - **`accept` matching:** split on commas, trimmed, lower-cased, empty tokens ignored. A token starting with `.` matches the end of the file name (`.png`). A token ending in `/*` matches a `file.type` with that prefix (`image/*`). Any other token must equal `file.type` (`application/pdf`). A file with an empty `type` can only match by extension. An empty `accept` accepts every file.
 - **`multiple="false"`:** the first file that passes `accept`, in `dataTransfer.files` order, is accepted. Every later file, matching or not, goes to `reject`.
-- **Folders (`directories`):** the drop reads `dataTransfer.items[i].webkitGetAsEntry()` synchronously, then walks each entry (a folder's reader is read until it returns an empty batch) and turns each file entry into a `File` whose `webkitRelativePath` is the entry's path without the leading slash (`site/css/main.css`; a loose file keeps its name). `accept` and `multiple` then filter the walked files and `drop` / `reject` fire once, after the walk, with the original event. Without entry support, or when the walk fails, the drop falls back to `dataTransfer.files`. Off by default, a dropped folder is not walked (browsers hand an empty or zero-byte entry). The picker side is the consumer's: a hidden `<input type="file" webkitdirectory>` behind a Browse folder button, whose files already carry `webkitRelativePath`.
+- **Folders (`directories`):** the drop reads `dataTransfer.items[i].webkitGetAsEntry()` synchronously, then walks each entry (a folder's reader is read until it returns an empty batch) and turns each file entry into a `File` whose `webkitRelativePath` is the entry's path without the leading slash (`site/css/main.css`; a loose file keeps its name). `accept` and `multiple` then filter the walked files and `drop` / `reject` fire once, after the walk, with the original event. Without entry support, or when the walk fails, the drop falls back to `dataTransfer.files`. Off by default, a dropped folder is not walked (browsers hand an empty or zero-byte entry). The picker side is the consumer's: a Browse folder button that calls `useFilePicker({ directory: true })`, whose files already carry `webkitRelativePath`.
 - **SSR:** `useEventListener` binds nothing when `window` is undefined, so the component renders on the server in its idle state.
 
 ## Motion & Animations
@@ -233,7 +226,7 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 
 Canonical layout, with two justified deviations: there is no `size` prop (no Sizes story), and there is no Types composite because an `overlay` is invisible at rest, so a side-by-side frame would show one empty box. Each variant gets its own story instead.
 
-- Default: `variant="inline"` with a "Browse files" `Button` in the default slot wired to a hidden native `<input type="file" multiple>`. `drop` and `reject` are logged through `argTypes` actions (`onDrop` / `onReject`).
+- Default: `variant="inline"` with a "Browse files" `Button` in the default slot that opens the system file picker through `useFilePicker({ multiple: true })`. `drop` and `reject` are logged through `argTypes` actions (`onDrop` / `onReject`).
 - Overlay: `variant="overlay"` inside a positioned `Card` (`class="relative"`) with a min height, and placeholder card content under it. The story copy tells the reader to drag a file over the window to see it. Justified because the overlay's placement and window-level behavior cannot be shown in Default.
 - Accept: `variant="inline"`, `accept="image/*"`, with the story rendering the names of rejected files from the `reject` payload under the dropzone. Justified because `reject` is half of the event contract and needs a visible demonstration.
 - Disabled: `disabled: true` on the Default composition, with the slotted Button also disabled.

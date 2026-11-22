@@ -2,7 +2,7 @@
 name: webkit-ux-heuristics
 description: Component-map discovery pass — for each UX moment (loading→Skeleton, destructive→Dialog confirm, field error→Field/Alert inline, overlay→shipped focus-trap, empty→one action) name the @aziontech/webkit component that already serves it, so the flow is sound before polish. Also owns three usability rules every surface follows — an external resource link opens in a new tab and says so (trailing az-external-link + new-tab hint), every long list (a "+N" Tag opening a Popover, an inline picker of existing resources in a create flow, a Select of existing resources) carries a count, search and Load more, and any list of options longer than 7 turns search on. State rendering + async behavior lives in /webkit-ui-states.
 status: active
-last_updated: 2026-11-20
+last_updated: 2026-11-21
 scope: general
 # prettier-ignore
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-accessibility, webkit-keyboard, ui-verify, review]
@@ -84,11 +84,11 @@ shrink-0`), never sized from the surrounding text. The mark is how the user know
 
 Pick the element by where the link sits:
 
-| Where                                       | Use                                                                                       |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Standalone (a domain, a repo, "Learn more") | `Link` with `target="_blank"` — it renders the mark and sets `rel` itself                 |
-| Inside running prose                        | an `<a>` with the `text-link` class, the same `target`/`rel`, and the mark after the text |
-| A resource name in a table cell or panel    | the shared cross-resource link from `/webkit-tables`                                      |
+| Where                                       | Use                                                                                                                                      |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Standalone (a domain, a repo, "Learn more") | `Link` with `target="_blank"` — it renders the mark and sets `rel` itself                                                                |
+| Inside running prose                        | `Link` with `inline` and the same `target`: it keeps the sentence's size and the underline, sets `rel` and draws the mark after the text |
+| A resource name in a table cell or panel    | the shared cross-resource link from `/webkit-tables`                                                                                     |
 
 ```vue
 <Link
