@@ -9,7 +9,7 @@ import { babelParse, parse } from 'vue/compiler-sfc'
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 export const PKG_DIR = resolve(SCRIPT_DIR, '..')
 
-export const MAX_ASSERTIONS = 1018
+export const MAX_ASSERTIONS = 991
 
 export const BANNED_ROOTS = ['src', 'blocks', 'examples']
 export const COUNTED_ROOTS = ['src']
@@ -51,9 +51,30 @@ function walk(node, visit) {
   }
 }
 
+export function unboundModelDefaults(ast) {
+  const allowed = new Set()
+  walk(ast, (node) => {
+    if (node.type !== 'CallExpression' || node.callee?.name !== 'defineModel') return
+    for (const arg of node.arguments)
+      if (arg.type === 'ObjectExpression')
+        for (const property of arg.properties) {
+          const value = property.value
+          if (
+            property.key?.name === 'default' &&
+            value?.type === 'TSAsExpression' &&
+            value.typeAnnotation?.type === 'TSNeverKeyword' &&
+            value.expression?.type === 'Identifier' &&
+            value.expression.name === 'undefined'
+          )
+            allowed.add(value)
+        }
+  })
+  return allowed
+}
+
 function assertionsIn(ast, lineOffset) {
   const found = []
-  const inner = new Set()
+  const inner = unboundModelDefaults(ast)
   walk(ast, (node) => {
     if (node.type !== 'TSAsExpression' && node.type !== 'TSTypeAssertion') return
     if (inner.has(node) || isConst(node.typeAnnotation)) return

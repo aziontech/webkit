@@ -23,6 +23,20 @@ const d = <number>w`,
   )
 })
 
+test('only the unbound default of a defineModel may be undefined as never', () => {
+  const found = scanSource(
+    `const open = defineModel<boolean>('open', { default: undefined as never })
+const other = { default: undefined as never }
+const value = defineModel<string>({ default: '' as never })`,
+    'file.ts'
+  )
+  assert.deepEqual(kinds(found), ['as-never', 'as-never'])
+  assert.deepEqual(
+    found.map((f) => f.line),
+    [2, 3]
+  )
+})
+
 test('as const and satisfies are not assertions', () => {
   const found = scanSource(
     `const a = ['x', 'y'] as const
@@ -35,7 +49,7 @@ const b = { size: 1 } satisfies Record<string, number>`,
 test('a .vue file is read in its scripts and its template expressions', () => {
   const found = scanSource(
     `<script setup lang="ts">
-const model = defineModel<boolean>('open', { default: undefined as never })
+const model = defineModel<boolean>('open', { default: null as never })
 </script>
 <template>
   <div :data-testid="($attrs['data-testid'] as string) ?? 'x'">{{ (count as number) + 1 }}</div>
