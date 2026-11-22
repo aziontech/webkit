@@ -7,9 +7,9 @@ import { cleanup, cli, cliJson, makeProject } from './lib/cli-project.mjs'
 
 const BLOCK = 'create/create-hub'
 const HUB_FILES = [
-  'src/views/create-hub.repository-list.vue',
+  'src/views/create-hub-repository-list.vue',
+  'src/views/create-hub-template-gallery.vue',
   'src/views/create-hub.sample.ts',
-  'src/views/create-hub.template-gallery.vue',
   'src/views/create-hub.types.ts',
   'src/views/create-hub.vue'
 ]

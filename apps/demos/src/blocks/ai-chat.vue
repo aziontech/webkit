@@ -8,8 +8,6 @@
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
   import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
-  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
@@ -41,12 +39,13 @@
   } from '@aziontech/webkit/utils/ai-chat-questions'
   import { computed, ref, watch } from 'vue'
 
-  import AiChatConnectionStatus from './ai-chat.ai-chat-connection-status.vue'
-  import AiChatHeader from './ai-chat.ai-chat-header.vue'
-  import AiChatHistory from './ai-chat.ai-chat-history.vue'
-  import AiChatStart from './ai-chat.ai-chat-start.vue'
-  import AiChatTurn from './ai-chat.ai-chat-turn.vue'
   import { sampleSuggestions } from './ai-chat.sample'
+  import AiChatComposer from './ai-chat-composer.vue'
+  import AiChatConnectionStatus from './ai-chat-connection-status.vue'
+  import AiChatHeader from './ai-chat-header.vue'
+  import AiChatHistory from './ai-chat-history.vue'
+  import AiChatStart from './ai-chat-start.vue'
+  import AiChatTurn from './ai-chat-turn.vue'
 
   /** A rating the reader gave a response. */
   export interface AiChatFeedback {
@@ -87,8 +86,10 @@
     hydrating?: boolean
     /** A response is being generated for this chat elsewhere, as `useChat` returns `sessionGenerating`. */
     sessionGenerating?: boolean
-    /** The reader may attach files; `send` then hands over the multimodal content `sendMessage` takes. */
+    /** The reader may attach files from the Attach control at the start of the composer; `send` then hands over the multimodal content `sendMessage` takes. */
     attachable?: boolean
+    /** An empty composer shows the round Start voice conversation control in place of Send; it emits `voice-start` and the app owns the audio session. */
+    voice?: boolean
     /** The files the reader may attach, in the native accept syntax. */
     accept?: string
     /** Most files attached to one message. */
@@ -115,7 +116,8 @@
     resuming: false,
     hydrating: false,
     sessionGenerating: false,
-    attachable: false,
+    attachable: true,
+    voice: true,
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
@@ -125,6 +127,7 @@
   const emit = defineEmits<{
     send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     stop: [event: MouseEvent]
+    'voice-start': [event: MouseEvent]
     retry: [event: MouseEvent, message: AiChatMessage]
     'new-chat': [event: MouseEvent]
     feedback: [feedback: AiChatFeedback]
@@ -148,7 +151,7 @@
 
   const prompt = ref('')
   const files = ref<PromptInputFile[]>([])
-  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
+  const composerEl = ref<InstanceType<typeof AiChatComposer> | null>(null)
   const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
   const stoppedIds = ref<Set<string>>(new Set())
   const edits = ref<Record<string, string>>({})
@@ -418,30 +421,22 @@
             :items="queued"
             @remove="(event, item) => removeQueued(event, item.id)"
           />
-          <PromptInput
+          <AiChatComposer
             ref="composerEl"
             v-model="prompt"
             v-model:files="files"
-            :status="state"
+            :state="state"
             :queueable="queueable"
-            :disabled="hydrating"
+            :hydrating="hydrating"
             :accept="accept"
             :max-files="maxFiles"
             :max-file-size="maxFileSize"
-            :max-length="4000"
-            @submit="(event, { value }) => send(event, value)"
+            :attachable="attachable"
+            :voice="voice"
+            @submit="send"
             @stop="stop"
-          >
-            <template
-              v-if="attachable"
-              #actions
-            >
-              <PromptInputAttachButton />
-            </template>
-            <template #hint>
-              The AI assistant can make mistakes. Check important information before you act on it.
-            </template>
-          </PromptInput>
+            @voice-start="emit('voice-start', $event)"
+          />
         </template>
       </Conversation>
     </div>

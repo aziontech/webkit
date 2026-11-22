@@ -59,7 +59,9 @@ A block is a screen an app feeds, not a demo. The primary SFC:
 `import type { … } from './<name>.vue'`; UI config (columns, filter properties, menus) stays in
 the SFC. A variant imports the primary (`import X from '../<name>.vue'`) and passes it other props
 or slots; only a genuinely different screen may stay a full SFC. `npx @aziontech/webkit add`
-copies the `files` beside the SFC as `<stem>.<file>` and rewrites the local imports, and
+copies the `files` beside the SFC (a part SFC as kebab `<stem>-<part>.vue`, or `<part>.vue` when
+its name already starts with `<stem>-`; data and helpers as `<stem>.<file>`) and rewrites the
+local imports, and
 `get_block` returns them under `files`. `check:blocks` fails on a primary without props, a
 primary that holds records, a variant that repeats 90 % or more of the primary, and a variant
 of 60 lines or more that copies 60 % or more of the primary and adds its own code (a fork, which
