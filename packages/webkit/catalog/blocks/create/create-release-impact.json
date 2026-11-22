@@ -29,6 +29,10 @@
  "sfcFile": "blocks/create/create-release-impact/create-release-impact.vue",
  "guidelinesFile": "blocks/create/create-release-impact/guidelines.md",
  "fileSources": [
-  "sample.ts"
+  "sample.ts",
+  "lib/release-impact.ts",
+  "parts/release-impact-panel.vue",
+  "parts/release-resource-card.vue",
+  "types.ts"
  ]
 }

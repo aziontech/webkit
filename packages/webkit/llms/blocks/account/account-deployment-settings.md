@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-deployment-settings/account-deployment-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-deployment-settings")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), [Pagination](../../components/pagination.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), [Pagination](../../components/pagination.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-form`, `webkit-tables`, `webkit-lists`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -1566,6 +1566,7 @@ export const settingRows = (
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -1644,19 +1645,25 @@ export const settingRows = (
     { key: 'status', label: 'Status', options: [{ value: 'Active' }, { value: 'Inactive' }] }
   ]
 
-  const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
-    useCollection({
-      items: rows,
-      columns,
-      filtering: { fields: ['name', 'description', 'reach', 'status'] },
-      propertyFiltering: { properties },
-      sorting: { defaultState: [{ desc: true, id: 'updatedAt' }] },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: {
-        storageKey: 'deployment-settings',
-        defaults: { columns: [{ id: 'type', visible: false }] }
-      }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: rows,
+    columns,
+    filtering: { fields: ['name', 'description', 'reach', 'status'] },
+    propertyFiltering: { properties },
+    sorting: { defaultState: [{ desc: true, id: 'updatedAt' }] },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: {
+      storageKey: 'deployment-settings',
+      defaults: { columns: [{ id: 'type', visible: false }] }
+    }
+  })
 
   const settingsTableEl = ref<TableExposed<SettingsRowData> | null>(null)
   const exportCsv = () => settingsTableEl.value?.exportCsv({ filename: 'deployment-settings.csv' })
@@ -1831,6 +1838,12 @@ export const settingRows = (
                   />
                 </template>
               </EmptyState>
+            </template>
+            <template #footer>
+              <DataTablePagination
+                v-bind="paginationProps"
+                manual
+              />
             </template>
           </DataTable>
         </template>

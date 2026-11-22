@@ -9,7 +9,7 @@ import { babelParse, parse } from 'vue/compiler-sfc'
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 export const PKG_DIR = resolve(SCRIPT_DIR, '..')
 
-export const MAX_ASSERTIONS = 969
+export const MAX_ASSERTIONS = 966
 
 export const BANNED_ROOTS = ['src', 'blocks', 'examples']
 export const COUNTED_ROOTS = ['src']

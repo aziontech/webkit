@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-resource")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FlowDiagramBind`, [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), `TableCellLink`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `use-unsaved-changes`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FlowDiagramBind`, [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), `TableCellLink`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -1161,6 +1161,7 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
   import Card from '@aziontech/webkit/card'
   import type { TableColumn } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Subheader from '@aziontech/webkit/subheader'
@@ -1211,8 +1212,6 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
           :data="deployments"
           :columns="deploymentColumns"
           row-key="id"
-          paginated
-          :page-size="10"
           :bordered="false"
           aria-label="Deployments"
         >
@@ -1230,6 +1229,9 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
               description="Deploy this application and each run lands here."
             />
           </template>
+          <template #footer>
+            <DataTablePagination :page-size="10" />
+          </template>
         </DataTable>
       </template>
     </Card>
@@ -1245,6 +1247,7 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
   import Card from '@aziontech/webkit/card'
   import type { TableColumn } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Subheader from '@aziontech/webkit/subheader'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
@@ -1308,8 +1311,6 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
           :data="versions"
           :columns="versionColumns"
           row-key="id"
-          paginated
-          :page-size="10"
           :bordered="false"
           aria-label="Versions"
         >
@@ -1337,6 +1338,9 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
               title="No versions yet"
               description="Every deploy creates a version of this application."
             />
+          </template>
+          <template #footer>
+            <DataTablePagination :page-size="10" />
           </template>
         </DataTable>
       </template>

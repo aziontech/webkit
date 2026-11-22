@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-alerts/dashboard-alerts.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-alerts")`
-- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Card](../../components/card.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, [Tag](../../components/tag.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Card](../../components/card.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, [Tag](../../components/tag.md), `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -1043,6 +1043,7 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
 ```ts
 <script setup lang="ts">
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import SeverityTag from '@aziontech/webkit/severity-tag'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
@@ -1108,9 +1109,6 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
     :columns="alertColumns"
     row-key="id"
     sortable
-    paginated
-    :page-size="10"
-    :page-size-options="[10, 25, 50]"
     density="compact"
     bordered
     :loading="loading"
@@ -1125,6 +1123,12 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
       <TableCellStatus
         :label="row.status"
         :severity="statusSeverity[row.status]"
+      />
+    </template>
+    <template #footer>
+      <DataTablePagination
+        :page-size="10"
+        :page-size-options="[10, 25, 50]"
       />
     </template>
   </DataTable>

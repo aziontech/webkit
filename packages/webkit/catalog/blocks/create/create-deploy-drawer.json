@@ -45,7 +45,15 @@
  "guidelinesFile": "blocks/create/create-deploy-drawer/guidelines.md",
  "fileSources": [
   "sample.ts",
-  "parts/deploy-drawer-frame.vue",
-  "parts/deploy-resources-card.vue"
+  "lib/list-format.ts",
+  "parts/build-item.vue",
+  "parts/deploy-loading.vue",
+  "parts/deploy-resources-card.vue",
+  "parts/domain-group-item.vue",
+  "parts/environment-choices.vue",
+  "parts/impacted-projects.vue",
+  "parts/project-card.vue",
+  "parts/version-picker.vue",
+  "types.ts"
  ]
 }

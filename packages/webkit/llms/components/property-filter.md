@@ -195,6 +195,7 @@
 ```vue
 <script setup>
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
@@ -227,7 +228,7 @@
     { accessorKey: 'requests', header: 'Requests', sortable: true, align: 'end' }
   ]
 
-  const { propertyFilterProps, tableProps } = useCollection({
+  const { paginationProps, propertyFilterProps, tableProps } = useCollection({
     items: workloads,
     columns,
     propertyFiltering: { properties },
@@ -238,7 +239,14 @@
 <template>
   <div class="flex flex-col gap-(--spacing-sm)">
     <PropertyFilter v-bind="propertyFilterProps" />
-    <DataTable v-bind="tableProps" />
+    <DataTable v-bind="tableProps">
+      <template #footer>
+        <DataTablePagination
+          v-bind="paginationProps"
+          manual
+        />
+      </template>
+    </DataTable>
   </div>
 </template>
 ```

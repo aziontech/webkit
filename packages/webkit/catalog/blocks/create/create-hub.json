@@ -24,6 +24,9 @@
  "sfcFile": "blocks/create/create-hub/create-hub.vue",
  "guidelinesFile": "blocks/create/create-hub/guidelines.md",
  "fileSources": [
-  "sample.ts"
+  "sample.ts",
+  "parts/repository-list.vue",
+  "parts/template-gallery.vue",
+  "types.ts"
  ]
 }

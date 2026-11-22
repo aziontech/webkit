@@ -29,9 +29,6 @@
  "sfcFile": "blocks/create/create-page/create-page.vue",
  "guidelinesFile": "blocks/create/create-page/guidelines.md",
  "fileSources": [
-  "domain-validation.ts",
-  "use-create-form.ts",
-  "parts/creation-header.vue",
-  "parts/discard-dialog.vue"
+  "domain-validation.ts"
  ]
 }

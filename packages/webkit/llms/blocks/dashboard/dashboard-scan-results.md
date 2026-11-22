@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-scan-results/dashboard-scan-results.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-scan-results")`
-- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Card](../../components/card.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), [DonutChart](../../components/donut-chart.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, `use-locale`
+- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Card](../../components/card.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DonutChart](../../components/donut-chart.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, `use-collection`, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -828,9 +828,11 @@ export const sampleSubmissions: ScanResultsSubmission[] = [
 ```ts
 <script setup lang="ts">
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import { matchesText } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
   import type { ScanResultsSubmission } from '../dashboard-scan-results.vue'
@@ -867,6 +869,15 @@ export const sampleSubmissions: ScanResultsSubmission[] = [
           (status.value === 'analyzing') === (row.verdict === 'pending')) &&
         (verdict.value === 'all' || row.verdict === verdict.value) &&
         (source.value === 'all' || row.source === source.value)
+    )
+  )
+  const matchingRows = computed(() =>
+    rows.value.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        scanColumns.flatMap((column) => column.accessorKey ?? [])
+      )
     )
   )
 </script>
@@ -906,14 +917,10 @@ export const sampleSubmissions: ScanResultsSubmission[] = [
       />
     </div>
     <DataTable
-      v-model:global-filter="search"
-      :data="rows"
+      :data="matchingRows"
       :columns="scanColumns"
       row-key="id"
       sortable
-      paginated
-      :page-size="10"
-      :page-size-options="[10, 25, 50]"
       density="compact"
       bordered
       :loading="loading"
@@ -956,6 +963,12 @@ export const sampleSubmissions: ScanResultsSubmission[] = [
           :datetime="row.lastSeen"
           >{{ row.lastSeen }}</time
         >
+      </template>
+      <template #footer>
+        <DataTablePagination
+          :page-size="10"
+          :page-size-options="[10, 25, 50]"
+        />
       </template>
     </DataTable>
   </div>

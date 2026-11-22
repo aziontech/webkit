@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-table/view-table.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-table")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [StatusIndicator](../../components/status-indicator.md), `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [StatusIndicator](../../components/status-indicator.md), `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -51,9 +51,9 @@ Beside the filter, outlined medium `IconButton`s for Refresh (the button and the
 
 The last control of the row. `CollectionPreferences` bound with `v-bind="preferencesProps"` opens a dialog that edits a draft and applies it on Confirm: the page size (10, 25, 50), the columns (shown, hidden and reordered), wrapped lines, striped rows and density. The Name and actions columns are `hideable: false`, so the panel locks them. `preferences.storageKey` saves the choice in localStorage per list; `defaults.columns` hides the ID column until someone shows it.
 
-### E. Resource table — `Card`, `DataTable` (required)
+### E. Resource table — `Card`, `DataTable`, `DataTablePagination` (required)
 
-`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `type: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
+`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, density, wrap and stripes, while `<DataTablePagination v-bind="paginationProps" manual />` in its `footer` slot is the pagination footer; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `type: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
 
 ### F. Cell presets — `TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTime` (optional)
 
@@ -132,7 +132,7 @@ Then delete `sampleResources` and its import (keep `sample.ts` only if you copie
 ## Don't
 
 - Don't add a search `Input`, a filter popover, a chip row or a row of `Select`s beside the `PropertyFilter`; one control narrows the list.
-- Don't filter, sort or page rows in a `computed` outside the collection, or pass `:data`, `paginated` and `v-model:globalFilter` by hand beside `tableProps`.
+- Don't filter, sort or page rows in a `computed` outside the collection, or pass `:data`, a non-manual `DataTablePagination` or a `TableSearch` `v-model` by hand beside `tableProps`; page with `<DataTablePagination v-bind="paginationProps" manual />` in the `footer` slot.
 - Don't build a columns popover of `Switch`es; column visibility and order belong to `CollectionPreferences`.
 - Don't wrap a bordered table in a padded card, or let the page scroll sideways for a wide table.
 - Don't add a second create button to the controls row.
@@ -206,6 +206,7 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
     type TableColumn,
     type TableExposed
   } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -304,6 +305,7 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
   ]
 
   const {
+    paginationProps,
     tableProps,
     propertyFilterProps,
     preferencesProps,
@@ -553,6 +555,12 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
                         />
                       </template>
                     </EmptyState>
+                  </template>
+                  <template #footer>
+                    <DataTablePagination
+                      v-bind="paginationProps"
+                      manual
+                    />
                   </template>
                 </DataTable>
               </template>
@@ -903,6 +911,7 @@ export const deploymentColumns: TableColumn[] = [
   const items = ref<Deployment[]>(sampleDeployments)
 
   const {
+    paginationProps,
     tableProps,
     propertyFilterProps,
     preferencesProps,
@@ -1051,6 +1060,7 @@ export const deploymentColumns: TableColumn[] = [
                 <DeploymentsTable
                   ref="deploymentsTableEl"
                   :table-props="tableProps"
+                  :pagination-props="paginationProps"
                   :loading="loading || fetching"
                   @open="(_event, row) => openDeployment(row)"
                   @action="(_event, { value, row }) => onRowAction(value, row)"
@@ -1089,6 +1099,7 @@ export const deploymentColumns: TableColumn[] = [
     type TableColumn,
     type TableExposed
   } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -1098,13 +1109,17 @@ export const deploymentColumns: TableColumn[] = [
   import TableCellLink from '@aziontech/webkit/table-cell-link'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag from '@aziontech/webkit/tag'
-  import type { CollectionTableProps } from '@aziontech/webkit/use-collection'
+  import type {
+    CollectionPaginationProps,
+    CollectionTableProps
+  } from '@aziontech/webkit/use-collection'
   import { ref } from 'vue'
 
   import { type Deployment, DEPLOYMENT_STATUS, environmentSeverity } from '../lib/deployments'
 
   defineProps<{
     tableProps: CollectionTableProps<Deployment, TableColumn>
+    paginationProps: CollectionPaginationProps
     loading: boolean
   }>()
 
@@ -1244,6 +1259,12 @@ export const deploymentColumns: TableColumn[] = [
           />
         </template>
       </EmptyState>
+    </template>
+    <template #footer>
+      <DataTablePagination
+        v-bind="paginationProps"
+        manual
+      />
     </template>
   </DataTable>
 </template>

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-mfa-settings/account-mfa-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-mfa-settings")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -43,9 +43,9 @@ While MFA is optional and someone has no factor, a warning `Alert` counts them (
 
 The `view/view-table` controls row, as on every account list: a `PropertyFilter` over Name, Email, MFA status and Method (`v-bind="propertyFilterProps"`), then Refresh and Download CSV as outlined `IconButton`s in a `Tooltip`, and `CollectionPreferences` for page size and columns. Download CSV is disabled when no row matches.
 
-### E. People table — `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `EmptyState`, `useCollection` (required)
+### E. People table — `DataTable`, `DataTablePagination`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `EmptyState`, `useCollection` (required)
 
-A `DataTable` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCollection`: Name (square `Avatar`, name, email under it, and below `sm` the MFA `TableCellStatus` under the email, hidden from assistive tech, so a phone shows who has MFA without scrolling past the pinned actions), MFA as `TableCellStatus` (Enabled success, Not set up warning), Method, and Set up as `TableCellTime` or a dash. When no person matches the filters, the table's `#empty` slot renders a small `EmptyState` (`No matching people`) with Clear filters.
+A `DataTable` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCollection` through `DataTablePagination` (`v-bind="paginationProps" manual`) in the `footer` slot: Name (square `Avatar`, name, email under it, and below `sm` the MFA `TableCellStatus` under the email, hidden from assistive tech, so a phone shows who has MFA without scrolling past the pinned actions), MFA as `TableCellStatus` (Enabled success, Not set up warning), Method, and Set up as `TableCellTime` or a dash. When no person matches the filters, the table's `#empty` slot renders a small `EmptyState` (`No matching people`) with Clear filters.
 
 ### F. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 
@@ -161,6 +161,7 @@ Each variant is the same screen in another state: `get_block("account/account-mf
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -272,15 +273,21 @@ Each variant is the same screen in another state: `get_block("account/account-mf
     { key: 'method', label: 'Method', options: [{ value: 'Authenticator app' }] }
   ]
 
-  const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
-    useCollection({
-      items: rows,
-      columns,
-      filtering: { fields: ['name', 'email', 'status', 'method'] },
-      propertyFiltering: { properties },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: { storageKey: 'account-mfa' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: rows,
+    columns,
+    filtering: { fields: ['name', 'email', 'status', 'method'] },
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: { storageKey: 'account-mfa' }
+  })
 
   const membersTableEl = ref<TableExposed<MemberRow> | null>(null)
   const exportCsv = () => membersTableEl.value?.exportCsv({ filename: 'mfa-status.csv' })
@@ -528,6 +535,12 @@ Each variant is the same screen in another state: `get_block("account/account-mf
                       />
                     </template>
                   </EmptyState>
+                </template>
+                <template #footer>
+                  <DataTablePagination
+                    v-bind="paginationProps"
+                    manual
+                  />
                 </template>
               </DataTable>
             </template>

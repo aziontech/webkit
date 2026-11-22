@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, [Wizard](../../components/wizard.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, [Wizard](../../components/wizard.md), [Wizard](../../components/wizard.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -32,9 +32,9 @@ The page a first-level resource is created on one step at a time. It is the `Wiz
 
 ## Building blocks
 
-### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 
-The `top-bar/top-bar-creation` header, with no sidebar: a back `IconButton` to the module, the `Brand` linking home, a `Breadcrumb` of the module and the create label, and the account `Avatar`. The breadcrumb's last item repeats the create button's label exactly.
+The `top-bar/top-bar-creation` header, with no sidebar: a back `IconButton` to the module, the `Brand` linking home, a `Breadcrumb` of the module and the create label, and the account `AppHeaderAccount`. The breadcrumb's last item repeats the create button's label exactly.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -219,69 +219,39 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
 ```vue
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Field from '@aziontech/webkit/field'
   import FieldError from '@aziontech/webkit/field-error'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import Subheader from '@aziontech/webkit/subheader'
   import Switch from '@aziontech/webkit/switch'
-  import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
-  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
-  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import Wizard from '@aziontech/webkit/wizard'
-  import { type ComponentPublicInstance, computed, onMounted, reactive, ref, watch } from 'vue'
+  import { computed, reactive, ref, watch } from 'vue'
 
+  import { listFields, types } from './lib/access-list'
+  import PolicyPickerStep from './parts/policy-picker-step.vue'
+  import ReviewStep from './parts/review-step.vue'
+  import WizardFrame from './parts/wizard-frame.vue'
   import { samplePolicies } from './sample'
+  import type {
+    CreateWizardPolicy,
+    CreateWizardStep,
+    CreateWizardSubmission,
+    CreateWizardValues
+  } from './types'
 
-  /** The kind of entry an access list holds. */
-  export type CreateWizardListType = 'asn' | 'ip_cidr' | 'countries'
-
-  /** A policy the list can run on. */
-  export interface CreateWizardPolicy {
-    /** The policy key. */
-    value: string
-    /** The policy name. */
-    label: string
-    /** The application it protects. */
-    description: string
-    /** Whether IP filtering is already on in it. */
-    ready: boolean
-  }
-
-  /** The values of the Create Access List form. */
-  export interface CreateWizardValues {
-    /** The list name. */
-    name: string
-    /** The kind of entry the list holds. */
-    type: CreateWizardListType
-    /** The entries, one per line. */
-    items: string
-  }
-
-  /** What submit sends: the form values and where the list runs. */
-  export interface CreateWizardSubmission extends CreateWizardValues {
-    /** The policy it runs on; empty when skipped. */
-    policy: string
-    /** Whether IP filtering is turned on in that policy as part of the create. */
-    enableModule: boolean
-  }
-
-  /** A step of the wizard. */
-  export type CreateWizardStep = 'where-it-runs' | 'module' | 'general' | 'settings' | 'review'
+  export type {
+    CreateWizardListType,
+    CreateWizardPolicy,
+    CreateWizardStep,
+    CreateWizardSubmission,
+    CreateWizardValues
+  } from './types'
 
   export interface CreateWizardProps {
     /** The policies to pick from. Left out, the sample renders. */
@@ -298,15 +268,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
     error?: string
   }
 
-  type ListType = CreateWizardListType
   type FieldName = 'name' | 'type' | 'items'
-  type PolicyOption = CreateWizardPolicy
-
-  interface ListField {
-    label: string
-    placeholder: string
-    helper: string
-  }
 
   interface FieldProblem {
     type: 'helper' | 'invalid' | 'required'
@@ -338,52 +300,11 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
     { label: 'Access Lists', href: '/access-lists' },
     { label: 'Create Access List' }
   ]
-  const types = [
-    {
-      value: 'asn',
-      label: 'ASN',
-      description: 'Identify networks by Autonomous System Number. Suited to grouping traffic.'
-    },
-    {
-      value: 'ip_cidr',
-      label: 'IP/CIDR',
-      description:
-        'Specific IP addresses or ranges in CIDR notation, for precise traffic segmentation.'
-    },
-    {
-      value: 'countries',
-      label: 'Countries',
-      description: 'Group traffic by country, for location-based rules.'
-    }
-  ]
-  const listFields: Record<ListType, ListField> = {
-    asn: {
-      label: 'List',
-      placeholder: '13335\n53331',
-      helper:
-        'One ASN per line, such as 13335. Public ASNs run from 1 to 64511, private ones from 64512 to 65535. Duplicate entries are removed.'
-    },
-    ip_cidr: {
-      label: 'List',
-      placeholder: '192.0.2.10\n198.51.100.24\n203.0.113.7 #comment',
-      helper:
-        'One address or range per line. Add a comment after #, and a date with --LT. Duplicate entries are removed.'
-    },
-    countries: {
-      label: 'Countries',
-      placeholder: 'US\nCA',
-      helper: 'One or more countries, one two-letter ISO 3166-1 code per line, such as US.'
-    }
-  }
-
-  const VISIBLE = 6
-
   const policies = computed<CreateWizardPolicy[]>(() => props.policies ?? samplePolicies)
 
   const current = ref<string>(props.defaultStep)
   const choice = ref(props.defaultPolicy)
   const enableModule = ref(false)
-  const query = ref('')
   const form = reactive<CreateWizardValues>({
     name: '',
     type: 'asn',
@@ -456,21 +377,6 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
 
   const listField = computed(() => listFields[form.type])
 
-  const matches = computed(() => {
-    const term = query.value.trim().toLowerCase()
-    if (!term) return policies.value
-    return policies.value.filter((option) =>
-      [option.label, option.description].some((field) => field.toLowerCase().includes(term))
-    )
-  })
-  const visible = computed(() => {
-    const head = matches.value.slice(0, VISIBLE)
-    if (!choice.value || head.some((option) => option.value === choice.value)) return head
-    const picked = matches.value.find((option) => option.value === choice.value)
-    return picked ? [picked, ...head.slice(0, VISIBLE - 1)] : head
-  })
-  const hidden = computed(() => Math.max(0, matches.value.length - visible.value.length))
-
   const validate = (fields: FieldName[]) => {
     for (const field of fields) delete errors[field]
     if (fields.includes('name') && !form.name.trim()) {
@@ -490,14 +396,6 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
     stepIndex.value = 1
   }
 
-  const choose = (option: PolicyOption) => answer(option.value)
-
-  const skip = () => answer('')
-
-  const onSearchEnter = () => {
-    if (matches.value.length) choose(matches.value[0])
-  }
-
   const entries = computed(() =>
     Array.from(
       new Set(
@@ -508,21 +406,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
       )
     )
   )
-  const PREVIEW = 5
   const typeLabel = computed(() => types.find((option) => option.value === form.type)?.label)
-  const consumers = [
-    {
-      by: 'Policy rules',
-      path: 'rules[].criteria[].argument',
-      as: 'Network list'
-    },
-    {
-      by: 'Rule sets',
-      path: 'rule_sets[].match.network_list',
-      as: 'Network list'
-    }
-  ]
-
   const editStep = (value: string) => {
     current.value = value
   }
@@ -559,44 +443,6 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
       enabled: () => !props.loading
     }
   )
-  const discardDialog = guard.dialogProps
-  const discardLabels = guard.labels
-
-  const onCancel = async (event: MouseEvent | KeyboardEvent) => {
-    if (await guard.confirmLeave()) emit('cancel', event)
-  }
-
-  useEscapeToCancel(onCancel, { enabled: () => !props.loading })
-
-  const wizardEl = ref<ComponentPublicInstance | null>(null)
-
-  const FIELD_SELECTOR =
-    'input:not([type="hidden"]), textarea, select, [role="combobox"], [role="radio"][tabindex="0"]'
-
-  const wizardRoot = () => (wizardEl.value?.$el as HTMLElement | undefined) ?? null
-
-  const focusFirstField = () => {
-    const root = wizardRoot()
-    const field = root?.querySelector<HTMLElement>(FIELD_SELECTOR)
-    const checked =
-      field instanceof HTMLInputElement && field.type === 'radio'
-        ? root?.querySelector<HTMLElement>(`input[name="${CSS.escape(field.name)}"]:checked`)
-        : null
-    ;(checked ?? field)?.focus()
-  }
-
-  useShortcuts({
-    keys: 'meta+enter',
-    label: () =>
-      stepIndex.value === definitions.value.length - 1 ? 'Create access list' : 'Next step',
-    group: 'Page',
-    element: wizardRoot,
-    when: () => !props.loading,
-    handler: () =>
-      [...(wizardRoot()?.querySelectorAll<HTMLButtonElement>('button') ?? [])].pop()?.click()
-  })
-
-  onMounted(focusFirstField)
 
   watch(
     () => props.error,
@@ -612,469 +458,189 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <AppHeader aria-label="Console">
-      <AppHeader.Start>
-        <IconButton
-          icon="az az-chevron-left"
-          aria-label="Back to Access Lists"
-          variant="outline"
-          size="small"
-          @click="onCancel"
-        />
-        <AppHeader.Brand
-          href="/home"
-          aria-label="Azion home"
-        >
-          <Brand
-            variant="default"
-            size="small"
-          />
-        </AppHeader.Brand>
-        <Breadcrumb :items="breadcrumb" />
-      </AppHeader.Start>
-      <AppHeader.Center />
-      <AppHeader.End>
-        <AppHeaderAccount
-          name="name@example.com"
-          aria-label="Account settings"
-        />
-      </AppHeader.End>
-    </AppHeader>
-
-    <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
-      <div
-        class="layout-form-create layout-boundary-inline flex flex-col gap-(--layout-section-gap) py-(--layout-section-gap)"
-      >
-        <PageHeader
-          title="Create Access List"
-          description="An access list groups IP addresses, countries or ASNs that policy rules match on. Answer each step, review, then create it."
-          size="small"
-        />
-
-        <Wizard
-          ref="wizardEl"
-          v-model="stepIndex"
-          aria-label="Create Access List"
-          submit-label="Create Access List"
-          :loading="loading"
-          @next="onNext"
-          @submit="commit"
-          @cancel="onCancel"
-        >
-          <Wizard.Step
-            title="Where it runs"
-            :description="byValue('where-it-runs').description"
-          >
-            <section class="mx-auto flex w-full max-w-(--container-md) flex-col gap-(--spacing-lg)">
-              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                <Input
-                  v-model="query"
-                  size="large"
-                  class="w-full"
-                  placeholder="Search policies"
-                  aria-label="Search policies"
-                  autocomplete="off"
-                  @keydown.enter.prevent="onSearchEnter"
-                />
-
-                <div class="flex flex-col">
-                  <Item
-                    v-for="option in visible"
-                    :key="option.value"
-                    size="small"
-                    clickable
-                    :aria-pressed="choice === option.value"
-                    @click="choose(option)"
-                  >
-                    <Item.Media>
-                      <i
-                        class="az az-shield text-body-md leading-none text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                    </Item.Media>
-                    <Item.Content>
-                      <Item.Title>{{ option.label }}</Item.Title>
-                    </Item.Content>
-                    <Item.Actions>
-                      <Tag
-                        v-if="!option.ready"
-                        label="IP filtering off"
-                        severity="warning"
-                        size="small"
-                      />
-                      <i
-                        v-if="choice === option.value"
-                        class="az az-check text-body-sm leading-none text-(--text-default)"
-                        aria-hidden="true"
-                      />
-                    </Item.Actions>
-                  </Item>
-
-                  <p
-                    v-if="hidden"
-                    class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
-                  >
-                    {{ hidden }} more. Type to narrow the list.
-                  </p>
-                  <p
-                    v-else-if="!matches.length"
-                    class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
-                  >
-                    No policy matches “{{ query.trim() }}”.
-                  </p>
-                </div>
-                <FieldError v-if="whereMissing"
-                  >Select a policy, or continue without one.</FieldError
-                >
-              </div>
-
-              <div class="flex flex-col items-center gap-(--spacing-2xs)">
-                <Button
-                  type="button"
-                  label="Create a policy"
-                  variant="ghost"
-                  size="small"
-                />
-                <Button
-                  type="button"
-                  label="Continue without a policy"
-                  variant="ghost"
-                  size="small"
-                  @click="skip"
-                />
-              </div>
-            </section>
-          </Wizard.Step>
-          <Wizard.Step
-            v-if="moduleMissing"
-            title="IP filtering"
-            :description="'Off on ' + choice + '.'"
-          >
-            <Card :padded="false">
-              <template #default>
-                <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
-                  <Alert
-                    severity="warning"
-                    size="small"
-                    :label="
-                      'An access list is only read by policy rules, and ' +
-                      choice +
-                      ' has IP filtering off, so nothing reads this one until the module is on.'
-                    "
-                  />
-
-                  <Field.Label>
-                    <Field orientation="horizontal">
-                      <Switch v-model="enableModule" />
-                      <Field.Content>
-                        <Field.Title> Turn on IP filtering </Field.Title>
-                        <Field.Description>
-                          {{
-                            'Sets modules.ip_filtering on the policy ' +
-                            choice +
-                            ' when this access list is created.'
-                          }}
-                        </Field.Description>
-                      </Field.Content>
-                    </Field>
-                  </Field.Label>
-
-                  <p class="text-body-sm text-(--text-muted)">
-                    Leaving it off still creates the access list. It is not read until someone turns
-                    IP filtering on.
-                  </p>
-                </div>
-              </template>
-            </Card>
-          </Wizard.Step>
-          <Wizard.Step
-            title="General"
-            :description="byValue('general').description"
-          >
-            <section
-              class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
-            >
-              <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                <Card :padded="false">
-                  <template #default>
-                    <Item.List>
-                      <SettingsRow
-                        title="Name"
-                        description="Give a unique and descriptive name to identify the access list."
-                      >
-                        <Input
-                          v-model="form.name"
-                          size="large"
-                          class="w-full"
-                          aria-label="Name"
-                          placeholder="office-ranges"
-                          autocomplete="off"
-                          required
-                          :invalid="errors.name?.type === 'required'"
-                          :aria-describedby="
-                            errors.name ? 'create-access-list-name-message' : undefined
-                          "
-                          @update:model-value="delete errors.name"
-                        />
-                        <FieldError
-                          v-if="errors.name"
-                          id="create-access-list-name-message"
-                          >{{ errors.name.message }}</FieldError
-                        >
-                      </SettingsRow>
-                    </Item.List>
-                  </template>
-                </Card>
-              </div>
-            </section>
-          </Wizard.Step>
-          <Wizard.Step
-            title="List settings"
-            :description="byValue('settings').description"
-          >
-            <section
-              class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
-            >
-              <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                <Card :padded="false">
-                  <template #default>
-                    <Item.List>
-                      <SettingsRow
-                        title="Type"
-                        variant="stacked"
-                      >
-                        <RadioGroup
-                          v-model="form.type"
-                          variant="card"
-                          class="w-full"
-                          name="access-lists-type"
-                          aria-label="Type"
-                        >
-                          <RadioGroup.Item
-                            v-for="option in types"
-                            :key="option.value"
-                            :value="option.value"
-                            :description="option.description"
-                            >{{ option.label }}</RadioGroup.Item
-                          >
-                        </RadioGroup>
-                      </SettingsRow>
-                      <SettingsRow
-                        :title="listField.label"
-                        :description="listField.helper"
-                        variant="stacked"
-                      >
-                        <Textarea
-                          v-model="form.items"
-                          class="w-full"
-                          :rows="5"
-                          :aria-label="listField.label"
-                          :placeholder="listField.placeholder"
-                          required
-                          :invalid="errors.items?.type === 'required'"
-                          :aria-describedby="
-                            errors.items ? 'create-access-list-items-message' : undefined
-                          "
-                          @update:model-value="delete errors.items"
-                        />
-                        <FieldError
-                          v-if="errors.items"
-                          id="create-access-list-items-message"
-                          >{{ errors.items.message }}</FieldError
-                        >
-                      </SettingsRow>
-                    </Item.List>
-                  </template>
-                </Card>
-              </div>
-            </section>
-          </Wizard.Step>
-          <Wizard.Step
-            title="Review"
-            :description="byValue('review').description"
-          >
-            <section class="flex min-w-0 flex-col gap-(--layout-section-gap)">
-              <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                <Subheader
-                  title="Where it runs"
-                  size="small"
-                >
-                  <template #actions>
-                    <Button
-                      type="button"
-                      label="Edit"
-                      variant="outline"
-                      size="small"
-                      aria-label="Edit where it runs"
-                      @click="editStep('where-it-runs')"
-                    />
-                  </template>
-                </Subheader>
-                <Alert
-                  key="alert-1"
-                  v-if="!choice"
-                  severity="warning"
-                >
-                  Bound to no policy. The list is created, but no rule can match on it until a
-                  policy uses it.
-                </Alert>
-                <Alert
-                  key="alert-2"
-                  v-else-if="moduleMissing && !enableModule"
-                  severity="warning"
-                >
-                  IP filtering is off on {{ choice }}, so no rule reads this list until it is on.
-                </Alert>
-                <Alert
-                  key="alert-3"
-                  severity="success"
-                >
-                  Runs on {{ choice }}.
-                </Alert>
-              </section>
-
-              <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                <Subheader
-                  title="What gets created"
-                  description="Each value is sent as the property named under it."
-                  size="small"
-                >
-                  <template #actions>
-                    <Button
-                      type="button"
-                      label="Edit"
-                      variant="outline"
-                      size="small"
-                      aria-label="Edit list settings"
-                      @click="editStep('settings')"
-                    />
-                  </template>
-                </Subheader>
-                <Card :padded="false">
-                  <template #default>
-                    <Item.List>
-                      <Item>
-                        <Item.Content>
-                          <Item.Title>Name</Item.Title>
-                          <Item.Description>name</Item.Description>
-                        </Item.Content>
-                        <Item.Actions>
-                          <span class="max-w-80 truncate text-label-sm text-(--text-default)">{{
-                            form.name
-                          }}</span>
-                          <Button
-                            type="button"
-                            label="Edit"
-                            variant="ghost"
-                            size="small"
-                            aria-label="Edit name"
-                            @click="editStep('general')"
-                          />
-                        </Item.Actions>
-                      </Item>
-                      <Item>
-                        <Item.Content>
-                          <Item.Title>Type</Item.Title>
-                          <Item.Description>type</Item.Description>
-                        </Item.Content>
-                        <Item.Actions>
-                          <span class="text-label-sm text-(--text-default)">{{ typeLabel }}</span>
-                        </Item.Actions>
-                      </Item>
-                      <Item>
-                        <Item.Content>
-                          <Item.Title>{{ listField.label }}</Item.Title>
-                          <Item.Description>items</Item.Description>
-                          <ul
-                            class="m-0 mt-(--spacing-xs) flex list-none flex-wrap gap-(--spacing-2xs) p-0"
-                            :aria-label="`${entries.length} entries`"
-                          >
-                            <li
-                              v-for="entry in entries.slice(0, PREVIEW)"
-                              :key="entry"
-                            >
-                              <Tag
-                                :label="entry"
-                                severity="neutral"
-                                size="small"
-                              />
-                            </li>
-                            <li
-                              v-if="entries.length > PREVIEW"
-                              class="text-label-sm text-(--text-muted)"
-                            >
-                              and {{ entries.length - PREVIEW }} more
-                            </li>
-                          </ul>
-                        </Item.Content>
-                        <Item.Actions>
-                          <span class="text-label-sm text-(--text-default)"
-                            >{{ entries.length }}
-                            {{ entries.length === 1 ? 'entry' : 'entries' }}</span
-                          >
-                        </Item.Actions>
-                      </Item>
-                    </Item.List>
-                  </template>
-                </Card>
-              </section>
-
-              <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                <Subheader
-                  title="What can reference it"
-                  description="Everything that can point at this list once it exists, and the field that carries the reference."
-                  size="small"
-                />
-                <Card :padded="false">
-                  <template #default>
-                    <Item.List>
-                      <Item
-                        v-for="row in consumers"
-                        :key="row.by"
-                      >
-                        <Item.Content>
-                          <Item.Title>{{ row.by }}</Item.Title>
-                          <Item.Description>{{ row.path }}</Item.Description>
-                        </Item.Content>
-                        <Item.Actions>
-                          <Tag
-                            :label="row.as"
-                            severity="neutral"
-                            size="small"
-                          />
-                        </Item.Actions>
-                      </Item>
-                    </Item.List>
-                  </template>
-                </Card>
-              </section>
-            </section>
-          </Wizard.Step>
-        </Wizard>
-      </div>
-    </main>
-    <ConfirmDialog
-      v-bind="discardDialog"
-      data-testid="unsaved-changes-dialog"
+  <WizardFrame
+    v-model="stepIndex"
+    back-label="Back to Access Lists"
+    :breadcrumb="breadcrumb"
+    title="Create Access List"
+    description="An access list groups IP addresses, countries or ASNs that policy rules match on. Answer each step, review, then create it."
+    submit-label="Create Access List"
+    :shortcut-label="stepIndex === definitions.length - 1 ? 'Create access list' : 'Next step'"
+    :loading="loading"
+    :guard="guard"
+    @next="onNext"
+    @submit="commit"
+    @cancel="(event: MouseEvent | KeyboardEvent) => emit('cancel', event)"
+  >
+    <Wizard.Step
+      title="Where it runs"
+      :description="byValue('where-it-runs').description"
     >
-      <template #actions>
-        <Button
-          :label="discardLabels.keepEditing"
-          variant="ghost"
-          size="medium"
-          data-autofocus
-          @click="guard.keepEditing"
-        />
-        <Button
-          :label="discardLabels.discard"
-          variant="danger"
-          size="medium"
-          @click="guard.discardAndLeave"
-        />
-      </template>
-    </ConfirmDialog>
-  </div>
+      <PolicyPickerStep
+        :policies="policies"
+        :choice="choice"
+        :missing="whereMissing"
+        @answer="answer"
+      />
+    </Wizard.Step>
+    <Wizard.Step
+      v-if="moduleMissing"
+      title="IP filtering"
+      :description="'Off on ' + choice + '.'"
+    >
+      <Card :padded="false">
+        <template #default>
+          <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
+            <Alert
+              severity="warning"
+              size="small"
+              :label="
+                'An access list is only read by policy rules, and ' +
+                choice +
+                ' has IP filtering off, so nothing reads this one until the module is on.'
+              "
+            />
+
+            <Field.Label>
+              <Field orientation="horizontal">
+                <Switch v-model="enableModule" />
+                <Field.Content>
+                  <Field.Title> Turn on IP filtering </Field.Title>
+                  <Field.Description>
+                    {{
+                      'Sets modules.ip_filtering on the policy ' +
+                      choice +
+                      ' when this access list is created.'
+                    }}
+                  </Field.Description>
+                </Field.Content>
+              </Field>
+            </Field.Label>
+
+            <p class="text-body-sm text-(--text-muted)">
+              Leaving it off still creates the access list. It is not read until someone turns IP
+              filtering on.
+            </p>
+          </div>
+        </template>
+      </Card>
+    </Wizard.Step>
+    <Wizard.Step
+      title="General"
+      :description="byValue('general').description"
+    >
+      <section
+        class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
+      >
+        <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+          <Card :padded="false">
+            <template #default>
+              <Item.List>
+                <SettingsRow
+                  title="Name"
+                  description="Give a unique and descriptive name to identify the access list."
+                >
+                  <Input
+                    v-model="form.name"
+                    size="large"
+                    class="w-full"
+                    aria-label="Name"
+                    placeholder="office-ranges"
+                    autocomplete="off"
+                    required
+                    :invalid="errors.name?.type === 'required'"
+                    :aria-describedby="errors.name ? 'create-access-list-name-message' : undefined"
+                    @update:model-value="delete errors.name"
+                  />
+                  <FieldError
+                    v-if="errors.name"
+                    id="create-access-list-name-message"
+                    >{{ errors.name.message }}</FieldError
+                  >
+                </SettingsRow>
+              </Item.List>
+            </template>
+          </Card>
+        </div>
+      </section>
+    </Wizard.Step>
+    <Wizard.Step
+      title="List settings"
+      :description="byValue('settings').description"
+    >
+      <section
+        class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
+      >
+        <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+          <Card :padded="false">
+            <template #default>
+              <Item.List>
+                <SettingsRow
+                  title="Type"
+                  variant="stacked"
+                >
+                  <RadioGroup
+                    v-model="form.type"
+                    variant="card"
+                    class="w-full"
+                    name="access-lists-type"
+                    aria-label="Type"
+                  >
+                    <RadioGroup.Item
+                      v-for="option in types"
+                      :key="option.value"
+                      :value="option.value"
+                      :description="option.description"
+                      >{{ option.label }}</RadioGroup.Item
+                    >
+                  </RadioGroup>
+                </SettingsRow>
+                <SettingsRow
+                  :title="listField.label"
+                  :description="listField.helper"
+                  variant="stacked"
+                >
+                  <Textarea
+                    v-model="form.items"
+                    class="w-full"
+                    :rows="5"
+                    :aria-label="listField.label"
+                    :placeholder="listField.placeholder"
+                    required
+                    :invalid="errors.items?.type === 'required'"
+                    :aria-describedby="
+                      errors.items ? 'create-access-list-items-message' : undefined
+                    "
+                    @update:model-value="delete errors.items"
+                  />
+                  <FieldError
+                    v-if="errors.items"
+                    id="create-access-list-items-message"
+                    >{{ errors.items.message }}</FieldError
+                  >
+                </SettingsRow>
+              </Item.List>
+            </template>
+          </Card>
+        </div>
+      </section>
+    </Wizard.Step>
+    <Wizard.Step
+      title="Review"
+      :description="byValue('review').description"
+    >
+      <ReviewStep
+        :name="form.name"
+        :type-label="typeLabel ?? ''"
+        :list-label="listField.label"
+        :entries="entries"
+        :choice="choice"
+        :module-missing="moduleMissing"
+        :enable-module="enableModule"
+        @edit="editStep"
+      />
+    </Wizard.Step>
+  </WizardFrame>
 </template>
 ```
 
@@ -1082,6 +648,12 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
 
 ```ts
 import type { CreateWizardPolicy } from './create-wizard.vue'
+import type {
+  ServiceWizardCachePolicy,
+  ServiceWizardOption,
+  ServiceWizardOriginField,
+  ServiceWizardOriginType
+} from './lib/service-wizard'
 
 export const samplePolicies: CreateWizardPolicy[] = [
   { value: 'acme-production', label: 'acme-production', description: 'acme-site', ready: true },
@@ -1124,4 +696,1196 @@ export const samplePolicies: CreateWizardPolicy[] = [
   },
   { value: 'qa-sandbox', label: 'qa-sandbox', description: 'internal', ready: false }
 ]
+
+export const projectModes = [
+  { label: 'Existing project', value: 'existing' },
+  { label: 'New project', value: 'new' }
+]
+export const projects: ServiceWizardOption[] = [
+  { value: 'web-app', label: 'web-app', description: 'Astro · acme/web-app' },
+  {
+    value: 'black-friday-2025',
+    label: 'black-friday-2025',
+    description: 'Next.js · acme/black-friday-2025'
+  },
+  {
+    value: 'black-friday-2026',
+    label: 'black-friday-2026',
+    description: 'Next.js · acme/black-friday-2026'
+  },
+  { value: 'docs-site', label: 'docs-site', description: 'Astro · acme/docs-site' },
+  { value: 'docs-next', label: 'docs-next', description: 'Next.js · acme/docs-next' },
+  { value: 'vue-sample', label: 'vue-sample', description: 'Vue · jane-doe/vue-sample' },
+  { value: 'hello-world', label: 'hello-world', description: 'JavaScript · acme/hello-world' },
+  { value: 'company-site', label: 'company-site', description: 'HTML · acme/company-site' },
+  { value: 'company-docs', label: 'company-docs', description: 'HTML · acme/company-docs' },
+  { value: 'analytics-pro', label: 'analytics-pro', description: 'Next.js · acme/analytics-pro' },
+  { value: 'analytics-api', label: 'analytics-api', description: 'Next.js · acme/analytics-api' },
+  {
+    value: 'react-dashboard',
+    label: 'react-dashboard',
+    description: 'React · acme/react-dashboard'
+  },
+  { value: 'docs-portal', label: 'docs-portal', description: 'Vue · acme/docs-portal' },
+  { value: 'ecommerce-v2', label: 'ecommerce-v2', description: 'Nuxt · acme/ecommerce-v2' },
+  {
+    value: 'ecommerce-storefront',
+    label: 'ecommerce-storefront',
+    description: 'Nuxt · acme/ecommerce-storefront'
+  },
+  {
+    value: 'marketing-site',
+    label: 'marketing-site',
+    description: 'Astro · acme/marketing-site'
+  },
+  { value: 'blog-platform', label: 'blog-platform', description: 'Astro · acme/blog-platform' },
+  { value: 'status-page', label: 'status-page', description: 'Svelte · acme/status-page' },
+  { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · acme/mobile-app' }
+]
+export const cachePolicies: ServiceWizardCachePolicy[] = [
+  {
+    value: 'images',
+    label: 'Image caching',
+    description:
+      'Caches images for a long TTL and ignores the query string, so one object serves every variation of the same file.',
+    fields: [
+      {
+        name: 'extensions',
+        label: 'Extension matches',
+        placeholder: 'jpg, jpeg, png, gif, webp, avif, svg, ico, bmp, tiff',
+        required: true,
+        description:
+          'Comma-separated. The policy applies to requests whose path ends in one of them.'
+      }
+    ]
+  },
+  {
+    value: 'files-optimization',
+    label: 'File optimization',
+    description:
+      'Caches static assets and compresses them on the way out. The template carries the TTLs and the cache key.',
+    fields: []
+  }
+]
+export const originTypes = [
+  { value: 'http', label: 'HTTP', description: 'An origin server, reached by host name.' },
+  {
+    value: 'storage',
+    label: 'Storage',
+    description: 'A storage location in this workspace, read by name and prefix.'
+  },
+  {
+    value: 'live-ingest',
+    label: 'Live Ingest',
+    description: 'A region a live stream is ingested from.'
+  }
+]
+export const originFieldsByType: Record<ServiceWizardOriginType, ServiceWizardOriginField[]> = {
+  http: [
+    {
+      kind: 'text',
+      name: 'address',
+      label: 'Origin address',
+      placeholder: 'origin.example.com',
+      required: true,
+      description: 'The host the project fetches from. No scheme.'
+    },
+    {
+      kind: 'text',
+      name: 'path',
+      label: 'Path',
+      placeholder: '/',
+      description: 'Prefixed to the request path before it reaches the origin.'
+    },
+    {
+      kind: 'text',
+      name: 'uriPrefix',
+      label: 'Apply when $uri starts with',
+      placeholder: '/api',
+      description: 'Leave it empty to send every request to this origin.'
+    }
+  ],
+  storage: [
+    {
+      kind: 'select',
+      name: 'location',
+      label: 'Location',
+      options: [
+        { value: 'static-assets', label: 'static-assets' },
+        { value: 'media-prod', label: 'media-prod' },
+        { value: 'user-uploads', label: 'user-uploads' }
+      ],
+      required: true,
+      description: 'A storage location in this workspace.'
+    },
+    {
+      kind: 'text',
+      name: 'prefix',
+      label: 'Prefix',
+      placeholder: 'assets/',
+      description: 'The folder inside the location the origin reads from.'
+    }
+  ],
+  'live-ingest': [
+    {
+      kind: 'select',
+      name: 'region',
+      label: 'Region',
+      options: [
+        { value: 'br-east-1', label: 'br-east-1, South America' },
+        { value: 'us-east-1', label: 'us-east-1, North America' }
+      ],
+      required: true,
+      description: 'Where the stream is ingested. Select the one closest to the broadcaster.'
+    }
+  ]
+}
+export const domainTypes = [
+  { label: 'Free platform domain', value: 'platform' },
+  { label: 'Your own domain', value: 'own' }
+]
+export const deploymentModes = [
+  { label: 'Create one', value: 'auto' },
+  { label: 'Use existing', value: 'existing' }
+]
+export const environments = [
+  {
+    value: 'Production',
+    label: 'Production',
+    description: 'Live traffic. One version serves the domain, and deploying replaces it.'
+  },
+  {
+    value: 'Preview',
+    label: 'Preview',
+    description:
+      'Every other branch. Each version keeps its own URL, so a build can be read before it is live.'
+  }
+]
+export const certificates: ServiceWizardOption[] = [
+  { value: 'lets_encrypt', label: 'Let’s Encrypt' },
+  { value: 'shared_san', label: 'Shared SAN' },
+  { value: 'own', label: 'A certificate you upload' }
+]
+export const tlsVersions: ServiceWizardOption[] = [
+  { value: 'tls_1_0', label: 'TLS 1.0' },
+  { value: 'tls_1_1', label: 'TLS 1.1' },
+  { value: 'tls_1_2', label: 'TLS 1.2' },
+  { value: 'tls_1_3', label: 'TLS 1.3' }
+]
+export const errorPages: ServiceWizardOption[] = [
+  { value: 'Rate limited', label: 'Rate limited' },
+  { value: 'Blocked by firewall', label: 'Blocked by firewall' },
+  { value: 'Branded 404', label: 'Branded 404' },
+  { value: 'Server error', label: 'Server error' },
+  { value: 'Maintenance window', label: 'Maintenance window' }
+]
+export const deployments: ServiceWizardOption[] = [
+  {
+    value: 'default',
+    label: 'Default',
+    description: 'The platform’s own deployment. Versions keep the resource IDs they shipped with.'
+  },
+  { value: 's1', label: 'storefront-prod', description: 'Storefront traffic for production.' },
+  { value: 's2', label: 'acme-storefront', description: 'Acme storefront, production traffic.' },
+  {
+    value: 's5',
+    label: 'analytics-canary',
+    description: 'Canary slice of the analytics project.'
+  },
+  { value: 's6', label: 'auth-service-prod', description: 'Authored in this workspace.' },
+  { value: 's7', label: 'marketing-site-prod', description: 'Authored in this workspace.' },
+  { value: 's9', label: 'internal-tools-dev', description: 'Authored in this workspace.' },
+  { value: 's10', label: 'blog-platform-stage', description: 'Authored in this workspace.' },
+  { value: 's11', label: 'web-app-prod', description: 'Production traffic for the web app.' },
+  {
+    value: 's12',
+    label: 'web-app-preview',
+    description: 'Per-version preview URLs for the web app.'
+  },
+  { value: 's13', label: 'web-app-stage', description: 'Stage rehearsals for the web app.' },
+  {
+    value: 's14',
+    label: 'campaign-landing-prod',
+    description: 'Production traffic for the seasonal campaign page.'
+  },
+  {
+    value: 's15',
+    label: 'campaign-landing-preview',
+    description: 'Per-version preview URLs for the seasonal campaign page.'
+  },
+  {
+    value: 's16',
+    label: 'docs-site-prod',
+    description: 'Production traffic for the documentation site.'
+  },
+  {
+    value: 's17',
+    label: 'docs-site-preview',
+    description: 'Per-version preview URLs for the documentation site.'
+  },
+  {
+    value: 'ws-1020655',
+    label: 'service-01',
+    description: 'Created with the service-01 service for Production.'
+  },
+  {
+    value: 'ws-1020655-preview',
+    label: 'service-01-preview',
+    description: 'Created with the service-01 service for Preview.'
+  },
+  {
+    value: 'ws-1020828',
+    label: 'service-02',
+    description: 'Created with the service-02 service for Production.'
+  },
+  {
+    value: 'ws-1020828-preview',
+    label: 'service-02-preview',
+    description: 'Created with the service-02 service for Preview.'
+  },
+  {
+    value: 'ws-1021001',
+    label: 'service-03',
+    description: 'Created with the service-03 service for Production.'
+  },
+  {
+    value: 'ws-1021001-preview',
+    label: 'service-03-preview',
+    description: 'Created with the service-03 service for Preview.'
+  },
+  {
+    value: 'ws-1021174',
+    label: 'service-04',
+    description: 'Created with the service-04 service for Production.'
+  },
+  {
+    value: 'ws-1021174-preview',
+    label: 'service-04-preview',
+    description: 'Created with the service-04 service for Preview.'
+  },
+  {
+    value: 'ws-1021347',
+    label: 'service-05',
+    description: 'Created with the service-05 service for Production.'
+  },
+  {
+    value: 'ws-1021347-preview',
+    label: 'service-05-preview',
+    description: 'Created with the service-05 service for Preview.'
+  },
+  {
+    value: 'ws-1021520',
+    label: 'service-06',
+    description: 'Created with the service-06 service for Production.'
+  },
+  {
+    value: 'ws-1021520-preview',
+    label: 'service-06-preview',
+    description: 'Created with the service-06 service for Preview.'
+  },
+  {
+    value: 'ws-1021693',
+    label: 'service-07',
+    description: 'Created with the service-07 service for Production.'
+  },
+  {
+    value: 'ws-1021693-preview',
+    label: 'service-07-preview',
+    description: 'Created with the service-07 service for Preview.'
+  },
+  {
+    value: 'ws-1021866',
+    label: 'service-08',
+    description: 'Created with the service-08 service for Production.'
+  },
+  {
+    value: 'ws-1021866-preview',
+    label: 'service-08-preview',
+    description: 'Created with the service-08 service for Preview.'
+  },
+  {
+    value: 'ws-1022039',
+    label: 'service-09',
+    description: 'Created with the service-09 service for Production.'
+  },
+  {
+    value: 'ws-1022039-preview',
+    label: 'service-09-preview',
+    description: 'Created with the service-09 service for Preview.'
+  },
+  {
+    value: 'ws-1022212',
+    label: 'service-10',
+    description: 'Created with the service-10 service for Production.'
+  },
+  {
+    value: 'ws-1022212-preview',
+    label: 'service-10-preview',
+    description: 'Created with the service-10 service for Preview.'
+  },
+  {
+    value: 'ws-1022385',
+    label: 'service-11',
+    description: 'Created with the service-11 service for Production.'
+  },
+  {
+    value: 'ws-1022385-preview',
+    label: 'service-11-preview',
+    description: 'Created with the service-11 service for Preview.'
+  },
+  {
+    value: 'ws-1022558',
+    label: 'service-12',
+    description: 'Created with the service-12 service for Production.'
+  },
+  {
+    value: 'ws-1022558-preview',
+    label: 'service-12-preview',
+    description: 'Created with the service-12 service for Preview.'
+  },
+  {
+    value: 'ws-1022731',
+    label: 'service-13',
+    description: 'Created with the service-13 service for Production.'
+  },
+  {
+    value: 'ws-1022731-preview',
+    label: 'service-13-preview',
+    description: 'Created with the service-13 service for Preview.'
+  },
+  {
+    value: 'ws-1022904',
+    label: 'service-14',
+    description: 'Created with the service-14 service for Production.'
+  },
+  {
+    value: 'ws-1022904-preview',
+    label: 'service-14-preview',
+    description: 'Created with the service-14 service for Preview.'
+  },
+  {
+    value: 'ws-1023077',
+    label: 'service-15',
+    description: 'Created with the service-15 service for Production.'
+  },
+  {
+    value: 'ws-1023077-preview',
+    label: 'service-15-preview',
+    description: 'Created with the service-15 service for Preview.'
+  },
+  {
+    value: 'ws-1023250',
+    label: 'service-16',
+    description: 'Created with the service-16 service for Production.'
+  },
+  {
+    value: 'ws-1023250-preview',
+    label: 'service-16-preview',
+    description: 'Created with the service-16 service for Preview.'
+  },
+  {
+    value: 'ws-1023423',
+    label: 'service-17',
+    description: 'Created with the service-17 service for Production.'
+  },
+  {
+    value: 'ws-1023423-preview',
+    label: 'service-17-preview',
+    description: 'Created with the service-17 service for Preview.'
+  },
+  {
+    value: 'ws-1023596',
+    label: 'service-18',
+    description: 'Created with the service-18 service for Production.'
+  },
+  {
+    value: 'ws-1023596-preview',
+    label: 'service-18-preview',
+    description: 'Created with the service-18 service for Preview.'
+  },
+  {
+    value: 'ws-1023769',
+    label: 'service-19',
+    description: 'Created with the service-19 service for Production.'
+  },
+  {
+    value: 'ws-1023769-preview',
+    label: 'service-19-preview',
+    description: 'Created with the service-19 service for Preview.'
+  },
+  {
+    value: 'ws-1023942',
+    label: 'service-20',
+    description: 'Created with the service-20 service for Production.'
+  },
+  {
+    value: 'ws-1023942-preview',
+    label: 'service-20-preview',
+    description: 'Created with the service-20 service for Preview.'
+  }
+]
+export const platformDomainSuffix = '.example.com'
+```
+
+## `lib/access-list.ts`
+
+```ts
+import type { CreateWizardListType } from '../types'
+
+export interface ListField {
+  label: string
+  placeholder: string
+  helper: string
+}
+
+export const types = [
+  {
+    value: 'asn',
+    label: 'ASN',
+    description: 'Identify networks by Autonomous System Number. Suited to grouping traffic.'
+  },
+  {
+    value: 'ip_cidr',
+    label: 'IP/CIDR',
+    description:
+      'Specific IP addresses or ranges in CIDR notation, for precise traffic segmentation.'
+  },
+  {
+    value: 'countries',
+    label: 'Countries',
+    description: 'Group traffic by country, for location-based rules.'
+  }
+]
+export const listFields: Record<CreateWizardListType, ListField> = {
+  asn: {
+    label: 'List',
+    placeholder: '13335\n53331',
+    helper:
+      'One ASN per line, such as 13335. Public ASNs run from 1 to 64511, private ones from 64512 to 65535. Duplicate entries are removed.'
+  },
+  ip_cidr: {
+    label: 'List',
+    placeholder: '192.0.2.10\n198.51.100.24\n203.0.113.7 #comment',
+    helper:
+      'One address or range per line. Add a comment after #, and a date with --LT. Duplicate entries are removed.'
+  },
+  countries: {
+    label: 'Countries',
+    placeholder: 'US\nCA',
+    helper: 'One or more countries, one two-letter ISO 3166-1 code per line, such as US.'
+  }
+}
+
+export const PREVIEW = 5
+
+export const consumers = [
+  {
+    by: 'Policy rules',
+    path: 'rules[].criteria[].argument',
+    as: 'Network list'
+  },
+  {
+    by: 'Rule sets',
+    path: 'rule_sets[].match.network_list',
+    as: 'Network list'
+  }
+]
+```
+
+## `lib/service-wizard.ts`
+
+```ts
+import type { SelectOptionItem } from '@aziontech/webkit/select'
+
+export interface ServiceWizardOption extends SelectOptionItem {
+  description?: string
+}
+export type ServiceWizardCachePolicyId = 'images' | 'files-optimization'
+export interface ServiceWizardCacheField {
+  name: string
+  label: string
+  placeholder: string
+  required: boolean
+  description: string
+}
+export interface ServiceWizardCachePolicy {
+  value: ServiceWizardCachePolicyId
+  label: string
+  description: string
+  fields: ServiceWizardCacheField[]
+}
+export type ServiceWizardOriginType = 'http' | 'storage' | 'live-ingest'
+export interface ServiceWizardOriginTextField {
+  kind: 'text'
+  name: string
+  label: string
+  placeholder: string
+  required?: boolean
+  description: string
+}
+export interface ServiceWizardOriginSelectField {
+  kind: 'select'
+  name: string
+  label: string
+  options: ServiceWizardOption[]
+  required?: boolean
+  description: string
+}
+export type ServiceWizardOriginField = ServiceWizardOriginTextField | ServiceWizardOriginSelectField
+export interface ServiceWizardPickerInitial {
+  chosen?: string
+  message?: string
+  loading?: boolean
+}
+export interface ServiceWizardScratch {
+  cache: Record<ServiceWizardCachePolicyId, { enabled: boolean; values: Record<string, string> }>
+  origin: { enabled: boolean; type: ServiceWizardOriginType; values: Record<string, string> }
+}
+
+/** A searchable, paged list of options, as the project and deployment pickers hold it. */
+export interface ServiceWizardPicker {
+  query: string
+  chosen: string
+  message: string
+  loading: boolean
+  paged: boolean
+  matches: ServiceWizardOption[]
+  visible: ServiceWizardOption[]
+  remaining: number
+  nextBatch: number
+  summary: string
+  loadMore: () => void
+}
+
+export const wireWidths = ['62%', '48%', '70%', '54%', '44%']
+export const wireSubWidths = ['84%', '66%', '78%', '58%', '72%']
+
+export const labelFor = (options: ServiceWizardOption[]) => (value: string) =>
+  options.find((option) => option.value === value)?.label ?? ''
+
+/** The domain and deployment answers of the Create Service wizard. */
+export interface ServiceWizardForm {
+  domainType: string
+  domainPrefix: string
+  domainHost: string
+  name: string
+  environment: string
+  certificate: string
+  deploymentMode: string
+  minimumTlsVersion: string
+  errorPage: string
+  allowPlatformDomain: boolean
+  active: boolean
+}
+
+/** The names the service, its deployment and its domain get. */
+export interface ServiceWizardNames {
+  service: string
+  deployment: string
+  domain: string
+}
+
+/** What a picker's summary line is computed from. */
+export interface PickerSummaryInput {
+  noun: string
+  total: number
+  query: string
+  loading: boolean
+  matches: number
+  visible: number
+  remaining: number
+  nextBatch: number
+}
+
+export function pickerSummary(input: PickerSummaryInput): string {
+  const { noun, total, query, loading, matches, visible, remaining, nextBatch } = input
+  if (loading) return 'Loading ' + nextBatch + ' more ' + noun + 's'
+  if (query.trim() && !matches) return 'No ' + noun + ' matches ' + query
+  if (remaining) return visible + ' of ' + matches + ' ' + noun + 's'
+  return query.trim() ? matches + ' of ' + total + ' ' + noun + 's' : total + ' ' + noun + 's'
+}
+
+export function filterOptions(
+  options: ServiceWizardOption[],
+  query: string
+): ServiceWizardOption[] {
+  const text = query.trim().toLowerCase()
+  if (!text) return options
+  return options.filter(
+    (option) =>
+      option.label.toLowerCase().includes(text) ||
+      String(option.description ?? '')
+        .toLowerCase()
+        .includes(text)
+  )
+}
+```
+
+## `parts/discard-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import type { UseUnsavedChangesReturn } from '@aziontech/webkit/use-unsaved-changes'
+
+  export interface DiscardDialogProps {
+    /** The unsaved-changes guard whose leave dialog this renders. */
+    guard: Pick<
+      UseUnsavedChangesReturn<unknown>,
+      'dialogProps' | 'labels' | 'keepEditing' | 'discardAndLeave'
+    >
+  }
+
+  defineProps<DiscardDialogProps>()
+</script>
+
+<template>
+  <ConfirmDialog v-bind="guard.dialogProps.value">
+    <template #actions>
+      <Button
+        :label="guard.labels.value.keepEditing"
+        variant="ghost"
+        size="medium"
+        data-autofocus
+        @click="guard.keepEditing"
+      />
+      <Button
+        :label="guard.labels.value.discard"
+        variant="danger"
+        size="medium"
+        @click="guard.discardAndLeave"
+      />
+    </template>
+  </ConfirmDialog>
+</template>
+```
+
+## `parts/policy-picker-step.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import FieldError from '@aziontech/webkit/field-error'
+  import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
+  import Tag from '@aziontech/webkit/tag'
+  import { computed, ref } from 'vue'
+
+  import type { CreateWizardPolicy } from '../types'
+
+  export interface PolicyPickerStepProps {
+    /** The policies the list can run in. */
+    policies: CreateWizardPolicy[]
+    /** The policy picked, empty for none. */
+    choice: string
+    /** Next was pressed with no answer: the step says to pick one. */
+    missing?: boolean
+  }
+
+  const props = withDefaults(defineProps<PolicyPickerStepProps>(), { missing: false })
+
+  const emit = defineEmits<{
+    /** A policy was picked, or Continue without a policy pressed (an empty value). */
+    answer: [value: string]
+  }>()
+
+  const VISIBLE = 6
+
+  const query = ref('')
+
+  const matches = computed(() => {
+    const term = query.value.trim().toLowerCase()
+    if (!term) return props.policies
+    return props.policies.filter((option) =>
+      [option.label, option.description].some((field) => field.toLowerCase().includes(term))
+    )
+  })
+  const visible = computed(() => {
+    const head = matches.value.slice(0, VISIBLE)
+    if (!props.choice || head.some((option) => option.value === props.choice)) return head
+    const picked = matches.value.find((option) => option.value === props.choice)
+    return picked ? [picked, ...head.slice(0, VISIBLE - 1)] : head
+  })
+  const hidden = computed(() => Math.max(0, matches.value.length - visible.value.length))
+
+  const choose = (option: CreateWizardPolicy) => emit('answer', option.value)
+
+  const skip = () => emit('answer', '')
+
+  const onSearchEnter = () => {
+    if (matches.value.length) choose(matches.value[0])
+  }
+</script>
+
+<template>
+  <section class="mx-auto flex w-full max-w-(--container-md) flex-col gap-(--spacing-lg)">
+    <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+      <Input
+        v-model="query"
+        size="large"
+        class="w-full"
+        placeholder="Search policies"
+        aria-label="Search policies"
+        autocomplete="off"
+        @keydown.enter.prevent="onSearchEnter"
+      />
+
+      <div class="flex flex-col">
+        <Item
+          v-for="option in visible"
+          :key="option.value"
+          size="small"
+          clickable
+          :aria-pressed="choice === option.value"
+          @click="choose(option)"
+        >
+          <Item.Media>
+            <i
+              class="az az-shield text-body-md leading-none text-(--text-muted)"
+              aria-hidden="true"
+            />
+          </Item.Media>
+          <Item.Content>
+            <Item.Title>{{ option.label }}</Item.Title>
+          </Item.Content>
+          <Item.Actions>
+            <Tag
+              v-if="!option.ready"
+              label="IP filtering off"
+              severity="warning"
+              size="small"
+            />
+            <i
+              v-if="choice === option.value"
+              class="az az-check text-body-sm leading-none text-(--text-default)"
+              aria-hidden="true"
+            />
+          </Item.Actions>
+        </Item>
+
+        <p
+          v-if="hidden"
+          class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+        >
+          {{ hidden }} more. Type to narrow the list.
+        </p>
+        <p
+          v-else-if="!matches.length"
+          class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+        >
+          No policy matches “{{ query.trim() }}”.
+        </p>
+      </div>
+      <FieldError v-if="missing">Select a policy, or continue without one.</FieldError>
+    </div>
+
+    <div class="flex flex-col items-center gap-(--spacing-2xs)">
+      <Button
+        type="button"
+        label="Create a policy"
+        variant="ghost"
+        size="small"
+      />
+      <Button
+        type="button"
+        label="Continue without a policy"
+        variant="ghost"
+        size="small"
+        @click="skip"
+      />
+    </div>
+  </section>
+</template>
+```
+
+## `parts/review-step.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import Item from '@aziontech/webkit/item'
+  import Subheader from '@aziontech/webkit/subheader'
+  import Tag from '@aziontech/webkit/tag'
+
+  import { consumers, PREVIEW } from '../lib/access-list'
+
+  export interface ReviewStepProps {
+    /** The list name. */
+    name: string
+    /** The label of the list type. */
+    typeLabel: string
+    /** The label of the entries field of that type. */
+    listLabel: string
+    /** The entries, without duplicates. */
+    entries: string[]
+    /** The policy picked, empty for none. */
+    choice: string
+    /** The picked policy has IP filtering off. */
+    moduleMissing?: boolean
+    /** IP filtering is turned on with the list. */
+    enableModule?: boolean
+  }
+
+  withDefaults(defineProps<ReviewStepProps>(), { moduleMissing: false, enableModule: false })
+
+  const emit = defineEmits<{
+    /** Edit was pressed on a section; carries the step to go back to. */
+    edit: [step: string]
+  }>()
+</script>
+
+<template>
+  <section class="flex min-w-0 flex-col gap-(--layout-section-gap)">
+    <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+      <Subheader
+        title="Where it runs"
+        size="small"
+      >
+        <template #actions>
+          <Button
+            type="button"
+            label="Edit"
+            variant="outline"
+            size="small"
+            aria-label="Edit where it runs"
+            @click="emit('edit', 'where-it-runs')"
+          />
+        </template>
+      </Subheader>
+      <Alert
+        key="alert-1"
+        v-if="!choice"
+        severity="warning"
+      >
+        Bound to no policy. The list is created, but no rule can match on it until a policy uses it.
+      </Alert>
+      <Alert
+        key="alert-2"
+        v-else-if="moduleMissing && !enableModule"
+        severity="warning"
+      >
+        IP filtering is off on {{ choice }}, so no rule reads this list until it is on.
+      </Alert>
+      <Alert
+        key="alert-3"
+        severity="success"
+      >
+        Runs on {{ choice }}.
+      </Alert>
+    </section>
+
+    <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+      <Subheader
+        title="What gets created"
+        description="Each value is sent as the property named under it."
+        size="small"
+      >
+        <template #actions>
+          <Button
+            type="button"
+            label="Edit"
+            variant="outline"
+            size="small"
+            aria-label="Edit list settings"
+            @click="emit('edit', 'settings')"
+          />
+        </template>
+      </Subheader>
+      <Card :padded="false">
+        <template #default>
+          <Item.List>
+            <Item>
+              <Item.Content>
+                <Item.Title>Name</Item.Title>
+                <Item.Description>name</Item.Description>
+              </Item.Content>
+              <Item.Actions>
+                <span class="max-w-80 truncate text-label-sm text-(--text-default)">{{
+                  name
+                }}</span>
+                <Button
+                  type="button"
+                  label="Edit"
+                  variant="ghost"
+                  size="small"
+                  aria-label="Edit name"
+                  @click="emit('edit', 'general')"
+                />
+              </Item.Actions>
+            </Item>
+            <Item>
+              <Item.Content>
+                <Item.Title>Type</Item.Title>
+                <Item.Description>type</Item.Description>
+              </Item.Content>
+              <Item.Actions>
+                <span class="text-label-sm text-(--text-default)">{{ typeLabel }}</span>
+              </Item.Actions>
+            </Item>
+            <Item>
+              <Item.Content>
+                <Item.Title>{{ listLabel }}</Item.Title>
+                <Item.Description>items</Item.Description>
+                <ul
+                  class="m-0 mt-(--spacing-xs) flex list-none flex-wrap gap-(--spacing-2xs) p-0"
+                  :aria-label="`${entries.length} entries`"
+                >
+                  <li
+                    v-for="entry in entries.slice(0, PREVIEW)"
+                    :key="entry"
+                  >
+                    <Tag
+                      :label="entry"
+                      severity="neutral"
+                      size="small"
+                    />
+                  </li>
+                  <li
+                    v-if="entries.length > PREVIEW"
+                    class="text-label-sm text-(--text-muted)"
+                  >
+                    and {{ entries.length - PREVIEW }} more
+                  </li>
+                </ul>
+              </Item.Content>
+              <Item.Actions>
+                <span class="text-label-sm text-(--text-default)"
+                  >{{ entries.length }} {{ entries.length === 1 ? 'entry' : 'entries' }}</span
+                >
+              </Item.Actions>
+            </Item>
+          </Item.List>
+        </template>
+      </Card>
+    </section>
+
+    <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+      <Subheader
+        title="What can reference it"
+        description="Everything that can point at this list once it exists, and the field that carries the reference."
+        size="small"
+      />
+      <Card :padded="false">
+        <template #default>
+          <Item.List>
+            <Item
+              v-for="row in consumers"
+              :key="row.by"
+            >
+              <Item.Content>
+                <Item.Title>{{ row.by }}</Item.Title>
+                <Item.Description>{{ row.path }}</Item.Description>
+              </Item.Content>
+              <Item.Actions>
+                <Tag
+                  :label="row.as"
+                  severity="neutral"
+                  size="small"
+                />
+              </Item.Actions>
+            </Item>
+          </Item.List>
+        </template>
+      </Card>
+    </section>
+  </section>
+</template>
+```
+
+## `parts/wizard-frame.vue`
+
+```ts
+<script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
+  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
+  import Brand from '@aziontech/webkit/brand'
+  import Breadcrumb, { type BreadcrumbItemData } from '@aziontech/webkit/breadcrumb-root'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import type { UseUnsavedChangesReturn } from '@aziontech/webkit/use-unsaved-changes'
+  import Wizard from '@aziontech/webkit/wizard-root'
+  import { type ComponentPublicInstance, onMounted, ref } from 'vue'
+
+  import DiscardDialog from './discard-dialog.vue'
+
+  export interface WizardFrameProps {
+    /** Name of the back control, read by screen readers. */
+    backLabel: string
+    /** The trail beside the brand: the module, then the page title. */
+    breadcrumb: BreadcrumbItemData[]
+    /** Page title and wizard name. */
+    title: string
+    /** The line under the title. */
+    description: string
+    /** Label of the submit button on the last step. */
+    submitLabel: string
+    /** Name of the Cmd+Enter shortcut in the shortcut list. */
+    shortcutLabel: string
+    /** The request is in flight: the wizard locks. */
+    loading?: boolean
+    /** The unsaved-changes guard; Back, Cancel and Escape ask before leaving a changed draft. */
+    guard: Pick<
+      UseUnsavedChangesReturn<unknown>,
+      'confirmLeave' | 'dialogProps' | 'labels' | 'keepEditing' | 'discardAndLeave'
+    >
+  }
+
+  const props = withDefaults(defineProps<WizardFrameProps>(), { loading: false })
+
+  const emit = defineEmits<{
+    next: [event: MouseEvent, position: number]
+    submit: [event: MouseEvent]
+    cancel: [event: MouseEvent | KeyboardEvent]
+  }>()
+
+  /** The step the wizard is on. */
+  const stepIndex = defineModel<number>({ required: true })
+
+  defineSlots<{
+    /** The steps of the wizard. */
+    default(): unknown
+  }>()
+
+  const onCancel = async (event: MouseEvent | KeyboardEvent) => {
+    if (await props.guard.confirmLeave()) emit('cancel', event)
+  }
+
+  useEscapeToCancel(onCancel, { enabled: () => !props.loading })
+
+  const wizardEl = ref<ComponentPublicInstance | null>(null)
+
+  const FIELD_SELECTOR =
+    'input:not([type="hidden"]), textarea, select, [role="combobox"], [role="radio"][tabindex="0"]'
+
+  const wizardRoot = () => (wizardEl.value?.$el as HTMLElement | undefined) ?? null
+
+  const focusFirstField = () => {
+    const root = wizardRoot()
+    const field = root?.querySelector<HTMLElement>(FIELD_SELECTOR)
+    const checked =
+      field instanceof HTMLInputElement && field.type === 'radio'
+        ? root?.querySelector<HTMLElement>(`input[name="${CSS.escape(field.name)}"]:checked`)
+        : null
+    ;(checked ?? field)?.focus()
+  }
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: () => props.shortcutLabel,
+    group: 'Page',
+    element: wizardRoot,
+    when: () => !props.loading,
+    handler: () =>
+      [...(wizardRoot()?.querySelectorAll<HTMLButtonElement>('button') ?? [])].pop()?.click()
+  })
+
+  onMounted(focusFirstField)
+</script>
+
+<template>
+  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
+    <AppHeader aria-label="Console">
+      <AppHeader.Start>
+        <IconButton
+          icon="az az-chevron-left"
+          :aria-label="backLabel"
+          variant="outline"
+          size="small"
+          @click="onCancel"
+        />
+        <AppHeader.Brand
+          href="/home"
+          aria-label="Azion home"
+        >
+          <Brand
+            variant="default"
+            size="small"
+          />
+        </AppHeader.Brand>
+        <Breadcrumb :items="breadcrumb" />
+      </AppHeader.Start>
+      <AppHeader.Center />
+      <AppHeader.End>
+        <AppHeaderAccount
+          name="name@example.com"
+          aria-label="Account settings"
+        />
+      </AppHeader.End>
+    </AppHeader>
+
+    <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
+      <div
+        class="layout-form-create layout-boundary-inline flex flex-col gap-(--layout-section-gap) py-(--layout-section-gap)"
+      >
+        <PageHeader
+          :title="title"
+          :description="description"
+          size="small"
+        />
+
+        <Wizard
+          ref="wizardEl"
+          v-model="stepIndex"
+          :aria-label="title"
+          :submit-label="submitLabel"
+          :loading="loading"
+          @next="(event: MouseEvent, position: number) => emit('next', event, position)"
+          @submit="(event: MouseEvent) => emit('submit', event)"
+          @cancel="onCancel"
+        >
+          <slot />
+        </Wizard>
+      </div>
+    </main>
+    <DiscardDialog
+      :guard="guard"
+      data-testid="unsaved-changes-dialog"
+    />
+  </div>
+</template>
+```
+
+## `types.ts`
+
+```ts
+/** The kind of entry an access list holds. */
+export type CreateWizardListType = 'asn' | 'ip_cidr' | 'countries'
+
+/** A policy the list can run on. */
+export interface CreateWizardPolicy {
+  /** The policy key. */
+  value: string
+  /** The policy name. */
+  label: string
+  /** The application it protects. */
+  description: string
+  /** Whether IP filtering is already on in it. */
+  ready: boolean
+}
+
+/** The values of the Create Access List form. */
+export interface CreateWizardValues {
+  /** The list name. */
+  name: string
+  /** The kind of entry the list holds. */
+  type: CreateWizardListType
+  /** The entries, one per line. */
+  items: string
+}
+
+/** What submit sends: the form values and where the list runs. */
+export interface CreateWizardSubmission extends CreateWizardValues {
+  /** The policy it runs on; empty when skipped. */
+  policy: string
+  /** Whether IP filtering is turned on in that policy as part of the create. */
+  enableModule: boolean
+}
+
+/** A step of the wizard. */
+export type CreateWizardStep = 'where-it-runs' | 'module' | 'general' | 'settings' | 'review'
 ```

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-activity-history/account-activity-history.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-activity-history")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), [DateRangePicker](../../components/date-range-picker.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [Table](../../components/table.md), `TableCellTime`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DateRangePicker](../../components/date-range-picker.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [Table](../../components/table.md), `TableCellTime`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -43,7 +43,7 @@ The period comes first in the reader's mind and is filtered before the collectio
 
 Refresh and Download CSV as outlined icon buttons in tooltips, then `CollectionPreferences` (page size 25, 50 or 100; columns), saved under `storageKey`.
 
-### E. Event table — `Card`, `DataTable`, `TableCellTime`, `Tag`, `CopyButton`, `useCollection` (required)
+### E. Event table — `Card`, `DataTable`, `DataTablePagination`, `TableCellTime`, `Tag`, `CopyButton`, `useCollection` (required)
 
 One `useCollection` over the events in the period, sorted by Date descending, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category as a small `Tag` with one severity per category (a category is not a status), User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `TableCellTime` (relative, exact time on the tooltip).
 
@@ -159,6 +159,7 @@ Each variant is the same screen in another state: `get_block("account/account-ac
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import type {
     DateRangeUnit,
     DateRangeValue,
@@ -298,16 +299,23 @@ Each variant is the same screen in another state: `get_block("account/account-ac
     { accessorKey: 'at', header: 'Date', sortable: true, minWidth: 150 }
   ]
 
-  const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
-    useCollection({
-      items: inRange,
-      columns,
-      filtering: { fields: ['event', 'category', 'user', 'ip'] },
-      propertyFiltering: { properties },
-      sorting: { defaultState: [{ id: 'at', desc: true }] },
-      pagination: { pageSize: 25, pageSizeOptions: [25, 50, 100] },
-      preferences: { storageKey: 'activity-history' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    status,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: inRange,
+    columns,
+    filtering: { fields: ['event', 'category', 'user', 'ip'] },
+    propertyFiltering: { properties },
+    sorting: { defaultState: [{ id: 'at', desc: true }] },
+    pagination: { pageSize: 25, pageSizeOptions: [25, 50, 100] },
+    preferences: { storageKey: 'activity-history' }
+  })
 
   const activityTableEl = ref<TableExposed<ActivityHistoryEvent> | null>(null)
   const exportCsv = () => activityTableEl.value?.exportCsv({ filename: 'activity-history.csv' })
@@ -515,6 +523,12 @@ Each variant is the same screen in another state: `get_block("account/account-ac
                     />
                   </template>
                 </EmptyState>
+              </template>
+              <template #footer>
+                <DataTablePagination
+                  v-bind="paginationProps"
+                  manual
+                />
               </template>
             </DataTable>
           </template>

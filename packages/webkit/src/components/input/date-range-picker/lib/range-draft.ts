@@ -12,7 +12,6 @@ import { exceedsDuration } from './range-bounds'
 import type { DateRangePanel } from './range-panel'
 import type { DateRangeTranslate } from './range-text'
 
-/** Key of the custom relative range in the draft. */
 export const CUSTOM = '__custom'
 
 /** The panel fields a draft value reads, with the custom amount parsed. */

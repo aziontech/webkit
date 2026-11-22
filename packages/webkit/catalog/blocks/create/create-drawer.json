@@ -56,6 +56,9 @@
  "fileSources": [
   "sample.ts",
   "composables/use-drawer-guard.ts",
+  "lib/certificate-match.ts",
+  "parts/form-drawer.vue",
+  "parts/submit-button.vue",
   "parts/unsaved-changes-dialog.vue"
  ]
 }

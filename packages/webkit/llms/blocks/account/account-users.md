@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-users/account-users.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-users")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -313,15 +313,21 @@ Each variant is the same screen in another state: `get_block("account/account-us
     { key: 'status', label: 'Status', options: optionsOf('status') }
   ])
 
-  const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
-    useCollection({
-      items,
-      columns,
-      filtering: { fields: ['name', 'email', 'role', 'status'] },
-      propertyFiltering: { properties },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: { storageKey: 'account-users' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items,
+    columns,
+    filtering: { fields: ['name', 'email', 'role', 'status'] },
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: { storageKey: 'account-users' }
+  })
 
   const usersTableEl = ref<InstanceType<typeof UsersTable> | null>(null)
   const exportCsv = () => usersTableEl.value?.exportCsv()
@@ -552,6 +558,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
           v-else
           ref="usersTableEl"
           :table-props="tableProps"
+          :pagination-props="paginationProps"
           :loading="loading"
           :team-options="teamOptions"
           @row-click="onRowOpen"
@@ -1088,6 +1095,7 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import MultiSelect from '@aziontech/webkit/multi-select'
@@ -1097,7 +1105,10 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import type { CollectionTableProps } from '@aziontech/webkit/use-collection'
+  import type {
+    CollectionPaginationProps,
+    CollectionTableProps
+  } from '@aziontech/webkit/use-collection'
   import { ref } from 'vue'
 
   import type { UsersTeam, UsersUser } from '../account-users.vue'
@@ -1111,6 +1122,7 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
 
   defineProps<{
     tableProps: CollectionTableProps<UsersUser, TableColumn>
+    paginationProps: CollectionPaginationProps
     loading: boolean
     teamOptions: UsersTeam[]
   }>()
@@ -1270,6 +1282,12 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
               />
             </template>
           </EmptyState>
+        </template>
+        <template #footer>
+          <DataTablePagination
+            v-bind="paginationProps"
+            manual
+          />
         </template>
       </DataTable>
     </template>

@@ -1,6 +1,6 @@
 # TopBarCreation (`top-bar/top-bar-creation`)
 
-> The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `AppHeader` in its default `content` placement, spanning the whole window. Start: a small back link with a `Tooltip`, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, opening the account `DropdownMenu`, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate, with its CreateAndDeploy wizard), the deploy flows (DeployTemplate) and the Creation Center (`create/create-hub`) render it. The back button returns to the list the flow started from; a wizard drops it and the crumb once they reach the provisioning and success screens. Built from `AppHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `Avatar`, `DropdownMenu` and `Brand`.
+> The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `AppHeader` in its default `content` placement, spanning the whole window. Start: a small back link with a `Tooltip`, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, opening the account `DropdownMenu`, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate, with its CreateAndDeploy wizard), the deploy flows (DeployTemplate) and the Creation Center (`create/create-hub`) render it. The back button returns to the list the flow started from; a wizard drops it and the crumb once they reach the provisioning and success screens. Built from `AppHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `AppHeaderAccount`, `DropdownMenu` and `Brand`.
 
 - Surface: app
 - Source: `blocks/top-bar/top-bar-creation/top-bar-creation.vue` in `@aziontech/webkit`
@@ -44,7 +44,7 @@ Inside `AppHeader.Brand`, linked to the home route through its `href` with `aria
 
 Where the flow lives: the module with an `href`, then the current page with none (`Resources › Create Resource`). The crumb links are a way out alongside the back button. A step of a wizard is not a crumb.
 
-### E. Account — `DropdownMenu` + `Avatar` (required)
+### E. Account — `DropdownMenu` + `AppHeaderAccount` (required)
 
 The signed-in user, inside a button labelled `Account menu` that opens the account `DropdownMenu`: name and email on top, Account settings, then Docs and Log out. It stays on every screen of the flow, including terminal ones, so the user never looks signed out.
 

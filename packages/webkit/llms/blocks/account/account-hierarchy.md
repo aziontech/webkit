@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-hierarchy/account-hierarchy.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-hierarchy")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [Table](../../components/table.md), `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [Table](../../components/table.md), `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -1156,6 +1156,7 @@ export const descendantsIn = (
   import Avatar from '@aziontech/webkit/avatar'
   import Card from '@aziontech/webkit/card'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import { type TableColumn } from '@aziontech/webkit/table'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
@@ -1215,8 +1216,6 @@ export const descendantsIn = (
         v-model:open-keys="tableExpanded"
         v-model:selected-keys="selectedKeys"
         :data="visibleTree"
-        paginated
-        :page-size="25"
         :columns="columns"
         :get-sub-rows="(row) => row.children"
         :loading="loading"
@@ -1339,6 +1338,9 @@ export const descendantsIn = (
               />
             </DropdownMenu.Group>
           </TableCellActions>
+        </template>
+        <template #footer>
+          <DataTablePagination :page-size="25" />
         </template>
       </DataTable>
     </template>

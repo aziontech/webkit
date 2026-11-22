@@ -95,6 +95,11 @@
  "slots": [],
  "styleSeam": false,
  "assets": [],
- "examples": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/site-header-section/default.vue"
+  }
+ ],
  "docs": "components/site-header-section.md"
 }

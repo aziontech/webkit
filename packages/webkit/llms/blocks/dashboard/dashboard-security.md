@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-security/dashboard-security.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-security")`
-- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [FilterMenu](../../components/filter-menu.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `utils/clipboard`, `utils/csv`
+- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [FilterMenu](../../components/filter-menu.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `utils/clipboard`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -1647,6 +1647,7 @@ export const sampleActorRows: ActorActivityRow[] = [
 <script setup lang="ts">
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
@@ -1731,8 +1732,6 @@ export const sampleActorRows: ActorActivityRow[] = [
             :columns="ipColumns"
             row-key="id"
             sortable
-            paginated
-            :page-size="10"
             density="compact"
             bordered
           >
@@ -1747,6 +1746,9 @@ export const sampleActorRows: ActorActivityRow[] = [
             <template #cell-requests="{ row }">
               <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
             </template>
+            <template #footer>
+              <DataTablePagination :page-size="10" />
+            </template>
           </DataTable>
         </div>
       </PanelBody>
@@ -1760,8 +1762,11 @@ export const sampleActorRows: ActorActivityRow[] = [
 ```ts
 <script setup lang="ts">
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
+  import { matchesText } from '@aziontech/webkit/use-collection'
+  import { computed } from 'vue'
 
   import type { SecuritySourceIp } from '../dashboard-security.vue'
   import { ipColumns } from '../security-cards'
@@ -1775,9 +1780,18 @@ export const sampleActorRows: ActorActivityRow[] = [
     loading: boolean
   }
 
-  defineProps<SourceIpSearchProps>()
+  const props = defineProps<SourceIpSearchProps>()
 
   const search = defineModel<string>('search', { default: '' })
+  const matchingRows = computed(() =>
+    props.rows.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        ipColumns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
+  )
 </script>
 
 <template>
@@ -1800,14 +1814,10 @@ export const sampleActorRows: ActorActivityRow[] = [
       </div>
     </div>
     <DataTable
-      v-model:global-filter="search"
-      :data="rows"
+      :data="matchingRows"
       :columns="ipColumns"
       row-key="id"
       sortable
-      paginated
-      :page-size="5"
-      :page-size-options="[5, 10, 25]"
       density="compact"
       bordered
       :loading="loading"
@@ -1822,6 +1832,12 @@ export const sampleActorRows: ActorActivityRow[] = [
       </template>
       <template #cell-requests="{ row }">
         <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
+      </template>
+      <template #footer>
+        <DataTablePagination
+          :page-size="5"
+          :page-size-options="[5, 10, 25]"
+        />
       </template>
     </DataTable>
   </div>

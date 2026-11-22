@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-personal-tokens/account-personal-tokens.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-personal-tokens")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Textarea](../../components/textarea.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Textarea](../../components/textarea.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -347,15 +347,22 @@ Each variant is the same screen in another state: `get_block("account/account-pe
     }
   ])
 
-  const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
-    useCollection({
-      items: rows,
-      columns,
-      filtering: { fields: ['name', 'description', 'status'] },
-      propertyFiltering: { properties },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: { storageKey: 'personal-tokens' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    status,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: rows,
+    columns,
+    filtering: { fields: ['name', 'description', 'status'] },
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: { storageKey: 'personal-tokens' }
+  })
 
   const tokensTableEl = ref<InstanceType<typeof TokensTable> | null>(null)
   const exportCsv = () => tokensTableEl.value?.exportCsv()
@@ -520,6 +527,7 @@ Each variant is the same screen in another state: `get_block("account/account-pe
           v-else
           ref="tokensTableEl"
           :table-props="tableProps"
+          :pagination-props="paginationProps"
           :loading="loading"
           :status-of="statusOf"
           @action="onAction"
@@ -917,6 +925,7 @@ export const sampleTokens: PersonalTokensToken[] = [
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
@@ -924,7 +933,10 @@ export const sampleTokens: PersonalTokensToken[] = [
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import type { TagSeverity } from '@aziontech/webkit/tag'
-  import type { CollectionTableProps } from '@aziontech/webkit/use-collection'
+  import type {
+    CollectionPaginationProps,
+    CollectionTableProps
+  } from '@aziontech/webkit/use-collection'
   import { ref } from 'vue'
 
   import type { PersonalTokensToken } from '../account-personal-tokens.vue'
@@ -934,6 +946,7 @@ export const sampleTokens: PersonalTokensToken[] = [
 
   defineProps<{
     tableProps: CollectionTableProps<PersonalTokensRow, TableColumn>
+    paginationProps: CollectionPaginationProps
     loading: boolean
     statusOf: (token: PersonalTokensToken) => { label: string; severity: TagSeverity }
   }>()
@@ -1047,6 +1060,12 @@ export const sampleTokens: PersonalTokensToken[] = [
               />
             </template>
           </EmptyState>
+        </template>
+        <template #footer>
+          <DataTablePagination
+            v-bind="paginationProps"
+            manual
+          />
         </template>
       </DataTable>
     </template>

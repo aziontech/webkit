@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-team-permissions/account-team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-team-permissions")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-shortcuts`
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -35,7 +35,7 @@ Title `Teams and permissions` and the sentence that states the model. Actions: D
 
 The view-table controls row (`view/view-table`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, description and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden when there is no team.
 
-### C. Team table — `Card`, `DataTable`, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, `Avatar`, `useCollection` (required)
+### C. Team table — `Card`, `DataTable`, `DataTablePagination`, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, `Avatar`, `useCollection` (required)
 
 `DataTable` with `v-bind="tableProps"` in a flush `Card`. Name: a square `Avatar` with the initials, the name as `TableCellLink` to the team's page and its description under it. Permissions: `TableCellTags` shows as many as fit and the rest behind `+N`; a team with every permission reads `All permissions`. Members as a number, Status as `TableCellStatus` (Active, Inactive).
 
@@ -194,6 +194,7 @@ Each variant is the same screen in another state: `get_block("account/account-te
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -315,15 +316,22 @@ Each variant is the same screen in another state: `get_block("account/account-te
     }
   ])
 
-  const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
-    useCollection({
-      items: rows,
-      columns,
-      filtering: { fields: ['name', 'description', 'status'] },
-      propertyFiltering: { properties },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: { storageKey: 'account-teams' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    status,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: rows,
+    columns,
+    filtering: { fields: ['name', 'description', 'status'] },
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: { storageKey: 'account-teams' }
+  })
 
   const teamsTableEl = ref<TableExposed<TeamRow> | null>(null)
   const exportCsv = () => teamsTableEl.value?.exportCsv({ filename: 'teams.csv' })
@@ -570,6 +578,12 @@ Each variant is the same screen in another state: `get_block("account/account-te
                     />
                   </template>
                 </EmptyState>
+              </template>
+              <template #footer>
+                <DataTablePagination
+                  v-bind="paginationProps"
+                  manual
+                />
               </template>
             </DataTable>
           </template>

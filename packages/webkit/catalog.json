@@ -11168,19 +11168,17 @@
    "import": "@aziontech/webkit/data-table",
    "target": "./src/components/data/data-table/data-table.vue",
    "kind": "component",
+   "subcomponents": [
+    "@aziontech/webkit/data-table-pagination",
+    "@aziontech/webkit/data-table-load-more"
+   ],
    "treeShakeableImport": "@aziontech/webkit/data-table",
    "models": [
     "data",
     "sorting",
     "selectedKeys",
     "columnVisibility",
-    "globalFilter",
-    "page",
-    "pageSize",
-    "filters",
-    "snapshot",
-    "openKeys",
-    "live"
+    "openKeys"
    ],
    "category": "data",
    "structure": "monolithic",
@@ -11242,13 +11240,6 @@
      "doc": "clicking a row toggles its selection (requires `selectable`); interactive cells still own their own click."
     },
     {
-     "name": "paginated",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Render a Pagination in the footer."
-    },
-    {
      "name": "manualSorting",
      "type": "boolean",
      "default": "false",
@@ -11256,32 +11247,11 @@
      "doc": "Server-side sorting: emit events, do not sort locally."
     },
     {
-     "name": "manualPagination",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Server-side pagination: emit events, do not slice locally."
-    },
-    {
      "name": "manualFiltering",
      "type": "boolean",
      "default": "false",
      "required": "false",
      "doc": "Server-side filtering: emit events, do not filter locally."
-    },
-    {
-     "name": "rowCount",
-     "type": "number",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Total row count for manual pagination."
-    },
-    {
-     "name": "pageSizeOptions",
-     "type": "number[]",
-     "default": "[10, 25, 50, 100]",
-     "required": "false",
-     "doc": "Page-size options shown in the footer selector, the same name as `pagination`. `rowCount` keeps its TanStack name (the total for manual pagination)."
     },
     {
      "name": "loading",
@@ -11296,34 +11266,6 @@
      "default": "''",
      "required": "false",
      "doc": "message of a failed load, shown in place of the rows in an `alert` region (an `EmptyState` with the error mark and `table.errorTitle`, the message as its description); the `error` slot replaces it. `loading` wins over it. Empty shows the rows."
-    },
-    {
-     "name": "filterFields",
-     "type": "TableFilterField[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Fields `TableFilter` offers (id, label, value type, allowed operators, select options): facets for the menu type, properties for the property type."
-    },
-    {
-     "name": "defaultSnapshot",
-     "type": "Partial<TableStateSnapshot>",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Uncontrolled snapshot seed applied once on mount; seeds only concerns that are not bound to their own v-model."
-    },
-    {
-     "name": "exportRows",
-     "type": "(scope: 'filtered' | 'all') => TRow[] | Promise<TRow[]>",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Rows `TableExportButton` and `exportCsv()` write for the `filtered` and `all` scopes in place of the rows the table holds (the `page` scope always writes the rendered page). `useCollection` binds it so an export covers every match, not only the page; a promise is awaited before the `export` event and the download."
-    },
-    {
-     "name": "exportFilename",
-     "type": "string",
-     "default": "'export.csv'",
-     "required": "false",
-     "doc": "Default filename for `TableExportButton` and `exportCsv()` when no per-call filename is given."
     },
     {
      "name": "stackable",
@@ -11361,13 +11303,6 @@
      "doc": "render only the rows in view, for thousands of rows. The viewport scrolls vertically within `maxHeight` (40rem when empty). Ignored in the stacked layout."
     },
     {
-     "name": "estimateRowHeight",
-     "type": "number",
-     "default": "48",
-     "required": "false",
-     "doc": "Row height (px) assumed in `virtual` mode until a row is measured."
-    },
-    {
      "name": "reorderable",
      "type": "boolean",
      "default": "false",
@@ -11387,20 +11322,6 @@
      "default": "undefined",
      "required": "false",
      "doc": "tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role=\"treegrid\"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode."
-    },
-    {
-     "name": "moreRows",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "more rows exist after the last one. The table emits `load-more` as the end of the rows nears the viewport (also in `virtual` mode) and offers a Load more button; false shows the end-of-results line once more rows were requested."
-    },
-    {
-     "name": "loadingMore",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "the next rows are loading; shows a loading line under the rows and holds further `load-more` requests."
     },
     {
      "name": "data",
@@ -11431,53 +11352,11 @@
      "doc": "Two-way value (`v-model:columnVisibility`)."
     },
     {
-     "name": "globalFilter",
-     "type": "string",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Two-way value (`v-model:globalFilter`)."
-    },
-    {
-     "name": "page",
-     "type": "number",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Two-way value (`v-model:page`)."
-    },
-    {
-     "name": "pageSize",
-     "type": "number",
-     "default": "10",
-     "required": "false",
-     "doc": "Two-way value (`v-model:pageSize`)."
-    },
-    {
-     "name": "filters",
-     "type": "TableAppliedFilter[]",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Two-way value (`v-model:filters`)."
-    },
-    {
-     "name": "snapshot",
-     "type": "TableStateSnapshot",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Two-way value (`v-model:snapshot`)."
-    },
-    {
      "name": "openKeys",
      "type": "string[]",
      "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:openKeys`)."
-    },
-    {
-     "name": "live",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Two-way value (`v-model:live`)."
     }
    ],
    "events": [
@@ -11515,11 +11394,6 @@
      "name": "reorder",
      "payload": "(event: KeyboardEvent | PointerEvent, payload: { from: number; to: number; row: TRow })",
      "notes": "`reorderable`: a row moved from index `from` to index `to` of `data`."
-    },
-    {
-     "name": "load-more",
-     "payload": "(event: Event)",
-     "notes": "`moreRows`: the end of the rows neared the viewport (`new Event('load-more')`) or the Load more button was pressed (its click); the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true."
     }
    ],
    "slots": [
@@ -11552,11 +11426,43 @@
      "name": "error",
      "scope": "{ message: string }",
      "notes": "shown in place of the rows while `error` is set; `message` is the `error` prop. Defaults to a small `EmptyState` with the error mark, `table.errorTitle` and the message."
+    },
+    {
+     "name": "load-more",
+     "scope": "—",
+     "notes": "content after the last row that scrolls with the rows, inside the viewport: `DataTableLoadMore`."
+    },
+    {
+     "name": "footer",
+     "scope": "—",
+     "notes": "band below the scroll viewport, outside `role=\"table\"`: `DataTablePagination`."
     }
    ],
    "surface": "app",
    "examplesFile": "catalog/examples/data-table.json",
    "docsFile": "catalog/components/data-table.json"
+  },
+  "data-table-pagination": {
+   "import": "@aziontech/webkit/data-table-pagination",
+   "target": "./src/components/data/data-table/data-table-pagination/data-table-pagination.vue",
+   "kind": "subcomponent",
+   "parent": "data-table",
+   "treeShakeableImport": "@aziontech/webkit/data-table-pagination",
+   "attached": false,
+   "models": [
+    "page",
+    "pageSize"
+   ],
+   "surface": "app"
+  },
+  "data-table-load-more": {
+   "import": "@aziontech/webkit/data-table-load-more",
+   "target": "./src/components/data/data-table/data-table-load-more/data-table-load-more.vue",
+   "kind": "subcomponent",
+   "parent": "data-table",
+   "treeShakeableImport": "@aziontech/webkit/data-table-load-more",
+   "attached": false,
+   "surface": "app"
   },
   "data-grid": {
    "import": "@aziontech/webkit/data-grid",
@@ -11805,6 +11711,9 @@
    "parent": "table",
    "treeShakeableImport": "@aziontech/webkit/table-search",
    "attached": false,
+   "models": [
+    "modelValue"
+   ],
    "surface": "app"
   },
   "table-filter": {
@@ -11814,6 +11723,9 @@
    "parent": "table",
    "treeShakeableImport": "@aziontech/webkit/table-filter",
    "attached": false,
+   "models": [
+    "modelValue"
+   ],
    "surface": "app"
   },
   "table-export-button": {
@@ -11841,6 +11753,9 @@
    "parent": "table",
    "treeShakeableImport": "@aziontech/webkit/table-live-button",
    "attached": false,
+   "models": [
+    "modelValue"
+   ],
    "surface": "app"
   },
   "property-filter": {
@@ -29471,6 +29386,7 @@
     }
    ],
    "surface": "site",
+   "examplesFile": "catalog/examples/site-header-section.json",
    "docsFile": "catalog/components/site-header-section.json"
   },
   "stats-section": {
@@ -31772,6 +31688,7 @@
     "CollectionPreferences",
     "CopyButton",
     "DataTable",
+    "DataTablePagination",
     "DateRangePicker",
     "EmptyState",
     "IconButton",
@@ -31790,6 +31707,7 @@
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/date-range-picker",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/icon-button",
@@ -31855,6 +31773,7 @@
     "ConfirmDialog",
     "CurrencyAmount",
     "DataTable",
+    "DataTablePagination",
     "DropdownMenu",
     "EmptyState",
     "IconButton",
@@ -31885,6 +31804,7 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/currency-amount",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/icon-button",
@@ -32059,6 +31979,7 @@
     "CollectionPreferences",
     "ConfirmDialog",
     "DataTable",
+    "DataTablePagination",
     "DrawerContent",
     "Drawer",
     "DrawerTitle",
@@ -32101,6 +32022,7 @@
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
@@ -32184,6 +32106,7 @@
     "Card",
     "ConfirmDialog",
     "DataTable",
+    "DataTablePagination",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -32219,6 +32142,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -32298,6 +32222,7 @@
     "CollectionPreferences",
     "ConfirmDialog",
     "DataTable",
+    "DataTablePagination",
     "DropdownMenu",
     "EmptyState",
     "IconButton",
@@ -32321,6 +32246,7 @@
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/icon-button",
@@ -32545,6 +32471,7 @@
     "ConfirmDialog",
     "CopyButton",
     "DataTable",
+    "DataTablePagination",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -32583,6 +32510,7 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -32677,6 +32605,7 @@
     "Combobox",
     "ConfirmDialog",
     "DataTable",
+    "DataTablePagination",
     "DropdownMenu",
     "EmptyState",
     "Field",
@@ -32712,6 +32641,7 @@
     "@aziontech/webkit/combobox",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/field",
@@ -32798,6 +32728,7 @@
     "CollectionPreferences",
     "ConfirmDialog",
     "DataTable",
+    "DataTablePagination",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -32836,6 +32767,7 @@
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -34586,6 +34518,7 @@
     "use-escape-to-cancel",
     "use-shortcuts",
     "use-unsaved-changes",
+    "Wizard",
     "Wizard"
    ],
    "imports": [
@@ -34620,7 +34553,8 @@
     "@aziontech/webkit/use-escape-to-cancel",
     "@aziontech/webkit/use-shortcuts",
     "@aziontech/webkit/use-unsaved-changes",
-    "@aziontech/webkit/wizard"
+    "@aziontech/webkit/wizard",
+    "@aziontech/webkit/wizard-root"
    ],
    "primary": "WhereItRuns",
    "guidelinesSummary": "The page a first-level resource is created on one step at a time. It is the `Wizard` component in a creation page: the user first says where the resource runs, then answers each step's fields in order, and only reaches the create action on the last step. The Wizard's rail shows how far they are and lets them return to any step already passed; if the host they chose lacks a module the resource needs, a step is inserted that offers to turn it on, so nothing is created that would silently never be read. The same frame creates a resource that must be bound and deployed in one act (CreateAndDeploy).",
@@ -34670,6 +34604,7 @@
     "Chart",
     "ChartCard",
     "DataTable",
+    "DataTablePagination",
     "EmptyState",
     "Hint",
     "PageHeader",
@@ -34688,6 +34623,7 @@
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/hint",
     "@aziontech/webkit/page-header",
@@ -34774,6 +34710,7 @@
     "Chart",
     "ChartCard",
     "DataTable",
+    "DataTablePagination",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -34796,6 +34733,7 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
+    "use-collection",
     "use-locale",
     "utils/clipboard",
     "utils/csv"
@@ -34805,6 +34743,7 @@
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -34827,6 +34766,7 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/clipboard",
     "@aziontech/webkit/utils/csv"
@@ -35321,6 +35261,7 @@
     "Card",
     "ChartCard",
     "DataTable",
+    "DataTablePagination",
     "DonutChart",
     "EmptyState",
     "Hint",
@@ -35332,6 +35273,7 @@
     "Skeleton",
     "StatTile",
     "TableCellStatus",
+    "use-collection",
     "use-locale"
    ],
    "imports": [
@@ -35340,6 +35282,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/chart-card",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/donut-chart",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/hint",
@@ -35351,6 +35294,7 @@
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/table-cell-status",
+    "@aziontech/webkit/use-collection",
     "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
@@ -35409,6 +35353,7 @@
     "Chart",
     "ChartCard",
     "DataTable",
+    "DataTablePagination",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -35433,6 +35378,7 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
+    "use-collection",
     "use-locale",
     "utils/clipboard",
     "utils/csv"
@@ -35444,6 +35390,7 @@
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -35468,6 +35415,7 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/clipboard",
     "@aziontech/webkit/utils/csv"
@@ -35772,6 +35720,7 @@
     "CollectionPreferences",
     "CopyButton",
     "DataTable",
+    "DataTablePagination",
     "DrawerContent",
     "DrawerDescription",
     "Drawer",
@@ -35816,6 +35765,7 @@
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
     "@aziontech/webkit/drawer-root",
@@ -36157,6 +36107,7 @@
     "ConsoleLayout",
     "CopyButton",
     "DataTable",
+    "DataTablePagination",
     "DrawerContent",
     "DrawerDescription",
     "Drawer",
@@ -36190,6 +36141,7 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
+    "use-collection",
     "use-locale",
     "use-unsaved-changes"
    ],
@@ -36204,6 +36156,7 @@
     "@aziontech/webkit/console-layout",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
     "@aziontech/webkit/drawer-root",
@@ -36237,6 +36190,7 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/use-unsaved-changes"
    ],
@@ -36325,6 +36279,7 @@
     "ConfirmDialog",
     "ConsoleLayout",
     "DataTable",
+    "DataTablePagination",
     "DrawerContent",
     "DrawerDescription",
     "Drawer",
@@ -36361,7 +36316,8 @@
     "Tag",
     "Textarea",
     "toast",
-    "Tooltip"
+    "Tooltip",
+    "use-collection"
    ],
    "imports": [
     "@aziontech/webkit/avatar",
@@ -36372,6 +36328,7 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/console-layout",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
     "@aziontech/webkit/drawer-root",
@@ -36408,7 +36365,8 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection"
    ],
    "primary": "Draft",
    "guidelinesSummary": "One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`. The workspace pins its own bars, so its root carries `data-layout-fill`: the layout's `main` stops scrolling, the root fills it (`h-dvh` only sizes a standalone preview) and its panes scroll.",
@@ -36989,7 +36947,8 @@
     "Tag",
     "toast",
     "Tooltip",
-    "use-file-picker"
+    "use-file-picker",
+    "utils/csv"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -37020,7 +36979,8 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-file-picker"
+    "@aziontech/webkit/use-file-picker",
+    "@aziontech/webkit/utils/csv"
    ],
    "primary": "CreateTable",
    "guidelinesSummary": "The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create Table, Add column, Insert and table menu buttons of `view/view-query-editor`. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
@@ -37106,6 +37066,7 @@
     "CollectionPreferences",
     "ConfirmDialog",
     "DataTable",
+    "DataTablePagination",
     "DrawerContent",
     "Drawer",
     "DrawerTitle",
@@ -37150,6 +37111,7 @@
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
@@ -37393,6 +37355,7 @@
     "ConsoleLayout",
     "ConsoleLayoutRoot",
     "DataTable",
+    "DataTablePagination",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -37430,6 +37393,7 @@
     "@aziontech/webkit/console-layout",
     "@aziontech/webkit/console-layout-root",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -38246,7 +38210,7 @@
    "title": "Blocks/TopBar/TopBarCreation",
    "source": "blocks/top-bar/top-bar-creation/top-bar-creation.vue",
    "surface": "app",
-   "summary": "The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `AppHeader` in its default `content` placement, spanning the whole window. Start: a small back link with a `Tooltip`, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, opening the account `DropdownMenu`, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate, with its CreateAndDeploy wizard), the deploy flows (DeployTemplate) and the Creation Center (`create/create-hub`) render it. The back button returns to the list the flow started from; a wizard drops it and the crumb once they reach the provisioning and success screens. Built from `AppHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `Avatar`, `DropdownMenu` and `Brand`.",
+   "summary": "The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `AppHeader` in its default `content` placement, spanning the whole window. Start: a small back link with a `Tooltip`, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, opening the account `DropdownMenu`, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate, with its CreateAndDeploy wizard), the deploy flows (DeployTemplate) and the Creation Center (`create/create-hub`) render it. The back button returns to the list the flow started from; a wizard drops it and the crumb once they reach the provisioning and success screens. Built from `AppHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `AppHeaderAccount`, `DropdownMenu` and `Brand`.",
    "intents": [
     "creation header",
     "focused shell header",
@@ -38434,6 +38398,8 @@
     "CodeBlock",
     "CopyButton",
     "DataTable",
+    "DataTableLoadMore",
+    "DataTablePagination",
     "DateRangePicker",
     "DrawerContent",
     "Drawer",
@@ -38471,6 +38437,8 @@
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-load-more",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/date-range-picker",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
@@ -38567,6 +38535,7 @@
     "Combobox",
     "ConfirmDialog",
     "DataTable",
+    "DataTablePagination",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -38599,6 +38568,7 @@
     "@aziontech/webkit/combobox",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -38824,6 +38794,7 @@
     "CodeEditor",
     "ConfirmDialog",
     "DataTable",
+    "DataTablePagination",
     "DrawerContent",
     "Drawer",
     "DrawerTitle",
@@ -38834,6 +38805,7 @@
     "FileTokenGroup",
     "IconButton",
     "Input",
+    "Item",
     "Item",
     "Kbd",
     "PageHeader",
@@ -38854,7 +38826,8 @@
     "ToggleGroup",
     "Tooltip",
     "use-file-picker",
-    "use-shortcuts"
+    "use-shortcuts",
+    "utils/csv"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -38868,6 +38841,7 @@
     "@aziontech/webkit/code-editor",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
@@ -38879,6 +38853,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/item-root",
     "@aziontech/webkit/kbd",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
@@ -38898,7 +38873,8 @@
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-file-picker",
-    "@aziontech/webkit/use-shortcuts"
+    "@aziontech/webkit/use-shortcuts",
+    "@aziontech/webkit/utils/csv"
    ],
    "primary": "Tables",
    "guidelinesSummary": "The workspace of one SQL database. The user comes here to see which tables exist, read and edit a table's rows or its definition, and write and run queries against the data. Two tabs share one layout: a resizable side panel that lists things (tables, or past queries) beside a working pane that shows the one in use. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`. The editor is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the side panel, the rows, the editor and the results each scroll on their own at every width (`h-dvh` only sizes a standalone preview). CreateDatabase is a focused create page with its own header and no rail, rendered outside it.",
@@ -39136,6 +39112,7 @@
     "CollectionPreferences",
     "ConfirmDialog",
     "DataTable",
+    "DataTablePagination",
     "DropdownMenuGroup",
     "DropdownMenuItem",
     "EmptyState",
@@ -39160,6 +39137,7 @@
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-item",
     "@aziontech/webkit/empty-state",
@@ -39333,6 +39311,7 @@
     "Textarea",
     "toast",
     "Tooltip",
+    "use-collection",
     "use-locale"
    ],
    "imports": [
@@ -39357,6 +39336,7 @@
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection",
     "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",

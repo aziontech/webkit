@@ -354,22 +354,13 @@ type CollectionStatus = 'loading' | 'error' | 'empty' | 'no-match' | 'ready'
 | `sorting` | `CollectionSort[]` | yes |  |
 | `manualSorting` | `true` | yes |  |
 | `manualFiltering` | `true` | yes |  |
-| `manualPagination` | `true` | yes |  |
-| `paginated` | `boolean` | yes |  |
-| `page` | `number` | yes |  |
-| `pageSize` | `number` | yes |  |
-| `rowCount` | `number` | yes |  |
-| `pageSizeOptions` | `number[]` | yes |  |
 | `selectable` | `boolean` | yes |  |
 | `selectedKeys` | `string[]` | yes |  |
 | `columnVisibility` | `Record<string, boolean>` | yes |  |
 | `wrapLines` | `boolean` | yes |  |
 | `striped` | `boolean` | yes |  |
 | `density` | `CollectionDensity` | yes |  |
-| `exportRows` | `(scope: CollectionExportScope) => Promise<T[]> \| T[]` | yes |  |
 | `onUpdate:sorting` | `(value: CollectionSort[] \| undefined) => void` | yes |  |
-| `onUpdate:page` | `(value: number \| undefined) => void` | yes |  |
-| `onUpdate:pageSize` | `(value: number) => void` | yes |  |
 | `onUpdate:selectedKeys` | `(value: string[] \| undefined) => void` | yes |  |
 | `onUpdate:columnVisibility` | `(value: Record<string, boolean> \| undefined) => void` | yes |  |
 

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/detail-dns-zone/detail-dns-zone.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-dns-zone")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [FileDropzone](../../components/file-dropzone.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, `ItemList`, [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-file-picker`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [FileDropzone](../../components/file-dropzone.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, `ItemList`, [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-file-picker`
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -532,6 +532,7 @@ export const dnsZonePolicyLabel = (value: string) =>
     TableExposed
   } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -579,6 +580,7 @@ export const dnsZonePolicyLabel = (value: string) =>
 
   const {
     tableProps,
+    paginationProps,
     propertyFilterProps,
     preferencesProps,
     status,
@@ -799,6 +801,12 @@ export const dnsZonePolicyLabel = (value: string) =>
                       </div>
                     </template>
                   </EmptyState>
+                </template>
+                <template #footer>
+                  <DataTablePagination
+                    v-bind="paginationProps"
+                    manual
+                  />
                 </template>
               </DataTable>
             </template>

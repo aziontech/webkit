@@ -30,9 +30,9 @@ A focused page, outside the console shell, where the user turns a template into 
 
 ## Building blocks
 
-### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 
-The creation header from `top-bar/top-bar-creation`: a small outlined back `IconButton` to the Creation Center, the `Brand` linking home, a `Breadcrumb` whose last crumb is the template and is current, and the account `Avatar` alone on the right. No sidebar, no search.
+The creation header from `top-bar/top-bar-creation`: a small outlined back `IconButton` to the Creation Center, the `Brand` linking home, a `Breadcrumb` whose last crumb is the template and is current, and the account `AppHeaderAccount` alone on the right. No sidebar, no search.
 
 ### B. Template and Git step — `Card`, `EmptyState`, `Button`, `Link` (required)
 
@@ -52,7 +52,7 @@ An outlined medium `Button` under the step that returns to the template list. It
 
 ## Data
 
-The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `create-deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out, and the imported repository, uploaded project and integration the variants pass. Every variant renders the block: the header, the preview card, Back and Escape come from it, and the variant fills the default slot with the step it is on and keeps that step's own records.
+The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `create-deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out, and the imported repository, uploaded project and integration the variants pass. Every variant renders a step from `parts/` that renders the block: the header, the preview card, Back and Escape come from it, and the step fills the default slot and keeps its own records.
 
 | Prop            | Type                     | What it does                                                                       |
 | --------------- | ------------------------ | ---------------------------------------------------------------------------------- |
@@ -577,87 +577,4 @@ export const sampleVariables: DeployFormVariable[] = [
     secret: true
   }
 ]
-```
-
-## `parts/build-preset-field.vue`
-
-```ts
-<script setup lang="ts">
-  import Field from '@aziontech/webkit/field'
-  import Select from '@aziontech/webkit/select'
-  import { computed } from 'vue'
-
-  import { samplePresets } from '../sample'
-
-  export interface BuildPresetFieldProps {
-    /** The preset found in the project; empty when nothing in it names a framework. */
-    detectedPreset?: string
-  }
-
-  const props = withDefaults(defineProps<BuildPresetFieldProps>(), { detectedPreset: '' })
-
-  const preset = defineModel<string>({ default: '' })
-
-  const helper = computed(() => {
-    if (!preset.value)
-      return 'Nothing here names a framework. Pick one to build the project, or leave it empty to serve the files as they are.'
-    if (preset.value === props.detectedPreset)
-      return 'Detected from your project. Change it if it is wrong.'
-    return 'The project is built with this preset.'
-  })
-</script>
-
-<template>
-  <Field>
-    <Field.Label>Build preset</Field.Label>
-    <Select
-      v-model="preset"
-      size="large"
-      placeholder="Select a preset"
-    >
-      <Select.Trigger />
-      <Select.Content>
-        <Select.Item
-          v-for="option in samplePresets"
-          :key="String(option.value)"
-          :value="option.value"
-        >
-          {{ option.label }}
-        </Select.Item>
-      </Select.Content>
-    </Select>
-    <Field.Description>{{ helper }}</Field.Description>
-  </Field>
-</template>
-```
-
-## `parts/deploy-heading.vue`
-
-```ts
-<script setup lang="ts">
-  export interface DeployHeadingProps {
-    /** The project deploys once, from uploaded files, instead of on every push of a repository. */
-    once?: boolean
-  }
-
-  withDefaults(defineProps<DeployHeadingProps>(), { once: false })
-</script>
-
-<template>
-  <div class="flex flex-col gap-(--spacing-2xs)">
-    <h2 class="text-heading-xs text-(--text-default)">Deploy your project</h2>
-    <p
-      v-if="once"
-      class="text-body-sm text-pretty text-(--text-muted)"
-    >
-      These files deploy once. Connect a Git provider later to ship every push automatically.
-    </p>
-    <p
-      v-else
-      class="text-body-sm text-pretty text-(--text-muted)"
-    >
-      This repository deploys on every push, automatically.
-    </p>
-  </div>
-</template>
 ```

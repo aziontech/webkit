@@ -502,6 +502,57 @@ export const sampleProjects: ResourcePickerOption[] = [
 ]
 
 export const sampleSelected = 'web-app'
+
+/** A firewall the OptionalBinding variant can bind. */
+export interface ResourcePickerFirewall {
+  /** Stable key. */
+  value: string
+  /** Display name. */
+  label: string
+  /** Its rules and modules, already phrased. */
+  description?: string
+}
+
+export const sampleFirewalls: ResourcePickerFirewall[] = [
+  { value: 'production-firewall', label: 'production-firewall', description: '12 rules · WAF' },
+  { value: 'api-firewall', label: 'api-firewall', description: '4 rules · Rate limiting' },
+  { value: 'docs-firewall', label: 'docs-firewall', description: '1 rule · Bot Manager' },
+  { value: 'staging-firewall', label: 'staging-firewall', description: '3 rules · WAF' },
+  {
+    value: 'checkout-firewall',
+    label: 'checkout-firewall',
+    description: '8 rules · WAF, Bot Manager'
+  },
+  {
+    value: 'partner-api-firewall',
+    label: 'partner-api-firewall',
+    description: '2 rules · Network Shield'
+  },
+  { value: 'marketing-firewall', label: 'marketing-firewall', description: '1 rule · WAF' }
+]
+export const sampleFirewallModules = [
+  {
+    key: 'ddos',
+    title: 'DDoS Protection',
+    description: 'Absorbs volumetric attacks at the network layer. Always on.',
+    locked: true
+  },
+  {
+    key: 'waf',
+    title: 'WAF',
+    description: 'Inspects each request and blocks the OWASP Top 10 attack classes.'
+  },
+  {
+    key: 'networkShield',
+    title: 'Network Shield',
+    description: 'Blocks traffic by country, ASN or IP range using network lists.'
+  },
+  {
+    key: 'botManager',
+    title: 'Bot Manager',
+    description: 'Scores automated traffic and challenges the requests that fail.'
+  }
+]
 ```
 
 ## `composables/use-paged-list.ts`

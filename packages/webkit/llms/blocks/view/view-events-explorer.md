@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-events-explorer/view-events-explorer.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-events-explorer")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [Checkbox](../../components/checkbox.md), [Chip](../../components/chip.md), [CodeBlock](../../components/code-block.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), [DateRangePicker](../../components/date-range-picker.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FilterMenu](../../components/filter-menu.md), [FilterMenu](../../components/filter-menu.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelHeader`, [Popover](../../components/popover.md), [PropertyFilter](../../components/property-filter.md), [Resizable](../../components/resizable.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-collection`, `use-locale`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [Checkbox](../../components/checkbox.md), [Chip](../../components/chip.md), [CodeBlock](../../components/code-block.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTableLoadMore`, `DataTablePagination`, [DateRangePicker](../../components/date-range-picker.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FilterMenu](../../components/filter-menu.md), [FilterMenu](../../components/filter-menu.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelHeader`, [Popover](../../components/popover.md), [PropertyFilter](../../components/property-filter.md), [Resizable](../../components/resizable.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-collection`, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -3310,6 +3310,8 @@ export const tokensForFilters = (
 ```ts
 <script setup lang="ts">
   import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
+  import DataTableLoadMore from '@aziontech/webkit/data-table-load-more'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Tag from '@aziontech/webkit/tag'
@@ -3382,24 +3384,16 @@ export const tokensForFilters = (
     <div class="flex min-h-0 flex-1">
       <DataTable
         ref="tableEl"
-        v-model:page="page"
-        v-model:page-size="pageSize"
         :data="events"
         :columns="columns"
         row-key="id"
         sortable
-        paginated
-        :manual-pagination="total !== undefined"
-        :row-count="total"
-        :more-rows="moreRows"
-        :loading-more="loadingMore"
         :bordered="false"
         density="compact"
         max-height="100%"
         class="w-full"
         :loading="loading"
         @row-click="(event: MouseEvent | KeyboardEvent, row: EventRow) => emit('open', event, row)"
-        @load-more="(event: Event) => emit('load-more', event)"
       >
         <template #header-detail>
           <span class="sr-only">Open the event document</span>
@@ -3505,6 +3499,21 @@ export const tokensForFilters = (
             icon="az az-filter-off"
             title="No events in this window"
             description="Widen the period or clear a filter to see more of the log."
+          />
+        </template>
+        <template #load-more>
+          <DataTableLoadMore
+            :more-rows="moreRows"
+            :loading="loadingMore"
+            @load-more="(event: Event) => emit('load-more', event)"
+          />
+        </template>
+        <template #footer>
+          <DataTablePagination
+            v-model:page="page"
+            v-model:page-size="pageSize"
+            :manual="total !== undefined"
+            :total="total"
           />
         </template>
       </DataTable>

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-billing/account-billing.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-billing")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CurrencyAmount](../../components/currency-amount.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), [PaymentBrand](../../components/payment-brand.md), [PropertyFilter](../../components/property-filter.md), [Skeleton](../../components/skeleton.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CurrencyAmount](../../components/currency-amount.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), [PaymentBrand](../../components/payment-brand.md), [PropertyFilter](../../components/property-filter.md), [Skeleton](../../components/skeleton.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-navigation`, `webkit-microcopy`
 
 ## Asked as
@@ -609,6 +609,7 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CurrencyAmount from '@aziontech/webkit/currency-amount'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
@@ -689,16 +690,23 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
     actionColumn
   ]
 
-  const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
-    useCollection({
-      items: invoiceRows,
-      columns,
-      filtering: { fields: ['id', 'plan', 'cycle', 'status'] },
-      propertyFiltering: { properties, defaultQuery: props.defaultQuery },
-      sorting: { defaultState: [{ id: 'billedAt', desc: true }] },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: { storageKey: 'billing-invoices' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    status,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: invoiceRows,
+    columns,
+    filtering: { fields: ['id', 'plan', 'cycle', 'status'] },
+    propertyFiltering: { properties, defaultQuery: props.defaultQuery },
+    sorting: { defaultState: [{ id: 'billedAt', desc: true }] },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: { storageKey: 'billing-invoices' }
+  })
 
   const invoicesTableEl = ref<TableExposed<BillingInvoice> | null>(null)
   const exportCsv = () => invoicesTableEl.value?.exportCsv({ filename: 'invoices.csv' })
@@ -862,6 +870,12 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
                 />
               </template>
             </EmptyState>
+          </template>
+          <template #footer>
+            <DataTablePagination
+              v-bind="paginationProps"
+              manual
+            />
           </template>
         </DataTable>
       </template>

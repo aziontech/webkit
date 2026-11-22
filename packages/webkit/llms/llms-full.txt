@@ -2141,7 +2141,7 @@ Descriptions, groups and keywords: foundations/icons.md.
 - Surface: app
 - Source: `blocks/account/account-activity-history/account-activity-history.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-activity-history")`
-- Components: Alert, Button, Card, CollectionPreferences, CopyButton, DataTable, DateRangePicker, EmptyState, IconButton, PageHeader, PropertyFilter, Table, `TableCellTime`, Tag, Tooltip, `use-collection`
+- Components: Alert, Button, Card, CollectionPreferences, CopyButton, DataTable, `DataTablePagination`, DateRangePicker, EmptyState, IconButton, PageHeader, PropertyFilter, Table, `TableCellTime`, Tag, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2167,7 +2167,7 @@ The account's audit log. An admin or a security reviewer answers "who did this, 
 - B. Filter — `PropertyFilter` (required)
 - C. Period — `DateRangePicker` (required)
 - D. Listing actions — `Tooltip`, `IconButton`, `CollectionPreferences` (required)
-- E. Event table — `Card`, `DataTable`, `TableCellTime`, `Tag`, `CopyButton`, `useCollection` (required)
+- E. Event table — `Card`, `DataTable`, `DataTablePagination`, `TableCellTime`, `Tag`, `CopyButton`, `useCollection` (required)
 - F. No match and empty period — `EmptyState` (required)
 - G. Load failure — `Alert` (conditional)
 
@@ -2242,7 +2242,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-act
 - Surface: app
 - Source: `blocks/account/account-billing/account-billing.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-billing")`
-- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CurrencyAmount, DataTable, DropdownMenu, EmptyState, IconButton, KeyValueList, Link, PageHeader, PageTabs, PaymentBrand, PropertyFilter, Skeleton, StatusIndicator, Subheader, Table, `TableCellActions`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-collection`, `use-locale`
+- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CurrencyAmount, DataTable, `DataTablePagination`, DropdownMenu, EmptyState, IconButton, KeyValueList, Link, PageHeader, PageTabs, PaymentBrand, PropertyFilter, Skeleton, StatusIndicator, Subheader, Table, `TableCellActions`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-navigation`, `webkit-microcopy`
 
 ## Asked as
@@ -2467,7 +2467,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-cha
 - Surface: app
 - Source: `blocks/account/account-deployment-settings/account-deployment-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-deployment-settings")`
-- Components: Accordion, Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, Item, Kbd, PageHeader, Pagination, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, Tag, Textarea, Toast, Tooltip, `use-collection`
+- Components: Accordion, Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DataTablePagination`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, Item, Kbd, PageHeader, Pagination, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, Tag, Textarea, Toast, Tooltip, `use-collection`
 - Skills: `webkit-form`, `webkit-tables`, `webkit-lists`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2578,7 +2578,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-dep
 - Surface: app
 - Source: `blocks/account/account-hierarchy/account-hierarchy.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-hierarchy")`
-- Components: Alert, Avatar, Button, Card, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, KeyValueList, Link, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, Table, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, Tabs, Tag, Toast, Tooltip, `use-locale`
+- Components: Alert, Avatar, Button, Card, ConfirmDialog, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, KeyValueList, Link, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, Table, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, Tabs, Tag, Toast, Tooltip, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2687,7 +2687,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-hie
 - Surface: app
 - Source: `blocks/account/account-mfa-settings/account-mfa-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-mfa-settings")`
-- Components: Alert, Avatar, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, DropdownMenu, EmptyState, IconButton, Item, PageHeader, PropertyFilter, SettingsRow, Switch, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Tooltip, `use-collection`
+- Components: Alert, Avatar, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DataTablePagination`, DropdownMenu, EmptyState, IconButton, Item, PageHeader, PropertyFilter, SettingsRow, Switch, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2713,7 +2713,7 @@ Multi-factor authentication for a whole account. An admin sees who signs in with
 - B. Require MFA — `Card`, `Item`, `SettingsRow`, `Switch`, `ConfirmDialog` (required)
 - C. Password-only warning — `Alert` (conditional)
 - D. Controls row — `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences` (required)
-- E. People table — `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `EmptyState`, `useCollection` (required)
+- E. People table — `DataTable`, `DataTablePagination`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `EmptyState`, `useCollection` (required)
 - F. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 - G. Load failure and outcomes — `Alert` (required)
 
@@ -2991,7 +2991,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-pay
 - Surface: app
 - Source: `blocks/account/account-personal-tokens/account-personal-tokens.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-personal-tokens")`
-- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CopyButton, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, PropertyFilter, Select, SettingsGroup, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Textarea, Tooltip, `use-collection`, `use-locale`
+- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CopyButton, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, PropertyFilter, Select, SettingsGroup, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Textarea, Tooltip, `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3099,7 +3099,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-per
 - Surface: app
 - Source: `blocks/account/account-team-permissions/account-team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-team-permissions")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, CollectionPreferences, Combobox, ConfirmDialog, DataTable, DropdownMenu, EmptyState, Field, IconButton, Input, Kbd, PageHeader, PropertyFilter, SaveBar, SettingsGroup, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`, `use-shortcuts`
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DataTablePagination`, DropdownMenu, EmptyState, Field, IconButton, Input, Kbd, PageHeader, PropertyFilter, SaveBar, SettingsGroup, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3123,7 +3123,7 @@ Who can do what in the account. An admin keeps one team per role (Administrators
 
 - A. Page heading — `PageHeader`, `Button` (required)
 - B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
-- C. Team table — `Card`, `DataTable`, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, `Avatar`, `useCollection` (required)
+- C. Team table — `Card`, `DataTable`, `DataTablePagination`, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, `Avatar`, `useCollection` (required)
 - D. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 - E. No match and empty — `EmptyState` (required)
 - F. Load failure — `Alert` (conditional)
@@ -3219,7 +3219,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-tea
 - Surface: app
 - Source: `blocks/account/account-users/account-users.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-users")`
-- Components: Alert, Avatar, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, KeyValueList, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, Select, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Tag, Toast, Tooltip, `use-collection`
+- Components: Alert, Avatar, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, KeyValueList, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, Select, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Tag, Toast, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -4418,7 +4418,7 @@ A focused page, outside the console shell, where the user turns a template into 
 
 ## Building blocks
 
-- A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+- A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 - B. Template and Git step — `Card`, `EmptyState`, `Button`, `Link` (required)
 - C. Browse templates — `Button` (optional)
 
@@ -4426,7 +4426,7 @@ What each part takes: [blocks/create/create-deploy-template.md](blocks/create/cr
 
 ## Data
 
-The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `create-deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out, and the imported repository, uploaded project and integration the variants pass. Every variant renders the block: the header, the preview card, Back and Escape come from it, and the variant fills the default slot with the step it is on and keeps that step's own records.
+The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `create-deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out, and the imported repository, uploaded project and integration the variants pass. Every variant renders a step from `parts/` that renders the block: the header, the preview card, Back and Escape come from it, and the step fills the default slot and keeps its own records.
 
 Prop: `template`, `account`, `providersHref`, `crumb`, `service`.
 
@@ -4579,7 +4579,7 @@ Event: `submit`, `update:open`, `update:environmentOpen`.
 
 The `trigger` slot replaces the Add button (an environment menu, a row menu) and receives `open` to call.
 
-Then delete `sample.ts` and its import.
+Then delete the `sample.ts` import of `create-drawer.vue`.
 
 What each prop and event does, and the go-live code: [blocks/create/create-drawer.md](blocks/create/create-drawer.md).
 
@@ -4689,7 +4689,7 @@ The Creation Center, where a new project starts. The user arrives from Home or a
 
 ## Building blocks
 
-- A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+- A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 - B. Page heading — `PageHeader` (required)
 - C. Git connect — `EmptyState`, `Button`, `Alert`, `Link` (required until connected)
 - D. Repository search — `Select`, `Input` (required once connected)
@@ -4804,7 +4804,7 @@ The page a first-level resource is created on when everything it needs fits on o
 
 ## Building blocks
 
-- A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+- A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 - B. Page heading — `PageHeader` (required)
 - C. Sections — `SettingsGroup`, `Card`, `Item` (required)
 - D. Field rows — `SettingsRow`, `Input`, `FieldError` (required)
@@ -5136,7 +5136,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: Alert, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, ConfirmDialog, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, Wizard
+- Components: Alert, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, ConfirmDialog, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, Wizard, Wizard
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -5163,7 +5163,7 @@ The page a first-level resource is created on one step at a time. It is the `Wiz
 
 ## Building blocks
 
-- A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+- A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 - B. Page heading — `PageHeader` (required)
 - C. Wizard — `Wizard`, `Wizard.Step` (required)
 - D. Where it runs — `Input`, `Item`, `Tag`, `FieldError`, `Button` (required)
@@ -5281,7 +5281,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-wizar
 - Surface: app
 - Source: `blocks/dashboard/dashboard-alerts/dashboard-alerts.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-alerts")`
-- Components: Alert, BarList, Card, Chart, ChartCard, DataTable, EmptyState, Hint, PageHeader, Select, SeverityTag, Skeleton, StatTile, `TableCellStatus`, Tag, `use-locale`
+- Components: Alert, BarList, Card, Chart, ChartCard, DataTable, `DataTablePagination`, EmptyState, Hint, PageHeader, Select, SeverityTag, Skeleton, StatTile, `TableCellStatus`, Tag, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -5402,7 +5402,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Surface: app
 - Source: `blocks/dashboard/dashboard-analytics/dashboard-analytics.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-analytics")`
-- Components: Alert, Chart, ChartCard, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Hint, IconButton, Input, Link, PageHeader, PageTabs, `PanelBody`, `PanelHeader`, Select, StatTile, StatTileGroup, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `utils/clipboard`, `utils/csv`
+- Components: Alert, Chart, ChartCard, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Hint, IconButton, Input, Link, PageHeader, PageTabs, `PanelBody`, `PanelHeader`, Select, StatTile, StatTileGroup, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-collection`, `use-locale`, `utils/clipboard`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -6166,7 +6166,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Surface: app
 - Source: `blocks/dashboard/dashboard-scan-results/dashboard-scan-results.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-scan-results")`
-- Components: Alert, BarList, Card, ChartCard, DataTable, DonutChart, EmptyState, Hint, IconButton, Input, Link, PageHeader, Select, Skeleton, StatTile, `TableCellStatus`, `use-locale`
+- Components: Alert, BarList, Card, ChartCard, DataTable, `DataTablePagination`, DonutChart, EmptyState, Hint, IconButton, Input, Link, PageHeader, Select, Skeleton, StatTile, `TableCellStatus`, `use-collection`, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -6283,7 +6283,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Surface: app
 - Source: `blocks/dashboard/dashboard-security/dashboard-security.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-security")`
-- Components: Alert, BarList, Button, Chart, ChartCard, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, FilterMenu, Hint, IconButton, Input, Item, Link, PageHeader, `PanelBody`, `PanelHeader`, Select, SeverityTag, Skeleton, StatTile, `TableCellStatus`, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `utils/clipboard`, `utils/csv`
+- Components: Alert, BarList, Button, Chart, ChartCard, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, FilterMenu, Hint, IconButton, Input, Item, Link, PageHeader, `PanelBody`, `PanelHeader`, Select, SeverityTag, Skeleton, StatTile, `TableCellStatus`, Tag, Toast, ToggleGroup, Tooltip, `use-collection`, `use-locale`, `utils/clipboard`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -6773,7 +6773,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-deplo
 - Surface: app
 - Source: `blocks/detail/detail-dns-zone/detail-dns-zone.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-dns-zone")`
-- Components: Alert, Button, Card, CollectionPreferences, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, `FieldDescription`, `FieldError`, FileDropzone, IconButton, Input, `InputGroupRoot`, `ItemList`, Kbd, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, SettingsGroup, SettingsRow, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Tabs, Tag, Textarea, Toast, Tooltip, `use-collection`, `use-file-picker`
+- Components: Alert, Button, Card, CollectionPreferences, CopyButton, DataTable, `DataTablePagination`, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, `FieldDescription`, `FieldError`, FileDropzone, IconButton, Input, `InputGroupRoot`, `ItemList`, Kbd, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, SettingsGroup, SettingsRow, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Tabs, Tag, Textarea, Toast, Tooltip, `use-collection`, `use-file-picker`
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -7320,7 +7320,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-produ
 - Surface: app
 - Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-resource")`
-- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FlowDiagramBind`, FlowDiagram, IconButton, Input, `InputGroupRoot`, Item, Item, Kbd, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Subheader, `TableCellLink`, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `use-unsaved-changes`
+- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DataTablePagination`, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FlowDiagramBind`, FlowDiagram, IconButton, Input, `InputGroupRoot`, Item, Item, Kbd, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Subheader, `TableCellLink`, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-collection`, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -7475,7 +7475,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 - Surface: app
 - Source: `blocks/detail/detail-version/detail-version.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-version")`
-- Components: Avatar, Breadcrumb, Button, Card, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldError`, IconButton, Input, Item, Item, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Resizable, SchemaForm, ScrollArea, Select, SettingsGroup, SettingsRow, Skeleton, Spinner, SplitButton, Switch, `TableCellLink`, `TableCellTime`, Tabs, Tag, Textarea, Toast, Tooltip
+- Components: Avatar, Breadcrumb, Button, Card, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DataTablePagination`, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldError`, IconButton, Input, Item, Item, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Resizable, SchemaForm, ScrollArea, Select, SettingsGroup, SettingsRow, Skeleton, Spinner, SplitButton, Switch, `TableCellLink`, `TableCellTime`, Tabs, Tag, Textarea, Toast, Tooltip, `use-collection`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -8144,7 +8144,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-rule-buil
 - Surface: app
 - Source: `blocks/edit/edit-schema/edit-schema.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-schema")`
-- Components: Alert, AttributeEditor, Button, Card, Checkbox, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, SettingsGroup, Switch, `TableCellActions`, Tag, Toast, Tooltip, `use-file-picker`
+- Components: Alert, AttributeEditor, Button, Card, Checkbox, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, SettingsGroup, Switch, `TableCellActions`, Tag, Toast, Tooltip, `use-file-picker`, `utils/csv`
 - Skills: `webkit-form`, `webkit-create-surface`, `webkit-tables`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -8261,7 +8261,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-schema.md
 - Surface: app
 - Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-variables")`
-- Components: Alert, AttributeEditor, Avatar, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Kbd, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsGroup, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`, `use-file-picker`, `use-shortcuts`
+- Components: Alert, AttributeEditor, Avatar, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, DataTable, `DataTablePagination`, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Kbd, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsGroup, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`, `use-file-picker`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -8530,7 +8530,7 @@ What each prop and event does, and the go-live code: [blocks/settings/settings-f
 - Surface: app
 - Source: `blocks/shell/shell-console/shell-console.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/shell-console")`
-- Components: Alert, Avatar, Badge, Button, Card, Command, ConsoleLayout, `ConsoleLayoutRoot`, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, HighlightButton, IconButton, Input, Item, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, `TableCellId`, `TableCellLink`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-color-mode`
+- Components: Alert, Avatar, Badge, Button, Card, Command, ConsoleLayout, `ConsoleLayoutRoot`, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, HighlightButton, IconButton, Input, Item, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, `TableCellId`, `TableCellLink`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-color-mode`
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -9779,7 +9779,7 @@ The top bar of the focused creation shell: create, edit and deploy flows that ru
 - B. Back — `IconButton` (required until the flow is terminal)
 - C. Brand — `Brand` (required)
 - D. Breadcrumb — `Breadcrumb` (required until the flow is terminal)
-- E. Account — `DropdownMenu` + `Avatar` (required)
+- E. Account — `DropdownMenu` + `AppHeaderAccount` (required)
 - F. Hint — `Tooltip` (required)
 
 What each part takes: [blocks/top-bar/top-bar-creation.md](blocks/top-bar/top-bar-creation.md).
@@ -9978,7 +9978,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-card.md](
 - Surface: app
 - Source: `blocks/view/view-events-explorer/view-events-explorer.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-events-explorer")`
-- Components: Accordion, Alert, Button, Chart, Checkbox, Chip, CodeBlock, CopyButton, DataTable, DateRangePicker, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, FilterMenu, FilterMenu, IconButton, Input, Item, `PanelHeader`, Popover, PropertyFilter, Resizable, Select, Sidebar, Skeleton, Tabs, Tag, Toast, Tooltip, Trace, `use-collection`, `use-locale`
+- Components: Accordion, Alert, Button, Chart, Checkbox, Chip, CodeBlock, CopyButton, DataTable, `DataTableLoadMore`, `DataTablePagination`, DateRangePicker, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, FilterMenu, FilterMenu, IconButton, Input, Item, `PanelHeader`, Popover, PropertyFilter, Resizable, Select, Sidebar, Skeleton, Tabs, Tag, Toast, Tooltip, Trace, `use-collection`, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -10118,7 +10118,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-events-ex
 - Surface: app
 - Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-file-browser")`
-- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress, `use-file-picker`
+- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress, `use-file-picker`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -10145,7 +10145,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-- A. Surface — `Card`, `DataTable` (required)
+- A. Surface — `Card`, `DataTable`, `DataTablePagination` (required)
 - B. Storage title and search — `TableSearch` (required)
 - C. Toolbar actions — `Tooltip`, `IconButton` (optional)
 - D. Columns — `CollectionPreferences` (optional)
@@ -10396,7 +10396,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-marketpla
 - Surface: app
 - Source: `blocks/view/view-query-editor/view-query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-query-editor")`
-- Components: Alert, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, Item, Kbd, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingsGroup, SettingsRow, Sidebar, Skeleton, Switch, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-file-picker`, `use-shortcuts`
+- Components: Alert, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, DataTable, `DataTablePagination`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, Item, Item, Kbd, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingsGroup, SettingsRow, Sidebar, Skeleton, Switch, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-file-picker`, `use-shortcuts`, `utils/csv`
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -10656,7 +10656,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-rule-list
 - Surface: app
 - Source: `blocks/view/view-table/view-table.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-table")`
-- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, IconButton, PageHeader, PropertyFilter, StatusIndicator, `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, Tag, Toast, Tooltip, `use-collection`
+- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DataTablePagination`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, IconButton, PageHeader, PropertyFilter, StatusIndicator, `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, Tag, Toast, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -10690,7 +10690,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - B. Property filter — `PropertyFilter` (required)
 - C. Listing actions — `Tooltip`, `IconButton` (optional)
 - D. Table preferences — `CollectionPreferences` (required)
-- E. Resource table — `Card`, `DataTable` (required)
+- E. Resource table — `Card`, `DataTable`, `DataTablePagination` (required)
 - F. Cell presets — `TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTime` (optional)
 - G. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 - H. Delete confirmation — `ConfirmDialog`, `Alert` (required)
@@ -10725,7 +10725,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-table.md]
 ## Don't
 
 - Don't add a search `Input`, a filter popover, a chip row or a row of `Select`s beside the `PropertyFilter`; one control narrows the list.
-- Don't filter, sort or page rows in a `computed` outside the collection, or pass `:data`, `paginated` and `v-model:globalFilter` by hand beside `tableProps`.
+- Don't filter, sort or page rows in a `computed` outside the collection, or pass `:data`, a non-manual `DataTablePagination` or a `TableSearch` `v-model` by hand beside `tableProps`; page with `<DataTablePagination v-bind="paginationProps" manual />` in the `footer` slot.
 - Don't build a columns popover of `Switch`es; column visibility and order belong to `CollectionPreferences`.
 - Don't wrap a bordered table in a padded card, or let the page scroll sideways for a wide table.
 - Don't add a second create button to the controls row.
@@ -10916,7 +10916,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-template-
 - Surface: app
 - Source: `blocks/view/view-waf-tuning/view-waf-tuning.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-waf-tuning")`
-- Components: Alert, Button, Card, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, EmptyState, Field, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, `TableCellTags`, Textarea, Toast, Tooltip, `use-locale`
+- Components: Alert, Button, Card, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, EmptyState, Field, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`, `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -21126,7 +21126,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 # Data Table
 
-> The data-driven table: pass `data` + `columns` and it renders the header, rows, selection, sorting, paging, empty / loading / error states and the footer `Pagination` itself, through the same `Table` parts (`Table.Header`, `Table.Row`, `Table.HeadCell`, `Table.Cell`), so its markup, tokens and accessibility are those of `table`. The headless **`@tanstack/vue-table`** engine lives here and only here: a hand-composed `Table` never loads it. A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport for a title, the context-aware `Table.*` toolbar parts (search, filter, export, refresh, live) and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance so the consumer can drive filtering, global search and column visibility through the table's own methods. Pairs with `Pagination` (rendered automatically in the footer when `paginated`). **Engine.** DataTable is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to the table family (this component and the editable `data-grid` that builds on it) per [`.claude/rules/dependencies.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model in webkit shapes (`sorting`, `selectedKeys`, `columnVisibility`, `globalFilter`, `page` + `pageSize`, `openKeys`, plus the structured `filters` model and the aggregate `snapshot` below); the component adapts them to the engine internally. `@tanstack/virtual` remains forbidden: the opt-in `virtual` mode windows the rows itself (spacer padding above and below the rendered slice, sized from a height index: each rendered row is measured with a `ResizeObserver`, rows not yet rendered take the average of the first rows measured, and when a row above the rows in view changes height the scroll position moves by the same amount so the rows in view stay still). Without `virtual`, a list of more than 200 rows renders its first 50 rows and mounts the rest as a spacer below them nears the viewport (an `IntersectionObserver`), so a long page costs what is on screen. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `TableFilter` (the slot that hosts `FilterMenu` with `type="menu"`, or `PropertyFilter` with `type="property"`, over `filterFields`), `FilterMenu.ChipGroup` with no `fields` in the `filters` slot (the applied fields of the menu type), `CollectionPreferences` with no `columns` (visible columns and their order, written back on Confirm), `TableSearch` (the global text filter), `TableExportButton` (CSV download), `TableRefreshButton` and `TableLiveButton`. Structured filters are a first-class model (`v-model:filters`, an `TableAppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getSnapshot`, `setSnapshot`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `page` / `pageSize` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:snapshot` + `getSnapshot()` / `setSnapshot()` + a `defaultSnapshot` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `TableFilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty' | 'within' | 'between'` (`within` holds a period id — `24h`, `7d`, `30d`, `3m` — and matches dates inside that window ending now; `between` holds `[start, end]` epoch milliseconds, either one `''` for an open bound; both read the cell as a `Date`, a timestamp or a parseable date string); `TableFilterType` = `'menu' | 'property'`; `TableFilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: TableFilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `TableAppliedFilter` = `{ field: string; operator: TableFilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; page?: number; pageSize?: number; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: TableAppliedFilter[] }` (every field optional so `setSnapshot` / `defaultSnapshot` accept a partial; JSON-serializable). **Collections.** `useCollection` (`@aziontech/webkit/use-collection`) drives DataTable in both client and server modes: `tableProps` binds `data` (one page), `columns` (ordered by the saved preferences), `rowKey`, `loading`, `sorting`, `manualSorting` / `manualFiltering` / `manualPagination`, `paginated`, `page`, `pageSize`, `rowCount`, `pageSizeOptions`, `selectable`, `selectedKeys`, `columnVisibility` and the three display preferences (`density`, `wrapLines`, `striped`) together with their update handlers, and `exportRows`, in one `v-bind`. The table keeps rendering one page; the composable owns filtering, sorting, paging and selection across pages, so `exportRows` hands `TableExportButton` and `exportCsv()` every match rather than the page: in client mode the matching items (or every item for the `all` scope), in server mode what the collection's `exportAll` callback loads (the loaded page when there is none). **Cell presets and reordering.** The six `TableCell*` presets (each its own import, `@aziontech/webkit/table-cell-<name>`) render the cells every list repeats, each inside a `#cell-<id>` slot: `TableCellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `TableCellId` (an identifier with its copy button), `TableCellStatus` (one semantic `Tag`), `TableCellTags` (as many tags as fit, the rest behind `+N`), `TableCellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `ConfigProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `TableCellActions` (the row menu named after the row). `reorderable` adds a leading grip column: drag a grip with the pointer, or focus it and press Arrow Up, Arrow Down, Home or End; the table emits `update:data` with the reordered records and `reorder` with `{ from, to, row }`, announces every move in a polite status region and locks while a sort is applied; `rowReorderable` keeps chosen rows (a pinned default) in place.
+> The data-driven table: pass `data` + `columns` and it renders the header, rows, selection, sorting, empty / loading / error states itself, through the same `Table` parts (`Table.Header`, `Table.Row`, `Table.HeadCell`, `Table.Cell`), so its markup, tokens and accessibility are those of `table`. The headless **`@tanstack/vue-table`** engine lives here and only here: a hand-composed `Table` never loads it. A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport for a title, the context-aware `Table.*` toolbar parts (search, filter, export, refresh, live) and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance so the consumer can drive filtering, global search and column visibility through the table's own methods. Optional features are **companion parts** that read the table's context (`compound-api.md`, CODE_QUALITY 3.4): `DataTablePagination` in the `footer` slot pages the rows with `Pagination`, `DataTableLoadMore` in the `load-more` slot asks for the next rows, and the toolbar parts own the search text, the structured filters, the live tail and the export rows. A root-only table loads none of them. **Engine.** DataTable is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualFiltering` on the root, `manual` on `DataTablePagination`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to the table family (this component and the editable `data-grid` that builds on it) per [`.claude/rules/dependencies.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model in webkit shapes: `sorting`, `selectedKeys`, `columnVisibility` and `openKeys` on the root, `page` + `pageSize` on `DataTablePagination`, the search text on `TableSearch`, the structured filters on `TableFilter` and the live tail on `TableLiveButton`; the component adapts them to the engine internally, and `getSnapshot()` / `setSnapshot()` read and write all of them at once. `@tanstack/virtual` remains forbidden: the opt-in `virtual` mode windows the rows itself (spacer padding above and below the rendered slice, sized from a height index: each rendered row is measured with a `ResizeObserver`, rows not yet rendered take the average of the first rows measured (48 px before the first row is measured), and when a row above the rows in view changes height the scroll position moves by the same amount so the rows in view stay still). Without `virtual`, a list of more than 200 rows renders its first 50 rows and mounts the rest as a spacer below them nears the viewport (an `IntersectionObserver`), so a long page costs what is on screen. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `TableFilter` (the slot that hosts `FilterMenu` with `type="menu"`, or `PropertyFilter` with `type="property"`, over its `fields`), `FilterMenu.ChipGroup` with no `fields` in the `filters` slot (the applied fields of the menu type, labelled by the fields the mounted `TableFilter` registers), `CollectionPreferences` with no `columns` (visible columns and their order, written back on Confirm), `TableSearch` (the global text filter, `v-model`), `TableExportButton` (CSV download, `rows` for every match), `TableRefreshButton` and `TableLiveButton` (the live tail, `v-model`). Structured filters are a first-class model (`TableFilter` `v-model`, a `TableAppliedFilter[]` distinct from the free-text search) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getSnapshot`, `setSnapshot`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `page` / `pageSize` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is read with `getSnapshot()` and written back with `setSnapshot()` — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `TableFilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty' | 'within' | 'between'` (`within` holds a period id — `24h`, `7d`, `30d`, `3m` — and matches dates inside that window ending now; `between` holds `[start, end]` epoch milliseconds, either one `''` for an open bound; both read the cell as a `Date`, a timestamp or a parseable date string); `TableFilterType` = `'menu' | 'property'`; `TableFilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: TableFilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `TableAppliedFilter` = `{ field: string; operator: TableFilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; page?: number; pageSize?: number; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: TableAppliedFilter[] }` (every field optional so `setSnapshot` accepts a partial; JSON-serializable). **Collections.** `useCollection` (`@aziontech/webkit/use-collection`) drives DataTable in both client and server modes: `tableProps` binds `data` (one page), `columns` (ordered by the saved preferences), `rowKey`, `loading`, `sorting`, `manualSorting` / `manualFiltering`, `selectable`, `selectedKeys`, `columnVisibility` and the three display preferences (`density`, `wrapLines`, `striped`) together with their update handlers, in one `v-bind`; `paginationProps` binds `DataTablePagination` (`v-bind="paginationProps" manual`: `page`, `total`, `pageSize`, `pageSizeOptions` and their handlers). The table keeps rendering one page; the composable owns filtering, sorting, paging and selection across pages, so `exportItems` given to `TableExportButton` `rows` hands the export every match rather than the page: in client mode the matching items (or every item for the `all` scope), in server mode what the collection's `exportAll` callback loads (the loaded page when there is none). **Cell presets and reordering.** The six `TableCell*` presets (each its own import, `@aziontech/webkit/table-cell-<name>`) render the cells every list repeats, each inside a `#cell-<id>` slot: `TableCellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `TableCellId` (an identifier with its copy button), `TableCellStatus` (one semantic `Tag`), `TableCellTags` (as many tags as fit, the rest behind `+N`), `TableCellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `ConfigProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `TableCellActions` (the row menu named after the row). `reorderable` adds a leading grip column: drag a grip with the pointer, or focus it and press Arrow Up, Arrow Down, Home or End; the table emits `update:data` with the reordered records and `reorder` with `{ from, to, row }`, announces every move in a polite status region and locks while a sort is applied; `rowReorderable` keeps chosen rows (a pinned default) in place.
 
 - Import: `import DataTable from '@aziontech/webkit/data-table'`
 - Category: data · Surface: app · Structure: monolithic
@@ -21136,7 +21136,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 - Use DataTable for records that share columns — any console list of resources people scan, sort and act on.
 - Records with the same fields shown in rows and columns, where the reader compares, sorts, selects or acts on rows (resource lists, logs, usage breakdowns): use DataTable for read-and-act lists of repeated records.
 - A list needs a toolbar for search, structured filters, column visibility, CSV export or refresh — the `Table.*` toolbar parts drive the DataTable through context.
-- Server-backed data that pages, sorts or filters on the API: `manual-pagination`, `manual-sorting` and `manual-filtering` emit the state instead of slicing locally.
+- Server-backed data that pages, sorts or filters on the API: `manual-sorting`, `manual-filtering` and a `manual` `DataTablePagination` emit the state instead of slicing locally.
 - Thousands of rows (`virtual`), tree rows (`get-sub-rows`), reorderable rows, infinite loading or a live tail.
 
 ## Do
@@ -21165,7 +21165,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 - `table` — the parts DataTable renders through, and the hand-composed table for small static content; its toolbar parts and cell presets go in DataTable's slots.
 - `data-grid` — the editable, spreadsheet-like grid; use it when cells are edited in place.
-- `pagination` — the page strip; a `paginated` DataTable renders and wires it in the footer.
+- `pagination` — the page strip; `DataTablePagination` in the `footer` slot renders and wires it.
 - `listing-table-section` — marketing section that composes `table` for a linked preview of a list.
 - `empty-state` — the pattern behind the table's default `empty` slot; override the slot for resource-specific copy and actions.
 - `item` — list rows without a column structure.
@@ -21185,40 +21185,23 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 | `selectable` | `boolean` | `false` | false | Adds a leading selection-checkbox column. |
 | `rowSelectable` | `(row: TRow) => boolean` | `undefined` | false | decides per row whether it can be selected (`(row) => row.type === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all. |
 | `selectOnRowClick` | `boolean` | `false` | false | clicking a row toggles its selection (requires `selectable`); interactive cells still own their own click. |
-| `paginated` | `boolean` | `false` | false | Render a Pagination in the footer. |
 | `manualSorting` | `boolean` | `false` | false | Server-side sorting: emit events, do not sort locally. |
-| `manualPagination` | `boolean` | `false` | false | Server-side pagination: emit events, do not slice locally. |
 | `manualFiltering` | `boolean` | `false` | false | Server-side filtering: emit events, do not filter locally. |
-| `rowCount` | `number` | `undefined` | false | Total row count for manual pagination. |
-| `pageSizeOptions` | `number[]` | `[10, 25, 50, 100]` | false | Page-size options shown in the footer selector, the same name as `pagination`. `rowCount` keeps its TanStack name (the total for manual pagination). |
 | `loading` | `boolean` | `false` | false | render skeleton rows in the body (aligned to the visible columns) and set `aria-busy`; `TableRefreshButton` disables/spins while true. Precedence: `loading` → skeleton, else rows, else `empty`. |
 | `error` | `string` | `''` | false | message of a failed load, shown in place of the rows in an `alert` region (an `EmptyState` with the error mark and `table.errorTitle`, the message as its description); the `error` slot replaces it. `loading` wins over it. Empty shows the rows. |
-| `filterFields` | `TableFilterField[]` | `[]` | false | Fields `TableFilter` offers (id, label, value type, allowed operators, select options): facets for the menu type, properties for the property type. |
-| `defaultSnapshot` | `Partial<TableStateSnapshot>` | `undefined` | false | Uncontrolled snapshot seed applied once on mount; seeds only concerns that are not bound to their own v-model. |
-| `exportRows` | `(scope: 'filtered' \| 'all') => TRow[] \| Promise<TRow[]>` | `undefined` | false | Rows `TableExportButton` and `exportCsv()` write for the `filtered` and `all` scopes in place of the rows the table holds (the `page` scope always writes the rendered page). `useCollection` binds it so an export covers every match, not only the page; a promise is awaited before the `export` event and the download. |
-| `exportFilename` | `string` | `'export.csv'` | false | Default filename for `TableExportButton` and `exportCsv()` when no per-call filename is given. |
 | `stackable` | `boolean` | `false` | false | opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone. |
 | `wrapLines` | `boolean` | `false` | false | cell text wraps onto several lines instead of truncating. |
 | `striped` | `boolean` | `false` | false | every other body row takes the raised surface. |
 | `density` | `'comfortable' \| 'compact'` | `'comfortable'` | false | Density of the header and the body rows: `compact` shrinks their height and padding (the header through `Table.Header`'s `density`). A saved `CollectionPreferences` density therefore covers the whole table. |
 | `virtual` | `boolean` | `false` | false | render only the rows in view, for thousands of rows. The viewport scrolls vertically within `maxHeight` (40rem when empty). Ignored in the stacked layout. |
-| `estimateRowHeight` | `number` | `48` | false | Row height (px) assumed in `virtual` mode until a row is measured. |
 | `reorderable` | `boolean` | `false` | false | a leading grip column lets people drag rows, or move the focused grip's row with Arrow Up, Arrow Down, Home and End, into a new order. Emits `update:data` (bind `v-model:data`) and `reorder`; locked while a sort is applied. |
 | `rowReorderable` | `(row: TRow) => boolean` | `undefined` | false | With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A rejected row keeps its place: its grip is disabled, and no row is dropped onto it or moved past it with the keys. |
 | `getSubRows` | `(row: TRow) => TRow[] \| undefined` | `undefined` | false | tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role="treegrid"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode. |
-| `moreRows` | `boolean` | `false` | false | more rows exist after the last one. The table emits `load-more` as the end of the rows nears the viewport (also in `virtual` mode) and offers a Load more button; false shows the end-of-results line once more rows were requested. |
-| `loadingMore` | `boolean` | `false` | false | the next rows are loading; shows a loading line under the rows and holds further `load-more` requests. |
 | `data` | `TRow[]` | `() => []` | false | Two-way value (`v-model:data`). |
 | `sorting` | `SortingState` | `undefined` | false | Two-way value (`v-model:sorting`). |
 | `selectedKeys` | `string[]` | `undefined` | false | Two-way value (`v-model:selectedKeys`). |
 | `columnVisibility` | `VisibilityState` | `undefined` | false | Two-way value (`v-model:columnVisibility`). |
-| `globalFilter` | `string` | `undefined` | false | Two-way value (`v-model:globalFilter`). |
-| `page` | `number` | `undefined` | false | Two-way value (`v-model:page`). |
-| `pageSize` | `number` | `10` | false | Two-way value (`v-model:pageSize`). |
-| `filters` | `TableAppliedFilter[]` | `undefined` | false | Two-way value (`v-model:filters`). |
-| `snapshot` | `TableStateSnapshot` | `undefined` | false | Two-way value (`v-model:snapshot`). |
 | `openKeys` | `string[]` | `undefined` | false | Two-way value (`v-model:openKeys`). |
-| `live` | `boolean` | `false` | false | Two-way value (`v-model:live`). |
 
 ## Events
 
@@ -21231,7 +21214,6 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 | `refresh` | `(event: Event)` | Refresh requested; the app refetches. `event` is the click of `TableRefreshButton`, or `new Event('refresh')` when `reload()` is called. |
 | `export` | `(event: Event, rows: TRow[])` | Export requested with the resolved rows; `event` is the click of `TableExportButton`, or `new Event('export')` when `exportCsv()` is called; a consumer may handle it server-side (otherwise the built-in CSV util downloads). |
 | `reorder` | `(event: KeyboardEvent \| PointerEvent, payload: { from: number; to: number; row: TRow })` | `reorderable`: a row moved from index `from` to index `to` of `data`. |
-| `load-more` | `(event: Event)` | `moreRows`: the end of the rows neared the viewport (`new Event('load-more')`) or the Load more button was pressed (its click); the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true. |
 
 ## Slots
 
@@ -21243,27 +21225,33 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 | `filters` | { table, selectedRows, selectedCount, clearSelection, loading } | Active-filter chips row below the toolbar; same scope as `toolbar`. |
 | `empty` | — | shown when there are no rows. Defaults to an empty-state block (illustration + title + description) following Figma; override the slot for custom copy/actions. |
 | `error` | { message: string } | shown in place of the rows while `error` is set; `message` is the `error` prop. Defaults to a small `EmptyState` with the error mark, `table.errorTitle` and the message. |
+| `load-more` | — | content after the last row that scrolls with the rows, inside the viewport: `DataTableLoadMore`. |
+| `footer` | — | band below the scroll viewport, outside `role="table"`: `DataTablePagination`. |
+
+## Sub-component imports
+
+- `@aziontech/webkit/data-table-pagination`
+- `@aziontech/webkit/data-table-load-more`
+
+## Sub-components
+
+- `data-table-pagination/data-table-pagination.vue` — **companion part** (`@aziontech/webkit/data-table-pagination`), placed in the `footer` slot.
+- `data-table-load-more/data-table-load-more.vue` — **companion part** (`@aziontech/webkit/data-table-load-more`), placed in the `load-more` slot.
 
 ## v-model
 
 | Model | Type | Default | Emits | Notes |
 | --- | --- | --- | --- | --- |
-| `v-model:live` | `boolean` | `false` | `update:live` | Live tail (`defineModel`): while true new rows are expected on top; the table scrolls to the newest row and marks the first row older than the live start. `TableLiveButton` toggles it; the app starts and stops its stream on `update:live`. |
 | `v-model:data` | `TRow[]` | `[]` | `update:data` | Row records (`defineModel`, default `[]`). One-way `:data` is the common case; `reorderable` writes the records in their new order back, so bind `v-model:data` to keep the order. |
-| `v-model:sorting` | `SortingState` | `undefined` | `update:sorting` | TanStack `SortingState` (`defineModel`). Uncontrolled it starts from `snapshot` / `defaultSnapshot`, else unsorted. |
+| `v-model:sorting` | `SortingState` | `undefined` | `update:sorting` | TanStack `SortingState` (`defineModel`). Uncontrolled it starts unsorted; `setSnapshot()` writes it too. |
 | `v-model:selected-keys` | `string[]` | `undefined` | `update:selectedKeys` | Keys of the selected rows, read from `rowKey` (`defineModel`), the same shape as DataGrid, Tree and CardList. |
 | `v-model:column-visibility` | `VisibilityState` | `undefined` | `update:columnVisibility` | TanStack `VisibilityState` (`defineModel`). |
-| `v-model:global-filter` | `string` | `undefined` | `update:globalFilter` | Search text across every column (`defineModel`). |
-| `v-model:page` | `number` | `undefined` | `update:page` | Current page, 1-based (`defineModel`), the same as `Pagination`. Uncontrolled it starts from `snapshot` / `defaultSnapshot`, else page 1. |
-| `v-model:page-size` | `number` | `10` | `update:pageSize` | Rows per page when paginated (`defineModel`); one-way `:page-size` is the common case. A new size returns to the first page. |
-| `v-model:filters` | `TableAppliedFilter[]` | `undefined` | `update:filters` | Structured applied conditions committed by `TableFilter` (`defineModel`), distinct from `globalFilter`. Client-side they map to TanStack column filters; under `manualFiltering` they are only emitted. |
-| `v-model:snapshot` | `TableStateSnapshot` | `undefined` | `update:snapshot` | Aggregate serializable snapshot layered over the per-concern models (`defineModel`); `update:snapshot` is debounced so bursts coalesce. A bound per-concern v-model (e.g. `v-model:sorting`) wins over `snapshot` for that concern. |
 | `v-model:open-keys` | `string[]` | `undefined` | `update:openKeys` | Tree rows: keys of the open rows (`defineModel`), the same shape as Tree and SidebarMenu. Uncontrolled it starts collapsed; written after a toggle by pointer or keyboard. |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `selected`
-- Data states: `loading` (skeleton rows, `aria-busy`; the footer states no count it does not know: with no rows yet it shows one `Skeleton` line (`__footer-loading`) in place of the `Pagination`, and with a known total it keeps the page controls and shows the `Skeleton` in place of the `Showing … of …` text), `error` (the `error` prop set: rows replaced by the `error` slot in an `alert` region, `__error`), `empty` (no rows: the `empty` slot, `__empty`). Precedence: loading, then error, then empty.
+- Data states: `loading` (skeleton rows, `aria-busy`; `DataTablePagination` states no count it does not know, see Sub-components), `error` (the `error` prop set: rows replaced by the `error` slot in an `alert` region, `__error`), `empty` (no rows: the `empty` slot, `__empty`). Precedence: loading, then error, then empty.
 - The viewport is always a scroll container (`overflow: auto`): horizontal scroll is automatic when columns overflow; vertical scroll engages only when `maxHeight` constrains the content.
 - `data-frozen` on TableHeader (`true`), TableHeadCell / TableCell (`start` | `end`), and TableRow (`true`). A frozen head/body cell renders a CSS-only fade (gradient pseudo-element) just outside its inner edge that dissolves the horizontally scrolling content into the row background (`from-transparent` → `var(--table-row-bg)`, the row-published color, so it matches the row on hover/selected) — `frozen=start` fades on the right, `frozen=end` on the left. The fade tints nothing; it only masks the content sliding under the pinned column.
 - Scroll cue: the scroll viewport sits in a `__scroll` frame that sets `data-overflow-start` / `data-overflow-end` from the scroll position (re-measured on scroll and on resize). While content is hidden past an inline edge, an `aria-hidden` gradient as wide as the hidden distance (at most 24 px, none when 4 px or less, so it never sits over text that is otherwise in view) (`__fade-start` / `__fade-end`, `from-transparent` to `var(--bg-surface)`, pointer events off) covers that edge of the viewport, so a phone shows that columns continue; it follows the inline direction under `dir="rtl"`, has no motion, and keeps its gradient under forced colors (fading to `Canvas`). A frozen column on that edge draws its own fade and paints over the cue, which sits below frozen cells and the sticky header (`z-5`).
@@ -21280,8 +21268,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 - Density and wrapping: `data-density="compact"` on the root shrinks the header (through `Table.Header`'s `density`) and the body cells (`min-h-9`, `--spacing-2xs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap. `striped` shades odd body rows with `var(--bg-surface-raised)` (selected and hover still win).
 - Virtual rows (`virtual`): only the rows in view plus 8 above and below render; the slice starts on an even row so stripes stay put; rows of different heights (`wrapLines` with long text) are measured as they render and the rows in view do not shift while scrolling; the root sets `aria-rowcount` and each row `aria-rowindex`. Skeleton and stacked layouts render every row.
 - Long lists (more than 200 rows, not `virtual`): the first 50 rows render, a spacer (`__lazy-rows`, `aria-hidden`) stands in for the rest and more rows mount as it nears the viewport, until every row is in the DOM; while rows are still missing the root sets `aria-rowcount` and each row `aria-rowindex`. When `data`, the sort or a filter changes, the mounted rows drop back to the ones within reach of the viewport (at least 50), so a sort after scrolling to the end and back does not patch every row.
-- Infinite loading (`moreRows`): an `aria-hidden` sentinel (`__more-sentinel`) under the rows, observed with an `IntersectionObserver` 600 px ahead of the scroll container, emits `load-more` when it nears the viewport, in `virtual` mode too; the observer re-arms when the row count changes, so a page that does not fill the viewport asks again. A `role="status"` line under the rows (`__more`) shows a Load more button while `moreRows` (keyboard and screen-reader path), a spinner with `Loading more rows` while `loadingMore` (the table also sets `aria-busy`), and `No more rows` once more rows were requested and `moreRows` turns false. Hidden while `loading` or with no rows.
-- Live tail (`live`): turning it on scrolls the viewport to the top and remembers the first row; once newer rows arrive above it, that row carries `data-live-boundary` and draws a 2 px success-coloured line on its top edge. While live and scrolled to the top, new rows keep the viewport at the newest row; scrolled down, the rows in view stay still. Turning it off clears the boundary.
+- Infinite loading: `DataTableLoadMore` in the `load-more` slot (see Sub-components).
+- Live tail (`TableLiveButton` `v-model`): turning it on scrolls the viewport to the top and remembers the first row; once newer rows arrive above it, that row carries `data-live-boundary` and draws a 2 px success-coloured line on its top edge. While live and scrolled to the top, new rows keep the viewport at the newest row; scrolled down, the rows in view stay still. Turning it off clears the boundary.
 - Responsive toolbar: the root is the `@container/table`; the toolbar wraps, and below `@md` of the table the `toolbar` slot moves under the title and starts at the start edge. `Table.Toolbar` wraps its controls.
 - Hover-free devices: a sortable header shows its sort affordance where the pointer cannot hover (`@media (hover: none)`).
 - Reorderable rows (`reorderable`): a 40 px leading column holds a grip `IconButton` per row (`data-reorder-handle`), frozen at the start edge when other columns are; the row being dragged sets `data-dragging` (dashed accent outline, 60% opacity) and the row under the pointer `data-drop="before" | "after"` (a 2 px accent line on that edge). While a sort is applied every grip is disabled and its description says to clear the sort.
@@ -21292,7 +21280,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the sort button and any interactive cell content.
 - Keyboard map: `Tab` focuses the sort button of each sortable column (one tab stop per column, as in the APG sortable table: the header cell itself is not focusable and carries `aria-sort`) and interactive cell content; `Enter`/`Space` on the sort button toggles the sort; row click is mouse/touch (no keyboard trap). The principal column still carries a real link or button (`TableCellLink`, or the `cell-<id>` slot with an anchor, as the Default example does), which keyboard and screen-reader users reach with `Tab` (WCAG 2.1.1).
 - Keyboard rows (the console keyboard standard, `rules/webkit-keyboard.md`): when the table has a `row-click` or a `row-remove` listener (or tree rows), body rows become one roving tab stop (one row `tabindex="0"`, the rest `-1`, the last focused row kept as the stop) with the same inset ring as tree rows. `Arrow Down` / `Arrow Up` move between rows, `Home` / `End` go to the first / last row, `Enter` emits `row-click` with the key press, `Space` toggles the row's selection when `selectable` allows it, and `Delete` / `Backspace` emits `row-remove` (never with `⌘`, `Ctrl`, `Alt` or `Shift` held). Keys pressed on a control inside the row (a checkbox, the row menu) belong to that control. When the row that held focus leaves `data` and focus fell to the page (the delete was confirmed in a dialog that closed, or the row itself was focused), focus moves to the row now at its index, else the previous row, else the table element (`tabindex="-1"`, ring on `focus-visible`); it waits while a modal layer is open, and leaves focus alone when the person moved it elsewhere. Without those listeners body rows are not focusable. Tests: `data-table.test.ts` › keyboard rows.
-- ARIA: `role="table"` sits on the grid element inside the scroll viewport (testid `<testid>__table`), not on the root: the root also holds the toolbar, applied filters, the focusable scroll viewport, the stacked select-all, the empty state and the pagination, and any of those inside a `table` is an unallowed child (`aria-required-children`). Every `aria-*` attribute passed to `DataTable` (`aria-label`, `aria-labelledby`, `aria-describedby`…) is forwarded to that element, as are `aria-busy` (loading) and `aria-rowcount` (windowed); every other attribute stays on the root. The pagination is a plain region under the viewport (`<testid>__footer`), not a `rowgroup`, and the `caption` slot renders as the table's first child. `table-caption` is a plain element (no `role`) that names the table through `aria-labelledby` unless the consumer names it with `aria-label`/`aria-labelledby`. `table-header`/`table-body` `role="rowgroup"`; `table-footer` has no role (it hosts pagination or an action, not rows); `table-row` `role="row"`; `table-head-cell` `role="columnheader"` with `aria-sort` when sortable; `table-cell` `role="cell"`; selected rows set `aria-selected`.
+- ARIA: `role="table"` sits on the grid element inside the scroll viewport (testid `<testid>__table`), not on the root: the root also holds the toolbar, applied filters, the focusable scroll viewport, the stacked select-all, the empty state and the pagination, and any of those inside a `table` is an unallowed child (`aria-required-children`). Every `aria-*` attribute passed to `DataTable` (`aria-label`, `aria-labelledby`, `aria-describedby`…) is forwarded to that element, as are `aria-busy` (loading) and `aria-rowcount` (windowed); every other attribute stays on the root. The pagination is a plain region under the viewport (`DataTablePagination`, a `TableFooter`), not a `rowgroup`, and the `caption` slot renders as the table's first child. `table-caption` is a plain element (no `role`) that names the table through `aria-labelledby` unless the consumer names it with `aria-label`/`aria-labelledby`. `table-header`/`table-body` `role="rowgroup"`; `table-footer` has no role (it hosts pagination or an action, not rows); `table-row` `role="row"`; `table-head-cell` `role="columnheader"` with `aria-sort` when sortable; `table-cell` `role="cell"`; selected rows set `aria-selected`.
 - Virtual rows keep their position for assistive technology: `aria-rowcount` on the `role="table"` element (rows + header) and `aria-rowindex` on each rendered row.
 - Reorderable rows: each grip is a button named `Reorder <row name>, position <n> of <total>` and described by a visually hidden hint (`Drag, or press Arrow Up or Arrow Down to move.`, or the lock reason). Arrow Up / Arrow Down / Home / End move the row and keep focus on its grip; `Esc` cancels a drag. A polite `role="status"` region announces `Moved <name> to position <n> of <total>.` (keyboard) or `Dropped …` (pointer). Dragging is never the only way to reorder (WCAG 2.5.7).
 - Tree rows follow the APG treegrid row-focus pattern: `Tab` enters the grid on one row (the last one focused, else the first); `Arrow Down` / `Arrow Up` move between visible rows; `Home` / `End` go to the first / last row; `Arrow Right` (inline end, mirrored in RTL) opens a closed row or moves to the first child of an open one; `Arrow Left` closes an open row or moves to the parent; `Enter` toggles the row; `Space` toggles its selection when `selectable` allows it. Interactive content inside the row (checkbox, menus) stays reachable with `Tab`. The pointer toggle is `aria-hidden` (the row's `aria-expanded` is the accessible state), and when a row collapses while one of its descendants holds focus, focus moves to that row.
@@ -21308,6 +21296,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 ```vue
 <script setup>
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
@@ -21386,8 +21375,6 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
     :columns="columns"
     row-key="id"
     sortable
-    paginated
-    :page-size="5"
     bordered
     v-model:sorting="sorting"
     @row-click="onRowClick"
@@ -21433,6 +21420,9 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuRoot>
+    </template>
+    <template #footer>
+      <DataTablePagination :page-size="5" />
     </template>
   </DataTable>
 </template>

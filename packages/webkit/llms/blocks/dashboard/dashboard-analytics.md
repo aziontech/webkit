@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-analytics/dashboard-analytics.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-analytics")`
-- Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `utils/clipboard`, `utils/csv`
+- Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `utils/clipboard`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -1469,6 +1469,7 @@ export const chartForms = [
 ```ts
 <script setup lang="ts">
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
 
   export interface ExpandedTableProps {
@@ -1493,8 +1494,6 @@ export const chartForms = [
     :columns="columns"
     row-key="id"
     sortable
-    paginated
-    :page-size="10"
     density="compact"
     bordered
   >
@@ -1511,6 +1510,9 @@ export const chartForms = [
       <span class="tabular-nums">{{
         formatCount('requests' in row ? Number(row.requests) : 0)
       }}</span>
+    </template>
+    <template #footer>
+      <DataTablePagination :page-size="10" />
     </template>
   </DataTable>
 </template>
@@ -1783,9 +1785,12 @@ export const chartForms = [
 ```ts
 <script setup lang="ts">
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import { matchesText } from '@aziontech/webkit/use-collection'
+  import { computed } from 'vue'
 
   export interface SearchTableProps {
     /** The rows; each has an id and a requests count. */
@@ -1825,6 +1830,15 @@ export const chartForms = [
 
   const noMatch = () =>
     props.filters.length ? 'Change the search or the status class.' : 'Change the search.'
+  const matchingRows = computed(() =>
+    props.rows.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        props.columns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
+  )
 </script>
 
 <template>
@@ -1856,14 +1870,10 @@ export const chartForms = [
     </div>
 
     <DataTable
-      v-model:global-filter="search"
-      :data="rows"
+      :data="matchingRows"
       :columns="columns"
       row-key="id"
       sortable
-      paginated
-      :page-size="5"
-      :page-size-options="[5, 10, 25]"
       density="compact"
       bordered
       :loading="loading"
@@ -1891,6 +1901,12 @@ export const chartForms = [
         <span class="tabular-nums">{{
           formatCount('requests' in row ? Number(row.requests) : 0)
         }}</span>
+      </template>
+      <template #footer>
+        <DataTablePagination
+          :page-size="5"
+          :page-size-options="[5, 10, 25]"
+        />
       </template>
     </DataTable>
   </div>

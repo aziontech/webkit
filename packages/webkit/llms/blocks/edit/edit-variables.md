@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-variables")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-file-picker`, `use-shortcuts`
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-file-picker`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -1639,6 +1639,7 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import type { TableColumn, TableExposed } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -1690,6 +1691,7 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
   ])
 
   const {
+    paginationProps,
     tableProps,
     propertyFilterProps,
     preferencesProps,
@@ -1940,6 +1942,12 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
                     />
                   </template>
                 </EmptyState>
+              </template>
+              <template #footer>
+                <DataTablePagination
+                  v-bind="paginationProps"
+                  manual
+                />
               </template>
             </DataTable>
           </template>

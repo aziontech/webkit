@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/edit-schema/edit-schema.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-schema")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-file-picker`
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-file-picker`, `utils/csv`
 - Skills: `webkit-form`, `webkit-create-surface`, `webkit-tables`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -825,26 +825,9 @@ export const filterTypes = (query: string) => {
 ## `lib/csv.ts`
 
 ```ts
-export type CsvRow = Record<string, string>
+import { splitCsvLine } from '@aziontech/webkit/utils/csv'
 
-const splitCsvLine = (line: string) => {
-  const cells: string[] = []
-  let cell = ''
-  let quoted = false
-  for (let i = 0; i < line.length; i += 1) {
-    const char = line[i]
-    if (quoted && char === '"' && line[i + 1] === '"') {
-      cell += '"'
-      i += 1
-    } else if (char === '"') quoted = !quoted
-    else if (char === ',' && !quoted) {
-      cells.push(cell.trim())
-      cell = ''
-    } else cell += char
-  }
-  cells.push(cell.trim())
-  return cells
-}
+export type CsvRow = Record<string, string>
 
 export const inferType = (values: string[]) => {
   const filled = values.filter((value) => value !== '')

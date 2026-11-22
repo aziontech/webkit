@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-waf-tuning/view-waf-tuning.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-waf-tuning")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -183,6 +183,7 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
   import TableCellTags from '@aziontech/webkit/table-cell-tags'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { matchesText } from '@aziontech/webkit/use-collection'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, watch } from 'vue'
 
@@ -331,6 +332,15 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
       })
     }
   )
+  const matchingRows = computed(() =>
+    rows.value.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        columns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
+  )
 </script>
 
 <template>
@@ -456,17 +466,15 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
             <DataTable
               v-else
               ref="tuningTableEl"
-              v-model:global-filter="search"
               v-model:selected-keys="selectedKeys"
               v-model:sorting="sorting"
-              :data="rows"
+              :data="matchingRows"
               :columns="columns"
               row-key="ruleId"
               selectable
               sortable
               :bordered="false"
               :loading="loading"
-              export-filename="waf-tuning.csv"
             >
               <template #cell-ruleId="{ value }">
                 <span class="min-w-0 truncate font-code tabular-nums">{{ value }}</span>

@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "A standard data-driven table: pass `:data` and `:columns` and the engine renders sortable headers, status `Tag`s, per-row action menus, and pagination. The outer card border is drawn via the `border` prop — the table is borderless by default (it usually sits inside a surface that already frames it), so set `border` to draw the `var(--border-default)` outline; the internal row dividers are unaffected either way.",
+   "summary": "A standard data-driven table: pass `:data` and `:columns` and the engine renders sortable headers, status `Tag`s and per-row action menus, and `DataTablePagination` in the `footer` slot pages the rows. The outer card border is drawn via the `border` prop — the table is borderless by default (it usually sits inside a surface that already frames it), so set `border` to draw the `var(--border-default)` outline; the internal row dividers are unaffected either way.",
    "file": "examples/data-table/default.vue"
   },
   {

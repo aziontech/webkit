@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-file-browser")`
-- Components: [Alert](../../components/alert.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SplitButton](../../components/split-button.md), `TableCellActions`, `TableCellTime`, `TableSearch`, [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [UploadProgress](../../components/upload-progress.md), `use-file-picker`
+- Components: [Alert](../../components/alert.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SplitButton](../../components/split-button.md), `TableCellActions`, `TableCellTime`, `TableSearch`, [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [UploadProgress](../../components/upload-progress.md), `use-file-picker`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -32,9 +32,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Surface — `Card`, `DataTable` (required)
+### A. Surface — `Card`, `DataTable`, `DataTablePagination` (required)
 
-One `Card :padded="false"` around a `DataTable :bordered="false"` with `row-key`, `sortable` with `manual-sorting` and `v-model:sorting` (the block orders the rows so `..` and the folders stay first: Size sorts on a numeric `bytes` field and Last modified on the `modifiedAt` timestamp, within folders and within files), `v-model:global-filter`, `paginated` at 50 rows (25, 50, 100), `:loading` and an `export-filename`. Name is the `principal` column; actions are `type: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
+One `Card :padded="false"` around a `DataTable :bordered="false"` with `row-key`, `sortable` with `manual-sorting` and `v-model:sorting` (the block orders the rows so `..` and the folders stay first: Size sorts on a numeric `bytes` field and Last modified on the `modifiedAt` timestamp, within folders and within files), the search text bound to the toolbar `TableSearch` `v-model` (through `FolderSearchRow` `v-model:search`), `DataTablePagination` in the `footer` slot at 50 rows (25, 50, 100), and `:loading`; Download CSV calls `exportCsv({ filename: 'files.csv' })`. Name is the `principal` column; actions are `type: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
 
 ### B. Storage title and search — `TableSearch` (required)
 
@@ -267,6 +267,7 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
     type DropdownMenuItemValue,
     type TableExposed
   } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
@@ -581,7 +582,6 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
             <DataTable
               ref="tableEl"
               v-model:sorting="sorting"
-              v-model:global-filter="search"
               v-model:selected-keys="selectedKeys"
               :selectable="movable"
               :row-selectable="isFile"
@@ -590,12 +590,8 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
               row-key="id"
               sortable
               manual-sorting
-              paginated
-              :page-size="50"
-              :page-size-options="[25, 50, 100]"
               :bordered="false"
               :loading="loading"
-              export-filename="files.csv"
               @row-click="onRowClick"
               @row-remove="onRowRemove"
             >
@@ -607,6 +603,7 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
                   <StorageTitle :name="rootName" />
 
                   <FolderSearchRow
+                    v-model:search="search"
                     :loading="loading"
                     :exportable="!!tableEl"
                     @refresh="refresh"
@@ -682,6 +679,12 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
                   @clear-search="search = ''"
                   @add="onAddClick"
                   @add-item="onAddItem"
+                />
+              </template>
+              <template #footer>
+                <DataTablePagination
+                  :page-size="50"
+                  :page-size-options="[25, 50, 100]"
                 />
               </template>
             </DataTable>
@@ -1326,6 +1329,8 @@ export const destinationProblem = (raw: string, path: string) => {
 
   defineProps<{ loading: boolean; exportable: boolean }>()
 
+  const search = defineModel<string>('search', { default: '' })
+
   const emit = defineEmits<{
     refresh: [event: MouseEvent]
     download: [event: MouseEvent]
@@ -1336,6 +1341,7 @@ export const destinationProblem = (raw: string, path: string) => {
   <div class="flex w-full items-center gap-(--spacing-xs)">
     <div class="flex flex-1">
       <TableSearch
+        v-model="search"
         size="large"
         placeholder="Search in folder"
         class="w-full"
