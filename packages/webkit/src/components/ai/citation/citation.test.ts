@@ -22,7 +22,20 @@ describe('Citation', () => {
     const link = getByRole('link', { name: 'Source 2: Cache settings' })
     expect(link).toHaveAttribute('href', '#answer-source-2')
     expect(link).not.toHaveAttribute('target')
-    expect(link).toHaveTextContent('2')
+    expect(link).toHaveTextContent('Cache settings')
+  })
+
+  it('shows the site in the chip and keeps it in the accessible name', () => {
+    const { getByRole } = render(Citation, {
+      props: { index: 1, title: 'Real-Time Purge', site: 'azion.com', href: '#a-source-1' }
+    })
+    const link = getByRole('link', { name: 'Source 1, azion.com: Real-Time Purge' })
+    expect(link).toHaveTextContent('azion.com')
+    expect(link).toHaveAttribute('data-slot', 'citation')
+  })
+
+  it('falls back to the number when it has neither site nor title', () => {
+    expect(render(Citation, { props: { index: 4 } }).getByTestId('citation')).toHaveTextContent('4')
   })
 
   it('opens an external source in a new tab', () => {

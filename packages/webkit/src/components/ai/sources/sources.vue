@@ -4,8 +4,9 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
+  import SourcesMark from './parts/sources-mark.vue'
   import type { SourcesItem } from './types'
-  import { sourceAnchor } from './types'
+  import { sourceAnchor, sourceSite } from './types'
 
   export type { SourcesItem }
 
@@ -19,7 +20,7 @@
     items?: SourcesItem[]
     /** Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here. */
     anchor?: string
-    /** Heading of the disclosure. Empty uses the locale catalog (`3 sources`). */
+    /** Label of the pill that opens the list. Empty shows `Sources` and names the pill with the count (`3 sources`). */
     title?: string
     /** Initial open state when uncontrolled. */
     defaultOpen?: boolean
@@ -42,9 +43,11 @@
 
   const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'sources')
   const prefix = computed<string>(() => props.anchor || uid)
-  const heading = computed<string>(
-    () => props.title || t('sources.count', { count: props.items.length })
+  const heading = computed<string>(() => props.title || t('sources.label'))
+  const triggerName = computed<string | undefined>(() =>
+    props.title ? undefined : t('sources.count', { count: props.items.length })
   )
+  const marks = computed<SourcesItem[]>(() => props.items.slice(0, 3))
 
   const isOpen = computed<boolean>(() => open.value ?? props.defaultOpen)
 
@@ -77,8 +80,16 @@
   })
 
   const TRIGGER_CLASS =
-    'inline-flex w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
-    'motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
+    'relative inline-flex h-8 w-fit shrink-0 items-center gap-(--spacing-xs) rounded-full ps-(--spacing-2xs) pe-(--spacing-sm) text-label-md text-(--text-muted) ' +
+    'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[state=open]:bg-(--bg-hover) data-[state=open]:text-(--text-default)'
+
+  const LIST_CLASS =
+    'm-0 mt-(--spacing-xs) flex basis-full list-none flex-col rounded-(--shape-card) border border-(--border-default) p-(--spacing-2xs)'
+
+  const ITEM_CLASS =
+    'flex items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-xs) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -87,33 +98,44 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
-    class="flex w-full flex-col gap-(--spacing-xs)"
+    class="contents"
   >
     <button
       type="button"
       :aria-expanded="isOpen ? 'true' : 'false'"
       :aria-controls="panelId"
+      :aria-label="triggerName"
       :data-testid="`${testId}__trigger`"
+      :data-state="isOpen ? 'open' : 'closed'"
       :class="TRIGGER_CLASS"
       @click="toggle"
     >
-      <i
-        class="az az-book"
+      <span
         aria-hidden="true"
+        class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
       />
+      <span
+        aria-hidden="true"
+        :data-testid="`${testId}__marks`"
+        class="flex items-center"
+      >
+        <SourcesMark
+          v-for="(item, i) in marks"
+          :key="`${i}-${item.title}`"
+          :item="item"
+          :data-testid="`${testId}__mark`"
+          class="ring-2 ring-(--bg-canvas) not-first:-ms-1.5"
+        />
+      </span>
       <span>{{ heading }}</span>
-      <i
-        :data-state="isOpen ? 'open' : 'closed'"
-        class="az az-chevron-down text-body-xs transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
-        aria-hidden="true"
-      />
     </button>
     <ol
       v-show="isOpen"
       :id="panelId"
       :aria-label="t('sources.label')"
       :data-testid="`${testId}__list`"
-      class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
+      data-slot="sources-list"
+      :class="LIST_CLASS"
     >
       <li
         v-for="(item, i) in items"
@@ -121,21 +143,19 @@
         :key="`${i}-${item.title}`"
         tabindex="-1"
         :data-testid="`${testId}__item`"
-        class="flex items-start gap-(--spacing-xs) rounded-(--shape-control) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+        :class="ITEM_CLASS"
       >
-        <span
-          aria-hidden="true"
-          class="inline-flex min-w-5 shrink-0 items-center justify-center rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-sm text-(--text-muted)"
-        >
-          {{ i + 1 }}
-        </span>
+        <SourcesMark
+          :item="item"
+          size="medium"
+        />
         <span class="flex min-w-0 flex-col">
           <a
             v-if="safeHref(item.href)"
             :href="safeHref(item.href) ?? undefined"
             :target="external(item.href) ? '_blank' : undefined"
             :rel="external(item.href) ? 'noopener noreferrer' : undefined"
-            class="truncate text-body-sm text-(--text-link) underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+            class="truncate text-body-sm text-(--text-default) underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
           >
             {{ item.title }}
           </a>
@@ -146,10 +166,10 @@
             {{ item.title }}
           </span>
           <span
-            v-if="item.description"
+            v-if="item.description || sourceSite(item)"
             class="truncate text-body-xs text-(--text-muted)"
           >
-            {{ item.description }}
+            {{ item.description || sourceSite(item) }}
           </span>
         </span>
       </li>

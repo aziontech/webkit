@@ -56,11 +56,14 @@ export const es: Messages = {
     notHelpful: 'No fue útil',
     feedback: 'Valoración de la respuesta',
     feedbackSubmitting: 'Enviando valoración',
-    feedbackSubmitted: 'Valoración enviada'
+    feedbackSubmitted: 'Valoración enviada',
+    readAloud: 'Leer en voz alta',
+    stopReading: 'Detener la lectura'
   },
   citation: {
     label: 'Fuente {index}: {title}',
-    labelUntitled: 'Fuente {index}'
+    labelUntitled: 'Fuente {index}',
+    labelWithSite: 'Fuente {index}, {site}: {title}'
   },
   conversation: {
     label: 'Conversación',

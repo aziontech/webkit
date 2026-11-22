@@ -2,7 +2,7 @@ import { defineComponent, h, type PropType, type VNodeChild } from 'vue'
 
 import Citation from '../citation/citation.vue'
 import type { SourcesItem } from '../sources/types'
-import { sourceAnchor } from '../sources/types'
+import { sourceAnchor, sourceSite } from '../sources/types'
 import type { MarkdownInline as MarkdownInlineNode } from './parse-markdown'
 
 const EXTERNAL = /^https?:/i
@@ -49,6 +49,7 @@ function renderLeaf(node: LeafNode, sources: SourcesItem[], anchor: string): VNo
       return h(Citation, {
         index: node.index,
         title: source?.title ?? '',
+        site: sourceSite(source),
         href: anchor && source ? `#${sourceAnchor(anchor, node.index)}` : ''
       })
     }

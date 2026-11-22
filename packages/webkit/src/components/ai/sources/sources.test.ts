@@ -42,6 +42,40 @@ describe('Sources', () => {
     expect(getByTestId('sources__list')).not.toBeVisible()
   })
 
+  it('draws the pill with up to three site marks, an icon or the first letter of the site', () => {
+    const { getByRole, getAllByTestId } = render(Sources, {
+      props: {
+        items: [
+          ...items,
+          { title: 'CLI', href: 'https://github.com/aziontech/azion', icon: 'az az-github' },
+          { title: 'Fourth', href: 'https://www.w3.org/' }
+        ]
+      }
+    })
+    expect(getByRole('button', { name: '4 sources' })).toHaveTextContent('Sources')
+    const marks = getAllByTestId('sources__mark')
+    expect(marks).toHaveLength(3)
+    expect(marks[0]).toHaveTextContent('A')
+    expect(marks[1]).toHaveTextContent('C')
+    expect(marks[2]?.querySelector('i')).toHaveClass('az-github')
+    expect(marks[0]?.closest('[aria-hidden="true"]')).not.toBeNull()
+  })
+
+  it('names the pill by its title when one is given', () => {
+    const { getByRole } = render(Sources, { props: { items, title: 'References' } })
+    expect(getByRole('button', { name: 'References' })).toBeTruthy()
+  })
+
+  it('shows the site of a source that has no description', () => {
+    const { getAllByTestId } = render(Sources, {
+      props: {
+        items: [{ title: 'HTTP caching', href: 'https://www.w3.org/Protocols/' }],
+        defaultOpen: true
+      }
+    })
+    expect(getAllByTestId('sources__item')[0]).toHaveTextContent('w3.org')
+  })
+
   it('toggles with the keyboard and emits update:open', async () => {
     const { getByRole, getByTestId, emitted } = render(Sources, { props: { items } })
     const trigger = getByRole('button')

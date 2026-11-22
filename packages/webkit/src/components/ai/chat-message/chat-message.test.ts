@@ -1,11 +1,12 @@
 import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
-import { defineComponent, h, nextTick, ref } from 'vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { defineComponent, h, nextTick, ref, type VNodeChild } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import StreamingResponse from '../streaming-response/streaming-response.vue'
 import { useChatMessageContext } from './composables/use-chat-message-context'
 import ChatMessage, { ChatMessageActions, ChatMessageFeedback } from './index'
 
@@ -40,23 +41,38 @@ describe('ChatMessage', () => {
     expect(getByTestId('chat-message')).toHaveAttribute('data-from', from)
   })
 
-  it('uses the author prop and hides the avatar from assistive tech', () => {
-    const { getByRole, getByTestId } = render(ChatMessage, {
-      props: { from: 'user', author: 'Ana Lima' },
+  it('draws no avatar, keeping the author and time in a visually hidden line', () => {
+    const { getByRole, getByTestId, queryByRole } = render(ChatMessage, {
+      props: { from: 'user', author: 'Jane Doe', timestamp: '10:42' },
       slots: { default: () => 'Hi' }
     })
-    expect(getByRole('article', { name: 'Ana Lima' })).toBeTruthy()
-    expect(getByTestId('chat-message__avatar')).toHaveAttribute('aria-hidden', 'true')
-    expect(getByTestId('chat-message__author')).toHaveTextContent('Ana Lima')
+    expect(getByRole('article', { name: 'Jane Doe at 10:42' })).toBeTruthy()
+    expect(queryByRole('img')).toBeNull()
+    expect(getByTestId('chat-message__author')).toHaveTextContent('Jane Doe at 10:42')
+    expect(getByTestId('chat-message__author')).toHaveClass('sr-only')
   })
 
-  it('drops avatar and author line when grouped', () => {
-    const { queryByTestId } = render(ChatMessage, {
+  it('shows the time on hover over the user bubble only', () => {
+    const user = render(ChatMessage, {
+      props: { from: 'user', timestamp: '10:42' },
+      slots: { default: () => 'Hi' }
+    })
+    expect(user.getByTestId('chat-message__content')).toHaveAttribute('title', '10:42')
+    const assistant = render(ChatMessage, {
+      props: { timestamp: '10:43' },
+      slots: { default: () => 'Hello' },
+      attrs: { 'data-testid': 'answer' }
+    })
+    expect(assistant.getByTestId('answer__content')).not.toHaveAttribute('title')
+  })
+
+  it('drops the hidden author line when grouped', () => {
+    const { queryByTestId, getByTestId } = render(ChatMessage, {
       props: { grouped: true },
       slots: { default: () => 'More' }
     })
     expect(queryByTestId('chat-message__author')).toBeNull()
-    expect(queryByTestId('chat-message__avatar')?.children).toHaveLength(0)
+    expect(getByTestId('chat-message')).toHaveAttribute('data-grouped')
   })
 
   it('renders loading text while pending and is busy while pending or streaming', async () => {
@@ -188,6 +204,121 @@ describe('ChatMessage', () => {
       })
     )
     await expectNoA11yViolations(container)
+  })
+
+  describe('action row', () => {
+    afterEach(() => {
+      vi.restoreAllMocks()
+      vi.unstubAllGlobals()
+    })
+
+    function spySpeech() {
+      const spoken: SpeechSynthesisUtterance[] = []
+      vi.spyOn(window.speechSynthesis, 'speak').mockImplementation((utterance) => {
+        spoken.push(utterance)
+      })
+      const cancel = vi.spyOn(window.speechSynthesis, 'cancel').mockImplementation(() => undefined)
+      return { spoken, cancel }
+    }
+
+    function renderRow(
+      props: Record<string, unknown> = {},
+      content: () => VNodeChild = () => 'Plain answer.'
+    ) {
+      return render(
+        defineComponent({
+          setup: () => () =>
+            h(
+              ChatMessage,
+              { status: 'success' },
+              {
+                default: content,
+                actions: () =>
+                  h(
+                    ChatMessageActions,
+                    { showReadAloud: true, ...props },
+                    {
+                      default: () => h('button', { type: 'button' }, 'Copy'),
+                      trailing: () => h('button', { type: 'button' }, 'Sources')
+                    }
+                  )
+              }
+            )
+        })
+      )
+    }
+
+    it('places Read aloud after the actions and before the trailing slot', async () => {
+      spySpeech()
+      const { getByRole } = renderRow()
+      await nextTick()
+      const names = Array.from(
+        getByRole('group', { name: 'Message actions' }).querySelectorAll('button')
+      ).map((button) => button.getAttribute('aria-label') ?? button.textContent)
+      expect(names).toEqual(['Copy', 'Read aloud', 'Sources'])
+    })
+
+    it('speaks the given text, turns into Stop reading, and stops when pressed again', async () => {
+      const { spoken, cancel } = spySpeech()
+      const { getByRole, getByTestId } = renderRow({ readAloudText: 'Hello there.' })
+      await nextTick()
+      await userEvent.click(getByRole('button', { name: 'Read aloud' }))
+      expect(spoken).toHaveLength(1)
+      expect(spoken[0]?.text).toBe('Hello there.')
+      const stop = getByRole('button', { name: 'Stop reading' })
+      expect(getByTestId('chat-message-actions__read-aloud')).toHaveAttribute('data-speaking')
+      await userEvent.click(stop)
+      expect(cancel).toHaveBeenCalled()
+      expect(getByRole('button', { name: 'Read aloud' })).toBeTruthy()
+    })
+
+    it('returns to Read aloud when the speech ends', async () => {
+      const { spoken } = spySpeech()
+      const { getByRole } = renderRow({ readAloudText: 'Short.' })
+      await nextTick()
+      await userEvent.click(getByRole('button', { name: 'Read aloud' }))
+      spoken[0]?.onend?.(new Event('end') as SpeechSynthesisEvent)
+      await nextTick()
+      expect(getByRole('button', { name: 'Read aloud' })).toBeTruthy()
+    })
+
+    it('reads the response text without citation chips when given no text', async () => {
+      const { spoken } = spySpeech()
+      const { getByRole } = renderRow({}, () =>
+        h(StreamingResponse, {
+          content: 'Purge **now** [1].',
+          sources: [{ title: 'Purge', href: 'https://www.azion.com/' }],
+          anchor: 'a'
+        })
+      )
+      await nextTick()
+      await userEvent.click(getByRole('button', { name: 'Read aloud' }))
+      expect(spoken[0]?.text).toBe('Purge now .')
+    })
+
+    it('stops speaking when the message unmounts', async () => {
+      const { cancel } = spySpeech()
+      const { getByRole, unmount } = renderRow({ readAloudText: 'Long answer.' })
+      await nextTick()
+      await userEvent.click(getByRole('button', { name: 'Read aloud' }))
+      cancel.mockClear()
+      unmount()
+      expect(cancel).toHaveBeenCalledTimes(1)
+    })
+
+    it('hides Read aloud where the browser has no speech synthesis', async () => {
+      vi.stubGlobal('SpeechSynthesisUtterance', undefined)
+      const { queryByRole } = renderRow()
+      await nextTick()
+      expect(queryByRole('button', { name: 'Read aloud' })).toBeNull()
+    })
+
+    it('has no axe violations with Read aloud', async () => {
+      spySpeech()
+      const { container } = renderRow()
+      await nextTick()
+      await expectNoA11yViolations(container)
+    })
   })
 
   describe('slot presence', () => {

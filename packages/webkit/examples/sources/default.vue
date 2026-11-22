@@ -4,18 +4,17 @@
   const items = [
     {
       title: 'Real-Time Purge',
-      href: 'https://www.azion.com/en/documentation/',
+      href: 'https://www.azion.com/en/documentation/products/cache/real-time-purge/',
       description: 'Azion documentation · Cache'
     },
     {
-      title: 'Cache settings',
-      href: 'https://www.azion.com/en/documentation/',
-      description: 'Azion documentation · Applications'
+      title: 'aziontech/azion: the Azion command line',
+      href: 'https://github.com/aziontech/azion',
+      icon: 'az az-github'
     },
     {
-      title: 'Purge by wildcard',
-      href: 'https://www.azion.com/en/documentation/',
-      description: 'Azion documentation · Cache'
+      title: 'HTTP Caching (RFC 9111)',
+      href: 'https://www.w3.org/Protocols/'
     }
   ]
 </script>

@@ -905,6 +905,9 @@
     "titleVariant": "titleAlign"
   },
   "chat-message": {
+    "#avatar": {
+      "removed": "ChatMessage draws no avatar in 6.0: the author and time are in the message's accessible name, so drop the avatar template"
+    },
     "state": {
       "to": "status",
       "values": {
@@ -1499,6 +1502,9 @@
     }
   },
   "chat-message-root": {
+    "#avatar": {
+      "removed": "ChatMessage draws no avatar in 6.0: the author and time are in the message's accessible name, so drop the avatar template"
+    },
     "state": {
       "to": "status",
       "values": {

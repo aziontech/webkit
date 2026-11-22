@@ -62,7 +62,7 @@
         :disabled="model === 'down'"
         :loading="loading && model === 'up'"
         variant="ghost"
-        size="small"
+        size="large"
         :data-testid="`${testId}__up`"
         @click="choose('up')"
       />
@@ -75,7 +75,7 @@
         :disabled="model === 'up'"
         :loading="loading && model === 'down'"
         variant="ghost"
-        size="small"
+        size="large"
         :data-testid="`${testId}__down`"
         @click="choose('down')"
       />
@@ -83,7 +83,7 @@
     <span
       role="status"
       :data-testid="`${testId}__status`"
-      class="ps-(--spacing-xs) text-body-xs text-(--text-muted)"
+      class="ps-(--spacing-xs) text-body-xs text-(--text-muted) empty:ps-0"
     >
       {{ statusText }}
     </span>

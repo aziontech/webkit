@@ -4,11 +4,11 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
-  import Avatar from '../../content/avatar/avatar.vue'
   import { ConversationInjectionKey } from '../conversation/injection-key'
   import ResponseLoading from '../response-loading/response-loading.vue'
   import type { ChatMessageFrom, ChatMessageStatus } from './injection-key'
   import { ChatMessageInjectionKey } from './injection-key'
+  import { contentText } from './lib/content-text'
 
   export type { ChatMessageFrom, ChatMessageStatus }
 
@@ -20,13 +20,13 @@
   export interface ChatMessageProps {
     /** Who wrote the message: the person (`user`), the generative AI assistant, or the product (`system`). */
     from?: ChatMessageFrom
-    /** Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`). */
+    /** Author name read in the message's accessible name; it is not shown. Empty uses the locale catalog (`You`, `AI assistant`, `System`). */
     author?: string
-    /** Time the message was sent, already formatted for display (`10:42`). Added to the accessible name. */
+    /** Time the message was sent, already formatted for display (`10:42`). Added to the accessible name and shown on hover over the user's bubble. */
     timestamp?: string
     /** Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `success` shows the actions, `error` shows the error line with Try again. */
     status?: ChatMessageStatus
-    /** Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn. */
+    /** Follows a message by the same author: tightens the gap above it so stacked messages read as one turn. */
     grouped?: boolean
     /** Error text shown while `status` is `error`. Empty uses the locale catalog. */
     errorMessage?: string
@@ -52,9 +52,7 @@
   const slots = defineSlots<{
     /** The message content: text, a `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`. */
     default?(): unknown
-    /** Replaces the default avatar (a person glyph for the user, the assistant mark for the AI). */
-    avatar?(): unknown
-    /** Inline actions under the content, usually a `ChatMessage.Actions`; shown only when the message status is `success`. */
+    /** The action row under the content, usually a `ChatMessage.Actions`; shown only when the message status is `success`. */
     actions?(): unknown
   }>()
 
@@ -101,16 +99,17 @@
 
   provide(ChatMessageInjectionKey, {
     from: computed(() => props.from),
-    status: computed(() => props.status)
+    status: computed(() => props.status),
+    contentText: () => contentText(bodyEl.value)
   })
 
   const COLUMN_CLASS =
     'flex min-w-0 flex-col gap-(--spacing-xs) ' +
-    'data-[from=assistant]:flex-1 data-[from=user]:max-w-[85%] data-[from=user]:data-[alignment=split]:items-end data-[from=system]:max-w-full data-[from=system]:items-center'
+    'data-[from=assistant]:flex-1 data-[from=user]:max-w-[80%] data-[from=user]:data-[alignment=split]:items-end data-[from=system]:max-w-full data-[from=system]:items-center'
 
   const CONTENT_CLASS =
-    'flex min-w-0 flex-col gap-(--spacing-sm) text-body-md text-(--text-default) break-words ' +
-    'data-[from=user]:rounded-(--shape-card) data-[from=user]:bg-(--bg-surface-raised) data-[from=user]:px-(--spacing-md) data-[from=user]:py-(--spacing-sm) ' +
+    'flex min-w-0 flex-col gap-(--spacing-md) text-body-lg text-(--text-default) break-words ' +
+    'data-[from=user]:gap-(--spacing-sm) data-[from=user]:rounded-(--shape-card) data-[from=user]:bg-(--bg-surface-raised) data-[from=user]:px-(--spacing-md) data-[from=user]:py-(--spacing-sm) ' +
     'data-[from=system]:text-body-sm data-[from=system]:text-(--text-muted) data-[from=system]:text-center'
 </script>
 
@@ -124,24 +123,8 @@
     :data-status="status"
     :data-alignment="alignment"
     :data-grouped="grouped || null"
-    class="group/message flex w-full min-w-0 gap-(--spacing-sm) data-[from=user]:data-[alignment=split]:flex-row-reverse data-[from=system]:justify-center data-[grouped]:-mt-(--spacing-sm)"
+    class="group/message flex w-full min-w-0 data-[from=user]:data-[alignment=split]:justify-end data-[from=system]:justify-center data-[grouped]:-mt-(--spacing-sm)"
   >
-    <div
-      v-if="from !== 'system'"
-      aria-hidden="true"
-      :data-testid="`${testId}__avatar`"
-      class="flex size-8 shrink-0 items-start"
-    >
-      <template v-if="!grouped">
-        <slot name="avatar">
-          <Avatar
-            :icon="from === 'user' ? 'az az-user' : 'az az-ask-azion'"
-            :alt="name"
-            size="medium"
-          />
-        </slot>
-      </template>
-    </div>
     <div
       :data-from="from"
       :data-alignment="alignment"
@@ -150,15 +133,9 @@
       <p
         v-if="!grouped && from !== 'system'"
         :data-testid="`${testId}__author`"
-        class="flex items-baseline gap-(--spacing-xs) text-label-sm text-(--text-default)"
+        class="sr-only"
       >
-        <span>{{ name }}</span>
-        <span
-          v-if="timestamp"
-          class="text-body-xs text-(--text-muted)"
-        >
-          {{ timestamp }}
-        </span>
+        {{ accessibleName }}
       </p>
       <ResponseLoading
         v-if="status === 'pending'"
@@ -171,6 +148,7 @@
         ref="bodyEl"
         :data-from="from"
         :data-testid="`${testId}__content`"
+        :title="from === 'user' && timestamp ? timestamp : undefined"
         :class="CONTENT_CLASS"
       >
         <slot />
@@ -199,7 +177,7 @@
       <div
         v-if="showActions()"
         :data-testid="`${testId}__actions`"
-        class="flex items-center"
+        class="-ms-(--spacing-sm) flex min-w-0 items-center"
       >
         <slot name="actions" />
       </div>

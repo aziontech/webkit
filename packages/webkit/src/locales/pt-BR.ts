@@ -56,11 +56,14 @@ export const ptBR: Messages = {
     notHelpful: 'Não foi útil',
     feedback: 'Avaliação da resposta',
     feedbackSubmitting: 'Enviando avaliação',
-    feedbackSubmitted: 'Avaliação enviada'
+    feedbackSubmitted: 'Avaliação enviada',
+    readAloud: 'Ler em voz alta',
+    stopReading: 'Parar a leitura'
   },
   citation: {
     label: 'Fonte {index}: {title}',
-    labelUntitled: 'Fonte {index}'
+    labelUntitled: 'Fonte {index}',
+    labelWithSite: 'Fonte {index}, {site}: {title}'
   },
   conversation: {
     label: 'Conversa',

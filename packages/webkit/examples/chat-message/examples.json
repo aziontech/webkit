@@ -4,12 +4,12 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "One turn: the reader's question in a filled bubble at the inline end, and the AI assistant's response flat beside its mark, each with an author line and time.",
+      "summary": "One turn: the reader's question in a filled bubble at the inline end, and the AI assistant's response as plain text across the column. No avatar or name is drawn; both stay in each message's accessible name, and the time shows on hover over the bubble.",
       "file": "default.vue"
     },
     {
       "name": "Actions",
-      "summary": "A complete response with its inline actions always visible: Copy, Regenerate and the Helpful / Not helpful thumbs, which disable the other thumb and confirm Feedback submitted.",
+      "summary": "A complete response with its action row always visible: Copy, the Helpful / Not helpful thumbs (a choice is final and confirms Feedback submitted), Regenerate, Read aloud, and the Sources pill with the mark of each site, which opens the source list under the row.",
       "file": "actions.vue"
     },
     {
@@ -24,7 +24,7 @@
     },
     {
       "name": "Thread",
-      "summary": "A system line centered in the thread, then two consecutive assistant messages where the second is grouped: no avatar or author line, so the two read as one turn.",
+      "summary": "A system line centered in the thread, then two consecutive assistant messages where the second is grouped: the gap above it tightens so the two read as one turn.",
       "file": "thread.vue"
     }
   ]

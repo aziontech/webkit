@@ -58,7 +58,8 @@
     :aria-busy="streaming || undefined"
     :data-testid="testId"
     :data-streaming="streaming || null"
-    class="flex w-full min-w-0 flex-col gap-(--spacing-sm) text-body-md text-(--text-default) break-words"
+    data-slot="streaming-response"
+    class="flex w-full min-w-0 flex-col gap-(--spacing-md) text-body-lg text-(--text-default) break-words"
   >
     <template
       v-for="(block, i) in blocks"
@@ -102,7 +103,7 @@
         v-else-if="block.type === 'list'"
         :start="block.ordered && block.start !== 1 ? block.start : undefined"
         :data-ordered="block.ordered || null"
-        class="m-0 flex list-disc flex-col gap-(--spacing-2xs) ps-(--spacing-lg) data-[ordered]:list-decimal"
+        class="m-0 flex list-disc flex-col gap-(--spacing-xs) ps-(--spacing-lg) data-[ordered]:list-decimal"
       >
         <li
           v-for="(item, j) in block.items"

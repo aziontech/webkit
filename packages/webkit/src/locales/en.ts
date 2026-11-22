@@ -1306,12 +1306,15 @@ export const chatMessage = {
   notHelpful: 'Not helpful',
   feedback: 'Response feedback',
   feedbackSubmitting: 'Submitting feedback',
-  feedbackSubmitted: 'Feedback submitted'
+  feedbackSubmitted: 'Feedback submitted',
+  readAloud: 'Read aloud',
+  stopReading: 'Stop reading'
 } as const
 
 export const citation = {
   label: 'Source {index}: {title}',
-  labelUntitled: 'Source {index}'
+  labelUntitled: 'Source {index}',
+  labelWithSite: 'Source {index}, {site}: {title}'
 } as const
 
 export const conversation = {
