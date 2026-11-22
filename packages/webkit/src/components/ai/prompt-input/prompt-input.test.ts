@@ -182,6 +182,32 @@ describe('PromptInput', () => {
     expect(textarea.getBoundingClientRect().height).toBe(capped)
   })
 
+  it('stays a single pill until the text takes a second line, then stacks until it is cleared', async () => {
+    const { getByRole, getByTestId, value } = harness()
+    const box = getByTestId('prompt-input__box')
+    expect(box).not.toHaveAttribute('data-multiline')
+    await userEvent.click(getByRole('textbox'))
+    await userEvent.keyboard('a')
+    await nextTick()
+    expect(box).not.toHaveAttribute('data-multiline')
+    await userEvent.keyboard('{Shift>}{Enter}{/Shift}b')
+    await expect.poll(() => box.hasAttribute('data-multiline')).toBe(true)
+    expect(getByTestId('prompt-input')).toHaveAttribute('data-multiline')
+    await userEvent.keyboard('{Backspace}{Backspace}')
+    await nextTick()
+    await nextTick()
+    expect(box).toHaveAttribute('data-multiline')
+    value.value = ''
+    await expect.poll(() => box.hasAttribute('data-multiline')).toBe(false)
+  })
+
+  it('stacks while files are attached', () => {
+    const { getByTestId } = harness({
+      files: [{ file: { name: 'log.txt', size: 10, type: 'text/plain' } }]
+    })
+    expect(getByTestId('prompt-input__box')).toHaveAttribute('data-multiline')
+  })
+
   it('reads its strings from the provider locale', () => {
     const { getByRole } = render(
       defineComponent({

@@ -285,4 +285,48 @@ describe('Conversation', () => {
     await frame()
     await expectNoA11yViolations(container)
   })
+
+  describe('composer', () => {
+    function withComposer() {
+      const Host = defineComponent({
+        setup: () => () =>
+          h('div', { style: 'height: 240px; display: flex; flex-direction: column' }, [
+            h(Conversation, null, {
+              default: () =>
+                many(12).map((turn) =>
+                  h(ChatMessage, { key: turn.id, from: turn.from }, () => turn.text)
+                ),
+              composer: () => h('textarea', { 'aria-label': 'Prompt', style: 'height: 56px' })
+            })
+          ])
+      })
+      return render(Host)
+    }
+
+    it('renders the composer outside the log and pads the thread by its height', async () => {
+      const { getByRole, getByTestId } = withComposer()
+      await frame()
+      const composer = getByTestId('conversation__composer')
+      expect(getByRole('log').contains(composer)).toBe(false)
+      expect(composer).toContainElement(getByRole('textbox', { name: 'Prompt' }))
+      const height = Number.parseFloat(
+        getByTestId('conversation').style.getPropertyValue('--conversation-composer-height')
+      )
+      expect(height).toBeGreaterThanOrEqual(56)
+    })
+
+    it('renders no composer area without the slot', () => {
+      const { queryByTestId, getByTestId } = thread(many(2))
+      expect(queryByTestId('conversation__composer')).toBeNull()
+      expect(
+        getByTestId('conversation').style.getPropertyValue('--conversation-composer-height')
+      ).toBe('')
+    })
+
+    it('has no axe violations with a composer', async () => {
+      const { container } = withComposer()
+      await frame()
+      await expectNoA11yViolations(container)
+    })
+  })
 })

@@ -1204,18 +1204,18 @@
   {
     "name": "conversation",
     "path": "src/components/ai/conversation/conversation.vue",
-    "limit": "7.15 KB"
+    "limit": "7.5 KB"
   },
   {
     "name": "prompt-input",
     "path": "src/components/ai/prompt-input/index.ts",
-    "limit": "13.9 KB",
+    "limit": "14.5 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-root",
     "path": "src/components/ai/prompt-input/prompt-input.vue",
-    "limit": "10.75 KB",
+    "limit": "11.35 KB",
     "entryOnly": true
   },
   {
@@ -1239,7 +1239,7 @@
   {
     "name": "prompt-input-context-picker",
     "path": "src/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue",
-    "limit": "15.2 KB",
+    "limit": "15.25 KB",
     "entryOnly": true
   },
   {

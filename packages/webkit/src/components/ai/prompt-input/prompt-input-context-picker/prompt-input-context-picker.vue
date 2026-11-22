@@ -69,6 +69,7 @@
         :disabled="disabled || options.length === 0"
         :data-testid="testId"
         :data-selected="chosen ? true : null"
+        class="rounded-full!"
       />
     </DropdownMenuTrigger>
     <DropdownMenuGroup>
