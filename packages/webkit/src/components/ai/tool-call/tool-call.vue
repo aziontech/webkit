@@ -96,7 +96,7 @@
         />
         <i
           :data-state="isOpen ? 'open' : 'closed'"
-          class="az az-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
+          class="az az-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-[rotate] duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
           aria-hidden="true"
         />
       </button>
