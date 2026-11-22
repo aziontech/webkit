@@ -58,7 +58,20 @@
     "name": "SaveAll",
     "file": "settings-form.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "parts/deployment-protection-card.vue",
+    "parts/general-group-card.vue",
+    "parts/notifications-group-card.vue",
+    "parts/preview-toolbar-card.vue",
+    "parts/profile-address-group.vue",
+    "parts/profile-appearance-group.vue",
+    "parts/profile-company-group.vue",
+    "parts/profile-general-group.vue",
+    "parts/profile-page.vue",
+    "parts/profile-source-control-group.vue",
+    "settings-form-save.ts"
+  ],
   "variants": [
     {
       "name": "Saving",
