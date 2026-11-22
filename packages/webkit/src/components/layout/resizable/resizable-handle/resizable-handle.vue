@@ -87,7 +87,7 @@
     })
   }
 
-  const nudge = (direction: -1 | 1) => {
+  const nudge = (direction: number) => {
     if (props.disabled) return
     const hit = target()
     if (!hit) return

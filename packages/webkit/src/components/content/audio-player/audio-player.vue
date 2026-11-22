@@ -13,31 +13,6 @@
     inheritAttrs: false
   })
 
-  export interface AudioPlayerProps {
-    /** Audio source: a URL, an object URL or a data URL built from base64 audio. Empty disables the controls. */
-    src?: string
-    /** Name of the clip, shown above the controls and used as the accessible name of the control group. */
-    title?: string
-    /** Length of the clip in seconds, shown until the browser reads it from the file. Unset shows a placeholder. */
-    duration?: number
-    /** Text the audio speaks, shown in a collapsible Transcript section under the controls. Empty hides the section. */
-    transcript?: string
-    /** Playback speeds the speed control cycles through, in order. Empty hides it; it starts at 1 when listed, else the first. */
-    playbackRates?: number[]
-    /** Shows a Download link to `src`. */
-    downloadable?: boolean
-    /** File name the Download link saves the audio as. Empty lets the browser pick one. */
-    fileName?: string
-    /** The audio is still being generated or fetched: the play control shows a spinner and the other controls are disabled. */
-    loading?: boolean
-    /** Why the audio cannot play. Set, the controls are disabled and this text replaces the time. */
-    error?: string
-    /** Disables every control and applies the disabled tokens. */
-    disabled?: boolean
-    /** Accessible name of the control group when there is no `title`. Empty falls back to the catalog's Audio player. */
-    ariaLabel?: string
-  }
-
   const props = withDefaults(defineProps<AudioPlayerProps>(), {
     src: '',
     title: '',
@@ -72,7 +47,6 @@
   const currentTime = ref(0)
   const mediaDuration = ref<number | undefined>(undefined)
 
-  const initialRate = (rates: number[]): number => (rates.includes(1) ? 1 : (rates[0] ?? 1))
   const rate = ref(initialRate(props.playbackRates))
 
   const testId = computed<string>(
@@ -184,10 +158,6 @@
     if (audioEl.value) audioEl.value.playbackRate = rate.value
   }
 
-  function onDurationchange() {
-    readDuration()
-  }
-
   function onTimeupdate() {
     currentTime.value = audioEl.value?.currentTime ?? 0
   }
@@ -201,18 +171,6 @@
     playing.value = false
     buffering.value = false
     emit('pause', event)
-  }
-
-  function onWaiting() {
-    buffering.value = true
-  }
-
-  function onPlaying() {
-    buffering.value = false
-  }
-
-  function onCanplay() {
-    buffering.value = false
   }
 
   function onError() {
@@ -263,6 +221,35 @@
     rate.value = rates[(index + 1) % rates.length] ?? rates[0] ?? 1
     if (audioEl.value) audioEl.value.playbackRate = rate.value
   }
+</script>
+
+<script lang="ts">
+  export interface AudioPlayerProps {
+    /** Audio source: a URL, an object URL or a data URL built from base64 audio. Empty disables the controls. */
+    src?: string
+    /** Name of the clip, shown above the controls and used as the accessible name of the control group. */
+    title?: string
+    /** Length of the clip in seconds, shown until the browser reads it from the file. Unset shows a placeholder. */
+    duration?: number
+    /** Text the audio speaks, shown in a collapsible Transcript section under the controls. Empty hides the section. */
+    transcript?: string
+    /** Playback speeds the speed control cycles through, in order. Empty hides it; it starts at 1 when listed, else the first. */
+    playbackRates?: number[]
+    /** Shows a Download link to `src`. */
+    downloadable?: boolean
+    /** File name the Download link saves the audio as. Empty lets the browser pick one. */
+    fileName?: string
+    /** The audio is still being generated or fetched: the play control shows a spinner and the other controls are disabled. */
+    loading?: boolean
+    /** Why the audio cannot play. Set, the controls are disabled and this text replaces the time. */
+    error?: string
+    /** Disables every control and applies the disabled tokens. */
+    disabled?: boolean
+    /** Accessible name of the control group when there is no `title`. Empty falls back to the catalog's Audio player. */
+    ariaLabel?: string
+  }
+
+  const initialRate = (rates: number[]): number => (rates.includes(1) ? 1 : (rates[0] ?? 1))
 
   const TRANSCRIPT_SUMMARY_CLASS =
     'cursor-pointer rounded-(--shape-control) text-label-sm text-(--text-default) ' +
@@ -291,13 +278,13 @@
       preload="metadata"
       class="hidden"
       @loadedmetadata="onLoadedmetadata"
-      @durationchange="onDurationchange"
+      @durationchange="readDuration"
       @timeupdate="onTimeupdate"
       @play="onPlay"
       @pause="onPause"
-      @waiting="onWaiting"
-      @playing="onPlaying"
-      @canplay="onCanplay"
+      @waiting="buffering = true"
+      @playing="buffering = false"
+      @canplay="buffering = false"
       @error="onError"
       @volumechange="onVolumechange"
     />
