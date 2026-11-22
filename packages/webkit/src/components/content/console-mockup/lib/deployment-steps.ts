@@ -1,3 +1,5 @@
+import type { LogViewerLine } from '../../../code/log-viewer/injection-key'
+
 export type DeploymentLogTuple = [time: string, message: string, type?: DeploymentLogLineType]
 
 export type DeploymentLogLineType = 'text' | 'success' | 'warning'
@@ -168,3 +170,67 @@ export const LOG_VIEWS: { label: string; value: DeploymentLogView }[] = [
   { label: 'Phased', value: 'phased' },
   { label: 'Complete', value: 'complete' }
 ]
+
+export type DeploymentPhase = 'running' | 'success' | 'error'
+
+export type DeploymentStepStatus = 'success' | 'running' | 'error' | 'skipped' | 'pending'
+
+export const STEP_TAGS: Partial<
+  Record<DeploymentStepStatus, { label: string; severity: 'danger' | 'neutral' }>
+> = {
+  error: { label: 'Failed', severity: 'danger' },
+  skipped: { label: 'Skipped', severity: 'neutral' }
+}
+
+export const tuplesFor = (step: DeploymentStep, failAt: string): DeploymentLogTuple[] => {
+  if (step.key !== failAt || !step.failLogs?.length) return step.logs
+  return step.failLogs.map(([time, message]) => [
+    time,
+    message,
+    message.includes('[ERROR]') ? 'warning' : 'text'
+  ])
+}
+
+export const stepStatusOf = (
+  phase: DeploymentPhase,
+  active: number,
+  i: number
+): DeploymentStepStatus => {
+  if (phase === 'error') {
+    if (i < active) return 'success'
+    return i === active ? 'error' : 'skipped'
+  }
+  if (phase === 'success' || i < active) return 'success'
+  if (i === active && phase === 'running') return 'running'
+  return 'pending'
+}
+
+export const formatDuration = (s: number): string =>
+  s >= 60 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${s}s`
+
+export const toLine = ([time, message, type]: DeploymentLogTuple, i: number): LogViewerLine => {
+  const kind =
+    type ??
+    (message.includes('vulnerabilit')
+      ? 'warning'
+      : /successfully|finalized/.test(message)
+        ? 'success'
+        : 'text')
+  return kind === 'warning'
+    ? { id: String(i), time, type: 'text', level: 'warn', message }
+    : { id: String(i), time, type: kind, message }
+}
+
+export const stepDurationLabel = (step: DeploymentStep, seconds: number): string => {
+  if (step.durationLabel) return step.durationLabel
+  return seconds > 0 ? formatDuration(seconds) : ''
+}
+
+export const outcomeOf = (phase: DeploymentPhase, time: string): string => {
+  if (phase === 'success') return time ? `Deployed in ${time}` : 'Deployed'
+  if (phase === 'error') return time ? `Failed after ${time}` : 'Failed'
+  return time
+}
+
+export const indexOfKey = (steps: DeploymentStep[], key: string): number =>
+  key ? steps.findIndex((step) => step.key === key) : -1

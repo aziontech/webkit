@@ -20,6 +20,59 @@ export interface UseSceneScriptReturn {
 
 class Cancelled extends Error {}
 
+const sceneWait =
+  (current: () => boolean, timers: Set<ReturnType<typeof globalThis.setTimeout>>): SceneWait =>
+  (ms) =>
+    new Promise((resolve, reject) => {
+      if (!current()) return reject(new Cancelled())
+      const timer = globalThis.setTimeout(() => {
+        timers.delete(timer)
+        if (current()) resolve()
+        else reject(new Cancelled())
+      }, ms)
+      timers.add(timer)
+    })
+
+const playForever = async (
+  wait: SceneWait,
+  reset: () => void,
+  play: (wait: SceneWait) => Promise<void>,
+  lead: number,
+  hold: number
+): Promise<void> => {
+  try {
+    for (;;) {
+      reset()
+      await wait(lead)
+      await play(wait)
+      await wait(hold)
+    }
+  } catch (error) {
+    if (!(error instanceof Cancelled)) throw error
+  }
+}
+
+const watchOnScreen = (
+  target: MaybeRefOrGetter<Element | null>,
+  onChange: (onScreen: boolean) => void
+): (() => void) => {
+  let observer: globalThis.IntersectionObserver | null = null
+  watch(
+    () => toValue(target),
+    (element) => {
+      observer?.disconnect()
+      if (!element) return
+      observer = new globalThis.IntersectionObserver(
+        ([entry]) => onChange(Boolean(entry?.isIntersecting)),
+        { threshold: 0.35 }
+      )
+      observer.observe(element)
+    },
+    { immediate: true }
+  )
+  return () => observer?.disconnect()
+}
+
 export function useSceneScript(
   target: MaybeRefOrGetter<Element | null>,
   {
@@ -43,34 +96,14 @@ export function useSceneScript(
     playing.value = false
   }
 
-  const loop = async () => {
+  const loop = () => {
     const token = ++run
-    const wait: SceneWait = (ms) =>
-      new Promise((resolve, reject) => {
-        if (token !== run) return reject(new Cancelled())
-        const timer = globalThis.setTimeout(() => {
-          timers.delete(timer)
-          if (token === run) resolve()
-          else reject(new Cancelled())
-        }, ms)
-        timers.add(timer)
-      })
-
+    const wait = sceneWait(() => token === run, timers)
     playing.value = true
-    try {
-      for (;;) {
-        reset()
-        await wait(lead)
-        await play(wait)
-        await wait(hold)
-      }
-    } catch (error) {
-      if (!(error instanceof Cancelled)) throw error
-    }
+    return playForever(wait, reset, play, lead, hold)
   }
 
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
-  let observer: globalThis.IntersectionObserver | null = null
 
   const onScreen = ref(false)
   const halted = () => paused() ?? reduced.value
@@ -89,27 +122,15 @@ export function useSceneScript(
   watch(active, start)
   watch(halted, start)
 
-  watch(
-    () => toValue(target),
-    (element) => {
-      observer?.disconnect()
-      if (!element) return
-      observer = new globalThis.IntersectionObserver(
-        ([entry]) => {
-          onScreen.value = Boolean(entry?.isIntersecting)
-          start()
-        },
-        { threshold: 0.35 }
-      )
-      observer.observe(element)
-    },
-    { immediate: true }
-  )
+  const disconnect = watchOnScreen(target, (on) => {
+    onScreen.value = on
+    start()
+  })
 
   settle()
 
   onScopeDispose(() => {
-    observer?.disconnect()
+    disconnect()
     stop()
   })
 
