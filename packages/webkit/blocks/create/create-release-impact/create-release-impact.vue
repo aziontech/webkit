@@ -10,6 +10,7 @@
   import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 
   import { cloneResource, plural, resolvedVersion } from './lib/release-impact'
+  import OutcomeActions from './parts/outcome-actions.vue'
   import ReleaseImpactPanel from './parts/release-impact-panel.vue'
   import ReleaseResourceCard from './parts/release-resource-card.vue'
   import { sampleImpact, sampleResources } from './sample'
@@ -239,21 +240,10 @@
           :label="`The release wasn't deployed. ${deployError} Nothing changed in traffic.`"
         >
           <template #actions>
-            <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-              <Button
-                label="Edit"
-                variant="outline"
-                size="small"
-                @click="edit"
-              />
-              <Button
-                label="Redeploy"
-                variant="outline"
-                size="small"
-                icon="az az-refresh"
-                @click="deploy"
-              />
-            </div>
+            <OutcomeActions
+              @edit="edit"
+              @redeploy="deploy"
+            />
           </template>
         </Alert>
         <Alert
@@ -263,21 +253,10 @@
           :label="`Release deployed. ${releaseLine} serve ${plural(projects.length, 'project', 'projects')} now.`"
         >
           <template #actions>
-            <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-              <Button
-                label="Edit"
-                variant="outline"
-                size="small"
-                @click="edit"
-              />
-              <Button
-                label="Redeploy"
-                variant="outline"
-                size="small"
-                icon="az az-refresh"
-                @click="deploy"
-              />
-            </div>
+            <OutcomeActions
+              @edit="edit"
+              @redeploy="deploy"
+            />
           </template>
         </Alert>
 

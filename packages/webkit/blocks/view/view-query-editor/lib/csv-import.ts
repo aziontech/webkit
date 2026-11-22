@@ -1,3 +1,5 @@
+import { splitCsvLine } from '@aziontech/webkit/utils/csv'
+
 import type { QueryEditorColumn } from '../types'
 
 export interface ImportFile {
@@ -14,25 +16,6 @@ export interface ImportRow {
 export type TypeCheck = [test: (value: string) => boolean, expected: string]
 
 export const SKIP = '__skip'
-
-export const splitCsvLine = (line: string) => {
-  const cells: string[] = []
-  let cell = ''
-  let quoted = false
-  for (let i = 0; i < line.length; i += 1) {
-    const char = line[i]
-    if (quoted && char === '"' && line[i + 1] === '"') {
-      cell += '"'
-      i += 1
-    } else if (char === '"') quoted = !quoted
-    else if (char === ',' && !quoted) {
-      cells.push(cell.trim())
-      cell = ''
-    } else cell += char
-  }
-  cells.push(cell.trim())
-  return cells
-}
 
 export const TYPE_CHECKS: Record<string, TypeCheck> = {
   int2: [(value) => /^-?\d+$/.test(value), 'a whole number'],

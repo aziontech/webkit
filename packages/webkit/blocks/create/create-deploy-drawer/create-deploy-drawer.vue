@@ -1,19 +1,11 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import Kbd from '@aziontech/webkit/kbd'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import SettingsGroup from '@aziontech/webkit/settings-group'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, ref, useId, watch } from 'vue'
 
   import BuildItem from './parts/build-item.vue'
+  import DeployDrawerFrame from './parts/deploy-drawer-frame.vue'
   import DeployLoading from './parts/deploy-loading.vue'
   import DeployResourcesCard from './parts/deploy-resources-card.vue'
   import EnvironmentChoices from './parts/environment-choices.vue'
@@ -218,190 +210,135 @@
     })
     open.value = false
   }
-
-  const formEl = ref<HTMLFormElement | null>(null)
-
-  useShortcuts({
-    keys: 'meta+enter',
-    label: 'Deploy',
-    group: 'Drawer',
-    element: formEl,
-    when: () => open.value && !blocked.value,
-    handler: () => formEl.value?.requestSubmit()
-  })
 </script>
 
 <template>
-  <Drawer
+  <DeployDrawerFrame
     v-model:open="open"
-    size="large"
-    side="end"
+    :title="title"
+    :blocked="blocked"
+    :reason-id="blocker ? blockerId : ''"
+    @submit="submit"
   >
-    <DrawerTrigger>
-      <Button
-        label="Deploy"
-        variant="outline"
-        size="medium"
-        icon="az az-cloud-upload"
-      />
-    </DrawerTrigger>
+    <DeployLoading v-if="loading" />
 
-    <DrawerContent>
-      <form
-        ref="formEl"
-        class="flex min-h-0 flex-1 flex-col"
-        :aria-label="title"
-        novalidate
-        @submit.prevent="submit"
+    <SettingsGroup
+      v-else-if="error"
+      label="Deploy targets"
+    >
+      <div class="flex min-w-0 flex-col items-start gap-(--spacing-sm)">
+        <Alert
+          severity="danger"
+          :label="error"
+        />
+        <Button
+          label="Retry"
+          variant="outline"
+          size="small"
+          icon="az az-refresh"
+          @click="(event: MouseEvent) => emit('retry', event)"
+        />
+      </div>
+    </SettingsGroup>
+
+    <fieldset
+      v-else
+      class="m-0 flex min-w-0 flex-col border-0 p-0"
+    >
+      <legend class="sr-only">{{ title }}</legend>
+      <SettingsGroup
+        label="Resources"
+        hint="The service version this deployment sends live, and the version of every module and integration it references."
       >
-        <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>{{ title }}</DrawerTitle>
-          </div>
-        </PanelHeader>
+        <BuildItem
+          v-if="build"
+          :build="build"
+        />
+        <DeployResourcesCard
+          v-else
+          v-model:picks="picks"
+          :resources="resources"
+          :dependencies-open="dependenciesOpen"
+          :dependencies-loading-keys="dependenciesLoadingKeys"
+        />
+      </SettingsGroup>
 
-        <PanelBody>
-          <DeployLoading v-if="loading" />
+      <SettingsGroup
+        :inert="!!build || undefined"
+        :data-pending="build ? 'true' : undefined"
+        label="Project"
+        hint="The project whose domains serve the service. Create one to deploy it on a new domain."
+      >
+        <ProjectCard
+          v-model:project-mode="projectMode"
+          v-model:project-id="projectId"
+          :project="project"
+          :project-groups="projectGroups"
+        />
+      </SettingsGroup>
 
-          <SettingsGroup
-            v-else-if="error"
-            label="Deploy targets"
-          >
-            <div class="flex min-w-0 flex-col items-start gap-(--spacing-sm)">
-              <Alert
-                severity="danger"
-                :label="error"
-              />
-              <Button
-                label="Retry"
-                variant="outline"
-                size="small"
-                icon="az az-refresh"
-                @click="(event: MouseEvent) => emit('retry', event)"
-              />
-            </div>
-          </SettingsGroup>
+      <SettingsGroup
+        :inert="!!build || undefined"
+        :data-pending="build ? 'true' : undefined"
+        label="Environment"
+        hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
+      >
+        <EnvironmentChoices
+          v-model="environment"
+          :environments="environmentChoices"
+          name="service-deploy-environment"
+        />
 
-          <fieldset
-            v-else
-            class="m-0 flex min-w-0 flex-col border-0 p-0"
-          >
-            <legend class="sr-only">{{ title }}</legend>
-            <SettingsGroup
-              label="Resources"
-              hint="The service version this deployment sends live, and the version of every module and integration it references."
-            >
-              <BuildItem
-                v-if="build"
-                :build="build"
-              />
-              <DeployResourcesCard
-                v-else
-                v-model:picks="picks"
-                :resources="resources"
-                :dependencies-open="dependenciesOpen"
-                :dependencies-loading-keys="dependenciesLoadingKeys"
-              />
-            </SettingsGroup>
+        <slot
+          name="environment-alerts"
+          :environment="environment"
+          :project="project"
+        />
+      </SettingsGroup>
 
-            <SettingsGroup
-              :inert="!!build || undefined"
-              :data-pending="build ? 'true' : undefined"
-              label="Project"
-              hint="The project whose domains serve the service. Create one to deploy it on a new domain."
-            >
-              <ProjectCard
-                v-model:project-mode="projectMode"
-                v-model:project-id="projectId"
-                :project="project"
-                :project-groups="projectGroups"
-              />
-            </SettingsGroup>
+      <SettingsGroup
+        v-if="impacted.length"
+        :inert="!!build || undefined"
+        :data-pending="build ? 'true' : undefined"
+        label="Projects impacted"
+        hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
+      >
+        <ImpactedProjects
+          :impacted="impacted"
+          :loading="impactedLoading"
+        />
+      </SettingsGroup>
 
-            <SettingsGroup
-              :inert="!!build || undefined"
-              :data-pending="build ? 'true' : undefined"
-              label="Environment"
-              hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
-            >
-              <EnvironmentChoices
-                v-model="environment"
-                :environments="environmentChoices"
-                name="service-deploy-environment"
-              />
-
-              <slot
-                name="environment-alerts"
-                :environment="environment"
-                :project="project"
-              />
-            </SettingsGroup>
-
-            <SettingsGroup
-              v-if="impacted.length"
-              :inert="!!build || undefined"
-              :data-pending="build ? 'true' : undefined"
-              label="Projects impacted"
-              hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
-            >
-              <ImpactedProjects
-                :impacted="impacted"
-                :loading="impactedLoading"
-              />
-            </SettingsGroup>
-
-            <span
-              class="sr-only"
-              role="status"
-            >
-              {{ impactedLoading ? 'Loading the projects this deployment reaches' : '' }}
-            </span>
-          </fieldset>
-        </PanelBody>
-
-        <PanelFooter>
-          <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
-            <p
-              v-if="blocker"
-              :id="blockerId"
-              class="flex min-w-0 items-start gap-(--spacing-xs) text-body-sm text-(--warning-foreground)"
-            >
-              <i
-                class="az az-triangle-alert mt-0.5 shrink-0 text-body-xs"
-                aria-hidden="true"
-              />
-              <span>{{ blocker }}</span>
-            </p>
-            <p
-              v-else-if="changeCount && !build"
-              class="flex min-w-0 items-center gap-(--spacing-2xs) text-body-xs text-(--text-muted)"
-            >
-              <i
-                class="az az-circle-info shrink-0"
-                aria-hidden="true"
-              />
-              <span class="truncate">{{ changeSummary }}</span>
-            </p>
-            <span v-else />
-            <Button
-              variant="primary"
-              size="medium"
-              :disabled="blocked"
-              type="submit"
-              :aria-describedby="blocker ? blockerId : undefined"
-              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
-            >
-              Deploy
-              <Kbd
-                meta
-                key-name="enter"
-                size="small"
-                aria-hidden="true"
-              />
-            </Button>
-          </div>
-        </PanelFooter>
-      </form>
-    </DrawerContent>
-  </Drawer>
+      <span
+        class="sr-only"
+        role="status"
+      >
+        {{ impactedLoading ? 'Loading the projects this deployment reaches' : '' }}
+      </span>
+    </fieldset>
+    <template #footer-start>
+      <p
+        v-if="blocker"
+        :id="blockerId"
+        class="flex min-w-0 items-start gap-(--spacing-xs) text-body-sm text-(--warning-foreground)"
+      >
+        <i
+          class="az az-triangle-alert mt-0.5 shrink-0 text-body-xs"
+          aria-hidden="true"
+        />
+        <span>{{ blocker }}</span>
+      </p>
+      <p
+        v-else-if="changeCount && !build"
+        class="flex min-w-0 items-center gap-(--spacing-2xs) text-body-xs text-(--text-muted)"
+      >
+        <i
+          class="az az-circle-info shrink-0"
+          aria-hidden="true"
+        />
+        <span class="truncate">{{ changeSummary }}</span>
+      </p>
+      <span v-else />
+    </template>
+  </DeployDrawerFrame>
 </template>

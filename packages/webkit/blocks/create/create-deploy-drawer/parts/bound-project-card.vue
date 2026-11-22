@@ -9,6 +9,7 @@
 
   import type { DeployDrawerBoundProject } from '../sample'
   import type { DeployDrawerProject } from '../types'
+  import ProjectMedia from './project-media.vue'
 
   export interface BoundProjectCardProps {
     /** The project the deployment goes live on. */
@@ -58,16 +59,7 @@
           variant="outline"
           size="small"
         >
-          <Item.Media>
-            <span
-              class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-            >
-              <i
-                class="az az-box text-body-xs text-(--text-default)"
-                aria-hidden="true"
-              />
-            </span>
-          </Item.Media>
+          <ProjectMedia />
           <Item.Content>
             <span class="flex min-w-0 items-center gap-(--spacing-xs)">
               <Item.Title>{{ project.name }}</Item.Title>

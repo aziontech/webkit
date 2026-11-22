@@ -6,6 +6,7 @@
 
   import type { DeployDrawerImpact } from '../types'
   import DomainGroupItem from './domain-group-item.vue'
+  import ProjectMedia from './project-media.vue'
 
   export interface ImpactedProjectsProps {
     /** The projects reached through shared Deployment Settings, per environment. */
@@ -83,16 +84,7 @@
             variant="outline"
             size="small"
           >
-            <Item.Media>
-              <span
-                class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-              >
-                <i
-                  class="az az-box text-body-xs text-(--text-default)"
-                  aria-hidden="true"
-                />
-              </span>
-            </Item.Media>
+            <ProjectMedia />
             <Item.Content>
               <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <Item.Title>{{ target.name }}</Item.Title>
