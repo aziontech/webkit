@@ -51,7 +51,23 @@
     "name": "List",
     "file": "edit-variables.vue"
   },
-  "files": ["sample.ts", "paste-panel.ts"],
+  "files": [
+    "sample.ts",
+    "lib/paste-report.ts",
+    "lib/variables-format.ts",
+    "lib/variables-rows.ts",
+    "lib/variables-scope.ts",
+    "lib/network-list.ts",
+    "composables/use-variables-form.ts",
+    "composables/use-network-list-form.ts",
+    "parts/variables-list.vue",
+    "parts/variables-drawer-form.vue",
+    "parts/variables-entries.vue",
+    "parts/variables-scope-group.vue",
+    "parts/paste-panel.vue",
+    "parts/env-paste-panel.vue",
+    "parts/network-list-fields.vue"
+  ],
   "variants": [
     {
       "name": "Create",
