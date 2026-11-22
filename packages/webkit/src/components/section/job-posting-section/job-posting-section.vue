@@ -1,17 +1,14 @@
 <script setup lang="ts">
-  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, nextTick, proxyRefs, ref, useAttrs, useId, watch } from 'vue'
 
   import Button from '../../action/button/button.vue'
-  import Eyebrow from '../../content/eyebrow/eyebrow.vue'
   import Alert from '../../feedback/alert/alert.vue'
   import Field from '../../input/field/field.vue'
   import FieldDescription from '../../input/field/field-description/field-description.vue'
   import FieldLabel from '../../input/field/field-label/field-label.vue'
   import FileDropzone from '../../input/file-dropzone/file-dropzone.vue'
-  import type { FileTokenGroupItem } from '../../input/file-token-group/file-token-group.vue'
   import FileTokenGroup from '../../input/file-token-group/file-token-group.vue'
   import Input from '../../input/input/input.vue'
-  import { defaultCountries } from '../../input/phone-input/lib/country-data'
   import PhoneInput from '../../input/phone-input/phone-input.vue'
   import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
@@ -24,6 +21,8 @@
   import PanelBody from '../../overlay/panel/panel-body.vue'
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
+  import { useJobPostingForm } from './composables/use-job-posting-form'
+  import JobPostingSectionRail from './parts/job-posting-section-rail.vue'
 
   defineOptions({
     name: 'JobPostingSection',
@@ -176,19 +175,18 @@
     submit: [event: SubmitEvent, values: Record<string, string>]
   }>()
 
-  const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-  const URL_PATTERN = /^https?:\/\/\S+$/
-
   const attrs = useAttrs()
   const baseId = useId()
 
-  const values = ref<Record<string, string>>({})
-  const countries = ref<Record<string, string>>({})
-  const files = ref<Record<string, File>>({})
-  const errors = ref<Record<string, string>>({})
   const confirming = ref(props.submitted)
-  const fileInputEls = ref<Record<string, HTMLInputElement | null>>({})
+
+  const application = proxyRefs(
+    useJobPostingForm(
+      baseId,
+      () => props.form.fields,
+      () => props.messages
+    )
+  )
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'job-posting-section'
@@ -198,92 +196,6 @@
 
   const legend = computed(() => props.form.ariaLabel || props.form.title)
 
-  const fieldId = (field: JobPostingSectionField) => `${baseId}-${field.name}`
-
-  const countryOf = (field: JobPostingSectionField) =>
-    countries.value[field.name] ?? field.country ?? 'US'
-
-  const clearError = (field: JobPostingSectionField) => {
-    if (errors.value[field.name]) errors.value = { ...errors.value, [field.name]: '' }
-  }
-
-  const setValue = (field: JobPostingSectionField, next: string) => {
-    values.value = { ...values.value, [field.name]: next }
-    clearError(field)
-  }
-
-  const setCountry = (field: JobPostingSectionField, next: string) => {
-    countries.value = { ...countries.value, [field.name]: next }
-  }
-
-  const syncInput = (field: JobPostingSectionField, file: File | null) => {
-    const input = fileInputEls.value[field.name]
-    if (!input || typeof DataTransfer === 'undefined') return
-    const transfer = new DataTransfer()
-    if (file) transfer.items.add(file)
-    input.files = transfer.files
-  }
-
-  const setFile = (field: JobPostingSectionField, file: File | null, fromInput = false) => {
-    const next = { ...files.value }
-    if (file) next[field.name] = file
-    else delete next[field.name]
-    files.value = next
-    if (!fromInput) syncInput(field, file)
-    setValue(field, file?.name ?? '')
-  }
-
-  const bindFileInput = (field: JobPostingSectionField, element: unknown) => {
-    fileInputEls.value[field.name] = element instanceof HTMLInputElement ? element : null
-  }
-
-  const browse = (field: JobPostingSectionField) => fileInputEls.value[field.name]?.click()
-
-  const onFilePick = (field: JobPostingSectionField, event: Event) => {
-    const input = event.target as HTMLInputElement
-    setFile(field, input.files?.[0] ?? null, true)
-  }
-
-  const fileTokens = (field: JobPostingSectionField): FileTokenGroupItem[] => {
-    const file = files.value[field.name]
-    return file ? [{ file }] : []
-  }
-
-  const valueOf = (field: JobPostingSectionField) => {
-    const raw = (values.value[field.name] ?? '').trim()
-    if (field.type !== 'phone' || !raw) return raw
-    const dialCode = defaultCountries.find((item) => item.code === countryOf(field))?.dialCode
-    return dialCode ? `${dialCode}${raw}` : raw
-  }
-
-  const filled = (field: JobPostingSectionField) => Boolean((values.value[field.name] ?? '').trim())
-
-  const emptyRequired = (field: JobPostingSectionField) =>
-    Boolean(errors.value[field.name]) && !filled(field)
-
-  const malformed = (field: JobPostingSectionField) =>
-    Boolean(errors.value[field.name]) && filled(field)
-
-  const messageOf = (field: JobPostingSectionField, value: string) => {
-    if (field.required && !value) return props.messages.missing
-    if (field.type === 'email' && value && !EMAIL_PATTERN.test(value))
-      return props.messages.invalidEmail
-    if (field.type === 'url' && value && !URL_PATTERN.test(value)) return props.messages.invalidUrl
-    return ''
-  }
-
-  const focusTarget = (field: JobPostingSectionField) =>
-    field.type === 'file' ? `${fieldId(field)}-browse` : fieldId(field)
-
-  const reset = () => {
-    values.value = {}
-    errors.value = {}
-    for (const field of props.form.fields) {
-      if (field.type === 'file') syncInput(field, null)
-    }
-    files.value = {}
-  }
-
   watch(
     () => props.submitted,
     (submitted) => {
@@ -292,23 +204,14 @@
   )
 
   watch(confirming, (open, wasOpen) => {
-    if (!open && wasOpen) reset()
+    if (!open && wasOpen) application.reset()
   })
 
   const send = (event: Event) => {
     if (props.loading) return
-    const collected: Record<string, string> = {}
-    const found: Record<string, string> = {}
-    for (const field of props.form.fields) {
-      const value = valueOf(field)
-      collected[field.name] = value
-      const message = messageOf(field, value)
-      if (message) found[field.name] = message
-    }
-    errors.value = found
-    const first = props.form.fields.find((field) => found[field.name])
+    const { values: collected, first } = application.validate()
     if (first) {
-      nextTick(() => document.getElementById(focusTarget(first))?.focus())
+      nextTick(() => document.getElementById(application.focusTarget(first))?.focus())
       return
     }
     emit('submit', event as SubmitEvent, collected)
@@ -336,50 +239,14 @@
           marks="bottom"
         >
           <div class="grid lg:grid-cols-[minmax(0,1fr)_var(--container-xs)]">
-            <div
-              :data-testid="`${testId}__rail`"
-              class="hidden border-(--border-default) lg:col-start-2 lg:row-start-1 lg:block lg:border-s"
-            >
-              <div class="sticky top-14 flex flex-col gap-(--spacing-lg) p-(--spacing-xl)">
-                <div class="flex flex-col gap-(--spacing-xs)">
-                  <Eyebrow v-if="area">{{ area }}</Eyebrow>
-                  <p class="m-0 text-pretty text-heading-sm text-(--text-default)">
-                    {{ title }}
-                  </p>
-                </div>
-
-                <ul
-                  v-if="facets.length > 0"
-                  class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0"
-                >
-                  <li
-                    v-for="facet in facets"
-                    :key="facet.label"
-                    class="flex items-start gap-(--spacing-xs) text-body-sm text-(--text-muted)"
-                  >
-                    <i
-                      v-if="facet.icon"
-                      :class="facet.icon"
-                      class="mt-(--spacing-2xs) shrink-0 text-body-sm text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                    {{ facet.label }}
-                  </li>
-                </ul>
-
-                <Button
-                  v-if="applyLabel"
-                  :label="applyLabel"
-                  variant="secondary"
-                  size="large"
-                  :href="`#${applyId}`"
-                  icon="az az-chevron-right"
-                  icon-position="trailing"
-                  animated
-                  class="w-full"
-                />
-              </div>
-            </div>
+            <JobPostingSectionRail
+              :test-id="testId"
+              :area="area"
+              :title="title"
+              :facets="facets"
+              :apply-label="applyLabel"
+              :apply-href="`#${applyId}`"
+            />
 
             <div class="min-w-0 lg:col-start-1 lg:row-start-1">
               <div
@@ -480,67 +347,67 @@
                   v-for="field in form.fields"
                   :key="field.name"
                   :required="field.required"
-                  :invalid="emptyRequired(field) || malformed(field)"
+                  :invalid="application.emptyRequired(field) || application.malformed(field)"
                   :disabled="loading"
                   :data-wide="field.type === 'file' || null"
                   class="min-w-0 sm:data-[wide]:col-span-2"
                 >
                   <FieldLabel
-                    :for="focusTarget(field)"
+                    :for="application.focusTarget(field)"
                     :required="field.required"
                     >{{ field.label }}</FieldLabel
                   >
                   <template v-if="field.type === 'file'">
                     <FileDropzone
-                      v-if="!files[field.name]"
+                      v-if="!application.files[field.name]"
                       :accept="field.accept ?? ''"
                       :multiple="false"
                       :disabled="loading"
-                      @drop="(_event, dropped) => setFile(field, dropped[0] ?? null)"
+                      @drop="(_event, dropped) => application.setFile(field, dropped[0] ?? null)"
                     >
                       <Button
-                        :id="`${fieldId(field)}-browse`"
+                        :id="`${application.fieldId(field)}-browse`"
                         type="button"
                         :label="messages.browse"
                         :aria-label="`${messages.browse}, ${field.label}`"
                         variant="secondary"
                         size="medium"
                         :disabled="loading"
-                        @click="browse(field)"
+                        @click="application.browse(field)"
                       />
                     </FileDropzone>
                     <FileTokenGroup
                       v-else
-                      :items="fileTokens(field)"
+                      :items="application.fileTokens(field)"
                       :readonly="loading"
-                      @remove="setFile(field, null)"
+                      @remove="application.setFile(field, null)"
                     />
                     <input
-                      :ref="(element) => bindFileInput(field, element)"
+                      :ref="(element) => application.bindFileInput(field, element)"
                       type="file"
                       :name="field.name"
                       :accept="field.accept || undefined"
                       class="hidden"
                       aria-hidden="true"
                       tabindex="-1"
-                      @change="onFilePick(field, $event)"
+                      @change="application.onFilePick(field, $event)"
                     />
                   </template>
                   <PhoneInput
                     v-else-if="field.type === 'phone'"
-                    :id="fieldId(field)"
+                    :id="application.fieldId(field)"
                     size="large"
-                    :model-value="values[field.name] ?? ''"
-                    :country="countryOf(field)"
+                    :model-value="application.values[field.name] ?? ''"
+                    :country="application.countryOf(field)"
                     :name="field.name"
                     :placeholder="field.placeholder"
-                    @update:model-value="setValue(field, $event)"
-                    @update:country="setCountry(field, $event)"
+                    @update:model-value="application.setValue(field, $event)"
+                    @update:country="application.setCountry(field, $event)"
                   />
                   <Input
                     v-else
-                    :id="fieldId(field)"
-                    :model-value="values[field.name] ?? ''"
+                    :id="application.fieldId(field)"
+                    :model-value="application.values[field.name] ?? ''"
                     :name="field.name"
                     :placeholder="field.placeholder"
                     :type="field.type === 'email' ? 'email' : 'text'"
@@ -548,10 +415,10 @@
                     :autocomplete="field.type === 'email' ? 'email' : field.autocomplete"
                     :spellcheck="field.type === 'email' || field.type === 'url' ? false : undefined"
                     size="large"
-                    @update:model-value="setValue(field, $event)"
+                    @update:model-value="application.setValue(field, $event)"
                   />
-                  <FieldDescription v-if="errors[field.name] || field.helper">
-                    {{ errors[field.name] || field.helper }}
+                  <FieldDescription v-if="application.errors[field.name] || field.helper">
+                    {{ application.errors[field.name] || field.helper }}
                   </FieldDescription>
                 </Field>
               </fieldset>
