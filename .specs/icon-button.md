@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 329cb0bd71fecf4f1334139ea35d8bd354205ac7a50576e682baf25ef307f974
+checksum: 48fab4e170a309b4a24514f7493ab88079db49f29c1e2ebd5d28caa33e816db5
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-21
 ---
 
 # Icon Button — Component Spec
@@ -164,14 +164,10 @@ A square control that triggers an action with a glyph and no visible text: close
 ## Examples
 
 - Default
-- Primary (variant)
-- Secondary (variant)
-- Outlined (variant)
-- Transparent (variant)
-- Danger (variant)
-- Small (size)
-- Medium (size)
-- Large (size)
+- Variants — composite story rendering every `variant` value side by side: primary, secondary, outline, ghost and danger.
+- Sizes — composite story rendering every `size` value side by side.
+- Icon transition (`iconTransition`) — a show and hide toggle that swaps its icon in place.
+- Loading
 - Disabled
 
 ## Constraints — DO NOT

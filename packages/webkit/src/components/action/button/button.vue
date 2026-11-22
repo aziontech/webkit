@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import { computed, type FunctionalComponent, h, useAttrs, watch } from 'vue'
+  import { computed, useAttrs, watch } from 'vue'
 
   import { useAnnouncer } from '../../../composables/use-announcer'
+  import { useButtonRoot } from '../../../composables/use-button-root'
   import { directionalIconClass } from '../../../utils/directional-icons'
-  import { safeHref } from '../../../utils/safe-href'
   import Spinner from '../../feedback/spinner/spinner.vue'
 
   export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link'
@@ -72,25 +72,21 @@
     leading?(): unknown
   }>()
 
-  const attrs = useAttrs()
   const { announce } = useAnnouncer()
-
-  const Root: FunctionalComponent<{ tag: 'a' | 'button' }> = (
-    { tag },
-    { attrs: rootAttrs, slots }
-  ) => h(tag, rootAttrs, slots['default']?.())
-  Root.props = ['tag']
-
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'button')
-  const loadingTestId = computed(() => `${testId.value}__loading`)
-
-  const isInert = computed(() => props.disabled || props.loading)
-  const linkHref = computed(() =>
-    safeHref(props.href, attrs['download'] != null && attrs['download'] !== false)
+  const attrs = useAttrs()
+  const { Root, rootAttrs, onClick } = useButtonRoot(props, 'button', (event) =>
+    emit('click', event)
   )
-
-  const isAnchor = computed(() => linkHref.value !== null)
-  const hasReason = computed(() => props.disabled && props.disabledReason.length > 0)
+  const buttonAttrs = computed(() =>
+    props.disabled && props.disabledReason
+      ? {
+          ...rootAttrs.value,
+          disabled: false,
+          tabindex: attrs['tabindex'],
+          title: props.disabledReason
+        }
+      : rootAttrs.value
+  )
 
   watch(
     () => props.loading,
@@ -144,37 +140,14 @@
     'transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none ' +
     'group-hover/button:data-animated:translate-x-0.5 rtl:group-hover/button:data-animated:-translate-x-0.5 ' +
     'group-data-[icon-position=trailing]/button:order-last'
-
-  const onClick = (event: MouseEvent) => {
-    if (isInert.value) {
-      event.preventDefault()
-      return
-    }
-
-    emit('click', event)
-  }
 </script>
 
 <template>
   <Root
-    :tag="isAnchor ? 'a' : 'button'"
-    v-bind="$attrs"
-    :href="linkHref ?? undefined"
-    :target="isAnchor ? target : undefined"
-    :rel="isAnchor && target === '_blank' ? 'noopener noreferrer' : undefined"
-    :type="isAnchor ? undefined : type"
-    :disabled="!isAnchor && disabled && !hasReason ? true : undefined"
-    :tabindex="isAnchor && isInert && !hasReason ? -1 : (attrs['tabindex'] as number | undefined)"
-    :aria-disabled="isInert || undefined"
-    :aria-busy="loading || undefined"
-    :title="hasReason ? disabledReason : (attrs['title'] as string | undefined)"
-    :data-disabled="disabled ? '' : undefined"
-    :data-loading="loading ? '' : undefined"
-    :data-inert="isInert ? '' : undefined"
+    v-bind="buttonAttrs"
     :data-variant="variant"
     :data-size="size"
     :data-icon-position="icon ? iconPosition : undefined"
-    :data-testid="testId"
     :class="ROOT_CLASS"
     @click="onClick"
   >
@@ -186,7 +159,7 @@
       <Spinner
         v-if="loading"
         class="size-3 group-data-[size=large]/button:size-4 group-data-[icon-position=trailing]/button:order-last"
-        :data-testid="loadingTestId"
+        :data-testid="`${rootAttrs['data-testid']}__loading`"
       />
       <i
         v-else-if="icon"
