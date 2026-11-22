@@ -31,7 +31,7 @@ A horizontal `Resizable` named "Version workspace": the version settings pane, a
 
 `PageTabs` with one `Tabs.Trigger` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: the open tab's panel goes in the slot named after the tab (`#source`, `#device-groups`, `#cache-settings`, `#functions-instances`, `#rules-engine`), and a tab with no slot shows an `EmptyState` with an Open link to its own page.
 
-### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip`, `Skeleton` (required)
+### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip`, `Skeleton`, `Link` (required)
 
 The open tab scrolls in a fading `ScrollArea`. A small `PageHeader` names the tab, then `SettingsGroup`s (General, Modules, Subscription modules) each hold a `Card :padded="false"` with an `Item.List` of `SettingsRow`s: a title, a one-sentence description and its control, an `Input` or a `Switch`. A module that needs a sales contact keeps its `Switch` disabled, explained by a `Tooltip`. On a built version the whole fieldset is disabled. While `creating`, `Skeleton` wires take the sections' place.
 

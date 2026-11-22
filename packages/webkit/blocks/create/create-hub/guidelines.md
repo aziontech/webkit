@@ -26,7 +26,7 @@ The creation header from `top-bar/top-bar-creation`: a small outlined back `Icon
 
 ### B. Page heading — `PageHeader` (required)
 
-`PageHeader` at `size="large"`. The description says what the page offers in one sentence and ends with inline file and folder `Button`s at `variant="link"` that open the system picker (a hidden file input, and one with `webkitdirectory` for a folder). Picking hands the files to the Upload a project flow (`create/create-deploy-template` Upload); the block announces it with an info toast. Dropping a folder is the job of `state/state-project-intake`; this page does not claim it. They are link-coloured and underline only on hover, like the rest of the console's text actions.
+`PageHeader` at `size="large"`. The description says what the page offers in one sentence and ends with inline file and folder `Button`s at `variant="link"` that open the system picker through `useFilePicker` (one for files, one with `directory` for a folder). Picking hands the files to the Upload a project flow (`create/create-deploy-template` Upload); the block announces it with an info toast. Dropping a folder is the job of `state/state-project-intake`; this page does not claim it. They are link-coloured and underline only on hover, like the rest of the console's text actions.
 
 ### C. Git connect — `EmptyState`, `Button`, `Alert`, `Link` (required until connected)
 

@@ -16,6 +16,7 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
@@ -164,7 +165,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
   const submitted = ref(false)
   const submitting = ref(false)
   const formEl = ref<HTMLFormElement | null>(null)
-  const fileInputEl = ref<HTMLInputElement | null>(null)
+  const certificatePicker = useFilePicker({ accept: '.pem,.crt,.cer,application/x-pem-file' })
   const uploadStatus = ref('')
   const NOW = Date.UTC(2026, 10, 10, 12)
 
@@ -223,10 +224,8 @@ mr+L2DBwFXtW2qJfNedf/9rU
     return list
   })
 
-  const onFilePicked = async (event: Event) => {
-    const input = event.target as HTMLInputElement
-    const file = input.files?.[0]
-    input.value = ''
+  const pickCertificate = async () => {
+    const [file] = await certificatePicker.open()
     if (!file) return
     form.certificate = await file.text()
     uploadStatus.value = parsed.value?.subject
@@ -355,7 +354,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
                       icon="az az-upload"
                       variant="outline"
                       size="small"
-                      @click="fileInputEl?.click()"
+                      @click="pickCertificate"
                     />
                   </div>
                   <div class="[&_textarea]:font-code [&_textarea]:text-body-sm">
@@ -371,15 +370,6 @@ mr+L2DBwFXtW2qJfNedf/9rU
                   >
                   <Field.Error v-if="errors.certificate">{{ errors.certificate }}</Field.Error>
                 </Field>
-                <input
-                  ref="fileInputEl"
-                  type="file"
-                  accept=".pem,.crt,.cer,application/x-pem-file"
-                  class="sr-only"
-                  tabindex="-1"
-                  aria-hidden="true"
-                  @change="onFilePicked"
-                />
                 <p
                   class="sr-only"
                   role="status"

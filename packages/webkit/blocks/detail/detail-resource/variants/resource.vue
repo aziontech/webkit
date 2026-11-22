@@ -6,14 +6,9 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-
-  const DETAIL_LINK_CLASS =
-    'group/link ' +
-    'data-link:cursor-pointer ' +
-    'inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 
   const FOOTER_BAND_CLASS =
     '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
@@ -32,27 +27,10 @@
             aria-hidden="true"
           />
           <div class="flex min-w-0">
-            <Tooltip
-              content="Open web-app-y6u7i8.example.com in a new tab"
-              class="w-full"
-            >
-              <a
-                href="https://web-app-y6u7i8.example.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-link
-                :class="DETAIL_LINK_CLASS"
-              >
-                <span class="truncate underline-offset-2 group-hover/link:underline"
-                  >web-app-y6u7i8.example.com</span
-                >
-                <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                <i
-                  class="az az-external-link shrink-0 text-body-xs leading-none"
-                  aria-hidden="true"
-                />
-              </a>
-            </Tooltip>
+            <TableCellLink
+              label="web-app-y6u7i8.example.com"
+              href="https://web-app-y6u7i8.example.com"
+            />
           </div>
         </div>
 
@@ -143,27 +121,10 @@
           <span class="text-label-sm text-(--text-muted)">Domains</span>
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <div class="flex min-w-0">
-              <Tooltip
-                content="Open web-app-y6u7i8.example.com in a new tab"
-                class="w-full"
-              >
-                <a
-                  href="https://web-app-y6u7i8.example.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-link
-                  :class="DETAIL_LINK_CLASS"
-                >
-                  <span class="truncate underline-offset-2 group-hover/link:underline"
-                    >web-app-y6u7i8.example.com</span
-                  >
-                  <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                  <i
-                    class="az az-external-link shrink-0 text-body-xs leading-none"
-                    aria-hidden="true"
-                  />
-                </a>
-              </Tooltip>
+              <TableCellLink
+                label="web-app-y6u7i8.example.com"
+                href="https://web-app-y6u7i8.example.com"
+              />
             </div>
           </div>
         </div>
@@ -203,27 +164,10 @@
                 aria-hidden="true"
               />
               <div class="flex min-w-0">
-                <Tooltip
-                  content="Open acme/web-app in a new tab"
-                  class="w-full"
-                >
-                  <a
-                    href="https://github.com/acme/web-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-link
-                    :class="DETAIL_LINK_CLASS"
-                  >
-                    <span class="truncate underline-offset-2 group-hover/link:underline"
-                      >acme/web-app</span
-                    >
-                    <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                    <i
-                      class="az az-external-link shrink-0 text-body-xs leading-none"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </Tooltip>
+                <TableCellLink
+                  label="acme/web-app"
+                  href="https://github.com/acme/web-app"
+                />
               </div>
             </div>
             <div class="flex min-w-0 items-center gap-(--spacing-2xs)">

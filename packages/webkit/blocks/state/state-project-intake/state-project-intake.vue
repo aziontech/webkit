@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { computed, ref, watch } from 'vue'
 
   /** One file of the upload, with its state and progress. */
@@ -31,7 +32,7 @@
 
   const MAX_ROWS = 50
 
-  const folderInputEl = ref<HTMLInputElement | null>(null)
+  const folderPicker = useFilePicker({ directory: true, multiple: true })
   const received = ref(0)
   const files = ref<ProjectIntakeUpload[]>([])
 
@@ -52,10 +53,9 @@
   )
   const totalSize = computed(() => files.value.reduce((sum, file) => sum + (file.size ?? 0), 0))
 
-  const chooseFolder = () => folderInputEl.value?.click()
-
-  const onFolderChosen = (event: Event) => {
-    const chosen = Array.from((event.target as HTMLInputElement).files ?? [])
+  const chooseFolder = async (event: MouseEvent) => {
+    const chosen = await folderPicker.open()
+    if (!chosen.length) return
     received.value = chosen.length
     emit('select', event, chosen)
   }
@@ -139,15 +139,6 @@
         size="medium"
         icon="az az-folder-open"
         @click="chooseFolder"
-      />
-      <input
-        ref="folderInputEl"
-        type="file"
-        webkitdirectory
-        multiple
-        hidden
-        aria-label="Project folder"
-        @change="onFolderChosen"
       />
     </FileDropzone>
     <p

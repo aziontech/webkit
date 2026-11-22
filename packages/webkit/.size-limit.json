@@ -546,7 +546,7 @@
   {
     "name": "plan-comparison-section",
     "path": "src/components/section/plan-comparison-section/plan-comparison-section.vue",
-    "limit": "38.95 KB"
+    "limit": "39.05 KB"
   },
   {
     "name": "pricing-plans-section",
@@ -590,7 +590,7 @@
   {
     "name": "client-mosaic-section",
     "path": "src/components/section/client-mosaic-section/client-mosaic-section.vue",
-    "limit": "7.45 KB"
+    "limit": "7.55 KB"
   },
   {
     "name": "client-story-columns-section",
@@ -1332,6 +1332,11 @@
   {
     "name": "use-escape-to-cancel",
     "path": "src/composables/use-escape-to-cancel/index.ts",
+    "limit": "1 KB"
+  },
+  {
+    "name": "use-file-picker",
+    "path": "src/composables/use-file-picker/index.ts",
     "limit": "1 KB"
   },
   {
@@ -2234,7 +2239,7 @@
   {
     "name": "link",
     "path": "src/components/navigation/link/link.vue",
-    "limit": "2.35 KB"
+    "limit": "2.45 KB"
   },
   {
     "name": "skip-link",

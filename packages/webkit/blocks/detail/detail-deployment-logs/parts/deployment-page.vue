@@ -14,6 +14,7 @@
     type LogViewerStepsView
   } from '@aziontech/webkit/log-viewer'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -80,10 +81,6 @@
 
   const logViewer = ref<LogViewerStepsView>('phased')
   const openStep = ref((failedStep.value ?? props.steps.at(-1))?.id)
-
-  const DETAIL_LINK_CLASS =
-    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 
   const DEPLOYMENT_SETTINGS_SUMMARY_CLASS =
     'flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-md) pb-(--spacing-md) ' +
@@ -241,37 +238,19 @@
             </div>
             <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Service</span>
-              <Tooltip content="Open web-app in Services">
-                <a
-                  href="/services/1784675753"
-                  :class="DETAIL_LINK_CLASS"
-                >
-                  <span class="truncate underline-offset-2 group-hover/link:underline">
-                    web-app
-                  </span>
-                  <i
-                    class="az az-external-link shrink-0 text-body-xs leading-none"
-                    aria-hidden="true"
-                  />
-                </a>
-              </Tooltip>
+              <TableCellLink
+                label="web-app"
+                href="/services/1784675753"
+                destination="Services"
+              />
             </div>
             <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Resource</span>
-              <Tooltip content="Open web-app in Resources">
-                <a
-                  href="/resources/1784552864"
-                  :class="DETAIL_LINK_CLASS"
-                >
-                  <span class="truncate underline-offset-2 group-hover/link:underline">
-                    web-app
-                  </span>
-                  <i
-                    class="az az-external-link shrink-0 text-body-xs leading-none"
-                    aria-hidden="true"
-                  />
-                </a>
-              </Tooltip>
+              <TableCellLink
+                label="web-app"
+                href="/resources/1784552864"
+                destination="Resources"
+              />
             </div>
             <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Triggered by</span>
@@ -319,27 +298,15 @@
             </div>
             <div class="flex flex-col gap-(--spacing-2xs) sm:col-span-2 lg:col-span-3">
               <span class="text-label-sm text-(--text-muted)">Domains</span>
-              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <div class="flex w-fit min-w-0 max-w-full items-center gap-(--spacing-xs)">
                 <i
                   class="az az-globe shrink-0 text-body-lg text-(--text-muted)"
                   aria-hidden="true"
                 />
-                <Tooltip :content="`Open ${DOMAIN} in a new tab`">
-                  <a
-                    :href="URL"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    :class="DETAIL_LINK_CLASS"
-                  >
-                    <span class="truncate underline-offset-2 group-hover/link:underline">{{
-                      DOMAIN
-                    }}</span>
-                    <i
-                      class="az az-external-link shrink-0 text-body-xs leading-none"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </Tooltip>
+                <TableCellLink
+                  :label="DOMAIN"
+                  :href="URL"
+                />
                 <CopyButton
                   variant="outline"
                   :value="DOMAIN"
@@ -369,20 +336,11 @@
 
                   <div :class="DEPLOYMENT_SETTINGS_SUMMARY_CLASS">
                     <div class="pointer-events-auto">
-                      <Tooltip content="Open Default in Build and deployment settings">
-                        <a
-                          href="/account/build-deployment"
-                          :class="DETAIL_LINK_CLASS"
-                        >
-                          <span class="truncate underline-offset-2 group-hover/link:underline">
-                            Default
-                          </span>
-                          <i
-                            class="az az-external-link shrink-0 text-body-xs leading-none"
-                            aria-hidden="true"
-                          />
-                        </a>
-                      </Tooltip>
+                      <TableCellLink
+                        label="Default"
+                        href="/account/build-deployment"
+                        destination="Build and deployment settings"
+                      />
                     </div>
                   </div>
                 </div>

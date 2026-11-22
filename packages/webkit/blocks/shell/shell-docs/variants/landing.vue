@@ -8,6 +8,7 @@
   import DocHero from '@aziontech/webkit/doc-hero'
   import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocProse from '@aziontech/webkit/doc-prose'
+  import Link from '@aziontech/webkit/link'
 
   const prompt =
     'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'
@@ -254,7 +255,14 @@
               >
             </div>
           </DocCardGroup>
-          <p>Also useful: <a href="/docs/observe">Observe</a></p>
+          <p>
+            Also useful:
+            <Link
+              inline
+              href="/docs/observe"
+              >Observe</Link
+            >
+          </p>
         </section>
 
         <section
@@ -276,8 +284,17 @@
             />
           </DocCardGroup>
           <p>
-            Also useful: <a href="/docs/get-started/first-deploy">First deploy</a>,
-            <a href="/docs/frameworks-compatibility">Frameworks compatibility</a>
+            Also useful:
+            <Link
+              inline
+              href="/docs/get-started/first-deploy"
+              >First deploy</Link
+            >,
+            <Link
+              inline
+              href="/docs/frameworks-compatibility"
+              >Frameworks compatibility</Link
+            >
           </p>
         </section>
 
@@ -301,9 +318,21 @@
           </DocCardGroup>
           <p>
             Reference, when you need the details:
-            <a href="/docs/ddos-protection">DDoS Protection</a>,
-            <a href="/docs/waf-rule-sets">WAF Rule Sets</a>,
-            <a href="/docs/bot-manager">Bot Manager</a>
+            <Link
+              inline
+              href="/docs/ddos-protection"
+              >DDoS Protection</Link
+            >,
+            <Link
+              inline
+              href="/docs/waf-rule-sets"
+              >WAF Rule Sets</Link
+            >,
+            <Link
+              inline
+              href="/docs/bot-manager"
+              >Bot Manager</Link
+            >
           </p>
         </section>
 

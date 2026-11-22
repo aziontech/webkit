@@ -17,6 +17,7 @@
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
   import DetailDnsZone, { type DnsZoneDetailRecord } from '../detail-dns-zone.vue'
@@ -188,7 +189,7 @@ legacy  IN HINFO "PC" "Linux"`
   const importOpen = ref(true)
   const zoneText = ref(SAMPLE_ZONE)
   const zoneSource = ref('the pasted zone file')
-  const fileInputEl = ref<HTMLInputElement | null>(null)
+  const zoneFilePicker = useFilePicker({ accept: '.zone,.txt,.db,text/plain' })
   const dropError = ref('')
   const parsedText = ref(SAMPLE_ZONE)
   let parseTimer: ReturnType<typeof setTimeout> | undefined
@@ -235,10 +236,9 @@ legacy  IN HINFO "PC" "Linux"`
   const onReject = () => {
     dropError.value = 'Drop one text file, such as example.com.zone or zone.txt.'
   }
-  const onPicked = (event: Event) => {
-    const input = event.target as HTMLInputElement
-    readFile(input.files?.[0])
-    input.value = ''
+  const pickZoneFile = async () => {
+    const [file] = await zoneFilePicker.open()
+    if (file) readFile(file)
   }
   const onPaste = () => {
     zoneSource.value = 'the pasted zone file'
@@ -323,18 +323,9 @@ legacy  IN HINFO "PC" "Linux"`
                 label="Browse files"
                 variant="secondary"
                 size="medium"
-                @click="fileInputEl?.click()"
+                @click="pickZoneFile"
               />
             </FileDropzone>
-            <input
-              ref="fileInputEl"
-              type="file"
-              accept=".zone,.txt,.db,text/plain"
-              class="hidden"
-              aria-hidden="true"
-              tabindex="-1"
-              @change="onPicked"
-            />
             <FieldError v-if="dropError">{{ dropError }}</FieldError>
             <Field>
               <Field.Label for="zone-import-text">

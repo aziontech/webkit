@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
+  import Link from '@aziontech/webkit/link'
   import OtpInput from '@aziontech/webkit/otp-input'
   import PageHeader from '@aziontech/webkit/page-header'
   import { computed, nextTick, onMounted, ref } from 'vue'
@@ -162,11 +163,13 @@
                 variant="link"
                 @click="switchMethod"
               />
-              <a
-                class="text-link text-body-sm"
-                href="/login"
-                >Sign in with another account</a
-              >
+              <span class="text-body-sm">
+                <Link
+                  inline
+                  href="/login"
+                  >Sign in with another account</Link
+                >
+              </span>
             </div>
           </div>
         </template>

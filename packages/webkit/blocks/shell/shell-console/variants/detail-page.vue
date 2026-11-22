@@ -6,6 +6,7 @@
   import Input from '@aziontech/webkit/input'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Select from '@aziontech/webkit/select'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -134,11 +135,11 @@
           aria-label="Back to Applications"
         />
       </Tooltip>
-      <a
+      <TableCellLink
+        label="azion-site"
         href="/applications/azion-site"
-        class="min-w-0 shrink truncate rounded-(--shape-button) text-label-md text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-        >azion-site</a
-      >
+        destination="Applications"
+      />
     </nav>
 
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">

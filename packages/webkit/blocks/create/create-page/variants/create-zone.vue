@@ -13,6 +13,7 @@
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { computed, onMounted, reactive, ref } from 'vue'
 
   import { type CreatePageDomainErrors, validateDomainForm } from '../domain-validation'
@@ -42,7 +43,7 @@
     domainKind: 'required'
   })
   const advancedOpen = ref(false)
-  const fileEl = ref<HTMLInputElement | null>(null)
+  const zoneFilePicker = useFilePicker({ accept: '.zone,.txt,.db,text/plain' })
 
   const records = ref<ZoneRecord[]>([
     { name: '@', type: 'A', value: '192.0.2.10', ttl: 3600 },
@@ -121,10 +122,8 @@
     )
   }
 
-  const onFilePicked = async (event: Event) => {
-    const input = event.target as HTMLInputElement
-    const [file] = Array.from(input.files ?? [])
-    input.value = ''
+  const openImport = async () => {
+    const [file] = await zoneFilePicker.open()
     if (!file) return
     const parsed = parseZoneFile(await file.text())
     if (!parsed.records.length) {
@@ -185,8 +184,6 @@
   })
 
   onMounted(() => nameEl.value?.focus())
-
-  const openImport = () => fileEl.value?.click()
 
   const DNSSEC_DESCRIPTION =
     "Signs this zone's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
@@ -402,15 +399,6 @@
                 <p class="min-w-0 text-body-sm text-(--text-muted) max-sm:hidden">
                   or paste zone file contents in Domain name
                 </p>
-                <input
-                  ref="fileEl"
-                  type="file"
-                  accept=".zone,.txt,.db,text/plain"
-                  class="sr-only"
-                  tabindex="-1"
-                  aria-hidden="true"
-                  @change="onFilePicked"
-                />
               </div>
             </template>
             <template #actions>

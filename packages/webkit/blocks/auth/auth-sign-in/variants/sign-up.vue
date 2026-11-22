@@ -5,6 +5,7 @@
   import Field from '@aziontech/webkit/field'
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PasswordInput from '@aziontech/webkit/password-input'
   import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
@@ -128,16 +129,16 @@
           >
             {{ cardNotice.label }}
             <template v-if="cardNotice.exits">
-              <a
-                class="text-link"
+              <Link
+                inline
                 href="/login"
-                >Sign in</a
+                >Sign in</Link
               >
               or
-              <a
-                class="text-link"
+              <Link
+                inline
                 href="/login?reset=1"
-                >reset your password</a
+                >reset your password</Link
               >.
             </template>
           </Alert>
@@ -232,29 +233,29 @@
     <div class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)">
       <div class="flex items-center justify-center gap-(--spacing-xs)">
         <p class="text-body-xs text-(--text-default)">Already have an account?</p>
-        <a
-          class="text-link text-body-xs"
-          href="/login"
-          >Sign in</a
-        >
+        <span class="text-body-xs">
+          <Link
+            inline
+            href="/login"
+            >Sign in</Link
+          >
+        </span>
       </div>
 
       <p class="text-center text-body-xs text-(--text-muted)">
         By continuing, I agree to the
-        <a
-          class="text-link"
+        <Link
+          inline
           href="https://example.com/terms"
           target="_blank"
-          rel="noopener noreferrer"
-          >terms of service</a
+          >terms of service</Link
         >
         and
-        <a
-          class="text-link"
+        <Link
+          inline
           href="https://example.com/privacy"
           target="_blank"
-          rel="noopener noreferrer"
-          >privacy policy</a
+          >privacy policy</Link
         >.
       </p>
     </div>

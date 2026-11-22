@@ -13,6 +13,7 @@
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
   import LanguageSelect from '@aziontech/webkit/language-select'
+  import Link from '@aziontech/webkit/link'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
@@ -75,11 +76,6 @@
   const { mode: theme } = useColorMode()
 
   const language = ref('en-US')
-
-  const BRAND_LINK_CLASS =
-    'inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
-    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -222,13 +218,13 @@
           </template>
 
           <template #brand>
-            <a
+            <Link
               href="/"
               aria-label="Azion home"
-              :class="BRAND_LINK_CLASS"
+              inline
             >
               <Brand size="small" />
-            </a>
+            </Link>
           </template>
         </Footer>
       </div>

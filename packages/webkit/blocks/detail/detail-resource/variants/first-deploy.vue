@@ -5,7 +5,9 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Link from '@aziontech/webkit/link'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tooltip from '@aziontech/webkit/tooltip'
 
   type ServiceState = {
@@ -36,18 +38,9 @@
     }
   ]
 
-  const CONNECT_LINK_CLASS =
-    'inline-flex min-w-0 items-center rounded-(--shape-button) text-body-sm text-(--text-link) underline-offset-2 transition-colors duration-150 ease-out ' +
-    'hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
-    'focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none'
-
   const FOOTER_BAND_CLASS =
     '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
     'py-(--spacing-xs)'
-
-  const DETAIL_LINK_CLASS =
-    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -132,12 +125,11 @@
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
             <span class="text-label-sm text-(--text-muted)">Source</span>
             <div class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-sm)">
-              <a
+              <Link
                 href="#connect-repository"
-                :class="CONNECT_LINK_CLASS"
-              >
-                <span class="truncate">Connect Git repository</span>
-              </a>
+                size="small"
+                label="Connect Git repository"
+              />
               <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
                 <i
                   class="az az-cloud-upload shrink-0 text-(--text-muted)"
@@ -201,26 +193,10 @@
               aria-hidden="true"
             />
             <div class="flex min-w-0">
-              <Tooltip
-                :content="`Open ${service.domain} in a new tab`"
-                class="w-full"
-              >
-                <a
-                  :href="`https://${service.domain}`"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  :class="DETAIL_LINK_CLASS"
-                >
-                  <span class="truncate underline-offset-2 group-hover/link:underline">{{
-                    service.domain
-                  }}</span>
-                  <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                  <i
-                    class="az az-external-link shrink-0 text-body-xs leading-none"
-                    aria-hidden="true"
-                  />
-                </a>
-              </Tooltip>
+              <TableCellLink
+                :label="service.domain"
+                :href="`https://${service.domain}`"
+              />
             </div>
           </div>
 

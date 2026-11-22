@@ -7,8 +7,10 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Item from '@aziontech/webkit/item-root'
   import Popover from '@aziontech/webkit/popover'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
 
@@ -25,17 +27,6 @@
   const environments = [{ name: 'Production' }, { name: 'Preview' }]
   const environment = defineModel<string>('environment', { default: 'Production' })
 
-  const DETAIL_LINK_CLASS =
-    'group/link ' +
-    'data-link:cursor-pointer ' +
-    'inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
-
-  const DOMAIN_LINK_CLASS =
-    'flex items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-default) ' +
-    'hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 ' +
-    'focus-visible:ring-offset-(--bg-canvas)'
-
   const MENU_TRIGGER_CLASS =
     'flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) ' +
     'transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)'
@@ -44,10 +35,6 @@
     'flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-md) pb-(--spacing-md) ' +
     '@lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) ' +
     '@lg/band:pb-0'
-
-  const SETTINGS_LINK_CLASS =
-    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -62,27 +49,10 @@
             aria-hidden="true"
           />
           <div class="flex min-w-0">
-            <Tooltip
-              content="Open service-01.example.com in a new tab"
-              class="w-full"
-            >
-              <a
-                href="https://service-01.example.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-link
-                :class="DETAIL_LINK_CLASS"
-              >
-                <span class="truncate underline-offset-2 group-hover/link:underline"
-                  >service-01.example.com</span
-                >
-                <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                <i
-                  class="az az-external-link shrink-0 text-body-xs leading-none"
-                  aria-hidden="true"
-                />
-              </a>
-            </Tooltip>
+            <TableCellLink
+              label="service-01.example.com"
+              href="https://service-01.example.com"
+            />
           </div>
           <Popover
             side="bottom"
@@ -109,20 +79,20 @@
               <div
                 class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-2xs)"
               >
-                <a
+                <Item
                   v-for="domain in domains"
                   :key="domain"
                   :href="`https://${domain}`"
                   target="_blank"
                   rel="noopener noreferrer"
-                  :class="DOMAIN_LINK_CLASS"
+                  variant="option"
                 >
                   <span class="truncate">{{ domain }}</span>
                   <i
                     class="az az-external-link ms-auto shrink-0 text-body-xs leading-none"
                     aria-hidden="true"
                   />
-                </a>
+                </Item>
               </div>
 
               <span
@@ -340,20 +310,11 @@
                   class="shrink-0"
                 />
                 <div class="pointer-events-auto">
-                  <Tooltip content="Open acme-production in Build and deployment settings">
-                    <a
-                      href="/account/build-deployment"
-                      :class="SETTINGS_LINK_CLASS"
-                    >
-                      <span class="truncate underline-offset-2 group-hover/link:underline">
-                        acme-production
-                      </span>
-                      <i
-                        class="az az-external-link shrink-0 text-body-xs leading-none"
-                        aria-hidden="true"
-                      />
-                    </a>
-                  </Tooltip>
+                  <TableCellLink
+                    label="acme-production"
+                    href="/account/build-deployment"
+                    destination="Build and deployment settings"
+                  />
                 </div>
               </div>
             </div>

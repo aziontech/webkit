@@ -990,3 +990,6 @@ Budget-raise: carousel-previous 1.8 KB → 3.75 KB (measured 3.74 KB): the contr
 Budget-raise: carousel-next 1.8 KB → 3.75 KB (measured 3.74 KB): the control is an IconButton instead of a hand-written button (no-unowned-element).
 Budget-raise: command 27.6 KB → 28.7 KB (measured 28.66 KB): Command.Input, which it renders, has a Button back control instead of a hand-written button (no-unowned-element).
 Budget-raise: command-input 5.1 KB → 7.5 KB (measured 7.49 KB): the back control is a Button instead of a hand-written button (no-unowned-element).
+Budget-raise: link 2.35 KB → 2.45 KB (measured 2.40 KB): the new `inline` mode, a second anchor branch for links inside a sentence, so blocks stop writing raw `<a class="text-link">`.
+Budget-raise: plan-comparison-section 38.95 KB → 39.05 KB (measured 39.00 KB): it renders Link, which gained the `inline` mode.
+Budget-raise: client-mosaic-section 7.45 KB → 7.55 KB (measured 7.48 KB): it renders Link, which gained the `inline` mode.

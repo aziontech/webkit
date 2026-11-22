@@ -18,9 +18,9 @@ The first thing a user reads about a resource they created from the CLI and have
 
 ## Building blocks
 
-### A. Section heading — `Subheader` (required)
+### A. Section heading — `Subheader`, `Link` (required)
 
-`Subheader` titled "Get started" with a one-sentence description that ends on a link to the CLI docs. It is a section inside the page, never the page title.
+`Subheader` titled "Get started" with a one-sentence description that ends on a link to the CLI docs, a `Link inline` that opens in a new tab. It is a section inside the page, never the page title.
 
 ### B. Path switch — `ToggleGroup` (required)
 

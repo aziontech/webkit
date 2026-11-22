@@ -26,7 +26,7 @@ The inline `FileDropzone` with `directories`, filling the page body: its title s
 
 ### B. Keyboard way in — `Button` (required)
 
-An outlined Choose a folder `Button` in the dropzone's default slot opens a hidden folder picker (`webkitdirectory`). Drag and drop is a shortcut, never the only way; keyboard and screen reader users take this button.
+An outlined Choose a folder `Button` in the dropzone's default slot opens the system folder picker (`useFilePicker` with `directory`). Drag and drop is a shortcut, never the only way; keyboard and screen reader users take this button.
 
 ### C. Upload list — `UploadProgress` (Initializing, UploadError)
 

@@ -899,20 +899,18 @@
                   <Field.Content>
                     <Field.Label for="checkout-terms">
                       I accept the
-                      <a
+                      <Link
                         href="https://example.com/terms"
                         target="_blank"
-                        rel="noopener noreferrer"
-                        class="text-link"
-                        >Terms of Service<span class="sr-only"> (opens in a new tab)</span></a
+                        inline
+                        >Terms of Service<span class="sr-only"> (opens in a new tab)</span></Link
                       >
                       and the
-                      <a
+                      <Link
                         href="https://example.com/privacy"
                         target="_blank"
-                        rel="noopener noreferrer"
-                        class="text-link"
-                        >Privacy Policy<span class="sr-only"> (opens in a new tab)</span></a
+                        inline
+                        >Privacy Policy<span class="sr-only"> (opens in a new tab)</span></Link
                       >
                     </Field.Label>
                     <Field.Description v-if="termsError">{{ termsError }}</Field.Description>

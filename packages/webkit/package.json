@@ -2512,6 +2512,10 @@
       "types": "./types/composables/use-direction/index.d.ts",
       "default": "./src/composables/use-direction/index.ts"
     },
+    "./use-file-picker": {
+      "types": "./types/composables/use-file-picker/index.d.ts",
+      "default": "./src/composables/use-file-picker/index.ts"
+    },
     "./use-focus-trap": {
       "types": "./types/composables/use-focus-trap/index.d.ts",
       "default": "./src/composables/use-focus-trap/index.ts"
@@ -4146,6 +4150,9 @@
       ],
       "use-direction": [
         "./types/composables/use-direction/index.d.ts"
+      ],
+      "use-file-picker": [
+        "./types/composables/use-file-picker/index.d.ts"
       ],
       "use-focus-trap": [
         "./types/composables/use-focus-trap/index.d.ts"

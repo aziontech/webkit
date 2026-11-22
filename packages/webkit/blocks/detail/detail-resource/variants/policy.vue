@@ -5,14 +5,9 @@
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-
-  const DETAIL_LINK_CLASS =
-    'group/link ' +
-    'data-link:cursor-pointer ' +
-    'inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 
   const FOOTER_BAND_CLASS =
     '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
@@ -31,22 +26,11 @@
             aria-hidden="true"
           />
           <div class="flex min-w-0">
-            <Tooltip
-              content="Open web-app in Resources"
-              class="w-full"
-            >
-              <a
-                href="/resources/3344556677"
-                data-link
-                :class="DETAIL_LINK_CLASS"
-              >
-                <span class="truncate underline-offset-2 group-hover/link:underline">web-app</span>
-                <i
-                  class="az az-external-link shrink-0 text-body-xs leading-none"
-                  aria-hidden="true"
-                />
-              </a>
-            </Tooltip>
+            <TableCellLink
+              label="web-app"
+              href="/resources/3344556677"
+              destination="Resources"
+            />
           </div>
         </div>
 

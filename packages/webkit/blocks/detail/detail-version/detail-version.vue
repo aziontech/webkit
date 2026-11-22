@@ -10,6 +10,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Resizable from '@aziontech/webkit/resizable'
@@ -345,14 +346,7 @@
     emit('revert', event, viewed.value)
   }
 
-  const CONTACT_SALES_LINK_CLASS =
-    'inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance ' +
-    'hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
-    'focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none'
-
-  const VERSION_LINK_CLASS =
-    'group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-start no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
+  const VERSION_LINK_CLASS = 'flex w-full min-w-0 gap-(--spacing-sm) text-start'
 </script>
 
 <template>
@@ -863,18 +857,12 @@
                                     <template #description>
                                       Enhance real-time data exchange between your resource and
                                       backend services using the WebSocket protocol.
-                                      <a
+                                      <Link
                                         href="https://example.com/contact-sales"
                                         target="_blank"
-                                        rel="noopener noreferrer"
-                                        :class="CONTACT_SALES_LINK_CLASS"
+                                        inline
+                                        >Contact sales</Link
                                       >
-                                        Contact sales
-                                        <i
-                                          class="az az-external-link shrink-0 text-body-sm leading-none"
-                                          aria-hidden="true"
-                                        />
-                                      </a>
                                     </template>
                                     <Tooltip content="Contact sales to activate this module.">
                                       <Switch
@@ -1326,61 +1314,63 @@
                     class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
                     aria-hidden="true"
                   />
-                  <a
+                  <Item
                     :href="`/resources/${resource.name}/versions/${entry.name}`"
                     :aria-current="entry.id === viewed.id ? 'page' : undefined"
-                    :class="VERSION_LINK_CLASS"
+                    variant="inline"
                   >
-                    <span
-                      class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
-                      aria-hidden="true"
-                    >
-                      <i class="az az-code text-body-xs" />
-                    </span>
-                    <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
-                      <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                        <span
-                          class="truncate text-label-md text-(--text-default) group-hover:underline"
-                        >
-                          {{ entry.name }}
-                        </span>
-                        <span class="flex shrink-0">
-                          <Tag
-                            :label="tagFor(entry).label"
-                            :variant="tagFor(entry).variant"
-                            :severity="tagFor(entry).severity"
-                            size="small"
-                          />
-                        </span>
-                        <span
-                          v-if="entry.id === viewed.id"
-                          class="flex shrink-0"
-                        >
-                          <Tag
-                            label="Viewing"
-                            severity="info"
-                            size="small"
-                          />
-                        </span>
-                      </span>
-                      <span class="line-clamp-2 text-body-sm text-(--text-muted)">
-                        {{ entry.comment }}
-                      </span>
+                    <span :class="VERSION_LINK_CLASS">
                       <span
-                        class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
+                        class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
+                        aria-hidden="true"
                       >
-                        <span class="flex shrink-0">
-                          <Avatar
-                            :alt="entry.author"
-                            :label="entry.author"
-                            size="small"
-                            variant="square"
-                          />
+                        <i class="az az-code text-body-xs" />
+                      </span>
+                      <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
+                        <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                          <span
+                            class="truncate text-label-md text-(--text-default) group-hover/item:underline"
+                          >
+                            {{ entry.name }}
+                          </span>
+                          <span class="flex shrink-0">
+                            <Tag
+                              :label="tagFor(entry).label"
+                              :variant="tagFor(entry).variant"
+                              :severity="tagFor(entry).severity"
+                              size="small"
+                            />
+                          </span>
+                          <span
+                            v-if="entry.id === viewed.id"
+                            class="flex shrink-0"
+                          >
+                            <Tag
+                              label="Viewing"
+                              severity="info"
+                              size="small"
+                            />
+                          </span>
                         </span>
-                        <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
+                        <span class="line-clamp-2 text-body-sm text-(--text-muted)">
+                          {{ entry.comment }}
+                        </span>
+                        <span
+                          class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
+                        >
+                          <span class="flex shrink-0">
+                            <Avatar
+                              :alt="entry.author"
+                              :label="entry.author"
+                              size="small"
+                              variant="square"
+                            />
+                          </span>
+                          <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
+                        </span>
                       </span>
                     </span>
-                  </a>
+                  </Item>
                 </li>
               </ol>
 

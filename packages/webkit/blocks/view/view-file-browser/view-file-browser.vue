@@ -32,6 +32,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import { sampleFolders, sampleStorageName } from './sample'
@@ -377,8 +378,8 @@
 
   const uploadOpen = ref(false)
   const picked = ref<PickedFile[]>([])
-  const pickerInputEl = ref<HTMLInputElement | null>(null)
-  const folderInputEl = ref<HTMLInputElement | null>(null)
+  const filePicker = useFilePicker({ multiple: true })
+  const folderPicker = useFilePicker({ directory: true })
   const uploadMode = ref<UploadMode>('files')
   const addHostEl = ref<HTMLElement | null>(null)
 
@@ -391,11 +392,7 @@
   const addPicked = (files: FileList | File[]) => {
     picked.value = [...picked.value, ...Array.from(files).map(toPicked)]
   }
-  const onPick = (event: Event) => {
-    const input = event.target as HTMLInputElement
-    addPicked(input.files ?? [])
-    input.value = ''
-  }
+  const pickFrom = async (picker: typeof filePicker) => addPicked(await picker.open())
   const removePicked = (index: number) => {
     picked.value = picked.value.filter((_, position) => position !== index)
   }
@@ -855,7 +852,7 @@
                 variant="secondary"
                 size="medium"
                 icon="az az-folder-open"
-                @click="folderInputEl?.click()"
+                @click="pickFrom(folderPicker)"
               />
               <Button
                 key="button-2"
@@ -863,27 +860,9 @@
                 label="Browse files"
                 variant="secondary"
                 size="medium"
-                @click="pickerInputEl?.click()"
+                @click="pickFrom(filePicker)"
               />
             </FileDropzone>
-            <input
-              ref="pickerInputEl"
-              type="file"
-              multiple
-              class="hidden"
-              aria-hidden="true"
-              tabindex="-1"
-              @change="onPick"
-            />
-            <input
-              ref="folderInputEl"
-              type="file"
-              webkitdirectory
-              class="hidden"
-              aria-hidden="true"
-              tabindex="-1"
-              @change="onPick"
-            />
             <FileTokenGroup
               v-if="picked.length"
               :items="picked"

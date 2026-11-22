@@ -22,9 +22,9 @@ The last stop before a resource is gone for good. The user chose Delete from a r
 
 `ConfirmDialog` at `size="medium"`, bound with `v-model:open`, closed by default. Its `#trigger` slot holds the visible `Button variant="danger"` that opens it; in a list the trigger is the row menu's Delete option instead. The title reads Delete plus the resource kind, the same string as the trigger. The body goes in the default slot; the dialog's own Cancel and Delete buttons take `confirm-label`, `cancel-label`, `:confirmation-phrase` and `:loading`.
 
-### B. Consequence — `Alert` (required)
+### B. Consequence — `Alert`, `Link` (required)
 
-A `severity="warning"` `Alert` first in the body states that the action cannot be reversed. Below it, one muted sentence names what goes with the resource and links the Help Center with the `text-link` utility. When the server refuses the delete, the same slot shows a `severity="danger"` `Alert` that says what blocks it and how to fix it. A container that holds other items (a folder, a database) passes its own consequence sentence instead of the generic one.
+A `severity="warning"` `Alert` first in the body states that the action cannot be reversed. Below it, one muted sentence names what goes with the resource and links the Help Center with a `Link inline`. When the server refuses the delete, the same slot shows a `severity="danger"` `Alert` that says what blocks it and how to fix it. A container that holds other items (a folder, a database) passes its own consequence sentence instead of the generic one.
 
 ### C. Typed confirmation — `ConfirmDialog` `confirmation-phrase` (required)
 

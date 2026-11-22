@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/link/default.vue'
 import Disabled from '../../../../examples/link/disabled.vue'
+import Inline from '../../../../examples/link/inline.vue'
 import Sizes from '../../../../examples/link/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { UNSAFE_URLS } from '../../../test/unsafe-urls'
@@ -203,5 +204,47 @@ describe('Link', () => {
   it('renders the composed Disabled story with disabled a11y state', () => {
     const { getByTestId } = render(Disabled)
     expect(getByTestId('link').getAttribute('aria-disabled')).toBe('true')
+  })
+
+  it('renders an inline link with the text-link style, no size and the slot as its text', () => {
+    const { getByTestId } = render(Link, {
+      props: { href: '/docs', inline: true, size: 'small' },
+      slots: { default: 'domains guide' }
+    })
+    const root = getByTestId('link')
+
+    expect(root.tagName).toBe('A')
+    expect(root.getAttribute('href')).toBe('/docs')
+    expect(root.hasAttribute('data-inline')).toBe(true)
+    expect(root.getAttribute('data-size')).toBeNull()
+    expect(root.classList.contains('text-link')).toBe(true)
+    expect(root.textContent).toBe('domains guide')
+  })
+
+  it('adds rel and the external mark to an inline _blank link', () => {
+    const { getByTestId } = render(Link, {
+      props: { href: 'https://example.com', target: '_blank', inline: true, label: 'Guide' }
+    })
+
+    expect(getByTestId('link').getAttribute('rel')).toBe('noopener noreferrer')
+    expect(getByTestId('link__icon').getAttribute('aria-hidden')).toBe('true')
+  })
+
+  it('does not emit click from a disabled inline link', async () => {
+    const { getByTestId, emitted } = render(Link, {
+      props: { inline: true, disabled: true, label: 'Guide' }
+    })
+    const root = getByTestId('link')
+
+    expect(root.getAttribute('aria-disabled')).toBe('true')
+    await fireEvent.click(root)
+    expect(emitted().click).toBeUndefined()
+  })
+
+  it('renders the composed Inline story without a11y violations', async () => {
+    const { container, getAllByTestId } = render(Inline)
+
+    expect(getAllByTestId('link').every((el) => el.hasAttribute('data-inline'))).toBe(true)
+    await expectNoA11yViolations(container)
   })
 })

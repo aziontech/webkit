@@ -28,6 +28,7 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
   import { sampleDatabase, sampleTables } from './sample'
@@ -356,7 +357,7 @@
     })
   )
 
-  const csvInputEl = ref<HTMLInputElement | null>(null)
+  const csvPicker = useFilePicker({ accept: '.csv,text/csv' })
   const csvFile = ref<SchemaEditorCsvFile | null>(null)
   const csvHeaders = ref<string[]>([])
   const csvRows = ref<CsvRow[]>([])
@@ -432,11 +433,7 @@
     }
     applyCsv({ name: file.name, size: file.size, type: 'text/csv' }, await file.text())
   }
-  const onCsvPick = (event: Event) => {
-    const input = event.target as HTMLInputElement
-    onCsvFiles(input.files)
-    input.value = ''
-  }
+  const pickCsv = async () => onCsvFiles(await csvPicker.open())
   const csvTokens = computed(() =>
     csvFile.value
       ? [
@@ -970,18 +967,9 @@
                       label="Browse files"
                       variant="secondary"
                       size="medium"
-                      @click="csvInputEl?.click()"
+                      @click="pickCsv"
                     />
                   </FileDropzone>
-                  <input
-                    ref="csvInputEl"
-                    type="file"
-                    accept=".csv,text/csv"
-                    class="hidden"
-                    aria-hidden="true"
-                    tabindex="-1"
-                    @change="onCsvPick"
-                  />
                   <FileTokenGroup
                     v-if="csvFile"
                     :items="csvTokens"

@@ -4,6 +4,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import { computed, ref } from 'vue'
 
@@ -170,10 +171,10 @@
                 client.redirect
               }}</span
               >. You can revoke access at any time in
-              <a
-                class="text-link"
+              <Link
+                inline
                 href="/account/authorized-apps"
-                >Authorized apps</a
+                >Authorized apps</Link
               >.
             </p>
 

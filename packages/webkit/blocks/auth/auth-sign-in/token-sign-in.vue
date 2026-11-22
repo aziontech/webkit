@@ -4,6 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import Checkbox from '@aziontech/webkit/checkbox'
   import Field from '@aziontech/webkit/field'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PasswordInput from '@aziontech/webkit/password-input'
   import { computed, nextTick, onMounted, ref, watch } from 'vue'
@@ -180,12 +181,11 @@
                 />
                 <Field.Description>
                   Create one in Account settings, Personal tokens.
-                  <a
-                    class="text-link"
+                  <Link
+                    inline
                     :href="TOKEN_DOCS"
                     target="_blank"
-                    rel="noopener noreferrer"
-                    >How to create a personal token</a
+                    >How to create a personal token</Link
                   >
                 </Field.Description>
                 <Field.Error v-if="tokenError">{{ tokenError }}</Field.Error>
