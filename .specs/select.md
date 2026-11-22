@@ -3,13 +3,13 @@ name: select
 category: input
 structure: composition
 status: implemented
-spec_version: 15
+spec_version: 16
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 0df491847163b8105eaa438565236df1983a191a2becb669eae75618294f426a
+checksum: 5fee5315bce5be6e3d1f370169e49ad9c3c70e65a627ee5947414d83060c905b
 created: 2026-06-15
-last_updated: 2026-11-20
+last_updated: 2026-11-21
 ---
 
 # Select — Component Spec
@@ -144,10 +144,11 @@ _none_
 
 ## Motion & Animations
 
-| Trigger                                         | Animation / Transition                                             | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                          |
-| ----------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------- | ---------------------------------------------------------------- |
-| dropdown open / close (on `SelectContent` only) | popup scale-in / scale-out semantic utilities from `animations.js` | semantic (150ms in / 110ms out · cubic-bezier)    | reduced-motion fallback via the matching `motion-reduce` utility |
-| trigger state change (border/ring/bg)           | `transition-colors duration-150 ease-out`                          | inline (matches catalog)                          | `motion-reduce:transition-none`                                  |
+| Trigger                                  | Animation / Transition                                  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
+| ---------------------------------------- | ------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
+| dropdown open (on `SelectContent` only)  | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)  | `motion-reduce:animate-none` (instant) |
+| dropdown close (on `SelectContent` only) | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)          | `motion-reduce:animate-none` (instant) |
+| trigger state change (border/ring/bg)    | `transition-colors duration-150 ease-out`               | inline (matches catalog)                          | `motion-reduce:transition-none`        |
 
 ## Tokens
 
