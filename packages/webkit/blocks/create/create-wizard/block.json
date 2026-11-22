@@ -50,20 +50,13 @@
   },
   "files": [
     "sample.ts",
-    "types.ts",
     "lib/access-list.ts",
     "lib/service-wizard.ts",
-    "parts/deployment-picker.vue",
     "parts/discard-dialog.vue",
     "parts/policy-picker-step.vue",
-    "parts/project-picker-card.vue",
-    "parts/project-settings.vue",
     "parts/review-step.vue",
-    "parts/service-advanced.vue",
-    "parts/service-domain-card.vue",
-    "parts/service-environment.vue",
-    "parts/service-wizard.vue",
-    "parts/wizard-frame.vue"
+    "parts/wizard-frame.vue",
+    "types.ts"
   ],
   "variants": [
     {

@@ -18,9 +18,9 @@ A focused page, outside the console shell, where the user turns a template into 
 
 ## Building blocks
 
-### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 
-The creation header from `top-bar/top-bar-creation`: a small outlined back `IconButton` to the Creation Center, the `Brand` linking home, a `Breadcrumb` whose last crumb is the template and is current, and the account `Avatar` alone on the right. No sidebar, no search.
+The creation header from `top-bar/top-bar-creation`: a small outlined back `IconButton` to the Creation Center, the `Brand` linking home, a `Breadcrumb` whose last crumb is the template and is current, and the account `AppHeaderAccount` alone on the right. No sidebar, no search.
 
 ### B. Template and Git step — `Card`, `EmptyState`, `Button`, `Link` (required)
 

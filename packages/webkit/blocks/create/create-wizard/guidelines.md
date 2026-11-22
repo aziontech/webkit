@@ -20,9 +20,9 @@ The page a first-level resource is created on one step at a time. It is the `Wiz
 
 ## Building blocks
 
-### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 
-The `top-bar/top-bar-creation` header, with no sidebar: a back `IconButton` to the module, the `Brand` linking home, a `Breadcrumb` of the module and the create label, and the account `Avatar`. The breadcrumb's last item repeats the create button's label exactly.
+The `top-bar/top-bar-creation` header, with no sidebar: a back `IconButton` to the module, the `Brand` linking home, a `Breadcrumb` of the module and the create label, and the account `AppHeaderAccount`. The breadcrumb's last item repeats the create button's label exactly.
 
 ### B. Page heading — `PageHeader` (required)
 

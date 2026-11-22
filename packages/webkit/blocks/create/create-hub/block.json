@@ -34,7 +34,7 @@
     "name": "Default",
     "file": "create-hub.vue"
   },
-  "files": ["sample.ts", "types.ts", "parts/repository-list.vue", "parts/template-gallery.vue"],
+  "files": ["sample.ts", "parts/repository-list.vue", "parts/template-gallery.vue", "types.ts"],
   "variants": [
     {
       "name": "Connected",

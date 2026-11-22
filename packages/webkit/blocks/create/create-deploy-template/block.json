@@ -44,17 +44,7 @@
     "name": "ConnectGit",
     "file": "create-deploy-template.vue"
   },
-  "files": [
-    "sample.ts",
-    "parts/build-preset-field.vue",
-    "parts/deploy-form.vue",
-    "parts/deploy-heading.vue",
-    "parts/deploy-variable-field.vue",
-    "parts/discard-dialog.vue",
-    "parts/install-integration-page.vue",
-    "parts/upload-page.vue",
-    "parts/where-it-runs-page.vue"
-  ],
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "WhereItRuns",

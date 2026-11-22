@@ -9,8 +9,17 @@ import { cleanup, cli, cliJson, makeProject, PKG_ROOT } from './lib/cli-project.
 
 const BLOCK = 'create/create-hub'
 const canonical = (file) => readFileSync(join(PKG_ROOT, 'blocks', BLOCK, file), 'utf8')
+const PRIMARY_IMPORTS = {
+  './parts/repository-list.vue': './create-hub.repository-list.vue',
+  './parts/template-gallery.vue': './create-hub.template-gallery.vue',
+  './sample': './create-hub.sample',
+  './types': './create-hub.types'
+}
 const copiedPrimary = () =>
-  canonical('create-hub.vue').replace("'./sample'", "'./create-hub.sample'")
+  Object.entries(PRIMARY_IMPORTS).reduce(
+    (text, [from, to]) => text.replaceAll(`'${from}'`, `'${to}'`),
+    canonical('create-hub.vue')
+  )
 const copiedVariant = (file) =>
   canonical(file)
     .replace("'../create-hub.vue'", "'./create-hub.vue'")
@@ -28,20 +37,29 @@ test('add copies the primary SFC into src/views and records it in the manifest',
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
     const entry = manifest.blocks[BLOCK]
     assert.equal(entry.version, JSON.parse(readFileSync(join(PKG_ROOT, 'package.json'))).version)
-    assert.deepEqual(entry.files, [
-      {
-        path: 'src/views/create-hub.sample.ts',
-        source: `blocks/${BLOCK}/sample.ts`,
-        variant: 'Data',
-        checksum: checksum(sample)
-      },
+    const sampleEntry = entry.files.find((f) => f.path === 'src/views/create-hub.sample.ts')
+    assert.deepEqual(sampleEntry, {
+      path: 'src/views/create-hub.sample.ts',
+      source: `blocks/${BLOCK}/sample.ts`,
+      variant: 'Data',
+      checksum: checksum(sample)
+    })
+    assert.deepEqual(
+      entry.files.find((f) => f.path === 'src/views/create-hub.vue'),
       {
         path: 'src/views/create-hub.vue',
         source: `blocks/${BLOCK}/create-hub.vue`,
         variant: 'Default',
-        imports: { './sample': './create-hub.sample' },
+        imports: PRIMARY_IMPORTS,
         checksum: checksum(copied)
       }
+    )
+    assert.deepEqual(entry.files.map((f) => f.path).sort(), [
+      'src/views/create-hub.repository-list.vue',
+      'src/views/create-hub.sample.ts',
+      'src/views/create-hub.template-gallery.vue',
+      'src/views/create-hub.types.ts',
+      'src/views/create-hub.vue'
     ])
     assert.match(r.stdout, /component: \(\) => import\('\.\/views\/create-hub\.vue'\)/)
     assert.match(r.stderr, /not installed in this project/)
@@ -65,6 +83,9 @@ test('add resolves a short name, copies the chosen variant and the guidelines si
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
     assert.deepEqual(manifest.blocks[BLOCK].files.map((f) => f.variant).sort(), [
       'Connected',
+      'Data',
+      'Data',
+      'Data',
       'Data',
       'Default'
     ])
@@ -90,6 +111,9 @@ test('add --variant after the primary was added keeps the primary copy and adds 
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
     assert.deepEqual(manifest.blocks[BLOCK].files.map((f) => f.variant).sort(), [
       'Connected',
+      'Data',
+      'Data',
+      'Data',
       'Data',
       'Default'
     ])

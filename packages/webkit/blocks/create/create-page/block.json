@@ -47,19 +47,7 @@
     "name": "Default",
     "file": "create-page.vue"
   },
-  "files": [
-    "domain-validation.ts",
-    "use-create-form.ts",
-    "lib/service-options.ts",
-    "parts/create-organization-form.vue",
-    "parts/create-purge-form.vue",
-    "parts/create-service-form.vue",
-    "parts/create-zone-form.vue",
-    "parts/creation-frame.vue",
-    "parts/creation-header.vue",
-    "parts/discard-dialog.vue",
-    "parts/service-cache-section.vue"
-  ],
+  "files": ["domain-validation.ts"],
   "variants": [
     {
       "name": "CreateZone",

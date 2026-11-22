@@ -20,9 +20,9 @@ The page a first-level resource is created on when everything it needs fits on o
 
 ## Building blocks
 
-### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 
-`AppHeader` with no sidebar: a small outlined `IconButton` back to the module ("Back to Domains"), the `Brand` linking home, a `Breadcrumb` of the module and the page title, and the account `Avatar` on the right. The breadcrumb's last item repeats the create button's label exactly.
+`AppHeader` with no sidebar: a small outlined `IconButton` back to the module ("Back to Domains"), the `Brand` linking home, a `Breadcrumb` of the module and the page title, and the account `AppHeaderAccount` on the right. The breadcrumb's last item repeats the create button's label exactly.
 
 ### B. Page heading — `PageHeader` (required)
 

@@ -26,20 +26,16 @@
   },
   "files": [
     "sample.ts",
-    "types.ts",
-    "composables/use-deploy-run.ts",
-    "composables/use-reload-flag.ts",
     "lib/list-format.ts",
-    "parts/bound-project-card.vue",
     "parts/build-item.vue",
-    "parts/deploy-drawer-frame.vue",
     "parts/deploy-loading.vue",
     "parts/deploy-resources-card.vue",
     "parts/domain-group-item.vue",
     "parts/environment-choices.vue",
     "parts/impacted-projects.vue",
     "parts/project-card.vue",
-    "parts/version-picker.vue"
+    "parts/version-picker.vue",
+    "types.ts"
   ],
   "variants": [
     {

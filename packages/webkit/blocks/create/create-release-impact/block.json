@@ -29,11 +29,10 @@
   },
   "files": [
     "sample.ts",
-    "types.ts",
     "lib/release-impact.ts",
-    "parts/choose-settings-page.vue",
     "parts/release-impact-panel.vue",
-    "parts/release-resource-card.vue"
+    "parts/release-resource-card.vue",
+    "types.ts"
   ],
   "variants": [
     {
