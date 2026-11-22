@@ -3,7 +3,7 @@
   "name": "AiChat",
   "title": "Blocks/Ai/AiChat",
   "surface": "app",
-  "summary": "The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a round menu button on a phone; no header bar, only round floating buttons on a phone and a quiet row on desktop; before the first message an `EmptyState` over vertical support prompts from `SuggestionGroup`, inside the log; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, the feedback thumbs, Regenerate, Read aloud and a `Sources` pill in the action row), followed by follow-up questions; a `PromptInput` pill floating at the foot of the column with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout that fills its content region.",
+  "summary": "The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a round menu button on a phone; no header bar, only round floating buttons on a phone and a quiet row on desktop; before the first message an `EmptyState` over vertical support prompts from `SuggestionGroup`, inside the log; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, the feedback thumbs, Regenerate, Read aloud and a `Sources` pill in the action row), followed by follow-up questions; a `PromptInput` pill floating at the foot of the column with the Attach \"+\" at the start, Dictate before the round button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout that fills its content region.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -47,6 +47,7 @@
   },
   "files": [
     "sample.ts",
+    "parts/ai-chat-composer.vue",
     "parts/ai-chat-connection-status.vue",
     "parts/ai-chat-header.vue",
     "parts/ai-chat-history.vue",

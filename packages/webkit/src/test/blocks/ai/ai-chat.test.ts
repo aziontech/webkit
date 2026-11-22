@@ -736,9 +736,25 @@ describe('ai/ai-chat', () => {
     expect(view.queryByTestId('prompt-input__files')).toBeNull()
   })
 
-  it('offers no attach control unless attachable', () => {
+  it('shows Attach at the start, Dictate before Send and Start voice while empty', async () => {
     const view = render(AiChat)
+    const box = view.getByTestId('prompt-input__box')
+    const buttons = within(box).getAllByRole('button')
+    expect(buttons[0]).toHaveAccessibleName('Attach files')
+    const voice = within(box).getByRole('button', { name: 'Start voice conversation' })
+    expect(buttons.at(-1)).toBe(voice)
+    await expect
+      .poll(() => within(box).getAllByRole('button').at(-2))
+      .toHaveAccessibleName('Dictate')
+    await userEvent.click(voice)
+    expect(view.emitted('voice-start')).toHaveLength(1)
+  })
+
+  it('offers no attach control or voice control when they are turned off', () => {
+    const view = render(AiChat, { props: { attachable: false, voice: false } })
     expect(view.queryByRole('button', { name: 'Attach files' })).toBeNull()
+    expect(view.queryByRole('button', { name: 'Start voice conversation' })).toBeNull()
+    expect(view.getByRole('button', { name: 'Submit' })).toBeDisabled()
   })
 
   it('draws the image and document a reader attached to a message', () => {

@@ -40,7 +40,7 @@ A small `EmptyState` titled with the resource ("Ask about storefront") and three
 
 ### F. Message log — `Conversation`
 
-The same layout as the full page: the reader's prompts in a bubble at the inline end, responses as plain text across the panel, no avatars. It is the only part of the drawer that scrolls, and it sits on the canvas, not the drawer's surface, so the prompt bubbles and the composer's fade read as on the full page; the composer floats over its foot.
+The same layout as the full page: the reader's prompts in a bubble at the inline end, responses as plain text across the panel, no avatars. It is the only part of the drawer that scrolls, and it sits on the drawer's own surface: the body sets `--conversation-composer-fade` to `--bg-surface` so the fade under the composer matches it, and the prompt bubbles (`--bg-selected`) stand apart from it in both themes; the composer floats over its foot.
 
 ### G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `CopyButton`
 
@@ -50,9 +50,9 @@ The same prompt and response anatomy as the full page: loading, thinking, stream
 
 After the last complete response, aligned with its text.
 
-### I. Composer — `PromptInput`, `PromptInputAttachButton`
+### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
 
-The `#composer` of `Conversation`: one floating pill at the foot of the drawer, no divider, four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint. With `attachable`, a `PromptInputAttachButton` (and drop and paste) attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating pill at the foot of the drawer, no divider, four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint. The Attach "+" at the start (`attachable`, on by default: a `PromptInputAttachButton`, and drop and paste) attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
 
 ### J. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 
@@ -107,7 +107,7 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 | `resuming`          | `boolean`                                 | `resuming` of `useChat`: Reconnecting while a run is rejoined.                                                                                                                                                                 |
 | `hydrating`         | `boolean`                                 | `isHydrating` of `useChat`: placeholders stand in for the conversation and the composer waits.                                                                                                                                 |
 | `sessionGenerating` | `boolean`                                 | `sessionGenerating` of `useChat`: Responding in another tab while this tab is not loading.                                                                                                                                     |
-| `attachable`        | `boolean`                                 | The reader may attach files; `send` then hands over multimodal content.                                                                                                                                                        |
+| `attachable`        | `boolean`                                 | The Attach "+" at the start of the composer; `send` then hands over multimodal content. Default `true`.                                                                                                                        |
 | `accept`            | `string`                                  | The files the reader may attach; default `image/*,application/pdf`.                                                                                                                                                            |
 | `maxFiles`          | `number`                                  | Most files on one message; default 4.                                                                                                                                                                                          |
 | `maxFileSize`       | `number`                                  | Largest file in bytes; default 10 MB.                                                                                                                                                                                          |

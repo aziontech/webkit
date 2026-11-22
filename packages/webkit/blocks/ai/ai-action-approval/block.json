@@ -29,7 +29,7 @@
     "name": "Pending",
     "file": "ai-action-approval.vue"
   },
-  "files": ["sample.ts"],
+  "files": ["sample.ts", "parts/ai-action-approval-composer.vue"],
   "variants": [
     {
       "name": "Irreversible",

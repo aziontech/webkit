@@ -88,7 +88,7 @@
     hydrating?: boolean
     /** A response is being generated for this chat elsewhere, as `useChat` returns `sessionGenerating`. */
     sessionGenerating?: boolean
-    /** The reader may attach files; `send` then hands over the multimodal content `sendMessage` takes. */
+    /** The reader may attach files from the Attach control at the start of the composer; `send` then hands over the multimodal content `sendMessage` takes. */
     attachable?: boolean
     /** The files the reader may attach, in the native accept syntax. */
     accept?: string
@@ -116,7 +116,7 @@
     resuming: false,
     hydrating: false,
     sessionGenerating: false,
-    attachable: false,
+    attachable: true,
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
@@ -348,7 +348,9 @@
             :empty="!turns.length"
             @new-chat="newChat"
           />
-          <div class="flex min-h-0 flex-1 flex-col bg-(--bg-canvas)">
+          <div
+            class="flex min-h-0 flex-1 flex-col [--conversation-composer-fade:var(--bg-surface)]"
+          >
             <Conversation
               aria-label="Conversation with the AI assistant"
               :more-messages="moreMessages"

@@ -20,7 +20,7 @@ The moment an assistant needs permission. The reader asked for something that ch
 
 ### A. Conversation frame — `Conversation`, `PromptInput`
 
-The thread and its composer, as in `ai/ai-chat`: a quiet title row with no divider, and the `PromptInput` pill floating in the `#composer` of `Conversation`, with the alert of unsent decisions above it. While an approved action runs, the composer shows Stop, which emits `stop`; the page cancels the run with `stop()` of `useChat`.
+The thread and its composer, as in `ai/ai-chat`: a quiet title row with no divider, and the `PromptInput` pill floating in the `#composer` of `Conversation`, with the alert of unsent decisions above it. The pill holds the Attach "+" at the start (`attachable`, on by default: up to 4 images or PDFs of 10 MB each, sent as TanStack AI's multimodal content) and Dictate before Send. Dictate (`PromptInputDictateButton`) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. While an approved action runs, the composer shows Stop, which emits `stop`; the page cancels the run with `stop()` of `useChat`.
 
 ### B. Request — `ChatMessage`
 
@@ -64,10 +64,11 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 | `tools`           | `Record<string, AiChatTool>`   | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant`, `confirmationPhrase` and `editable` for its approval card.                                    |
 | `interrupts`      | `interrupts` of `useChat`      | The pending approvals and questions; the approve button and Deny resolve the one whose `toolCallId` matches the call, a generic one asks its question, and an unbound one asks it for the app to route. |
 | `interruptErrors` | `interruptErrors` of `useChat` | Decisions that were not sent: an alert with the reason, and Retry when one is retryable.                                                                                                                |
+| `attachable`      | `boolean`                      | The Attach "+" at the start of the composer; `send` then hands over multimodal content. Default `true`.                                                                                                 |
 
 | Event              | Payload                     | When                                                                                                                                              |
 | ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `send`             | `(event, text)`             | The composer: call `sendMessage(text)`.                                                                                                           |
+| `send`             | `(event, content)`          | The composer: call `sendMessage(content)`. `content` is the text, or with attachments `{ content: parts }`.                                       |
 | `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
 | `retry`            | `(event, message)`          | Try again or Regenerate response: call `reload()`.                                                                                                |
 | `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
@@ -116,7 +117,7 @@ export async function POST(request: Request) {
     :error="error"
     :interrupts="interrupts"
     :interrupt-errors="interruptErrors"
-    @send="(_event, text) => sendMessage(text)"
+    @send="(_event, content) => sendMessage(content)"
     @retry-interrupts="retryInterrupts()"
     @stop="stop()"
     @retry="reload()"

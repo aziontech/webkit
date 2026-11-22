@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
+  import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
   import { ref } from 'vue'
 
@@ -48,6 +49,9 @@
       #actions
     >
       <PromptInputAttachButton />
+    </template>
+    <template #end>
+      <PromptInputDictateButton />
     </template>
     <template #hint>The AI assistant can make mistakes. Check important information.</template>
   </PromptInput>

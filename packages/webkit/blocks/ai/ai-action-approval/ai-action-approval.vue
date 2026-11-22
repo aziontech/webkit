@@ -8,7 +8,6 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import ImageGallery from '@aziontech/webkit/image-gallery'
   import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import ToolCall from '@aziontech/webkit/tool-call'
@@ -18,6 +17,7 @@
     type AiChatInterruptError,
     type AiChatMessage,
     type AiChatQuestion,
+    type AiChatSendContent,
     type AiChatTool,
     type AiChatToolCallPart,
     answerInterrupt,
@@ -42,6 +42,7 @@
   } from '@aziontech/webkit/utils/ai-chat'
   import { computed, ref } from 'vue'
 
+  import AiActionApprovalComposer from './parts/ai-action-approval-composer.vue'
   import { sampleMessages, sampleTools } from './sample'
 
   export interface AiActionApprovalProps {
@@ -57,6 +58,8 @@
     interrupts?: ReadonlyArray<AiChatInterrupt>
     /** Why the decisions were not sent, as `useChat` returns `interruptErrors`; a retryable one offers Retry. */
     interruptErrors?: ReadonlyArray<AiChatInterruptError>
+    /** The reader may attach images and PDFs (up to 4, 10 MB each) from the Attach control at the start of the composer; `send` then hands over the multimodal content `sendMessage` takes. */
+    attachable?: boolean
   }
 
   const props = withDefaults(defineProps<AiActionApprovalProps>(), {
@@ -65,7 +68,8 @@
     error: '',
     tools: undefined,
     interrupts: () => [],
-    interruptErrors: () => []
+    interruptErrors: () => [],
+    attachable: true
   })
 
   const emit = defineEmits<{
@@ -73,14 +77,13 @@
     deny: [event: MouseEvent, call: AiChatToolCallPart]
     stop: [event: MouseEvent]
     retry: [event: MouseEvent, message: AiChatMessage]
-    send: [event: MouseEvent | KeyboardEvent, text: string]
+    send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     'answer-interrupt': [event: Event, interrupt: AiChatInterrupt, value: string]
     'retry-interrupts': [event: MouseEvent]
   }>()
 
   const { formatDate } = useLocale()
 
-  const prompt = ref('')
   const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
   const settled = ref<Record<string, AiChatQuestion>>({})
@@ -190,12 +193,6 @@
     const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
     settled.value[question.id] = { ...question, status: 'skipped', error: '' }
     skipInterrupt(interrupt)
-  }
-
-  function send(event: MouseEvent | KeyboardEvent, value: string) {
-    if (!value.trim() || state.value !== 'ready') return
-    prompt.value = ''
-    emit('send', event, value)
   }
 </script>
 
@@ -391,16 +388,12 @@
         >
           {{ interruptErrorText(interruptErrors) }}
         </Alert>
-        <PromptInput
-          v-model="prompt"
-          :status="state"
-          @submit="(event, { value }) => send(event, value)"
+        <AiActionApprovalComposer
+          :state="state"
+          :attachable="attachable"
+          @send="(event, content) => emit('send', event, content)"
           @stop="emit('stop', $event)"
-        >
-          <template #hint>
-            The assistant runs nothing in your account without your approval.
-          </template>
-        </PromptInput>
+        />
       </template>
     </Conversation>
   </section>

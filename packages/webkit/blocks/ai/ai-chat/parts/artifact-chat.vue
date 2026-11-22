@@ -9,6 +9,9 @@
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import type { PromptInputFile } from '@aziontech/webkit/prompt-input'
+  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
+  import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
   import Resizable from '@aziontech/webkit/resizable'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
@@ -36,8 +39,14 @@
   const paneCanvasEl = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
   const drawerCanvasEl = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
   const prompt = ref('')
+  const files = ref<PromptInputFile[]>([])
   const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
   const lines = computed(() => versions[version.value].split('\n').length)
+
+  const clearPrompt = () => {
+    prompt.value = ''
+    files.value = []
+  }
 
   const narrow = ref(false)
   let narrowQuery: MediaQueryList | null = null
@@ -164,10 +173,18 @@
               <template #composer>
                 <PromptInput
                   v-model="prompt"
+                  v-model:files="files"
                   :max-length="4000"
                   placeholder="Ask for a change"
-                  @submit="prompt = ''"
+                  accept="image/*,application/pdf"
+                  @submit="clearPrompt"
                 >
+                  <template #actions>
+                    <PromptInputAttachButton />
+                  </template>
+                  <template #end>
+                    <PromptInputDictateButton />
+                  </template>
                   <template #hint>
                     The AI assistant can make mistakes. Check a query before you run it.
                   </template>
