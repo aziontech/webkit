@@ -1230,3 +1230,4 @@ Budget-raise: prompt-input-root 10.75 KB → 11.35 KB (measured 11.32 KB): the s
 Budget-raise: prompt-input 13.9 KB → 14.5 KB (measured 14.44 KB): the same floating pill as prompt-input-root, plus round Attach and Dictate controls.
 Budget-raise: prompt-input-context-picker 15.2 KB → 15.25 KB (measured 15.20 KB): its trigger is now round to sit in the composer pill.
 Budget-raise: prompt-queue 4.7 KB → 4.75 KB (measured 4.71 KB): the queue box takes the composer's translucent surface and backdrop blur (chat look proposal), so it reads as one floating surface with the pill composer below it.
+Budget-raise: conversation-history 6.7 KB → 9 KB (measured 8.94 KB): the ChatGPT-style side list adds New chat and a search field (`creatable`, `searchable`); the search field is the package `Input` (frame, field attributes, autofill hints), which a native input may not replace (owners.json).

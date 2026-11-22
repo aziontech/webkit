@@ -455,7 +455,10 @@ export const ptBR: Messages = {
     previous30: 'Últimos 30 dias',
     older: 'Mais antigas',
     emptyTitle: 'Nenhuma conversa ainda.',
-    delete: 'Excluir {title}'
+    delete: 'Excluir {title}',
+    newChat: 'Novo chat',
+    search: 'Buscar conversas',
+    noMatch: 'Nenhuma conversa corresponde a “{query}”.'
   },
   qrCode: {
     label: 'Código QR'

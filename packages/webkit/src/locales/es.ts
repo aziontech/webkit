@@ -455,7 +455,10 @@ export const es: Messages = {
     previous30: 'Últimos 30 días',
     older: 'Más antiguas',
     emptyTitle: 'Aún no hay conversaciones.',
-    delete: 'Eliminar {title}'
+    delete: 'Eliminar {title}',
+    newChat: 'Nuevo chat',
+    search: 'Buscar conversaciones',
+    noMatch: 'Ninguna conversación coincide con «{query}».'
   },
   qrCode: {
     label: 'Código QR'
