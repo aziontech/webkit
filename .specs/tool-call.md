@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: d0c58884a7730e3b91a8e0fd5e3185cc75f1069ffaaa9a6ab88ad4f89a49be97
+checksum: 2f1e80e7f2a8f0bca53184509eaa67712e77eaf0c1063f9dc177e97f68306f63
 created: 2026-11-11
-last_updated: 2026-11-19
+last_updated: 2026-11-22
 ---
 
 # ToolCall — Component Spec
@@ -114,13 +114,13 @@ _No events._
 
 ## Tokens
 
-| Region        | Token                                                               |
-| ------------- | ------------------------------------------------------------------- |
-| frame         | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`   |
-| title         | `.text-label-sm`, `var(--text-default)`                             |
-| name          | `.text-label-code-sm`, `var(--bg-surface-raised)`, `var(--text-muted)` |
-| section label | `.text-label-sm`, `var(--text-muted)`                               |
-| padding       | `var(--spacing-sm)`, `var(--spacing-xs)`                            |
+| Region        | Token                                                                                                                                                |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| frame         | none: a quiet row in the assistant column, at least 40 px tall; details hang under a 1 px `border-s var(--border-default)` rule, `var(--spacing-md)` |
+| title         | `.text-body-sm`, `var(--text-muted)` → hover `var(--text-default)`                                                                                   |
+| name          | `.text-label-code-sm`, `var(--bg-surface-raised)`, `var(--text-muted)`                                                                               |
+| section label | `.text-label-sm`, `var(--text-muted)`                                                                                                                |
+| padding       | `var(--spacing-sm)`, `var(--spacing-xs)`                                                                                                             |
 
 ## Theme gaps
 

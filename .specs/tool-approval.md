@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: c6348fddd63afad129ee154598f7e6c25aef8cf34064a8091c5a41f3f1789b03
+checksum: e234bac33245d9c0166ff1bc8e2f961b32196519fc818dd3fbdf6004756e5314
 created: 2026-11-11
-last_updated: 2026-11-19
+last_updated: 2026-11-22
 ---
 
 # ToolApproval — Component Spec
@@ -183,15 +183,15 @@ _No motion of its own; `Button` handles its loading spinner._
 
 ## Tokens
 
-| Region          | Token                                                                                                      |
-| --------------- | ---------------------------------------------------------------------------------------------------------- |
-| frame           | `var(--bg-surface)`, `var(--border-default)` (danger pending: `var(--danger-border)`), `var(--shape-card)` |
-| title           | `.text-heading-2xs`, `var(--text-default)`                                                                 |
-| description     | `.text-body-sm`, `var(--text-muted)`                                                                       |
-| shield glyph    | `var(--text-muted)` / `var(--danger-foreground)`                                                           |
-| phrase input    | `var(--border-default)`, `var(--shape-control)`, `.text-body-sm`                                           |
-| arguments field | `Textarea` tokens (`monospace`); label `.text-label-sm`, `var(--text-default)`; error `FieldError` tokens  |
-| padding/gaps    | `var(--spacing-md)`, `var(--spacing-sm)`, `var(--spacing-xs)`                                              |
+| Region          | Token                                                                                                                                                  |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| frame           | no fill (it sits in the assistant's plain column), a 1 px `var(--border-default)` border (danger pending: `var(--danger-border)`), `var(--shape-card)` |
+| title           | `.text-heading-2xs`, `var(--text-default)`                                                                                                             |
+| description     | `.text-body-sm`, `var(--text-muted)`                                                                                                                   |
+| shield glyph    | `var(--text-muted)` / `var(--danger-foreground)`                                                                                                       |
+| phrase input    | `var(--border-default)`, `var(--shape-control)`, `.text-body-sm`                                                                                       |
+| arguments field | `Textarea` tokens (`monospace`); label `.text-label-sm`, `var(--text-default)`; error `FieldError` tokens                                              |
+| padding/gaps    | `var(--spacing-md)`, `var(--spacing-sm)`, `var(--spacing-xs)`                                                                                          |
 
 ## Theme gaps
 

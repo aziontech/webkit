@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 3ecf46a6714eb4dff502fa7707c23cde764ff659d2ddfaf0248e4b718e7c4c2d
+checksum: 02688141d8d500b07b8de1eea8bd8e7ed8cfe792e57ed435fb49ec34f7927195
 created: 2026-11-19
-last_updated: 2026-11-19
+last_updated: 2026-11-22
 ---
 
 # PromptQueue — Component Spec
@@ -90,14 +90,14 @@ _No slots._
 
 ## Tokens
 
-| Region      | Token                                                                                 |
-| ----------- | ------------------------------------------------------------------------------------- |
-| box         | `var(--bg-surface)`, `border border-(--border-default)`, `var(--shape-card)`          |
-| box padding | `var(--spacing-xs)` block / `var(--spacing-sm)` inline; rows gap `var(--spacing-2xs)` |
-| heading     | `.text-label-sm`, `var(--text-muted)`; glyph `az az-clock` `var(--text-muted)`        |
-| item text   | `.text-body-md`, `var(--text-default)`, two lines at most (`line-clamp-2`)            |
-| attachments | `.text-label-sm`, `var(--text-muted)`; glyph `az az-paperclip`                        |
-| remove      | `IconButton` `variant="ghost"` `size="small"` `icon="az az-x"`                        |
+| Region      | Token                                                                                                                                                           |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| box         | the composer's surface: `var(--bg-surface-raised)` at 88% over what scrolls behind, `backdrop-blur-md`, `border border-(--border-default)`, `var(--shape-card)` |
+| box padding | `var(--spacing-xs)` block / `var(--spacing-sm)` inline; rows gap `var(--spacing-2xs)`                                                                           |
+| heading     | `.text-label-sm`, `var(--text-muted)`; glyph `az az-clock` `var(--text-muted)`                                                                                  |
+| item text   | `.text-body-md`, `var(--text-default)`, two lines at most (`line-clamp-2`)                                                                                      |
+| attachments | `.text-label-sm`, `var(--text-muted)`; glyph `az az-paperclip`                                                                                                  |
+| remove      | `IconButton` `variant="ghost"` `size="small"` `icon="az az-x"`                                                                                                  |
 
 ## Theme gaps
 

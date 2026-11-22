@@ -194,7 +194,7 @@
     :data-testid="testId"
     :data-status="status"
     :data-type="type"
-    class="flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
+    class="flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)"
   >
     <div class="flex items-start gap-(--spacing-sm)">
       <i

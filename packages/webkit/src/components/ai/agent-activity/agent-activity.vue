@@ -137,11 +137,11 @@
   }
 
   const TOGGLE_CLASS =
-    'inline-flex min-h-6 w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
-    'motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) pointer-coarse:min-h-11'
+    'inline-flex min-h-8 w-fit items-center gap-(--spacing-xs) rounded-full text-body-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) pointer-coarse:min-h-10'
 
   const STEP_TITLE_CLASS =
-    'text-start text-body-sm text-(--text-default) wrap-anywhere ' +
+    'text-start text-body-md text-(--text-default) wrap-anywhere ' +
     'data-[status=canceled]:text-(--text-muted) data-[status=pending]:text-(--text-muted) data-[status=skipped]:text-(--text-muted)'
 </script>
 
@@ -189,7 +189,7 @@
         class="flex min-w-0 items-start gap-(--spacing-xs)"
       >
         <span
-          class="flex h-5 w-4 shrink-0 items-center justify-center"
+          class="flex h-5.5 w-4 shrink-0 items-center justify-center"
           aria-hidden="true"
         >
           <Spinner

@@ -124,7 +124,7 @@
   defineExpose({ focus })
 
   const ROOT_CLASS =
-    'flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) ' +
+    'flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) ' +
     'data-[variant=danger]:data-[status=pending]:border-(--danger-border)'
 </script>
 
