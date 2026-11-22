@@ -6,7 +6,6 @@
     onBeforeUnmount,
     onMounted,
     provide,
-    type Ref,
     ref,
     shallowRef,
     useAttrs,
@@ -21,11 +20,14 @@
   import DialogContent from '../dialog/dialog-content.vue'
   import DialogTitle from '../dialog/dialog-title.vue'
   import PanelHeader from '../panel/panel-header.vue'
+  import { useCommandActive } from './composables/use-command-active'
+  import { useCommandPages } from './composables/use-command-pages'
   import {
     CommandInjectionKey,
     type CommandItemValue,
     type CommandRegisteredItem
   } from './injection-key'
+  import { groupStatsOf, matchesShortcut, sortVisibleItems } from './lib/command-order'
   import { claimShortcut } from './shortcut-registry'
 
   defineOptions({
@@ -80,7 +82,6 @@
   })
 
   const query = ref('')
-  const activeValue = ref<CommandItemValue | null>(null)
   const registry = new Set<CommandRegisteredItem>()
   const registryVersion = shallowRef(0)
   const items = computed<CommandRegisteredItem[]>(() => {
@@ -88,15 +89,9 @@
     return Array.from(registry)
   })
   const previousActiveEl = ref<HTMLElement | null>(null)
-  const pageStack = ref<string[]>([])
-  const pageHeadings = shallowRef(new Map<string, Ref<string>>())
   let pageChangedWhileClosed = false
 
   const ranking = computed(() => query.value.trim().length > 0)
-  const page = computed(() => pageModel.value)
-  const pageHeading = computed(
-    () => pageHeadings.value.get(pageModel.value)?.value || pageModel.value
-  )
 
   const isMac = computed(
     () =>
@@ -104,126 +99,28 @@
       /mac/i.test(navigator.platform || navigator.userAgent || '')
   )
 
-  const groupStats = computed(() => {
-    const stats = new Map<string, { visible: boolean; order: number }>()
-    for (const item of items.value) {
-      if (item.groupId === null) continue
-      const current = stats.get(item.groupId) ?? { visible: false, order: Infinity }
-      if (item.isVisible.value) {
-        current.visible = true
-        current.order = Math.min(current.order, item.order.value)
-      }
-      stats.set(item.groupId, current)
-    }
-    return stats
-  })
+  const groupStats = computed(() => groupStatsOf(items.value))
 
-  function topOrder(item: CommandRegisteredItem) {
-    if (item.groupId === null) return item.order.value
-    return groupStats.value.get(item.groupId)?.order ?? item.order.value
-  }
-
-  function domOrder(left: HTMLElement | null, right: HTMLElement | null) {
-    if (!left || !right) return 0
-    const position = left.compareDocumentPosition(right)
-    if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1
-    if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1
-    return 0
-  }
-
-  const visibleItems = computed(() => {
-    const visible = items.value.filter((item) => item.isVisible.value)
-    const ranked = ranking.value
-    const inOrder =
-      !ranked &&
-      visible.every(
-        (item, index) => index === 0 || domOrder(visible[index - 1]!.el.value, item.el.value) <= 0
-      )
-    if (inOrder) return visible
-    return visible
-      .map((item, index) => ({ item, index }))
-      .sort((a, b) => {
-        if (ranked) {
-          const byTop = topOrder(a.item) - topOrder(b.item)
-          if (byTop !== 0) return byTop
-          if (a.item.groupId !== null && a.item.groupId === b.item.groupId) {
-            const byOwn = a.item.order.value - b.item.order.value
-            if (byOwn !== 0) return byOwn
-          }
-        }
-        return domOrder(a.item.el.value, b.item.el.value) || a.index - b.index
-      })
-      .map((entry) => entry.item)
-  })
+  const visibleItems = computed(() =>
+    sortVisibleItems(
+      items.value.filter((item) => item.isVisible.value),
+      ranking.value,
+      groupStats.value
+    )
+  )
 
   const navigableItems = computed(() => visibleItems.value.filter((item) => !item.disabled.value))
 
-  const leadingGroupId = computed(() =>
-    ranking.value ? (visibleItems.value[0]?.groupId ?? null) : null
-  )
-
-  const hasVisibleItems = computed(() => visibleItems.value.length > 0)
-
-  function setOpen(value: boolean) {
-    isOpen.set(value)
-  }
-
-  function setQuery(value: string) {
-    query.value = value
-  }
-
-  function setActive(value: CommandItemValue | null) {
-    activeValue.value = value
-  }
-
-  function isActive(value: CommandItemValue) {
-    return activeValue.value === value
-  }
-
-  function groupHasVisibleItems(groupId: string) {
-    return groupStats.value.get(groupId)?.visible ?? false
-  }
-
-  function groupOrder(groupId: string) {
-    const order = groupStats.value.get(groupId)?.order ?? 0
-    return Number.isFinite(order) ? order : 0
-  }
-
-  function goToPage(name: string) {
+  const pages = useCommandPages(pageModel, (name) => {
     pageModel.value = name
     query.value = ''
     nextTick(() => resetActive())
-  }
+  })
+  const active = useCommandActive(navigableItems, query, pages.popPage)
+  const { activeValue, resetActive } = active
 
-  function pushPage(name: string) {
-    if (!name || name === pageModel.value) return
-    pageStack.value = [...pageStack.value, pageModel.value]
-    goToPage(name)
-  }
-
-  function popPage() {
-    if (pageModel.value === '') return false
-    const stack = [...pageStack.value]
-    const previous = stack.pop() ?? ''
-    pageStack.value = stack
-    goToPage(previous)
-    return true
-  }
-
-  function registerPage(name: string, heading: Ref<string>) {
-    const next = new Map(pageHeadings.value)
-    next.set(name, heading)
-    pageHeadings.value = next
-    return () => {
-      const rest = new Map(pageHeadings.value)
-      if (rest.get(name) === heading) rest.delete(name)
-      pageHeadings.value = rest
-    }
-  }
-
-  function resetActive() {
-    const first = navigableItems.value[0]
-    activeValue.value = first ? first.value : null
+  function setOpen(value: boolean) {
+    isOpen.set(value)
   }
 
   function registerItem(item: CommandRegisteredItem) {
@@ -238,89 +135,12 @@
     }
   }
 
-  function moveActive(delta: number) {
-    const list = navigableItems.value
-    if (!list.length) {
-      activeValue.value = null
-      return
-    }
-    const currentIndex = list.findIndex((item) => item.value === activeValue.value)
-    let next = currentIndex + delta
-    if (next < 0) next = list.length - 1
-    if (next >= list.length) next = 0
-    activeValue.value = list[next].value
-  }
-
-  function onInputKeydown(event: globalThis.KeyboardEvent) {
-    switch (event.key) {
-      case 'ArrowDown':
-        event.preventDefault()
-        moveActive(1)
-        break
-      case 'ArrowUp':
-        event.preventDefault()
-        moveActive(-1)
-        break
-      case 'Home': {
-        event.preventDefault()
-        const first = navigableItems.value[0]
-        if (first) activeValue.value = first.value
-        break
-      }
-      case 'End': {
-        event.preventDefault()
-        const list = navigableItems.value
-        if (list.length) activeValue.value = list[list.length - 1].value
-        break
-      }
-      case 'Backspace':
-        if (query.value === '' && popPage()) event.preventDefault()
-        break
-      case 'Escape':
-        if (popPage()) event.preventDefault()
-        break
-      case 'Enter': {
-        event.preventDefault()
-        const active = navigableItems.value.find((item) => item.value === activeValue.value)
-        if (active) active.activate(event)
-        break
-      }
-      default:
-        break
-    }
-  }
-
   function close() {
     setOpen(false)
   }
 
-  function select(
-    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-    value: CommandItemValue
-  ) {
-    emit('select', event, value)
-    close()
-  }
-
-  function matchesShortcut(event: globalThis.KeyboardEvent) {
-    const tokens = props.shortcut
-      .toLowerCase()
-      .split('+')
-      .map((token) => token.trim())
-      .filter(Boolean)
-    if (!tokens.length) return false
-    const key = tokens[tokens.length - 1]
-    const modifiers = tokens.slice(0, -1)
-    if (event.key.toLowerCase() !== key) return false
-    if (modifiers.includes('meta') && !(isMac.value ? event.metaKey : event.ctrlKey)) return false
-    if (modifiers.includes('ctrl') && !event.ctrlKey) return false
-    if (modifiers.includes('shift') && !event.shiftKey) return false
-    if (modifiers.includes('alt') && !event.altKey) return false
-    return true
-  }
-
   useEventListener(defaultWindow, 'keydown', (event: globalThis.KeyboardEvent) => {
-    if (!matchesShortcut(event)) return
+    if (!matchesShortcut(props.shortcut, event, isMac.value)) return
     event.preventDefault()
     setOpen(!isOpen.value)
   })
@@ -364,7 +184,7 @@
         query.value = ''
         if (!pageChangedWhileClosed) pageModel.value = ''
         pageChangedWhileClosed = false
-        pageStack.value = []
+        pages.resetPages()
         nextTick(() => resetActive())
       } else if (wasOpen) {
         nextTick(() => previousActiveEl.value?.focus?.())
@@ -377,29 +197,32 @@
   })
 
   provide(CommandInjectionKey, {
+    ...pages,
+    ...active,
     testId: testId.value,
     query,
-    setQuery,
+    setQuery: (value: string) => {
+      query.value = value
+    },
     isOpen: computed(() => isOpen.value),
     listId,
     close,
-    select,
+    select: (event: globalThis.MouseEvent | globalThis.KeyboardEvent, value: CommandItemValue) => {
+      emit('select', event, value)
+      close()
+    },
     registerItem,
-    activeValue,
     activeId,
-    setActive,
-    isActive,
-    hasVisibleItems,
-    groupHasVisibleItems,
+    hasVisibleItems: computed(() => visibleItems.value.length > 0),
+    groupHasVisibleItems: (groupId: string) => groupStats.value.get(groupId)?.visible ?? false,
     ranking,
-    groupOrder,
-    leadingGroupId,
-    page,
-    pageHeading,
-    pushPage,
-    popPage,
-    registerPage,
-    onInputKeydown
+    groupOrder: (groupId: string) => {
+      const order = groupStats.value.get(groupId)?.order ?? 0
+      return Number.isFinite(order) ? order : 0
+    },
+    leadingGroupId: computed(() =>
+      ranking.value ? (visibleItems.value[0]?.groupId ?? null) : null
+    )
   })
 </script>
 
