@@ -156,7 +156,7 @@
         return new EditorWorker()
       }
     }
-    return (await import('monaco-editor')) as unknown as CodeEditorMonacoModule
+    return await import('monaco-editor')
   }
 
   const tabs = [

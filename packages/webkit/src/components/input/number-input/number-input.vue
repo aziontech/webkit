@@ -41,7 +41,7 @@
       /** Renders the chevron-up/chevron-down spinner controls. */
       showButtons?: boolean
       /** Lets a cleared field emit null instead of falling back to min or 0. */
-      nullable?: TNullable
+      nullable?: TNullable | false
     }>(),
     {
       placeholder: '',
@@ -54,7 +54,7 @@
       max: undefined,
       step: 1,
       showButtons: true,
-      nullable: false as never
+      nullable: false
     }
   )
 

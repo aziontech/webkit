@@ -213,10 +213,8 @@ export const formatTimezoneLabel = (timezone: string, localLabel = 'Local'): str
 
 export const defaultTimezones = (): string[] => {
   const local = localTimezone()
-  const supported = (Intl as unknown as { supportedValuesOf?: (key: string) => string[] })
-    .supportedValuesOf
-
-  const base = typeof supported === 'function' ? supported('timeZone') : []
+  const base =
+    typeof Intl.supportedValuesOf === 'function' ? Intl.supportedValuesOf('timeZone') : []
   const curated = [
     local,
     'UTC',
