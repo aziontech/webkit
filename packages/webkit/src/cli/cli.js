@@ -1,19 +1,35 @@
 #!/usr/bin/env node
 
-import { applyPlan } from './apply.js'
-import { applyAdd, applyRemove, MANIFEST, planAdd, planDiff, planRemove } from './blocks.js'
-import { runCanary } from './canary.js'
-import { exitCodeFor, formatCheck, runCheck, withNavigation } from './check.js'
-import { planSources, SOURCES_FILE, writeSources } from './css-sources.js'
-import { planDoctor } from './doctor.js'
-import { planMigrate, REVIEW_WARNING, SUPPORTED_VERSIONS } from './migrate.js'
-import { parseUrls } from './navigation-check.js'
-import { planInit } from './plan.js'
-import { formatSearch, formatView, runSearch, runView } from './query.js'
-import { FAIL_MODES, FORMATS, runReport } from './report.js'
-import { catalogFor, resolveWebkit } from './source.js'
-import { planSync, resolveBundleRoot } from './sync.js'
-import { colorize, diffStats } from './text-diff.js'
+import { parseArgs } from './commands/args.js'
+import { runAdd, runDiff, runRemove } from './commands/blocks.js'
+import {
+  runCanaryCommand,
+  runCheckCommand,
+  runCss,
+  runDoctor,
+  runReportCommand
+} from './commands/health.js'
+import { runInit } from './commands/init.js'
+import { runMigrate } from './commands/migrate.js'
+import { err, out } from './commands/output.js'
+import { runQuery } from './commands/query.js'
+import { runSync } from './commands/sync.js'
+
+const COMMANDS = new Set([
+  'init',
+  'add',
+  'remove',
+  'diff',
+  'search',
+  'view',
+  'check',
+  'doctor',
+  'css',
+  'report',
+  'canary',
+  'sync',
+  'migrate'
+])
 
 const HELP = `@aziontech/webkit — adopt the design system in one command
 
@@ -106,659 +122,54 @@ Run interactively (a TTY, no --yes) and init asks about the optional pieces —
 icons, entry wiring — before writing anything.
 `
 
-const COMMANDS = new Set([
-  'init',
-  'add',
-  'remove',
-  'diff',
-  'search',
-  'view',
-  'check',
-  'doctor',
-  'css',
-  'report',
-  'canary',
-  'sync',
-  'migrate'
-])
-const KNOWN_FLAGS = new Set([
-  '--dry-run',
-  '--strict',
-  '--recommended',
-  '--yes',
-  '-y',
-  '--no-icons',
-  '--no-entry',
-  '--check',
-  '--force',
-  '--json',
-  '--with-guidelines',
-  '--no-lint',
-  '-h',
-  '--help'
-])
-const VALUE_FLAGS = new Set([
-  '--format',
-  '--fail-on',
-  '--from',
-  '--dest',
-  '--variant',
-  '--example',
-  '--max-warnings',
-  '--url'
-])
-
-function parseArgs(argv) {
-  const args = argv.slice(2)
-  const command = args.find((a) => !a.startsWith('-')) || null
-
-  const values = {}
-  const rest = []
-  for (let i = 0; i < args.length; i++) {
-    const a = args[i]
-    if (VALUE_FLAGS.has(a)) {
-      values[a] = args[i + 1]
-      i += 1
-      continue
-    }
-    rest.push(a)
-  }
-
-  const flagList = rest.filter((a) => a.startsWith('-'))
-  const unknown = flagList.filter((f) => !KNOWN_FLAGS.has(f))
-  const flags = new Set(flagList)
-  const positionals = rest.filter((a) => a !== command && !a.startsWith('-'))
-
-  return {
-    command,
-    unknown,
-    dryRun: flags.has('--dry-run'),
-    recommended: flags.has('--recommended') && !flags.has('--strict'),
-    yes: flags.has('--yes') || flags.has('-y'),
-    noIcons: flags.has('--no-icons'),
-    noEntry: flags.has('--no-entry'),
-    help: flags.has('-h') || flags.has('--help'),
-    format: values['--format'],
-    failOn: values['--fail-on'],
-    from: values['--from'],
-    args: positionals,
-    check: flags.has('--check'),
-    force: flags.has('--force'),
-    json: flags.has('--json'),
-    withGuidelines: flags.has('--with-guidelines'),
-    noLint: flags.has('--no-lint'),
-    dest: values['--dest'],
-    variant: values['--variant'],
-    example: values['--example'],
-    maxWarnings: values['--max-warnings'],
-    urls: parseUrls(values['--url'])
-  }
-}
-
-async function resolveInitOptions(parsed) {
-  const opts = {
-    recommended: parsed.recommended,
-    icons: !parsed.noIcons,
-    wireEntry: !parsed.noEntry
-  }
-  const interactive = process.stdin.isTTY && process.stdout.isTTY && !parsed.yes && !parsed.dryRun
-  if (!interactive) return opts
-
-  const { createInterface } = await import('node:readline/promises')
-  const rl = createInterface({ input: process.stdin, output: process.stdout })
-  rl.on('SIGINT', () => {
-    rl.close()
-    process.exit(130)
-  })
-  const ask = async (question) => {
-    const answer = (await rl.question(`${question} [Y/n] `)).trim().toLowerCase()
-    return answer === '' || answer === 'y' || answer === 'yes'
-  }
-  try {
-    if (opts.icons) opts.icons = await ask('Install @aziontech/icons (the icon font)?')
-    if (opts.wireEntry) {
-      opts.wireEntry = await ask(
-        'Add the style imports to your app entry (src/main.*) automatically?'
-      )
-    }
-  } finally {
-    rl.close()
-  }
-  return opts
-}
-
-const DOCTOR_LABEL = { ok: 'OK   ', warn: 'WARN ', fail: 'FAIL ' }
-
-function runDoctor(projectDir) {
-  process.stdout.write(`\n@aziontech/webkit doctor\nproject: ${projectDir}\n\n`)
-  const report = planDoctor(projectDir)
-  for (const { check, status, detail } of report) {
-    const [head, ...rest] = detail.split('\n')
-    process.stdout.write(`${DOCTOR_LABEL[status] || status} ${check} — ${head}\n`)
-    for (const line of rest) process.stdout.write(`       ${line}\n`)
-  }
-  const fails = report.filter((c) => c.status === 'fail').length
-  const warns = report.filter((c) => c.status === 'warn').length
-  process.stdout.write(`\n${fails} fail, ${warns} warn, ${report.length - fails - warns} ok\n`)
-  return fails ? 1 : 0
-}
-
-function syncLabel(state, forced) {
-  switch (state) {
-    case 'missing':
-      return 'COPY  '
-    case 'stale':
-      return 'UPDATE'
-    case 'unstamped-identical':
-      return 'STAMP '
-    case 'modified':
-    case 'unstamped-different':
-      return forced ? 'STAMP ' : 'SKIP  '
-    case 'orphan':
-      return 'ORPHAN'
-    default:
-      return state.toUpperCase()
-  }
-}
-
-function printSyncTable(plan) {
-  let acted = 0
-  for (const entry of plan.entries) {
-    if (!entry.action) continue
-    acted += 1
-    const forced = entry.action.forced === true
-    process.stdout.write(
-      `${syncLabel(entry.state, forced)} .claude/${entry.rel} (${entry.state})\n`
-    )
-  }
-  if (plan.fragment.action) {
-    acted += 1
-    process.stdout.write(`FENCE  CLAUDE.md (fragment ${plan.fragment.state})\n`)
-  }
-  const current = plan.entries.length - plan.entries.filter((e) => e.action).length
-  process.stdout.write(
-    `\n${acted} action(s), ${current} current, fragment ${plan.fragment.state}, drift: ${plan.drift ? 'yes' : 'no'}\n`
-  )
-}
-
-function runSync(appDir, { check, dryRun, force, json }) {
-  const applyNothing = check || dryRun
-  try {
-    const bundleRoot = resolveBundleRoot(appDir)
-    if (bundleRoot.kind === 'source') {
-      process.stdout.write(
-        json
-          ? `${JSON.stringify({ drift: false, source: bundleRoot.dir, entries: [] }, null, 2)}\n`
-          : `\n@aziontech/webkit sync\n${bundleRoot.dir} holds the bundle sources (skills/, rules/, adapters/) — nothing to sync.\n`
-      )
-      return 0
-    }
-    const projectDir = bundleRoot.dir
-    const plan = planSync(projectDir, { force })
-
-    if (json) {
-      process.stdout.write(
-        `${JSON.stringify(
-          {
-            drift: plan.drift,
-            fragment: plan.fragment.state,
-            entries: plan.entries.map((e) => ({
-              rel: e.rel,
-              state: e.state,
-              action: e.action ? e.action.type : null
-            }))
-          },
-          null,
-          2
-        )}\n`
-      )
-    } else {
-      process.stdout.write(
-        `\n@aziontech/webkit sync${applyNothing ? ' (no changes applied)' : ''}\nproject: ${projectDir}${bundleRoot.kind === 'ancestor' ? ' (the repository root that owns the agent files)' : ''}\n\n`
-      )
-      printSyncTable(plan)
-    }
-
-    if (!applyNothing) {
-      applyPlan(projectDir, plan.actions)
-    }
-
-    return check && plan.drift ? 1 : 0
-  } catch (err) {
-    process.stderr.write(`${err?.message || err}\n`)
-    return 2
-  }
-}
-
-function labelFor(result) {
-  return (
-    {
-      written: 'WRITE ',
-      merged: 'MERGE ',
-      appended: 'APPEND',
-      skipped: 'SKIP  ',
-      advised: 'NOTE  ',
-      error: 'ERROR '
-    }[result] || result.toUpperCase()
-  )
-}
-
-function printResult({ action, result, detail }) {
-  if (result === 'advised') {
-    process.stdout.write(`\nNOTE   ${detail}\n`)
-    return
-  }
-  const stream = result === 'error' ? process.stderr : process.stdout
-  stream.write(`${labelFor(result)} ${detail || action.type}\n`)
-}
-
-function printPlan(plan) {
-  for (const action of plan) {
-    switch (action.type) {
-      case 'add-dep': {
-        const { dev } = action
-        process.stdout.write(
-          action.keep
-            ? `PLAN   keep ${dev ? '(dev) ' : ''}${action.dep}@${action.keep} (WebKit needs ${action.version})\n`
-            : `PLAN   add-dep ${dev ? '(dev) ' : ''}${action.dep}@${action.version}${action.replace ? ` (replaces ${action.replace})` : ''}\n`
-        )
-        break
-      }
-      case 'advise':
-        process.stdout.write(`\nPLAN   note: ${action.message}\n`)
-        break
-      case 'copy':
-        process.stdout.write(`PLAN   copy ${action.to}\n`)
-        break
-      case 'copy-stamped':
-        process.stdout.write(`PLAN   copy (stamped) ${action.to}\n`)
-        break
-      case 'patch-entry':
-        process.stdout.write(`PLAN   patch ${action.path} (${action.imports.join(' · ')})\n`)
-        break
-      case 'remove-starter':
-        process.stdout.write(
-          `PLAN   remove the starter ${action.files.join(', ')} and its import in ${action.path}\n`
-        )
-        break
-      case 'fence':
-        process.stdout.write(`PLAN   fence ${action.path}\n`)
-        break
-      case 'report':
-        process.stdout.write(`PLAN   report ${action.state}: .claude/${action.rel}\n`)
-        break
-      case 'activate-hooks':
-        process.stdout.write('PLAN   activate git hooks (npx husky)\n')
-        break
-      default:
-        process.stdout.write(`PLAN   ${action.type} ${action.path || ''}\n`)
-    }
-  }
-}
-
-function runMigrate(projectDir, target, { dryRun, from }) {
-  const version = Number(String(target || '').replace(/^v/i, ''))
-  if (!SUPPORTED_VERSIONS.includes(version)) {
-    process.stderr.write(
-      `Usage: npx @aziontech/webkit migrate v6 [--dry-run] (supported: ${SUPPORTED_VERSIONS.map((v) => `v${v}`).join(', ')})\n`
-    )
-    return 1
-  }
-  const fromMajor = from == null ? null : Number(String(from).replace(/^v/i, ''))
-  if (fromMajor != null && !Number.isInteger(fromMajor)) {
-    process.stderr.write(`--from takes a major version, such as 3 or v5 (got ${from})\n`)
-    return 1
-  }
-  const results = planMigrate(projectDir, { version, dryRun, fromMajor })
-  let changed = 0
-  let manual = 0
-  let review = 0
-  for (const { file, changes, warnings } of results) {
-    const toReview = warnings.filter((w) => REVIEW_WARNING.test(w))
-    if (changes.length) changed += 1
-    if (warnings.length > toReview.length) manual += 1
-    else if (toReview.length) review += 1
-    process.stdout.write(`${file}\n`)
-    for (const c of changes)
-      process.stdout.write(`  ${dryRun ? 'would change' : 'changed'}: ${c}\n`)
-    for (const w of warnings)
-      process.stdout.write(`  ${REVIEW_WARNING.test(w) ? 'REVIEW' : 'MANUAL'}: ${w}\n`)
-  }
-  process.stdout.write(
-    `\n${changed} file(s) ${dryRun ? 'to rewrite' : 'rewritten'}, ${manual} file(s) need a manual change${review ? `, ${review} more to review` : ''}. See MIGRATION_V6.md.\n`
-  )
-  return 0
-}
-
-const json = (value) => process.stdout.write(`${JSON.stringify(value, null, 2)}\n`)
-const useColor = () =>
-  !process.env.NO_COLOR && (Boolean(process.env.FORCE_COLOR) || Boolean(process.stdout.isTTY))
-
-function runCss(projectDir, parsed) {
-  const plan = planSources(projectDir)
-  const summary = `${plan.files.length} WebKit file(s) for ${plan.subpaths.length} import(s)`
-  if (!plan.resolved && plan.subpaths.length) {
-    process.stderr.write(
-      `@aziontech/webkit is not installed here, so ${SOURCES_FILE} cannot list the files of ${plan.subpaths.length} import(s). Install it first.\n`
-    )
-    return 1
-  }
-  if (parsed.check) {
-    process.stdout.write(`${SOURCES_FILE}: ${plan.stale ? 'stale' : 'current'} — ${summary}\n`)
-    return plan.stale ? 1 : 0
-  }
-  if (parsed.dryRun) {
-    process.stdout.write(`${plan.stale ? 'would write' : 'current'} ${SOURCES_FILE} — ${summary}\n`)
-    return 0
-  }
-  const written = writeSources(plan)
-  process.stdout.write(`${written ? 'wrote' : 'current'} ${SOURCES_FILE} — ${summary}\n`)
-  return 0
-}
-
-function refreshSourcesAfterAdd(projectDir) {
-  const plan = planSources(projectDir)
-  if (plan.current === null || !plan.resolved) return
-  if (writeSources(plan))
-    process.stdout.write(`updated ${SOURCES_FILE} — ${plan.files.length} WebKit file(s)\n`)
-}
-
-function runAdd(projectDir, id, parsed) {
-  if (!id) {
-    process.stderr.write('Usage: npx @aziontech/webkit add <block-id> (find one with `search`)\n')
-    return 1
-  }
-  const webkit = resolveWebkit(projectDir)
-  const plan = planAdd(projectDir, webkit, catalogFor(webkit), id, {
-    dest: parsed.dest,
-    variant: parsed.variant,
-    withGuidelines: parsed.withGuidelines,
-    force: parsed.force
-  })
-  const written = plan.ok && !parsed.dryRun ? applyAdd(projectDir, plan) : []
-  if (written.length && !parsed.json) refreshSourcesAfterAdd(projectDir)
-  if (parsed.json) {
-    json({
-      ok: plan.ok,
+const HANDLERS = {
+  init: runInit,
+  doctor: (projectDir) => runDoctor(projectDir),
+  css: runCss,
+  add: (projectDir, parsed) => runAdd(projectDir, parsed.args[0], parsed),
+  remove: (projectDir, parsed) => runRemove(projectDir, parsed.args[0], parsed),
+  diff: (projectDir, parsed) => runDiff(projectDir, parsed.args[0], parsed),
+  search: (projectDir, parsed) => runQuery(projectDir, 'search', parsed),
+  view: (projectDir, parsed) => runQuery(projectDir, 'view', parsed),
+  check: runCheckCommand,
+  report: runReportCommand,
+  canary: (projectDir) => runCanaryCommand(projectDir),
+  migrate: (projectDir, parsed) =>
+    runMigrate(projectDir, parsed.args[0], { dryRun: parsed.dryRun, from: parsed.from }),
+  sync: (projectDir, parsed) =>
+    runSync(projectDir, {
+      check: parsed.check,
       dryRun: parsed.dryRun,
-      ...(plan.id ? { id: plan.id, version: plan.version } : {}),
-      files: (plan.files || []).map(({ content: _content, ...f }) => f),
-      ...(plan.guidelines ? { guidelines: plan.guidelines.path } : {}),
-      imports: plan.imports,
-      route: plan.route,
-      written,
-      errors: plan.errors,
-      warnings: plan.warnings || [],
-      ...(plan.suggestions?.length ? { suggestions: plan.suggestions } : {})
+      force: parsed.force,
+      json: parsed.json
     })
-    return plan.ok ? 0 : 1
-  }
-  for (const w of plan.warnings || []) process.stderr.write(`WARN  ${w}\n`)
-  if (!plan.ok) {
-    for (const e of plan.errors) process.stderr.write(`ERROR ${e}\n`)
-    if (plan.suggestions?.length) {
-      process.stderr.write(`Did you mean: ${plan.suggestions.join(', ')}?\n`)
-    }
-    return 1
-  }
-  const verb = parsed.dryRun ? 'would write' : 'wrote'
-  process.stdout.write(`\n${plan.id} (${plan.name}) from @aziontech/webkit@${plan.version}\n`)
-  if (plan.viewsReason) process.stdout.write(`views directory: ${plan.viewsReason}\n`)
-  process.stdout.write('\n')
-  for (const f of plan.files) {
-    process.stdout.write(`${verb} ${f.path}${f.exists ? ' (overwritten)' : ''}  ← ${f.variant}\n`)
-  }
-  if (plan.guidelines) process.stdout.write(`${verb} ${plan.guidelines.path}  ← guidelines\n`)
-  process.stdout.write(`${parsed.dryRun ? 'would record' : 'recorded'} ${plan.id} in ${MANIFEST}\n`)
-  const ok = plan.imports.webkit.length
-  process.stdout.write(`imports: ${ok} @aziontech/webkit subpath(s), all exported\n`)
-  process.stdout.write(
-    `\nAdd the route${plan.route.router ? ` in ${plan.route.router}` : ''}:\n  ${plan.route.entry}\n`
-  )
-  process.stdout.write(
-    `\nChange only the content (copy, data, handlers); keep the components, their order and the classes. Read the guidelines: npx @aziontech/webkit view ${plan.id}\n`
-  )
-  if (parsed.dryRun) process.stdout.write('\nDry run — no files were written.\n')
-  return 0
-}
-
-function runRemove(projectDir, target, parsed) {
-  if (!target) {
-    process.stderr.write('Usage: npx @aziontech/webkit remove <block-id|path> [--dry-run]\n')
-    return 2
-  }
-  const plan = planRemove(projectDir, target)
-  if (!plan.ok) {
-    if (parsed.json) json(plan)
-    else process.stderr.write(`${plan.error}\n`)
-    return 1
-  }
-  const removed = parsed.dryRun ? [] : applyRemove(projectDir, plan)
-  if (removed.length && !parsed.json) refreshSourcesAfterAdd(projectDir)
-  if (parsed.json) {
-    json({ ...plan, dryRun: parsed.dryRun, removed })
-    return 0
-  }
-  const verb = parsed.dryRun ? 'would delete' : 'deleted'
-  for (const file of plan.files) {
-    process.stdout.write(
-      file.exists
-        ? `${verb} ${file.path}\n`
-        : `${file.path}: already gone, dropped from ${MANIFEST}\n`
-    )
-  }
-  process.stdout.write(
-    `${parsed.dryRun ? 'would drop' : 'dropped'} ${plan.whole ? plan.id : `${plan.files.length} file(s) of ${plan.id}`} from ${MANIFEST}\n`
-  )
-  if (plan.importers.length) {
-    process.stdout.write('\nStill imported by (remove these imports and the route):\n')
-    for (const hit of plan.importers) process.stdout.write(`  ${hit.file}: ${hit.imports}\n`)
-  }
-  if (parsed.dryRun) process.stdout.write('\nDry run — no files were deleted.\n')
-  return 0
-}
-
-function runDiff(projectDir, target, parsed) {
-  if (!target) {
-    process.stderr.write('Usage: npx @aziontech/webkit diff <block-id|path>\n')
-    return 2
-  }
-  const result = planDiff(projectDir, resolveWebkit(projectDir), target)
-  if (!result.ok) {
-    if (parsed.json) json(result)
-    else process.stderr.write(`${result.error}\n`)
-    return 2
-  }
-  const differs = result.files.some((f) => f.status !== 'identical')
-  if (parsed.json) {
-    json({ ...result, differs })
-    return differs ? 1 : 0
-  }
-  const color = useColor()
-  for (const f of result.files) {
-    const upstream = f.upstreamChanged
-      ? result.recordedVersion === result.version
-        ? ` — the installed canonical block differs from the copy recorded at the same version (${result.version})`
-        : ` — the canonical block changed since it was copied (${result.recordedVersion} → ${result.version})`
-      : ''
-    if (f.status === 'identical') {
-      process.stdout.write(`${f.path}: identical to ${f.source}${upstream}\n`)
-    } else if (f.status === 'missing') {
-      process.stdout.write(`${f.path}: missing (recorded in ${MANIFEST})\n`)
-    } else if (f.status === 'removed-upstream') {
-      process.stdout.write(`${f.path}: ${f.source} is not in @aziontech/webkit@${result.version}\n`)
-    } else {
-      const { added, removed } = diffStats(f.patch)
-      process.stdout.write(`${f.path}: +${added} -${removed} against ${f.source}${upstream}\n`)
-      process.stdout.write(color ? `${colorize(f.patch)}\n` : f.patch)
-    }
-  }
-  return differs ? 1 : 0
-}
-
-function runQuery(projectDir, command, parsed) {
-  const query = parsed.args.join(' ').trim()
-  if (!query) {
-    process.stderr.write(
-      `Usage: npx @aziontech/webkit ${command} <${command === 'view' ? 'id' : 'query'}>\n`
-    )
-    return 1
-  }
-  const catalog = catalogFor(resolveWebkit(projectDir))
-  if (command === 'search') {
-    const result = runSearch(catalog, query)
-    if (parsed.json) json(result)
-    else process.stdout.write(formatSearch(result))
-    return 0
-  }
-  const result = runView(catalog, query, { variant: parsed.variant, example: parsed.example })
-  if (parsed.json) {
-    json(result)
-    return result.ok ? 0 : 1
-  }
-  if (!result.ok) {
-    process.stderr.write(`${result.error}\n`)
-    if (result.suggestions?.length) {
-      process.stderr.write(`Did you mean: ${result.suggestions.join(', ')}?\n`)
-    }
-    return 1
-  }
-  process.stdout.write(formatView(result))
-  return 0
-}
-
-async function runCheckCommand(projectDir, parsed) {
-  let maxWarnings = null
-  if (parsed.maxWarnings != null) {
-    maxWarnings = Number(parsed.maxWarnings)
-    if (!Number.isInteger(maxWarnings)) {
-      process.stderr.write(`--max-warnings takes an integer (got ${parsed.maxWarnings})\n`)
-      return 2
-    }
-  }
-  const result = await withNavigation(
-    runCheck(projectDir, resolveWebkit(projectDir), { lint: !parsed.noLint }),
-    projectDir,
-    parsed.urls
-  )
-  const code = exitCodeFor(result, maxWarnings)
-  if (parsed.json) json({ ...result, maxWarnings, exitCode: code })
-  else process.stdout.write(formatCheck(result, maxWarnings))
-  return code
 }
 
 async function run(argv) {
   const parsed = parseArgs(argv)
-  const { command, dryRun, recommended, help, unknown } = parsed
+  const { command, help, unknown } = parsed
 
   if (help || !command) {
-    process.stdout.write(HELP)
-    return command ? 0 : help ? 0 : 1
+    out(HELP)
+    return command || help ? 0 : 1
   }
-
   if (unknown.length) {
-    process.stderr.write(`Unknown option(s): ${unknown.join(', ')}\n\n${HELP}`)
+    err(`Unknown option(s): ${unknown.join(', ')}\n\n${HELP}`)
     return 1
   }
-
   if (!COMMANDS.has(command)) {
-    process.stderr.write(`Unknown command: ${command}\n\n${HELP}`)
+    err(`Unknown command: ${command}\n\n${HELP}`)
     return 1
   }
-
-  const projectDir = process.cwd()
-
-  if (command === 'doctor') {
-    return runDoctor(projectDir)
-  }
-
-  if (command === 'css') return runCss(projectDir, parsed)
-  if (command === 'add') return runAdd(projectDir, parsed.args[0], parsed)
-  if (command === 'remove') return runRemove(projectDir, parsed.args[0], parsed)
-  if (command === 'diff') return runDiff(projectDir, parsed.args[0], parsed)
-  if (command === 'search' || command === 'view') return runQuery(projectDir, command, parsed)
-  if (command === 'check') return runCheckCommand(projectDir, parsed)
-
-  if (command === 'report') {
-    const format = parsed.format ?? 'markdown'
-    const failOn = parsed.failOn ?? 'never'
-    if (!FORMATS.has(format)) {
-      process.stderr.write(`Unknown --format value: ${format} (expected markdown or json)\n`)
-      return 1
-    }
-    if (!FAIL_MODES.has(failOn)) {
-      process.stderr.write(`Unknown --fail-on value: ${failOn} (expected never or any)\n`)
-      return 1
-    }
-    const patterns = parsed.args.length ? parsed.args : ['.']
-    const result = runReport(projectDir, {
-      format,
-      failOn,
-      patterns,
-      log: (line) => process.stderr.write(`${line}\n`)
-    })
-    if (result.error) {
-      process.stderr.write(`${result.error}\n`)
-      return result.exitCode
-    }
-    process.stdout.write(result.stdout)
-    return result.exitCode
-  }
-
-  if (command === 'canary') {
-    const result = runCanary(projectDir)
-    for (const line of result.lines) process.stdout.write(`${line}\n`)
-    return result.exitCode
-  }
-
-  if (command === 'migrate') {
-    return runMigrate(projectDir, parsed.args[0], { dryRun, from: parsed.from })
-  }
-
-  if (command === 'sync') {
-    return runSync(projectDir, {
-      check: parsed.check,
-      dryRun: dryRun,
-      force: parsed.force,
-      json: parsed.json
-    })
-  }
-
-  const initOpts = await resolveInitOptions(parsed)
-  const plan = planInit(projectDir, initOpts)
-
-  process.stdout.write(
-    `\n@aziontech/webkit init — ${recommended ? 'recommended' : 'strict'} preset${dryRun ? ' (dry run)' : ''}\n`
-  )
-  process.stdout.write(`project: ${projectDir}\n\n`)
-
-  if (dryRun) {
-    printPlan(plan)
-    process.stdout.write('\nDry run — no files were written.\n')
-    return 0
-  }
-
-  const results = applyPlan(projectDir, plan)
-  for (const r of results) printResult(r)
-
-  const errors = results.filter((r) => r.result === 'error')
-  if (errors.length) {
-    process.stderr.write(
-      `\n${errors.length} action(s) failed — nothing was overwritten. Fix the file(s) above and re-run.\n`
-    )
-    return 1
-  }
-
-  process.stdout.write('\nDone. Run your package manager install to fetch the new dependencies.\n')
-  return 0
+  return HANDLERS[command](process.cwd(), parsed)
 }
 
 run(process.argv).then(
   (code) => {
     process.exitCode = code
   },
-  (err) => {
-    process.stderr.write(`${err?.message || err}\n`)
+  (error) => {
+    err(`${error?.message || error}\n`)
     process.exitCode = 1
   }
 )

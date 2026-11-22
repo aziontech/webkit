@@ -23,23 +23,27 @@ function staticString(node) {
   return null
 }
 
-function outputLine(code) {
-  const lines = code.split('\n').map((line) => line.trim())
-  const prompted = lines.some((line) => PROMPT.test(line))
-  if (prompted) {
-    let continues = false
-    for (const line of lines) {
-      if (PROMPT.test(line)) {
-        continues = line.endsWith('\\')
-        continue
-      }
-      if (continues) {
-        continues = line.endsWith('\\')
-        continue
-      }
-      if (line && !line.startsWith('#')) return line
+function promptedOutput(lines) {
+  let continues = false
+  for (const line of lines) {
+    if (PROMPT.test(line) || continues) {
+      continues = line.endsWith('\\')
+      continue
     }
+    if (line && !line.startsWith('#')) return line
   }
+  return null
+}
+
+function isOutputComment(line, lines, index) {
+  if (OUTPUT_COMMENT.test(line)) return true
+  return lines
+    .slice(index + 1)
+    .filter(Boolean)
+    .every((next) => next.startsWith('#'))
+}
+
+function commentedOutput(lines) {
   let commands = 0
   for (let index = 0; index < lines.length; index++) {
     const line = lines[index]
@@ -49,11 +53,15 @@ function outputLine(code) {
       continue
     }
     if (commands === 0 || line.startsWith('#!')) continue
-    if (OUTPUT_COMMENT.test(line)) return line
-    const rest = lines.slice(index + 1).filter(Boolean)
-    if (rest.every((next) => next.startsWith('#'))) return line
+    if (isOutputComment(line, lines, index)) return line
   }
   return null
+}
+
+function outputLine(code) {
+  const lines = code.split('\n').map((line) => line.trim())
+  const prompted = lines.some((line) => PROMPT.test(line)) ? promptedOutput(lines) : null
+  return prompted ?? commentedOutput(lines)
 }
 
 export default {

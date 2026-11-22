@@ -8,7 +8,7 @@ extend-exclude = [
   "packages/webkit/src/locales/es.ts",
   "apps/docs/src/lib/i18n.ts",
   # Multilingual search synonyms (pt-BR and es queries an app user types).
-  "packages/webkit/src/catalog/search-lexicon.js",
+  "packages/webkit/src/catalog/lexicon/",
   "packages/webkit/test/catalog/search-queries.json",
   # Generated from the sources by build:catalog / build:llms.
   "packages/webkit/catalog.json",

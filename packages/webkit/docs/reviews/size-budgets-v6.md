@@ -1010,3 +1010,5 @@ Budget-raise: console-layout 82.8 KB → 82.95 KB (measured 82.90 KB): the accou
 Budget-raise: bento-grid 2.25 KB → 2.4 KB (measured 2.38 KB): BentoGrid.Cell href: the whole tile renders as one link.
 Budget-raise: bento-grid-cell 1.75 KB → 1.95 KB (measured 1.93 KB): BentoGrid.Cell href: the whole tile renders as one link.
 Budget-raise: popover-trigger 2.5 KB → 2.55 KB (measured 2.51 KB): TriggerHost recognises AppHeaderAccount as a control so the trigger state reaches it in the server render.
+Budget-raise: backdrop 10.65 KB → 10.8 KB (measured 10.78 KB): SpinningGlobe's drawing moved to `assets/globe/lib/draw-globe.ts` in small functions to meet the function limits of CODE_QUALITY 3.1.
+Budget-raise: console-application-scene 119.9 KB → 120.4 KB (measured 120.39 KB): the drawer fields moved to a private part (`parts/console-application-drawer-field.vue`) to bring the scene under the 400-line limit of CODE_QUALITY 3.1.

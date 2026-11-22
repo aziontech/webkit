@@ -23,6 +23,71 @@ function subpathOf(source) {
   return source.slice(WEBKIT_PREFIX.length)
 }
 
+function lookup(map, element) {
+  const raw = element?.rawName ?? ''
+  if (map.has(raw)) return raw
+  for (const local of map.keys()) {
+    if (kebab(local) === raw) return local
+  }
+  return null
+}
+
+function nextElement(node) {
+  const siblings = node.parent?.children ?? []
+  const index = siblings.indexOf(node)
+  for (let i = index + 1; i < siblings.length; i += 1) {
+    const sibling = siblings[i]
+    if (sibling.type === 'VElement') return sibling
+    if (sibling.type === 'VText' && sibling.value.trim() !== '') return null
+  }
+  return null
+}
+
+function closesThePage(parts, element) {
+  const local = lookup(parts, element)
+  if (!local) return false
+  const kind = parts.get(local)
+  if (kind === 'gap') return true
+  if (kind !== 'frame') return false
+  return (element.children ?? []).some(
+    (child) => child.type === 'VElement' && parts.get(lookup(parts, child)) === 'texture'
+  )
+}
+
+function closingSet(element) {
+  return (element.startTag?.attributes ?? []).some((attr) => {
+    if (!attr.directive) return attr.key?.name === 'closing'
+    if (attr.key?.name?.name !== 'bind' || attr.key.argument?.name !== 'closing') return false
+    const expression = attr.value?.expression
+    return !(expression?.type === 'Literal' && expression.value === false)
+  })
+}
+
+function hatchOff(element) {
+  return (element.startTag?.attributes ?? []).some(
+    (attr) =>
+      attr.directive &&
+      attr.key?.name?.name === 'bind' &&
+      attr.key.argument?.name === 'hatch' &&
+      attr.value?.expression?.type === 'Literal' &&
+      attr.value.expression.value === false
+  )
+}
+
+function importVisitor(closing, parts) {
+  return {
+    ImportDeclaration(node) {
+      const subpath = subpathOf(node.source.value)
+      if (!subpath) return
+      const def = node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier')
+      if (!def) return
+      if (CLOSING.has(subpath)) closing.set(def.local.name, false)
+      if (CLOSING_WHEN_SET.has(subpath)) closing.set(def.local.name, true)
+      if (CLOSE_PARTS.has(subpath)) parts.set(def.local.name, CLOSE_PARTS.get(subpath))
+    }
+  }
+}
+
 export default {
   meta: {
     type: 'problem',
@@ -43,71 +108,10 @@ export default {
     const closing = new Map()
     const parts = new Map()
 
-    const scriptVisitor = {
-      ImportDeclaration(node) {
-        const subpath = subpathOf(node.source.value)
-        if (!subpath) return
-        const def = node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier')
-        if (!def) return
-        if (CLOSING.has(subpath)) closing.set(def.local.name, false)
-        if (CLOSING_WHEN_SET.has(subpath)) closing.set(def.local.name, true)
-        if (CLOSE_PARTS.has(subpath)) parts.set(def.local.name, CLOSE_PARTS.get(subpath))
-      }
-    }
+    const scriptVisitor = importVisitor(closing, parts)
 
     const factory = templateBodyVisitorFactory(context)
     if (!factory) return scriptVisitor
-
-    function lookup(map, element) {
-      const raw = element?.rawName ?? ''
-      if (map.has(raw)) return raw
-      for (const local of map.keys()) {
-        if (kebab(local) === raw) return local
-      }
-      return null
-    }
-
-    function nextElement(node) {
-      const siblings = node.parent?.children ?? []
-      const index = siblings.indexOf(node)
-      for (let i = index + 1; i < siblings.length; i += 1) {
-        const sibling = siblings[i]
-        if (sibling.type === 'VElement') return sibling
-        if (sibling.type === 'VText' && sibling.value.trim() !== '') return null
-      }
-      return null
-    }
-
-    function closesThePage(element) {
-      const local = lookup(parts, element)
-      if (!local) return false
-      const kind = parts.get(local)
-      if (kind === 'gap') return true
-      if (kind !== 'frame') return false
-      return (element.children ?? []).some(
-        (child) => child.type === 'VElement' && parts.get(lookup(parts, child)) === 'texture'
-      )
-    }
-
-    function closingSet(element) {
-      return (element.startTag?.attributes ?? []).some((attr) => {
-        if (!attr.directive) return attr.key?.name === 'closing'
-        if (attr.key?.name?.name !== 'bind' || attr.key.argument?.name !== 'closing') return false
-        const expression = attr.value?.expression
-        return !(expression?.type === 'Literal' && expression.value === false)
-      })
-    }
-
-    function hatchOff(element) {
-      return (element.startTag?.attributes ?? []).some(
-        (attr) =>
-          attr.directive &&
-          attr.key?.name?.name === 'bind' &&
-          attr.key.argument?.name === 'hatch' &&
-          attr.value?.expression?.type === 'Literal' &&
-          attr.value.expression.value === false
-      )
-    }
 
     const templateVisitor = {
       VElement(node) {
@@ -116,7 +120,7 @@ export default {
         if (!section || hatchOff(node)) return
         if (closing.get(section) && !closingSet(node)) return
         const next = nextElement(node)
-        if (!next || !closesThePage(next)) return
+        if (!next || !closesThePage(parts, next)) return
         context.report({
           node: next.startTag,
           messageId: 'doubled',
