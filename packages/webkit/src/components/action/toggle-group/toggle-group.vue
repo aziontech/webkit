@@ -1,20 +1,12 @@
 <script setup lang="ts" generic="TValue extends string = string">
-  import {
-    type ComponentPublicInstance,
-    computed,
-    nextTick,
-    onBeforeUnmount,
-    onMounted,
-    ref,
-    useAttrs,
-    watch
-  } from 'vue'
+  import { type ComponentPublicInstance, computed, ref, useAttrs, watch } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import { FormValue } from '../../input/parts/form-value'
+  import { useToggleGroupIndicator } from './composables/use-toggle-group-indicator'
 
   defineOptions({
     name: 'ToggleGroup',
@@ -56,11 +48,6 @@
   const rootEl = ref<HTMLElement | null>(null)
   const dir = useDirection(rootEl)
   const optionEls = ref<HTMLElement[]>([])
-  const indicatorVisible = ref(false)
-  const indicatorWidth = ref(0)
-  const indicatorHeight = ref(0)
-  const indicatorOffsetX = ref(0)
-  const indicatorOffsetY = ref(0)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'toggle-group')
 
@@ -109,13 +96,6 @@
     if (selected && !selected.disabled) return selected.value
     return options.find((option) => !option.disabled)?.value
   })
-
-  const indicatorTransformStyle = computed(() => ({
-    left: '0',
-    width: `${indicatorWidth.value}px`,
-    height: `${indicatorHeight.value}px`,
-    transform: `translate3d(${indicatorOffsetX.value}px, ${indicatorOffsetY.value}px, 0)`
-  }))
 
   const ROOT_CLASS =
     'group relative inline-flex w-fit max-w-full min-w-0 items-stretch gap-(--spacing-2xs) rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-2xs) ' +
@@ -219,63 +199,11 @@
     }
   }
 
-  const syncIndicator = () => {
-    const root = rootEl.value
-    const activeOptionEl = optionEls.value[selectedIndex.value]
-
-    if (!root || !activeOptionEl || selectedIndex.value < 0 || !activeOptionEl.offsetParent) {
-      indicatorVisible.value = false
-      return
-    }
-
-    indicatorWidth.value = activeOptionEl.offsetWidth
-    indicatorHeight.value = activeOptionEl.offsetHeight
-    indicatorOffsetX.value = activeOptionEl.offsetLeft
-    indicatorOffsetY.value = activeOptionEl.offsetTop
-    indicatorVisible.value = true
-  }
-
-  const scheduleIndicatorSync = () => {
-    nextTick(() => {
-      syncIndicator()
-      observeMeasuredElements()
-    })
-  }
-
-  let resizeObserver: ResizeObserver | null = null
-
-  const observeMeasuredElements = () => {
-    if (!resizeObserver) {
-      return
-    }
-
-    resizeObserver.disconnect()
-
-    if (rootEl.value) {
-      resizeObserver.observe(rootEl.value)
-    }
-
-    optionEls.value.forEach((el) => {
-      if (el) {
-        resizeObserver?.observe(el)
-      }
-    })
-  }
-
-  onMounted(() => {
-    if (typeof ResizeObserver !== 'undefined') {
-      resizeObserver = new ResizeObserver(() => {
-        syncIndicator()
-      })
-    }
-
-    scheduleIndicatorSync()
-  })
-
-  onBeforeUnmount(() => {
-    resizeObserver?.disconnect()
-    resizeObserver = null
-  })
+  const {
+    visible: indicatorVisible,
+    style: indicatorTransformStyle,
+    schedule: scheduleIndicatorSync
+  } = useToggleGroupIndicator(rootEl, optionEls, selectedIndex)
 
   watch(
     normalizedOptions,
