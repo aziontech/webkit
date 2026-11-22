@@ -7,7 +7,7 @@
   "workspaces": {
     ".": {
       "entry": [".claude/hooks/*.mjs"],
-      "project": ["*.{js,mjs}", ".claude/hooks/**/*.mjs", "lint-canaries/index.js"]
+      "project": ["*.{js,mjs}", ".claude/hooks/**/*.mjs"]
     },
     "packages/webkit": {
       "entry": [
@@ -19,7 +19,7 @@
         "blocks/*/*/variants/*.vue",
         "examples/*/*.vue"
       ],
-      "ignoreDependencies": ["figma", "esbuild", "jscpd"]
+      "ignoreDependencies": ["figma", "jscpd"]
     },
     "packages/theme": {
       "entry": ["src/tokens/primitives/fonts.css"]
@@ -40,5 +40,5 @@
       "entry": ["azion.config.cjs"]
     }
   },
-  "ignoreBinaries": ["gh", "azion"]
+  "ignoreBinaries": ["gh", "azion", "actionlint", "zizmor", "typos"]
 }

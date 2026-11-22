@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-variables")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-shortcuts`
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-file-picker`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -176,7 +176,7 @@ Then delete `sample.ts` and its import. With no `saving` set during the `save` h
 - Every key and value field has a visible `label` in its addon; an invalid field sets `aria-invalid` and points to its `FieldError` through `aria-describedby`.
 - Icon-only controls (Remove variable, Show value, Hide value, row actions, toolbar) carry an `aria-label` that matches their `Tooltip`.
 - The Secret `Checkbox` and each scope `Switch` have an `aria-label` naming what they toggle, e.g. "Enable Project scope".
-- The `ToggleGroup` is labeled "Variables view"; the hidden file input is removed from the tab order and the Upload button triggers it.
+- The `ToggleGroup` is labeled "Variables view"; the Upload button opens the system file picker through `useFilePicker`, so no hidden input sits in the tab order.
 - Adding a pair moves focus to its new Key field; removing one moves focus to the pair now in its place (or Add variable); both are announced in a polite live region by `AttributeEditor`.
 - The paste panel's `Textarea` is described by its report, so skipped lines and replaced keys are read with the field; Paste .env exposes `aria-expanded`, and applying announces how many variables were added.
 - The drawer traps focus while open and returns it to Create Variable on close.
@@ -258,6 +258,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
@@ -563,7 +564,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
   const view = ref('Form')
   const jsonText = ref('{}')
   const jsonError = ref('')
-  const fileInputEl = ref<HTMLInputElement | null>(null)
+  const envFilePicker = useFilePicker({ accept: '.env,.txt,text/plain' })
 
   const filledEntries = computed(() => entries.value.filter((entry) => !isEmptyEntry(entry)))
   const keyCounts = computed(() =>
@@ -688,10 +689,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
     entries.value.splice(index, 1, ...toEntries(pairs))
   }
 
-  const onFilePicked = async (event: Event) => {
-    const input = event.target as HTMLInputElement
-    const [file] = input.files ?? []
-    input.value = ''
+  const pickEnvFile = async () => {
+    const [file] = await envFilePicker.open()
     if (!file) return
     const { parsed, invalidLines } = parseEnvFile(await file.text())
     if (!parsed.length && invalidLines.length) return
@@ -1222,16 +1221,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
                       icon="az az-upload"
                       variant="outline"
                       size="medium"
-                      @click="fileInputEl?.click()"
-                    />
-                    <input
-                      ref="fileInputEl"
-                      type="file"
-                      accept=".env,.txt,text/plain"
-                      class="sr-only"
-                      tabindex="-1"
-                      aria-hidden="true"
-                      @change="onFilePicked"
+                      @click="pickEnvFile"
                     />
                     <ToggleGroup
                       v-model="view"

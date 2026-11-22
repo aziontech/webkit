@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/detail-version/detail-version.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-version")`
-- Components: [Avatar](../../components/avatar.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Resizable](../../components/resizable.md), [SchemaForm](../../components/schema-form.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [SplitButton](../../components/split-button.md), [Switch](../../components/switch.md), `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Avatar](../../components/avatar.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Resizable](../../components/resizable.md), [SchemaForm](../../components/schema-form.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [SplitButton](../../components/split-button.md), [Switch](../../components/switch.md), `TableCellLink`, `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -43,7 +43,7 @@ A horizontal `Resizable` named "Version workspace": the version settings pane, a
 
 `PageTabs` with one `Tabs.Trigger` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: the open tab's panel goes in the slot named after the tab (`#source`, `#device-groups`, `#cache-settings`, `#functions-instances`, `#rules-engine`), and a tab with no slot shows an `EmptyState` with an Open link to its own page.
 
-### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip`, `Skeleton` (required)
+### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip`, `Skeleton`, `Link` (required)
 
 The open tab scrolls in a fading `ScrollArea`. A small `PageHeader` names the tab, then `SettingsGroup`s (General, Modules, Subscription modules) each hold a `Card :padded="false"` with an `Item.List` of `SettingsRow`s: a title, a one-sentence description and its control, an `Input` or a `Switch`. A module that needs a sales contact keeps its `Switch` disabled, explained by a `Tooltip`. On a built version the whole fieldset is disabled. While `creating`, `Skeleton` wires take the sections' place.
 
@@ -224,6 +224,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Resizable from '@aziontech/webkit/resizable'
@@ -559,14 +560,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
     emit('revert', event, viewed.value)
   }
 
-  const CONTACT_SALES_LINK_CLASS =
-    'inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance ' +
-    'hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
-    'focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none'
-
-  const VERSION_LINK_CLASS =
-    'group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-start no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
+  const VERSION_LINK_CLASS = 'flex w-full min-w-0 gap-(--spacing-sm) text-start'
 </script>
 
 <template>
@@ -1077,18 +1071,12 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
                                     <template #description>
                                       Enhance real-time data exchange between your resource and
                                       backend services using the WebSocket protocol.
-                                      <a
+                                      <Link
                                         href="https://example.com/contact-sales"
                                         target="_blank"
-                                        rel="noopener noreferrer"
-                                        :class="CONTACT_SALES_LINK_CLASS"
+                                        inline
+                                        >Contact sales</Link
                                       >
-                                        Contact sales
-                                        <i
-                                          class="az az-external-link shrink-0 text-body-sm leading-none"
-                                          aria-hidden="true"
-                                        />
-                                      </a>
                                     </template>
                                     <Tooltip content="Contact sales to activate this module.">
                                       <Switch
@@ -1540,61 +1528,63 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
                     class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
                     aria-hidden="true"
                   />
-                  <a
+                  <Item
                     :href="`/resources/${resource.name}/versions/${entry.name}`"
                     :aria-current="entry.id === viewed.id ? 'page' : undefined"
-                    :class="VERSION_LINK_CLASS"
+                    variant="inline"
                   >
-                    <span
-                      class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
-                      aria-hidden="true"
-                    >
-                      <i class="az az-code text-body-xs" />
-                    </span>
-                    <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
-                      <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                        <span
-                          class="truncate text-label-md text-(--text-default) group-hover:underline"
-                        >
-                          {{ entry.name }}
-                        </span>
-                        <span class="flex shrink-0">
-                          <Tag
-                            :label="tagFor(entry).label"
-                            :variant="tagFor(entry).variant"
-                            :severity="tagFor(entry).severity"
-                            size="small"
-                          />
-                        </span>
-                        <span
-                          v-if="entry.id === viewed.id"
-                          class="flex shrink-0"
-                        >
-                          <Tag
-                            label="Viewing"
-                            severity="info"
-                            size="small"
-                          />
-                        </span>
-                      </span>
-                      <span class="line-clamp-2 text-body-sm text-(--text-muted)">
-                        {{ entry.comment }}
-                      </span>
+                    <span :class="VERSION_LINK_CLASS">
                       <span
-                        class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
+                        class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
+                        aria-hidden="true"
                       >
-                        <span class="flex shrink-0">
-                          <Avatar
-                            :alt="entry.author"
-                            :label="entry.author"
-                            size="small"
-                            variant="square"
-                          />
+                        <i class="az az-code text-body-xs" />
+                      </span>
+                      <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
+                        <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                          <span
+                            class="truncate text-label-md text-(--text-default) group-hover/item:underline"
+                          >
+                            {{ entry.name }}
+                          </span>
+                          <span class="flex shrink-0">
+                            <Tag
+                              :label="tagFor(entry).label"
+                              :variant="tagFor(entry).variant"
+                              :severity="tagFor(entry).severity"
+                              size="small"
+                            />
+                          </span>
+                          <span
+                            v-if="entry.id === viewed.id"
+                            class="flex shrink-0"
+                          >
+                            <Tag
+                              label="Viewing"
+                              severity="info"
+                              size="small"
+                            />
+                          </span>
                         </span>
-                        <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
+                        <span class="line-clamp-2 text-body-sm text-(--text-muted)">
+                          {{ entry.comment }}
+                        </span>
+                        <span
+                          class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
+                        >
+                          <span class="flex shrink-0">
+                            <Avatar
+                              :alt="entry.author"
+                              :label="entry.author"
+                              size="small"
+                              variant="square"
+                            />
+                          </span>
+                          <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
+                        </span>
                       </span>
                     </span>
-                  </a>
+                  </Item>
                 </li>
               </ol>
 

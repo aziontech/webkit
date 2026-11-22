@@ -518,7 +518,7 @@ import {
 
 import type { ResourcePickerOption } from '../create-resource-picker.vue'
 
-export const PAGE_SIZE = 5
+const PAGE_SIZE = 5
 
 export interface UsePagedListReturn {
   query: WritableComputedRef<string>

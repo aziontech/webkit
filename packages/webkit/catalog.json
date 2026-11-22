@@ -21508,6 +21508,13 @@
      "default": "'_self'",
      "required": "false",
      "doc": "Link target when navigating."
+    },
+    {
+     "name": "inline",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders the link inside running prose: it inherits the size and line height of the text around it, wraps with it and keeps the underline at rest; `size` does not apply."
     }
    ],
    "events": [
@@ -29812,6 +29819,12 @@
    "kind": "composable",
    "treeShakeableImport": "@aziontech/webkit/use-direction"
   },
+  "use-file-picker": {
+   "import": "@aziontech/webkit/use-file-picker",
+   "target": "./src/composables/use-file-picker/index.ts",
+   "kind": "composable",
+   "treeShakeableImport": "@aziontech/webkit/use-file-picker"
+  },
   "use-focus-trap": {
    "import": "@aziontech/webkit/use-focus-trap",
    "target": "./src/composables/use-focus-trap/index.ts",
@@ -31787,6 +31800,7 @@
     "EmptyState",
     "IconButton",
     "KeyValueList",
+    "Link",
     "PageHeader",
     "PageTabs",
     "PaymentBrand",
@@ -31816,6 +31830,7 @@
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/key-value-list",
+    "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
     "@aziontech/webkit/payment-brand",
@@ -32010,6 +32025,7 @@
     "Switch",
     "table",
     "TableCellActions",
+    "TableCellLink",
     "TableCellStatus",
     "TableCellTime",
     "Tag",
@@ -32051,6 +32067,7 @@
     "@aziontech/webkit/switch",
     "@aziontech/webkit/table",
     "@aziontech/webkit/table-cell-actions",
+    "@aziontech/webkit/table-cell-link",
     "@aziontech/webkit/table-cell-status",
     "@aziontech/webkit/table-cell-time",
     "@aziontech/webkit/tag",
@@ -33357,6 +33374,7 @@
     "Input",
     "Item",
     "KeyValueList",
+    "Link",
     "OtpInput",
     "PageHeader",
     "PasswordInput",
@@ -33384,6 +33402,7 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/key-value-list",
+    "@aziontech/webkit/link",
     "@aziontech/webkit/otp-input",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/password-input",
@@ -33949,6 +33968,7 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
+    "use-file-picker",
     "use-locale",
     "use-shortcuts",
     "use-unsaved-changes"
@@ -33994,6 +34014,7 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-file-picker",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/use-shortcuts",
     "@aziontech/webkit/use-unsaved-changes"
@@ -34080,7 +34101,8 @@
     "PageHeader",
     "ScrollArea",
     "Select",
-    "Skeleton"
+    "Skeleton",
+    "use-file-picker"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -34099,7 +34121,8 @@
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/scroll-area",
     "@aziontech/webkit/select",
-    "@aziontech/webkit/skeleton"
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/use-file-picker"
    ],
    "primary": "Default",
    "guidelinesSummary": "The Creation Center, where a new project starts. The user arrives from Home or a Create action with something to deploy and needs to pick its source in one look: a repository from their Git account, a template, or a file or folder from their machine. The page puts the two main sources side by side, Import from GitHub and Start from template, under one heading, and offers file and folder upload in the heading.",
@@ -34190,6 +34213,7 @@
     "Textarea",
     "toast",
     "use-escape-to-cancel",
+    "use-file-picker",
     "use-shortcuts",
     "use-unsaved-changes"
    ],
@@ -34222,6 +34246,7 @@
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/use-escape-to-cancel",
+    "@aziontech/webkit/use-file-picker",
     "@aziontech/webkit/use-shortcuts",
     "@aziontech/webkit/use-unsaved-changes"
    ],
@@ -35585,6 +35610,7 @@
     "IconButton",
     "LogViewer",
     "StatusIndicator",
+    "TableCellLink",
     "Tag",
     "ToggleGroup",
     "Tooltip"
@@ -35601,6 +35627,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/log-viewer",
     "@aziontech/webkit/status-indicator",
+    "@aziontech/webkit/table-cell-link",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip"
@@ -35708,7 +35735,8 @@
     "Textarea",
     "toast",
     "Tooltip",
-    "use-collection"
+    "use-collection",
+    "use-file-picker"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -35751,7 +35779,8 @@
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-collection"
+    "@aziontech/webkit/use-collection",
+    "@aziontech/webkit/use-file-picker"
    ],
    "primary": "MainSettings",
    "guidelinesSummary": "The detail page of a resource that owns a long list of records, here a DNS zone. The user arrives from the zones index to do one of two jobs: adjust the zone itself (name, nameservers, DNSSEC, status) and save, or find, add, edit and delete the records the zone answers with. A tab bar splits the two jobs so the settings form and the records table never share a scroll. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
@@ -35838,12 +35867,14 @@
    "components": [
     "Card",
     "CodeBlock",
+    "Link",
     "Subheader",
     "ToggleGroup"
    ],
    "imports": [
     "@aziontech/webkit/card",
     "@aziontech/webkit/code-block",
+    "@aziontech/webkit/link",
     "@aziontech/webkit/subheader",
     "@aziontech/webkit/toggle-group"
    ],
@@ -36067,6 +36098,7 @@
     "Input",
     "InputGroupRoot",
     "Item",
+    "Item",
     "Kbd",
     "Link",
     "PageHeader",
@@ -36081,6 +36113,7 @@
     "SettingsRow",
     "StatusIndicator",
     "Subheader",
+    "TableCellLink",
     "Tabs",
     "Tag",
     "toast",
@@ -36112,6 +36145,7 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/input-group-root",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/item-root",
     "@aziontech/webkit/kbd",
     "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
@@ -36126,6 +36160,7 @@
     "@aziontech/webkit/settings-row",
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/subheader",
+    "@aziontech/webkit/table-cell-link",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
@@ -36230,6 +36265,7 @@
     "IconButton",
     "Input",
     "Item",
+    "Link",
     "MultiSelect",
     "NumberInput",
     "PageHeader",
@@ -36247,6 +36283,7 @@
     "Spinner",
     "SplitButton",
     "Switch",
+    "TableCellLink",
     "TableCellTime",
     "Tabs",
     "Tag",
@@ -36274,6 +36311,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/link",
     "@aziontech/webkit/multi-select",
     "@aziontech/webkit/number-input",
     "@aziontech/webkit/page-header",
@@ -36291,6 +36329,7 @@
     "@aziontech/webkit/spinner",
     "@aziontech/webkit/split-button",
     "@aziontech/webkit/switch",
+    "@aziontech/webkit/table-cell-link",
     "@aziontech/webkit/table-cell-time",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
@@ -36377,6 +36416,7 @@
     "Button",
     "ConfirmDialog",
     "Item",
+    "Link",
     "PageHeader",
     "toast"
    ],
@@ -36385,6 +36425,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/toast"
    ],
@@ -36874,7 +36915,8 @@
     "TableCellActions",
     "Tag",
     "toast",
-    "Tooltip"
+    "Tooltip",
+    "use-file-picker"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -36904,7 +36946,8 @@
     "@aziontech/webkit/table-cell-actions",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-file-picker"
    ],
    "primary": "CreateTable",
    "guidelinesSummary": "The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create Table, Add column, Insert and table menu buttons of `view/view-query-editor`. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
@@ -37021,6 +37064,7 @@
     "ToggleGroup",
     "Tooltip",
     "use-collection",
+    "use-file-picker",
     "use-shortcuts"
    ],
    "imports": [
@@ -37064,6 +37108,7 @@
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-collection",
+    "@aziontech/webkit/use-file-picker",
     "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "List",
@@ -37285,6 +37330,7 @@
     "IconButton",
     "Input",
     "Item",
+    "Item",
     "PageHeader",
     "PageTabs",
     "PanelBody",
@@ -37293,6 +37339,7 @@
     "Select",
     "StatusIndicator",
     "TableCellId",
+    "TableCellLink",
     "TableCellStatus",
     "Tabs",
     "Tag",
@@ -37320,6 +37367,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/item-root",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
     "@aziontech/webkit/panel-body",
@@ -37328,6 +37376,7 @@
     "@aziontech/webkit/select",
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/table-cell-id",
+    "@aziontech/webkit/table-cell-link",
     "@aziontech/webkit/table-cell-status",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
@@ -37446,7 +37495,9 @@
     "Footer",
     "IconButton",
     "ItemList",
+    "Item",
     "LanguageSelect",
+    "Link",
     "RegistrationFrame",
     "StatusIndicator",
     "Tabs",
@@ -37490,7 +37541,9 @@
     "@aziontech/webkit/footer",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/item-list",
+    "@aziontech/webkit/item-root",
     "@aziontech/webkit/language-select",
+    "@aziontech/webkit/link",
     "@aziontech/webkit/registration-frame",
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/tabs",
@@ -38052,13 +38105,15 @@
     "Alert",
     "Button",
     "FileDropzone",
-    "UploadProgress"
+    "UploadProgress",
+    "use-file-picker"
    ],
    "imports": [
     "@aziontech/webkit/alert",
     "@aziontech/webkit/button",
     "@aziontech/webkit/file-dropzone",
-    "@aziontech/webkit/upload-progress"
+    "@aziontech/webkit/upload-progress",
+    "@aziontech/webkit/use-file-picker"
    ],
    "primary": "DropZone",
    "guidelinesSummary": "The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: a drop target fills the page body and says what will happen, with a Choose a folder button for anyone not dragging; once it is dropped, a full-screen Initializing overlay lists the received files with their status until the upload is done and the deploy takes over. DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`shell/shell-console`); Initializing covers the whole screen.",
@@ -38457,7 +38512,8 @@
     "TableSearch",
     "toast",
     "Tooltip",
-    "UploadProgress"
+    "UploadProgress",
+    "use-file-picker"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -38488,7 +38544,8 @@
     "@aziontech/webkit/table-search",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/upload-progress"
+    "@aziontech/webkit/upload-progress",
+    "@aziontech/webkit/use-file-picker"
    ],
    "primary": "Default",
    "guidelinesSummary": "The contents of one storage resource. The user opens a bucket to find a file, walk into a folder and back out, upload something or add a folder, and download or delete what is there. The table's toolbar is the whole page header, so the storage name, search, the folder path and Add to files all sit on the one surface the files live on. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`.",
@@ -38721,6 +38778,7 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
+    "use-file-picker",
     "use-shortcuts"
    ],
    "imports": [
@@ -38764,6 +38822,7 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-file-picker",
     "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "Tables",

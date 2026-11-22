@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/auth/auth-sign-in/auth-sign-in.vue` in `@aziontech/webkit`
 - MCP: `get_block("auth/auth-sign-in")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [PasswordRequirements](../../components/password-requirements.md), [QrCode](../../components/qr-code.md), [Separator](../../components/separator.md), [Skeleton](../../components/skeleton.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [PasswordRequirements](../../components/password-requirements.md), [QrCode](../../components/qr-code.md), [Separator](../../components/separator.md), [Skeleton](../../components/skeleton.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-locale`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -49,9 +49,9 @@ Three roles, never more on one step:
 - **Continue with Google / GitHub** on the email step: `variant="outline"`, `size="large"`, full width, `type="button"` so they never submit the form.
 - **The primary action** at the foot of the card, `type="submit"`, full width, `size="large"`. Its label follows the step: `Continue with email`, `Sign in`, `Send reset link`, `Reset password`. On the `sent` step it drops to `variant="secondary"` with `Return to sign in`, because nothing is left to submit.
 
-### D. The card — `Card` (required)
+### D. The card — `Card`, `Link` (required)
 
-One `Card` with `:padded="false"`, capped at `max-w-(--container-sm)` and centred in the column. It holds the `<form novalidate>`, its heading (`PageHeader`, `size="small"`: the `h1` plus a muted lead), the notice slot, the step body inside one `fieldset` and the primary action. Prompts that are not part of the form (Don't have an account? Sign up, the terms line) sit under the card, outside it.
+One `Card` with `:padded="false"`, capped at `max-w-(--container-sm)` and centred in the column. It holds the `<form novalidate>`, its heading (`PageHeader`, `size="small"`: the `h1` plus a muted lead), the notice slot, the step body inside one `fieldset` and the primary action. Prompts that are not part of the form (Don't have an account? Sign up, the terms line) sit under the card, outside it; their links are `Link inline`, so they take the size of the sentence and keep the underline.
 
 ### E. Card notice — `Alert` (conditional)
 
@@ -377,6 +377,7 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
   import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PasswordInput from '@aziontech/webkit/password-input'
   import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
@@ -1236,30 +1237,30 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
     <div class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)">
       <div class="flex items-center justify-center gap-(--spacing-xs)">
         <p class="text-body-xs text-(--text-default)">{{ copy.noAccount }}</p>
-        <a
-          class="text-link text-body-xs"
-          :href="signUpHref"
-          >{{ copy.signUp }}</a
-        >
+        <span class="text-body-xs">
+          <Link
+            inline
+            :href="signUpHref"
+            >{{ copy.signUp }}</Link
+          >
+        </span>
       </div>
 
       <template v-if="step === 'email' || step === 'password'">
         <p class="text-center text-body-xs text-(--text-muted)">
           {{ copy.agreeStart }}
-          <a
-            class="text-link"
+          <Link
+            inline
             :href="termsHref"
             target="_blank"
-            rel="noopener noreferrer"
-            >{{ copy.terms }}</a
+            >{{ copy.terms }}</Link
           >
           {{ copy.and }}
-          <a
-            class="text-link"
+          <Link
+            inline
             :href="privacyHref"
             target="_blank"
-            rel="noopener noreferrer"
-            >{{ copy.privacy }}</a
+            >{{ copy.privacy }}</Link
           >.
         </p>
       </template>
@@ -1277,6 +1278,7 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
   import Card from '@aziontech/webkit/card'
   import Checkbox from '@aziontech/webkit/checkbox'
   import Field from '@aziontech/webkit/field'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PasswordInput from '@aziontech/webkit/password-input'
   import { computed, nextTick, onMounted, ref, watch } from 'vue'
@@ -1453,12 +1455,11 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
                 />
                 <Field.Description>
                   Create one in Account settings, Personal tokens.
-                  <a
-                    class="text-link"
+                  <Link
+                    inline
                     :href="TOKEN_DOCS"
                     target="_blank"
-                    rel="noopener noreferrer"
-                    >How to create a personal token</a
+                    >How to create a personal token</Link
                   >
                 </Field.Description>
                 <Field.Error v-if="tokenError">{{ tokenError }}</Field.Error>

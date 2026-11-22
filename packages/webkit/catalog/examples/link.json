@@ -11,9 +11,9 @@
    "file": "examples/link/sizes.vue"
   },
   {
-   "name": "Disabled",
-   "summary": "Disabled state; interaction is blocked and the disabled tokens apply.",
-   "file": "examples/link/disabled.vue"
+   "name": "Inline",
+   "summary": "Links inside a sentence: they take the paragraph's size, wrap with it and keep the underline at rest; the `_blank` one adds the external-link mark.",
+   "file": "examples/link/inline.vue"
   }
  ]
 }

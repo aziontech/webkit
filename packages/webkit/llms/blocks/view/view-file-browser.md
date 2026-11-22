@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-file-browser")`
-- Components: [Alert](../../components/alert.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SplitButton](../../components/split-button.md), `TableCellActions`, `TableCellTime`, `TableSearch`, [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [UploadProgress](../../components/upload-progress.md)
+- Components: [Alert](../../components/alert.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SplitButton](../../components/split-button.md), `TableCellActions`, `TableCellTime`, `TableSearch`, [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [UploadProgress](../../components/upload-progress.md), `use-file-picker`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -70,7 +70,7 @@ When the search is set, the table's `#empty` slot holds a medium `EmptyState`, N
 
 ### J. Upload — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `FileDropzone`, `FileTokenGroup` (required)
 
-Add to files and its Upload file option open a medium `Dialog` titled Upload files whose description names the destination folder and that a file with the same name is replaced. Inside: an inline `FileDropzone` (`Up to 300 MB per file.`) with a secondary Browse files `Button` wired to a hidden `<input type="file" multiple>`, then a `FileTokenGroup` (`limit` 5) of the picked files. A file over the limit stays in the group with its reason (`Larger than 300 MB, the limit per file`), an empty file with a warning, and both are left out of the count: the primary button reads `Upload 3 files` and is disabled while nothing can be sent. Upload emits `upload` with the files and the folder path and closes the dialog; the dialog does not wait for the transfer. Upload folder opens the same dialog titled Upload folder, a `FileDropzone` with `directories` (a dropped folder is walked) and a Browse folder `Button` wired to a hidden `<input type="file" webkitdirectory>`; each file keeps its path inside the folder in `webkitRelativePath` (`site/css/main.css`). Add folder emits `add-folder`; the page asks for the name.
+Add to files and its Upload file option open a medium `Dialog` titled Upload files whose description names the destination folder and that a file with the same name is replaced. Inside: an inline `FileDropzone` (`Up to 300 MB per file.`) with a secondary Browse files `Button` that opens the system picker through `useFilePicker` (several files; Browse folder picks a folder), then a `FileTokenGroup` (`limit` 5) of the picked files. A file over the limit stays in the group with its reason (`Larger than 300 MB, the limit per file`), an empty file with a warning, and both are left out of the count: the primary button reads `Upload 3 files` and is disabled while nothing can be sent. Upload emits `upload` with the files and the folder path and closes the dialog; the dialog does not wait for the transfer. Upload folder opens the same dialog titled Upload folder, a `FileDropzone` with `directories` (a dropped folder is walked) and a Browse folder `Button` wired to a hidden `<input type="file" webkitdirectory>`; each file keeps its path inside the folder in `webkitRelativePath` (`site/css/main.css`). Add folder emits `add-folder`; the page asks for the name.
 
 A second `FileDropzone variant="overlay"` sits inside the `section` that holds the card (made `relative`), so dragging files anywhere over the page shows `Drop files to upload them to <folder>` over the listing; a drop emits `upload` for the folder in view and refuses files over the limit with a danger toast.
 
@@ -294,6 +294,7 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import { sampleFolders, sampleStorageName } from './sample'
@@ -639,8 +640,8 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
 
   const uploadOpen = ref(false)
   const picked = ref<PickedFile[]>([])
-  const pickerInputEl = ref<HTMLInputElement | null>(null)
-  const folderInputEl = ref<HTMLInputElement | null>(null)
+  const filePicker = useFilePicker({ multiple: true })
+  const folderPicker = useFilePicker({ directory: true })
   const uploadMode = ref<UploadMode>('files')
   const addHostEl = ref<HTMLElement | null>(null)
 
@@ -653,11 +654,7 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
   const addPicked = (files: FileList | File[]) => {
     picked.value = [...picked.value, ...Array.from(files).map(toPicked)]
   }
-  const onPick = (event: Event) => {
-    const input = event.target as HTMLInputElement
-    addPicked(input.files ?? [])
-    input.value = ''
-  }
+  const pickFrom = async (picker: typeof filePicker) => addPicked(await picker.open())
   const removePicked = (index: number) => {
     picked.value = picked.value.filter((_, position) => position !== index)
   }
@@ -1117,7 +1114,7 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
                 variant="secondary"
                 size="medium"
                 icon="az az-folder-open"
-                @click="folderInputEl?.click()"
+                @click="pickFrom(folderPicker)"
               />
               <Button
                 key="button-2"
@@ -1125,27 +1122,9 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
                 label="Browse files"
                 variant="secondary"
                 size="medium"
-                @click="pickerInputEl?.click()"
+                @click="pickFrom(filePicker)"
               />
             </FileDropzone>
-            <input
-              ref="pickerInputEl"
-              type="file"
-              multiple
-              class="hidden"
-              aria-hidden="true"
-              tabindex="-1"
-              @change="onPick"
-            />
-            <input
-              ref="folderInputEl"
-              type="file"
-              webkitdirectory
-              class="hidden"
-              aria-hidden="true"
-              tabindex="-1"
-              @change="onPick"
-            />
             <FileTokenGroup
               v-if="picked.length"
               :items="picked"

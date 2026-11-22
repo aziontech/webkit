@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/edit-schema/edit-schema.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-schema")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-file-picker`
 - Skills: `webkit-form`, `webkit-create-surface`, `webkit-tables`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -43,7 +43,7 @@ The Columns section is an `AttributeEditor` (`v-model:items`, large, `reorderabl
 
 ### D. CSV import and foreign keys — `FileDropzone`, `FileTokenGroup` (optional)
 
-Two optional sections in the Create Table drawer. Import data from CSV: a `FileDropzone` (one .csv) with a Browse files button over a hidden file input; once read, the file is a `FileTokenGroup` token (Remove clears it), the columns are rebuilt from the header with types guessed from the values (`int8`, `numeric`, `bool`, `timestamptz`, else `text`; `id` becomes the primary key) and stay editable, an empty name takes the file's, and a bordered `DataTable` previews the first five rows under a line that counts columns and rows. A header with an empty name or a non-CSV file is an error on the token and blocks Create. Foreign keys: a second `AttributeEditor` named Foreign keys (no minimum, `No foreign keys.` when empty) with Column (the named columns), References table, References column (enabled once a table is picked) and On delete (No action, Cascade, Set null) cells as `Select`s; the editor owns Remove foreign key and Add foreign key. After Create, an incomplete row shows `Choose the column, the table and the column it references.` under its first empty cell. The success toast counts the imported rows and the keys. The drawer imports into a new table; an existing empty table imports from its own page (M2.10 row).
+Two optional sections in the Create Table drawer. Import data from CSV: a `FileDropzone` (one .csv) with a Browse files button that opens the system picker through `useFilePicker`; once read, the file is a `FileTokenGroup` token (Remove clears it), the columns are rebuilt from the header with types guessed from the values (`int8`, `numeric`, `bool`, `timestamptz`, else `text`; `id` becomes the primary key) and stay editable, an empty name takes the file's, and a bordered `DataTable` previews the first five rows under a line that counts columns and rows. A header with an empty name or a non-CSV file is an error on the token and blocks Create. Foreign keys: a second `AttributeEditor` named Foreign keys (no minimum, `No foreign keys.` when empty) with Column (the named columns), References table, References column (enabled once a table is picked) and On delete (No action, Cascade, Set null) cells as `Select`s; the editor owns Remove foreign key and Add foreign key. After Create, an incomplete row shows `Choose the column, the table and the column it references.` under its first empty cell. The success toast counts the imported rows and the keys. The drawer imports into a new table; an existing empty table imports from its own page (M2.10 row).
 
 ### E. Add column drawer — `Switch` (required)
 
@@ -221,6 +221,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
   import { sampleDatabase, sampleTables } from './sample'
@@ -549,7 +550,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
     })
   )
 
-  const csvInputEl = ref<HTMLInputElement | null>(null)
+  const csvPicker = useFilePicker({ accept: '.csv,text/csv' })
   const csvFile = ref<SchemaEditorCsvFile | null>(null)
   const csvHeaders = ref<string[]>([])
   const csvRows = ref<CsvRow[]>([])
@@ -625,11 +626,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
     }
     applyCsv({ name: file.name, size: file.size, type: 'text/csv' }, await file.text())
   }
-  const onCsvPick = (event: Event) => {
-    const input = event.target as HTMLInputElement
-    onCsvFiles(input.files)
-    input.value = ''
-  }
+  const pickCsv = async () => onCsvFiles(await csvPicker.open())
   const csvTokens = computed(() =>
     csvFile.value
       ? [
@@ -1163,18 +1160,9 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
                       label="Browse files"
                       variant="secondary"
                       size="medium"
-                      @click="csvInputEl?.click()"
+                      @click="pickCsv"
                     />
                   </FileDropzone>
-                  <input
-                    ref="csvInputEl"
-                    type="file"
-                    accept=".csv,text/csv"
-                    class="hidden"
-                    aria-hidden="true"
-                    tabindex="-1"
-                    @change="onCsvPick"
-                  />
                   <FileTokenGroup
                     v-if="csvFile"
                     :items="csvTokens"

@@ -1294,10 +1294,6 @@ test('require-authoring-standards (shared engine: hook + ratchet + consumer lint
         filename: 'src/typed.js'
       },
       {
-        code: 'const en = { a: 1 }\nexport { en }\n/** @alias */\nexport default en',
-        filename: 'src/locales/en.ts'
-      },
-      {
         code: "// url=https://www.figma.com/design/k/F?node-id=1-2\n// source=src/a.vue\n// component=A\nimport figma from 'figma'\nexport default { id: 'a' }",
         filename: 'src/components/a/a.figma.ts'
       },

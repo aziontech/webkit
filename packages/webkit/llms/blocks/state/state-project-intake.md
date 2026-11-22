@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/state/state-project-intake/state-project-intake.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-project-intake")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [FileDropzone](../../components/file-dropzone.md), [UploadProgress](../../components/upload-progress.md)
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [FileDropzone](../../components/file-dropzone.md), [UploadProgress](../../components/upload-progress.md), `use-file-picker`
 - Skills: `webkit-ui-states`, `webkit-motion-polish`
 
 ## Asked as
@@ -38,7 +38,7 @@ The inline `FileDropzone` with `directories`, filling the page body: its title s
 
 ### B. Keyboard way in — `Button` (required)
 
-An outlined Choose a folder `Button` in the dropzone's default slot opens a hidden folder picker (`webkitdirectory`). Drag and drop is a shortcut, never the only way; keyboard and screen reader users take this button.
+An outlined Choose a folder `Button` in the dropzone's default slot opens the system folder picker (`useFilePicker` with `directory`). Drag and drop is a shortcut, never the only way; keyboard and screen reader users take this button.
 
 ### C. Upload list — `UploadProgress` (Initializing, UploadError)
 
@@ -145,6 +145,7 @@ Each variant is the same screen in another state: `get_block("state/state-projec
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { computed, ref, watch } from 'vue'
 
   /** One file of the upload, with its state and progress. */
@@ -173,7 +174,7 @@ Each variant is the same screen in another state: `get_block("state/state-projec
 
   const MAX_ROWS = 50
 
-  const folderInputEl = ref<HTMLInputElement | null>(null)
+  const folderPicker = useFilePicker({ directory: true, multiple: true })
   const received = ref(0)
   const files = ref<ProjectIntakeUpload[]>([])
 
@@ -194,10 +195,9 @@ Each variant is the same screen in another state: `get_block("state/state-projec
   )
   const totalSize = computed(() => files.value.reduce((sum, file) => sum + (file.size ?? 0), 0))
 
-  const chooseFolder = () => folderInputEl.value?.click()
-
-  const onFolderChosen = (event: Event) => {
-    const chosen = Array.from((event.target as HTMLInputElement).files ?? [])
+  const chooseFolder = async (event: MouseEvent) => {
+    const chosen = await folderPicker.open()
+    if (!chosen.length) return
     received.value = chosen.length
     emit('select', event, chosen)
   }
@@ -281,15 +281,6 @@ Each variant is the same screen in another state: `get_block("state/state-projec
         size="medium"
         icon="az az-folder-open"
         @click="chooseFolder"
-      />
-      <input
-        ref="folderInputEl"
-        type="file"
-        webkitdirectory
-        multiple
-        hidden
-        aria-label="Project folder"
-        @change="onFolderChosen"
       />
     </FileDropzone>
     <p

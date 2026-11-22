@@ -32,7 +32,7 @@ export const COUNTING =
   'or object given to defineProps (local interfaces, their extends and intersections resolved); models count ' +
   'defineModel calls.'
 
-export const SCANNED = ['src', 'blocks', 'examples']
+const SCANNED = ['src', 'blocks', 'examples']
 
 const SOURCE = /\.(vue|ts|js|mjs)$/
 const SKIPPED = [
@@ -104,7 +104,7 @@ const declarationsOf = (ast) =>
       : node
   )
 
-export function countTypeMembers(type, ast, seen = new Set()) {
+function countTypeMembers(type, ast, seen = new Set()) {
   if (!type) return null
   if (type.type === 'TSTypeLiteral') return type.members.length
   if (type.type === 'TSIntersectionType') {
@@ -153,7 +153,7 @@ function walk(node, visit) {
 const isCall = (node, name) =>
   node.type === 'CallExpression' && node.callee.type === 'Identifier' && node.callee.name === name
 
-export function countPropsAndModels(ast) {
+function countPropsAndModels(ast) {
   let props = 0
   let models = 0
   let unresolved = false
@@ -208,7 +208,7 @@ const measureRule = {
 
 const lineLengthConfig = qualityConfig.find((block) => block.rules?.['max-len'])
 
-export function eslintConfig() {
+function eslintConfig() {
   return [
     {
       files: ['**/*.{js,mjs,ts,vue}'],

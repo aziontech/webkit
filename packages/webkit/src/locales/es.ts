@@ -1426,6 +1426,3 @@ export const es: Messages = {
     reorderCancelled: 'Reordenación cancelada.'
   }
 }
-
-/** @alias */
-export default es

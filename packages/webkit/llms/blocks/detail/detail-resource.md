@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-resource")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FlowDiagramBind`, [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `use-unsaved-changes`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FlowDiagramBind`, [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), `TableCellLink`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -36,13 +36,13 @@ The second-level page of one resource. The user arrives from a list row or a dep
 
 A full-bleed `PageTabs` with one `Tabs.Trigger` per concern: Overview, Versions, Build, Deployments, first in the body and in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. On a tabbed page the primary action (an outlined Deploy) sits on the tab row at medium size. Each tab is its own route: a variant renders the open tab's panel (Application renders all of its panels), and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it, so no tab is dead.
 
-### B. Summary subject band — `Card`, `Tooltip`, `Button`, `DropdownMenu`, `IconButton` (required)
+### B. Summary subject band — `Card`, `TableCellLink`, `Button`, `DropdownMenu`, `IconButton` (required)
 
-`Card :padded="false"` opens the tab. Its first band holds the resource glyph and its primary link, the live address that opens in a new tab and is named by a `Tooltip`, then a secondary Visit `Button` that opens the same address in a new tab (`href`, `target="_blank"`) and an outlined Resource actions `IconButton` that opens a `DropdownMenu` placed `bottom-end` with Copy URL and, in its own group, Settings.
+`Card :padded="false"` opens the tab. Its first band holds the resource glyph and its primary link, the live address as a `TableCellLink`, which opens it in a new tab and names it in its tooltip, then a secondary Visit `Button` that opens the same address in a new tab (`href`, `target="_blank"`) and an outlined Resource actions `IconButton` that opens a `DropdownMenu` placed `bottom-end` with Copy URL and, in its own group, Settings.
 
 ### C. Summary facts band — `Link`, `Tag`, `StatusIndicator`, `Avatar`, `Tooltip` (required)
 
-A grid of label and value pairs, one column below `sm` so no value runs into the next: Deployment (the ID as a small `Link` with a Production `Tag`), Domains, Status as a `StatusIndicator`, Created as a relative time with the author `Avatar`, Source and Framework. Each label is a small muted span over its value; links carry a `Tooltip` that says where they go. A service adds custom domains (with a transparent small `IconButton`, Add a custom domain, inside a `Tooltip`), environments and its ID with a `CopyButton`; a policy adds its rules and modules.
+A grid of label and value pairs, one column below `sm` so no value runs into the next: Deployment (the ID as a small `Link` with a Production `Tag`), Domains, Status as a `StatusIndicator`, Created as a relative time with the author `Avatar`, Source and Framework. Each label is a small muted span over its value; links are `TableCellLink`s, whose tooltip says where they go. A service adds custom domains (with a transparent small `IconButton`, Add a custom domain, inside a `Tooltip`), environments and its ID with a `CopyButton`; a policy adds its rules and modules.
 
 ### D. Summary state band — `Button` (optional)
 
@@ -217,6 +217,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-reso
   import PageTabs from '@aziontech/webkit/page-tabs'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Subheader from '@aziontech/webkit/subheader'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -403,20 +404,9 @@ jobs:
   const path = ref('cli')
   const steps = computed(() => (path.value === 'actions' ? ACTIONS_STEPS : cliSteps.value))
 
-  const DETAIL_LINK_CLASS =
-    'group/link ' +
-    'data-link:cursor-pointer ' +
-    'inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
-
   const FOOTER_BAND_CLASS =
     '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
     'py-(--spacing-xs)'
-
-  const DOCS_LINK_CLASS =
-    'rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance ' +
-    'hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
-    'focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -455,27 +445,10 @@ jobs:
                         aria-hidden="true"
                       />
                       <div class="flex min-w-0">
-                        <Tooltip
-                          :content="`Open ${resource.domain} in a new tab`"
-                          class="w-full"
-                        >
-                          <a
-                            :href="address"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            data-link
-                            :class="DETAIL_LINK_CLASS"
-                          >
-                            <span class="truncate underline-offset-2 group-hover/link:underline">{{
-                              resource.domain
-                            }}</span>
-                            <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                            <i
-                              class="az az-external-link shrink-0 text-body-xs leading-none"
-                              aria-hidden="true"
-                            />
-                          </a>
-                        </Tooltip>
+                        <TableCellLink
+                          :label="resource.domain"
+                          :href="address"
+                        />
                       </div>
                     </div>
 
@@ -567,28 +540,10 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Domains</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <div class="flex min-w-0">
-                          <Tooltip
-                            :content="`Open ${resource.domain} in a new tab`"
-                            class="w-full"
-                          >
-                            <a
-                              :href="address"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              data-link
-                              :class="DETAIL_LINK_CLASS"
-                            >
-                              <span
-                                class="truncate underline-offset-2 group-hover/link:underline"
-                                >{{ resource.domain }}</span
-                              >
-                              <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                              <i
-                                class="az az-external-link shrink-0 text-body-xs leading-none"
-                                aria-hidden="true"
-                              />
-                            </a>
-                          </Tooltip>
+                          <TableCellLink
+                            :label="resource.domain"
+                            :href="address"
+                          />
                         </div>
                       </div>
                     </div>
@@ -678,12 +633,11 @@ jobs:
                   <template #description>
                     Two ways to build and deploy this resource. Select one and follow the steps, or
                     read the
-                    <a
+                    <Link
                       href="https://example.com/docs/cli"
                       target="_blank"
-                      rel="noopener noreferrer"
-                      :class="DOCS_LINK_CLASS"
-                      >CLI docs</a
+                      inline
+                      >CLI docs</Link
                     >.
                   </template>
                   <template #actions>
@@ -1003,6 +957,7 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
   import Button from '@aziontech/webkit/button'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tooltip from '@aziontech/webkit/tooltip'
 
   export interface ApplicationAddressBandProps {
@@ -1022,10 +977,6 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
     { value: 'copy-url', label: 'Copy URL', icon: 'az az-copy' },
     { value: 'settings', label: 'Settings', icon: 'az az-settings' }
   ]
-
-  const DETAIL_LINK_CLASS =
-    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -1039,24 +990,10 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
         aria-hidden="true"
       />
       <div class="flex min-w-0">
-        <Tooltip
-          :content="`Open ${host} in a new tab`"
-          class="w-full"
-        >
-          <a
-            :href="`https://${host}`"
-            target="_blank"
-            rel="noopener noreferrer"
-            :class="DETAIL_LINK_CLASS"
-          >
-            <span class="truncate underline-offset-2 group-hover/link:underline">{{ host }}</span>
-            <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-            <i
-              class="az az-external-link shrink-0 text-body-xs leading-none"
-              aria-hidden="true"
-            />
-          </a>
-        </Tooltip>
+        <TableCellLink
+          :label="host"
+          :href="`https://${host}`"
+        />
       </div>
     </div>
     <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
@@ -1360,6 +1297,7 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tabs from '@aziontech/webkit/tabs'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref } from 'vue'
@@ -1412,10 +1350,6 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
   const discard = () => {
     Object.assign(settings, JSON.parse(baseline.value) as typeof settings)
   }
-
-  const DETAIL_LINK_CLASS =
-    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -1492,24 +1426,10 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
                                   class="az az-github shrink-0"
                                   aria-hidden="true"
                                 />
-                                <Tooltip :content="`Open ${repository} on GitHub`">
-                                  <a
-                                    :href="`https://github.com/${repository}`"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    :class="DETAIL_LINK_CLASS"
-                                  >
-                                    <span
-                                      class="truncate underline-offset-2 group-hover/link:underline"
-                                    >
-                                      {{ repository }}
-                                    </span>
-                                    <i
-                                      class="az az-external-link shrink-0 text-body-xs leading-none"
-                                      aria-hidden="true"
-                                    />
-                                  </a>
-                                </Tooltip>
+                                <TableCellLink
+                                  :label="repository"
+                                  :href="`https://github.com/${repository}`"
+                                />
                               </span>
                             </template>
                             <Button

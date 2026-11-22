@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-hub/create-hub.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-hub")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), `use-file-picker`
 - Skills: `webkit-create-surface`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -38,7 +38,7 @@ The creation header from `top-bar/top-bar-creation`: a small outlined back `Icon
 
 ### B. Page heading — `PageHeader` (required)
 
-`PageHeader` at `size="large"`. The description says what the page offers in one sentence and ends with inline file and folder `Button`s at `variant="link"` that open the system picker (a hidden file input, and one with `webkitdirectory` for a folder). Picking hands the files to the Upload a project flow (`create/create-deploy-template` Upload); the block announces it with an info toast. Dropping a folder is the job of `state/state-project-intake`; this page does not claim it. They are link-coloured and underline only on hover, like the rest of the console's text actions.
+`PageHeader` at `size="large"`. The description says what the page offers in one sentence and ends with inline file and folder `Button`s at `variant="link"` that open the system picker through `useFilePicker` (one for files, one with `directory` for a folder). Picking hands the files to the Upload a project flow (`create/create-deploy-template` Upload); the block announces it with an info toast. Dropping a folder is the job of `state/state-project-intake`; this page does not claim it. They are link-coloured and underline only on hover, like the rest of the console's text actions.
 
 ### C. Git connect — `EmptyState`, `Button`, `Alert`, `Link` (required until connected)
 
@@ -194,6 +194,7 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { computed, ref, watch } from 'vue'
 
   import { sampleRepositories, sampleTemplates } from './sample'
@@ -290,8 +291,8 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
   const search = ref('')
   const repoLimit = ref(REPO_PAGE)
   const templateSearch = ref('')
-  const fileInputEl = ref<HTMLInputElement | null>(null)
-  const folderInputEl = ref<HTMLInputElement | null>(null)
+  const filePicker = useFilePicker({ multiple: true })
+  const folderPicker = useFilePicker({ directory: true })
 
   const accounts = computed(() => props.accounts)
   const activeScope = computed(() => scope.value || props.accounts[0]?.value || '')
@@ -347,16 +348,12 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
 
   const templateHref = (item: CreateHubTemplate) => `/create/templates/${item.slug}`
 
-  const openFilePicker = () => fileInputEl.value?.click()
-  const openFolderPicker = () => folderInputEl.value?.click()
-
-  const onPick = (event: Event) => {
-    const input = event.target as HTMLInputElement
-    const picked = input.files ? Array.from(input.files) : []
-    if (!picked.length) return
-    emit('upload', event, picked)
-    input.value = ''
+  const pickFrom = async (event: MouseEvent, picker: typeof filePicker) => {
+    const picked = await picker.open()
+    if (picked.length) emit('upload', event, picked)
   }
+  const openFilePicker = (event: MouseEvent) => pickFrom(event, filePicker)
+  const openFolderPicker = (event: MouseEvent) => pickFrom(event, folderPicker)
 
   const ACCOUNT_BUTTON_CLASS =
     'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
@@ -436,24 +433,6 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
                 label="folder"
                 @click="openFolderPicker"
               />.
-              <input
-                ref="fileInputEl"
-                type="file"
-                multiple
-                class="sr-only"
-                tabindex="-1"
-                aria-hidden="true"
-                @change="onPick"
-              />
-              <input
-                ref="folderInputEl"
-                type="file"
-                webkitdirectory
-                class="sr-only"
-                tabindex="-1"
-                aria-hidden="true"
-                @change="onPick"
-              />
             </template>
           </PageHeader>
 

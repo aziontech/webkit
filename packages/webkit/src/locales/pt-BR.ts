@@ -1425,6 +1425,3 @@ export const ptBR: Messages = {
     reorderCancelled: 'Reordenação cancelada.'
   }
 }
-
-/** @alias */
-export default ptBR

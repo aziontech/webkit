@@ -2232,7 +2232,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-act
 - Surface: app
 - Source: `blocks/account/account-billing/account-billing.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-billing")`
-- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CurrencyAmount, DataTable, DropdownMenu, EmptyState, IconButton, KeyValueList, PageHeader, PageTabs, PaymentBrand, PropertyFilter, Skeleton, StatusIndicator, Subheader, Table, `TableCellActions`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-collection`, `use-locale`
+- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CurrencyAmount, DataTable, DropdownMenu, EmptyState, IconButton, KeyValueList, Link, PageHeader, PageTabs, PaymentBrand, PropertyFilter, Skeleton, StatusIndicator, Subheader, Table, `TableCellActions`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-navigation`, `webkit-microcopy`
 
 ## Asked as
@@ -2259,7 +2259,7 @@ What the account pays, what it paid and which card it is charged to. An admin ch
 - B. Tabs — `PageTabs`, `Tabs` (required)
 - C. Load failure — `Alert` (conditional)
 - D. Subscription plan — `Card`, `Skeleton`, `Tag`, `KeyValueList`, `CurrencyAmount`, `PaymentBrand` (required)
-- E. Upgrade card — `Card` (required)
+- E. Upgrade card — `Card`, `Link` (required)
 - F. Invoices controls — `Subheader`, `PropertyFilter`, `CollectionPreferences` (required)
 - G. Invoices table — `DataTable`, `TableCellActions`, `TableCellStatus`, `useCollection` (required)
 - H. No invoices and no match — `EmptyState` (conditional)
@@ -2457,7 +2457,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-cha
 - Surface: app
 - Source: `blocks/account/account-deployment-settings/account-deployment-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-deployment-settings")`
-- Components: Accordion, Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, Item, Kbd, PageHeader, Pagination, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Switch, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Tag, Textarea, Toast, Tooltip, `use-collection`
+- Components: Accordion, Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, Item, Kbd, PageHeader, Pagination, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, Tag, Textarea, Toast, Tooltip, `use-collection`
 - Skills: `webkit-form`, `webkit-tables`, `webkit-lists`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2483,7 +2483,7 @@ How every deploy in the account routes. A Deployment Setting holds a binding pol
 - A. Page heading — `PageHeader`, `Button` (required)
 - B. What a Deployment Setting is — `Alert` (required)
 - C. New service defaults — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Select`, `Switch`, `SaveBar` (required)
-- D. All services — `Accordion`, `Input`, `Tag`, `Select`, `Pagination` (required)
+- D. All services — `Accordion`, `Input`, `Tag`, `Select`, `Pagination`, `TableCellLink` (required)
 - E. Deployment Settings controls — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 - F. Deployment Settings table — `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Card`, `Tag`, `DropdownMenu`, `ConfirmDialog`, `EmptyState`, `useCollection` (required)
 - G. Create and edit drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Textarea`, `RadioGroup` (required)
@@ -3822,7 +3822,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat-drawer.m
 - Surface: app
 - Source: `blocks/auth/auth-sign-in/auth-sign-in.vue` in `@aziontech/webkit`
 - MCP: `get_block("auth/auth-sign-in")`
-- Components: Alert, AppHeader, Avatar, Brand, Button, Card, Checkbox, CopyButton, Field, `FieldError`, IconButton, Input, Item, KeyValueList, OtpInput, PageHeader, PasswordInput, PasswordRequirements, PasswordRequirements, QrCode, Separator, Skeleton, Tag, Tooltip, `use-locale`
+- Components: Alert, AppHeader, Avatar, Brand, Button, Card, Checkbox, CopyButton, Field, `FieldError`, IconButton, Input, Item, KeyValueList, Link, OtpInput, PageHeader, PasswordInput, PasswordRequirements, PasswordRequirements, QrCode, Separator, Skeleton, Tag, Tooltip, `use-locale`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -3853,7 +3853,7 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 - A. Signed-out bar — `AppHeader` (required)
 - B. Product mark — `Brand` (required)
 - C. Actions — `Button` (required)
-- D. The card — `Card` (required)
+- D. The card — `Card`, `Link` (required)
 - E. Card notice — `Alert` (conditional)
 - F. Social divider — `Separator` (email step only)
 - G. Field label — `Field`, `Field.Label` (required)
@@ -4515,7 +4515,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-drawer/create-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-drawer")`
-- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, InputGroup, Item, Kbd, KeyValueList, Link, NumberInput, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SchemaForm, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Textarea, Toast, ToggleGroup, Tooltip, `use-locale`, `use-shortcuts`, `use-unsaved-changes`
+- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, InputGroup, Item, Kbd, KeyValueList, Link, NumberInput, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SchemaForm, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Textarea, Toast, ToggleGroup, Tooltip, `use-file-picker`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4652,7 +4652,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-drawe
 - Surface: app
 - Source: `blocks/create/create-hub/create-hub.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-hub")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, EmptyState, IconButton, Input, IntegrationCard, Item, Link, PageHeader, ScrollArea, Select, Skeleton
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, EmptyState, IconButton, Input, IntegrationCard, Item, Link, PageHeader, ScrollArea, Select, Skeleton, `use-file-picker`
 - Skills: `webkit-create-surface`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -4767,7 +4767,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-hub.m
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast, `use-escape-to-cancel`, `use-file-picker`, `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -6640,7 +6640,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Surface: app
 - Source: `blocks/detail/detail-deployment-logs/detail-deployment-logs.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-deployment-logs")`
-- Components: Accordion, Alert, Avatar, Button, Card, CopyButton, DropdownMenu, EmptyState, IconButton, LogViewer, StatusIndicator, Tag, ToggleGroup, Tooltip
+- Components: Accordion, Alert, Avatar, Button, Card, CopyButton, DropdownMenu, EmptyState, IconButton, LogViewer, StatusIndicator, `TableCellLink`, Tag, ToggleGroup, Tooltip
 - Skills: `webkit-ui-states`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -6763,7 +6763,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-deplo
 - Surface: app
 - Source: `blocks/detail/detail-dns-zone/detail-dns-zone.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-dns-zone")`
-- Components: Alert, Button, Card, CollectionPreferences, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, `FieldDescription`, `FieldError`, FileDropzone, IconButton, Input, `InputGroupRoot`, `ItemList`, Kbd, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, SettingsGroup, SettingsRow, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Tabs, Tag, Textarea, Toast, Tooltip, `use-collection`
+- Components: Alert, Button, Card, CollectionPreferences, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, `FieldDescription`, `FieldError`, FileDropzone, IconButton, Input, `InputGroupRoot`, `ItemList`, Kbd, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, SettingsGroup, SettingsRow, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Tabs, Tag, Textarea, Toast, Tooltip, `use-collection`, `use-file-picker`
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -6996,7 +6996,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-domai
 - Surface: app
 - Source: `blocks/detail/detail-get-started/detail-get-started.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-get-started")`
-- Components: Card, CodeBlock, Subheader, ToggleGroup
+- Components: Card, CodeBlock, Link, Subheader, ToggleGroup
 - Skills: `webkit-microcopy`
 
 ## Asked as
@@ -7021,7 +7021,7 @@ The first thing a user reads about a resource they created from the CLI and have
 
 ## Building blocks
 
-- A. Section heading — `Subheader` (required)
+- A. Section heading — `Subheader`, `Link` (required)
 - B. Path switch — `ToggleGroup` (required)
 - C. Step cards — `Card` (required)
 - D. Commands — `CodeBlock` (required)
@@ -7310,7 +7310,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-produ
 - Surface: app
 - Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-resource")`
-- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FlowDiagramBind`, FlowDiagram, IconButton, Input, `InputGroupRoot`, Item, Kbd, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Subheader, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `use-unsaved-changes`
+- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FlowDiagramBind`, FlowDiagram, IconButton, Input, `InputGroupRoot`, Item, Item, Kbd, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Subheader, `TableCellLink`, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -7338,7 +7338,7 @@ The second-level page of one resource. The user arrives from a list row or a dep
 ## Building blocks
 
 - A. Tab bar — `PageTabs`, `Tabs`, `EmptyState` (required)
-- B. Summary subject band — `Card`, `Tooltip`, `Button`, `DropdownMenu`, `IconButton` (required)
+- B. Summary subject band — `Card`, `TableCellLink`, `Button`, `DropdownMenu`, `IconButton` (required)
 - C. Summary facts band — `Link`, `Tag`, `StatusIndicator`, `Avatar`, `Tooltip` (required)
 - D. Summary state band — `Button` (optional)
 - E. Get started — `Subheader`, `ToggleGroup`, `Card`, `CodeBlock` (optional)
@@ -7465,7 +7465,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 - Surface: app
 - Source: `blocks/detail/detail-version/detail-version.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-version")`
-- Components: Avatar, Breadcrumb, Button, Card, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Resizable, SchemaForm, ScrollArea, Select, SettingsGroup, SettingsRow, Skeleton, Spinner, SplitButton, Switch, `TableCellTime`, Tabs, Tag, Textarea, Toast, Tooltip
+- Components: Avatar, Breadcrumb, Button, Card, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldError`, IconButton, Input, Item, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Resizable, SchemaForm, ScrollArea, Select, SettingsGroup, SettingsRow, Skeleton, Spinner, SplitButton, Switch, `TableCellLink`, `TableCellTime`, Tabs, Tag, Textarea, Toast, Tooltip
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -7492,7 +7492,7 @@ One version of a resource, opened from its Versions tab. The user is here to cha
 - A. Version switcher — `ConsoleLayout`, `Select`, `Input`, `Tag`, `IconButton`, `Tooltip` (required)
 - B. Workspace — `Resizable` (required)
 - C. Version tab bar — `PageTabs`, `Tabs`, `Tag`, `DropdownMenu`, `IconButton`, `EmptyState` (required)
-- D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip`, `Skeleton` (required)
+- D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip`, `Skeleton`, `Link` (required)
 - E. Version bar — `Tag`, `SplitButton`, `Button`, `Spinner` (required)
 - F. Version history — `IconButton`, `Tag`, `Field`, `Textarea`, `Button`, `Avatar` (optional)
 - G. Revert — `ConfirmDialog`, `Button`, `Tag` (optional, on an earlier Ready version)
@@ -7610,7 +7610,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-versi
 - Surface: app
 - Source: `blocks/edit/edit-delete-dialog/edit-delete-dialog.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-delete-dialog")`
-- Components: Alert, Button, ConfirmDialog, Item, PageHeader, Toast
+- Components: Alert, Button, ConfirmDialog, Item, Link, PageHeader, Toast
 - Skills: `webkit-ux-heuristics`, `webkit-microcopy`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -7636,7 +7636,7 @@ The last stop before a resource is gone for good. The user chose Delete from a r
 ## Building blocks
 
 - A. Dialog and trigger — `ConfirmDialog`, `Button` (required)
-- B. Consequence — `Alert` (required)
+- B. Consequence — `Alert`, `Link` (required)
 - C. Typed confirmation — `ConfirmDialog` `confirmation-phrase` (required)
 - D. Trigger — `Button` (required)
 
@@ -8134,7 +8134,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-rule-buil
 - Surface: app
 - Source: `blocks/edit/edit-schema/edit-schema.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-schema")`
-- Components: Alert, AttributeEditor, Button, Card, Checkbox, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, SettingsGroup, Switch, `TableCellActions`, Tag, Toast, Tooltip
+- Components: Alert, AttributeEditor, Button, Card, Checkbox, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, SettingsGroup, Switch, `TableCellActions`, Tag, Toast, Tooltip, `use-file-picker`
 - Skills: `webkit-form`, `webkit-create-surface`, `webkit-tables`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -8251,7 +8251,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-schema.md
 - Surface: app
 - Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-variables")`
-- Components: Alert, AttributeEditor, Avatar, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Kbd, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsGroup, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`, `use-shortcuts`
+- Components: Alert, AttributeEditor, Avatar, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Kbd, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsGroup, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`, `use-file-picker`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -8346,7 +8346,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-variables
 - Every key and value field has a visible `label` in its addon; an invalid field sets `aria-invalid` and points to its `FieldError` through `aria-describedby`.
 - Icon-only controls (Remove variable, Show value, Hide value, row actions, toolbar) carry an `aria-label` that matches their `Tooltip`.
 - The Secret `Checkbox` and each scope `Switch` have an `aria-label` naming what they toggle, e.g. "Enable Project scope".
-- The `ToggleGroup` is labeled "Variables view"; the hidden file input is removed from the tab order and the Upload button triggers it.
+- The `ToggleGroup` is labeled "Variables view"; the Upload button opens the system file picker through `useFilePicker`, so no hidden input sits in the tab order.
 - Adding a pair moves focus to its new Key field; removing one moves focus to the pair now in its place (or Add variable); both are announced in a polite live region by `AttributeEditor`.
 - The paste panel's `Textarea` is described by its report, so skipped lines and replaced keys are read with the field; Paste .env exposes `aria-expanded`, and applying announces how many variables were added.
 - The drawer traps focus while open and returns it to Create Variable on close.
@@ -8518,7 +8518,7 @@ What each prop and event does, and the go-live code: [blocks/settings/settings-f
 - Surface: app
 - Source: `blocks/shell/shell-console/shell-console.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/shell-console")`
-- Components: Alert, Avatar, Badge, Button, Card, Command, ConsoleLayout, `ConsoleLayoutRoot`, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, HighlightButton, IconButton, Input, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, `TableCellId`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-color-mode`
+- Components: Alert, Avatar, Badge, Button, Card, Command, ConsoleLayout, `ConsoleLayoutRoot`, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, HighlightButton, IconButton, Input, Item, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, `TableCellId`, `TableCellLink`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-color-mode`
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -8633,7 +8633,7 @@ What each prop and event does, and the go-live code: [blocks/shell/shell-console
 - Surface: docs
 - Source: `blocks/shell/shell-docs/shell-docs.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/shell-docs")`
-- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, Brand, Button, CodeBlock, CopyPromptButton, DataTable, Diagram, DocAccordion, DocAccordionGroup, DocAgentCard, DocCallToAction, DocCallout, DocCard, DocCardGroup, DocCodeGroup, DocFrame, DocHeading, DocHero, DocItem, DocLayout, DocMarkdown, DocPageHeader, DocPreviousNext, DocPrompt, DocProse, DocSteps, Footer, IconButton, `ItemList`, LanguageSelect, RegistrationFrame, StatusIndicator, Tabs, Tag, ThemeSwitcher, ThirdPartyLogo, `use-color-mode`
+- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, Brand, Button, CodeBlock, CopyPromptButton, DataTable, Diagram, DocAccordion, DocAccordionGroup, DocAgentCard, DocCallToAction, DocCallout, DocCard, DocCardGroup, DocCodeGroup, DocFrame, DocHeading, DocHero, DocItem, DocLayout, DocMarkdown, DocPageHeader, DocPreviousNext, DocPrompt, DocProse, DocSteps, Footer, IconButton, `ItemList`, Item, LanguageSelect, Link, RegistrationFrame, StatusIndicator, Tabs, Tag, ThemeSwitcher, ThirdPartyLogo, `use-color-mode`
 - Skills: `webkit-layout`, `webkit-navigation`
 
 ## Asked as
@@ -8661,7 +8661,7 @@ The documentation shell. A reader comes to learn one task and leave, so the shel
 - G. Running text — `DocProse` (required)
 - H. Section headings — `DocHeading` (required)
 - I. Footer — `Footer` (required)
-- J. Brand — `Brand` (required)
+- J. Brand — `Brand`, `Link` (required)
 - K. System status — `StatusIndicator` (required)
 - L. Language — `LanguageSelect` (required)
 
@@ -9552,7 +9552,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-page-sk
 - Surface: app
 - Source: `blocks/state/state-project-intake/state-project-intake.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-project-intake")`
-- Components: Alert, Button, FileDropzone, UploadProgress
+- Components: Alert, Button, FileDropzone, UploadProgress, `use-file-picker`
 - Skills: `webkit-ui-states`, `webkit-motion-polish`
 
 ## Asked as
@@ -10106,7 +10106,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-events-ex
 - Surface: app
 - Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-file-browser")`
-- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress
+- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress, `use-file-picker`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -10384,7 +10384,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-marketpla
 - Surface: app
 - Source: `blocks/view/view-query-editor/view-query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-query-editor")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, Item, Kbd, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingsGroup, SettingsRow, Sidebar, Skeleton, Switch, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-shortcuts`
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, Item, Kbd, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingsGroup, SettingsRow, Sidebar, Skeleton, Switch, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-file-picker`, `use-shortcuts`
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -19451,6 +19451,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ```vue
 <script setup>
+  import Link from '@aziontech/webkit/link'
   import OverflowCount from '@aziontech/webkit/overflow-count'
 
   const domains = ['shop.example.com', 'api.example.com', 'img.example.com', 'docs.example.com']
@@ -19458,13 +19459,12 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 <template>
   <div class="flex w-full max-w-(--container-xs) min-w-0 items-center gap-(--spacing-xs)">
-    <a
+    <Link
       :href="`https://${domains[0]}`"
+      :label="domains[0]"
       target="_blank"
-      rel="noopener noreferrer"
-      class="min-w-0 truncate text-body-sm text-(--text-default) underline-offset-2 hover:underline"
-      >{{ domains[0] }}</a
-    >
+      size="small"
+    />
     <OverflowCount
       :items="domains.slice(1).map((label) => ({ label, href: `https://${label}` }))"
       :noun="{ one: 'domain', other: 'domains' }"
@@ -21298,6 +21298,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
@@ -21377,11 +21378,11 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
     @row-click="onRowClick"
   >
     <template #cell-name="{ row, value }">
-      <a
-        :href="'/workloads/' + row.id"
-        class="cursor-pointer truncate text-(--text-default) no-underline hover:underline active:underline"
-        >{{ value }}</a
-      >
+      <TableCellLink
+        :label="value"
+        :to="`/workloads/${row.id}`"
+        destination="Workloads"
+      />
     </template>
     <template #cell-status="{ value }">
       <Tag :severity="statusSeverity(value)">{{ value }}</Tag>
@@ -30333,6 +30334,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - Use Link when the text takes the person to another page, resource or URL.
 - A standalone navigation link: a domain, a repository, a docs page, "View all".
 - An in-console navigation action ("Add custom domain"): no trailing icon unless `icon` is set.
+- A link inside a sentence: set `inline`, so it takes the size of the text around it and keeps the underline at rest.
 
 ## Do
 
@@ -30341,11 +30343,11 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - `target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `az az-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.
 - An icon is shown when `icon` is set.
 - Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).
+- Inside running prose set `inline`: the link inherits the font size and line height of its sentence, wraps with it and keeps a quiet underline at rest (color alone fails WCAG 1.4.1); `size` does not apply.
 - `disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead.
 
 ## Don’t
 
-- A link inside a sentence → use a plain anchor with the text-link class.
 - An action that changes something instead of navigating → use `button`.
 - A text action that runs something instead of navigating → use `button` with `variant="link"`.
 
@@ -30364,6 +30366,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 | `icon` | `string` | `''` | false | Azion icon class for the trailing icon; set shows it. Empty shows `az az-external-link` only when `target` is `_blank`. |
 | `href` | `string` | `''` | false | Destination URL for the anchor. Empty, or an unsafe URL (`javascript:`, `data:`), renders `#`. |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when navigating. |
+| `inline` | `boolean` | `false` | false | Renders the link inside running prose: it inherits the size and line height of the text around it, wraps with it and keeps the underline at rest; `size` does not apply. |
 
 ## Events
 
@@ -30386,6 +30389,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - Visual states: `default`, `hover`, `focus-visible`, `disabled`
 - `hover` and `focus-visible` underline the label (`underline-offset-4`); there is no surface behind the link
 - `data-disabled` mirrors the `disabled` prop
+- `inline`: the anchor carries the `text-link` style (link colour, underline at rest, stronger on hover, outline focus ring) and `data-inline`; no box height
 - Consumer attributes (`id`, `aria-*`, `download`, `rel`, `data-*`, listeners) land on the anchor through `v-bind="$attrs"`; a consumer `rel` overrides the computed one
 
 ## Accessibility
@@ -33633,6 +33637,39 @@ Options of `useEscapeToCancel`.
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `enabled` | `MaybeRefOrGetter<boolean>` | no | Turns the shortcut off (for example while the create request is in flight). |
+
+---
+
+<!-- composables/use-file-picker.md -->
+
+# useFilePicker
+
+Composable `@aziontech/webkit/use-file-picker`. The signatures and option tables below are read from its typed source, [`src/composables/use-file-picker/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-file-picker/index.ts).
+
+```ts
+import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+import type { UseFilePickerOptions, UseFilePickerReturn } from '@aziontech/webkit/use-file-picker'
+```
+
+## `useFilePicker`
+
+```ts
+function useFilePicker(options: UseFilePickerOptions = {}): UseFilePickerReturn
+```
+
+## `UseFilePickerOptions`
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `accept` | `MaybeRefOrGetter<string>` | no | Comma-separated file filter in the native accept syntax (extensions, MIME types, type wildcards). Empty accepts every file. |
+| `multiple` | `MaybeRefOrGetter<boolean>` | no | Lets the person pick more than one file. |
+| `directory` | `MaybeRefOrGetter<boolean>` | no | Picks a folder: every file inside it is returned, each with its `webkitRelativePath`. |
+
+## `UseFilePickerReturn`
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `open` | `() => Promise<File[]>` | yes | Opens the system file picker; resolves with the chosen files, or an empty list when the person cancels. Call it from a click handler. |
 
 ---
 

@@ -1391,7 +1391,6 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
                       >
                         <Checkbox
                           :model-value="true"
-                          :id="`event-field-${field.id}`"
                           @update:model-value="toggleColumn(field.id)"
                         />
                         <Field.Label>
@@ -1509,7 +1508,6 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
                               <Field orientation="horizontal">
                                 <Checkbox
                                   :model-value="false"
-                                  :id="`event-field-${field.id}`"
                                   @update:model-value="toggleColumn(field.id)"
                                 />
                                 <Field.Label>

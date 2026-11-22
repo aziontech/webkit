@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-billing/account-billing.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-billing")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CurrencyAmount](../../components/currency-amount.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [KeyValueList](../../components/key-value-list.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), [PaymentBrand](../../components/payment-brand.md), [PropertyFilter](../../components/property-filter.md), [Skeleton](../../components/skeleton.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CurrencyAmount](../../components/currency-amount.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), [PaymentBrand](../../components/payment-brand.md), [PropertyFilter](../../components/property-filter.md), [Skeleton](../../components/skeleton.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-navigation`, `webkit-microcopy`
 
 ## Asked as
@@ -44,9 +44,9 @@ When the billing data fails to load, a danger `Alert` with Retry takes the tab's
 
 A `Card` whose header holds the `Subscription plan` heading and the outlined `Change plan`, which opens `account/account-change-plan-drawer` (the copyable SFC links to the plans route so it stands alone). The body shows the plan name with a small secondary `Current plan` `Tag` (a `Skeleton` while loading), then split `KeyValueList` with Plan start date, Next charge date, Next charge value as `CurrencyAmount`, and the default card as a decorative `PaymentBrand` plate and its brand and last four. The footer says what an invoice includes. On wide containers it takes about half the row.
 
-### E. Upgrade card — `Card` (required)
+### E. Upgrade card — `Card`, `Link` (required)
 
-`Upgrade to Enterprise` beside the plan card: one sentence on what the tier adds, four perks with icons, a link to pricing and a primary `Contact sales`, the one primary action on the page (the tier is sold by the sales team). Show the next tier only; hide the card on the top tier.
+`Upgrade to Enterprise` beside the plan card: one sentence on what the tier adds, four perks with icons, a small `Link` to pricing that opens in a new tab and a primary `Contact sales`, the one primary action on the page (the tier is sold by the sales team). Show the next tier only; hide the card on the top tier.
 
 ### F. Invoices controls — `Subheader`, `PropertyFilter`, `CollectionPreferences` (required)
 
@@ -198,6 +198,7 @@ Each variant is the same screen in another state: `get_block("account/account-bi
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import KeyValueList from '@aziontech/webkit/key-value-list'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
@@ -688,13 +689,12 @@ Each variant is the same screen in another state: `get_block("account/account-bi
                   <div
                     class="flex w-full min-w-0 flex-wrap items-center justify-between gap-(--spacing-md)"
                   >
-                    <a
+                    <Link
                       href="https://example.com/pricing"
                       target="_blank"
-                      rel="noreferrer"
-                      class="text-body-xs text-(--text-link) hover:underline"
-                      >Pricing and plans</a
-                    >
+                      size="small"
+                      label="Pricing and plans"
+                    />
                     <Button
                       label="Contact sales"
                       variant="primary"

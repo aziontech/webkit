@@ -11,6 +11,7 @@
 - Use Link when the text takes the person to another page, resource or URL.
 - A standalone navigation link: a domain, a repository, a docs page, "View all".
 - An in-console navigation action ("Add custom domain"): no trailing icon unless `icon` is set.
+- A link inside a sentence: set `inline`, so it takes the size of the text around it and keeps the underline at rest.
 
 ## Do
 
@@ -19,11 +20,11 @@
 - `target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `az az-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.
 - An icon is shown when `icon` is set.
 - Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).
+- Inside running prose set `inline`: the link inherits the font size and line height of its sentence, wraps with it and keeps a quiet underline at rest (color alone fails WCAG 1.4.1); `size` does not apply.
 - `disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead.
 
 ## Don’t
 
-- A link inside a sentence → use a plain anchor with the text-link class.
 - An action that changes something instead of navigating → use `button`.
 - A text action that runs something instead of navigating → use `button` with `variant="link"`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
@@ -43,6 +44,7 @@
 | `icon` | `string` | `''` | false | Azion icon class for the trailing icon; set shows it. Empty shows `az az-external-link` only when `target` is `_blank`. |
 | `href` | `string` | `''` | false | Destination URL for the anchor. Empty, or an unsafe URL (`javascript:`, `data:`), renders `#`. |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when navigating. |
+| `inline` | `boolean` | `false` | false | Renders the link inside running prose: it inherits the size and line height of the text around it, wraps with it and keeps the underline at rest; `size` does not apply. |
 
 ## Events
 
@@ -65,6 +67,7 @@
 - Visual states: `default`, `hover`, `focus-visible`, `disabled`
 - `hover` and `focus-visible` underline the label (`underline-offset-4`); there is no surface behind the link
 - `data-disabled` mirrors the `disabled` prop
+- `inline`: the anchor carries the `text-link` style (link colour, underline at rest, stronger on hover, outline focus ring) and `data-inline`; no box height
 - Consumer attributes (`id`, `aria-*`, `download`, `rel`, `data-*`, listeners) land on the anchor through `v-bind="$attrs"`; a consumer `rel` overrides the computed one
 
 ## Accessibility
@@ -131,7 +134,7 @@
 </template>
 ```
 
-### Disabled
+### Inline
 
 ```vue
 <script setup>
@@ -139,10 +142,20 @@
 </script>
 
 <template>
-  <Link
-    label="Learn more"
-    icon="az az-external-link"
-    disabled
-  />
+  <p class="max-w-(--container-sm) text-body-md text-(--text-muted)">
+    Point a CNAME record at the workload before you add the domain. Read the
+    <Link
+      href="https://example.com/docs/domains"
+      target="_blank"
+      inline
+      >domains guide<span class="sr-only"> (opens in a new tab)</span></Link
+    >
+    or open the
+    <Link
+      href="/domains"
+      inline
+      >domain list</Link
+    >.
+  </p>
 </template>
 ```
