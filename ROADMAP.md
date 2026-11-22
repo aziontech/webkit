@@ -59,6 +59,21 @@ Six phases: measure, foundations and gates, internal refactor (no API change, te
 no pixel change), API work through the spec flow, blocks, verify. Done means every new baseline
 is empty and the full gates, browser suite and visual suite are green.
 
+**Progress: the proposed CI from an empty list (owner, 2026-11-21).** The CI proposed in
+[`.claude/docs/CI.md`](./.claude/docs/CI.md) was run on all existing code with every list of known
+violations emptied (branch `refactor/clear-quality-baselines`). Each step below is fixed, then its
+check joins the CI with no baseline, then the branch is pushed.
+
+| Step | What fails today                                                                                                                                                                                                                                                    | Status      |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| 1    | Keyboard: the Combobox and PropertyFilter suggestion lists counted as unreachable (the keyboard check now counts a list its combobox controls as reached); the docs-site axe check on the ViewEventsExplorer field list and a loading box; a stale `llms` page      | Done        |
+| 2    | Workflows: `pull_request_target` in `assign-author.yml`, credentials kept after checkout, three jobs outside the gate, one `continue-on-error`; spelling (544); duplicate lockfile versions; subpaths of the theme and icons packages that do not resolve in node10 | Not started |
+| 3    | Type assertions: 29 `as never`, 12 `as unknown as`                                                                                                                                                                                                                  | Not started |
+| 4    | Unused code (knip): unused exports, types and dependencies                                                                                                                                                                                                          | Not started |
+| 5    | Raw native elements outside their owner component: 267 in 192 files; `animate-spin` and `animate-pulse` outside Spinner and Skeleton                                                                                                                                | Not started |
+| 6    | Size limits of `CODE_QUALITY.md` 3.1: 165 files over 400 lines, 451 functions over 60 lines, 80 over complexity 12                                                                                                                                                  | Not started |
+| 7    | The 249 hard-coded site strings                                                                                                                                                                                                                                     | Item 1.9    |
+
 **1.8 in detail — every browser engine and real devices, in CI (owner, 2026-11-20).** Today CI
 runs the component suite and the visual suite on Chromium only. Firefox and the Safari engine run
 only by hand (`test:browser-firefox`, `test:browser-webkit`, last full run in M1.11), real Edge and

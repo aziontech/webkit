@@ -474,9 +474,17 @@ export function keyboardReach(limited: boolean): KeyboardReach {
     return `${tag}${role ? `[role=${role}]` : ''}${testId ? ` in ${testId}` : ''}${name ? ` "${name}"` : ''}`
   }
 
+  const controlled = (element: Element) =>
+    element.id !== '' &&
+    visited.some((stop) =>
+      ['aria-controls', 'aria-owns'].some((name) =>
+        (stop.getAttribute(name) ?? '').split(/\s+/).includes(element.id)
+      )
+    )
   const unreached: string[] = []
   for (const { members, first } of groups.values()) {
     if (members.some(reached)) continue
+    if (first.matches(ROVING) && controlled(first)) continue
     if (
       furthest &&
       members.every(

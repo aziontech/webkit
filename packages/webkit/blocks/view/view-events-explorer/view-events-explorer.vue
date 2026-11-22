@@ -1140,7 +1140,6 @@
                       >
                         <Checkbox
                           :model-value="true"
-                          :id="`event-field-${field.id}`"
                           @update:model-value="toggleColumn(field.id)"
                         />
                         <Field.Label>
@@ -1258,7 +1257,6 @@
                               <Field orientation="horizontal">
                                 <Checkbox
                                   :model-value="false"
-                                  :id="`event-field-${field.id}`"
                                   @update:model-value="toggleColumn(field.id)"
                                 />
                                 <Field.Label>

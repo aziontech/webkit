@@ -571,6 +571,7 @@ LIMIT 3;`
             <div
               v-if="loading"
               class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) py-(--spacing-sm)"
+              role="status"
               aria-busy="true"
               aria-label="Loading tables"
             >
