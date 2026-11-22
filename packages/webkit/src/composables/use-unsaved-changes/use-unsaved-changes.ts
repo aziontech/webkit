@@ -1,15 +1,16 @@
 import {
   computed,
   type ComputedRef,
+  getCurrentScope,
   isRef,
   type MaybeRefOrGetter,
+  onScopeDispose,
   readonly,
   type Ref,
   ref,
   toValue
 } from 'vue'
 
-import { useBeforeUnloadGuard } from './composables/use-before-unload-guard'
 import { useLeaveDialog } from './composables/use-leave-dialog'
 
 /** Options of `useUnsavedChanges`. */
@@ -91,16 +92,21 @@ export function useUnsavedChanges<T>(
     return copy
   }
 
-  const { cancel, ...dialog } = useLeaveDialog({
-    isDirty,
-    enabled,
-    savable,
-    discard,
-    onSave: options.onSave
-  })
+  const { cancel, ...dialog } = useLeaveDialog(isDirty, enabled, savable, discard, options.onSave)
 
-  if (options.beforeUnload !== false) {
-    useBeforeUnloadGuard(() => enabled() && isDirty.value, cancel)
+  if (options.beforeUnload !== false && typeof window !== 'undefined') {
+    const onBeforeunload = (event: BeforeUnloadEvent) => {
+      if (!enabled() || !isDirty.value) return
+      event.preventDefault()
+      event.returnValue = ''
+    }
+    window.addEventListener('beforeunload', onBeforeunload)
+    if (getCurrentScope()) {
+      onScopeDispose(() => {
+        window.removeEventListener('beforeunload', onBeforeunload)
+        cancel()
+      })
+    }
   }
 
   return {

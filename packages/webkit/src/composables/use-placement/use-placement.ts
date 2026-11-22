@@ -3,20 +3,11 @@ import { type MaybeRefOrGetter, nextTick, readonly, type Ref, ref, toValue, watc
 import { getFixedFrame } from '../../utils/containing-block'
 import { type Direction, resolveDirection } from '../use-direction'
 import { useAnchoring } from './composables/use-anchoring'
-import { usePanelResize } from './composables/use-panel-resize'
-import { useViewportListeners } from './composables/use-viewport-listeners'
 import { getClippingBoundary } from './lib/clipping-boundary'
 import { computePlacement, DEFAULT_AUTO_SIDES } from './lib/compute-placement'
-import {
-  capPanel,
-  lockWidth,
-  measurePanel,
-  offScreenStyle,
-  type PanelStyle,
-  placedStyle
-} from './lib/panel-style'
+import { measurePanel, offScreenStyle, type PanelStyle, placedStyle } from './lib/panel-style'
 import { triggerMoved } from './lib/trigger-moved'
-import type { Align, CollisionPadding, Rect, Side } from './lib/types'
+import type { Align, CollisionPadding, ComputePlacementResult, Rect, Side } from './lib/types'
 
 export interface UsePlacementOptions {
   triggerRef: MaybeRefOrGetter<globalThis.HTMLElement | null>
@@ -62,42 +53,6 @@ export interface UsePlacementReturn {
   updatePosition: () => void
 }
 
-type PlacementSettings = Required<
-  Pick<
-    UsePlacementOptions,
-    | 'align'
-    | 'sideOffset'
-    | 'alignOffset'
-    | 'collisionPadding'
-    | 'flip'
-    | 'zIndex'
-    | 'matchTriggerWidth'
-  >
-> &
-  UsePlacementOptions
-
-function resolveSettings({
-  align = 'center',
-  sideOffset = 4,
-  alignOffset = 0,
-  collisionPadding = 8,
-  flip = true,
-  zIndex = 1100,
-  matchTriggerWidth = false,
-  ...rest
-}: UsePlacementOptions): PlacementSettings {
-  return {
-    ...rest,
-    align,
-    sideOffset,
-    alignOffset,
-    collisionPadding,
-    flip,
-    zIndex,
-    matchTriggerWidth
-  }
-}
-
 function initialSide(side: Side | 'auto', autoSides: Side[] | undefined): Side {
   return side === 'auto' ? (autoSides?.[0] ?? DEFAULT_AUTO_SIDES[0]!) : side
 }
@@ -105,68 +60,54 @@ function initialSide(side: Side | 'auto', autoSides: Side[] | undefined): Side {
 function placePanel(
   trigger: globalThis.HTMLElement,
   panel: globalThis.HTMLElement,
-  settings: PlacementSettings
-): { style: PanelStyle; side: Side; align: Align; triggerRect: Rect } {
+  options: UsePlacementOptions,
+  zIndex: number
+): [style: PanelStyle, result: ComputePlacementResult, triggerRect: Rect] {
   panel.style.maxHeight = ''
   panel.style.maxWidth = ''
   const frame = getFixedFrame(panel)
   const panelSize = measurePanel(panel, frame)
   const triggerRect = trigger.getBoundingClientRect()
   const viewport = { width: globalThis.innerWidth ?? 0, height: globalThis.innerHeight ?? 0 }
+  const matchTriggerWidth = options.matchTriggerWidth ?? false
   const result = computePlacement({
     triggerRect,
     panelSize,
     boundary: getClippingBoundary(trigger, viewport),
-    side: toValue(settings.side),
-    align: toValue(settings.align),
-    dir: toValue(settings.dir) ?? resolveDirection(trigger),
-    autoSides: settings.autoSides,
-    flip: settings.flip,
-    sideOffset: toValue(settings.sideOffset),
-    alignOffset: toValue(settings.alignOffset),
-    collisionPadding: settings.collisionPadding,
-    matchTriggerWidth: settings.matchTriggerWidth
+    side: toValue(options.side),
+    align: toValue(options.align ?? 'center'),
+    dir: toValue(options.dir) ?? resolveDirection(trigger),
+    autoSides: options.autoSides,
+    flip: options.flip ?? true,
+    sideOffset: toValue(options.sideOffset ?? 4),
+    alignOffset: toValue(options.alignOffset ?? 0),
+    collisionPadding: options.collisionPadding ?? 8,
+    matchTriggerWidth
   })
-  const style = placedStyle(result, frame, settings.zIndex)
-  capPanel(panel, style)
-  if (settings.matchTriggerWidth) lockWidth(style, triggerRect, frame)
-  return { style, side: result.side, align: result.align, triggerRect }
-}
-
-function repositionOnChange(settings: PlacementSettings, update: () => void): void {
-  watch(
-    () => [
-      toValue(settings.side),
-      toValue(settings.align),
-      toValue(settings.sideOffset),
-      toValue(settings.alignOffset)
-    ],
-    () => {
-      if (toValue(settings.isOpen)) nextTick(() => update())
-    }
-  )
+  const width = matchTriggerWidth ? `${triggerRect.width / frame.scaleX}px` : null
+  return [placedStyle(result, frame, zIndex, panel, width), result, triggerRect]
 }
 
 export function usePlacement(options: UsePlacementOptions): UsePlacementReturn {
-  const settings = resolveSettings(options)
-  const { triggerRef, panelRef, isOpen, onDismiss } = settings
-  const resolvedSide = ref<Side>(initialSide(toValue(settings.side), settings.autoSides))
-  const resolvedAlign = ref<Align>(toValue(settings.align))
-  const panelStyle = ref<PanelStyle>(offScreenStyle(settings.zIndex))
+  const { triggerRef, panelRef, isOpen, onDismiss } = options
+  const zIndex = options.zIndex ?? 1100
+  const resolvedSide = ref<Side>(initialSide(toValue(options.side), options.autoSides))
+  const resolvedAlign = ref<Align>(toValue(options.align ?? 'center'))
+  const panelStyle = ref<PanelStyle>(offScreenStyle(zIndex))
   let anchorRect: Rect | null = null
 
   function updatePosition(): void {
     const trigger = toValue(triggerRef)
     const panel = toValue(panelRef)
     if (!trigger || !panel) {
-      panelStyle.value = offScreenStyle(settings.zIndex)
+      panelStyle.value = offScreenStyle(zIndex)
       return
     }
-    const placed = placePanel(trigger, panel, settings)
-    anchorRect = placed.triggerRect
-    resolvedSide.value = placed.side
-    resolvedAlign.value = placed.align
-    panelStyle.value = placed.style
+    const [style, result, triggerRect] = placePanel(trigger, panel, options, zIndex)
+    anchorRect = triggerRect
+    resolvedSide.value = result.side
+    resolvedAlign.value = result.align
+    panelStyle.value = style
   }
 
   const updateWhenOpen = (): void => {
@@ -183,17 +124,20 @@ export function usePlacement(options: UsePlacementOptions): UsePlacementReturn {
     nextTick(updateWhenOpen)
   }
 
-  const { listen } = useViewportListeners(updateWhenOpen, onScroll)
-  const { anchored } = useAnchoring({
-    isOpen,
-    update: updatePosition,
-    onToggle: (open) => {
-      listen(open)
-      if (!open) anchorRect = null
-    }
+  const anchored = useAnchoring(isOpen, panelRef, updatePosition, updateWhenOpen, onScroll, () => {
+    anchorRect = null
   })
-  repositionOnChange(settings, updatePosition)
-  usePanelResize(panelRef, updateWhenOpen)
+  watch(
+    () => [
+      toValue(options.side),
+      toValue(options.align),
+      toValue(options.sideOffset),
+      toValue(options.alignOffset)
+    ],
+    () => {
+      if (toValue(isOpen)) nextTick(updatePosition)
+    }
+  )
 
   return {
     resolvedSide: readonly(resolvedSide),

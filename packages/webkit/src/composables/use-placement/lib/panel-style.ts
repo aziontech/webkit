@@ -1,5 +1,5 @@
 import type { FixedFrame } from '../../../utils/containing-block'
-import type { ComputePlacementResult, Rect, Size } from './types'
+import type { ComputePlacementResult, Size } from './types'
 
 export type PanelStyle = Record<string, string>
 
@@ -24,28 +24,28 @@ export function measurePanel(panel: globalThis.HTMLElement, frame: FixedFrame): 
 export function placedStyle(
   result: ComputePlacementResult,
   frame: FixedFrame,
-  zIndex: number
+  zIndex: number,
+  panel: globalThis.HTMLElement,
+  width: string | null
 ): PanelStyle {
-  const x = Math.round((result.left - frame.left) / frame.scaleX)
-  const y = Math.round((result.top - frame.top) / frame.scaleY)
   const style: PanelStyle = {
     position: 'fixed',
     top: '0',
     left: '0',
-    translate: `${x}px ${y}px`,
+    translate: `${Math.round((result.left - frame.left) / frame.scaleX)}px ${Math.round(
+      (result.top - frame.top) / frame.scaleY
+    )}px`,
     zIndex: String(zIndex),
     '--popup-origin': result.origin
   }
-  if (result.maxHeight !== null) style['maxHeight'] = `${result.maxHeight / frame.scaleY}px`
-  if (result.maxWidth !== null) style['maxWidth'] = `${result.maxWidth / frame.scaleX}px`
+  if (result.maxHeight !== null) {
+    style['maxHeight'] = `${result.maxHeight / frame.scaleY}px`
+    panel.style.maxHeight = style['maxHeight']
+  }
+  if (result.maxWidth !== null) {
+    style['maxWidth'] = `${result.maxWidth / frame.scaleX}px`
+    panel.style.maxWidth = style['maxWidth']
+  }
+  if (width !== null) style['width'] = width
   return style
-}
-
-export function capPanel(panel: globalThis.HTMLElement, style: PanelStyle): void {
-  if (style['maxHeight']) panel.style.maxHeight = style['maxHeight']
-  if (style['maxWidth']) panel.style.maxWidth = style['maxWidth']
-}
-
-export function lockWidth(style: PanelStyle, triggerRect: Rect, frame: FixedFrame): void {
-  style['width'] = `${triggerRect.width / frame.scaleX}px`
 }

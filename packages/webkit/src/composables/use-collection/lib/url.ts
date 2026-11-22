@@ -123,29 +123,9 @@ function parseTokens(raw: string | null): PropertyFilterToken[] | undefined {
   }
 }
 
-function readQuery(get: (key: string) => string | null): PropertyFilterQuery | undefined {
-  const tokens = parseTokens(get('filter'))
-  const groups = parseGroups(get('groups'))
-  if (!tokens && !groups) return undefined
-  const query: PropertyFilterQuery = {
-    tokens: tokens ?? [],
-    operation: get('op') === 'or' ? 'or' : 'and'
-  }
-  if (groups) query.groups = groups
-  return query
-}
-
-const parseSorting = (raw: string): { id: string; desc: boolean }[] =>
-  raw
-    .split(',')
-    .filter(Boolean)
-    .map((part) =>
-      part.startsWith('-') ? { id: part.slice(1), desc: true } : { id: part, desc: false }
-    )
-
-function positiveInteger(raw: string | null): number | undefined {
+function positiveInteger(raw: string | null): number {
   const value = Number(raw)
-  return Number.isInteger(value) && value > 0 ? value : undefined
+  return Number.isInteger(value) && value > 0 ? value : 0
 }
 
 export function readUrlState(params: URLSearchParams, prefix = ''): CollectionUrlState {
@@ -153,14 +133,25 @@ export function readUrlState(params: URLSearchParams, prefix = ''): CollectionUr
   const state: CollectionUrlState = {}
   const text = get('q')
   if (text !== null) state.filteringText = text
-  const query = readQuery(get)
-  if (query) state.query = query
+  const tokens = parseTokens(get('filter'))
+  const groups = parseGroups(get('groups'))
+  if (tokens || groups) {
+    state.query = { tokens: tokens ?? [], operation: get('op') === 'or' ? 'or' : 'and' }
+    if (groups) state.query.groups = groups
+  }
   const sort = get('sort')
-  if (sort !== null) state.sorting = parseSorting(sort)
+  if (sort !== null) {
+    state.sorting = sort
+      .split(',')
+      .filter(Boolean)
+      .map((part) =>
+        part.startsWith('-') ? { id: part.slice(1), desc: true } : { id: part, desc: false }
+      )
+  }
   const page = positiveInteger(get('page'))
-  if (page !== undefined) state.page = page
+  if (page) state.page = page
   const size = positiveInteger(get('size'))
-  if (size !== undefined) state.pageSize = size
+  if (size) state.pageSize = size
   return state
 }
 

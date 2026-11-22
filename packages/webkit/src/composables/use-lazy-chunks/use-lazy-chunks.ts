@@ -1,14 +1,6 @@
 import { onScopeDispose, shallowRef } from 'vue'
 
-import {
-  type ChunkHeight,
-  chunkIndex,
-  chunkObserver,
-  releaseHidden,
-  splitChunks
-} from './lib/chunks'
-
-export { scrollParent } from './lib/chunks'
+import { type ChunkHeight, releaseHidden, splitChunks } from './lib/chunks'
 
 export interface LazyChunk<T> {
   index: number
@@ -33,6 +25,16 @@ export interface UseLazyChunksReturn {
   revealAll: () => void
 }
 
+const SCROLLS = /(auto|scroll|overlay)/
+
+export function scrollParent(el: Element | null | undefined): HTMLElement | null {
+  for (let node = el?.parentElement ?? null; node; node = node.parentElement) {
+    const { overflowY } = getComputedStyle(node)
+    if (SCROLLS.test(overflowY) && node.scrollHeight > node.clientHeight) return node
+  }
+  return null
+}
+
 export function useLazyChunks(options: UseLazyChunksOptions): UseLazyChunksReturn {
   const chunkSize = options.chunkSize ?? 100
   const threshold = options.threshold ?? 300
@@ -45,7 +47,7 @@ export function useLazyChunks(options: UseLazyChunksOptions): UseLazyChunksRetur
   const isMounted = (index: number) => mounted.value === 'all' || mounted.value.has(index)
 
   const split = <T>(items: readonly T[]): LazyChunk<T>[] =>
-    splitChunks(items, { threshold, chunkSize, rowHeight: options.rowHeight }, isMounted, heights)
+    splitChunks(items, threshold, chunkSize, options.rowHeight, isMounted, heights)
 
   const reveal = (indexes: number[]) => {
     if (mounted.value === 'all') return
@@ -54,24 +56,25 @@ export function useLazyChunks(options: UseLazyChunksOptions): UseLazyChunksRetur
     mounted.value = next
   }
 
-  const release = (entries: IntersectionObserverEntry[]) => {
-    if (mounted.value === 'all') return
-    const next = new Set(mounted.value)
-    const live = (index: number, target: Element) =>
-      observed.get(index) === target && roles.get(target) === 'chunk'
-    if (releaseHidden(entries, next, live, heights)) mounted.value = next
-  }
+  const release = (entries: IntersectionObserverEntry[]) =>
+    releaseHidden(entries, mounted, observed, roles, heights)
 
   const revealAll = () => {
     mounted.value = 'all'
   }
 
-  const onEntries = (entries: IntersectionObserverEntry[]) => {
-    const hits = entries
-      .filter((entry) => entry.isIntersecting)
-      .map((entry) => chunkIndex(entry.target))
-    if (hits.length) reveal(hits)
-    if (options.release) release(entries.filter((entry) => !entry.isIntersecting))
+  const connect = (first: Element) => {
+    if (typeof IntersectionObserver === 'undefined') return
+    observer = new IntersectionObserver(
+      (entries) => {
+        const hits = entries
+          .filter((entry) => entry.isIntersecting)
+          .map((entry) => Number((entry.target as HTMLElement).dataset['chunk']))
+        if (hits.length) reveal(hits)
+        if (options.release) release(entries.filter((entry) => !entry.isIntersecting))
+      },
+      { root: scrollParent(first), rootMargin: options.rootMargin ?? '600px 0px' }
+    )
   }
 
   const observe = (el: unknown, index: number) => {
@@ -88,7 +91,7 @@ export function useLazyChunks(options: UseLazyChunksOptions): UseLazyChunksRetur
     roles.set(el, isMounted(index) ? 'chunk' : 'placeholder')
     if (previous === el) return
     observed.set(index, el)
-    if (!observer) observer = chunkObserver(el, options.rootMargin, onEntries)
+    if (!observer) connect(el)
     observer?.observe(el)
   }
 

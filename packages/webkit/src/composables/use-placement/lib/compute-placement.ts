@@ -32,14 +32,9 @@ function isVertical(side: Side | PhysicalSide): boolean {
   return side === 'top' || side === 'bottom'
 }
 
-function pick<T>(align: Align, start: T, end: T, center: T): T {
-  if (align === 'start') return start
-  return align === 'end' ? end : center
-}
-
 function toPhysical(side: Side, align: Align, rtl: boolean): Candidate {
   if (isVertical(side)) {
-    const flipped = pick<Align>(align, 'end', 'start', align)
+    const flipped = align === 'start' ? 'end' : align === 'end' ? 'start' : align
     return { logical: side, side: side as PhysicalSide, align: rtl ? flipped : align }
   }
   return { logical: side, side: (side === 'start') === rtl ? 'right' : 'left', align }
@@ -47,9 +42,13 @@ function toPhysical(side: Side, align: Align, rtl: boolean): Candidate {
 
 function getPopupOrigin({ side, align }: PhysicalPlacement): string {
   if (isVertical(side)) {
-    return `${side === 'top' ? 'bottom' : 'top'} ${pick(align, 'left', 'right', 'center')}`
+    const vertical = side === 'top' ? 'bottom' : 'top'
+    const horizontal = align === 'start' ? 'left' : align === 'end' ? 'right' : 'center'
+    return `${vertical} ${horizontal}`
   }
-  return `${pick(align, 'top', 'bottom', 'center')} ${side === 'left' ? 'right' : 'left'}`
+  const horizontal = side === 'left' ? 'right' : 'left'
+  const vertical = align === 'start' ? 'top' : align === 'end' ? 'bottom' : 'center'
+  return `${vertical} ${horizontal}`
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -59,19 +58,6 @@ function clamp(value: number, min: number, max: number): number {
 function resolvePadding(padding: CollisionPadding): { x: number; y: number } {
   if (typeof padding === 'number') return { x: padding, y: padding }
   return { x: padding?.x ?? 0, y: padding?.y ?? 0 }
-}
-
-function spaceOn(side: PhysicalSide, trigger: Rect, boundary: Rect): number {
-  switch (side) {
-    case 'bottom':
-      return boundary.bottom - trigger.bottom
-    case 'top':
-      return trigger.top - boundary.top
-    case 'right':
-      return boundary.right - trigger.right
-    case 'left':
-      return trigger.left - boundary.left
-  }
 }
 
 function resolveSide(
@@ -101,57 +87,29 @@ function resolveSide(
   return fits(opposite) || clearance(opposite) > clearance(preferred) ? opposite : preferred
 }
 
-function alongEdge(
-  align: Align,
-  start: number,
-  length: number,
-  size: number,
-  offset: number
-): number {
-  return pick(
-    align,
-    start + offset,
-    start + length - size - offset,
-    start + length / 2 - size / 2 + offset
-  )
-}
-
-function panelExtent(
-  input: ComputePlacementInput,
-  side: PhysicalSide,
-  main: number,
-  padding: { x: number; y: number }
-): { width: number; height: number; locked: boolean } {
-  const { triggerRect: trigger, panelSize, boundary } = input
-  const vertical = isVertical(side)
-  const locked = vertical && input.matchTriggerWidth === true
-  const crossAvailable = Math.max(
-    0,
-    vertical ? boundary.width - 2 * padding.x : boundary.height - 2 * padding.y
-  )
-  const cross = locked
-    ? trigger.width
-    : Math.min(vertical ? panelSize.width : panelSize.height, crossAvailable)
-  return vertical ? { width: cross, height: main, locked } : { width: main, height: cross, locked }
+function alignShift(input: ComputePlacementInput, align: Align, vertical: boolean): number {
+  const raw = input.alignOffset ?? 0
+  return input.dir === 'rtl' && align === 'center' && vertical ? -raw : raw
 }
 
 function panelPoint(
-  input: ComputePlacementInput,
   { side, align }: PhysicalPlacement,
-  { width, height }: { width: number; height: number },
-  alignOffset: number
-): { top: number; left: number } {
-  const { triggerRect: trigger, sideOffset: offset } = input
+  trigger: Rect,
+  offset: number,
+  width: number,
+  height: number,
+  shift: number
+): [top: number, left: number] {
   if (isVertical(side)) {
-    return {
-      top: side === 'top' ? trigger.top - height - offset : trigger.bottom + offset,
-      left: alongEdge(align, trigger.left, trigger.width, width, alignOffset)
-    }
+    const top = side === 'top' ? trigger.top - height - offset : trigger.bottom + offset
+    if (align === 'start') return [top, trigger.left + shift]
+    if (align === 'end') return [top, trigger.right - width - shift]
+    return [top, trigger.left + trigger.width / 2 - width / 2 + shift]
   }
-  return {
-    top: alongEdge(align, trigger.top, trigger.height, height, alignOffset),
-    left: side === 'left' ? trigger.left - width - offset : trigger.right + offset
-  }
+  const left = side === 'left' ? trigger.left - width - offset : trigger.right + offset
+  if (align === 'start') return [trigger.top + shift, left]
+  if (align === 'end') return [trigger.bottom - height - shift, left]
+  return [trigger.top + trigger.height / 2 - height / 2 + shift, left]
 }
 
 export function computePlacement(input: ComputePlacementInput): ComputePlacementResult {
@@ -161,29 +119,43 @@ export function computePlacement(input: ComputePlacementInput): ComputePlacement
   const align = input.align ?? 'center'
 
   const mainSize = (side: PhysicalSide) => (isVertical(side) ? panelSize.height : panelSize.width)
-  const available = (side: PhysicalSide) =>
-    spaceOn(side, trigger, boundary) - offset - (isVertical(side) ? padding.y : padding.x)
+  const available = (side: PhysicalSide) => {
+    switch (side) {
+      case 'bottom':
+        return boundary.bottom - trigger.bottom - offset - padding.y
+      case 'top':
+        return trigger.top - boundary.top - offset - padding.y
+      case 'right':
+        return boundary.right - trigger.right - offset - padding.x
+      case 'left':
+        return trigger.left - boundary.left - offset - padding.x
+    }
+  }
   const resolved = resolveSide(input, align, rtl, ({ side }) => available(side) - mainSize(side))
   const { side } = resolved
+  const vertical = isVertical(side)
+  const locked = vertical && input.matchTriggerWidth === true
 
-  const rawAlignOffset = input.alignOffset ?? 0
-  const mirrored = rtl && resolved.align === 'center' && isVertical(side)
-  const { width, height, locked } = panelExtent(
-    input,
-    side,
-    Math.min(mainSize(side), Math.max(0, available(side))),
-    padding
+  const main = Math.min(mainSize(side), Math.max(0, available(side)))
+  const crossAvailable = Math.max(
+    0,
+    vertical ? boundary.width - 2 * padding.x : boundary.height - 2 * padding.y
   )
-  const point = panelPoint(
-    input,
+  const cross = locked
+    ? trigger.width
+    : Math.min(vertical ? panelSize.width : panelSize.height, crossAvailable)
+  const [width, height] = vertical ? [cross, main] : [main, cross]
+  let [top, left] = panelPoint(
     resolved,
-    { width, height },
-    mirrored ? -rawAlignOffset : rawAlignOffset
+    trigger,
+    offset,
+    width,
+    height,
+    alignShift(input, resolved.align, vertical)
   )
-  const left = locked
-    ? point.left
-    : clamp(point.left, boundary.left + padding.x, boundary.right - padding.x - width)
-  const top = clamp(point.top, boundary.top + padding.y, boundary.bottom - padding.y - height)
+
+  if (!locked) left = clamp(left, boundary.left + padding.x, boundary.right - padding.x - width)
+  top = clamp(top, boundary.top + padding.y, boundary.bottom - padding.y - height)
 
   return {
     side: resolved.logical,

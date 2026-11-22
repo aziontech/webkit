@@ -1,75 +1,59 @@
 import { type ComputedRef, onScopeDispose, watch } from 'vue'
 
-import { basePreferences, type CollectionConfig, resolveUrl } from '../lib/config'
+import { basePreferences, resolveUrl } from '../lib/config'
 import { emptyQuery } from '../lib/property-filter'
 import type { CollectionState } from '../lib/state'
 import type { CollectionColumn, UseCollectionOptions } from '../lib/types'
-import { type CollectionUrlState, readUrlState, writeUrlState } from '../lib/url'
-
-export interface UseCollectionUrlReturn {
-  readPageSize: () => number | undefined
-  watchState: () => void
-}
+import { readUrlState, writeUrlState } from '../lib/url'
+import { whenMounted } from '../lib/when-mounted'
 
 export function useCollectionUrl<T extends object, C extends CollectionColumn>(
   options: UseCollectionOptions<T, C>,
-  config: CollectionConfig<T>,
-  state: CollectionState<T>,
-  pageSize: ComputedRef<number>
-): UseCollectionUrlReturn {
+  s: CollectionState<T>,
+  pageSize: ComputedRef<number>,
+  loadStored: (fromUrl: number | undefined) => void
+): void {
+  const { paginated, filteringText, query, sorting, page, storedPreferences } = s
   const url = resolveUrl(options.url as UseCollectionOptions<object>['url'])
-  const { filteringText, query, sorting, page } = state
+  if (!url) return whenMounted(() => loadStored(undefined))
+  const read = () => readUrlState(url.adapter.read(), url.prefix)
   let applyingUrl = false
-
-  const defaults = (): Required<Omit<CollectionUrlState, 'pageSize'>> => ({
-    filteringText: options.filtering?.defaultText ?? '',
-    query: options.propertyFiltering?.defaultQuery ?? emptyQuery(),
-    sorting: options.sorting?.defaultState ?? [],
-    page: 1
-  })
-
   const applyUrl = (): void => {
-    if (!url) return
-    const { pageSize: savedSize, ...saved } = readUrlState(url.adapter.read(), url.prefix)
-    const next = { ...defaults(), ...saved }
+    const state = read()
     applyingUrl = true
-    filteringText.value = next.filteringText
-    state.debouncedText.value = next.filteringText
-    query.value = next.query
-    sorting.value = next.sorting
-    if (savedSize !== undefined)
-      state.storedPreferences.value = { ...state.storedPreferences.value, pageSize: savedSize }
-    page.value = next.page
+    filteringText.value = state.filteringText ?? options.filtering?.defaultText ?? ''
+    s.debouncedText.value = filteringText.value
+    query.value = state.query ?? options.propertyFiltering?.defaultQuery ?? emptyQuery()
+    sorting.value = state.sorting ?? options.sorting?.defaultState ?? []
+    if (state.pageSize !== undefined)
+      storedPreferences.value = { ...storedPreferences.value, pageSize: state.pageSize }
+    page.value = state.page ?? 1
     applyingUrl = false
   }
-
-  const writeUrl = (): void => {
-    if (applyingUrl || !url) return
-    const size = config.paginated ? pageSize.value : 0
-    const defaultSize = config.paginated ? basePreferences(options).pageSize : 0
-    const current = {
-      filteringText: filteringText.value,
-      query: query.value,
-      sorting: sorting.value,
-      page: page.value,
-      pageSize: size
-    }
-    url.adapter.write(
-      writeUrlState(url.adapter.read(), current, { pageSize: defaultSize }, url.prefix)
-    )
-  }
-
-  const watchState = (): void => {
-    if (!url) return
-    watch([filteringText, query, sorting, page, pageSize], writeUrl, { deep: true })
-    const stop = url.adapter.subscribe?.(applyUrl)
-    if (stop) onScopeDispose(stop)
-  }
-
   applyUrl()
+  whenMounted(() => loadStored(read().pageSize))
 
-  return {
-    readPageSize: () => (url ? readUrlState(url.adapter.read(), url.prefix).pageSize : undefined),
-    watchState
-  }
+  watch(
+    [filteringText, query, sorting, page, pageSize],
+    () => {
+      if (applyingUrl) return
+      url.adapter.write(
+        writeUrlState(
+          url.adapter.read(),
+          {
+            filteringText: filteringText.value,
+            query: query.value,
+            sorting: sorting.value,
+            page: page.value,
+            pageSize: paginated ? pageSize.value : 0
+          },
+          { pageSize: paginated ? basePreferences(options).pageSize : 0 },
+          url.prefix
+        )
+      )
+    },
+    { deep: true }
+  )
+  const stop = url.adapter.subscribe?.(applyUrl)
+  if (stop) onScopeDispose(stop)
 }

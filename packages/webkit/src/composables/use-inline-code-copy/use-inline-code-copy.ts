@@ -76,10 +76,14 @@ function chipListeners(
 export function useInlineCodeCopy(
   root: MaybeRefOrGetter<HTMLElement | null>
 ): UseInlineCodeCopyReturn {
-  const { t } = useTranslate({ copyText: en.copyText })
-  const tip = useCopyTip()
+  const { t } = useTranslate({
+    docProse: en.docProse,
+    copyText: en.copyText,
+    kbd: en.kbd,
+    common: en.common
+  })
+  const tip = useCopyTip(t)
   const listeners = chipListeners((target) => chipFrom(toValue(root), target), tip)
-  const events = Object.keys(listeners) as (keyof ChipListeners)[]
   let observer: globalThis.MutationObserver | null = null
   let boundEl: HTMLElement | null = null
 
@@ -89,8 +93,12 @@ export function useInlineCodeCopy(
   }
 
   const unbind = (): void => {
-    for (const name of events)
-      boundEl?.removeEventListener(name, listeners[name] as globalThis.EventListener)
+    boundEl?.removeEventListener('pointerover', listeners.pointerover)
+    boundEl?.removeEventListener('pointerout', listeners.pointerout)
+    boundEl?.removeEventListener('focusin', listeners.focusin)
+    boundEl?.removeEventListener('focusout', listeners.focusout)
+    boundEl?.removeEventListener('click', listeners.click)
+    boundEl?.removeEventListener('keydown', listeners.keydown)
     globalThis.removeEventListener('scroll', tip.reanchor, { capture: true })
     globalThis.removeEventListener('resize', tip.reanchor)
     observer?.disconnect()
@@ -103,8 +111,12 @@ export function useInlineCodeCopy(
     const host = toValue(root)
     if (!host) return
     boundEl = host
-    for (const name of events)
-      host.addEventListener(name, listeners[name] as globalThis.EventListener)
+    host.addEventListener('pointerover', listeners.pointerover)
+    host.addEventListener('pointerout', listeners.pointerout)
+    host.addEventListener('focusin', listeners.focusin)
+    host.addEventListener('focusout', listeners.focusout)
+    host.addEventListener('click', listeners.click)
+    host.addEventListener('keydown', listeners.keydown)
     globalThis.addEventListener('scroll', tip.reanchor, { passive: true, capture: true })
     globalThis.addEventListener('resize', tip.reanchor, { passive: true })
     decorate()

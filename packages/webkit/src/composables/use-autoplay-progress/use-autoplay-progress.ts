@@ -37,40 +37,22 @@ export interface UseAutoplayProgressReturn {
 
 const PROGRESS_TICK_MS = 100
 
-interface ProgressTicker {
-  elapsed: Readonly<Ref<number>>
-  start: () => void
-  stop: () => void
-  reset: () => void
-}
-
-function createProgressTicker(options: UseAutoplayProgressOptions): ProgressTicker {
-  const elapsed = ref(0)
-  let marquee: ReturnType<typeof globalThis.setInterval> | null = null
-
-  function stop(): void {
-    if (marquee === null) return
-    globalThis.clearInterval(marquee)
-    marquee = null
+const setTo =
+  <T>(target: Ref<T>, value: T) =>
+  (): void => {
+    target.value = value
   }
 
-  function tick(): void {
+function tickEvery(
+  elapsed: Ref<number>,
+  options: UseAutoplayProgressOptions
+): ReturnType<typeof globalThis.setInterval> {
+  return globalThis.setInterval(() => {
     elapsed.value += PROGRESS_TICK_MS
     if (elapsed.value < toValue(options.interval)) return
     elapsed.value = 0
     options.onAdvance()
-  }
-
-  function start(): void {
-    stop()
-    marquee = globalThis.setInterval(tick, PROGRESS_TICK_MS)
-  }
-
-  function reset(): void {
-    elapsed.value = 0
-  }
-
-  return { elapsed: readonly(elapsed), start, stop, reset }
+  }, PROGRESS_TICK_MS)
 }
 
 export function useAutoplayProgress(
@@ -79,10 +61,11 @@ export function useAutoplayProgress(
   const reducedMotion = usePreferredReducedMotion()
   const { t } = useTranslate({ common: en.common })
 
-  const ticker = createProgressTicker(options)
+  const elapsed = ref(0)
   const paused = ref(false)
   const pointerInside = ref(false)
   const focusInside = ref(false)
+  let marquee: ReturnType<typeof globalThis.setInterval> | null = null
 
   const autoplayEnabled = computed(
     () => toValue(options.enabled) && reducedMotion.value !== 'reduce'
@@ -97,19 +80,22 @@ export function useAutoplayProgress(
   )
 
   const progress = computed(() =>
-    Math.min(100, Math.max(0, (ticker.elapsed.value / toValue(options.interval)) * 100))
+    Math.min(100, Math.max(0, (elapsed.value / toValue(options.interval)) * 100))
   )
+
+  function stop(): void {
+    if (marquee === null) return
+    globalThis.clearInterval(marquee)
+    marquee = null
+  }
+
+  function start(): void {
+    stop()
+    marquee = tickEvery(elapsed, options)
+  }
 
   function togglePause(): void {
     paused.value = !paused.value
-  }
-
-  function enterPointer(): void {
-    pointerInside.value = true
-  }
-
-  function leavePointer(): void {
-    pointerInside.value = false
   }
 
   function enterFocus(event: globalThis.FocusEvent): void {
@@ -117,17 +103,13 @@ export function useAutoplayProgress(
     focusInside.value = target.matches(':focus-visible')
   }
 
-  function leaveFocus(): void {
-    focusInside.value = false
-  }
-
-  watch(autoplayRunning, (running) => (running ? ticker.start() : ticker.stop()))
+  watch(autoplayRunning, (running) => (running ? start() : stop()))
 
   onMounted(() => {
-    if (autoplayRunning.value) ticker.start()
+    if (autoplayRunning.value) start()
   })
 
-  onScopeDispose(ticker.stop)
+  onScopeDispose(stop)
 
   return {
     autoplayEnabled,
@@ -135,11 +117,11 @@ export function useAutoplayProgress(
     paused: readonly(paused),
     pauseLabel,
     progress,
-    restartProgress: ticker.reset,
+    restartProgress: setTo(elapsed, 0),
     togglePause,
-    enterPointer,
-    leavePointer,
+    enterPointer: setTo(pointerInside, true),
+    leavePointer: setTo(pointerInside, false),
     enterFocus,
-    leaveFocus
+    leaveFocus: setTo(focusInside, false)
   }
 }

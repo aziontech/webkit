@@ -36,10 +36,16 @@ function wrapTab(event: KeyboardEvent, root: HTMLElement): void {
     return
   }
   const activeEl = document.activeElement
-  const [edge, wrapTo] = event.shiftKey ? [first, last] : [last, first]
-  if (activeEl === edge || !root.contains(activeEl)) {
+  if (event.shiftKey) {
+    if (activeEl === first || !root.contains(activeEl)) {
+      event.preventDefault()
+      last.focus()
+    }
+    return
+  }
+  if (activeEl === last || !root.contains(activeEl)) {
     event.preventDefault()
-    wrapTo.focus()
+    first.focus()
   }
 }
 

@@ -1,33 +1,14 @@
-import type { ComputedRef } from 'vue'
-
-import { cloneQuery } from './property-filter'
 import type { CollectionState } from './state'
-import type { CollectionFetchParams, CollectionFetchResult } from './types'
-
-export function fetchParamsOf<T>(
-  state: CollectionState<T>,
-  pageSize: ComputedRef<number>,
-  signal: AbortSignal
-): CollectionFetchParams {
-  return {
-    filteringText: state.debouncedText.value,
-    filter: cloneQuery(state.query.value),
-    sort: [...state.sorting.value],
-    page: state.page.value,
-    pageSize: pageSize.value,
-    signal
-  }
-}
+import type { CollectionFetchResult } from './types'
 
 export function applyFetchResult<T>(
-  state: CollectionState<T>,
-  keyOf: (item: T) => string,
-  pageSize: number,
-  result: CollectionFetchResult<T>
+  s: CollectionState<T>,
+  result: CollectionFetchResult<T>,
+  pageSize: number
 ): void {
-  for (const item of result.items) state.seen.set(keyOf(item), item)
-  state.serverItems.value = result.items
-  state.serverTotal.value = result.total
+  for (const item of result.items) s.seen.set(s.keyOf(item), item)
+  s.serverItems.value = result.items
+  s.serverTotal.value = result.total
   const lastPage = Math.max(1, Math.ceil(result.total / pageSize))
-  if (state.page.value > lastPage && result.total > 0) state.page.value = lastPage
+  if (s.page.value > lastPage && result.total > 0) s.page.value = lastPage
 }

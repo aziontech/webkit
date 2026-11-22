@@ -1,106 +1,88 @@
-import { computed, type ComputedRef } from 'vue'
+import { computed } from 'vue'
 
-import {
-  type CollectionTableSource,
-  preferencesPropsOf,
-  tablePropsOf,
-  visiblePageSize
-} from '../lib/bindings'
-import type { FilteringProperty, PropertyFilterQuery } from '../lib/property-filter'
+import { DEFAULT_PAGE_SIZE } from '../lib/config'
+import { cloneQuery } from '../lib/property-filter'
+import type { CollectionState, CollectionView } from '../lib/state'
 import type {
-  CollectionCardListProps,
   CollectionColumn,
-  CollectionPaginationProps,
-  CollectionPreferencesProps,
-  CollectionPropertyFilterProps,
-  CollectionSort,
-  CollectionTableProps,
-  CollectionTextFilterProps,
+  CollectionExportScope,
+  UseCollectionOptions,
   UseCollectionReturn
 } from '../lib/types'
+import type { UseCollectionFiltersReturn } from './use-collection-filters'
+import type { UseCollectionPreferencesReturn } from './use-collection-preferences'
+import type { UseCollectionSelectionReturn } from './use-collection-selection'
+import { useCollectionTableProps } from './use-collection-table-props'
 
 export type UseCollectionBindingsReturn<T, C> = Pick<
   UseCollectionReturn<T, C>,
+  | 'exportItems'
   | 'tableProps'
   | 'paginationProps'
   | 'filterProps'
   | 'propertyFilterProps'
-  | 'preferencesProps'
   | 'cardListProps'
 >
 
-export interface CollectionBindingsSource<T, C> extends Omit<
-  CollectionTableSource<T, C>,
-  'items' | 'columns' | 'loading' | 'sorting' | 'totalCount' | 'selectedKeys'
-> {
-  items: ComputedRef<T[]>
-  columns: ComputedRef<C[]>
-  properties: ComputedRef<FilteringProperty[]>
-  loading: Readonly<{ value: boolean }>
-  sorting: Readonly<{ value: CollectionSort[] }>
-  filteringText: Readonly<{ value: string }>
-  query: Readonly<{ value: PropertyFilterQuery }>
-  totalCount: ComputedRef<number>
-  pageSelectedKeys: ComputedRef<string[]>
-  setFilteringText: (text: string) => void
-  setQuery: (query: PropertyFilterQuery) => void
-}
-
-export function useCollectionBindings<T, C extends CollectionColumn>(
-  source: CollectionBindingsSource<T, C>
+export function useCollectionBindings<T extends object, C extends CollectionColumn>(
+  options: UseCollectionOptions<T, C>,
+  s: CollectionState<T, C>,
+  view: CollectionView<T>,
+  prefs: Omit<UseCollectionPreferencesReturn, 'loadStored'>,
+  filters: UseCollectionFiltersReturn,
+  selection: UseCollectionSelectionReturn<T>
 ): UseCollectionBindingsReturn<T, C> {
-  const { config } = source
-  const tableProps = computed<CollectionTableProps<T, C>>(() =>
-    tablePropsOf({
-      ...source,
-      items: source.items.value,
-      columns: source.columns.value,
-      loading: source.loading.value,
-      sorting: source.sorting.value,
-      totalCount: source.totalCount.value,
-      selectedKeys: source.pageSelectedKeys.value
+  const { serverMode, paginated, page, query } = s
+  const { pageSize, setPageSize } = prefs
+  const { isSelected, pageKeys, applyPageSelection } = selection
+
+  const exportItems = async (scope: CollectionExportScope = 'filtered'): Promise<T[]> => {
+    if (!serverMode)
+      return scope === 'all' ? [...s.sourceItems.value] : [...view.matchingItems.value]
+    if (!options.exportAll) return [...s.serverItems.value]
+    return options.exportAll({
+      filteringText: s.filteringText.value,
+      filter: cloneQuery(query.value),
+      sort: [...s.sorting.value],
+      scope
     })
-  )
-  const paginationProps = computed<CollectionPaginationProps>(() => ({
-    page: source.page.value,
-    total: source.totalCount.value,
-    pageSize: visiblePageSize(config.paginated, source.pageSize.value),
-    pageSizeOptions: config.pageSizeOptions,
-    'onUpdate:page': source.setPage,
-    'onUpdate:pageSize': source.setPageSize
-  }))
-  const filterProps = computed<CollectionTextFilterProps>(() => ({
-    modelValue: source.filteringText.value,
-    'onUpdate:modelValue': source.setFilteringText
-  }))
-  const propertyFilterProps = computed<CollectionPropertyFilterProps>(() => ({
-    query: source.query.value,
-    properties: source.properties.value,
-    totalCount: source.totalCount.value,
-    'onUpdate:query': source.setQuery
-  }))
-  const preferencesProps = computed<CollectionPreferencesProps>(() =>
-    preferencesPropsOf(
-      source.columns.value,
-      source.preferences.value,
-      config.paginated ? config.pageSizeOptions : [],
-      source.setPreferences
-    )
-  )
-  const cardListProps = computed<CollectionCardListProps<T>>(() => ({
-    items: source.items.value,
-    itemKey: config.itemKey,
-    loading: source.loading.value,
-    selectionMode: config.selectionEnabled ? config.selectionMode : 'none',
-    selectedKeys: source.pageSelectedKeys.value,
-    'onUpdate:selectedKeys': (keys) => source.applyPageSelection(new Set(keys))
-  }))
+  }
+
+  const exportRows = (scope: CollectionExportScope): Promise<T[]> | T[] =>
+    serverMode
+      ? exportItems(scope)
+      : scope === 'all'
+        ? [...s.sourceItems.value]
+        : [...view.matchingItems.value]
+
   return {
-    tableProps,
-    paginationProps,
-    filterProps,
-    propertyFilterProps,
-    preferencesProps,
-    cardListProps
+    exportItems,
+    tableProps: useCollectionTableProps(s, view, prefs, filters, selection, exportRows),
+    paginationProps: computed(() => ({
+      page: page.value,
+      total: view.totalCount.value,
+      pageSize: paginated ? pageSize.value : DEFAULT_PAGE_SIZE,
+      pageSizeOptions: s.pageSizeOptions,
+      'onUpdate:page': filters.setPage,
+      'onUpdate:pageSize': setPageSize
+    })),
+    filterProps: computed(() => ({
+      modelValue: s.filteringText.value,
+      'onUpdate:modelValue': filters.setFilteringText
+    })),
+    propertyFilterProps: computed(() => ({
+      query: query.value,
+      properties: s.properties.value,
+      totalCount: view.totalCount.value,
+      'onUpdate:query': filters.setQuery
+    })),
+    cardListProps: computed(() => ({
+      items: view.items.value,
+      itemKey: s.itemKey,
+      loading: s.loading.value,
+      selectionMode: s.selectionEnabled ? s.selectionMode : 'none',
+      selectedKeys: pageKeys.value.filter(isSelected),
+      'onUpdate:selectedKeys': (keys: string[]) => applyPageSelection(new Set(keys))
+    }))
   }
 }

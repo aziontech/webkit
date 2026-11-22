@@ -100,28 +100,11 @@ function isEnabled(shortcut: Shortcut): boolean {
   return shortcut.when === undefined || toValue(shortcut.when) !== false
 }
 
-interface KeyPress {
-  event: KeyboardEvent
-  typing: boolean
-  layer: Element | null
-}
-
-function isIgnoredKeydown(event: KeyboardEvent): boolean {
-  return event.defaultPrevented || event.isComposing || event.keyCode === 229 || event.repeat
-}
-
-function belongsToLayer(shortcut: Shortcut, layer: Element | null): boolean {
-  if (!layer) return true
-  const owner = toValue(shortcut.element)
-  return Boolean(owner && layer.contains(owner))
-}
-
-function firesOn(shortcut: Shortcut, { event, typing, layer }: KeyPress): boolean {
+function matchesPress(shortcut: Shortcut, event: KeyboardEvent, typing: boolean): boolean {
   if (!shortcut.handler || !isEnabled(shortcut)) return false
   const combination = parseShortcutKeys(toValue(shortcut.keys))
-  if (!combination) return false
-  if (typing && isSingleKey(combination)) return false
-  return matchesShortcut(event, combination) && belongsToLayer(shortcut, layer)
+  if (!combination || (typing && isSingleKey(combination))) return false
+  return matchesShortcut(event, combination)
 }
 
 export function createShortcutRegistry(): ShortcutRegistry {
@@ -129,14 +112,24 @@ export function createShortcutRegistry(): ShortcutRegistry {
   let nextId = 0
   let listening = false
 
-  function onKeydown(event: KeyboardEvent): void {
-    if (isIgnoredKeydown(event)) return
+  function onKeydown(event: KeyboardEvent) {
+    if (event.defaultPrevented || event.isComposing || event.keyCode === 229 || event.repeat) {
+      return
+    }
     const target = eventTarget(event)
-    const press: KeyPress = { event, typing: isTypingTarget(target), layer: topModalLayer(target) }
-    const entry = entries.findLast(({ shortcut }) => firesOn(shortcut, press))
-    if (!entry) return
-    event.preventDefault()
-    entry.shortcut.handler?.(event)
+    const typing = isTypingTarget(target)
+    const layer = topModalLayer(target)
+    for (let index = entries.length - 1; index >= 0; index -= 1) {
+      const { shortcut } = entries[index]!
+      if (!matchesPress(shortcut, event, typing)) continue
+      if (layer) {
+        const owner = toValue(shortcut.element)
+        if (!owner || !layer.contains(owner)) continue
+      }
+      event.preventDefault()
+      shortcut.handler?.(event)
+      return
+    }
   }
 
   function setListening(on: boolean) {

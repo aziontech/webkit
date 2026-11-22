@@ -1,10 +1,8 @@
 import { computed, type ComputedRef, onScopeDispose, readonly, type Ref, ref } from 'vue'
 
-import * as en from '../../../locales/en'
 import { copyText } from '../../../utils/clipboard'
-import { useTranslate } from '../../use-translate'
+import { type UseTranslateReturn } from '../../use-translate'
 import { copyShortcut } from '../lib/chip'
-import { createTimer, createTipAnchor } from '../lib/tip'
 
 export type InlineCodeCopyState = 'copy' | 'copied' | 'manual'
 
@@ -23,25 +21,33 @@ export interface UseCopyTipReturn {
 
 const FEEDBACK_MS = 1400
 
-export function useCopyTip(): UseCopyTipReturn {
-  const { t } = useTranslate({ docProse: en.docProse, kbd: en.kbd, common: en.common })
+function tipText(state: InlineCodeCopyState, t: UseTranslateReturn['t']): string {
+  if (state === 'copied') return t('common.copied')
+  if (state === 'manual')
+    return t('docProse.copyManually', { shortcut: copyShortcut(t('kbd.ctrl')) })
+  return t('common.copy')
+}
 
+export function useCopyTip(t: UseTranslateReturn['t']): UseCopyTipReturn {
   const tipFor = ref<HTMLElement | null>(null)
   const state = ref<InlineCodeCopyState>('copy')
-  const position = createTipAnchor()
+  const tipLeft = ref(0)
+  const tipTop = ref(0)
   const announcement = ref('')
-  const resetTimer = createTimer()
+  let resetTimer: ReturnType<typeof globalThis.setTimeout> | null = null
 
-  const tipLabel = computed(() => {
-    if (state.value === 'copied') return t('common.copied')
-    if (state.value === 'manual') {
-      return t('docProse.copyManually', { shortcut: copyShortcut(t('kbd.ctrl')) })
-    }
-    return t('common.copy')
-  })
+  const tipLabel = computed(() => tipText(state.value, t))
 
-  const anchorTip = position.anchor
-  const clearReset = resetTimer.clear
+  const anchorTip = (chip: HTMLElement): void => {
+    const rect = chip.getBoundingClientRect()
+    tipLeft.value = rect.left + rect.width / 2
+    tipTop.value = rect.top
+  }
+
+  const clearReset = (): void => {
+    if (resetTimer !== null) globalThis.clearTimeout(resetTimer)
+    resetTimer = null
+  }
 
   const show = (chip: HTMLElement): void => {
     if (chip === tipFor.value) return
@@ -49,12 +55,6 @@ export function useCopyTip(): UseCopyTipReturn {
     state.value = 'copy'
     tipFor.value = chip
     anchorTip(chip)
-  }
-
-  const hide = (chip: HTMLElement): void => {
-    if (chip !== tipFor.value) return
-    clearReset()
-    tipFor.value = null
   }
 
   const copy = async (chip: HTMLElement): Promise<void> => {
@@ -65,14 +65,12 @@ export function useCopyTip(): UseCopyTipReturn {
     globalThis.getSelection()?.selectAllChildren(chip)
     state.value = (await copyText(text)) ? 'copied' : 'manual'
     announcement.value = tipLabel.value
-    resetTimer.schedule(() => {
+    clearReset()
+    resetTimer = globalThis.setTimeout(() => {
       state.value = 'copy'
       announcement.value = ''
+      resetTimer = null
     }, FEEDBACK_MS)
-  }
-
-  const reanchor = (): void => {
-    if (tipFor.value) anchorTip(tipFor.value)
   }
 
   onScopeDispose(clearReset)
@@ -80,13 +78,19 @@ export function useCopyTip(): UseCopyTipReturn {
   return {
     tipFor: readonly(tipFor) as Readonly<Ref<HTMLElement | null>>,
     tipLabel,
-    tipLeft: position.left,
-    tipTop: position.top,
+    tipLeft: readonly(tipLeft),
+    tipTop: readonly(tipTop),
     announcement: readonly(announcement),
     show,
-    hide,
+    hide: (chip: HTMLElement): void => {
+      if (chip !== tipFor.value) return
+      clearReset()
+      tipFor.value = null
+    },
     copy,
-    reanchor,
+    reanchor: (): void => {
+      if (tipFor.value) anchorTip(tipFor.value)
+    },
     clearReset
   }
 }

@@ -28,42 +28,11 @@ const Root: FunctionalComponent<{ tag: 'a' | 'button' }> = ({ tag }, { attrs, sl
   h(tag, attrs, slots['default']?.())
 Root.props = ['tag']
 
-function anchorBindings(
-  props: UseButtonRootProps,
-  href: string,
-  inert: boolean,
-  attrs: Record<string, unknown>
-): Record<string, unknown> {
-  return {
-    tag: 'a',
-    href,
-    target: props.target,
-    rel: props.target === '_blank' ? 'noopener noreferrer' : attrs['rel'],
-    type: undefined,
-    disabled: false,
-    tabindex: inert ? -1 : attrs['tabindex']
-  }
-}
+const flag = (on: boolean) => (on ? '' : undefined)
 
-function buttonBindings(props: UseButtonRootProps): Record<string, unknown> {
-  return {
-    tag: 'button',
-    href: null,
-    target: undefined,
-    type: props.type ?? 'button',
-    disabled: props.disabled
-  }
-}
+const aria = (on: boolean) => on || undefined
 
-function stateBindings(props: UseButtonRootProps, inert: boolean): Record<string, unknown> {
-  return {
-    'aria-disabled': inert || undefined,
-    'aria-busy': props.loading || undefined,
-    'data-disabled': props.disabled ? '' : undefined,
-    'data-loading': props.loading ? '' : undefined,
-    'data-inert': inert ? '' : undefined
-  }
-}
+const isDownload = (value: unknown) => value != null && value !== false
 
 export function useButtonRoot(
   props: UseButtonRootProps,
@@ -73,12 +42,23 @@ export function useButtonRoot(
   const attrs = useAttrs()
 
   const rootAttrs = computed(() => {
-    const href = safeHref(props.href, attrs['download'] != null && attrs['download'] !== false)
+    const href = safeHref(props.href, isDownload(attrs['download']))
+    const anchor = href !== null
     const inert = props.disabled || props.loading
     return {
       ...attrs,
-      ...(href === null ? buttonBindings(props) : anchorBindings(props, href, inert, attrs)),
-      ...stateBindings(props, inert),
+      tag: anchor ? 'a' : 'button',
+      href,
+      target: anchor ? props.target : undefined,
+      rel: anchor && props.target === '_blank' ? 'noopener noreferrer' : attrs['rel'],
+      type: anchor ? undefined : (props.type ?? 'button'),
+      disabled: !anchor && props.disabled,
+      tabindex: anchor && inert ? -1 : attrs['tabindex'],
+      'aria-disabled': aria(inert),
+      'aria-busy': aria(props.loading),
+      'data-disabled': flag(props.disabled),
+      'data-loading': flag(props.loading),
+      'data-inert': flag(inert),
       'data-testid': attrs['data-testid'] ?? name
     }
   })

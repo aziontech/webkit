@@ -51,9 +51,7 @@ export function usePinnedRow(
 
   const measure = () => {
     frame = null
-    const next = measurePinnedRow(elements, enabled)
-    runwayHeight.value = next?.runwayHeight ?? ''
-    offset.value = next?.offset ?? 0
+    measurePinnedRow(elements, enabled, runwayHeight, offset)
   }
 
   const schedule = () => {

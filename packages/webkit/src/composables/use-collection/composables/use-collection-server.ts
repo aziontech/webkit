@@ -1,29 +1,24 @@
 import { type ComputedRef, onScopeDispose, watch } from 'vue'
 
-import type { CollectionConfig } from '../lib/config'
-import { applyFetchResult, fetchParamsOf } from '../lib/server'
+import { cloneQuery } from '../lib/property-filter'
+import { applyFetchResult } from '../lib/server'
 import type { CollectionState } from '../lib/state'
 import type { CollectionColumn, UseCollectionOptions } from '../lib/types'
-
-export interface UseCollectionServerReturn {
-  refresh: () => Promise<void>
-  start: () => void
-  watchSources: () => void
-}
+import { whenMounted } from '../lib/when-mounted'
+import { useCollectionTextDebounce } from './use-collection-text-debounce'
 
 export function useCollectionServer<T extends object, C extends CollectionColumn>(
   options: UseCollectionOptions<T, C>,
-  config: CollectionConfig<T>,
-  state: CollectionState<T>,
+  s: CollectionState<T>,
   pageSize: ComputedRef<number>
-): UseCollectionServerReturn {
-  const { loading, error } = state
+): () => Promise<void> {
+  const { serverMode, debouncedText, query, sorting, page, loading, error } = s
   let controller: AbortController | null = null
   let requestId = 0
-  let mounted = false
+  let mounted = !serverMode
 
   const refresh = async (): Promise<void> => {
-    if (!config.serverMode || !options.fetch) return
+    if (!serverMode || !options.fetch) return
     controller?.abort()
     const current = new AbortController()
     controller = current
@@ -31,10 +26,18 @@ export function useCollectionServer<T extends object, C extends CollectionColumn
     loading.value = true
     error.value = null
     try {
-      const result = await options.fetch(fetchParamsOf(state, pageSize, current.signal))
-      if (id === requestId) applyFetchResult(state, config.keyOf, pageSize.value, result)
+      const result = await options.fetch({
+        filteringText: debouncedText.value,
+        filter: cloneQuery(query.value),
+        sort: [...sorting.value],
+        page: page.value,
+        pageSize: pageSize.value,
+        signal: current.signal
+      })
+      if (id === requestId) applyFetchResult(s, result, pageSize.value)
     } catch (cause) {
-      if (id === requestId && !current.signal.aborted) error.value = cause
+      if (id !== requestId || current.signal.aborted) return
+      error.value = cause
     } finally {
       if (id === requestId) {
         loading.value = false
@@ -43,10 +46,15 @@ export function useCollectionServer<T extends object, C extends CollectionColumn
     }
   }
 
-  const watchSources = (): void => {
-    if (!config.serverMode) return
+  whenMounted(() => {
+    mounted = true
+    if (serverMode) void refresh()
+  })
+
+  if (serverMode) {
+    useCollectionTextDebounce(s, options.filtering?.debounce)
     watch(
-      [state.debouncedText, state.query, state.sorting, state.page, pageSize],
+      [debouncedText, query, sorting, page, pageSize],
       () => {
         if (mounted) void refresh()
       },
@@ -56,12 +64,5 @@ export function useCollectionServer<T extends object, C extends CollectionColumn
 
   onScopeDispose(() => controller?.abort())
 
-  return {
-    refresh,
-    start: () => {
-      mounted = true
-      if (config.serverMode) void refresh()
-    },
-    watchSources
-  }
+  return refresh
 }

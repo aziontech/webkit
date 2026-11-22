@@ -1,13 +1,23 @@
-import { type MaybeRefOrGetter, type Ref, toValue } from 'vue'
+import {
+  type MaybeRefOrGetter,
+  nextTick,
+  onMounted,
+  onScopeDispose,
+  type Ref,
+  toValue,
+  watch
+} from 'vue'
 
 import { useOverlayLayer } from '../use-overlay-layer'
-import { useListboxDismiss } from './composables/use-listbox-dismiss'
-import { focusOnOpen } from './lib/initial-focus'
 import {
-  createOptionFocus,
-  isNavigationKey,
+  activeElement,
+  createTypeahead,
+  enabledOptions,
+  focusOnOpen,
   isTypeaheadKey,
-  type ListboxLazy
+  type ListboxLazy,
+  outsidePress,
+  stepIndex
 } from './lib/option-focus'
 
 export type ListboxFocusIntent = '' | 'first' | 'last' | `type:${string}`
@@ -38,51 +48,94 @@ export interface UseListboxContentReturn {
   navigate: (key: string) => void
 }
 
+function listboxKeydown(
+  event: globalThis.KeyboardEvent,
+  close: (refocus: boolean) => void,
+  holdTab: boolean | undefined,
+  typeahead: (key: string) => boolean,
+  navigate: (key: string) => void
+): void {
+  const key = event.key
+  if (key === 'Escape' || key === 'Tab') {
+    if (key === 'Escape' || event.shiftKey || holdTab) event.preventDefault()
+    return close(key === 'Tab')
+  }
+  if (isTypeaheadKey(event)) {
+    if (typeahead(key)) event.preventDefault()
+    return
+  }
+  if (key !== 'ArrowDown' && key !== 'ArrowUp' && key !== 'Home' && key !== 'End') return
+  event.preventDefault()
+  navigate(key)
+}
+
 export function useListboxContent(options: UseListboxContentOptions): UseListboxContentReturn {
   const { root, lazy, setOpen, triggerEl, pendingFocus } = options
   const isOpen = () => toValue(options.open)
   const focusBack = () => (options.focusTarget?.value ?? triggerEl.value)?.focus()
-  const focus = createOptionFocus(root, lazy, options.textFieldSelector)
 
   useOverlayLayer(() => isOpen(), { element: root })
 
-  const onKeydown = (event: globalThis.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      event.preventDefault()
-      setOpen(false)
-      return
-    }
-    if (event.key === 'Tab') {
-      if (event.shiftKey || toValue(options.holdTab)) event.preventDefault()
-      setOpen(false)
-      focusBack()
-      return
-    }
-    if (isTypeaheadKey(event)) {
-      if (focus.typeahead(event.key)) event.preventDefault()
-      return
-    }
-    if (!isNavigationKey(event.key)) return
-    event.preventDefault()
-    focus.navigate(event.key)
+  const moveFocus = (key: string) => {
+    const list = enabledOptions(root.value)
+    if (list.length === 0) return
+    const active = activeElement()
+    list[stepIndex(key, active ? list.indexOf(active) : -1, list.length)]?.focus()
   }
 
-  const focusInitial = async () => {
-    const el = root.value
-    if (!el) return
-    const intent = pendingFocus.value
-    pendingFocus.value = ''
-    await focusOnOpen(el, intent, Boolean(toValue(options.keepFocusOnOpen)), lazy.value, focus)
+  const typeahead = createTypeahead(root, lazy, options.textFieldSelector)
+
+  const navigate = (key: string) => {
+    if (lazy.value?.hasHidden()) {
+      lazy.value.revealAll()
+      void nextTick(() => moveFocus(key))
+      return
+    }
+    moveFocus(key)
   }
 
-  useListboxDismiss({
-    open: options.open,
-    setOpen,
-    root,
-    triggerEl,
-    onOpened: focusInitial,
-    focusBack
+  const close = (refocus: boolean) => {
+    setOpen(false)
+    if (refocus) focusBack()
+  }
+
+  const onKeydown = (event: globalThis.KeyboardEvent) =>
+    listboxKeydown(event, close, toValue(options.holdTab), typeahead, navigate)
+
+  const onDocumentPointerdown = outsidePress(root, triggerEl, isOpen, setOpen)
+
+  watch(
+    () => isOpen(),
+    async (next) => {
+      if (next) {
+        await nextTick()
+        await focusOnOpen(
+          root.value,
+          pendingFocus,
+          toValue(options.keepFocusOnOpen),
+          lazy.value,
+          moveFocus,
+          typeahead
+        )
+        document.addEventListener('pointerdown', onDocumentPointerdown, true)
+      } else {
+        const hadFocus = !!root.value?.contains(document.activeElement)
+        document.removeEventListener('pointerdown', onDocumentPointerdown, true)
+        if (hadFocus) {
+          await nextTick()
+          focusBack()
+        }
+      }
+    }
+  )
+
+  onMounted(() => {
+    if (isOpen()) document.addEventListener('pointerdown', onDocumentPointerdown, true)
   })
 
-  return { onKeydown, navigate: focus.navigate }
+  onScopeDispose(() => {
+    document.removeEventListener('pointerdown', onDocumentPointerdown, true)
+  })
+
+  return { onKeydown, navigate }
 }

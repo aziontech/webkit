@@ -1,10 +1,10 @@
-import { nextTick, type Ref, watch } from 'vue'
+import { nextTick, onScopeDispose, type Ref, watch } from 'vue'
 
+import { nextTabbableAfter } from '../../utils/tabbable'
+import { useOverlayLayer } from '../use-overlay-layer'
 import type { Align, Side } from '../use-placement'
-import { useMenuKeyboard } from './composables/use-menu-keyboard'
 import { useMenuLevel } from './composables/use-menu-level'
-import { useMenuOutsidePress } from './composables/use-menu-outside-press'
-import { focusMenuItem, type MenuFocusTarget } from './lib/menu-items'
+import { createTypeahead, focusMenuItem, type MenuFocusTarget } from './lib/menu-items'
 import { registerShortcut } from './lib/shortcut-registry'
 
 export type { MenuFocusTarget }
@@ -95,44 +95,104 @@ export interface UseMenuRootReturn {
   onPanelKeydown: (event: globalThis.KeyboardEvent) => void
 }
 
-function shortcutPriority(
-  isOpen: Readonly<Ref<boolean>>,
-  triggerEl: Ref<globalThis.HTMLElement | null>
-): number {
-  if (isOpen.value) return 2
+type MenuKeyAction = MenuFocusTarget | 'Escape' | 'Tab' | 'type' | null
+
+function menuKeyAction(event: globalThis.KeyboardEvent, typing: boolean): MenuKeyAction {
+  const key = event.key
+  if (key === 'ArrowDown') return 'next'
+  if (key === 'ArrowUp') return 'prev'
+  if (key === 'Home' || key === 'End') {
+    if (typing) return null
+    return key === 'Home' ? 'first' : 'last'
+  }
+  if (key === 'Escape' || key === 'Tab') return key
+  return !typing && isPrintable(event) ? 'type' : null
+}
+
+const isPrintable = (event: globalThis.KeyboardEvent): boolean =>
+  event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey
+
+function tabOut(panel: globalThis.HTMLElement | null): void {
+  const from = globalThis.document?.activeElement as globalThis.HTMLElement | null
+  if (!from || from === globalThis.document.body || panel?.contains(from)) return
+  nextTabbableAfter(from, panel)?.focus()
+}
+
+function panelKeydown(
+  event: globalThis.KeyboardEvent,
+  options: UseMenuRootOptions,
+  typeahead: (event: globalThis.KeyboardEvent) => void
+): void {
+  const typing = (event.target as globalThis.HTMLElement | null)?.matches?.('input, textarea')
+  const action = menuKeyAction(event, Boolean(typing))
+  if (!action) return
+  if (action === 'type') return typeahead(event)
+  event.preventDefault()
+  const panel = options.panelEl.value
+  if (action !== 'Escape' && action !== 'Tab') return focusMenuItem(panel, action)
+  options.setOpen(false)
+  options.focusTrigger()
+  if (action === 'Tab' && !event.shiftKey) tabOut(panel)
+}
+
+function outsidePress(
+  options: UseMenuRootOptions,
+  subPanels: Set<() => globalThis.HTMLElement | null>,
+  isInsideHigherLayer: (target: globalThis.Node) => boolean
+): (active: boolean) => void {
+  const onDocumentMousedown = (event: globalThis.MouseEvent) => {
+    if (!options.isOpen.value) return
+    const target = event.target as globalThis.Node | null
+    if (!target) return
+    if (options.triggerEl.value?.contains(target)) return
+    if (options.panelEl.value?.contains(target)) return
+    for (const panel of subPanels) if (panel()?.contains(target)) return
+    if (isInsideHigherLayer(target)) return
+    options.setOpen(false)
+  }
+  return (active) => {
+    if (active) globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
+    else globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
+  }
+}
+
+function shortcutPriority(options: UseMenuRootOptions): number {
+  if (options.isOpen.value) return 2
   const focused = globalThis.document?.activeElement ?? null
-  return focused && triggerEl.value?.contains(focused) ? 1 : 0
+  return focused && options.triggerEl.value?.contains(focused) ? 1 : 0
+}
+
+function selectOption(
+  options: UseMenuRootOptions,
+  value: MenuOptionValue,
+  event: MenuActivationEvent,
+  close = true
+): void {
+  const wasOpen = options.isOpen.value
+  options.onSelect(event, value)
+  if (close && wasOpen) {
+    options.setOpen(false)
+    options.focusTrigger()
+  }
 }
 
 export function useMenuRoot(options: UseMenuRootOptions): UseMenuRootReturn {
   const { isOpen, disabled, panelEl, triggerEl, setOpen, focusTrigger } = options
+
   const level = useMenuLevel()
-  const focusOption = (target: MenuFocusTarget) => () => focusMenuItem(panelEl.value, target)
-  const focusFirstOption = focusOption('first')
+  const subPanels = new Set<() => globalThis.HTMLElement | null>()
 
-  function selectOption(value: MenuOptionValue, event: MenuActivationEvent, close = true): void {
-    const wasOpen = isOpen.value
-    options.onSelect(event, value)
-    if (!close || !wasOpen) return
-    setOpen(false)
-    focusTrigger()
-  }
+  const focusFirstOption = () => focusMenuItem(panelEl.value, 'first')
+  const typeahead = createTypeahead(panelEl)
 
-  const registerCommand = (
-    command: string,
-    activate: (event: globalThis.KeyboardEvent) => void
-  ): (() => void) =>
-    registerShortcut(
-      command,
-      () => !disabled.value,
-      activate,
-      () => shortcutPriority(isOpen, triggerEl)
-    )
+  const { isInsideHigherLayer } = useOverlayLayer(isOpen, { element: panelEl })
+  const listenOutside = outsidePress(options, subPanels, isInsideHigherLayer)
 
-  const { onPanelKeydown } = useMenuKeyboard({ panelEl, setOpen, focusTrigger })
-  const { registerSubPanel } = useMenuOutsidePress({ isOpen, triggerEl, panelEl, setOpen })
+  if (isOpen.value) listenOutside(true)
+  onScopeDispose(() => listenOutside(false))
 
   watch(isOpen, async (open) => {
+    listenOutside(open)
     if (!open) {
       level.setActiveSub(null)
       return
@@ -153,18 +213,27 @@ export function useMenuRoot(options: UseMenuRootOptions): UseMenuRootReturn {
     panelEl,
     panelBodyEl: options.panelBodyEl,
     setOpen,
-    selectOption,
-    registerCommand,
+    selectOption: (value, event, close) => selectOption(options, value, event, close),
+    registerCommand: (command, activate) =>
+      registerShortcut(
+        command,
+        () => !disabled.value,
+        activate,
+        () => shortcutPriority(options)
+      ),
     focusFirstOption,
-    focusLastOption: focusOption('last'),
-    focusNextOption: focusOption('next'),
-    focusPrevOption: focusOption('prev'),
+    focusLastOption: () => focusMenuItem(panelEl.value, 'last'),
+    focusNextOption: () => focusMenuItem(panelEl.value, 'next'),
+    focusPrevOption: () => focusMenuItem(panelEl.value, 'prev'),
     focusTrigger,
     activeSub: level.activeSub,
     setActiveSub: level.setActiveSub,
     cancelSubClose: level.cancelSubClose,
-    registerSubPanel
+    registerSubPanel: (panel) => {
+      subPanels.add(panel)
+      return () => subPanels.delete(panel)
+    }
   }
 
-  return { context, onPanelKeydown }
+  return { context, onPanelKeydown: (event) => panelKeydown(event, options, typeahead) }
 }

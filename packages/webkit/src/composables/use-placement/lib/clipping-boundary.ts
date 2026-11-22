@@ -9,17 +9,13 @@ interface Edges {
 
 const SCROLLS = /auto|scroll|overlay/
 
-function clipsAxis(overflow: string, scrollSize: number, clientSize: number): boolean {
-  return SCROLLS.test(overflow) && scrollSize > clientSize + 1
-}
-
 function clipBy(
   node: globalThis.HTMLElement,
   style: globalThis.CSSStyleDeclaration,
   edges: Edges
 ): void {
-  const clipsX = clipsAxis(style.overflowX, node.scrollWidth, node.clientWidth)
-  const clipsY = clipsAxis(style.overflowY, node.scrollHeight, node.clientHeight)
+  const clipsX = SCROLLS.test(style.overflowX) && node.scrollWidth > node.clientWidth + 1
+  const clipsY = SCROLLS.test(style.overflowY) && node.scrollHeight > node.clientHeight + 1
   if (!clipsX && !clipsY) return
   const rect = node.getBoundingClientRect()
   if (clipsX) {
@@ -32,31 +28,19 @@ function clipBy(
   }
 }
 
-function firstAncestor(trigger: globalThis.Element): globalThis.HTMLElement | null {
-  return typeof globalThis.getComputedStyle === 'function' ? trigger.parentElement : null
-}
-
-function isInsideBody(node: globalThis.HTMLElement, body: globalThis.HTMLElement | null): boolean {
-  return node !== body && node !== body?.parentElement
-}
-
-function toRect(edges: Edges, viewport: Size): Rect {
-  const empty = edges.right <= edges.left || edges.bottom <= edges.top
-  const { top, left, right, bottom } = empty
-    ? { top: 0, left: 0, right: viewport.width, bottom: viewport.height }
-    : edges
-  return { top, left, right, bottom, width: right - left, height: bottom - top }
-}
-
 export function getClippingBoundary(trigger: globalThis.Element, viewport: Size): Rect {
   const edges: Edges = { top: 0, left: 0, right: viewport.width, bottom: viewport.height }
   const body = globalThis.document?.body ?? null
-  let node = firstAncestor(trigger)
-  while (node && isInsideBody(node, body)) {
+  let node = typeof globalThis.getComputedStyle === 'function' ? trigger.parentElement : null
+  while (node && node !== body && node !== body?.parentElement) {
     const style = globalThis.getComputedStyle(node)
     clipBy(node, style, edges)
     if (style.position === 'fixed') break
     node = node.parentElement
   }
-  return toRect(edges, viewport)
+  const { top, left, right, bottom } =
+    edges.right > edges.left && edges.bottom > edges.top
+      ? edges
+      : { top: 0, left: 0, right: viewport.width, bottom: viewport.height }
+  return { top, left, right, bottom, width: right - left, height: bottom - top }
 }

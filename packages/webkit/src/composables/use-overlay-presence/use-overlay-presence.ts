@@ -10,8 +10,6 @@ import {
   watch
 } from 'vue'
 
-import { createDelay, createFrameQueue } from './lib/frame-queue'
-
 /** Painted state of an overlay, one frame behind `isOpen` so its enter transition runs. */
 export type OverlayMotionState = 'open' | 'closed'
 
@@ -37,60 +35,63 @@ export function useOverlayPresence(
 ): UseOverlayPresenceReturn {
   const motionState = ref<OverlayMotionState>('closed')
   const isPresent = ref(toValue(isOpen))
-  const frames = createFrameQueue()
-  const exitTimer = createDelay()
+  const frames = new Set<number>()
+  let exitTimer: ReturnType<typeof setTimeout> | undefined
+  let disposed = false
 
-  const paintOpen = async () => {
-    motionState.value = 'closed'
+  const requestFrame = (callback: () => void) => {
+    if (disposed) return
+    const id = globalThis.requestAnimationFrame(() => {
+      frames.delete(id)
+      if (disposed) return
+      callback()
+    })
+    frames.add(id)
+  }
+
+  const afterFrames = (count: number, callback: () => void) => {
+    requestFrame(count > 1 ? () => afterFrames(count - 1, callback) : callback)
+  }
+
+  const paint = async (open: boolean) => {
+    if (open) motionState.value = 'closed'
     await nextTick()
-
-    frames.afterFrames(options.openFrames ?? 1, () => {
-      if (toValue(isOpen)) {
-        motionState.value = 'open'
-      }
+    afterFrames(open ? (options.openFrames ?? 1) : 1, () => {
+      if (toValue(isOpen) === open) motionState.value = open ? 'open' : 'closed'
     })
   }
 
-  const paintClose = async () => {
-    await nextTick()
-
-    frames.afterFrames(1, () => {
-      if (!toValue(isOpen)) {
-        motionState.value = 'closed'
-      }
-    })
-  }
-
-  const updatePresence = (open: boolean) => {
-    exitTimer.clear()
-    if (open) {
-      isPresent.value = true
-      return
-    }
-    if (!isPresent.value) return
-    exitTimer.start(options.exitMs, () => {
-      isPresent.value = false
-    })
+  const clearExitTimer = () => {
+    if (!exitTimer) return
+    clearTimeout(exitTimer)
+    exitTimer = undefined
   }
 
   watch(
     () => toValue(isOpen),
     (open) => {
-      void (open ? paintOpen() : paintClose())
-      updatePresence(open)
+      void paint(open)
+      clearExitTimer()
+      if (open) isPresent.value = true
+      else if (isPresent.value) {
+        exitTimer = setTimeout(() => {
+          isPresent.value = false
+          exitTimer = undefined
+        }, options.exitMs)
+      }
     },
     { flush: 'sync' }
   )
 
   onMounted(() => {
-    if (toValue(isOpen)) {
-      void paintOpen()
-    }
+    if (toValue(isOpen)) void paint(true)
   })
 
   onScopeDispose(() => {
-    frames.dispose()
-    exitTimer.clear()
+    disposed = true
+    for (const id of frames) globalThis.cancelAnimationFrame(id)
+    frames.clear()
+    clearExitTimer()
   })
 
   return { isPresent: readonly(isPresent), motionState: readonly(motionState) }

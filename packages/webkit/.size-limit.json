@@ -2,12 +2,12 @@
   {
     "name": "app-layout",
     "path": "src/components/layout/app-layout/app-layout.vue",
-    "limit": "24.2 KB"
+    "limit": "24.1 KB"
   },
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "82.4 KB",
+    "limit": "81.65 KB",
     "entryOnly": true
   },
   {
@@ -24,29 +24,29 @@
   {
     "name": "doc-layout",
     "path": "src/components/docs/doc-layout/doc-layout.vue",
-    "limit": "72.75 KB"
+    "limit": "72.3 KB"
   },
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "40.4 KB",
+    "limit": "40 KB",
     "entryOnly": true
   },
   {
     "name": "browser-frame",
     "path": "src/components/content/browser-frame/browser-frame.vue",
-    "limit": "15.25 KB",
+    "limit": "14.9 KB",
     "entryOnly": true
   },
   {
     "name": "search-trigger",
     "path": "src/components/action/search-trigger/search-trigger.vue",
-    "limit": "10.15 KB"
+    "limit": "9.8 KB"
   },
   {
     "name": "copy-prompt-button",
     "path": "src/components/action/copy-prompt-button/copy-prompt-button.vue",
-    "limit": "9.65 KB",
+    "limit": "9.35 KB",
     "entryOnly": true
   },
   {
@@ -57,7 +57,7 @@
   {
     "name": "doc-agent-card",
     "path": "src/components/docs/doc-agent-card/doc-agent-card.vue",
-    "limit": "15.65 KB",
+    "limit": "15.3 KB",
     "entryOnly": true
   },
   {
@@ -68,7 +68,7 @@
   {
     "name": "diagram",
     "path": "src/components/marketing/diagram/diagram.vue",
-    "limit": "12.1 KB",
+    "limit": "11.8 KB",
     "entryOnly": true
   },
   {
@@ -84,12 +84,12 @@
   {
     "name": "date-picker-root",
     "path": "src/components/input/date-picker/date-picker.vue",
-    "limit": "44.4 KB"
+    "limit": "43.8 KB"
   },
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "55.2 KB"
+    "limit": "54.7 KB"
   },
   {
     "name": "table-root",
@@ -109,12 +109,12 @@
   {
     "name": "property-filter",
     "path": "src/components/data/property-filter/property-filter.vue",
-    "limit": "35.1 KB"
+    "limit": "34.65 KB"
   },
   {
     "name": "collection-preferences",
     "path": "src/components/data/collection-preferences/collection-preferences.vue",
-    "limit": "32.9 KB"
+    "limit": "32.8 KB"
   },
   {
     "name": "card",
@@ -129,12 +129,12 @@
   {
     "name": "card-list",
     "path": "src/components/data/card-list/card-list.vue",
-    "limit": "8.4 KB"
+    "limit": "8.35 KB"
   },
   {
     "name": "use-collection",
     "path": "src/composables/use-collection/index.ts",
-    "limit": "6.95 KB"
+    "limit": "6.65 KB"
   },
   {
     "name": "use-color-mode",
@@ -174,7 +174,7 @@
   {
     "name": "chip",
     "path": "src/components/input/chip/chip.vue",
-    "limit": "8.25 KB"
+    "limit": "7.95 KB"
   },
   {
     "name": "footer-root",
@@ -184,7 +184,7 @@
   {
     "name": "doc-prose",
     "path": "src/components/docs/doc-prose/doc-prose.vue",
-    "limit": "4.6 KB"
+    "limit": "4.55 KB"
   },
   {
     "name": "doc-call-to-action",
@@ -194,7 +194,7 @@
   {
     "name": "doc-callout",
     "path": "src/components/docs/doc-callout/doc-callout.vue",
-    "limit": "9.3 KB"
+    "limit": "9.25 KB"
   },
   {
     "name": "doc-card",
@@ -224,7 +224,7 @@
   {
     "name": "doc-frame",
     "path": "src/components/docs/doc-frame/doc-frame.vue",
-    "limit": "9.9 KB"
+    "limit": "9.85 KB"
   },
   {
     "name": "doc-changelog-entry",
@@ -244,7 +244,7 @@
   {
     "name": "doc-code-group",
     "path": "src/components/docs/doc-code-group/doc-code-group.vue",
-    "limit": "33.75 KB",
+    "limit": "33.35 KB",
     "entryOnly": true
   },
   {
@@ -255,7 +255,7 @@
   {
     "name": "doc-prompt",
     "path": "src/components/docs/doc-prompt/doc-prompt.vue",
-    "limit": "13.5 KB",
+    "limit": "13.15 KB",
     "entryOnly": true
   },
   {
@@ -266,7 +266,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/docs/doc-page-header/doc-page-header.vue",
-    "limit": "33 KB"
+    "limit": "32.4 KB"
   },
   {
     "name": "doc-table-of-contents",
@@ -365,7 +365,7 @@
   {
     "name": "media-tabs",
     "path": "src/components/marketing/media-tabs/media-tabs.vue",
-    "limit": "9.5 KB"
+    "limit": "9.45 KB"
   },
   {
     "name": "embed",
@@ -422,7 +422,7 @@
   {
     "name": "quote-tabs",
     "path": "src/components/marketing/quote-tabs/quote-tabs.vue",
-    "limit": "24.55 KB",
+    "limit": "24.5 KB",
     "entryOnly": true
   },
   {
@@ -443,12 +443,12 @@
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "120.2 KB"
+    "limit": "119.9 KB"
   },
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "84.1 KB"
+    "limit": "83.85 KB"
   },
   {
     "name": "runtime-api-cloud",
@@ -468,7 +468,7 @@
   {
     "name": "article-body-section",
     "path": "src/components/section/article-body-section/article-body-section.vue",
-    "limit": "48 KB",
+    "limit": "47.35 KB",
     "entryOnly": true
   },
   {
@@ -484,13 +484,13 @@
   {
     "name": "article-index-section",
     "path": "src/components/section/article-index-section/article-index-section.vue",
-    "limit": "37.15 KB",
+    "limit": "36.6 KB",
     "entryOnly": true
   },
   {
     "name": "story-index-section",
     "path": "src/components/section/story-index-section/story-index-section.vue",
-    "limit": "36.3 KB",
+    "limit": "35.75 KB",
     "entryOnly": true
   },
   {
@@ -502,7 +502,7 @@
   {
     "name": "capability-grid-section",
     "path": "src/components/section/capability-grid-section/capability-grid-section.vue",
-    "limit": "8.2 KB"
+    "limit": "8.15 KB"
   },
   {
     "name": "console-showcase-section",
@@ -517,13 +517,13 @@
   {
     "name": "copy-command-section",
     "path": "src/components/section/copy-command-section/copy-command-section.vue",
-    "limit": "12.5 KB",
+    "limit": "12.15 KB",
     "entryOnly": true
   },
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "53.2 KB",
+    "limit": "52.55 KB",
     "entryOnly": true
   },
   {
@@ -535,23 +535,23 @@
   {
     "name": "site-header-section",
     "path": "src/components/section/site-header-section/site-header-section.vue",
-    "limit": "59.4 KB"
+    "limit": "58.9 KB"
   },
   {
     "name": "competitor-comparison-section",
     "path": "src/components/section/competitor-comparison-section/competitor-comparison-section.vue",
-    "limit": "25.8 KB",
+    "limit": "25.45 KB",
     "entryOnly": true
   },
   {
     "name": "plan-comparison-section",
     "path": "src/components/section/plan-comparison-section/plan-comparison-section.vue",
-    "limit": "39.8 KB"
+    "limit": "39.25 KB"
   },
   {
     "name": "pricing-plans-section",
     "path": "src/components/section/pricing-plans-section/pricing-plans-section.vue",
-    "limit": "22.15 KB"
+    "limit": "22.1 KB"
   },
   {
     "name": "feature-scroll-section",
@@ -585,7 +585,7 @@
   {
     "name": "card-carousel-section",
     "path": "src/components/section/card-carousel-section/card-carousel-section.vue",
-    "limit": "9.35 KB"
+    "limit": "9.3 KB"
   },
   {
     "name": "client-mosaic-section",
@@ -616,13 +616,13 @@
   {
     "name": "job-posting-section",
     "path": "src/components/section/job-posting-section/job-posting-section.vue",
-    "limit": "59.65 KB",
+    "limit": "58.85 KB",
     "entryOnly": true
   },
   {
     "name": "logo-wall-section",
     "path": "src/components/section/logo-wall-section/logo-wall-section.vue",
-    "limit": "24.5 KB"
+    "limit": "24.45 KB"
   },
   {
     "name": "photo-marquee-section",
@@ -632,7 +632,7 @@
   {
     "name": "listing-index-section",
     "path": "src/components/section/listing-index-section/listing-index-section.vue",
-    "limit": "42.3 KB",
+    "limit": "41.8 KB",
     "entryOnly": true
   },
   {
@@ -643,7 +643,7 @@
   {
     "name": "subject-grid-section",
     "path": "src/components/section/subject-grid-section/subject-grid-section.vue",
-    "limit": "8.6 KB"
+    "limit": "8.55 KB"
   },
   {
     "name": "template-gallery-section",
@@ -654,24 +654,24 @@
   {
     "name": "recognition-marquee-section",
     "path": "src/components/section/recognition-marquee-section/recognition-marquee-section.vue",
-    "limit": "21.65 KB"
+    "limit": "21.6 KB"
   },
   {
     "name": "architecture-tabs-section",
     "path": "src/components/section/architecture-tabs-section/architecture-tabs-section.vue",
-    "limit": "23.1 KB",
+    "limit": "23 KB",
     "entryOnly": true
   },
   {
     "name": "cli-terminal-section",
     "path": "src/components/section/cli-terminal-section/cli-terminal-section.vue",
-    "limit": "47 KB",
+    "limit": "46.5 KB",
     "entryOnly": true
   },
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "58.05 KB",
+    "limit": "57.4 KB",
     "entryOnly": true
   },
   {
@@ -710,7 +710,7 @@
   {
     "name": "newsletter-section",
     "path": "src/components/section/newsletter-section/newsletter-section.vue",
-    "limit": "13.8 KB"
+    "limit": "13.75 KB"
   },
   {
     "name": "stepper",
@@ -871,7 +871,7 @@
   {
     "name": "timestamp",
     "path": "src/components/content/timestamp/timestamp.vue",
-    "limit": "20.55 KB"
+    "limit": "20.25 KB"
   },
   {
     "name": "error-boundary",
@@ -896,7 +896,7 @@
   {
     "name": "tutorial-panel-hotspot",
     "path": "src/components/content/tutorial-panel/tutorial-panel-hotspot/tutorial-panel-hotspot.vue",
-    "limit": "14.45 KB"
+    "limit": "14.1 KB"
   },
   {
     "name": "help-panel",
@@ -981,7 +981,7 @@
   {
     "name": "field",
     "path": "src/components/input/field/index.ts",
-    "limit": "9.35 KB"
+    "limit": "9 KB"
   },
   {
     "name": "field-root",
@@ -991,7 +991,7 @@
   {
     "name": "field-label",
     "path": "src/components/input/field/field-label/field-label.vue",
-    "limit": "7.75 KB"
+    "limit": "7.45 KB"
   },
   {
     "name": "field-description",
@@ -1046,18 +1046,18 @@
   {
     "name": "subheader",
     "path": "src/components/layout/subheader/subheader.vue",
-    "limit": "11.2 KB",
+    "limit": "10.85 KB",
     "entryOnly": true
   },
   {
     "name": "settings-group",
     "path": "src/components/layout/settings-group/settings-group.vue",
-    "limit": "8.6 KB"
+    "limit": "8.3 KB"
   },
   {
     "name": "settings-row",
     "path": "src/components/layout/settings-row/settings-row.vue",
-    "limit": "18.2 KB"
+    "limit": "17.85 KB"
   },
   {
     "name": "save-bar",
@@ -1072,7 +1072,7 @@
   {
     "name": "confirm-dialog",
     "path": "src/components/overlay/confirm-dialog/confirm-dialog.vue",
-    "limit": "28.2 KB"
+    "limit": "28.15 KB"
   },
   {
     "name": "config-provider",
@@ -1092,41 +1092,41 @@
   {
     "name": "phone-input",
     "path": "src/components/input/phone-input/phone-input.vue",
-    "limit": "35.4 KB",
+    "limit": "34.75 KB",
     "entryOnly": true
   },
   {
     "name": "language-select",
     "path": "src/components/input/language-select/language-select.vue",
-    "limit": "29.4 KB",
+    "limit": "28.75 KB",
     "entryOnly": true
   },
   {
     "name": "select",
     "path": "src/components/input/select/index.ts",
-    "limit": "23.55 KB"
+    "limit": "23 KB"
   },
   {
     "name": "multi-select",
     "path": "src/components/input/multi-select/index.ts",
-    "limit": "31.5 KB"
+    "limit": "30.95 KB"
   },
   {
     "name": "code-block",
     "path": "src/components/code/code-block/code-block.vue",
-    "limit": "33.25 KB",
+    "limit": "32.9 KB",
     "entryOnly": true
   },
   {
     "name": "log-viewer-content",
     "path": "src/components/code/log-viewer/log-viewer-content.vue",
-    "limit": "29.8 KB",
+    "limit": "29.4 KB",
     "entryOnly": true
   },
   {
     "name": "trace",
     "path": "src/components/code/trace/trace.vue",
-    "limit": "37.95 KB",
+    "limit": "37.65 KB",
     "entryOnly": true
   },
   {
@@ -1137,12 +1137,12 @@
   {
     "name": "tool-approval",
     "path": "src/components/ai/tool-approval/tool-approval.vue",
-    "limit": "16.35 KB"
+    "limit": "16 KB"
   },
   {
     "name": "agent-question",
     "path": "src/components/ai/agent-question/agent-question.vue",
-    "limit": "17.1 KB"
+    "limit": "16.7 KB"
   },
   {
     "name": "response-loading",
@@ -1152,13 +1152,13 @@
   {
     "name": "artifact-canvas",
     "path": "src/components/ai/artifact-canvas/artifact-canvas.vue",
-    "limit": "12.3 KB",
+    "limit": "12 KB",
     "entryOnly": true
   },
   {
     "name": "artifact-preview",
     "path": "src/components/ai/artifact-preview/artifact-preview.vue",
-    "limit": "12.5 KB",
+    "limit": "12.15 KB",
     "entryOnly": true
   },
   {
@@ -1169,7 +1169,7 @@
   {
     "name": "chat-message",
     "path": "src/components/ai/chat-message/index.ts",
-    "limit": "26.05 KB"
+    "limit": "25.85 KB"
   },
   {
     "name": "chat-message-root",
@@ -1184,12 +1184,12 @@
   {
     "name": "chat-message-feedback",
     "path": "src/components/ai/chat-message/chat-message-feedback/chat-message-feedback.vue",
-    "limit": "9.7 KB"
+    "limit": "9.4 KB"
   },
   {
     "name": "citation",
     "path": "src/components/ai/citation/citation.vue",
-    "limit": "7.45 KB"
+    "limit": "7.15 KB"
   },
   {
     "name": "conversation",
@@ -1223,19 +1223,19 @@
   {
     "name": "prompt-input-model-picker",
     "path": "src/components/ai/prompt-input/prompt-input-model-picker/prompt-input-model-picker.vue",
-    "limit": "15.9 KB",
+    "limit": "15.3 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-context-picker",
     "path": "src/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue",
-    "limit": "15.75 KB",
+    "limit": "15.2 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-tools",
     "path": "src/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue",
-    "limit": "18.25 KB",
+    "limit": "17.7 KB",
     "entryOnly": true
   },
   {
@@ -1246,7 +1246,7 @@
   {
     "name": "reasoning",
     "path": "src/components/ai/reasoning/reasoning.vue",
-    "limit": "5.2 KB"
+    "limit": "5.15 KB"
   },
   {
     "name": "sources",
@@ -1256,18 +1256,18 @@
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "37.35 KB",
+    "limit": "37 KB",
     "entryOnly": true
   },
   {
     "name": "conversation-history",
     "path": "src/components/ai/conversation-history/conversation-history.vue",
-    "limit": "6.75 KB"
+    "limit": "6.7 KB"
   },
   {
     "name": "feedback-reason-dialog",
     "path": "src/components/ai/feedback-reason-dialog/feedback-reason-dialog.vue",
-    "limit": "34.65 KB"
+    "limit": "34.35 KB"
   },
   {
     "name": "response-branches",
@@ -1287,7 +1287,7 @@
   {
     "name": "subagent-card",
     "path": "src/components/ai/subagent-card/subagent-card.vue",
-    "limit": "6.85 KB"
+    "limit": "6.8 KB"
   },
   {
     "name": "tool-call",
@@ -1297,7 +1297,7 @@
   {
     "name": "attribute-editor",
     "path": "src/components/input/attribute-editor/attribute-editor.vue",
-    "limit": "19.3 KB"
+    "limit": "18.9 KB"
   },
   {
     "name": "code-editor",
@@ -1307,17 +1307,17 @@
   {
     "name": "button-group",
     "path": "src/components/action/button-group/button-group.vue",
-    "limit": "17.4 KB"
+    "limit": "16.85 KB"
   },
   {
     "name": "combobox",
     "path": "src/components/input/combobox/combobox.vue",
-    "limit": "14.1 KB"
+    "limit": "13.7 KB"
   },
   {
     "name": "tag-editor",
     "path": "src/components/input/tag-editor/tag-editor.vue",
-    "limit": "21.2 KB"
+    "limit": "20.8 KB"
   },
   {
     "name": "schema-form",
@@ -1372,7 +1372,7 @@
   {
     "name": "overflow-count",
     "path": "src/components/content/overflow-count/overflow-count.vue",
-    "limit": "15.8 KB"
+    "limit": "15.5 KB"
   },
   {
     "name": "payment-brand",
@@ -1397,30 +1397,30 @@
   {
     "name": "table-cell-link",
     "path": "src/components/data/table/table-cell-link/table-cell-link.vue",
-    "limit": "20.75 KB",
+    "limit": "20.4 KB",
     "entryOnly": true
   },
   {
     "name": "table-cell-id",
     "path": "src/components/data/table/table-cell-id/table-cell-id.vue",
-    "limit": "10.8 KB",
+    "limit": "10.5 KB",
     "entryOnly": true
   },
   {
     "name": "table-cell-time",
     "path": "src/components/data/table/table-cell-time/table-cell-time.vue",
-    "limit": "19.3 KB",
+    "limit": "19 KB",
     "entryOnly": true
   },
   {
     "name": "table-cell-tags",
     "path": "src/components/data/table/table-cell-tags/table-cell-tags.vue",
-    "limit": "16.9 KB"
+    "limit": "16.55 KB"
   },
   {
     "name": "table-cell-actions",
     "path": "src/components/data/table/table-cell-actions/table-cell-actions.vue",
-    "limit": "13.05 KB"
+    "limit": "12.5 KB"
   },
   {
     "name": "file-token-group",
@@ -1430,19 +1430,19 @@
   {
     "name": "filter-menu",
     "path": "src/components/data/filter-menu/index.ts",
-    "limit": "37.55 KB",
+    "limit": "37.2 KB",
     "entryOnly": true
   },
   {
     "name": "filter-menu-root",
     "path": "src/components/data/filter-menu/filter-menu.vue",
-    "limit": "33.7 KB",
+    "limit": "33.35 KB",
     "entryOnly": true
   },
   {
     "name": "filter-menu-chip-group",
     "path": "src/components/data/filter-menu/filter-menu-chip-group/filter-menu-chip-group.vue",
-    "limit": "22.25 KB",
+    "limit": "21.95 KB",
     "entryOnly": true
   },
   {
@@ -1458,18 +1458,18 @@
   {
     "name": "highlight-button",
     "path": "src/components/action/highlight-button/highlight-button.vue",
-    "limit": "2.5 KB"
+    "limit": "2.45 KB"
   },
   {
     "name": "copy-button",
     "path": "src/components/action/copy-button/copy-button.vue",
-    "limit": "10.5 KB",
+    "limit": "10.15 KB",
     "entryOnly": true
   },
   {
     "name": "copy-text",
     "path": "src/components/content/copy-text/copy-text.vue",
-    "limit": "10.8 KB",
+    "limit": "10.5 KB",
     "entryOnly": true
   },
   {
@@ -1480,12 +1480,12 @@
   {
     "name": "icon-button",
     "path": "src/components/action/icon-button/icon-button.vue",
-    "limit": "2.75 KB"
+    "limit": "2.7 KB"
   },
   {
     "name": "split-button",
     "path": "src/components/action/split-button/split-button.vue",
-    "limit": "17.45 KB"
+    "limit": "16.85 KB"
   },
   {
     "name": "chart-card-content",
@@ -1566,7 +1566,7 @@
   {
     "name": "pricing-card",
     "path": "src/components/content/pricing-card/pricing-card.vue",
-    "limit": "5.35 KB"
+    "limit": "5.3 KB"
   },
   {
     "name": "item",
@@ -1641,7 +1641,7 @@
   {
     "name": "log-viewer",
     "path": "src/components/code/log-viewer/index.ts",
-    "limit": "43.85 KB"
+    "limit": "43.5 KB"
   },
   {
     "name": "log-viewer-root",
@@ -1656,7 +1656,7 @@
   {
     "name": "log-viewer-steps",
     "path": "src/components/code/log-viewer/log-viewer-steps.vue",
-    "limit": "42.25 KB"
+    "limit": "41.9 KB"
   },
   {
     "name": "log-viewer-header",
@@ -1727,12 +1727,12 @@
   {
     "name": "table-export-button",
     "path": "src/components/data/table/table-export-button/table-export-button.vue",
-    "limit": "9.25 KB"
+    "limit": "8.95 KB"
   },
   {
     "name": "table-refresh-button",
     "path": "src/components/data/table/table-refresh-button/table-refresh-button.vue",
-    "limit": "9.25 KB"
+    "limit": "8.9 KB"
   },
   {
     "name": "table-live-button",
@@ -1819,7 +1819,7 @@
   {
     "name": "flow-diagram-bind",
     "path": "src/components/data/flow-diagram/flow-diagram-bind/flow-diagram-bind.vue",
-    "limit": "16.7 KB"
+    "limit": "16.2 KB"
   },
   {
     "name": "transfer-list",
@@ -1889,7 +1889,7 @@
   {
     "name": "toast-action",
     "path": "src/components/feedback/toast/toast-action/toast-action.vue",
-    "limit": "3.5 KB"
+    "limit": "3.45 KB"
   },
   {
     "name": "toast-close",
@@ -1909,7 +1909,7 @@
   {
     "name": "date-picker",
     "path": "src/components/input/date-picker/index.ts",
-    "limit": "44.55 KB"
+    "limit": "43.95 KB"
   },
   {
     "name": "date-picker-clear",
@@ -1939,7 +1939,7 @@
   {
     "name": "hint",
     "path": "src/components/input/hint/hint.vue",
-    "limit": "6.45 KB"
+    "limit": "6.15 KB"
   },
   {
     "name": "password-input",
@@ -1974,7 +1974,7 @@
   {
     "name": "theme-switcher",
     "path": "src/components/input/theme-switcher/theme-switcher.vue",
-    "limit": "18.6 KB"
+    "limit": "18.25 KB"
   },
   {
     "name": "textarea",
@@ -1984,12 +1984,12 @@
   {
     "name": "context-menu",
     "path": "src/components/navigation/context-menu/index.ts",
-    "limit": "12.05 KB"
+    "limit": "11.5 KB"
   },
   {
     "name": "context-menu-root",
     "path": "src/components/navigation/context-menu/context-menu.vue",
-    "limit": "8.3 KB"
+    "limit": "7.75 KB"
   },
   {
     "name": "context-menu-trigger",
@@ -1999,12 +1999,12 @@
   {
     "name": "dropdown-menu",
     "path": "src/components/navigation/dropdown-menu/index.ts",
-    "limit": "13.05 KB"
+    "limit": "12.5 KB"
   },
   {
     "name": "dropdown-menu-root",
     "path": "src/components/navigation/dropdown-menu/dropdown-menu.vue",
-    "limit": "8.15 KB"
+    "limit": "7.65 KB"
   },
   {
     "name": "dropdown-menu-trigger",
@@ -2029,7 +2029,7 @@
   {
     "name": "dropdown-menu-sub-content",
     "path": "src/components/navigation/dropdown-menu/dropdown-menu-sub-content/dropdown-menu-sub-content.vue",
-    "limit": "5.4 KB"
+    "limit": "5.05 KB"
   },
   {
     "name": "dropdown-menu-sub-trigger",
@@ -2044,12 +2044,12 @@
   {
     "name": "multi-select-trigger",
     "path": "src/components/input/multi-select/multi-select-trigger/multi-select-trigger.vue",
-    "limit": "10.65 KB"
+    "limit": "10.3 KB"
   },
   {
     "name": "multi-select-content",
     "path": "src/components/input/multi-select/multi-select-content/multi-select-content.vue",
-    "limit": "22.05 KB"
+    "limit": "21.55 KB"
   },
   {
     "name": "multi-select-group",
@@ -2074,7 +2074,7 @@
   {
     "name": "select-content",
     "path": "src/components/input/select/select-content/select-content.vue",
-    "limit": "19.85 KB"
+    "limit": "19.35 KB"
   },
   {
     "name": "select-group",
@@ -2109,7 +2109,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "83.7 KB"
+    "limit": "83 KB"
   },
   {
     "name": "use-console-layout",
@@ -2159,12 +2159,12 @@
   {
     "name": "sidebar",
     "path": "src/components/layout/sidebar/index.ts",
-    "limit": "25.5 KB"
+    "limit": "25.1 KB"
   },
   {
     "name": "sidebar-root",
     "path": "src/components/layout/sidebar/sidebar.vue",
-    "limit": "25.3 KB"
+    "limit": "24.9 KB"
   },
   {
     "name": "sidebar-header",
@@ -2224,12 +2224,12 @@
   {
     "name": "breadcrumb",
     "path": "src/components/navigation/breadcrumb/index.ts",
-    "limit": "27.1 KB"
+    "limit": "26.55 KB"
   },
   {
     "name": "breadcrumb-root",
     "path": "src/components/navigation/breadcrumb/breadcrumb.vue",
-    "limit": "27.05 KB"
+    "limit": "26.55 KB"
   },
   {
     "name": "breadcrumb-item",
@@ -2249,7 +2249,7 @@
   {
     "name": "sidebar-menu",
     "path": "src/components/navigation/sidebar-menu/index.ts",
-    "limit": "22 KB"
+    "limit": "21.95 KB"
   },
   {
     "name": "sidebar-menu-root",
@@ -2269,7 +2269,7 @@
   {
     "name": "sidebar-menu-sub-trigger",
     "path": "src/components/navigation/sidebar-menu/sidebar-menu-sub-trigger/sidebar-menu-sub-trigger.vue",
-    "limit": "16 KB"
+    "limit": "15.95 KB"
   },
   {
     "name": "sidebar-menu-sub-content",
@@ -2314,7 +2314,7 @@
   {
     "name": "navigation-menu",
     "path": "src/components/navigation/navigation-menu/index.ts",
-    "limit": "26.3 KB"
+    "limit": "26.15 KB"
   },
   {
     "name": "navigation-menu-root",
@@ -2349,22 +2349,22 @@
   {
     "name": "navigation-menu-viewport",
     "path": "src/components/navigation/navigation-menu/navigation-menu-viewport.vue",
-    "limit": "18.55 KB"
+    "limit": "18.45 KB"
   },
   {
     "name": "tooltip",
     "path": "src/components/overlay/tooltip/tooltip.vue",
-    "limit": "6.1 KB"
+    "limit": "5.8 KB"
   },
   {
     "name": "command",
     "path": "src/components/overlay/command/index.ts",
-    "limit": "28.8 KB"
+    "limit": "28.7 KB"
   },
   {
     "name": "command-root",
     "path": "src/components/overlay/command/command.vue",
-    "limit": "21.7 KB"
+    "limit": "21.6 KB"
   },
   {
     "name": "command-input",
@@ -2404,7 +2404,7 @@
   {
     "name": "dialog",
     "path": "src/components/overlay/dialog/index.ts",
-    "limit": "23.35 KB"
+    "limit": "23.25 KB"
   },
   {
     "name": "dialog-root",
@@ -2419,7 +2419,7 @@
   {
     "name": "dialog-content",
     "path": "src/components/overlay/dialog/dialog-content.vue",
-    "limit": "18.3 KB"
+    "limit": "18.15 KB"
   },
   {
     "name": "dialog-description",
@@ -2454,7 +2454,7 @@
   {
     "name": "drawer",
     "path": "src/components/overlay/drawer/index.ts",
-    "limit": "23.5 KB"
+    "limit": "23.4 KB"
   },
   {
     "name": "drawer-root",
@@ -2469,7 +2469,7 @@
   {
     "name": "drawer-content",
     "path": "src/components/overlay/drawer/drawer-content.vue",
-    "limit": "18.45 KB"
+    "limit": "18.3 KB"
   },
   {
     "name": "drawer-description",
@@ -2529,12 +2529,12 @@
   {
     "name": "hover-card",
     "path": "src/components/overlay/hover-card/index.ts",
-    "limit": "6.05 KB"
+    "limit": "5.75 KB"
   },
   {
     "name": "hover-card-root",
     "path": "src/components/overlay/hover-card/hover-card.vue",
-    "limit": "4.75 KB"
+    "limit": "4.4 KB"
   },
   {
     "name": "hover-card-trigger",
@@ -2549,12 +2549,12 @@
   {
     "name": "popover",
     "path": "src/components/overlay/popover/index.ts",
-    "limit": "11.65 KB"
+    "limit": "11.3 KB"
   },
   {
     "name": "popover-root",
     "path": "src/components/overlay/popover/popover.vue",
-    "limit": "5.55 KB"
+    "limit": "5.25 KB"
   },
   {
     "name": "popover-trigger",
@@ -2614,6 +2614,6 @@
   {
     "name": "shortcuts-dialog",
     "path": "src/components/overlay/shortcuts-dialog/shortcuts-dialog.vue",
-    "limit": "27.35 KB"
+    "limit": "27.2 KB"
   }
 ]

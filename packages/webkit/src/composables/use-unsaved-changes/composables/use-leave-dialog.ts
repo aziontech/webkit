@@ -2,16 +2,7 @@ import { computed, type ComputedRef, readonly, type Ref, ref } from 'vue'
 
 import * as en from '../../../locales/en'
 import { useTranslate } from '../../use-translate'
-import { createLeaveGate } from '../lib/leave-gate'
 import type { UnsavedChangesDialogProps } from '../use-unsaved-changes'
-
-export interface UseLeaveDialogOptions {
-  isDirty: ComputedRef<boolean>
-  enabled: () => boolean
-  savable: ComputedRef<boolean>
-  discard: () => void
-  onSave?: () => unknown
-}
 
 export interface UseLeaveDialogReturn {
   saving: Readonly<Ref<boolean>>
@@ -24,70 +15,83 @@ export interface UseLeaveDialogReturn {
   cancel: () => void
 }
 
-async function saved(onSave: () => unknown): Promise<boolean> {
+async function saveAndLeave(
+  onSave: (() => unknown) | undefined,
+  saving: Ref<boolean>,
+  isDirty: ComputedRef<boolean>,
+  settle: (allowed: boolean) => void
+): Promise<void> {
+  if (!onSave || saving.value) return
+  saving.value = true
   try {
     await onSave()
-    return true
   } catch {
-    return false
+    saving.value = false
+    return
   }
+  saving.value = false
+  if (!isDirty.value) settle(true)
 }
 
-export function useLeaveDialog(options: UseLeaveDialogOptions): UseLeaveDialogReturn {
+export function useLeaveDialog(
+  isDirty: ComputedRef<boolean>,
+  enabled: () => boolean,
+  savable: ComputedRef<boolean>,
+  discard: () => void,
+  onSave?: () => unknown
+): UseLeaveDialogReturn {
   const { t } = useTranslate({ unsavedChanges: en.unsavedChanges })
-  const { isDirty, savable } = options
   const open = ref(false)
   const saving = ref(false)
-  const { request, settle, cancel } = createLeaveGate(open)
+  let release: ((allowed: boolean) => void) | null = null
 
-  const confirmLeave = () =>
-    !options.enabled() || !isDirty.value ? Promise.resolve(true) : request()
+  const settle = (allowed: boolean) => {
+    const resolve = release
+    release = null
+    open.value = false
+    resolve?.(allowed)
+  }
+
+  const confirmLeave = () => {
+    if (!enabled() || !isDirty.value) return Promise.resolve(true)
+    release?.(false)
+    open.value = true
+    return new Promise<boolean>((resolve) => {
+      release = resolve
+    })
+  }
 
   const keepEditing = () => {
     if (!saving.value) settle(false)
   }
 
-  const discardAndLeave = () => {
-    if (saving.value) return
-    options.discard()
-    settle(true)
-  }
-
-  const saveAndLeave = async () => {
-    if (!options.onSave || saving.value) return
-    saving.value = true
-    const ok = await saved(options.onSave)
-    saving.value = false
-    if (ok && !isDirty.value) settle(true)
-  }
-
-  const dialogProps = computed<UnsavedChangesDialogProps>(() => ({
-    open: open.value,
-    title: t('unsavedChanges.title'),
-    description: savable.value
-      ? t('unsavedChanges.descriptionSavable')
-      : t('unsavedChanges.description'),
-    variant: 'danger',
-    loading: saving.value,
-    'onUpdate:open': (next: boolean) => {
-      if (!next) keepEditing()
-    }
-  }))
-
-  const labels = computed(() => ({
-    keepEditing: t('unsavedChanges.keepEditing'),
-    discard: t('unsavedChanges.discard'),
-    save: t('unsavedChanges.save')
-  }))
-
   return {
     saving: readonly(saving),
     confirmLeave,
-    dialogProps,
-    labels,
     keepEditing,
-    discardAndLeave,
-    saveAndLeave,
-    cancel
+    discardAndLeave: () => {
+      if (saving.value) return
+      discard()
+      settle(true)
+    },
+    saveAndLeave: () => saveAndLeave(onSave, saving, isDirty, settle),
+    dialogProps: computed<UnsavedChangesDialogProps>(() => ({
+      open: open.value,
+      title: t('unsavedChanges.title'),
+      description: savable.value
+        ? t('unsavedChanges.descriptionSavable')
+        : t('unsavedChanges.description'),
+      variant: 'danger',
+      loading: saving.value,
+      'onUpdate:open': (next: boolean) => {
+        if (!next) keepEditing()
+      }
+    })),
+    labels: computed(() => ({
+      keepEditing: t('unsavedChanges.keepEditing'),
+      discard: t('unsavedChanges.discard'),
+      save: t('unsavedChanges.save')
+    })),
+    cancel: () => release?.(false)
   }
 }
