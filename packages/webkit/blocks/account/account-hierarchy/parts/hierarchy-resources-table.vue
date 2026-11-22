@@ -2,6 +2,7 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Card from '@aziontech/webkit/card'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import { type TableColumn } from '@aziontech/webkit/table'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
@@ -61,8 +62,6 @@
         v-model:open-keys="tableExpanded"
         v-model:selected-keys="selectedKeys"
         :data="visibleTree"
-        paginated
-        :page-size="25"
         :columns="columns"
         :get-sub-rows="(row) => row.children"
         :loading="loading"
@@ -185,6 +184,9 @@
               />
             </DropdownMenu.Group>
           </TableCellActions>
+        </template>
+        <template #footer>
+          <DataTablePagination :page-size="25" />
         </template>
       </DataTable>
     </template>

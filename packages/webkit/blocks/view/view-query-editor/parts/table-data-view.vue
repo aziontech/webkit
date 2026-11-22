@@ -2,6 +2,7 @@
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -156,9 +157,6 @@
         row-key="__k"
         selectable
         sortable
-        paginated
-        :page-size="25"
-        :page-size-options="[25, 50, 100]"
         density="compact"
         :loading="loading"
         :bordered="false"
@@ -249,6 +247,12 @@
               />
             </template>
           </EmptyState>
+        </template>
+        <template #footer>
+          <DataTablePagination
+            :page-size="25"
+            :page-size-options="[25, 50, 100]"
+          />
         </template>
       </DataTable>
     </div>

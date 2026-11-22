@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import MultiSelect from '@aziontech/webkit/multi-select'
@@ -12,7 +13,10 @@
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import type { CollectionTableProps } from '@aziontech/webkit/use-collection'
+  import type {
+    CollectionPaginationProps,
+    CollectionTableProps
+  } from '@aziontech/webkit/use-collection'
   import { ref } from 'vue'
 
   import type { UsersTeam, UsersUser } from '../account-users.vue'
@@ -26,6 +30,7 @@
 
   defineProps<{
     tableProps: CollectionTableProps<UsersUser, TableColumn>
+    paginationProps: CollectionPaginationProps
     loading: boolean
     teamOptions: UsersTeam[]
   }>()
@@ -185,6 +190,12 @@
               />
             </template>
           </EmptyState>
+        </template>
+        <template #footer>
+          <DataTablePagination
+            v-bind="paginationProps"
+            manual
+          />
         </template>
       </DataTable>
     </template>

@@ -1,9 +1,9 @@
 import { computed, type ComputedRef } from 'vue'
 
-import { columnIdOf, DEFAULT_PAGE_SIZE } from '../lib/config'
+import { columnIdOf } from '../lib/config'
 import type { CollectionColumnPreference } from '../lib/preferences'
 import type { CollectionState, CollectionView } from '../lib/state'
-import type { CollectionColumn, CollectionExportScope, CollectionTableProps } from '../lib/types'
+import type { CollectionColumn, CollectionTableProps } from '../lib/types'
 import type { UseCollectionFiltersReturn } from './use-collection-filters'
 import type { UseCollectionPreferencesReturn } from './use-collection-preferences'
 import type { UseCollectionSelectionReturn } from './use-collection-selection'
@@ -24,11 +24,10 @@ export function useCollectionTableProps<T extends object, C extends CollectionCo
   view: CollectionView<T>,
   prefs: Omit<UseCollectionPreferencesReturn, 'loadStored'>,
   filters: UseCollectionFiltersReturn,
-  selection: UseCollectionSelectionReturn<T>,
-  exportRows: (scope: CollectionExportScope) => Promise<T[]> | T[]
+  selection: UseCollectionSelectionReturn<T>
 ): ComputedRef<CollectionTableProps<T, C>> {
-  const { paginated, page, sorting, columns } = s
-  const { preferences, pageSize, setPreferences } = prefs
+  const { sorting, columns } = s
+  const { preferences, setPreferences } = prefs
 
   const orderedColumns = computed<C[]>(() => orderColumns(columns.value, preferences.value.columns))
 
@@ -52,26 +51,13 @@ export function useCollectionTableProps<T extends object, C extends CollectionCo
     sorting: sorting.value,
     manualSorting: true,
     manualFiltering: true,
-    manualPagination: true,
-    paginated,
-    page: page.value,
-    pageSize: paginated ? pageSize.value : DEFAULT_PAGE_SIZE,
-    rowCount: view.totalCount.value,
-    pageSizeOptions: s.pageSizeOptions,
     selectable: s.selectionEnabled,
     selectedKeys: pageSelectedKeys.value,
     columnVisibility: columnVisibility.value,
     wrapLines: preferences.value.wrapLines,
     striped: preferences.value.striped,
     density: preferences.value.density,
-    exportRows,
     'onUpdate:sorting': (value) => filters.setSorting(value ?? []),
-    'onUpdate:page': (value) => {
-      if (value !== undefined && value !== page.value) filters.setPage(value)
-    },
-    'onUpdate:pageSize': (value) => {
-      if (paginated && value !== pageSize.value) prefs.setPageSize(value)
-    },
     'onUpdate:selectedKeys': (value = []) => selection.applyPageSelection(new Set(value)),
     'onUpdate:columnVisibility': (value = {}) =>
       setPreferences({

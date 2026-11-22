@@ -3,9 +3,11 @@
   import Card from '@aziontech/webkit/card'
   import type { TableColumn, TableExposed } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
+  import { matchesText } from '@aziontech/webkit/use-collection'
   import { computed, reactive, ref, watch } from 'vue'
 
   import { blankSetting, type CacheSetting, cacheSummary } from '../detail-version-cache'
@@ -92,6 +94,15 @@
       { description: 'The change is part of this draft until you deploy it.' }
     )
   }
+  const matchingRows = computed(() =>
+    rows.value.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        cacheColumns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
+  )
 </script>
 
 <template>
@@ -122,13 +133,10 @@
             <template #default>
               <DataTable
                 ref="tableEl"
-                v-model:globalFilter="search"
-                :data="rows"
+                :data="matchingRows"
                 :columns="cacheColumns"
                 row-key="id"
                 sortable
-                paginated
-                :page-size="10"
                 :bordered="false"
                 aria-label="Cache settings"
               >
@@ -165,6 +173,9 @@
                     @clear="search = ''"
                     @add="openSetting()"
                   />
+                </template>
+                <template #footer>
+                  <DataTablePagination :page-size="10" />
                 </template>
               </DataTable>
             </template>

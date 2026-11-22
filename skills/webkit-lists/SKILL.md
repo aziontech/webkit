@@ -2,7 +2,7 @@
 name: webkit-lists
 description: The list page — the one shape every resource index takes on @aziontech/webkit, and the collection model behind it. Every list runs on `useCollection` (`@aziontech/webkit/use-collection`), in client mode (in-memory items) or server mode (a `fetch` that returns one page and the total) — it owns the text and property filters, sorting, pagination, selection across pages, the empty vs no-match states, the filter, sort and page in the URL and the saved preferences, and hands back props to bind on `Table`, `Pagination`, `PropertyFilter`, `CollectionPreferences` and `CardList`. Fixes the page skeleton (shell → page heading carrying the create action → controls row with the PropertyFilter and CollectionPreferences → card-wrapped Table, or CardList), which columns become filter properties, and the two empty states. Use when building or reviewing any resource index, list, card view or "all X" page. The page-level companion to /webkit-tables (which owns the Table and its cell recipes).
 status: active
-last_updated: 2026-11-17
+last_updated: 2026-11-22
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-styling, ui-verify, review]
 ---
@@ -189,14 +189,15 @@ signal }` and resolves `{ items, total }`; the composable tracks `loading` and `
 text (`filtering.debounce`, 300 ms), aborts the previous request through `signal` when a newer one
 starts, and ignores a late answer. The page passes the query straight to its API.
 
-**Export** — `tableProps` also binds `exportRows`, so `TableExportButton` and the Table's `exportCsv()`
-write every match, not the one page the Table holds. In client mode that is the matching items; in
+**Export** — give `exportItems` to `TableExportButton` (`<TableExportButton :rows="exportItems" />`), so the
+export writes every match, not the one page the Table holds. In client mode that is the matching items; in
 server mode pass `exportAll` (it receives `{ filteringText, filter, sort, scope }` and resolves every
 item to write), or the export holds the loaded page only. `exportItems(scope?)` returns the same rows
-for a custom export. A Download CSV button outside the Table calls `tableEl.value.exportCsv()`.
+for a custom export. A Download CSV button outside the Table calls
+`tableEl.value.exportCsv({ rows: await exportItems() })`.
 
 ```js
-const { tableProps } = useCollection({
+const { tableProps, paginationProps, exportItems } = useCollection({
   fetch: ({ filter, sort, page, pageSize, signal }) =>
     api.listApplications({ filter, sort, page, pageSize }, { signal }),
   columns,
@@ -206,9 +207,10 @@ const { tableProps } = useCollection({
 })
 ```
 
-The table stays a renderer: `tableProps` sets `manualSorting`, `manualFiltering` and `manualPagination`,
-so it never filters or slices the page it is given. Never also pass `:data` + `paginated` +
-`v-model:globalFilter` by hand beside it.
+The table stays a renderer: `tableProps` sets `manualSorting` and `manualFiltering`, and
+`<DataTablePagination v-bind="paginationProps" manual />` in the DataTable `footer` slot pages it (`manual`:
+the table renders the one page it is given). Never also pass `:data`, a non-manual `DataTablePagination` or a
+`TableSearch` `v-model` by hand beside it.
 
 ---
 

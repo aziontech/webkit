@@ -62,16 +62,17 @@
 
 <template>
   <DataTable
-    v-model:filters="filters"
     :data="rows"
     :columns="columns"
-    :filter-fields="filterFields"
     row-key="id"
     aria-label="Workloads"
   >
     <template #title>Workloads</template>
     <template #toolbar>
-      <TableFilter />
+      <TableFilter
+        v-model="filters"
+        :fields="filterFields"
+      />
       <CollectionPreferences :sections="['columns']" />
     </template>
     <template #filters>

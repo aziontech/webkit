@@ -1,5 +1,6 @@
 <script setup>
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import Input from '@aziontech/webkit/input'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
@@ -23,7 +24,7 @@
     { accessorKey: 'status', header: 'Status' }
   ]
 
-  const { filterProps, tableProps } = useCollection({
+  const { paginationProps, filterProps, tableProps } = useCollection({
     fetch: fetchDomains,
     columns,
     pagination: { pageSize: 10 },
@@ -38,6 +39,13 @@
       placeholder="Search domains"
       aria-label="Search domains"
     />
-    <DataTable v-bind="tableProps" />
+    <DataTable v-bind="tableProps">
+      <template #footer>
+        <DataTablePagination
+          v-bind="paginationProps"
+          manual
+        />
+      </template>
+    </DataTable>
   </div>
 </template>

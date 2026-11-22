@@ -12,6 +12,7 @@
   import TableCellTags from '@aziontech/webkit/table-cell-tags'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { matchesText } from '@aziontech/webkit/use-collection'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, watch } from 'vue'
 
@@ -160,6 +161,15 @@
       })
     }
   )
+  const matchingRows = computed(() =>
+    rows.value.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        columns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
+  )
 </script>
 
 <template>
@@ -285,17 +295,15 @@
             <DataTable
               v-else
               ref="tuningTableEl"
-              v-model:global-filter="search"
               v-model:selected-keys="selectedKeys"
               v-model:sorting="sorting"
-              :data="rows"
+              :data="matchingRows"
               :columns="columns"
               row-key="ruleId"
               selectable
               sortable
               :bordered="false"
               :loading="loading"
-              export-filename="waf-tuning.csv"
             >
               <template #cell-ruleId="{ value }">
                 <span class="min-w-0 truncate font-code tabular-nums">{{ value }}</span>

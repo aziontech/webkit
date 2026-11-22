@@ -302,7 +302,7 @@
   "table": {
     "border": "bordered",
     "rowsPerPageOptions": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; the page sizes are pageSizeOptions"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; move :page-size-options onto DataTablePagination: import DataTablePagination from '@aziontech/webkit/data-table-pagination' and write <template #footer><DataTablePagination :page-size-options=\"…\" /></template>."
     },
     "columns": {
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
@@ -323,34 +323,34 @@
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
     },
     "estimateRowHeight": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; virtual rows measure themselves; before the first row is measured a row counts 48 px, so drop the prop."
     },
     "expanded": {
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
     },
     "exportFilename": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; move export-filename onto TableExportButton as filename (<TableExportButton filename=\"…\" />), or pass { filename } to exportCsv()."
     },
     "exportRows": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; move :export-rows onto TableExportButton as :rows: <TableExportButton :rows=\"…\" /> (useCollection().exportItems writes every match)."
     },
     "filterFields": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; move :filter-fields onto TableFilter as :fields: <TableFilter :fields=\"…\" /> in the toolbar slot; FilterMenu.ChipGroup reads them from it."
     },
     "filters": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; move v-model:filters onto TableFilter as its v-model: <TableFilter v-model=\"…\" :fields=\"…\" /> in the toolbar slot."
     },
     "getSubRows": {
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
     },
     "globalFilter": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; move v-model:global-filter onto TableSearch as its v-model (<TableSearch v-model=\"…\" /> in the toolbar slot); a search field outside the table filters data itself, e.g. with matchesText from '@aziontech/webkit/use-collection'."
     },
     "headerKind": {
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; use density there (it compacts the header and the rows)"
     },
     "initialState": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; call tableEl.value.setSnapshot(snapshot) once the table is mounted (a template ref and onMounted)."
     },
     "loading": {
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
@@ -359,28 +359,28 @@
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
     },
     "manualPagination": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; set manual on DataTablePagination: <template #footer><DataTablePagination manual :total=\"…\" /></template> (import DataTablePagination from '@aziontech/webkit/data-table-pagination')."
     },
     "manualSorting": {
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
     },
     "pageSize": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; move v-model:page-size (or :page-size) onto DataTablePagination: <template #footer><DataTablePagination v-model:page-size=\"…\" /></template> (import DataTablePagination from '@aziontech/webkit/data-table-pagination')."
     },
     "pageSizeOptions": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; move :page-size-options onto DataTablePagination: import DataTablePagination from '@aziontech/webkit/data-table-pagination' and write <template #footer><DataTablePagination :page-size-options=\"…\" /></template>."
     },
     "paginated": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; paging is a companion part: import DataTablePagination from '@aziontech/webkit/data-table-pagination' and place it in the DataTable footer slot: <template #footer><DataTablePagination /></template>; without it every row renders."
     },
     "pagination": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; the page moved to DataTablePagination: <template #footer><DataTablePagination v-model:page=\"…\" /></template> (1-based; import DataTablePagination from '@aziontech/webkit/data-table-pagination')."
     },
     "reorderable": {
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
     },
     "rowCount": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; move :row-count onto DataTablePagination as :total, with manual: <template #footer><DataTablePagination manual :total=\"…\" /></template> (import DataTablePagination from '@aziontech/webkit/data-table-pagination')."
     },
     "rowKey": {
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
@@ -404,7 +404,7 @@
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
     },
     "state": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; read the state with tableEl.value.getSnapshot() and write it back with tableEl.value.setSnapshot(snapshot) through a template ref."
     },
     "striped": {
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
@@ -1308,9 +1308,69 @@
     "enableRowSelection": "selectable",
     "rowSelection": "selectedKeys",
     "expanded": "openKeys",
-    "pagination": "page",
-    "state": "snapshot",
-    "initialState": "defaultSnapshot"
+    "pagination": {
+      "removed": "the page moved to DataTablePagination: <template #footer><DataTablePagination v-model:page=\"…\" /></template> (1-based; import DataTablePagination from '@aziontech/webkit/data-table-pagination')."
+    },
+    "state": {
+      "removed": "read the state with tableEl.value.getSnapshot() and write it back with tableEl.value.setSnapshot(snapshot) through a template ref."
+    },
+    "initialState": {
+      "removed": "call tableEl.value.setSnapshot(snapshot) once the table is mounted (a template ref and onMounted)."
+    },
+    "paginated": {
+      "removed": "paging is a companion part: import DataTablePagination from '@aziontech/webkit/data-table-pagination' and place it in the DataTable footer slot: <template #footer><DataTablePagination /></template>; without it every row renders."
+    },
+    "pageSizeOptions": {
+      "removed": "move :page-size-options onto DataTablePagination: import DataTablePagination from '@aziontech/webkit/data-table-pagination' and write <template #footer><DataTablePagination :page-size-options=\"…\" /></template>."
+    },
+    "rowCount": {
+      "removed": "move :row-count onto DataTablePagination as :total, with manual: <template #footer><DataTablePagination manual :total=\"…\" /></template> (import DataTablePagination from '@aziontech/webkit/data-table-pagination')."
+    },
+    "manualPagination": {
+      "removed": "set manual on DataTablePagination: <template #footer><DataTablePagination manual :total=\"…\" /></template> (import DataTablePagination from '@aziontech/webkit/data-table-pagination')."
+    },
+    "page": {
+      "removed": "move v-model:page onto DataTablePagination: <template #footer><DataTablePagination v-model:page=\"…\" /></template> (import DataTablePagination from '@aziontech/webkit/data-table-pagination')."
+    },
+    "pageSize": {
+      "removed": "move v-model:page-size (or :page-size) onto DataTablePagination: <template #footer><DataTablePagination v-model:page-size=\"…\" /></template> (import DataTablePagination from '@aziontech/webkit/data-table-pagination')."
+    },
+    "moreRows": {
+      "removed": "infinite loading is a companion part: import DataTableLoadMore from '@aziontech/webkit/data-table-load-more' and place it in the DataTable load-more slot: <template #load-more><DataTableLoadMore :more-rows=\"…\" :loading=\"…\" @load-more=\"…\" /></template>."
+    },
+    "loadingMore": {
+      "removed": "move :loading-more onto DataTableLoadMore as :loading: import DataTableLoadMore from '@aziontech/webkit/data-table-load-more' and place it in the DataTable load-more slot: <template #load-more><DataTableLoadMore :more-rows=\"…\" :loading=\"…\" @load-more=\"…\" /></template>."
+    },
+    "@load-more": {
+      "removed": "listen to load-more on DataTableLoadMore: import DataTableLoadMore from '@aziontech/webkit/data-table-load-more' and place it in the DataTable load-more slot: <template #load-more><DataTableLoadMore :more-rows=\"…\" :loading=\"…\" @load-more=\"…\" /></template>."
+    },
+    "live": {
+      "removed": "move v-model:live onto TableLiveButton as its v-model: <TableLiveButton v-model=\"…\" /> in the toolbar slot."
+    },
+    "globalFilter": {
+      "removed": "move v-model:global-filter onto TableSearch as its v-model (<TableSearch v-model=\"…\" /> in the toolbar slot); a search field outside the table filters data itself, e.g. with matchesText from '@aziontech/webkit/use-collection'."
+    },
+    "filterFields": {
+      "removed": "move :filter-fields onto TableFilter as :fields: <TableFilter :fields=\"…\" /> in the toolbar slot; FilterMenu.ChipGroup reads them from it."
+    },
+    "filters": {
+      "removed": "move v-model:filters onto TableFilter as its v-model: <TableFilter v-model=\"…\" :fields=\"…\" /> in the toolbar slot."
+    },
+    "exportRows": {
+      "removed": "move :export-rows onto TableExportButton as :rows: <TableExportButton :rows=\"…\" /> (useCollection().exportItems writes every match)."
+    },
+    "exportFilename": {
+      "removed": "move export-filename onto TableExportButton as filename (<TableExportButton filename=\"…\" />), or pass { filename } to exportCsv()."
+    },
+    "snapshot": {
+      "removed": "read the state with tableEl.value.getSnapshot() and write it back with tableEl.value.setSnapshot(snapshot) through a template ref."
+    },
+    "defaultSnapshot": {
+      "removed": "call tableEl.value.setSnapshot(snapshot) once the table is mounted (a template ref and onMounted)."
+    },
+    "estimateRowHeight": {
+      "removed": "virtual rows measure themselves; before the first row is measured a row counts 48 px, so drop the prop."
+    }
   },
   "data-grid": {
     "enableRowSelection": "selectable",

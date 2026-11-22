@@ -48,16 +48,9 @@ export function useCollectionBindings<T extends object, C extends CollectionColu
     })
   }
 
-  const exportRows = (scope: CollectionExportScope): Promise<T[]> | T[] =>
-    serverMode
-      ? exportItems(scope)
-      : scope === 'all'
-        ? [...s.sourceItems.value]
-        : [...view.matchingItems.value]
-
   return {
     exportItems,
-    tableProps: useCollectionTableProps(s, view, prefs, filters, selection, exportRows),
+    tableProps: useCollectionTableProps(s, view, prefs, filters, selection),
     paginationProps: computed(() => ({
       page: page.value,
       total: view.totalCount.value,

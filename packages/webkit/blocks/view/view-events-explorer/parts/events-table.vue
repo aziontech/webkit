@@ -1,5 +1,7 @@
 <script setup lang="ts">
   import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
+  import DataTableLoadMore from '@aziontech/webkit/data-table-load-more'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Tag from '@aziontech/webkit/tag'
@@ -72,24 +74,16 @@
     <div class="flex min-h-0 flex-1">
       <DataTable
         ref="tableEl"
-        v-model:page="page"
-        v-model:page-size="pageSize"
         :data="events"
         :columns="columns"
         row-key="id"
         sortable
-        paginated
-        :manual-pagination="total !== undefined"
-        :row-count="total"
-        :more-rows="moreRows"
-        :loading-more="loadingMore"
         :bordered="false"
         density="compact"
         max-height="100%"
         class="w-full"
         :loading="loading"
         @row-click="(event: MouseEvent | KeyboardEvent, row: EventRow) => emit('open', event, row)"
-        @load-more="(event: Event) => emit('load-more', event)"
       >
         <template #header-detail>
           <span class="sr-only">Open the event document</span>
@@ -195,6 +189,21 @@
             icon="az az-filter-off"
             title="No events in this window"
             description="Widen the period or clear a filter to see more of the log."
+          />
+        </template>
+        <template #load-more>
+          <DataTableLoadMore
+            :more-rows="moreRows"
+            :loading="loadingMore"
+            @load-more="(event: Event) => emit('load-more', event)"
+          />
+        </template>
+        <template #footer>
+          <DataTablePagination
+            v-model:page="page"
+            v-model:page-size="pageSize"
+            :manual="total !== undefined"
+            :total="total"
           />
         </template>
       </DataTable>

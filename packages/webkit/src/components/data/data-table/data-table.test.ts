@@ -17,6 +17,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import { hostable } from '../../../test/hostable'
 import FilterMenu from '../filter-menu/index'
 import Table from '../table/index'
+import type { TableAppliedFilter } from '../table/injection-key'
 import TableBody from '../table/table-body/table-body.vue'
 import TableCaption from '../table/table-caption/table-caption.vue'
 import TableCell from '../table/table-cell/table-cell.vue'
@@ -28,6 +29,7 @@ import TableRefreshButton from '../table/table-refresh-button/table-refresh-butt
 import TableRow from '../table/table-row/table-row.vue'
 import TableSearch from '../table/table-search/table-search.vue'
 import DataTableRoot from './data-table.vue'
+import DataTablePagination from './data-table-pagination/data-table-pagination.vue'
 
 const DataTable = hostable(DataTableRoot)
 
@@ -81,11 +83,12 @@ describe('DataTable', () => {
         props: {
           data: Array.from({ length: 12 }, (_, i) => ({ id: String(i), name: `Row ${i}` })),
           columns: [{ accessorKey: 'name', header: 'Name' }],
-          paginated: true,
-          pageSize: 5,
           selectable: true
         },
-        slots: { toolbar: '<button type="button">Refresh</button>' }
+        slots: {
+          toolbar: '<button type="button">Refresh</button>',
+          footer: () => h(DataTablePagination, { pageSize: 5 })
+        }
       })
       const table = view.getByRole('table')
       expect(table.getAttribute('aria-label')).toBe('Domains')
@@ -106,17 +109,21 @@ describe('DataTable', () => {
     describe('accessibility — the table owns only its caption and row groups', () => {
       it('keeps the toolbar, the focusable viewport and the footer outside role=table', () => {
         const { getByRole, getByTestId } = render(DataTable, {
-          props: { data: rows, columns, paginated: true, pageSize: 2, 'aria-label': 'Domains' },
-          slots: { toolbar: '<button type="button">Refresh</button>', caption: 'Three domains' }
+          props: { data: rows, columns, 'aria-label': 'Domains' },
+          slots: {
+            toolbar: '<button type="button">Refresh</button>',
+            caption: 'Three domains',
+            footer: () => h(DataTablePagination, { pageSize: 2 })
+          }
         })
 
         const table = getByRole('table', { name: 'Domains' })
         expect(table).toBe(getByTestId('data-table__table'))
         expect(getByTestId('data-table').hasAttribute('aria-label')).toBe(false)
         expect(table.contains(getByTestId('data-table__viewport'))).toBe(false)
-        expect(table.contains(getByTestId('data-table__footer'))).toBe(false)
+        expect(table.contains(getByTestId('data-table-pagination'))).toBe(false)
         expect(table.contains(getByRole('button', { name: 'Refresh' }))).toBe(false)
-        expect(getByTestId('data-table__footer').getAttribute('role')).toBeNull()
+        expect(getByTestId('data-table-pagination').getAttribute('role')).toBeNull()
       })
 
       it('is named by its caption unless the consumer names it', async () => {
@@ -149,13 +156,14 @@ describe('DataTable', () => {
 
         const narrow = render(
           defineComponent({
-            components: { DataTable, Table },
+            components: { DataTable, DataTablePagination, Table },
             setup: () => ({ rows, columns }),
             template: `
             <div style="width: 240px">
-              <DataTable :data="rows" :columns="columns" paginated :page-size="2" aria-label="Domains">
+              <DataTable :data="rows" :columns="columns" aria-label="Domains">
                 <template #toolbar><button type="button">Refresh</button></template>
                 <template #caption>Three domains</template>
+                <template #footer><DataTablePagination :page-size="2" /></template>
               </DataTable>
             </div>
           `
@@ -536,6 +544,28 @@ describe('DataTable', () => {
         .map((c) => c.textContent?.trim())
       expect(bodyCells).toContain('Alpha')
       expect(bodyCells).not.toContain('Charlie')
+    })
+
+    it('filters by its v-model from the first render and writes the typed text back', async () => {
+      const search = ref('Alpha')
+      const Tree = defineComponent({
+        components: { DataTable, TableSearch },
+        setup: () => ({ rows, columns, search }),
+        template: `
+          <DataTable :data="rows" :columns="columns">
+            <template #toolbar><TableSearch v-model="search" /></template>
+          </DataTable>
+        `
+      })
+      const view = render(Tree)
+      expect(view.getAllByRole('row')).toHaveLength(2)
+      await fireEvent.update(view.getByTestId('table-search') as HTMLInputElement, 'Bravo')
+      expect(search.value).toBe('Bravo')
+      expect(view.getByText('Bravo')).toBeTruthy()
+      search.value = ''
+      await nextTick()
+      await nextTick()
+      expect(view.getAllByRole('row')).toHaveLength(rows.length + 1)
     })
 
     it('focuses the search on / from the page, but not while typing in a field', async () => {
@@ -1023,7 +1053,15 @@ describe('DataTable', () => {
             pagination: { pageSize: 10 },
             selection: {}
           })
-          return () => h(DataTable, { ...collection.tableProps.value, 'data-testid': 'coll' })
+          return () =>
+            h(
+              DataTable,
+              { ...collection.tableProps.value, 'data-testid': 'coll' },
+              {
+                footer: () =>
+                  h(DataTablePagination, { ...collection.paginationProps.value, manual: true })
+              }
+            )
         }
       })
 
@@ -1077,7 +1115,11 @@ describe('DataTable', () => {
             h(
               DataTable,
               { ...collection.tableProps.value, onExport },
-              { toolbar: () => h(TableExportButton) }
+              {
+                toolbar: () => h(TableExportButton, { rows: collection.exportItems }),
+                footer: () =>
+                  h(DataTablePagination, { ...collection.paginationProps.value, manual: true })
+              }
             )
         }
       })
@@ -1179,6 +1221,7 @@ describe('DataTable', () => {
       { id: 'name', label: 'Name', type: 'text' as const }
     ]
     const applied = { field: 'status', operator: 'eq' as const, value: 'Active' }
+    const models: unknown[][] = []
     const renderFiltered = (type: 'menu' | 'property' = 'menu') =>
       render(DataTable, {
         props: {
@@ -1187,13 +1230,17 @@ describe('DataTable', () => {
             { accessorKey: 'name', header: 'Name' },
             { accessorKey: 'status', header: 'Status' }
           ],
-          filterFields,
-          filters: [applied],
           rowKey: 'id',
           ariaLabel: 'People'
         },
         slots: {
-          toolbar: () => h(TableFilter, { type: type }),
+          toolbar: () =>
+            h(TableFilter, {
+              type,
+              fields: filterFields,
+              modelValue: [applied],
+              'onUpdate:modelValue': (next?: unknown[]) => models.push(next ?? [])
+            }),
           filters: () => h(FilterMenu.ChipGroup)
         }
       })
@@ -1236,7 +1283,7 @@ describe('DataTable', () => {
       const payload = view.emitted()['filter-apply']?.at(-1) as unknown[]
       expect(payload[0]).toBeInstanceOf(Event)
       expect(payload[1]).toEqual([])
-      expect(view.emitted()['update:filters']?.at(-1)).toEqual([[]])
+      expect(models.at(-1)).toEqual([])
     })
   })
 
@@ -1309,7 +1356,7 @@ describe('DataTable', () => {
     })
 
     it('writes in, eq, within and between filters with the event first on apply', async () => {
-      const filters = ref<unknown[]>([])
+      const filters = ref<TableAppliedFilter[]>([])
       const applies: unknown[][] = []
       render(
         defineComponent({
@@ -1323,21 +1370,26 @@ describe('DataTable', () => {
                   { accessorKey: 'status', header: 'Status' }
                 ],
                 rowKey: 'id',
-                filters: filters.value,
-                filterFields: [
-                  {
-                    id: 'status',
-                    label: 'Status',
-                    type: 'select',
-                    options: [{ label: 'Active', value: 'Active' }]
-                  },
-                  { id: 'modified', label: 'Last modified', type: 'date' },
-                  { id: 'name', label: 'Name', type: 'text' }
-                ],
-                'onUpdate:filters': (next: unknown[]) => (filters.value = next),
                 onFilterApply: (...args: unknown[]) => applies.push(args)
               },
-              { toolbar: () => h(TableFilter) }
+              {
+                toolbar: () =>
+                  h(TableFilter, {
+                    modelValue: filters.value,
+                    fields: [
+                      {
+                        id: 'status',
+                        label: 'Status',
+                        type: 'select',
+                        options: [{ label: 'Active', value: 'Active' }]
+                      },
+                      { id: 'modified', label: 'Last modified', type: 'date' },
+                      { id: 'name', label: 'Name', type: 'text' }
+                    ],
+                    'onUpdate:modelValue': (next?: TableAppliedFilter[]) =>
+                      (filters.value = next ?? [])
+                  })
+              }
             )
         })
       )
@@ -1450,66 +1502,88 @@ describe('DataTable', () => {
       ).toBe(false)
     })
 
-    it('offers pageSizeOptions in the footer, 10 to 100 by default', () => {
-      const many = Array.from({ length: 30 }, (_, i) => ({
+    const paged = (pagination: Record<string, unknown>, table: Record<string, unknown> = {}) => {
+      const events = { page: [] as number[], pageSize: [] as number[] }
+      const tableProps = ref<Record<string, unknown>>({ columns, ...table })
+      const pagingProps = ref<Record<string, unknown>>(pagination)
+      const view = render(
+        defineComponent({
+          components: { DataTable, DataTablePagination },
+          setup: () => ({ tableProps, pagingProps, events }),
+          template: `
+            <DataTable v-bind="tableProps">
+              <template #footer>
+                <DataTablePagination
+                  v-bind="pagingProps"
+                  @update:page="(page) => events.page.push(page)"
+                  @update:page-size="(size) => events.pageSize.push(size)"
+                />
+              </template>
+            </DataTable>
+          `
+        })
+      )
+      return { view, events, tableProps, pagingProps }
+    }
+    const numbered = (count: number) =>
+      Array.from({ length: count }, (_, i) => ({
         id: String(i),
         name: `Row ${i}`,
         status: 'Active'
       }))
+
+    it('offers pageSizeOptions in the footer, 10 to 100 by default', () => {
       const sizes = (container: HTMLElement) =>
         Array.from(container.querySelectorAll('option')).map((option) => option.value)
-      const next = render(DataTable, {
-        props: { columns, data: many, paginated: true, pageSizeOptions: [5, 15], pageSize: 5 }
-      })
-      expect(sizes(next.container as HTMLElement)).toEqual(['5', '15'])
-      next.unmount()
-      const standard = render(DataTable, {
-        props: { columns, data: many, paginated: true, pageSize: 10 }
-      })
-      expect(sizes(standard.container as HTMLElement)).toEqual(['10', '25', '50', '100'])
+      const next = paged({ pageSizeOptions: [5, 15], pageSize: 5 }, { data: numbered(30) })
+      expect(sizes(next.view.container as HTMLElement)).toEqual(['5', '15'])
+      next.view.unmount()
+      const standard = paged({}, { data: numbered(30) })
+      expect(sizes(standard.view.container as HTMLElement)).toEqual(['10', '25', '50', '100'])
+    })
+
+    it('renders the page and page size the part names from the first render', () => {
+      const { view } = paged({ page: 2, pageSize: 5 }, { data: numbered(12) })
+      expect(view.getAllByRole('row')).toHaveLength(6)
+      expect(view.getByText('Row 5')).toBeTruthy()
+      expect(view.queryByText('Row 4')).toBeNull()
+      expect(view.getByTestId('data-table-pagination')).toBeTruthy()
+    })
+
+    it('renders every row without a pagination part', () => {
+      const view = render(DataTable, { props: { columns, data: numbered(30) } })
+      expect(view.getAllByRole('row')).toHaveLength(31)
+      expect(view.queryByTestId('data-table-pagination')).toBeNull()
     })
 
     it('moves pages through the footer and emits a 1-based update:page', async () => {
-      const many = Array.from({ length: 12 }, (_, i) => ({
-        id: String(i),
-        name: `Row ${i}`,
-        status: 'Active'
-      }))
-      const view = render(DataTable, {
-        props: { columns, data: many, paginated: true, pageSize: 5 }
-      })
+      const { view, events } = paged({ pageSize: 5 }, { data: numbered(12) })
       await fireEvent.click(view.getByRole('button', { name: 'Next page' }))
-      expect(view.emitted()['update:page']?.at(-1)).toEqual([2])
+      expect(events.page.at(-1)).toBe(2)
       expect(view.getByText('Row 5')).toBeTruthy()
       expect(view.queryByText('Row 0')).toBeNull()
     })
 
     it('shows the page a controlled v-model:page names and returns to page 1 on a new page size', async () => {
-      const many = Array.from({ length: 12 }, (_, i) => ({
-        id: String(i),
-        name: `Row ${i}`,
-        status: 'Active'
-      }))
-      const view = render(DataTable, {
-        props: { columns, data: many, paginated: true, pageSize: 5, page: 3 }
-      })
+      const { view, events, pagingProps } = paged({ pageSize: 5, page: 3 }, { data: numbered(12) })
       expect(view.getByText('Row 10')).toBeTruthy()
       expect(view.queryByText('Row 0')).toBeNull()
-      await view.rerender({ columns, data: many, paginated: true, pageSize: 10, page: 3 })
-      expect(view.emitted()['update:page']?.at(-1)).toEqual([1])
+      pagingProps.value = { pageSize: 10, page: 3 }
+      await nextTick()
+      await nextTick()
+      expect(events.page.at(-1)).toBe(1)
     })
 
-    it('seeds the page and page size from defaultSnapshot', () => {
-      const many = Array.from({ length: 12 }, (_, i) => ({
-        id: String(i),
-        name: `Row ${i}`,
-        status: 'Active'
-      }))
-      const view = render(DataTable, {
-        props: { columns, data: many, paginated: true, defaultSnapshot: { page: 2, pageSize: 5 } }
-      })
-      expect(view.getByText('Row 5')).toBeTruthy()
-      expect(view.queryByText('Row 4')).toBeNull()
+    it('renders data as one page and reports only the page under manual', async () => {
+      const { view, events } = paged(
+        { manual: true, total: 40, pageSize: 5 },
+        { data: numbered(5) }
+      )
+      expect(view.getAllByRole('row')).toHaveLength(6)
+      expect(view.getByTestId('data-table-pagination').textContent).toMatch(/of 40/)
+      await fireEvent.click(view.getByRole('button', { name: 'Next page' }))
+      expect(events.page.at(-1)).toBe(2)
+      expect(view.getByText('Row 0')).toBeTruthy()
     })
 
     it('renders skeleton rows with aria-busy and ignores row clicks while loading', async () => {
@@ -1522,18 +1596,18 @@ describe('DataTable', () => {
     })
 
     it('states no row count while the first page loads, and hides only the count on a known total', async () => {
-      const view = render(DataTable, {
-        props: { columns, data: [], paginated: true, loading: true }
-      })
-      const footer = view.getByTestId('data-table__footer')
+      const { view, tableProps } = paged({}, { data: [], loading: true })
+      const footer = view.getByTestId('data-table-pagination')
       expect(footer.textContent).not.toMatch(/Showing/)
-      expect(view.getByTestId('data-table__footer-loading')).toBeTruthy()
+      expect(view.getByTestId('data-table-pagination__loading')).toBeTruthy()
       expect(view.queryByRole('navigation')).toBeNull()
-      await view.rerender({ columns, data: rows, paginated: true, loading: false })
-      expect(view.getByTestId('data-table__footer').textContent).toMatch(/Showing 1 to/)
-      await view.rerender({ columns, data: rows, paginated: true, loading: true })
+      tableProps.value = { columns, data: rows, loading: false }
+      await nextTick()
+      expect(view.getByTestId('data-table-pagination').textContent).toMatch(/Showing 1 to/)
+      tableProps.value = { columns, data: rows, loading: true }
+      await nextTick()
       expect(view.getByRole('navigation')).toBeTruthy()
-      expect(view.getByTestId('data-table__footer').textContent).not.toMatch(/Showing/)
+      expect(view.getByTestId('data-table-pagination').textContent).not.toMatch(/Showing/)
     })
 
     it('shows the error in an alert in place of the rows, and the error slot replaces it', () => {
@@ -1553,7 +1627,7 @@ describe('DataTable', () => {
       expect(custom.queryByTestId('data-table__empty')).toBeNull()
     })
 
-    it('round-trips getSnapshot and setSnapshot and mirrors update:snapshot', async () => {
+    it('round-trips getSnapshot and setSnapshot', async () => {
       const tableEl = ref<{
         getSnapshot: () => { sorting: unknown[]; page: number; pageSize: number }
         setSnapshot: (next: {
@@ -1562,7 +1636,6 @@ describe('DataTable', () => {
           pageSize?: number
         }) => void
       } | null>(null)
-      const states: unknown[] = []
       render(
         defineComponent({
           setup: () => () =>
@@ -1570,8 +1643,7 @@ describe('DataTable', () => {
               ref: tableEl,
               columns: [{ accessorKey: 'name', header: 'Name', sortable: true }],
               data: rows,
-              sortable: true,
-              'onUpdate:snapshot': (value: unknown) => states.push(value)
+              sortable: true
             })
         })
       )
@@ -1581,10 +1653,6 @@ describe('DataTable', () => {
       tableEl.value?.setSnapshot({ sorting: [{ id: 'name', desc: true }] })
       await nextTick()
       expect(tableEl.value?.getSnapshot().sorting).toEqual([{ id: 'name', desc: true }])
-      await waitFor(() => expect(states.length).toBeGreaterThan(0))
-      expect((states.at(-1) as { sorting: unknown[] }).sorting).toEqual([
-        { id: 'name', desc: true }
-      ])
       tableEl.value?.setSnapshot({ page: 2, pageSize: 25 })
       await nextTick()
       expect(tableEl.value?.getSnapshot().page).toBe(2)

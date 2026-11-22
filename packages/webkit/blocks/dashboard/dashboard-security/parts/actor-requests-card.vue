@@ -2,6 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import SeverityTag from '@aziontech/webkit/severity-tag'
@@ -75,9 +76,6 @@
         :columns="columns"
         row-key="id"
         sortable
-        paginated
-        :page-size="10"
-        :page-size-options="[10, 25, 50]"
         density="compact"
         bordered
       >
@@ -95,6 +93,12 @@
         </template>
         <template #cell-method="{ row }">
           <span class="font-mono text-body-sm">{{ row.method }}</span>
+        </template>
+        <template #footer>
+          <DataTablePagination
+            :page-size="10"
+            :page-size-options="[10, 25, 50]"
+          />
         </template>
       </DataTable>
       <EmptyState

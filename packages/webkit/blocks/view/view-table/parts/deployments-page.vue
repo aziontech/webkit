@@ -17,6 +17,7 @@
   const items = ref<Deployment[]>(sampleDeployments)
 
   const {
+    paginationProps,
     tableProps,
     propertyFilterProps,
     preferencesProps,
@@ -165,6 +166,7 @@
                 <DeploymentsTable
                   ref="deploymentsTableEl"
                   :table-props="tableProps"
+                  :pagination-props="paginationProps"
                   :loading="loading || fetching"
                   @open="(_event, row) => openDeployment(row)"
                   @action="(_event, { value, row }) => onRowAction(value, row)"

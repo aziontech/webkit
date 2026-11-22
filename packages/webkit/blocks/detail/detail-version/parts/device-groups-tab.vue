@@ -2,12 +2,14 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
+  import { matchesText } from '@aziontech/webkit/use-collection'
   import { computed, reactive, ref, watch } from 'vue'
 
   import { type DeviceGroup, sampleDeviceGroups } from '../sample'
@@ -81,6 +83,15 @@
       { description: 'The change is part of this draft until you deploy it.' }
     )
   }
+  const matchingGroups = computed(() =>
+    groups.value.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        groupColumns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
+  )
 </script>
 
 <template>
@@ -111,13 +122,10 @@
             <template #default>
               <DataTable
                 ref="tableEl"
-                v-model:globalFilter="search"
-                :data="groups"
+                :data="matchingGroups"
                 :columns="groupColumns"
                 row-key="id"
                 sortable
-                paginated
-                :page-size="10"
                 :bordered="false"
                 aria-label="Device groups"
               >
@@ -150,6 +158,9 @@
                     @clear="search = ''"
                     @add="openGroup()"
                   />
+                </template>
+                <template #footer>
+                  <DataTablePagination :page-size="10" />
                 </template>
               </DataTable>
             </template>

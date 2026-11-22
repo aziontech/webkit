@@ -2,6 +2,7 @@
   import Alert from '@aziontech/webkit/alert'
   import CodeBlock from '@aziontech/webkit/code-block'
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -147,11 +148,15 @@
         :data="filteredResultRows"
         :columns="resultColumns"
         row-key="__k"
-        paginated
-        :page-size="50"
-        :page-size-options="[10, 25, 50, 100]"
         :bordered="false"
-      />
+      >
+        <template #footer>
+          <DataTablePagination
+            :page-size="50"
+            :page-size-options="[10, 25, 50, 100]"
+          />
+        </template>
+      </DataTable>
       <CodeBlock
         v-else-if="resultRows.length && resultView === 'json'"
         :code="resultJson"

@@ -133,7 +133,7 @@ describe('useCollection — client mode', () => {
   it('shows every item on one page without pagination', () => {
     const c = setup({ items: rows })
     expect(c.items.value).toHaveLength(23)
-    expect(c.tableProps.value.paginated).toBe(false)
+    expect(c.paginationProps.value.total).toBe(23)
   })
 
   it('filters by text and goes back to the first page', () => {
@@ -219,7 +219,7 @@ describe('useCollection — client mode', () => {
     expect(c.selectedKeys.value).toEqual(['2'])
   })
 
-  it('binds Table props both ways', () => {
+  it('binds DataTable and DataTablePagination props both ways', () => {
     const columns = [
       { accessorKey: 'name', header: 'Name' },
       { accessorKey: 'status', header: 'Status' },
@@ -227,15 +227,16 @@ describe('useCollection — client mode', () => {
     ]
     const c = setup({ items: rows, columns, pagination: { pageSize: 10 }, selection: {} })
     const props = c.tableProps.value
-    expect(props.manualPagination).toBe(true)
-    expect(props.rowCount).toBe(23)
-    expect(props.page).toBe(1)
+    const paging = c.paginationProps.value
+    expect(props.manualSorting).toBe(true)
+    expect(paging.total).toBe(23)
+    expect(paging.page).toBe(1)
     props['onUpdate:selectedKeys'](['1', '2'])
     expect(c.selectedKeys.value).toEqual(['1', '2'])
-    props['onUpdate:page'](2)
+    paging['onUpdate:page'](2)
     expect(c.page.value).toBe(2)
-    expect(c.tableProps.value.page).toBe(2)
-    props['onUpdate:pageSize'](25)
+    expect(c.paginationProps.value.page).toBe(2)
+    paging['onUpdate:pageSize'](25)
     expect(c.pageSize.value).toBe(25)
     props['onUpdate:columnVisibility']({ status: false })
     expect(c.tableProps.value.columnVisibility).toEqual({ status: false })
@@ -250,13 +251,13 @@ describe('useCollection — client mode', () => {
     })
     c.setSorting([{ id: 'requests', desc: true }])
     expect(c.items.value).toHaveLength(5)
-    const filtered = c.tableProps.value.exportRows('filtered') as Row[]
+    const filtered = (await c.exportItems('filtered')) as Row[]
     expect(filtered).toHaveLength(15)
     expect(filtered.every((row) => row.status === 'Active')).toBe(true)
     expect(filtered.map((row) => row.requests)).toEqual(
       [...filtered.map((row) => row.requests)].sort((a, b) => b - a)
     )
-    expect(c.tableProps.value.exportRows('all')).toHaveLength(23)
+    expect(await c.exportItems('all')).toHaveLength(23)
     expect(await c.exportItems()).toEqual(filtered)
   })
 })
@@ -521,7 +522,7 @@ describe('useCollection — server mode', () => {
     await flush()
     c.setSorting([{ id: 'name', desc: true }])
     await flush()
-    expect(await c.tableProps.value.exportRows('filtered')).toHaveLength(23)
+    expect(await c.exportItems('filtered')).toHaveLength(23)
     expect(exportAll).toHaveBeenCalledWith({
       filteringText: '',
       filter: { tokens: [], operation: 'and' },

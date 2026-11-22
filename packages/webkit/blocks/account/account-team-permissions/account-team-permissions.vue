@@ -6,6 +6,7 @@
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -127,15 +128,22 @@
     }
   ])
 
-  const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
-    useCollection({
-      items: rows,
-      columns,
-      filtering: { fields: ['name', 'description', 'status'] },
-      propertyFiltering: { properties },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: { storageKey: 'account-teams' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    status,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: rows,
+    columns,
+    filtering: { fields: ['name', 'description', 'status'] },
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: { storageKey: 'account-teams' }
+  })
 
   const teamsTableEl = ref<TableExposed<TeamRow> | null>(null)
   const exportCsv = () => teamsTableEl.value?.exportCsv({ filename: 'teams.csv' })
@@ -382,6 +390,12 @@
                     />
                   </template>
                 </EmptyState>
+              </template>
+              <template #footer>
+                <DataTablePagination
+                  v-bind="paginationProps"
+                  manual
+                />
               </template>
             </DataTable>
           </template>

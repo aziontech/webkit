@@ -4,6 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import type { TableColumn } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
   import Drawer from '@aziontech/webkit/drawer-root'
@@ -211,8 +212,6 @@
                   :data="parsed.lines"
                   :columns="previewColumns"
                   row-key="line"
-                  paginated
-                  :page-size="10"
                   :bordered="false"
                   aria-label="Zone file preview"
                 >
@@ -242,6 +241,9 @@
                       :severity="statusTag[value].severity"
                       size="small"
                     />
+                  </template>
+                  <template #footer>
+                    <DataTablePagination :page-size="10" />
                   </template>
                 </DataTable>
               </template>
