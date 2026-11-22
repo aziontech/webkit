@@ -53,6 +53,89 @@ function escapeAttribute(text) {
   return text.replace(/&/g, '&amp;').replace(/"/g, '&quot;')
 }
 
+function entryForTag(catalog, bindings, rawName) {
+  const name = rawName.includes('-') && !rawName.includes('.') ? pascal(rawName) : rawName
+  if (bindings.has(name)) return catalog.getEntry(bindings.get(name))
+  const dot = name.indexOf('.')
+  if (dot <= 0) return null
+  const base = bindings.get(name.slice(0, dot))
+  if (!base) return null
+  return catalog.getEntry(`${base}-${kebab(name.slice(dot + 1))}`)
+}
+
+function messageFor(prop, dropped, slots) {
+  const textOnly = dropped.every(
+    (child) => child.type === 'VText' || child.type === 'VExpressionContainer'
+  )
+  if (prop && (textOnly || !slots.length)) return 'droppedText'
+  return slots.length ? 'droppedMarkup' : 'dropped'
+}
+
+function passesProp(node, prop) {
+  return (node.startTag.attributes || []).some((attr) =>
+    attr.directive
+      ? attr.key?.name?.name === 'bind' && attr.key.argument?.name === prop
+      : attr.key?.name === prop
+  )
+}
+
+function propSuggestions(context, node, dropped, prop) {
+  const onlyText =
+    dropped.length === 1 &&
+    dropped[0].type === 'VText' &&
+    node.children.every((child) => child.type === 'VText')
+  if (!prop || !onlyText || passesProp(node, prop)) return []
+  return [
+    {
+      messageId: 'useProp',
+      data: { prop },
+      fix(fixer) {
+        const source = context.sourceCode.text
+        const open = source.slice(node.startTag.range[0], node.startTag.range[1] - 1)
+        const text = escapeAttribute(dropped[0].value.trim().replace(/\s+/g, ' '))
+        return fixer.replaceTextRange(node.range, `${open.trimEnd()} ${prop}="${text}" />`)
+      }
+    }
+  ]
+}
+
+function checkElement(context, catalog, bindings, node) {
+  if (!node.rawName) return
+  const entry = entryForTag(catalog, bindings, node.rawName)
+  if (!entry) return
+  const slots = slotNames(entry)
+  if (!slots || slots.includes('default')) return
+  const dropped = droppedChildren(node)
+  if (!dropped.length) return
+  const propNames = new Set((entry.props || []).map((p) => p.name))
+  const prop = TEXT_PROPS.find((name) => propNames.has(name))
+  context.report({
+    node: node.startTag,
+    messageId: messageFor(prop, dropped, slots),
+    data: {
+      tag: node.rawName,
+      prop,
+      slots: slots.map((name) => `#${name}`).join(', '),
+      orProp: prop ? `, or pass text through its \`${prop}\` prop` : ''
+    },
+    suggest: propSuggestions(context, node, dropped, prop)
+  })
+}
+
+function importVisitor(catalog, bindings) {
+  return {
+    ImportDeclaration(node) {
+      const src = node.source.value
+      if (typeof src !== 'string' || !src.startsWith(catalog.prefix)) return
+      const sub = src.slice(catalog.prefix.length)
+      const entry = catalog.getEntry(sub)
+      if (!entry || !WEBKIT_TAG_KINDS.has(entry.kind)) return
+      const def = node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier')
+      if (def) bindings.set(def.local.name, sub)
+    }
+  }
+}
+
 export default {
   meta: {
     type: 'problem',
@@ -75,98 +158,13 @@ export default {
   create(context) {
     const catalog = loadCatalog(ctxCwd(context))
     if (!catalog.available) return {}
-    const prefix = catalog.prefix
     const bindings = new Map()
-
-    const scriptVisitor = {
-      ImportDeclaration(node) {
-        const src = node.source.value
-        if (typeof src !== 'string' || !src.startsWith(prefix)) return
-        const sub = src.slice(prefix.length)
-        const entry = catalog.getEntry(sub)
-        if (!entry || !WEBKIT_TAG_KINDS.has(entry.kind)) return
-        const def = node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier')
-        if (def) bindings.set(def.local.name, sub)
-      }
-    }
-
+    const scriptVisitor = importVisitor(catalog, bindings)
     const factory = templateBodyVisitorFactory(context)
     if (!factory) return scriptVisitor
-
-    function entryForTag(rawName) {
-      const name = rawName.includes('-') && !rawName.includes('.') ? pascal(rawName) : rawName
-      if (bindings.has(name)) return catalog.getEntry(bindings.get(name))
-      const dot = name.indexOf('.')
-      if (dot <= 0) return null
-      const base = bindings.get(name.slice(0, dot))
-      if (!base) return null
-      return catalog.getEntry(`${base}-${kebab(name.slice(dot + 1))}`)
-    }
-
     const templateVisitor = {
-      VElement(node) {
-        if (!node.rawName) return
-        const entry = entryForTag(node.rawName)
-        if (!entry) return
-        const slots = slotNames(entry)
-        if (!slots || slots.includes('default')) return
-        const dropped = droppedChildren(node)
-        if (!dropped.length) return
-
-        const propNames = new Set((entry.props || []).map((p) => p.name))
-        const prop = TEXT_PROPS.find((name) => propNames.has(name))
-        const textOnly = dropped.every(
-          (child) => child.type === 'VText' || child.type === 'VExpressionContainer'
-        )
-        const onlyText =
-          dropped.length === 1 &&
-          dropped[0].type === 'VText' &&
-          node.children.every((child) => child.type === 'VText')
-        const messageId =
-          prop && (textOnly || !slots.length)
-            ? 'droppedText'
-            : slots.length
-              ? 'droppedMarkup'
-              : 'dropped'
-        const data = {
-          tag: node.rawName,
-          prop,
-          slots: slots.map((name) => `#${name}`).join(', '),
-          orProp: prop ? `, or pass text through its \`${prop}\` prop` : ''
-        }
-        const hasProp = (node.startTag.attributes || []).some((attr) =>
-          attr.directive
-            ? attr.key?.name?.name === 'bind' && attr.key.argument?.name === prop
-            : attr.key?.name === prop
-        )
-        const suggest =
-          prop && onlyText && !hasProp
-            ? [
-                {
-                  messageId: 'useProp',
-                  data: { prop },
-                  fix(fixer) {
-                    const source = context.sourceCode.text
-                    const open = source.slice(node.startTag.range[0], node.startTag.range[1] - 1)
-                    const text = escapeAttribute(dropped[0].value.trim().replace(/\s+/g, ' '))
-                    return fixer.replaceTextRange(
-                      node.range,
-                      `${open.trimEnd()} ${prop}="${text}" />`
-                    )
-                  }
-                }
-              ]
-            : []
-
-        context.report({
-          node: node.startTag,
-          messageId,
-          data,
-          suggest
-        })
-      }
+      VElement: (node) => checkElement(context, catalog, bindings, node)
     }
-
     return factory(templateVisitor, scriptVisitor)
   }
 }

@@ -11,16 +11,20 @@ const NAME_ATTRS = new Set(['aria-label', 'arialabel', 'aria-labelledby', 'arial
 
 const normalized = (name) => String(name ?? '').toLowerCase()
 
-function nameSource(attr) {
-  if (!attr.directive) {
-    if (!NAME_ATTRS.has(normalized(attr.key?.name))) return null
-    return (attr.value?.value ?? '').trim() ? 'named' : null
-  }
+function staticNameSource(attr) {
+  if (!NAME_ATTRS.has(normalized(attr.key?.name))) return null
+  return (attr.value?.value ?? '').trim() ? 'named' : null
+}
+
+function boundNameSource(attr) {
   if (attr.key?.name?.name !== 'bind') return null
   const argument = attr.key.argument
-  if (!argument) return 'spread'
-  if (argument.type !== 'VIdentifier') return 'spread'
+  if (!argument || argument.type !== 'VIdentifier') return 'spread'
   return NAME_ATTRS.has(normalized(argument.rawName ?? argument.name)) ? 'named' : null
+}
+
+function nameSource(attr) {
+  return attr.directive ? boundNameSource(attr) : staticNameSource(attr)
 }
 
 export default {

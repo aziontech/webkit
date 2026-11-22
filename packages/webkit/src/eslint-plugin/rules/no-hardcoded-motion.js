@@ -11,6 +11,39 @@ const TRANSITION_UTILITY =
   /(?:^|[\s:'"`])transition(?:-(?:all|colors|opacity|shadow|transform))?(?=$|[\s'"`])/
 const MOTION_ESCAPE = /motion-reduce:/
 
+function styleTimingHit(text) {
+  if (!STYLE_SIGNAL.test(text)) return null
+  return (
+    text.match(STYLE_LITERAL_TIMING) ||
+    text.match(STYLE_TRANSITION_ALL) ||
+    text.match(STYLE_CUBIC_BEZIER)
+  )
+}
+
+function unknownAnimation(text, animationNames) {
+  if (!animationNames.size) return null
+  for (const m of text.matchAll(ANIMATE_NAME)) {
+    const name = m[1]
+    if (name !== 'none' && !animationNames.has(name)) return name
+  }
+  return null
+}
+
+function motionFinding(text, animationNames) {
+  const arbitrary = text.match(ARBITRARY_TIMING)
+  if (arbitrary) return { messageId: 'arbitrary', data: { sample: arbitrary[0] } }
+  const styleHit = styleTimingHit(text)
+  if (styleHit) return { messageId: 'styleTiming', data: { sample: styleHit[0] } }
+  const name = unknownAnimation(text, animationNames)
+  return name ? { messageId: 'unknownAnimation', data: { name } } : null
+}
+
+function lacksMotionEscape(text) {
+  const hasAnimation = /\banimate-(?!none\b)[a-z]/.test(text)
+  const hasTransition = TRANSITION_UTILITY.test(text) && !/\btransition-none\b/.test(text)
+  return (hasAnimation || hasTransition) && !MOTION_ESCAPE.test(text)
+}
+
 export default {
   meta: {
     type: 'suggestion',
@@ -36,41 +69,13 @@ export default {
 
     function scan(node, text) {
       if (typeof text !== 'string' || !text) return
-
-      const arbitrary = text.match(ARBITRARY_TIMING)
-      if (arbitrary) {
-        context.report({ node, messageId: 'arbitrary', data: { sample: arbitrary[0] } })
-        return
-      }
-
-      if (STYLE_SIGNAL.test(text)) {
-        const styleHit =
-          text.match(STYLE_LITERAL_TIMING) ||
-          text.match(STYLE_TRANSITION_ALL) ||
-          text.match(STYLE_CUBIC_BEZIER)
-        if (styleHit) {
-          context.report({ node, messageId: 'styleTiming', data: { sample: styleHit[0] } })
-          return
-        }
-      }
-
-      if (animationNames.size) {
-        for (const m of text.matchAll(ANIMATE_NAME)) {
-          const name = m[1]
-          if (name === 'none' || animationNames.has(name)) continue
-          context.report({ node, messageId: 'unknownAnimation', data: { name } })
-          return
-        }
-      }
+      const finding = motionFinding(text, animationNames)
+      if (finding) context.report({ node, ...finding })
     }
 
     function scanClassPairing(node, text) {
       if (typeof text !== 'string' || !text) return
-      const hasAnimation = /\banimate-(?!none\b)[a-z]/.test(text)
-      const hasTransition = TRANSITION_UTILITY.test(text) && !/\btransition-none\b/.test(text)
-      if ((hasAnimation || hasTransition) && !MOTION_ESCAPE.test(text)) {
-        context.report({ node, messageId: 'pairing' })
-      }
+      if (lacksMotionEscape(text)) context.report({ node, messageId: 'pairing' })
     }
 
     const scriptVisitor = {

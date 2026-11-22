@@ -38,6 +38,31 @@ function insideHeader(node) {
   return false
 }
 
+function isHandRolledSearch(node, raw) {
+  if (TRIGGER.has(raw)) return false
+  const keys = staticAttr(node, 'aria-keyshortcuts')
+  return Boolean(keys) && SHORTCUT.test(keys)
+}
+
+function isSearchIconButton(node, raw) {
+  return ICON_BUTTONS.has(raw) && /\b(?:az|ai|pi)-search\b/.test(staticAttr(node, 'icon') ?? '')
+}
+
+function headerMissesSearch(node) {
+  const everything = [...descendants(templateRoot(node))]
+  const navigates =
+    [...descendants(node)].some((el) => NAVIGATION.has(el.rawName)) ||
+    everything.some((el) => el.rawName === 'Sidebar' || el.rawName === 'sidebar')
+  return navigates && !everything.some((el) => TRIGGER.has(el.rawName))
+}
+
+function headerFinding(node) {
+  const raw = node.rawName ?? ''
+  if (isHandRolledSearch(node, raw)) return 'handRolled'
+  if (isSearchIconButton(node, raw)) return insideHeader(node) ? 'bareIcon' : null
+  return HEADER.has(raw) && headerMissesSearch(node) ? 'missing' : null
+}
+
 export default {
   meta: {
     type: 'problem',
@@ -65,36 +90,10 @@ export default {
   create(context) {
     const factory = templateBodyVisitorFactory(context)
     if (!factory) return {}
-
     return factory({
       VElement(node) {
-        const raw = node.rawName ?? ''
-
-        if (!TRIGGER.has(raw)) {
-          const keys = staticAttr(node, 'aria-keyshortcuts')
-          if (keys && SHORTCUT.test(keys)) {
-            context.report({ node: node.startTag, messageId: 'handRolled' })
-            return
-          }
-        }
-
-        if (
-          ICON_BUTTONS.has(raw) &&
-          /\b(?:az|ai|pi)-search\b/.test(staticAttr(node, 'icon') ?? '')
-        ) {
-          if (insideHeader(node)) context.report({ node: node.startTag, messageId: 'bareIcon' })
-          return
-        }
-
-        if (!HEADER.has(raw)) return
-        const root = templateRoot(node)
-        const everything = [...descendants(root)]
-        const navigates =
-          [...descendants(node)].some((el) => NAVIGATION.has(el.rawName)) ||
-          everything.some((el) => el.rawName === 'Sidebar' || el.rawName === 'sidebar')
-        if (!navigates) return
-        if (everything.some((el) => TRIGGER.has(el.rawName))) return
-        context.report({ node: node.startTag, messageId: 'missing' })
+        const messageId = headerFinding(node)
+        if (messageId) context.report({ node: node.startTag, messageId })
       }
     })
   }
