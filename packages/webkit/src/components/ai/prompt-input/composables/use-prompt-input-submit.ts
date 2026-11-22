@@ -26,6 +26,7 @@ export interface UsePromptInputSubmitOptions {
 
 export interface UsePromptInputSubmitReturn {
   overBy: ComputedRef<number>
+  nearLimit: ComputedRef<boolean>
   busy: ComputedRef<boolean>
   canSubmit: ComputedRef<boolean>
   showVoice: ComputedRef<boolean>
@@ -46,6 +47,9 @@ export function usePromptInputSubmit(
   const { model, files, references, rejection } = options
   const overBy = computed<number>(() =>
     options.maxLength() > 0 ? Math.max(0, model.value.length - options.maxLength()) : 0
+  )
+  const nearLimit = computed<boolean>(
+    () => options.maxLength() > 0 && model.value.length >= options.maxLength() * 0.8
   )
   const busy = computed<boolean>(() => options.status() !== 'ready')
   const filesPending = computed<boolean>(() =>
@@ -81,5 +85,5 @@ export function usePromptInputSubmit(
     })
   }
 
-  return { overBy, busy, canSubmit, showVoice, submit }
+  return { overBy, nearLimit, busy, canSubmit, showVoice, submit }
 }

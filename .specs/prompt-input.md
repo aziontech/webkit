@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 8
 template: 2
-checksum: d9eaca6327a543dc780d6c47ccb5e29f79dca0e6ac4be537a2bddcb4bfe5e7f6
+checksum: 525f04eff01c5350f3e75c82e4e203e715032c4891510c8e2c4dcf23e1f54b49
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -70,7 +70,8 @@ rounded rectangle (text on its own row) until the prompt is cleared.
 - Set `queueable` only when the owner queues what is sent while a response runs, and shows the
   queue (`PromptQueue` above the composer) so the reader can remove a prompt before it is sent.
 - Clear `v-model` and `v-model:files` in the `submit` handler and keep focus in the input.
-- Use `maxLength` only when the backend has a limit; the counter is the warning.
+- Use `maxLength` only when the backend has a limit; the counter is the warning, and it stays hidden
+  until the prompt reaches 80% of the limit, so a resting composer shows no number.
 - Compose only the controls the product has. Attach first at the inline start; model, dictate and
   Submit at the inline end, in that order; the secondary row holds what is not about this prompt
   (where the chat lives, the tools, a link to the desktop app).
@@ -271,7 +272,7 @@ packages/webkit/src/components/ai/prompt-input/
 | ------------- | ------------------------------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `placeholder` | `string`                              | `''`      | false    | Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`).                                                                        |
 | `ariaLabel`   | `string`                              | `''`      | false    | Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`).                                                                                    |
-| `maxLength`   | `number`                              | `0`       | false    | Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit.                                                                                                       |
+| `maxLength`   | `number`                              | `0`       | false    | Character limit; an `n/max` counter shows from 80% of it and submit is blocked over it. `0` means no limit.                                                                                    |
 | `minRows`     | `number`                              | `1`       | false    | Rows shown while empty.                                                                                                                                                                        |
 | `maxRows`     | `number`                              | `6`       | false    | Rows the text area grows to before it scrolls.                                                                                                                                                 |
 | `status`      | `'ready' \| 'pending' \| 'streaming'` | `'ready'` | false    | Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit (unless `queueable`); typing stays allowed.                                                         |
@@ -319,6 +320,7 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 - `ready`: Submit (primary round `IconButton`, large, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (primary `IconButton`, `az az-headphones`) takes its place.
 - `pending` / `streaming`: Stop (secondary `IconButton`, `az az-stop`) replaces Submit; Enter does nothing.
 - `pending` / `streaming` with `queueable`: Stop stays, and Submit (primary, after Stop at the inline end) shows beside it while there is something to send; Enter and Submit emit `submit` as in `ready`. With nothing to send only Stop shows, and the voice control never does.
+- Near the limit (the prompt holds 80% of `maxLength` or more): the `n/max` counter shows before Submit and the text area is described by it; below 80% it is not rendered.
 - Over the limit: border turns `--danger-border`, the counter turns danger, `aria-invalid="true"`, and a polite live region says how many characters are over.
 - Dragging files over the box: a dashed `--border-selected` panel on `--bg-selected` covers the box and reads `Drop files to attach`.
 - Rejected files: a danger line under the box says how many were not added and why (`not an accepted type`, `larger than 10 MB`, `up to 3 files`), in a polite live region; it clears on the next accepted file, a removal or a submit.
@@ -360,7 +362,7 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 - Dictation: the control's name says what pressing it does (`Dictate` / `Stop dictation`), with no `aria-pressed`; the listening status is a polite live region. Where the browser has no speech recognition the control is not rendered.
 - Queue: with `queueable`, Stop and Submit are two named buttons in tab order (Stop first); the owner announces the queued prompt through `PromptQueue`'s list, so the composer adds no live region of its own.
 - Focus: Submit, Stop and Start voice conversation share one place, except with `queueable` while `pending` / `streaming`, when Stop and Submit sit side by side. When the control that has focus is swapped, removed or disabled (the owner clears the prompt after a submit, which hides a queue Submit; a request starts or ends), focus moves to the text area instead of falling to the page.
-- ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter and the hint, `aria-invalid` over the limit; Submit, Stop and Start voice conversation are named icon buttons.
+- ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter (while it shows) and the hint, `aria-invalid` over the limit; Submit, Stop and Start voice conversation are named icon buttons.
 - The placeholder never carries required information (it disappears on typing).
 - Touch target: `IconButton` medium (44 px on coarse pointers); the small picker `Button`s get the 44 px hit area on coarse pointers from `Button`.
 
@@ -412,6 +414,7 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
   breaks where its controls stop fitting, at any width, with no breakpoint to keep in step.
 - Narrow: the pill's row wraps its slot controls; Submit stays at the inline end; once the text wraps the composer stacks, so the text gets the full width. With `queueable` while busy, Stop and Submit stay together at the inline end and never wrap onto separate lines; each keeps the 44 px target on coarse pointers. The model `Button` truncates the mode label first. The footer row wraps onto more lines; nothing scrolls sideways.
 - Shortcut menu (`/`, `@`): opens above the box, and below it when the space above the box in the visible viewport (the on-screen keyboard excluded) is shorter than the list and the space below is larger, so a composer at the top of a page or a panel never draws its list off-screen; the list carries `data-side="top|bottom"`.
+- Height: the text area measures its height again whenever its own width changes (a resize observer, released when the component unmounts), so a composer mounted in a pane that starts near zero width (a split view opening on a phone) settles to one row once the pane has its width.
 - Touch: `enterkeyhint="send"` on mobile keyboards; targets 44 px on coarse pointers.
 - Reflow: no horizontal scroll at 320 px.
 

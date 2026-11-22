@@ -39,7 +39,7 @@
     placeholder?: string
     /** Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`). */
     ariaLabel?: string
-    /** Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit. */
+    /** Character limit; an `n/max` counter shows from 80% of it and submit is blocked over it. `0` means no limit. */
     maxLength?: number
     /** Rows shown while empty. */
     minRows?: number
@@ -138,7 +138,7 @@
   const dragging = ref<boolean>(false)
   const rejection = ref<string>('')
   const controlEl = ref<HTMLElement | null>(null)
-  const { overBy, busy, canSubmit, showVoice, submit } = usePromptInputSubmit({
+  const { overBy, nearLimit, busy, canSubmit, showVoice, submit } = usePromptInputSubmit({
     model,
     files,
     references,
@@ -153,7 +153,7 @@
     send: (event, payload) => emit('submit', event, payload)
   })
   const describedBy = () => {
-    const ids = [props.maxLength > 0 ? counterId : '', slots.hint ? hintId : ''].filter(Boolean)
+    const ids = [nearLimit.value ? counterId : '', slots.hint ? hintId : ''].filter(Boolean)
     return ids.join(' ') || undefined
   }
 
@@ -359,7 +359,7 @@
             <slot name="end" />
           </fieldset>
           <span
-            v-if="maxLength > 0"
+            v-if="nearLimit"
             :id="counterId"
             :data-invalid="overBy > 0 || null"
             :data-testid="`${testId}__counter`"

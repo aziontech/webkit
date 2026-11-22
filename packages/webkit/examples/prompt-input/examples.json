@@ -14,7 +14,7 @@
     },
     {
       "name": "CharacterLimit",
-      "summary": "A 280-character limit: the counter shows how many are used, and over the limit the frame and counter turn danger and Submit disables.",
+      "summary": "A 280-character limit: the counter appears once the prompt reaches 80% of it (224 characters) and shows how many are used, and over the limit the frame and counter turn danger and Submit disables. A short prompt shows no counter.",
       "file": "character-limit.vue"
     },
     {

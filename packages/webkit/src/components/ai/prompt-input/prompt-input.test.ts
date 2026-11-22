@@ -145,6 +145,22 @@ describe('PromptInput', () => {
     expect(submitted).toEqual([])
   })
 
+  it('hides the counter until the prompt reaches 80% of the limit', async () => {
+    const { getByRole, queryByTestId, value } = harness({ initial: 'abc', maxLength: 10 })
+    const textarea = getByRole('textbox')
+    expect(queryByTestId('prompt-input__counter')).toBeNull()
+    expect(textarea).not.toHaveAttribute('aria-describedby')
+    value.value = 'abcdefgh'
+    await nextTick()
+    expect(queryByTestId('prompt-input__counter')).toHaveTextContent('8/10')
+    expect(textarea.getAttribute('aria-describedby')).toContain(
+      queryByTestId('prompt-input__counter')!.id
+    )
+    value.value = ''
+    await nextTick()
+    expect(queryByTestId('prompt-input__counter')).toBeNull()
+  })
+
   it('disables the text area, submit and the actions slot', () => {
     const { getByRole } = harness(
       { initial: 'x', disabled: true },
@@ -180,6 +196,22 @@ describe('PromptInput', () => {
     expect(textarea.style.overflowY).toBe('auto')
     await userEvent.keyboard('{Shift>}{Enter}{/Shift}f')
     expect(textarea.getBoundingClientRect().height).toBe(capped)
+  })
+
+  it('measures its height again when the text area changes width', async () => {
+    const { getByRole } = harness({
+      placeholder: 'A long hint that wraps over several lines when the text area is narrow',
+      maxRows: 6
+    })
+    const textarea = getByRole('textbox') as HTMLTextAreaElement
+    textarea.style.width = '600px'
+    await nextTick()
+    const wide = textarea.getBoundingClientRect().height
+    textarea.style.width = '40px'
+    await expect.poll(() => textarea.getBoundingClientRect().height).toBeGreaterThan(wide)
+    const narrow = textarea.getBoundingClientRect().height
+    textarea.style.width = '600px'
+    await expect.poll(() => textarea.getBoundingClientRect().height).toBeLessThan(narrow)
   })
 
   it('stays a single pill until the text takes a second line, then stacks until it is cleared', async () => {
