@@ -63,7 +63,7 @@ time zone on every tab ✗, "next N units" / start relative to now ✗**.
 - **Supabase / Vercel logs** — a preset list ("last hour", "last 24 hours") plus a custom absolute
   range, and a live mode that follows now.
 
-Take-aways: (1) the value has to stay relative ("last 15 minutes", "since 9:30 until now") until the
+Takeaways: (1) the value has to stay relative ("last 15 minutes", "since 9:30 until now") until the
 query runs; (2) refresh belongs with the range, because it only makes sense for ranges that end now;
 (3) on a phone the panel becomes a bottom sheet; (4) nobody truncates a time range.
 

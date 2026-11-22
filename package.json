@@ -55,6 +55,7 @@
     "format:webkit": "pnpm --filter @aziontech/webkit run format",
     "check:webkit:format": "pnpm --filter @aziontech/webkit run check:format",
     "check:audit": "pnpm audit",
+    "check:spelling": "typos --format brief",
     "gates": "pnpm run lint:webkit && pnpm run lint:webkit:style && pnpm run check:webkit:format && pnpm run typecheck:webkit && pnpm run typecheck:webkit:tests && pnpm run typecheck:docs && pnpm run check:webkit:type-coverage && pnpm run check:audit"
   },
   "dependencies": {

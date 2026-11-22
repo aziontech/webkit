@@ -1,0 +1,95 @@
+# Spelling check (typos-cli), run by `pnpm check:spelling`.
+# Every entry says why the word is correct; a real typo is fixed in the file, never listed here.
+
+[files]
+extend-exclude = [
+  # Translation catalogs: pt-BR and es product strings, not English.
+  "packages/webkit/src/locales/pt-BR.ts",
+  "packages/webkit/src/locales/es.ts",
+  "apps/docs/src/lib/i18n.ts",
+  # Multilingual search synonyms (pt-BR and es queries an app user types).
+  "packages/webkit/src/catalog/search-lexicon.js",
+  "packages/webkit/test/catalog/search-queries.json",
+  # Generated from the sources by build:catalog / build:llms.
+  "packages/webkit/catalog.json",
+  "packages/webkit/catalog/",
+  "packages/webkit/llms/",
+  # Built theme output.
+  "packages/theme/dist/",
+  # Release history written by release-please from past commit messages.
+  "CHANGELOG.md",
+  # Recorded agent runs and judge transcripts of the M2.7 evaluation, kept verbatim as evidence.
+  "packages/webkit/docs/reviews/m2.7/",
+  # Lint canary: the misspelled aria-lable is the violation the canary must catch.
+  "lint-canaries/eslint/accessibility/aria-props.vue",
+  # Lockfiles and visual baselines.
+  "pnpm-lock.yaml",
+  "*.snap",
+  "__screenshots__/",
+  "apps/visual/baselines/",
+]
+
+[default]
+extend-ignore-re = [
+  # Git commit hashes and other hex ids (a hex run with at least one digit).
+  "\\b[0-9a-f]{0,39}[0-9][0-9a-f]{0,39}\\b",
+  # Base64 payloads (certificates, inline images).
+  "[A-Za-z0-9+/]{40,}={0,2}",
+  # Unicode ranges in @font-face (U+0100-02BA).
+  "U\\+[0-9A-Fa-f]{4,6}(-[0-9A-Fa-f]{4,6})?",
+]
+
+[default.extend-identifiers]
+# Sample deployment id in the create-deploy-drawer block data.
+ALF0CLL8 = "ALF0CLL8"
+
+[default.extend-words]
+# "Look-alikes": the look-alike component check (check:look-alikes) and its reports.
+alikes = "alikes"
+# Americanas, a client brand with a logo in assets/logos/clients.
+americanas = "americanas"
+# Accepted English spelling of "not parseable".
+unparseable = "unparseable"
+# The "mis-" prefix in hyphenated words (mis-read, mis-handled, mis-tokened).
+mis = "mis"
+# Chief Marketing Officer, a job title option in the hero-form-section examples.
+cmo = "cmo"
+# ISO 3166 country codes (Bosnia and Herzegovina, Faroe Islands, Pitcairn) in the country, flag and map data.
+ba = "ba"
+fo = "fo"
+# Pitcairn, also sample initials and the plural "PNGs".
+pn = "pn"
+# "Protected branchs" is the literal name of the GitHub ruleset on main.
+branchs = "branchs"
+# Text layer name in the Figma file, read by the navigation-menu-list Code Connect mapping.
+categorie = "categorie"
+# Retired 5.x names kept in the v6 migration maps, the naming check and its tests (code-sintax tokens, the ai-pratices-review icon).
+sintax = "sintax"
+pratices = "pratices"
+# Deliberate misspellings that tests and docs use to show a typo is caught (buton, serch, a SQL error on SELEC).
+buton = "buton"
+serch = "serch"
+selec = "selec"
+# Partial input typed one key at a time in tests and console mock-ups (Hel, caf, emai) or matched as a prefix (vulnerabilit).
+hel = "hel"
+caf = "caf"
+emai = "emai"
+vulnerabilit = "vulnerabilit"
+# pt-BR words in block search intents, pt-BR UI strings of the demos app and of the sign-in block, and pt-BR test assertions.
+argumentos = "argumentos"
+clientes = "clientes"
+comando = "comando"
+conter = "conter"
+controle = "controle"
+controles = "controles"
+copie = "copie"
+datas = "datas"
+erro = "erro"
+erros = "erros"
+fases = "fases"
+inicial = "inicial"
+itens = "itens"
+momento = "momento"
+progresso = "progresso"
+seletor = "seletor"
+tema = "tema"

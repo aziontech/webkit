@@ -111,7 +111,7 @@ Once the project is wired, import components by path:
     icon="az az-trash"
   />
 
-  <!-- statment buttons -->
+  <!-- state buttons -->
   <Button
     variant="outline"
     label="Button"

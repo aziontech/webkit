@@ -276,7 +276,7 @@
       >
         <template #default>
           <a
-            href="https://www.azion.com/en/templates/"
+            href="https://www.azion.com/en/documentation/platform/marketplace/templates/"
             target="_blank"
             rel="noopener noreferrer"
             :class="CARD_LINK_CLASS"

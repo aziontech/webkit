@@ -26,7 +26,7 @@
   const rootEl = useTemplateRef<globalThis.SVGSVGElement>('rootEl')
 
   const scene = shallowRef<IllustrationScene | null>(null)
-  const placeheld = shallowRef(false)
+  const showPlaceholder = shallowRef(false)
 
   const paint = (load: IllustrationAssetLoader) =>
     Promise.all([load(), import('../../../assets/illustrations/scene')]).then(
@@ -53,7 +53,7 @@
           return paint(load ?? loadIllustrationPlaceholder).then((painted) => {
             if (props.name !== name) return
             scene.value = painted
-            placeheld.value = !load
+            showPlaceholder.value = !load
           })
         })
         .catch(warnUnloaded)
@@ -75,12 +75,12 @@
 
   const frame = computed(() => {
     const [, , width, height] = viewBox.value.split(/[\s,]+/).map(Number)
-    return placeheld.value || !(width > 0 && height > 0)
+    return showPlaceholder.value || !(width > 0 && height > 0)
       ? { width: 592, height: 300 }
       : { width, height }
   })
 
-  const decorative = computed(() => placeheld.value || props.ariaLabel.length === 0)
+  const decorative = computed(() => showPlaceholder.value || props.ariaLabel.length === 0)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'illustration')
 
@@ -100,7 +100,7 @@
     :aria-label="decorative ? undefined : ariaLabel"
     :aria-hidden="decorative || undefined"
     :data-testid="testId"
-    :data-placeholder="placeheld || undefined"
+    :data-placeholder="showPlaceholder || undefined"
     :width="frame.width"
     :height="frame.height"
     fill="none"

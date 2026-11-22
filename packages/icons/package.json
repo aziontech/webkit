@@ -1,11 +1,12 @@
 {
   "name": "@aziontech/icons",
   "version": "4.5.0",
+  "type": "commonjs",
   "description": "Azion icon font library — azionicons as CSS/woff2, plus colored brand icons",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aziontech/webkit.git",
+    "url": "git+https://github.com/aziontech/webkit.git",
     "directory": "packages/icons"
   },
   "publishConfig": {
@@ -39,6 +40,28 @@
   "style": "./dist/index.css",
   "main": "./dist/index.css",
   "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "azionicons": [
+        "./dist/index.d.ts"
+      ],
+      "azionicons-color": [
+        "./dist/index.d.ts"
+      ],
+      "azionicons-color-utilities": [
+        "./dist/index.d.ts"
+      ],
+      "catalog": [
+        "./dist/catalog.json"
+      ],
+      "color-catalog": [
+        "./dist/color-catalog.json"
+      ],
+      "manifest": [
+        "./dist/icons.json"
+      ]
+    }
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
