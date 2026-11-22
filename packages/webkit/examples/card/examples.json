@@ -23,6 +23,11 @@
       "file": "flush.vue"
     },
     {
+      "name": "Link",
+      "summary": "Set `href` and the whole card is one link: the root renders as an anchor with its own focus ring, and the card's text, title first, is the link's name. Keep buttons and other links out of a linked card.",
+      "file": "link.vue"
+    },
+    {
       "name": "Page JSON",
       "summary": "The same content in the marketing site's page JSON: `Card` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"` and `texture: \"none\"`, so nothing is painted behind it) and `SitePage` renders the entry with no code. The card body is a text child of the scene.",
       "file": "page-entry.vue",

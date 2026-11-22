@@ -35,7 +35,7 @@ const nameOf = ({ type }: VNode): string => (type as { name?: string }).name ?? 
 
 function isControl(vnode: VNode): boolean {
   const { type, props } = vnode
-  if (typeof type !== 'string') return /^(Icon)?Button$/.test(nameOf(vnode))
+  if (typeof type !== 'string') return /^((Icon)?Button|AppHeaderAccount)$/.test(nameOf(vnode))
   const p = props ?? {}
   return (
     /^(button|input|select|textarea)$/.test(type) ||

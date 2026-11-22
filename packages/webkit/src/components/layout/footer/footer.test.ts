@@ -399,4 +399,27 @@ describe('Footer', () => {
       await expectNoA11yViolations(container)
     })
   })
+
+  describe('homeHref — the brand is the home link', () => {
+    it('wraps the brand slot in one named home link', async () => {
+      const { container, getByRole } = render(DefaultFooter)
+      const home = getByRole('link', { name: 'Azion home' })
+      expect(home.getAttribute('href')).toBe('/')
+      expect(home.getAttribute('data-testid')).toBe('footer__home')
+      expect(home.closest('[data-testid="footer__brand"]')).toBeTruthy()
+      await expectNoA11yViolations(container)
+    })
+
+    it('takes homeAriaLabel, and renders the brand alone without homeHref', () => {
+      const named = render(Footer, {
+        props: { homeHref: '/', homeAriaLabel: 'Azion console home' },
+        slots: { brand: '<svg data-testid="mark" />' }
+      })
+      expect(named.getByRole('link', { name: 'Azion console home' })).toBeTruthy()
+      named.unmount()
+      const plain = render(Footer, { slots: { brand: '<svg data-testid="mark" />' } })
+      expect(plain.queryByRole('link')).toBeNull()
+      expect(plain.getByTestId('mark')).toBeTruthy()
+    })
+  })
 })

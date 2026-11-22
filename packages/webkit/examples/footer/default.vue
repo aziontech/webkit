@@ -15,7 +15,10 @@
 </script>
 
 <template>
-  <Footer aria-label="Footer">
+  <Footer
+    aria-label="Footer"
+    home-href="/"
+  >
     <Footer.Column title="Products">
       <Footer.Link href="/products/edge-application">Edge Application</Footer.Link>
       <Footer.Link href="/products/edge-firewall">Edge Firewall</Footer.Link>
@@ -37,12 +40,7 @@
       <Footer.Link href="https://status.azion.com/">System status</Footer.Link>
     </Footer.Column>
     <template #brand>
-      <a
-        href="/"
-        aria-label="Azion home"
-      >
-        <Brand size="small" />
-      </a>
+      <Brand size="small" />
     </template>
     <template #social>
       <IconButton

@@ -770,12 +770,14 @@ export const es: Messages = {
     itemProgress: 'Progreso de {name}'
   },
   footer: {
-    label: 'Pie de página'
+    label: 'Pie de página',
+    home: 'Inicio de Azion'
   },
   appHeader: {
     label: 'Encabezado global',
     home: 'Inicio de Azion',
-    productHome: 'Inicio de Azion {product}'
+    productHome: 'Inicio de Azion {product}',
+    account: 'Menú de la cuenta'
   },
   helpPanel: {
     label: 'Ayuda',

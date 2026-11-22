@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/card/default.vue'
+import LinkCard from '../../../../examples/card/link.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Card from './card.vue'
 
@@ -194,6 +195,28 @@ describe('Card', () => {
       await nextTick()
       expect(queryByTestId('card__footer')).toBeNull()
       expect(queryByTestId('probe')).toBeNull()
+    })
+  })
+
+  describe('href — the whole card is one link', () => {
+    it('renders the root as an anchor named by its text', async () => {
+      const { container, getByRole } = render(LinkCard)
+      const link = getByRole('link', { name: /^Nuxt E-commerce/ })
+      expect(link.getAttribute('href')).toBe('/create/templates/nuxt-ecommerce')
+      expect(link.getAttribute('data-testid')).toBe('card')
+      expect(link.hasAttribute('data-link')).toBe(true)
+      expect(container.querySelector('section')).toBeNull()
+      await expectNoA11yViolations(container)
+    })
+
+    it('keeps the section root without href or with an unsafe one', () => {
+      const plain = render(Card, { props: { title: 'Plain' } })
+      expect(plain.container.querySelector('section[data-testid="card"]')).toBeTruthy()
+      expect(plain.queryByRole('link')).toBeNull()
+      plain.unmount()
+      const unsafe = render(Card, { props: { title: 'Unsafe', href: 'javascript:alert(1)' } })
+      expect(unsafe.queryByRole('link')).toBeNull()
+      expect(unsafe.container.querySelector('[data-link]')).toBeNull()
     })
   })
 })

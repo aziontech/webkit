@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
+  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
@@ -755,11 +755,6 @@
 
   onMounted(focusFirstField)
 
-  const ACCOUNT_BUTTON_CLASS =
-    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
-    'motion-reduce:transition-none'
-
   const DOMAIN_SLOT_CLASS =
     'flex min-h-10 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) ' +
     'data-[empty]:border-dashed'
@@ -789,17 +784,10 @@
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>
-        <button
-          type="button"
+        <AppHeaderAccount
+          name="name@example.com"
           aria-label="Account settings"
-          :class="ACCOUNT_BUTTON_CLASS"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            variant="square"
-          />
-        </button>
+        />
       </AppHeader.End>
     </AppHeader>
 

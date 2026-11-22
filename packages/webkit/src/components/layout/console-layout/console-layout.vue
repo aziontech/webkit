@@ -53,6 +53,7 @@
   import ShortcutsDialog from '../../overlay/shortcuts-dialog/shortcuts-dialog.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import AppHeader from '../app-header/app-header.vue'
+  import AppHeaderAccount from '../app-header/app-header-account.vue'
   import AppHeaderBrand from '../app-header/app-header-brand.vue'
   import AppHeaderCenter from '../app-header/app-header-center.vue'
   import AppHeaderEnd from '../app-header/app-header-end.vue'
@@ -399,11 +400,6 @@
     if (hrefOf(crumb)) follow(event, crumb)
   }
 
-  const ACCOUNT_TRIGGER_CLASS =
-    'rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
-    'motion-reduce:transition-none'
-
   const MAIN_CLASS =
     'flex min-h-full min-w-0 flex-col animate-page-enter ' +
     'has-[>[data-layout-fill]]:h-full has-[>[data-layout-fill]]:overflow-hidden ' +
@@ -625,18 +621,11 @@
                 @select="onAccountSelect"
               >
                 <DropdownMenuTrigger>
-                  <button
-                    type="button"
+                  <AppHeaderAccount
+                    :src="account.src"
+                    :name="account.name"
                     :aria-label="accountTriggerLabel"
-                    :class="ACCOUNT_TRIGGER_CLASS"
-                  >
-                    <Avatar
-                      :src="account.src"
-                      :label="account.name"
-                      size="medium"
-                      variant="square"
-                    />
-                  </button>
+                  />
                 </DropdownMenuTrigger>
                 <slot name="account-menu" />
               </DropdownMenu>

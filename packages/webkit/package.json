@@ -1438,6 +1438,10 @@
       "types": "./types/components/layout/app-header/app-header.vue.d.ts",
       "default": "./src/components/layout/app-header/app-header.vue"
     },
+    "./app-header-account": {
+      "types": "./types/components/layout/app-header/app-header-account.vue.d.ts",
+      "default": "./src/components/layout/app-header/app-header-account.vue"
+    },
     "./sidebar": {
       "types": "./types/components/layout/sidebar/index.d.ts",
       "default": "./src/components/layout/sidebar/index.ts"
@@ -3613,6 +3617,9 @@
       ],
       "app-header-root": [
         "./types/components/layout/app-header/app-header.vue.d.ts"
+      ],
+      "app-header-account": [
+        "./types/components/layout/app-header/app-header-account.vue.d.ts"
       ],
       "sidebar": [
         "./types/components/layout/sidebar/index.d.ts"

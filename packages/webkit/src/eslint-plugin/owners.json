@@ -49,7 +49,10 @@
         "src/components/code/log-viewer/log-viewer-header.vue": "LogViewer.Header: its level filters are toggle buttons (aria-pressed) with a dot and a count.",
         "src/components/code/code-editor": "CodeEditor: each problem row is the button that moves the caret to its marker.",
         "src/components/input/hint": "Hint: the component is the inline info trigger of its tooltip, sized to the label beside it.",
-        "src/components/input/date-picker/parts/date-picker-control-button.vue": "DatePicker field segment: the in-field calendar and clear segments that fill the field height and draw its divider, part of the date field control."
+        "src/components/input/date-picker/parts/date-picker-control-button.vue": "DatePicker field segment: the in-field calendar and clear segments that fill the field height and draw its divider, part of the date field control.",
+        "src/components/layout/app-header/app-header-account.vue": "AppHeaderAccount: the account control at the end of the header, an avatar that opens the account menu (or acts alone).",
+        "src/components/ai/suggestion-group": "SuggestionGroup: each prompt is a suggestion chip whose label wraps to the reader's whole question, a group of buttons Button cannot draw (one line, fixed height).",
+        "src/components/content/avatar-group": "AvatarGroup: the +N overflow is the last circle of the overlapping avatar stack and the disclosure button (popovertarget) of the hidden names."
       }
     },
     "a": {
@@ -85,7 +88,6 @@
         "src/components/section/investor-marks-section": "InvestorMarksSection: each logo cell is one link to the investor's site; the logo is its only content.",
         "src/components/section/listing-index-section": "ListingIndexSection: each row's name is the row's link, stretched over the row on narrow screens.",
         "src/components/section/listing-table-section": "ListingTableSection: each row's name is the row's link, stretched over the row on narrow screens.",
-        "src/components/section/site-footer-section": "SiteFooterSection: the brand mark is the home link.",
         "src/components/section/site-header-section": "SiteHeaderSection: the brand mark is the home link.",
         "src/components/section/story-index-section": "StoryIndexSection: each story card is one link surface.",
         "src/components/section/template-gallery-section": "TemplateGallerySection: the anchor stretched over each card is the card's link surface.",
@@ -94,7 +96,10 @@
         "src/components/ai/sources": "Sources: each entry is the link to a cited source, a reference list whose job is links.",
         "src/components/content/integration-card": "IntegrationCard: its title link is stretched over the card, so the whole card is one target.",
         "src/components/content/overflow-count": "OverflowCount: its popover lists the hidden entries as full-width link rows.",
-        "src/components/layout/app-header/app-header-brand.vue": "AppHeader.Brand: the brand mark is the home link of the header."
+        "src/components/layout/app-header/app-header-brand.vue": "AppHeader.Brand: the brand mark is the home link of the header.",
+        "src/components/content/card/card.vue": "Card: with href the whole card is one link (the root renders as an anchor).",
+        "src/components/layout/bento-grid/bento-grid-cell": "BentoGrid.Cell: with href the whole tile is one link (the cell surface renders as an anchor).",
+        "src/components/layout/footer/footer.vue": "Footer: with homeHref the brand is the home link of the bottom bar."
       }
     },
     "input": {

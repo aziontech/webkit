@@ -13,7 +13,6 @@
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
   import LanguageSelect from '@aziontech/webkit/language-select'
-  import Link from '@aziontech/webkit/link'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
@@ -176,6 +175,8 @@
         <Footer
           variant="content"
           aria-label="Footer"
+          home-href="/"
+          home-aria-label="Azion home"
         >
           <Footer.Column
             v-for="column in footerColumns"
@@ -218,13 +219,7 @@
           </template>
 
           <template #brand>
-            <Link
-              href="/"
-              aria-label="Azion home"
-              inline
-            >
-              <Brand size="small" />
-            </Link>
+            <Brand size="small" />
           </template>
         </Footer>
       </div>

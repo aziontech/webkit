@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../../utils/safe-href'
   import RegistrationFrame from '../../../layout/registration-frame/registration-frame.vue'
 
   defineOptions({
@@ -24,13 +25,16 @@
     variant?: BentoGridCellVariant
     /** Pads the cell's content away from its rules; off for content that reaches the cell's edges. */
     padded?: boolean
+    /** When set, the whole tile is one link to this URL: the cell's surface renders as an anchor. */
+    href?: string
   }
 
-  withDefaults(defineProps<BentoGridCellProps>(), {
+  const props = withDefaults(defineProps<BentoGridCellProps>(), {
     span: '1',
     rows: '1',
     variant: 'surface',
-    padded: true
+    padded: true,
+    href: ''
   })
 
   defineSlots<{
@@ -41,6 +45,13 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'bento-grid-cell')
+
+  const link = computed(() => safeHref(props.href))
+
+  const SURFACE_CLASS =
+    'h-full data-[variant=canvas]:bg-(--bg-canvas) data-[variant=surface]:bg-(--bg-surface) data-[padded]:p-(--spacing-xl) ' +
+    'data-[link]:block data-[link]:text-(--text-default) data-[link]:no-underline data-[link]:outline-none ' +
+    'data-[link]:focus-visible:ring-2 data-[link]:focus-visible:ring-inset data-[link]:focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -56,13 +67,17 @@
       marks="all"
       class="h-full w-full min-w-0"
     >
-      <div
+      <component
+        :is="link ? 'a' : 'div'"
+        :href="link ?? undefined"
         :data-variant="variant"
         :data-padded="padded || null"
-        class="h-full data-[variant=canvas]:bg-(--bg-canvas) data-[variant=surface]:bg-(--bg-surface) data-[padded]:p-(--spacing-xl)"
+        :data-link="link ? true : null"
+        :data-testid="link ? `${testId}__link` : undefined"
+        :class="SURFACE_CLASS"
       >
         <slot />
-      </div>
+      </component>
     </RegistrationFrame>
   </div>
 </template>

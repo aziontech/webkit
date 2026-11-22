@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
+  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
@@ -177,11 +177,6 @@
   const openFilePicker = (event: MouseEvent) => pickFrom(event, filePicker)
   const openFolderPicker = (event: MouseEvent) => pickFrom(event, folderPicker)
 
-  const ACCOUNT_BUTTON_CLASS =
-    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
-    'motion-reduce:transition-none'
-
   const TEMPLATE_GLOW_CLASS =
     'pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance ' +
     'group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none'
@@ -189,10 +184,6 @@
   const TEMPLATE_ICON_CLASS =
     'text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance ' +
     'group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none'
-
-  const TEMPLATE_LINK_CLASS =
-    "text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:z-20 after:rounded-(--shape-card) after:content-[''] focus-visible:after:ring-2 " +
-    'focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)'
 </script>
 
 <template>
@@ -218,17 +209,10 @@
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>
-        <button
-          type="button"
+        <AppHeaderAccount
+          name="name@example.com"
           aria-label="Account settings"
-          :class="ACCOUNT_BUTTON_CLASS"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            variant="square"
-          />
-        </button>
+        />
       </AppHeader.End>
     </AppHeader>
 
@@ -620,7 +604,10 @@
                               :key="item.slug"
                               class="flex group relative min-h-(--size-44)"
                             >
-                              <Card class="w-full">
+                              <Card
+                                :href="templateHref(item)"
+                                class="w-full"
+                              >
                                 <template #default>
                                   <div class="isolate flex flex-1 flex-col">
                                     <span
@@ -648,12 +635,7 @@
                                       </span>
                                       <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                                         <h4 class="text-label-md text-(--text-default)">
-                                          <a
-                                            :href="templateHref(item)"
-                                            :class="TEMPLATE_LINK_CLASS"
-                                          >
-                                            {{ item.title }}
-                                          </a>
+                                          {{ item.title }}
                                         </h4>
                                         <p class="text-pretty text-body-sm text-(--text-muted)">
                                           {{ item.description }}
