@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { computed, ref, shallowRef } from 'vue'
+import { computed, effectScope, ref, shallowRef } from 'vue'
 
 import type { NavigationMenuChangeEventDetails } from '../lib/change-event-details'
 import {
@@ -16,18 +16,20 @@ const setup = (dir: 'ltr' | 'rtl' = 'ltr') => {
   })
   const current = ref<string | number | null>(null)
   const calls: Array<[string | number | null, NavigationMenuChangeEventDetails]> = []
-  const keyboard = useNavigationMenuKeyboard({
-    value: computed(() => current.value),
-    orientation: computed(() => 'horizontal'),
-    isRtl: () => dir === 'rtl',
-    triggers: shallowRef<NavigationMenuTriggerEntry[]>(buttons),
-    popupEl: shallowRef(null),
-    activeTriggerEl: shallowRef(null),
-    setValue: (next, details) => {
-      calls.push([next, details])
-      current.value = next
-    }
-  })
+  const keyboard = effectScope().run(() =>
+    useNavigationMenuKeyboard({
+      value: computed(() => current.value),
+      orientation: computed(() => 'horizontal'),
+      isRtl: () => dir === 'rtl',
+      triggers: shallowRef<NavigationMenuTriggerEntry[]>(buttons),
+      popupEl: shallowRef(null),
+      activeTriggerEl: shallowRef(null),
+      setValue: (next, details) => {
+        calls.push([next, details])
+        current.value = next
+      }
+    })
+  )!
   return { buttons, calls, keyboard }
 }
 

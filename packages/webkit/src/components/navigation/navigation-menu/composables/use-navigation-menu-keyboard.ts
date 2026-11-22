@@ -1,4 +1,4 @@
-import { type ComputedRef, nextTick, type Ref } from 'vue'
+import { type ComputedRef, nextTick, onScopeDispose, type Ref } from 'vue'
 
 import {
   createChangeEventDetails,
@@ -33,12 +33,14 @@ function panelFocusables(panel: HTMLElement | null): HTMLElement[] {
   return Array.from(panel.querySelectorAll<HTMLElement>(PANEL_FOCUSABLE))
 }
 
-async function focusPanel(popupEl: Readonly<Ref<HTMLElement | null>>, edge: 'first' | 'last') {
-  for (let attempt = 0; attempt < 5; attempt += 1) {
+type Scope = { alive: boolean }
+
+async function focusPanel(popupEl: Readonly<Ref<HTMLElement | null>>, scope: Scope) {
+  for (let attempt = 0; attempt < 5 && scope.alive; attempt += 1) {
     await nextTick()
     const items = panelFocusables(popupEl.value)
     if (items.length) {
-      ;(edge === 'last' ? items[items.length - 1] : items[0]).focus()
+      items[0].focus()
       return
     }
     await new Promise((resolve) => globalThis.requestAnimationFrame(() => resolve(null)))
@@ -91,7 +93,8 @@ function enterPanel(
   { value, popupEl, orientation, isRtl, setValue }: NavigationMenuKeyboardRoot,
   event: KeyboardEvent,
   ownTrigger: HTMLElement,
-  ownValue: string | number | undefined
+  ownValue: string | number | undefined,
+  scope: Scope
 ): boolean {
   const ownOpen = ownValue != null && value.value === ownValue
   const enterKey =
@@ -102,7 +105,7 @@ function enterPanel(
   event.preventDefault()
   if (!tabIn && !ownOpen && ownValue != null)
     setValue(ownValue, createChangeEventDetails('trigger-press', event, ownTrigger))
-  void focusPanel(popupEl, 'first')
+  void focusPanel(popupEl, scope)
   return true
 }
 
@@ -124,7 +127,7 @@ function moveBetweenTriggers(
   setValue(entry.value, createChangeEventDetails('list-navigation', event, entry.el))
 }
 
-function onTriggerKeydown(root: NavigationMenuKeyboardRoot, event: KeyboardEvent) {
+function onTriggerKeydown(root: NavigationMenuKeyboardRoot, event: KeyboardEvent, scope: Scope) {
   const { triggers, value, setValue } = root
   const focusedIndex = triggers.value.findIndex((entry) => entry.el === document.activeElement)
   const baseIndex =
@@ -144,14 +147,19 @@ function onTriggerKeydown(root: NavigationMenuKeyboardRoot, event: KeyboardEvent
       )
     return
   }
-  if (!enterPanel(root, event, ownTrigger, ownValue)) moveBetweenTriggers(root, event, baseIndex)
+  if (!enterPanel(root, event, ownTrigger, ownValue, scope))
+    moveBetweenTriggers(root, event, baseIndex)
 }
 
 export function useNavigationMenuKeyboard(
   root: NavigationMenuKeyboardRoot
 ): UseNavigationMenuKeyboardReturn {
+  const scope: Scope = { alive: true }
+  onScopeDispose(() => {
+    scope.alive = false
+  })
   return {
-    onTriggerKeydown: (event) => onTriggerKeydown(root, event),
+    onTriggerKeydown: (event) => onTriggerKeydown(root, event, scope),
     onPopupKeydown: (event) => onPopupKeydown(root, event)
   }
 }
