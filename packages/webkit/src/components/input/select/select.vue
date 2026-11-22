@@ -55,7 +55,7 @@
     }
   )
 
-  /** Two-way bound selection: the one picked value. Its type flows to displayValue and update:modelValue. */
+  /** Two-way bound selection: the one picked value. Its type flows to displayValue and to the v-model update. */
   const model = defineModel<TValue>({ default: undefined as never })
 
   /** Controlled open state for the dropdown. Use with v-model:open; while unbound the dropdown is uncontrolled and seeded by defaultOpen. */

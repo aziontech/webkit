@@ -71,7 +71,10 @@ function familyAnimations(abs, name, vueText) {
   const found = new Set(animateClasses(vueText))
   for (const file of vueFilesUnder(componentDir(abs, name))) {
     if (file === abs) continue
-    for (const c of animateClasses(readFileSync(file, 'utf-8'))) found.add(c)
+    const text = readFileSync(file, 'utf-8')
+    for (const part of [file, ...privatePartFiles(file, text)])
+      for (const c of animateClasses(part === file ? text : readFileSync(part, 'utf-8')))
+        found.add(c)
   }
   return found
 }
