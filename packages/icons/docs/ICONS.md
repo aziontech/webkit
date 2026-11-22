@@ -2,7 +2,7 @@
 
 > Generated from `src/icons.json` by `scripts/build-docs.mjs`. Edit the JSON, then run `npm run build`; do not edit this page by hand.
 
-552 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
+554 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
 
 ## How the icons are organised
 
@@ -12,8 +12,8 @@
   - Platform (9) — The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
   - Solutions (8) — The Azion Solutions, one icon each: the five By Need Solutions and the three By Industry Solutions, named after the Solution's short name.
   - Services (8) — Support plans and professional services.
-- **Interface** (307) — Generic glyphs for the interface. They name an action, an object or a state, never a product.
-  - Arrows (48) — Arrows, chevrons, carets, sorting and moving.
+- **Interface** (309) — Generic glyphs for the interface. They name an action, an object or a state, never a product.
+  - Arrows (50) — Arrows, chevrons, carets, sorting and moving.
   - Actions (37) — Things a person does: edit, copy, delete, search, share, download, zoom.
   - Status (24) — Alerts, information, success, help and states such as on, off or loading.
   - Files (17) — Files, folders, documents and attachments.
@@ -167,6 +167,8 @@ Arrows, chevrons, carets, sorting and moving.
 | `az az-arrow-down-z-a` | Sort descending, Z to A | A down arrow beside a Z above an A |  |
 | `az az-arrow-left` | Go back or move left | An arrow pointing left |  |
 | `az az-arrow-right` | Go forward or move right | An arrow pointing right |  |
+| `az az-arrow-left-to-line` | Move all the way to the start | An arrow pointing left at a vertical line |  |
+| `az az-arrow-right-to-line` | Move all the way to the end | An arrow pointing right at a vertical line |  |
 | `az az-arrow-right-left` | Swap or exchange | Two arrows, the top pointing right and the bottom pointing left |  |
 | `az az-arrow-up` | Move up or go up | An arrow pointing up |  |
 | `az az-arrow-up-0-1` | Sort ascending, 0 to 9 | An up arrow beside a 0 above a 1 |  |

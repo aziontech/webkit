@@ -103,7 +103,7 @@
       >
         <i
           :data-streaming="streaming || null"
-          class="az az-sparkles data-[streaming]:animate-pulse motion-reduce:animate-none"
+          class="az az-sparkles data-[streaming]:animate-status-pulse motion-reduce:animate-none"
           aria-hidden="true"
         />
         <span :data-testid="`${testId}__label`">{{ label }}</span>

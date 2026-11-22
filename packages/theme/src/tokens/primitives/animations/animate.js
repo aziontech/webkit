@@ -41,6 +41,7 @@ export const animate = {
   'spin-settle': `spin ${SETTLE_SPIN} cubic-bezier(0.4, 0, 0.2, 1)`,
   'ping-settle': 'ping 1s cubic-bezier(0, 0, 0.2, 1) 3',
   'pulse-settle': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 2',
+  'status-pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
   'blink-settle': 'blink 1s step-end 4',
   'fade-in': 'fadeIn 220ms ease-in-out',
   'fade-out': 'fadeOut 220ms ease-in-out',
@@ -73,7 +74,8 @@ export const useWhen = {
   pulse: 'Skeleton/placeholder opacity pulse while content loads.',
   bounce: 'Playful attention bounce (scroll-down hints); use sparingly.',
   shimmer: 'Skeleton shimmer sweep while content loads.',
-  blink: 'Text caret / terminal cursor blink while text is being typed or streamed (stops when the typing does).',
+  blink:
+    'Text caret / terminal cursor blink while text is being typed or streamed (stops when the typing does).',
   'spin-settle':
     'One eased revolution, then still (4.2s): a decorative rotating glow that must stop by itself within 5 seconds (WCAG 2.2.2). Ends on its start frame.',
   'ping-settle':
@@ -82,6 +84,8 @@ export const useWhen = {
     'Two opacity pulses, then still at full strength (4s): a decorative pulse that must stop by itself within 5 seconds (WCAG 2.2.2). Keep any stagger delay under 1s so the last pulse still ends within 5 seconds.',
   'blink-settle':
     'Four caret blinks, then a solid caret (4s): a decorative cursor that must stop by itself within 5 seconds (WCAG 2.2.2).',
+  'status-pulse':
+    'A small status mark (a live dot, a streaming sparkle) pulsing for as long as the status it shows lasts: the signal is the motion, so it stops when the status ends. Never for loading placeholders (pulse, on Skeleton) or decoration (pulse-settle).',
   'fade-in': 'Content or backdrop appearing in place (no directional origin).',
   'fade-out': 'Content or backdrop leaving in place (pair of fade-in).',
   'slide-down': 'Vertical disclosure expanding (accordion panel, expandable row).',

@@ -320,34 +320,40 @@ describe('Sidebar', () => {
       const root = getByTestId('sidebar')
       expect(root.getAttribute('data-state')).toBe('closed')
       expect(root.hasAttribute('inert')).toBe(true)
-      expect((getByTestId('sidebar__collapse-input') as HTMLInputElement).checked).toBe(true)
+      expect(getByTestId('sidebar__panel').getAttribute('data-state')).toBe('closed')
     })
 
-    it('renders a hidden checkbox whose checked state mirrors collapsed, CSS-only motion driver', () => {
+    it('the panel carries the collapsed state that drives the CSS motion, with no hidden control', () => {
       const { getByTestId } = render(Sidebar, {
         props: { collapsible: true, open: false },
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const input = getByTestId('sidebar__collapse-input') as HTMLInputElement
-      expect(input.type).toBe('checkbox')
-      expect(input.checked).toBe(true)
-      expect(input.getAttribute('aria-hidden')).toBe('true')
-      expect(input.getAttribute('tabindex')).toBe('-1')
+      const panel = getByTestId('sidebar__panel')
+      expect(panel.getAttribute('data-state')).toBe('closed')
+      expect(getByTestId('sidebar').querySelector('input')).toBeNull()
     })
 
-    it('toggling the hidden checkbox drives the collapsed model, the same state the trigger drives', async () => {
-      const { getByTestId, emitted } = render(Sidebar, {
-        props: { collapsible: true },
+    it('the panel state follows the model both ways, the state the trigger drives', async () => {
+      const { getByTestId, rerender } = render(Sidebar, {
+        props: { collapsible: true, open: true },
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const input = getByTestId('sidebar__collapse-input') as HTMLInputElement
-      await fireEvent.click(input)
+      const panel = getByTestId('sidebar__panel')
+      expect(panel.getAttribute('data-state')).toBe('open')
+      await rerender({ collapsible: true, open: false })
+      expect(panel.getAttribute('data-state')).toBe('closed')
+      await rerender({ collapsible: true, open: true })
+      expect(panel.getAttribute('data-state')).toBe('open')
+    })
 
-      expect(input.checked).toBe(true)
-      expect(emitted()['update:open']?.at(-1)).toEqual([false])
-      expect(getByTestId('sidebar').getAttribute('data-state')).toBe('closed')
+    it('a rail that cannot collapse carries no panel state', () => {
+      const { getByTestId } = render(Sidebar, {
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      expect(getByTestId('sidebar__panel').hasAttribute('data-state')).toBe(false)
     })
 
     it('the way back is a sibling of the rail, because a collapsed rail would clip it', async () => {

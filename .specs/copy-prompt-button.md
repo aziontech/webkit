@@ -5,16 +5,16 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 0bca51fd50bb157941bc507661193059ecfda00f96574754477f7f7f51ac2435
+checksum: 6538259e6ab5f2f5b1ddbe3a32e6a1d33c0848d86cfd6bd4527f1f1097cc5b7e
 created: 2026-11-12
-last_updated: 2026-11-15
+last_updated: 2026-11-21
 ---
 
 # CopyPromptButton — Component Spec
 
 ## Purpose
 
-The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip carries the design system's AI treatment, the same three layers as `HighlightButton`: a blurred gradient glow rotating behind it, the brand-accent gradient over the glow, and a dark scrim over both that holds the white label at contrast; on hover the gradient and the scrim fade to a quarter and the glow blooms through. It is dark in both themes (it renders under `data-theme="dark"`), so it reads as the AI entry point next to a primary button, and a tooltip says what it does. The marks are single-colour and decorative, drawn in the chip's own ink; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor"). With `closable` a dismiss button sits beside the chip, and dismissing removes both from the layout.
+The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip carries the design system's AI treatment, the same three layers as `HighlightButton`: a blurred gradient glow that turns once behind it and rests, the brand-accent gradient over the glow, and a dark scrim over both that holds the white label at contrast; on hover the gradient and the scrim fade to a quarter and the glow blooms through. It is dark in both themes (it renders under `data-theme="dark"`), so it reads as the AI entry point next to a primary button, and a tooltip says what it does. The marks are single-colour and decorative, drawn in the chip's own ink; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor"). With `closable` a dismiss button sits beside the chip, and dismissing removes both from the layout.
 
 ## When to use
 
@@ -98,7 +98,7 @@ _none_
 
 ## States
 
-- Visual states: `idle`, `hover` (the gradient and the scrim fade to 25% and the rotating glow blooms through), `focus-visible` (ring), `copied` (the label swaps to a check and `Copied` for two seconds, without changing the width), `disabled` (the AI layers hide and the chip takes the disabled fill), `dismissed` (`open` is false: the chip and its dismiss button unmount).
+- Visual states: `idle`, `hover` (the gradient and the scrim fade to 25% and the glow blooms through), `focus-visible` (ring), `copied` (the label swaps to a check and `Copied` for two seconds, without changing the width), `disabled` (the AI layers hide and the chip takes the disabled fill), `dismissed` (`open` is false: the chip and its dismiss button unmount).
 - `data-state` is `idle` or `copied`; `data-disabled` mirrors `disabled`.
 - Not applicable: `loading`, `empty`, `error`, `readonly`, `invalid`, `open`/`closed` (the tooltip owns its own open state).
 
@@ -106,7 +106,7 @@ _none_
 
 | Trigger              | Animation / Transition                                                                                                                                                        | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                             |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | --------------------------------------------------- |
-| idle (always)        | the glow layer rotates once every 8 s: `animate-spin [animation-duration:8s] [animation-timing-function:linear]`                                                              | semantic `spin`, as `HighlightButton`             | `motion-reduce:animate-none` (the glow holds still) |
+| on mount             | the glow layer turns once and rests (4.2 s, so it stops by itself within 5 s, WCAG 2.2.2): `animate-spin-settle`                                                              | catalog `spin-settle`, as `HighlightButton`       | `motion-reduce:animate-none` (the glow holds still) |
 | hover state change   | the gradient and scrim layers' `transition-opacity duration-300 ease-out`, and the chip's `transition-colors duration-fast-02 ease-productive-entrance`, as `HighlightButton` | semantic (fast-02 · productive entrance)          | `motion-reduce:transition-none` on every layer      |
 | tooltip open / close | owned by `Tooltip` (its popup scale-in and scale-out)                                                                                                                         | semantic                                          | `motion-reduce:animate-none` (in `Tooltip`)         |
 
@@ -141,7 +141,7 @@ _none_
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Contrast: the white label and marks sit on the 80% black scrim at rest (≥ 4.5:1 in both page themes); on hover the scrim thins over the accent gradient and the label stays above 3:1 for its large button type.
 - Touch target: 40 px tall; `pointer-coarse:min-h-11` raises it to 44 px.
-- `motion-reduce:animate-none` on the rotating glow and `motion-reduce:transition-none` on every transition.
+- `motion-reduce:animate-none` on the glow and `motion-reduce:transition-none` on every transition.
 
 ## Internationalization
 

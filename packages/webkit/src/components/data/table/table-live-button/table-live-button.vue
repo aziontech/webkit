@@ -50,7 +50,7 @@
         aria-hidden="true"
         :data-live="isLive || undefined"
         :data-testid="`${testId}__dot`"
-        class="size-2 shrink-0 rounded-full bg-(--text-muted) data-[live]:bg-(--success) data-[live]:animate-pulse motion-reduce:animate-none"
+        class="size-2 shrink-0 rounded-full bg-(--text-muted) data-[live]:bg-(--success) data-[live]:animate-status-pulse motion-reduce:animate-none"
       />
     </template>
   </Button>

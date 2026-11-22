@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 290a60be70cd92c8c4c0edf5f4399a2e9c3c88a93a0c84ec39ae5874418d2775
+checksum: 87bd87062b50302e4e79d382697af955e79d4256b9f8ea7832777fd2347a618a
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-21
 ---
 
 # Reasoning — Component Spec
@@ -96,11 +96,11 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 ## Motion & Animations
 
-| Trigger            | Animation / Transition                                           | Token     | Reduced-motion fallback         |
-| ------------------ | ---------------------------------------------------------------- | --------- | ------------------------------- |
-| streaming glyph    | `animate-pulse`                                                  | `pulse`   | `motion-reduce:animate-none`    |
-| chevron open/close | `transition-transform duration-fast-02 ease-productive-entrance` | `fast-02` | `motion-reduce:transition-none` |
-| label color hover  | `transition-colors`                                              | `fast-02` | `motion-reduce:transition-none` |
+| Trigger            | Animation / Transition                                           | Token          | Reduced-motion fallback         |
+| ------------------ | ---------------------------------------------------------------- | -------------- | ------------------------------- |
+| streaming glyph    | `animate-status-pulse`                                           | `status-pulse` | `motion-reduce:animate-none`    |
+| chevron open/close | `transition-transform duration-fast-02 ease-productive-entrance` | `fast-02`      | `motion-reduce:transition-none` |
+| label color hover  | `transition-colors`                                              | `fast-02`      | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -112,7 +112,9 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 ## Theme gaps
 
-_None._
+| Figma variable         | Temporary primitive                       | Follow-up          |
+| ---------------------- | ----------------------------------------- | ------------------ |
+| status-pulse animation | added to primitives/animations/animate.js | done (this change) |
 
 ## Accessibility (WCAG 2.1 AA)
 

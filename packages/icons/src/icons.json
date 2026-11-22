@@ -911,6 +911,26 @@
       "legacy": ["ai ai-arrow-right", "pi pi-arrow-right"]
     },
     {
+      "name": "arrow-left-to-line",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing left at a vertical line",
+      "means": "Move all the way to the start",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "arrow-right-to-line",
+      "set": "mono",
+      "group": "interface",
+      "category": "arrow",
+      "shows": "An arrow pointing right at a vertical line",
+      "means": "Move all the way to the end",
+      "status": "stable",
+      "legacy": []
+    },
+    {
       "name": "arrow-right-left",
       "set": "mono",
       "group": "interface",

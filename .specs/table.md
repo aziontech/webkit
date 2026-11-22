@@ -7,9 +7,9 @@ spec_version: 23
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: ff619ac104c39d312bffb4a32ae76aba9529b474082508c2c51b0e6928711674
+checksum: b6e8087f5b6774adef9f4f1bd3ac50f9259913eca0681d9f8b8b0bd87ce66c4c
 created: 2026-06-16
-last_updated: 2026-11-20
+last_updated: 2026-11-21
 ---
 
 # Table — Component Spec
@@ -224,7 +224,7 @@ _none_ — sort comes from `Table.HeadCell` (`sort`) and row clicks fall through
 | ---------------------------------- | ------------------------------------------ | ------ | ------------------------------- |
 | row hover / selected               | `transition-colors duration-150 ease-out`  | inline | `motion-reduce:transition-none` |
 | sort glyph reveal on header hover  | `transition-opacity duration-150 ease-out` | inline | `motion-reduce:transition-none` |
-| live dot (`TableLiveButton`, live) | `animate-pulse`                            | inline | `motion-reduce:animate-none`    |
+| live dot (`TableLiveButton`, live) | `animate-status-pulse`                     | inline | `motion-reduce:animate-none`    |
 
 The root itself is static. `TableFilter` animates through the `FilterMenu` or `PropertyFilter` it hosts (owned by those specs); DataTable's own motion (body enter, row drag) is in [`data-table`](./data-table.md).
 
@@ -256,9 +256,9 @@ The root itself is static. `TableFilter` animates through the `FilterMenu` or `P
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-| -------------- | ------------------- | --------- |
-| _none_         | —                   | —         |
+| Figma variable         | Temporary primitive                       | Follow-up          |
+| ---------------------- | ----------------------------------------- | ------------------ |
+| status-pulse animation | added to primitives/animations/animate.js | done (this change) |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -267,7 +267,7 @@ The root itself is static. `TableFilter` animates through the `FilterMenu` or `P
 - ARIA: `role="table"` sits on the grid element inside the scroll viewport (testid `<testid>__table`), not on the root: the root also holds the toolbar band, the focusable scroll viewport and the footer, and any of those inside a `table` is an unallowed child (`aria-required-children`). Every `aria-*` attribute passed to `Table` (`aria-label`, `aria-labelledby`, `aria-describedby`…) is forwarded to that element; every other attribute stays on the root. `table-caption` is a plain element (no `role`) that names the table through `aria-labelledby` unless the consumer names it with `aria-label`/`aria-labelledby`. The default slot is the table's content, so it holds rowgroups (and a caption) only; anything else goes in `footer` or around the `Table`. `table-header`/`table-body` `role="rowgroup"`; `table-footer` has no role (it hosts pagination or an action, not rows); `table-row` `role="row"`; `table-head-cell` `role="columnheader"` with `aria-sort` when sortable; `table-cell` `role="cell"`; selected rows set `aria-selected`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including muted header text.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Pause, Stop, Hide (WCAG 2.2.2): the `TableLiveButton` dot pulses for as long as the live tail runs. The pulse is an essential status signal (it shows the stream is running, and stops when the stream stops), so it keeps `animate-pulse`; the user stops it with the same button, and `motion-reduce:animate-none` keeps it still.
+- Pause, Stop, Hide (WCAG 2.2.2): the `TableLiveButton` dot pulses for as long as the live tail runs. The pulse is an essential status signal (it shows the stream is running, and stops when the stream stops), so it takes `animate-status-pulse` (the catalog's status pulse; `animate-pulse` is the Skeleton loading placeholder's); the user stops it with the same button, and `motion-reduce:animate-none` keeps it still.
 - Touch target ≥40×40 px on the sort button and row action controls.
 - Filter names: `TableFilter` hosts `FilterMenu` (its trigger counts the applied fields in its name) or `PropertyFilter` (a combobox named by `title`); see their specs.
 

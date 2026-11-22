@@ -993,3 +993,5 @@ Budget-raise: command-input 5.1 KB → 7.5 KB (measured 7.49 KB): the back contr
 Budget-raise: link 2.35 KB → 2.45 KB (measured 2.40 KB): the new `inline` mode, a second anchor branch for links inside a sentence, so blocks stop writing raw `<a class="text-link">`.
 Budget-raise: plan-comparison-section 38.95 KB → 39.05 KB (measured 39.00 KB): it renders Link, which gained the `inline` mode.
 Budget-raise: client-mosaic-section 7.45 KB → 7.55 KB (measured 7.48 KB): it renders Link, which gained the `inline` mode.
+Budget-raise: transfer-list-controls 2.15 KB → 4.15 KB (measured 4.11 KB): the four move controls are IconButtons (the shared button root, its spinner and its focus and disabled states) instead of hand-written buttons with inline SVG arrows (no-unowned-element); the arrows are now font glyphs that mirror in right-to-left.
+Budget-raise: transfer-list 6.75 KB → 7.9 KB (measured 7.85 KB): it renders TransferList.Controls, which now builds on IconButton.

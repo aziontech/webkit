@@ -187,6 +187,11 @@
 
   const isCollapsed = computed(() => collapsed.value && railEnabled.value && !resizing.value)
 
+  const panelState = computed(() => {
+    if (!railEnabled.value) return undefined
+    return collapsed.value ? 'closed' : 'open'
+  })
+
   const isOut = computed(() => isCollapsed.value && !iconMode.value)
 
   const hydrated = ref(false)
@@ -225,7 +230,7 @@
 
   const RAIL_MOTION_CLASS =
     'transition-[width,min-width] duration-moderate-02 ease-expressive-entrance ' +
-    'has-[>div>input:checked]:ease-productive-exit ' +
+    'has-[>div[data-state=closed]]:ease-productive-exit ' +
     'data-[resizing]:transition-none ' +
     'not-data-[settled]:transition-none ' +
     'motion-reduce:transition-none'
@@ -238,8 +243,9 @@
         ? cn(
             'relative shrink-0 overflow-hidden',
             iconMode.value
-              ? 'w-(--sidebar-width) has-[>div>input:checked]:w-(--sidebar-rail-width) min-w-(--sidebar-min-width) has-[>div>input:checked]:min-w-(--sidebar-rail-width)'
-              : 'data-[state=closed]:border-e-0 has-[>div>input:checked]:border-e-0 w-(--sidebar-width) has-[>div>input:checked]:w-0 min-w-(--sidebar-min-width) has-[>div>input:checked]:min-w-0',
+              ? 'w-(--sidebar-width) has-[>div[data-state=closed]]:w-(--sidebar-rail-width) min-w-(--sidebar-min-width) has-[>div[data-state=closed]]:min-w-(--sidebar-rail-width)'
+              : 'data-[state=closed]:border-e-0 has-[>div[data-state=closed]]:border-e-0 w-(--sidebar-width) ' +
+                  'has-[>div[data-state=closed]]:w-0 min-w-(--sidebar-min-width) has-[>div[data-state=closed]]:min-w-0',
             'data-[resizing]:min-w-0 max-w-(--sidebar-max-width)',
             RAIL_MOTION_CLASS,
             props.resizable ? 'resize-x data-[hydrated]:resize-none' : undefined
@@ -261,7 +267,7 @@
 
   const INNER_MOTION_CLASS =
     'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance ' +
-    'has-[>input:checked]:ease-productive-exit ' +
+    'data-[state=closed]:ease-productive-exit ' +
     'data-[resizing]:transition-none ' +
     'not-data-[settled]:transition-none ' +
     'motion-reduce:transition-none motion-reduce:translate-none'
@@ -270,9 +276,9 @@
     cn(
       'flex h-full min-h-0 w-full flex-col',
       iconMode.value
-        ? 'w-[calc(var(--sidebar-width)-1px)] has-[>input:checked]:w-[calc(var(--sidebar-rail-width)-1px)]'
+        ? 'w-[calc(var(--sidebar-width)-1px)] data-[state=closed]:w-[calc(var(--sidebar-rail-width)-1px)]'
         : cn(
-            'w-[calc(var(--sidebar-width)-1px)] translate-x-0 has-[>input:checked]:-translate-x-full rtl:has-[>input:checked]:translate-x-full opacity-100 has-[>input:checked]:opacity-20',
+            'w-[calc(var(--sidebar-width)-1px)] translate-x-0 data-[state=closed]:-translate-x-full rtl:data-[state=closed]:translate-x-full opacity-100 data-[state=closed]:opacity-20',
             INNER_MOTION_CLASS
           )
     )
@@ -348,17 +354,9 @@
       :style="innerStyle"
       :data-resizing="resizing ? '' : undefined"
       :data-settled="settled ? '' : undefined"
+      :data-state="panelState"
       :data-testid="`${testId}__panel`"
     >
-      <input
-        v-if="railEnabled"
-        v-model="collapsed"
-        type="checkbox"
-        class="sr-only"
-        tabindex="-1"
-        aria-hidden="true"
-        :data-testid="`${testId}__collapse-input`"
-      />
       <div
         v-if="$slots['header']"
         :class="headerRegionClass"

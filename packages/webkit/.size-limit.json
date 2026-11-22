@@ -1824,7 +1824,7 @@
   {
     "name": "transfer-list",
     "path": "src/components/data/transfer-list/index.ts",
-    "limit": "6.75 KB"
+    "limit": "7.9 KB"
   },
   {
     "name": "transfer-list-root",
@@ -1844,7 +1844,7 @@
   {
     "name": "transfer-list-controls",
     "path": "src/components/data/transfer-list/transfer-list-controls/transfer-list-controls.vue",
-    "limit": "2.15 KB"
+    "limit": "4.15 KB"
   },
   {
     "name": "alert",
