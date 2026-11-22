@@ -730,22 +730,22 @@
   {
     "name": "chart",
     "path": "src/components/chart/chart/index.ts",
-    "limit": "25.35 KB"
+    "limit": "26.3 KB"
   },
   {
     "name": "chart-root",
     "path": "src/components/chart/chart/chart.vue",
-    "limit": "16.9 KB"
+    "limit": "17.5 KB"
   },
   {
     "name": "chart-line",
     "path": "src/components/chart/chart/chart-line/chart-line.vue",
-    "limit": "2.25 KB"
+    "limit": "2.3 KB"
   },
   {
     "name": "chart-area",
     "path": "src/components/chart/chart/chart-area/chart-area.vue",
-    "limit": "2.5 KB"
+    "limit": "2.55 KB"
   },
   {
     "name": "chart-bar",
@@ -770,7 +770,7 @@
   {
     "name": "chart-tooltip",
     "path": "src/components/chart/chart/chart-tooltip/chart-tooltip.vue",
-    "limit": "2.85 KB"
+    "limit": "2.9 KB"
   },
   {
     "name": "chart-legend",
@@ -800,13 +800,13 @@
   {
     "name": "map-chart",
     "path": "src/components/chart/map-chart/map-chart.vue",
-    "limit": "17.8 KB",
+    "limit": "18.55 KB",
     "entryOnly": true
   },
   {
     "name": "donut-chart",
     "path": "src/components/chart/donut-chart/donut-chart.vue",
-    "limit": "13.1 KB"
+    "limit": "13.9 KB"
   },
   {
     "name": "stat-tile",

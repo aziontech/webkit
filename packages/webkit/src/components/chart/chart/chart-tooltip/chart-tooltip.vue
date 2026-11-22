@@ -5,6 +5,7 @@
   import * as en from '../../../../locales/en'
   import { isFiniteNumber } from '../../lib'
   import { useChartContext } from '../composables/use-chart-context'
+  import ChartTooltipPanel from '../parts/chart-tooltip-panel.vue'
 
   defineOptions({ name: 'ChartTooltip', inheritAttrs: false })
 
@@ -75,11 +76,6 @@
       })
     }
   })
-
-  const PANEL_CLASS =
-    'flex w-max max-w-(--container-3xs) flex-col overflow-hidden rounded-(--shape-control) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) text-(--chart-tooltip-text) ' +
-    'shadow-(--shadow-sm) ' +
-    'data-[side=end]:translate-x-(--spacing-sm) data-[side=start]:-translate-x-[calc(100%+var(--spacing-sm))]'
 </script>
 
 <template>
@@ -95,15 +91,10 @@
       :style="{ left: '0', translate: `${readout.x}px ${readout.y}px` }"
       class="absolute top-0 data-[moving]:transition-[translate] data-[moving]:duration-fast-02 data-[moving]:ease-productive-entrance motion-reduce:transition-none"
     >
-      <div
-        :data-side="readout.side"
-        :class="PANEL_CLASS"
+      <ChartTooltipPanel
+        :title="readout.title"
+        :side="readout.side"
       >
-        <span
-          class="border-b border-(--chart-tooltip-border) px-(--spacing-sm) py-(--spacing-xs) text-label-md"
-        >
-          {{ readout.title }}
-        </span>
         <span class="flex flex-col gap-(--spacing-2xs) px-(--spacing-sm) py-(--spacing-xs)">
           <span
             v-for="row in readout.rows"
@@ -139,7 +130,7 @@
         >
           <slot name="footer" />
         </span>
-      </div>
+      </ChartTooltipPanel>
     </div>
   </div>
 </template>

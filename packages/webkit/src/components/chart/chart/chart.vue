@@ -8,11 +8,10 @@
   import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Alert from '../../feedback/alert/alert.vue'
-  import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import {
     categoryLayout,
+    CHART_STATE_SLOTS,
     type ChartLabel,
     type ChartLabelScale,
     type ChartPoint,
@@ -30,7 +29,8 @@
     mirrorLayout,
     niceTicks,
     normalizeSeries,
-    stackedMax
+    stackedMax,
+    stepIndex
   } from '../lib'
   import {
     type ChartAxisType,
@@ -39,6 +39,8 @@
     type ChartOrientation,
     type ChartReferenceRegistration
   } from './injection-key'
+  import ChartDataTable, { type ChartDataTableRow } from './parts/chart-data-table.vue'
+  import ChartFrame from './parts/chart-frame.vue'
 
   defineOptions({ name: 'Chart', inheritAttrs: false })
 
@@ -380,6 +382,18 @@
   const formatCell = (value: number | null | undefined) =>
     isFiniteNumber(value) ? valueText(value) : ''
 
+  const tableColumns = computed(() => [
+    t('chart.label'),
+    ...visibleSeries.value.map((entry) => entry.name)
+  ])
+  const tableRow = ({ label, index }: { label: ChartLabel; index: number }): ChartDataTableRow => ({
+    key: index,
+    header: labelText(label),
+    cells: visibleSeries.value.map((entry) => formatCell(entry.values[index]))
+  })
+  const tableRows = computed(() => labels.value.map((label, index) => tableRow({ label, index })))
+  const twinTableRows = computed(() => twinRows.value.map(tableRow))
+
   const { entered } = useChartEntrance({ show: showMarks, ready: () => stageWidth.value > 0 })
 
   function setActiveIndex(index: number | null) {
@@ -528,13 +542,8 @@
     const backward = vertical.value ? 'ArrowLeft' : 'ArrowUp'
     const nextSeries = vertical.value ? 'ArrowDown' : 'ArrowRight'
     const previousSeries = vertical.value ? 'ArrowUp' : 'ArrowLeft'
-    let target: number | null = null
-    if (key === forward) target = current === null ? 0 : Math.min(last, current + 1)
-    else if (key === backward) target = current === null ? last : Math.max(0, current - 1)
-    else if (key === 'Home') target = 0
-    else if (key === 'End') target = last
-
-    if (target !== null) {
+    const target = stepIndex(key, current, last, [forward], [backward])
+    if (target !== undefined) {
       if (hasBrush.value && event.shiftKey) {
         const anchor = draft.value?.[0] ?? current ?? target
         draft.value = [anchor, target]
@@ -599,204 +608,82 @@
 </script>
 
 <template>
-  <figure
+  <ChartFrame
     v-bind="$attrs"
     :data-testid="testId"
-    data-plain-ground
     :data-orientation="orientation"
-    :data-loading="loading || null"
-    :data-error="(!loading && hasError) || null"
-    :data-empty="(!loading && !hasError && isEmpty) || null"
-    :data-refetching="refetching || null"
-    :data-table-view="tableView || null"
     :data-active="activeIndex !== null || null"
     :data-label-scale="labelScale"
     :data-brushing="draft !== null || null"
-    :aria-busy="loading || refetching || undefined"
+    :loading="loading"
+    :refetching="refetching"
+    :error="error"
+    :drawable="!isEmpty"
+    :table-view="tableView"
+    :empty-title="emptyTitle || t('chart.emptyTitle')"
+    :empty-description="emptyDescription"
+    :empty-icon="vertical ? 'az az-chart-line' : 'az az-chart-bar'"
+    state-class="col-start-1 row-start-1"
+    :summary-id="summaryId"
+    :summary="summary"
+    :live-id="liveId"
+    :announcement="announcement"
+    :test-id="testId"
     :style="{ '--chart-plot-min': `${height}px` }"
     :class="ROOT_CLASS"
   >
-    <div
-      v-if="loading"
-      class="col-start-1 row-start-1 flex min-h-0"
-    >
-      <Skeleton
-        width="100%"
-        height="100%"
-        :data-testid="`${testId}__loading`"
-      />
-    </div>
-    <div
-      v-else-if="hasError"
-      class="col-start-1 row-start-1 flex items-center justify-center p-(--spacing-md)"
-    >
-      <slot name="error">
-        <Alert
-          severity="danger"
-          :label="error"
-          :data-testid="`${testId}__error`"
+    <template #loading>
+      <div class="col-start-1 row-start-1 flex min-h-0">
+        <Skeleton
+          width="100%"
+          height="100%"
+          :data-testid="`${testId}__loading`"
         />
-      </slot>
-    </div>
-    <div
-      v-else-if="isEmpty"
-      class="col-start-1 row-start-1 flex items-stretch"
-    >
-      <slot name="empty">
-        <EmptyState
-          :title="emptyTitle || t('chart.emptyTitle')"
-          :description="emptyDescription"
-          :icon="vertical ? 'az az-chart-line' : 'az az-chart-bar'"
-          size="small"
-          bordered
-          :data-testid="`${testId}__empty`"
-        >
-          <template
-            v-if="$slots['empty-actions']"
-            #actions
-          >
-            <slot name="empty-actions" />
-          </template>
-        </EmptyState>
-      </slot>
-    </div>
-    <div
-      v-else-if="tableView"
-      class="col-start-1 row-start-1 min-h-0 overflow-auto"
-    >
-      <table
-        :data-testid="`${testId}__table`"
-        class="w-full border-collapse text-body-sm text-(--text-default)"
-      >
-        <caption class="sr-only">
-          {{
-            ariaLabel || summary
-          }}
-        </caption>
-        <thead>
-          <tr>
-            <th
-              scope="col"
-              class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-start text-label-sm text-(--text-muted)"
-            >
-              {{ t('chart.label') }}
-            </th>
-            <th
-              v-for="entry in visibleSeries"
-              :key="entry.id"
-              scope="col"
-              class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-end text-label-sm text-(--text-muted)"
-            >
-              {{ entry.name }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(label, index) in labels"
-            :key="index"
-          >
-            <th
-              scope="row"
-              class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-2xs) text-start text-body-sm"
-            >
-              {{ labelText(label) }}
-            </th>
-            <td
-              v-for="entry in visibleSeries"
-              :key="entry.id"
-              class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-2xs) text-end tabular-nums"
-            >
-              {{ formatCell(entry.values[index]) }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <template v-else>
-      <div
-        ref="stageEl"
-        role="group"
-        :aria-roledescription="t('chart.roleDescription')"
-        tabindex="0"
-        :aria-label="accessibleName"
-        :aria-labelledby="labelledBy"
-        :aria-describedby="describedBy"
-        :data-testid="`${testId}__plot`"
-        :data-brush="hasBrush || null"
-        :style="{ minHeight: `${height}px` }"
-        class="col-start-1 row-start-1 min-h-0 min-w-0 cursor-crosshair rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[brush]:touch-pan-y"
-        @pointerdown="onPointerdown"
-        @pointermove="onPointermove"
-        @pointerup="onPointerup"
-        @pointercancel="onPointercancel"
-        @pointerleave="onPointerleave"
-      />
-      <slot />
+      </div>
     </template>
-
-    <p
-      :id="summaryId"
-      class="sr-only"
-    >
-      {{ summary }}
-    </p>
-    <p
-      :id="liveId"
-      aria-live="polite"
-      class="sr-only"
-      :data-testid="`${testId}__live`"
-    >
-      {{ announcement }}
-    </p>
+    <template #table>
+      <div class="col-start-1 row-start-1 min-h-0 overflow-auto">
+        <ChartDataTable
+          :data-testid="`${testId}__table`"
+          :caption="ariaLabel || summary"
+          :columns="tableColumns"
+          :rows="tableRows"
+        />
+      </div>
+    </template>
     <div
-      v-if="showMarks"
-      v-memo="[
-        twinRows,
-        visibleSeries,
-        ariaLabel,
-        summary,
-        testId,
-        locale,
-        labelZone,
-        formatValue,
-        formatLabel
-      ]"
-      class="sr-only"
+      ref="stageEl"
+      role="group"
+      :aria-roledescription="t('chart.roleDescription')"
+      tabindex="0"
+      :aria-label="accessibleName"
+      :aria-labelledby="labelledBy"
+      :aria-describedby="describedBy"
+      :data-testid="`${testId}__plot`"
+      :data-brush="hasBrush || null"
+      :style="{ minHeight: `${height}px` }"
+      class="col-start-1 row-start-1 min-h-0 min-w-0 cursor-crosshair rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[brush]:touch-pan-y"
+      @pointerdown="onPointerdown"
+      @pointermove="onPointermove"
+      @pointerup="onPointerup"
+      @pointercancel="onPointercancel"
+      @pointerleave="onPointerleave"
+    />
+    <slot />
+    <template #twin>
+      <ChartDataTable
+        v-memo="[twinTableRows, tableColumns, ariaLabel, summary, testId]"
+        :data-testid="`${testId}__twin`"
+        :caption="ariaLabel || summary"
+        :columns="tableColumns"
+        :rows="twinTableRows"
+      />
+    </template>
+    <template
+      v-for="name in CHART_STATE_SLOTS.filter((slot) => $slots[slot])"
+      #[name]
     >
-      <table :data-testid="`${testId}__twin`">
-        <caption>
-          {{
-            ariaLabel || summary
-          }}
-        </caption>
-        <thead>
-          <tr>
-            <th scope="col">{{ t('chart.label') }}</th>
-            <th
-              v-for="entry in visibleSeries"
-              :key="entry.id"
-              scope="col"
-            >
-              {{ entry.name }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="{ label, index } in twinRows"
-            :key="index"
-          >
-            <th scope="row">{{ labelText(label) }}</th>
-            <td
-              v-for="entry in visibleSeries"
-              :key="entry.id"
-            >
-              {{ formatCell(entry.values[index]) }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </figure>
+      <slot :name="name" />
+    </template>
+  </ChartFrame>
 </template>
