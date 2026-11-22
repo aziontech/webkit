@@ -10,6 +10,7 @@
   import PageTabs from '@aziontech/webkit/page-tabs'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Subheader from '@aziontech/webkit/subheader'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -233,27 +234,10 @@ jobs:
                         aria-hidden="true"
                       />
                       <div class="flex min-w-0">
-                        <Tooltip
-                          :content="`Open ${resource.domain} in a new tab`"
-                          class="w-full"
-                        >
-                          <a
-                            :href="address"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            data-link
-                            class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                          >
-                            <span class="truncate underline-offset-2 group-hover/link:underline">{{
-                              resource.domain
-                            }}</span>
-                            <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                            <i
-                              class="az az-external-link shrink-0 text-body-xs leading-none"
-                              aria-hidden="true"
-                            />
-                          </a>
-                        </Tooltip>
+                        <TableCellLink
+                          :label="resource.domain"
+                          :href="address"
+                        />
                       </div>
                     </div>
 
@@ -345,28 +329,10 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Domains</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <div class="flex min-w-0">
-                          <Tooltip
-                            :content="`Open ${resource.domain} in a new tab`"
-                            class="w-full"
-                          >
-                            <a
-                              :href="address"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              data-link
-                              class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                            >
-                              <span
-                                class="truncate underline-offset-2 group-hover/link:underline"
-                                >{{ resource.domain }}</span
-                              >
-                              <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                              <i
-                                class="az az-external-link shrink-0 text-body-xs leading-none"
-                                aria-hidden="true"
-                              />
-                            </a>
-                          </Tooltip>
+                          <TableCellLink
+                            :label="resource.domain"
+                            :href="address"
+                          />
                         </div>
                       </div>
                     </div>
@@ -458,12 +424,11 @@ jobs:
                   <template #description>
                     Two ways to build and deploy this resource. Select one and follow the steps, or
                     read the
-                    <a
+                    <Link
                       href="https://example.com/docs/cli"
                       target="_blank"
-                      rel="noopener noreferrer"
-                      class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                      >CLI docs</a
+                      inline
+                      >CLI docs</Link
                     >.
                   </template>
                   <template #actions>
