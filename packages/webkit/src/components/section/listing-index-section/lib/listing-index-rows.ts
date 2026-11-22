@@ -5,6 +5,8 @@ import type {
   ListingIndexSectionSort
 } from '../listing-index-section.vue'
 
+export const LAZY_ROWS = 300
+
 export function seedFacets(
   facets: ListingIndexSectionFacet[],
   search: string,

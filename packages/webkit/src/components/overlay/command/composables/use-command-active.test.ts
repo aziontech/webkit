@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { computed, ref } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 
 import type { CommandRegisteredItem } from '../injection-key'
 import { useCommandActive } from './use-command-active'
@@ -17,7 +17,7 @@ const item = (value: string, activated: string[]): CommandRegisteredItem => ({
 
 const setup = (values: string[], query = '') => {
   const activated: string[] = []
-  const list = ref(values.map((value) => item(value, activated)))
+  const list = shallowRef(values.map((value) => item(value, activated)))
   let popped = 0
   const active = useCommandActive(
     computed(() => list.value),

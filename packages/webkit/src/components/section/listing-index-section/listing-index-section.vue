@@ -27,6 +27,7 @@
   import StoryIndexSectionFacetSelect from '../story-index-section/parts/story-index-section-facet-select.vue'
   import StoryIndexSectionToolbar from '../story-index-section/parts/story-index-section-toolbar.vue'
   import * as listing from './lib/listing-index-rows'
+  import { edgeOf, facetDisplay, sortDisplay } from './lib/listing-index-rows'
 
   defineOptions({
     name: 'ListingIndexSection',
@@ -187,10 +188,9 @@
 
   const listed = computed(() => listing.groupRows(props.groups, matches.value))
 
-  const LAZY_ROWS = 300
   const phoneChunks = useLazyChunks({ rowHeight: 1, chunkSize: 1, threshold: 0 })
   const tableChunks = useLazyChunks({ rowHeight: 1, chunkSize: 1, threshold: 0 })
-  const lazyGroups = computed(() => matches.value.length > LAZY_ROWS)
+  const lazyGroups = computed(() => matches.value.length > listing.LAZY_ROWS)
   const blocksOf = (chunks: typeof phoneChunks, rowHeight: number) =>
     computed(() =>
       listing.groupBlocks(listed.value, lazyGroups.value ? chunks.split : null, rowHeight)
@@ -271,7 +271,7 @@
             :options="facet.options"
             :all-option="{ value: '', label: facet.allLabel }"
             :placeholder="facet.allLabel"
-            :display-value="listing.facetDisplay(facet)"
+            :display-value="facetDisplay(facet)"
             :search-placeholder="t('listingIndexSection.search')"
             :search-aria-label="
               t('listingIndexSection.searchFacet', { facet: facet.label.toLowerCase() })
@@ -284,7 +284,7 @@
             :model-value="sort"
             :label="sortAriaLabel"
             :options="sorts"
-            :display-value="listing.sortDisplay(sorts)"
+            :display-value="sortDisplay(sorts)"
             :search-placeholder="t('listingIndexSection.search')"
             :search-aria-label="
               t('listingIndexSection.searchFacet', { facet: sortAriaLabel.toLowerCase() })
@@ -371,7 +371,7 @@
                   :key="column.key"
                   :grow="column.grow ?? 1"
                   :align="column.align ?? 'start'"
-                  :data-edge="listing.edgeOf(index, columns.length)"
+                  :data-edge="edgeOf(index, columns.length)"
                   class="data-[edge=end]:pe-(--spacing-xl)! data-[edge=start]:ps-(--spacing-xl)!"
                 >
                   <span class="text-overline-md text-(--text-muted)">{{ column.label }}</span>
@@ -414,7 +414,7 @@
                     :grow="column.grow ?? 1"
                     :align="column.align ?? 'start'"
                     :principal="cellIndex === 0"
-                    :data-edge="listing.edgeOf(cellIndex, columns.length)"
+                    :data-edge="edgeOf(cellIndex, columns.length)"
                     :data-meta="cellIndex > 0 || null"
                     class="py-(--spacing-lg)! text-(--text-muted) data-[meta]:text-overline-sm! data-[edge=end]:pe-(--spacing-xl)! data-[edge=start]:ps-(--spacing-xl)!"
                   >

@@ -12,7 +12,7 @@ const Heading = defineComponent({
   props: { id: { type: String, required: true } },
   setup(props) {
     const el = ref<HTMLElement | null>(null)
-    useHeadingOutline(el, () => ({ id: props.id, text: props.id.toUpperCase(), level: 2 }))
+    useHeadingOutline(el, () => ({ id: props.id, text: props.id.toUpperCase(), depth: 2 }))
     const navigate = useHeadingNavigation()
     return () =>
       h('h2', { id: props.id, ref: el }, [
