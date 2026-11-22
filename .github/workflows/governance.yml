@@ -38,6 +38,7 @@ jobs:
               - 'packages/webkit-mcp/**'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
+              - '.syncpackrc.json'
             tests:
               - 'packages/webkit/**'
             visual:
@@ -116,6 +117,9 @@ jobs:
 
       - name: Check unused files, exports and dependencies
         run: pnpm run check:unused
+
+      - name: Check every package uses one version of each shared dependency and the lockfile has no duplicate
+        run: pnpm run check:versions
 
   lint-canaries:
     name: Lint canaries (broken samples must stay broken)
