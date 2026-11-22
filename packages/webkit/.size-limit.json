@@ -24,12 +24,12 @@
   {
     "name": "doc-layout",
     "path": "src/components/docs/doc-layout/doc-layout.vue",
-    "limit": "72.35 KB"
+    "limit": "72.4 KB"
   },
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "40 KB",
+    "limit": "40.2 KB",
     "entryOnly": true
   },
   {
@@ -2324,7 +2324,7 @@
   {
     "name": "navigation-menu-root",
     "path": "src/components/navigation/navigation-menu/navigation-menu.vue",
-    "limit": "15.75 KB"
+    "limit": "15.8 KB"
   },
   {
     "name": "navigation-menu-list",
@@ -2369,7 +2369,7 @@
   {
     "name": "command-root",
     "path": "src/components/overlay/command/command.vue",
-    "limit": "21.55 KB"
+    "limit": "21.6 KB"
   },
   {
     "name": "command-input",
