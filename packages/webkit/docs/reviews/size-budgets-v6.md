@@ -1010,3 +1010,6 @@ Budget-raise: console-layout 82.8 KB → 82.95 KB (measured 82.90 KB): the accou
 Budget-raise: bento-grid 2.25 KB → 2.4 KB (measured 2.38 KB): BentoGrid.Cell href: the whole tile renders as one link.
 Budget-raise: bento-grid-cell 1.75 KB → 1.95 KB (measured 1.93 KB): BentoGrid.Cell href: the whole tile renders as one link.
 Budget-raise: popover-trigger 2.5 KB → 2.55 KB (measured 2.51 KB): TriggerHost recognises AppHeaderAccount as a control so the trigger state reaches it in the server render.
+Budget-raise: combobox 13.55 KB → 13.85 KB (measured 13.80 KB): split into rows, commit, scroll and keyboard composables for the CODE_QUALITY 3.1 limits; the function boundaries and the names they return cost 0.28 KB that inlining would have saved.
+Budget-raise: date-picker-root 43.7 KB → 43.8 KB (measured 43.78 KB): the date picker fields and time zone render Combobox, which grew 0.28 KB in its split.
+Budget-raise: date-picker 43.9 KB → 43.95 KB (measured 43.93 KB): the date picker fields and time zone render Combobox, which grew 0.28 KB in its split.

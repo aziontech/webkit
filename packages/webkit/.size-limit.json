@@ -84,7 +84,7 @@
   {
     "name": "date-picker-root",
     "path": "src/components/input/date-picker/date-picker.vue",
-    "limit": "43.7 KB"
+    "limit": "43.8 KB"
   },
   {
     "name": "date-range-picker",
@@ -1312,7 +1312,7 @@
   {
     "name": "combobox",
     "path": "src/components/input/combobox/combobox.vue",
-    "limit": "13.55 KB"
+    "limit": "13.85 KB"
   },
   {
     "name": "tag-editor",
@@ -1909,7 +1909,7 @@
   {
     "name": "date-picker",
     "path": "src/components/input/date-picker/index.ts",
-    "limit": "43.9 KB"
+    "limit": "43.95 KB"
   },
   {
     "name": "date-picker-clear",

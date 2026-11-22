@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, nextTick, onBeforeUpdate, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import LazyNodes from '../../../composables/use-lazy-chunks/lib/lazy-nodes'
@@ -10,31 +10,14 @@
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Spinner from '../../feedback/spinner/spinner.vue'
   import Input from '../input/input.vue'
+  import { useComboboxCommit } from './composables/use-combobox-commit'
+  import { useComboboxKeyboard } from './composables/use-combobox-keyboard'
+  import { useComboboxRows } from './composables/use-combobox-rows'
+  import { useComboboxScroll } from './composables/use-combobox-scroll'
+  import { isDisabledRow, optionLabel } from './lib/combobox-rows'
+  import type { ComboboxOption, ComboboxSize } from './types'
 
-  /** One suggestion of the Combobox. */
-  export type ComboboxOption = {
-    /** The committed value; also matched by the typed text. */
-    value: string
-    /** Text shown instead of the value. */
-    label?: string
-    /** Muted text at the end of the row. */
-    description?: string
-    /** Title of the group the option sits under. */
-    group?: string
-    /** Shown but not selectable. */
-    disabled?: boolean
-  }
-
-  /** Size token, as `Input`: 28 / 32 / 40 px. */
-  export type ComboboxSize = 'small' | 'medium' | 'large'
-
-  type Row =
-    | { kind: 'option'; id: string; option: ComboboxOption }
-    | { kind: 'custom'; id: string; value: string }
-
-  type Section = { id: string; title: string; rows: Row[] }
-
-  type CommitEvent = MouseEvent | KeyboardEvent | FocusEvent
+  export type { ComboboxOption, ComboboxSize } from './types'
 
   defineOptions({
     name: 'Combobox',
@@ -137,11 +120,9 @@
   const active = ref(-1)
   const anchorWidth = ref(0)
 
-  const labelOf = (option: ComboboxOption) => option.label || option.value
-
   const displayOf = (value: string) => {
     const match = props.options.find((option) => option.value === value)
-    return match ? labelOf(match) : value
+    return match ? optionLabel(match) : value
   }
 
   const text = ref(displayOf(model.value))
@@ -153,71 +134,9 @@
     }
   )
 
-  const fold = (value: string) =>
-    value
-      .normalize('NFD')
-      .replace(/\p{Diacritic}/gu, '')
-      .toLocaleLowerCase(locale.value)
-
   const query = computed(() => (typing.value ? text.value.trim() : ''))
 
-  const folded = computed(() =>
-    props.options.map((option) => ({
-      option,
-      value: fold(option.value),
-      label: fold(labelOf(option))
-    }))
-  )
-
-  const exactMatch = (value: string) => {
-    const needle = fold(value)
-    return folded.value.find(
-      (entry) => !entry.option.disabled && (entry.value === needle || entry.label === needle)
-    )?.option
-  }
-
-  const matches = computed(() => {
-    if (!props.filter || !query.value) return props.options
-    const needle = fold(query.value)
-    return folded.value
-      .filter((entry) => entry.value.includes(needle) || entry.label.includes(needle))
-      .map((entry) => entry.option)
-  })
-
-  const showCustom = computed(
-    () => props.allowCustom && Boolean(query.value) && !exactMatch(query.value)
-  )
-
-  const sections = computed<Section[]>(() => {
-    const order: string[] = []
-    const byGroup = new Map<string, Row[]>()
-    matches.value.forEach((option, index) => {
-      const key = option.group ?? ''
-      if (!byGroup.has(key)) {
-        byGroup.set(key, [])
-        order.push(key)
-      }
-      byGroup.get(key)?.push({ kind: 'option', id: `${uid}-option-${index}`, option })
-    })
-    const ordered = [...order.filter((key) => !key), ...order.filter((key) => key)]
-    const out: Section[] = ordered.map((key, index) => ({
-      id: `${uid}-group-${index}`,
-      title: key,
-      rows: byGroup.get(key) ?? []
-    }))
-    if (showCustom.value) {
-      out.push({
-        id: `${uid}-custom`,
-        title: '',
-        rows: [{ kind: 'custom', id: `${uid}-option-custom`, value: query.value }]
-      })
-    }
-    return out
-  })
-
-  const rows = computed(() => sections.value.flatMap((section) => section.rows))
-
-  const isDisabledRow = (row: Row) => row.kind === 'option' && Boolean(row.option.disabled)
+  const { exactMatch, sections, rows } = useComboboxRows(props, query, locale, uid)
 
   const expanded = computed(
     () =>
@@ -261,107 +180,27 @@
     if (!next) active.value = -1
   }
 
-  function close() {
-    setOpen(false)
-  }
+  const close = () => setOpen(false)
 
-  const setModel = (value: string) => {
-    if (value !== model.value) model.value = value
-  }
+  const commit = useComboboxCommit(
+    model,
+    text,
+    typing,
+    props,
+    exactMatch,
+    displayOf,
+    close,
+    (event, value) => emit('create', event, value)
+  )
 
-  const commitOption = (option: ComboboxOption) => {
-    if (option.disabled) return
-    typing.value = false
-    text.value = labelOf(option)
-    setModel(option.value)
-    close()
-  }
-
-  const commitCustom = (event: CommitEvent, value: string) => {
-    typing.value = false
-    text.value = value
-    if (value !== model.value) {
-      setModel(value)
-      emit('create', event, value)
-    }
-    close()
-  }
-
-  const commitRow = (event: CommitEvent, row: Row) => {
-    if (row.kind === 'option') commitOption(row.option)
-    else commitCustom(event, row.value)
-  }
-
-  const restore = () => {
-    typing.value = false
-    text.value = displayOf(model.value)
-  }
-
-  const commitText = (event: CommitEvent) => {
-    if (!typing.value) return
-    const value = text.value.trim()
-    if (!value) {
-      typing.value = false
-      text.value = ''
-      setModel('')
-      return
-    }
-    const match = exactMatch(value)
-    if (match) commitOption(match)
-    else if (props.allowCustom) commitCustom(event, value)
-    else restore()
-  }
-
-  const lazyLists = new Set<{ revealAll: () => void }>()
-  onBeforeUpdate(() => lazyLists.clear())
-  const setLazy = (el: unknown) => {
-    if (el && typeof (el as { revealAll?: unknown }).revealAll === 'function') {
-      lazyLists.add(el as { revealAll: () => void })
-    }
-  }
-
-  const scrollActiveIntoView = () => {
-    lazyLists.forEach((list) => list.revealAll())
-    nextTick(() => {
-      const id = activeId.value
-      if (id) globalThis.document?.getElementById(id)?.scrollIntoView?.({ block: 'nearest' })
-    })
-  }
-
-  const revealSelected = () => {
-    const row = rows.value.find(
-      (item) => item.kind === 'option' && item.option.value === model.value
-    )
-    if (!row) return
-    lazyLists.forEach((list) => list.revealAll())
-    nextTick(() => {
-      const list = panelEl.value
-      const item = globalThis.document?.getElementById(row.id)
-      if (!list || !item) return
-      const offset = item.getBoundingClientRect().top - list.getBoundingClientRect().top
-      list.scrollTop += offset - (list.clientHeight - item.offsetHeight) / 2
-    })
-  }
-
-  watch(expanded, (isExpanded) => {
-    if (isExpanded && !typing.value) revealSelected()
-  })
-
-  const moveTo = (start: number, step: 1 | -1) => {
-    const total = rows.value.length
-    if (!total) return
-    let index = start
-    for (let i = 0; i < total; i += 1) {
-      index = (index + total) % total
-      const row = rows.value[index]
-      if (row && !isDisabledRow(row)) {
-        active.value = index
-        scrollActiveIntoView()
-        return
-      }
-      index += step
-    }
-  }
+  const { setLazy, scrollActiveIntoView } = useComboboxScroll(
+    rows,
+    activeId,
+    panelEl,
+    () => model.value,
+    expanded,
+    typing
+  )
 
   const onInput = (value: string) => {
     text.value = value
@@ -371,81 +210,29 @@
     emit('search', value)
   }
 
-  const onFocus = () => {
-    setOpen(true)
-  }
-
   const onBlur = (event: FocusEvent) => {
-    commitText(event)
+    commit.commitText(event)
     close()
   }
 
+  const keyboard = useComboboxKeyboard(
+    rows,
+    active,
+    open,
+    expanded,
+    typing,
+    setOpen,
+    scrollActiveIntoView,
+    commit,
+    () => text.value !== displayOf(model.value)
+  )
+
   const onKeydown = (event: KeyboardEvent) => {
-    if (props.readonly) return
-    const key = event.key
-    if (key === 'ArrowDown' || key === 'ArrowUp') {
-      event.preventDefault()
-      if (event.altKey) {
-        setOpen(key === 'ArrowDown')
-        return
-      }
-      if (!open.value) {
-        setOpen(true)
-        nextTick(() =>
-          moveTo(key === 'ArrowDown' ? 0 : rows.value.length - 1, key === 'ArrowDown' ? 1 : -1)
-        )
-        return
-      }
-      if (key === 'ArrowDown') moveTo(active.value < 0 ? 0 : active.value + 1, 1)
-      else moveTo(active.value < 0 ? rows.value.length - 1 : active.value - 1, -1)
-      return
-    }
-    if ((key === 'Home' || key === 'End') && expanded.value && active.value >= 0) {
-      event.preventDefault()
-      if (key === 'Home') moveTo(0, 1)
-      else moveTo(rows.value.length - 1, -1)
-      return
-    }
-    if (key === 'Enter') {
-      const row = active.value >= 0 && expanded.value ? rows.value[active.value] : undefined
-      if (row) {
-        event.preventDefault()
-        commitRow(event, row)
-        return
-      }
-      if (typing.value) {
-        event.preventDefault()
-        commitText(event)
-        close()
-      }
-      return
-    }
-    if (key === 'Escape') {
-      if (expanded.value) {
-        event.preventDefault()
-        event.stopPropagation()
-        close()
-        return
-      }
-      if (text.value !== displayOf(model.value)) {
-        event.preventDefault()
-        event.stopPropagation()
-        restore()
-      }
-      return
-    }
-    if (key === 'Tab') {
-      const row = active.value >= 0 && expanded.value ? rows.value[active.value] : undefined
-      if (row) commitRow(event, row)
-      else commitText(event)
-      close()
-    }
+    if (!props.readonly) keyboard.onKeydown(event)
   }
 
   const clear = () => {
-    typing.value = false
-    text.value = ''
-    setModel('')
+    commit.reset()
     emit('search', '')
     inputEl()?.focus()
   }
@@ -501,7 +288,7 @@
         :data-testid="`${testId}__input`"
         :class="showClear ? 'pe-9' : ''"
         @update:model-value="onInput"
-        @focus="onFocus"
+        @focus="setOpen(true)"
         @blur="onBlur"
         @keydown="onKeydown"
       >
@@ -600,8 +387,8 @@
                   :data-type="row.kind"
                   :data-testid="`${testId}__option`"
                   :class="OPTION_CLASS"
-                  @click="commitRow($event, row)"
-                  @keydown.enter.prevent="commitRow($event, row)"
+                  @click="commit.commitRow($event, row)"
+                  @keydown.enter.prevent="commit.commitRow($event, row)"
                   @mousemove="active = isDisabledRow(row) ? active : rows.indexOf(row)"
                 >
                   <template v-if="row.kind === 'option'">
@@ -612,7 +399,7 @@
                       :selected="row.option.value === model"
                     >
                       <span class="min-w-0 flex-1 truncate"
-                        ><bdi>{{ labelOf(row.option) }}</bdi></span
+                        ><bdi>{{ optionLabel(row.option) }}</bdi></span
                       >
                       <span
                         v-if="row.option.description"
