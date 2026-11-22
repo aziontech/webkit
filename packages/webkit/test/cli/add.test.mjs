@@ -346,16 +346,20 @@ test('add reaches a part through the sibling variant a variant imports', () => {
     const variant = readFileSync(join(dir, 'src/views/create-page-required-fields.vue'), 'utf8')
     assert.match(variant, /import CreateService from '\.\/create-page-create-service\.vue'/)
     const sibling = readFileSync(join(dir, 'src/views/create-page-create-service.vue'), 'utf8')
-    assert.match(sibling, /from '\.\/create-page\.creation-header\.vue'/)
-    assert.match(sibling, /from '\.\/create-page\.discard-dialog\.vue'/)
-    assert.match(sibling, /from '\.\/create-page\.use-create-form'/)
+    assert.match(sibling, /from '\.\/create-page\.create-service-form\.vue'/)
+    const part = readFileSync(join(dir, 'src/views/create-page.create-service-form.vue'), 'utf8')
+    assert.match(part, /from '\.\/create-page\.creation-header\.vue'/)
+    assert.match(part, /from '\.\/create-page\.discard-dialog\.vue'/)
+    assert.match(part, /from '\.\/create-page\.use-create-form'/)
     for (const file of ['creation-header.vue', 'discard-dialog.vue', 'use-create-form.ts']) {
       assert.ok(existsSync(join(dir, `src/views/create-page.${file}`)), file)
     }
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
     const paths = manifest.blocks['create/create-page'].files.map((f) => f.path)
     assert.equal(new Set(paths).size, paths.length)
-    assert.ok(!paths.some((path) => /create-(zone|purge|organization)/.test(path)))
+    assert.ok(
+      !paths.some((path) => /create-page-create-(zone|purge|organization)\.vue$/.test(path))
+    )
   } finally {
     cleanup(dir)
   }
