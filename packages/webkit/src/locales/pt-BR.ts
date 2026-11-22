@@ -770,12 +770,14 @@ export const ptBR: Messages = {
     itemProgress: 'Progresso de {name}'
   },
   footer: {
-    label: 'Rodapé'
+    label: 'Rodapé',
+    home: 'Página inicial da Azion'
   },
   appHeader: {
     label: 'Cabeçalho global',
     home: 'Página inicial da Azion',
-    productHome: 'Página inicial da Azion {product}'
+    productHome: 'Página inicial da Azion {product}',
+    account: 'Menu da conta'
   },
   helpPanel: {
     label: 'Ajuda',

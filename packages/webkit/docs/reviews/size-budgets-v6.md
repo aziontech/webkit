@@ -995,3 +995,18 @@ Budget-raise: plan-comparison-section 38.95 KB → 39.05 KB (measured 39.00 KB):
 Budget-raise: client-mosaic-section 7.45 KB → 7.55 KB (measured 7.48 KB): it renders Link, which gained the `inline` mode.
 Budget-raise: transfer-list-controls 2.15 KB → 4.15 KB (measured 4.11 KB): the four move controls are IconButtons (the shared button root, its spinner and its focus and disabled states) instead of hand-written buttons with inline SVG arrows (no-unowned-element); the arrows are now font glyphs that mirror in right-to-left.
 Budget-raise: transfer-list 6.75 KB → 7.9 KB (measured 7.85 KB): it renders TransferList.Controls, which now builds on IconButton.
+Budget-raise: console-layout-root 81.5 KB → 81.6 KB (measured 81.59 KB): the account trigger is now the AppHeaderAccount part, and TriggerHost recognises it as a control.
+Budget-raise: card 11.15 KB → 11.45 KB (measured 11.43 KB): Card href: the whole card renders as one link (safeHref and the link classes).
+Budget-raise: doc-page-header 32.25 KB → 32.3 KB (measured 32.26 KB): TriggerHost recognises AppHeaderAccount as a control (shared overlay trigger).
+Budget-raise: client-mosaic-section 7.55 KB → 7.65 KB (measured 7.62 KB): builds on BentoGrid.Cell, which gained href.
+Budget-raise: investor-marks-section 4.7 KB → 4.8 KB (measured 4.77 KB): builds on BentoGrid.Cell, which gained href.
+Budget-raise: timestamp 20.05 KB → 20.1 KB (measured 20.05 KB): TriggerHost recognises AppHeaderAccount as a control (shared overlay trigger).
+Budget-raise: prompt-input-model-picker 15.16 KB → 15.2 KB (measured 15.17 KB): TriggerHost recognises AppHeaderAccount as a control (shared overlay trigger).
+Budget-raise: overflow-count 15.3 KB → 15.35 KB (measured 15.31 KB): TriggerHost recognises AppHeaderAccount as a control (shared overlay trigger).
+Budget-raise: table-cell-tags 16.35 KB → 16.4 KB (measured 16.37 KB): TriggerHost recognises AppHeaderAccount as a control (shared overlay trigger).
+Budget-raise: table-cell-actions 12.36 KB → 12.4 KB (measured 12.37 KB): TriggerHost recognises AppHeaderAccount as a control (shared overlay trigger).
+Budget-raise: footer 3.7 KB → 3.85 KB (measured 3.81 KB): Footer homeHref: the brand renders inside one home link (safeHref, the link classes, the footer.home string).
+Budget-raise: console-layout 82.8 KB → 82.95 KB (measured 82.90 KB): the account trigger is now the AppHeaderAccount part, and TriggerHost recognises it as a control.
+Budget-raise: bento-grid 2.25 KB → 2.4 KB (measured 2.38 KB): BentoGrid.Cell href: the whole tile renders as one link.
+Budget-raise: bento-grid-cell 1.75 KB → 1.95 KB (measured 1.93 KB): BentoGrid.Cell href: the whole tile renders as one link.
+Budget-raise: popover-trigger 2.5 KB → 2.55 KB (measured 2.51 KB): TriggerHost recognises AppHeaderAccount as a control so the trigger state reaches it in the server render.

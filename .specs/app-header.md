@@ -3,13 +3,13 @@ name: app-header
 category: layout
 structure: composition
 status: implemented
-spec_version: 11
+spec_version: 12
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: 4cf567e76a2c79866b5f070bf1440deb20d3657ee369687b2952226d116fe9c6
+checksum: 59b235ce94c351c7d44b88c9eaa81dbcedc3ef0fb2e64297f4cb71064614d14c
 created: 2026-05-23
-last_updated: 2026-11-17
+last_updated: 2026-11-21
 ---
 
 # Global Header — Component Spec
@@ -51,6 +51,7 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 - Keep the default `variant="content"` for app shells; use `variant="site"` only on framed marketing pages.
 - Group the menu trigger and the brand in `AppHeader.Container` so they stay together and never shrink.
 - Make the logo the home link with `href` on `AppHeader.Brand` (`<AppHeader.Brand href="/" aria-label="Azion home">`) instead of wrapping it in a hand-made anchor: the brand owns the focus ring, the hover affordance and the hit area. Empty `aria-label` names the link from the locale catalog (`Azion home`).
+- Put the signed-in account at the end with `AppHeaderAccount` (`import AppHeaderAccount from '@aziontech/webkit/app-header-account'`, then `<AppHeaderAccount :name="account.name" :src="account.src" />`) instead of a hand-made button around an `Avatar`: the part owns the focus ring, the hover affordance and the accessible name. To open the account menu, place it in `DropdownMenu.Trigger`, which forwards the menu state onto it.
 - Name the product beside the mark with `label` on `AppHeader.Brand` (`label="Docs"`, `label="Console"`) instead of a `Tag` or a hand-made span: the brand draws the one product lockup every Azion header shares.
 - Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
 - Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
@@ -112,6 +113,8 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 
 - `app-header-brand.vue` — `AppHeader.Brand`. Brand slot wrapper sized for Azion logo SVGs (default / min). Props `href?: string` (default `''`; when set the brand renders as an anchor to it, and `data-link` on the root carries the link styling: a 40px minimum hit area (44px on `pointer: coarse`), the `--ring-color` focus ring offset against `--bg-surface`, and an opacity hover with a `motion-reduce` fallback; empty renders the plain `div`, unchanged), `ariaLabel?: string` (default `''`; the link's accessible name, written `aria-label="…"` by the consumer; empty with `href` set uses the locale catalog `appHeader.home`, `Azion home` in English) and `label?: string` (default `''`; the product name drawn after the slotted mark as an uppercase label in `.text-overline-sm`, `--text-muted`, inside a `--border-muted` hairline box with `--shape-control` corners and `--spacing-2xs` inline padding, `--spacing-xs` from the mark; `data-label` on the root and `${testId}__label` on the label; empty draws nothing and leaves the part unchanged). With `href` set and no `ariaLabel`, a label names the link from the locale catalog `appHeader.productHome` (`Azion {product} home`, e.g. `Azion Docs home`) instead of `appHeader.home`. No events.
 
+- `app-header-account.vue` — `AppHeaderAccount`, a **companion part**: exported on its own as `@aziontech/webkit/app-header-account` and not attached to the compound, because it composes `Avatar` (and its class merging), which would add about 12 KB to every `AppHeader` import. The account control at the end of the bar: a native `button` that draws the signed-in account as a medium square `Avatar` (initials from `name`, or the photo from `src`). Props `name?: string` (default `''`; the avatar's initials, its first two characters), `src?: string` (default `''`; the photo URL, replacing the initials) and `ariaLabel?: string` (default `''`; the control's accessible name, written `aria-label="…"`; empty uses the locale catalog `appHeader.account`, `Account menu` in English). Event `click: [event: MouseEvent]` when it is activated. It owns the `--ring-color` focus ring offset against `--bg-surface`, corners on `--shape-button` (the square avatar's corner, so the ring follows the avatar) and an opacity hover with a `motion-reduce` fallback. Inside `DropdownMenu.Trigger` it receives the trigger's `aria-haspopup`, `aria-expanded` and `aria-controls` and opens the menu, as shadcn's and Supabase's account menus put the avatar in the menu trigger.
+
 ## Props
 
 | Prop        | Type                  | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                           |
@@ -131,6 +134,8 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 | `default` | —     | Each sub-component (incl. `Container`) exposes `default` for region content.          |
 | `default` | —     | `app-header-brand` exposes `default` for logo markup.                                 |
 
+> `AppHeaderAccount` has no slots: it draws its own `Avatar`.
+
 ## States
 
 - Visual states: `default`
@@ -138,12 +143,14 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 - No interactive states on the shell; children own focus/hover/disabled.
 - `AppHeader.Brand` with `href`: `data-link` on its anchor; hover (opacity) and `focus-visible` (ring) are its only states.
 - `AppHeader.Brand` with `label`: `data-label` on its root; the label is static (no states of its own).
+- `AppHeaderAccount`: hover (opacity) and `focus-visible` (ring); inside `DropdownMenu.Trigger` the trigger adds `aria-expanded`.
 
 ## Motion & Animations
 
-| Trigger                           | Animation / Transition                                                              | Token                                                               | Reduced-motion fallback         |
-| --------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------- |
-| brand link hover (`href` set)     | `transition-opacity duration-fast-02 ease-productive-entrance` to `hover:opacity-80` | `duration['fast-02']` · `curve['productive-entrance']` (animate.js) | `motion-reduce:transition-none` |
+| Trigger                       | Animation / Transition                                                               | Token                                                               | Reduced-motion fallback         |
+| ----------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------- |
+| brand link hover (`href` set) | `transition-opacity duration-fast-02 ease-productive-entrance` to `hover:opacity-80` | `duration['fast-02']` · `curve['productive-entrance']` (animate.js) | `motion-reduce:transition-none` |
+| account control hover         | `transition-opacity duration-fast-02 ease-productive-entrance` to `hover:opacity-80` | `duration['fast-02']` · `curve['productive-entrance']` (animate.js) | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -168,6 +175,8 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 | brand label corner                    | `var(--shape-control)`                                                                                                     |
 | brand label padding-inline            | `var(--spacing-2xs)`                                                                                                       |
 | brand mark-to-label gap               | `var(--spacing-xs)`                                                                                                        |
+| account control focus ring offset     | `var(--bg-surface)`                                                                                                        |
+| account control corner                | `var(--shape-button)`                                                                                                      |
 
 ## Theme gaps
 
@@ -182,6 +191,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 - ARIA: landmark only on root. `AppHeader.Brand` with `href` is a native anchor named by `ariaLabel` (locale fallback `appHeader.home`), so the logo link always has an accessible name; without `href` it stays a non-interactive `div`.
 - Brand label: with `href` the visible `label` is `aria-hidden` and the link name says where it goes, product included (`appHeader.productHome`, `Azion Docs home`), so the product is read once and the visible word is inside the name (WCAG 2.5.3); a consumer `aria-label` should keep the product word. Without `href` the label stays readable text after the mark. Spacing is logical (`gap`, `px`), so the label follows the mark in the inline direction under `dir="rtl"`.
 - Keyboard (brand link): Tab reaches it, Enter follows it; the `focus-visible` ring uses `--ring-color`.
+- `AppHeaderAccount` is a native `button` named by `ariaLabel` (locale fallback `appHeader.account`); the avatar inside is decoration of that name. Tab reaches it, Enter and Space activate it; in `DropdownMenu.Trigger`, Arrow Down opens the menu as well.
 - Contrast ≥4.5:1 for text and icons in slotted content.
 - `motion-reduce:*` on any animated slotted controls (owned by children).
 - Touch target ≥40×40 px on slotted buttons (owned by children).
@@ -192,6 +202,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 - WithLabel — the brand link with a product label (`label="Console"`), the lockup every Azion product header shares; shown because `label` is a prop the anatomy example does not cover.
 - ContentZone — the default placement shown against a mock page, for the one claim the anatomy cannot show: the first region and the page heading on one vertical.
 - SitePlacement — the `variant="site"` bar over a framed marketing column, its regions on the bar's own measure, one rung wider than the page frame.
+- WithAccount — `AppHeaderAccount` at the end of the bar inside `DropdownMenu.Trigger`, opening the account menu; shown because the part is not in the anatomy example.
 
 ## Constraints — DO NOT
 

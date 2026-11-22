@@ -181,7 +181,6 @@
       back-label="Back to console"
       :breadcrumb="breadcrumb"
       account-label="JD"
-      account-alt="Jane Doe"
       @back="leave"
     />
 

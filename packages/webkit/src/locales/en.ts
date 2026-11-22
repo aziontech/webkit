@@ -609,13 +609,15 @@ export const uploadProgress = {
 } as const
 
 export const footer = {
-  label: 'Footer'
+  label: 'Footer',
+  home: 'Azion home'
 } as const
 
 export const appHeader = {
   label: 'Global header',
   home: 'Azion home',
-  productHome: 'Azion {product} home'
+  productHome: 'Azion {product} home',
+  account: 'Account menu'
 } as const
 
 export const helpPanel = {

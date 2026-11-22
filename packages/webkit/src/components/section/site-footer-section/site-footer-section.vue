@@ -3,7 +3,6 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import { safeHref } from '../../../utils/safe-href'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
@@ -105,11 +104,6 @@
   )
 
   const hasHome = computed(() => props.home.length > 0)
-
-  const HOME_LINK_CLASS =
-    'inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
-    'focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -122,6 +116,8 @@
     <Footer
       :variant="variant"
       :aria-label="ariaLabel || t('siteFooterSection.label')"
+      :home-href="home"
+      :home-aria-label="homeAriaLabel || t('siteFooterSection.home')"
     >
       <FooterColumn
         v-for="column in columns"
@@ -151,13 +147,7 @@
         v-if="hasHome"
         #brand
       >
-        <a
-          :href="safeHref(home) ?? undefined"
-          :aria-label="homeAriaLabel || t('siteFooterSection.home')"
-          :class="HOME_LINK_CLASS"
-        >
-          <Brand size="small" />
-        </a>
+        <Brand size="small" />
       </template>
 
       <template

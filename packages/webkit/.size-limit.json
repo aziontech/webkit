@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "81.5 KB",
+    "limit": "81.6 KB",
     "entryOnly": true
   },
   {
@@ -119,7 +119,7 @@
   {
     "name": "card",
     "path": "src/components/content/card/card.vue",
-    "limit": "11.15 KB"
+    "limit": "11.45 KB"
   },
   {
     "name": "integration-card",
@@ -266,7 +266,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/docs/doc-page-header/doc-page-header.vue",
-    "limit": "32.25 KB"
+    "limit": "32.3 KB"
   },
   {
     "name": "doc-table-of-contents",
@@ -590,7 +590,7 @@
   {
     "name": "client-mosaic-section",
     "path": "src/components/section/client-mosaic-section/client-mosaic-section.vue",
-    "limit": "7.55 KB"
+    "limit": "7.65 KB"
   },
   {
     "name": "client-story-columns-section",
@@ -611,7 +611,7 @@
   {
     "name": "investor-marks-section",
     "path": "src/components/section/investor-marks-section/investor-marks-section.vue",
-    "limit": "4.7 KB"
+    "limit": "4.8 KB"
   },
   {
     "name": "job-posting-section",
@@ -871,7 +871,7 @@
   {
     "name": "timestamp",
     "path": "src/components/content/timestamp/timestamp.vue",
-    "limit": "20.05 KB"
+    "limit": "20.1 KB"
   },
   {
     "name": "error-boundary",
@@ -1223,7 +1223,7 @@
   {
     "name": "prompt-input-model-picker",
     "path": "src/components/ai/prompt-input/prompt-input-model-picker/prompt-input-model-picker.vue",
-    "limit": "15.16 KB",
+    "limit": "15.2 KB",
     "entryOnly": true
   },
   {
@@ -1372,7 +1372,7 @@
   {
     "name": "overflow-count",
     "path": "src/components/content/overflow-count/overflow-count.vue",
-    "limit": "15.3 KB"
+    "limit": "15.35 KB"
   },
   {
     "name": "payment-brand",
@@ -1415,12 +1415,12 @@
   {
     "name": "table-cell-tags",
     "path": "src/components/data/table/table-cell-tags/table-cell-tags.vue",
-    "limit": "16.35 KB"
+    "limit": "16.4 KB"
   },
   {
     "name": "table-cell-actions",
     "path": "src/components/data/table/table-cell-actions/table-cell-actions.vue",
-    "limit": "12.36 KB"
+    "limit": "12.4 KB"
   },
   {
     "name": "file-token-group",
@@ -2094,7 +2094,7 @@
   {
     "name": "footer",
     "path": "src/components/layout/footer/index.ts",
-    "limit": "3.7 KB"
+    "limit": "3.85 KB"
   },
   {
     "name": "footer-column",
@@ -2109,7 +2109,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "82.8 KB"
+    "limit": "82.95 KB"
   },
   {
     "name": "use-console-layout",
@@ -2157,6 +2157,11 @@
     "limit": "1.6 KB"
   },
   {
+    "name": "app-header-account",
+    "path": "src/components/layout/app-header/app-header-account.vue",
+    "limit": "13.7 KB"
+  },
+  {
     "name": "sidebar",
     "path": "src/components/layout/sidebar/index.ts",
     "limit": "24.95 KB"
@@ -2179,12 +2184,12 @@
   {
     "name": "bento-grid",
     "path": "src/components/layout/bento-grid/index.ts",
-    "limit": "2.25 KB"
+    "limit": "2.4 KB"
   },
   {
     "name": "bento-grid-cell",
     "path": "src/components/layout/bento-grid/bento-grid-cell/bento-grid-cell.vue",
-    "limit": "1.75 KB"
+    "limit": "1.95 KB"
   },
   {
     "name": "carousel",
@@ -2559,7 +2564,7 @@
   {
     "name": "popover-trigger",
     "path": "src/components/overlay/popover/popover-trigger/popover-trigger.vue",
-    "limit": "2.5 KB"
+    "limit": "2.55 KB"
   },
   {
     "name": "popover-content",

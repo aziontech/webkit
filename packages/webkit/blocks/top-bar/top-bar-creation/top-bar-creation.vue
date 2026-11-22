@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
+  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb, { type BreadcrumbItemData } from '@aziontech/webkit/breadcrumb-root'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
@@ -48,11 +48,6 @@
   }>()
 
   const account = computed(() => props.account ?? sampleAccount)
-
-  const ACCOUNT_TRIGGER_CLASS =
-    'rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
-    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -95,17 +90,10 @@
           @select="(event, value) => emit('account-select', event, value)"
         >
           <DropdownMenu.Trigger>
-            <button
-              type="button"
+            <AppHeaderAccount
+              :name="account.name"
               aria-label="Account menu"
-              :class="ACCOUNT_TRIGGER_CLASS"
-            >
-              <Avatar
-                :label="account.name"
-                size="medium"
-                variant="square"
-              />
-            </button>
+            />
           </DropdownMenu.Trigger>
           <DropdownMenu.Group>
             <template #header>

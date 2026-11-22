@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import RegistrationFrame from '../registration-frame/registration-frame.vue'
   import { FooterInjectionKey } from './injection-key'
 
@@ -25,11 +26,17 @@
      * status and language at its end.
      */
     variant?: FooterVariant
+    /** When set, the brand slot renders inside one home link to this URL, with the focus ring and the hover of a link. */
+    homeHref?: string
+    /** Accessible name of the home link. Empty uses the locale catalog (`Azion home`). */
+    homeAriaLabel?: string
   }
 
-  withDefaults(defineProps<FooterProps>(), {
+  const props = withDefaults(defineProps<FooterProps>(), {
     ariaLabel: '',
-    variant: 'content'
+    variant: 'content',
+    homeHref: '',
+    homeAriaLabel: ''
   })
 
   const slots = defineSlots<{
@@ -56,9 +63,16 @@
 
   const hasEnd = () => Boolean(slots.status || slots.language)
 
+  const homeLink = computed(() => safeHref(props.homeHref))
+
   provide(FooterInjectionKey, {
     testId: testId.value
   })
+
+  const HOME_LINK_CLASS =
+    'inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas)'
 
   const BANDS_CLASS =
     'flex w-full flex-col ' +
@@ -118,7 +132,19 @@
               :data-testid="`${testId}__brand`"
               class="me-(--spacing-xs) flex shrink-0 items-center *:flex *:items-center [&_svg]:block [&_svg]:h-[18px] [&_svg]:w-auto"
             >
-              <slot name="brand" />
+              <a
+                v-if="homeLink"
+                :href="homeLink"
+                :aria-label="homeAriaLabel || t('footer.home')"
+                :data-testid="`${testId}__home`"
+                :class="HOME_LINK_CLASS"
+              >
+                <slot name="brand" />
+              </a>
+              <slot
+                v-else
+                name="brand"
+              />
             </div>
             <slot name="social" />
           </div>

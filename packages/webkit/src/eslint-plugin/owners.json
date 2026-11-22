@@ -50,7 +50,10 @@
         "src/components/code/code-editor": "CodeEditor: each problem row is the button that moves the caret to its marker.",
         "src/components/input/hint": "Hint: the component is the inline info trigger of its tooltip, sized to the label beside it.",
         "src/components/input/date-picker/parts/date-picker-control-button.vue": "DatePicker field segment: the in-field calendar and clear segments that fill the field height and draw its divider, part of the date field control.",
-        "src/components/input/chip": "Chip: the remove button is part of the token itself, a round 16 or 24 px hit inside the 24 or 32 px pill with its own coarse-pointer target; IconButton's smallest step (28 px) does not fit inside the chip."
+        "src/components/input/chip": "Chip: the remove button is part of the token itself, a round 16 or 24 px hit inside the 24 or 32 px pill with its own coarse-pointer target; IconButton's smallest step (28 px) does not fit inside the chip.",
+        "src/components/layout/app-header/app-header-account.vue": "AppHeaderAccount: the account control at the end of the header, an avatar that opens the account menu (or acts alone).",
+        "src/components/ai/suggestion-group": "SuggestionGroup: each prompt is a suggestion chip whose label wraps to the reader's whole question, a group of buttons Button cannot draw (one line, fixed height).",
+        "src/components/content/avatar-group": "AvatarGroup: the +N overflow is the last circle of the overlapping avatar stack and the disclosure button (popovertarget) of the hidden names."
       }
     },
     "a": {
@@ -86,7 +89,6 @@
         "src/components/section/investor-marks-section": "InvestorMarksSection: each logo cell is one link to the investor's site; the logo is its only content.",
         "src/components/section/listing-index-section": "ListingIndexSection: each row's name is the row's link, stretched over the row on narrow screens.",
         "src/components/section/listing-table-section": "ListingTableSection: each row's name is the row's link, stretched over the row on narrow screens.",
-        "src/components/section/site-footer-section": "SiteFooterSection: the brand mark is the home link.",
         "src/components/section/site-header-section": "SiteHeaderSection: the brand mark is the home link.",
         "src/components/section/story-index-section": "StoryIndexSection: each story card is one link surface.",
         "src/components/section/template-gallery-section": "TemplateGallerySection: the anchor stretched over each card is the card's link surface.",
@@ -97,7 +99,10 @@
         "src/components/content/overflow-count": "OverflowCount: its popover lists the hidden entries as full-width link rows.",
         "src/components/layout/app-header/app-header-brand.vue": "AppHeader.Brand: the brand mark is the home link of the header.",
         "src/components/data/flow-diagram/flow-diagram-title": "FlowDiagram.Title: a linked title is the resource's name as its link, in the title's type and colour, truncating while its open glyph stays visible (the job Table.CellLink has in a row); Link draws link-coloured controls or underlined links in prose.",
-        "src/components/data/flow-diagram/parts/flow-diagram-card.vue": "FlowDiagram card: a linked field value is the value itself as its link, in the field's type and colour and truncating (the job Table.CellLink has in a row); Link draws link-coloured controls or underlined links in prose."
+        "src/components/data/flow-diagram/parts/flow-diagram-card.vue": "FlowDiagram card: a linked field value is the value itself as its link, in the field's type and colour and truncating (the job Table.CellLink has in a row); Link draws link-coloured controls or underlined links in prose.",
+        "src/components/content/card/card.vue": "Card: with href the whole card is one link (the root renders as an anchor).",
+        "src/components/layout/bento-grid/bento-grid-cell": "BentoGrid.Cell: with href the whole tile is one link (the cell surface renders as an anchor).",
+        "src/components/layout/footer/footer.vue": "Footer: with homeHref the brand is the home link of the bottom bar."
       }
     },
     "input": {

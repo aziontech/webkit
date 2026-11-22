@@ -17,6 +17,8 @@
   <Footer
     variant="console"
     aria-label="Footer"
+    home-href="/"
+    home-aria-label="Azion console home"
   >
     <Footer.Column title="Resources">
       <Footer.Link href="https://www.azion.com/en/documentation/">Docs</Footer.Link>
@@ -26,12 +28,7 @@
       >
     </Footer.Column>
     <template #brand>
-      <a
-        href="/"
-        aria-label="Azion console home"
-      >
-        <Brand size="small" />
-      </a>
+      <Brand size="small" />
     </template>
     <template #status>
       <StatusIndicator
