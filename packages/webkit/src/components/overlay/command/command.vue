@@ -131,7 +131,7 @@
       registryVersion.value += 1
       if (activeValue.value !== item.value) return
       if (isOpen.value) resetActive()
-      else activeValue.value = null
+      else active.setActive(null)
     }
   }
 

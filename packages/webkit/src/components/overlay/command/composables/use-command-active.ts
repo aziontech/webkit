@@ -1,9 +1,9 @@
-import { type ComputedRef, type Ref, ref } from 'vue'
+import { type ComputedRef, readonly, type Ref, ref } from 'vue'
 
 import type { CommandItemValue, CommandRegisteredItem } from '../injection-key'
 
 export interface UseCommandActiveReturn {
-  activeValue: Ref<CommandItemValue | null>
+  activeValue: Readonly<Ref<CommandItemValue | null>>
   setActive: (value: CommandItemValue | null) => void
   isActive: (value: CommandItemValue) => boolean
   resetActive: () => void
@@ -47,7 +47,7 @@ export function useCommandActive(
   }
 
   return {
-    activeValue,
+    activeValue: readonly(activeValue),
     setActive: (value) => {
       activeValue.value = value
     },
