@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "81.6 KB",
+    "limit": "81.7 KB",
     "entryOnly": true
   },
   {
@@ -24,7 +24,7 @@
   {
     "name": "doc-layout",
     "path": "src/components/docs/doc-layout/doc-layout.vue",
-    "limit": "72.15 KB"
+    "limit": "72.35 KB"
   },
   {
     "name": "doc-markdown",
@@ -68,7 +68,7 @@
   {
     "name": "diagram",
     "path": "src/components/marketing/diagram/diagram.vue",
-    "limit": "11.65 KB",
+    "limit": "11.7 KB",
     "entryOnly": true
   },
   {
@@ -535,7 +535,7 @@
   {
     "name": "site-header-section",
     "path": "src/components/section/site-header-section/site-header-section.vue",
-    "limit": "58.85 KB"
+    "limit": "59.35 KB"
   },
   {
     "name": "competitor-comparison-section",
@@ -616,7 +616,7 @@
   {
     "name": "job-posting-section",
     "path": "src/components/section/job-posting-section/job-posting-section.vue",
-    "limit": "58.6 KB",
+    "limit": "58.65 KB",
     "entryOnly": true
   },
   {
@@ -1307,7 +1307,7 @@
   {
     "name": "button-group",
     "path": "src/components/action/button-group/button-group.vue",
-    "limit": "16.7 KB"
+    "limit": "16.75 KB"
   },
   {
     "name": "combobox",
@@ -1819,7 +1819,7 @@
   {
     "name": "flow-diagram-bind",
     "path": "src/components/data/flow-diagram/flow-diagram-bind/flow-diagram-bind.vue",
-    "limit": "16 KB"
+    "limit": "16.05 KB"
   },
   {
     "name": "transfer-list",
@@ -2109,7 +2109,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "82.95 KB"
+    "limit": "83 KB"
   },
   {
     "name": "use-console-layout",
@@ -2254,12 +2254,12 @@
   {
     "name": "sidebar-menu",
     "path": "src/components/navigation/sidebar-menu/index.ts",
-    "limit": "21.95 KB"
+    "limit": "22 KB"
   },
   {
     "name": "sidebar-menu-root",
     "path": "src/components/navigation/sidebar-menu/sidebar-menu.vue",
-    "limit": "21.5 KB"
+    "limit": "21.6 KB"
   },
   {
     "name": "sidebar-menu-group",
@@ -2319,12 +2319,12 @@
   {
     "name": "navigation-menu",
     "path": "src/components/navigation/navigation-menu/index.ts",
-    "limit": "26.1 KB"
+    "limit": "26.55 KB"
   },
   {
     "name": "navigation-menu-root",
     "path": "src/components/navigation/navigation-menu/navigation-menu.vue",
-    "limit": "15.55 KB"
+    "limit": "15.75 KB"
   },
   {
     "name": "navigation-menu-list",
@@ -2354,7 +2354,7 @@
   {
     "name": "navigation-menu-viewport",
     "path": "src/components/navigation/navigation-menu/navigation-menu-viewport.vue",
-    "limit": "18.35 KB"
+    "limit": "18.4 KB"
   },
   {
     "name": "tooltip",
