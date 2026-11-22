@@ -47,7 +47,7 @@
       <template #actions>
         <ChatMessage.Actions>
           <CopyButton
-            size="small"
+            size="large"
             :value="full"
           />
         </ChatMessage.Actions>

@@ -1471,6 +1471,15 @@ default and `footer` slots, and drops `variant`. Swap the tag and drop `variant=
 `integrationCard.byVendor` and `integrationCard.installed` (were `card.*`). The codemod lists the old
 props as `MANUAL`.
 
+### `ChatMessage` draws no avatar or author line
+
+`ChatMessage` and `ChatMessageRoot` follow the chat-app layout: the assistant's text is plain and
+full width, the user's message a bubble at the inline end, and neither draws an avatar, a name or a
+time (they stay in the message's accessible name; the time shows on hover over the user's bubble).
+The `avatar` slot is removed: delete its template (the codemod lists it as `MANUAL`). `Citation`
+shows the source's site in a chip (`site`), and `Sources` is a `Sources` pill; put it in the new
+`#trailing` slot of `ChatMessage.Actions`.
+
 ### Overlay and feedback behaviour
 
 `ConfirmDialog` opens with focus on Cancel and has no close button (an alert

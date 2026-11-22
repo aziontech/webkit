@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: d83762855d7345ae7c871ec2210f6259f4e15181f6a3c2d0b7ae2122d4777b6d
+checksum: eb667e3a512bc2be79eb5e6a531f3948901ea039d1e90708dacec448c1cd3395
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-22
 ---
 
 # StreamingResponse — Component Spec
@@ -23,8 +23,10 @@ rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown
 streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>`
 until it closes (no highlighting churn), and a half-written link shows its text only.
 
-Numbered citations `[1]` become `Citation` references resolved against `sources`, linked to the
-`Sources` list under the response through a shared `anchor`. A blinking caret marks the end while
+Text renders at the reading size (`.text-body-lg`) with a full step (`--spacing-md`) between blocks,
+the plain, wide answer column of a chat. Numbered citations `[1]` become `Citation` chips holding
+the source's site (from its `href`), resolved against `sources` and linked to the `Sources` list
+through a shared `anchor`. A blinking caret marks the end while
 `streaming`; the region is `aria-busy` until the stream ends.
 
 ## When to use
@@ -86,12 +88,12 @@ components: `code-block`, `citation`._
 
 ## Props
 
-| Prop        | Type            | Default | Required | JSDoc                                                                                                                                                         |
-| ----------- | --------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prop        | Type            | Default | Required | JSDoc                                                                                                                                                              |
+| ----------- | --------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `content`   | `string`        | `''`    | false    | The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, tel, relative and hash links survive. |
-| `streaming` | `boolean`       | `false` | false    | Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes.                             |
-| `sources`   | `SourcesItem[]` | `[]`    | false    | Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name).                                                    |
-| `anchor`    | `string`        | `''`    | false    | The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers.                                           |
+| `streaming` | `boolean`       | `false` | false    | Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes.                                  |
+| `sources`   | `SourcesItem[]` | `[]`    | false    | Sources the `[n]` citations in the content resolve against (site in the chip, title in the tooltip and the accessible name).                                       |
+| `anchor`    | `string`        | `''`    | false    | The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers.                                                |
 
 ## Events
 
@@ -104,6 +106,7 @@ _No slots — the content is the `content` string._
 ## States
 
 - `data-streaming` and `aria-busy="true"` while `streaming`.
+- `data-slot="streaming-response"` on the root marks the answer text, which `ChatMessage.Actions` Read aloud speaks.
 - Caret: inside the last paragraph or heading, else after the last block; only while `streaming`.
 - Open fence while streaming: `<pre data-testid="…__pending-code">`; closed fence or stream ended: `CodeBlock`.
 
@@ -117,17 +120,17 @@ _No slots — the content is the `content` string._
 
 | Region      | Token                                                                                              |
 | ----------- | -------------------------------------------------------------------------------------------------- |
-| body        | `.text-body-md`, `var(--text-default)`                                                             |
+| body        | `.text-body-lg`, `var(--text-default)`                                                             |
 | headings    | `.text-heading-sm` (`#`), `.text-heading-xs`, `.text-heading-2xs`, `.text-label-md`                |
 | inline code | `.text-label-code-sm`, `var(--bg-surface-raised)`, `var(--shape-control)`                          |
 | links       | `var(--text-link)`                                                                                 |
 | quote       | `var(--border-strong)`, `var(--text-muted)`                                                        |
 | table       | `var(--border-default)`, `var(--border-muted)`, header `var(--bg-surface-raised)`, `.text-body-sm` |
-| block gap   | `var(--spacing-sm)`                                                                                |
+| block gap   | `var(--spacing-md)`; list items `var(--spacing-xs)`                                                |
 
 ## Theme gaps
 
-_None._
+- No `text-body-prose-lg`: the reading size uses `.text-body-lg` (16 px, 18 px from `md`) at `snug` leading; a relaxed-leading step at that size would read closer to a chat answer.
 
 ## Accessibility (WCAG 2.1 AA)
 

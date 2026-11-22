@@ -208,6 +208,24 @@ describe('StreamingResponse', () => {
     )
   })
 
+  it('shows the site of a web source in its citation chip', () => {
+    const { getByRole } = render(StreamingResponse, {
+      props: {
+        content: 'Cached [1].',
+        sources: [{ title: 'Cache settings', href: 'https://www.azion.com/en/documentation/' }],
+        anchor: 'answer'
+      }
+    })
+    expect(getByRole('link', { name: 'Source 1, azion.com: Cache settings' })).toHaveTextContent(
+      'azion.com'
+    )
+  })
+
+  it('marks its root as the answer text', () => {
+    const { getByTestId } = render(StreamingResponse, { props: { content: 'Hi' } })
+    expect(getByTestId('streaming-response')).toHaveAttribute('data-slot', 'streaming-response')
+  })
+
   it('has no axe violations', async () => {
     const { container } = render(StreamingResponse, {
       props: { content: rich, sources: [{ title: 'Docs' }], anchor: 'a' }

@@ -1179,27 +1179,27 @@
   {
     "name": "chat-message",
     "path": "src/components/ai/chat-message/index.ts",
-    "limit": "25.85 KB"
+    "limit": "14 KB"
   },
   {
     "name": "chat-message-root",
     "path": "src/components/ai/chat-message/chat-message.vue",
-    "limit": "18.95 KB"
+    "limit": "7.1 KB"
   },
   {
     "name": "chat-message-actions",
     "path": "src/components/ai/chat-message/chat-message-actions/chat-message-actions.vue",
-    "limit": "1.7 KB"
+    "limit": "9.7 KB"
   },
   {
     "name": "chat-message-feedback",
     "path": "src/components/ai/chat-message/chat-message-feedback/chat-message-feedback.vue",
-    "limit": "9.4 KB"
+    "limit": "9.45 KB"
   },
   {
     "name": "citation",
     "path": "src/components/ai/citation/citation.vue",
-    "limit": "7.15 KB"
+    "limit": "7.25 KB"
   },
   {
     "name": "conversation",
@@ -1261,12 +1261,12 @@
   {
     "name": "sources",
     "path": "src/components/ai/sources/sources.vue",
-    "limit": "2.9 KB"
+    "limit": "3.4 KB"
   },
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "38.1 KB",
+    "limit": "38.35 KB",
     "entryOnly": true
   },
   {

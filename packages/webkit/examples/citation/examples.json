@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Two numbered references in a sentence: the first links to the source page and names it in a tooltip, the second points at item 2 of a Sources list on the same page.",
+      "summary": "Two references in a sentence, each a small chip with the source's site: the first links to the source page, the second points at item 2 of a Sources list on the same page. Both name the source in a tooltip.",
       "file": "default.vue"
     }
   ]

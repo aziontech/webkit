@@ -14,6 +14,8 @@ export interface ChatMessageContext {
   from: ComputedRef<ChatMessageFrom>
   /** Lifecycle of the message; actions render only when it is `success`. */
   status: ComputedRef<ChatMessageStatus>
+  /** Reads the text of the rendered content, what Read aloud speaks when it is given no text. */
+  contentText: () => string
 }
 
 export const ChatMessageInjectionKey: InjectionKey<ChatMessageContext> = Symbol('ChatMessage')

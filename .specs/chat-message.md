@@ -3,26 +3,28 @@ name: chat-message
 category: ai
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: cf62981f115dccd02b60e3759b9c643e6ee62399c9d9a5bad5631350c3ffacac
+checksum: 39eccc91fdb5af11d71f2ba464674c1efdc4da56abb66083871db5d0bbff3457
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-22
 ---
 
 # ChatMessage — Component Spec
 
 ## Purpose
 
-One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who
-wrote it (avatar and author line), the content, and — once the response is complete — the inline
-actions a reader takes on it (copy, regenerate, thumbs up / down). It owns the message lifecycle:
+One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the
+content and — once the response is complete — the action row a reader uses on it (copy, the
+helpful / not helpful thumbs, regenerate, read aloud, the sources). It owns the message lifecycle:
 `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no
 actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and
 `error` (an error line with Try again).
 
-User messages sit in a filled bubble; assistant messages are flat, full width, beside the assistant
-mark; system messages are a muted centered line. Alignment comes from the enclosing `Conversation`.
+Assistant messages are plain text across the reading column (`.text-body-lg`): no avatar, name,
+time or bubble. User messages are a filled bubble at the inline end, at most 80 % wide; system
+messages a muted centered line. Author and time live in the accessible name (the time also shows on
+hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
 
 ## When to use
 
@@ -46,8 +48,8 @@ mark; system messages are a muted centered line. Alignment comes from the enclos
 ## Best practices
 
 - Pass `status` from your request: `pending` until the first token, `streaming` while tokens arrive, then `success` or `error`.
-- Keep actions to five or fewer, always visible (no hover-only): copy, regenerate, feedback.
-- Use `grouped` for a second message by the same author so stacked bubbles read as one turn (only the first shows the avatar).
+- Keep the action row always visible: Copy, the thumbs, Regenerate, app actions (Share), Read aloud, then the `Sources` pill in `#trailing`; give `CopyButton` and `IconButton` `size="large"` (40 px targets).
+- Use `grouped` for a second message by the same author so stacked messages read as one turn.
 - Never put the feedback thumbs on non-AI content.
 
 ## Usage
@@ -57,10 +59,12 @@ mark; system messages are a muted centered line. Alignment comes from the enclos
   import { ref } from 'vue'
   import ChatMessage from '@aziontech/webkit/chat-message'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import Sources from '@aziontech/webkit/sources'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
 
   const feedback = ref(null)
-  const answer = 'Open **Real-Time Purge** and choose *URL*.'
+  const sources = [{ title: 'Real-Time Purge', href: 'https://www.azion.com/en/documentation/' }]
+  const answer = 'Open **Real-Time Purge** and choose *URL* [1].'
 </script>
 
 <template>
@@ -69,11 +73,24 @@ mark; system messages are a muted centered line. Alignment comes from the enclos
     timestamp="10:42"
     status="success"
   >
-    <StreamingResponse :content="answer" />
+    <StreamingResponse
+      :content="answer"
+      :sources="sources"
+      anchor="answer-1"
+    />
     <template #actions>
-      <ChatMessage.Actions>
-        <CopyButton :value="answer" />
+      <ChatMessage.Actions show-read-aloud>
+        <CopyButton
+          size="large"
+          :value="answer"
+        />
         <ChatMessage.Feedback v-model="feedback" />
+        <template #trailing>
+          <Sources
+            :items="sources"
+            anchor="answer-1"
+          />
+        </template>
       </ChatMessage.Actions>
     </template>
   </ChatMessage>
@@ -84,19 +101,20 @@ mark; system messages are a muted centered line. Alignment comes from the enclos
 
 Compound API through `index.ts` (`ChatMessage.Actions`, `ChatMessage.Feedback`); standalone entries
 `chat-message-root`, `chat-message-actions`, `chat-message-feedback`. The root provides
-`{ from, status }` (`injection-key.ts`); `useChatMessageContext()` throws outside a `ChatMessage`.
+`{ from, status, contentText }` (`injection-key.ts`; `contentText()` reads the `StreamingResponse` text, `lib/content-text.ts`); `useChatMessageContext()` throws outside a `ChatMessage`.
 
-- `chat-message-actions/chat-message-actions.vue` — `role="group"` row of inline actions; renders nothing unless the message `status` is `success`.
-  - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`).
-  - Slot: `default` — the icon actions.
+- `chat-message-actions/chat-message-actions.vue` — `role="group"` row of actions, wrapping when narrow; renders nothing unless `status` is `success`. Order: `default`, Read aloud, `trailing`.
+  - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`); `showReadAloud?: boolean` (default `false` — shows Read aloud); `readAloudText?: string` (default `''` — the text Read aloud speaks; empty reads `contentText()`).
+  - Slots: `default` — the icon actions; `trailing` — the `Sources` pill.
+  - Read aloud (private part `parts/chat-message-read-aloud.vue`, test id `chat-message-actions__read-aloud`): a 40 px ghost `IconButton` that speaks the text with `speechSynthesis` in the active locale; while speaking it is `Stop reading` (`data-speaking`). Pressing it again, another message's Read aloud or unmounting stops it. Rendered after mount, only where the browser has speech synthesis.
   - `data-testid` fallback: `chat-message-actions`.
-- `chat-message-feedback/chat-message-feedback.vue` — thumbs up / down (`aria-pressed`), each with a tooltip (`Helpful`, `Not helpful`); after a choice the other thumb disables and a `role="status"` line reads `Submitting feedback` (while `loading`) then `Feedback submitted`. A choice is final.
+- `chat-message-feedback/chat-message-feedback.vue` — thumbs up / down (`aria-pressed`, large ghost `IconButton`s), each with a tooltip (`Helpful`, `Not helpful`); after a choice the other thumb disables and a `role="status"` line reads `Submitting feedback` (while `loading`) then `Feedback submitted`. A choice is final.
   - Props: `loading?: boolean` (default `false`).
   - v-model: `'up' | 'down' | null` through `defineModel` (default `null`; emits `update:modelValue`).
   - `data-testid` fallback: `chat-message-feedback`.
 
 Exported types: `ChatMessageFrom`, `ChatMessageStatus`, `ChatMessageFeedbackValue`. Composed DS
-components: `avatar`, `button`, `response-loading`, `icon-button`, `tooltip`.
+components: `button`, `response-loading`, `icon-button`, `tooltip`.
 
 ```
 packages/webkit/src/components/ai/chat-message/
@@ -105,6 +123,8 @@ packages/webkit/src/components/ai/chat-message/
 ├── index.ts
 ├── injection-key.ts
 ├── composables/use-chat-message-context.ts
+├── lib/content-text.ts
+├── parts/chat-message-read-aloud.vue
 ├── chat-message-actions/chat-message-actions.vue
 └── chat-message-feedback/chat-message-feedback.vue
 ```
@@ -114,10 +134,10 @@ packages/webkit/src/components/ai/chat-message/
 | Prop           | Type                                               | Default       | Required | JSDoc                                                                                                                                                      |
 | -------------- | -------------------------------------------------- | ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `from`         | `'user' \| 'assistant' \| 'system'`                | `'assistant'` | false    | Who wrote the message: the person (`user`), the generative AI assistant, or the product (`system`).                                                        |
-| `author`       | `string`                                           | `''`          | false    | Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`).                       |
-| `timestamp`    | `string`                                           | `''`          | false    | Time the message was sent, already formatted for display (`10:42`). Added to the accessible name.                                                          |
+| `author`       | `string`                                           | `''`          | false    | Author name read in the message's accessible name; it is not shown. Empty uses the locale catalog (`You`, `AI assistant`, `System`).                       |
+| `timestamp`    | `string`                                           | `''`          | false    | Time the message was sent, already formatted for display (`10:42`). Added to the accessible name and shown on hover over the user's bubble.                |
 | `status`       | `'pending' \| 'streaming' \| 'success' \| 'error'` | `'success'`   | false    | Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `success` shows the actions, `error` shows the error line with Try again. |
-| `grouped`      | `boolean`                                          | `false`       | false    | Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn.                                           |
+| `grouped`      | `boolean`                                          | `false`       | false    | Follows a message by the same author: tightens the gap above it so stacked messages read as one turn.                                                      |
 | `errorMessage` | `string`                                           | `''`          | false    | Error text shown while `status` is `error`. Empty uses the locale catalog.                                                                                 |
 | `loadingLabel` | `string`                                           | `''`          | false    | Loading text shown while `status` is `pending`. Empty uses `ResponseLoading`'s own (`Generating a response`).                                              |
 
@@ -132,12 +152,12 @@ packages/webkit/src/components/ai/chat-message/
 | Slot      | Scope | Notes                                                                                                    |
 | --------- | ----- | -------------------------------------------------------------------------------------------------------- |
 | `default` | —     | The content: text, `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`. |
-| `avatar`  | —     | Replaces the default avatar (person glyph for the user, the assistant mark for the AI).                  |
-| `actions` | —     | Inline actions, usually `ChatMessage.Actions`; shown only when `status` is `success`.                    |
+| `actions` | —     | The action row, usually `ChatMessage.Actions`; shown only when `status` is `success`.                    |
 
 ## States
 
 - `data-from` (`user` | `assistant` | `system`), `data-status` (mirrors `status`), `data-alignment` (from the conversation), `data-grouped`.
+- A visually hidden line (`__author`, dropped when `grouped`) reads the accessible name; the user bubble has the time as `title`.
 - `aria-busy="true"` while `pending` or `streaming`.
 - `pending`: `ResponseLoading` (inline, no delay — the owner decides when a message exists) in place of the content.
 - `error`: the content (whatever streamed) stays; an error line with a danger glyph and a Try again `Button` follows.
@@ -145,19 +165,18 @@ packages/webkit/src/components/ai/chat-message/
 
 ## Motion & Animations
 
-_No motion of its own — `ResponseLoading` owns the pulsing dots shown while `pending`, `IconButton` its loading spinner._
+_No motion of its own — `ResponseLoading` owns the pulsing dots shown while `pending`, `IconButton` its loading spinner and hover fades._
 
 ## Tokens
 
-| Region              | Token                                                                              |
-| ------------------- | ---------------------------------------------------------------------------------- |
-| user bubble surface | `var(--bg-surface-raised)`, `var(--shape-card)`                                    |
-| bubble padding      | `var(--spacing-md)` / `var(--spacing-sm)`                                          |
-| author line         | `.text-label-sm`, `var(--text-default)`; time `.text-body-xs`, `var(--text-muted)` |
-| content             | `.text-body-md`, `var(--text-default)`                                             |
-| system line         | `.text-body-sm`, `var(--text-muted)`                                               |
-| error line          | `.text-body-sm`, `var(--danger-foreground)`                                        |
-| gaps                | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-2xs)`                     |
+| Region              | Token                                                                                                |
+| ------------------- | ---------------------------------------------------------------------------------------------------- |
+| user bubble surface | `var(--bg-surface-raised)`, `var(--shape-card)` (the largest rounded shape token), at most 80 % wide |
+| bubble padding      | `var(--spacing-md)` / `var(--spacing-sm)`                                                            |
+| content             | `.text-body-lg`, `var(--text-default)`; blocks `var(--spacing-md)` apart                             |
+| system line         | `.text-body-sm`, `var(--text-muted)`                                                                 |
+| error line          | `.text-body-sm`, `var(--danger-foreground)`                                                          |
+| gaps                | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-2xs)`                                       |
 
 ## Theme gaps
 
@@ -167,9 +186,9 @@ _None._
 
 - Visible focus: the composed controls carry their own `focus-visible` rings.
 - Keyboard map: `Tab` through links in the content, then the actions in order; Enter / Space activate. The message adds no key handling.
-- ARIA: `<article aria-label="<author> at <time>">` so each message has a unique name (Cloudscape); avatar wrapper `aria-hidden` (the author line names the author); `aria-busy` while loading or streaming; actions are a `role="group"` named `Message actions`; feedback thumbs use `aria-pressed`, the feedback status is `role="status"`.
+- ARIA: `<article aria-label="<author> at <time>">` so each message has a unique name (Cloudscape), repeated in a visually hidden line at its start for browse mode; `aria-busy` while loading or streaming; actions are a `role="group"` named `Message actions`; feedback thumbs use `aria-pressed`, the feedback status is `role="status"`.
 - Announcement: when an assistant or system message turns `success` or `error` (or mounts finished after the conversation is ready), its text is read once through the `Conversation` live region.
-- Never rely on alignment alone: every message has the avatar and author line (or `grouped` after one that has).
+- Never rely on alignment alone: every message names its author in its accessible name and hidden line (or is `grouped` after one that does).
 - Contrast ≥4.5:1 on the muted time and system text.
 
 ## Internationalization
@@ -188,21 +207,23 @@ _None._
 | `chatMessage.feedback`           | `Response feedback`                    | —                     |
 | `chatMessage.feedbackSubmitting` | `Submitting feedback`                  | —                     |
 | `chatMessage.feedbackSubmitted`  | `Feedback submitted`                   | —                     |
+| `chatMessage.readAloud`          | `Read aloud`                           | —                     |
+| `chatMessage.stopReading`        | `Stop reading`                         | —                     |
 
 - Formatting: the owner formats `timestamp` (`Intl.DateTimeFormat` with the provider locale).
 
 ## Right-to-left
 
-- Layout: logical utilities; in `split` the user message reverses the row so it sits at the inline end (left in RTL).
-- Icons: thumbs, refresh and the assistant mark are not mirrored.
+- Layout: logical utilities; in `split` the user bubble sits at the inline end (left in RTL); the action row's pull is `-ms`.
+- Icons: thumbs, refresh, speaker and stop are not mirrored.
 - Keyboard: no arrow keys.
 - User data: content renders `dir` per block (code is `dir="ltr"`).
 
 ## Responsive
 
-- Container queries: none; user bubbles cap at 85 % of the thread width, assistant content fills it.
-- Narrow: same layout; the avatar column is 32 px.
-- Touch: actions are `IconButton`s (44 px on coarse pointers).
+- Container queries: none; user bubbles cap at 80 % of the thread width, assistant content fills it.
+- Narrow: same layout; the action row wraps, and an open `Sources` list takes the full width under it.
+- Touch: Feedback and Read aloud are 40 px `IconButton`s; the `Sources` pill has a 44 px hit area on coarse pointers.
 - Reflow: long words break (`break-words`); code and tables scroll in their own blocks.
 
 ## Performance
@@ -213,7 +234,7 @@ _None._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/chat-message/`: Default (user and assistant), Actions and feedback, Pending and streaming, Error with retry, Grouped and system._
+_Examples in `packages/webkit/examples/chat-message/`: Default (user bubble and plain assistant text), Actions (Copy, feedback, Regenerate, Read aloud and the Sources pill), Pending and streaming, Error with retry, Grouped and system._
 
 ## Constraints — DO NOT
 
