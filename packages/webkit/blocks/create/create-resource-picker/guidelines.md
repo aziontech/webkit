@@ -49,6 +49,8 @@ A transparent small full-width `Button` under the list while more matches remain
 
 The block takes its resources through props, keeps the answer in `v-model`s and emits Load more; it fetches nothing. `ResourcePickerOption`, `ResourcePickerMode` and `ResourcePickerProps` are exported from `create-resource-picker.vue`, and `sample.ts` holds the sample projects the block renders when `projects` is left out (and never while `loading` or `error` is set).
 
+The OptionalBinding variant renders `parts/firewall-binding.vue`, with its firewalls and modules in `sample.ts`.
+
 | Prop / model   | Type                     | What it does                                                                                                  |
 | -------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `projects`     | `ResourcePickerOption[]` | The resources that can be bound; searched and paged five at a time in the browser. Pass `[]` when none exist. |

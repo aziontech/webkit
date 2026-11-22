@@ -49,6 +49,8 @@ One toast id for the run, raised only while the dialog is hidden, so it never co
 
 The block takes the run through props and emits every action; it runs no deploy and fakes no progress. `DeployProgressDialogItem` and `DeployProgressDialogProps` are exported from `create-deploy-progress-dialog.vue`, and `sample.ts` holds the sample runs (`sampleRunningItems` renders when `items` is left out; `sampleDeployedItems` and `samplePartialItems` are what the variants pass). The page updates each row's `status` as the deploy reports it; the title, the bar, the filter counts and the toast follow from the rows.
 
+The Drop variant confirms the dropped folder in `parts/drop-confirm-dialog.vue` before it opens the block.
+
 | Prop           | Type                         | What it does                                                                                                       |
 | -------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `items`        | `DeployProgressDialogItem[]` | Every Deployment Setting of the run with its `status` (queued, deploying, done, failed) and the failure `message`. |
