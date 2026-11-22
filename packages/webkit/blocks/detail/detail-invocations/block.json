@@ -31,7 +31,12 @@
     "name": "Completed",
     "file": "detail-invocations.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "invocations-format.ts",
+    "parts/invocation-request-path.vue",
+    "parts/invocation-summary-card.vue"
+  ],
   "variants": [
     {
       "name": "Error",

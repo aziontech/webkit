@@ -1,21 +1,9 @@
 <script setup lang="ts">
-  import AgentActivity from '@aziontech/webkit/agent-activity'
-  import AgentQuestion from '@aziontech/webkit/agent-question'
   import Alert from '@aziontech/webkit/alert'
-  import AudioPlayer from '@aziontech/webkit/audio-player'
-  import Button from '@aziontech/webkit/button'
-  import ChatMessage, {
-    type ChatMessageFeedbackValue,
-    type ChatMessageStatus
-  } from '@aziontech/webkit/chat-message'
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import type { ChatMessageFeedbackValue, ChatMessageStatus } from '@aziontech/webkit/chat-message'
+  import ChatMessage from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import FilePreview from '@aziontech/webkit/file-preview'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
-  import McpAppFrame, {
+  import {
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
@@ -23,19 +11,9 @@
   import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
-  import Reasoning from '@aziontech/webkit/reasoning'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Sources from '@aziontech/webkit/sources'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SubagentCard from '@aziontech/webkit/subagent-card'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-  import Tag from '@aziontech/webkit/tag'
-  import ToolApproval from '@aziontech/webkit/tool-approval'
-  import ToolCall from '@aziontech/webkit/tool-call'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import {
-    activitiesBefore,
     type AiChatConnection,
     type AiChatInterrupt,
     type AiChatInterruptError,
@@ -47,34 +25,26 @@
     type AiChatToolAnswer,
     type AiChatToolCallPart,
     type AiChatUiResourcePart,
-    answerable,
-    answerInterrupt,
-    approvalOf,
     contentOf,
-    documentNameOf,
     hasAnswer,
     interruptErrorText,
     isQuestion,
     json,
-    needsApproval,
-    parsesAsJson,
-    questionOf,
     queueItemOf,
     resolveInterrupt,
-    segmentsOf,
-    skipInterrupt,
-    stopSubagent,
-    structuredOf,
-    subagentStatusOf,
-    subagentTextOf,
-    textOf,
-    toolContentOf,
-    toolQuestionOf,
-    toolStatusOf
+    toolQuestionOf
   } from '@aziontech/webkit/utils/ai-chat'
-  import VideoPlayer from '@aziontech/webkit/video-player'
+  import {
+    answerQuestion,
+    groupQuestions,
+    skipQuestion
+  } from '@aziontech/webkit/utils/ai-chat-questions'
   import { computed, ref, watch } from 'vue'
 
+  import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
+  import AiChatHeader from './parts/ai-chat-header.vue'
+  import AiChatStart from './parts/ai-chat-start.vue'
+  import AiChatTurn from './parts/ai-chat-turn.vue'
   import { sampleSuggestions } from './sample'
 
   /** A rating the reader gave a response. */
@@ -171,17 +141,6 @@
     'retry-interrupts': [event: MouseEvent]
   }>()
 
-  const appFrames = new Map<string, InstanceType<typeof McpAppFrame>>()
-
-  function setAppFrame(key: string, el: unknown) {
-    if (el) appFrames.set(key, el as InstanceType<typeof McpAppFrame>)
-    else appFrames.delete(key)
-  }
-
-  function forwardAppMessage(key: string, part: AiChatUiResourcePart, message: McpAppFrameMessage) {
-    emit('app-message', message, part, (reply) => appFrames.get(key)?.post(reply))
-  }
-
   const { formatDate } = useLocale()
 
   const prompt = ref('')
@@ -219,21 +178,6 @@
 
   const queueable = computed(() => props.queue !== undefined)
   const queued = computed(() => (props.queue ?? []).map(queueItemOf))
-  const wasConnected = ref(props.connection === 'connected')
-  watch(
-    () => props.connection,
-    (value) => {
-      if (value === 'connected') wasConnected.value = true
-    }
-  )
-  const reconnecting = computed(
-    () => (wasConnected.value && props.connection === 'connecting') || props.resuming
-  )
-  const offline = computed(
-    () =>
-      !reconnecting.value &&
-      (props.connection === 'error' || (wasConnected.value && props.connection === 'disconnected'))
-  )
   const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
 
   const pendingQuestions = computed(() => props.interrupts.filter(isQuestion))
@@ -245,36 +189,21 @@
     { immediate: true }
   )
 
-  const questions = computed(() => {
-    const live = pendingQuestions.value
-      .map(questionOf)
-      .map((question) =>
-        !question.bound && routed.value[question.id]
-          ? { ...question, status: 'running' as const }
-          : question
-      )
-    const ids = new Set(live.map((question) => question.id))
-    const known = new Set(turns.value.map((turn) => turn.id))
-    const groups: Record<string, AiChatQuestion[]> = {}
-    for (const question of [
-      ...live,
-      ...Object.values(settled.value).filter((question) => !ids.has(question.id))
-    ]) {
-      const after = askedAfter.value[question.id] ?? ''
-      ;(groups[known.has(after) ? after : (last.value?.id ?? '')] ??= []).push(question)
-    }
-    return groups
-  })
+  const questions = computed(() =>
+    groupQuestions({
+      pending: pendingQuestions.value,
+      settled: settled.value,
+      routed: routed.value,
+      askedAfter: askedAfter.value,
+      turns: turns.value,
+      lastId: last.value?.id ?? ''
+    })
+  )
 
   function answer(event: Event, question: AiChatQuestion, value: string) {
-    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
-    settled.value[question.id] = { ...question, status: 'success', error: '' }
-    if (question.bound) {
-      answerInterrupt(interrupt, value)
-    } else {
-      routed.value[question.id] = true
-      if (interrupt) emit('answer-interrupt', event, interrupt, value)
-    }
+    const state = { pending: pendingQuestions.value, settled: settled.value, routed: routed.value }
+    const interrupt = answerQuestion(state, question, value)
+    if (interrupt) emit('answer-interrupt', event, interrupt, value)
   }
 
   function askOf(call: AiChatToolCallPart): AiChatQuestion {
@@ -287,9 +216,7 @@
   }
 
   function skip(question: AiChatQuestion) {
-    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
-    settled.value[question.id] = { ...question, status: 'skipped', error: '' }
-    skipInterrupt(interrupt)
+    skipQuestion({ pending: pendingQuestions.value, settled: settled.value }, question)
   }
 
   function editOf(call: AiChatToolCallPart): string {
@@ -392,69 +319,17 @@
     aria-labelledby="ai-chat-title"
     class="flex min-h-0 w-full grow basis-0 flex-col"
   >
-    <header
-      class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-    >
-      <div class="flex items-center gap-(--spacing-xs)">
-        <h1
-          id="ai-chat-title"
-          class="text-heading-xs text-(--text-default)"
-        >
-          AI assistant
-        </h1>
-        <Tag
-          label="Preview"
-          severity="info"
-          size="small"
-        />
-      </div>
-      <Button
-        label="New chat"
-        variant="ghost"
-        size="small"
-        icon="az az-plus"
-        :disabled="!turns.length"
-        @click="newChat"
-      />
-    </header>
+    <AiChatHeader
+      :empty="!turns.length"
+      @new-chat="newChat"
+    />
     <div class="flex min-h-0 flex-1 flex-col">
-      <div
-        v-if="hydrating && !turns.length"
-        role="status"
-        aria-label="Loading the conversation"
-        class="layout-column-content layout-boundary-inline flex flex-1 flex-col gap-(--spacing-lg) py-(--spacing-md)"
-      >
-        <div
-          v-for="row in 3"
-          :key="row"
-          class="flex gap-(--spacing-sm)"
-        >
-          <Skeleton
-            variant="circle"
-            width="2rem"
-            height="2rem"
-          />
-          <div class="flex flex-1 flex-col gap-(--spacing-xs)">
-            <Skeleton width="25%" />
-            <Skeleton :width="row === 2 ? '50%' : '85%'" />
-          </div>
-        </div>
-      </div>
-      <div
-        v-else-if="!turns.length"
-        class="layout-column-content layout-boundary-inline flex flex-1 flex-col justify-center gap-(--spacing-lg) py-(--spacing-md)"
-      >
-        <EmptyState
-          title="How can I help with your Azion account?"
-          description="Ask about your workloads, cache, security rules and deployments. Answers cite the documentation they come from."
-          icon="az az-ask-azion"
-        />
-        <SuggestionGroup
-          :items="starters"
-          orientation="vertical"
-          @select="(event, item) => send(event, item.label)"
-        />
-      </div>
+      <AiChatStart
+        v-if="!turns.length"
+        :hydrating="hydrating"
+        :starters="starters"
+        @select="(event, item) => send(event, item.label)"
+      />
       <Conversation
         v-else
         aria-label="Conversation with the AI assistant"
@@ -462,270 +337,34 @@
         :loading-more="loadingMore"
         @load-more="emit('load-more', $event)"
       >
-        <template
+        <AiChatTurn
           v-for="turn in turns"
           :key="turn.id"
-        >
-          <ChatMessage
-            :from="turn.role === 'user' ? 'user' : 'assistant'"
-            :status="statusOf(turn)"
-            :timestamp="timeOf(turn)"
-            :error-message="statusOf(turn) === 'error' ? failure : undefined"
-            @retry="emit('retry', $event, turn)"
-          >
-            <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
-            <template
-              v-for="segment in segmentsOf(
-                turn,
-                turn.role === 'assistant' ? activitiesBefore(messages, turn) : []
-              )"
-              :key="segment.key"
-            >
-              <template v-if="turn.role === 'user' && segment.type === 'text'" />
-              <AgentActivity
-                v-else-if="segment.type === 'activity'"
-                :steps="segment.steps"
-              />
-              <Reasoning
-                v-else-if="segment.type === 'reasoning'"
-                :streaming="statusOf(turn) === 'pending'"
-                :duration="
-                  statusOf(turn) === 'pending' ? undefined : turn.metadata?.reasoningSeconds
-                "
-              >
-                <p class="whitespace-pre-line">{{ segment.content }}</p>
-              </Reasoning>
-              <StreamingResponse
-                v-else-if="segment.type === 'text'"
-                :content="segment.content"
-                :streaming="statusOf(turn) === 'streaming'"
-                :sources="turn.metadata?.sources ?? []"
-                :anchor="`answer-${turn.id}`"
-              />
-              <AgentQuestion
-                v-else-if="
-                  segment.type === 'tool' &&
-                  answerable(toolOf(segment.call), segment.call, segment.result)
-                "
-                v-model="answers[segment.call.id]"
-                :title="askOf(segment.call).title"
-                :type="askOf(segment.call).options.length ? 'choice' : 'text'"
-                :options="askOf(segment.call).options"
-                :status="askOf(segment.call).status"
-                @submit="(event, value) => answerTool(event, segment.call, value)"
-              />
-              <template v-else-if="segment.type === 'tool'">
-                <ToolApproval
-                  v-if="needsApproval(segment.call)"
-                  :title="
-                    toolOf(segment.call).question ||
-                    toolOf(segment.call).title ||
-                    `Run ${segment.call.name}?`
-                  "
-                  :description="toolOf(segment.call).description"
-                  :approve-label="toolOf(segment.call).approveLabel"
-                  :variant="toolOf(segment.call).variant"
-                  :confirmation-phrase="toolOf(segment.call).confirmationPhrase"
-                  :status="approvalOf(segment.call)"
-                  :loading="loading && turn === last"
-                  :editable="toolOf(segment.call).editable"
-                  :invalid="toolOf(segment.call).editable && !parsesAsJson(editOf(segment.call))"
-                  :model-value="editOf(segment.call)"
-                  @update:model-value="(text) => (edits[segment.call.id] = text)"
-                  @approve="(event, text) => approve(event, segment.call, text)"
-                  @deny="deny($event, segment.call)"
-                >
-                  <CodeBlock
-                    v-if="
-                      !toolOf(segment.call).editable &&
-                      json(segment.call.input ?? segment.call.arguments)
-                    "
-                    :code="json(segment.call.input ?? segment.call.arguments)"
-                    language="json"
-                    :show-line-numbers="false"
-                  />
-                </ToolApproval>
-                <ToolCall
-                  v-if="!needsApproval(segment.call) || approvalOf(segment.call) === 'approved'"
-                  :name="segment.call.name"
-                  :title="toolOf(segment.call).title"
-                  :status="toolStatusOf(segment.call, segment.result)"
-                >
-                  <template
-                    v-if="json(segment.call.input ?? segment.call.arguments)"
-                    #input
-                  >
-                    <CodeBlock
-                      :code="json(segment.call.input ?? segment.call.arguments)"
-                      language="json"
-                      :show-line-numbers="false"
-                    />
-                  </template>
-                  <template
-                    v-if="
-                      !segment.result?.error &&
-                      segment.call.output === undefined &&
-                      toolContentOf(segment.result?.content)
-                    "
-                    #output
-                  >
-                    <p
-                      v-if="toolContentOf(segment.result?.content)?.text"
-                      class="whitespace-pre-line text-body-sm text-(--text-default)"
-                    >
-                      {{ toolContentOf(segment.result?.content)?.text }}
-                    </p>
-                    <ImageGallery
-                      v-if="toolContentOf(segment.result?.content)?.images.length"
-                      :items="toolContentOf(segment.result?.content)?.images ?? []"
-                    />
-                  </template>
-                  <template
-                    v-else-if="
-                      json(segment.result?.error || segment.call.output || segment.result?.content)
-                    "
-                    #output
-                  >
-                    <CodeBlock
-                      :code="
-                        json(
-                          segment.result?.error || segment.call.output || segment.result?.content
-                        )
-                      "
-                      language="json"
-                      :show-line-numbers="false"
-                    />
-                  </template>
-                </ToolCall>
-              </template>
-              <ImageGallery
-                v-else-if="segment.type === 'gallery'"
-                :items="segment.images"
-              />
-              <AudioPlayer
-                v-else-if="segment.type === 'audio'"
-                :src="segment.src"
-              />
-              <VideoPlayer
-                v-else-if="segment.type === 'video'"
-                :src="segment.src"
-                :mime-type="segment.mimeType"
-              />
-              <FilePreview
-                v-else-if="segment.type === 'document'"
-                :file-name="documentNameOf(segment.part)"
-                :mime-type="segment.part.source.mimeType"
-                :src="segment.part.source.type === 'url' ? segment.part.source.value : ''"
-                :base64="segment.part.source.type === 'data' ? segment.part.source.value : ''"
-              />
-              <SubagentCard
-                v-else-if="segment.type === 'subagent'"
-                :name="segment.part.subagent.name"
-                :title="segment.part.subagent.description"
-                :description="segment.part.subagent.error?.message"
-                :status="subagentStatusOf(segment.part)"
-                :stoppable="typeof segment.part.subagent.stop === 'function'"
-                @stop="stopSubagent(segment.part)"
-              >
-                <StreamingResponse
-                  v-if="subagentTextOf(segment.part)"
-                  :content="subagentTextOf(segment.part)"
-                />
-                <template
-                  v-if="json(segment.part.subagent.input)"
-                  #input
-                >
-                  <CodeBlock
-                    :code="json(segment.part.subagent.input)"
-                    language="json"
-                    :show-line-numbers="false"
-                  />
-                </template>
-              </SubagentCard>
-              <template v-else-if="segment.type === 'structured'">
-                <Alert
-                  v-if="segment.part.status === 'error'"
-                  severity="danger"
-                  size="small"
-                  title="The structured answer failed"
-                >
-                  {{ segment.part.errorMessage || 'The answer did not match the expected format.' }}
-                </Alert>
-                <CodeBlock
-                  v-else-if="structuredOf(segment.part)"
-                  :code="structuredOf(segment.part)"
-                  language="json"
-                  :show-line-numbers="false"
-                  :aria-busy="segment.part.status === 'streaming' || undefined"
-                />
-              </template>
-              <McpAppFrame
-                v-else-if="segment.type === 'app'"
-                :ref="(el) => setAppFrame(segment.key, el)"
-                :resource="segment.part.resource"
-                :title="
-                  (tools[segment.part.toolName] ?? { title: '' }).title || segment.part.toolName
-                "
-                :resolve-url="resolveAppUrl"
-                @message="(message) => forwardAppMessage(segment.key, segment.part, message)"
-              />
-            </template>
-            <template v-if="turn.role === 'assistant'">
-              <p
-                v-if="stopped(turn)"
-                class="text-body-sm text-(--text-muted)"
-              >
-                You stopped this response.
-              </p>
-              <Sources
-                v-if="statusOf(turn) === 'success' && !stopped(turn)"
-                :items="turn.metadata?.sources ?? []"
-                :anchor="`answer-${turn.id}`"
-              />
-            </template>
-            <template
-              v-if="turn.role === 'assistant'"
-              #actions
-            >
-              <ChatMessage.Actions>
-                <CopyButton
-                  size="small"
-                  :value="textOf(turn)"
-                />
-                <IconButton
-                  icon="az az-refresh"
-                  aria-label="Regenerate response"
-                  variant="ghost"
-                  size="small"
-                  :disabled="state !== 'ready'"
-                  @click="emit('retry', $event, turn)"
-                />
-                <ChatMessage.Feedback
-                  :model-value="ratings[turn.id] ?? null"
-                  @update:model-value="(value) => rate(turn, value)"
-                />
-              </ChatMessage.Actions>
-            </template>
-          </ChatMessage>
-          <ChatMessage
-            v-if="questions[turn.id]?.length"
-            from="assistant"
-          >
-            <AgentQuestion
-              v-for="question in questions[turn.id]"
-              :key="question.id"
-              v-model="answers[question.id]"
-              :title="question.title"
-              :type="question.options.length ? 'choice' : 'text'"
-              :options="question.options"
-              :status="question.status"
-              :error="question.error"
-              :skippable="question.bound"
-              @submit="(event, value) => answer(event, question, value)"
-              @skip="skip(question)"
-            />
-          </ChatMessage>
-        </template>
+          v-model:answers="answers"
+          :turn="turn"
+          :messages="messages"
+          :status="statusOf(turn)"
+          :time="timeOf(turn)"
+          :failure="failure"
+          :tools="tools"
+          :busy="loading && turn === last"
+          :ready="state === 'ready'"
+          :stopped="stopped(turn)"
+          :rating="ratings[turn.id] ?? null"
+          :questions="questions[turn.id]"
+          :ask-of="askOf"
+          :edit-of="editOf"
+          :resolve-app-url="resolveAppUrl"
+          @retry="emit('retry', $event, turn)"
+          @rate="(value) => rate(turn, value)"
+          @answer-tool="answerTool"
+          @edit="(call, text) => (edits[call.id] = text)"
+          @approve="approve"
+          @deny="deny"
+          @answer="answer"
+          @skip="skip"
+          @app-message="(message, part, reply) => emit('app-message', message, part, reply)"
+        />
         <ChatMessage
           v-if="waiting && last"
           :status="failure ? 'error' : 'pending'"
@@ -747,28 +386,11 @@
     <footer
       class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-xs) pb-(--spacing-md)"
     >
-      <StatusIndicator
-        v-if="reconnecting"
-        key="reconnecting"
-        severity="warning"
-        label="Reconnecting"
-        loading
-      />
-      <Alert
-        v-else-if="offline"
-        key="offline"
-        severity="danger"
-        size="small"
-        title="Connection lost"
-      >
-        Your messages send when the connection returns.
-      </Alert>
-      <StatusIndicator
-        v-else-if="sessionGenerating && !loading"
-        key="elsewhere"
-        severity="info"
-        label="Responding in another tab"
-        loading
+      <AiChatConnectionStatus
+        :connection="connection"
+        :resuming="resuming"
+        :session-generating="sessionGenerating"
+        :loading="loading"
       />
       <Alert
         key="alert-2"

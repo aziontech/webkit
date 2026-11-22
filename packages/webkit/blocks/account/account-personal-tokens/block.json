@@ -35,7 +35,12 @@
     "name": "Default",
     "file": "account-personal-tokens.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "parts/create-token-drawer.vue",
+    "parts/token-secret-dialog.vue",
+    "parts/tokens-table.vue"
+  ],
   "variants": [
     {
       "name": "Empty",

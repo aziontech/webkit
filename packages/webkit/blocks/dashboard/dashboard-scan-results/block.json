@@ -26,7 +26,13 @@
     "name": "Default",
     "file": "dashboard-scan-results.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "parts/filter-select.vue",
+    "parts/held-flagged-card.vue",
+    "parts/submissions-table.vue",
+    "scan-results-config.ts"
+  ],
   "variants": [
     {
       "name": "Loading",

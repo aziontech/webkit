@@ -27,7 +27,7 @@
     "name": "Default",
     "file": "dashboard-breakdown.vue"
   },
-  "files": ["sample.ts"],
+  "files": ["sample.ts", "parts/contributors-table.vue", "parts/spend-card.vue"],
   "variants": [
     {
       "name": "Loading",

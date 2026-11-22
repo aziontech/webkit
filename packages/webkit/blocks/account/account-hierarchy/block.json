@@ -28,7 +28,16 @@
     "name": "Default",
     "file": "account-hierarchy.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "hierarchy-model.ts",
+    "parts/hierarchy-details.vue",
+    "parts/hierarchy-labels-dialog.vue",
+    "parts/hierarchy-move-dialog.vue",
+    "parts/hierarchy-resources-table.vue",
+    "parts/hierarchy-resources.vue",
+    "parts/hierarchy-toolbar.vue"
+  ],
   "variants": [
     {
       "name": "Selected",

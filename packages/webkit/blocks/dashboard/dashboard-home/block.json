@@ -39,7 +39,14 @@
     "name": "Default",
     "file": "dashboard-home.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "home-metrics.ts",
+    "parts/home-domain-check.vue",
+    "parts/home-first-access.vue",
+    "parts/home-panels.vue",
+    "parts/home-usage-band.vue"
+  ],
   "variants": [
     {
       "name": "Empty",

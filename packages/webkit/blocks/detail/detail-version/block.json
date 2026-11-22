@@ -42,7 +42,19 @@
     "name": "Draft",
     "file": "detail-version.vue"
   },
-  "files": ["sample.ts", "parts/modified-by.vue", "parts/table-empty.vue"],
+  "files": [
+    "sample.ts",
+    "detail-version-cache.ts",
+    "detail-version-states.ts",
+    "parts/creating-wire.vue",
+    "parts/environment-switcher.vue",
+    "parts/revert-diff.vue",
+    "parts/settings-panel.vue",
+    "parts/version-bar.vue",
+    "parts/version-history.vue",
+    "parts/version-switcher.vue",
+    "parts/version-tab-bar.vue"
+  ],
   "variants": [
     {
       "name": "Deployed",

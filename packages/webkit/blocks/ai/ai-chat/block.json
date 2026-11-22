@@ -45,7 +45,15 @@
     "name": "Empty",
     "file": "ai-chat.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "parts/ai-chat-connection-status.vue",
+    "parts/ai-chat-header.vue",
+    "parts/ai-chat-media-segment.vue",
+    "parts/ai-chat-start.vue",
+    "parts/ai-chat-tool-segment.vue",
+    "parts/ai-chat-turn.vue"
+  ],
   "variants": [
     {
       "name": "Streaming",

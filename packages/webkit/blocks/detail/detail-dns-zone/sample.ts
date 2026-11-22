@@ -26,3 +26,15 @@ export const sampleRecords: DnsZoneDetailRecord[] = [
     description: 'Points www at the origin server.'
   }
 ]
+
+export const sampleZoneFile = `$ORIGIN example.com.
+$TTL 1h
+@       IN SOA ns1.example.net. admin.example.com. ( 2026111101 7200 3600 1209600 3600 )
+@       IN NS  ns1.example.net.
+@       IN A   192.0.2.10
+www     IN CNAME example.com.
+api 300 IN A   192.0.2.300
+mail    IN MX  10 mx.example.net.
+@       IN TXT "v=spf1 include:_spf.example.net ~all"
+ipv6    IN AAAA 2001:db8::10
+legacy  IN HINFO "PC" "Linux"`

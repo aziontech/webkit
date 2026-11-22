@@ -41,7 +41,14 @@
     "name": "Default",
     "file": "account-users.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "account-users-format.ts",
+    "parts/invite-user-drawer.vue",
+    "parts/user-profile-dialog.vue",
+    "parts/user-role-dialog.vue",
+    "parts/users-table.vue"
+  ],
   "variants": [
     {
       "name": "Invite",

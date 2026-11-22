@@ -36,7 +36,15 @@
     "name": "Default",
     "file": "dashboard-security.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "parts/attention-card.vue",
+    "parts/matched-chart.vue",
+    "parts/security-card.vue",
+    "parts/security-dialog.vue",
+    "parts/source-ip-search.vue",
+    "security-cards.ts"
+  ],
   "variants": [
     {
       "name": "Loading",

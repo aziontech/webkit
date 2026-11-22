@@ -4,40 +4,21 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
-  import FieldDescription from '@aziontech/webkit/field-description'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import PasswordInput from '@aziontech/webkit/password-input'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
+  import { type TableColumn } from '@aziontech/webkit/table'
   import type { TagSeverity } from '@aziontech/webkit/tag'
-  import Textarea from '@aziontech/webkit/textarea'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, nextTick, reactive, ref, watch } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
+  import CreateTokenDrawer from './parts/create-token-drawer.vue'
+  import TokenSecretDialog from './parts/token-secret-dialog.vue'
+  import TokensTable, { type PersonalTokensRow } from './parts/tokens-table.vue'
   import { sampleNow, sampleTokens } from './sample'
 
   /** One personal token of the signed-in person. */
@@ -109,7 +90,6 @@
 
   const secretModel = defineModel<PersonalTokensSecret | null>('secret', { default: null })
 
-  type TokenRow = PersonalTokensToken & { status: string; expires: string }
   interface TokenStatus {
     label: string
     severity: TagSeverity
@@ -150,7 +130,7 @@
     return { label: 'Active', severity: 'success' }
   }
 
-  const rows = computed<TokenRow[]>(() =>
+  const rows = computed<PersonalTokensRow[]>(() =>
     items.value.map((token) => ({
       ...token,
       status: statusOf(token).label,
@@ -188,80 +168,28 @@
       preferences: { storageKey: 'personal-tokens' }
     })
 
-  const tokensTableEl = ref<TableExposed<TokenRow> | null>(null)
-  const exportCsv = () => tokensTableEl.value?.exportCsv({ filename: 'personal-tokens.csv' })
+  const tokensTableEl = ref<InstanceType<typeof TokensTable> | null>(null)
+  const exportCsv = () => tokensTableEl.value?.exportCsv()
 
   const loadFailed = computed(() => props.error !== '')
   const refreshing = computed(() => props.loading && items.value.length > 0)
 
-  const expiryOptions = [
-    { value: '7', label: '7 days' },
-    { value: '30', label: '30 days' },
-    { value: '60', label: '60 days' },
-    { value: '90', label: '90 days' },
-    { value: '365', label: '1 year' }
-  ]
-  const expiryLabel = (value: string) =>
-    expiryOptions.find((option) => option.value === value)?.label ?? ''
-
   const createOpen = ref(false)
   const submitting = computed(() => props.creating)
-  const form = reactive({ name: '', description: '', expiresIn: '30' })
-  const errors = reactive({ name: '' })
-  const expiryHint = computed(
-    () =>
-      `The token stops working on ${formatDate(daysFrom(Number(form.expiresIn)))}. Create a new one before then.`
-  )
 
   const openCreate = () => {
-    Object.assign(form, { name: '', description: '', expiresIn: '30' })
-    errors.name = ''
     createOpen.value = true
   }
 
-  const focusById = (id: string) => nextTick(() => document.getElementById(id)?.focus())
-
-  const revealOpen = computed(() => secretModel.value !== null)
-  const revealed = computed(() => secretModel.value ?? { name: '', secret: '' })
   watch(secretModel, (next) => {
     if (next) createOpen.value = false
   })
-
-  const submit = (event: Event) => {
-    if (submitting.value) return
-    const name = form.name.trim()
-    if (!name) errors.name = 'This field is required.'
-    else if (items.value.some((token) => token.name.toLowerCase() === name.toLowerCase())) {
-      errors.name = 'A token with this name already exists. Use another name.'
-    } else errors.name = ''
-    if (errors.name) {
-      focusById('token-name')
-      return
-    }
-    emit('create', event, {
-      name,
-      description: form.description.trim(),
-      expiresInDays: Number(form.expiresIn)
-    })
-  }
-
-  const copied = ref(false)
-  const onCopied = () => {
-    copied.value = true
-  }
-  const closeReveal = () => {
-    secretModel.value = null
-    copied.value = false
-  }
 
   const pending = ref<PersonalTokensToken | null>(null)
   const revokeOpen = ref(false)
   const deleteOpen = ref(false)
 
-  const removalOf = (row: TokenRow): DropdownMenuItemValue =>
-    !row.revoked && row.status !== 'Expired' ? 'revoke' : 'delete'
-
-  const onAction = (value: DropdownMenuItemValue, row: TokenRow) => {
+  const onAction = (value: DropdownMenuItemValue, row: PersonalTokensRow) => {
     pending.value = items.value.find((token) => token.id === row.id) ?? null
     if (value === 'revoke') revokeOpen.value = true
     if (value === 'delete') deleteOpen.value = true
@@ -398,287 +326,29 @@
           </template>
         </Card>
 
-        <Card
+        <TokensTable
           key="card-2"
           v-else
-          :padded="false"
-        >
-          <template #default>
-            <DataTable
-              ref="tokensTableEl"
-              v-bind="tableProps"
-              :loading="loading"
-              sortable
-              :bordered="false"
-              aria-label="Personal tokens"
-              @row-remove="(_event, row) => onAction(removalOf(row), row)"
-            >
-              <template #cell-name="{ value }">
-                <span class="truncate text-label-sm text-(--text-default)">{{ value }}</span>
-              </template>
-              <template #cell-description="{ value }">
-                <span
-                  v-if="value"
-                  class="truncate text-body-sm text-(--text-muted)"
-                  >{{ value }}</span
-                >
-                <span
-                  v-else
-                  class="text-body-sm text-(--text-muted)"
-                  >No description</span
-                >
-              </template>
-              <template #cell-status="{ row }">
-                <TableCellStatus
-                  :label="row.status"
-                  :severity="statusOf(row).severity"
-                />
-              </template>
-              <template #cell-lastUsedAt="{ value }">
-                <TableCellTime
-                  v-if="value"
-                  :value="value"
-                />
-                <span
-                  v-else
-                  class="text-body-sm text-(--text-muted)"
-                  >Never used</span
-                >
-              </template>
-              <template #cell-createdAt="{ row }">
-                <TableCellTime
-                  :value="row.createdAt"
-                  :author="row.createdBy"
-                />
-              </template>
-              <template #header-actions>
-                <span class="sr-only">Actions</span>
-              </template>
-              <template #cell-actions="{ row }">
-                <TableCellActions
-                  :name="row.name"
-                  @select="(_event, value) => onAction(value, row)"
-                >
-                  <DropdownMenu.Group
-                    key="dropdown-menu.group-1"
-                    v-if="!row.revoked && row.status !== 'Expired'"
-                  >
-                    <DropdownMenu.Item
-                      value="revoke"
-                      label="Revoke"
-                    />
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group
-                    key="dropdown-menu.group-2"
-                    v-else
-                  >
-                    <DropdownMenu.Item
-                      value="delete"
-                      label="Delete"
-                    />
-                  </DropdownMenu.Group>
-                </TableCellActions>
-              </template>
-              <template #empty>
-                <EmptyState
-                  size="small"
-                  icon="az az-search"
-                  title="No matching tokens"
-                  description="No token matches these filters."
-                >
-                  <template #actions>
-                    <Button
-                      label="Clear filters"
-                      variant="outline"
-                      size="small"
-                      @click="clearFilters"
-                    />
-                  </template>
-                </EmptyState>
-              </template>
-            </DataTable>
-          </template>
-        </Card>
+          ref="tokensTableEl"
+          :table-props="tableProps"
+          :loading="loading"
+          :status-of="statusOf"
+          @action="onAction"
+          @clear="clearFilters"
+        />
       </section>
     </div>
 
-    <Drawer
+    <CreateTokenDrawer
       v-model:open="createOpen"
-      size="large"
-      side="end"
-    >
-      <DrawerContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Create Personal Token"
-          novalidate
-          @submit.prevent="submit"
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-              <DrawerTitle>Create Personal Token</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                The token acts as you, with your permissions, until it expires or you revoke it.
-              </p>
-            </div>
-          </PanelHeader>
+      :submitting="submitting"
+      :names="items.map((token) => token.name)"
+      :format-date="formatDate"
+      :days-from="daysFrom"
+      @create="(event, values) => emit('create', event, values)"
+    />
 
-          <PanelBody>
-            <fieldset
-              class="m-0 flex min-w-0 flex-col border-0 p-0"
-              :disabled="submitting"
-            >
-              <legend class="sr-only">Create Personal Token</legend>
-              <SettingsGroup
-                label="General"
-                hint="How you will recognise the token in this list."
-              >
-                <div class="flex w-full min-w-0 flex-col gap-(--spacing-lg)">
-                  <Field
-                    required
-                    :invalid="!!errors.name"
-                  >
-                    <Field.Label for="token-name">Name</Field.Label>
-                    <Input
-                      id="token-name"
-                      v-model="form.name"
-                      placeholder="deploy-pipeline"
-                      autocomplete="off"
-                      @update:model-value="errors.name = ''"
-                    />
-                    <Field.Description>{{
-                      errors.name || 'Name it after where it is used, such as the job or the tool.'
-                    }}</Field.Description>
-                  </Field>
-                  <Field>
-                    <Field.Label for="token-description">Description</Field.Label>
-                    <Textarea
-                      id="token-description"
-                      v-model="form.description"
-                      :rows="3"
-                    />
-                  </Field>
-                </div>
-              </SettingsGroup>
-              <SettingsGroup
-                label="Expiration"
-                hint="Shorter is safer. A token cannot be extended."
-              >
-                <Field>
-                  <Field.Label for="token-expiry">Expires in</Field.Label>
-                  <Select
-                    v-model="form.expiresIn"
-                    size="large"
-                    class="w-full"
-                    :display-value="expiryLabel"
-                  >
-                    <Select.Trigger
-                      id="token-expiry"
-                      aria-describedby="token-expiry-hint"
-                    />
-                    <Select.Content>
-                      <Select.Item
-                        v-for="option in expiryOptions"
-                        :key="option.value"
-                        :value="option.value"
-                      >
-                        {{ option.label }}
-                      </Select.Item>
-                    </Select.Content>
-                  </Select>
-                  <FieldDescription id="token-expiry-hint">{{ expiryHint }}</FieldDescription>
-                </Field>
-              </SettingsGroup>
-            </fieldset>
-          </PanelBody>
-
-          <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-              <Button
-                label="Cancel"
-                variant="outline"
-                size="medium"
-                type="button"
-                :disabled="submitting"
-                @click="createOpen = false"
-              />
-              <Button
-                label="Create Personal Token"
-                variant="primary"
-                size="medium"
-                type="submit"
-                :loading="submitting"
-              />
-            </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </Drawer>
-
-    <Dialog
-      :open="revealOpen"
-      size="medium"
-      :dismissible="false"
-      :closable="false"
-      @update:open="(open) => !open && closeReveal()"
-    >
-      <DialogContent>
-        <PanelHeader class="w-full">
-          <DialogTitle>Copy your new token</DialogTitle>
-        </PanelHeader>
-        <PanelBody>
-          <div class="flex flex-col gap-(--spacing-md)">
-            <DialogDescription>
-              “{{ revealed.name }}” is ready. This is the only time the token is shown.
-            </DialogDescription>
-            <Alert
-              severity="warning"
-              size="small"
-              label="Copy the token and store it somewhere safe, such as a secret manager. After you close this dialog, it cannot be shown again; create a new one if it is lost."
-            />
-            <Field>
-              <Field.Label for="token-secret">Token</Field.Label>
-              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <div class="min-w-0 grow">
-                  <PasswordInput
-                    id="token-secret"
-                    :model-value="revealed.secret"
-                    readonly
-                    autocomplete="off"
-                    class="w-full"
-                  />
-                </div>
-                <CopyButton
-                  :value="revealed.secret"
-                  variant="outline"
-                  size="large"
-                  aria-label="Copy token"
-                  copied-label="Token copied"
-                  @copy="onCopied"
-                />
-              </div>
-              <p
-                v-if="copied"
-                class="text-body-xs text-(--text-muted)"
-                aria-hidden="true"
-              >
-                Copied to the clipboard.
-              </p>
-            </Field>
-          </div>
-        </PanelBody>
-        <PanelFooter>
-          <div class="flex w-full justify-end">
-            <Button
-              :label="copied ? 'Done' : 'I copied the token'"
-              variant="primary"
-              size="medium"
-              @click="closeReveal"
-            />
-          </div>
-        </PanelFooter>
-      </DialogContent>
-    </Dialog>
+    <TokenSecretDialog v-model:secret="secretModel" />
 
     <ConfirmDialog
       v-model:open="revokeOpen"

@@ -3,7 +3,9 @@
   "name": "AiChatDrawer",
   "title": "Blocks/Ai/AiChatDrawer",
   "surface": "app",
-  "keyboard": { "entry": "field" },
+  "keyboard": {
+    "entry": "field"
+  },
   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
   "preview": {
     "layout": "fullscreen",
@@ -32,7 +34,17 @@
     "name": "Empty",
     "file": "ai-chat-drawer.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "parts/ai-chat-connection-status.vue",
+    "parts/ai-chat-media-segment.vue",
+    "parts/ai-chat-tool-segment.vue",
+    "parts/ai-chat-turn.vue",
+    "parts/drawer-chat-composer.vue",
+    "parts/drawer-chat-header.vue",
+    "parts/drawer-chat-start.vue",
+    "parts/workload-overview.vue"
+  ],
   "variants": [
     {
       "name": "Streaming",

@@ -1,20 +1,18 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import Card from '@aziontech/webkit/card'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
-  import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import Tracker, { type TrackerItem } from '@aziontech/webkit/tracker'
+  import type { TrackerItem } from '@aziontech/webkit/tracker'
   import { computed, ref } from 'vue'
 
+  import HourlyScoreCard from './parts/hourly-score-card.vue'
+  import OpenIncidentsCard from './parts/open-incidents-card.vue'
   import {
     sampleApplications,
     sampleHourly,
@@ -310,171 +308,22 @@
           </ChartCard.Content>
         </ChartCard>
 
-        <ChartCard :span="12">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Hourly score</ChartCard.Title>
-              <Hint content="One block per hour for each application, colored by its band." />
-            </span>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="`Couldn't load hourly score. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <ul
-              v-else-if="loading"
-              aria-busy="true"
-              class="flex flex-col gap-(--spacing-sm)"
-            >
-              <li
-                v-for="index in 4"
-                :key="index"
-                class="grid grid-cols-1 items-center gap-(--spacing-xs) md:grid-cols-[minmax(0,9rem)_1fr_4rem] md:gap-(--spacing-md)"
-              >
-                <Skeleton
-                  width="70%"
-                  height="1rem"
-                />
-                <Tracker
-                  :items="[]"
-                  loading
-                />
-                <Skeleton
-                  width="3rem"
-                  height="1.25rem"
-                />
-              </li>
-            </ul>
-            <ul
-              v-else-if="hourly.length"
-              class="flex flex-col gap-(--spacing-sm)"
-            >
-              <li
-                v-for="application in hourly"
-                :key="application.id"
-                class="grid grid-cols-1 items-center gap-(--spacing-xs) md:grid-cols-[minmax(0,9rem)_1fr_4rem] md:gap-(--spacing-md)"
-              >
-                <span class="truncate text-label-md text-(--text-default)">{{
-                  application.name
-                }}</span>
-                <Tracker
-                  :items="application.blocks"
-                  :aria-label="application.name + ', score per hour'"
-                />
-                <span class="flex md:justify-end">
-                  <Tag
-                    :label="application.band.label"
-                    :severity="application.band.severity"
-                    size="small"
-                  />
-                </span>
-              </li>
-            </ul>
-            <EmptyState
-              v-else
-              size="small"
-              icon="az az-chart-bar"
-              :title="'No samples in ' + phrase"
-              description="Each application gets a row once its first sample arrives. Select a longer period."
-            />
-          </ChartCard.Content>
-        </ChartCard>
+        <HourlyScoreCard
+          :hourly="hourly"
+          :loading="loading"
+          :error="error"
+          :phrase="phrase"
+          @retry="(event) => emit('retry', event)"
+        />
       </div>
 
-      <Card
-        title="Open incidents"
-        :padded="error !== ''"
-      >
-        <template #default>
-          <Alert
-            v-if="error"
-            severity="danger"
-            :label="`Couldn't load open incidents. ${error}`"
-            action-label="Retry"
-            @action="(event) => emit('retry', event)"
-          />
-          <Item.List
-            v-else-if="loading"
-            key="item.list-1"
-            aria-busy="true"
-          >
-            <Item
-              v-for="index in 3"
-              :key="index"
-              size="small"
-              role="listitem"
-            >
-              <Item.Media>
-                <Skeleton
-                  variant="rectangle"
-                  width="2rem"
-                  height="2rem"
-                />
-              </Item.Media>
-              <Item.Content>
-                <div class="flex flex-col gap-(--spacing-xs)">
-                  <Skeleton
-                    width="30%"
-                    height="1rem"
-                  />
-                  <Skeleton
-                    width="55%"
-                    height="0.75rem"
-                  />
-                </div>
-              </Item.Content>
-            </Item>
-          </Item.List>
-          <Item.List
-            key="item.list-2"
-            v-else-if="incidents.length"
-          >
-            <Item
-              v-for="incident in incidents"
-              :key="incident.id"
-              :href="`/incidents/${incident.id}`"
-              size="small"
-            >
-              <Item.Media type="icon">
-                <i
-                  :class="incident.icon"
-                  aria-hidden="true"
-                />
-              </Item.Media>
-              <Item.Content>
-                <Item.Title>{{ incident.name }} · {{ incident.cause }}</Item.Title>
-                <Item.Description>
-                  {{ incident.scope }} · {{ incident.devices }} devices, {{ incident.share }}% of
-                  samples · Opened
-                  <time :datetime="incident.opened">{{ incident.openedLabel }}</time>
-                </Item.Description>
-              </Item.Content>
-              <Item.Actions>
-                <Tag
-                  :label="incident.band.label"
-                  :severity="incident.band.severity"
-                  size="small"
-                />
-              </Item.Actions>
-            </Item>
-          </Item.List>
-          <div
-            v-else
-            class="p-(--spacing-md)"
-          >
-            <EmptyState
-              size="small"
-              icon="az az-circle-check"
-              :title="'No open incidents in ' + phrase"
-              description="An incident opens when an application or a location stays poor for several samples in a row."
-            />
-          </div>
-        </template>
-      </Card>
+      <OpenIncidentsCard
+        :incidents="incidents"
+        :loading="loading"
+        :error="error"
+        :phrase="phrase"
+        @retry="(event) => emit('retry', event)"
+      />
     </div>
   </div>
 </template>

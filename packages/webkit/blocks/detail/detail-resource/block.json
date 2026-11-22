@@ -54,11 +54,16 @@
   "files": [
     "sample.ts",
     "use-topology-staging.ts",
-    "parts/application-address-band.vue",
     "parts/application-deployments-tab.vue",
     "parts/application-versions-tab.vue",
-    "parts/deploy-action.vue",
-    "parts/resource-build-page.vue"
+    "parts/resource-get-started.vue",
+    "parts/resource-summary-card.vue",
+    "parts/resource-tab-bar.vue",
+    "parts/summary-fact.vue",
+    "parts/summary-facts.vue",
+    "parts/summary-state-band.vue",
+    "parts/summary-subject-band.vue",
+    "parts/tab-route-empty.vue"
   ],
   "variants": [
     {

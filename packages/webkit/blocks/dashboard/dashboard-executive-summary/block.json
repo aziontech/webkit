@@ -26,7 +26,12 @@
     "name": "Default",
     "file": "dashboard-executive-summary.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "executive-summary-metrics.ts",
+    "parts/commentary-card.vue",
+    "parts/goals-card.vue"
+  ],
   "variants": [
     {
       "name": "Loading",
