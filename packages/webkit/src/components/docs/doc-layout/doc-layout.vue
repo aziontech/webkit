@@ -1,15 +1,5 @@
 <script setup lang="ts">
-  import {
-    computed,
-    onMounted,
-    onScopeDispose,
-    proxyRefs,
-    ref,
-    shallowRef,
-    useAttrs,
-    useId,
-    watch
-  } from 'vue'
+  import { computed, proxyRefs, ref, useAttrs, useId } from 'vue'
 
   import {
     type AppNavGroup,
@@ -17,13 +7,6 @@
     useAppNavigation
   } from '../../../composables/use-app-navigation'
   import { useAppNavigationMenu } from '../../../composables/use-app-navigation-menu'
-  import {
-    type HeadingNavigationItem,
-    type HeadingOutlineItem,
-    provideHeadingNavigation,
-    provideHeadingOutline,
-    type RegisterHeading
-  } from '../../../composables/use-heading-navigation'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
@@ -56,9 +39,9 @@
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
   import DocTableOfContents, {
-    type DocTableOfContentsGroup,
-    type DocTableOfContentsItem
+    type DocTableOfContentsGroup
   } from '../doc-table-of-contents/doc-table-of-contents.vue'
+  import { useDocLayoutOutline } from './composables/use-doc-layout-outline'
 
   defineOptions({
     name: 'DocLayout',
@@ -146,7 +129,6 @@
   const drawerOpen = ref(false)
   const menuExpanded = ref<string[]>([])
   const menuPath = ref<string[]>([])
-  const headingId = ref('')
   const headerEl = ref<globalThis.HTMLElement | null>(null)
 
   const NAV_VALUE = 'doc-layout:nav:'
@@ -177,85 +159,7 @@
     menuPath.value.length > 1 ? '' : props.rootLabel || t('docLayout.root')
   )
 
-  type RegisteredHeading = {
-    el: () => Element | null
-    item: () => HeadingOutlineItem | null
-  }
-
-  const headings = shallowRef<RegisteredHeading[]>([])
-
-  const registerHeading: RegisterHeading = (el, item) => {
-    const entry = { el, item }
-    headings.value = [...headings.value, entry]
-    return () => {
-      headings.value = headings.value.filter((heading) => heading !== entry)
-    }
-  }
-
-  provideHeadingOutline(registerHeading)
-
-  const outline = computed<DocTableOfContentsItem[]>(() =>
-    headings.value
-      .map((heading) => ({ el: heading.el(), item: heading.item() }))
-      .filter((heading): heading is { el: Element; item: HeadingOutlineItem } =>
-        Boolean(heading.el && heading.item)
-      )
-      .sort((a, b) => (a.el.compareDocumentPosition(b.el) & 4 ? -1 : 1))
-      .map((heading) => heading.item)
-  )
-
-  const activeHeading = computed(() => headingId.value || outline.value[0]?.id || '')
-
-  watch(outline, () => {
-    headingId.value = ''
-    onScroll()
-  })
-
-  const headerOffset = () => headerEl.value?.getBoundingClientRect().height ?? 0
-
-  let frame = 0
-
-  const readHeading = () => {
-    frame = 0
-    const line = headerOffset() + 8
-    let current = ''
-    for (const item of outline.value) {
-      const el = globalThis.document?.getElementById(item.id)
-      if (!el) continue
-      if (el.getBoundingClientRect().top <= line) current = item.id
-      else break
-    }
-    headingId.value = current
-  }
-
-  const onScroll = () => {
-    if (!frame) frame = globalThis.requestAnimationFrame(readHeading)
-  }
-
-  onMounted(() => {
-    readHeading()
-    globalThis.addEventListener('scroll', onScroll, { passive: true })
-  })
-
-  onScopeDispose(() => {
-    globalThis.removeEventListener?.('scroll', onScroll)
-    if (frame) globalThis.cancelAnimationFrame(frame)
-  })
-
-  const jumpTo = (event: globalThis.MouseEvent, item: HeadingNavigationItem) => {
-    const el = globalThis.document?.getElementById(item.id)
-    if (!el) return
-    event.preventDefault()
-    const reduce = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-    const top = el.getBoundingClientRect().top + globalThis.scrollY - headerOffset() - 16
-    globalThis.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' })
-    globalThis.history?.replaceState(globalThis.history.state, '', `#${item.id}`)
-    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1')
-    el.focus({ preventScroll: true })
-    headingId.value = item.id
-  }
-
-  provideHeadingNavigation(jumpTo)
+  const { outline, activeHeading, jumpTo } = useDocLayoutOutline(headerEl)
 
   const onMenuNavigate = (event: globalThis.MouseEvent, node: SidebarMenuNode) => {
     const item = appMenu.leaves.get(node.id)
