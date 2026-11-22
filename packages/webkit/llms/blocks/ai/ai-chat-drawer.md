@@ -1,11 +1,11 @@
 # AiChatDrawer (`ai/ai-chat-drawer`)
 
-> The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal="false"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.
+> The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal="false"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with the reader's prompts in bubbles at the inline end and plain-text responses that think (`Reasoning`), stream (`StreamingResponse` with site-name citation chips) and carry Copy, feedback, Regenerate, Read aloud and a `Sources` pill, and a `PromptInput` pill floating at the foot with the disclaimer, the thread on the canvas. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.
 
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAttachButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -44,27 +44,27 @@ A medium right-side `Drawer` with no so the resource page beside it stays undimm
 
 ### D. Header — `PanelHeader`, `DrawerTitle`, `Tag`, `IconButton`
 
-`DrawerTitle` with the assistant's name, a Preview `Tag`, New chat as an `IconButton`, then the drawer's own close button.
+A `PanelHeader` on the drawer's surface over the canvas of the thread: `DrawerTitle` with the assistant's name, a Preview `Tag`, New chat as an `IconButton`, then the drawer's own close button. The drawer has no history panel; the full-page `ai/ai-chat` keeps the history.
 
 ### E. Empty state — `EmptyState`, `SuggestionGroup`
 
-A small `EmptyState` titled with the resource ("Ask about storefront") and three support prompts about it, stacked.
+A small `EmptyState` titled with the resource ("Ask about storefront") and three support prompts about it, stacked, centered inside the log so the composer stays mounted when the thread starts.
 
 ### F. Message log — `Conversation`
 
-`layout="start"`: every message at the inline start, distinguished by avatar and author line, as Cloudscape asks for dense side panels. It is the only part of the drawer that scrolls.
+The same layout as the full page: the reader's prompts in a bubble at the inline end, responses as plain text across the panel, no avatars. It is the only part of the drawer that scrolls, and it sits on the drawer's own surface: the body sets `--conversation-composer-fade` to `--bg-surface` so the fade under the composer matches it, and the prompt bubbles (`--bg-selected`) stand apart from it in both themes; the composer floats over its foot.
 
 ### G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `CopyButton`
 
-The same prompt and response anatomy as the full page: loading, thinking, streaming with citations, sources, and `ChatMessage.Actions` with `CopyButton`, Regenerate and feedback. The files a reader attached draw under their prompt as media does in a response (section K).
+The same prompt and response anatomy as the full page: loading, thinking, streaming with site-name citation chips, and `ChatMessage.Actions` with `CopyButton`, feedback, Regenerate, Read aloud and the Sources pill at its end. The files a reader attached draw under their prompt as media does in a response (section K).
 
 ### H. Follow-up questions — `SuggestionGroup`
 
 After the last complete response, aligned with its text.
 
-### I. Composer — `PromptInput`, `PromptInputAttachButton`
+### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
 
-At the foot of the drawer above a divider: four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint. With `attachable`, a `PromptInputAttachButton` (and drop and paste) attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating pill at the foot of the drawer, no divider, four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint. The Attach "+" at the start (`attachable`, on by default: a `PromptInputAttachButton`, and drop and paste) attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
 
 ### J. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 
@@ -119,7 +119,7 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 | `resuming`          | `boolean`                                 | `resuming` of `useChat`: Reconnecting while a run is rejoined.                                                                                                                                                                 |
 | `hydrating`         | `boolean`                                 | `isHydrating` of `useChat`: placeholders stand in for the conversation and the composer waits.                                                                                                                                 |
 | `sessionGenerating` | `boolean`                                 | `sessionGenerating` of `useChat`: Responding in another tab while this tab is not loading.                                                                                                                                     |
-| `attachable`        | `boolean`                                 | The reader may attach files; `send` then hands over multimodal content.                                                                                                                                                        |
+| `attachable`        | `boolean`                                 | The Attach "+" at the start of the composer; `send` then hands over multimodal content. Default `true`.                                                                                                                        |
 | `accept`            | `string`                                  | The files the reader may attach; default `image/*,application/pdf`.                                                                                                                                                            |
 | `maxFiles`          | `number`                                  | Most files on one message; default 4.                                                                                                                                                                                          |
 | `maxFileSize`       | `number`                                  | Largest file in bytes; default 10 MB.                                                                                                                                                                                          |
@@ -366,7 +366,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     hydrating?: boolean
     /** A response is being generated for this chat elsewhere, as `useChat` returns `sessionGenerating`. */
     sessionGenerating?: boolean
-    /** The reader may attach files; `send` then hands over the multimodal content `sendMessage` takes. */
+    /** The reader may attach files from the Attach control at the start of the composer; `send` then hands over the multimodal content `sendMessage` takes. */
     attachable?: boolean
     /** The files the reader may attach, in the native accept syntax. */
     accept?: string
@@ -394,7 +394,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     resuming: false,
     hydrating: false,
     sessionGenerating: false,
-    attachable: false,
+    attachable: true,
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
@@ -626,21 +626,21 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
             :empty="!turns.length"
             @new-chat="newChat"
           />
-          <div class="flex min-h-0 flex-1 flex-col">
-            <DrawerChatStart
-              v-if="!turns.length"
-              :hydrating="hydrating"
-              :starters="starters"
-              @select="(event, item) => send(event, item.label)"
-            />
+          <div
+            class="flex min-h-0 flex-1 flex-col [--conversation-composer-fade:var(--bg-surface)]"
+          >
             <Conversation
-              v-else
-              layout="start"
               aria-label="Conversation with the AI assistant"
               :more-messages="moreMessages"
               :loading-more="loadingMore"
               @load-more="emit('load-more', $event)"
             >
+              <DrawerChatStart
+                v-if="!turns.length"
+                :hydrating="hydrating"
+                :starters="starters"
+                @select="(event, item) => send(event, item.label)"
+              />
               <AiChatTurn
                 v-for="turn in turns"
                 :key="turn.id"
@@ -675,57 +675,51 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
                 :error-message="failure || undefined"
                 @retry="emit('retry', $event, last)"
               />
-              <div
+              <SuggestionGroup
                 v-if="lastAnswer && followUps?.length"
-                class="ps-[calc(2rem+var(--spacing-sm))]"
-              >
-                <SuggestionGroup
-                  :items="followUps"
-                  aria-label="Follow-up questions"
-                  @select="(event, item) => send(event, item.label)"
+                :items="followUps"
+                aria-label="Follow-up questions"
+                @select="(event, item) => send(event, item.label)"
+              />
+              <template #composer>
+                <AiChatConnectionStatus
+                  :connection="connection"
+                  :resuming="resuming"
+                  :session-generating="sessionGenerating"
+                  :loading="loading"
                 />
-              </div>
+                <Alert
+                  key="alert-2"
+                  v-if="interruptErrors.length"
+                  severity="danger"
+                  size="small"
+                  title="Your answer was not sent"
+                  :action-label="retryable ? 'Retry' : ''"
+                  @action="emit('retry-interrupts', $event)"
+                >
+                  {{ interruptErrorText(interruptErrors) }}
+                </Alert>
+                <PromptQueue
+                  v-if="queued.length"
+                  :items="queued"
+                  @remove="(event, item) => removeQueued(event, item.id)"
+                />
+                <DrawerChatComposer
+                  ref="composerEl"
+                  v-model="prompt"
+                  v-model:files="files"
+                  :state="state"
+                  :queueable="queueable"
+                  :hydrating="hydrating"
+                  :accept="accept"
+                  :max-files="maxFiles"
+                  :max-file-size="maxFileSize"
+                  :attachable="attachable"
+                  @submit="send"
+                  @stop="stop"
+                />
+              </template>
             </Conversation>
-          </div>
-          <div
-            class="flex flex-col gap-(--spacing-xs) border-t border-(--border-default) p-(--spacing-sm)"
-          >
-            <AiChatConnectionStatus
-              :connection="connection"
-              :resuming="resuming"
-              :session-generating="sessionGenerating"
-              :loading="loading"
-            />
-            <Alert
-              key="alert-2"
-              v-if="interruptErrors.length"
-              severity="danger"
-              size="small"
-              title="Your answer was not sent"
-              :action-label="retryable ? 'Retry' : ''"
-              @action="emit('retry-interrupts', $event)"
-            >
-              {{ interruptErrorText(interruptErrors) }}
-            </Alert>
-            <PromptQueue
-              v-if="queued.length"
-              :items="queued"
-              @remove="(event, item) => removeQueued(event, item.id)"
-            />
-            <DrawerChatComposer
-              ref="composerEl"
-              v-model="prompt"
-              v-model:files="files"
-              :state="state"
-              :queueable="queueable"
-              :hydrating="hydrating"
-              :accept="accept"
-              :max-files="maxFiles"
-              :max-file-size="maxFileSize"
-              :attachable="attachable"
-              @submit="send"
-              @stop="stop"
-            />
           </div>
         </div>
       </DrawerContent>
@@ -849,8 +843,27 @@ const history: [string, string][] = [
   ],
   [
     'How do I fix that?',
-    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page`.'
+    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page` [1]. Campaign parameters such as `utm_source` then stop creating new cache keys [3].'
   ]
+]
+
+const cacheKeySources: SourcesItem[] = [
+  {
+    title: 'Cache settings',
+    href: 'https://www.azion.com/en/documentation/',
+    description: 'Azion documentation · Cache'
+  },
+  {
+    title: 'aziontech/azion',
+    href: 'https://github.com/aziontech/azion',
+    description: 'Azion CLI on GitHub',
+    icon: 'az az-github'
+  },
+  {
+    title: 'HTTP Caching',
+    href: 'https://www.w3.org/Protocols/',
+    description: 'W3C · HTTP'
+  }
 ]
 
 export const sampleLongThread: AiChatMessage[] = history.flatMap(
@@ -859,7 +872,7 @@ export const sampleLongThread: AiChatMessage[] = history.flatMap(
     assistant(`a${index}`, answer, `09:${11 + index * 4}`, {
       reasoning: 'Reading the workload settings of storefront.',
       reasoningSeconds: 2,
-      sources: []
+      sources: index === history.length - 1 ? cacheKeySources : []
     })
   ]
 )
@@ -1309,33 +1322,40 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
       >
         You stopped this response.
       </p>
-      <Sources
-        v-if="status === 'success' && !stopped"
-        :items="turn.metadata?.sources ?? []"
-        :anchor="`answer-${turn.id}`"
-      />
     </template>
     <template
       v-if="turn.role === 'assistant'"
       #actions
     >
-      <ChatMessage.Actions>
+      <ChatMessage.Actions
+        show-read-aloud
+        :read-aloud-text="textOf(turn)"
+      >
         <CopyButton
-          size="small"
+          size="large"
           :value="textOf(turn)"
-        />
-        <IconButton
-          icon="az az-refresh"
-          aria-label="Regenerate response"
-          variant="ghost"
-          size="small"
-          :disabled="!ready"
-          @click="emit('retry', $event)"
         />
         <ChatMessage.Feedback
           :model-value="rating"
           @update:model-value="(value) => emit('rate', value)"
         />
+        <IconButton
+          icon="az az-refresh"
+          aria-label="Regenerate response"
+          variant="ghost"
+          size="large"
+          :disabled="!ready"
+          @click="emit('retry', $event)"
+        />
+        <template
+          v-if="!stopped && turn.metadata?.sources?.length"
+          #trailing
+        >
+          <Sources
+            :items="turn.metadata.sources"
+            :anchor="`answer-${turn.id}`"
+          />
+        </template>
       </ChatMessage.Actions>
     </template>
   </ChatMessage>
@@ -1366,6 +1386,7 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
 <script setup lang="ts">
   import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
+  import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
   import { ref } from 'vue'
 
@@ -1414,6 +1435,9 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
     >
       <PromptInputAttachButton />
     </template>
+    <template #end>
+      <PromptInputDictateButton />
+    </template>
     <template #hint>The AI assistant can make mistakes. Check important information.</template>
   </PromptInput>
 </template>
@@ -1445,10 +1469,10 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
     </div>
     <div class="flex items-center gap-(--spacing-2xs)">
       <IconButton
-        icon="az az-plus"
+        icon="az az-square-pen"
         aria-label="New chat"
         variant="ghost"
-        size="small"
+        size="medium"
         :disabled="empty"
         @click="emit('new-chat', $event)"
       />
@@ -1477,27 +1501,26 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
     v-if="hydrating"
     role="status"
     aria-label="Loading the conversation"
-    class="flex flex-1 flex-col gap-(--spacing-lg) p-(--spacing-md)"
+    class="flex flex-col gap-(--spacing-xl)"
   >
-    <div
-      v-for="row in 3"
+    <template
+      v-for="row in 2"
       :key="row"
-      class="flex gap-(--spacing-sm)"
     >
       <Skeleton
-        variant="circle"
-        width="2rem"
-        height="2rem"
+        width="55%"
+        height="2.75rem"
+        class="self-end"
       />
-      <div class="flex flex-1 flex-col gap-(--spacing-xs)">
-        <Skeleton width="25%" />
-        <Skeleton :width="row === 2 ? '50%' : '85%'" />
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <Skeleton width="90%" />
+        <Skeleton :width="row === 2 ? '40%' : '70%'" />
       </div>
-    </div>
+    </template>
   </div>
   <div
     v-else
-    class="flex flex-1 flex-col justify-center gap-(--spacing-lg) p-(--spacing-md)"
+    class="my-auto flex flex-col gap-(--spacing-lg) py-(--spacing-md)"
   >
     <EmptyState
       title="Ask about storefront"

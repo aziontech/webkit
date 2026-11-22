@@ -1785,7 +1785,8 @@ matches your case, switch to the block it names. Then change only the content of
 keeping to the guidelines. Only when no block fits, compose from components (below).
 
 A block takes its data through props and emits its actions; it fetches nothing. `add` copies its
-data files beside it (`<name>.sample.ts`, and an API adapter when the block ships one). To go live,
+data files beside it (`<name>.sample.ts`, and an API adapter when the block ships one) and its parts
+as kebab SFCs (`<name>-<part>.vue`). To go live,
 do not rewrite the block: render it from the routed page that owns the request and pass what the
 request returns (its `## Data` guidelines list the props and events):
 `<TableView :resources="rows" :loading="pending" :error="message" @refresh="load" @retry="load" />`.
@@ -3332,7 +3333,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-use
 - Surface: app
 - Source: `blocks/ai/ai-action-approval/ai-action-approval.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-action-approval")`
-- Components: AgentQuestion, Alert, Button, ChatMessage, CodeBlock, Conversation, CopyButton, ImageGallery, PromptInput, StreamingResponse, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`
+- Components: AgentQuestion, Alert, Button, ChatMessage, CodeBlock, Conversation, CopyButton, ImageGallery, `PromptInputAttachButton`, `PromptInputDictateButton`, PromptInput, StreamingResponse, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -3374,7 +3375,7 @@ The block draws a conversation in the message shape of TanStack AI: each message
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-Prop: `messages`, `loading`, `error`, `tools`, `interrupts`, `interruptErrors`.
+Prop: `messages`, `loading`, `error`, `tools`, `interrupts`, `interruptErrors`, `attachable`.
 
 Event: `send`, `stop`, `retry`, `approve`, `deny`, `answer-interrupt`, `retry-interrupts`.
 
@@ -3560,19 +3561,19 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-api-key.md](b
 
 # AiChat (`ai/ai-chat`)
 
-> The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from…
+> The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a round menu button on a phone…
 
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, McpAppFrame, `PromptInputAttachButton`, PromptInput, PromptQueue, Reasoning, Resizable, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, VideoPlayer
+- Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, ChatMessage, CodeBlock, Conversation, ConversationHistory, CopyButton, `DrawerBody`, `DrawerContent`, `DrawerHeader`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, McpAppFrame, `PromptInputAttachButton`, `PromptInputDictateButton`, PromptInput, PromptQueue, Reasoning, Resizable, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
 ai chat; ai assistant; chatbot; copilot; chat with ai; generative ai chat; assistant page; ask ai; llm chat; conversational ui; prompt and response; streaming response; chat de ia; assistente de ia; assistente virtual; conversa com ia; chat con ia; asistente de ia; artifact; artifact canvas; generated file; code canvas; canvas de artefato; artefato gerado; full page chat; tanstack ai; usechat; agent activity; subagent; agent question
 
-A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.
+A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation: one reading column the thread scrolls in, with the header controls and the composer floating over it. Beside it, the conversation history. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -3590,7 +3591,8 @@ A full page where a person talks with the generative AI assistant about their ac
 
 ## Building blocks
 
-- A. Header — `Tag`, `Button`
+- A. Header — `IconButton`, `Tag`, `Button`
+- A2. History — `ConversationHistory`, `Drawer`
 - B. Empty state — `EmptyState`, `SuggestionGroup`
 - C. Message log — `Conversation`
 - D. Prompt — `ChatMessage`, `ImageGallery`, `FilePreview`
@@ -3598,7 +3600,7 @@ A full page where a person talks with the generative AI assistant about their ac
 - F. Sources — `Sources`
 - G. Response actions — `ChatMessage`, `CopyButton`, `IconButton`
 - H. Follow-up questions — `SuggestionGroup`
-- I. Composer — `PromptInput`, `PromptInputAttachButton`
+- I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
 - J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
 - K. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 - L. Media — `ImageGallery`, `AudioPlayer`, `VideoPlayer`, `FilePreview`
@@ -3618,9 +3620,11 @@ An activity step reads, by convention, `content.title` (else its `activityType`)
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-Prop: `messages`, `suggestions`, `followUps`, `loading`, `error`, `tools`, `interrupts`, `interruptErrors`, `queue`, `moreMessages`, `loadingMore`, `connection`, `resuming`, `hydrating`, `sessionGenerating`, `attachable`, `accept`, `maxFiles`, `maxFileSize`, `resolveAppUrl`.
+Prop: `messages`, `suggestions`, `followUps`, `loading`, `error`, `tools`, `interrupts`, `interruptErrors`, `queue`, `moreMessages`, `loadingMore`, `connection`, `resuming`, `hydrating`, `sessionGenerating`, `attachable`, `voice`, `accept`, `maxFiles`, `maxFileSize`, `resolveAppUrl`.
 
-Event: `send`, `stop`, `retry`, `new-chat`, `feedback`, `approve`, `remove-queued`, `app-message`, `load-more`, `deny`, `answer-tool`, `answer-interrupt`, `retry-interrupts`.
+The open conversation of the history is `v-model:activeKey` (`string | null`): picking a row sets it, New chat clears it; load that conversation's messages when it changes.
+
+Event: `send`, `stop`, `voice-start`, `retry`, `new-chat`, `feedback`, `approve`, `remove-queued`, `app-message`, `load-more`, `deny`, `answer-tool`, `answer-interrupt`, `retry-interrupts`.
 
 A tool that needs approval is declared once with `toolDefinition({ name, inputSchema, needsApproval: true })`, run on the server with `.server(...)` and passed to `useChat({ tools: [definition] })` too, so the client can match the approval request to the call. Then delete `sample.ts` and its import. `apps/demos` runs this block on `useChat` with TanStack AI's `fakeText` model (`src/lib/assistant-model.ts`), no server and no key.
 
@@ -3630,7 +3634,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 
 - Show the loading text only after a second; a response that arrives faster streams directly.
 - Keep actions visible on every complete response, not on hover.
-- Cite sources inline with numbers and list them under the response.
+- Cite sources inline with site-name chips and open the list from the Sources pill.
 - Let the reader stop a response and keep what streamed, marked as stopped.
 - Keep the composer usable while a response streams so the reader can draft the next prompt.
 - Return focus to the composer when a response finishes.
@@ -3662,12 +3666,13 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 ## Accessibility
 
 - The log is a named `role="log"` whose own live behavior is off; a polite live region reads each finished response once, with its author.
-- Each message is an `article` named by author and time; avatars are hidden from assistive tech because the author line names the author.
+- Each message is an `article` named by author and time; the author and time are visually hidden, never removed.
 - Responses are `aria-busy` while loading or streaming; the caret is hidden.
 - The composer is named Prompt, described by its counter and disclaimer; Enter submits and an IME composition never does.
 - Feedback thumbs are toggle buttons with `aria-pressed`, and the submitted state is a status message.
-- Keyboard order: header, log (focusable to scroll), each message's links and actions, follow-ups, composer.
-- Alignment never carries meaning alone: every message has its author line.
+- Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer.
+- The phone history is a `Drawer` named Conversation history that returns focus to the menu button; the desktop toggle names what it does and carries `aria-expanded`.
+- Alignment never carries meaning alone: every message's accessible name says who wrote it.
 - Reconnecting is a polite status and Connection lost an alert; the queued messages are a list named Queued messages, each with Remove from queue; a question card is a group named by its question; the placeholders while restoring are a status named Loading the conversation.
 
 ## States
@@ -3677,10 +3682,11 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Error: `error` set: the last response keeps its partial text, with the error line and Try again; with no response yet, a pending response shows the error.
 - Tools: a `tool-call` part draws as a `ToolCall` titled from `tools`, its input and output in code; one with `approval` draws the `ToolApproval` card first (see `ai/ai-action-approval`).
 - Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up fills the composer.
-- LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response, with `followUps`.
+- LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response with its Sources pill, with `followUps`.
 - Media: an answer with two charts in an `ImageGallery`, a CSV report in a `FilePreview` and an audio summary.
 - Agent: activity steps, a finished `SubagentCard` and a pending `AgentQuestion`; answering it resolves the interrupt and the card keeps the answer.
-- Restoring: `hydrating` with no messages yet shows the `Skeleton` rows and a disabled composer.
+- Restoring: `hydrating` with no messages yet shows `Skeleton` bubbles and lines and a disabled composer.
+- History: the side panel on desktop, the start drawer on a phone, with New chat and search.
 - Attachments, structured answers and rich tool results: a prompt with an image and a PDF, a `structured-output` part as JSON and a tool result with text and an image (variant Media).
 - Queue, older messages and connection: `queue` shows a `PromptQueue` over the composer, `moreMessages` a Load earlier messages button, and `connection` a Reconnecting status or a Connection lost alert.
 
@@ -3707,7 +3713,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: AgentActivity, AgentQuestion, Alert, AudioPlayer, Button, Card, ChatMessage, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, KeyValueList, McpAppFrame, PageHeader, `PanelHeader`, `PromptInputAttachButton`, PromptInput, PromptQueue, Reasoning, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, VideoPlayer
+- Components: AgentActivity, AgentQuestion, Alert, AudioPlayer, Button, Card, ChatMessage, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, KeyValueList, McpAppFrame, PageHeader, `PanelHeader`, `PromptInputAttachButton`, `PromptInputDictateButton`, PromptInput, PromptQueue, Reasoning, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3740,7 +3746,7 @@ The generative AI assistant beside the work: the reader is on a resource page �
 - F. Message log — `Conversation`
 - G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `CopyButton`
 - H. Follow-up questions — `SuggestionGroup`
-- I. Composer — `PromptInput`, `PromptInputAttachButton`
+- I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
 - J. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 - K. Media — `ImageGallery`, `AudioPlayer`, `VideoPlayer`, `FilePreview`
 - L. Agent work — `AgentActivity`, `SubagentCard`, `AgentQuestion`
@@ -12425,7 +12431,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
           ref="openerEl"
           class="flex h-full flex-col gap-(--spacing-sm) overflow-auto p-(--spacing-md)"
         >
-          <p class="m-0 text-body-sm text-(--text-default)">
+          <p class="m-0 text-body-lg text-(--text-default)">
             Here are the ten biggest orders of the last seven days.
           </p>
           <ArtifactPreview
@@ -12610,7 +12616,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 
 # Chat Message
 
-> One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes on it (copy, regenerate, thumbs up / down). It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). User messages sit in a filled bubble; assistant messages are flat, full width, beside the assistant mark; system messages are a muted centered line. Alignment comes from the enclosing `Conversation`.
+> One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the helpful / not helpful thumbs, regenerate, read aloud, the sources). It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). Assistant messages are plain text across the reading column (`.text-body-lg`): no avatar, name, time or bubble. User messages are a filled bubble at the inline end, at most 80 % wide; system messages a muted centered line. Author and time live in the accessible name (the time also shows on hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
 
 - Import: `import ChatMessageRoot from '@aziontech/webkit/chat-message-root'`
 - Compound import (dot notation, not tree-shakeable): `import ChatMessage from '@aziontech/webkit/chat-message'`
@@ -12624,8 +12630,8 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 ## Do
 
 - Pass `status` from your request: `pending` until the first token, `streaming` while tokens arrive, then `success` or `error`.
-- Keep actions to five or fewer, always visible (no hover-only): copy, regenerate, feedback.
-- Use `grouped` for a second message by the same author so stacked bubbles read as one turn (only the first shows the avatar).
+- Keep the action row always visible: Copy, the thumbs, Regenerate, app actions (Share), Read aloud, then the `Sources` pill in `#trailing`; give `CopyButton` and `IconButton` `size="large"` (40 px targets).
+- Use `grouped` for a second message by the same author so stacked messages read as one turn.
 - Never put the feedback thumbs on non-AI content.
 
 ## Don’t
@@ -12647,10 +12653,10 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `from` | `'user' \| 'assistant' \| 'system'` | `'assistant'` | false | Who wrote the message: the person (`user`), the generative AI assistant, or the product (`system`). |
-| `author` | `string` | `''` | false | Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`). |
-| `timestamp` | `string` | `''` | false | Time the message was sent, already formatted for display (`10:42`). Added to the accessible name. |
+| `author` | `string` | `''` | false | Author name read in the message's accessible name; it is not shown. Empty uses the locale catalog (`You`, `AI assistant`, `System`). |
+| `timestamp` | `string` | `''` | false | Time the message was sent, already formatted for display (`10:42`). Added to the accessible name and shown on hover over the user's bubble. |
 | `status` | `'pending' \| 'streaming' \| 'success' \| 'error'` | `'success'` | false | Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `success` shows the actions, `error` shows the error line with Try again. |
-| `grouped` | `boolean` | `false` | false | Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn. |
+| `grouped` | `boolean` | `false` | false | Follows a message by the same author: tightens the gap above it so stacked messages read as one turn. |
 | `errorMessage` | `string` | `''` | false | Error text shown while `status` is `error`. Empty uses the locale catalog. |
 | `loadingLabel` | `string` | `''` | false | Loading text shown while `status` is `pending`. Empty uses `ResponseLoading`'s own (`Generating a response`). |
 
@@ -12665,8 +12671,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `default` | — | The content: text, `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`. |
-| `avatar` | — | Replaces the default avatar (person glyph for the user, the assistant mark for the AI). |
-| `actions` | — | Inline actions, usually `ChatMessage.Actions`; shown only when `status` is `success`. |
+| `actions` | — | The action row, usually `ChatMessage.Actions`; shown only when `status` is `success`. |
 
 ## Sub-component imports
 
@@ -12677,19 +12682,20 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 
 Compound API through `index.ts` (`ChatMessage.Actions`, `ChatMessage.Feedback`); standalone entries
 `chat-message-root`, `chat-message-actions`, `chat-message-feedback`. The root provides
-`{ from, status }` (`injection-key.ts`); `useChatMessageContext()` throws outside a `ChatMessage`.
+`{ from, status, contentText }` (`injection-key.ts`; `contentText()` reads the `StreamingResponse` text, `lib/content-text.ts`); `useChatMessageContext()` throws outside a `ChatMessage`.
 
-- `chat-message-actions/chat-message-actions.vue` — `role="group"` row of inline actions; renders nothing unless the message `status` is `success`.
-  - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`).
-  - Slot: `default` — the icon actions.
+- `chat-message-actions/chat-message-actions.vue` — `role="group"` row of actions, wrapping when narrow; renders nothing unless `status` is `success`.
+  - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`); `showReadAloud?: boolean` (default `false` — shows Read aloud); `readAloudText?: string` (default `''` — the text Read aloud speaks; empty reads `contentText()`).
+  - Slots: `default` — the icon actions; `trailing` — the `Sources` pill.
+  - Read aloud (private part `parts/chat-message-read-aloud.vue`, test id `chat-message-actions__read-aloud`): a 40 px ghost `IconButton` that speaks the text with `speechSynthesis` in the active locale; while speaking it is `Stop reading` (`data-speaking`). Pressing it again, another message's Read aloud or unmounting stops it. Rendered after mount, only where the browser has speech synthesis.
   - `data-testid` fallback: `chat-message-actions`.
-- `chat-message-feedback/chat-message-feedback.vue` — thumbs up / down (`aria-pressed`), each with a tooltip (`Helpful`, `Not helpful`); after a choice the other thumb disables and a `role="status"` line reads `Submitti…
+- `chat-message-feedback/chat-message-feedback.vue` — thumbs up / down (`aria-pressed`, large ghost `IconButton`s), each with a tooltip (`Helpful`, `Not helpful`); after a choice the other thumb disables and a `role="st…
   - Props: `loading?: boolean` (default `false`).
   - v-model: `'up' | 'down' | null` through `defineModel` (default `null`; emits `update:modelValue`).
   - `data-testid` fallback: `chat-message-feedback`.
 
 Exported types: `ChatMessageFrom`, `ChatMessageStatus`, `ChatMessageFeedbackValue`. Composed DS
-components: `avatar`, `button`, `response-loading`, `icon-button`, `tooltip`.
+components: `button`, `response-loading`, `icon-button`, `tooltip`.
 
 ```
 packages/webkit/src/components/ai/chat-message/
@@ -12698,6 +12704,8 @@ packages/webkit/src/components/ai/chat-message/
 ├── index.ts
 ├── injection-key.ts
 ├── composables/use-chat-message-context.ts
+├── lib/content-text.ts
+├── parts/chat-message-read-aloud.vue
 ├── chat-message-actions/chat-message-actions.vue
 └── chat-message-feedback/chat-message-feedback.vue
 ```
@@ -12705,6 +12713,7 @@ packages/webkit/src/components/ai/chat-message/
 ## States
 
 - `data-from` (`user` | `assistant` | `system`), `data-status` (mirrors `status`), `data-alignment` (from the conversation), `data-grouped`.
+- A visually hidden line (`__author`, dropped when `grouped`) reads the accessible name; the user bubble has the time as `title`.
 - `aria-busy="true"` while `pending` or `streaming`.
 - `pending`: `ResponseLoading` (inline, no delay — the owner decides when a message exists) in place of the content.
 - `error`: the content (whatever streamed) stays; an error line with a danger glyph and a Try again `Button` follows.
@@ -12714,9 +12723,9 @@ packages/webkit/src/components/ai/chat-message/
 
 - Visible focus: the composed controls carry their own `focus-visible` rings.
 - Keyboard map: `Tab` through links in the content, then the actions in order; Enter / Space activate. The message adds no key handling.
-- ARIA: `<article aria-label="<author> at <time>">` so each message has a unique name (Cloudscape); avatar wrapper `aria-hidden` (the author line names the author); `aria-busy` while loading or streaming; actions are a `role="group"` named `Message actions`; feedback thumbs use `aria-pressed`, the feedback status is `role="status"`.
+- ARIA: `<article aria-label="<author> at <time>">` so each message has a unique name (Cloudscape), repeated in a visually hidden line at its start for browse mode; `aria-busy` while loading or streaming; actions are a `role="group"` named `Message actions`; feedback thumbs use `aria-pressed`, the feedback status is `role="status"`.
 - Announcement: when an assistant or system message turns `success` or `error` (or mounts finished after the conversation is ready), its text is read once through the `Conversation` live region.
-- Never rely on alignment alone: every message has the avatar and author line (or `grouped` after one that has).
+- Never rely on alignment alone: every message names its author in its accessible name and hidden line (or is `grouped` after one that does).
 - Contrast ≥4.5:1 on the muted time and system text.
 
 ## Examples
@@ -12730,7 +12739,7 @@ packages/webkit/src/components/ai/chat-message/
 </script>
 
 <template>
-  <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-lg)">
+  <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-xl)">
     <ChatMessageRoot
       from="user"
       author="Jane Doe"
@@ -12755,7 +12764,7 @@ packages/webkit/src/components/ai/chat-message/
 
 # Citation
 
-> An inline numbered reference in generated text (`[1]`), Cloudscape's inline citation: a small superscript number that links to the source — to item `n` of the `Sources` list under the response, or straight to the URL — with a tooltip naming the source and an accessible name of `Source 1: <title>`. `StreamingResponse` renders it for every `[n]`; use it directly when you build responses yourself.
+> An inline reference in generated text (`[1]`), Cloudscape's inline citation: a small rounded chip holding the source's site (`azion.com`), or its title cut to fit, that links to item `n` of the `Sources` list or to the URL, with a tooltip naming the source and the accessible name `Source 1, azion.com: <title>`. `StreamingResponse` renders it for every `[n]`, filling `site` from the source's `href`.
 
 - Import: `import Citation from '@aziontech/webkit/citation'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -12766,8 +12775,8 @@ packages/webkit/src/components/ai/chat-message/
 
 ## Do
 
-- Number in order of first use: [1], [2], [3].
-- Give every citation a `title`; a bare number tells a screen reader nothing.
+- Number in order of first use: [1], [2], [3]; the number stays in the accessible name.
+- Give every citation a `title` and, for a web source, its `site`; a bare number tells a reader nothing.
 
 ## Don’t
 
@@ -12785,8 +12794,9 @@ packages/webkit/src/components/ai/chat-message/
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `index` | `number` | `—` | true | 1-based number of the source, in the order the response first cites it. |
-| `title` | `string` | `''` | false | Title of the source, shown in the tooltip and read in the accessible name. |
-| `href` | `string` | `''` | false | Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it, or when it is unsafe (`javascript:`, `data:`), the number is plain text. |
+| `title` | `string` | `''` | false | Title of the source, shown in the tooltip and read in the accessible name; the chip shows it, cut to fit, when `site` is empty. |
+| `site` | `string` | `''` | false | Site of the source without `www.` (`example.com`), the text of the chip. |
+| `href` | `string` | `''` | false | Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it, or when it is unsafe (`javascript:`, `data:`), the chip is plain text. |
 
 ## Sub-components
 
@@ -12796,12 +12806,14 @@ _None. Exports: `"./citation"`. Composed DS components: `tooltip`._
 
 - With `href`: an `<a>` (external URLs open in a new tab); without: a `role="note"` span.
 - Tooltip only when `title` is set.
+- The chip text is `site`, else `title`, else the number; a long text is cut with an ellipsis (`max-w-48`).
+- `data-slot="citation"` marks the chip, so `ChatMessage`'s Read aloud skips it; `data-linked` on a linked chip turns on the hover underline.
 
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Keyboard map: `Tab` reaches a linked citation; `Enter` follows it; focus shows the tooltip.
-- ARIA: `aria-label="Source 1: Real-Time Purge"` (the visible digit alone is not a name).
+- ARIA: `aria-label="Source 1, azion.com: Real-Time Purge"` — the number and the title, with the visible site first so the name contains the text on screen (WCAG 2.5.3). Without `site`: `Source 1: Real-Time Purge`.
 - Touch target: inline text reference; exempt from the 24 px minimum as inline text (WCAG 2.5.8 exception).
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): renders the unlinked note.
 
@@ -12815,16 +12827,18 @@ _None. Exports: `"./citation"`. Composed DS components: `tooltip`._
 </script>
 
 <template>
-  <p class="max-w-(--container-md) text-body-md text-(--text-default)">
+  <p class="max-w-(--container-md) text-body-lg text-(--text-default)">
     A purge reaches every data center in a few seconds
     <Citation
       :index="1"
       title="Real-Time Purge"
+      site="azion.com"
       href="https://www.azion.com/en/documentation/"
     />, and cached objects are fetched again from the origin on the next request
     <Citation
       :index="2"
-      title="Cache settings"
+      title="HTTP Caching (RFC 9111)"
+      site="w3.org"
       href="#cache-answer-source-2"
     />.
   </p>
@@ -12837,7 +12851,7 @@ _None. Exports: `"./citation"`. Composed DS components: `tooltip`._
 
 # Conversation
 
-> The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a "Scroll to the latest message" button brings them back. It is a `role="log"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. With `moreMessages`, a Load earlier messages button opens the thread and the log also emits `load-more` as the reader scrolls near the top; prepended messages never move what the reader sees. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).
+> The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a "Scroll to the latest message" button brings them back. It is a `role="log"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. With `moreMessages`, a Load earlier messages button opens the thread and the log also emits `load-more` as the reader scrolls near the top; prepended messages never move what the reader sees. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces). The thread is a centred reading column (`--layout-measure-content`) with a 16 px gutter on a phone, and a larger gap before each user turn. The `composer` slot floats the composer over the bottom of the column: the thread scrolls under it behind a fade and is padded by its height; the round Scroll to latest button floats just above it.
 
 - Import: `import Conversation from '@aziontech/webkit/conversation'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -12849,7 +12863,7 @@ _None. Exports: `"./citation"`. Composed DS components: `tooltip`._
 
 ## Do
 
-- Pin the prompt input under the conversation; only the log scrolls.
+- Put the prompt input in the `composer` slot; only the log scrolls, and the thread scrolls under the composer.
 - Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.
 - Use `layout="start"` in drawers and side panels, `split` on a full page.
 - Keep one conversation per surface; a second thread is a second page or a history list.
@@ -12865,9 +12879,9 @@ _None. Exports: `"./citation"`. Composed DS components: `tooltip`._
 ## Related
 
 - `chat-message` — the item the log holds; announces itself through this component.
-- `prompt-input` — the composer pinned under the log (outside it; only the log scrolls).
+- `prompt-input` — the composer, floated over the bottom of the log through the `composer` slot (outside the log; only the log scrolls).
 - `suggestion-group` — follow-up questions after the last response, or support prompts in the empty state.
-- `empty-state` — what the panel shows before the first message (the block renders it instead of the log).
+- `empty-state` — what the panel shows before the first message; render it in the default slot (the thread column is at least the log's height, so `my-auto` centres it) so the composer in `composer` never remounts when the first message is sent.
 - `log-viewer` — machine logs, not conversations.
 
 ## Props
@@ -12889,7 +12903,8 @@ _None. Exports: `"./citation"`. Composed DS components: `tooltip`._
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card). |
+| `default` | — | The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card), or the empty state before the first message. |
+| `composer` | — | The composer floating over the bottom of the thread, in the reading column: `PromptInput`, with any status, alert or queue above it. Rendered outside the log, after it in the reading order. |
 
 ## Sub-components
 
@@ -12909,6 +12924,7 @@ never read as new.
 
 - `data-pinned` on the root while the log follows the newest message; absent once the reader scrolled up (the Scroll to latest button shows). Only the reader's own scrolling unpins it (wheel, touch, pointer on the scrollbar, keys): a scroll the browser causes — a host moving the log in the DOM, a drawer opening — is corrected back to the end while pinned.
 - `data-layout` mirrors `layout`; each message carries it as `data-alignment`.
+- With the `composer` slot, the root sets `--conversation-composer-height` (the measured height of the composer area, its fade included); the thread's bottom padding and the Scroll to latest button's offset read it. `--conversation-composer-fade` is the colour the fade blends into; the root does not set it and falls back to `var(--bg-canvas)`, so a host on another surface sets it on any ancestor (a panel or a drawer body: `class="[--conversation-composer-fade:var(--bg-surface)]"`) and the fade matches that surface.
 - `data-loading-more` on the root and `aria-busy` on the log while `loadingMore`; the button is in its `loading` state.
 - With `moreMessages` or `loadingMore` the first row (`__older`, observed by an `IntersectionObserver`) holds the button (`__load-more`).
 - Scroll anchoring: while not pinned, the first message in view (or the button, while it has focus) is the anchor; growth above it is offset in the scroll position. Native `overflow-anchor` is off.
@@ -12924,7 +12940,8 @@ never read as new.
 - ARIA: `role="log"` with `aria-live="off"` (streaming chunks are not read) and `aria-label`; a separate visually hidden `aria-live="polite"` `aria-atomic="true"` region receives `"<author>: <text>"` when an assistant or system message completes or fails. User messages are not announced (the reader just typed them). It also says `Loading earlier messages`, then `Earlier messages loaded` once older messages were prepended.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons) on both buttons, idle and loading (`Button`'s own colors).
 - Reduced motion: smooth scrolling is replaced by a jump.
-- Touch target: the scroll button is a medium `IconButton` (≥32 px, 44 px on coarse pointers through `IconButton`).
+- Touch target: the scroll button is a large round `IconButton` (40 px, 44 px on coarse pointers through `IconButton`).
+- Reading order: the composer area follows the log in the DOM, so `Tab` leaves the log's last control and reaches the composer.
 
 ## Examples
 
@@ -12934,18 +12951,22 @@ never read as new.
 <script setup>
   import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
+  import PromptInput from '@aziontech/webkit/prompt-input'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup from '@aziontech/webkit/suggestion-group'
+  import { ref } from 'vue'
 
   const followUps = [
     { id: 'wildcard', label: 'How do I purge a whole folder?' },
     { id: 'ttl', label: 'What TTL should my images use?' }
   ]
+
+  const prompt = ref('')
 </script>
 
 <template>
   <div
-    class="flex h-[28rem] w-full max-w-(--container-3xl) flex-col rounded-(--shape-card) border border-(--border-default)"
+    class="flex h-[32rem] w-full max-w-(--container-3xl) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default)"
   >
     <Conversation>
       <ChatMessageRoot
@@ -12974,6 +12995,13 @@ never read as new.
         :items="followUps"
         aria-label="Follow-up questions"
       />
+      <template #composer>
+        <PromptInput
+          v-model="prompt"
+          aria-label="Ask the AI assistant"
+          @submit="prompt = ''"
+        />
+      </template>
     </Conversation>
   </div>
 </template>
@@ -12987,7 +13015,7 @@ never read as new.
 
 # Conversation History
 
-> The list of past conversations with an assistant, in a side panel or drawer: titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, and an optional Delete per row. Choosing a row sets `v-model` to its id; the owner loads that conversation into `Conversation`.
+> The list of past conversations with an assistant, in a side panel on wide screens or a `Drawer` on phones: plain rows of titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, an optional Delete per row, and at the top an optional New chat row and a search field that filters the titles. Choosing a row sets `v-model` to its id; the owner loads that conversation into `Conversation`.
 
 - Import: `import ConversationHistory from '@aziontech/webkit/conversation-history'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -13000,6 +13028,8 @@ never read as new.
 ## Do
 
 - Title each conversation from its first prompt, short; the full title shows on hover through `title`.
+- Put it in a side panel beside the conversation on wide screens and in a `Drawer` (`side="start"`) opened from a menu button on phones; close the drawer from `update:modelValue` and `create` so the chosen conversation shows at once (the Default example).
+- Turn on `creatable` when the page has no other New chat control, and `searchable` once the list is long enough to scroll.
 - Fix the reference time so the groups match on the server and the client: set `now` on the app's `ConfigProvider` once (every time-relative component below reads it), or pass `now` here to override it for this list.
 - Never delete on the first tap: open a `ConfirmDialog` from the `remove` handler and remove the item from `@confirm` (the Default example), or remove it at once and offer Undo in a toast.
 
@@ -13021,6 +13051,8 @@ never read as new.
 | `items` | `{ id: string; title: string; updatedAt: string \| number \| Date }[]` | `[]` | false | Conversations, any order; they are sorted newest first inside their group. |
 | `now` | `string \| number \| Date` | `undefined` | false | Reference time for the groups. Empty uses the nearest `ConfigProvider`'s `now`, then the current time; set either when the list is rendered on the server. |
 | `removable` | `boolean` | `false` | false | Shows a Delete button on each row that emits `remove`. |
+| `creatable` | `boolean` | `false` | false | Shows a New chat row at the top that emits `create`. |
+| `searchable` | `boolean` | `false` | false | Shows a search field at the top that hides conversations whose title does not contain the typed text. |
 | `loading` | `boolean` | `false` | false | Shows placeholder rows while the history loads. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Conversation history`). |
 | `modelValue` | `string \| null` | `null` | false | Two-way value (`v-model`). |
@@ -13030,6 +13062,7 @@ never read as new.
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `remove` | `(event: MouseEvent, id: string)` |  |
+| `create` | `(event: MouseEvent)` |  |
 
 ## v-model
 
@@ -13042,13 +13075,15 @@ never read as new.
 - Groups render only when they have items; inside a group, newest first.
 - Active row: `data-active` and `aria-current="page"`, the selected surface.
 - Empty: one muted line, `No conversations yet.`
+- No match: while the search field holds text that no title contains, one muted line, `No conversations match “{query}”.`; New chat and the search field stay.
 - Loading: `aria-busy="true"` and five skeleton rows; no group headings.
 
 ## Accessibility
 
 - The root is a `nav` named by `ariaLabel`; each group is a `ul` labelled by its visible heading (`aria-labelledby`).
 - Each conversation is a `button` with its title as the name; the open one carries `aria-current="page"`.
-- Delete is an `IconButton` named `Delete <title>`, shown on every row (not hover-only), so it is reachable by keyboard and touch.
+- Delete is an `IconButton` named `Delete <title>` on every row. On touch it is always shown; with a fine pointer it fades in on hover, on keyboard focus inside the row and on the open row, and it is always in the tab order, so it is reachable by keyboard, pointer and touch.
+- New chat is a `button` named `New chat`, first in the list. The search field is an `Input` with `role="searchbox"` (and `enterkeyhint="search"`) named `Search conversations`; filtering announces nothing, the rows change in place.
 - Keyboard: `Tab` moves through rows and their Delete; `Enter`/`Space` open a conversation.
 - Focus after a delete: when the owner removes the item whose Delete was pressed and focus was lost with it (on `body`, or on the closed `ConfirmDialog`), focus moves to the conversation that took its place, else the last one, else the list itself (`tabindex="-1"`). Tests: `conversation-history.test.ts` › moves focus to the next row after a delete.
 - Loading sets `aria-busy` on the list.
@@ -13061,7 +13096,9 @@ never read as new.
 <script setup>
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import ConversationHistory from '@aziontech/webkit/conversation-history'
-  import { computed, ref } from 'vue'
+  import Drawer from '@aziontech/webkit/drawer'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   const now = '2026-11-11T15:00:00'
   const items = ref([
@@ -13077,6 +13114,32 @@ never read as new.
     { id: 'c6', title: 'Edge storage pricing', updatedAt: '2026-08-02T10:00:00' }
   ])
   const active = ref('c2')
+  const historyOpen = ref(false)
+  const narrow = ref(false)
+
+  let narrowQuery = null
+  const onNarrowChange = () => {
+    narrow.value = !!narrowQuery?.matches
+  }
+  onMounted(() => {
+    narrowQuery = globalThis.matchMedia?.('(max-width: 767px)') ?? null
+    onNarrowChange()
+    narrowQuery?.addEventListener('change', onNarrowChange)
+  })
+  onBeforeUnmount(() => narrowQuery?.removeEventListener('change', onNarrowChange))
+
+  watch(active, () => {
+    historyOpen.value = false
+  })
+
+  const activeTitle = computed(
+    () => items.value.find((item) => item.id === active.value)?.title ?? 'New chat'
+  )
+
+  const startChat = () => {
+    active.value = null
+    historyOpen.value = false
+  }
 
   const pendingId = ref(null)
   const confirmOpen = ref(false)
@@ -13098,14 +13161,60 @@ never read as new.
 </script>
 
 <template>
-  <div class="w-full max-w-(--container-3xs)">
-    <ConversationHistory
-      v-model="active"
-      :items="items"
-      :now="now"
-      removable
-      @remove="remove"
-    />
+  <div
+    class="flex h-96 w-full overflow-hidden rounded-(--shape-card) border border-(--border-default)"
+  >
+    <aside
+      v-if="!narrow"
+      class="flex w-(--container-3xs) shrink-0 flex-col overflow-y-auto border-e border-(--border-default) bg-(--bg-surface) p-(--spacing-xs)"
+    >
+      <ConversationHistory
+        v-model="active"
+        :items="items"
+        :now="now"
+        creatable
+        searchable
+        removable
+        @create="startChat"
+        @remove="remove"
+      />
+    </aside>
+    <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs) p-(--spacing-sm)">
+      <div class="flex items-center gap-(--spacing-xs)">
+        <IconButton
+          v-if="narrow"
+          icon="az az-menu"
+          aria-label="Open conversation history"
+          variant="ghost"
+          @click="historyOpen = true"
+        />
+        <p class="m-0 truncate text-label-md text-(--text-default)">{{ activeTitle }}</p>
+      </div>
+    </div>
+    <Drawer
+      v-if="narrow"
+      v-model:open="historyOpen"
+      side="start"
+      size="small"
+    >
+      <Drawer.Content>
+        <Drawer.Header class="w-full">
+          <Drawer.Title>Conversation history</Drawer.Title>
+        </Drawer.Header>
+        <Drawer.Body>
+          <ConversationHistory
+            v-model="active"
+            :items="items"
+            :now="now"
+            creatable
+            searchable
+            removable
+            @create="startChat"
+            @remove="remove"
+          />
+        </Drawer.Body>
+      </Drawer.Content>
+    </Drawer>
     <ConfirmDialog
       v-model:open="confirmOpen"
       title="Delete conversation"
@@ -13436,7 +13545,7 @@ never read as new.
 
 # Prompt Input
 
-> The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attached by a button, by dropping them on the box or by pasting them, a model and mode picker, dictation, a voice-conversation control that stands in for Submit while the prompt is empty, a Submit control that becomes Stop while a response is generated, a secondary row under the box (a context picker, tools, links), an optional character limit with a counter, and constraint text under it all. Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text and the files, receives `submit` with the trimmed prompt, its references and its files, and clears them. While `status` is `pending` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop. With `queueable` the owner keeps a queue of prompts to send after the response (TanStack AI `useChat` queues a `sendMessage` made while it streams): Submit then stays beside Stop, and Enter or Submit sends the next prompt into that queue while Stop still ends the response. The anatomy is composed by the app: the root draws the box, the text area, Submit / Stop / voice and the file tokens; the controls the app wants (attach, dictate, model, context, tools) are sub-components it places in the `actions`, `end` and `footer` slots. Each reads the composer through `provide` / `inject`, so the app wires nothing but its own values.
+> The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attached by a button, by dropping them on the box or by pasting them, a model and mode picker, dictation, a voice-conversation control that stands in for Submit while the prompt is empty, a Submit control that becomes Stop while a response is generated, a secondary row under the box (a context picker, tools, links), an optional character limit with a counter, and constraint text under it all. Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text and the files, receives `submit` with the trimmed prompt, its references and its files, and clears them. While `status` is `pending` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop. With `queueable` the owner keeps a queue of prompts to send after the response (TanStack AI `useChat` queues a `sendMessage` made while it streams): Submit then stays beside Stop, and Enter or Submit sends the next prompt into that queue while Stop still ends the response. The anatomy is composed by the app: the root draws the box, the text area, Submit / Stop / voice and the file tokens; the controls the app wants (attach, dictate, model, context, tools) are sub-components it places in the `actions`, `end` and `footer` slots. Each reads the composer through `provide` / `inject`, so the app wires nothing but its own values. At rest it is one floating pill (Attach `+`, the text, the `end` controls, a round Submit, voice or Stop) on a translucent raised surface with a shadow and a backdrop blur, so a thread can scroll under it. A second line, attached files or references, or an open shortcut menu stack it into a rounded rectangle (text on its own row) until the prompt is cleared.
 
 - Import: `import PromptInputRoot from '@aziontech/webkit/prompt-input-root'`
 - Compound import (dot notation, not tree-shakeable): `import PromptInput from '@aziontech/webkit/prompt-input'`
@@ -13454,7 +13563,7 @@ never read as new.
 - Set `status` from the request so Submit turns into Stop; wire `stop` to abort it.
 - Set `queueable` only when the owner queues what is sent while a response runs, and shows the
 - Clear `v-model` and `v-model:files` in the `submit` handler and keep focus in the input.
-- Use `maxLength` only when the backend has a limit; the counter is the warning.
+- Use `maxLength` only when the backend has a limit; the counter is the warning, and it stays hidden
 - Compose only the controls the product has. Attach first at the inline start; model, dictate and
 - Show the upload state on each file (`loading`, `progress`, `error`); Submit waits for them.
 - Set `voice` only when the product has a voice conversation; Submit replaces it as soon as there is
@@ -13482,7 +13591,7 @@ never read as new.
 | --- | --- | --- | --- | --- |
 | `placeholder` | `string` | `''` | false | Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`). |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`). |
-| `maxLength` | `number` | `0` | false | Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit. |
+| `maxLength` | `number` | `0` | false | Character limit; an `n/max` counter shows from 80% of it and submit is blocked over it. `0` means no limit. |
 | `minRows` | `number` | `1` | false | Rows shown while empty. |
 | `maxRows` | `number` | `6` | false | Rows the text area grows to before it scrolls. |
 | `status` | `'ready' \| 'pending' \| 'streaming'` | `'ready'` | false | Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit (unless `queueable`); typing stays allowed. |
@@ -13511,9 +13620,9 @@ never read as new.
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `attachments` | — | Attached context the app draws itself, above the text, before the file tokens and the references. |
-| `actions` | — | Controls at the inline start of the toolbar (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input. |
-| `end` | — | Controls at the inline end of the toolbar, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input. |
-| `footer` | — | The secondary row under the box (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input. |
+| `actions` | — | Controls at the inline start of the pill (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input. |
+| `end` | — | Controls at the inline end of the pill, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input. |
+| `footer` | — | A secondary row under the pill (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input. Optional: for the single-pill look, place the pickers in `actions` / `end` instead. |
 | `hint` | — | Constraint text under everything; referenced by `aria-describedby`. |
 
 ## Sub-component imports
@@ -13625,9 +13734,11 @@ packages/webkit/src/components/ai/prompt-input/
 ## States
 
 - `data-status` mirrors `status`; `data-disabled`; `data-invalid` while over `maxLength`; `data-dragging` on the box while files are dragged over it (only with an `AttachButton`).
-- `ready`: Submit (primary `IconButton`, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (primary `IconButton`, `az az-headphones`) takes its place.
+- `data-multiline` on the root and the box while the composer is stacked (a rounded rectangle, text on its own row): the prompt took a second line (kept until it is cleared), `minRows` is above 1, files, references or the `attachments` slot are shown, or a shortcut menu is open. Absent, it is the single pill.
+- `ready`: Submit (primary round `IconButton`, large, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (primary `IconButton`, `az az-headphones`) takes its place.
 - `pending` / `streaming`: Stop (secondary `IconButton`, `az az-stop`) replaces Submit; Enter does nothing.
 - `pending` / `streaming` with `queueable`: Stop stays, and Submit (primary, after Stop at the inline end) shows beside it while there is something to send; Enter and Submit emit `submit` as in `ready`. With nothing to send only Stop shows, and the voice control never does.
+- Near the limit (the prompt holds 80% of `maxLength` or more): the `n/max` counter shows before Submit and the text area is described by it; below 80% it is not rendered.
 - Over the limit: border turns `--danger-border`, the counter turns danger, `aria-invalid="true"`, and a polite live region says how many characters are over.
 - Dragging files over the box: a dashed `--border-selected` panel on `--bg-selected` covers the box and reads `Drop files to attach`.
 - Rejected files: a danger line under the box says how many were not added and why (`not an accepted type`, `larger than 10 MB`, `up to 3 files`), in a polite live region; it clears on the next accepted file, a removal or a submit.
@@ -13644,7 +13755,7 @@ packages/webkit/src/components/ai/prompt-input/
 - Dictation: the control's name says what pressing it does (`Dictate` / `Stop dictation`), with no `aria-pressed`; the listening status is a polite live region. Where the browser has no speech recognition the control is not rendered.
 - Queue: with `queueable`, Stop and Submit are two named buttons in tab order (Stop first); the owner announces the queued prompt through `PromptQueue`'s list, so the composer adds no live region of its own.
 - Focus: Submit, Stop and Start voice conversation share one place, except with `queueable` while `pending` / `streaming`, when Stop and Submit sit side by side. When the control that has focus is swapped, removed or disabled (the owner clears the prompt after a submit, which hides a queue Submit; a request starts or ends), focus moves to the text area instead of falling to the page.
-- ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter and the hint, `aria-invalid` over the limit; Submit, Stop and Start voice conversation are named icon buttons.
+- ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter (while it shows) and the hint, `aria-invalid` over the limit; Submit, Stop and Start voice conversation are named icon buttons.
 - The placeholder never carries required information (it disappears on typing).
 - Touch target: `IconButton` medium (44 px on coarse pointers); the small picker `Button`s get the 44 px hit area on coarse pointers from `Button`.
 
@@ -14172,7 +14283,7 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 
 # Sources
 
-> The list of sources a generative AI response drew on (Cloudscape's sources expandable section, AI Elements Sources): a disclosure titled `3 sources` that opens an ordered list — number, linked title, one-line description. Item `n` carries the id `<anchor>-source-<n>`, the target of the `[n]` citations `StreamingResponse` renders; following a citation opens the list and brings the item into view.
+> The sources a generative AI response drew on (Cloudscape's sources section, AI Elements Sources): a rounded `Sources` pill with the overlapping marks of up to three sources (the item's `icon` or its site's first letter) that opens an ordered list — mark, linked title, description or site. It ends the message's action row (`ChatMessage.Actions` `#trailing`). Item `n` has the id `<anchor>-source-<n>`, the target of `StreamingResponse`'s `[n]` citations; following one opens the list and brings the item into view.
 
 - Import: `import Sources from '@aziontech/webkit/sources'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -14184,7 +14295,8 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 ## Do
 
 - Order items as the response first cites them, so `[1]` is item 1.
-- Use the page title, not the URL, as the title; add the site or section as the description.
+- Use the page title, not the URL, as the title; the site shows on its own from `href`, so the description is for the section (`Azion documentation · Cache`).
+- Give `icon` only for a site whose glyph is in the icon set (`az az-github`).
 - Keep the list collapsed by default; the inline citations are the primary path.
 
 ## Don’t
@@ -14196,7 +14308,7 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 
 - `citation` — the inline `[n]` that points here.
 - `streaming-response` — renders the citations; share the `anchor`.
-- `chat-message` — sources sit inside the assistant message, under the response.
+- `chat-message` — the pill goes in the `#trailing` slot of `ChatMessage.Actions`, after the icon actions.
 
 ## Props
 
@@ -14204,15 +14316,15 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 | --- | --- | --- | --- | --- |
 | `items` | `SourcesItem[]` | `[]` | false | The sources behind the response, in citation order; item `n` is what `[n]` points at. |
 | `anchor` | `string` | `''` | false | Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here. |
-| `title` | `string` | `''` | false | Heading of the disclosure. Empty uses the locale catalog (`3 sources`). |
+| `title` | `string` | `''` | false | Label of the pill that opens the list. Empty shows `Sources` and names the pill with the count (`3 sources`). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Sub-components
 
 _None. Data-driven: a source list is a record set the response already holds, like table rows.
-Exports: `"./sources"`; exported type `SourcesItem` (`title`, `href?`, `description?`) from `sources/types.ts`,
-shared with `StreamingResponse`._
+Exports: `"./sources"`; exported type `SourcesItem` (`title`, `href?`, `description?`, `icon?`) from `sources/types.ts`,
+shared with `StreamingResponse`. A private part, `parts/sources-mark.vue`, draws one round mark._
 
 ## v-model
 
@@ -14222,14 +14334,16 @@ shared with `StreamingResponse`._
 
 ## States
 
-- `data-state="open|closed"`; renders nothing when `items` is empty.
+- `data-state="open|closed"` on the root and the pill (an open pill keeps the hover fill); renders nothing when `items` is empty.
+- The root is `display: contents`, so in a wrapping row (`ChatMessage.Actions`) the pill sits in the row and the open list takes the full width under it.
 - Following a `#<anchor>-source-<n>` link (`hashchange`) opens the list and scrolls the item into view.
 
 ## Accessibility
 
 - Visible focus: trigger, links and the targeted item show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Keyboard map: `Tab` to the trigger, `Enter` / `Space` toggles; `Tab` through the links.
-- ARIA: `button` with `aria-expanded` / `aria-controls`; the list is an `<ol aria-label="Sources">` so numbers are announced by position; the visual number chip is `aria-hidden`.
+- ARIA: `button` with `aria-expanded` / `aria-controls`, named `3 sources` (it holds the visible `Sources`, WCAG 2.5.3) or by `title`; the marks are `aria-hidden`; the list is an `<ol aria-label="Sources">` so numbers are announced by position.
+- Touch: the 32 px pill carries an invisible 44 px hit area on coarse pointers.
 - External links open in a new tab with `rel="noopener noreferrer"`.
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the title as plain text.
 
@@ -14244,18 +14358,17 @@ shared with `StreamingResponse`._
   const items = [
     {
       title: 'Real-Time Purge',
-      href: 'https://www.azion.com/en/documentation/',
+      href: 'https://www.azion.com/en/documentation/products/cache/real-time-purge/',
       description: 'Azion documentation · Cache'
     },
     {
-      title: 'Cache settings',
-      href: 'https://www.azion.com/en/documentation/',
-      description: 'Azion documentation · Applications'
+      title: 'aziontech/azion: the Azion command line',
+      href: 'https://github.com/aziontech/azion',
+      icon: 'az az-github'
     },
     {
-      title: 'Purge by wildcard',
-      href: 'https://www.azion.com/en/documentation/',
-      description: 'Azion documentation · Cache'
+      title: 'HTTP Caching (RFC 9111)',
+      href: 'https://www.w3.org/Protocols/'
     }
   ]
 </script>
@@ -14278,7 +14391,7 @@ shared with `StreamingResponse`._
 
 # Streaming Response
 
-> Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:`, `data:` and protocol-relative links are dropped (only `http(s)`, `mailto`, `tel`, relative and `#` links survive, checked by the shared `safeHref`), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists, block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Numbered citations `[1]` become `Citation` references resolved against `sources`, linked to the `Sources` list under the response through a shared `anchor`. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.
+> Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:`, `data:` and protocol-relative links are dropped (only `http(s)`, `mailto`, `tel`, relative and `#` links survive, checked by the shared `safeHref`), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists, block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Text renders at the reading size (`.text-body-lg`) with a full step (`--spacing-md`) between blocks, the plain, wide answer column of a chat. Numbered citations `[1]` become `Citation` chips holding the source's site (from its `href`), resolved against `sources` and linked to the `Sources` list through a shared `anchor`. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.
 
 - Import: `import StreamingResponse from '@aziontech/webkit/streaming-response'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -14315,7 +14428,7 @@ shared with `StreamingResponse`._
 | --- | --- | --- | --- | --- |
 | `content` | `string` | `''` | false | The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, tel, relative and hash links survive. |
 | `streaming` | `boolean` | `false` | false | Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes. |
-| `sources` | `SourcesItem[]` | `[]` | false | Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name). |
+| `sources` | `SourcesItem[]` | `[]` | false | Sources the `[n]` citations in the content resolve against (site in the chip, title in the tooltip and the accessible name). |
 | `anchor` | `string` | `''` | false | The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers. |
 
 ## Sub-components
@@ -14328,6 +14441,7 @@ components: `code-block`, `citation`._
 ## States
 
 - `data-streaming` and `aria-busy="true"` while `streaming`.
+- `data-slot="streaming-response"` on the root marks the answer text, which `ChatMessage.Actions` Read aloud speaks.
 - Caret: inside the last paragraph or heading, else after the last block; only while `streaming`.
 - Open fence while streaming: `<pre data-testid="…__pending-code">`; closed fence or stream ended: `CodeBlock`.
 
@@ -14470,7 +14584,7 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 - Status is conveyed in text, never by color alone.
 - Focus: when `Stop` leaves the DOM while it holds focus (the status becomes `canceled`), focus moves to the toggle, or to the card root (`tabindex="-1"`) when the row is static; the `role="status"` region announces `Stopped`.
 - Accessible name of the toggle: its text, the title and the helper name; the status is announced by the status region.
-- Contrast: `--text-default` and `--text-muted` on `--bg-surface`, and `--text-muted` on `--bg-surface-raised` (the name chip), pass WCAG 2.1 AA and their APCA targets; status colours come from `StatusIndicator`, and the status is always text. No disabled state.
+- Contrast: `--text-default` and `--text-muted` on the canvas (`--bg-canvas`), and `--text-muted` on `--bg-surface-raised` (the name chip), pass WCAG 2.1 AA and their APCA targets; status colours come from `StatusIndicator`, and the status is always text. No disabled state.
 
 ## Examples
 
@@ -14589,7 +14703,7 @@ types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Keyboard map: `Tab` moves between prompts (each is a native button; five at most keeps the tab order short); `Enter` / `Space` chooses.
 - ARIA: `role="group"` with `aria-label`; icons `aria-hidden`; native `disabled`.
-- Touch target: 32 px rows, 44 px on coarse pointers.
+- Touch target: 40 px rows, 44 px on coarse pointers.
 
 ## Examples
 

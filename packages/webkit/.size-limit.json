@@ -1087,12 +1087,12 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "12.4 KB"
+    "limit": "12.45 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "11.65 KB"
+    "limit": "11.7 KB"
   },
   {
     "name": "locales-es",
@@ -1147,12 +1147,12 @@
   {
     "name": "tool-approval",
     "path": "src/components/ai/tool-approval/tool-approval.vue",
-    "limit": "16.15 KB"
+    "limit": "16.55 KB"
   },
   {
     "name": "agent-question",
     "path": "src/components/ai/agent-question/agent-question.vue",
-    "limit": "16.85 KB"
+    "limit": "17.3 KB"
   },
   {
     "name": "response-loading",
@@ -1209,13 +1209,13 @@
   {
     "name": "prompt-input",
     "path": "src/components/ai/prompt-input/index.ts",
-    "limit": "14.5 KB",
+    "limit": "14.65 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-root",
     "path": "src/components/ai/prompt-input/prompt-input.vue",
-    "limit": "11.35 KB",
+    "limit": "11.55 KB",
     "entryOnly": true
   },
   {
@@ -1266,7 +1266,7 @@
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "38.35 KB",
+    "limit": "38.5 KB",
     "entryOnly": true
   },
   {

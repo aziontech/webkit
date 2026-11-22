@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "An inline numbered reference in generated text (`[1]`), Cloudscape's inline citation: a small superscript number that links to the source — to item `n` of the `Sources` list under the response, or straight to the URL — with a tooltip naming the source and an accessible name of `Source 1: <title>`. `StreamingResponse` renders it for every `[n]`; use it directly when you build responses yourself.",
+ "purpose": "An inline reference in generated text (`[1]`), Cloudscape's inline citation: a small rounded chip holding the source's site (`azion.com`), or its title cut to fit, that links to item `n` of the `Sources` list or to the URL, with a tooltip naming the source and the accessible name `Source 1, azion.com: <title>`. `StreamingResponse` renders it for every `[n]`, filling `site` from the source's `href`.",
  "setup": null,
  "useWhen": [
   "A statement in a generated response that comes from a specific source."
@@ -23,8 +23,8 @@
   "`tooltip` — shows the source title."
  ],
  "bestPractices": [
-  "Number in order of first use: [1], [2], [3].",
-  "Give every citation a `title`; a bare number tells a screen reader nothing."
+  "Number in order of first use: [1], [2], [3]; the number stays in the accessible name.",
+  "Give every citation a `title` and, for a web source, its `site`; a bare number tells a reader nothing."
  ],
  "props": [
   {
@@ -39,14 +39,21 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Title of the source, shown in the tooltip and read in the accessible name."
+   "doc": "Title of the source, shown in the tooltip and read in the accessible name; the chip shows it, cut to fit, when `site` is empty."
+  },
+  {
+   "name": "site",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Site of the source without `www.` (`example.com`), the text of the chip."
   },
   {
    "name": "href",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it, or when it is unsafe (`javascript:`, `data:`), the number is plain text."
+   "doc": "Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it, or when it is unsafe (`javascript:`, `data:`), the chip is plain text."
   }
  ],
  "events": [],

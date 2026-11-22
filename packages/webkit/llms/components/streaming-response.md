@@ -1,6 +1,6 @@
 # Streaming Response
 
-> Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:`, `data:` and protocol-relative links are dropped (only `http(s)`, `mailto`, `tel`, relative and `#` links survive, checked by the shared `safeHref`), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists, block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Numbered citations `[1]` become `Citation` references resolved against `sources`, linked to the `Sources` list under the response through a shared `anchor`. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.
+> Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:`, `data:` and protocol-relative links are dropped (only `http(s)`, `mailto`, `tel`, relative and `#` links survive, checked by the shared `safeHref`), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists, block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Text renders at the reading size (`.text-body-lg`) with a full step (`--spacing-md`) between blocks, the plain, wide answer column of a chat. Numbered citations `[1]` become `Citation` chips holding the source's site (from its `href`), resolved against `sources` and linked to the `Sources` list through a shared `anchor`. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.
 
 - Import: `import StreamingResponse from '@aziontech/webkit/streaming-response'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -39,7 +39,7 @@
 | --- | --- | --- | --- | --- |
 | `content` | `string` | `''` | false | The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, tel, relative and hash links survive. |
 | `streaming` | `boolean` | `false` | false | Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes. |
-| `sources` | `SourcesItem[]` | `[]` | false | Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name). |
+| `sources` | `SourcesItem[]` | `[]` | false | Sources the `[n]` citations in the content resolve against (site in the chip, title in the tooltip and the accessible name). |
 | `anchor` | `string` | `''` | false | The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers. |
 
 ## Sub-components
@@ -52,6 +52,7 @@ components: `code-block`, `citation`._
 ## States
 
 - `data-streaming` and `aria-busy="true"` while `streaming`.
+- `data-slot="streaming-response"` on the root marks the answer text, which `ChatMessage.Actions` Read aloud speaks.
 - Caret: inside the last paragraph or heading, else after the last block; only while `streaming`.
 - Open fence while streaming: `<pre data-testid="…__pending-code">`; closed fence or stream ended: `CodeBlock`.
 
@@ -191,13 +192,12 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
   const sources = [
     {
       title: 'Real-Time Purge',
-      href: 'https://www.azion.com/en/documentation/',
+      href: 'https://www.azion.com/en/documentation/products/cache/real-time-purge/',
       description: 'Azion documentation · Cache'
     },
     {
-      title: 'Cache settings',
-      href: 'https://www.azion.com/en/documentation/',
-      description: 'Azion documentation · Applications'
+      title: 'HTTP Caching (RFC 9111)',
+      href: 'https://www.w3.org/Protocols/'
     }
   ]
 

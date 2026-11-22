@@ -11,7 +11,7 @@
   "@aziontech/webkit/chat-message-actions",
   "@aziontech/webkit/chat-message-feedback"
  ],
- "purpose": "One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes on it (copy, regenerate, thumbs up / down). It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). User messages sit in a filled bubble; assistant messages are flat, full width, beside the assistant mark; system messages are a muted centered line. Alignment comes from the enclosing `Conversation`.",
+ "purpose": "One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the helpful / not helpful thumbs, regenerate, read aloud, the sources). It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). Assistant messages are plain text across the reading column (`.text-body-lg`): no avatar, name, time or bubble. User messages are a filled bubble at the inline end, at most 80 % wide; system messages a muted centered line. Author and time live in the accessible name (the time also shows on hover over the user's bubble). Alignment comes from the enclosing `Conversation`.",
  "setup": null,
  "useWhen": [
   "Every turn of a chat with the generative AI assistant: the person's prompt, the assistant's response, a system note (\"Conversation restarted\").",
@@ -31,8 +31,8 @@
  ],
  "bestPractices": [
   "Pass `status` from your request: `pending` until the first token, `streaming` while tokens arrive, then `success` or `error`.",
-  "Keep actions to five or fewer, always visible (no hover-only): copy, regenerate, feedback.",
-  "Use `grouped` for a second message by the same author so stacked bubbles read as one turn (only the first shows the avatar).",
+  "Keep the action row always visible: Copy, the thumbs, Regenerate, app actions (Share), Read aloud, then the `Sources` pill in `#trailing`; give `CopyButton` and `IconButton` `size=\"large\"` (40 px targets).",
+  "Use `grouped` for a second message by the same author so stacked messages read as one turn.",
   "Never put the feedback thumbs on non-AI content."
  ],
  "props": [
@@ -48,14 +48,14 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`)."
+   "doc": "Author name read in the message's accessible name; it is not shown. Empty uses the locale catalog (`You`, `AI assistant`, `System`)."
   },
   {
    "name": "timestamp",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name."
+   "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name and shown on hover over the user's bubble."
   },
   {
    "name": "status",
@@ -69,7 +69,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn."
+   "doc": "Follows a message by the same author: tightens the gap above it so stacked messages read as one turn."
   },
   {
    "name": "errorMessage",
@@ -100,14 +100,9 @@
    "notes": "The content: text, `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`."
   },
   {
-   "name": "avatar",
-   "scope": "—",
-   "notes": "Replaces the default avatar (person glyph for the user, the assistant mark for the AI)."
-  },
-  {
    "name": "actions",
    "scope": "—",
-   "notes": "Inline actions, usually `ChatMessage.Actions`; shown only when `status` is `success`."
+   "notes": "The action row, usually `ChatMessage.Actions`; shown only when `status` is `success`."
   }
  ],
  "styleSeam": false,

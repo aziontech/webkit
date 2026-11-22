@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a \"Scroll to the latest message\" button brings them back. It is a `role=\"log\"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. With `moreMessages`, a Load earlier messages button opens the thread and the log also emits `load-more` as the reader scrolls near the top; prepended messages never move what the reader sees. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).",
+ "purpose": "The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a \"Scroll to the latest message\" button brings them back. It is a `role=\"log\"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. With `moreMessages`, a Load earlier messages button opens the thread and the log also emits `load-more` as the reader scrolls near the top; prepended messages never move what the reader sees. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces). The thread is a centred reading column (`--layout-measure-content`) with a 16 px gutter on a phone, and a larger gap before each user turn. The `composer` slot floats the composer over the bottom of the column: the thread scrolls under it behind a fade and is padded by its height; the round Scroll to latest button floats just above it.",
  "setup": null,
  "useWhen": [
   "Any surface where a person and the generative AI assistant exchange messages: the assistant page, the assistant drawer, an in-flow helper.",
@@ -22,13 +22,13 @@
  ],
  "related": [
   "`chat-message` — the item the log holds; announces itself through this component.",
-  "`prompt-input` — the composer pinned under the log (outside it; only the log scrolls).",
+  "`prompt-input` — the composer, floated over the bottom of the log through the `composer` slot (outside the log; only the log scrolls).",
   "`suggestion-group` — follow-up questions after the last response, or support prompts in the empty state.",
-  "`empty-state` — what the panel shows before the first message (the block renders it instead of the log).",
+  "`empty-state` — what the panel shows before the first message; render it in the default slot (the thread column is at least the log's height, so `my-auto` centres it) so the composer in `composer` never remounts when the first message is sent.",
   "`log-viewer` — machine logs, not conversations."
  ],
  "bestPractices": [
-  "Pin the prompt input under the conversation; only the log scrolls.",
+  "Put the prompt input in the `composer` slot; only the log scrolls, and the thread scrolls under the composer.",
   "Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.",
   "Use `layout=\"start\"` in drawers and side panels, `split` on a full page.",
   "Keep one conversation per surface; a second thread is a second page or a history list.",
@@ -75,7 +75,12 @@
   {
    "name": "default",
    "scope": "—",
-   "notes": "The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card)."
+   "notes": "The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card), or the empty state before the first message."
+  },
+  {
+   "name": "composer",
+   "scope": "—",
+   "notes": "The composer floating over the bottom of the thread, in the reading column: `PromptInput`, with any status, alert or queue above it. Rendered outside the log, after it in the reading order."
   }
  ],
  "styleSeam": false,

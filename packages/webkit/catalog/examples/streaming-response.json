@@ -12,7 +12,7 @@
   },
   {
    "name": "WithCitations",
-   "summary": "Numbered citations in the text resolve against the sources: each `[n]` shows the source title in a tooltip and links to item n of the Sources list under the response.",
+   "summary": "Citations in the text resolve against the sources: each `[n]` becomes a chip with the source's site, names the source in a tooltip and links to item n of the Sources list under the response.",
    "file": "examples/streaming-response/with-citations.vue"
   }
  ]

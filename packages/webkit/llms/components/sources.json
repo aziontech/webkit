@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The list of sources a generative AI response drew on (Cloudscape's sources expandable section, AI Elements Sources): a disclosure titled `3 sources` that opens an ordered list — number, linked title, one-line description. Item `n` carries the id `<anchor>-source-<n>`, the target of the `[n]` citations `StreamingResponse` renders; following a citation opens the list and brings the item into view.",
+ "purpose": "The sources a generative AI response drew on (Cloudscape's sources section, AI Elements Sources): a rounded `Sources` pill with the overlapping marks of up to three sources (the item's `icon` or its site's first letter) that opens an ordered list — mark, linked title, description or site. It ends the message's action row (`ChatMessage.Actions` `#trailing`). Item `n` has the id `<anchor>-source-<n>`, the target of `StreamingResponse`'s `[n]` citations; following one opens the list and brings the item into view.",
  "setup": null,
  "useWhen": [
   "A response is grounded in documents, pages or records the reader may want to open or verify."
@@ -20,11 +20,12 @@
  "related": [
   "`citation` — the inline `[n]` that points here.",
   "`streaming-response` — renders the citations; share the `anchor`.",
-  "`chat-message` — sources sit inside the assistant message, under the response."
+  "`chat-message` — the pill goes in the `#trailing` slot of `ChatMessage.Actions`, after the icon actions."
  ],
  "bestPractices": [
   "Order items as the response first cites them, so `[1]` is item 1.",
-  "Use the page title, not the URL, as the title; add the site or section as the description.",
+  "Use the page title, not the URL, as the title; the site shows on its own from `href`, so the description is for the section (`Azion documentation · Cache`).",
+  "Give `icon` only for a site whose glyph is in the icon set (`az az-github`).",
   "Keep the list collapsed by default; the inline citations are the primary path."
  ],
  "props": [
@@ -47,7 +48,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Heading of the disclosure. Empty uses the locale catalog (`3 sources`)."
+   "doc": "Label of the pill that opens the list. Empty shows `Sources` and names the pill with the count (`3 sources`)."
   },
   {
    "name": "defaultOpen",

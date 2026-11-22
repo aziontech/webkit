@@ -1,6 +1,6 @@
 # Conversation
 
-> The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a "Scroll to the latest message" button brings them back. It is a `role="log"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. With `moreMessages`, a Load earlier messages button opens the thread and the log also emits `load-more` as the reader scrolls near the top; prepended messages never move what the reader sees. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).
+> The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a "Scroll to the latest message" button brings them back. It is a `role="log"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. With `moreMessages`, a Load earlier messages button opens the thread and the log also emits `load-more` as the reader scrolls near the top; prepended messages never move what the reader sees. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces). The thread is a centred reading column (`--layout-measure-content`) with a 16 px gutter on a phone, and a larger gap before each user turn. The `composer` slot floats the composer over the bottom of the column: the thread scrolls under it behind a fade and is padded by its height; the round Scroll to latest button floats just above it.
 
 - Import: `import Conversation from '@aziontech/webkit/conversation'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -13,7 +13,7 @@
 
 ## Do
 
-- Pin the prompt input under the conversation; only the log scrolls.
+- Put the prompt input in the `composer` slot; only the log scrolls, and the thread scrolls under the composer.
 - Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.
 - Use `layout="start"` in drawers and side panels, `split` on a full page.
 - Keep one conversation per surface; a second thread is a second page or a history list.
@@ -30,9 +30,9 @@
 ## Related
 
 - [chat-message](chat-message.md) — the item the log holds; announces itself through this component.
-- [prompt-input](prompt-input.md) — the composer pinned under the log (outside it; only the log scrolls).
+- [prompt-input](prompt-input.md) — the composer, floated over the bottom of the log through the `composer` slot (outside the log; only the log scrolls).
 - [suggestion-group](suggestion-group.md) — follow-up questions after the last response, or support prompts in the empty state.
-- [empty-state](empty-state.md) — what the panel shows before the first message (the block renders it instead of the log).
+- [empty-state](empty-state.md) — what the panel shows before the first message; render it in the default slot (the thread column is at least the log's height, so `my-auto` centres it) so the composer in `composer` never remounts when the first message is sent.
 - [log-viewer](log-viewer.md) — machine logs, not conversations.
 
 ## Props
@@ -54,7 +54,8 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card). |
+| `default` | — | The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card), or the empty state before the first message. |
+| `composer` | — | The composer floating over the bottom of the thread, in the reading column: `PromptInput`, with any status, alert or queue above it. Rendered outside the log, after it in the reading order. |
 
 ## Sub-components
 
@@ -74,6 +75,7 @@ never read as new.
 
 - `data-pinned` on the root while the log follows the newest message; absent once the reader scrolled up (the Scroll to latest button shows). Only the reader's own scrolling unpins it (wheel, touch, pointer on the scrollbar, keys): a scroll the browser causes — a host moving the log in the DOM, a drawer opening — is corrected back to the end while pinned.
 - `data-layout` mirrors `layout`; each message carries it as `data-alignment`.
+- With the `composer` slot, the root sets `--conversation-composer-height` (the measured height of the composer area, its fade included); the thread's bottom padding and the Scroll to latest button's offset read it. `--conversation-composer-fade` is the colour the fade blends into; the root does not set it and falls back to `var(--bg-canvas)`, so a host on another surface sets it on any ancestor (a panel or a drawer body: `class="[--conversation-composer-fade:var(--bg-surface)]"`) and the fade matches that surface.
 - `data-loading-more` on the root and `aria-busy` on the log while `loadingMore`; the button is in its `loading` state.
 - With `moreMessages` or `loadingMore` the first row (`__older`, observed by an `IntersectionObserver`) holds the button (`__load-more`).
 - Scroll anchoring: while not pinned, the first message in view (or the button, while it has focus) is the anchor; growth above it is offset in the scroll position. Native `overflow-anchor` is off.
@@ -89,7 +91,8 @@ never read as new.
 - ARIA: `role="log"` with `aria-live="off"` (streaming chunks are not read) and `aria-label`; a separate visually hidden `aria-live="polite"` `aria-atomic="true"` region receives `"<author>: <text>"` when an assistant or system message completes or fails. User messages are not announced (the reader just typed them). It also says `Loading earlier messages`, then `Earlier messages loaded` once older messages were prepended.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons) on both buttons, idle and loading (`Button`'s own colors).
 - Reduced motion: smooth scrolling is replaced by a jump.
-- Touch target: the scroll button is a medium `IconButton` (≥32 px, 44 px on coarse pointers through `IconButton`).
+- Touch target: the scroll button is a large round `IconButton` (40 px, 44 px on coarse pointers through `IconButton`).
+- Reading order: the composer area follows the log in the DOM, so `Tab` leaves the log's last control and reaches the composer.
 
 ## Right-to-left
 
@@ -113,7 +116,7 @@ never read as new.
 
 ## Responsive
 
-- Container queries: none; the thread centers at `--layout-measure-content` and fills narrower hosts.
+- Container queries: none; the thread and the composer centre at `--layout-measure-content` and fill narrower hosts with the `--spacing-md` gutter.
 - Narrow (≤ 640 px or a drawer): full width; the owner should pass `layout="start"`.
 - Touch: the scroll button and the Load earlier messages button meet 44 px on coarse pointers (both through their own `pointer-coarse` hit area).
 - Reflow: no horizontal scroll at 320 px; wide code and tables scroll inside their own blocks; the Load earlier messages label fits at 320 px and 200 % zoom without horizontal scroll.
@@ -126,18 +129,22 @@ never read as new.
 <script setup>
   import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
+  import PromptInput from '@aziontech/webkit/prompt-input'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup from '@aziontech/webkit/suggestion-group'
+  import { ref } from 'vue'
 
   const followUps = [
     { id: 'wildcard', label: 'How do I purge a whole folder?' },
     { id: 'ttl', label: 'What TTL should my images use?' }
   ]
+
+  const prompt = ref('')
 </script>
 
 <template>
   <div
-    class="flex h-[28rem] w-full max-w-(--container-3xl) flex-col rounded-(--shape-card) border border-(--border-default)"
+    class="flex h-[32rem] w-full max-w-(--container-3xl) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default)"
   >
     <Conversation>
       <ChatMessageRoot
@@ -166,6 +173,13 @@ never read as new.
         :items="followUps"
         aria-label="Follow-up questions"
       />
+      <template #composer>
+        <PromptInput
+          v-model="prompt"
+          aria-label="Ask the AI assistant"
+          @submit="prompt = ''"
+        />
+      </template>
     </Conversation>
   </div>
 </template>
@@ -228,6 +242,8 @@ never read as new.
 <script setup>
   import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
+  import PromptInput from '@aziontech/webkit/prompt-input'
+  import { ref } from 'vue'
 
   const questions = [
     'Which domains does storefront answer on?',
@@ -245,11 +261,13 @@ never read as new.
     '91% over the last 24 hours.',
     'The search pages, because every query is a new cache key.'
   ]
+
+  const prompt = ref('')
 </script>
 
 <template>
   <div
-    class="flex h-[24rem] w-full max-w-(--container-3xl) flex-col rounded-(--shape-card) border border-(--border-default)"
+    class="flex h-[32rem] w-full max-w-(--container-3xl) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default)"
   >
     <Conversation>
       <template
@@ -258,6 +276,13 @@ never read as new.
       >
         <ChatMessageRoot from="user">{{ question }}</ChatMessageRoot>
         <ChatMessageRoot>{{ answers[index] }}</ChatMessageRoot>
+      </template>
+      <template #composer>
+        <PromptInput
+          v-model="prompt"
+          aria-label="Ask the AI assistant"
+          @submit="prompt = ''"
+        />
       </template>
     </Conversation>
   </div>
