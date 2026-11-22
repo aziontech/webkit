@@ -266,7 +266,7 @@ describe('Illustration', () => {
     warn.mockRestore()
   })
 
-  it('does not mark a registered scene as placeheld', async () => {
+  it('does not mark a registered scene as a placeholder', async () => {
     const el = await root(render(Illustration, { props: { name: 'runtime' } }))
     expect(el.getAttribute('data-placeholder')).toBeNull()
   })

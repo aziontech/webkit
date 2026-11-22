@@ -134,7 +134,7 @@
             <i class="az az-face-smile"></i>
           </div>
         </div>
-        <!-- Comandos -->
+        <!-- Commands -->
         <div
           class="flex-col gap-3 w-full md:flex-col md:w-64 md:sticky top-28 md:h-60 z-10 hidden md:flex"
         >
@@ -205,7 +205,7 @@
     <div
       class="flex flex-col gap-3 w-full md:flex-col md:w-64 md:sticky top-28 md:h-60 z-10 px-4 pt-6 pb-8"
     >
-      <!-- Comandos -->
+      <!-- Commands -->
       <div
         class="flex items-center gap-4 bg-neutral-100/60 py-2 border border-neutral-200 rounded-lg px-2.5 dark:bg-neutral-800/60 dark:border-neutral-700"
       >
