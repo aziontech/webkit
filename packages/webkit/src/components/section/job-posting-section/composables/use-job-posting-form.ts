@@ -1,4 +1,4 @@
-import { type Ref, ref } from 'vue'
+import { computed, type ComputedRef, ref } from 'vue'
 
 import type { FileTokenGroupItem } from '../../../input/file-token-group/file-token-group.vue'
 import { defaultCountries } from '../../../input/phone-input/lib/country-data'
@@ -7,9 +7,9 @@ import type { JobPostingSectionField, JobPostingSectionMessages } from '../job-p
 type Field = JobPostingSectionField
 
 export interface UseJobPostingFormReturn {
-  values: Ref<Record<string, string>>
-  files: Ref<Record<string, File>>
-  errors: Ref<Record<string, string>>
+  values: ComputedRef<Record<string, string>>
+  files: ComputedRef<Record<string, File>>
+  errors: ComputedRef<Record<string, string>>
   fieldId: (field: Field) => string
   focusTarget: (field: Field) => string
   countryOf: (field: Field) => string
@@ -59,7 +59,7 @@ function createFileFields(fields: () => Field[], setValue: (field: Field, next: 
   }
 
   return {
-    files,
+    files: computed(() => files.value),
     setFile,
     bindFileInput: (field: Field, element: unknown) => {
       fileInputEls.value[field.name] = element instanceof HTMLInputElement ? element : null
@@ -121,8 +121,8 @@ export function useJobPostingForm(
 
   return {
     ...fileFields,
-    values,
-    errors,
+    values: computed(() => values.value),
+    errors: computed(() => errors.value),
     fieldId,
     focusTarget: (field) => (field.type === 'file' ? `${fieldId(field)}-browse` : fieldId(field)),
     countryOf,
