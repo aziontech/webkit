@@ -26,6 +26,7 @@
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import StoryIndexSectionFacetSelect from '../story-index-section/parts/story-index-section-facet-select.vue'
   import StoryIndexSectionToolbar from '../story-index-section/parts/story-index-section-toolbar.vue'
+  import * as listing from './lib/listing-index-rows'
 
   defineOptions({
     name: 'ListingIndexSection',
@@ -162,15 +163,9 @@
   const mounted = useMounted()
   const wide = computed(() => mounted.value && wideQuery.value)
 
-  onMounted(() => {
-    const params = new URLSearchParams(globalThis.location?.search ?? '')
-    props.facets.forEach((facet) => {
-      const value = params.get(facet.id)
-      if (value && facet.options.some((option) => option.value === value)) {
-        selected.value[facet.id] = value
-      }
-    })
-  })
+  onMounted(() =>
+    listing.seedFacets(props.facets, globalThis.location?.search ?? '', selected.value)
+  )
 
   const hasRows = computed(() => props.data.length > 0)
 
@@ -186,26 +181,11 @@
     wide.value ? props.searchPlaceholder : props.searchShortPlaceholder || props.searchPlaceholder
   )
 
-  const matches = computed(() => {
-    const needle = query.value.trim().toLowerCase()
-    const found = props.data.filter(
-      (row) =>
-        Object.entries(selected.value).every(
-          ([key, value]) => !value || (row.facets?.[key] ?? []).includes(value)
-        ) &&
-        (!needle || Object.values(row.values).join(' ').toLowerCase().includes(needle))
-    )
-    const by = props.sorts.find((option) => option.value === sort.value)?.by
-    return by
-      ? [...found].sort((a, b) => (a.values[by] ?? '').localeCompare(b.values[by] ?? ''))
-      : found
-  })
-
-  const listed = computed(() =>
-    props.groups
-      .map((group) => ({ group, rows: matches.value.filter((row) => row.group === group) }))
-      .filter((entry) => entry.rows.length > 0)
+  const matches = computed(() =>
+    listing.filterRows(props.data, selected.value, query.value, props.sorts, sort.value)
   )
+
+  const listed = computed(() => listing.groupRows(props.groups, matches.value))
 
   const LAZY_ROWS = 300
   const phoneChunks = useLazyChunks({ rowHeight: 1, chunkSize: 1, threshold: 0 })
@@ -213,28 +193,12 @@
   const lazyGroups = computed(() => matches.value.length > LAZY_ROWS)
   const blocksOf = (chunks: typeof phoneChunks, rowHeight: number) =>
     computed(() =>
-      (lazyGroups.value
-        ? chunks.split(listed.value)
-        : listed.value.map((entry, index) => ({ index, items: [entry], mounted: true }))
-      ).map((chunk) => ({
-        index: chunk.index,
-        entry: chunk.items[0],
-        mounted: chunk.mounted,
-        height: `${(chunk.items[0].rows.length + 1) * rowHeight}px`
-      }))
+      listing.groupBlocks(listed.value, lazyGroups.value ? chunks.split : null, rowHeight)
     )
   const phoneBlocks = blocksOf(phoneChunks, 76)
   const tableBlocks = blocksOf(tableChunks, 56)
 
-  const applied = computed(() =>
-    props.facets.flatMap((facet) => {
-      const value = selected.value[facet.id]
-      const option = value
-        ? facet.options.find((candidate) => candidate.value === value)
-        : undefined
-      return option ? [{ key: facet.id, label: `${facet.label}: ${option.label}` }] : []
-    })
-  )
+  const applied = computed(() => listing.appliedFacets(props.facets, selected.value))
 
   const filterButtonLabel = computed(() => {
     const label = props.filterLabel || t('listingIndexSection.filters')
@@ -242,15 +206,6 @@
       ? t('listingIndexSection.filtersApplied', { label, count: applied.value.length })
       : label
   })
-
-  const facetDisplay = (facet: ListingIndexSectionFacet) => (value: unknown) =>
-    facet.options.find((option) => option.value === value)?.label ?? facet.allLabel
-
-  const sortDisplay = (value: unknown) =>
-    props.sorts.find((option) => option.value === value)?.label ?? ''
-
-  const edge = (index: number) =>
-    index === 0 ? 'start' : index === props.columns.length - 1 ? 'end' : undefined
 
   const updateFacet = (key: string, value: unknown) => {
     selected.value[key] = typeof value === 'string' ? value : ''
@@ -316,7 +271,7 @@
             :options="facet.options"
             :all-option="{ value: '', label: facet.allLabel }"
             :placeholder="facet.allLabel"
-            :display-value="facetDisplay(facet)"
+            :display-value="listing.facetDisplay(facet)"
             :search-placeholder="t('listingIndexSection.search')"
             :search-aria-label="
               t('listingIndexSection.searchFacet', { facet: facet.label.toLowerCase() })
@@ -329,7 +284,7 @@
             :model-value="sort"
             :label="sortAriaLabel"
             :options="sorts"
-            :display-value="sortDisplay"
+            :display-value="listing.sortDisplay(sorts)"
             :search-placeholder="t('listingIndexSection.search')"
             :search-aria-label="
               t('listingIndexSection.searchFacet', { facet: sortAriaLabel.toLowerCase() })
@@ -416,7 +371,7 @@
                   :key="column.key"
                   :grow="column.grow ?? 1"
                   :align="column.align ?? 'start'"
-                  :data-edge="edge(index)"
+                  :data-edge="listing.edgeOf(index, columns.length)"
                   class="data-[edge=end]:pe-(--spacing-xl)! data-[edge=start]:ps-(--spacing-xl)!"
                 >
                   <span class="text-overline-md text-(--text-muted)">{{ column.label }}</span>
@@ -459,7 +414,7 @@
                     :grow="column.grow ?? 1"
                     :align="column.align ?? 'start'"
                     :principal="cellIndex === 0"
-                    :data-edge="edge(cellIndex)"
+                    :data-edge="listing.edgeOf(cellIndex, columns.length)"
                     :data-meta="cellIndex > 0 || null"
                     class="py-(--spacing-lg)! text-(--text-muted) data-[meta]:text-overline-sm! data-[edge=end]:pe-(--spacing-xl)! data-[edge=start]:ps-(--spacing-xl)!"
                   >
