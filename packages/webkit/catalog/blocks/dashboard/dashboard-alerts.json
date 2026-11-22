@@ -18,7 +18,11 @@
  ],
  "sfcFile": "blocks/dashboard/dashboard-alerts/dashboard-alerts.vue",
  "guidelinesFile": "blocks/dashboard/dashboard-alerts/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/dashboard/dashboard-alerts/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "parts/alerts-card.vue",
+  "parts/entity-table.vue",
+  "parts/open-alert-table.vue",
+  "parts/open-by-severity.vue"
+ ]
 }

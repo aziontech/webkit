@@ -18,7 +18,13 @@
  ],
  "sfcFile": "blocks/account/account-deployment-settings/account-deployment-settings.vue",
  "guidelinesFile": "blocks/account/account-deployment-settings/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/account/account-deployment-settings/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "deployment-policies.ts",
+  "parts/deployment-defaults-group.vue",
+  "parts/deployment-save-bar.vue",
+  "parts/deployment-services-group.vue",
+  "parts/deployment-setting-drawer.vue",
+  "parts/deployment-settings-table.vue"
+ ]
 }

@@ -28,10 +28,10 @@
  ],
  "sfcFile": "blocks/create/create-page/create-page.vue",
  "guidelinesFile": "blocks/create/create-page/guidelines.md",
- "fileSources": {
-  "domain-validation.ts": "blocks/create/create-page/domain-validation.ts",
-  "use-create-form.ts": "blocks/create/create-page/use-create-form.ts",
-  "parts/creation-header.vue": "blocks/create/create-page/parts/creation-header.vue",
-  "parts/discard-dialog.vue": "blocks/create/create-page/parts/discard-dialog.vue"
- }
+ "fileSources": [
+  "domain-validation.ts",
+  "use-create-form.ts",
+  "parts/creation-header.vue",
+  "parts/discard-dialog.vue"
+ ]
 }

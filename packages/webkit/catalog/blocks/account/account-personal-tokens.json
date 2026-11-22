@@ -23,7 +23,10 @@
  ],
  "sfcFile": "blocks/account/account-personal-tokens/account-personal-tokens.vue",
  "guidelinesFile": "blocks/account/account-personal-tokens/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/account/account-personal-tokens/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "parts/create-token-drawer.vue",
+  "parts/token-secret-dialog.vue",
+  "parts/tokens-table.vue"
+ ]
 }

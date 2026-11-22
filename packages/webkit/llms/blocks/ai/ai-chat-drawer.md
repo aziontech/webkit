@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAttachButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAttachButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -277,50 +277,21 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 
 ```vue
 <script setup lang="ts">
-  import AgentActivity from '@aziontech/webkit/agent-activity'
-  import AgentQuestion from '@aziontech/webkit/agent-question'
   import Alert from '@aziontech/webkit/alert'
-  import AudioPlayer from '@aziontech/webkit/audio-player'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ChatMessage, {
-    type ChatMessageFeedbackValue,
-    type ChatMessageStatus
-  } from '@aziontech/webkit/chat-message'
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import type { ChatMessageFeedbackValue, ChatMessageStatus } from '@aziontech/webkit/chat-message'
+  import ChatMessage from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import FilePreview from '@aziontech/webkit/file-preview'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import McpAppFrame, {
+  import {
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
-  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
-  import Reasoning from '@aziontech/webkit/reasoning'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Sources from '@aziontech/webkit/sources'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SubagentCard from '@aziontech/webkit/subagent-card'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-  import Tag from '@aziontech/webkit/tag'
-  import ToolApproval from '@aziontech/webkit/tool-approval'
-  import ToolCall from '@aziontech/webkit/tool-call'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import {
-    activitiesBefore,
     type AiChatConnection,
     type AiChatInterrupt,
     type AiChatInterruptError,
@@ -332,34 +303,28 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     type AiChatToolAnswer,
     type AiChatToolCallPart,
     type AiChatUiResourcePart,
-    answerable,
-    answerInterrupt,
-    approvalOf,
     contentOf,
-    documentNameOf,
     hasAnswer,
     interruptErrorText,
     isQuestion,
     json,
-    needsApproval,
-    parsesAsJson,
-    questionOf,
     queueItemOf,
     resolveInterrupt,
-    segmentsOf,
-    skipInterrupt,
-    stopSubagent,
-    structuredOf,
-    subagentStatusOf,
-    subagentTextOf,
-    textOf,
-    toolContentOf,
-    toolQuestionOf,
-    toolStatusOf
+    toolQuestionOf
   } from '@aziontech/webkit/utils/ai-chat'
-  import VideoPlayer from '@aziontech/webkit/video-player'
+  import {
+    answerQuestion,
+    groupQuestions,
+    skipQuestion
+  } from '@aziontech/webkit/utils/ai-chat-questions'
   import { computed, nextTick, ref, watch } from 'vue'
 
+  import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
+  import AiChatTurn from './parts/ai-chat-turn.vue'
+  import DrawerChatComposer from './parts/drawer-chat-composer.vue'
+  import DrawerChatHeader from './parts/drawer-chat-header.vue'
+  import DrawerChatStart from './parts/drawer-chat-start.vue'
+  import WorkloadOverview from './parts/workload-overview.vue'
   import { sampleSuggestions } from './sample'
 
   /** A rating the reader gave a response. */
@@ -459,22 +424,11 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   /** Whether the assistant drawer is open; Agent opens it and its close button closes it. */
   const open = defineModel<boolean>('open', { default: true })
 
-  const appFrames = new Map<string, InstanceType<typeof McpAppFrame>>()
-
-  function setAppFrame(key: string, el: unknown) {
-    if (el) appFrames.set(key, el as InstanceType<typeof McpAppFrame>)
-    else appFrames.delete(key)
-  }
-
-  function forwardAppMessage(key: string, part: AiChatUiResourcePart, message: McpAppFrameMessage) {
-    emit('app-message', message, part, (reply) => appFrames.get(key)?.post(reply))
-  }
-
   const { formatDate } = useLocale()
 
   const prompt = ref('')
   const files = ref<PromptInputFile[]>([])
-  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
+  const composerEl = ref<InstanceType<typeof DrawerChatComposer> | null>(null)
   const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
   const stoppedIds = ref<Set<string>>(new Set())
   const edits = ref<Record<string, string>>({})
@@ -507,21 +461,6 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 
   const queueable = computed(() => props.queue !== undefined)
   const queued = computed(() => (props.queue ?? []).map(queueItemOf))
-  const wasConnected = ref(props.connection === 'connected')
-  watch(
-    () => props.connection,
-    (value) => {
-      if (value === 'connected') wasConnected.value = true
-    }
-  )
-  const reconnecting = computed(
-    () => (wasConnected.value && props.connection === 'connecting') || props.resuming
-  )
-  const offline = computed(
-    () =>
-      !reconnecting.value &&
-      (props.connection === 'error' || (wasConnected.value && props.connection === 'disconnected'))
-  )
   const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
 
   const pendingQuestions = computed(() => props.interrupts.filter(isQuestion))
@@ -533,36 +472,21 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     { immediate: true }
   )
 
-  const questions = computed(() => {
-    const live = pendingQuestions.value
-      .map(questionOf)
-      .map((question) =>
-        !question.bound && routed.value[question.id]
-          ? { ...question, status: 'running' as const }
-          : question
-      )
-    const ids = new Set(live.map((question) => question.id))
-    const known = new Set(turns.value.map((turn) => turn.id))
-    const groups: Record<string, AiChatQuestion[]> = {}
-    for (const question of [
-      ...live,
-      ...Object.values(settled.value).filter((question) => !ids.has(question.id))
-    ]) {
-      const after = askedAfter.value[question.id] ?? ''
-      ;(groups[known.has(after) ? after : (last.value?.id ?? '')] ??= []).push(question)
-    }
-    return groups
-  })
+  const questions = computed(() =>
+    groupQuestions({
+      pending: pendingQuestions.value,
+      settled: settled.value,
+      routed: routed.value,
+      askedAfter: askedAfter.value,
+      turns: turns.value,
+      lastId: last.value?.id ?? ''
+    })
+  )
 
   function answer(event: Event, question: AiChatQuestion, value: string) {
-    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
-    settled.value[question.id] = { ...question, status: 'success', error: '' }
-    if (question.bound) {
-      answerInterrupt(interrupt, value)
-    } else {
-      routed.value[question.id] = true
-      if (interrupt) emit('answer-interrupt', event, interrupt, value)
-    }
+    const state = { pending: pendingQuestions.value, settled: settled.value, routed: routed.value }
+    const interrupt = answerQuestion(state, question, value)
+    if (interrupt) emit('answer-interrupt', event, interrupt, value)
   }
 
   function askOf(call: AiChatToolCallPart): AiChatQuestion {
@@ -575,9 +499,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   }
 
   function skip(question: AiChatQuestion) {
-    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
-    settled.value[question.id] = { ...question, status: 'skipped', error: '' }
-    skipInterrupt(interrupt)
+    skipQuestion({ pending: pendingQuestions.value, settled: settled.value }, question)
   }
 
   function editOf(call: AiChatToolCallPart): string {
@@ -687,49 +609,10 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 
 <template>
   <div class="w-full">
-    <div class="layout-column layout-boundary flex min-w-0 flex-col">
-      <div class="layout-section-start flex flex-col gap-(--layout-section-gap)">
-        <PageHeader
-          title="storefront"
-          description="Workload · Production"
-        >
-          <template #actions>
-            <Button
-              label="Agent"
-              variant="outline"
-              size="medium"
-              icon="az az-ask-azion"
-              :aria-expanded="open ? 'true' : 'false'"
-              @click="open = true"
-            />
-          </template>
-        </PageHeader>
-        <Card>
-          <template #default>
-            <div class="p-(--spacing-md)">
-              <KeyValueList
-                :columns="3"
-                aria-label="Workload details"
-              >
-                <KeyValueList.Item label="Status">
-                  <StatusIndicator
-                    severity="danger"
-                    label="Errors above 30%"
-                  />
-                </KeyValueList.Item>
-                <KeyValueList.Item label="Domains"
-                  >www.example.com, shop.example.com</KeyValueList.Item
-                >
-                <KeyValueList.Item label="Origin">api.example.com</KeyValueList.Item>
-                <KeyValueList.Item label="Cache hit ratio">91%</KeyValueList.Item>
-                <KeyValueList.Item label="Last deployment">Today, 13:58</KeyValueList.Item>
-                <KeyValueList.Item label="Region">US East (Washington)</KeyValueList.Item>
-              </KeyValueList>
-            </div>
-          </template>
-        </Card>
-      </div>
-    </div>
+    <WorkloadOverview
+      :open="open"
+      @open="open = true"
+    />
 
     <Drawer
       v-model:open="open"
@@ -739,65 +622,17 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     >
       <DrawerContent>
         <div class="flex min-h-0 flex-1 flex-col">
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-              <DrawerTitle>AI assistant</DrawerTitle>
-              <Tag
-                label="Preview"
-                severity="info"
-                size="small"
-              />
-            </div>
-            <div class="flex items-center gap-(--spacing-2xs)">
-              <IconButton
-                icon="az az-plus"
-                aria-label="New chat"
-                variant="ghost"
-                size="small"
-                :disabled="!turns.length"
-                @click="newChat"
-              />
-            </div>
-          </PanelHeader>
+          <DrawerChatHeader
+            :empty="!turns.length"
+            @new-chat="newChat"
+          />
           <div class="flex min-h-0 flex-1 flex-col">
-            <div
-              v-if="hydrating && !turns.length"
-              role="status"
-              aria-label="Loading the conversation"
-              class="flex flex-1 flex-col gap-(--spacing-lg) p-(--spacing-md)"
-            >
-              <div
-                v-for="row in 3"
-                :key="row"
-                class="flex gap-(--spacing-sm)"
-              >
-                <Skeleton
-                  variant="circle"
-                  width="2rem"
-                  height="2rem"
-                />
-                <div class="flex flex-1 flex-col gap-(--spacing-xs)">
-                  <Skeleton width="25%" />
-                  <Skeleton :width="row === 2 ? '50%' : '85%'" />
-                </div>
-              </div>
-            </div>
-            <div
-              v-else-if="!turns.length"
-              class="flex flex-1 flex-col justify-center gap-(--spacing-lg) p-(--spacing-md)"
-            >
-              <EmptyState
-                title="Ask about storefront"
-                description="The assistant reads this workload’s settings and metrics to answer. It cites the documentation it uses."
-                icon="az az-ask-azion"
-                size="small"
-              />
-              <SuggestionGroup
-                :items="starters"
-                orientation="vertical"
-                @select="(event, item) => send(event, item.label)"
-              />
-            </div>
+            <DrawerChatStart
+              v-if="!turns.length"
+              :hydrating="hydrating"
+              :starters="starters"
+              @select="(event, item) => send(event, item.label)"
+            />
             <Conversation
               v-else
               layout="start"
@@ -806,284 +641,34 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
               :loading-more="loadingMore"
               @load-more="emit('load-more', $event)"
             >
-              <template
+              <AiChatTurn
                 v-for="turn in turns"
                 :key="turn.id"
-              >
-                <ChatMessage
-                  :from="turn.role === 'user' ? 'user' : 'assistant'"
-                  :status="statusOf(turn)"
-                  :timestamp="timeOf(turn)"
-                  :error-message="statusOf(turn) === 'error' ? failure : undefined"
-                  @retry="emit('retry', $event, turn)"
-                >
-                  <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
-                  <template
-                    v-for="segment in segmentsOf(
-                      turn,
-                      turn.role === 'assistant' ? activitiesBefore(messages, turn) : []
-                    )"
-                    :key="segment.key"
-                  >
-                    <template v-if="turn.role === 'user' && segment.type === 'text'" />
-                    <AgentActivity
-                      v-else-if="segment.type === 'activity'"
-                      :steps="segment.steps"
-                    />
-                    <Reasoning
-                      v-else-if="segment.type === 'reasoning'"
-                      :streaming="statusOf(turn) === 'pending'"
-                      :duration="
-                        statusOf(turn) === 'pending' ? undefined : turn.metadata?.reasoningSeconds
-                      "
-                    >
-                      <p class="whitespace-pre-line">{{ segment.content }}</p>
-                    </Reasoning>
-                    <StreamingResponse
-                      v-else-if="segment.type === 'text'"
-                      :content="segment.content"
-                      :streaming="statusOf(turn) === 'streaming'"
-                      :sources="turn.metadata?.sources ?? []"
-                      :anchor="`answer-${turn.id}`"
-                    />
-                    <AgentQuestion
-                      v-else-if="
-                        segment.type === 'tool' &&
-                        answerable(toolOf(segment.call), segment.call, segment.result)
-                      "
-                      v-model="answers[segment.call.id]"
-                      :title="askOf(segment.call).title"
-                      :type="askOf(segment.call).options.length ? 'choice' : 'text'"
-                      :options="askOf(segment.call).options"
-                      :status="askOf(segment.call).status"
-                      @submit="(event, value) => answerTool(event, segment.call, value)"
-                    />
-                    <template v-else-if="segment.type === 'tool'">
-                      <ToolApproval
-                        v-if="needsApproval(segment.call)"
-                        :title="
-                          toolOf(segment.call).question ||
-                          toolOf(segment.call).title ||
-                          `Run ${segment.call.name}?`
-                        "
-                        :description="toolOf(segment.call).description"
-                        :approve-label="toolOf(segment.call).approveLabel"
-                        :variant="toolOf(segment.call).variant"
-                        :confirmation-phrase="toolOf(segment.call).confirmationPhrase"
-                        :status="approvalOf(segment.call)"
-                        :loading="loading && turn === last"
-                        :editable="toolOf(segment.call).editable"
-                        :invalid="
-                          toolOf(segment.call).editable && !parsesAsJson(editOf(segment.call))
-                        "
-                        :model-value="editOf(segment.call)"
-                        @update:model-value="(text) => (edits[segment.call.id] = text)"
-                        @approve="(event, text) => approve(event, segment.call, text)"
-                        @deny="deny($event, segment.call)"
-                      >
-                        <CodeBlock
-                          v-if="
-                            !toolOf(segment.call).editable &&
-                            json(segment.call.input ?? segment.call.arguments)
-                          "
-                          :code="json(segment.call.input ?? segment.call.arguments)"
-                          language="json"
-                          :show-line-numbers="false"
-                        />
-                      </ToolApproval>
-                      <ToolCall
-                        v-if="
-                          !needsApproval(segment.call) || approvalOf(segment.call) === 'approved'
-                        "
-                        :name="segment.call.name"
-                        :title="toolOf(segment.call).title"
-                        :status="toolStatusOf(segment.call, segment.result)"
-                      >
-                        <template
-                          v-if="json(segment.call.input ?? segment.call.arguments)"
-                          #input
-                        >
-                          <CodeBlock
-                            :code="json(segment.call.input ?? segment.call.arguments)"
-                            language="json"
-                            :show-line-numbers="false"
-                          />
-                        </template>
-                        <template
-                          v-if="
-                            !segment.result?.error &&
-                            segment.call.output === undefined &&
-                            toolContentOf(segment.result?.content)
-                          "
-                          #output
-                        >
-                          <p
-                            v-if="toolContentOf(segment.result?.content)?.text"
-                            class="whitespace-pre-line text-body-sm text-(--text-default)"
-                          >
-                            {{ toolContentOf(segment.result?.content)?.text }}
-                          </p>
-                          <ImageGallery
-                            v-if="toolContentOf(segment.result?.content)?.images.length"
-                            :items="toolContentOf(segment.result?.content)?.images ?? []"
-                          />
-                        </template>
-                        <template
-                          v-else-if="
-                            json(
-                              segment.result?.error ||
-                                segment.call.output ||
-                                segment.result?.content
-                            )
-                          "
-                          #output
-                        >
-                          <CodeBlock
-                            :code="
-                              json(
-                                segment.result?.error ||
-                                  segment.call.output ||
-                                  segment.result?.content
-                              )
-                            "
-                            language="json"
-                            :show-line-numbers="false"
-                          />
-                        </template>
-                      </ToolCall>
-                    </template>
-                    <ImageGallery
-                      v-else-if="segment.type === 'gallery'"
-                      :items="segment.images"
-                    />
-                    <AudioPlayer
-                      v-else-if="segment.type === 'audio'"
-                      :src="segment.src"
-                    />
-                    <VideoPlayer
-                      v-else-if="segment.type === 'video'"
-                      :src="segment.src"
-                      :mime-type="segment.mimeType"
-                    />
-                    <FilePreview
-                      v-else-if="segment.type === 'document'"
-                      :file-name="documentNameOf(segment.part)"
-                      :mime-type="segment.part.source.mimeType"
-                      :src="segment.part.source.type === 'url' ? segment.part.source.value : ''"
-                      :base64="segment.part.source.type === 'data' ? segment.part.source.value : ''"
-                    />
-                    <SubagentCard
-                      v-else-if="segment.type === 'subagent'"
-                      :name="segment.part.subagent.name"
-                      :title="segment.part.subagent.description"
-                      :description="segment.part.subagent.error?.message"
-                      :status="subagentStatusOf(segment.part)"
-                      :stoppable="typeof segment.part.subagent.stop === 'function'"
-                      @stop="stopSubagent(segment.part)"
-                    >
-                      <StreamingResponse
-                        v-if="subagentTextOf(segment.part)"
-                        :content="subagentTextOf(segment.part)"
-                      />
-                      <template
-                        v-if="json(segment.part.subagent.input)"
-                        #input
-                      >
-                        <CodeBlock
-                          :code="json(segment.part.subagent.input)"
-                          language="json"
-                          :show-line-numbers="false"
-                        />
-                      </template>
-                    </SubagentCard>
-                    <template v-else-if="segment.type === 'structured'">
-                      <Alert
-                        v-if="segment.part.status === 'error'"
-                        severity="danger"
-                        size="small"
-                        title="The structured answer failed"
-                      >
-                        {{
-                          segment.part.errorMessage ||
-                          'The answer did not match the expected format.'
-                        }}
-                      </Alert>
-                      <CodeBlock
-                        v-else-if="structuredOf(segment.part)"
-                        :code="structuredOf(segment.part)"
-                        language="json"
-                        :show-line-numbers="false"
-                        :aria-busy="segment.part.status === 'streaming' || undefined"
-                      />
-                    </template>
-                    <McpAppFrame
-                      v-else-if="segment.type === 'app'"
-                      :ref="(el) => setAppFrame(segment.key, el)"
-                      :resource="segment.part.resource"
-                      :title="
-                        (tools[segment.part.toolName] ?? { title: '' }).title ||
-                        segment.part.toolName
-                      "
-                      :resolve-url="resolveAppUrl"
-                      @message="(message) => forwardAppMessage(segment.key, segment.part, message)"
-                    />
-                  </template>
-                  <template v-if="turn.role === 'assistant'">
-                    <p
-                      v-if="stopped(turn)"
-                      class="text-body-sm text-(--text-muted)"
-                    >
-                      You stopped this response.
-                    </p>
-                    <Sources
-                      v-if="statusOf(turn) === 'success' && !stopped(turn)"
-                      :items="turn.metadata?.sources ?? []"
-                      :anchor="`answer-${turn.id}`"
-                    />
-                  </template>
-                  <template
-                    v-if="turn.role === 'assistant'"
-                    #actions
-                  >
-                    <ChatMessage.Actions>
-                      <CopyButton
-                        size="small"
-                        :value="textOf(turn)"
-                      />
-                      <IconButton
-                        icon="az az-refresh"
-                        aria-label="Regenerate response"
-                        variant="ghost"
-                        size="small"
-                        :disabled="state !== 'ready'"
-                        @click="emit('retry', $event, turn)"
-                      />
-                      <ChatMessage.Feedback
-                        :model-value="ratings[turn.id] ?? null"
-                        @update:model-value="(value) => rate(turn, value)"
-                      />
-                    </ChatMessage.Actions>
-                  </template>
-                </ChatMessage>
-                <ChatMessage
-                  v-if="questions[turn.id]?.length"
-                  from="assistant"
-                >
-                  <AgentQuestion
-                    v-for="question in questions[turn.id]"
-                    :key="question.id"
-                    v-model="answers[question.id]"
-                    :title="question.title"
-                    :type="question.options.length ? 'choice' : 'text'"
-                    :options="question.options"
-                    :status="question.status"
-                    :error="question.error"
-                    :skippable="question.bound"
-                    @submit="(event, value) => answer(event, question, value)"
-                    @skip="skip(question)"
-                  />
-                </ChatMessage>
-              </template>
+                v-model:answers="answers"
+                :turn="turn"
+                :messages="messages"
+                :status="statusOf(turn)"
+                :time="timeOf(turn)"
+                :failure="failure"
+                :tools="tools"
+                :busy="loading && turn === last"
+                :ready="state === 'ready'"
+                :stopped="stopped(turn)"
+                :rating="ratings[turn.id] ?? null"
+                :questions="questions[turn.id]"
+                :ask-of="askOf"
+                :edit-of="editOf"
+                :resolve-app-url="resolveAppUrl"
+                @retry="emit('retry', $event, turn)"
+                @rate="(value) => rate(turn, value)"
+                @answer-tool="answerTool"
+                @edit="(call, text) => (edits[call.id] = text)"
+                @approve="approve"
+                @deny="deny"
+                @answer="answer"
+                @skip="skip"
+                @app-message="(message, part, reply) => emit('app-message', message, part, reply)"
+              />
               <ChatMessage
                 v-if="waiting && last"
                 :status="failure ? 'error' : 'pending'"
@@ -1105,28 +690,11 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
           <div
             class="flex flex-col gap-(--spacing-xs) border-t border-(--border-default) p-(--spacing-sm)"
           >
-            <StatusIndicator
-              v-if="reconnecting"
-              key="reconnecting"
-              severity="warning"
-              label="Reconnecting"
-              loading
-            />
-            <Alert
-              v-else-if="offline"
-              key="offline"
-              severity="danger"
-              size="small"
-              title="Connection lost"
-            >
-              Your messages send when the connection returns.
-            </Alert>
-            <StatusIndicator
-              v-else-if="sessionGenerating && !loading"
-              key="elsewhere"
-              severity="info"
-              label="Responding in another tab"
-              loading
+            <AiChatConnectionStatus
+              :connection="connection"
+              :resuming="resuming"
+              :session-generating="sessionGenerating"
+              :loading="loading"
             />
             <Alert
               key="alert-2"
@@ -1144,31 +712,20 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
               :items="queued"
               @remove="(event, item) => removeQueued(event, item.id)"
             />
-            <PromptInput
+            <DrawerChatComposer
               ref="composerEl"
               v-model="prompt"
               v-model:files="files"
-              :status="state"
+              :state="state"
               :queueable="queueable"
-              :disabled="hydrating"
+              :hydrating="hydrating"
               :accept="accept"
               :max-files="maxFiles"
               :max-file-size="maxFileSize"
-              :max-rows="4"
-              placeholder="Ask about storefront"
-              @submit="(event, { value }) => send(event, value)"
+              :attachable="attachable"
+              @submit="send"
               @stop="stop"
-            >
-              <template
-                v-if="attachable"
-                #actions
-              >
-                <PromptInputAttachButton />
-              </template>
-              <template #hint
-                >The AI assistant can make mistakes. Check important information.</template
-              >
-            </PromptInput>
+            />
           </div>
         </div>
       </DrawerContent>
@@ -1322,3 +879,699 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
   { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'az az-globe' }
 ]
 ````
+
+## `parts/ai-chat-connection-status.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import type { AiChatConnection } from '@aziontech/webkit/utils/ai-chat'
+  import { computed, ref, watch } from 'vue'
+
+  const props = defineProps<{
+    connection: AiChatConnection
+    resuming: boolean
+    sessionGenerating: boolean
+    loading: boolean
+  }>()
+
+  const wasConnected = ref(props.connection === 'connected')
+  watch(
+    () => props.connection,
+    (value) => {
+      if (value === 'connected') wasConnected.value = true
+    }
+  )
+  const reconnecting = computed(
+    () => (wasConnected.value && props.connection === 'connecting') || props.resuming
+  )
+  const offline = computed(
+    () =>
+      !reconnecting.value &&
+      (props.connection === 'error' || (wasConnected.value && props.connection === 'disconnected'))
+  )
+</script>
+
+<template>
+  <StatusIndicator
+    v-if="reconnecting"
+    key="reconnecting"
+    severity="warning"
+    label="Reconnecting"
+    loading
+  />
+  <Alert
+    v-else-if="offline"
+    key="offline"
+    severity="danger"
+    size="small"
+    title="Connection lost"
+  >
+    Your messages send when the connection returns.
+  </Alert>
+  <StatusIndicator
+    v-else-if="sessionGenerating && !loading"
+    key="elsewhere"
+    severity="info"
+    label="Responding in another tab"
+    loading
+  />
+</template>
+```
+
+## `parts/ai-chat-media-segment.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import AudioPlayer from '@aziontech/webkit/audio-player'
+  import CodeBlock from '@aziontech/webkit/code-block'
+  import FilePreview from '@aziontech/webkit/file-preview'
+  import ImageGallery from '@aziontech/webkit/image-gallery'
+  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import SubagentCard from '@aziontech/webkit/subagent-card'
+  import {
+    type AiChatSegment,
+    documentNameOf,
+    json,
+    stopSubagent,
+    structuredOf,
+    subagentStatusOf,
+    subagentTextOf
+  } from '@aziontech/webkit/utils/ai-chat'
+  import VideoPlayer from '@aziontech/webkit/video-player'
+
+  defineProps<{ segment: AiChatSegment }>()
+</script>
+
+<template>
+  <ImageGallery
+    v-if="segment.type === 'gallery'"
+    :items="segment.images"
+  />
+  <AudioPlayer
+    v-else-if="segment.type === 'audio'"
+    :src="segment.src"
+  />
+  <VideoPlayer
+    v-else-if="segment.type === 'video'"
+    :src="segment.src"
+    :mime-type="segment.mimeType"
+  />
+  <FilePreview
+    v-else-if="segment.type === 'document'"
+    :file-name="documentNameOf(segment.part)"
+    :mime-type="segment.part.source.mimeType"
+    :src="segment.part.source.type === 'url' ? segment.part.source.value : ''"
+    :base64="segment.part.source.type === 'data' ? segment.part.source.value : ''"
+  />
+  <SubagentCard
+    v-else-if="segment.type === 'subagent'"
+    :name="segment.part.subagent.name"
+    :title="segment.part.subagent.description"
+    :description="segment.part.subagent.error?.message"
+    :status="subagentStatusOf(segment.part)"
+    :stoppable="typeof segment.part.subagent.stop === 'function'"
+    @stop="stopSubagent(segment.part)"
+  >
+    <StreamingResponse
+      v-if="subagentTextOf(segment.part)"
+      :content="subagentTextOf(segment.part)"
+    />
+    <template
+      v-if="json(segment.part.subagent.input)"
+      #input
+    >
+      <CodeBlock
+        :code="json(segment.part.subagent.input)"
+        language="json"
+        :show-line-numbers="false"
+      />
+    </template>
+  </SubagentCard>
+  <template v-else-if="segment.type === 'structured'">
+    <Alert
+      v-if="segment.part.status === 'error'"
+      severity="danger"
+      size="small"
+      title="The structured answer failed"
+    >
+      {{ segment.part.errorMessage || 'The answer did not match the expected format.' }}
+    </Alert>
+    <CodeBlock
+      v-else-if="structuredOf(segment.part)"
+      :code="structuredOf(segment.part)"
+      language="json"
+      :show-line-numbers="false"
+      :aria-busy="segment.part.status === 'streaming' || undefined"
+    />
+  </template>
+</template>
+```
+
+## `parts/ai-chat-tool-segment.vue`
+
+```ts
+<script setup lang="ts">
+  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import CodeBlock from '@aziontech/webkit/code-block'
+  import ImageGallery from '@aziontech/webkit/image-gallery'
+  import ToolApproval from '@aziontech/webkit/tool-approval'
+  import ToolCall from '@aziontech/webkit/tool-call'
+  import {
+    type AiChatQuestion,
+    type AiChatTool,
+    type AiChatToolCallPart,
+    type AiChatToolResultPart,
+    answerable,
+    approvalOf,
+    json,
+    needsApproval,
+    parsesAsJson,
+    toolContentOf,
+    toolStatusOf
+  } from '@aziontech/webkit/utils/ai-chat'
+
+  defineProps<{
+    call: AiChatToolCallPart
+    result?: AiChatToolResultPart
+    tool: AiChatTool
+    ask: AiChatQuestion
+    edit: string
+    busy: boolean
+  }>()
+
+  const emit = defineEmits<{
+    answer: [event: Event, value: string]
+    edit: [text: string]
+    approve: [event: MouseEvent, text: string]
+    deny: [event: MouseEvent]
+  }>()
+
+  const answer = defineModel<string>('answer')
+</script>
+
+<template>
+  <AgentQuestion
+    v-if="answerable(tool, call, result)"
+    v-model="answer"
+    :title="ask.title"
+    :type="ask.options.length ? 'choice' : 'text'"
+    :options="ask.options"
+    :status="ask.status"
+    @submit="(event, value) => emit('answer', event, value)"
+  />
+  <template v-else>
+    <ToolApproval
+      v-if="needsApproval(call)"
+      :title="tool.question || tool.title || `Run ${call.name}?`"
+      :description="tool.description"
+      :approve-label="tool.approveLabel"
+      :variant="tool.variant"
+      :confirmation-phrase="tool.confirmationPhrase"
+      :status="approvalOf(call)"
+      :loading="busy"
+      :editable="tool.editable"
+      :invalid="tool.editable && !parsesAsJson(edit)"
+      :model-value="edit"
+      @update:model-value="(text) => emit('edit', text)"
+      @approve="(event, text) => emit('approve', event, text)"
+      @deny="emit('deny', $event)"
+    >
+      <CodeBlock
+        v-if="!tool.editable && json(call.input ?? call.arguments)"
+        :code="json(call.input ?? call.arguments)"
+        language="json"
+        :show-line-numbers="false"
+      />
+    </ToolApproval>
+    <ToolCall
+      v-if="!needsApproval(call) || approvalOf(call) === 'approved'"
+      :name="call.name"
+      :title="tool.title"
+      :status="toolStatusOf(call, result)"
+    >
+      <template
+        v-if="json(call.input ?? call.arguments)"
+        #input
+      >
+        <CodeBlock
+          :code="json(call.input ?? call.arguments)"
+          language="json"
+          :show-line-numbers="false"
+        />
+      </template>
+      <template
+        v-if="!result?.error && call.output === undefined && toolContentOf(result?.content)"
+        #output
+      >
+        <p
+          v-if="toolContentOf(result?.content)?.text"
+          class="whitespace-pre-line text-body-sm text-(--text-default)"
+        >
+          {{ toolContentOf(result?.content)?.text }}
+        </p>
+        <ImageGallery
+          v-if="toolContentOf(result?.content)?.images.length"
+          :items="toolContentOf(result?.content)?.images ?? []"
+        />
+      </template>
+      <template
+        v-else-if="json(result?.error || call.output || result?.content)"
+        #output
+      >
+        <CodeBlock
+          :code="json(result?.error || call.output || result?.content)"
+          language="json"
+          :show-line-numbers="false"
+        />
+      </template>
+    </ToolCall>
+  </template>
+</template>
+```
+
+## `parts/ai-chat-turn.vue`
+
+```ts
+<script setup lang="ts">
+  import AgentActivity from '@aziontech/webkit/agent-activity'
+  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import ChatMessage, {
+    type ChatMessageFeedbackValue,
+    type ChatMessageStatus
+  } from '@aziontech/webkit/chat-message'
+  import CopyButton from '@aziontech/webkit/copy-button'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import McpAppFrame, {
+    type McpAppFrameMessage,
+    type McpAppFrameResource
+  } from '@aziontech/webkit/mcp-app-frame'
+  import Reasoning from '@aziontech/webkit/reasoning'
+  import Sources from '@aziontech/webkit/sources'
+  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import {
+    activitiesBefore,
+    type AiChatMessage,
+    type AiChatQuestion,
+    type AiChatSegment,
+    type AiChatTool,
+    type AiChatToolCallPart,
+    type AiChatUiResourcePart,
+    segmentsOf,
+    textOf
+  } from '@aziontech/webkit/utils/ai-chat'
+
+  import AiChatMediaSegment from './ai-chat-media-segment.vue'
+  import AiChatToolSegment from './ai-chat-tool-segment.vue'
+
+  const props = defineProps<{
+    turn: AiChatMessage
+    messages: ReadonlyArray<AiChatMessage>
+    status: ChatMessageStatus
+    time: string
+    failure: string
+    tools: Record<string, AiChatTool>
+    busy: boolean
+    ready: boolean
+    stopped: boolean
+    rating: ChatMessageFeedbackValue | null
+    questions?: AiChatQuestion[]
+    askOf: (call: AiChatToolCallPart) => AiChatQuestion
+    editOf: (call: AiChatToolCallPart) => string
+    resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
+  }>()
+
+  const emit = defineEmits<{
+    retry: [event: MouseEvent]
+    rate: [value: ChatMessageFeedbackValue | null]
+    'answer-tool': [event: Event, call: AiChatToolCallPart, value: string]
+    edit: [call: AiChatToolCallPart, text: string]
+    approve: [event: MouseEvent, call: AiChatToolCallPart, text: string]
+    deny: [event: MouseEvent, call: AiChatToolCallPart]
+    answer: [event: Event, question: AiChatQuestion, value: string]
+    skip: [question: AiChatQuestion]
+    'app-message': [
+      message: McpAppFrameMessage,
+      part: AiChatUiResourcePart,
+      reply: (message: McpAppFrameMessage) => void
+    ]
+  }>()
+
+  const answers = defineModel<Record<string, string>>('answers', { required: true })
+
+  const MEDIA_TYPES = new Set(['gallery', 'audio', 'video', 'document', 'subagent', 'structured'])
+  const isMedia = (segment: AiChatSegment) => MEDIA_TYPES.has(segment.type)
+
+  function toolOf(call: AiChatToolCallPart): AiChatTool {
+    return props.tools[call.name] ?? { title: '' }
+  }
+
+  const appFrames = new Map<string, InstanceType<typeof McpAppFrame>>()
+
+  function setAppFrame(key: string, el: unknown) {
+    if (el) appFrames.set(key, el as InstanceType<typeof McpAppFrame>)
+    else appFrames.delete(key)
+  }
+
+  function forwardAppMessage(key: string, part: AiChatUiResourcePart, message: McpAppFrameMessage) {
+    emit('app-message', message, part, (reply) => appFrames.get(key)?.post(reply))
+  }
+</script>
+
+<template>
+  <ChatMessage
+    :from="turn.role === 'user' ? 'user' : 'assistant'"
+    :status="status"
+    :timestamp="time"
+    :error-message="status === 'error' ? failure : undefined"
+    @retry="emit('retry', $event)"
+  >
+    <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
+    <template
+      v-for="segment in segmentsOf(
+        turn,
+        turn.role === 'assistant' ? activitiesBefore(messages, turn) : []
+      )"
+      :key="segment.key"
+    >
+      <template v-if="turn.role === 'user' && segment.type === 'text'" />
+      <AgentActivity
+        v-else-if="segment.type === 'activity'"
+        :steps="segment.steps"
+      />
+      <Reasoning
+        v-else-if="segment.type === 'reasoning'"
+        :streaming="status === 'pending'"
+        :duration="status === 'pending' ? undefined : turn.metadata?.reasoningSeconds"
+      >
+        <p class="whitespace-pre-line">{{ segment.content }}</p>
+      </Reasoning>
+      <StreamingResponse
+        v-else-if="segment.type === 'text'"
+        :content="segment.content"
+        :streaming="status === 'streaming'"
+        :sources="turn.metadata?.sources ?? []"
+        :anchor="`answer-${turn.id}`"
+      />
+      <AiChatToolSegment
+        v-else-if="segment.type === 'tool'"
+        v-model:answer="answers[segment.call.id]"
+        :call="segment.call"
+        :result="segment.result"
+        :tool="toolOf(segment.call)"
+        :ask="askOf(segment.call)"
+        :edit="editOf(segment.call)"
+        :busy="busy"
+        @answer="(event, value) => emit('answer-tool', event, segment.call, value)"
+        @edit="(text) => emit('edit', segment.call, text)"
+        @approve="(event, text) => emit('approve', event, segment.call, text)"
+        @deny="(event) => emit('deny', event, segment.call)"
+      />
+      <AiChatMediaSegment
+        v-else-if="isMedia(segment)"
+        :segment="segment"
+      />
+      <McpAppFrame
+        v-else-if="segment.type === 'app'"
+        :ref="(el) => setAppFrame(segment.key, el)"
+        :resource="segment.part.resource"
+        :title="(tools[segment.part.toolName] ?? { title: '' }).title || segment.part.toolName"
+        :resolve-url="resolveAppUrl"
+        @message="(message) => forwardAppMessage(segment.key, segment.part, message)"
+      />
+    </template>
+    <template v-if="turn.role === 'assistant'">
+      <p
+        v-if="stopped"
+        class="text-body-sm text-(--text-muted)"
+      >
+        You stopped this response.
+      </p>
+      <Sources
+        v-if="status === 'success' && !stopped"
+        :items="turn.metadata?.sources ?? []"
+        :anchor="`answer-${turn.id}`"
+      />
+    </template>
+    <template
+      v-if="turn.role === 'assistant'"
+      #actions
+    >
+      <ChatMessage.Actions>
+        <CopyButton
+          size="small"
+          :value="textOf(turn)"
+        />
+        <IconButton
+          icon="az az-refresh"
+          aria-label="Regenerate response"
+          variant="ghost"
+          size="small"
+          :disabled="!ready"
+          @click="emit('retry', $event)"
+        />
+        <ChatMessage.Feedback
+          :model-value="rating"
+          @update:model-value="(value) => emit('rate', value)"
+        />
+      </ChatMessage.Actions>
+    </template>
+  </ChatMessage>
+  <ChatMessage
+    v-if="questions?.length"
+    from="assistant"
+  >
+    <AgentQuestion
+      v-for="question in questions"
+      :key="question.id"
+      v-model="answers[question.id]"
+      :title="question.title"
+      :type="question.options.length ? 'choice' : 'text'"
+      :options="question.options"
+      :status="question.status"
+      :error="question.error"
+      :skippable="question.bound"
+      @submit="(event, value) => emit('answer', event, question, value)"
+      @skip="emit('skip', question)"
+    />
+  </ChatMessage>
+</template>
+```
+
+## `parts/drawer-chat-composer.vue`
+
+```ts
+<script setup lang="ts">
+  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
+  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
+  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import { ref } from 'vue'
+
+  defineProps<{
+    state: PromptInputStatus
+    queueable: boolean
+    hydrating: boolean
+    accept: string
+    maxFiles: number
+    maxFileSize: number
+    attachable: boolean
+  }>()
+
+  const emit = defineEmits<{
+    submit: [event: MouseEvent | KeyboardEvent, value: string]
+    stop: [event: MouseEvent]
+  }>()
+
+  const prompt = defineModel<string>({ required: true })
+  const files = defineModel<PromptInputFile[]>('files', { required: true })
+
+  const inputEl = ref<InstanceType<typeof PromptInput> | null>(null)
+
+  defineExpose({ focus: () => inputEl.value?.focus() })
+</script>
+
+<template>
+  <PromptInput
+    ref="inputEl"
+    v-model="prompt"
+    v-model:files="files"
+    :status="state"
+    :queueable="queueable"
+    :disabled="hydrating"
+    :accept="accept"
+    :max-files="maxFiles"
+    :max-file-size="maxFileSize"
+    :max-rows="4"
+    placeholder="Ask about storefront"
+    @submit="(event, { value }) => emit('submit', event, value)"
+    @stop="emit('stop', $event)"
+  >
+    <template
+      v-if="attachable"
+      #actions
+    >
+      <PromptInputAttachButton />
+    </template>
+    <template #hint>The AI assistant can make mistakes. Check important information.</template>
+  </PromptInput>
+</template>
+```
+
+## `parts/drawer-chat-header.vue`
+
+```ts
+<script setup lang="ts">
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Tag from '@aziontech/webkit/tag'
+
+  defineProps<{ empty: boolean }>()
+
+  const emit = defineEmits<{ 'new-chat': [event: MouseEvent] }>()
+</script>
+
+<template>
+  <PanelHeader class="w-full">
+    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+      <DrawerTitle>AI assistant</DrawerTitle>
+      <Tag
+        label="Preview"
+        severity="info"
+        size="small"
+      />
+    </div>
+    <div class="flex items-center gap-(--spacing-2xs)">
+      <IconButton
+        icon="az az-plus"
+        aria-label="New chat"
+        variant="ghost"
+        size="small"
+        :disabled="empty"
+        @click="emit('new-chat', $event)"
+      />
+    </div>
+  </PanelHeader>
+</template>
+```
+
+## `parts/drawer-chat-start.vue`
+
+```ts
+<script setup lang="ts">
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+
+  defineProps<{ hydrating: boolean; starters: SuggestionGroupItem[] }>()
+
+  const emit = defineEmits<{
+    select: [event: MouseEvent | KeyboardEvent, item: SuggestionGroupItem]
+  }>()
+</script>
+
+<template>
+  <div
+    v-if="hydrating"
+    role="status"
+    aria-label="Loading the conversation"
+    class="flex flex-1 flex-col gap-(--spacing-lg) p-(--spacing-md)"
+  >
+    <div
+      v-for="row in 3"
+      :key="row"
+      class="flex gap-(--spacing-sm)"
+    >
+      <Skeleton
+        variant="circle"
+        width="2rem"
+        height="2rem"
+      />
+      <div class="flex flex-1 flex-col gap-(--spacing-xs)">
+        <Skeleton width="25%" />
+        <Skeleton :width="row === 2 ? '50%' : '85%'" />
+      </div>
+    </div>
+  </div>
+  <div
+    v-else
+    class="flex flex-1 flex-col justify-center gap-(--spacing-lg) p-(--spacing-md)"
+  >
+    <EmptyState
+      title="Ask about storefront"
+      description="The assistant reads this workload’s settings and metrics to answer. It cites the documentation it uses."
+      icon="az az-ask-azion"
+      size="small"
+    />
+    <SuggestionGroup
+      :items="starters"
+      orientation="vertical"
+      @select="(event, item) => emit('select', event, item)"
+    />
+  </div>
+</template>
+```
+
+## `parts/workload-overview.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+
+  defineProps<{ open: boolean }>()
+
+  const emit = defineEmits<{ open: [] }>()
+</script>
+
+<template>
+  <div class="layout-column layout-boundary flex min-w-0 flex-col">
+    <div class="layout-section-start flex flex-col gap-(--layout-section-gap)">
+      <PageHeader
+        title="storefront"
+        description="Workload · Production"
+      >
+        <template #actions>
+          <Button
+            label="Agent"
+            variant="outline"
+            size="medium"
+            icon="az az-ask-azion"
+            :aria-expanded="open ? 'true' : 'false'"
+            @click="emit('open')"
+          />
+        </template>
+      </PageHeader>
+      <Card>
+        <template #default>
+          <div class="p-(--spacing-md)">
+            <KeyValueList
+              :columns="3"
+              aria-label="Workload details"
+            >
+              <KeyValueList.Item label="Status">
+                <StatusIndicator
+                  severity="danger"
+                  label="Errors above 30%"
+                />
+              </KeyValueList.Item>
+              <KeyValueList.Item label="Domains"
+                >www.example.com, shop.example.com</KeyValueList.Item
+              >
+              <KeyValueList.Item label="Origin">api.example.com</KeyValueList.Item>
+              <KeyValueList.Item label="Cache hit ratio">91%</KeyValueList.Item>
+              <KeyValueList.Item label="Last deployment">Today, 13:58</KeyValueList.Item>
+              <KeyValueList.Item label="Region">US East (Washington)</KeyValueList.Item>
+            </KeyValueList>
+          </div>
+        </template>
+      </Card>
+    </div>
+  </div>
+</template>
+```

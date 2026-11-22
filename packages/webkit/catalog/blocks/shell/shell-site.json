@@ -2,7 +2,7 @@
  "variants": [],
  "sfcFile": "blocks/shell/shell-site/shell-site.vue",
  "guidelinesFile": "blocks/shell/shell-site/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/shell/shell-site/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

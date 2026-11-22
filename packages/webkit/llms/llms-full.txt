@@ -242,12 +242,12 @@ one that is.
 
 ## Token groups
 
-767 CSS custom properties from `@aziontech/theme`, grouped by their first segment. The MCP tool `list_tokens` returns the same list.
+768 CSS custom properties from `@aziontech/theme`, grouped by their first segment. The MCP tool `list_tokens` returns the same list.
 
 | Group | Count | Tokens |
 | --- | --- | --- |
 | accent | 4 | `--accent` · `--accent-foreground` · `--accent-mask` · `--accent-selected` |
-| animate | 29 | `--animate-blink` · `--animate-blink-settle` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-flow-dash-settle` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-ping-settle` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-pulse-settle` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-spin-settle` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
+| animate | 30 | `--animate-blink` · `--animate-blink-settle` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-flow-dash-settle` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-ping-settle` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-pulse-settle` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-spin-settle` · `--animate-status-pulse` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
 | aspect | 1 | `--aspect-video` |
 | bg | 13 | `--bg-active` · `--bg-backdrop` · `--bg-canvas` · `--bg-contrast` · `--bg-disabled` · `--bg-hover` · `--bg-mask` · `--bg-placeholder` · `--bg-placeholder-highlight` · `--bg-selected` · `--bg-surface` · `--bg-surface-overlay` · `--bg-surface-raised` |
 | blur | 7 | `--blur-2xl` · `--blur-3xl` · `--blur-lg` · `--blur-md` · `--blur-sm` · `--blur-xl` · `--blur-xs` |
@@ -612,6 +612,8 @@ and accent all move together.
 
 ```vue
 <script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+
   function toggleTheme() {
     const el = document.documentElement
     el.dataset.theme = el.dataset.theme === 'dark' ? 'light' : 'dark'
@@ -627,12 +629,12 @@ and accent all move together.
     <h3 class="text-(--text-default)">Workload health</h3>
     <p class="text-(--text-secondary)">Requests are within normal range.</p>
     <span class="text-(--primary)">View details</span>
-    <button
-      class="mt-(--spacing-sm) text-(--primary)"
+    <Button
+      label="Toggle theme"
+      variant="secondary"
+      class="mt-(--spacing-sm)"
       @click="toggleTheme"
-    >
-      Toggle theme
-    </button>
+    />
   </article>
 </template>
 ```
@@ -1175,6 +1177,7 @@ stay a review concern:
 | `animate-slide-out-start` | `slideOutStart 150ms cubic-bezier(0.55, 0.09, 0.68, 0.53)` | Start-anchored panel leaving (pair of slide-in-start; use as leave-active-class). |
 | `animate-spin` | `spin 1s linear infinite` | Indeterminate circular spinners (loading icons). |
 | `animate-spin-settle` | `spin 4200ms cubic-bezier(0.4, 0, 0.2, 1)` | One eased revolution, then still (4.2s): a decorative rotating glow that must stop by itself within 5 seconds (WCAG 2.2.2). Ends on its start frame. |
+| `animate-status-pulse` | `pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite` | A small status mark (a live dot, a streaming sparkle) pulsing for as long as the status it shows lasts: the signal is the motion, so it stops when the status ends. Never for loading placeholders (pulse, on Skeleton) or decoration (pulse-settle). |
 | `animate-texture-wave-a` | `textureWaveA 4800ms cubic-bezier(0.39, 0.57, 0.56, 1) forwards` | One of the two crossing bands of a pixelate texture, drifting left and easing to a stop (4.8s, WCAG 2.2.2), holding where it lands. Set --texture-wave-shift on the element to one period of its banding measured along X, and overhang the element by that much on the side it travels toward, or the field uncovers. |
 | `animate-texture-wave-b` | `textureWaveB 4800ms cubic-bezier(0.39, 0.57, 0.56, 1) forwards` | The counter-drifting band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction). |
 
@@ -1184,7 +1187,7 @@ stay a review concern:
 | --- | --- | --- |
 | transition | 8 | `--transition-duration-fast-01` · `--transition-duration-fast-02` · `--transition-duration-moderate-01` · `--transition-duration-moderate-02` · `--transition-duration-slow-01` · `--transition-duration-slow-02` · `--transition-duration-slow-03` · `--transition-duration-slow-04` |
 | ease | 7 | `--ease-expressive-entrance` · `--ease-expressive-exit` · `--ease-in` · `--ease-in-out` · `--ease-out` · `--ease-productive-entrance` · `--ease-productive-exit` |
-| animate | 29 | `--animate-blink` · `--animate-blink-settle` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-flow-dash-settle` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-ping-settle` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-pulse-settle` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-spin-settle` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
+| animate | 30 | `--animate-blink` · `--animate-blink-settle` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-flow-dash-settle` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-ping-settle` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-pulse-settle` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-spin-settle` · `--animate-status-pulse` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
 
 ---
 
@@ -1493,8 +1496,11 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
 
 ## Do
 
-- Use the **native element** whose semantics match before reaching for `role`
-  (`<button>`, `<a href>`, `<input>`); add `role` only when no native element fits.
+- Use the **native element** whose semantics match before reaching for `role`, through the
+  WebKit component that renders it: `Button` / `IconButton` for a `<button>`, `Link` for an
+  `<a href>` (`Link inline` inside a sentence), `Input` and its family for an `<input>`. A raw
+  one outside its owner is flagged by `webkit/no-unowned-element`. Add `role` only when no
+  native element fits.
 - Mirror ARIA state with the element's `data-*` state (`aria-expanded` with
   `data-state="open"`, `aria-disabled` with `data-disabled`, `aria-invalid` with
   `data-invalid`).
@@ -1550,10 +1556,10 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
   and marks) and APCA: Lc 75 body text, Lc 60 other text, Lc 45 icons, Lc 30 solid marks, Lc 15
   borders. Use the theme's token pairs (they pass); the few accepted exceptions are listed in
   `webkit-tokens.md` § "Contrast: APCA and WCAG 2".
-- Never strip the underline from a link inside a sentence (`text-link`, `no-underline`): the link blue is
-  only 1.1–1.3:1 against muted body text and 3:1 against default text, so color alone fails WCAG 1.4.1.
-  `text-link` keeps a quiet underline at rest and strengthens it on hover. A standalone `Link` (not in a
-  sentence) underlines on hover only.
+- Never strip the underline from a link inside a sentence (`no-underline` on a `Link inline`): the link
+  blue is only 1.1–1.3:1 against muted body text and 3:1 against default text, so color alone fails
+  WCAG 1.4.1. `Link inline` renders the `text-link` style, which keeps a quiet underline at rest and
+  strengthens it on hover. A standalone `Link` (not in a sentence) underlines on hover only.
 
 ## Example
 
@@ -1561,24 +1567,28 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
 
 ```vue
 <script setup>
-import { useId } from 'vue'
+import Button from '@aziontech/webkit/button'
+import Input from '@aziontech/webkit/input'
+import { ref, useId } from 'vue'
+const open = ref(false)
 const hintId = useId() // stable id for the ARIA association
 </script>
 
 <template>
-  <!-- native semantics, tokenized focus ring, reduced-motion fallback -->
-  <button
-    class="inline-flex items-center gap-(--spacing-xs)
-           transition-colors duration-150 motion-reduce:transition-none
-           focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+  <!-- a native button with the token focus ring and the reduced-motion fallback built in;
+       the ARIA state mirrors what the toggle shows -->
+  <Button
+    label="Show details"
+    variant="secondary"
     :aria-expanded="open"
-    :data-state="open ? 'open' : 'closed'"
-    @click="toggle"
-  >
-    Save changes
-  </button>
+    @click="open = !open"
+  />
 
-  <input type="email" :aria-describedby="hintId" />
+  <Input
+    type="email"
+    aria-label="Email"
+    :aria-describedby="hintId"
+  />
   <p :id="hintId">We never share your email.</p>
 </template>
 ```
@@ -2110,13 +2120,13 @@ Descriptions: foundations/brand-marks.md.
 
 yout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry (the font); the colour logos come with the WebKit stylesheet, compiled only for the classes written whole in your sources. An `icon` prop takes the class string.
 
-552 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+554 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
 Used by: Alert, ArtifactPreview, Avatar, Button, Combobox, DocCard, DocItem, DocPrompt, EmptyState, FeatureItem, FileDropzone, HighlightButton, IconButton, Link, SettingsGroup, SplitButton, Tag.
 
 ## Names
 
-`az az-ai-gateway` · `az az-ai-inference` · `az az-application-accelerator` · `az az-applications` · `az az-bot-manager` · `az az-certificate-manager` · `az az-connectors` · `az az-custom-pages` · `az az-data-stream` · `az az-durable-objects` · `az az-edge-dns` · `az az-orchestrator` · `az az-edge-pulse` · `az az-firewall` · `az az-functions` · `az az-image-processor` · `az az-kv-store` · `az az-live-ingest` · `az az-load-balancer` · `az az-marketplace` · `az az-network-lists` · `az az-object-storage` · `az az-real-time-events` · `az az-real-time-metrics` · `az az-real-time-purge` · `az az-sql-database` · `az az-variables` · `az az-waf` · `az az-workloads` · `az az-domains` · `az az-edge-libraries` · `az az-edge-nodes` · `az az-edge-services` · `az az-rules-engine` · `az az-ask-azion` · `az az-azion` · `az az-azion-api` · `az az-azion-cli` · `az az-build-pillar` · `az az-deploy-pillar` · `az az-observe-pillar` · `az az-secure-pillar` · `az az-store-pillar` · `az az-application-development` · `az az-performance-and-reliability` · `az az-artificial-intelligence` · `az az-application-security` · `az az-media-and-streaming` · `az az-retail` · `az az-technology` · `az az-financial-services` · `az az-business-support` · `az az-configuration-service` · `az az-integration-services` · `az az-practices-review` · `az az-professional-services` · `az az-security-team` · `az az-technical-account` · `az az-technical-support` · `az az-arrow-down` · `az az-arrow-down-0-1` · `az az-arrow-down-1-0` · `az az-arrow-down-a-z` · `az az-arrow-down-left` · `az az-arrow-down-narrow-wide` · `az az-arrow-down-right` · `az az-arrow-down-wide-narrow` · `az az-arrow-down-z-a` · `az az-arrow-left` · `az az-arrow-right` · `az az-arrow-right-left` · `az az-arrow-up` · `az az-arrow-up-0-1` · `az az-arrow-up-1-0` · `az az-arrow-up-a-z` · `az az-arrow-up-left` · `az az-arrow-up-narrow-wide` · `az az-arrow-up-right` · `az az-arrow-up-wide-narrow` · `az az-arrow-up-z-a` · `az az-caret-down` · `az az-caret-left` · `az az-caret-right` · `az az-caret-up` · `az az-chevron-down` · `az az-chevron-left` · `az az-chevron-right` · `az az-chevron-up` · `az az-chevrons-down` · `az az-chevrons-left` · `az az-chevrons-right` · `az az-chevrons-up` · `az az-circle-arrow-down` · `az az-circle-arrow-left` · `az az-circle-arrow-right` · `az az-circle-arrow-up` · `az az-circle-chevron-down` · `az az-circle-chevron-left` · `az az-circle-chevron-right` · `az az-circle-chevron-up` · `az az-move` · `az az-move-horizontal` · `az az-move-vertical` · `az az-sort` · `az az-sort-down-fill` · `az az-sort-off` · `az az-sort-up-fill` · `az az-arrow-up-from-line` · `az az-circle-plus` · `az az-cloud-download` · `az az-cloud-upload` · `az az-copy` · `az az-delete-left` · `az az-download` · `az az-eraser` · `az az-external-link` · `az az-eye` · `az az-eye-off` · `az az-filter` · `az az-filter-fill` · `az az-filter-off` · `az az-history` · `az az-link` · `az az-log-in` · `az az-log-out` · `az az-minus` · `az az-pencil` · `az az-plus` · `az az-power-off` · `az az-refresh` · `az az-replay` · `az az-save` · `az az-scissors` · `az az-search` · `az az-settings` · `az az-share` · `az az-square-pen` · `az az-sync` · `az az-trash` · `az az-undo` · `az az-upload` · `az az-x` · `az az-zoom-in` · `az az-zoom-out` · `az az-attack` · `az az-ban` · `az az-check` · `az az-circle` · `az az-circle-alert` · `az az-circle-check` · `az az-circle-fill` · `az az-circle-half` · `az az-circle-help` · `az az-circle-info` · `az az-circle-minus` · `az az-circle-off` · `az az-circle-on` · `az az-circle-x` · `az az-disabled` · `az az-enabled` · `az az-hourglass` · `az az-info` · `az az-question` · `az az-spinner` · `az az-spinner-dotted` · `az az-square-check` · `az az-triangle-alert` · `az az-verified` · `az az-clipboard` · `az az-file` · `az az-file-arrow-up` · `az az-file-check` · `az az-file-excel` · `az az-file-export` · `az az-file-import` · `az az-file-pdf` · `az az-file-pen` · `az az-file-plus` · `az az-file-word` · `az az-folder` · `az az-folder-open` · `az az-folder-plus` · `az az-json` · `az az-json-text` · `az az-paperclip` · `az az-backward` · `az az-camera` · `az az-circle-pause` · `az az-circle-play` · `az az-circle-stop` · `az az-forward` · `az az-image` · `az az-images` · `az az-microphone` · `az az-pause` · `az az-play` · `az az-skip-back` · `az az-skip-forward` · `az az-step-back` · `az az-step-forward` · `az az-stop` · `az az-video` · `az az-volume-down` · `az az-volume-off` · `az az-volume-up` · `az az-at` · `az az-bell` · `az az-bell-off` · `az az-comment` · `az az-comments` · `az az-inbox` · `az az-mail` · `az az-megaphone` · `az az-phone` · `az az-reply` · `az az-rss` · `az az-send` · `az az-webhook` · `az az-barcode` · `az az-cart-arrow-down` · `az az-cart-minus` · `az az-cart-plus` · `az az-credit-card` · `az az-dollar` · `az az-euro` · `az az-gift` · `az az-indian-rupee` · `az az-money-bill` · `az az-pound` · `az az-receipt` · `az az-shop` · `az az-shopping-bag` · `az az-shopping-cart` · `az az-ticket` · `az az-turkish-lira` · `az az-wallet` · `az az-address-book` · `az az-face-smile` · `az az-id-card` · `az az-mars` · `az az-user` · `az az-user-minus` · `az az-user-pen` · `az az-user-plus` · `az az-users` · `az az-venus` · `az az-desktop` · `az az-headphones` · `az az-microchip` · `az az-microchip-ai` · `az az-mobile` · `az az-print` · `az az-server` · `az az-tablet` · `az az-wifi` · `az az-calculator` · `az az-chart-bar` · `az az-chart-line` · `az az-chart-pie` · `az az-chart-scatter` · `az az-database` · `az az-gauge` · `az az-list` · `az az-list-check` · `az az-sheet` · `az az-sql` · `az az-table` · `az az-wave-pulse` · `az az-align-center` · `az az-align-justify` · `az az-align-left` · `az az-align-right` · `az az-columns-3` · `az az-ellipsis` · `az az-ellipsis-vertical` · `az az-expand` · `az az-layers` · `az az-layout-grid` · `az az-maximize` · `az az-menu` · `az az-minimize` · `az az-sitemap` · `az az-sliders-horizontal` · `az az-sliders-vertical` · `az az-app-window` · `az az-window-minimize` · `az az-asterisk` · `az az-bolt` · `az az-book` · `az az-bookmark` · `az az-bookmark-fill` · `az az-box` · `az az-briefcase` · `az az-building` · `az az-building-columns` · `az az-bullseye` · `az az-calendar` · `az az-calendar-clock` · `az az-calendar-minus` · `az az-calendar-plus` · `az az-calendar-x` · `az az-car` · `az az-clock` · `az az-cloud` · `az az-code` · `az az-compass` · `az az-crown` · `az az-directions` · `az az-equals` · `az az-flag` · `az az-flag-fill` · `az az-globe` · `az az-graduation-cap` · `az az-hammer` · `az az-hash` · `az az-heart` · `az az-heart-fill` · `az az-home` · `az az-key` · `az az-language` · `az az-lightbulb` · `az az-lock` · `az az-lock-open` · `az az-map` · `az az-map-pin` · `az az-moon` · `az az-palette` · `az az-percentage` · `az az-pin` · `az az-qrcode` · `az az-route` · `az az-shield` · `az az-signpost` · `az az-sparkles` · `az az-star` · `az az-star-fill` · `az az-star-half` · `az az-star-half-fill` · `az az-stopwatch` · `az az-sun` · `az az-tag` · `az az-tags` · `az az-thumbs-down` · `az az-thumbs-down-fill` · `az az-thumbs-up` · `az az-thumbs-up-fill` · `az az-trophy` · `az az-truck` · `az az-warehouse` · `az az-wrench` · `az az-git-branch` · `az az-git-branch-delete` · `az az-git-branch-plus` · `az az-git-cherry-pick` · `az az-git-commit` · `az az-git-compare` · `az az-git-diff` · `az az-git-fork` · `az az-git-graph` · `az az-git-merge` · `az az-git-merge-conflict` · `az az-git-pull-request` · `az az-git-pull-request-closed` · `az az-git-pull-request-draft` · `az az-git-repository` · `az az-angular` · `az az-astro` · `az az-docusaurus` · `az az-eleventy` · `az az-gatsby` · `az az-hexo` · `az az-hono` · `az az-hugo` · `az az-jekyll` · `az az-nextjs` · `az az-nitro` · `az az-nuxt` · `az az-preact` · `az az-qwik` · `az az-react` · `az az-remix` · `az az-stencil` · `az az-svelte` · `az az-vitepress` · `az az-vue` · `az az-vuepress` · `az az-claude` · `az az-deepseek` · `az az-gemini` · `az az-grok` · `az az-meta` · `az az-microsoft-copilot` · `az az-mistral` · `az az-openai` · `az az-perplexity` · `az az-qwen` · `az az-cursor` · `az az-github` · `az az-mcp` · `az az-redis` · `az az-terraform` · `az az-turso` · `az az-vite` · `az az-windsurf` · `az az-graphql` · `az az-html` · `az az-discord` · `az az-facebook` · `az az-google` · `az az-instagram` · `az az-linkedin` · `az az-medium` · `az az-reddit` · `az az-slack` · `az az-twitch` · `az az-whatsapp` · `az az-x-brand` · `az az-youtube` · `az-color az-angular` · `az-color az-astro` · `az-color az-flutter` · `az-color az-nextjs` · `az-color az-nuxt` · `az-color az-react` · `az-color az-redwood` · `az-color az-solidjs` · `az-color az-svelte` · `az-color az-vue` · `az-color az-claude` · `az-color az-deepseek` · `az-color az-gemini` · `az-color az-grok` · `az-color az-meta` · `az-color az-microsoft-copilot` · `az-color az-mistral` · `az-color az-openai` · `az-color az-perplexity` · `az-color az-qwen` · `az-color az-azure-devops` · `az-color az-bitbucket` · `az-color az-cursor` · `az-color az-gitlab` · `az-color az-terraform` · `az-color az-windsurf` · `az-color az-graphql` · `az-color az-html` · `az-color az-javascript` · `az-color az-kotlin` · `az-color az-typescript` · `az-color az-discord` · `az-color az-google` · `az-color az-x-brand` · `az-color az-youtube` · `az az-cache` · `az az-tiered-cache` · `az az-network-shield` · `az az-ddos-protection` · `az az-secure-internet-access` · `az az-lora-fine-tune` · `az az-origin-shield` · `az az-langgraph` · `az az-neon` · `az az-nodejs` · `az az-python` · `az az-upstash` · `az az-wordpress` · `az az-terminal` · `az-color az-docusaurus` · `az-color az-eleventy` · `az-color az-gatsby` · `az-color az-hexo` · `az-color az-hono` · `az-color az-hugo` · `az-color az-jekyll` · `az-color az-langgraph` · `az-color az-neon` · `az-color az-nodejs` · `az-color az-preact` · `az-color az-python` · `az-color az-qwik` · `az-color az-remix` · `az-color az-turso` · `az-color az-upstash` · `az-color az-vite` · `az-color az-vitepress` · `az-color az-vuepress` · `az-color az-wordpress` · `az-color az-stencil` · `az-color az-htmx` · `az-color az-rust` · `az-color az-webassembly` · `az-color az-kimi` · `az-color az-zhipu` · `az-color az-minimax` · `az-color az-ernie` · `az-color az-hunyuan` · `az-color az-doubao` · `az-color az-yi` · `az-color az-stepfun` · `az-color az-baichuan` · `az-color az-iflytek-spark` · `az-color az-sensenova` · `az-color az-internlm` · `az-color az-baai` · `az-color az-nanonets` · `az-color az-hugging-face` · `az-color az-suno` · `az-color az-fish-audio` · `az-color az-stability-ai` · `az-color az-nvidia` · `az-color az-coqui` · `az-color az-mcp` · `az-color az-github-copilot` · `az-color az-codex` · `az-color az-opencode` · `az-color az-warp` · `az-color az-kiro` · `az-color az-datadog` · `az-color az-splunk` · `az-color az-elasticsearch` · `az-color az-grafana` · `az-color az-apache-kafka` · `az-color az-amazon-kinesis` · `az-color az-amazon-s3` · `az-color az-microsoft-azure` · `az-color az-google-bigquery` · `az-color az-ibm` · `az-color az-supabase` · `az-color az-postgresql` · `az-color az-mysql` · `az-color az-mongodb` · `az-color az-tidb` · `az-color az-drizzle` · `az-color az-sanity` · `az-color az-cosmic` · `az-color az-okta` · `az-color az-microsoft-entra` · `az-color az-auth0` · `az-color az-keycloak` · `az-color az-authentik` · `az-color az-authelia` · `az-color az-ory` · `az-color az-zitadel` · `az-color az-hcaptcha` · `az-color az-recaptcha` · `az-color az-fingerprint-brand` · `az-color az-github` · `az-color az-github-actions` · `az-color az-visual-studio-code` · `az-color az-stripe` · `az-color az-resend` · `az-color az-browserless`
+`az az-ai-gateway` · `az az-ai-inference` · `az az-application-accelerator` · `az az-applications` · `az az-bot-manager` · `az az-certificate-manager` · `az az-connectors` · `az az-custom-pages` · `az az-data-stream` · `az az-durable-objects` · `az az-edge-dns` · `az az-orchestrator` · `az az-edge-pulse` · `az az-firewall` · `az az-functions` · `az az-image-processor` · `az az-kv-store` · `az az-live-ingest` · `az az-load-balancer` · `az az-marketplace` · `az az-network-lists` · `az az-object-storage` · `az az-real-time-events` · `az az-real-time-metrics` · `az az-real-time-purge` · `az az-sql-database` · `az az-variables` · `az az-waf` · `az az-workloads` · `az az-domains` · `az az-edge-libraries` · `az az-edge-nodes` · `az az-edge-services` · `az az-rules-engine` · `az az-ask-azion` · `az az-azion` · `az az-azion-api` · `az az-azion-cli` · `az az-build-pillar` · `az az-deploy-pillar` · `az az-observe-pillar` · `az az-secure-pillar` · `az az-store-pillar` · `az az-application-development` · `az az-performance-and-reliability` · `az az-artificial-intelligence` · `az az-application-security` · `az az-media-and-streaming` · `az az-retail` · `az az-technology` · `az az-financial-services` · `az az-business-support` · `az az-configuration-service` · `az az-integration-services` · `az az-practices-review` · `az az-professional-services` · `az az-security-team` · `az az-technical-account` · `az az-technical-support` · `az az-arrow-down` · `az az-arrow-down-0-1` · `az az-arrow-down-1-0` · `az az-arrow-down-a-z` · `az az-arrow-down-left` · `az az-arrow-down-narrow-wide` · `az az-arrow-down-right` · `az az-arrow-down-wide-narrow` · `az az-arrow-down-z-a` · `az az-arrow-left` · `az az-arrow-right` · `az az-arrow-left-to-line` · `az az-arrow-right-to-line` · `az az-arrow-right-left` · `az az-arrow-up` · `az az-arrow-up-0-1` · `az az-arrow-up-1-0` · `az az-arrow-up-a-z` · `az az-arrow-up-left` · `az az-arrow-up-narrow-wide` · `az az-arrow-up-right` · `az az-arrow-up-wide-narrow` · `az az-arrow-up-z-a` · `az az-caret-down` · `az az-caret-left` · `az az-caret-right` · `az az-caret-up` · `az az-chevron-down` · `az az-chevron-left` · `az az-chevron-right` · `az az-chevron-up` · `az az-chevrons-down` · `az az-chevrons-left` · `az az-chevrons-right` · `az az-chevrons-up` · `az az-circle-arrow-down` · `az az-circle-arrow-left` · `az az-circle-arrow-right` · `az az-circle-arrow-up` · `az az-circle-chevron-down` · `az az-circle-chevron-left` · `az az-circle-chevron-right` · `az az-circle-chevron-up` · `az az-move` · `az az-move-horizontal` · `az az-move-vertical` · `az az-sort` · `az az-sort-down-fill` · `az az-sort-off` · `az az-sort-up-fill` · `az az-arrow-up-from-line` · `az az-circle-plus` · `az az-cloud-download` · `az az-cloud-upload` · `az az-copy` · `az az-delete-left` · `az az-download` · `az az-eraser` · `az az-external-link` · `az az-eye` · `az az-eye-off` · `az az-filter` · `az az-filter-fill` · `az az-filter-off` · `az az-history` · `az az-link` · `az az-log-in` · `az az-log-out` · `az az-minus` · `az az-pencil` · `az az-plus` · `az az-power-off` · `az az-refresh` · `az az-replay` · `az az-save` · `az az-scissors` · `az az-search` · `az az-settings` · `az az-share` · `az az-square-pen` · `az az-sync` · `az az-trash` · `az az-undo` · `az az-upload` · `az az-x` · `az az-zoom-in` · `az az-zoom-out` · `az az-attack` · `az az-ban` · `az az-check` · `az az-circle` · `az az-circle-alert` · `az az-circle-check` · `az az-circle-fill` · `az az-circle-half` · `az az-circle-help` · `az az-circle-info` · `az az-circle-minus` · `az az-circle-off` · `az az-circle-on` · `az az-circle-x` · `az az-disabled` · `az az-enabled` · `az az-hourglass` · `az az-info` · `az az-question` · `az az-spinner` · `az az-spinner-dotted` · `az az-square-check` · `az az-triangle-alert` · `az az-verified` · `az az-clipboard` · `az az-file` · `az az-file-arrow-up` · `az az-file-check` · `az az-file-excel` · `az az-file-export` · `az az-file-import` · `az az-file-pdf` · `az az-file-pen` · `az az-file-plus` · `az az-file-word` · `az az-folder` · `az az-folder-open` · `az az-folder-plus` · `az az-json` · `az az-json-text` · `az az-paperclip` · `az az-backward` · `az az-camera` · `az az-circle-pause` · `az az-circle-play` · `az az-circle-stop` · `az az-forward` · `az az-image` · `az az-images` · `az az-microphone` · `az az-pause` · `az az-play` · `az az-skip-back` · `az az-skip-forward` · `az az-step-back` · `az az-step-forward` · `az az-stop` · `az az-video` · `az az-volume-down` · `az az-volume-off` · `az az-volume-up` · `az az-at` · `az az-bell` · `az az-bell-off` · `az az-comment` · `az az-comments` · `az az-inbox` · `az az-mail` · `az az-megaphone` · `az az-phone` · `az az-reply` · `az az-rss` · `az az-send` · `az az-webhook` · `az az-barcode` · `az az-cart-arrow-down` · `az az-cart-minus` · `az az-cart-plus` · `az az-credit-card` · `az az-dollar` · `az az-euro` · `az az-gift` · `az az-indian-rupee` · `az az-money-bill` · `az az-pound` · `az az-receipt` · `az az-shop` · `az az-shopping-bag` · `az az-shopping-cart` · `az az-ticket` · `az az-turkish-lira` · `az az-wallet` · `az az-address-book` · `az az-face-smile` · `az az-id-card` · `az az-mars` · `az az-user` · `az az-user-minus` · `az az-user-pen` · `az az-user-plus` · `az az-users` · `az az-venus` · `az az-desktop` · `az az-headphones` · `az az-microchip` · `az az-microchip-ai` · `az az-mobile` · `az az-print` · `az az-server` · `az az-tablet` · `az az-wifi` · `az az-calculator` · `az az-chart-bar` · `az az-chart-line` · `az az-chart-pie` · `az az-chart-scatter` · `az az-database` · `az az-gauge` · `az az-list` · `az az-list-check` · `az az-sheet` · `az az-sql` · `az az-table` · `az az-wave-pulse` · `az az-align-center` · `az az-align-justify` · `az az-align-left` · `az az-align-right` · `az az-columns-3` · `az az-ellipsis` · `az az-ellipsis-vertical` · `az az-expand` · `az az-layers` · `az az-layout-grid` · `az az-maximize` · `az az-menu` · `az az-minimize` · `az az-sitemap` · `az az-sliders-horizontal` · `az az-sliders-vertical` · `az az-app-window` · `az az-window-minimize` · `az az-asterisk` · `az az-bolt` · `az az-book` · `az az-bookmark` · `az az-bookmark-fill` · `az az-box` · `az az-briefcase` · `az az-building` · `az az-building-columns` · `az az-bullseye` · `az az-calendar` · `az az-calendar-clock` · `az az-calendar-minus` · `az az-calendar-plus` · `az az-calendar-x` · `az az-car` · `az az-clock` · `az az-cloud` · `az az-code` · `az az-compass` · `az az-crown` · `az az-directions` · `az az-equals` · `az az-flag` · `az az-flag-fill` · `az az-globe` · `az az-graduation-cap` · `az az-hammer` · `az az-hash` · `az az-heart` · `az az-heart-fill` · `az az-home` · `az az-key` · `az az-language` · `az az-lightbulb` · `az az-lock` · `az az-lock-open` · `az az-map` · `az az-map-pin` · `az az-moon` · `az az-palette` · `az az-percentage` · `az az-pin` · `az az-qrcode` · `az az-route` · `az az-shield` · `az az-signpost` · `az az-sparkles` · `az az-star` · `az az-star-fill` · `az az-star-half` · `az az-star-half-fill` · `az az-stopwatch` · `az az-sun` · `az az-tag` · `az az-tags` · `az az-thumbs-down` · `az az-thumbs-down-fill` · `az az-thumbs-up` · `az az-thumbs-up-fill` · `az az-trophy` · `az az-truck` · `az az-warehouse` · `az az-wrench` · `az az-git-branch` · `az az-git-branch-delete` · `az az-git-branch-plus` · `az az-git-cherry-pick` · `az az-git-commit` · `az az-git-compare` · `az az-git-diff` · `az az-git-fork` · `az az-git-graph` · `az az-git-merge` · `az az-git-merge-conflict` · `az az-git-pull-request` · `az az-git-pull-request-closed` · `az az-git-pull-request-draft` · `az az-git-repository` · `az az-angular` · `az az-astro` · `az az-docusaurus` · `az az-eleventy` · `az az-gatsby` · `az az-hexo` · `az az-hono` · `az az-hugo` · `az az-jekyll` · `az az-nextjs` · `az az-nitro` · `az az-nuxt` · `az az-preact` · `az az-qwik` · `az az-react` · `az az-remix` · `az az-stencil` · `az az-svelte` · `az az-vitepress` · `az az-vue` · `az az-vuepress` · `az az-claude` · `az az-deepseek` · `az az-gemini` · `az az-grok` · `az az-meta` · `az az-microsoft-copilot` · `az az-mistral` · `az az-openai` · `az az-perplexity` · `az az-qwen` · `az az-cursor` · `az az-github` · `az az-mcp` · `az az-redis` · `az az-terraform` · `az az-turso` · `az az-vite` · `az az-windsurf` · `az az-graphql` · `az az-html` · `az az-discord` · `az az-facebook` · `az az-google` · `az az-instagram` · `az az-linkedin` · `az az-medium` · `az az-reddit` · `az az-slack` · `az az-twitch` · `az az-whatsapp` · `az az-x-brand` · `az az-youtube` · `az-color az-angular` · `az-color az-astro` · `az-color az-flutter` · `az-color az-nextjs` · `az-color az-nuxt` · `az-color az-react` · `az-color az-redwood` · `az-color az-solidjs` · `az-color az-svelte` · `az-color az-vue` · `az-color az-claude` · `az-color az-deepseek` · `az-color az-gemini` · `az-color az-grok` · `az-color az-meta` · `az-color az-microsoft-copilot` · `az-color az-mistral` · `az-color az-openai` · `az-color az-perplexity` · `az-color az-qwen` · `az-color az-azure-devops` · `az-color az-bitbucket` · `az-color az-cursor` · `az-color az-gitlab` · `az-color az-terraform` · `az-color az-windsurf` · `az-color az-graphql` · `az-color az-html` · `az-color az-javascript` · `az-color az-kotlin` · `az-color az-typescript` · `az-color az-discord` · `az-color az-google` · `az-color az-x-brand` · `az-color az-youtube` · `az az-cache` · `az az-tiered-cache` · `az az-network-shield` · `az az-ddos-protection` · `az az-secure-internet-access` · `az az-lora-fine-tune` · `az az-origin-shield` · `az az-langgraph` · `az az-neon` · `az az-nodejs` · `az az-python` · `az az-upstash` · `az az-wordpress` · `az az-terminal` · `az-color az-docusaurus` · `az-color az-eleventy` · `az-color az-gatsby` · `az-color az-hexo` · `az-color az-hono` · `az-color az-hugo` · `az-color az-jekyll` · `az-color az-langgraph` · `az-color az-neon` · `az-color az-nodejs` · `az-color az-preact` · `az-color az-python` · `az-color az-qwik` · `az-color az-remix` · `az-color az-turso` · `az-color az-upstash` · `az-color az-vite` · `az-color az-vitepress` · `az-color az-vuepress` · `az-color az-wordpress` · `az-color az-stencil` · `az-color az-htmx` · `az-color az-rust` · `az-color az-webassembly` · `az-color az-kimi` · `az-color az-zhipu` · `az-color az-minimax` · `az-color az-ernie` · `az-color az-hunyuan` · `az-color az-doubao` · `az-color az-yi` · `az-color az-stepfun` · `az-color az-baichuan` · `az-color az-iflytek-spark` · `az-color az-sensenova` · `az-color az-internlm` · `az-color az-baai` · `az-color az-nanonets` · `az-color az-hugging-face` · `az-color az-suno` · `az-color az-fish-audio` · `az-color az-stability-ai` · `az-color az-nvidia` · `az-color az-coqui` · `az-color az-mcp` · `az-color az-github-copilot` · `az-color az-codex` · `az-color az-opencode` · `az-color az-warp` · `az-color az-kiro` · `az-color az-datadog` · `az-color az-splunk` · `az-color az-elasticsearch` · `az-color az-grafana` · `az-color az-apache-kafka` · `az-color az-amazon-kinesis` · `az-color az-amazon-s3` · `az-color az-microsoft-azure` · `az-color az-google-bigquery` · `az-color az-ibm` · `az-color az-supabase` · `az-color az-postgresql` · `az-color az-mysql` · `az-color az-mongodb` · `az-color az-tidb` · `az-color az-drizzle` · `az-color az-sanity` · `az-color az-cosmic` · `az-color az-okta` · `az-color az-microsoft-entra` · `az-color az-auth0` · `az-color az-keycloak` · `az-color az-authentik` · `az-color az-authelia` · `az-color az-ory` · `az-color az-zitadel` · `az-color az-hcaptcha` · `az-color az-recaptcha` · `az-color az-fingerprint-brand` · `az-color az-github` · `az-color az-github-actions` · `az-color az-visual-studio-code` · `az-color az-stripe` · `az-color az-resend` · `az-color az-browserless`
 
 Descriptions, groups and keywords: foundations/icons.md.
 
@@ -3555,7 +3565,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-api-key.md](b
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, McpAppFrame, `PromptInputAttachButton`, PromptInput, PromptQueue, Reasoning, Resizable, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`, VideoPlayer
+- Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, McpAppFrame, `PromptInputAttachButton`, PromptInput, PromptQueue, Reasoning, Resizable, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3697,7 +3707,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: AgentActivity, AgentQuestion, Alert, AudioPlayer, Button, Card, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, KeyValueList, McpAppFrame, PageHeader, `PanelHeader`, `PromptInputAttachButton`, PromptInput, PromptQueue, Reasoning, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`, VideoPlayer
+- Components: AgentActivity, AgentQuestion, Alert, AudioPlayer, Button, Card, ChatMessage, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, KeyValueList, McpAppFrame, PageHeader, `PanelHeader`, `PromptInputAttachButton`, PromptInput, PromptQueue, Reasoning, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -4383,7 +4393,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-deploy-template/create-deploy-template.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-template")`
-- Components: Accordion, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Kbd, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-escape-to-cancel`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`
+- Components: Accordion, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Kbd, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-escape-to-cancel`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4652,7 +4662,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-drawe
 - Surface: app
 - Source: `blocks/create/create-hub/create-hub.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-hub")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, EmptyState, IconButton, Input, IntegrationCard, Item, Link, PageHeader, ScrollArea, Select, Skeleton, `use-file-picker`
+- Components: Alert, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, EmptyState, IconButton, Input, IntegrationCard, Item, Link, PageHeader, ScrollArea, Select, Skeleton, `use-file-picker`
 - Skills: `webkit-create-surface`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -4767,7 +4777,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-hub.m
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast, `use-escape-to-cancel`, `use-file-picker`, `use-shortcuts`, `use-unsaved-changes`
+- Components: Alert, AppHeader, `AppHeaderAccount`, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast, `use-escape-to-cancel`, `use-file-picker`, `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -5126,7 +5136,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, Wizard
+- Components: Alert, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, ConfirmDialog, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, Wizard
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -6030,7 +6040,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Surface: app
 - Source: `blocks/dashboard/dashboard-home/dashboard-home.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-home")`
-- Components: Alert, `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, DataTable, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Hint, IconButton, Illustration, Input, Item, Link, Popover, SearchTrigger, Skeleton, Spinner, StatTile, StatTileGroup, `TableCellActions`, `TableCellLink`, `TableCellTime`, Tag, ThirdPartyLogo, Toast, Tooltip, `use-console-layout`
+- Components: Alert, `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, DataTable, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Hint, IconButton, Illustration, Input, Item, Item, Link, Popover, SearchTrigger, Skeleton, Spinner, StatTile, StatTileGroup, `TableCellActions`, `TableCellLink`, `TableCellTime`, Tag, ThirdPartyLogo, Toast, Tooltip, `use-console-layout`
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -7361,7 +7371,7 @@ What each part takes: [blocks/detail/detail-resource.md](blocks/detail/detail-re
 
 ## Data
 
-The primary (ResourceOverview) takes the resource through a prop, owns the open tab as a model and emits its actions; it fetches nothing. `ResourceDetailResource`, `ResourceDetailTab` and `ResourceDetailProps` are exported from `detail-resource.vue`, and `sample.ts` holds the sample resource the block renders when `resource` is left out. The other variants are whole screens of their own (a service, a policy, an application with working tabs) and keep their own records.
+The primary (ResourceOverview) takes the resource through a prop, owns the open tab as a model and emits its actions; it fetches nothing. `ResourceDetailResource`, `ResourceDetailTab` and `ResourceDetailProps` are exported from `detail-resource.vue`, and `sample.ts` holds the sample resource the block renders when `resource` is left out. The other variants are whole screens of their own (a service, a policy, an application with working tabs); their records are in `sample.ts` too.
 
 Prop / model: `resource`, `v-model:tab`.
 
@@ -7465,7 +7475,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 - Surface: app
 - Source: `blocks/detail/detail-version/detail-version.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-version")`
-- Components: Avatar, Breadcrumb, Button, Card, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldError`, IconButton, Input, Item, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Resizable, SchemaForm, ScrollArea, Select, SettingsGroup, SettingsRow, Skeleton, Spinner, SplitButton, Switch, `TableCellLink`, `TableCellTime`, Tabs, Tag, Textarea, Toast, Tooltip
+- Components: Avatar, Breadcrumb, Button, Card, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldError`, IconButton, Input, Item, Item, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Resizable, SchemaForm, ScrollArea, Select, SettingsGroup, SettingsRow, Skeleton, Spinner, SplitButton, Switch, `TableCellLink`, `TableCellTime`, Tabs, Tag, Textarea, Toast, Tooltip
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -7762,7 +7772,7 @@ What each part takes: [blocks/edit/edit-function.md](blocks/edit/edit-function.m
 
 ## Data
 
-The block takes the saved service and the request state through props and emits the save; it fetches nothing. `FunctionEditorService`, `FunctionEditorField`, `FunctionEditorValues` and `FunctionEditorProps` are exported from `edit-function.vue`, and `sample.ts` holds the sample service and fields the block renders when `service` or `fields` is left out. The editor keeps its own draft; Discard returns to the props.
+The block takes the saved service and the request state through props and emits the save; it fetches nothing. `FunctionEditorService`, `FunctionEditorField`, `FunctionEditorValues` and `FunctionEditorProps` are exported from `edit-function.vue`, and `sample.ts` holds the sample service and fields the block renders when `service` or `fields` is left out. The editor keeps its own draft; Discard returns to the props. The page file is the wiring: `parts/` holds its regions (`function-arguments.vue` with `function-field-item.vue` and `function-field-settings.vue`, `function-settings-tab.vue`, `function-save-bar.vue`, and the TestRun pane `function-test-run-pane.vue`), `composables/use-function-fields.ts` the field list behavior (names, expand, add, duplicate, remove, move), `composables/use-function-test-run.ts` the TestRun run and save simulation, and `lib/function-editor.ts` the Monaco loader, the option lists and the field helpers. `webkit add` copies them all.
 
 Prop: `service`, `fields`, `defaultDraft`, `v-model:tab`, `v-model:document`, `defaultOpenKeys`, `loading`, `error`.
 
@@ -8298,11 +8308,13 @@ What each part takes: [blocks/edit/edit-variables.md](blocks/edit/edit-variables
 
 The block takes its variables through props and emits every action; it fetches nothing and saves nothing. `VariablesVariable`, `VariablesScope`, `VariablesDraft`, `VariablesSavePayload` and `VariablesProps` are exported from `edit-variables.vue`, and `sample.ts` holds the sample variables the block renders when `variables` is left out (and never while `loading` is set).
 
+The block is a folder. `edit-variables.vue` is the wiring: the props, the list rows, the row actions and the save. `parts/` holds its regions: `variables-list.vue` (the controls row and the table, on `useCollection`), `variables-drawer-form.vue` (the drawer form with its header, alert, fieldset and Save), `variables-entries.vue` (the Variables section: rows, JSON view and import tools), `variables-scope-group.vue` (the Scope section), `paste-panel.vue` with `env-paste-panel.vue` (the inline paste panel), and `network-list-fields.vue` (the network list sections). `composables/use-variables-form.ts` owns the drawer form state and validation and provides it to the parts, `composables/use-network-list-form.ts` does the same for the network list, and `lib/` holds the pure helpers (the `.env` and JSON parsing, the scopes, the row updates, the network list rules). The PasteEnv and NetworkList variants render the same parts with their own sample text from `sample.ts`. `webkit add` copies every file listed in `block.json` `files`.
+
 Prop: `variables`, `loading`, `saving`, `saveError`, `defaultOpen`.
 
 Event: `refresh`, `save`, `clone`, `delete`.
 
-Then delete `sample.ts` and its import. With no `saving` set during the `save` handler the block treats the save as done at once, which is how it runs on its sample.
+Then delete the sample variables from `sample.ts` and their import. With no `saving` set during the `save` handler the block treats the save as done at once, which is how it runs on its sample.
 
 What each prop and event does, and the go-live code: [blocks/edit/edit-variables.md](blocks/edit/edit-variables.md).
 
@@ -9300,7 +9312,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-first-u
 - Surface: app
 - Source: `blocks/state/state-form-validation/state-form-validation.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-form-validation")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, DropdownMenu, Field, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, SaveBar, Select, SettingsRow, Skeleton, Subheader, Switch, Textarea, Toast, Tooltip
+- Components: Alert, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, DropdownMenu, Field, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, SaveBar, Select, SettingsRow, Skeleton, Subheader, Switch, Textarea, Toast, Tooltip
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -9740,7 +9752,7 @@ What each prop and event does, and the go-live code: [blocks/top-bar/top-bar-aut
 - Surface: app
 - Source: `blocks/top-bar/top-bar-creation/top-bar-creation.vue` in `@aziontech/webkit`
 - MCP: `get_block("top-bar/top-bar-creation")`
-- Components: AppHeader, Avatar, Brand, Breadcrumb, DropdownMenu, IconButton, Tooltip
+- Components: AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, DropdownMenu, IconButton, Tooltip
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -9966,7 +9978,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-card.md](
 - Surface: app
 - Source: `blocks/view/view-events-explorer/view-events-explorer.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-events-explorer")`
-- Components: Accordion, Alert, Button, Chart, Checkbox, Chip, CodeBlock, CopyButton, DataTable, DateRangePicker, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, FilterMenu, IconButton, Input, Item, `PanelHeader`, Popover, PropertyFilter, Resizable, Select, Sidebar, Skeleton, Tabs, Tag, Toast, Tooltip, Trace, `use-collection`, `use-locale`
+- Components: Accordion, Alert, Button, Chart, Checkbox, Chip, CodeBlock, CopyButton, DataTable, DateRangePicker, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, FilterMenu, FilterMenu, IconButton, Input, Item, `PanelHeader`, Popover, PropertyFilter, Resizable, Select, Sidebar, Skeleton, Tabs, Tag, Toast, Tooltip, Trace, `use-collection`, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -10150,7 +10162,7 @@ What each part takes: [blocks/view/view-file-browser.md](blocks/view/view-file-b
 
 ## Data
 
-The block takes the open folder through props and emits every action; it fetches nothing. `FileBrowserEntry`, `FileBrowserTransfer` and `FileBrowserProps` are exported from `view-file-browser.vue`, and `sample.ts` holds a sample storage the block browses when `entries` is left out (and never while `loading` or `error` is set). `azion-storage.ts` maps an Azion Object Storage listing to entries.
+The block takes the open folder through props and emits every action; it fetches nothing. `FileBrowserEntry`, `FileBrowserTransfer` and `FileBrowserProps` are exported from `view-file-browser.vue`, and `sample.ts` holds a sample storage the block browses when `entries` is left out (and never while `loading` or `error` is set). `azion-storage.ts` maps an Azion Object Storage listing to entries. `lib/file-rows.ts` turns entries into table rows (glyph, size, sort, folders first) and checks a Move destination; the regions are private parts in `parts/`: the storage title, the search row, the selection bar, the name cell, the row menu, the empty folder, the error card, the upload, move and delete dialogs and the transfer card.
 
 Prop / model: `storageName`, `v-model:path`, `entries`, `loading`, `error`, `destinations`, `movable`, `v-model:selected-keys`, `defaultMoveOpen`, `transfers`, `transferOperation`.
 
@@ -10384,7 +10396,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-marketpla
 - Surface: app
 - Source: `blocks/view/view-query-editor/view-query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-query-editor")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, Item, Kbd, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingsGroup, SettingsRow, Sidebar, Skeleton, Switch, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-file-picker`, `use-shortcuts`
+- Components: Alert, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, Item, Kbd, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingsGroup, SettingsRow, Sidebar, Skeleton, Switch, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-file-picker`, `use-shortcuts`
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -10689,13 +10701,13 @@ What each part takes: [blocks/view/view-table.md](blocks/view/view-table.md).
 
 ## Data
 
-The block takes its records through props and emits every action; it fetches nothing. `TableViewResource` and `TableViewProps` are exported from `view-table.vue`, and `sample.ts` holds the sample rows the block renders when `resources` is left out (and never while `loading` or `error` is set).
+The block takes its records through props and emits every action; it fetches nothing. `TableViewResource` and `TableViewProps` are exported from `view-table.vue`, and `sample.ts` holds the sample rows the block renders when `resources` is left out (and never while `loading` or `error` is set). The filter row (the `PropertyFilter`, Refresh, Download CSV and preferences) is the private part `parts/collection-controls.vue`; the Deployments state is `parts/deployments-page.vue`, which renders `parts/deployments-table.vue` with the columns, properties and statuses of `lib/deployments.ts` and the sample runs `sampleDeployments` of `sample.ts`.
 
 Prop: `resources`, `loading`, `error`.
 
 Event: `create`, `refresh`, `retry`, `row-action`, `delete`.
 
-Then delete `sample.ts` and its import. A list too large for the browser moves to `useCollection` server mode (`fetch`), which pages and filters on the server.
+Then delete `sampleResources` and its import (keep `sample.ts` only if you copied the Deployments state, which reads `sampleDeployments` from it). A list too large for the browser moves to `useCollection` server mode (`fetch`), which pages and filters on the server.
 
 What each prop and event does, and the go-live code: [blocks/view/view-table.md](blocks/view/view-table.md).
 
@@ -10939,7 +10951,7 @@ What each part takes: [blocks/view/view-waf-tuning.md](blocks/view/view-waf-tuni
 
 ## Data
 
-The block takes its matches through props and emits every action; it fetches nothing. `WafTuningMatch`, `WafTuningAllowPayload` and `WafTuningProps` are exported from `view-waf-tuning.vue`, and `sample.ts` holds the sample matches the block renders when `matches` is left out (and never while `loading` or `error` is set).
+The block takes its matches through props and emits every action; it fetches nothing. `WafTuningMatch`, `WafTuningAllowPayload` and `WafTuningProps` are exported from `view-waf-tuning.vue`, and `sample.ts` holds the sample matches the block renders when `matches` is left out (and never while `loading` or `error` is set). The allow dialog is the private part `parts/allow-dialog.vue`; it keeps the reason and its validation, and the page keeps the outcome.
 
 Prop: `matches`, `v-model:range`, `loading`, `error`, `defaultSelectedKeys`, `defaultOpen`, `allowing`, `allowError`.
 
@@ -11368,7 +11380,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 # Copy Prompt Button
 
-> The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip carries the design system's AI treatment, the same three layers as `HighlightButton`: a blurred gradient glow rotating behind it, the brand-accent gradient over the glow, and a dark scrim over both that holds the white label at contrast; on hover the gradient and the scrim fade to a quarter and the glow blooms through. It is dark in both themes (it renders under `data-theme="dark"`), so it reads as the AI entry point next to a primary button, and a tooltip says what it does. The marks are single-colour and decorative, drawn in the chip's own ink; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor"). With `closable` a dismiss button sits beside the chip, and dismissing removes both from the layout.
+> The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip carries the design system's AI treatment, the same three layers as `HighlightButton`: a blurred gradient glow that turns once behind it and rests, the brand-accent gradient over the glow, and a dark scrim over both that holds the white label at contrast; on hover the gradient and the scrim fade to a quarter and the glow blooms through. It is dark in both themes (it renders under `data-theme="dark"`), so it reads as the AI entry point next to a primary button, and a tooltip says what it does. The marks are single-colour and decorative, drawn in the chip's own ink; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor"). With `closable` a dismiss button sits beside the chip, and dismissing removes both from the layout.
 
 - Import: `import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'`
 - Category: action · Surface: app · Structure: monolithic
@@ -11430,7 +11442,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ## States
 
-- Visual states: `idle`, `hover` (the gradient and the scrim fade to 25% and the rotating glow blooms through), `focus-visible` (ring), `copied` (the label swaps to a check and `Copied` for two seconds, without changing the width), `disabled` (the AI layers hide and the chip takes the disabled fill), `dismissed` (`open` is false: the chip and its dismiss button unmount).
+- Visual states: `idle`, `hover` (the gradient and the scrim fade to 25% and the glow blooms through), `focus-visible` (ring), `copied` (the label swaps to a check and `Copied` for two seconds, without changing the width), `disabled` (the AI layers hide and the chip takes the disabled fill), `dismissed` (`open` is false: the chip and its dismiss button unmount).
 - `data-state` is `idle` or `copied`; `data-disabled` mirrors `disabled`.
 - Not applicable: `loading`, `empty`, `error`, `readonly`, `invalid`, `open`/`closed` (the tooltip owns its own open state).
 
@@ -11444,7 +11456,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Contrast: the white label and marks sit on the 80% black scrim at rest (≥ 4.5:1 in both page themes); on hover the scrim thins over the accent gradient and the label stays above 3:1 for its large button type.
 - Touch target: 40 px tall; `pointer-coarse:min-h-11` raises it to 44 px.
-- `motion-reduce:animate-none` on the rotating glow and `motion-reduce:transition-none` on every transition.
+- `motion-reduce:animate-none` on the glow and `motion-reduce:transition-none` on every transition.
 
 ## Examples
 
@@ -17845,6 +17857,7 @@ The frame is static apart from its resize handles.
 - `header-actions` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
 - Set `:padded="false"` only when the content draws its own inset or needs flush dividers.
 - The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space.
+- To make the whole card one link (a template or a destination tile), set `href` instead of wrapping the card in an anchor or stretching a hand-made link over it. Keep buttons and other links out of a linked card: its content is the link's name.
 
 ## Don’t
 
@@ -17870,6 +17883,7 @@ The frame is static apart from its resize handles.
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `''` | false | Heading rendered in the header when the `header` slot is empty. |
 | `padded` | `boolean` | `true` | false | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers. |
+| `href` | `string` | `''` | false | When set, the whole card is one link to this URL: the root renders as an anchor. Keep other interactive content out of a linked card. |
 
 ## Slots
 
@@ -17885,13 +17899,14 @@ The frame is static apart from its resize handles.
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - Responsive: the content region is the `@container/card`, so `KeyValueList`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
 - Hover-free devices: the `header-actions` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
+- Link: with `href` (a safe URL) the root is an `a` with `data-link`, the text stays `--text-default` with no underline, and `focus-visible` draws the `--ring-color` ring offset against `--bg-canvas`; an empty or unsafe `href` keeps the `section`.
 - Header only: with `padded` off and nothing in the default slot, the empty content region collapses and the header draws no bottom rule, so the card's own frame is the only line under it.
 
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
+- ARIA: the root is a `section`; with `href` it is a native anchor whose name is the card's text, so the title comes first in the content.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
@@ -22351,7 +22366,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - ARIA: `role="table"` sits on the grid element inside the scroll viewport (testid `<testid>__table`), not on the root: the root also holds the toolbar band, the focusable scroll viewport and the footer, and any of those inside a `table` is an unallowed child (`aria-required-children`). Every `aria-*` attribute passed to `Table` (`aria-label`, `aria-labelledby`, `aria-describedby`…) is forwarded to that element; every other attribute stays on the root. `table-caption` is a plain element (no `role`) that names the table through `aria-labelledby` unless the consumer names it with `aria-label`/`aria-labelledby`. The default slot is the table's content, so it holds rowgroups (and a caption) only; anything else goes in `footer` or around the `Table`. `table-header`/`table-body` `role="rowgroup"`; `table-footer` has no role (it hosts pagination or an action, not rows); `table-row` `role="row"`; `table-head-cell` `role="columnheader"` with `aria-sort` when sortable; `table-cell` `role="cell"`; selected rows set `aria-selected`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including muted header text.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Pause, Stop, Hide (WCAG 2.2.2): the `TableLiveButton` dot pulses for as long as the live tail runs. The pulse is an essential status signal (it shows the stream is running, and stops when the stream stops), so it keeps `animate-pulse`; the user stops it with the same button, and `motion-reduce:animate-none` keeps it still.
+- Pause, Stop, Hide (WCAG 2.2.2): the `TableLiveButton` dot pulses for as long as the live tail runs. The pulse is an essential status signal (it shows the stream is running, and stops when the stream stops), so it takes `animate-status-pulse` (the catalog's status pulse; `animate-pulse` is the Skeleton loading placeholder's); the user stops it with the same button, and `motion-reduce:animate-none` keeps it still.
 - Touch target ≥40×40 px on the sort button and row action controls.
 - Filter names: `TableFilter` hosts `FilterMenu` (its trigger counts the applied fields in its name) or `PropertyFilter` (a combobox named by `title`); see their specs.
 
@@ -22498,7 +22513,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - ARIA: each list is `role="listbox"` with `aria-label` from its title text; options are `role="option"` with `aria-selected`; the source/target listboxes set `aria-multiselectable="true"`; every move control is an icon-only button with an explicit `aria-label`; `aria-disabled` mirrors `disabled` on both listboxes, and a disabled root becomes `role="group"` with `aria-disabled="true"`, so the titles dimmed by the root's `opacity-60` belong to a disabled control (WCAG 1.4.3 inactive-component exemption) instead of reading as low-contrast live text.
 - Contrast ≥4.5:1 (text) / ≥3:1 (borders + icons), including the disabled state.
 - A loading list sets `aria-busy="true"`; its `Spinner` is decorative (`aria-hidden`) and carries its own reduced-motion fallback. Control hover transitions pair with `motion-reduce:transition-none`.
-- Touch target ≥40×40 px for every move control (medium icon-button height).
+- Touch target ≥40×40 px for every move control (large icon-button height).
 
 ## Examples
 
@@ -22798,7 +22813,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 ## Do
 
 - Pick `severity` by meaning. `danger` and `warning` render with `role="alert"`.
-- Use `label` for plain copy and the default slot when the copy needs inline links.
+- Use `label` for plain copy and the default slot when the copy needs inline links; each link is a `Link` with `inline`.
 - Set `title` when the alert says two things: what happened (the title, a few words, no end period) and what it means or what to do (the copy). A one-sentence alert needs no title. A title alone, with no copy, is allowed for a short notice that still wants the heading weight.
 - Use either the built-in action (`actionLabel` with `@action`) or the `actions` slot, not both. The slot replaces the button.
 - Once `closable` or `life` dismisses the message, it stays hidden until it is remounted. Listen to `close` to keep your own state in sync.
@@ -24792,7 +24807,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 ## Do
 
-- Always give the user a non-drag path. In `inline`, put a `Button` in the default slot that opens a native `<input type="file">`. In `overlay`, keep an upload button somewhere on the page. The drop target is pointer-only by design.
+- Always give the user a non-drag path. In `inline`, put a `Button` in the default slot that opens the system file picker through `useFilePicker`. In `overlay`, keep an upload button somewhere on the page. The drop target is pointer-only by design.
 - Pass the same `accept` string to the dropzone and to the native input behind your Browse button, so both paths filter the same way.
 - Handle `reject`. Tell the user which files were skipped and why (e.g. a `toast` naming the files and the accepted types). A silent rejection reads as a broken drop.
 - Announce the outcome of a drop yourself (a toast, or a live region on your file list). The dropzone does not announce drag states (see Accessibility).
@@ -24885,10 +24900,9 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 <script setup>
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import { ref } from 'vue'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
 
-  const inputEl = ref(null)
-  const browse = () => inputEl.value?.click()
+  const picker = useFilePicker({ multiple: true })
 </script>
 
 <template>
@@ -24898,16 +24912,9 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
         label="Browse files"
         variant="secondary"
         size="medium"
-        @click="browse"
+        @click="picker.open()"
       />
     </FileDropzone>
-    <input
-      ref="inputEl"
-      type="file"
-      multiple
-      aria-label="Browse files"
-      class="hidden"
-    />
   </div>
 </template>
 ```
@@ -24992,11 +24999,12 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup from '@aziontech/webkit/file-token-group'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { ref } from 'vue'
 
   const LIMIT = 300 * 1024 * 1024
 
-  const inputEl = ref(null)
+  const picker = useFilePicker({ multiple: true })
   const items = ref([
     { file: { name: 'logo.svg', size: 4210, type: 'image/svg+xml' } },
     { file: { name: 'index.html', size: 18432, type: 'text/html' } },
@@ -25014,10 +25022,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
     items.value = [...items.value, ...Array.from(files).map(toItem)]
   }
 
-  const onPick = (event) => {
-    add(event.target.files ?? [])
-    event.target.value = ''
-  }
+  const browse = async () => add(await picker.open())
 
   const remove = (index) => {
     items.value = items.value.filter((_, position) => position !== index)
@@ -25034,18 +25039,9 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
         label="Browse files"
         variant="secondary"
         size="medium"
-        @click="inputEl?.click()"
+        @click="browse"
       />
     </FileDropzone>
-    <input
-      ref="inputEl"
-      type="file"
-      multiple
-      class="hidden"
-      aria-hidden="true"
-      tabindex="-1"
-      @change="onPick"
-    />
     <FileTokenGroup
       :items="items"
       @remove="(_event, { index }) => remove(index)"
@@ -27212,6 +27208,7 @@ packages/webkit/src/components/input/radio-group/
 - Keep the default `variant="content"` for app shells; use `variant="site"` only on framed marketing pages.
 - Group the menu trigger and the brand in `AppHeader.Container` so they stay together and never shrink.
 - Make the logo the home link with `href` on `AppHeader.Brand` (`<AppHeader.Brand href="/" aria-label="Azion home">`) instead of wrapping it in a hand-made anchor: the brand owns the focus ring, the hover affordance and the hit area. Empty `aria-label` names the link from the locale catalog (`Azion home`).
+- Put the signed-in account at the end with `AppHeaderAccount` (`import AppHeaderAccount from '@aziontech/webkit/app-header-account'`, then `<AppHeaderAccount :name="account.name" :src="account.src" />`) instead of a hand-made button around an `Avatar`: the part owns the focus ring, the hover affordance and the accessible name. To open the account menu, place it in `DropdownMenu.Trigger`, which forwards the menu state onto it.
 - Name the product beside the mark with `label` on `AppHeader.Brand` (`label="Docs"`, `label="Console"`) instead of a `Tag` or a hand-made span: the brand draws the one product lockup every Azion header shares.
 - Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
 - Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
@@ -27245,6 +27242,10 @@ packages/webkit/src/components/input/radio-group/
 | `default` | — | Each sub-component (incl. `Container`) exposes `default` for region content. |
 | `default` | — | `app-header-brand` exposes `default` for logo markup. |
 
+## Sub-component imports
+
+- `@aziontech/webkit/app-header-account`
+
 ## Sub-components
 
 - `app-header-container.vue` — Start cluster wrapper; groups the menu trigger (`Start`) and `Brand` into one `shrink-0` flex unit, mirroring the Figma `Container` region.
@@ -27258,6 +27259,8 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 
 - `app-header-brand.vue` — `AppHeader.Brand`.
 
+- `app-header-account.vue` — `AppHeaderAccount`, a **companion part**: exported on its own as `@aziontech/webkit/app-header-account` and not attached to the compound, because it composes `Avatar` (and its class merging)…
+
 ## States
 
 - Visual states: `default`
@@ -27265,6 +27268,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 - No interactive states on the shell; children own focus/hover/disabled.
 - `AppHeader.Brand` with `href`: `data-link` on its anchor; hover (opacity) and `focus-visible` (ring) are its only states.
 - `AppHeader.Brand` with `label`: `data-label` on its root; the label is static (no states of its own).
+- `AppHeaderAccount`: hover (opacity) and `focus-visible` (ring); inside `DropdownMenu.Trigger` the trigger adds `aria-expanded`.
 
 ## Accessibility
 
@@ -27273,6 +27277,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 - ARIA: landmark only on root. `AppHeader.Brand` with `href` is a native anchor named by `ariaLabel` (locale fallback `appHeader.home`), so the logo link always has an accessible name; without `href` it stays a non-interactive `div`.
 - Brand label: with `href` the visible `label` is `aria-hidden` and the link name says where it goes, product included (`appHeader.productHome`, `Azion Docs home`), so the product is read once and the visible word is inside the name (WCAG 2.5.3); a consumer `aria-label` should keep the product word. Without `href` the label stays readable text after the mark. Spacing is logical (`gap`, `px`), so the label follows the mark in the inline direction under `dir="rtl"`.
 - Keyboard (brand link): Tab reaches it, Enter follows it; the `focus-visible` ring uses `--ring-color`.
+- `AppHeaderAccount` is a native `button` named by `ariaLabel` (locale fallback `appHeader.account`); the avatar inside is decoration of that name. Tab reaches it, Enter and Space activate it; in `DropdownMenu.Trigger`, Arrow Down opens the menu as well.
 - Contrast ≥4.5:1 for text and icons in slotted content.
 - `motion-reduce:*` on any animated slotted controls (owned by children).
 - Touch target ≥40×40 px on slotted buttons (owned by children).
@@ -28137,7 +28142,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 ## Do
 
 - Compose every band from existing DS components (`Brand`, `IconButton variant="ghost" size="small"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.
-- Put the brand in the `brand` slot as a home link around `Brand size="small"`; the footer sizes its mark to the header's 18px.
+- Put `Brand size="small"` in the `brand` slot and make it the home link with `homeHref` (`home-href="/"`) instead of wrapping it in a hand-made anchor: the footer owns the link's focus ring and hover. The footer sizes the mark to the header's 18px.
 - Keep column titles short (one or two words) — they are group labels, not headings for prose.
 - Give every social `IconButton` an `aria-label`; the footer cannot name them for you.
 - Keep the social `IconButton`s at `size="small"`: a 28px box keeps the brand and seven icons beside the status pair on one row from `md`.
@@ -28163,13 +28168,15 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`). |
 | `variant` | `'content' \| 'site' \| 'console'` | `'content'` | false | Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a plain full-width rule, like the header's, and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end. |
+| `homeHref` | `string` | `''` | false | When set, the brand slot renders inside one home link to this URL, with the focus ring and the hover of a link. |
+| `homeAriaLabel` | `string` | `''` | false | Accessible name of the home link. Empty uses the locale catalog (`Azion home`). |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `default` | — | Root: the `Footer.Column` items; a 2-column grid that becomes 4 columns at `md`, or one inline row in `console`. |
-| `brand` | — | Root: the brand lockup that opens the bottom bar, its mark sized to 18px. |
+| `brand` | — | Root: the brand lockup that opens the bottom bar, its mark sized to 18px; inside the home link when `homeHref` is set. |
 | `social` | — | Root: the social icon buttons, after the brand at the start of the bottom bar. |
 | `status` | — | Root: the system status indicator, at the end of the bottom bar. |
 | `language` | — | Root: the language select, after the status. |
@@ -28191,6 +28198,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 - Visual states: `default` on the shell and columns; `default`, `hover`, `focus-visible`, `active`, `visited` on `footer-link`.
 - Placement: `data-variant="content" | "site" | "console"` on the root (from `variant`); the bands and `footer-column` read it through the named group (`group-data-[variant=…]/footer:`).
 - No `data-state`; the shell has no interactive states — slotted children own their own.
+- Home link (`homeHref` set to a safe URL): the brand cell holds an anchor (`${testId}__home`) with an opacity hover and the `--ring-color` focus ring offset against `--bg-canvas`; empty or unsafe renders the brand alone.
 
 ## Accessibility
 
@@ -28198,6 +28206,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 - Each `footer-column` renders a `<nav>` labelled via `aria-labelledby` pointing at its title (`useId`), so link groups are unique, navigable landmarks; in `console` the title is visually hidden and still names the `nav`.
 - Keyboard map: none on the shell; `Tab` moves through links and controls in DOM order (columns, brand, social, status, language); `Enter` activates.
 - Visible focus on links: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
+- The home link (`homeHref`) is a native anchor named by `homeAriaLabel` (locale fallback `footer.home`), so the logo link always has a name; the brand mark inside it is decoration of that name.
 - Contrast ≥4.5:1 for column titles and links on `--bg-canvas`.
 - `motion-reduce:transition-none` on the link color transition.
 - Touch target: text links are drawn at their text height with `--spacing-xs` between them on a fine pointer; on a coarse pointer each link is 44 px tall (`pointer-coarse:min-h-11`) and the column drops its gap, so the links tile the column without overlapping.
@@ -28224,7 +28233,10 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 </script>
 
 <template>
-  <Footer aria-label="Footer">
+  <Footer
+    aria-label="Footer"
+    home-href="/"
+  >
     <Footer.Column title="Products">
       <Footer.Link href="/products/edge-application">Edge Application</Footer.Link>
       <Footer.Link href="/products/edge-firewall">Edge Firewall</Footer.Link>
@@ -28246,12 +28258,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
       <Footer.Link href="https://status.azion.com/">System status</Footer.Link>
     </Footer.Column>
     <template #brand>
-      <a
-        href="/"
-        aria-label="Azion home"
-      >
-        <Brand size="small" />
-      </a>
+      <Brand size="small" />
     </template>
     <template #social>
       <IconButton
@@ -29339,7 +29346,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - `data-resizing` on the root and on the handle while a pointer drag is in flight
 - `data-preview` on the collapsed edge zone while it is showing the rail's preview sliver
 - `data-state` / `data-resizing` / `data-preview` are **reported state, not the motion
-  driver**: the collapse/expand animation itself runs off the hidden checkbox's `:checked` (see
+  driver**: the collapse/expand animation itself runs off the panel's own `data-state` (see
   Motion & Animations), so these attributes exist for consumer styling hooks and for tests, not
   because the component's own CSS depends on them for that transition.
 - `data-hydrated` on the root once Vue has mounted — internal only (switches the native
@@ -29348,9 +29355,11 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - `data-settled` on the root and on the panel two frames after mount — internal only (gates the
   rail's motion off until then, so a state restored at mount lands in place; see Motion &
   Animations); not a documented consumer styling hook.
-- Region testids derived from the root: `__panel` (the fixed-width inner panel),
-  `__collapse-input` (the hidden checkbox that carries the collapsed state, `!open`, for CSS — not an interactive
-  control; see Accessibility), `__header`, `__nav`, `__scroll`, `__footer`, `__collapse` (the
+- `data-state="closed"` on the panel (`__panel`) whenever the rail is collapsed (`!open`), **including
+  during a drag**, `data-state="open"` otherwise; absent when the rail can neither collapse nor resize.
+  It is the motion driver; the root's `data-state` is the committed, reported state (gated on
+  `!resizing`, like `inert`).
+- Region testids derived from the root: `__panel` (the fixed-width inner panel), `__header`, `__nav`, `__scroll`, `__footer`, `__collapse` (the
   trigger), `__handle` (the drag separator), `__expand` / `__expand-button` (the collapsed
   affordance)
 - A collapsed offcanvas rail carries `inert`, which also removes it from the accessibility tree, so it holds no tab stops while it is out; an icon rail keeps its rows reachable
@@ -29392,10 +29401,9 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - A **collapsed rail carries `inert`**, which also removes it from the accessibility tree — the content is still mounted so its width
   can animate, and it must not be reachable while it is out of the layout. That is why the control
   that brings it back is a sibling of the rail rather than inside it.
-- The **hidden checkbox that mirrors the collapsed state (`!open`)** (`__collapse-input`) carries `aria-hidden="true"`
-  and `tabindex="-1"`: it is a CSS state carrier, not a second control, so it is never reachable by
-  keyboard or announced by a screen reader. The trigger's accessible name and role are unaffected —
-  the consumer-facing control is still the `IconButton`.
+- The collapsed state that drives the motion is a `data-state` attribute on the panel, not a form
+  control, so the rail holds no hidden input for a screen reader or a form to find; the one control
+  is the `IconButton` trigger.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states; the width /
   transform / opacity transition is dropped entirely under `prefers-reduced-motion`.
@@ -33413,7 +33421,7 @@ Composable `@aziontech/webkit/use-collection`. The signatures and option tables 
 
 ```ts
 import { useCollection, matchesQuery, matchesText, parseFilterText, tokenText, historyAdapter, routerAdapter } from '@aziontech/webkit/use-collection'
-import type { UseCollectionOptions, UseCollectionReturn, CollectionColumnPreference, CollectionDensity, CollectionPreferencesValue, PreferencesStorage, FilteringProperty, PropertyFilterOperation, PropertyFilterOperator, PropertyFilterOption, PropertyFilterQuery, PropertyFilterToken, PropertyFilterTokenGroup, CollectionUrlAdapter, RouterLike, CollectionCardListProps, CollectionColumn, CollectionExportParams, CollectionExportScope, CollectionFetchParams, CollectionFetchResult, CollectionPaginationProps, CollectionPreferenceColumn, CollectionPreferencesProps, CollectionPropertyFilterProps, CollectionSelectionMode, CollectionSort, CollectionStatus, CollectionTableProps, CollectionTextFilterProps } from '@aziontech/webkit/use-collection'
+import type { UseCollectionOptions, UseCollectionReturn, CollectionColumnPreference, CollectionDensity, CollectionPreferencesValue, PreferencesStorage, FilteringProperty, PropertyFilterOperation, PropertyFilterOperator, PropertyFilterOption, PropertyFilterQuery, PropertyFilterToken, PropertyFilterTokenGroup, CollectionCardListProps, CollectionColumn, CollectionExportParams, CollectionExportScope, CollectionFetchParams, CollectionFetchResult, CollectionPaginationProps, CollectionPreferenceColumn, CollectionPreferencesProps, CollectionPropertyFilterProps, CollectionSelectionMode, CollectionSort, CollectionStatus, CollectionTableProps, CollectionTextFilterProps, CollectionUrlAdapter, RouterLike } from '@aziontech/webkit/use-collection'
 ```
 
 ## `useCollection`
@@ -33485,7 +33493,7 @@ function useCollection<T extends object, C extends CollectionColumn = Collection
 
 ## Other exports
 
-`matchesQuery` · `matchesText` · `parseFilterText` · `tokenText` · `historyAdapter` · `routerAdapter` · `CollectionColumnPreference` · `CollectionDensity` · `CollectionPreferencesValue` · `PreferencesStorage` · `FilteringProperty` · `PropertyFilterOperation` · `PropertyFilterOperator` · `PropertyFilterOption` · `PropertyFilterQuery` · `PropertyFilterToken` · `PropertyFilterTokenGroup` · `CollectionUrlAdapter` · `RouterLike` · `CollectionCardListProps` · `CollectionColumn` · `CollectionExportParams` · `CollectionExportScope` · `CollectionFetchParams` · `CollectionFetchResult` · `CollectionPaginationProps` · `CollectionPreferenceColumn` · `CollectionPreferencesProps` · `CollectionPropertyFilterProps` · `CollectionSelectionMode` · `CollectionSort` · `CollectionStatus` · `CollectionTableProps` · `CollectionTextFilterProps`. Signatures and fields: [composables/use-collection.md](composables/use-collection.md).
+`matchesQuery` · `matchesText` · `parseFilterText` · `tokenText` · `historyAdapter` · `routerAdapter` · `CollectionColumnPreference` · `CollectionDensity` · `CollectionPreferencesValue` · `PreferencesStorage` · `FilteringProperty` · `PropertyFilterOperation` · `PropertyFilterOperator` · `PropertyFilterOption` · `PropertyFilterQuery` · `PropertyFilterToken` · `PropertyFilterTokenGroup` · `CollectionCardListProps` · `CollectionColumn` · `CollectionExportParams` · `CollectionExportScope` · `CollectionFetchParams` · `CollectionFetchResult` · `CollectionPaginationProps` · `CollectionPreferenceColumn` · `CollectionPreferencesProps` · `CollectionPropertyFilterProps` · `CollectionSelectionMode` · `CollectionSort` · `CollectionStatus` · `CollectionTableProps` · `CollectionTextFilterProps` · `CollectionUrlAdapter` · `RouterLike`. Signatures and fields: [composables/use-collection.md](composables/use-collection.md).
 
 ---
 
@@ -33801,14 +33809,14 @@ What a pinned row exposes to its band.
 Composable `@aziontech/webkit/use-placement`. The signatures and option tables below are read from its typed source, [`src/composables/use-placement/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-placement/index.ts).
 
 ```ts
-import { usePlacement, computePlacement, getClippingBoundary } from '@aziontech/webkit/use-placement'
-import type { UsePlacementOptions, UsePlacementReturn, Side, Align, PhysicalSide, Rect, Size, CollisionPadding, ComputePlacementInput, ComputePlacementResult } from '@aziontech/webkit/use-placement'
+import { usePlacement, getClippingBoundary, computePlacement } from '@aziontech/webkit/use-placement'
+import type { UsePlacementOptions, UsePlacementReturn, Align, CollisionPadding, ComputePlacementInput, ComputePlacementResult, PhysicalSide, Rect, Side, Size } from '@aziontech/webkit/use-placement'
 ```
 
 ## `usePlacement`
 
 ```ts
-function usePlacement({ triggerRef, panelRef, isOpen, side, align = 'center', sideOffset = 4, alignOffset = 0, collisionPadding = 8, flip = true, autoSides, dir, zIndex = 1100, onDismiss, matchTriggerWidth = false }: UsePlacementOptions): UsePlacementReturn
+function usePlacement(options: UsePlacementOptions): UsePlacementReturn
 ```
 
 ## `UsePlacementOptions`
@@ -33819,16 +33827,16 @@ function usePlacement({ triggerRef, panelRef, isOpen, side, align = 'center', si
 | `panelRef` | `MaybeRefOrGetter<globalThis.HTMLElement \| null>` | yes |  |
 | `isOpen` | `MaybeRefOrGetter<boolean>` | yes |  |
 | `side` | `MaybeRefOrGetter<Side \| 'auto'>` | yes |  |
-| `align` | `MaybeRefOrGetter<Align>` | no |  |
-| `sideOffset` | `MaybeRefOrGetter<number>` | no |  |
-| `alignOffset` | `MaybeRefOrGetter<number>` | no |  |
-| `collisionPadding` | `CollisionPadding` | no |  |
-| `flip` | `boolean` | no |  |
+| `align` | `MaybeRefOrGetter<Align>` | no | Alignment along the anchor edge. Defaults to `'center'`. |
+| `sideOffset` | `MaybeRefOrGetter<number>` | no | Gap between trigger and panel, in px. Defaults to 4. |
+| `alignOffset` | `MaybeRefOrGetter<number>` | no | Shift along the alignment axis, in px. Defaults to 0. |
+| `collisionPadding` | `CollisionPadding` | no | Distance kept from the boundary edges, in px. Defaults to 8. |
+| `flip` | `boolean` | no | Flip to the opposite side when the panel does not fit. Defaults to true. |
 | `autoSides` | `Side[]` | no |  |
 | `dir` | `MaybeRefOrGetter<Direction \| undefined>` | no | Text direction that resolves `start`/`end`; read from the trigger's nearest `dir` when omitted. |
-| `zIndex` | `number` | no |  |
+| `zIndex` | `number` | no | Stacking order of the panel. Defaults to 1100. |
 | `onDismiss` | `() => void` | no | When provided, a scroll that moves the trigger dismisses the panel through this callback (the panel is anchored once and does not follow the page): the scrolled node must be the document or an ancestor of the trigger, and the trigger must have moved more than 1px from where the panel was last anchored. Scrolls inside the panel, of unrelated scrollers, and scroll events that leave the trigger in place are ignored. When omitted, a scroll repositions the panel. Resize always repositions. |
-| `matchTriggerWidth` | `boolean` | no | Lock the panel width to the trigger width (list boxes anchored under a field). |
+| `matchTriggerWidth` | `boolean` | no | Lock the panel width to the trigger width (list boxes anchored under a field). Defaults to false. |
 
 ## `UsePlacementReturn`
 
@@ -33842,7 +33850,7 @@ function usePlacement({ triggerRef, panelRef, isOpen, side, align = 'center', si
 
 ## Other exports
 
-`computePlacement` · `getClippingBoundary` · `Side` · `Align` · `PhysicalSide` · `Rect` · `Size` · `CollisionPadding` · `ComputePlacementInput` · `ComputePlacementResult`. Signatures and fields: [composables/use-placement.md](composables/use-placement.md).
+`getClippingBoundary` · `computePlacement` · `Align` · `CollisionPadding` · `ComputePlacementInput` · `ComputePlacementResult` · `PhysicalSide` · `Rect` · `Side` · `Size`. Signatures and fields: [composables/use-placement.md](composables/use-placement.md).
 
 ---
 
@@ -33853,8 +33861,8 @@ function usePlacement({ triggerRef, panelRef, isOpen, side, align = 'center', si
 Composable `@aziontech/webkit/use-shortcuts`. The signatures and option tables below are read from its typed source, [`src/composables/use-shortcuts/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-shortcuts/index.ts).
 
 ```ts
-import { useShortcuts, createShortcutRegistry, isTypingTarget, matchesShortcut, parseShortcutKeys, provideShortcuts, shortcutKeyList, toAriaKeyshortcuts, useShortcutList, ShortcutsInjectionKey } from '@aziontech/webkit/use-shortcuts'
-import type { UseShortcutsReturn, Shortcut, ShortcutCombination, ShortcutListGroup, ShortcutListItem, ShortcutRegistry, ShortcutRegistryEntry, UseShortcutListReturn } from '@aziontech/webkit/use-shortcuts'
+import { useShortcuts, matchesShortcut, parseShortcutKeys, shortcutKeyList, toAriaKeyshortcuts, isTypingTarget, createShortcutRegistry, provideShortcuts, useShortcutList, ShortcutsInjectionKey } from '@aziontech/webkit/use-shortcuts'
+import type { UseShortcutsReturn, ShortcutCombination, Shortcut, ShortcutListGroup, ShortcutListItem, ShortcutRegistry, ShortcutRegistryEntry, UseShortcutListReturn } from '@aziontech/webkit/use-shortcuts'
 ```
 
 ## `useShortcuts`
@@ -33873,7 +33881,7 @@ What `useShortcuts` returns.
 
 ## Other exports
 
-`createShortcutRegistry` · `isTypingTarget` · `matchesShortcut` · `parseShortcutKeys` · `provideShortcuts` · `shortcutKeyList` · `toAriaKeyshortcuts` · `useShortcutList` · `Shortcut` · `ShortcutCombination` · `ShortcutListGroup` · `ShortcutListItem` · `ShortcutRegistry` · `ShortcutRegistryEntry` · `UseShortcutListReturn` · `ShortcutsInjectionKey`. Signatures and fields: [composables/use-shortcuts.md](composables/use-shortcuts.md).
+`matchesShortcut` · `parseShortcutKeys` · `shortcutKeyList` · `toAriaKeyshortcuts` · `isTypingTarget` · `createShortcutRegistry` · `provideShortcuts` · `useShortcutList` · `ShortcutCombination` · `Shortcut` · `ShortcutListGroup` · `ShortcutListItem` · `ShortcutRegistry` · `ShortcutRegistryEntry` · `UseShortcutListReturn` · `ShortcutsInjectionKey`. Signatures and fields: [composables/use-shortcuts.md](composables/use-shortcuts.md).
 
 ---
 

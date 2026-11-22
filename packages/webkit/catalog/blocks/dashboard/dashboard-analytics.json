@@ -43,7 +43,15 @@
  ],
  "sfcFile": "blocks/dashboard/dashboard-analytics/dashboard-analytics.vue",
  "guidelinesFile": "blocks/dashboard/dashboard-analytics/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/dashboard/dashboard-analytics/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "analytics-cards.ts",
+  "analytics-report.ts",
+  "parts/expanded-dialog.vue",
+  "parts/expanded-table.vue",
+  "parts/metric-card.vue",
+  "parts/period-header.vue",
+  "parts/search-table.vue",
+  "parts/series-chart.vue"
+ ]
 }

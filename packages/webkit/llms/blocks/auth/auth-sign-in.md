@@ -368,28 +368,24 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
 
 ```vue
 <script setup lang="ts">
-  import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Brand from '@aziontech/webkit/brand'
+  import Alert from '@aziontech/webkit/alert'
   import Button, { type ButtonVariant } from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import FieldError from '@aziontech/webkit/field-error'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PasswordInput from '@aziontech/webkit/password-input'
-  import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
-  import PasswordRequirements from '@aziontech/webkit/password-requirements-root'
-  import Separator from '@aziontech/webkit/separator'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, nextTick, onMounted, onScopeDispose, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
+  import { useCardHeight } from './composables/use-card-height'
+  import { fillEmail, resolveSignInCopy, type SignInCopy } from './lib/sign-in-copy'
+  import { type CardNotice, emailError, newPasswordError, noticeFor } from './lib/sign-in-rules'
+  import EmailField from './parts/email-field.vue'
+  import LastUsedTag from './parts/last-used-tag.vue'
+  import PasswordField from './parts/password-field.vue'
+  import SentStep from './parts/sent-step.vue'
+  import SignInFooter from './parts/sign-in-footer.vue'
   import SignInFrame from './parts/sign-in-frame.vue'
+  import SignInProviders from './parts/sign-in-providers.vue'
+  import StepBack from './parts/step-back.vue'
 
   /** The step the card shows. */
   export type SignInStep = 'email' | 'password' | 'reset' | 'sent' | 'new-password'
@@ -439,12 +435,6 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
     privacyHref?: string
   }
 
-  interface CardNotice {
-    severity: AlertSeverity
-    label: string
-    retry?: boolean
-  }
-
   const props = withDefaults(defineProps<SignInProps>(), {
     defaultValues: () => ({}),
     loading: false,
@@ -470,231 +460,10 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
 
   const step = defineModel<SignInStep>('step', { default: 'email' })
 
-  const COPY = {
-    en: {
-      console: 'Console',
-      home: 'Azion home',
-      documentation: 'Documentation',
-      badCredentials: 'Incorrect email or password. Check both and try again.',
-      serviceUnavailable: 'Sign-in is unavailable right now. Your credentials are fine.',
-      serverError: 'Sign-in failed on our side. You are still signed out. Error 500.',
-      timeout: 'The server did not answer in time. Your session may already be open.',
-      sessionExpired: 'Your session expired. Sign in again to pick up where you left off.',
-      signedIn: 'Signed in.',
-      passwordUpdated: 'Password updated. Sign in with the new one.',
-      required: 'This field is required.',
-      invalidEmail: 'Enter a valid email address.',
-      weakPassword: 'Password does not meet requirements.',
-      mismatch: "Passwords don't match.",
-      resetTitle: 'Reset your password',
-      resetDescription:
-        "Enter the email for your account and we'll send you a link to set a new one.",
-      newPasswordTitle: 'Reset password',
-      sentTitle: 'Check your inbox',
-      sentDescription:
-        'We sent a reset link to {email}. Check your inbox or spam folder and follow the instructions.',
-      title: 'Welcome back',
-      description: 'Sign in to your account.',
-      signIn: 'Sign in',
-      sendResetLink: 'Send reset link',
-      resetPassword: 'Reset password',
-      returnToSignIn: 'Return to sign in',
-      continueWithEmail: 'Continue with email',
-      resent: 'We sent another link to {email}.',
-      form: 'Sign in to your account',
-      retry: 'Retry',
-      preparingProviders: 'Preparing sign-in providers',
-      continueWithGoogle: 'Continue with Google',
-      continueWithGithub: 'Continue with GitHub',
-      or: 'or',
-      email: 'Email',
-      changeEmail: 'Change email',
-      password: 'Password',
-      passwordPlaceholder: 'Type your password',
-      forgotPassword: 'Forgot your password?',
-      backToSignIn: 'Back to sign in',
-      newPassword: 'New password',
-      newPasswordPlaceholder: 'Enter a new password',
-      confirmPassword: 'Confirm password',
-      confirmPasswordPlaceholder: 'Repeat the new password',
-      didNotReceive: "Didn't receive the email?",
-      resendEmail: 'Resend email',
-      alreadyOpened: 'Already opened it?',
-      setNewPassword: 'Set a new password',
-      lastUsed: 'Last used',
-      noAccount: "Don't have an account?",
-      signUp: 'Sign up',
-      agreeStart: 'By continuing, I agree to the',
-      terms: 'terms of service',
-      and: 'and',
-      privacy: 'privacy policy'
-    },
-    'pt-BR': {
-      console: 'Console',
-      home: 'Página inicial da Azion',
-      documentation: 'Documentação',
-      badCredentials: 'E-mail ou senha incorretos. Confira os dois e tente de novo.',
-      serviceUnavailable: 'O login está indisponível no momento. Suas credenciais estão corretas.',
-      serverError: 'O login falhou do nosso lado. Você continua desconectado. Erro 500.',
-      timeout: 'O servidor não respondeu a tempo. Sua sessão pode já estar aberta.',
-      sessionExpired: 'Sua sessão expirou. Entre de novo para continuar de onde parou.',
-      signedIn: 'Login feito.',
-      passwordUpdated: 'Senha atualizada. Entre com a nova senha.',
-      required: 'Este campo é obrigatório.',
-      invalidEmail: 'Digite um endereço de e-mail válido.',
-      weakPassword: 'A senha não atende aos requisitos.',
-      mismatch: 'As senhas não coincidem.',
-      resetTitle: 'Redefina sua senha',
-      resetDescription:
-        'Digite o e-mail da sua conta e enviaremos um link para você definir uma nova senha.',
-      newPasswordTitle: 'Redefinir senha',
-      sentTitle: 'Confira sua caixa de entrada',
-      sentDescription:
-        'Enviamos um link de redefinição para {email}. Confira a caixa de entrada ou o spam e siga as instruções.',
-      title: 'Boas-vindas de volta',
-      description: 'Entre na sua conta.',
-      signIn: 'Entrar',
-      sendResetLink: 'Enviar link de redefinição',
-      resetPassword: 'Redefinir senha',
-      returnToSignIn: 'Voltar para o login',
-      continueWithEmail: 'Continuar com e-mail',
-      resent: 'Enviamos outro link para {email}.',
-      form: 'Entre na sua conta',
-      retry: 'Tentar de novo',
-      preparingProviders: 'Preparando os provedores de login',
-      continueWithGoogle: 'Continuar com Google',
-      continueWithGithub: 'Continuar com GitHub',
-      or: 'ou',
-      email: 'E-mail',
-      changeEmail: 'Trocar e-mail',
-      password: 'Senha',
-      passwordPlaceholder: 'Digite sua senha',
-      forgotPassword: 'Esqueceu sua senha?',
-      backToSignIn: 'Voltar para o login',
-      newPassword: 'Nova senha',
-      newPasswordPlaceholder: 'Digite uma nova senha',
-      confirmPassword: 'Confirmar senha',
-      confirmPasswordPlaceholder: 'Repita a nova senha',
-      didNotReceive: 'Não recebeu o e-mail?',
-      resendEmail: 'Reenviar e-mail',
-      alreadyOpened: 'Já abriu?',
-      setNewPassword: 'Definir uma nova senha',
-      lastUsed: 'Usado por último',
-      noAccount: 'Não tem uma conta?',
-      signUp: 'Cadastre-se',
-      agreeStart: 'Ao continuar, concordo com os',
-      terms: 'termos de serviço',
-      and: 'e a',
-      privacy: 'política de privacidade'
-    },
-    es: {
-      console: 'Consola',
-      home: 'Inicio de Azion',
-      documentation: 'Documentación',
-      badCredentials: 'Correo o contraseña incorrectos. Revisa ambos y vuelve a intentarlo.',
-      serviceUnavailable:
-        'El inicio de sesión no está disponible ahora. Tus credenciales son correctas.',
-      serverError: 'El inicio de sesión falló de nuestro lado. Sigues sin sesión. Error 500.',
-      timeout: 'El servidor no respondió a tiempo. Puede que tu sesión ya esté abierta.',
-      sessionExpired: 'Tu sesión caducó. Inicia sesión de nuevo para seguir donde lo dejaste.',
-      signedIn: 'Sesión iniciada.',
-      passwordUpdated: 'Contraseña actualizada. Inicia sesión con la nueva.',
-      required: 'Este campo es obligatorio.',
-      invalidEmail: 'Introduce un correo electrónico válido.',
-      weakPassword: 'La contraseña no cumple los requisitos.',
-      mismatch: 'Las contraseñas no coinciden.',
-      resetTitle: 'Restablece tu contraseña',
-      resetDescription:
-        'Introduce el correo de tu cuenta y te enviaremos un enlace para crear una nueva.',
-      newPasswordTitle: 'Restablecer contraseña',
-      sentTitle: 'Revisa tu bandeja de entrada',
-      sentDescription:
-        'Enviamos un enlace de restablecimiento a {email}. Revisa la bandeja de entrada o el spam y sigue las instrucciones.',
-      title: 'Te damos la bienvenida de nuevo',
-      description: 'Inicia sesión en tu cuenta.',
-      signIn: 'Iniciar sesión',
-      sendResetLink: 'Enviar enlace',
-      resetPassword: 'Restablecer contraseña',
-      returnToSignIn: 'Volver a iniciar sesión',
-      continueWithEmail: 'Continuar con correo',
-      resent: 'Enviamos otro enlace a {email}.',
-      form: 'Inicia sesión en tu cuenta',
-      retry: 'Reintentar',
-      preparingProviders: 'Preparando los proveedores de inicio de sesión',
-      continueWithGoogle: 'Continuar con Google',
-      continueWithGithub: 'Continuar con GitHub',
-      or: 'o',
-      email: 'Correo electrónico',
-      changeEmail: 'Cambiar correo',
-      password: 'Contraseña',
-      passwordPlaceholder: 'Escribe tu contraseña',
-      forgotPassword: '¿Olvidaste tu contraseña?',
-      backToSignIn: 'Volver a iniciar sesión',
-      newPassword: 'Nueva contraseña',
-      newPasswordPlaceholder: 'Introduce una nueva contraseña',
-      confirmPassword: 'Confirmar contraseña',
-      confirmPasswordPlaceholder: 'Repite la nueva contraseña',
-      didNotReceive: '¿No recibiste el correo?',
-      resendEmail: 'Reenviar correo',
-      alreadyOpened: '¿Ya lo abriste?',
-      setNewPassword: 'Crear una nueva contraseña',
-      lastUsed: 'Último usado',
-      noAccount: '¿No tienes una cuenta?',
-      signUp: 'Regístrate',
-      agreeStart: 'Al continuar, acepto los',
-      terms: 'términos del servicio',
-      and: 'y la',
-      privacy: 'política de privacidad'
-    }
-  }
-
-  type SignInCopy = (typeof COPY)['en']
-
   const { locale } = useLocale()
-  const copy = computed<SignInCopy>(() => {
-    const tag = locale.value
-    const language = tag.split('-')[0]
-    return COPY[tag as keyof typeof COPY] ?? COPY[language as keyof typeof COPY] ?? COPY.en
-  })
-  const fill = (template: string, email: string) => template.replace('{email}', email)
+  const copy = computed<SignInCopy>(() => resolveSignInCopy(locale.value))
 
-  const failureNotices = (): Record<SignInFailure, CardNotice> => ({
-    'bad-credentials': { severity: 'danger', label: copy.value.badCredentials },
-    'service-unavailable': {
-      severity: 'warning',
-      label: copy.value.serviceUnavailable,
-      retry: true
-    },
-    'server-error': { severity: 'danger', label: copy.value.serverError, retry: true },
-    timeout: { severity: 'warning', label: copy.value.timeout, retry: true }
-  })
-
-  const outcomeNotices = (): Record<SignInNoticeKind, CardNotice> => ({
-    'session-expired': { severity: 'info', label: copy.value.sessionExpired },
-    'signed-in': { severity: 'success', label: copy.value.signedIn },
-    'password-updated': { severity: 'success', label: copy.value.passwordUpdated }
-  })
-
-  const noticeFromProps = (): CardNotice | null => {
-    if (props.error) {
-      return (
-        failureNotices()[props.error as SignInFailure] ?? {
-          severity: 'danger',
-          label: props.error,
-          retry: true
-        }
-      )
-    }
-    if (props.notice) {
-      return (
-        outcomeNotices()[props.notice as SignInNoticeKind] ?? {
-          severity: 'info',
-          label: props.notice
-        }
-      )
-    }
-    return null
-  }
+  const noticeFromProps = () => noticeFor(props.error, props.notice, copy.value)
 
   const returnStep = ref<SignInStep>('email')
   const email = ref(props.defaultValues.email ?? '')
@@ -713,41 +482,7 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
   })
 
   const cardContentEl = ref<HTMLElement | null>(null)
-  const cardHeight = ref(0)
-  const resizing = ref(false)
-  let resizeObserver: ResizeObserver | null = null
-
-  const onCardResize = ([entry]: ResizeObserverEntry[]) => {
-    const next = Math.round(entry.contentRect.height)
-    if (cardHeight.value && next !== cardHeight.value) resizing.value = true
-    cardHeight.value = next
-  }
-
-  onMounted(() => {
-    if (typeof ResizeObserver === 'undefined' || !cardContentEl.value) return
-    resizeObserver = new ResizeObserver(onCardResize)
-    resizeObserver.observe(cardContentEl.value)
-  })
-
-  onScopeDispose(() => {
-    resizeObserver?.disconnect()
-  })
-
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-  const emailError = (value: string) =>
-    !value.trim()
-      ? copy.value.required
-      : emailPattern.test(value.trim())
-        ? ''
-        : copy.value.invalidEmail
-
-  const newPasswordError = (value: string) =>
-    !value
-      ? copy.value.required
-      : DEFAULT_PASSWORD_REQUIREMENTS.every((rule) => rule.test.test(value))
-        ? ''
-        : copy.value.weakPassword
+  const { height: cardHeight, resizing, onTransitionend } = useCardHeight(cardContentEl)
 
   const heading = computed(() => {
     if (step.value === 'reset') {
@@ -758,7 +493,7 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
     if (step.value === 'sent') {
       return {
         title: copy.value.sentTitle,
-        description: fill(copy.value.sentDescription, resetEmail.value)
+        description: fillEmail(copy.value.sentDescription, resetEmail.value)
       }
     }
     return { title: copy.value.title, description: copy.value.description }
@@ -815,7 +550,7 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
     emit('resend', event, resetEmail.value)
     cardNotice.value = {
       severity: 'success',
-      label: fill(copy.value.resent, resetEmail.value)
+      label: fillEmail(copy.value.resent, resetEmail.value)
     }
   }
 
@@ -838,72 +573,62 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
     emit('submit', event, { email: email.value.trim(), password: password.value })
   }
 
+  const submitEmail = (event: Event) => {
+    errors.email = emailError(email.value, copy.value)
+    if (errors.email) focusField('login-email')
+    else {
+      emit('continue', event, email.value.trim())
+      step.value = 'password'
+    }
+  }
+
+  const submitReset = (event: Event) => {
+    errors.resetEmail = emailError(resetEmail.value, copy.value)
+    if (errors.resetEmail) focusField('reset-email')
+    else {
+      emit('reset-request', event, resetEmail.value.trim())
+      step.value = 'sent'
+    }
+  }
+
+  const submitNewPassword = (event: Event) => {
+    errors.newPassword = newPasswordError(newPassword.value, copy.value)
+    errors.confirmPassword = !confirmPassword.value
+      ? copy.value.required
+      : confirmPassword.value === newPassword.value
+        ? ''
+        : copy.value.mismatch
+    if (errors.newPassword || errors.confirmPassword)
+      focusField(errors.newPassword ? 'new-password' : 'confirm-password')
+    else {
+      email.value = resetEmail.value
+      password.value = ''
+      returnStep.value = 'password'
+      emit('password-reset', event, newPassword.value)
+    }
+  }
+
+  const stepActions: Record<SignInStep, (event: Event) => void> = {
+    email: submitEmail,
+    password: signIn,
+    reset: submitReset,
+    'new-password': submitNewPassword,
+    sent: backToSignIn
+  }
+
   const onPrimary = (event: Event) => {
     if (verifying.value) return
     cardNotice.value = null
-    if (step.value === 'email') {
-      errors.email = emailError(email.value)
-      if (errors.email) focusField('login-email')
-      else {
-        emit('continue', event, email.value.trim())
-        step.value = 'password'
-      }
-    } else if (step.value === 'password') signIn(event)
-    else if (step.value === 'reset') {
-      errors.resetEmail = emailError(resetEmail.value)
-      if (errors.resetEmail) focusField('reset-email')
-      else {
-        emit('reset-request', event, resetEmail.value.trim())
-        step.value = 'sent'
-      }
-    } else if (step.value === 'new-password') {
-      errors.newPassword = newPasswordError(newPassword.value)
-      errors.confirmPassword = !confirmPassword.value
-        ? copy.value.required
-        : confirmPassword.value === newPassword.value
-          ? ''
-          : copy.value.mismatch
-      if (errors.newPassword || errors.confirmPassword)
-        focusField(errors.newPassword ? 'new-password' : 'confirm-password')
-      else {
-        email.value = resetEmail.value
-        password.value = ''
-        returnStep.value = 'password'
-        emit('password-reset', event, newPassword.value)
-      }
-    } else backToSignIn()
+    stepActions[step.value](event)
   }
 </script>
 
 <template>
-  <SignInFrame>
-    <template #header>
-      <AppHeader
-        :aria-label="copy.console"
-        class="shrink-0"
-      >
-        <AppHeader.Brand
-          :href="homeHref"
-          :aria-label="copy.home"
-        >
-          <Brand
-            variant="default"
-            size="small"
-          />
-        </AppHeader.Brand>
-        <AppHeader.Center />
-        <AppHeader.End>
-          <Button
-            :label="copy.documentation"
-            variant="outline"
-            size="medium"
-            icon="az az-book"
-            :href="docsHref"
-          />
-        </AppHeader.End>
-      </AppHeader>
-    </template>
-
+  <SignInFrame
+    :home-href="homeHref"
+    :docs-href="docsHref"
+    :labels="copy"
+  >
     <Card
       class="w-full max-w-(--container-sm)"
       :padded="false"
@@ -914,7 +639,7 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
             :style="cardHeight ? { height: `${cardHeight}px` } : undefined"
             :data-resizing="resizing || null"
             class="transition-[height] duration-moderate-02 ease-productive-entrance motion-safe:data-resizing:overflow-hidden motion-reduce:transition-none"
-            @transitionend.self="resizing = false"
+            @transitionend.self="onTransitionend"
           >
             <form
               ref="cardContentEl"
@@ -956,132 +681,48 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
                 :disabled="verifying"
               >
                 <legend class="sr-only">{{ heading.title }}</legend>
-                <div
+                <SignInProviders
                   v-if="step === 'email'"
-                  class="flex flex-col gap-(--spacing-lg) pb-(--spacing-lg)"
-                >
-                  <div
-                    v-if="providersLoading"
-                    role="status"
-                    :aria-label="copy.preparingProviders"
-                    class="flex flex-col gap-(--spacing-sm)"
-                  >
-                    <Skeleton height="2.5rem" />
-                    <Skeleton height="2.5rem" />
-                  </div>
-                  <div
-                    v-else
-                    class="flex flex-col gap-(--spacing-sm)"
-                  >
-                    <div class="relative">
-                      <Button
-                        type="button"
-                        :label="copy.continueWithGoogle"
-                        variant="outline"
-                        size="large"
-                        icon="az-color az-google"
-                        class="w-full"
-                        @click="(event: MouseEvent) => emit('provider-click', event, 'google')"
-                      />
-                      <div
-                        v-if="lastUsed === 'google'"
-                        class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
-                      >
-                        <Tag
-                          :label="copy.lastUsed"
-                          severity="info"
-                          size="small"
-                        />
-                      </div>
-                    </div>
-                    <div class="relative">
-                      <Button
-                        type="button"
-                        :label="copy.continueWithGithub"
-                        variant="outline"
-                        size="large"
-                        icon="az az-github"
-                        class="w-full"
-                        @click="(event: MouseEvent) => emit('provider-click', event, 'github')"
-                      />
-                      <div
-                        v-if="lastUsed === 'github'"
-                        class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
-                      >
-                        <Tag
-                          :label="copy.lastUsed"
-                          severity="info"
-                          size="small"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <Separator :label="copy.or" />
-                </div>
+                  :copy="copy"
+                  :loading="providersLoading"
+                  :last-used="lastUsed"
+                  @provider-click="(event, provider) => emit('provider-click', event, provider)"
+                />
 
                 <div v-if="step === 'email'">
-                  <Field
-                    required
-                    :invalid="!!errors.email"
-                  >
-                    <Field.Label for="login-email">{{ copy.email }}</Field.Label>
-                    <Input
-                      id="login-email"
-                      v-model="email"
-                      type="email"
-                      name="email"
-                      size="large"
-                      autocomplete="username"
-                      class="w-full"
-                      placeholder="m@example.com"
-                      required
-                      :invalid="!!errors.email"
-                      :aria-describedby="errors.email ? 'login-email-error' : undefined"
-                      @update:model-value="errors.email = ''"
-                    />
-                    <FieldError
-                      v-if="errors.email"
-                      id="login-email-error"
-                      >{{ errors.email }}</FieldError
-                    >
-                  </Field>
+                  <EmailField
+                    id="login-email"
+                    v-model="email"
+                    name="email"
+                    :label="copy.email"
+                    autocomplete="username"
+                    :error="errors.email"
+                    @update:model-value="errors.email = ''"
+                  />
                 </div>
 
                 <div
                   v-else-if="step === 'password'"
                   class="flex flex-col gap-(--spacing-lg)"
                 >
-                  <div class="flex items-center gap-(--spacing-sm)">
-                    <Tooltip :content="copy.changeEmail">
-                      <IconButton
-                        icon="az az-chevron-left"
-                        :aria-label="copy.changeEmail"
-                        variant="outline"
-                        size="small"
-                        @click="backToEmail"
-                      />
-                    </Tooltip>
-                    <span class="truncate text-label-sm text-(--text-default)">{{ email }}</span>
-                  </div>
+                  <StepBack
+                    :label="copy.changeEmail"
+                    :text="email"
+                    @back="backToEmail"
+                  />
 
                   <div class="flex flex-col items-start gap-(--spacing-xs)">
-                    <Field
+                    <PasswordField
+                      id="login-password"
+                      v-model="password"
                       class="w-full"
-                      required
-                      :invalid="!!errors.password"
-                    >
-                      <Field.Label for="login-password">{{ copy.password }}</Field.Label>
-                      <PasswordInput
-                        id="login-password"
-                        v-model="password"
-                        name="password"
-                        autocomplete="current-password"
-                        :placeholder="copy.passwordPlaceholder"
-                        @update:model-value="errors.password = ''"
-                      />
-                      <Field.Error v-if="errors.password">{{ errors.password }}</Field.Error>
-                    </Field>
+                      name="password"
+                      :label="copy.password"
+                      autocomplete="current-password"
+                      :placeholder="copy.passwordPlaceholder"
+                      :error="errors.password"
+                      @update:model-value="errors.password = ''"
+                    />
 
                     <Button
                       type="button"
@@ -1096,115 +737,57 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
                   v-else-if="step === 'reset'"
                   class="flex flex-col gap-(--spacing-lg)"
                 >
-                  <div class="flex items-center gap-(--spacing-sm)">
-                    <Tooltip :content="copy.backToSignIn">
-                      <IconButton
-                        icon="az az-chevron-left"
-                        :aria-label="copy.backToSignIn"
-                        variant="outline"
-                        size="small"
-                        @click="backToSignIn"
-                      />
-                    </Tooltip>
-                    <span class="truncate text-label-sm text-(--text-default)">{{
-                      copy.backToSignIn
-                    }}</span>
-                  </div>
+                  <StepBack
+                    :label="copy.backToSignIn"
+                    :text="copy.backToSignIn"
+                    @back="backToSignIn"
+                  />
 
-                  <Field
-                    required
-                    :invalid="!!errors.resetEmail"
-                  >
-                    <Field.Label for="reset-email">{{ copy.email }}</Field.Label>
-                    <Input
-                      id="reset-email"
-                      v-model="resetEmail"
-                      type="email"
-                      name="reset-email"
-                      size="large"
-                      autocomplete="email"
-                      class="w-full"
-                      placeholder="m@example.com"
-                      required
-                      :invalid="!!errors.resetEmail"
-                      :aria-describedby="errors.resetEmail ? 'reset-email-error' : undefined"
-                      @update:model-value="errors.resetEmail = ''"
-                    />
-                    <FieldError
-                      v-if="errors.resetEmail"
-                      id="reset-email-error"
-                      >{{ errors.resetEmail }}</FieldError
-                    >
-                  </Field>
+                  <EmailField
+                    id="reset-email"
+                    v-model="resetEmail"
+                    name="reset-email"
+                    :label="copy.email"
+                    autocomplete="email"
+                    :error="errors.resetEmail"
+                    @update:model-value="errors.resetEmail = ''"
+                  />
                 </div>
 
                 <div
                   v-else-if="step === 'new-password'"
                   class="flex flex-col gap-(--spacing-lg)"
                 >
-                  <Field
-                    required
-                    :invalid="!!errors.newPassword"
-                  >
-                    <Field.Label for="new-password">{{ copy.newPassword }}</Field.Label>
-                    <PasswordInput
-                      id="new-password"
-                      v-model="newPassword"
-                      name="new-password"
-                      autocomplete="new-password"
-                      :placeholder="copy.newPasswordPlaceholder"
-                      @update:model-value="errors.newPassword = ''"
-                    />
-                    <Field.Error v-if="errors.newPassword">{{ errors.newPassword }}</Field.Error>
-                    <PasswordRequirements :value="newPassword" />
-                  </Field>
+                  <PasswordField
+                    id="new-password"
+                    v-model="newPassword"
+                    name="new-password"
+                    :label="copy.newPassword"
+                    autocomplete="new-password"
+                    :placeholder="copy.newPasswordPlaceholder"
+                    :error="errors.newPassword"
+                    show-requirements
+                    @update:model-value="errors.newPassword = ''"
+                  />
 
-                  <Field
-                    required
-                    :invalid="!!errors.confirmPassword"
-                  >
-                    <Field.Label for="confirm-password">{{ copy.confirmPassword }}</Field.Label>
-                    <PasswordInput
-                      id="confirm-password"
-                      v-model="confirmPassword"
-                      name="confirm-password"
-                      autocomplete="new-password"
-                      :placeholder="copy.confirmPasswordPlaceholder"
-                      @update:model-value="errors.confirmPassword = ''"
-                    />
-                    <Field.Error v-if="errors.confirmPassword">{{
-                      errors.confirmPassword
-                    }}</Field.Error>
-                  </Field>
+                  <PasswordField
+                    id="confirm-password"
+                    v-model="confirmPassword"
+                    name="confirm-password"
+                    :label="copy.confirmPassword"
+                    autocomplete="new-password"
+                    :placeholder="copy.confirmPasswordPlaceholder"
+                    :error="errors.confirmPassword"
+                    @update:model-value="errors.confirmPassword = ''"
+                  />
                 </div>
 
-                <div
+                <SentStep
                   v-else
-                  class="flex flex-col gap-(--spacing-xs)"
-                >
-                  <div class="flex items-center gap-(--spacing-xs)">
-                    <p class="text-body-sm text-(--text-default)">
-                      {{ copy.didNotReceive }}
-                    </p>
-                    <Button
-                      type="button"
-                      :label="copy.resendEmail"
-                      variant="link"
-                      @click="resendEmail"
-                    />
-                  </div>
-                  <div class="flex items-center gap-(--spacing-xs)">
-                    <p class="text-body-sm text-(--text-default)">
-                      {{ copy.alreadyOpened }}
-                    </p>
-                    <Button
-                      type="button"
-                      :label="copy.setNewPassword"
-                      variant="link"
-                      @click="openResetLink"
-                    />
-                  </div>
-                </div>
+                  :copy="copy"
+                  @resend="resendEmail"
+                  @open-reset="openResetLink"
+                />
               </fieldset>
 
               <div class="relative">
@@ -1217,16 +800,10 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
                   :loading="verifying"
                 />
 
-                <div
+                <LastUsedTag
                   v-if="step === 'email' && lastUsed === 'email'"
-                  class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
-                >
-                  <Tag
-                    :label="copy.lastUsed"
-                    severity="info"
-                    size="small"
-                  />
-                </div>
+                  :label="copy.lastUsed"
+                />
               </div>
             </form>
           </div>
@@ -1234,39 +811,93 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
       </template>
     </Card>
 
-    <div class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)">
-      <div class="flex items-center justify-center gap-(--spacing-xs)">
-        <p class="text-body-xs text-(--text-default)">{{ copy.noAccount }}</p>
-        <span class="text-body-xs">
-          <Link
-            inline
-            :href="signUpHref"
-            >{{ copy.signUp }}</Link
-          >
-        </span>
-      </div>
-
-      <template v-if="step === 'email' || step === 'password'">
-        <p class="text-center text-body-xs text-(--text-muted)">
-          {{ copy.agreeStart }}
-          <Link
-            inline
-            :href="termsHref"
-            target="_blank"
-            >{{ copy.terms }}</Link
-          >
-          {{ copy.and }}
-          <Link
-            inline
-            :href="privacyHref"
-            target="_blank"
-            >{{ copy.privacy }}</Link
-          >.
-        </p>
-      </template>
-    </div>
+    <SignInFooter
+      :prompt="copy.noAccount"
+      :link-label="copy.signUp"
+      :link-href="signUpHref"
+      :show-terms="step === 'email' || step === 'password'"
+      :terms="copy"
+      :terms-href="termsHref"
+      :privacy-href="privacyHref"
+    />
   </SignInFrame>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type { AuthScope } from './parts/scope-list.vue'
+
+export const signedInAccount = { name: 'Jane Doe', initials: 'JD', email: 'jane.doe@example.com' }
+
+export const oauthClient = {
+  name: 'Acme Deploy',
+  initials: 'AD',
+  publisher: 'Acme Inc.',
+  site: 'deploy.example.com',
+  redirect: 'https://deploy.example.com/oauth/callback'
+}
+
+export const oauthScopes: AuthScope[] = [
+  {
+    id: 'profile',
+    icon: 'az az-user',
+    title: 'Read your profile',
+    description: 'Your name, email address and avatar.'
+  },
+  {
+    id: 'workloads:read',
+    icon: 'az az-globe',
+    title: 'Read your workloads',
+    description: 'Names, domains and status. Not their settings or secrets.'
+  },
+  {
+    id: 'applications:deploy',
+    icon: 'az az-upload',
+    title: 'Deploy your applications',
+    description: 'Create and publish new versions of the applications in this account.'
+  }
+]
+
+export const deviceRequest = {
+  code: 'WDJBMJHT',
+  client: 'Acme CLI',
+  device: 'build-runner-01',
+  address: '203.0.113.24',
+  requested: 'Nov 14, 2026, 10:42 UTC',
+  expires: '15 minutes'
+}
+
+export const deviceScopes: AuthScope[] = [
+  {
+    id: 'workloads:read',
+    icon: 'az az-globe',
+    title: 'Read your workloads',
+    description: 'Names, domains and status.'
+  },
+  {
+    id: 'applications:deploy',
+    icon: 'az az-upload',
+    title: 'Deploy your applications',
+    description: 'Create and publish new versions from the terminal.'
+  }
+]
+
+export const mfaAccount = 'jane.doe@example.com'
+
+export const mfaSetupKey = 'JBSW Y3DP EHPK 3PXP'
+
+export const recoveryCodes = [
+  'K7QM2XPA',
+  'R4TD9WLN',
+  'B8VJ3HQE',
+  'N2CY6FMT',
+  'H5LP8KRW',
+  'W9EX4GDB',
+  'T3NA7ZQC',
+  'F6RU2MJV'
+]
 ```
 
 ## `token-sign-in.vue`
@@ -1497,6 +1128,410 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
 </template>
 ```
 
+## `lib/sign-in-copy.ts`
+
+```ts
+export const SIGN_IN_COPY = {
+  en: {
+    console: 'Console',
+    home: 'Azion home',
+    documentation: 'Documentation',
+    badCredentials: 'Incorrect email or password. Check both and try again.',
+    serviceUnavailable: 'Sign-in is unavailable right now. Your credentials are fine.',
+    serverError: 'Sign-in failed on our side. You are still signed out. Error 500.',
+    timeout: 'The server did not answer in time. Your session may already be open.',
+    sessionExpired: 'Your session expired. Sign in again to pick up where you left off.',
+    signedIn: 'Signed in.',
+    passwordUpdated: 'Password updated. Sign in with the new one.',
+    required: 'This field is required.',
+    invalidEmail: 'Enter a valid email address.',
+    weakPassword: 'Password does not meet requirements.',
+    mismatch: "Passwords don't match.",
+    resetTitle: 'Reset your password',
+    resetDescription:
+      "Enter the email for your account and we'll send you a link to set a new one.",
+    newPasswordTitle: 'Reset password',
+    sentTitle: 'Check your inbox',
+    sentDescription:
+      'We sent a reset link to {email}. Check your inbox or spam folder and follow the instructions.',
+    title: 'Welcome back',
+    description: 'Sign in to your account.',
+    signIn: 'Sign in',
+    sendResetLink: 'Send reset link',
+    resetPassword: 'Reset password',
+    returnToSignIn: 'Return to sign in',
+    continueWithEmail: 'Continue with email',
+    resent: 'We sent another link to {email}.',
+    form: 'Sign in to your account',
+    retry: 'Retry',
+    preparingProviders: 'Preparing sign-in providers',
+    continueWithGoogle: 'Continue with Google',
+    continueWithGithub: 'Continue with GitHub',
+    or: 'or',
+    email: 'Email',
+    changeEmail: 'Change email',
+    password: 'Password',
+    passwordPlaceholder: 'Type your password',
+    forgotPassword: 'Forgot your password?',
+    backToSignIn: 'Back to sign in',
+    newPassword: 'New password',
+    newPasswordPlaceholder: 'Enter a new password',
+    confirmPassword: 'Confirm password',
+    confirmPasswordPlaceholder: 'Repeat the new password',
+    didNotReceive: "Didn't receive the email?",
+    resendEmail: 'Resend email',
+    alreadyOpened: 'Already opened it?',
+    setNewPassword: 'Set a new password',
+    lastUsed: 'Last used',
+    noAccount: "Don't have an account?",
+    signUp: 'Sign up',
+    agreeStart: 'By continuing, I agree to the',
+    terms: 'terms of service',
+    and: 'and',
+    privacy: 'privacy policy'
+  },
+  'pt-BR': {
+    console: 'Console',
+    home: 'Página inicial da Azion',
+    documentation: 'Documentação',
+    badCredentials: 'E-mail ou senha incorretos. Confira os dois e tente de novo.',
+    serviceUnavailable: 'O login está indisponível no momento. Suas credenciais estão corretas.',
+    serverError: 'O login falhou do nosso lado. Você continua desconectado. Erro 500.',
+    timeout: 'O servidor não respondeu a tempo. Sua sessão pode já estar aberta.',
+    sessionExpired: 'Sua sessão expirou. Entre de novo para continuar de onde parou.',
+    signedIn: 'Login feito.',
+    passwordUpdated: 'Senha atualizada. Entre com a nova senha.',
+    required: 'Este campo é obrigatório.',
+    invalidEmail: 'Digite um endereço de e-mail válido.',
+    weakPassword: 'A senha não atende aos requisitos.',
+    mismatch: 'As senhas não coincidem.',
+    resetTitle: 'Redefina sua senha',
+    resetDescription:
+      'Digite o e-mail da sua conta e enviaremos um link para você definir uma nova senha.',
+    newPasswordTitle: 'Redefinir senha',
+    sentTitle: 'Confira sua caixa de entrada',
+    sentDescription:
+      'Enviamos um link de redefinição para {email}. Confira a caixa de entrada ou o spam e siga as instruções.',
+    title: 'Boas-vindas de volta',
+    description: 'Entre na sua conta.',
+    signIn: 'Entrar',
+    sendResetLink: 'Enviar link de redefinição',
+    resetPassword: 'Redefinir senha',
+    returnToSignIn: 'Voltar para o login',
+    continueWithEmail: 'Continuar com e-mail',
+    resent: 'Enviamos outro link para {email}.',
+    form: 'Entre na sua conta',
+    retry: 'Tentar de novo',
+    preparingProviders: 'Preparando os provedores de login',
+    continueWithGoogle: 'Continuar com Google',
+    continueWithGithub: 'Continuar com GitHub',
+    or: 'ou',
+    email: 'E-mail',
+    changeEmail: 'Trocar e-mail',
+    password: 'Senha',
+    passwordPlaceholder: 'Digite sua senha',
+    forgotPassword: 'Esqueceu sua senha?',
+    backToSignIn: 'Voltar para o login',
+    newPassword: 'Nova senha',
+    newPasswordPlaceholder: 'Digite uma nova senha',
+    confirmPassword: 'Confirmar senha',
+    confirmPasswordPlaceholder: 'Repita a nova senha',
+    didNotReceive: 'Não recebeu o e-mail?',
+    resendEmail: 'Reenviar e-mail',
+    alreadyOpened: 'Já abriu?',
+    setNewPassword: 'Definir uma nova senha',
+    lastUsed: 'Usado por último',
+    noAccount: 'Não tem uma conta?',
+    signUp: 'Cadastre-se',
+    agreeStart: 'Ao continuar, concordo com os',
+    terms: 'termos de serviço',
+    and: 'e a',
+    privacy: 'política de privacidade'
+  },
+  es: {
+    console: 'Consola',
+    home: 'Inicio de Azion',
+    documentation: 'Documentación',
+    badCredentials: 'Correo o contraseña incorrectos. Revisa ambos y vuelve a intentarlo.',
+    serviceUnavailable:
+      'El inicio de sesión no está disponible ahora. Tus credenciales son correctas.',
+    serverError: 'El inicio de sesión falló de nuestro lado. Sigues sin sesión. Error 500.',
+    timeout: 'El servidor no respondió a tiempo. Puede que tu sesión ya esté abierta.',
+    sessionExpired: 'Tu sesión caducó. Inicia sesión de nuevo para seguir donde lo dejaste.',
+    signedIn: 'Sesión iniciada.',
+    passwordUpdated: 'Contraseña actualizada. Inicia sesión con la nueva.',
+    required: 'Este campo es obligatorio.',
+    invalidEmail: 'Introduce un correo electrónico válido.',
+    weakPassword: 'La contraseña no cumple los requisitos.',
+    mismatch: 'Las contraseñas no coinciden.',
+    resetTitle: 'Restablece tu contraseña',
+    resetDescription:
+      'Introduce el correo de tu cuenta y te enviaremos un enlace para crear una nueva.',
+    newPasswordTitle: 'Restablecer contraseña',
+    sentTitle: 'Revisa tu bandeja de entrada',
+    sentDescription:
+      'Enviamos un enlace de restablecimiento a {email}. Revisa la bandeja de entrada o el spam y sigue las instrucciones.',
+    title: 'Te damos la bienvenida de nuevo',
+    description: 'Inicia sesión en tu cuenta.',
+    signIn: 'Iniciar sesión',
+    sendResetLink: 'Enviar enlace',
+    resetPassword: 'Restablecer contraseña',
+    returnToSignIn: 'Volver a iniciar sesión',
+    continueWithEmail: 'Continuar con correo',
+    resent: 'Enviamos otro enlace a {email}.',
+    form: 'Inicia sesión en tu cuenta',
+    retry: 'Reintentar',
+    preparingProviders: 'Preparando los proveedores de inicio de sesión',
+    continueWithGoogle: 'Continuar con Google',
+    continueWithGithub: 'Continuar con GitHub',
+    or: 'o',
+    email: 'Correo electrónico',
+    changeEmail: 'Cambiar correo',
+    password: 'Contraseña',
+    passwordPlaceholder: 'Escribe tu contraseña',
+    forgotPassword: '¿Olvidaste tu contraseña?',
+    backToSignIn: 'Volver a iniciar sesión',
+    newPassword: 'Nueva contraseña',
+    newPasswordPlaceholder: 'Introduce una nueva contraseña',
+    confirmPassword: 'Confirmar contraseña',
+    confirmPasswordPlaceholder: 'Repite la nueva contraseña',
+    didNotReceive: '¿No recibiste el correo?',
+    resendEmail: 'Reenviar correo',
+    alreadyOpened: '¿Ya lo abriste?',
+    setNewPassword: 'Crear una nueva contraseña',
+    lastUsed: 'Último usado',
+    noAccount: '¿No tienes una cuenta?',
+    signUp: 'Regístrate',
+    agreeStart: 'Al continuar, acepto los',
+    terms: 'términos del servicio',
+    and: 'y la',
+    privacy: 'política de privacidad'
+  }
+}
+
+export type SignInCopy = (typeof SIGN_IN_COPY)['en']
+
+export const resolveSignInCopy = (tag: string): SignInCopy => {
+  const language = tag.split('-')[0]
+  return (
+    SIGN_IN_COPY[tag as keyof typeof SIGN_IN_COPY] ??
+    SIGN_IN_COPY[language as keyof typeof SIGN_IN_COPY] ??
+    SIGN_IN_COPY.en
+  )
+}
+
+export const fillEmail = (template: string, email: string) => template.replace('{email}', email)
+```
+
+## `lib/sign-in-rules.ts`
+
+```ts
+import type { AlertSeverity } from '@aziontech/webkit/alert'
+import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
+
+import type { SignInFailure, SignInNoticeKind } from '../auth-sign-in.vue'
+import type { SignInCopy } from './sign-in-copy'
+
+/** What the card notice shows. */
+export interface CardNotice {
+  /** The colour of the notice. */
+  severity: AlertSeverity
+  /** What the notice says. */
+  label: string
+  /** The notice offers Retry. */
+  retry?: boolean
+}
+
+type FieldCopy = Pick<SignInCopy, 'required' | 'invalidEmail' | 'weakPassword'>
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+export const emailError = (value: string, copy: FieldCopy) =>
+  !value.trim() ? copy.required : EMAIL_PATTERN.test(value.trim()) ? '' : copy.invalidEmail
+
+export const newPasswordError = (value: string, copy: FieldCopy) =>
+  !value
+    ? copy.required
+    : DEFAULT_PASSWORD_REQUIREMENTS.every((rule) => rule.test.test(value))
+      ? ''
+      : copy.weakPassword
+
+const failureNotices = (copy: SignInCopy): Record<SignInFailure, CardNotice> => ({
+  'bad-credentials': { severity: 'danger', label: copy.badCredentials },
+  'service-unavailable': { severity: 'warning', label: copy.serviceUnavailable, retry: true },
+  'server-error': { severity: 'danger', label: copy.serverError, retry: true },
+  timeout: { severity: 'warning', label: copy.timeout, retry: true }
+})
+
+const outcomeNotices = (copy: SignInCopy): Record<SignInNoticeKind, CardNotice> => ({
+  'session-expired': { severity: 'info', label: copy.sessionExpired },
+  'signed-in': { severity: 'success', label: copy.signedIn },
+  'password-updated': { severity: 'success', label: copy.passwordUpdated }
+})
+
+export const noticeFor = (error: string, notice: string, copy: SignInCopy): CardNotice | null => {
+  if (error) {
+    return (
+      failureNotices(copy)[error as SignInFailure] ?? {
+        severity: 'danger',
+        label: error,
+        retry: true
+      }
+    )
+  }
+  if (notice) {
+    return outcomeNotices(copy)[notice as SignInNoticeKind] ?? { severity: 'info', label: notice }
+  }
+  return null
+}
+```
+
+## `composables/use-card-height.ts`
+
+```ts
+import { onMounted, onScopeDispose, readonly, type Ref, ref } from 'vue'
+
+export interface UseCardHeightReturn {
+  /** The measured height in pixels; 0 before the first measure. */
+  height: Readonly<Ref<number>>
+  /** The height is easing to a new value. */
+  resizing: Readonly<Ref<boolean>>
+  /** Ends the resize when the height transition ends. */
+  onTransitionend: () => void
+}
+
+export function useCardHeight(contentEl: Ref<HTMLElement | null>): UseCardHeightReturn {
+  const height = ref(0)
+  const resizing = ref(false)
+  let resizeObserver: ResizeObserver | null = null
+
+  const onResize = ([entry]: ResizeObserverEntry[]) => {
+    const next = Math.round(entry.contentRect.height)
+    if (height.value && next !== height.value) resizing.value = true
+    height.value = next
+  }
+
+  onMounted(() => {
+    if (typeof ResizeObserver === 'undefined' || !contentEl.value) return
+    resizeObserver = new ResizeObserver(onResize)
+    resizeObserver.observe(contentEl.value)
+  })
+
+  onScopeDispose(() => {
+    resizeObserver?.disconnect()
+  })
+
+  const onTransitionend = () => {
+    resizing.value = false
+  }
+
+  return { height: readonly(height), resizing: readonly(resizing), onTransitionend }
+}
+```
+
+## `composables/use-code-check.ts`
+
+```ts
+import { type MaybeRefOrGetter, onScopeDispose, readonly, type Ref, ref, toValue } from 'vue'
+
+export interface CodeCheckMessages {
+  /** The message when nothing was entered. */
+  empty: string
+  /** The message when the code is shorter than its length. */
+  short: string
+  /** The message when the server rejects the code. */
+  rejected: string
+}
+
+export interface UseCodeCheckOptions {
+  /** The code the person types, bound to the input. */
+  code: Ref<string>
+  /** How many characters a full code has. */
+  length: MaybeRefOrGetter<number>
+  /** The messages of the field. */
+  messages: MaybeRefOrGetter<CodeCheckMessages>
+  /** Moves focus back to the code input. */
+  focus: () => void
+  /** Runs when the server accepts the code. */
+  onAccepted: (code: string) => void
+  /** True while another request of the screen is in flight: the check does not start. */
+  blocked?: () => boolean
+}
+
+export interface UseCodeCheckReturn {
+  /** The validation or rejection message; empty shows none. */
+  error: Readonly<Ref<string>>
+  /** The code is being checked. */
+  checking: Readonly<Ref<boolean>>
+  /** The check could not reach the server. */
+  unreachable: Readonly<Ref<boolean>>
+  /** Checks the code: all zeros is rejected and all nines cannot be reached, as a sample server. */
+  check: () => void
+  /** Clears the message, as the person types. */
+  clearError: () => void
+  /** Clears the code, the message and the unreachable notice. */
+  reset: () => void
+}
+
+export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
+  const { code, focus, onAccepted, blocked = () => false } = options
+  const error = ref('')
+  const checking = ref(false)
+  const unreachable = ref(false)
+  let timer: ReturnType<typeof setTimeout> | undefined
+
+  onScopeDispose(() => clearTimeout(timer))
+
+  const answer = (rejected: string) => {
+    checking.value = false
+    if (/^0+$/.test(code.value)) {
+      error.value = rejected
+      code.value = ''
+      focus()
+      return
+    }
+    if (/^9+$/.test(code.value)) {
+      unreachable.value = true
+      return
+    }
+    onAccepted(code.value)
+  }
+
+  const check = () => {
+    if (checking.value || blocked()) return
+    unreachable.value = false
+    const messages = toValue(options.messages)
+    if (code.value.length < toValue(options.length)) {
+      error.value = code.value ? messages.short : messages.empty
+      focus()
+      return
+    }
+    error.value = ''
+    checking.value = true
+    timer = setTimeout(() => answer(messages.rejected), 600)
+  }
+
+  const clearError = () => {
+    error.value = ''
+  }
+
+  const reset = () => {
+    code.value = ''
+    error.value = ''
+    unreachable.value = false
+  }
+
+  return {
+    error: readonly(error),
+    checking: readonly(checking),
+    unreachable: readonly(unreachable),
+    check,
+    clearError,
+    reset
+  }
+}
+```
+
 ## `parts/sign-in-frame.vue`
 
 ```ts
@@ -1510,16 +1545,17 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
     homeHref?: string
     /** Where the Documentation button leads. */
     docsHref?: string
+    /** The words of the signed-out bar in the app's language. */
+    labels?: { console: string; home: string; documentation: string }
   }
 
   withDefaults(defineProps<SignInFrameProps>(), {
     homeHref: '/home',
-    docsHref: '/docs'
+    docsHref: '/docs',
+    labels: () => ({ console: 'Console', home: 'Azion home', documentation: 'Documentation' })
   })
 
   defineSlots<{
-    /** The signed-out bar; left out, the English bar with the product mark and Documentation renders. */
-    header(): unknown
     /** The card and what sits under it, in the centred column. */
     default(): unknown
   }>()
@@ -1531,32 +1567,30 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
 
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <slot name="header">
-      <AppHeader
-        aria-label="Console"
-        class="shrink-0"
+    <AppHeader
+      :aria-label="labels.console"
+      class="shrink-0"
+    >
+      <AppHeader.Brand
+        :href="homeHref"
+        :aria-label="labels.home"
       >
-        <AppHeader.Brand
-          :href="homeHref"
-          aria-label="Azion home"
-        >
-          <Brand
-            variant="default"
-            size="small"
-          />
-        </AppHeader.Brand>
-        <AppHeader.Center />
-        <AppHeader.End>
-          <Button
-            label="Documentation"
-            variant="outline"
-            size="medium"
-            icon="az az-book"
-            :href="docsHref"
-          />
-        </AppHeader.End>
-      </AppHeader>
-    </slot>
+        <Brand
+          variant="default"
+          size="small"
+        />
+      </AppHeader.Brand>
+      <AppHeader.Center />
+      <AppHeader.End>
+        <Button
+          :label="labels.documentation"
+          variant="outline"
+          size="medium"
+          icon="az az-book"
+          :href="docsHref"
+        />
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">
@@ -1568,5 +1602,1438 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
       </div>
     </main>
   </div>
+</template>
+```
+
+## `parts/auth-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+
+  defineSlots<{
+    /** What the card holds, padding included. */
+    default(): unknown
+  }>()
+</script>
+
+<template>
+  <div class="flex w-full flex-col items-center">
+    <Card
+      class="w-full max-w-(--container-sm)"
+      :padded="false"
+    >
+      <template #default>
+        <slot />
+      </template>
+    </Card>
+  </div>
+</template>
+```
+
+## `parts/email-field.vue`
+
+```ts
+<script setup lang="ts">
+  import Field from '@aziontech/webkit/field'
+  import FieldError from '@aziontech/webkit/field-error'
+  import Input from '@aziontech/webkit/input'
+
+  export interface EmailFieldProps {
+    /** The id of the input, also the stem of its error id. */
+    id: string
+    /** The form name of the input. */
+    name: string
+    /** The field label. */
+    label: string
+    /** The autocomplete hint. */
+    autocomplete: string
+    /** The validation message; empty shows none. */
+    error?: string
+  }
+
+  withDefaults(defineProps<EmailFieldProps>(), { error: '' })
+
+  const email = defineModel<string>({ default: '' })
+</script>
+
+<template>
+  <Field
+    required
+    :invalid="!!error"
+  >
+    <Field.Label :for="id">{{ label }}</Field.Label>
+    <Input
+      :id="id"
+      v-model="email"
+      type="email"
+      :name="name"
+      size="large"
+      :autocomplete="autocomplete"
+      class="w-full"
+      placeholder="m@example.com"
+      required
+      :invalid="!!error"
+      :aria-describedby="error ? `${id}-error` : undefined"
+    />
+    <FieldError
+      v-if="error"
+      :id="`${id}-error`"
+      >{{ error }}</FieldError
+    >
+  </Field>
+</template>
+```
+
+## `parts/password-field.vue`
+
+```ts
+<script setup lang="ts">
+  import Field from '@aziontech/webkit/field'
+  import PasswordInput, { type PasswordInputAutocomplete } from '@aziontech/webkit/password-input'
+  import PasswordRequirements from '@aziontech/webkit/password-requirements-root'
+
+  export interface PasswordFieldProps {
+    /** The id of the input. */
+    id: string
+    /** The form name of the input. */
+    name: string
+    /** The field label. */
+    label: string
+    /** The autocomplete hint. */
+    autocomplete: PasswordInputAutocomplete
+    /** The input placeholder. */
+    placeholder: string
+    /** The validation message; empty shows none. */
+    error?: string
+    /** Lists the password requirements under the input. */
+    showRequirements?: boolean
+  }
+
+  withDefaults(defineProps<PasswordFieldProps>(), { error: '', showRequirements: false })
+
+  const password = defineModel<string>({ default: '' })
+</script>
+
+<template>
+  <Field
+    required
+    :invalid="!!error"
+  >
+    <Field.Label :for="id">{{ label }}</Field.Label>
+    <PasswordInput
+      :id="id"
+      v-model="password"
+      :name="name"
+      :autocomplete="autocomplete"
+      :placeholder="placeholder"
+    />
+    <Field.Error v-if="error">{{ error }}</Field.Error>
+    <PasswordRequirements
+      v-if="showRequirements"
+      :value="password"
+    />
+  </Field>
+</template>
+```
+
+## `parts/last-used-tag.vue`
+
+```ts
+<script setup lang="ts">
+  import Tag from '@aziontech/webkit/tag'
+
+  export interface LastUsedTagProps {
+    /** What the tag says. */
+    label: string
+  }
+
+  defineProps<LastUsedTagProps>()
+</script>
+
+<template>
+  <div class="absolute end-(--spacing-sm) top-0 -translate-y-1/2">
+    <Tag
+      :label="label"
+      severity="info"
+      size="small"
+    />
+  </div>
+</template>
+```
+
+## `parts/sign-in-providers.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Separator from '@aziontech/webkit/separator'
+  import Skeleton from '@aziontech/webkit/skeleton'
+
+  import type { SignInMethod, SignInProvider } from '../auth-sign-in.vue'
+  import type { SignInCopy } from '../lib/sign-in-copy'
+  import LastUsedTag from './last-used-tag.vue'
+
+  export interface SignInProvidersProps {
+    /** The card copy in the app's language. */
+    copy: SignInCopy
+    /** Skeleton bars hold the place of the providers. */
+    loading?: boolean
+    /** The method that carries the Last used tag. */
+    lastUsed?: SignInMethod | ''
+  }
+
+  withDefaults(defineProps<SignInProvidersProps>(), { loading: false, lastUsed: '' })
+
+  const emit = defineEmits<{
+    'provider-click': [event: MouseEvent, provider: SignInProvider]
+  }>()
+
+  const providers: { id: SignInProvider; icon: string; label: keyof SignInCopy }[] = [
+    { id: 'google', icon: 'az-color az-google', label: 'continueWithGoogle' },
+    { id: 'github', icon: 'az az-github', label: 'continueWithGithub' }
+  ]
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-lg) pb-(--spacing-lg)">
+    <div
+      v-if="loading"
+      role="status"
+      :aria-label="copy.preparingProviders"
+      class="flex flex-col gap-(--spacing-sm)"
+    >
+      <Skeleton height="2.5rem" />
+      <Skeleton height="2.5rem" />
+    </div>
+    <div
+      v-else
+      class="flex flex-col gap-(--spacing-sm)"
+    >
+      <div
+        v-for="provider in providers"
+        :key="provider.id"
+        class="relative"
+      >
+        <Button
+          type="button"
+          :label="copy[provider.label]"
+          variant="outline"
+          size="large"
+          :icon="provider.icon"
+          class="w-full"
+          @click="(event: MouseEvent) => emit('provider-click', event, provider.id)"
+        />
+        <LastUsedTag
+          v-if="lastUsed === provider.id"
+          :label="copy.lastUsed"
+        />
+      </div>
+    </div>
+
+    <Separator :label="copy.or" />
+  </div>
+</template>
+```
+
+## `parts/step-back.vue`
+
+```ts
+<script setup lang="ts">
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Tooltip from '@aziontech/webkit/tooltip'
+
+  export interface StepBackProps {
+    /** The name of the back control, also its tooltip. */
+    label: string
+    /** The text beside the control. */
+    text: string
+  }
+
+  defineProps<StepBackProps>()
+
+  const emit = defineEmits<{
+    back: [event: MouseEvent]
+  }>()
+</script>
+
+<template>
+  <div class="flex items-center gap-(--spacing-sm)">
+    <Tooltip :content="label">
+      <IconButton
+        icon="az az-chevron-left"
+        :aria-label="label"
+        variant="outline"
+        size="small"
+        @click="(event: MouseEvent) => emit('back', event)"
+      />
+    </Tooltip>
+    <span class="truncate text-label-sm text-(--text-default)">{{ text }}</span>
+  </div>
+</template>
+```
+
+## `parts/sent-step.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+
+  import type { SignInCopy } from '../lib/sign-in-copy'
+
+  export interface SentStepProps {
+    /** The card copy in the app's language. */
+    copy: SignInCopy
+  }
+
+  defineProps<SentStepProps>()
+
+  const emit = defineEmits<{
+    resend: [event: MouseEvent]
+    'open-reset': [event: MouseEvent]
+  }>()
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-xs)">
+    <div class="flex items-center gap-(--spacing-xs)">
+      <p class="text-body-sm text-(--text-default)">
+        {{ copy.didNotReceive }}
+      </p>
+      <Button
+        type="button"
+        :label="copy.resendEmail"
+        variant="link"
+        @click="(event: MouseEvent) => emit('resend', event)"
+      />
+    </div>
+    <div class="flex items-center gap-(--spacing-xs)">
+      <p class="text-body-sm text-(--text-default)">
+        {{ copy.alreadyOpened }}
+      </p>
+      <Button
+        type="button"
+        :label="copy.setNewPassword"
+        variant="link"
+        @click="(event: MouseEvent) => emit('open-reset', event)"
+      />
+    </div>
+  </div>
+</template>
+```
+
+## `parts/sign-in-footer.vue`
+
+```ts
+<script setup lang="ts">
+  import Link from '@aziontech/webkit/link'
+
+  export interface SignInFooterProps {
+    /** The question before the link. */
+    prompt: string
+    /** The text of the link. */
+    linkLabel: string
+    /** Where the link leads. */
+    linkHref: string
+    /** Shows the terms line. */
+    showTerms?: boolean
+    /** The words of the terms line. */
+    terms?: { agreeStart: string; terms: string; and: string; privacy: string }
+    /** The terms of service page. */
+    termsHref?: string
+    /** The privacy policy page. */
+    privacyHref?: string
+  }
+
+  withDefaults(defineProps<SignInFooterProps>(), {
+    showTerms: true,
+    terms: () => ({
+      agreeStart: 'By continuing, I agree to the',
+      terms: 'terms of service',
+      and: 'and',
+      privacy: 'privacy policy'
+    }),
+    termsHref: 'https://example.com/terms',
+    privacyHref: 'https://example.com/privacy'
+  })
+</script>
+
+<template>
+  <div class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)">
+    <div class="flex items-center justify-center gap-(--spacing-xs)">
+      <p class="text-body-xs text-(--text-default)">{{ prompt }}</p>
+      <span class="text-body-xs">
+        <Link
+          inline
+          :href="linkHref"
+          >{{ linkLabel }}</Link
+        >
+      </span>
+    </div>
+
+    <p
+      v-if="showTerms"
+      class="text-center text-body-xs text-(--text-muted)"
+    >
+      {{ terms.agreeStart }}
+      <Link
+        inline
+        :href="termsHref"
+        target="_blank"
+        >{{ terms.terms }}</Link
+      >
+      {{ terms.and }}
+      <Link
+        inline
+        :href="privacyHref"
+        target="_blank"
+        >{{ terms.privacy }}</Link
+      >.
+    </p>
+  </div>
+</template>
+```
+
+## `parts/signed-in-as.vue`
+
+```ts
+<script setup lang="ts">
+  import Avatar from '@aziontech/webkit/avatar'
+  import Button from '@aziontech/webkit/button'
+  import Item from '@aziontech/webkit/item'
+
+  export interface SignedInAsProps {
+    /** The account that is signed in. */
+    account: { name: string; initials: string; email: string }
+    /** Switch account is not available, while an answer is in flight or after it. */
+    disabled?: boolean
+  }
+
+  withDefaults(defineProps<SignedInAsProps>(), { disabled: false })
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-xs)">
+    <h2 class="text-label-md text-(--text-muted)">Signed in as</h2>
+    <Item
+      variant="outline"
+      size="small"
+    >
+      <Item.Media>
+        <Avatar
+          :label="account.initials"
+          size="medium"
+        />
+      </Item.Media>
+      <Item.Content>
+        <Item.Title class="max-w-full">
+          <span
+            class="min-w-0 truncate"
+            :title="account.name"
+            >{{ account.name }}</span
+          >
+        </Item.Title>
+        <Item.Description>
+          <span
+            class="block truncate"
+            :title="account.email"
+            >{{ account.email }}</span
+          >
+        </Item.Description>
+      </Item.Content>
+      <Item.Actions>
+        <Button
+          label="Switch account"
+          variant="outline"
+          size="small"
+          href="/login?prompt=select_account"
+          :disabled="disabled"
+        />
+      </Item.Actions>
+    </Item>
+  </div>
+</template>
+```
+
+## `parts/scope-list.vue`
+
+```ts
+<script setup lang="ts">
+  import Item from '@aziontech/webkit/item'
+
+  /** One permission the app asks for. */
+  export interface AuthScope {
+    /** The scope id. */
+    id: string
+    /** The icon class of the scope. */
+    icon: string
+    /** What the scope allows. */
+    title: string
+    /** The detail of what the scope allows. */
+    description: string
+  }
+
+  export interface ScopeListProps {
+    /** The id of the list heading. */
+    headingId: string
+    /** The name of the app that asks. */
+    client: string
+    /** The permissions the app asks for. */
+    scopes: AuthScope[]
+  }
+
+  defineProps<ScopeListProps>()
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-xs)">
+    <h2
+      :id="headingId"
+      class="text-label-md text-(--text-muted)"
+    >
+      {{ client }} will be able to
+    </h2>
+    <Item.List :aria-labelledby="headingId">
+      <Item
+        v-for="scope in scopes"
+        :key="scope.id"
+        size="small"
+        role="listitem"
+      >
+        <Item.Media type="icon">
+          <i
+            :class="scope.icon"
+            aria-hidden="true"
+          />
+        </Item.Media>
+        <Item.Content>
+          <Item.Title>{{ scope.title }}</Item.Title>
+          <Item.Description>{{ scope.description }}</Item.Description>
+        </Item.Content>
+      </Item>
+    </Item.List>
+  </div>
+</template>
+```
+
+## `parts/sign-up-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import Link from '@aziontech/webkit/link'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import Separator from '@aziontech/webkit/separator'
+  import { nextTick, onScopeDispose, reactive, ref } from 'vue'
+
+  import type { SignInProvider } from '../auth-sign-in.vue'
+  import { SIGN_IN_COPY } from '../lib/sign-in-copy'
+  import { emailError, newPasswordError } from '../lib/sign-in-rules'
+  import EmailField from './email-field.vue'
+  import PasswordField from './password-field.vue'
+
+  /** A sign-up failure with its own copy and exits. */
+  export type SignUpFailure = 'email-taken'
+
+  export interface SignUpCardProps {
+    /** The email the form opens on, such as the address a failed sign-up kept. */
+    defaultEmail?: string
+    /** Why sign-up fails: the notice opens with it, and every submit answers with it. */
+    error?: SignUpFailure | ''
+  }
+
+  interface SignUpNotice {
+    severity: AlertSeverity
+    label: string
+    exits?: boolean
+  }
+
+  const props = withDefaults(defineProps<SignUpCardProps>(), {
+    defaultEmail: '',
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    'provider-click': [event: MouseEvent, provider: SignInProvider]
+  }>()
+
+  const takenNotice: SignUpNotice = {
+    severity: 'danger',
+    label: 'This email is already registered.',
+    exits: true
+  }
+
+  const email = ref(props.defaultEmail)
+  const password = ref('')
+  const errors = reactive({ email: '', password: '' })
+  const cardNotice = ref<SignUpNotice | null>(props.error === 'email-taken' ? takenNotice : null)
+  const verifying = ref(false)
+  let requestTimer: ReturnType<typeof setTimeout> | undefined
+
+  onScopeDispose(() => clearTimeout(requestTimer))
+
+  const onEmailInput = () => {
+    errors.email = ''
+    if (cardNotice.value?.exits) cardNotice.value = null
+  }
+
+  const answer = () => {
+    verifying.value = false
+    cardNotice.value =
+      props.error === 'email-taken'
+        ? takenNotice
+        : {
+            severity: 'success',
+            label: `Account created. We sent a verification link to ${email.value.trim()}.`
+          }
+  }
+
+  const signUp = () => {
+    if (verifying.value) return
+    errors.email = emailError(email.value, SIGN_IN_COPY.en)
+    errors.password = newPasswordError(password.value, SIGN_IN_COPY.en)
+    cardNotice.value = null
+    if (errors.email || errors.password) {
+      const id = errors.email ? 'signup-email' : 'signup-password'
+      nextTick(() => document.getElementById(id)?.focus())
+      return
+    }
+    verifying.value = true
+    clearTimeout(requestTimer)
+    requestTimer = setTimeout(answer, 600)
+  }
+
+  const providers: { id: SignInProvider; label: string; icon: string }[] = [
+    { id: 'google', label: 'Continue with Google', icon: 'az-color az-google' },
+    { id: 'github', label: 'Continue with GitHub', icon: 'az az-github' }
+  ]
+</script>
+
+<template>
+  <Card
+    class="w-full max-w-(--container-sm)"
+    :padded="false"
+  >
+    <template #default>
+      <form
+        class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
+        aria-label="Sign up for a free account"
+        :aria-busy="verifying || undefined"
+        novalidate
+        @submit.prevent="signUp"
+      >
+        <PageHeader
+          title="Sign up for a free account"
+          size="small"
+        />
+
+        <Alert
+          v-if="cardNotice"
+          :key="cardNotice.label"
+          :severity="cardNotice.severity"
+          size="small"
+        >
+          {{ cardNotice.label }}
+          <template v-if="cardNotice.exits">
+            <Link
+              inline
+              href="/login"
+              >Sign in</Link
+            >
+            or
+            <Link
+              inline
+              href="/login?reset=1"
+              >reset your password</Link
+            >.
+          </template>
+        </Alert>
+
+        <div class="flex flex-col gap-(--spacing-sm)">
+          <Button
+            v-for="provider in providers"
+            :key="provider.id"
+            type="button"
+            :label="provider.label"
+            variant="outline"
+            size="large"
+            :icon="provider.icon"
+            class="w-full"
+            :disabled="verifying"
+            @click="(event: MouseEvent) => emit('provider-click', event, provider.id)"
+          />
+        </div>
+
+        <Separator label="or" />
+
+        <fieldset
+          class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
+          :disabled="verifying"
+        >
+          <legend class="sr-only">Account credentials</legend>
+
+          <EmailField
+            id="signup-email"
+            v-model="email"
+            name="email"
+            label="Work email"
+            autocomplete="email"
+            :error="errors.email"
+            @update:model-value="onEmailInput"
+          />
+
+          <PasswordField
+            id="signup-password"
+            v-model="password"
+            name="password"
+            label="Password"
+            autocomplete="new-password"
+            placeholder="Create a password"
+            :error="errors.password"
+            show-requirements
+            @update:model-value="errors.password = ''"
+          />
+        </fieldset>
+
+        <Button
+          label="Sign up"
+          variant="primary"
+          size="large"
+          class="w-full"
+          type="submit"
+          :loading="verifying"
+        />
+      </form>
+    </template>
+  </Card>
+</template>
+```
+
+## `parts/mfa-code-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import Field from '@aziontech/webkit/field'
+  import Link from '@aziontech/webkit/link'
+  import OtpInput from '@aziontech/webkit/otp-input'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import { computed, nextTick, onMounted, ref } from 'vue'
+
+  import { useCodeCheck } from '../composables/use-code-check'
+  import { mfaAccount as account } from '../sample'
+  import AuthCard from './auth-card.vue'
+
+  const recovery = ref(false)
+  const code = ref('')
+  const signedIn = ref(false)
+
+  const codeField = computed(() =>
+    recovery.value
+      ? {
+          label: 'Recovery code',
+          length: 8,
+          description:
+            'One of the 8-character codes you saved when you set up multi-factor authentication. Each works once.',
+          empty: 'Enter one of your recovery codes.',
+          short: 'Enter all 8 characters of the recovery code.',
+          rejected: 'That recovery code is not valid or was already used. Try another one.'
+        }
+      : {
+          label: 'Authentication code',
+          length: 6,
+          description: `The 6-digit code your authenticator app shows for ${account}.`,
+          empty: 'Enter the 6-digit code from the app.',
+          short: 'Enter all 6 digits of the code.',
+          rejected:
+            'That code is not valid. Enter the current code; the app changes it every 30 seconds.'
+        }
+  )
+
+  const focusCode = () => nextTick(() => document.getElementById('mfa-code')?.focus())
+  onMounted(focusCode)
+
+  const codeCheck = useCodeCheck({
+    code,
+    length: () => codeField.value.length,
+    messages: codeField,
+    focus: focusCode,
+    onAccepted: () => {
+      signedIn.value = true
+    }
+  })
+  const { error: codeError, checking: verifying, unreachable, check: verify } = codeCheck
+
+  const switchMethod = () => {
+    recovery.value = !recovery.value
+    codeCheck.reset()
+    focusCode()
+  }
+</script>
+
+<template>
+  <AuthCard>
+    <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)">
+      <PageHeader
+        title="Verify it's you"
+        :description="
+          recovery
+            ? 'Enter a recovery code to sign in without your authenticator app.'
+            : 'Open your authenticator app and enter the code it shows.'
+        "
+      />
+
+      <Alert
+        key="alert-1"
+        v-if="signedIn"
+        severity="success"
+        size="small"
+        label="Signed in."
+      />
+      <Alert
+        key="alert-2"
+        v-else-if="unreachable"
+        severity="warning"
+        size="small"
+      >
+        We could not check the code. Your entry is kept; try again in a moment.
+        <template #actions>
+          <Button
+            label="Retry"
+            variant="secondary"
+            size="small"
+            :loading="verifying"
+            @click="verify"
+          />
+        </template>
+      </Alert>
+
+      <form
+        class="flex flex-col gap-(--spacing-lg)"
+        novalidate
+        @submit.prevent="verify"
+      >
+        <Field :invalid="!!codeError">
+          <Field.Label for="mfa-code">{{ codeField.label }}</Field.Label>
+          <OtpInput
+            id="mfa-code"
+            :key="recovery ? 'recovery' : 'app'"
+            v-model="code"
+            name="code"
+            :length="codeField.length"
+            :mode="recovery ? 'alphanumeric' : 'numeric'"
+            :group="recovery ? 4 : 0"
+            :disabled="verifying || signedIn"
+            @update:model-value="codeCheck.clearError"
+            @complete="verify"
+          />
+          <Field.Description>{{ codeError || codeField.description }}</Field.Description>
+        </Field>
+
+        <Button
+          type="submit"
+          label="Verify"
+          variant="primary"
+          size="large"
+          class="w-full"
+          :loading="verifying"
+          :disabled="signedIn"
+        />
+      </form>
+
+      <div class="flex flex-col items-start gap-(--spacing-xs)">
+        <Button
+          type="button"
+          :label="recovery ? 'Use your authenticator app' : 'Use a recovery code'"
+          variant="link"
+          @click="switchMethod"
+        />
+        <span class="text-body-sm">
+          <Link
+            inline
+            href="/login"
+            >Sign in with another account</Link
+          >
+        </span>
+      </div>
+    </div>
+  </AuthCard>
+</template>
+```
+
+## `parts/mfa-setup-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import Checkbox from '@aziontech/webkit/checkbox'
+  import CopyButton from '@aziontech/webkit/copy-button'
+  import Field from '@aziontech/webkit/field'
+  import OtpInput from '@aziontech/webkit/otp-input'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import QrCode from '@aziontech/webkit/qr-code'
+  import { computed, nextTick, ref } from 'vue'
+
+  import { useCodeCheck } from '../composables/use-code-check'
+  import { mfaAccount as account, mfaSetupKey as setupKey, recoveryCodes } from '../sample'
+  import AuthCard from './auth-card.vue'
+
+  const otpauthUri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${setupKey.replaceAll(' ', '')}&issuer=Azion`
+
+  const recoveryText = recoveryCodes.join('\n')
+  const codesSaved = ref(false)
+  const continueHint = computed(() =>
+    codesSaved.value ? '' : 'Confirm that you saved the recovery codes to continue.'
+  )
+
+  const downloadCodes = () => {
+    const url = URL.createObjectURL(new Blob([`${recoveryText}\n`], { type: 'text/plain' }))
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'azion-recovery-codes.txt'
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const code = ref('')
+  const enabled = ref(false)
+
+  const focusCode = () => nextTick(() => document.getElementById('mfa-setup-code')?.focus())
+
+  const codeCheck = useCodeCheck({
+    code,
+    length: 6,
+    messages: {
+      empty: 'Enter the 6-digit code from the app.',
+      short: 'Enter all 6 digits of the code.',
+      rejected:
+        'That code is not valid. Enter the current code; the app changes it every 30 seconds.'
+    },
+    focus: focusCode,
+    onAccepted: () => {
+      enabled.value = true
+    }
+  })
+  const { error: codeError, checking: verifying, unreachable, check: verify } = codeCheck
+
+  const SETUP_KEY_CLASS =
+    'flex items-center justify-between gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-2xs) ' +
+    'py-(--spacing-2xs)'
+</script>
+
+<template>
+  <AuthCard>
+    <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)">
+      <PageHeader
+        title="Set up multi-factor authentication"
+        description="Add a second step to sign in: a code from an authenticator app on your phone."
+      />
+
+      <Alert
+        key="alert-1"
+        v-if="enabled"
+        severity="success"
+        size="small"
+        label="Multi-factor authentication is on. Save your recovery codes before you continue."
+      />
+      <Alert
+        key="alert-2"
+        v-else-if="unreachable"
+        severity="warning"
+        size="small"
+      >
+        We could not check the code, and multi-factor authentication is still off. Try again in a
+        moment.
+        <template #actions>
+          <Button
+            label="Retry"
+            variant="secondary"
+            size="small"
+            :loading="verifying"
+            @click="verify"
+          />
+        </template>
+      </Alert>
+
+      <template v-if="!enabled">
+        <ol
+          class="flex list-decimal flex-col gap-(--spacing-xs) ps-(--spacing-lg) text-body-sm text-(--text-default)"
+        >
+          <li>Install an authenticator app, such as Google Authenticator, on your phone.</li>
+          <li>In the app, add an account and choose to scan a QR code.</li>
+          <li>Scan this code, then enter the 6-digit code the app shows.</li>
+        </ol>
+
+        <div class="flex flex-col items-center gap-(--spacing-sm)">
+          <QrCode
+            :value="otpauthUri"
+            :aria-label="`QR code to add ${account} to an authenticator app`"
+          />
+        </div>
+
+        <div class="flex flex-col gap-(--spacing-2xs)">
+          <p class="text-label-sm text-(--text-default)">Can't scan the code?</p>
+          <p class="text-body-sm text-(--text-muted)">Enter this setup key in the app instead.</p>
+          <div :class="SETUP_KEY_CLASS">
+            <code
+              class="text-label-code-sm text-(--text-default)"
+              dir="ltr"
+              >{{ setupKey }}</code
+            >
+            <CopyButton
+              :value="setupKey.replaceAll(' ', '')"
+              aria-label="Copy setup key"
+              copied-label="Setup key copied"
+              size="small"
+            />
+          </div>
+        </div>
+
+        <form
+          class="flex flex-col gap-(--spacing-lg)"
+          aria-label="Verify the authenticator app"
+          novalidate
+          @submit.prevent="verify"
+        >
+          <Field :invalid="!!codeError">
+            <Field.Label for="mfa-setup-code">Authentication code</Field.Label>
+            <OtpInput
+              id="mfa-setup-code"
+              v-model="code"
+              name="code"
+              :disabled="verifying"
+              @update:model-value="codeCheck.clearError"
+              @complete="verify"
+            />
+            <Field.Description>{{
+              codeError || 'The 6-digit code from the app, after you scan.'
+            }}</Field.Description>
+          </Field>
+
+          <Button
+            type="submit"
+            label="Verify code"
+            variant="primary"
+            size="large"
+            class="w-full"
+            :loading="verifying"
+          />
+        </form>
+      </template>
+
+      <template v-else>
+        <section
+          class="flex flex-col gap-(--spacing-sm)"
+          aria-labelledby="mfa-setup-recovery-title"
+        >
+          <div class="flex flex-col gap-(--spacing-2xs)">
+            <h2
+              id="mfa-setup-recovery-title"
+              class="text-label-md text-(--text-default)"
+            >
+              Save your recovery codes
+            </h2>
+            <p class="text-body-sm text-(--text-muted)">
+              If you lose your phone, sign in with one of these codes. Each code works once. Keep
+              them somewhere safe, such as a password manager; they are not shown again.
+            </p>
+          </div>
+          <ul
+            class="grid grid-cols-2 gap-x-(--spacing-md) gap-y-(--spacing-2xs) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-sm)"
+            aria-label="Recovery codes"
+          >
+            <li
+              v-for="recoveryCode in recoveryCodes"
+              :key="recoveryCode"
+              class="text-label-code-sm text-(--text-default)"
+              dir="ltr"
+            >
+              <code>{{ recoveryCode }}</code>
+            </li>
+          </ul>
+          <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+            <Button
+              label="Download"
+              variant="outline"
+              size="medium"
+              icon="az az-download"
+              @click="downloadCodes"
+            />
+            <CopyButton
+              :value="recoveryText"
+              aria-label="Copy recovery codes"
+              copied-label="Recovery codes copied"
+              variant="outline"
+              size="medium"
+            />
+          </div>
+        </section>
+
+        <Field orientation="horizontal">
+          <Checkbox
+            id="mfa-setup-codes-saved"
+            v-model="codesSaved"
+            name="codesSaved"
+          />
+          <Field.Content>
+            <Field.Label for="mfa-setup-codes-saved">I saved these codes</Field.Label>
+          </Field.Content>
+        </Field>
+
+        <div class="flex flex-col gap-(--spacing-2xs)">
+          <Button
+            label="Continue to Console"
+            variant="primary"
+            size="large"
+            class="w-full"
+            :disabled="!codesSaved"
+            :href="codesSaved ? '/home' : ''"
+            aria-describedby="mfa-setup-continue-hint"
+          />
+          <p
+            id="mfa-setup-continue-hint"
+            class="text-body-sm text-(--text-muted)"
+          >
+            {{ continueHint }}
+          </p>
+        </div>
+      </template>
+    </div>
+  </AuthCard>
+</template>
+```
+
+## `parts/oauth-consent-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Avatar from '@aziontech/webkit/avatar'
+  import Button from '@aziontech/webkit/button'
+  import Link from '@aziontech/webkit/link'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import { computed, onScopeDispose, ref } from 'vue'
+
+  import { oauthClient as client, oauthScopes as scopes, signedInAccount } from '../sample'
+  import AuthCard from './auth-card.vue'
+  import ScopeList from './scope-list.vue'
+  import SignedInAs from './signed-in-as.vue'
+
+  const pending = ref<'' | 'allow' | 'deny'>('')
+  const outcome = ref<'' | 'allowed' | 'denied'>('')
+  let timer: ReturnType<typeof setTimeout> | undefined
+
+  onScopeDispose(() => clearTimeout(timer))
+
+  const settled = computed(() => !!outcome.value)
+
+  const respond = (answer: 'allow' | 'deny') => {
+    if (pending.value || settled.value) return
+    pending.value = answer
+    timer = setTimeout(() => {
+      pending.value = ''
+      outcome.value = answer === 'allow' ? 'allowed' : 'denied'
+    }, 600)
+  }
+</script>
+
+<template>
+  <AuthCard>
+    <section
+      class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
+      aria-labelledby="oauth-consent-title"
+    >
+      <div class="flex flex-col items-start gap-(--spacing-md)">
+        <Avatar
+          variant="square"
+          size="large"
+          :label="client.initials"
+          :alt="client.name"
+        />
+        <PageHeader
+          class="w-full"
+          title-id="oauth-consent-title"
+          :title="`Authorize ${client.name}`"
+          :description="`${client.name} by ${client.publisher} (${client.site}) wants to access your account.`"
+        />
+      </div>
+
+      <Alert
+        key="alert-1"
+        v-if="outcome === 'allowed'"
+        severity="success"
+        size="small"
+        :label="`Access granted. Returning to ${client.name}.`"
+      />
+      <Alert
+        key="alert-2"
+        v-else-if="outcome === 'denied'"
+        severity="info"
+        size="small"
+        :label="`Access denied. Returning to ${client.name} with no access to your account.`"
+      />
+
+      <SignedInAs
+        :account="signedInAccount"
+        :disabled="!!pending || settled"
+      />
+
+      <ScopeList
+        heading-id="oauth-consent-scopes"
+        :client="client.name"
+        :scopes="scopes"
+      />
+
+      <p class="text-body-sm text-(--text-muted)">
+        Allowing sends you back to
+        <span class="text-body-code-sm break-words text-(--text-default)">{{
+          client.redirect
+        }}</span
+        >. You can revoke access at any time in
+        <Link
+          inline
+          href="/account/authorized-apps"
+          >Authorized apps</Link
+        >.
+      </p>
+
+      <div class="grid grid-cols-2 gap-(--spacing-sm)">
+        <Button
+          label="Deny"
+          variant="secondary"
+          size="large"
+          class="w-full"
+          :loading="pending === 'deny'"
+          :disabled="pending === 'allow' || settled"
+          @click="respond('deny')"
+        />
+        <Button
+          label="Allow"
+          variant="primary"
+          size="large"
+          class="w-full"
+          :loading="pending === 'allow'"
+          :disabled="pending === 'deny' || settled"
+          @click="respond('allow')"
+        />
+      </div>
+    </section>
+  </AuthCard>
+</template>
+```
+
+## `parts/device-authorization-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import Field from '@aziontech/webkit/field'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
+  import OtpInput from '@aziontech/webkit/otp-input'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import { computed, nextTick, onScopeDispose, ref } from 'vue'
+
+  import { useCodeCheck } from '../composables/use-code-check'
+  import { deviceRequest as request, deviceScopes as scopes, signedInAccount } from '../sample'
+  import AuthCard from './auth-card.vue'
+  import ScopeList from './scope-list.vue'
+  import SignedInAs from './signed-in-as.vue'
+
+  const CODE_BOX_CLASS =
+    'flex flex-col items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-md)'
+
+  const entering = ref(false)
+  const code = ref('')
+  const shownCode = ref(request.code)
+  const pending = ref<'' | 'confirm' | 'cancel'>('')
+  const outcome = ref<'' | 'connected' | 'cancelled'>('')
+  let timer: ReturnType<typeof setTimeout> | undefined
+
+  onScopeDispose(() => clearTimeout(timer))
+
+  const settled = computed(() => !!outcome.value)
+  const grouped = computed(() => `${shownCode.value.slice(0, 4)}-${shownCode.value.slice(4)}`)
+
+  const focusCode = () => nextTick(() => document.getElementById('device-code')?.focus())
+
+  const codeCheck = useCodeCheck({
+    code,
+    length: 8,
+    messages: {
+      empty: 'Enter the code your terminal shows.',
+      short: 'Enter all 8 characters of the code.',
+      rejected:
+        'That code is not valid or has expired. Check your terminal, or start the sign-in again there.'
+    },
+    focus: focusCode,
+    blocked: () => !!pending.value,
+    onAccepted: (accepted) => {
+      shownCode.value = accepted
+      entering.value = false
+    }
+  })
+  const { error: codeError, checking, unreachable, check } = codeCheck
+
+  const enterCode = () => {
+    entering.value = true
+    codeCheck.reset()
+    focusCode()
+  }
+
+  const respond = (answer: 'confirm' | 'cancel') => {
+    if (pending.value || checking.value || settled.value) return
+    pending.value = answer
+    timer = setTimeout(() => {
+      pending.value = ''
+      outcome.value = answer === 'confirm' ? 'connected' : 'cancelled'
+    }, 600)
+  }
+</script>
+
+<template>
+  <AuthCard>
+    <section
+      class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
+      aria-labelledby="device-authorization-title"
+    >
+      <PageHeader
+        title-id="device-authorization-title"
+        :title="`Connect ${request.client}`"
+        :description="
+          entering
+            ? 'Enter the code your terminal shows to connect it to your account.'
+            : 'Check that this code matches the one in your terminal, then confirm.'
+        "
+      />
+
+      <Alert
+        key="alert-1"
+        v-if="outcome === 'connected'"
+        severity="success"
+        size="small"
+        label="Device connected. Go back to your terminal; you can close this tab."
+      />
+      <Alert
+        key="alert-2"
+        v-else-if="outcome === 'cancelled'"
+        severity="info"
+        size="small"
+        label="Request cancelled. The device was not connected."
+      />
+      <Alert
+        key="alert-3"
+        v-else-if="unreachable"
+        severity="warning"
+        size="small"
+      >
+        We could not check the code. Your entry is kept; try again in a moment.
+        <template #actions>
+          <Button
+            label="Retry"
+            variant="secondary"
+            size="small"
+            :loading="checking"
+            @click="check"
+          />
+        </template>
+      </Alert>
+
+      <form
+        v-if="entering"
+        class="flex flex-col gap-(--spacing-lg)"
+        aria-label="Enter the device code"
+        novalidate
+        @submit.prevent="check"
+      >
+        <Field :invalid="!!codeError">
+          <Field.Label for="device-code">Device code</Field.Label>
+          <OtpInput
+            id="device-code"
+            v-model="code"
+            name="code"
+            :length="8"
+            mode="alphanumeric"
+            :group="4"
+            :disabled="checking"
+            @update:model-value="codeCheck.clearError"
+            @complete="check"
+          />
+          <Field.Description>{{
+            codeError || `Codes expire ${request.expires} after the terminal shows them.`
+          }}</Field.Description>
+        </Field>
+        <Button
+          type="submit"
+          label="Continue"
+          variant="primary"
+          size="large"
+          class="w-full"
+          :loading="checking"
+        />
+      </form>
+
+      <template v-else>
+        <div :class="CODE_BOX_CLASS">
+          <span class="text-label-sm text-(--text-muted)">Device code</span>
+          <span class="text-label-code-lg text-(--text-default)">{{ grouped }}</span>
+        </div>
+
+        <KeyValueList
+          variant="split"
+          aria-label="Request details"
+        >
+          <KeyValueList.Item label="Application">{{ request.client }}</KeyValueList.Item>
+          <KeyValueList.Item label="Device">{{ request.device }}</KeyValueList.Item>
+          <KeyValueList.Item label="IP address">{{ request.address }}</KeyValueList.Item>
+          <KeyValueList.Item label="Requested">{{ request.requested }}</KeyValueList.Item>
+        </KeyValueList>
+
+        <SignedInAs
+          :account="signedInAccount"
+          :disabled="!!pending || settled"
+        />
+
+        <ScopeList
+          heading-id="device-authorization-scopes"
+          :client="request.client"
+          :scopes="scopes"
+        />
+
+        <div class="grid grid-cols-2 gap-(--spacing-sm)">
+          <Button
+            label="Cancel"
+            variant="secondary"
+            size="large"
+            class="w-full"
+            :loading="pending === 'cancel'"
+            :disabled="pending === 'confirm' || settled"
+            @click="respond('cancel')"
+          />
+          <Button
+            label="Confirm"
+            variant="primary"
+            size="large"
+            class="w-full"
+            :loading="pending === 'confirm'"
+            :disabled="pending === 'cancel' || settled"
+            @click="respond('confirm')"
+          />
+        </div>
+
+        <Button
+          v-if="!settled"
+          variant="link"
+          label="The code does not match? Enter the code from your terminal"
+          class="self-start"
+          @click="enterCode"
+        />
+      </template>
+    </section>
+  </AuthCard>
 </template>
 ```

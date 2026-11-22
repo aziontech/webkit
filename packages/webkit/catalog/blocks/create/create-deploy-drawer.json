@@ -43,9 +43,9 @@
  ],
  "sfcFile": "blocks/create/create-deploy-drawer/create-deploy-drawer.vue",
  "guidelinesFile": "blocks/create/create-deploy-drawer/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/create/create-deploy-drawer/sample.ts",
-  "parts/deploy-drawer-frame.vue": "blocks/create/create-deploy-drawer/parts/deploy-drawer-frame.vue",
-  "parts/deploy-resources-card.vue": "blocks/create/create-deploy-drawer/parts/deploy-resources-card.vue"
- }
+ "fileSources": [
+  "sample.ts",
+  "parts/deploy-drawer-frame.vue",
+  "parts/deploy-resources-card.vue"
+ ]
 }

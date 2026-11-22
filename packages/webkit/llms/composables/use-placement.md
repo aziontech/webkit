@@ -3,14 +3,14 @@
 Composable `@aziontech/webkit/use-placement`. The signatures and option tables below are read from its typed source, [`src/composables/use-placement/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-placement/index.ts).
 
 ```ts
-import { usePlacement, computePlacement, getClippingBoundary } from '@aziontech/webkit/use-placement'
-import type { UsePlacementOptions, UsePlacementReturn, Side, Align, PhysicalSide, Rect, Size, CollisionPadding, ComputePlacementInput, ComputePlacementResult } from '@aziontech/webkit/use-placement'
+import { usePlacement, getClippingBoundary, computePlacement } from '@aziontech/webkit/use-placement'
+import type { UsePlacementOptions, UsePlacementReturn, Align, CollisionPadding, ComputePlacementInput, ComputePlacementResult, PhysicalSide, Rect, Side, Size } from '@aziontech/webkit/use-placement'
 ```
 
 ## `usePlacement`
 
 ```ts
-function usePlacement({ triggerRef, panelRef, isOpen, side, align = 'center', sideOffset = 4, alignOffset = 0, collisionPadding = 8, flip = true, autoSides, dir, zIndex = 1100, onDismiss, matchTriggerWidth = false }: UsePlacementOptions): UsePlacementReturn
+function usePlacement(options: UsePlacementOptions): UsePlacementReturn
 ```
 
 ## `UsePlacementOptions`
@@ -21,16 +21,16 @@ function usePlacement({ triggerRef, panelRef, isOpen, side, align = 'center', si
 | `panelRef` | `MaybeRefOrGetter<globalThis.HTMLElement \| null>` | yes |  |
 | `isOpen` | `MaybeRefOrGetter<boolean>` | yes |  |
 | `side` | `MaybeRefOrGetter<Side \| 'auto'>` | yes |  |
-| `align` | `MaybeRefOrGetter<Align>` | no |  |
-| `sideOffset` | `MaybeRefOrGetter<number>` | no |  |
-| `alignOffset` | `MaybeRefOrGetter<number>` | no |  |
-| `collisionPadding` | `CollisionPadding` | no |  |
-| `flip` | `boolean` | no |  |
+| `align` | `MaybeRefOrGetter<Align>` | no | Alignment along the anchor edge. Defaults to `'center'`. |
+| `sideOffset` | `MaybeRefOrGetter<number>` | no | Gap between trigger and panel, in px. Defaults to 4. |
+| `alignOffset` | `MaybeRefOrGetter<number>` | no | Shift along the alignment axis, in px. Defaults to 0. |
+| `collisionPadding` | `CollisionPadding` | no | Distance kept from the boundary edges, in px. Defaults to 8. |
+| `flip` | `boolean` | no | Flip to the opposite side when the panel does not fit. Defaults to true. |
 | `autoSides` | `Side[]` | no |  |
 | `dir` | `MaybeRefOrGetter<Direction \| undefined>` | no | Text direction that resolves `start`/`end`; read from the trigger's nearest `dir` when omitted. |
-| `zIndex` | `number` | no |  |
+| `zIndex` | `number` | no | Stacking order of the panel. Defaults to 1100. |
 | `onDismiss` | `() => void` | no | When provided, a scroll that moves the trigger dismisses the panel through this callback (the panel is anchored once and does not follow the page): the scrolled node must be the document or an ancestor of the trigger, and the trigger must have moved more than 1px from where the panel was last anchored. Scrolls inside the panel, of unrelated scrollers, and scroll events that leave the trigger in place are ignored. When omitted, a scroll repositions the panel. Resize always repositions. |
-| `matchTriggerWidth` | `boolean` | no | Lock the panel width to the trigger width (list boxes anchored under a field). |
+| `matchTriggerWidth` | `boolean` | no | Lock the panel width to the trigger width (list boxes anchored under a field). Defaults to false. |
 
 ## `UsePlacementReturn`
 
@@ -42,24 +42,16 @@ function usePlacement({ triggerRef, panelRef, isOpen, side, align = 'center', si
 | `anchored` | `Readonly<Ref<boolean>>` | yes | True one frame after the opening placements landed, so only re-anchors transition. |
 | `updatePosition` | `() => void` | yes |  |
 
-## `computePlacement`
-
-```ts
-function computePlacement(input: ComputePlacementInput): ComputePlacementResult
-```
-
 ## `getClippingBoundary`
 
 ```ts
 function getClippingBoundary(trigger: globalThis.Element, viewport: Size): Rect
 ```
 
-## `Side`
-
-Side of the anchor the panel opens on; `start` and `end` follow the text direction.
+## `computePlacement`
 
 ```ts
-type Side = 'top' | 'bottom' | 'start' | 'end'
+function computePlacement(input: ComputePlacementInput): ComputePlacementResult
 ```
 
 ## `Align`
@@ -69,34 +61,6 @@ Alignment of the panel along the anchor edge; `start` and `end` follow the text 
 ```ts
 type Align = 'start' | 'center' | 'end'
 ```
-
-## `PhysicalSide`
-
-A screen side, after `start`/`end` resolved against the text direction.
-
-```ts
-type PhysicalSide = 'top' | 'right' | 'bottom' | 'left'
-```
-
-## `Rect`
-
-Viewport-space rectangle (the shape `getBoundingClientRect()` returns).
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `top` | `number` | yes |  |
-| `left` | `number` | yes |  |
-| `right` | `number` | yes |  |
-| `bottom` | `number` | yes |  |
-| `width` | `number` | yes |  |
-| `height` | `number` | yes |  |
-
-## `Size`
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `width` | `number` | yes |  |
-| `height` | `number` | yes |  |
 
 ## `CollisionPadding`
 
@@ -137,3 +101,39 @@ type CollisionPadding = number | { x: number; y: number }
 | `height` | `number` | yes |  |
 | `maxWidth` | `number \| null` | yes | Cap to apply on the panel, or `null` when the natural size fits. |
 | `maxHeight` | `number \| null` | yes |  |
+
+## `PhysicalSide`
+
+A screen side, after `start`/`end` resolved against the text direction.
+
+```ts
+type PhysicalSide = 'top' | 'right' | 'bottom' | 'left'
+```
+
+## `Rect`
+
+Viewport-space rectangle (the shape `getBoundingClientRect()` returns).
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `top` | `number` | yes |  |
+| `left` | `number` | yes |  |
+| `right` | `number` | yes |  |
+| `bottom` | `number` | yes |  |
+| `width` | `number` | yes |  |
+| `height` | `number` | yes |  |
+
+## `Side`
+
+Side of the anchor the panel opens on; `start` and `end` follow the text direction.
+
+```ts
+type Side = 'top' | 'bottom' | 'start' | 'end'
+```
+
+## `Size`
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `width` | `number` | yes |  |
+| `height` | `number` | yes |  |

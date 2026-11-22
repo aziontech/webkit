@@ -28,8 +28,8 @@
  ],
  "sfcFile": "blocks/create/create-resource-picker/create-resource-picker.vue",
  "guidelinesFile": "blocks/create/create-resource-picker/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/create/create-resource-picker/sample.ts",
-  "composables/use-paged-list.ts": "blocks/create/create-resource-picker/composables/use-paged-list.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "composables/use-paged-list.ts"
+ ]
 }

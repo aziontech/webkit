@@ -88,7 +88,7 @@ With `movable`, `selectable` with `v-model:selected-keys` adds the checkbox colu
 
 ## Data
 
-The block takes the open folder through props and emits every action; it fetches nothing. `FileBrowserEntry`, `FileBrowserTransfer` and `FileBrowserProps` are exported from `view-file-browser.vue`, and `sample.ts` holds a sample storage the block browses when `entries` is left out (and never while `loading` or `error` is set). `azion-storage.ts` maps an Azion Object Storage listing to entries.
+The block takes the open folder through props and emits every action; it fetches nothing. `FileBrowserEntry`, `FileBrowserTransfer` and `FileBrowserProps` are exported from `view-file-browser.vue`, and `sample.ts` holds a sample storage the block browses when `entries` is left out (and never while `loading` or `error` is set). `azion-storage.ts` maps an Azion Object Storage listing to entries. `lib/file-rows.ts` turns entries into table rows (glyph, size, sort, folders first) and checks a Move destination; the regions are private parts in `parts/`: the storage title, the search row, the selection bar, the name cell, the row menu, the empty folder, the error card, the upload, move and delete dialogs and the transfer card.
 
 | Prop / model            | Type                    | What it does                                                                                                            |
 | ----------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------- |
@@ -261,42 +261,39 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import Combobox from '@aziontech/webkit/combobox'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable, {
     type DropdownMenuItemValue,
-    type TableColumn,
     type TableExposed
   } from '@aziontech/webkit/data-table'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import FileTokenGroup, { type FileTokenGroupItem } from '@aziontech/webkit/file-token-group'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import TableSearch from '@aziontech/webkit/table-search'
   import { toast } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import type { UploadProgressItem } from '@aziontech/webkit/upload-progress'
   import { computed, nextTick, ref, watch } from 'vue'
 
+  import {
+    addToFilesActions,
+    fileColumns,
+    type FileRow,
+    folderName,
+    listRows,
+    sortRows,
+    UPLOAD_LIMIT
+  } from './lib/file-rows'
+  import DeleteEntryDialog from './parts/delete-entry-dialog.vue'
+  import FileNameCell from './parts/file-name-cell.vue'
+  import FileRowActions from './parts/file-row-actions.vue'
+  import FolderEmpty from './parts/folder-empty.vue'
+  import FolderErrorCard from './parts/folder-error-card.vue'
+  import FolderSearchRow from './parts/folder-search-row.vue'
+  import MoveDialog from './parts/move-dialog.vue'
+  import SelectionBar from './parts/selection-bar.vue'
+  import StorageTitle from './parts/storage-title.vue'
+  import TransferCard from './parts/transfer-card.vue'
+  import UploadDialog from './parts/upload-dialog.vue'
   import { sampleFolders, sampleStorageName } from './sample'
 
   /** Whether an entry is a folder or a file. */
@@ -362,23 +359,7 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
     transferOperation?: FileBrowserTransferOperation
   }
 
-  type RowKind = FileBrowserEntryKind | 'parent'
-
-  interface FileRow {
-    name: string
-    id: string
-    kind: RowKind
-    icon?: string
-    size: string
-    bytes: number
-    modifiedAt?: string
-    author?: string
-    entry?: FileBrowserEntry
-  }
-
   type UploadMode = 'files' | 'folder'
-
-  type PickedFile = FileTokenGroupItem & { file: File }
 
   const props = withDefaults(defineProps<FileBrowserProps>(), {
     storageName: undefined,
@@ -424,95 +405,10 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
     { immediate: true }
   )
 
-  const GLYPHS: Record<string, string> = {
-    svg: 'az az-image',
-    webp: 'az az-image',
-    png: 'az az-image',
-    mp4: 'az az-video',
-    html: 'az az-code',
-    js: 'az az-code',
-    css: 'az az-code',
-    json: 'az az-database',
-    woff2: 'az az-star',
-    log: 'az az-align-left',
-    txt: 'az az-file'
-  }
-
-  const columns: TableColumn[] = [
-    {
-      accessorKey: 'name',
-      header: 'Name',
-      sortable: true,
-      principal: true,
-      hideable: false,
-      grow: 3
-    },
-    { accessorKey: 'bytes', header: 'Size', sortable: true, minWidth: 80 },
-    { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
-    { id: 'actions', type: 'action', hideable: false }
-  ]
-
-  const addToFilesActions = [
-    { label: 'Upload file', value: 'upload', icon: 'az az-upload' },
-    { label: 'Upload folder', value: 'upload-folder', icon: 'az az-folder-open' },
-    { label: 'Add folder', value: 'folder', icon: 'az az-folder-plus' }
-  ]
-
-  const LIMIT = 300 * 1024 * 1024
-  const formatBytes = (bytes: number) => {
-    if (bytes < 1024) return `${bytes} B`
-    if (bytes < 1024 * 1024) return `${Number((bytes / 1024).toFixed(2))} KB`
-    return `${Number((bytes / 1024 / 1024).toFixed(2))} MB`
-  }
-  const extensionOf = (name: string) => name.split('.').pop()?.toLowerCase() ?? ''
-  const folderName = (name: string) => (name.endsWith('/') ? name : `${name}/`)
-
-  const toRow = (kind: RowKind, name: string, entry?: FileBrowserEntry): FileRow => {
-    const file = kind === 'file'
-    return {
-      name,
-      id: name,
-      kind,
-      icon: file ? (GLYPHS[extensionOf(name)] ?? 'az az-file') : undefined,
-      size: file ? formatBytes(entry?.bytes ?? 0) : '-',
-      bytes: file ? (entry?.bytes ?? 0) : 0,
-      modifiedAt: file ? entry?.modifiedAt : undefined,
-      author: file ? entry?.editor : undefined,
-      entry
-    }
-  }
-
-  const rows = computed<FileRow[]>(() => {
-    const ofKind = (kind: FileBrowserEntryKind) =>
-      items.value
-        .filter((entry) => entry.kind === kind)
-        .map((entry) => toRow(kind, kind === 'folder' ? folderName(entry.name) : entry.name, entry))
-        .sort((a, b) => a.name.localeCompare(b.name))
-    const list: FileRow[] = [...ofKind('folder'), ...ofKind('file')]
-    if (folderPath.value.length) list.unshift(toRow('parent', '..'))
-    return list
-  })
+  const rows = computed<FileRow[]>(() => listRows(items.value, folderPath.value.length > 0))
 
   const sorting = ref<{ desc: boolean; id: string }[]>([])
-  const compareFiles = (id: string) => (a: FileRow, b: FileRow) => {
-    if (id === 'bytes') return a.bytes - b.bytes
-    if (id === 'modifiedAt') return Date.parse(a.modifiedAt ?? '') - Date.parse(b.modifiedAt ?? '')
-    return a.name.localeCompare(b.name)
-  }
-  const sortedRows = computed<FileRow[]>(() => {
-    const [sort] = sorting.value
-    if (!sort) return rows.value
-    const direction = sort.desc ? -1 : 1
-    const ordered = (kind: RowKind, id: string) =>
-      rows.value
-        .filter((item) => item.kind === kind)
-        .sort((a, b) => direction * compareFiles(id)(a, b))
-    return [
-      ...rows.value.filter((item) => item.kind === 'parent'),
-      ...ordered('folder', sort.id === 'name' ? 'name' : ''),
-      ...ordered('file', sort.id)
-    ]
-  })
+  const sortedRows = computed<FileRow[]>(() => sortRows(rows.value, sorting.value[0]))
 
   const search = ref('')
   const tableEl = ref<TableExposed<FileRow> | null>(null)
@@ -588,50 +484,17 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
 
   const moveOpen = ref(false)
   const moving = ref<FileRow[]>([])
-  const destination = ref('')
-  const destinationError = ref('')
   const selectionHostEl = ref<HTMLElement | null>(null)
-
-  const moveTitle = computed(() =>
-    moving.value.length === 1 ? `Move ${moving.value[0].name}` : `Move ${moving.value.length} files`
-  )
-  const movingSize = computed(() =>
-    formatBytes(moving.value.reduce((sum, item) => sum + item.bytes, 0))
-  )
 
   const openMove = (selected: FileRow[]) => {
     moving.value = selected.filter((item) => item.kind === 'file')
     if (!moving.value.length) return
-    destination.value = ''
-    destinationError.value = ''
     moveOpen.value = true
   }
   const hasSelectedFiles = (selectedRows: FileRow[]) =>
     selectedRows.some((item) => item.kind === 'file')
 
-  const normalize = (raw: string) => {
-    const target = raw.trim().replace(/\/+/g, '/').replace(/^\//, '')
-    return target && !target.endsWith('/') ? `${target}/` : target
-  }
-
-  const validate = () => {
-    const raw = destination.value.trim()
-    const target = normalize(raw)
-    if (/[^ -~]/.test(raw)) {
-      destinationError.value = 'Use letters, numbers, dots, hyphens and slashes only.'
-    } else if (target.split('/').includes('..')) {
-      destinationError.value = 'A destination cannot go up with "..". Type the full path.'
-    } else if (target === path.value) {
-      destinationError.value = 'The files are already in this folder. Pick another one.'
-    } else {
-      destinationError.value = ''
-    }
-    return destinationError.value ? null : target
-  }
-
-  const confirmMove = (event: Event) => {
-    const target = validate()
-    if (target === null) return
+  const confirmMove = (event: Event, target: string) => {
     const entries = moving.value.flatMap((item) => (item.entry ? [item.entry] : []))
     emit('move', event, { entries, destination: target })
     selectedKeys.value = []
@@ -639,27 +502,10 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
   }
 
   const uploadOpen = ref(false)
-  const picked = ref<PickedFile[]>([])
-  const filePicker = useFilePicker({ multiple: true })
-  const folderPicker = useFilePicker({ directory: true })
   const uploadMode = ref<UploadMode>('files')
   const addHostEl = ref<HTMLElement | null>(null)
 
-  const toPicked = (file: File): PickedFile => ({
-    file,
-    error: file.size > LIMIT ? 'Larger than 300 MB, the limit per file' : undefined,
-    warning: file.size === 0 ? 'This file is empty' : undefined
-  })
-  const pickable = computed(() => picked.value.filter((item) => !item.error))
-  const addPicked = (files: FileList | File[]) => {
-    picked.value = [...picked.value, ...Array.from(files).map(toPicked)]
-  }
-  const pickFrom = async (picker: typeof filePicker) => addPicked(await picker.open())
-  const removePicked = (index: number) => {
-    picked.value = picked.value.filter((_, position) => position !== index)
-  }
   const openUpload = (mode: UploadMode = 'files') => {
-    picked.value = []
     uploadMode.value = mode
     uploadOpen.value = true
   }
@@ -670,16 +516,15 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
     if (item.value === 'folder') emit('add-folder', event)
   }
 
-  const startUpload = (event: MouseEvent) => {
-    if (!pickable.value.length) return
-    emit('upload', event, { files: pickable.value.map((item) => item.file), path: path.value })
+  const startUpload = (event: MouseEvent, files: File[]) => {
+    emit('upload', event, { files, path: path.value })
     uploadOpen.value = false
   }
 
   const onPageDrop = (event: DragEvent, files: File[]) => {
-    const accepted = files.filter((file) => file.size <= LIMIT)
+    const accepted = files.filter((file) => file.size <= UPLOAD_LIMIT)
     if (accepted.length) emit('upload', event, { files: accepted, path: path.value })
-    const refused = files.filter((file) => file.size > LIMIT)
+    const refused = files.filter((file) => file.size > UPLOAD_LIMIT)
     if (refused.length) {
       toast.error(`${refused[0].name} is larger than 300 MB.`, {
         description: 'Files over the limit per file were left out of the upload.',
@@ -689,10 +534,6 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
   }
 
   const transferItems = computed<FileBrowserTransfer[]>(() => props.transfers ?? [])
-  const transferExpanded = ref(true)
-  const lastTarget = computed(
-    () => transferItems.value.find((item) => item.status === 'success')?.target ?? ''
-  )
 
   const closeTransfer = async (event: MouseEvent) => {
     const moved = props.transferOperation === 'move'
@@ -715,55 +556,14 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
         v-if="error"
         class="flex min-h-0 flex-col"
       >
-        <Card>
-          <template #default>
-            <div class="flex w-full flex-col gap-(--spacing-sm)">
-              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <i
-                  class="az az-database shrink-0 text-body-lg text-(--text-muted)"
-                  aria-hidden="true"
-                />
-                <h1 class="min-w-0 truncate text-heading-2xs text-(--text-default)">
-                  {{ rootName }}
-                </h1>
-              </div>
-              <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
-                <div class="min-w-0">
-                  <Breadcrumb
-                    :items="pathCrumbs"
-                    class="w-full"
-                    @navigate="onCrumb"
-                  />
-                </div>
-                <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-                  <Tooltip content="Refresh">
-                    <IconButton
-                      icon="az az-refresh"
-                      variant="outline"
-                      size="medium"
-                      aria-label="Refresh"
-                      @click="refresh"
-                    />
-                  </Tooltip>
-                  <SplitButton
-                    label="Add to files"
-                    icon="az az-plus"
-                    variant="primary"
-                    size="medium"
-                    :items="addToFilesActions"
-                    disabled
-                  />
-                </div>
-              </div>
-              <Alert
-                severity="danger"
-                :label="error"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
-            </div>
-          </template>
-        </Card>
+        <FolderErrorCard
+          :root-name="rootName"
+          :crumbs="pathCrumbs"
+          :error="error"
+          @navigate="onCrumb"
+          @refresh="refresh"
+          @retry="(event) => emit('retry', event)"
+        />
       </section>
       <section
         key="section-files"
@@ -786,7 +586,7 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
               :selectable="movable"
               :row-selectable="isFile"
               :data="sortedRows"
-              :columns="columns"
+              :columns="fileColumns"
               row-key="id"
               sortable
               manual-sorting
@@ -804,55 +604,14 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
                   ref="selectionHostEl"
                   class="flex w-full flex-col gap-(--spacing-sm)"
                 >
-                  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                    <i
-                      class="az az-database shrink-0 text-body-lg text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                    <h1 class="min-w-0 truncate text-heading-2xs text-(--text-default)">
-                      {{ rootName }}
-                    </h1>
-                  </div>
+                  <StorageTitle :name="rootName" />
 
-                  <div class="flex w-full items-center gap-(--spacing-xs)">
-                    <div class="flex flex-1">
-                      <TableSearch
-                        size="large"
-                        placeholder="Search in folder"
-                        class="w-full"
-                      />
-                    </div>
-                    <Tooltip
-                      content="Refresh"
-                      class="shrink-0"
-                    >
-                      <IconButton
-                        icon="az az-refresh"
-                        variant="outline"
-                        size="large"
-                        :loading="loading"
-                        aria-label="Refresh"
-                        @click="refresh"
-                      />
-                    </Tooltip>
-                    <Tooltip
-                      content="Download CSV"
-                      class="shrink-0"
-                    >
-                      <IconButton
-                        icon="az az-download"
-                        variant="outline"
-                        size="large"
-                        :disabled="!tableEl"
-                        aria-label="Download CSV"
-                        @click="tableEl?.exportCsv({ filename: 'files.csv' })"
-                      />
-                    </Tooltip>
-                    <CollectionPreferences
-                      :sections="['columns']"
-                      class="shrink-0"
-                    />
-                  </div>
+                  <FolderSearchRow
+                    :loading="loading"
+                    :exportable="!!tableEl"
+                    @refresh="refresh"
+                    @download="tableEl?.exportCsv({ filename: 'files.csv' })"
+                  />
 
                   <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
                     <div class="min-w-0">
@@ -878,73 +637,23 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
                     </div>
                   </div>
 
-                  <div
+                  <SelectionBar
                     v-if="movable && selectedCount"
-                    class="flex w-full flex-wrap items-center gap-(--spacing-xs) rounded-(--shape-control) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
-                  >
-                    <span class="text-label-sm text-(--text-default)"
-                      >{{ selectedCount }} selected</span
-                    >
-                    <Button
-                      label="Clear selection"
-                      variant="ghost"
-                      size="small"
-                      @click="clearSelection()"
-                    />
-                    <div class="ms-auto flex items-center gap-(--spacing-xs)">
-                      <Button
-                        label="Move"
-                        icon="az az-arrow-right-left"
-                        variant="outline"
-                        size="small"
-                        :disabled="!hasSelectedFiles(selectedRows)"
-                        @click="openMove(selectedRows)"
-                      />
-                    </div>
-                  </div>
+                    :selected-count="selectedCount"
+                    :movable-selection="hasSelectedFiles(selectedRows)"
+                    @clear="clearSelection()"
+                    @move="openMove(selectedRows)"
+                  />
                 </div>
               </template>
 
               <template #cell-name="{ value, row: item }">
-                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <i
-                    v-if="item.kind === 'parent'"
-                    class="az az-folder-open shrink-0 text-body-lg text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                  <i
-                    v-else-if="item.kind === 'folder'"
-                    class="az az-folder shrink-0 text-body-lg text-(--text-link)"
-                    aria-hidden="true"
-                  />
-                  <i
-                    v-else
-                    :class="item.icon"
-                    class="shrink-0 text-body-lg text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                  <Button
-                    key="button-1"
-                    v-if="item.kind === 'parent'"
-                    variant="link"
-                    label=".."
-                    aria-label="Go up to the parent folder"
-                    @click.stop="goUp"
-                  />
-                  <Button
-                    key="button-2"
-                    v-else-if="item.kind === 'folder'"
-                    variant="link"
-                    :label="value"
-                    class="min-w-0"
-                    @click.stop="(event: MouseEvent) => openEntry(event, item)"
-                  />
-                  <span
-                    v-else
-                    class="truncate"
-                    >{{ value }}</span
-                  >
-                </div>
+                <FileNameCell
+                  :item="item"
+                  :value="value"
+                  @go-up="goUp"
+                  @open="openEntry"
+                />
               </template>
 
               <template #cell-bytes="{ row: item }">
@@ -960,296 +669,55 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
               </template>
 
               <template #cell-actions="{ row: item }">
-                <TableCellActions
-                  v-if="item.kind !== 'parent'"
-                  :name="item.name"
-                  @select="(event, value) => onRowAction(event, value, item)"
-                >
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem
-                      v-if="item.kind === 'folder'"
-                      key="open"
-                      value="open"
-                      label="Open"
-                    >
-                      <template #leading
-                        ><i
-                          class="az az-folder-open"
-                          aria-hidden="true"
-                      /></template>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      v-else
-                      key="download"
-                      value="download"
-                      label="Download"
-                    >
-                      <template #leading
-                        ><i
-                          class="az az-download"
-                          aria-hidden="true"
-                      /></template>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      v-if="movable && item.kind === 'file'"
-                      key="move"
-                      value="move"
-                      label="Move"
-                    >
-                      <template #leading
-                        ><i
-                          class="az az-arrow-right-left"
-                          aria-hidden="true"
-                      /></template>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem
-                      value="delete"
-                      label="Delete"
-                    >
-                      <template #leading
-                        ><i
-                          class="az az-trash"
-                          aria-hidden="true"
-                      /></template>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </TableCellActions>
+                <FileRowActions
+                  :item="item"
+                  :movable="movable"
+                  @select="(event, { value }) => onRowAction(event, value, item)"
+                />
               </template>
 
               <template #empty>
-                <EmptyState
-                  key="empty-state-1"
-                  v-if="search"
-                  size="medium"
-                  icon="az az-search"
-                  title="No matching files"
-                  :description="`Nothing in this folder matches “${search}”.`"
-                >
-                  <template #actions>
-                    <Button
-                      label="Clear search"
-                      variant="outline"
-                      size="small"
-                      @click="search = ''"
-                    />
-                  </template>
-                </EmptyState>
-                <EmptyState
-                  key="empty-state-2"
-                  v-else
-                  size="medium"
-                  title="This folder is empty"
-                  description="Upload files or create a folder to get started."
-                >
-                  <template #actions>
-                    <SplitButton
-                      label="Add to files"
-                      icon="az az-plus"
-                      variant="secondary"
-                      size="medium"
-                      :items="addToFilesActions"
-                      @click="onAddClick"
-                      @item-click="onAddItem"
-                    />
-                  </template>
-                </EmptyState>
+                <FolderEmpty
+                  :search="search"
+                  @clear-search="search = ''"
+                  @add="onAddClick"
+                  @add-item="onAddItem"
+                />
               </template>
             </DataTable>
           </template>
         </Card>
       </section>
     </div>
-    <ConfirmDialog
+    <DeleteEntryDialog
       v-model:open="deleteOpen"
-      :title="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
-      size="medium"
-      :confirm-label="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
-      :confirmation-phrase="pending?.name ?? ''"
+      :pending="pending"
       @confirm="confirmDelete"
-    >
-      <div class="flex flex-col gap-(--spacing-md)">
-        <Alert
-          severity="warning"
-          label="Once confirmed, this action can't be reversed."
-        />
-        <p class="m-0 text-body-sm text-(--text-muted)">
-          {{
-            pending?.kind === 'folder'
-              ? 'The selected folder will be deleted, along with all its files.'
-              : 'The selected file will be deleted.'
-          }}
-        </p>
-      </div>
-    </ConfirmDialog>
-    <Dialog
+    />
+    <UploadDialog
       v-model:open="uploadOpen"
-      size="medium"
-    >
-      <DialogContent>
-        <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DialogTitle>{{
-              uploadMode === 'folder' ? 'Upload folder' : 'Upload files'
-            }}</DialogTitle>
-            <DialogDescription>
-              {{ uploadMode === 'folder' ? 'The folder and its subfolders go' : 'Files go' }} to
-              {{ path || rootName }}. A file with the same path is replaced.
-            </DialogDescription>
-          </div>
-        </PanelHeader>
-        <PanelBody>
-          <div class="flex flex-col gap-(--spacing-md)">
-            <FileDropzone
-              :directories="uploadMode === 'folder'"
-              :title="uploadMode === 'folder' ? 'Drop a folder to upload' : undefined"
-              description="Up to 300 MB per file."
-              @drop="(_event, files) => addPicked(files)"
-            >
-              <Button
-                key="button-1"
-                v-if="uploadMode === 'folder'"
-                label="Browse folder"
-                variant="secondary"
-                size="medium"
-                icon="az az-folder-open"
-                @click="pickFrom(folderPicker)"
-              />
-              <Button
-                key="button-2"
-                v-else
-                label="Browse files"
-                variant="secondary"
-                size="medium"
-                @click="pickFrom(filePicker)"
-              />
-            </FileDropzone>
-            <FileTokenGroup
-              v-if="picked.length"
-              :items="picked"
-              :limit="5"
-              aria-label="Files to upload"
-              @remove="(_event, { index }) => removePicked(index)"
-            />
-          </div>
-        </PanelBody>
-        <PanelFooter>
-          <div class="flex w-full justify-end gap-(--spacing-xs)">
-            <Button
-              label="Cancel"
-              variant="outline"
-              size="medium"
-              @click="uploadOpen = false"
-            />
-            <Button
-              :label="pickable.length > 1 ? `Upload ${pickable.length} files` : 'Upload file'"
-              variant="primary"
-              size="medium"
-              icon="az az-upload"
-              :disabled="!pickable.length"
-              @click="startUpload"
-            />
-          </div>
-        </PanelFooter>
-      </DialogContent>
-    </Dialog>
-    <Dialog
+      :upload-mode="uploadMode"
+      :path="path"
+      :root-name="rootName"
+      @upload="startUpload"
+    />
+    <MoveDialog
       v-model:open="moveOpen"
-      size="medium"
-    >
-      <DialogContent>
-        <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DialogTitle>{{ moveTitle }}</DialogTitle>
-            <DialogDescription>
-              {{ moving.length === 1 ? '1 file' : `${moving.length} files` }}, {{ movingSize }},
-              from {{ path || rootName }}. Pick a folder or type a new path; leave it empty for the
-              storage root.
-            </DialogDescription>
-          </div>
-        </PanelHeader>
-        <PanelBody>
-          <form
-            class="flex flex-col gap-(--spacing-md)"
-            novalidate
-            @submit.prevent="confirmMove"
-          >
-            <ul
-              aria-label="Files to move"
-              class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0"
-            >
-              <li
-                v-for="item in moving"
-                :key="item.name"
-                class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
-              >
-                <i
-                  class="az az-file shrink-0 text-(--text-muted)"
-                  aria-hidden="true"
-                />
-                <span class="min-w-0 truncate">{{ item.name }}</span>
-                <span class="ms-auto shrink-0 text-(--text-muted)">{{ item.size }}</span>
-              </li>
-            </ul>
-            <Field :invalid="!!destinationError">
-              <Field.Label>Destination folder</Field.Label>
-              <Combobox
-                v-model="destination"
-                :options="destinationOptions"
-                placeholder="/ (storage root)"
-                size="large"
-                clearable
-                @update:model-value="destinationError = ''"
-              />
-              <Field.Description
-                >A folder that does not exist yet is created with the move.</Field.Description
-              >
-              <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
-            </Field>
-          </form>
-        </PanelBody>
-        <PanelFooter>
-          <div class="flex w-full justify-end gap-(--spacing-xs)">
-            <Button
-              label="Cancel"
-              variant="outline"
-              size="medium"
-              @click="moveOpen = false"
-            />
-            <Button
-              :label="moving.length === 1 ? 'Move file' : `Move ${moving.length} files`"
-              variant="primary"
-              size="medium"
-              @click="confirmMove"
-            />
-          </div>
-        </PanelFooter>
-      </DialogContent>
-    </Dialog>
-    <UploadProgress
+      :moving="moving"
+      :path="path"
+      :root-name="rootName"
+      :destination-options="destinationOptions"
+      @move="confirmMove"
+    />
+    <TransferCard
       v-if="transferItems.length"
-      v-model:open="transferExpanded"
-      :items="transferItems"
-      :operation="transferOperation"
-      :cancelable="transferOperation === 'upload'"
+      :transfer-items="transferItems"
+      :transfer-operation="transferOperation"
       @cancel="(event, id) => emit('cancel-transfer', event, id)"
       @retry="(event, id) => emit('retry-transfer', event, id)"
       @close="closeTransfer"
-    >
-      <template
-        v-if="transferOperation === 'upload'"
-        #actions
-      >
-        <Button
-          v-if="transferItems.some((item) => item.status === 'success')"
-          label="Open folder"
-          variant="secondary"
-          size="small"
-          @click="openFolder(lastTarget)"
-        />
-      </template>
-    </UploadProgress>
+      @open-folder="(_event, target) => openFolder(target)"
+    />
   </div>
 </template>
 ```
@@ -1381,4 +849,917 @@ export const toFileBrowserEntries = (
   }
   return [...[...folders].map((name): FileBrowserEntry => ({ name, kind: 'folder' })), ...files]
 }
+```
+
+## `lib/file-rows.ts`
+
+```ts
+import type { TableColumn } from '@aziontech/webkit/data-table'
+
+import type { FileBrowserEntry, FileBrowserEntryKind } from '../view-file-browser.vue'
+
+/** What a row of the listing is: an entry, or the parent folder link. */
+export type FileRowKind = FileBrowserEntryKind | 'parent'
+
+/** One row of the listing table. */
+export interface FileRow {
+  /** The name shown; a folder ends in a slash, the parent link is two dots. */
+  name: string
+  /** The row key. */
+  id: string
+  /** Entry or parent link. */
+  kind: FileRowKind
+  /** The file glyph. */
+  icon?: string
+  /** The size as shown. */
+  size: string
+  /** The size in bytes, for sorting. */
+  bytes: number
+  /** When the file changed last. */
+  modifiedAt?: string
+  /** Who changed the file last. */
+  author?: string
+  /** The entry the row shows. */
+  entry?: FileBrowserEntry
+}
+
+const GLYPHS: Record<string, string> = {
+  svg: 'az az-image',
+  webp: 'az az-image',
+  png: 'az az-image',
+  mp4: 'az az-video',
+  html: 'az az-code',
+  js: 'az az-code',
+  css: 'az az-code',
+  json: 'az az-database',
+  woff2: 'az az-star',
+  log: 'az az-align-left',
+  txt: 'az az-file'
+}
+
+export const fileColumns: TableColumn[] = [
+  {
+    accessorKey: 'name',
+    header: 'Name',
+    sortable: true,
+    principal: true,
+    hideable: false,
+    grow: 3
+  },
+  { accessorKey: 'bytes', header: 'Size', sortable: true, minWidth: 80 },
+  { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
+  { id: 'actions', type: 'action', hideable: false }
+]
+
+export const addToFilesActions = [
+  { label: 'Upload file', value: 'upload', icon: 'az az-upload' },
+  { label: 'Upload folder', value: 'upload-folder', icon: 'az az-folder-open' },
+  { label: 'Add folder', value: 'folder', icon: 'az az-folder-plus' }
+]
+
+export const UPLOAD_LIMIT = 300 * 1024 * 1024
+
+export const formatBytes = (bytes: number) => {
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${Number((bytes / 1024).toFixed(2))} KB`
+  return `${Number((bytes / 1024 / 1024).toFixed(2))} MB`
+}
+
+const extensionOf = (name: string) => name.split('.').pop()?.toLowerCase() ?? ''
+
+export const folderName = (name: string) => (name.endsWith('/') ? name : `${name}/`)
+
+const fileRow = (name: string, entry?: FileBrowserEntry): FileRow => {
+  const bytes = entry?.bytes ?? 0
+  return {
+    name,
+    id: name,
+    kind: 'file',
+    icon: GLYPHS[extensionOf(name)] ?? 'az az-file',
+    size: formatBytes(bytes),
+    bytes,
+    modifiedAt: entry?.modifiedAt,
+    author: entry?.editor,
+    entry
+  }
+}
+
+const toRow = (kind: FileRowKind, name: string, entry?: FileBrowserEntry): FileRow => {
+  if (kind === 'file') return fileRow(name, entry)
+  return {
+    name,
+    id: name,
+    kind,
+    icon: undefined,
+    size: '-',
+    bytes: 0,
+    modifiedAt: undefined,
+    author: undefined,
+    entry
+  }
+}
+
+export const listRows = (entries: FileBrowserEntry[], nested: boolean): FileRow[] => {
+  const ofKind = (kind: FileBrowserEntryKind) =>
+    entries
+      .filter((entry) => entry.kind === kind)
+      .map((entry) => toRow(kind, kind === 'folder' ? folderName(entry.name) : entry.name, entry))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  const list: FileRow[] = [...ofKind('folder'), ...ofKind('file')]
+  if (nested) list.unshift(toRow('parent', '..'))
+  return list
+}
+
+const compareFiles = (id: string) => (a: FileRow, b: FileRow) => {
+  if (id === 'bytes') return a.bytes - b.bytes
+  if (id === 'modifiedAt') return Date.parse(a.modifiedAt ?? '') - Date.parse(b.modifiedAt ?? '')
+  return a.name.localeCompare(b.name)
+}
+
+export const sortRows = (rows: FileRow[], sort?: { desc: boolean; id: string }): FileRow[] => {
+  if (!sort) return rows
+  const direction = sort.desc ? -1 : 1
+  const ordered = (kind: FileRowKind, id: string) =>
+    rows.filter((item) => item.kind === kind).sort((a, b) => direction * compareFiles(id)(a, b))
+  return [
+    ...rows.filter((item) => item.kind === 'parent'),
+    ...ordered('folder', sort.id === 'name' ? 'name' : ''),
+    ...ordered('file', sort.id)
+  ]
+}
+
+export const normalizeDestination = (raw: string) => {
+  const target = raw.trim().replace(/\/+/g, '/').replace(/^\//, '')
+  return target && !target.endsWith('/') ? `${target}/` : target
+}
+
+export const destinationProblem = (raw: string, path: string) => {
+  const target = normalizeDestination(raw)
+  if (/[^ -~]/.test(raw.trim())) return 'Use letters, numbers, dots, hyphens and slashes only.'
+  if (target.split('/').includes('..'))
+    return 'A destination cannot go up with "..". Type the full path.'
+  if (target === path) return 'The files are already in this folder. Pick another one.'
+  return ''
+}
+```
+
+## `parts/delete-entry-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+
+  import type { FileRow } from '../lib/file-rows'
+
+  defineProps<{ pending: FileRow | null }>()
+
+  const emit = defineEmits<{
+    confirm: [event: Event]
+  }>()
+
+  const open = defineModel<boolean>('open', { default: false })
+</script>
+
+<template>
+  <ConfirmDialog
+    v-model:open="open"
+    :title="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
+    size="medium"
+    :confirm-label="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
+    :confirmation-phrase="pending?.name ?? ''"
+    @confirm="(event: Event) => emit('confirm', event)"
+  >
+    <div class="flex flex-col gap-(--spacing-md)">
+      <Alert
+        severity="warning"
+        label="Once confirmed, this action can't be reversed."
+      />
+      <p class="m-0 text-body-sm text-(--text-muted)">
+        {{
+          pending?.kind === 'folder'
+            ? 'The selected folder will be deleted, along with all its files.'
+            : 'The selected file will be deleted.'
+        }}
+      </p>
+    </div>
+  </ConfirmDialog>
+</template>
+```
+
+## `parts/file-name-cell.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+
+  import type { FileRow } from '../lib/file-rows'
+
+  defineProps<{ item: FileRow; value: string }>()
+
+  const emit = defineEmits<{
+    'go-up': [event: MouseEvent]
+    open: [event: MouseEvent, item: FileRow]
+  }>()
+</script>
+
+<template>
+  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+    <i
+      v-if="item.kind === 'parent'"
+      class="az az-folder-open shrink-0 text-body-lg text-(--text-muted)"
+      aria-hidden="true"
+    />
+    <i
+      v-else-if="item.kind === 'folder'"
+      class="az az-folder shrink-0 text-body-lg text-(--text-link)"
+      aria-hidden="true"
+    />
+    <i
+      v-else
+      :class="item.icon"
+      class="shrink-0 text-body-lg text-(--text-muted)"
+      aria-hidden="true"
+    />
+    <Button
+      key="button-1"
+      v-if="item.kind === 'parent'"
+      variant="link"
+      label=".."
+      aria-label="Go up to the parent folder"
+      @click.stop="(event: MouseEvent) => emit('go-up', event)"
+    />
+    <Button
+      key="button-2"
+      v-else-if="item.kind === 'folder'"
+      variant="link"
+      :label="value"
+      class="min-w-0"
+      @click.stop="(event: MouseEvent) => emit('open', event, item)"
+    />
+    <span
+      v-else
+      class="truncate"
+      >{{ value }}</span
+    >
+  </div>
+</template>
+```
+
+## `parts/file-row-actions.vue`
+
+```ts
+<script setup lang="ts">
+  import type { DropdownMenuItemValue } from '@aziontech/webkit/data-table'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+
+  import type { FileRow } from '../lib/file-rows'
+
+  defineProps<{ item: FileRow; movable: boolean }>()
+
+  const emit = defineEmits<{
+    select: [event: Event, payload: { value: DropdownMenuItemValue; item: FileRow }]
+  }>()
+</script>
+
+<template>
+  <TableCellActions
+    v-if="item.kind !== 'parent'"
+    :name="item.name"
+    @select="(event, value) => emit('select', event, { value, item })"
+  >
+    <DropdownMenuGroup>
+      <DropdownMenuItem
+        v-if="item.kind === 'folder'"
+        key="open"
+        value="open"
+        label="Open"
+      >
+        <template #leading
+          ><i
+            class="az az-folder-open"
+            aria-hidden="true"
+        /></template>
+      </DropdownMenuItem>
+      <DropdownMenuItem
+        v-else
+        key="download"
+        value="download"
+        label="Download"
+      >
+        <template #leading
+          ><i
+            class="az az-download"
+            aria-hidden="true"
+        /></template>
+      </DropdownMenuItem>
+      <DropdownMenuItem
+        v-if="movable && item.kind === 'file'"
+        key="move"
+        value="move"
+        label="Move"
+      >
+        <template #leading
+          ><i
+            class="az az-arrow-right-left"
+            aria-hidden="true"
+        /></template>
+      </DropdownMenuItem>
+    </DropdownMenuGroup>
+    <DropdownMenuGroup>
+      <DropdownMenuItem
+        value="delete"
+        label="Delete"
+      >
+        <template #leading
+          ><i
+            class="az az-trash"
+            aria-hidden="true"
+        /></template>
+      </DropdownMenuItem>
+    </DropdownMenuGroup>
+  </TableCellActions>
+</template>
+```
+
+## `parts/folder-empty.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
+
+  import { addToFilesActions } from '../lib/file-rows'
+
+  defineProps<{ search: string }>()
+
+  const emit = defineEmits<{
+    'clear-search': [event: MouseEvent]
+    add: [event: MouseEvent]
+    'add-item': [event: MouseEvent | KeyboardEvent, item: SplitButtonItem]
+  }>()
+</script>
+
+<template>
+  <EmptyState
+    key="empty-state-1"
+    v-if="search"
+    size="medium"
+    icon="az az-search"
+    title="No matching files"
+    :description="`Nothing in this folder matches “${search}”.`"
+  >
+    <template #actions>
+      <Button
+        label="Clear search"
+        variant="outline"
+        size="small"
+        @click="(event: MouseEvent) => emit('clear-search', event)"
+      />
+    </template>
+  </EmptyState>
+  <EmptyState
+    key="empty-state-2"
+    v-else
+    size="medium"
+    title="This folder is empty"
+    description="Upload files or create a folder to get started."
+  >
+    <template #actions>
+      <SplitButton
+        label="Add to files"
+        icon="az az-plus"
+        variant="secondary"
+        size="medium"
+        :items="addToFilesActions"
+        @click="(event: MouseEvent) => emit('add', event)"
+        @item-click="(event, item) => emit('add-item', event, item)"
+      />
+    </template>
+  </EmptyState>
+</template>
+```
+
+## `parts/folder-error-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
+  import Card from '@aziontech/webkit/card'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import SplitButton from '@aziontech/webkit/split-button'
+  import Tooltip from '@aziontech/webkit/tooltip'
+
+  import { addToFilesActions } from '../lib/file-rows'
+  import StorageTitle from './storage-title.vue'
+
+  defineProps<{
+    rootName: string
+    crumbs: { label: string; href: string }[]
+    error: string
+  }>()
+
+  const emit = defineEmits<{
+    navigate: [event: MouseEvent, href: string]
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+  }>()
+</script>
+
+<template>
+  <Card>
+    <template #default>
+      <div class="flex w-full flex-col gap-(--spacing-sm)">
+        <StorageTitle :name="rootName" />
+        <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
+          <div class="min-w-0">
+            <Breadcrumb
+              :items="crumbs"
+              class="w-full"
+              @navigate="(event: MouseEvent, href: string) => emit('navigate', event, href)"
+            />
+          </div>
+          <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+            <Tooltip content="Refresh">
+              <IconButton
+                icon="az az-refresh"
+                variant="outline"
+                size="medium"
+                aria-label="Refresh"
+                @click="(event: MouseEvent) => emit('refresh', event)"
+              />
+            </Tooltip>
+            <SplitButton
+              label="Add to files"
+              icon="az az-plus"
+              variant="primary"
+              size="medium"
+              :items="addToFilesActions"
+              disabled
+            />
+          </div>
+        </div>
+        <Alert
+          severity="danger"
+          :label="error"
+          action-label="Retry"
+          @action="(event) => emit('retry', event)"
+        />
+      </div>
+    </template>
+  </Card>
+</template>
+```
+
+## `parts/folder-search-row.vue`
+
+```ts
+<script setup lang="ts">
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import TableSearch from '@aziontech/webkit/table-search'
+  import Tooltip from '@aziontech/webkit/tooltip'
+
+  defineProps<{ loading: boolean; exportable: boolean }>()
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    download: [event: MouseEvent]
+  }>()
+</script>
+
+<template>
+  <div class="flex w-full items-center gap-(--spacing-xs)">
+    <div class="flex flex-1">
+      <TableSearch
+        size="large"
+        placeholder="Search in folder"
+        class="w-full"
+      />
+    </div>
+    <Tooltip
+      content="Refresh"
+      class="shrink-0"
+    >
+      <IconButton
+        icon="az az-refresh"
+        variant="outline"
+        size="large"
+        :loading="loading"
+        aria-label="Refresh"
+        @click="(event: MouseEvent) => emit('refresh', event)"
+      />
+    </Tooltip>
+    <Tooltip
+      content="Download CSV"
+      class="shrink-0"
+    >
+      <IconButton
+        icon="az az-download"
+        variant="outline"
+        size="large"
+        :disabled="!exportable"
+        aria-label="Download CSV"
+        @click="(event: MouseEvent) => emit('download', event)"
+      />
+    </Tooltip>
+    <CollectionPreferences
+      :sections="['columns']"
+      class="shrink-0"
+    />
+  </div>
+</template>
+```
+
+## `parts/move-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Combobox from '@aziontech/webkit/combobox'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import Dialog from '@aziontech/webkit/dialog-root'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
+  import Field from '@aziontech/webkit/field'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import { computed, ref, watch } from 'vue'
+
+  import {
+    destinationProblem,
+    type FileRow,
+    formatBytes,
+    normalizeDestination
+  } from '../lib/file-rows'
+
+  const props = defineProps<{
+    moving: FileRow[]
+    path: string
+    rootName: string
+    destinationOptions: { value: string; label?: string; description?: string }[]
+  }>()
+
+  const emit = defineEmits<{
+    move: [event: Event, destination: string]
+  }>()
+
+  const open = defineModel<boolean>('open', { default: false })
+
+  const destination = ref('')
+  const destinationError = ref('')
+
+  const moveTitle = computed(() =>
+    props.moving.length === 1 ? `Move ${props.moving[0].name}` : `Move ${props.moving.length} files`
+  )
+  const movingSize = computed(() =>
+    formatBytes(props.moving.reduce((sum, item) => sum + item.bytes, 0))
+  )
+
+  watch(open, (now) => {
+    if (!now) return
+    destination.value = ''
+    destinationError.value = ''
+  })
+
+  const confirmMove = (event: Event) => {
+    destinationError.value = destinationProblem(destination.value, props.path)
+    if (destinationError.value) return
+    emit('move', event, normalizeDestination(destination.value))
+  }
+</script>
+
+<template>
+  <Dialog
+    v-model:open="open"
+    size="medium"
+  >
+    <DialogContent>
+      <PanelHeader class="w-full">
+        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+          <DialogTitle>{{ moveTitle }}</DialogTitle>
+          <DialogDescription>
+            {{ moving.length === 1 ? '1 file' : `${moving.length} files` }}, {{ movingSize }}, from
+            {{ path || rootName }}. Pick a folder or type a new path; leave it empty for the storage
+            root.
+          </DialogDescription>
+        </div>
+      </PanelHeader>
+      <PanelBody>
+        <form
+          class="flex flex-col gap-(--spacing-md)"
+          novalidate
+          @submit.prevent="confirmMove"
+        >
+          <ul
+            aria-label="Files to move"
+            class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0"
+          >
+            <li
+              v-for="item in moving"
+              :key="item.name"
+              class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
+            >
+              <i
+                class="az az-file shrink-0 text-(--text-muted)"
+                aria-hidden="true"
+              />
+              <span class="min-w-0 truncate">{{ item.name }}</span>
+              <span class="ms-auto shrink-0 text-(--text-muted)">{{ item.size }}</span>
+            </li>
+          </ul>
+          <Field :invalid="!!destinationError">
+            <Field.Label>Destination folder</Field.Label>
+            <Combobox
+              v-model="destination"
+              :options="destinationOptions"
+              placeholder="/ (storage root)"
+              size="large"
+              clearable
+              @update:model-value="destinationError = ''"
+            />
+            <Field.Description
+              >A folder that does not exist yet is created with the move.</Field.Description
+            >
+            <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
+          </Field>
+        </form>
+      </PanelBody>
+      <PanelFooter>
+        <div class="flex w-full justify-end gap-(--spacing-xs)">
+          <Button
+            label="Cancel"
+            variant="outline"
+            size="medium"
+            @click="open = false"
+          />
+          <Button
+            :label="moving.length === 1 ? 'Move file' : `Move ${moving.length} files`"
+            variant="primary"
+            size="medium"
+            @click="confirmMove"
+          />
+        </div>
+      </PanelFooter>
+    </DialogContent>
+  </Dialog>
+</template>
+```
+
+## `parts/selection-bar.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+
+  defineProps<{ selectedCount: number; movableSelection: boolean }>()
+
+  const emit = defineEmits<{
+    clear: [event: MouseEvent]
+    move: [event: MouseEvent]
+  }>()
+</script>
+
+<template>
+  <div
+    class="flex w-full flex-wrap items-center gap-(--spacing-xs) rounded-(--shape-control) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
+  >
+    <span class="text-label-sm text-(--text-default)">{{ selectedCount }} selected</span>
+    <Button
+      label="Clear selection"
+      variant="ghost"
+      size="small"
+      @click="(event: MouseEvent) => emit('clear', event)"
+    />
+    <div class="ms-auto flex items-center gap-(--spacing-xs)">
+      <Button
+        label="Move"
+        icon="az az-arrow-right-left"
+        variant="outline"
+        size="small"
+        :disabled="!movableSelection"
+        @click="(event: MouseEvent) => emit('move', event)"
+      />
+    </div>
+  </div>
+</template>
+```
+
+## `parts/storage-title.vue`
+
+```ts
+<script setup lang="ts">
+  defineProps<{ name: string }>()
+</script>
+
+<template>
+  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+    <i
+      class="az az-database shrink-0 text-body-lg text-(--text-muted)"
+      aria-hidden="true"
+    />
+    <h1 class="min-w-0 truncate text-heading-2xs text-(--text-default)">
+      {{ name }}
+    </h1>
+  </div>
+</template>
+```
+
+## `parts/transfer-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import UploadProgress from '@aziontech/webkit/upload-progress'
+  import { computed, ref } from 'vue'
+
+  import type { FileBrowserTransfer, FileBrowserTransferOperation } from '../view-file-browser.vue'
+
+  const props = defineProps<{
+    transferItems: FileBrowserTransfer[]
+    transferOperation: FileBrowserTransferOperation
+  }>()
+
+  const emit = defineEmits<{
+    cancel: [event: MouseEvent, id?: string]
+    retry: [event: MouseEvent, id?: string]
+    close: [event: MouseEvent]
+    'open-folder': [event: MouseEvent, target: string]
+  }>()
+
+  const transferExpanded = ref(true)
+  const lastTarget = computed(
+    () => props.transferItems.find((item) => item.status === 'success')?.target ?? ''
+  )
+</script>
+
+<template>
+  <UploadProgress
+    v-model:open="transferExpanded"
+    :items="transferItems"
+    :operation="transferOperation"
+    :cancelable="transferOperation === 'upload'"
+    @cancel="(event, id) => emit('cancel', event, id)"
+    @retry="(event, id) => emit('retry', event, id)"
+    @close="(event) => emit('close', event)"
+  >
+    <template
+      v-if="transferOperation === 'upload'"
+      #actions
+    >
+      <Button
+        v-if="transferItems.some((item) => item.status === 'success')"
+        label="Open folder"
+        variant="secondary"
+        size="small"
+        @click="(event: MouseEvent) => emit('open-folder', event, lastTarget)"
+      />
+    </template>
+  </UploadProgress>
+</template>
+```
+
+## `parts/upload-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import Dialog from '@aziontech/webkit/dialog-root'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
+  import FileDropzone from '@aziontech/webkit/file-dropzone'
+  import FileTokenGroup, { type FileTokenGroupItem } from '@aziontech/webkit/file-token-group'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import { computed, ref, watch } from 'vue'
+
+  import { UPLOAD_LIMIT } from '../lib/file-rows'
+
+  type PickedFile = FileTokenGroupItem & { file: File }
+
+  defineProps<{
+    uploadMode: 'files' | 'folder'
+    path: string
+    rootName: string
+  }>()
+
+  const emit = defineEmits<{
+    upload: [event: MouseEvent, files: File[]]
+  }>()
+
+  const open = defineModel<boolean>('open', { default: false })
+
+  const picked = ref<PickedFile[]>([])
+  const filePicker = useFilePicker({ multiple: true })
+  const folderPicker = useFilePicker({ directory: true })
+
+  const toPicked = (file: File): PickedFile => ({
+    file,
+    error: file.size > UPLOAD_LIMIT ? 'Larger than 300 MB, the limit per file' : undefined,
+    warning: file.size === 0 ? 'This file is empty' : undefined
+  })
+  const pickable = computed(() => picked.value.filter((item) => !item.error))
+  const addPicked = (files: FileList | File[]) => {
+    picked.value = [...picked.value, ...Array.from(files).map(toPicked)]
+  }
+  const pickFrom = async (picker: typeof filePicker) => addPicked(await picker.open())
+  const removePicked = (index: number) => {
+    picked.value = picked.value.filter((_, position) => position !== index)
+  }
+
+  watch(open, (now) => {
+    if (now) picked.value = []
+  })
+
+  const startUpload = (event: MouseEvent) => {
+    if (!pickable.value.length) return
+    emit(
+      'upload',
+      event,
+      pickable.value.map((item) => item.file)
+    )
+  }
+</script>
+
+<template>
+  <Dialog
+    v-model:open="open"
+    size="medium"
+  >
+    <DialogContent>
+      <PanelHeader class="w-full">
+        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+          <DialogTitle>{{
+            uploadMode === 'folder' ? 'Upload folder' : 'Upload files'
+          }}</DialogTitle>
+          <DialogDescription>
+            {{ uploadMode === 'folder' ? 'The folder and its subfolders go' : 'Files go' }} to
+            {{ path || rootName }}. A file with the same path is replaced.
+          </DialogDescription>
+        </div>
+      </PanelHeader>
+      <PanelBody>
+        <div class="flex flex-col gap-(--spacing-md)">
+          <FileDropzone
+            :directories="uploadMode === 'folder'"
+            :title="uploadMode === 'folder' ? 'Drop a folder to upload' : undefined"
+            description="Up to 300 MB per file."
+            @drop="(_event, files) => addPicked(files)"
+          >
+            <Button
+              key="button-1"
+              v-if="uploadMode === 'folder'"
+              label="Browse folder"
+              variant="secondary"
+              size="medium"
+              icon="az az-folder-open"
+              @click="pickFrom(folderPicker)"
+            />
+            <Button
+              key="button-2"
+              v-else
+              label="Browse files"
+              variant="secondary"
+              size="medium"
+              @click="pickFrom(filePicker)"
+            />
+          </FileDropzone>
+          <FileTokenGroup
+            v-if="picked.length"
+            :items="picked"
+            :limit="5"
+            aria-label="Files to upload"
+            @remove="(_event, { index }) => removePicked(index)"
+          />
+        </div>
+      </PanelBody>
+      <PanelFooter>
+        <div class="flex w-full justify-end gap-(--spacing-xs)">
+          <Button
+            label="Cancel"
+            variant="outline"
+            size="medium"
+            @click="open = false"
+          />
+          <Button
+            :label="pickable.length > 1 ? `Upload ${pickable.length} files` : 'Upload file'"
+            variant="primary"
+            size="medium"
+            icon="az az-upload"
+            :disabled="!pickable.length"
+            @click="startUpload"
+          />
+        </div>
+      </PanelFooter>
+    </DialogContent>
+  </Dialog>
+</template>
 ```

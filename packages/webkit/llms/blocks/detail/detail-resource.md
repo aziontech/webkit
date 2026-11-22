@@ -68,7 +68,7 @@ For a resource made from the CLI, the `detail/detail-get-started` section follow
 
 ## Data
 
-The primary (ResourceOverview) takes the resource through a prop, owns the open tab as a model and emits its actions; it fetches nothing. `ResourceDetailResource`, `ResourceDetailTab` and `ResourceDetailProps` are exported from `detail-resource.vue`, and `sample.ts` holds the sample resource the block renders when `resource` is left out. The other variants are whole screens of their own (a service, a policy, an application with working tabs) and keep their own records.
+The primary (ResourceOverview) takes the resource through a prop, owns the open tab as a model and emits its actions; it fetches nothing. `ResourceDetailResource`, `ResourceDetailTab` and `ResourceDetailProps` are exported from `detail-resource.vue`, and `sample.ts` holds the sample resource the block renders when `resource` is left out. The other variants are whole screens of their own (a service, a policy, an application with working tabs); their records are in `sample.ts` too.
 
 | Prop / model  | Type                     | What it does                                                                                                     |
 | ------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------- |
@@ -206,26 +206,17 @@ Each variant is the same screen in another state: `get_block("detail/detail-reso
 
 ```vue
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Link from '@aziontech/webkit/link'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-  import Subheader from '@aziontech/webkit/subheader'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref } from 'vue'
+  import { computed } from 'vue'
 
-  import { sampleResource } from './sample'
+  import ResourceGetStarted from './parts/resource-get-started.vue'
+  import ResourceSummaryCard from './parts/resource-summary-card.vue'
+  import ResourceTabBar from './parts/resource-tab-bar.vue'
+  import TabRouteEmpty from './parts/tab-route-empty.vue'
+  import { resourceTabs, sampleResource } from './sample'
 
   /** A tab of the resource page. */
   export type ResourceDetailTab = 'overview' | 'versions' | 'build' | 'deployments'
@@ -274,153 +265,23 @@ Each variant is the same screen in another state: `get_block("detail/detail-reso
   const activeTab = defineModel<ResourceDetailTab>('tab', { default: 'overview' })
 
   const resource = computed<ResourceDetailResource>(() => props.resource ?? sampleResource)
-  const address = computed(() => `https://${resource.value.domain}`)
 
   const { formatRelativeTime } = useLocale()
   const created = computed(
     () => `${formatRelativeTime(resource.value.createdAt)} by ${resource.value.createdBy}`
   )
 
-  const tabs: { value: ResourceDetailTab; label: string }[] = [
-    { value: 'overview', label: 'Overview' },
-    { value: 'versions', label: 'Versions' },
-    { value: 'build', label: 'Build' },
-    { value: 'deployments', label: 'Deployments' }
-  ]
-
-  const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
-
-  const PATHS = [
-    { label: 'CLI', value: 'cli' },
-    { label: 'GitHub Actions', value: 'actions' }
-  ]
-
-  const cliSteps = computed(() => [
-    {
-      title: 'Install the CLI',
-      description:
-        'Install it globally. It builds with your framework preset and ships the build in one step.',
-      tabs: [
-        {
-          label: 'npm',
-          value: 'npm',
-          language: 'bash',
-          code: 'npm install -g platform-cli'
-        },
-        {
-          label: 'yarn',
-          value: 'yarn',
-          language: 'bash',
-          code: 'yarn global add platform-cli'
-        },
-        { label: 'pnpm', value: 'pnpm', language: 'bash', code: 'pnpm add -g platform-cli' },
-        {
-          label: 'brew',
-          value: 'brew',
-          language: 'bash',
-          code: 'brew install platform-cli'
-        }
-      ]
-    },
-    {
-      title: 'Link your project',
-      description:
-        'Authenticate, then link the local project to this resource so every deploy lands on it.',
-      tabs: [
-        {
-          label: 'Link',
-          value: 'link',
-          language: 'bash',
-          code: `platform login
-platform link \\
-  --name ${resource.value.name}`
-        }
-      ]
-    },
-    {
-      title: 'Deploy and visit your site',
-      description:
-        'Build and ship. The CLI prints the domain when it finishes, and sync reconciles platform.json with what the console shows.',
-      tabs: [
-        {
-          label: 'Deploy',
-          value: 'deploy',
-          language: 'bash',
-          code: `platform deploy --auto --local
-platform sync`
-        }
-      ]
-    }
-  ])
-
-  const ACTIONS_STEPS = [
-    {
-      title: 'Store your personal token',
-      description:
-        'Create a personal token in Account settings and keep it as the repository secret the workflow authenticates with.',
-      tabs: [
-        {
-          label: 'Secret',
-          value: 'secret',
-          language: 'bash',
-          code: `gh secret set \\
-  PLATFORM_TOKEN`
-        }
-      ]
-    },
-    {
-      title: 'Add the deploy workflow',
-      description:
-        'One job that installs the CLI and deploys the build. Every push to the production branch runs it.',
-      tabs: [
-        {
-          label: 'deploy.yml',
-          value: 'workflow',
-          fileName: '.github/workflows/deploy.yml',
-          language: 'yaml',
-          code: `on:
-  push:
-    branches: [main]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: npm install -g platform-cli
-      - run: platform login --token \${{ secrets.PLATFORM_TOKEN }}
-      - run: platform deploy --auto --local`
-        }
-      ]
-    },
-    {
-      title: 'Push to deploy',
-      description:
-        'Every push to the production branch builds and ships. The deployment lands on the Overview tab as it runs.',
-      tabs: [{ label: 'Push', value: 'push', language: 'bash', code: 'git push origin main' }]
-    }
-  ]
-
-  const path = ref('cli')
-  const steps = computed(() => (path.value === 'actions' ? ACTIONS_STEPS : cliSteps.value))
-
-  const FOOTER_BAND_CLASS =
-    '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
-    'py-(--spacing-xs)'
+  const tabLabel = computed(
+    () => resourceTabs.find((tab) => tab.value === activeTab.value)?.label ?? ''
+  )
 </script>
 
 <template>
   <div class="flex min-h-0 flex-1 flex-col">
-    <div class="sticky top-0 z-1 bg-(--bg-canvas)">
-      <PageTabs v-model="activeTab">
-        <Tabs.Trigger
-          v-for="tab in tabs"
-          :key="tab.value"
-          :value="tab.value"
-          :label="tab.label"
-        />
-      </PageTabs>
-    </div>
+    <ResourceTabBar
+      v-model="activeTab"
+      :tabs="resourceTabs"
+    />
 
     <div
       v-if="activeTab === 'overview'"
@@ -432,270 +293,31 @@ jobs:
             <section
               class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap) pb-(--layout-section-gap)"
             >
-              <Card :padded="false">
-                <template #default>
-                  <div
-                    class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
-                  >
-                    <div
-                      class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
-                    >
-                      <i
-                        class="az az-globe shrink-0 text-body-lg text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                      <div class="flex min-w-0">
-                        <TableCellLink
-                          :label="resource.domain"
-                          :href="address"
-                        />
-                      </div>
-                    </div>
-
-                    <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
-                      <Button
-                        label="Visit"
-                        :href="address"
-                        target="_blank"
-                        variant="secondary"
-                        size="medium"
-                        icon="az az-external-link"
-                      />
-
-                      <DropdownMenu
-                        side="bottom"
-                        align="end"
-                        @select="(event, value) => emit('resource-action', event, value)"
-                      >
-                        <DropdownMenu.Trigger>
-                          <Tooltip content="Resource actions">
-                            <IconButton
-                              icon="az az-ellipsis"
-                              variant="outline"
-                              size="medium"
-                              aria-label="Resource actions"
-                            />
-                          </Tooltip>
-                        </DropdownMenu.Trigger>
-
-                        <DropdownMenu.Group>
-                          <DropdownMenu.Item
-                            value="copy-url"
-                            label="Copy URL"
-                          >
-                            <template #leading>
-                              <i
-                                class="az az-copy"
-                                aria-hidden="true"
-                              />
-                            </template>
-                          </DropdownMenu.Item>
-                        </DropdownMenu.Group>
-
-                        <DropdownMenu.Group>
-                          <DropdownMenu.Item
-                            value="settings"
-                            label="Settings"
-                          >
-                            <template #leading>
-                              <i
-                                class="az az-settings"
-                                aria-hidden="true"
-                              />
-                            </template>
-                          </DropdownMenu.Item>
-                        </DropdownMenu.Group>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-
-                  <div
-                    class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-3 lg:grid-cols-6"
-                  >
-                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
-                      <span class="text-label-sm text-(--text-muted)">Deployment</span>
-                      <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-                        <div class="flex min-w-0">
-                          <Tooltip
-                            :content="`Open ${resource.deploymentId} in Deployments`"
-                            class="w-full"
-                          >
-                            <Link
-                              :label="resource.deploymentId"
-                              :href="`/deployments/${resource.deploymentId}`"
-                              size="small"
-                            />
-                          </Tooltip>
-                        </div>
-                        <Tag
-                          :label="resource.environment"
-                          severity="neutral"
-                          size="small"
-                          class="shrink-0"
-                        />
-                      </div>
-                    </div>
-
-                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
-                      <span class="text-label-sm text-(--text-muted)">Domains</span>
-                      <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-                        <div class="flex min-w-0">
-                          <TableCellLink
-                            :label="resource.domain"
-                            :href="address"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
-                      <span class="text-label-sm text-(--text-muted)">Status</span>
-                      <div class="flex min-h-7 min-w-0 items-center">
-                        <StatusIndicator
-                          :severity="resource.statusSeverity"
-                          :label="resource.status"
-                        />
-                      </div>
-                    </div>
-
-                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
-                      <span class="text-label-sm text-(--text-muted)">Created</span>
-                      <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-                        <span class="truncate text-body-sm text-(--text-default)">
-                          {{ created }}
-                        </span>
-                        <Avatar
-                          :alt="resource.createdBy"
-                          :label="resource.createdBy"
-                          size="small"
-                          variant="square"
-                          class="shrink-0"
-                        />
-                      </div>
-                    </div>
-
-                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
-                      <span class="text-label-sm text-(--text-muted)">Source</span>
-                      <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-sm)">
-                        <Button
-                          variant="link"
-                          label="Connect Git repository"
-                          @click="(event: MouseEvent) => emit('connect-repository', event)"
-                        />
-                      </div>
-                    </div>
-
-                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
-                      <span class="text-label-sm text-(--text-muted)">Framework</span>
-                      <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-                        <i
-                          :class="resource.frameworkIcon"
-                          class="shrink-0 text-body-lg"
-                          aria-hidden="true"
-                        />
-                        <span class="truncate text-body-sm text-(--text-default)">
-                          {{ resource.framework }}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div :class="FOOTER_BAND_CLASS">
-                    <p
-                      class="min-w-0 flex-1 basis-(--container-2xs) text-pretty text-body-sm text-(--text-muted)"
-                    >
-                      To deploy to Production, drop your project anywhere on this page, connect Git,
-                      or run
-                      <code
-                        class="font-(family-name:--font-code) text-body-sm text-(--text-default)"
-                        >platform deploy</code
-                      >
-                      via the CLI.
-                    </p>
-
-                    <div class="w-full shrink-0 @lg/band:ms-auto @lg/band:w-fit">
-                      <Button
-                        class="w-full"
-                        label="Documentation"
-                        variant="outline"
-                        size="medium"
-                        icon="az az-book"
-                        href="https://example.com/docs/cli"
-                        target="_blank"
-                      />
-                    </div>
-                  </div>
+              <ResourceSummaryCard
+                :resource="resource"
+                :created="created"
+                @action="(event, value) => emit('resource-action', event, value)"
+              >
+                <template #source>
+                  <Button
+                    variant="link"
+                    label="Connect Git repository"
+                    @click="(event: MouseEvent) => emit('connect-repository', event)"
+                  />
                 </template>
-              </Card>
-
-              <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
-                <Subheader title="Get started">
-                  <template #description>
-                    Two ways to build and deploy this resource. Select one and follow the steps, or
-                    read the
-                    <Link
-                      href="https://example.com/docs/cli"
-                      target="_blank"
-                      inline
-                      >CLI docs</Link
-                    >.
-                  </template>
-                  <template #actions>
-                    <ToggleGroup
-                      v-model="path"
-                      :options="PATHS"
-                      size="large"
-                      aria-label="Deploy with"
-                    />
-                  </template>
-                </Subheader>
-
-                <div class="grid min-w-0 gap-(--spacing-lg) @4xl:grid-cols-3">
-                  <div
-                    v-for="(step, index) in steps"
-                    :key="step.title"
-                    class="relative flex min-w-0"
+                <p
+                  class="min-w-0 flex-1 basis-(--container-2xs) text-pretty text-body-sm text-(--text-muted)"
+                >
+                  To deploy to Production, drop your project anywhere on this page, connect Git, or
+                  run
+                  <code class="font-(family-name:--font-code) text-body-sm text-(--text-default)"
+                    >platform deploy</code
                   >
-                    <span
-                      v-if="index > 0"
-                      aria-hidden="true"
-                      class="absolute end-full top-9 hidden w-(--spacing-lg) border-t border-dashed border-(--border-default) @4xl:block"
-                    />
-                    <div class="flex min-w-0 flex-1">
-                      <Card
-                        :padded="false"
-                        class="w-full"
-                      >
-                        <template #default>
-                          <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
-                            <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                              <span
-                                class="flex size-6 shrink-0 items-center justify-center rounded-full bg-(--bg-surface-overlay) text-label-sm text-(--text-default)"
-                              >
-                                {{ index + 1 }}
-                              </span>
-                              <h3 class="min-w-0 text-heading-xs text-(--text-default)">
-                                {{ step.title }}
-                              </h3>
-                            </div>
-                            <p class="text-pretty text-body-sm text-(--text-muted)">
-                              {{ step.description }}
-                            </p>
-                            <div class="mt-(--spacing-2xs) min-w-0">
-                              <CodeBlock
-                                :tabs="step.tabs"
-                                :show-line-numbers="false"
-                                :copy-aria-label="`Copy the commands for ${step.title}`"
-                                class="w-full"
-                              />
-                            </div>
-                          </div>
-                        </template>
-                      </Card>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  via the CLI.
+                </p>
+              </ResourceSummaryCard>
+
+              <ResourceGetStarted :name="resource.name" />
             </section>
           </div>
         </div>
@@ -705,25 +327,10 @@ jobs:
       v-else
       class="relative flex min-h-0 flex-1 flex-col"
     >
-      <div class="layout-column layout-boundary flex min-w-0 flex-col">
-        <div class="layout-section-start">
-          <EmptyState
-            size="medium"
-            icon="az az-external-link"
-            :title="tabLabel"
-            :description="`${tabLabel} opens on its own page.`"
-          >
-            <template #actions>
-              <Button
-                :label="`Open ${tabLabel}`"
-                variant="outline"
-                size="small"
-                :href="`/resources/${resource.name}/${activeTab}`"
-              />
-            </template>
-          </EmptyState>
-        </div>
-      </div>
+      <TabRouteEmpty
+        :label="tabLabel"
+        :href="`/resources/${resource.name}/${activeTab}`"
+      />
     </div>
   </div>
 </template>
@@ -732,7 +339,15 @@ jobs:
 ## `sample.ts`
 
 ```ts
-import type { ResourceDetailResource } from './detail-resource.vue'
+import type { FlowDiagramEdgeData, FlowDiagramNodeData } from '@aziontech/webkit/flow-diagram-root'
+import type { StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
+
+import type { ResourceDetailResource, ResourceDetailTab } from './detail-resource.vue'
+import type { ApplicationDeploymentRow } from './parts/application-deployments-tab.vue'
+import type { ApplicationVersionRow } from './parts/application-versions-tab.vue'
+import type { ProductionStep } from './parts/production-progress-tag.vue'
+import type { TopologyTarget } from './use-topology-staging'
 
 const referenceTime = Date.UTC(2026, 10, 10, 12)
 
@@ -747,6 +362,566 @@ export const sampleResource: ResourceDetailResource = {
   createdBy: 'John Smith',
   framework: 'Next.js',
   frameworkIcon: 'az-color az-nextjs'
+}
+
+export const webAppResource: ResourceDetailResource = {
+  name: 'web-app',
+  domain: 'web-app-y6u7i8.example.com',
+  deploymentId: '1213284258',
+  environment: 'Production',
+  status: 'Ready',
+  statusSeverity: 'success',
+  createdAt: new Date(referenceTime - 28 * 86_400_000),
+  createdBy: 'Riley Carter',
+  framework: 'Nuxt',
+  frameworkIcon: 'az-color az-nuxt'
+}
+
+export const resourceTabs: { value: ResourceDetailTab; label: string }[] = [
+  { value: 'overview', label: 'Overview' },
+  { value: 'versions', label: 'Versions' },
+  { value: 'build', label: 'Build' },
+  { value: 'deployments', label: 'Deployments' }
+]
+
+export const policyModules = [
+  'Rate limiting',
+  'Request inspection',
+  'IP filtering',
+  'Bot detection'
+]
+
+export const serviceDomains = [
+  'service-01.example.com',
+  'service-01-alias-1.example.com',
+  'service-01-alias-2.example.com',
+  'service-01-alias-3.example.com',
+  'service-01-alias-4.example.com',
+  'service-01-alias-5.example.com',
+  'service-01-alias-6.example.com',
+  'service-01-alias-7.example.com'
+]
+
+export const serviceEnvironments = [
+  { name: 'Production', policy: 'Single' },
+  { name: 'Preview', policy: 'Versioned' }
+]
+
+/** A service card of the first deploy. */
+export interface FirstDeployService {
+  /** The service ID. */
+  id: string
+  /** The generated domain. */
+  domain: string
+  /** The deploy step in flight; empty when none runs. */
+  deployStep: string
+  /** The service serves traffic. */
+  live: boolean
+  /** Who created it. */
+  createdBy: string
+  /** When it was created, already formatted. */
+  createdAt: string
+}
+
+export const firstDeployServices: FirstDeployService[] = [
+  {
+    id: '1020731',
+    domain: 'store-front-k3p9qa.example.com',
+    deployStep: 'Build',
+    live: false,
+    createdBy: 'Jane Doe',
+    createdAt: 'Nov 12'
+  },
+  {
+    id: '1020655',
+    domain: 'docs-site-w2x7mb.example.com',
+    deployStep: '',
+    live: false,
+    createdBy: 'Sam Lee',
+    createdAt: 'Sep 22'
+  }
+]
+
+export const productionSteps: ProductionStep[] = [
+  {
+    id: 'domain',
+    icon: 'az az-globe',
+    title: 'Add a custom domain',
+    description:
+      'Serve this service on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',
+    actionLabel: 'Add Domain',
+    done: false
+  },
+  {
+    id: 'policy',
+    icon: 'az az-shield',
+    title: 'Enable a security policy',
+    description:
+      'Bind a policy so requests are inspected before they reach the resource. Rate limiting, request inspection, and IP filtering.',
+    actionLabel: 'Bind Policy',
+    done: false
+  },
+  {
+    id: 'errorPage',
+    icon: 'az az-file',
+    title: 'Set custom error pages',
+    description: 'Answer 4xx and 5xx with your own page instead of the default response.',
+    actionLabel: 'Bind Error Page',
+    done: false
+  }
+]
+
+export const serviceTargets: Record<string, TopologyTarget> = {
+  policy: {
+    kind: 'Policy',
+    icon: 'az az-shield',
+    options: [
+      { value: 'payments-api', label: 'payments-api' },
+      { value: 'api-hardening', label: 'api-hardening' },
+      { value: 'partner-gateway', label: 'partner-gateway' },
+      { value: 'production-policy', label: 'production-policy' },
+      { value: 'canary-policy', label: 'canary-policy' }
+    ],
+    unbound: 'Requests reach the resource without inspection.'
+  },
+  errorPage: {
+    kind: 'Error Page',
+    icon: 'az az-file',
+    options: [
+      { value: 'Branded 404', label: 'Branded 404' },
+      { value: 'Maintenance window', label: 'Maintenance window' },
+      { value: 'Server error', label: 'Server error' },
+      { value: 'Blocked by policy', label: 'Blocked by policy' },
+      { value: 'Rate limited', label: 'Rate limited' }
+    ],
+    unbound: 'Errors answer with the default page.'
+  },
+  origin: {
+    kind: 'Origin',
+    icon: 'az az-link',
+    options: [
+      { value: 'web-app-storage', label: 'web-app-storage' },
+      { value: 'api-primary', label: 'api-primary' },
+      { value: 'assets-storage', label: 'assets-storage' },
+      { value: 'api-failover', label: 'api-failover' },
+      { value: 'uploads', label: 'uploads' }
+    ],
+    removable: false,
+    bound:
+      'Provisioned with this service. It is the resource’s origin, so it can be re-pointed but not removed.',
+    fields: [
+      { label: 'ID', value: '1599818521' },
+      { label: 'Type', value: 'Storage' },
+      { label: 'Address', value: 'web-app-assets' }
+    ]
+  }
+}
+
+export const serviceTopology: Record<string, FlowDiagramNodeData> = {
+  domains: {
+    id: 'domains',
+    eyebrow: 'Domains',
+    icon: 'az az-globe',
+    title: 'service-01.example.com',
+    status: '1 domain',
+    severity: 'neutral',
+    fields: [
+      {
+        label: 'Generated domain',
+        value: 'service-01.example.com',
+        copyable: true,
+        href: 'https://service-01.example.com'
+      }
+    ]
+  },
+  service: {
+    id: 'service',
+    eyebrow: 'Service',
+    icon: 'az az-server',
+    title: 'service-01',
+    status: 'Live',
+    severity: 'success',
+    href: '/services/1020655',
+    fields: [
+      { label: 'ID', value: '1020655' },
+      {
+        label: 'Domain',
+        value: 'service-01.example.com',
+        copyable: true,
+        href: 'https://service-01.example.com'
+      },
+      { label: 'Environment', value: 'Production' }
+    ]
+  },
+  resource: {
+    id: 'resource',
+    eyebrow: 'Resource',
+    icon: 'az az-box',
+    title: 'web-app',
+    status: 'Active',
+    severity: 'success',
+    href: '/resources/1170472732',
+    fields: [
+      { label: 'ID', value: '1170472732' },
+      { label: 'Repository', value: 'acme/web-app' },
+      { label: 'Branch', value: 'main' }
+    ]
+  },
+  storage: {
+    id: 'storage',
+    eyebrow: 'Storage',
+    icon: 'az az-inbox',
+    title: 'web-app-assets',
+    status: 'Public',
+    severity: 'info',
+    href: '/storage/web-app-assets',
+    fields: [
+      { label: 'Access', value: 'Public' },
+      { label: 'Files', value: '24' },
+      { label: 'Size', value: '1.2 MB' }
+    ]
+  }
+}
+
+export const serviceEdges: FlowDiagramEdgeData[] = [
+  { from: 'domains', to: 'service' },
+  { from: 'service', to: 'policy' },
+  { from: 'policy', to: 'resource' },
+  { from: 'policy', to: 'errorPage' },
+  { from: 'resource', to: 'origin' },
+  { from: 'origin', to: 'storage' }
+]
+
+export const application = {
+  name: 'storefront-app',
+  host: 'storefront-app-k3m9.azion.app',
+  deployment: '4182093317',
+  version: 'BX7Q2LMA'
+}
+
+export const applicationFacts = [
+  { label: 'Active version', value: application.version, code: true },
+  { label: 'Framework', value: 'Vite' },
+  { label: 'Source', value: 'acme/storefront (main)' },
+  { label: 'Created', value: '2 weeks ago by Mara Lin', author: 'Mara Lin' }
+]
+
+export const applicationVersions: ApplicationVersionRow[] = [
+  {
+    id: 'BX7Q2LMA',
+    name: 'BX7Q2LMA',
+    description: 'Cache product images for 7 days',
+    state: 'Active',
+    createdAgo: '3 hours ago'
+  },
+  {
+    id: 'BW1K8RTE',
+    name: 'BW1K8RTE',
+    description: 'Add rule"Redirect old checkout"',
+    state: 'Ready',
+    createdAgo: 'Yesterday'
+  },
+  {
+    id: 'BV4N6PXD',
+    name: 'BV4N6PXD',
+    description: 'Bypass cache for /api/*',
+    state: 'Ready',
+    createdAgo: '4 days ago'
+  }
+]
+
+export const applicationDeployments: ApplicationDeploymentRow[] = [
+  {
+    id: '4182093317',
+    version: 'BX7Q2LMA',
+    environment: 'Production',
+    status: 'Live',
+    createdAgo: '3 hours ago'
+  },
+  {
+    id: '4181877250',
+    version: 'BW1K8RTE',
+    environment: 'Preview',
+    status: 'Live',
+    createdAgo: 'Yesterday'
+  },
+  {
+    id: '4180412906',
+    version: 'BW1K8RTE',
+    environment: 'Production',
+    status: 'Failed',
+    createdAgo: 'Yesterday'
+  }
+]
+
+export const applicationDeploymentSeverity: Record<string, StatusIndicatorSeverity> = {
+  Live: 'success',
+  Failed: 'danger',
+  Building: 'info'
+}
+
+export const applicationTargets: Record<string, TopologyTarget> = {
+  firewall: {
+    kind: 'Firewall',
+    icon: 'az az-shield',
+    options: [
+      { value: 'edge-guard', label: 'edge-guard' },
+      { value: 'strict-waf', label: 'strict-waf' }
+    ],
+    unbound: 'Requests reach the application without inspection.'
+  },
+  function: {
+    kind: 'Function instance',
+    icon: 'az az-code',
+    options: [
+      { value: 'geo-redirect', label: 'geo-redirect' },
+      { value: 'ab-split', label: 'ab-split' }
+    ],
+    unbound: 'No function runs before the cache.'
+  }
+}
+
+export const applicationTopology: Record<string, FlowDiagramNodeData> = {
+  domain: {
+    id: 'domain',
+    eyebrow: 'Domain',
+    icon: 'az az-globe',
+    title: 'shop.example.com',
+    status: 'Live',
+    severity: 'success'
+  },
+  workload: {
+    id: 'workload',
+    eyebrow: 'Workload',
+    icon: 'az az-sitemap',
+    title: 'storefront',
+    status: 'Active',
+    severity: 'success'
+  },
+  application: {
+    id: 'application',
+    eyebrow: 'Application',
+    icon: 'az az-box',
+    title: 'storefront-app',
+    status: 'Active',
+    severity: 'success'
+  }
+}
+
+export const applicationEdges: FlowDiagramEdgeData[] = [
+  { from: 'domain', to: 'workload' },
+  { from: 'workload', to: 'firewall' },
+  { from: 'firewall', to: 'application' },
+  { from: 'application', to: 'function' }
+]
+
+export const buildApplication = {
+  name: 'storefront-app',
+  host: 'storefront-app-k3m9.example.com',
+  deployment: '4182093317',
+  version: 'BX7Q2LMA',
+  repository: 'acme/storefront'
+}
+
+export const buildApplicationVersions: ApplicationVersionRow[] = [
+  {
+    id: 'BX7Q2LMA',
+    name: 'BX7Q2LMA',
+    description: 'Cache product images for 7 days',
+    state: 'Active',
+    createdAgo: '3 hours ago'
+  },
+  {
+    id: 'BW1K8RTE',
+    name: 'BW1K8RTE',
+    description: 'Redirect the old checkout path',
+    state: 'Ready',
+    createdAgo: 'Yesterday'
+  },
+  {
+    id: 'BV4N6PXD',
+    name: 'BV4N6PXD',
+    description: 'Bypass cache for /api/*',
+    state: 'Ready',
+    createdAgo: '4 days ago'
+  }
+]
+
+export const buildApplicationDeployments: ApplicationDeploymentRow[] = [
+  {
+    id: '4182093317',
+    version: 'BX7Q2LMA',
+    environment: 'Production',
+    status: 'Ready',
+    createdAgo: '3 hours ago'
+  },
+  {
+    id: '4181877250',
+    version: 'BW1K8RTE',
+    environment: 'Preview',
+    status: 'Ready',
+    createdAgo: 'Yesterday'
+  },
+  {
+    id: '4180412906',
+    version: 'BW1K8RTE',
+    environment: 'Production',
+    status: 'Error',
+    createdAgo: 'Yesterday'
+  }
+]
+
+export const buildDeploymentSeverity: Record<string, StatusIndicatorSeverity> = {
+  Ready: 'success',
+  Error: 'danger',
+  Building: 'info'
+}
+
+/** One row of the resource Versions tab. */
+export interface ResourceVersionRow {
+  /** Stable key. */
+  id: string
+  /** The code-set name. */
+  name: string
+  /** A key of the version states. */
+  state: string
+  /** What the version changed. */
+  description: string
+  /** Who built it. */
+  author: string
+  /** When it was built, as ISO 8601. */
+  createdAt: string
+  /** When it was built, already formatted. */
+  createdAgo: string
+}
+
+export const resourceVersions: ResourceVersionRow[] = [
+  {
+    id: 'ANWDC7RA',
+    name: 'ANWDC7RA',
+    state: 'active',
+    description: 'Reorder rules',
+    author: 'Chris Taylor',
+    createdAt: '2026-11-05T17:37:18.145Z',
+    createdAgo: '21 hours ago'
+  },
+  {
+    id: 'APA7237R',
+    name: 'APA7237R',
+    state: 'ready',
+    description: 'Add rule"Security headers"',
+    author: 'Riley Carter',
+    createdAt: '2026-11-03T14:37:18.145Z',
+    createdAgo: '3 days ago'
+  },
+  {
+    id: 'AQO0RYO8',
+    name: 'AQO0RYO8',
+    state: 'ready',
+    description: 'Bypass cache for /api/*',
+    author: 'Ethan Brooks',
+    createdAt: '2026-11-02T14:37:18.145Z',
+    createdAgo: '4 days ago'
+  },
+  {
+    id: 'AS1UHU4P',
+    name: 'AS1UHU4P',
+    state: 'ready',
+    description: 'Add rule"Redirect /blog to docs"',
+    author: 'Jordan Kim',
+    createdAt: '2026-11-01T14:37:18.145Z',
+    createdAgo: '5 days ago'
+  },
+  {
+    id: 'ATFO7PL6',
+    name: 'ATFO7PL6',
+    state: 'ready',
+    description: 'Add function"image-resize"',
+    author: 'Taylor Reed',
+    createdAt: '2026-10-31T14:37:18.145Z',
+    createdAgo: '6 days ago'
+  },
+  {
+    id: 'AUTHXL1N',
+    name: 'AUTHXL1N',
+    state: 'ready',
+    description: 'Reorder rules',
+    author: 'John Smith',
+    createdAt: '2026-10-30T14:37:18.145Z',
+    createdAgo: '1 week ago'
+  },
+  {
+    id: 'AW7BNGI4',
+    name: 'AW7BNGI4',
+    state: 'ready',
+    description: 'Add rule"Security headers"',
+    author: 'Sam Lee',
+    createdAt: '2026-10-29T14:37:18.145Z',
+    createdAgo: '1 week ago'
+  },
+  {
+    id: 'AXL5DBYL',
+    name: 'AXL5DBYL',
+    state: 'ready',
+    description: 'Bypass cache for /api/*',
+    author: 'Priya Patel',
+    createdAt: '2026-10-28T14:37:18.145Z',
+    createdAgo: '1 week ago'
+  },
+  {
+    id: 'AYYZ37F2',
+    name: 'AYYZ37F2',
+    state: 'ready',
+    description: 'Add rule"Redirect /blog to docs"',
+    author: 'Chris Taylor',
+    createdAt: '2026-10-27T14:37:18.145Z',
+    createdAgo: '1 week ago'
+  },
+  {
+    id: 'A1CST2VJ',
+    name: 'A1CST2VJ',
+    state: 'ready',
+    description: 'Add function"image-resize"',
+    author: 'Riley Carter',
+    createdAt: '2026-10-26T14:37:18.145Z',
+    createdAgo: '2 weeks ago'
+  },
+  {
+    id: 'A2QMIYC0',
+    name: 'A2QMIYC0',
+    state: 'ready',
+    description: 'Reorder rules',
+    author: 'Ethan Brooks',
+    createdAt: '2026-10-24T14:37:18.145Z',
+    createdAgo: '2 weeks ago'
+  },
+  {
+    id: 'A44G8TSH',
+    name: 'A44G8TSH',
+    state: 'ready',
+    description: 'Add rule"Security headers"',
+    author: 'Jordan Kim',
+    createdAt: '2026-10-24T14:37:18.145Z',
+    createdAgo: '2 weeks ago'
+  },
+  {
+    id: 'A5I9YP8Y',
+    name: 'A5I9YP8Y',
+    state: 'archived',
+    description: 'Bypass cache for /api/*',
+    author: 'Taylor Reed',
+    createdAt: '2026-10-22T14:37:18.145Z',
+    createdAgo: '2 weeks ago'
+  }
+]
+
+export const resourceVersionStates: Record<
+  string,
+  { label: string; severity?: TagSeverity; variant?: TagVariant }
+> = {
+  active: { label: 'Deployed', variant: 'primary' },
+  ready: { label: 'Ready', severity: 'success' },
+  archived: { label: 'Archived', severity: 'neutral' }
 }
 ```
 
@@ -827,61 +1002,79 @@ export interface UseTopologyStagingReturn {
   deploy: () => void
 }
 
-export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopologyStagingReturn {
-  const { targets } = options
-  const deployed = reactive<Record<string, string>>({ ...options.bound })
-  const staged = reactive<Record<string, string>>({})
-  const stagedCount = computed(() => Object.keys(staged).length)
-  const stagedNote = ref('')
-  const deploying = ref(false)
-  let timer: ReturnType<typeof setTimeout> | undefined
-
-  const slotNode = (key: string): FlowDiagramNodeData => {
-    const target = targets[key]
-    const pick = staged[key]
-    const removing = pick === ''
-    const value = pick === undefined ? deployed[key] : pick
-    const base = {
-      id: key,
-      eyebrow: target.kind,
-      icon: target.icon,
-      bindable: true,
-      bindOptions: target.options,
-      removable: target.removable !== false
-    }
-    if (!value) {
-      return {
-        ...base,
-        status: removing ? 'Staged' : '',
-        severity: removing ? 'warning' : 'neutral',
-        dashed: true,
-        message: removing ? `Deploy to remove this ${target.kind.toLowerCase()}.` : target.unbound
-      }
-    }
+function topologySlotNode(
+  key: string,
+  target: TopologyTarget,
+  pick: string | undefined,
+  deployedValue: string | undefined
+): FlowDiagramNodeData {
+  const removing = pick === ''
+  const value = pick === undefined ? deployedValue : pick
+  const base = {
+    id: key,
+    eyebrow: target.kind,
+    icon: target.icon,
+    bindable: true,
+    bindOptions: target.options,
+    removable: target.removable !== false
+  }
+  if (!value) {
     return {
       ...base,
-      title: value,
-      boundValue: value,
-      status: pick === undefined ? 'Active' : 'Staged',
-      severity: pick === undefined ? 'success' : 'warning',
-      dashed: pick !== undefined,
-      message:
-        pick === undefined
-          ? target.bound || ''
-          : `Deploy to apply this ${target.kind.toLowerCase()}.`,
-      fields: pick === undefined ? target.fields : undefined
+      status: removing ? 'Staged' : '',
+      severity: removing ? 'warning' : 'neutral',
+      dashed: true,
+      message: removing ? `Deploy to remove this ${target.kind.toLowerCase()}.` : target.unbound
     }
   }
+  return {
+    ...base,
+    title: value,
+    boundValue: value,
+    status: pick === undefined ? 'Active' : 'Staged',
+    severity: pick === undefined ? 'success' : 'warning',
+    dashed: pick !== undefined,
+    message:
+      pick === undefined
+        ? target.bound || ''
+        : `Deploy to apply this ${target.kind.toLowerCase()}.`,
+    fields: pick === undefined ? target.fields : undefined
+  }
+}
 
-  const stagedChanges = computed(() =>
-    Object.entries(staged).map(([key, value]) => ({
-      key,
-      kind: targets[key].kind,
-      from: deployed[key] || 'Not bound',
-      to: value || 'Removed'
-    }))
-  )
+function announceLive(
+  options: UseTopologyStagingOptions,
+  changes: number,
+  onEdit: () => void,
+  onRedeploy: () => void
+): void {
+  toast.success(`${options.name} is live.`, {
+    id: options.toastId,
+    description: changes
+      ? `${changes} topology ${changes === 1 ? 'change' : 'changes'} now serve Production.`
+      : 'Production serves the active version.',
+    duration: 0,
+    closable: true,
+    actions: [
+      { label: 'Edit', onClick: onEdit },
+      { label: 'Redeploy', onClick: onRedeploy }
+    ]
+  })
+}
 
+function applyStaged(deployed: Record<string, string>, staged: Record<string, string>): void {
+  for (const [key, value] of Object.entries(staged)) {
+    deployed[key] = value
+    delete staged[key]
+  }
+}
+
+function stagingEdits(
+  targets: Record<string, TopologyTarget>,
+  deployed: Record<string, string>,
+  staged: Record<string, string>,
+  stagedNote: Ref<string>
+): Pick<UseTopologyStagingReturn, 'bind' | 'unbind' | 'createTarget'> {
   const bind = (key: string, value: string) => {
     if (value === deployed[key]) delete staged[key]
     else staged[key] = value
@@ -895,6 +1088,31 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
   const createTarget = (key: string) => {
     stagedNote.value = `Opens the create flow for a new ${targets[key].kind.toLowerCase()}.`
   }
+  return { bind, unbind, createTarget }
+}
+
+export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopologyStagingReturn {
+  const { targets } = options
+  const deployed = reactive<Record<string, string>>({ ...options.bound })
+  const staged = reactive<Record<string, string>>({})
+  const stagedCount = computed(() => Object.keys(staged).length)
+  const stagedNote = ref('')
+  const deploying = ref(false)
+  let timer: ReturnType<typeof setTimeout> | undefined
+
+  const slotNode = (key: string): FlowDiagramNodeData =>
+    topologySlotNode(key, targets[key], staged[key], deployed[key])
+
+  const stagedChanges = computed(() =>
+    Object.entries(staged).map(([key, value]) => ({
+      key,
+      kind: targets[key].kind,
+      from: deployed[key] || 'Not bound',
+      to: value || 'Removed'
+    }))
+  )
+
+  const { bind, unbind, createTarget } = stagingEdits(targets, deployed, staged, stagedNote)
 
   const editStaged = () => {
     toast.dismiss(options.toastId)
@@ -910,24 +1128,10 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
     })
     clearTimeout(timer)
     timer = setTimeout(() => {
-      for (const [key, value] of Object.entries(staged)) {
-        deployed[key] = value
-        delete staged[key]
-      }
+      applyStaged(deployed, staged)
       deploying.value = false
       stagedNote.value = ''
-      toast.success(`${options.name} is live.`, {
-        id: options.toastId,
-        description: changes
-          ? `${changes} topology ${changes === 1 ? 'change' : 'changes'} now serve Production.`
-          : 'Production serves the active version.',
-        duration: 0,
-        closable: true,
-        actions: [
-          { label: 'Edit', onClick: editStaged },
-          { label: 'Redeploy', onClick: deploy }
-        ]
-      })
+      announceLive(options, changes, editStaged, deploy)
     }, 1500)
   }
 
@@ -948,100 +1152,6 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
     deploy
   }
 }
-```
-
-## `parts/application-address-band.vue`
-
-```ts
-<script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import Tooltip from '@aziontech/webkit/tooltip'
-
-  export interface ApplicationAddressBandProps {
-    /** The live address, without the scheme; the link and Visit open it. */
-    host: string
-    /** The glyph before the address. */
-    icon: string
-    /** Whether the items of the actions menu carry their glyph. */
-    showMenuIcons?: boolean
-  }
-
-  withDefaults(defineProps<ApplicationAddressBandProps>(), {
-    showMenuIcons: false
-  })
-
-  const menuItems = [
-    { value: 'copy-url', label: 'Copy URL', icon: 'az az-copy' },
-    { value: 'settings', label: 'Settings', icon: 'az az-settings' }
-  ]
-</script>
-
-<template>
-  <div
-    class="flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
-  >
-    <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
-      <i
-        :class="icon"
-        class="shrink-0 text-body-lg text-(--text-muted)"
-        aria-hidden="true"
-      />
-      <div class="flex min-w-0">
-        <TableCellLink
-          :label="host"
-          :href="`https://${host}`"
-        />
-      </div>
-    </div>
-    <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
-      <Button
-        label="Visit"
-        :href="`https://${host}`"
-        target="_blank"
-        variant="secondary"
-        size="medium"
-        icon="az az-external-link"
-      />
-      <DropdownMenu
-        side="bottom"
-        align="end"
-      >
-        <DropdownMenu.Trigger>
-          <Tooltip content="Application actions">
-            <IconButton
-              icon="az az-ellipsis"
-              variant="outline"
-              size="medium"
-              aria-label="Application actions"
-            />
-          </Tooltip>
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Group
-          v-for="item in menuItems"
-          :key="item.value"
-        >
-          <DropdownMenu.Item
-            :value="item.value"
-            :label="item.label"
-          >
-            <template
-              v-if="showMenuIcons"
-              #leading
-            >
-              <i
-                :class="item.icon"
-                aria-hidden="true"
-              />
-            </template>
-          </DropdownMenu.Item>
-        </DropdownMenu.Group>
-      </DropdownMenu>
-    </div>
-  </div>
-</template>
 ```
 
 ## `parts/application-deployments-tab.vue`
@@ -1235,503 +1345,683 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
 </template>
 ```
 
-## `parts/deploy-action.vue`
+## `parts/resource-get-started.vue`
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Tag from '@aziontech/webkit/tag'
+  import Card from '@aziontech/webkit/card'
+  import CodeBlock from '@aziontech/webkit/code-block'
+  import Link from '@aziontech/webkit/link'
+  import Subheader from '@aziontech/webkit/subheader'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { computed, ref } from 'vue'
 
-  export interface DeployActionProps {
-    /** How many topology changes wait for the next deploy; a warning tag counts them. */
-    stagedCount?: number
-    /** A deployment is in flight. */
-    loading?: boolean
+  export interface ResourceGetStartedProps {
+    /** The resource slug the CLI links to. */
+    name: string
   }
 
-  withDefaults(defineProps<DeployActionProps>(), {
-    stagedCount: 0,
-    loading: false
-  })
+  const props = defineProps<ResourceGetStartedProps>()
 
-  const emit = defineEmits<{
-    deploy: [event: MouseEvent]
-  }>()
+  const PATHS = [
+    { label: 'CLI', value: 'cli' },
+    { label: 'GitHub Actions', value: 'actions' }
+  ]
+
+  const cliSteps = computed(() => [
+    {
+      title: 'Install the CLI',
+      description:
+        'Install it globally. It builds with your framework preset and ships the build in one step.',
+      tabs: [
+        {
+          label: 'npm',
+          value: 'npm',
+          language: 'bash',
+          code: 'npm install -g platform-cli'
+        },
+        {
+          label: 'yarn',
+          value: 'yarn',
+          language: 'bash',
+          code: 'yarn global add platform-cli'
+        },
+        { label: 'pnpm', value: 'pnpm', language: 'bash', code: 'pnpm add -g platform-cli' },
+        {
+          label: 'brew',
+          value: 'brew',
+          language: 'bash',
+          code: 'brew install platform-cli'
+        }
+      ]
+    },
+    {
+      title: 'Link your project',
+      description:
+        'Authenticate, then link the local project to this resource so every deploy lands on it.',
+      tabs: [
+        {
+          label: 'Link',
+          value: 'link',
+          language: 'bash',
+          code: `platform login
+platform link \\
+  --name ${props.name}`
+        }
+      ]
+    },
+    {
+      title: 'Deploy and visit your site',
+      description:
+        'Build and ship. The CLI prints the domain when it finishes, and sync reconciles platform.json with what the console shows.',
+      tabs: [
+        {
+          label: 'Deploy',
+          value: 'deploy',
+          language: 'bash',
+          code: `platform deploy --auto --local
+platform sync`
+        }
+      ]
+    }
+  ])
+
+  const ACTIONS_STEPS = [
+    {
+      title: 'Store your personal token',
+      description:
+        'Create a personal token in Account settings and keep it as the repository secret the workflow authenticates with.',
+      tabs: [
+        {
+          label: 'Secret',
+          value: 'secret',
+          language: 'bash',
+          code: `gh secret set \\
+  PLATFORM_TOKEN`
+        }
+      ]
+    },
+    {
+      title: 'Add the deploy workflow',
+      description:
+        'One job that installs the CLI and deploys the build. Every push to the production branch runs it.',
+      tabs: [
+        {
+          label: 'deploy.yml',
+          value: 'workflow',
+          fileName: '.github/workflows/deploy.yml',
+          language: 'yaml',
+          code: `on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install -g platform-cli
+      - run: platform login --token \${{ secrets.PLATFORM_TOKEN }}
+      - run: platform deploy --auto --local`
+        }
+      ]
+    },
+    {
+      title: 'Push to deploy',
+      description:
+        'Every push to the production branch builds and ships. The deployment lands on the Overview tab as it runs.',
+      tabs: [{ label: 'Push', value: 'push', language: 'bash', code: 'git push origin main' }]
+    }
+  ]
+
+  const path = ref('cli')
+  const steps = computed(() => (path.value === 'actions' ? ACTIONS_STEPS : cliSteps.value))
 </script>
 
 <template>
-  <div class="flex items-center gap-(--spacing-xs)">
-    <Tag
-      v-if="stagedCount"
-      :label="`${stagedCount} ${stagedCount === 1 ? 'change' : 'changes'}`"
-      severity="warning"
-      size="small"
-    />
-    <Button
-      label="Deploy"
-      variant="outline"
-      size="medium"
-      icon="az az-cloud-upload"
-      :loading="loading"
-      @click="(event: MouseEvent) => emit('deploy', event)"
-    />
+  <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
+    <Subheader title="Get started">
+      <template #description>
+        Two ways to build and deploy this resource. Select one and follow the steps, or read the
+        <Link
+          href="https://example.com/docs/cli"
+          target="_blank"
+          inline
+          >CLI docs</Link
+        >.
+      </template>
+      <template #actions>
+        <ToggleGroup
+          v-model="path"
+          :options="PATHS"
+          size="large"
+          aria-label="Deploy with"
+        />
+      </template>
+    </Subheader>
+
+    <div class="grid min-w-0 gap-(--spacing-lg) @4xl:grid-cols-3">
+      <div
+        v-for="(step, index) in steps"
+        :key="step.title"
+        class="relative flex min-w-0"
+      >
+        <span
+          v-if="index > 0"
+          aria-hidden="true"
+          class="absolute end-full top-9 hidden w-(--spacing-lg) border-t border-dashed border-(--border-default) @4xl:block"
+        />
+        <div class="flex min-w-0 flex-1">
+          <Card
+            :padded="false"
+            class="w-full"
+          >
+            <template #default>
+              <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
+                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                  <span
+                    class="flex size-6 shrink-0 items-center justify-center rounded-full bg-(--bg-surface-overlay) text-label-sm text-(--text-default)"
+                  >
+                    {{ index + 1 }}
+                  </span>
+                  <h3 class="min-w-0 text-heading-xs text-(--text-default)">
+                    {{ step.title }}
+                  </h3>
+                </div>
+                <p class="text-pretty text-body-sm text-(--text-muted)">
+                  {{ step.description }}
+                </p>
+                <div class="mt-(--spacing-2xs) min-w-0">
+                  <CodeBlock
+                    :tabs="step.tabs"
+                    :show-line-numbers="false"
+                    :copy-aria-label="`Copy the commands for ${step.title}`"
+                    class="w-full"
+                  />
+                </div>
+              </div>
+            </template>
+          </Card>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 ```
 
-## `parts/resource-build-page.vue`
+## `parts/resource-summary-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Avatar from '@aziontech/webkit/avatar'
+  import Card from '@aziontech/webkit/card'
+  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import Link from '@aziontech/webkit/link'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import Tag from '@aziontech/webkit/tag'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { computed } from 'vue'
+
+  import type { ResourceDetailResource } from '../detail-resource.vue'
+  import SummaryFact from './summary-fact.vue'
+  import SummaryFacts from './summary-facts.vue'
+  import SummaryStateBand from './summary-state-band.vue'
+  import SummarySubjectBand from './summary-subject-band.vue'
+
+  export interface ResourceSummaryCardProps {
+    /** The resource the card sums up. */
+    resource: ResourceDetailResource
+    /** When and by whom it was created, already formatted. */
+    created: string
+  }
+
+  const props = defineProps<ResourceSummaryCardProps>()
+
+  const emit = defineEmits<{
+    action: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
+  }>()
+
+  defineSlots<{
+    source(): unknown
+    default(): unknown
+  }>()
+
+  const address = computed(() => `https://${props.resource.domain}`)
+
+  const menu = [
+    [{ value: 'copy-url', label: 'Copy URL', icon: 'az az-copy' }],
+    [{ value: 'settings', label: 'Settings', icon: 'az az-settings' }]
+  ]
+</script>
+
+<template>
+  <Card :padded="false">
+    <template #default>
+      <SummarySubjectBand
+        icon="az az-globe"
+        :label="resource.domain"
+        :href="address"
+        :visit="address"
+        actions-label="Resource actions"
+        :menu="menu"
+        @select="(event, value) => emit('action', event, value)"
+      />
+
+      <SummaryFacts>
+        <SummaryFact
+          label="Deployment"
+          class="lg:col-span-2"
+        >
+          <div class="flex min-w-0">
+            <Tooltip
+              :content="`Open ${resource.deploymentId} in Deployments`"
+              class="w-full"
+            >
+              <Link
+                :label="resource.deploymentId"
+                :href="`/deployments/${resource.deploymentId}`"
+                size="small"
+              />
+            </Tooltip>
+          </div>
+          <Tag
+            :label="resource.environment"
+            severity="neutral"
+            size="small"
+            class="shrink-0"
+          />
+        </SummaryFact>
+
+        <SummaryFact
+          label="Domains"
+          class="lg:col-span-2"
+        >
+          <div class="flex min-w-0">
+            <TableCellLink
+              :label="resource.domain"
+              :href="address"
+            />
+          </div>
+        </SummaryFact>
+
+        <SummaryFact
+          label="Status"
+          value-class=""
+          class="lg:col-span-2"
+        >
+          <StatusIndicator
+            :severity="resource.statusSeverity"
+            :label="resource.status"
+          />
+        </SummaryFact>
+
+        <SummaryFact
+          label="Created"
+          class="lg:col-span-2"
+        >
+          <span class="truncate text-body-sm text-(--text-default)">
+            {{ created }}
+          </span>
+          <Avatar
+            :alt="resource.createdBy"
+            :label="resource.createdBy"
+            size="small"
+            variant="square"
+            class="shrink-0"
+          />
+        </SummaryFact>
+
+        <SummaryFact
+          label="Source"
+          value-class="gap-(--spacing-sm)"
+          class="lg:col-span-2"
+        >
+          <slot name="source" />
+        </SummaryFact>
+
+        <SummaryFact
+          label="Framework"
+          class="lg:col-span-2"
+        >
+          <i
+            :class="resource.frameworkIcon"
+            class="shrink-0 text-body-lg"
+            aria-hidden="true"
+          />
+          <span class="truncate text-body-sm text-(--text-default)">
+            {{ resource.framework }}
+          </span>
+        </SummaryFact>
+      </SummaryFacts>
+
+      <SummaryStateBand docs="https://example.com/docs/cli">
+        <slot />
+      </SummaryStateBand>
+    </template>
+  </Card>
+</template>
+```
+
+## `parts/resource-tab-bar.vue`
+
+```ts
+<script setup lang="ts">
+  import PageTabs from '@aziontech/webkit/page-tabs'
+  import Tabs from '@aziontech/webkit/tabs'
+
+  defineProps<{
+    /** The tabs, in order. */
+    tabs: { value: string; label: string }[]
+    /** The tab that holds unsaved changes; empty when none does. */
+    dirtyTab?: string
+  }>()
+
+  const model = defineModel<string>({ required: true })
+
+  defineSlots<{ actions?(): unknown }>()
+</script>
+
+<template>
+  <div class="sticky top-0 z-1 bg-(--bg-canvas)">
+    <PageTabs v-model="model">
+      <Tabs.Trigger
+        v-for="tab in tabs"
+        :key="tab.value"
+        :value="tab.value"
+        :label="tab.label"
+        :dirty="Boolean(dirtyTab) && tab.value === dirtyTab"
+      />
+      <template
+        v-if="$slots.actions"
+        #actions
+      >
+        <slot name="actions" />
+      </template>
+    </PageTabs>
+  </div>
+</template>
+```
+
+## `parts/summary-fact.vue`
+
+```ts
+<script setup lang="ts">
+  export interface SummaryFactProps {
+    /** The muted label over the value. */
+    label?: string
+    /** The utilities the value row adds, such as its gap. */
+    valueClass?: string
+    /** The muted text shown when no value is given, such as None. */
+    empty?: string
+  }
+
+  withDefaults(defineProps<SummaryFactProps>(), {
+    label: '',
+    valueClass: 'gap-(--spacing-xs)',
+    empty: ''
+  })
+
+  defineSlots<{
+    default?(): unknown
+    label?(): unknown
+  }>()
+</script>
+
+<template>
+  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+    <slot name="label">
+      <span class="text-label-sm text-(--text-muted)">{{ label }}</span>
+    </slot>
+    <div
+      class="flex min-h-7 min-w-0 items-center"
+      :class="valueClass"
+    >
+      <slot>
+        <span class="truncate text-body-sm text-(--text-muted)">{{ empty }}</span>
+      </slot>
+    </div>
+  </div>
+</template>
+```
+
+## `parts/summary-facts.vue`
+
+```ts
+<script setup lang="ts">
+  export interface SummaryFactsProps {
+    /** The grid columns from sm up. */
+    columns?: string
+  }
+
+  withDefaults(defineProps<SummaryFactsProps>(), {
+    columns: 'sm:grid-cols-3 lg:grid-cols-6'
+  })
+
+  defineSlots<{ default(): unknown }>()
+</script>
+
+<template>
+  <div
+    class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-1 gap-(--spacing-sm)"
+    :class="columns"
+  >
+    <slot />
+  </div>
+</template>
+```
+
+## `parts/summary-state-band.vue`
 
 ```ts
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, reactive, ref } from 'vue'
 
-  export interface ResourceBuildPageProps {
-    /** A repository is connected: the Git repository band lists it with its branches instead of the connect card. */
-    connected?: boolean
+  export interface SummaryStateBandProps {
+    /** The documentation the band links to. */
+    docs: string
   }
 
-  withDefaults(defineProps<ResourceBuildPageProps>(), {
-    connected: false
-  })
+  defineProps<SummaryStateBandProps>()
 
-  const tabs = [
-    { value: 'overview', label: 'Overview' },
-    { value: 'versions', label: 'Versions' },
-    { value: 'build', label: 'Build' },
-    { value: 'deployments', label: 'Deployments' }
-  ]
+  defineSlots<{ default(): unknown }>()
 
-  const activeTab = ref('build')
-  const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
-
-  const buildDefaults = { buildCommand: 'platform build', deployCommand: 'platform deploy --local' }
-
-  const repository = 'acme/analytics-app'
-
-  const settings = reactive({
-    ...buildDefaults,
-    productionBranch: 'main',
-    previewBranch: 'develop'
-  })
-  const saving = ref(false)
-  const baseline = ref(JSON.stringify(settings))
-  const dirty = computed(() => JSON.stringify(settings) !== baseline.value)
-
-  const save = () => {
-    saving.value = true
-    setTimeout(() => {
-      baseline.value = JSON.stringify(settings)
-      saving.value = false
-    }, 800)
-  }
-
-  const onSaveShortcut = () => {
-    if (!dirty.value || saving.value) return
-    save()
-  }
-
-  const discard = () => {
-    Object.assign(settings, JSON.parse(baseline.value) as typeof settings)
-  }
+  const STATE_BAND_CLASS =
+    '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
+    'py-(--spacing-xs)'
 </script>
 
 <template>
-  <div class="flex min-h-0 flex-1 flex-col">
-    <div class="sticky top-0 z-1 bg-(--bg-canvas)">
-      <PageTabs v-model="activeTab">
-        <Tabs.Trigger
-          v-for="tab in tabs"
-          :key="tab.value"
-          :value="tab.value"
-          :label="tab.label"
-        />
-      </PageTabs>
+  <div :class="STATE_BAND_CLASS">
+    <slot />
+
+    <div class="w-full shrink-0 @lg/band:ms-auto @lg/band:w-fit">
+      <Button
+        class="w-full"
+        label="Documentation"
+        variant="outline"
+        size="medium"
+        icon="az az-book"
+        :href="docs"
+        target="_blank"
+      />
     </div>
+  </div>
+</template>
+```
 
-    <div
-      v-if="activeTab === 'build'"
-      class="relative flex min-h-0 flex-1 flex-col"
-    >
-      <section class="min-h-0 flex-1">
-        <div class="flex min-h-full flex-col">
-          <div class="flex min-w-0 flex-col">
-            <div
-              class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
-            >
-              <PageHeader
-                title="Build"
-                :description="
-                  connected
-                    ? 'How code reaches this resource, and what the CLI builds it with.'
-                    : 'This resource has no repository. Connect one here, or keep deploying from your terminal.'
-                "
-                size="small"
-              >
-                <template #actions>
-                  <Button
-                    label="Deploy"
-                    icon="az az-cloud-upload"
-                    variant="outline"
-                    size="medium"
-                  />
-                </template>
-              </PageHeader>
+## `parts/summary-subject-band.vue`
 
-              <div class="mt-(--layout-section-gap) flex min-w-0 flex-col">
-                <SettingsGroup
-                  label="Git repository"
-                  :hint="
-                    connected
-                      ? 'The repository this resource builds from, and the branches a push deploys.'
-                      : 'Connect a provider to build this resource from a repository.'
-                  "
-                  anchor="git-repository"
-                >
-                  <Card
-                    key="repository"
-                    v-if="connected"
-                    :padded="false"
-                  >
-                    <template #default>
-                      <fieldset
-                        class="m-0 flex min-w-0 flex-col border-0 p-0"
-                        :disabled="saving"
-                      >
-                        <legend class="sr-only">Git repository</legend>
-                        <Item.List>
-                          <SettingsRow
-                            title="Connected repository"
-                            variant="compact"
-                          >
-                            <template #description>
-                              <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-                                <i
-                                  class="az az-github shrink-0"
-                                  aria-hidden="true"
-                                />
-                                <TableCellLink
-                                  :label="repository"
-                                  :href="`https://github.com/${repository}`"
-                                />
-                              </span>
-                            </template>
-                            <Button
-                              type="button"
-                              label="Disconnect"
-                              variant="danger"
-                              size="small"
-                            />
-                          </SettingsRow>
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import Tooltip from '@aziontech/webkit/tooltip'
 
-                          <SettingsRow
-                            title="Production branch"
-                            description="Pushes to this branch build and deploy to Production."
-                            stackable
-                          >
-                            <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                              <Input
-                                v-model="settings.productionBranch"
-                                size="large"
-                                :disabled="saving"
-                                class="w-full"
-                                aria-label="Production branch"
-                                monospace
-                                :spellcheck="false"
-                              />
-                            </div>
-                          </SettingsRow>
+  /** One item of the actions menu. */
+  export interface SummaryMenuItem {
+    /** The value the menu emits. */
+    value: string
+    /** The item label. */
+    label: string
+    /** The leading glyph class. */
+    icon: string
+  }
 
-                          <SettingsRow
-                            title="Preview branch"
-                            description="Pushes to this branch deploy a preview with its own URL. Production is untouched."
-                            stackable
-                          >
-                            <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                              <Input
-                                v-model="settings.previewBranch"
-                                size="large"
-                                :disabled="saving"
-                                class="w-full"
-                                aria-label="Preview branch"
-                                monospace
-                                :spellcheck="false"
-                              />
-                            </div>
-                          </SettingsRow>
-                        </Item.List>
-                      </fieldset>
-                    </template>
-                  </Card>
-                  <Card
-                    v-else
-                    key="connect"
-                  >
-                    <template #default>
-                      <div
-                        class="flex rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) lg:min-h-0 lg:flex-1"
-                      >
-                        <EmptyState
-                          size="medium"
-                          title="Connect Git repository"
-                          description="Select a Git provider, then select the repository this resource builds from. Until then, new code reaches it from the CLI only."
-                          class="w-full"
-                        >
-                          <template #icon>
-                            <span class="relative flex size-10 items-center justify-center">
-                              <span
-                                aria-hidden="true"
-                                class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-(--border-strong) bg-(--bg-canvas) opacity-5"
-                              />
-                              <span
-                                aria-hidden="true"
-                                class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
-                              />
-                              <span
-                                class="relative flex size-10 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface)"
-                              >
-                                <i
-                                  class="az az-github text-body-md leading-none text-(--text-default)"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            </span>
-                          </template>
-                          <template #actions>
-                            <Button
-                              label="Continue with GitHub"
-                              icon="az az-github"
-                              variant="secondary"
-                              size="large"
-                            />
-                            <Link
-                              label="Manage connected providers"
-                              href="#"
-                              size="large"
-                            />
-                          </template>
-                        </EmptyState>
-                      </div>
-                    </template>
-                  </Card>
-                </SettingsGroup>
+  export interface SummarySubjectBandProps {
+    /** The glyph before the subject. */
+    icon: string
+    /** The primary link label. */
+    label?: string
+    /** Where the primary link goes. */
+    href?: string
+    /** Where the primary link goes, named in its tooltip. */
+    destination?: string
+    /** The address Visit opens in a new tab; empty draws no Visit. */
+    visit?: string
+    /** The accessible name and tooltip of the actions menu. */
+    actionsLabel: string
+    /** The groups of the actions menu. */
+    menu: SummaryMenuItem[][]
+    /** Whether the items of the actions menu carry their glyph. */
+    showMenuIcons?: boolean
+    /** Whether the band is a container query container. */
+    container?: boolean
+  }
 
-                <SettingsGroup
-                  label="Build configuration"
-                  hint="How the CLI builds this resource."
-                  anchor="build-configuration"
-                >
-                  <form
-                    aria-label="Build configuration"
-                    novalidate
-                    @submit.prevent="save"
-                  >
-                    <Card :padded="false">
-                      <template #default>
-                        <fieldset
-                          class="m-0 flex min-w-0 flex-col border-0 p-0"
-                          :disabled="saving"
-                        >
-                          <legend class="sr-only">Build configuration</legend>
-                          <Item.List>
-                            <SettingsRow
-                              title="Framework preset"
-                              description="The preset the CLI builds with."
-                            >
-                              <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                                <div class="flex flex-1 cursor-not-allowed">
-                                  <Tooltip
-                                    content="Detected from platform.config and can't be changed here."
-                                    class="w-full"
-                                  >
-                                    <div class="pointer-events-none">
-                                      <Input
-                                        model-value="Next.js"
-                                        size="large"
-                                        disabled
-                                        aria-label="Framework preset"
-                                      />
-                                    </div>
-                                  </Tooltip>
-                                </div>
-                              </div>
-                            </SettingsRow>
+  withDefaults(defineProps<SummarySubjectBandProps>(), {
+    label: '',
+    href: '',
+    destination: '',
+    visit: '',
+    showMenuIcons: true,
+    container: true
+  })
 
-                            <SettingsRow
-                              title="Build command"
-                              description="The command that builds the resource."
-                              stackable
-                            >
-                              <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                                <Input
-                                  v-model="settings.buildCommand"
-                                  size="large"
-                                  :disabled="saving"
-                                  class="w-full"
-                                  aria-label="Build command"
-                                  monospace
-                                  :spellcheck="false"
-                                />
-                              </div>
-                            </SettingsRow>
+  const emit = defineEmits<{
+    select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
+  }>()
 
-                            <SettingsRow
-                              title="Deploy command"
-                              description="The command that deploys the build."
-                              stackable
-                            >
-                              <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                                <Input
-                                  v-model="settings.deployCommand"
-                                  size="large"
-                                  :disabled="saving"
-                                  class="w-full"
-                                  aria-label="Deploy command"
-                                  monospace
-                                  :spellcheck="false"
-                                />
-                              </div>
-                            </SettingsRow>
-                          </Item.List>
-                        </fieldset>
-                      </template>
-                    </Card>
-                  </form>
-                </SettingsGroup>
+  defineSlots<{
+    subject?(): unknown
+    'subject-trailing'?(): unknown
+    actions?(): unknown
+  }>()
+</script>
 
-                <SettingsGroup
-                  label="Deployment"
-                  hint="The personal token the workflow authenticates with, kept as a repository secret."
-                  anchor="deployment"
-                >
-                  <Card :padded="false">
-                    <template #default>
-                      <Item.List>
-                        <SettingsRow
-                          title="API token"
-                          description="Stored as the PLATFORM_TOKEN GitHub secret."
-                          stackable
-                        >
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <InputGroupRoot class="w-full">
-                              <div class="flex flex-1">
-                                <Input
-                                  model-value="analytics-app build token"
-                                  size="large"
-                                  class="w-full"
-                                  aria-label="API token"
-                                  monospace
-                                  readonly
-                                />
-                              </div>
-                              <CopyButton
-                                variant="ghost"
-                                value="analytics-app build token"
-                                aria-label="Copy API token"
-                                size="small"
-                              />
-                            </InputGroupRoot>
-                          </div>
-                        </SettingsRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </SettingsGroup>
-              </div>
-            </div>
-
-            <Transition
-              enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-              enter-from-class="translate-y-2 opacity-0"
-              leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-              leave-to-class="translate-y-2 opacity-0"
-            >
-              <SaveBar
-                v-if="dirty || saving"
-                @save="onSaveShortcut"
-              >
-                <template v-if="connected">
-                  Build settings changed.
-                  <span class="text-(--text-muted)"
-                    >Saving applies them to the next push and build of this resource.</span
-                  >
-                </template>
-                <template v-else>
-                  Build configuration changed.
-                  <span class="text-(--text-muted)"
-                    >Saving applies it to the next build of this resource.</span
-                  >
-                </template>
-                <template #actions>
-                  <Button
-                    type="button"
-                    label="Discard"
-                    variant="outline"
-                    size="medium"
-                    :disabled="saving"
-                    @click="discard"
-                  />
-                  <Button
-                    variant="primary"
-                    size="medium"
-                    :loading="saving"
-                    @click="save"
-                    aria-keyshortcuts="Meta+S Control+S"
-                  >
-                    Save
-                    <Kbd
-                      meta
-                      size="small"
-                      aria-hidden="true"
-                      >S</Kbd
-                    >
-                  </Button>
-                </template>
-              </SaveBar>
-            </Transition>
-          </div>
+<template>
+  <div
+    :class="container && '@container/band'"
+    class="flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
+  >
+    <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
+      <i
+        :class="icon"
+        class="shrink-0 text-body-lg text-(--text-muted)"
+        aria-hidden="true"
+      />
+      <slot name="subject">
+        <div class="flex min-w-0">
+          <TableCellLink
+            :label="label"
+            :href="href"
+            :destination="destination"
+          />
         </div>
-      </section>
+      </slot>
+      <slot name="subject-trailing" />
     </div>
-    <div
-      v-else
-      class="relative flex min-h-0 flex-1 flex-col"
-    >
-      <div class="layout-column layout-boundary flex min-w-0 flex-col">
-        <div class="layout-section-start">
-          <EmptyState
-            size="medium"
-            icon="az az-external-link"
-            :title="tabLabel"
-            :description="`${tabLabel} opens on its own page.`"
+
+    <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
+      <Button
+        v-if="visit"
+        label="Visit"
+        :href="visit"
+        target="_blank"
+        variant="secondary"
+        size="medium"
+        icon="az az-external-link"
+      />
+      <slot name="actions" />
+      <DropdownMenu
+        side="bottom"
+        align="end"
+        @select="(event, value) => emit('select', event, value)"
+      >
+        <DropdownMenu.Trigger>
+          <Tooltip :content="actionsLabel">
+            <IconButton
+              icon="az az-ellipsis"
+              variant="outline"
+              size="medium"
+              :aria-label="actionsLabel"
+            />
+          </Tooltip>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Group
+          v-for="(group, index) in menu"
+          :key="index"
+        >
+          <DropdownMenu.Item
+            v-for="item in group"
+            :key="item.value"
+            :value="item.value"
+            :label="item.label"
           >
-            <template #actions>
-              <Button
-                :label="`Open ${tabLabel}`"
-                variant="outline"
-                size="small"
-                :href="`/resources/analytics-app/${activeTab}`"
+            <template
+              v-if="showMenuIcons"
+              #leading
+            >
+              <i
+                :class="item.icon"
+                aria-hidden="true"
               />
             </template>
-          </EmptyState>
-        </div>
-      </div>
+          </DropdownMenu.Item>
+        </DropdownMenu.Group>
+      </DropdownMenu>
+    </div>
+  </div>
+</template>
+```
+
+## `parts/tab-route-empty.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import EmptyState from '@aziontech/webkit/empty-state'
+
+  export interface TabRouteEmptyProps {
+    /** The tab label. */
+    label: string
+    /** The route the tab opens on. */
+    href: string
+  }
+
+  defineProps<TabRouteEmptyProps>()
+</script>
+
+<template>
+  <div class="layout-column layout-boundary flex min-w-0 flex-col">
+    <div class="layout-section-start">
+      <EmptyState
+        size="medium"
+        icon="az az-external-link"
+        :title="label"
+        :description="`${label} opens on its own page.`"
+      >
+        <template #actions>
+          <Button
+            :label="`Open ${label}`"
+            variant="outline"
+            size="small"
+            :href="href"
+          />
+        </template>
+      </EmptyState>
     </div>
   </div>
 </template>

@@ -23,7 +23,7 @@
  ],
  "sfcFile": "blocks/create/create-wizard/create-wizard.vue",
  "guidelinesFile": "blocks/create/create-wizard/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/create/create-wizard/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

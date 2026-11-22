@@ -18,7 +18,7 @@
  ],
  "sfcFile": "blocks/create/create-deploy-progress-dialog/create-deploy-progress-dialog.vue",
  "guidelinesFile": "blocks/create/create-deploy-progress-dialog/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/create/create-deploy-progress-dialog/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

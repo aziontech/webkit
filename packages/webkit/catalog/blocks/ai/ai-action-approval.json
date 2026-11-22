@@ -28,7 +28,7 @@
  ],
  "sfcFile": "blocks/ai/ai-action-approval/ai-action-approval.vue",
  "guidelinesFile": "blocks/ai/ai-action-approval/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/ai/ai-action-approval/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

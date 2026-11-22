@@ -48,7 +48,7 @@
  ],
  "sfcFile": "blocks/view/view-query-editor/view-query-editor.vue",
  "guidelinesFile": "blocks/view/view-query-editor/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/view/view-query-editor/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

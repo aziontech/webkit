@@ -26,7 +26,8 @@
   "Use `title` for a plain heading (rendered as an `h2`). Use the `header` slot only when the header needs another layout: it replaces both the title and `header-actions`.",
   "`header-actions` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.",
   "Set `:padded=\"false\"` only when the content draws its own inset or needs flush dividers.",
-  "The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space."
+  "The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space.",
+  "To make the whole card one link (a template or a destination tile), set `href` instead of wrapping the card in an anchor or stretching a hand-made link over it. Keep buttons and other links out of a linked card: its content is the link's name."
  ],
  "channels": [
   "app",

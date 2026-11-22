@@ -13,7 +13,7 @@
  ],
  "sfcFile": "blocks/account/account-payment-method-card/account-payment-method-card.vue",
  "guidelinesFile": "blocks/account/account-payment-method-card/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/account/account-payment-method-card/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

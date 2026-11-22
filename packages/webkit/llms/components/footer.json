@@ -31,7 +31,7 @@
  ],
  "bestPractices": [
   "Compose every band from existing DS components (`Brand`, `IconButton variant=\"ghost\" size=\"small\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
-  "Put the brand in the `brand` slot as a home link around `Brand size=\"small\"`; the footer sizes its mark to the header's 18px.",
+  "Put `Brand size=\"small\"` in the `brand` slot and make it the home link with `homeHref` (`home-href=\"/\"`) instead of wrapping it in a hand-made anchor: the footer owns the link's focus ring and hover. The footer sizes the mark to the header's 18px.",
   "Keep column titles short (one or two words) — they are group labels, not headings for prose.",
   "Give every social `IconButton` an `aria-label`; the footer cannot name them for you.",
   "Keep the social `IconButton`s at `size=\"small\"`: a 28px box keeps the brand and seven icons beside the status pair on one row from `md`.",
@@ -53,6 +53,20 @@
    "default": "'content'",
    "required": "false",
    "doc": "Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a plain full-width rule, like the header's, and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end."
+  },
+  {
+   "name": "homeHref",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "When set, the brand slot renders inside one home link to this URL, with the focus ring and the hover of a link."
+  },
+  {
+   "name": "homeAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the home link. Empty uses the locale catalog (`Azion home`)."
   }
  ],
  "events": [],
@@ -65,7 +79,7 @@
   {
    "name": "brand",
    "scope": "—",
-   "notes": "Root: the brand lockup that opens the bottom bar, its mark sized to 18px."
+   "notes": "Root: the brand lockup that opens the bottom bar, its mark sized to 18px; inside the home link when `homeHref` is set."
   },
   {
    "name": "social",

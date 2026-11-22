@@ -3,8 +3,8 @@
 Composable `@aziontech/webkit/use-shortcuts`. The signatures and option tables below are read from its typed source, [`src/composables/use-shortcuts/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-shortcuts/index.ts).
 
 ```ts
-import { useShortcuts, createShortcutRegistry, isTypingTarget, matchesShortcut, parseShortcutKeys, provideShortcuts, shortcutKeyList, toAriaKeyshortcuts, useShortcutList, ShortcutsInjectionKey } from '@aziontech/webkit/use-shortcuts'
-import type { UseShortcutsReturn, Shortcut, ShortcutCombination, ShortcutListGroup, ShortcutListItem, ShortcutRegistry, ShortcutRegistryEntry, UseShortcutListReturn } from '@aziontech/webkit/use-shortcuts'
+import { useShortcuts, matchesShortcut, parseShortcutKeys, shortcutKeyList, toAriaKeyshortcuts, isTypingTarget, createShortcutRegistry, provideShortcuts, useShortcutList, ShortcutsInjectionKey } from '@aziontech/webkit/use-shortcuts'
+import type { UseShortcutsReturn, ShortcutCombination, Shortcut, ShortcutListGroup, ShortcutListItem, ShortcutRegistry, ShortcutRegistryEntry, UseShortcutListReturn } from '@aziontech/webkit/use-shortcuts'
 ```
 
 ## `useShortcuts`
@@ -21,18 +21,6 @@ What `useShortcuts` returns.
 | --- | --- | --- | --- |
 | `stop` | `() => void` | yes | Removes the shortcuts before the scope ends. |
 
-## `createShortcutRegistry`
-
-```ts
-function createShortcutRegistry(): ShortcutRegistry
-```
-
-## `isTypingTarget`
-
-```ts
-function isTypingTarget(target: Element | null): boolean
-```
-
 ## `matchesShortcut`
 
 ```ts
@@ -43,12 +31,6 @@ function matchesShortcut(event: KeyboardEvent, combination: ShortcutCombination)
 
 ```ts
 function parseShortcutKeys(keys: string): ShortcutCombination | null
-```
-
-## `provideShortcuts`
-
-```ts
-function provideShortcuts(): ShortcutRegistry
 ```
 
 ## `shortcutKeyList`
@@ -63,11 +45,41 @@ function shortcutKeyList(keys: string): string[]
 function toAriaKeyshortcuts(keys: string): string
 ```
 
+## `isTypingTarget`
+
+```ts
+function isTypingTarget(target: Element | null): boolean
+```
+
+## `createShortcutRegistry`
+
+```ts
+function createShortcutRegistry(): ShortcutRegistry
+```
+
+## `provideShortcuts`
+
+```ts
+function provideShortcuts(): ShortcutRegistry
+```
+
 ## `useShortcutList`
 
 ```ts
 function useShortcutList(): UseShortcutListReturn
 ```
+
+## `ShortcutCombination`
+
+A parsed key combination.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `meta` | `boolean` | yes | Command on Apple platforms, Control elsewhere. |
+| `ctrl` | `boolean` | yes | Control on every platform. |
+| `shift` | `boolean` | yes | Shift. |
+| `alt` | `boolean` | yes | Alt, Option on Apple platforms. |
+| `key` | `string` | yes | The key, lowercase, as `KeyboardEvent.key` names it (`s`, `enter`, `/`). |
 
 ## `Shortcut`
 
@@ -81,18 +93,6 @@ One keyboard shortcut a screen offers.
 | `handler` | `(event: KeyboardEvent) => void` | no | Runs on the key press, after the browser default is prevented. Omitted, the shortcut is only listed: another part (Command, a field) binds it. |
 | `when` | `MaybeRefOrGetter<boolean>` | no | The shortcut works and is listed only while this is true. |
 | `element` | `MaybeRefOrGetter<HTMLElement \| null \| undefined>` | no | The element the shortcut belongs to. While a modal layer is open, only shortcuts whose element sits inside that layer fire. |
-
-## `ShortcutCombination`
-
-A parsed key combination.
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `meta` | `boolean` | yes | Command on Apple platforms, Control elsewhere. |
-| `ctrl` | `boolean` | yes | Control on every platform. |
-| `shift` | `boolean` | yes | Shift. |
-| `alt` | `boolean` | yes | Alt, Option on Apple platforms. |
-| `key` | `string` | yes | The key, lowercase, as `KeyboardEvent.key` names it (`s`, `enter`, `/`). |
 
 ## `ShortcutListGroup`
 

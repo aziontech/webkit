@@ -181,54 +181,32 @@ Each variant is the same screen in another state: `get_block("account/account-hi
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import Link from '@aziontech/webkit/link'
-  import MultiSelect from '@aziontech/webkit/multi-select'
+  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Select from '@aziontech/webkit/select'
-  import { type TableColumn } from '@aziontech/webkit/table'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellId from '@aziontech/webkit/table-cell-id'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTags from '@aziontech/webkit/table-cell-tags'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, useId, watch } from 'vue'
 
+  import {
+    buildTree,
+    descendantsIn,
+    plural,
+    pruneTree,
+    type ResourceNode,
+    types
+  } from './hierarchy-model'
+  import HierarchyDetails from './parts/hierarchy-details.vue'
+  import HierarchyLabelsDialog from './parts/hierarchy-labels-dialog.vue'
+  import HierarchyMoveDialog from './parts/hierarchy-move-dialog.vue'
+  import HierarchyResources from './parts/hierarchy-resources.vue'
+  import HierarchyToolbar from './parts/hierarchy-toolbar.vue'
   import { sampleCurrentId, sampleResources, sampleRoleBindings } from './sample'
 
   /** The level of a resource in the hierarchy. */
   export type AccountHierarchyResourceType = 'organization' | 'group' | 'workspace'
   /** The state of a workspace. */
   export type AccountHierarchyResourceStatus = 'Active' | 'Suspended' | 'Pending'
-
-  interface ResourceTypeMeta {
-    label: string
-    icon: string
-    severity?: TagSeverity
-    variant?: TagVariant
-  }
 
   /** One organization, group or workspace; the tree is built from parentId. */
   export interface AccountHierarchyResource {
@@ -271,12 +249,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
     error?: string
   }
 
-  interface ResourceNode extends AccountHierarchyResource {
-    children?: ResourceNode[]
-  }
   type Resource = AccountHierarchyResource
-  type ResourceStatus = AccountHierarchyResourceStatus
-  type ResourceType = AccountHierarchyResourceType
 
   const props = withDefaults(defineProps<AccountHierarchyProps>(), {
     resources: undefined,
@@ -297,12 +270,6 @@ Each variant is the same screen in another state: `get_block("account/account-hi
 
   const selectedKeys = defineModel<string[]>('selectedKeys', { default: () => [] })
 
-  const types: Record<ResourceType, ResourceTypeMeta> = {
-    organization: { label: 'Organization', icon: 'az az-building', variant: 'accent' },
-    group: { label: 'Group', icon: 'az az-users', severity: 'info' },
-    workspace: { label: 'Workspace', icon: 'az az-layout-grid', severity: 'neutral' }
-  }
-
   const uid = useId()
   const blank = computed(() => props.loading || props.error !== '')
   const source = computed<Resource[]>(() => props.resources ?? (blank.value ? [] : sampleResources))
@@ -320,20 +287,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
   )
   const refreshing = computed(() => props.loading && items.value.length > 0)
 
-  const tree = computed<ResourceNode[]>(() => {
-    const byParent = new Map<string | null, Resource[]>()
-    for (const item of items.value) {
-      const list = byParent.get(item.parentId) ?? []
-      list.push(item)
-      byParent.set(item.parentId, list)
-    }
-    const build = (parentId: string | null): ResourceNode[] =>
-      (byParent.get(parentId) ?? []).map((item) => {
-        const children = build(item.id)
-        return children.length ? { ...item, children } : { ...item }
-      })
-    return build(null)
-  })
+  const tree = computed<ResourceNode[]>(() => buildTree(items.value))
 
   const query = ref('')
   const needle = computed(() => query.value.trim().toLowerCase())
@@ -341,30 +295,9 @@ Each variant is the same screen in another state: `get_block("account/account-hi
     [item.name, item.id, types[item.type].label, ...(item.labels ?? [])].some((value) =>
       value.toLowerCase().includes(needle.value)
     )
-  const visibleTree = computed<ResourceNode[]>(() => {
-    if (!needle.value) return tree.value
-    const prune = (nodes: ResourceNode[]): ResourceNode[] =>
-      nodes.flatMap((node) => {
-        if (matchesQuery(node)) return [node]
-        const children = prune(node.children ?? [])
-        return children.length ? [{ ...node, children }] : []
-      })
-    return prune(tree.value)
-  })
-  const clearQuery = () => {
-    query.value = ''
-  }
-
-  const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', principal: true, grow: 3 },
-    { accessorKey: 'id', header: 'ID', minWidth: 128 },
-    { accessorKey: 'type', header: 'Type', minWidth: 136 },
-    { accessorKey: 'lastAccessed', header: 'Last accessed', minWidth: 120 },
-    { accessorKey: 'status', header: 'Status', minWidth: 112 },
-    { accessorKey: 'charges', header: 'Charges', align: 'end', minWidth: 112 },
-    { accessorKey: 'labels', header: 'Labels', minWidth: 120 },
-    { id: 'actions', type: 'action', hideable: false }
-  ]
+  const visibleTree = computed<ResourceNode[]>(() =>
+    needle.value ? pruneTree(tree.value, matchesQuery) : tree.value
+  )
 
   const expanded = ref<string[]>(['org-1001', 'grp-2101'])
   const parentIds = computed(() => [
@@ -382,42 +315,8 @@ Each variant is the same screen in another state: `get_block("account/account-hi
   )
   const selectedCount = computed(() => selectedResources.value.length)
   const focused = computed(() => (selectedCount.value === 1 ? selectedResources.value[0] : null))
-  const clearSelection = () => {
-    selectedKeys.value = []
-  }
 
-  const descendantsOf = (id: string): Resource[] => {
-    const out: Resource[] = []
-    const walk = (parentId: string) => {
-      for (const item of items.value)
-        if (item.parentId === parentId) {
-          out.push(item)
-          walk(item.id)
-        }
-    }
-    walk(id)
-    return out
-  }
-
-  const statusSeverities: Record<ResourceStatus, TagSeverity> = {
-    Active: 'success',
-    Suspended: 'danger',
-    Pending: 'warning'
-  }
-  const statusSeverity = (status?: ResourceStatus): TagSeverity =>
-    status ? statusSeverities[status] : 'neutral'
-  const { formatNumber } = useLocale()
-
-  const money = (value: number) => formatNumber(value, { style: 'currency', currency: 'USD' })
-  const initials = (name: string) =>
-    name
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((word) => word[0].toUpperCase())
-      .join('')
-  const plural = (count: number, one: string, other: string) =>
-    `${count} ${count === 1 ? one : other}`
+  const descendantsOf = (id: string): Resource[] => descendantsIn(items.value, id)
 
   const detailsOpen = ref(true)
   const detailsTab = ref('permissions')
@@ -583,600 +482,65 @@ Each variant is the same screen in another state: `get_block("account/account-hi
         </template>
       </PageHeader>
 
-      <div
-        role="group"
-        aria-label="Resource actions"
-        class="layout-section-start flex flex-wrap items-center gap-(--spacing-xs)"
-      >
-        <Button
-          label="Create Group"
-          icon="az az-folder"
-          variant="outline"
-          size="medium"
-          href="/account/resources/new-group"
-        />
-        <span
-          class="mx-(--spacing-2xs) h-(--size-5) w-px bg-(--border-muted)"
-          aria-hidden="true"
-        />
-        <Button
-          label="Move"
-          icon="az az-arrow-right-left"
-          variant="outline"
-          size="medium"
-          :disabled="!selectedCount"
-          @click="openMove(selectedResources)"
-        />
-        <Button
-          label="Labels"
-          icon="az az-tag"
-          variant="outline"
-          size="medium"
-          :disabled="!selectedCount"
-          @click="openLabels(selectedResources)"
-        />
-        <Button
-          label="Delete"
-          icon="az az-trash"
-          variant="outline"
-          size="medium"
-          :disabled="!selectedCount"
-          @click="openDelete(selectedResources)"
-        />
-        <div class="ms-auto flex items-center gap-(--spacing-xs)">
-          <Tooltip content="Refresh">
-            <IconButton
-              icon="az az-refresh"
-              variant="outline"
-              size="medium"
-              :loading="refreshing"
-              aria-label="Refresh resources"
-              @click="emit('refresh', $event)"
-            />
-          </Tooltip>
-          <Button
-            :label="detailsOpen ? 'Hide details' : 'Show details'"
-            :icon="detailsOpen ? 'az az-eye-off' : 'az az-eye'"
-            variant="ghost"
-            size="medium"
-            :aria-expanded="detailsOpen"
-            :aria-controls="`${uid}-details`"
-            @click="detailsOpen = !detailsOpen"
-          />
-        </div>
-      </div>
+      <HierarchyToolbar
+        v-model:details-open="detailsOpen"
+        :uid="uid"
+        :selected-count="selectedCount"
+        :refreshing="refreshing"
+        @move="openMove(selectedResources)"
+        @labels="openLabels(selectedResources)"
+        @delete="openDelete(selectedResources)"
+        @refresh="(event) => emit('refresh', event)"
+      />
 
       <div class="layout-group-start flex min-w-0 flex-col gap-(--spacing-lg) 2xl:flex-row">
-        <section
-          :aria-labelledby="`${uid}-resources`"
-          class="flex min-w-0 flex-1 flex-col gap-(--spacing-sm)"
-        >
-          <div class="flex min-h-8 items-center justify-between gap-(--spacing-xs)">
-            <h2
-              :id="`${uid}-resources`"
-              class="text-heading-xs text-(--text-default)"
-            >
-              Resources
-            </h2>
-            <Button
-              v-if="selectedCount"
-              label="Clear selection"
-              variant="ghost"
-              size="small"
-              @click="clearSelection"
-            />
-          </div>
+        <HierarchyResources
+          v-model:query="query"
+          v-model:open-keys="tableExpanded"
+          v-model:selected-keys="selectedKeys"
+          :uid="uid"
+          :error="error"
+          :loading="loading"
+          :item-count="items.length"
+          :selected-count="selectedCount"
+          :needle="needle"
+          :visible-tree="visibleTree"
+          :current-id="currentId"
+          @retry="(event) => emit('retry', event)"
+          @row-action="onRowAction"
+        />
 
-          <Alert
-            v-if="error"
-            severity="danger"
-          >
-            {{ error }}
-            <template #actions>
-              <Button
-                label="Retry"
-                variant="secondary"
-                size="small"
-                @click="emit('retry', $event)"
-              />
-            </template>
-          </Alert>
-
-          <Card
-            key="card-1"
-            v-else-if="!loading && !items.length"
-            :padded="false"
-          >
-            <template #default>
-              <EmptyState
-                size="medium"
-                icon="az az-sitemap"
-                title="No resources yet"
-                description="Create a workspace, then group workspaces under organizations and groups to share role bindings."
-              >
-                <template #actions>
-                  <Button
-                    label="Create Workspace"
-                    icon="az az-plus"
-                    variant="secondary"
-                    size="small"
-                    href="/account/resources/new"
-                  />
-                </template>
-              </EmptyState>
-            </template>
-          </Card>
-
-          <template v-else>
-            <Input
-              v-model="query"
-              placeholder="Search by name, ID, type or label"
-              aria-label="Search resources"
-              class="w-full"
-            >
-              <template #leading>
-                <i
-                  class="az az-search"
-                  aria-hidden="true"
-                />
-              </template>
-            </Input>
-
-            <Card
-              key="card-3"
-              v-if="needle && !visibleTree.length"
-              :padded="false"
-            >
-              <template #default>
-                <EmptyState
-                  size="small"
-                  icon="az az-search"
-                  title="No matching resources"
-                  :description="`No resource matches “${query.trim()}”.`"
-                >
-                  <template #actions>
-                    <Button
-                      label="Clear search"
-                      variant="outline"
-                      size="small"
-                      @click="clearQuery"
-                    />
-                  </template>
-                </EmptyState>
-              </template>
-            </Card>
-
-            <Card
-              key="card-2"
-              v-else
-              :padded="false"
-            >
-              <template #default>
-                <DataTable
-                  v-model:open-keys="tableExpanded"
-                  v-model:selected-keys="selectedKeys"
-                  :data="visibleTree"
-                  paginated
-                  :page-size="25"
-                  :columns="columns"
-                  :get-sub-rows="(row) => row.children"
-                  :loading="loading"
-                  row-key="id"
-                  selectable
-                  :bordered="false"
-                  :aria-labelledby="`${uid}-resources`"
-                  @row-remove="(_event, row) => onRowAction('delete', row)"
-                >
-                  <template #cell-name="{ row }">
-                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <Avatar
-                        v-if="row.type !== 'workspace'"
-                        :label="initials(row.name)"
-                        size="small"
-                        variant="square"
-                      />
-                      <i
-                        v-else
-                        :class="types[row.type].icon"
-                        class="shrink-0 text-body-sm text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                      <span class="truncate text-label-sm text-(--text-default)">{{
-                        row.name
-                      }}</span>
-                      <Tooltip
-                        v-if="row.id === currentId"
-                        content="Current workspace"
-                      >
-                        <i
-                          class="az az-check shrink-0 text-body-xs text-(--text-muted)"
-                          aria-label="Current workspace"
-                          role="img"
-                        />
-                      </Tooltip>
-                    </span>
-                  </template>
-                  <template #cell-id="{ row, value }">
-                    <TableCellId
-                      v-if="row.type === 'workspace'"
-                      :value="value"
-                      resource="workspace"
-                    />
-                    <span
-                      v-else
-                      class="text-body-sm text-(--text-muted)"
-                      >{{ value }}</span
-                    >
-                  </template>
-                  <template #cell-type="{ value }">
-                    <Tag
-                      :label="types[value].label"
-                      :icon="types[value].icon"
-                      :variant="types[value].variant"
-                      :severity="types[value].severity"
-                      size="small"
-                    />
-                  </template>
-                  <template #cell-lastAccessed="{ value }">
-                    <span class="text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
-                  </template>
-                  <template #cell-status="{ value }">
-                    <TableCellStatus
-                      :label="value"
-                      :severity="statusSeverity(value)"
-                    />
-                  </template>
-                  <template #cell-charges="{ value }">
-                    <span
-                      class="tabular-nums text-(--text-default) data-[empty]:text-(--text-muted)"
-                      :data-empty="!value || null"
-                      >{{ value ? money(value) : '—' }}</span
-                    >
-                  </template>
-                  <template #header-charges>
-                    <span class="inline-flex items-center gap-(--spacing-2xs)">
-                      Charges
-                      <Tooltip content="Estimated month-to-date charges.">
-                        <i
-                          class="az az-circle-help text-body-xs text-(--text-muted)"
-                          role="img"
-                          aria-label="About charges"
-                          tabindex="0"
-                        />
-                      </Tooltip>
-                    </span>
-                  </template>
-                  <template #cell-labels="{ value }">
-                    <TableCellTags
-                      :items="value ?? []"
-                      icon="az az-tag"
-                      :noun="{ one: 'label', other: 'labels' }"
-                    />
-                  </template>
-                  <template #header-actions>
-                    <span class="sr-only">Actions</span>
-                  </template>
-                  <template #cell-actions="{ row }">
-                    <TableCellActions
-                      :name="row.name"
-                      @select="(_event, value) => onRowAction(value, row)"
-                    >
-                      <DropdownMenu.Group>
-                        <DropdownMenu.Item
-                          value="details"
-                          label="View details"
-                        />
-                        <DropdownMenu.Item
-                          value="move"
-                          label="Move"
-                        />
-                        <DropdownMenu.Item
-                          value="labels"
-                          label="Edit labels"
-                        />
-                      </DropdownMenu.Group>
-                      <DropdownMenu.Group>
-                        <DropdownMenu.Item
-                          value="delete"
-                          label="Delete"
-                        />
-                      </DropdownMenu.Group>
-                    </TableCellActions>
-                  </template>
-                </DataTable>
-              </template>
-            </Card>
-          </template>
-
-          <Link
-            label="Resources pending deletion"
-            size="medium"
-            href="/account/resources/pending-deletion"
-            class="self-start"
-          />
-        </section>
-
-        <aside
+        <HierarchyDetails
           v-show="detailsOpen"
-          :id="`${uid}-details`"
-          :aria-labelledby="`${uid}-details-heading`"
-          class="w-full shrink-0 2xl:w-(--container-xs)"
-        >
-          <Card>
-            <template #default>
-              <div class="flex flex-col gap-(--spacing-md)">
-                <h2
-                  :id="`${uid}-details-heading`"
-                  class="text-heading-xs text-(--text-default)"
-                  aria-live="polite"
-                >
-                  {{ detailsTitle }}
-                </h2>
-
-                <Tabs v-model="detailsTab">
-                  <div class="flex w-full flex-col">
-                    <Tabs.List aria-label="Details">
-                      <Tabs.Trigger
-                        value="permissions"
-                        label="Permissions"
-                      />
-                      <Tabs.Trigger
-                        value="labels"
-                        label="Labels"
-                      />
-                    </Tabs.List>
-                    <div class="relative isolate w-full">
-                      <Tabs.Content value="permissions">
-                        <EmptyState
-                          v-if="!focused"
-                          size="small"
-                          icon="az az-sitemap"
-                          :title="
-                            selectedCount ? 'Several resources selected' : 'Select a resource'
-                          "
-                          :description="
-                            selectedCount
-                              ? 'Select a single resource to see its role bindings.'
-                              : 'Select a resource to see its role bindings and labels.'
-                          "
-                        />
-                        <div
-                          v-else
-                          class="flex flex-col gap-(--spacing-sm)"
-                        >
-                          <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                            <Tag
-                              :label="types[focused.type].label"
-                              :icon="types[focused.type].icon"
-                              :variant="types[focused.type].variant"
-                              :severity="types[focused.type].severity"
-                              size="small"
-                            />
-                            <span class="truncate text-label-md text-(--text-default)">{{
-                              focused.name
-                            }}</span>
-                          </div>
-                          <KeyValueList
-                            variant="split"
-                            aria-label="Role bindings"
-                          >
-                            <KeyValueList.Item
-                              v-for="binding in roleBindings"
-                              :key="binding.role"
-                              :label="binding.role"
-                              >{{ plural(binding.members, 'member', 'members') }}</KeyValueList.Item
-                            >
-                          </KeyValueList>
-                        </div>
-                      </Tabs.Content>
-                      <Tabs.Content value="labels">
-                        <EmptyState
-                          v-if="!focused"
-                          size="small"
-                          icon="az az-tag"
-                          :title="
-                            selectedCount ? 'Several resources selected' : 'Select a resource'
-                          "
-                          :description="
-                            selectedCount
-                              ? 'Select a single resource to see its labels.'
-                              : 'Select a resource to see its role bindings and labels.'
-                          "
-                        />
-                        <div
-                          v-else
-                          class="flex flex-col gap-(--spacing-sm)"
-                        >
-                          <ul
-                            v-if="focused.labels?.length"
-                            aria-label="Labels"
-                            class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0"
-                          >
-                            <li
-                              v-for="label in focused.labels"
-                              :key="label"
-                            >
-                              <Tag
-                                :label="label"
-                                severity="neutral"
-                                size="medium"
-                              />
-                            </li>
-                          </ul>
-                          <EmptyState
-                            v-else
-                            size="small"
-                            icon="az az-tag"
-                            title="No labels"
-                            description="This resource has no labels."
-                          />
-                          <Button
-                            label="Edit labels"
-                            icon="az az-tag"
-                            variant="outline"
-                            size="small"
-                            class="self-start"
-                            @click="openLabels([focused])"
-                          />
-                        </div>
-                      </Tabs.Content>
-                    </div>
-                  </div>
-                </Tabs>
-              </div>
-            </template>
-          </Card>
-        </aside>
+          v-model:tab="detailsTab"
+          :uid="uid"
+          :details-title="detailsTitle"
+          :selected-count="selectedCount"
+          :focused="focused"
+          :role-bindings="roleBindings"
+          @edit-labels="(resource) => openLabels([resource])"
+        />
       </div>
     </div>
 
-    <Dialog
+    <HierarchyMoveDialog
       v-model:open="moveOpen"
-      size="medium"
-    >
-      <DialogContent>
-        <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DialogTitle>{{
-              moving.length === 1
-                ? `Move ${moving[0].name}`
-                : `Move ${plural(moving.length, 'resource', 'resources')}`
-            }}</DialogTitle>
-            <DialogDescription>
-              Everything inside moves with it. Role bindings inherited from the old parent stop
-              applying; bindings set on the resource itself stay.
-            </DialogDescription>
-          </div>
-        </PanelHeader>
-        <PanelBody>
-          <form
-            class="flex flex-col gap-(--spacing-md)"
-            novalidate
-            @submit.prevent="confirmMove"
-          >
-            <Field :invalid="!!destinationError">
-              <Field.Label>New parent</Field.Label>
-              <Select
-                v-model="destination"
-                size="large"
-                placeholder="Choose an organization or group"
-                @update:model-value="destinationError = ''"
-              >
-                <Select.Trigger />
-                <Select.Content>
-                  <Select.Item
-                    v-for="option in destinationOptions"
-                    :key="option.value"
-                    :value="option.value"
-                    >{{ option.label }} · {{ types[option.type].label }}</Select.Item
-                  >
-                </Select.Content>
-              </Select>
-              <Field.Description
-                >A resource cannot move into itself or into anything inside it.</Field.Description
-              >
-              <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
-            </Field>
-          </form>
-        </PanelBody>
-        <PanelFooter>
-          <div class="flex w-full justify-end gap-(--spacing-xs)">
-            <Button
-              label="Cancel"
-              variant="outline"
-              size="medium"
-              @click="moveOpen = false"
-            />
-            <Button
-              label="Move"
-              variant="primary"
-              size="medium"
-              @click="confirmMove"
-            />
-          </div>
-        </PanelFooter>
-      </DialogContent>
-    </Dialog>
+      v-model:destination="destination"
+      v-model:error="destinationError"
+      :moving="moving"
+      :destination-options="destinationOptions"
+      @confirm="confirmMove"
+    />
 
-    <Dialog
+    <HierarchyLabelsDialog
       v-model:open="labelsOpen"
-      size="medium"
-    >
-      <DialogContent>
-        <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DialogTitle>{{
-              labelling.length === 1
-                ? `Labels of ${labelling[0].name}`
-                : `Labels of ${plural(labelling.length, 'resource', 'resources')}`
-            }}</DialogTitle>
-            <DialogDescription>
-              Labels group resources for search, billing reports and policies. Changes apply to
-              every selected resource.
-            </DialogDescription>
-          </div>
-        </PanelHeader>
-        <PanelBody>
-          <form
-            class="flex flex-col gap-(--spacing-md)"
-            novalidate
-            @submit.prevent="confirmLabels"
-          >
-            <Field>
-              <Field.Label>Add labels</Field.Label>
-              <MultiSelect
-                v-model="addLabels"
-                placeholder="Choose labels"
-              >
-                <MultiSelect.Trigger />
-                <MultiSelect.Content>
-                  <MultiSelect.Item
-                    v-for="label in knownLabels"
-                    :key="label"
-                    :value="label"
-                    >{{ label }}</MultiSelect.Item
-                  >
-                </MultiSelect.Content>
-              </MultiSelect>
-            </Field>
-            <Field v-if="presentLabels.length">
-              <Field.Label>Remove labels</Field.Label>
-              <MultiSelect
-                v-model="removeLabels"
-                placeholder="Choose labels"
-              >
-                <MultiSelect.Trigger />
-                <MultiSelect.Content>
-                  <MultiSelect.Item
-                    v-for="label in presentLabels"
-                    :key="label"
-                    :value="label"
-                    >{{ label }}</MultiSelect.Item
-                  >
-                </MultiSelect.Content>
-              </MultiSelect>
-            </Field>
-          </form>
-        </PanelBody>
-        <PanelFooter>
-          <div class="flex w-full justify-end gap-(--spacing-xs)">
-            <Button
-              label="Cancel"
-              variant="outline"
-              size="medium"
-              @click="labelsOpen = false"
-            />
-            <Button
-              label="Save labels"
-              variant="primary"
-              size="medium"
-              :disabled="!addLabels.length && !removeLabels.length"
-              @click="confirmLabels"
-            />
-          </div>
-        </PanelFooter>
-      </DialogContent>
-    </Dialog>
+      v-model:add="addLabels"
+      v-model:remove="removeLabels"
+      :labelling="labelling"
+      :known-labels="knownLabels"
+      :present-labels="presentLabels"
+      @confirm="confirmLabels"
+    />
 
     <ConfirmDialog
       v-model:open="deleteOpen"
@@ -1280,4 +644,976 @@ export const sampleRoleBindings: AccountHierarchyRoleBinding[] = [
   { role: 'Editor', members: 5 },
   { role: 'Viewer', members: 11 }
 ]
+```
+
+## `hierarchy-model.ts`
+
+```ts
+import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
+
+import type {
+  AccountHierarchyResource,
+  AccountHierarchyResourceStatus,
+  AccountHierarchyResourceType
+} from './account-hierarchy.vue'
+
+/** How a resource level reads: its label, glyph and tag colour. */
+export interface ResourceTypeMeta {
+  /** The level name. */
+  label: string
+  /** The level glyph class. */
+  icon: string
+  /** The tag severity. */
+  severity?: TagSeverity
+  /** The tag variant. */
+  variant?: TagVariant
+}
+
+/** A resource with the resources under it. */
+export interface ResourceNode extends AccountHierarchyResource {
+  /** The resources whose parent it is. */
+  children?: ResourceNode[]
+}
+
+export const types: Record<AccountHierarchyResourceType, ResourceTypeMeta> = {
+  organization: { label: 'Organization', icon: 'az az-building', variant: 'accent' },
+  group: { label: 'Group', icon: 'az az-users', severity: 'info' },
+  workspace: { label: 'Workspace', icon: 'az az-layout-grid', severity: 'neutral' }
+}
+
+const statusSeverities: Record<AccountHierarchyResourceStatus, TagSeverity> = {
+  Active: 'success',
+  Suspended: 'danger',
+  Pending: 'warning'
+}
+
+export const statusSeverity = (status?: AccountHierarchyResourceStatus): TagSeverity =>
+  status ? statusSeverities[status] : 'neutral'
+
+export const initials = (name: string): string =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join('')
+
+export const plural = (count: number, one: string, other: string): string =>
+  `${count} ${count === 1 ? one : other}`
+
+export const buildTree = (items: AccountHierarchyResource[]): ResourceNode[] => {
+  const byParent = new Map<string | null, AccountHierarchyResource[]>()
+  for (const item of items) {
+    const list = byParent.get(item.parentId) ?? []
+    list.push(item)
+    byParent.set(item.parentId, list)
+  }
+  const build = (parentId: string | null): ResourceNode[] =>
+    (byParent.get(parentId) ?? []).map((item) => {
+      const children = build(item.id)
+      return children.length ? { ...item, children } : { ...item }
+    })
+  return build(null)
+}
+
+export const pruneTree = (
+  nodes: ResourceNode[],
+  matches: (item: AccountHierarchyResource) => boolean
+): ResourceNode[] =>
+  nodes.flatMap((node) => {
+    if (matches(node)) return [node]
+    const children = pruneTree(node.children ?? [], matches)
+    return children.length ? [{ ...node, children }] : []
+  })
+
+export const descendantsIn = (
+  items: AccountHierarchyResource[],
+  id: string
+): AccountHierarchyResource[] => {
+  const out: AccountHierarchyResource[] = []
+  const walk = (parentId: string) => {
+    for (const item of items)
+      if (item.parentId === parentId) {
+        out.push(item)
+        walk(item.id)
+      }
+  }
+  walk(id)
+  return out
+}
+```
+
+## `parts/hierarchy-details.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
+  import Tabs from '@aziontech/webkit/tabs'
+  import Tag from '@aziontech/webkit/tag'
+
+  import type {
+    AccountHierarchyResource,
+    AccountHierarchyRoleBinding
+  } from '../account-hierarchy.vue'
+  import { plural, types } from '../hierarchy-model'
+
+  export interface HierarchyDetailsProps {
+    /** The prefix of the ids the panel labels itself with. */
+    uid: string
+    /** What the panel heading says. */
+    detailsTitle: string
+    /** How many resources are selected. */
+    selectedCount: number
+    /** The single selected resource, or null. */
+    focused: AccountHierarchyResource | null
+    /** Role bindings of the selected resource. */
+    roleBindings: AccountHierarchyRoleBinding[]
+  }
+
+  defineProps<HierarchyDetailsProps>()
+
+  const detailsTab = defineModel<string>('tab', { required: true })
+
+  const emit = defineEmits<{
+    'edit-labels': [resource: AccountHierarchyResource]
+  }>()
+
+  const openLabels = ([resource]: AccountHierarchyResource[]) => emit('edit-labels', resource)
+</script>
+
+<template>
+  <aside
+    :id="`${uid}-details`"
+    :aria-labelledby="`${uid}-details-heading`"
+    class="w-full shrink-0 2xl:w-(--container-xs)"
+  >
+    <Card>
+      <template #default>
+        <div class="flex flex-col gap-(--spacing-md)">
+          <h2
+            :id="`${uid}-details-heading`"
+            class="text-heading-xs text-(--text-default)"
+            aria-live="polite"
+          >
+            {{ detailsTitle }}
+          </h2>
+
+          <Tabs v-model="detailsTab">
+            <div class="flex w-full flex-col">
+              <Tabs.List aria-label="Details">
+                <Tabs.Trigger
+                  value="permissions"
+                  label="Permissions"
+                />
+                <Tabs.Trigger
+                  value="labels"
+                  label="Labels"
+                />
+              </Tabs.List>
+              <div class="relative isolate w-full">
+                <Tabs.Content value="permissions">
+                  <EmptyState
+                    v-if="!focused"
+                    size="small"
+                    icon="az az-sitemap"
+                    :title="selectedCount ? 'Several resources selected' : 'Select a resource'"
+                    :description="
+                      selectedCount
+                        ? 'Select a single resource to see its role bindings.'
+                        : 'Select a resource to see its role bindings and labels.'
+                    "
+                  />
+                  <div
+                    v-else
+                    class="flex flex-col gap-(--spacing-sm)"
+                  >
+                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                      <Tag
+                        :label="types[focused.type].label"
+                        :icon="types[focused.type].icon"
+                        :variant="types[focused.type].variant"
+                        :severity="types[focused.type].severity"
+                        size="small"
+                      />
+                      <span class="truncate text-label-md text-(--text-default)">{{
+                        focused.name
+                      }}</span>
+                    </div>
+                    <KeyValueList
+                      variant="split"
+                      aria-label="Role bindings"
+                    >
+                      <KeyValueList.Item
+                        v-for="binding in roleBindings"
+                        :key="binding.role"
+                        :label="binding.role"
+                        >{{ plural(binding.members, 'member', 'members') }}</KeyValueList.Item
+                      >
+                    </KeyValueList>
+                  </div>
+                </Tabs.Content>
+                <Tabs.Content value="labels">
+                  <EmptyState
+                    v-if="!focused"
+                    size="small"
+                    icon="az az-tag"
+                    :title="selectedCount ? 'Several resources selected' : 'Select a resource'"
+                    :description="
+                      selectedCount
+                        ? 'Select a single resource to see its labels.'
+                        : 'Select a resource to see its role bindings and labels.'
+                    "
+                  />
+                  <div
+                    v-else
+                    class="flex flex-col gap-(--spacing-sm)"
+                  >
+                    <ul
+                      v-if="focused.labels?.length"
+                      aria-label="Labels"
+                      class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0"
+                    >
+                      <li
+                        v-for="label in focused.labels"
+                        :key="label"
+                      >
+                        <Tag
+                          :label="label"
+                          severity="neutral"
+                          size="medium"
+                        />
+                      </li>
+                    </ul>
+                    <EmptyState
+                      v-else
+                      size="small"
+                      icon="az az-tag"
+                      title="No labels"
+                      description="This resource has no labels."
+                    />
+                    <Button
+                      label="Edit labels"
+                      icon="az az-tag"
+                      variant="outline"
+                      size="small"
+                      class="self-start"
+                      @click="openLabels([focused])"
+                    />
+                  </div>
+                </Tabs.Content>
+              </div>
+            </div>
+          </Tabs>
+        </div>
+      </template>
+    </Card>
+  </aside>
+</template>
+```
+
+## `parts/hierarchy-labels-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import Dialog from '@aziontech/webkit/dialog-root'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
+  import Field from '@aziontech/webkit/field'
+  import MultiSelect from '@aziontech/webkit/multi-select'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+
+  import type { AccountHierarchyResource } from '../account-hierarchy.vue'
+  import { plural } from '../hierarchy-model'
+
+  export interface HierarchyLabelsDialogProps {
+    /** The resources whose labels change. */
+    labelling: AccountHierarchyResource[]
+    /** Every label the account uses. */
+    knownLabels: string[]
+    /** The labels the resources carry. */
+    presentLabels: string[]
+  }
+
+  defineProps<HierarchyLabelsDialogProps>()
+
+  const labelsOpen = defineModel<boolean>('open', { required: true })
+  const addLabels = defineModel<string[]>('add', { required: true })
+  const removeLabels = defineModel<string[]>('remove', { required: true })
+
+  const emit = defineEmits<{
+    confirm: [event: Event]
+  }>()
+
+  const confirmLabels = (event: Event) => emit('confirm', event)
+</script>
+
+<template>
+  <Dialog
+    v-model:open="labelsOpen"
+    size="medium"
+  >
+    <DialogContent>
+      <PanelHeader class="w-full">
+        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+          <DialogTitle>{{
+            labelling.length === 1
+              ? `Labels of ${labelling[0].name}`
+              : `Labels of ${plural(labelling.length, 'resource', 'resources')}`
+          }}</DialogTitle>
+          <DialogDescription>
+            Labels group resources for search, billing reports and policies. Changes apply to every
+            selected resource.
+          </DialogDescription>
+        </div>
+      </PanelHeader>
+      <PanelBody>
+        <form
+          class="flex flex-col gap-(--spacing-md)"
+          novalidate
+          @submit.prevent="confirmLabels"
+        >
+          <Field>
+            <Field.Label>Add labels</Field.Label>
+            <MultiSelect
+              v-model="addLabels"
+              placeholder="Choose labels"
+            >
+              <MultiSelect.Trigger />
+              <MultiSelect.Content>
+                <MultiSelect.Item
+                  v-for="label in knownLabels"
+                  :key="label"
+                  :value="label"
+                  >{{ label }}</MultiSelect.Item
+                >
+              </MultiSelect.Content>
+            </MultiSelect>
+          </Field>
+          <Field v-if="presentLabels.length">
+            <Field.Label>Remove labels</Field.Label>
+            <MultiSelect
+              v-model="removeLabels"
+              placeholder="Choose labels"
+            >
+              <MultiSelect.Trigger />
+              <MultiSelect.Content>
+                <MultiSelect.Item
+                  v-for="label in presentLabels"
+                  :key="label"
+                  :value="label"
+                  >{{ label }}</MultiSelect.Item
+                >
+              </MultiSelect.Content>
+            </MultiSelect>
+          </Field>
+        </form>
+      </PanelBody>
+      <PanelFooter>
+        <div class="flex w-full justify-end gap-(--spacing-xs)">
+          <Button
+            label="Cancel"
+            variant="outline"
+            size="medium"
+            @click="labelsOpen = false"
+          />
+          <Button
+            label="Save labels"
+            variant="primary"
+            size="medium"
+            :disabled="!addLabels.length && !removeLabels.length"
+            @click="confirmLabels"
+          />
+        </div>
+      </PanelFooter>
+    </DialogContent>
+  </Dialog>
+</template>
+```
+
+## `parts/hierarchy-move-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import Dialog from '@aziontech/webkit/dialog-root'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
+  import Field from '@aziontech/webkit/field'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Select from '@aziontech/webkit/select'
+
+  import type {
+    AccountHierarchyResource,
+    AccountHierarchyResourceType
+  } from '../account-hierarchy.vue'
+  import { plural, types } from '../hierarchy-model'
+
+  export interface HierarchyMoveDialogProps {
+    /** The resources being moved. */
+    moving: AccountHierarchyResource[]
+    /** Where they can go: organizations and groups outside them. */
+    destinationOptions: { value: string; label: string; type: AccountHierarchyResourceType }[]
+  }
+
+  defineProps<HierarchyMoveDialogProps>()
+
+  const moveOpen = defineModel<boolean>('open', { required: true })
+  const destination = defineModel<string>('destination', { required: true })
+  const destinationError = defineModel<string>('error', { required: true })
+
+  const emit = defineEmits<{
+    confirm: [event: Event]
+  }>()
+
+  const confirmMove = (event: Event) => emit('confirm', event)
+</script>
+
+<template>
+  <Dialog
+    v-model:open="moveOpen"
+    size="medium"
+  >
+    <DialogContent>
+      <PanelHeader class="w-full">
+        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+          <DialogTitle>{{
+            moving.length === 1
+              ? `Move ${moving[0].name}`
+              : `Move ${plural(moving.length, 'resource', 'resources')}`
+          }}</DialogTitle>
+          <DialogDescription>
+            Everything inside moves with it. Role bindings inherited from the old parent stop
+            applying; bindings set on the resource itself stay.
+          </DialogDescription>
+        </div>
+      </PanelHeader>
+      <PanelBody>
+        <form
+          class="flex flex-col gap-(--spacing-md)"
+          novalidate
+          @submit.prevent="confirmMove"
+        >
+          <Field :invalid="!!destinationError">
+            <Field.Label>New parent</Field.Label>
+            <Select
+              v-model="destination"
+              size="large"
+              placeholder="Choose an organization or group"
+              @update:model-value="destinationError = ''"
+            >
+              <Select.Trigger />
+              <Select.Content>
+                <Select.Item
+                  v-for="option in destinationOptions"
+                  :key="option.value"
+                  :value="option.value"
+                  >{{ option.label }} · {{ types[option.type].label }}</Select.Item
+                >
+              </Select.Content>
+            </Select>
+            <Field.Description
+              >A resource cannot move into itself or into anything inside it.</Field.Description
+            >
+            <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
+          </Field>
+        </form>
+      </PanelBody>
+      <PanelFooter>
+        <div class="flex w-full justify-end gap-(--spacing-xs)">
+          <Button
+            label="Cancel"
+            variant="outline"
+            size="medium"
+            @click="moveOpen = false"
+          />
+          <Button
+            label="Move"
+            variant="primary"
+            size="medium"
+            @click="confirmMove"
+          />
+        </div>
+      </PanelFooter>
+    </DialogContent>
+  </Dialog>
+</template>
+```
+
+## `parts/hierarchy-resources-table.vue`
+
+```ts
+<script setup lang="ts">
+  import Avatar from '@aziontech/webkit/avatar'
+  import Card from '@aziontech/webkit/card'
+  import DataTable from '@aziontech/webkit/data-table'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import { type TableColumn } from '@aziontech/webkit/table'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import TableCellTags from '@aziontech/webkit/table-cell-tags'
+  import Tag from '@aziontech/webkit/tag'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
+
+  import type { AccountHierarchyResource } from '../account-hierarchy.vue'
+  import { initials, type ResourceNode, statusSeverity, types } from '../hierarchy-model'
+
+  export interface HierarchyResourcesTableProps {
+    /** The tree the table shows, pruned by the search. */
+    visibleTree: ResourceNode[]
+    /** The id of the workspace the person is in. */
+    currentId: string
+    /** A request is in flight. */
+    loading: boolean
+    /** The id of the heading that names the table. */
+    labelledby: string
+  }
+
+  defineProps<HierarchyResourcesTableProps>()
+
+  const tableExpanded = defineModel<string[]>('openKeys', { required: true })
+  const selectedKeys = defineModel<string[]>('selectedKeys', { required: true })
+
+  const emit = defineEmits<{
+    'row-action': [value: DropdownMenuItemValue, row: AccountHierarchyResource]
+  }>()
+
+  const onRowAction = (value: DropdownMenuItemValue, row: AccountHierarchyResource) =>
+    emit('row-action', value, row)
+
+  const columns: TableColumn[] = [
+    { accessorKey: 'name', header: 'Name', principal: true, grow: 3 },
+    { accessorKey: 'id', header: 'ID', minWidth: 128 },
+    { accessorKey: 'type', header: 'Type', minWidth: 136 },
+    { accessorKey: 'lastAccessed', header: 'Last accessed', minWidth: 120 },
+    { accessorKey: 'status', header: 'Status', minWidth: 112 },
+    { accessorKey: 'charges', header: 'Charges', align: 'end', minWidth: 112 },
+    { accessorKey: 'labels', header: 'Labels', minWidth: 120 },
+    { id: 'actions', type: 'action', hideable: false }
+  ]
+
+  const { formatNumber } = useLocale()
+
+  const money = (value: number) => formatNumber(value, { style: 'currency', currency: 'USD' })
+</script>
+
+<template>
+  <Card :padded="false">
+    <template #default>
+      <DataTable
+        v-model:open-keys="tableExpanded"
+        v-model:selected-keys="selectedKeys"
+        :data="visibleTree"
+        paginated
+        :page-size="25"
+        :columns="columns"
+        :get-sub-rows="(row) => row.children"
+        :loading="loading"
+        row-key="id"
+        selectable
+        :bordered="false"
+        :aria-labelledby="labelledby"
+        @row-remove="(_event, row) => onRowAction('delete', row)"
+      >
+        <template #cell-name="{ row }">
+          <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+            <Avatar
+              v-if="row.type !== 'workspace'"
+              :label="initials(row.name)"
+              size="small"
+              variant="square"
+            />
+            <i
+              v-else
+              :class="types[row.type].icon"
+              class="shrink-0 text-body-sm text-(--text-muted)"
+              aria-hidden="true"
+            />
+            <span class="truncate text-label-sm text-(--text-default)">{{ row.name }}</span>
+            <Tooltip
+              v-if="row.id === currentId"
+              content="Current workspace"
+            >
+              <i
+                class="az az-check shrink-0 text-body-xs text-(--text-muted)"
+                aria-label="Current workspace"
+                role="img"
+              />
+            </Tooltip>
+          </span>
+        </template>
+        <template #cell-id="{ row, value }">
+          <TableCellId
+            v-if="row.type === 'workspace'"
+            :value="value"
+            resource="workspace"
+          />
+          <span
+            v-else
+            class="text-body-sm text-(--text-muted)"
+            >{{ value }}</span
+          >
+        </template>
+        <template #cell-type="{ value }">
+          <Tag
+            :label="types[value].label"
+            :icon="types[value].icon"
+            :variant="types[value].variant"
+            :severity="types[value].severity"
+            size="small"
+          />
+        </template>
+        <template #cell-lastAccessed="{ value }">
+          <span class="text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
+        </template>
+        <template #cell-status="{ value }">
+          <TableCellStatus
+            :label="value"
+            :severity="statusSeverity(value)"
+          />
+        </template>
+        <template #cell-charges="{ value }">
+          <span
+            class="tabular-nums text-(--text-default) data-[empty]:text-(--text-muted)"
+            :data-empty="!value || null"
+            >{{ value ? money(value) : '—' }}</span
+          >
+        </template>
+        <template #header-charges>
+          <span class="inline-flex items-center gap-(--spacing-2xs)">
+            Charges
+            <Tooltip content="Estimated month-to-date charges.">
+              <i
+                class="az az-circle-help text-body-xs text-(--text-muted)"
+                role="img"
+                aria-label="About charges"
+                tabindex="0"
+              />
+            </Tooltip>
+          </span>
+        </template>
+        <template #cell-labels="{ value }">
+          <TableCellTags
+            :items="value ?? []"
+            icon="az az-tag"
+            :noun="{ one: 'label', other: 'labels' }"
+          />
+        </template>
+        <template #header-actions>
+          <span class="sr-only">Actions</span>
+        </template>
+        <template #cell-actions="{ row }">
+          <TableCellActions
+            :name="row.name"
+            @select="(_event, value) => onRowAction(value, row)"
+          >
+            <DropdownMenu.Group>
+              <DropdownMenu.Item
+                value="details"
+                label="View details"
+              />
+              <DropdownMenu.Item
+                value="move"
+                label="Move"
+              />
+              <DropdownMenu.Item
+                value="labels"
+                label="Edit labels"
+              />
+            </DropdownMenu.Group>
+            <DropdownMenu.Group>
+              <DropdownMenu.Item
+                value="delete"
+                label="Delete"
+              />
+            </DropdownMenu.Group>
+          </TableCellActions>
+        </template>
+      </DataTable>
+    </template>
+  </Card>
+</template>
+```
+
+## `parts/hierarchy-resources.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Input from '@aziontech/webkit/input'
+  import Link from '@aziontech/webkit/link'
+
+  import type { AccountHierarchyResource } from '../account-hierarchy.vue'
+  import type { ResourceNode } from '../hierarchy-model'
+  import HierarchyResourcesTable from './hierarchy-resources-table.vue'
+
+  export interface HierarchyResourcesProps {
+    /** The prefix of the ids the section labels itself with. */
+    uid: string
+    /** Why the resources could not load. */
+    error: string
+    /** A request is in flight. */
+    loading: boolean
+    /** How many resources the account holds. */
+    itemCount: number
+    /** How many resources are selected. */
+    selectedCount: number
+    /** The search, trimmed and lower-cased. */
+    needle: string
+    /** The tree the table shows, pruned by the search. */
+    visibleTree: ResourceNode[]
+    /** The id of the workspace the person is in. */
+    currentId: string
+  }
+
+  defineProps<HierarchyResourcesProps>()
+
+  const query = defineModel<string>('query', { required: true })
+  const tableExpanded = defineModel<string[]>('openKeys', { required: true })
+  const selectedKeys = defineModel<string[]>('selectedKeys', { required: true })
+
+  const emit = defineEmits<{
+    retry: [event: MouseEvent]
+    'row-action': [value: DropdownMenuItemValue, row: AccountHierarchyResource]
+  }>()
+
+  const clearSelection = () => {
+    selectedKeys.value = []
+  }
+  const clearQuery = () => {
+    query.value = ''
+  }
+</script>
+
+<template>
+  <section
+    :aria-labelledby="`${uid}-resources`"
+    class="flex min-w-0 flex-1 flex-col gap-(--spacing-sm)"
+  >
+    <div class="flex min-h-8 items-center justify-between gap-(--spacing-xs)">
+      <h2
+        :id="`${uid}-resources`"
+        class="text-heading-xs text-(--text-default)"
+      >
+        Resources
+      </h2>
+      <Button
+        v-if="selectedCount"
+        label="Clear selection"
+        variant="ghost"
+        size="small"
+        @click="clearSelection"
+      />
+    </div>
+
+    <Alert
+      v-if="error"
+      severity="danger"
+    >
+      {{ error }}
+      <template #actions>
+        <Button
+          label="Retry"
+          variant="secondary"
+          size="small"
+          @click="emit('retry', $event)"
+        />
+      </template>
+    </Alert>
+
+    <Card
+      key="card-1"
+      v-else-if="!loading && !itemCount"
+      :padded="false"
+    >
+      <template #default>
+        <EmptyState
+          size="medium"
+          icon="az az-sitemap"
+          title="No resources yet"
+          description="Create a workspace, then group workspaces under organizations and groups to share role bindings."
+        >
+          <template #actions>
+            <Button
+              label="Create Workspace"
+              icon="az az-plus"
+              variant="secondary"
+              size="small"
+              href="/account/resources/new"
+            />
+          </template>
+        </EmptyState>
+      </template>
+    </Card>
+
+    <template v-else>
+      <Input
+        v-model="query"
+        placeholder="Search by name, ID, type or label"
+        aria-label="Search resources"
+        class="w-full"
+      >
+        <template #leading>
+          <i
+            class="az az-search"
+            aria-hidden="true"
+          />
+        </template>
+      </Input>
+
+      <Card
+        key="card-3"
+        v-if="needle && !visibleTree.length"
+        :padded="false"
+      >
+        <template #default>
+          <EmptyState
+            size="small"
+            icon="az az-search"
+            title="No matching resources"
+            :description="`No resource matches “${query.trim()}”.`"
+          >
+            <template #actions>
+              <Button
+                label="Clear search"
+                variant="outline"
+                size="small"
+                @click="clearQuery"
+              />
+            </template>
+          </EmptyState>
+        </template>
+      </Card>
+
+      <HierarchyResourcesTable
+        key="card-2"
+        v-else
+        v-model:open-keys="tableExpanded"
+        v-model:selected-keys="selectedKeys"
+        :visible-tree="visibleTree"
+        :current-id="currentId"
+        :loading="loading"
+        :labelledby="`${uid}-resources`"
+        @row-action="(value, row) => emit('row-action', value, row)"
+      />
+    </template>
+
+    <Link
+      label="Resources pending deletion"
+      size="medium"
+      href="/account/resources/pending-deletion"
+      class="self-start"
+    />
+  </section>
+</template>
+```
+
+## `parts/hierarchy-toolbar.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Tooltip from '@aziontech/webkit/tooltip'
+
+  export interface HierarchyToolbarProps {
+    /** The prefix of the ids the toolbar points at. */
+    uid: string
+    /** How many resources are selected. */
+    selectedCount: number
+    /** A refresh is in flight. */
+    refreshing: boolean
+  }
+
+  defineProps<HierarchyToolbarProps>()
+
+  const detailsOpen = defineModel<boolean>('detailsOpen', { required: true })
+
+  const emit = defineEmits<{
+    move: []
+    labels: []
+    delete: []
+    refresh: [event: MouseEvent]
+  }>()
+</script>
+
+<template>
+  <div
+    role="group"
+    aria-label="Resource actions"
+    class="layout-section-start flex flex-wrap items-center gap-(--spacing-xs)"
+  >
+    <Button
+      label="Create Group"
+      icon="az az-folder"
+      variant="outline"
+      size="medium"
+      href="/account/resources/new-group"
+    />
+    <span
+      class="mx-(--spacing-2xs) h-(--size-5) w-px bg-(--border-muted)"
+      aria-hidden="true"
+    />
+    <Button
+      label="Move"
+      icon="az az-arrow-right-left"
+      variant="outline"
+      size="medium"
+      :disabled="!selectedCount"
+      @click="emit('move')"
+    />
+    <Button
+      label="Labels"
+      icon="az az-tag"
+      variant="outline"
+      size="medium"
+      :disabled="!selectedCount"
+      @click="emit('labels')"
+    />
+    <Button
+      label="Delete"
+      icon="az az-trash"
+      variant="outline"
+      size="medium"
+      :disabled="!selectedCount"
+      @click="emit('delete')"
+    />
+    <div class="ms-auto flex items-center gap-(--spacing-xs)">
+      <Tooltip content="Refresh">
+        <IconButton
+          icon="az az-refresh"
+          variant="outline"
+          size="medium"
+          :loading="refreshing"
+          aria-label="Refresh resources"
+          @click="emit('refresh', $event)"
+        />
+      </Tooltip>
+      <Button
+        :label="detailsOpen ? 'Hide details' : 'Show details'"
+        :icon="detailsOpen ? 'az az-eye-off' : 'az az-eye'"
+        variant="ghost"
+        size="medium"
+        :aria-expanded="detailsOpen"
+        :aria-controls="`${uid}-details`"
+        @click="detailsOpen = !detailsOpen"
+      />
+    </div>
+  </div>
+</template>
 ```

@@ -13,7 +13,10 @@
  ],
  "sfcFile": "blocks/detail/detail-invocations/detail-invocations.vue",
  "guidelinesFile": "blocks/detail/detail-invocations/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/detail/detail-invocations/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "invocations-format.ts",
+  "parts/invocation-request-path.vue",
+  "parts/invocation-summary-card.vue"
+ ]
 }

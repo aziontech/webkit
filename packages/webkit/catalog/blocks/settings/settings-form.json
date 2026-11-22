@@ -48,7 +48,7 @@
  ],
  "sfcFile": "blocks/settings/settings-form/settings-form.vue",
  "guidelinesFile": "blocks/settings/settings-form/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/settings/settings-form/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

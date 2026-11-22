@@ -23,7 +23,7 @@
  ],
  "sfcFile": "blocks/dashboard/dashboard-configurable/dashboard-configurable.vue",
  "guidelinesFile": "blocks/dashboard/dashboard-configurable/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/dashboard/dashboard-configurable/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

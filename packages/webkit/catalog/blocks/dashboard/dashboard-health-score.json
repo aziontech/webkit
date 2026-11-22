@@ -23,7 +23,9 @@
  ],
  "sfcFile": "blocks/dashboard/dashboard-health-score/dashboard-health-score.vue",
  "guidelinesFile": "blocks/dashboard/dashboard-health-score/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/dashboard/dashboard-health-score/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "parts/hourly-score-card.vue",
+  "parts/open-incidents-card.vue"
+ ]
 }

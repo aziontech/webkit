@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Headings, paragraphs, links, inline code, both list kinds, a blockquote and a section rule — all of it plain semantic HTML, none of it carrying a class. The markup is hand-written here, which is also the proof that the contract is not tied to any renderer.",
+   "summary": "Headings, paragraphs, links, inline code, both list kinds, a blockquote and a section rule: the plain semantic HTML a Markdown source renders to through `DocMarkdown`, none of it carrying a class. `DocProse` styles it the way it styles a documentation page.",
    "file": "examples/doc-prose/default.vue"
   },
   {

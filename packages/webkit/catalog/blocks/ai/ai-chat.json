@@ -33,7 +33,13 @@
  ],
  "sfcFile": "blocks/ai/ai-chat/ai-chat.vue",
  "guidelinesFile": "blocks/ai/ai-chat/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/ai/ai-chat/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "parts/ai-chat-connection-status.vue",
+  "parts/ai-chat-header.vue",
+  "parts/ai-chat-media-segment.vue",
+  "parts/ai-chat-start.vue",
+  "parts/ai-chat-tool-segment.vue",
+  "parts/ai-chat-turn.vue"
+ ]
 }

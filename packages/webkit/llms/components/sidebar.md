@@ -107,7 +107,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - `data-resizing` on the root and on the handle while a pointer drag is in flight
 - `data-preview` on the collapsed edge zone while it is showing the rail's preview sliver
 - `data-state` / `data-resizing` / `data-preview` are **reported state, not the motion
-  driver**: the collapse/expand animation itself runs off the hidden checkbox's `:checked` (see
+  driver**: the collapse/expand animation itself runs off the panel's own `data-state` (see
   Motion & Animations), so these attributes exist for consumer styling hooks and for tests, not
   because the component's own CSS depends on them for that transition.
 - `data-hydrated` on the root once Vue has mounted — internal only (switches the native
@@ -116,9 +116,11 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - `data-settled` on the root and on the panel two frames after mount — internal only (gates the
   rail's motion off until then, so a state restored at mount lands in place; see Motion &
   Animations); not a documented consumer styling hook.
-- Region testids derived from the root: `__panel` (the fixed-width inner panel),
-  `__collapse-input` (the hidden checkbox that carries the collapsed state, `!open`, for CSS — not an interactive
-  control; see Accessibility), `__header`, `__nav`, `__scroll`, `__footer`, `__collapse` (the
+- `data-state="closed"` on the panel (`__panel`) whenever the rail is collapsed (`!open`), **including
+  during a drag**, `data-state="open"` otherwise; absent when the rail can neither collapse nor resize.
+  It is the motion driver; the root's `data-state` is the committed, reported state (gated on
+  `!resizing`, like `inert`).
+- Region testids derived from the root: `__panel` (the fixed-width inner panel), `__header`, `__nav`, `__scroll`, `__footer`, `__collapse` (the
   trigger), `__handle` (the drag separator), `__expand` / `__expand-button` (the collapsed
   affordance)
 - A collapsed offcanvas rail carries `inert`, which also removes it from the accessibility tree, so it holds no tab stops while it is out; an icon rail keeps its rows reachable
@@ -160,10 +162,9 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - A **collapsed rail carries `inert`**, which also removes it from the accessibility tree — the content is still mounted so its width
   can animate, and it must not be reachable while it is out of the layout. That is why the control
   that brings it back is a sibling of the rail rather than inside it.
-- The **hidden checkbox that mirrors the collapsed state (`!open`)** (`__collapse-input`) carries `aria-hidden="true"`
-  and `tabindex="-1"`: it is a CSS state carrier, not a second control, so it is never reachable by
-  keyboard or announced by a screen reader. The trigger's accessible name and role are unaffected —
-  the consumer-facing control is still the `IconButton`.
+- The collapsed state that drives the motion is a `data-state` attribute on the panel, not a form
+  control, so the rail holds no hidden input for a screen reader or a form to find; the one control
+  is the `IconButton` trigger.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states; the width /
   transform / opacity transition is dropped entirely under `prefers-reduced-motion`.

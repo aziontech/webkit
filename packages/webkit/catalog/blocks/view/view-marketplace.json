@@ -43,7 +43,11 @@
  ],
  "sfcFile": "blocks/view/view-marketplace/view-marketplace.vue",
  "guidelinesFile": "blocks/view/view-marketplace/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/view/view-marketplace/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "parts/configure-page.vue",
+  "parts/integration-drawer.vue",
+  "parts/integration-tiles-loading.vue",
+  "parts/solution-page.vue"
+ ]
 }
