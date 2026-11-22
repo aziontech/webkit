@@ -14,7 +14,9 @@
       "virtual:docs-index": ["./src/lib/virtual/docs-index.d.ts"],
       "virtual:docs-tokens": ["./src/lib/virtual/docs-tokens.d.ts"],
       "virtual:docs-assets": ["./src/lib/virtual/docs-assets.d.ts"],
-      "virtual:docs-component-loaders": ["./src/lib/virtual/docs-component-loaders.d.ts"]
+      "virtual:docs-component-loaders": ["./src/lib/virtual/docs-component-loaders.d.ts"],
+      "virtual:docs-example-loaders": ["./src/lib/virtual/docs-example-loaders.d.ts"],
+      "virtual:docs-block-loaders": ["./src/lib/virtual/docs-block-loaders.d.ts"]
     }
   },
   "include": ["src/**/*", "plugins/**/*", "test/**/*", "vite.config.ts"]

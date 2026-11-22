@@ -30,6 +30,7 @@ function staticRoutes(): string[] {
 }
 
 const ssgOptions: Partial<ViteSSGOptions> = {
+  entry: 'src/main.ts',
   dirStyle: 'nested',
   formatting: 'none',
   concurrency: 2,
@@ -37,7 +38,8 @@ const ssgOptions: Partial<ViteSSGOptions> = {
   onPageRendered: (_route, html, appCtx) => {
     const ssr = (appCtx.app as { ssrContext?: { teleports?: Record<string, string> } }).ssrContext
     const body = ssr?.teleports?.body
-    return body ? html.replace(/<body([^>]*)>\s*/, (open) => `${open.trimEnd()}${body}`) : html
+    const page = html.replace(/<link\b[^>]*rel="modulepreload"[^>]*>/g, '')
+    return body ? page.replace(/<body([^>]*)>\s*/, (open) => `${open.trimEnd()}${body}`) : page
   },
   includedRoutes: () => {
     const only = process.env.DOCS_ROUTES?.split(',').filter(Boolean)
@@ -73,6 +75,10 @@ export default defineConfig({
   build: {
     assetsDir: '_app',
     chunkSizeWarningLimit: 2000,
+    modulePreload: {
+      resolveDependencies: (_file, deps, { hostType }) =>
+        hostType === 'html' ? [] : deps.filter((dep) => dep.endsWith('.css'))
+    },
     rollupOptions: {
       experimental: {
         chunkOptimization: { mergeCommonChunks: false }

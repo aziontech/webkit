@@ -7,6 +7,8 @@ extend-exclude = [
   "packages/webkit/src/locales/pt-BR.ts",
   "packages/webkit/src/locales/es.ts",
   "apps/docs/src/lib/i18n.ts",
+  "apps/docs/src/lib/i18n-pt-br.ts",
+  "apps/docs/src/lib/i18n-es.ts",
   # Multilingual search synonyms (pt-BR and es queries an app user types).
   "packages/webkit/src/catalog/lexicon/",
   "packages/webkit/test/catalog/search-queries.json",

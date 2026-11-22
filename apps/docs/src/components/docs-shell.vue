@@ -8,22 +8,29 @@
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
   import LanguageSelect from '@aziontech/webkit/language-select'
-  import NavigationMenu from '@aziontech/webkit/navigation-menu'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import Sidebar from '@aziontech/webkit/sidebar'
   import SkipLink from '@aziontech/webkit/skip-link'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref, watch } from 'vue'
+  import { computed, defineAsyncComponent, hydrateOnIdle, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
   import { LOCALES, messages } from '../lib/i18n'
   import { settings } from '../lib/settings'
   import SearchCommand from './search-command.vue'
   import SideNav from './side-nav.vue'
+
+  const DocsSidebar = defineAsyncComponent({
+    loader: () => import('./docs-sidebar.vue'),
+    hydrate: hydrateOnIdle()
+  })
+  const HeaderNav = defineAsyncComponent({
+    loader: () => import('./header-nav.vue'),
+    hydrate: hydrateOnIdle()
+  })
 
   const route = useRoute()
   const t = messages
@@ -83,23 +90,11 @@
                 size="small"
               />
             </AppHeader.Brand>
-            <NavigationMenu
-              :aria-label="t.navigation"
-              class="ms-(--spacing-sm) hidden lg:flex"
-            >
-              <NavigationMenu.List>
-                <NavigationMenu.Item
-                  v-for="section in sections"
-                  :key="section.to"
-                >
-                  <NavigationMenu.Link
-                    :href="section.to"
-                    :active="activeSection === section.to"
-                    >{{ section.label }}</NavigationMenu.Link
-                  >
-                </NavigationMenu.Item>
-              </NavigationMenu.List>
-            </NavigationMenu>
+            <HeaderNav
+              :label="t.navigation"
+              :sections="sections"
+              :active="activeSection"
+            />
           </div>
         </AppHeader.Start>
         <AppHeader.Center />
@@ -151,12 +146,7 @@
       <aside
         class="sticky top-14 hidden h-[calc(100vh-3.5rem)] w-(--container-2xs) shrink-0 lg:flex"
       >
-        <Sidebar
-          :aria-label="t.navigation"
-          class="w-full"
-        >
-          <SideNav />
-        </Sidebar>
+        <DocsSidebar :label="t.navigation" />
       </aside>
 
       <div class="flex min-w-0 flex-1 flex-col">

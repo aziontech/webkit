@@ -1,14 +1,28 @@
 <script setup lang="ts">
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import { es } from '@aziontech/webkit/locales/es'
-  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import { getCurrentInstance, onMounted, useSSRContext } from 'vue'
+  import ConfigProvider, { type ConfigProviderProps } from '@aziontech/webkit/config-provider'
+  import { getCurrentInstance, onMounted, shallowRef, useSSRContext, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import DocsShell from './components/docs-shell.vue'
   import { persistSettings, restoreSettings, settings } from './lib/settings'
 
-  const catalogs = { 'pt-BR': ptBR, es }
+  type Catalog = NonNullable<ConfigProviderProps['catalogs']>[string]
+
+  const LOADERS: Record<string, () => Promise<Catalog>> = {
+    'pt-BR': () => import('@aziontech/webkit/locales/pt-BR').then((module) => module.ptBR),
+    es: () => import('@aziontech/webkit/locales/es').then((module) => module.es)
+  }
+  const catalogs = shallowRef<Record<string, Catalog>>({})
+
+  watch(
+    () => settings.locale,
+    async (locale) => {
+      const load = LOADERS[locale]
+      if (!load || catalogs.value[locale]) return
+      catalogs.value = { ...catalogs.value, [locale]: await load() }
+    },
+    { immediate: true }
+  )
   const route = useRoute()
 
   if (import.meta.env.SSR) {

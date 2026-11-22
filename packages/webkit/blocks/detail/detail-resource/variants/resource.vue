@@ -19,7 +19,7 @@
         <div class="flex min-w-0">
           <TableCellLink
             label="acme/web-app"
-            href="https://github.com/acme/web-app"
+            href="https://github.example.com/acme/web-app"
           />
         </div>
       </div>

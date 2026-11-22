@@ -1,5 +1,5 @@
 import { cpSync, createReadStream, existsSync, readFileSync, statSync } from 'node:fs'
-import { extname, join, normalize } from 'node:path'
+import { dirname, extname, join, normalize, relative } from 'node:path'
 
 import type { Plugin, ResolvedConfig } from 'vite'
 
@@ -14,7 +14,7 @@ import {
   renderGuidelinesFile,
   renderMarkdownFile
 } from './content.ts'
-import { CATALOG, LLMS, readCatalog, THEME, WEBKIT } from './paths.ts'
+import { CATALOG, LLMS, readCatalog, THEME, walk, WEBKIT } from './paths.ts'
 
 const INDEX = 'virtual:docs-index'
 const TOKENS = 'virtual:docs-tokens'
@@ -22,6 +22,12 @@ const ASSETS = 'virtual:docs-assets'
 const ASSET_LLMS = ['illustrations', 'brand-marks']
 const LOADERS = 'virtual:docs-component-loaders'
 const COMPONENT = 'virtual:docs-component:'
+const EXAMPLE_LOADERS = 'virtual:docs-example-loaders'
+const EXAMPLES = 'virtual:docs-examples:'
+const BLOCK_LOADERS = 'virtual:docs-block-loaders'
+const BLOCK = 'virtual:docs-block-files:'
+const EXAMPLES_DIR = join(WEBKIT, 'examples')
+const BLOCKS_DIR = join(WEBKIT, 'blocks')
 const HIGHLIGHT = '\0docs-highlight:'
 const MARKDOWN = '\0docs-markdown:'
 const GUIDELINES = '\0docs-guidelines:'
@@ -59,6 +65,46 @@ const MIME: Record<string, string> = {
   '.mp4': 'video/mp4'
 }
 
+function exampleFiles(): Map<string, string[]> {
+  const byDir = new Map<string, string[]>()
+  for (const file of walk(EXAMPLES_DIR, (name) => /\.(vue|json)$/.test(name))) {
+    const dir = relative(EXAMPLES_DIR, dirname(file))
+    byDir.set(dir, [...(byDir.get(dir) ?? []), file])
+  }
+  return byDir
+}
+
+function loaderMap(entries: [string, string][]): string {
+  return `{\n${entries.map(([key, value]) => `  ${JSON.stringify(key)}: ${value}`).join(',\n')}\n}`
+}
+
+const importDefault = (id: string) => `() => import(${JSON.stringify(id)}).then((m) => m.default)`
+
+function examplesModule(dir: string): string {
+  const files = (exampleFiles().get(dir) ?? []).map((file) => [
+    relative(join(EXAMPLES_DIR, dir), file),
+    file
+  ])
+  const components = files.filter(([name]) => name.endsWith('.vue'))
+  return [
+    `export const components = ${loaderMap(components.map(([name, file]) => [name, importDefault(file)]))}`,
+    `export const sources = ${loaderMap(files.map(([name, file]) => [name, importDefault(`${file}?highlight`)]))}`
+  ].join('\n')
+}
+
+function blockModule(dir: string): string {
+  const block = buildIndex().blocks.find((item) => item.dir === dir)
+  const base = join(BLOCKS_DIR, dir)
+  const states = (block?.states ?? []).map((state) => [state.file, join(base, state.file)])
+  const guidelines = join(base, 'guidelines.md')
+  return [
+    `export const components = ${loaderMap(states.map(([name, file]) => [name, importDefault(file)]))}`,
+    `export const sources = ${loaderMap(states.map(([name, file]) => [name, importDefault(`${file}?highlight`)]))}`,
+    `export const manifest = ${importDefault(join(base, 'block.json'))}`,
+    `export const guidelines = ${existsSync(guidelines) ? importDefault(`${guidelines}?guidelines`) : 'undefined'}`
+  ].join('\n')
+}
+
 function languageOf(file: string): string {
   const ext = extname(file).slice(1)
   return ext === 'mjs' ? 'js' : ext
@@ -78,7 +124,11 @@ export function docsPlugin(): Plugin {
         id === TOKENS ||
         id === ASSETS ||
         id === LOADERS ||
-        id.startsWith(COMPONENT)
+        id === EXAMPLE_LOADERS ||
+        id === BLOCK_LOADERS ||
+        id.startsWith(COMPONENT) ||
+        id.startsWith(EXAMPLES) ||
+        id.startsWith(BLOCK)
       ) {
         return `\0${id}`
       }
@@ -115,6 +165,25 @@ export function docsPlugin(): Plugin {
             `  ${JSON.stringify(item.name)}: () => import(${JSON.stringify(COMPONENT + item.name)})`
         )
         return `export default {\n${lines.join(',\n')}\n}`
+      }
+      if (id === `\0${EXAMPLE_LOADERS}`) {
+        const dirs = [...exampleFiles().keys()].sort()
+        for (const dir of dirs) this.addWatchFile(join(EXAMPLES_DIR, dir))
+        return `export default ${loaderMap(dirs.map((dir) => [dir, `() => import(${JSON.stringify(EXAMPLES + dir)})`]))}`
+      }
+      if (id.startsWith(`\0${EXAMPLES}`)) {
+        const dir = id.slice(EXAMPLES.length + 1)
+        this.addWatchFile(join(EXAMPLES_DIR, dir))
+        return examplesModule(dir)
+      }
+      if (id === `\0${BLOCK_LOADERS}`) {
+        const dirs = buildIndex().blocks.map((block) => block.dir)
+        return `export default ${loaderMap(dirs.map((dir) => [dir, `() => import(${JSON.stringify(BLOCK + dir)})`]))}`
+      }
+      if (id.startsWith(`\0${BLOCK}`)) {
+        const dir = id.slice(BLOCK.length + 1)
+        this.addWatchFile(join(BLOCKS_DIR, dir, 'block.json'))
+        return blockModule(dir)
       }
       if (id.startsWith(`\0${COMPONENT}`)) {
         this.addWatchFile(CATALOG)

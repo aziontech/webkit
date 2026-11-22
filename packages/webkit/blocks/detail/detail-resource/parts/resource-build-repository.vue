@@ -65,7 +65,7 @@
                   <Link
                     inline
                     :label="repository"
-                    :href="`https://github.com/${repository}`"
+                    :href="`https://github.example.com/${repository}`"
                     target="_blank"
                   />
                 </span>

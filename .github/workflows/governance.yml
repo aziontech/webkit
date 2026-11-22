@@ -258,7 +258,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [changes, lint, types]
     if: needs.changes.outputs.visual == 'true'
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -277,6 +277,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build the docs site (every route prerendered)
+        env:
+          DOCS_SOURCE_REF: ${{ github.event.pull_request.head.sha }}
         run: pnpm build:docs
 
       - name: Cache Playwright browsers
@@ -299,8 +301,38 @@ jobs:
       - name: Check that no docs page loads the Monaco editor up front
         run: pnpm check:docs:editor-chunks
 
+      - name: Install lychee (pinned release binary, checksum verified)
+        env:
+          LYCHEE_VERSION: 0.24.2
+          LYCHEE_SHA256: 73657a111819a30c47c08352896796f23d64e4eb2b3ed39b6d32149241566fc5
+        run: |
+          bin="$RUNNER_TEMP/lychee"
+          mkdir -p "$bin"
+          curl -fsSL -o "$RUNNER_TEMP/lychee.tar.gz" "https://github.com/lycheeverse/lychee/releases/download/lychee-v${LYCHEE_VERSION}/lychee-x86_64-unknown-linux-musl.tar.gz"
+          echo "${LYCHEE_SHA256}  $RUNNER_TEMP/lychee.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/lychee.tar.gz" -C "$bin" --strip-components=1 lychee-x86_64-unknown-linux-musl/lychee
+          echo "$bin" >> "$GITHUB_PATH"
+
+      - name: Check that every external docs link resolves (lychee; bot-blocking hosts may answer 403 or 429)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: pnpm --filter @aziontech/webkit-docs run check:external-links
+
       - name: Build the demos
         run: pnpm build:demos
+
+      - name: Lighthouse — accessibility 100, LCP at most 2.5 s, CLS at most 0.1, TBT at most 200 ms (docs home, one component page, one demo)
+        env:
+          LIGHTHOUSE_OUT: ${{ runner.temp }}/lighthouse
+        run: pnpm --filter @aziontech/webkit-docs run check:lighthouse
+
+      - name: Upload the Lighthouse reports
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: lighthouse
+          path: ${{ runner.temp }}/lighthouse/
+          retention-days: 7
 
       - name: Upload the built sites for the visual shards
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

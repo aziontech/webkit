@@ -160,6 +160,30 @@ in the browser. The output is plain static files:
   one prerendered page that reads the example from its path (`scripts/serve.mjs` does this).
 - The site expects to live at the domain root. To serve it under a path, set Vite's `base` in
   `vite.config.ts`.
+- Serve it compressed (brotli or gzip) over HTTP/2, as every CDN does by default (Azion's Edge
+  Application included). `scripts/serve.mjs` does the same: it compresses every text file, and
+  with `TLS_KEY` and `TLS_CERT` set it speaks HTTP/2.
+- Links to repository files point at `main`; set `DOCS_SOURCE_REF` (a branch or commit) at build
+  time to point them at another ref. CI builds with the pull request's head commit.
+
+## Performance and external links
+
+`pnpm --filter @aziontech/webkit-docs run check:lighthouse` (after `pnpm build:docs` and
+`pnpm build:demos`) serves both sites compressed over HTTP/2 and runs Lighthouse 12.8.2 three
+times on the docs home, `/components/button` (mobile profile) and the demos `/resources`
+(desktop profile). The median must have LCP at most 2.5 s, CLS at most 0.1 and TBT at most
+200 ms, and the accessibility score must be 100; a failing node counts only when no entry of
+`packages/webkit/src/test/a11y-accepted.json` covers its rule, theme and selector.
+`LIGHTHOUSE_OUT=<dir>` keeps the reports.
+
+`pnpm --filter @aziontech/webkit-docs run check:external-links` runs `lychee` over the built
+pages: `lychee.toml` for every external link, `lychee-bot-blocked.toml` for the hosts that block
+automated clients, where a 403 or 429 is accepted. It needs `lychee` on `PATH` and the network.
+
+The page starts the app after its first paint (`src/boot.ts`), loads each component's examples,
+each block's files and the non-English messages only on the route that needs them, and hydrates
+the side navigation, the header navigation and the lower parts of a component page when the
+browser is idle.
 
 ## Smoke test
 
