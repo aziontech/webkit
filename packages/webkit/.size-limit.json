@@ -2,12 +2,12 @@
   {
     "name": "app-layout",
     "path": "src/components/layout/app-layout/app-layout.vue",
-    "limit": "24.1 KB"
+    "limit": "24.3 KB"
   },
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "81.6 KB",
+    "limit": "82.45 KB",
     "entryOnly": true
   },
   {
@@ -24,7 +24,7 @@
   {
     "name": "doc-layout",
     "path": "src/components/docs/doc-layout/doc-layout.vue",
-    "limit": "72.15 KB"
+    "limit": "72.4 KB"
   },
   {
     "name": "doc-markdown",
@@ -2109,7 +2109,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "82.95 KB"
+    "limit": "83.7 KB"
   },
   {
     "name": "use-console-layout",
@@ -2164,12 +2164,12 @@
   {
     "name": "sidebar",
     "path": "src/components/layout/sidebar/index.ts",
-    "limit": "24.95 KB"
+    "limit": "25.1 KB"
   },
   {
     "name": "sidebar-root",
     "path": "src/components/layout/sidebar/sidebar.vue",
-    "limit": "24.75 KB"
+    "limit": "24.9 KB"
   },
   {
     "name": "sidebar-header",

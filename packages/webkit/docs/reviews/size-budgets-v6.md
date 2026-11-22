@@ -1010,3 +1010,9 @@ Budget-raise: console-layout 82.8 KB → 82.95 KB (measured 82.90 KB): the accou
 Budget-raise: bento-grid 2.25 KB → 2.4 KB (measured 2.38 KB): BentoGrid.Cell href: the whole tile renders as one link.
 Budget-raise: bento-grid-cell 1.75 KB → 1.95 KB (measured 1.93 KB): BentoGrid.Cell href: the whole tile renders as one link.
 Budget-raise: popover-trigger 2.5 KB → 2.55 KB (measured 2.51 KB): TriggerHost recognises AppHeaderAccount as a control so the trigger state reaches it in the server render.
+Budget-raise: app-layout 24.1 KB → 24.3 KB (measured 24.27 KB): CODE_QUALITY 3.1/3.3 split: the split panel, written twice (bottom and side), renders once from a private part, and the localStorage sync moved to a composable; the part boundary costs more than the duplicate template, which gzip had nearly for free.
+Budget-raise: console-layout-root 81.6 KB → 82.45 KB (measured 82.40 KB): carries the Sidebar and AppLayout splits (0.45 KB), plus the 3.1 split of ConsoleLayout (palette and header-start parts, nav audit composable, reveal helper) to bring the root under 400 lines.
+Budget-raise: console-layout 82.95 KB → 83.7 KB (measured 83.68 KB): same as console-layout-root.
+Budget-raise: doc-layout 72.15 KB → 72.4 KB (measured 72.38 KB): carries the Sidebar and AppLayout splits.
+Budget-raise: sidebar 24.95 KB → 25.1 KB (measured 25.08 KB): CODE_QUALITY 3.1 split of useSidebarRail (164-line function) into drag, preview and key composables; the shared refs passed between them and the extra return objects cost the bytes, and splitting the Sidebar setup below 200 lines moved code out of the gzip window of its template.
+Budget-raise: sidebar-root 24.75 KB → 24.9 KB (measured 24.88 KB): same split of useSidebarRail and the Sidebar setup as the sidebar entry.

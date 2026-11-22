@@ -33,7 +33,6 @@ export const NETWORK_MAP_REGIONS = {
   oceania: '1180 530 425 375'
 } as const
 
-/** Which tiers of data centers each density lights. */
 export const NETWORK_MAP_DENSITY_TIERS: Record<
   NetworkMapDensity,
   (keyof typeof NETWORK_MAP_TIERS)[]
@@ -44,7 +43,6 @@ export const NETWORK_MAP_DENSITY_TIERS: Record<
   high: ['core', 'satellite', 'extra']
 }
 
-/** Where each position parks the map, as fractions of the space left over. */
 export const NETWORK_MAP_ANCHOR: Record<NetworkMapPosition, [number, number]> = {
   center: [0.5, 0.5],
   top: [0.5, 0],

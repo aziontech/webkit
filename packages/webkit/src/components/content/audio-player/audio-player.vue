@@ -7,11 +7,37 @@
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Spinner from '../../feedback/spinner/spinner.vue'
   import Slider from '../../input/slider/slider.vue'
+  import { clock, spoken } from './lib/audio-time'
 
   defineOptions({
     name: 'AudioPlayer',
     inheritAttrs: false
   })
+
+  export interface AudioPlayerProps {
+    /** Audio source: a URL, an object URL or a data URL built from base64 audio. Empty disables the controls. */
+    src?: string
+    /** Name of the clip, shown above the controls and used as the accessible name of the control group. */
+    title?: string
+    /** Length of the clip in seconds, shown until the browser reads it from the file. Unset shows a placeholder. */
+    duration?: number
+    /** Text the audio speaks, shown in a collapsible Transcript section under the controls. Empty hides the section. */
+    transcript?: string
+    /** Playback speeds the speed control cycles through, in order. Empty hides it; it starts at 1 when listed, else the first. */
+    playbackRates?: number[]
+    /** Shows a Download link to `src`. */
+    downloadable?: boolean
+    /** File name the Download link saves the audio as. Empty lets the browser pick one. */
+    fileName?: string
+    /** The audio is still being generated or fetched: the play control shows a spinner and the other controls are disabled. */
+    loading?: boolean
+    /** Why the audio cannot play. Set, the controls are disabled and this text replaces the time. */
+    error?: string
+    /** Disables every control and applies the disabled tokens. */
+    disabled?: boolean
+    /** Accessible name of the control group when there is no `title`. Empty falls back to the catalog's Audio player. */
+    ariaLabel?: string
+  }
 
   const props = withDefaults(defineProps<AudioPlayerProps>(), {
     src: '',
@@ -47,6 +73,7 @@
   const currentTime = ref(0)
   const mediaDuration = ref<number | undefined>(undefined)
 
+  const initialRate = (rates: number[]): number => (rates.includes(1) ? 1 : (rates[0] ?? 1))
   const rate = ref(initialRate(props.playbackRates))
 
   const testId = computed<string>(
@@ -73,47 +100,19 @@
     () => props.downloadable && Boolean(props.src) && !props.loading && !hasError.value
   )
 
-  function clock(seconds: number | undefined): string {
-    if (seconds === undefined || !Number.isFinite(seconds)) return '--:--'
-    const total = Math.max(0, Math.floor(seconds))
-    const hours = Math.floor(total / 3600)
-    const minutes = Math.floor((total % 3600) / 60)
-    const secs = total % 60
-    const padded = (value: number) =>
-      formatNumber(value, { minimumIntegerDigits: 2, useGrouping: false })
-    if (hours > 0) {
-      return `${formatNumber(hours, { useGrouping: false })}:${padded(minutes)}:${padded(secs)}`
-    }
-    return `${formatNumber(minutes, { useGrouping: false })}:${padded(secs)}`
-  }
-
-  function spoken(seconds: number): string {
-    const total = Math.max(0, Math.floor(seconds))
-    const units: Array<[number, string]> = [
-      [Math.floor(total / 3600), 'hour'],
-      [Math.floor((total % 3600) / 60), 'minute'],
-      [total % 60, 'second']
-    ]
-    const parts = units
-      .filter(([value]) => value > 0)
-      .map(([value, unit]) => formatNumber(value, { style: 'unit', unit, unitDisplay: 'long' }))
-    if (!parts.length) {
-      return formatNumber(0, { style: 'unit', unit: 'second', unitDisplay: 'long' })
-    }
-    return formatList(parts, { type: 'unit', style: 'long' })
-  }
-
   const currentLabel = computed(() =>
-    knownDuration.value === undefined ? clock(undefined) : clock(currentTime.value)
+    knownDuration.value === undefined
+      ? clock(formatNumber, undefined)
+      : clock(formatNumber, currentTime.value)
   )
-  const durationLabel = computed(() => clock(knownDuration.value))
+  const durationLabel = computed(() => clock(formatNumber, knownDuration.value))
 
   const positionText = computed(() =>
     knownDuration.value === undefined
       ? undefined
       : t('audioPlayer.position', {
-          current: spoken(seekValue.value),
-          total: spoken(knownDuration.value)
+          current: spoken(formatNumber, formatList, seekValue.value),
+          total: spoken(formatNumber, formatList, knownDuration.value)
         })
   )
 
@@ -221,35 +220,6 @@
     rate.value = rates[(index + 1) % rates.length] ?? rates[0] ?? 1
     if (audioEl.value) audioEl.value.playbackRate = rate.value
   }
-</script>
-
-<script lang="ts">
-  export interface AudioPlayerProps {
-    /** Audio source: a URL, an object URL or a data URL built from base64 audio. Empty disables the controls. */
-    src?: string
-    /** Name of the clip, shown above the controls and used as the accessible name of the control group. */
-    title?: string
-    /** Length of the clip in seconds, shown until the browser reads it from the file. Unset shows a placeholder. */
-    duration?: number
-    /** Text the audio speaks, shown in a collapsible Transcript section under the controls. Empty hides the section. */
-    transcript?: string
-    /** Playback speeds the speed control cycles through, in order. Empty hides it; it starts at 1 when listed, else the first. */
-    playbackRates?: number[]
-    /** Shows a Download link to `src`. */
-    downloadable?: boolean
-    /** File name the Download link saves the audio as. Empty lets the browser pick one. */
-    fileName?: string
-    /** The audio is still being generated or fetched: the play control shows a spinner and the other controls are disabled. */
-    loading?: boolean
-    /** Why the audio cannot play. Set, the controls are disabled and this text replaces the time. */
-    error?: string
-    /** Disables every control and applies the disabled tokens. */
-    disabled?: boolean
-    /** Accessible name of the control group when there is no `title`. Empty falls back to the catalog's Audio player. */
-    ariaLabel?: string
-  }
-
-  const initialRate = (rates: number[]): number => (rates.includes(1) ? 1 : (rates[0] ?? 1))
 
   const TRANSCRIPT_SUMMARY_CLASS =
     'cursor-pointer rounded-(--shape-control) text-label-sm text-(--text-default) ' +

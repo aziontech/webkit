@@ -10,11 +10,39 @@
   import { useSidebarKeys } from './composables/use-sidebar-keys'
   import { SIDEBAR_ICON_RAIL_TOKEN, useSidebarRail } from './composables/use-sidebar-rail'
   import { SidebarInjectionKey } from './injection-key'
+  import {
+    EXPAND_CLASS,
+    EXPAND_HINT_CLASS,
+    INNER_MOTION_CLASS,
+    NAV_CLASS,
+    RAIL_MOTION_CLASS,
+    RESIZE_INDICATOR_CLASS,
+    sidebarFooterBandClass,
+    sidebarFooterSlotClass,
+    sidebarScrollClass
+  } from './lib/sidebar-classes'
 
   defineOptions({
     name: 'Sidebar',
     inheritAttrs: false
   })
+
+  /** How a collapsed sidebar leaves the layout: entirely, or down to an icon rail. */
+  export type SidebarCollapsible = 'offcanvas' | 'icon'
+
+  export interface SidebarProps {
+    ariaLabel?: string
+    resizable?: boolean
+    /** Adds the collapse trigger; true or offcanvas takes a collapsed sidebar out of the layout, icon keeps an icon rail. */
+    collapsible?: boolean | SidebarCollapsible
+    /** Lets Cmd+B or Ctrl+B toggle the collapsed state while the sidebar is collapsible. */
+    shortcut?: boolean
+    minWidthToken?: string
+    maxWidthToken?: string
+    collapseAriaLabel?: string
+    expandAriaLabel?: string
+    resizeAriaLabel?: string
+  }
 
   const props = withDefaults(defineProps<SidebarProps>(), {
     ariaLabel: '',
@@ -206,84 +234,12 @@
       : 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
   )
 
-  const footerBandClass = () => {
-    if (collapseMode.value === null) return undefined
-    if (rail.value) {
-      return 'flex flex-col items-center gap-(--spacing-xs) border-t border-(--border-muted) px-(--spacing-xs) py-(--spacing-sm)'
-    }
-    return cn(
-      'flex h-14 items-center gap-(--spacing-xs)',
-      'border-t border-(--border-muted) px-(--spacing-md)',
-      !slots['footer'] ? 'justify-end' : undefined
-    )
-  }
+  const footerBandClass = () =>
+    sidebarFooterBandClass(collapseMode.value !== null, rail.value, Boolean(slots['footer']))
 
-  const footerSlotClass = () => {
-    if (collapseMode.value === null) return undefined
-    return rail.value ? 'flex min-w-0 justify-center' : 'min-w-0 flex-1'
-  }
+  const footerSlotClass = () => sidebarFooterSlotClass(collapseMode.value !== null, rail.value)
 
-  const scrollClass = () =>
-    cn(
-      'flex min-h-0 flex-1 flex-col gap-(--spacing-md) p-(--spacing-md)',
-      'scroll-py-(--spacing-2xs)',
-      slots['header'] ? 'pt-(--spacing-2xs)' : undefined,
-      rail.value ? 'px-(--spacing-xs)' : undefined
-    )
-</script>
-
-<script lang="ts">
-  /** How a collapsed sidebar leaves the layout: entirely, or down to an icon rail. */
-  export type SidebarCollapsible = 'offcanvas' | 'icon'
-
-  export interface SidebarProps {
-    ariaLabel?: string
-    resizable?: boolean
-    /** Adds the collapse trigger; true or offcanvas takes a collapsed sidebar out of the layout, icon keeps an icon rail. */
-    collapsible?: boolean | SidebarCollapsible
-    /** Lets Cmd+B or Ctrl+B toggle the collapsed state while the sidebar is collapsible. */
-    shortcut?: boolean
-    minWidthToken?: string
-    maxWidthToken?: string
-    collapseAriaLabel?: string
-    expandAriaLabel?: string
-    resizeAriaLabel?: string
-  }
-
-  const RAIL_MOTION_CLASS =
-    'transition-[width,min-width] duration-moderate-02 ease-expressive-entrance ' +
-    'has-[>div[data-state=closed]]:ease-productive-exit ' +
-    'data-[resizing]:transition-none ' +
-    'not-data-[settled]:transition-none ' +
-    'motion-reduce:transition-none'
-
-  const NAV_CLASS =
-    'flex h-full min-h-0 flex-1 flex-col [--sidebar-menu-item-ring-offset:var(--bg-surface)] [--sidebar-menu-ring-offset:var(--bg-surface)]'
-
-  const INNER_MOTION_CLASS =
-    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance ' +
-    'data-[state=closed]:ease-productive-exit ' +
-    'data-[resizing]:transition-none ' +
-    'not-data-[settled]:transition-none ' +
-    'motion-reduce:transition-none motion-reduce:translate-none'
-
-  const RESIZE_INDICATOR_CLASS =
-    'pointer-events-none absolute inset-y-0 end-0 w-(--border-width-2) bg-(--accent) opacity-0 transition-opacity ' +
-    'group-hover:opacity-100 group-focus-visible:opacity-100 ' +
-    'group-data-[preview]:opacity-100 ' +
-    'group-data-[resizing]:opacity-100 ' +
-    'motion-reduce:transition-none'
-
-  const EXPAND_CLASS =
-    'group absolute inset-y-0 start-0 z-20 w-(--size-6) hover:w-(--size-10) focus-within:w-(--size-10) ' +
-    'transition-[width] duration-moderate-02 ease-expressive-exit hover:ease-expressive-entrance focus-within:ease-expressive-entrance motion-reduce:transition-none'
-
-  const EXPAND_HINT_CLASS =
-    'pointer-events-none absolute start-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] ' +
-    'rtl:translate-x-(--size-10) ps-(--spacing-2xs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit ' +
-    'group-hover:translate-x-0 rtl:group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance ' +
-    'group-focus-within:translate-x-0 rtl:group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto ' +
-    'group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none'
+  const scrollClass = () => sidebarScrollClass(Boolean(slots['header']), rail.value)
 </script>
 
 <template>
