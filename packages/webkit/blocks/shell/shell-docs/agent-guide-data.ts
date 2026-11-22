@@ -200,10 +200,10 @@ export const docLinks = [
     description: 'Machine-readable index of the whole documentation.'
   },
   {
-    title: 'For AI agents',
+    title: 'Agent setup',
     icon: 'az az-sparkles',
-    href: 'https://www.azion.com/en/documentation/devtools/for-ai-agents/',
-    description: 'Canonical facts: current product names, API base URL, auth format.'
+    href: 'https://www.azion.com/en/documentation/agent-setup/',
+    description: 'Connect Claude Code, Cursor, Codex and other agents to the Azion MCP servers.'
   },
   {
     title: 'AGENTS.md',
