@@ -6,11 +6,11 @@
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
+  import Link from '@aziontech/webkit/link'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Subheader from '@aziontech/webkit/subheader'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
 
   /** The build settings of the application. */
   export interface ApplicationBuildSettings {
@@ -85,9 +85,11 @@
                         class="az az-github shrink-0"
                         aria-hidden="true"
                       />
-                      <TableCellLink
+                      <Link
+                        inline
                         :label="repository"
                         :href="`https://github.com/${repository}`"
+                        target="_blank"
                       />
                     </span>
                   </template>

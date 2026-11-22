@@ -24,4 +24,5 @@ const AppHeader = Object.assign(AppHeaderRoot, {
 export default AppHeader
 export type { AppHeaderVariant } from './app-header.vue'
 export type { AppHeaderProps } from './app-header.vue'
+export type { AppHeaderAccountProps } from './app-header-account.vue'
 export type { AppHeaderBrandProps } from './app-header-brand.vue'

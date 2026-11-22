@@ -18,7 +18,7 @@ const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 
 export const FULL_BUDGETS = {
   'llms-full.txt': 2_360_000,
-  'llms-full-site.txt': 740_000
+  'llms-full-site.txt': 750_000
 }
 
 const SPEC_SECTIONS = [

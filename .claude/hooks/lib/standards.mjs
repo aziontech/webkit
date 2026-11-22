@@ -42,10 +42,11 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'ci', by: 'check-naming' },
       { surface: 'ci', by: 'check-authoring' },
+      { surface: 'ci', by: 'check-spelling' },
       { surface: 'lint', by: 'no-deprecated-name' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'One engine, packages/webkit/scripts/lib/naming-rules.mjs (RULES registry, one id per checkable rule of decisions N1-N18): check-naming runs it in CI (gate `naming`, toolkit job) and validate-naming write-time on the file a write produces (only added violations block). Enforced rules (export-kebab, block-id, export-synonym, export-retired) block now; staged rules are reported until the rename lanes merge, then NAMING_STAGED_BLOCKS flips. no-deprecated-name carries the old→new maps (src/cli/migrations/v6*.json, the ones webkit migrate applies) to consumer code. What a machine cannot decide is listed review-only in naming.md.'
+    note: 'check-spelling (typos, root pnpm check:spelling, _typos.toml lists each accepted word with its reason) keeps every name and doc whole English words. One engine, packages/webkit/scripts/lib/naming-rules.mjs (RULES registry, one id per checkable rule of decisions N1-N18): check-naming runs it in CI (gate `naming`, toolkit job) and validate-naming write-time on the file a write produces (only added violations block). Enforced rules (export-kebab, block-id, export-synonym, export-retired) block now; staged rules are reported until the rename lanes merge, then NAMING_STAGED_BLOCKS flips. no-deprecated-name carries the old→new maps (src/cli/migrations/v6*.json, the ones webkit migrate applies) to consumer code. What a machine cannot decide is listed review-only in naming.md.'
   },
   {
     id: 'imports',
@@ -58,7 +59,8 @@ export const STANDARDS = [
       { surface: 'lint', by: 'no-deep-internal-import' },
       { surface: 'lint', by: 'prefer-tree-shakeable-root' },
       { surface: 'lint', by: 'no-whole-icon-set-import' },
-      { surface: 'lint', by: 'no-root-relative-asset' }
+      { surface: 'lint', by: 'no-root-relative-asset' },
+      { surface: 'ci', by: 'check-package-lint' }
     ]
   },
   {
@@ -101,9 +103,10 @@ export const STANDARDS = [
     scope: 'webkit',
     enforce: [
       { surface: 'write-time', by: 'validate-references' },
-      { surface: 'ci', by: 'type-check' }
+      { surface: 'ci', by: 'type-check' },
+      { surface: 'ci', by: 'check-unused' }
     ],
-    note: 'Forbidden libs are never installed — any import of one fails vue-tsc/build in CI, so an editor push cannot bypass the hook.'
+    note: 'Forbidden libs are never installed — any import of one fails vue-tsc/build in CI, so an editor push cannot bypass the hook. check-unused (knip, root pnpm check:unused, knip.json) fails an unused dependency, file or export, with no baseline.'
   },
   {
     id: 'migration',
@@ -134,9 +137,10 @@ export const STANDARDS = [
     scope: 'webkit',
     enforce: [
       { surface: 'ci', by: 'commitlint' },
-      { surface: 'ci', by: 'branch-protection' }
+      { surface: 'ci', by: 'branch-protection' },
+      { surface: 'ci', by: 'check-workflows' }
     ],
-    note: 'Base branch + required checks enforced by branch protection; commit shape by commitlint.'
+    note: 'Base branch + required checks enforced by branch protection; commit shape by commitlint; check-workflows (actionlint and zizmor, root pnpm check:workflows) fails a workflow error, an unpinned action or a missing least-privilege permission.'
   },
 
   // ── Construction ──
@@ -147,9 +151,11 @@ export const STANDARDS = [
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'review', by: 'required-approval' },
-      { surface: 'ci', by: 'check-authoring' }
+      { surface: 'ci', by: 'check-authoring' },
+      { surface: 'ci', by: 'check-maintainability' },
+      { surface: 'ci', by: 'check-duplication' }
     ],
-    note: 'Folder layout + defineOptions blocked by spec-compliance; <script setup> section order confirmed in review.'
+    note: 'Folder layout + defineOptions blocked by spec-compliance; <script setup> section order confirmed in review. check-maintainability fails a file, script block, function, line, prop or model count over the CODE_QUALITY.md 3.1 limits, so a component is split by feature into composables/, parts/ and lib/; check-duplication (jscpd) fails code copied between components or inside a block. Both run with no baseline.'
   },
   {
     id: 'props',
@@ -160,8 +166,10 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'write-time', by: 'validate-tokens' },
       { surface: 'ci', by: 'check-authoring' },
+      { surface: 'ci', by: 'check-assertions' },
       { surface: 'lint', by: 'require-authoring-standards' }
-    ]
+    ],
+    note: 'check-assertions fails any `as never` or `as unknown as` in src, blocks and examples (the one allowed form is `undefined as never` as the default of an unbound defineModel, decision CQ-E7), and caps the count of other type assertions in src.'
   },
   {
     id: 'v-model',
@@ -231,9 +239,10 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'ci', by: 'check-authoring' },
       { surface: 'lint', by: 'no-polymorphic-as-prop' },
+      { surface: 'lint', by: 'no-unowned-element' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: '`class` in defineProps, phantom asChild imports and `as`/`asChild` props are blocked automatically (write-time AND the CI ratchet); defineExpose confirmed in review.'
+    note: '`class` in defineProps, phantom asChild imports and `as`/`asChild` props are blocked automatically (write-time AND the CI ratchet); defineExpose confirmed in review. no-unowned-element (lint:quality, and the consumer strict preset) fails a native element or ARIA role written outside the component that owns it in src/eslint-plugin/owners.json (each owner with its reason, no exception list): a raw button belongs to Button, a raw anchor to Link.'
   },
   {
     id: 'component-states',
@@ -252,10 +261,12 @@ export const STANDARDS = [
     scope: 'general',
     enforce: [
       { surface: 'ci', by: 'vuejs-accessibility' },
+      { surface: 'ci', by: 'vitest' },
+      { surface: 'ci', by: 'docs-smoke' },
       { surface: 'lint', by: 'require-accessible-name' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'Static a11y via eslint-plugin-vuejs-accessibility (error); behavioural via axe once the test layer lands; review in the meantime.'
+    note: 'Static a11y via eslint-plugin-vuejs-accessibility, the full recommended set at error with no baseline (lint:quality); axe in every component test and over every block and example (vitest); axe in light and dark over the built docs site (docs-smoke, pnpm test:docs:smoke in the site job); focus and keyboard behaviour confirmed in review.'
   },
   {
     id: 'testid',

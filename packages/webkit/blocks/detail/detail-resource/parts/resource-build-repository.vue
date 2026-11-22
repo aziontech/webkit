@@ -7,7 +7,6 @@
   import Link from '@aziontech/webkit/link'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
 
   /** The branches a push deploys. */
   export interface ResourceBuildBranches {
@@ -63,9 +62,11 @@
                     class="az az-github shrink-0"
                     aria-hidden="true"
                   />
-                  <TableCellLink
+                  <Link
+                    inline
                     :label="repository"
                     :href="`https://github.com/${repository}`"
+                    target="_blank"
                   />
                 </span>
               </template>

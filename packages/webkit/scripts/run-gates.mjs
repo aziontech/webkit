@@ -117,6 +117,17 @@ export const GATES = [
     steps: [['node', 'scripts/check-duplication.mjs']]
   },
   {
+    id: 'maintainability',
+    label:
+      'No file, script block, function, line, prop or model count over the CODE_QUALITY.md 3.1 limits',
+    steps: [['node', 'scripts/check-maintainability.mjs']]
+  },
+  {
+    id: 'assertions',
+    label: 'No as never or as unknown as, and the type assertion count does not grow',
+    steps: [['node', 'scripts/check-assertions.mjs']]
+  },
+  {
     id: 'quality-lint',
     label:
       'No line over 200 characters and no accessibility lint finding in components, blocks and examples',
@@ -173,6 +184,24 @@ export const GATES = [
     label: 'Prettier check',
     root: true,
     steps: [['pnpm', 'run', 'check:webkit:format']]
+  },
+  {
+    id: 'unused',
+    label: 'No unused file, export or dependency (knip)',
+    root: true,
+    steps: [['pnpm', 'run', 'check:unused']]
+  },
+  {
+    id: 'spelling',
+    label: 'No spelling mistake (typos)',
+    root: true,
+    steps: [['pnpm', 'run', 'check:spelling']]
+  },
+  {
+    id: 'workflows',
+    label: 'Workflow linters (actionlint, zizmor)',
+    root: true,
+    steps: [['npm', 'run', 'check:workflows']]
   }
 ]
 

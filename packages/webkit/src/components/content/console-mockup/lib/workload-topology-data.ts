@@ -1,4 +1,4 @@
-export interface TopologyNode {
+export interface WorkloadTopologyNode {
   key: string
   eyebrow: string
   icon: string
@@ -10,7 +10,7 @@ export interface TopologyNode {
 export interface TopologyColumn {
   key: string
   order: number
-  nodes: TopologyNode[]
+  nodes: WorkloadTopologyNode[]
 }
 
 export type TopologySide = 'start' | 'end'
@@ -33,7 +33,7 @@ export interface TopologyDrawing {
   paths: string[]
 }
 
-const DOMAINS: TopologyNode[] = [
+const DOMAINS: WorkloadTopologyNode[] = [
   {
     key: 'domain-shop',
     eyebrow: 'Domain',
@@ -57,7 +57,7 @@ const DOMAINS: TopologyNode[] = [
   }
 ]
 
-const WORKLOAD: TopologyNode = {
+const WORKLOAD: WorkloadTopologyNode = {
   key: 'workload',
   eyebrow: 'Workload',
   icon: 'az az-workloads',
@@ -66,7 +66,7 @@ const WORKLOAD: TopologyNode = {
   indicator: true
 }
 
-const APPLICATION: TopologyNode = {
+const APPLICATION: WorkloadTopologyNode = {
   key: 'application',
   eyebrow: 'Application',
   icon: 'az az-applications',
@@ -74,7 +74,7 @@ const APPLICATION: TopologyNode = {
   label: 'Active'
 }
 
-const FIREWALL: TopologyNode = {
+const FIREWALL: WorkloadTopologyNode = {
   key: 'firewall',
   eyebrow: 'Firewall',
   icon: 'az az-firewall',
@@ -82,7 +82,7 @@ const FIREWALL: TopologyNode = {
   label: 'Active'
 }
 
-const DOMAIN_GROUP: TopologyNode = {
+const DOMAIN_GROUP: WorkloadTopologyNode = {
   key: 'domains',
   eyebrow: 'Domains',
   icon: 'az az-domains',

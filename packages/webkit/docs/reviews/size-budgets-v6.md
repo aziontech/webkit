@@ -1155,3 +1155,4 @@ Budget-raise: console-layout 82.95 KB → 83.7 KB (measured 83.68 KB): same as c
 Budget-raise: doc-layout 72.15 KB → 72.4 KB (measured 72.38 KB): carries the Sidebar and AppLayout splits.
 Budget-raise: sidebar 24.95 KB → 25.1 KB (measured 25.08 KB): CODE_QUALITY 3.1 split of useSidebarRail (164-line function) into drag, preview and key composables; the shared refs passed between them and the extra return objects cost the bytes, and splitting the Sidebar setup below 200 lines moved code out of the gzip window of its template.
 Budget-raise: sidebar-root 24.75 KB → 24.9 KB (measured 24.88 KB): same split of useSidebarRail and the Sidebar setup as the sidebar entry.
+Budget-raise: package packedBytes 8400000 → 8500000 (measured 8465155): the CODE_QUALITY 3.1 splits of components and blocks into parts/, lib/ and composables/ add hundreds of small files, and each costs a tar header and its own compression window in the packed tarball.
