@@ -11,7 +11,7 @@
     type TransferListItemSlotProps,
     type TransferListSide
   } from '../injection-key'
-  import { getItemTransitionStyle, transferListItemTransitionClasses } from '../presets/transitions'
+  import { getItemTransitionStyle } from '../presets/transitions'
 
   defineOptions({
     name: 'TransferListPanel',
@@ -53,7 +53,6 @@
   const visibleItems = computed(() => (props.loading ? [] : ctx.items(props.side)))
 
   const itemTransitionStyle = getItemTransitionStyle()
-  const itemTransitionActive = transferListItemTransitionClasses.join(' ')
 
   watch(
     () => props.loading,
@@ -125,10 +124,10 @@
         :data-loading="loading || null"
         enter-from-class="opacity-0"
         enter-to-class="opacity-100"
-        :enter-active-class="itemTransitionActive"
+        enter-active-class="motion-reduce:transition-none"
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
-        :leave-active-class="itemTransitionActive"
+        leave-active-class="motion-reduce:transition-none"
         :class="LIST_CLASS"
         @click="onOptionClick"
         @dblclick="onOptionDblclick"

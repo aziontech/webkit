@@ -8,5 +8,3 @@ export const transferListItemMotion = {
 export const getItemTransitionStyle = (): { transition: string } => ({
   transition: `opacity ${transferListItemMotion.duration} ${transferListItemMotion.curve}`
 })
-
-export const transferListItemTransitionClasses = ['motion-reduce:transition-none'] as const

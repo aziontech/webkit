@@ -35,7 +35,7 @@
     'block bg-(--bg-placeholder) ' +
     'data-[variant=rectangle]:rounded-(--shape-control) data-[variant=circle]:rounded-full ' +
     'data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)] ' +
-    'data-[animated]:motion-safe:bg-[length:200%_100%] data-[animated]:motion-safe:animate-(--animate-shimmer) ' +
+    'data-[animated]:motion-safe:bg-[length:200%_100%] data-[animated]:motion-safe:animate-shimmer ' +
     'motion-reduce:animate-none'
 </script>
 

@@ -13,6 +13,11 @@
       "file": "under-attack.vue"
     },
     {
+      "name": "ScaleUp",
+      "summary": "The Scale Up page: no highlights and no client strip, a short headline that breaks over two lines, and a phone field labelled by its placeholder (`visuallyHiddenLabel` keeps \"Phone\" as its accessible name without drawing it).",
+      "file": "scale-up.vue"
+    },
+    {
       "name": "Loading",
       "summary": "While the site sends the values: the button spins and a submit is ignored.",
       "file": "loading.vue"

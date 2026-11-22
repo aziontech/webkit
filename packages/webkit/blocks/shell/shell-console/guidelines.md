@@ -65,7 +65,7 @@ The app's one toast region, at `bottom-end`, mounted once by the shell because i
 
 ## Data
 
-`navigation`, `account` and the recents are the shell's own constants, which the app replaces with its navigation file and signed-in user. The states render the shell and fill its slots instead of copying it:
+`navigation`, `account` and `recents` are props (`ShellConsoleProps`, `ShellConsoleRecent` are exported from `shell-console.vue`); left out, the console tree, the account and the recents in `sample.ts` render. The app passes its navigation file and signed-in user, then deletes `sample.ts` and its import. The states render the shell and fill its slots instead of copying it:
 
 | Slot             | Scope         | What goes in it                                                               |
 | ---------------- | ------------- | ----------------------------------------------------------------------------- |

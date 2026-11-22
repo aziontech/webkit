@@ -3,9 +3,13 @@
   import Button from '@aziontech/webkit/button'
   import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
   import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
+  import DocLayout, {
+    type DocLayoutNavGroup,
+    type DocLayoutSection
+  } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocProse from '@aziontech/webkit/doc-prose'
+  import type { DocTableOfContentsGroup } from '@aziontech/webkit/doc-table-of-contents'
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
   import LanguageSelect from '@aziontech/webkit/language-select'
@@ -14,152 +18,61 @@
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
   import { ref } from 'vue'
 
+  import {
+    sampleFooterColumns,
+    sampleNavigation,
+    sampleOutlineGroups,
+    sampleSections,
+    sampleSocials
+  } from './sample'
+
+  /** One column of footer links. */
+  export interface ShellDocsFooterColumn {
+    /** The column heading. */
+    title: string
+    /** The link labels, in reading order. */
+    links: string[]
+  }
+
+  /** One social profile in the footer. */
+  export interface ShellDocsSocial {
+    /** Icon class of the platform. */
+    icon: string
+    /** Accessible name of the icon link. */
+    label: string
+    /** The profile URL. */
+    href: string
+  }
+
+  export interface ShellDocsProps {
+    /** The top-bar sections. Left out, the sample sections render. */
+    sections?: DocLayoutSection[]
+    /** The sidebar tree. Left out, the sample docs tree renders. */
+    navigation?: DocLayoutNavGroup[]
+    /** The link groups under the table of contents. Left out, the sample groups render. */
+    outlineGroups?: DocTableOfContentsGroup[]
+    /** The footer's link columns. Left out, the sample columns render. */
+    footerColumns?: ShellDocsFooterColumn[]
+    /** The footer's social profiles. Left out, the sample profiles render. */
+    socials?: ShellDocsSocial[]
+  }
+
+  withDefaults(defineProps<ShellDocsProps>(), {
+    sections: () => sampleSections,
+    navigation: () => sampleNavigation,
+    outlineGroups: () => sampleOutlineGroups,
+    footerColumns: () => sampleFooterColumns,
+    socials: () => sampleSocials
+  })
+
   defineSlots<{
     /** The page body: the route's article; the sample guide stands in for RouterView. */
     default(): unknown
   }>()
 
-  const sections = [
-    { label: 'Reference', href: '/docs/reference' },
-    { label: 'Guides', href: '/docs/guides' },
-    { label: 'Dev tools', href: '/docs/dev-tools' }
-  ]
-
-  const navigation: DocLayoutNavGroup[] = [
-    {
-      label: 'Get started',
-      items: [
-        { id: 'overview', label: 'Overview', href: '/docs' },
-        {
-          id: 'get-started',
-          label: 'Get started',
-          type: 'inline',
-          defaultOpen: true,
-          children: [
-            {
-              id: 'create-an-account',
-              label: 'Create an account',
-              href: '/docs/get-started/create-an-account'
-            },
-            { id: 'first-deploy', label: 'First deploy', href: '/docs/get-started/first-deploy' }
-          ]
-        }
-      ]
-    },
-    {
-      label: 'Functions',
-      items: [
-        { id: 'functions-overview', label: 'Overview', href: '/docs/functions' },
-        {
-          id: 'functions-getting-started',
-          label: 'Getting started',
-          href: '/docs/functions/getting-started'
-        },
-        { id: 'functions-limits', label: 'Limits', href: '/docs/functions/limits' }
-      ]
-    },
-    {
-      label: 'Applications',
-      items: [
-        { id: 'applications-overview', label: 'Overview', href: '/docs/applications' },
-        { id: 'applications-cache', label: 'Cache', href: '/docs/applications/cache' }
-      ]
-    },
-    {
-      label: 'Dev tools',
-      items: [
-        { id: 'azion-cli', label: 'Azion CLI', href: '/docs/dev-tools/cli' },
-        {
-          id: 'agent-setup-group',
-          label: 'Agent setup',
-          type: 'inline',
-          defaultOpen: true,
-          children: [
-            { id: 'agent-setup', label: 'Overview', href: '/docs/agent-setup' },
-            { id: 'claude-code', label: 'Claude Code', href: '/docs/agent-setup/claude-code' }
-          ]
-        }
-      ]
-    }
-  ]
-
   const crumbs = [{ label: 'Functions', href: '/docs/functions' }, { label: 'Getting started' }]
 
-  const outlineGroups = [
-    {
-      label: 'GitHub',
-      links: [
-        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'az az-github' },
-        {
-          label: 'Contribute to this page',
-          href: 'https://github.com/aziontech/azion',
-          icon: 'az az-pencil'
-        }
-      ]
-    },
-    {
-      label: 'Community',
-      links: [
-        { label: 'Discord', href: 'https://discord.gg/azion', icon: 'az az-discord' },
-        { label: 'X', href: 'https://x.com/aziontech', icon: 'az az-x-brand' }
-      ]
-    }
-  ]
-
   const { mode: theme } = useColorMode()
-
-  const columns = [
-    {
-      title: 'Products',
-      links: [
-        'Functions',
-        'Cache',
-        'Object Storage',
-        'SQL Database',
-        'WAF',
-        'Edge DNS',
-        'Data Stream'
-      ]
-    },
-    {
-      title: 'Solutions',
-      links: [
-        'Web Apps',
-        'AI',
-        'Application Security',
-        'Financial Services',
-        'Retail',
-        'Technology'
-      ]
-    },
-    {
-      title: 'Developers',
-      links: ['Docs', 'API Reference', 'Dev Tools', 'Release Notes', 'Marketplace', 'Status']
-    },
-    { title: 'Company', links: ['About', 'Customers', 'Partners', 'Careers', 'Blog', 'Contact'] }
-  ]
-
-  const socials = [
-    { icon: 'az az-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
-    {
-      icon: 'az az-linkedin',
-      label: 'Azion on LinkedIn',
-      href: 'https://www.linkedin.com/company/aziontech'
-    },
-    {
-      icon: 'az az-youtube',
-      label: 'Azion on YouTube',
-      href: 'https://www.youtube.com/aziontech'
-    },
-    { icon: 'az az-x-brand', label: 'Azion on X', href: 'https://x.com/aziontech' },
-    {
-      icon: 'az az-instagram',
-      label: 'Azion on Instagram',
-      href: 'https://www.instagram.com/aziontech'
-    },
-    { icon: 'az az-discord', label: 'Azion on Discord', href: 'https://discord.gg/azion' },
-    { icon: 'az az-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
-  ]
 
   const language = ref('en-US')
 
@@ -269,7 +182,7 @@
           aria-label="Footer"
         >
           <Footer.Column
-            v-for="column in columns"
+            v-for="column in footerColumns"
             :key="column.title"
             :title="column.title"
           >

@@ -60,6 +60,10 @@ In the footer's status slot.
 
 In the footer's language slot: `variant="ghost"`, the compact round flag and country code, named `Language` by its catalog. Never a field-sized `Select`: it would draw the field outline in the footer bar.
 
+## Data
+
+The shell's data comes in through props (`ShellDocsProps`, `ShellDocsFooterColumn` and `ShellDocsSocial` are exported from `shell-docs.vue`): `sections`, `navigation`, `outline-groups`, `footer-columns` and `socials`. Left out, the sample docs tree, sections, outline links, footer columns and socials in `sample.ts` render; the app passes its own and deletes `sample.ts` and its import.
+
 ## Do
 
 - Compose `DocLayout` once in the app's root around `RouterView` (the primary); each route renders only its `<article>`.

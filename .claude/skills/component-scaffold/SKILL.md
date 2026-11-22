@@ -62,10 +62,7 @@ packages/webkit/src/components/action/button/
 - The full text of `.specs/<name>.md` (verbatim).
 - The Constraints block (verbatim).
 - [`.claude/rules/no-invention.md`](../../rules/no-invention.md), [`.claude/rules/compound-api.md`](../../rules/compound-api.md) (composition only), [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md).
-- The canonical files for cross-reference (read-only):
-  - `packages/webkit/src/components/action/button/button.vue`
-  - `packages/webkit/src/components/action/icon-button/icon-button.vue`
-  - `packages/webkit/src/components/content/pricing-card/pricing-card.vue`
+- The reference components for cross-reference (read-only): `button`, `icon-button` and `pricing-card`. Find them through the webkit MCP (`get_component` for the contract, `get_import` for the source its `target` points at); never hardcode a source path, because a component can move between category folders.
 
 ## Workflow
 
@@ -264,7 +261,7 @@ export default Object.assign(Dialog, {
 
 - Every prop, event, slot, and sub-component MUST come from the spec — no inventions. (`validate-spec-compliance.mjs` enforces this on Write; it will reject the run if you stray.)
 - (Composition only) Emit the compound `index.ts` (vue-tsc generates `index.d.ts` at publish; never hand-write it) and point the root export → `index.ts`; **also add the standalone `./<name>-root` export → root `.vue`** for tree-shaking. Member names mirror the component's anatomy. Never invent overlay part names (`Trigger`/`Content`) on a component with no open/closed state. See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
-- Use the canonicals (`button.vue`, `pricing-card.vue`) as the **shape** reference — but substitute spec content, never copy spec content from a canonical.
+- Use the reference components (`button`, `pricing-card`, found through the MCP) as the **shape** guide — but substitute spec content, never copy spec content from a canonical.
 - `withDefaults` mirrors the spec's Default column **exactly**. An optional string prop that holds renderable text defaults to `''` (`value: ''`, `label: ''`) — never `value: undefined`, never the literal `'undefined'`. Reserve `undefined` (unquoted) for props where absence ≠ empty: controlled state (`open`, `modelValue`) or an optional resource whose presence toggles rendering (`src`). When the spec's Default cell is wrong on this point, stop with `BLOCKED: prop <name> defaults to 'undefined' — should be '' (empty string)`; do not silently copy it.
 - All visual tokens come from [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md). No HEX, no Tailwind palette, no raw typography.
 - A zero length carries **no unit**: `0`, never `0px` / `0rem` / `0em` — in arbitrary values (`p-[0px]`), inline `style`, or any emitted value. Units that mean something at zero (`0%`, `0s`, `0deg`, `0fr`) are fine, and inside `calc()`/`min()`/`max()`/`clamp()` — where CSS requires a unit — the zero is `0rem`. See [`.claude/rules/styling.md`](../../rules/styling.md).
