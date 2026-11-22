@@ -1,27 +1,42 @@
 <script setup lang="ts">
-  import { duration } from '@aziontech/theme/animations'
   import { computed, onMounted, ref, useAttrs, watch } from 'vue'
 
   import Button from '../../../components/action/button/button.vue'
+  import IconButton from '../../../components/action/icon-button/icon-button.vue'
+  import CodeBlock from '../../../components/code/code-block/code-block.vue'
   import Card from '../../../components/content/card/card.vue'
   import ConsoleMockupShell from '../../../components/content/console-mockup/parts/console-mockup-shell.vue'
   import ItemList from '../../../components/content/item/item-list.vue'
   import Tag from '../../../components/content/tag/tag.vue'
   import DataTable from '../../../components/data/data-table/data-table.vue'
   import TableCellStatus from '../../../components/data/table/table-cell-status/table-cell-status.vue'
+  import Field from '../../../components/input/field/field.vue'
+  import FieldLabel from '../../../components/input/field/field-label/field-label.vue'
   import Input from '../../../components/input/input/input.vue'
+  import RadioGroup from '../../../components/input/radio-group/radio-group.vue'
+  import Select from '../../../components/input/select/select.vue'
+  import SelectTrigger from '../../../components/input/select/select-trigger/select-trigger.vue'
   import Switch from '../../../components/input/switch/switch.vue'
+  import Textarea from '../../../components/input/textarea/textarea.vue'
   import SaveBar from '../../../components/layout/save-bar/save-bar.vue'
   import SettingsRow from '../../../components/layout/settings-row/settings-row.vue'
   import TabsRoot from '../../../components/navigation/tabs/tabs.vue'
   import TabsList from '../../../components/navigation/tabs/tabs-list.vue'
   import TabsTrigger from '../../../components/navigation/tabs/tabs-trigger.vue'
+  import Panel from '../../../components/overlay/panel/panel.vue'
+  import PanelBody from '../../../components/overlay/panel/panel-body.vue'
+  import PanelFooter from '../../../components/overlay/panel/panel-footer.vue'
+  import PanelHeader from '../../../components/overlay/panel/panel-header.vue'
   import {
+    bandDelay,
     CONSOLE_APPLICATION_STEPS,
-    type ConsoleApplicationFormRow,
-    type ConsoleApplicationSceneTab
+    type ConsoleApplicationSceneTab,
+    displayAs,
+    rowOn,
+    rowTag,
+    rowValue,
+    severityOf
   } from './console-application-data'
-  import ConsoleApplicationDrawer from './console-application-drawer.vue'
 
   defineOptions({ name: 'ConsoleApplicationScene', inheritAttrs: false })
 
@@ -48,7 +63,6 @@
   const attrs = useAttrs()
 
   const SECOND_MOVE_MS = 900
-  const POSITIVE = new Set(['Enabled', 'Active', 'Ready'])
 
   const second = ref(!props.animated)
 
@@ -110,28 +124,6 @@
       { immediate: true }
     )
   })
-
-  function severityOf(value: string): 'success' | 'neutral' {
-    return POSITIVE.has(value) ? 'success' : 'neutral'
-  }
-
-  function bandDelay(index: number): Record<string, string> {
-    return {
-      '--content-enter-delay': `${globalThis.parseFloat(duration['fast-01']) * (index + 1)}ms`
-    }
-  }
-
-  function rowValue(row: ConsoleApplicationFormRow): string {
-    return 'value' in row ? row.value : ''
-  }
-
-  function rowTag(row: ConsoleApplicationFormRow): string {
-    return 'tag' in row ? row.tag : ''
-  }
-
-  function rowOn(row: ConsoleApplicationFormRow): boolean {
-    return 'on' in row ? row.on : false
-  }
 </script>
 
 <template>
@@ -321,12 +313,117 @@
         :data-animated="animated || null"
         class="absolute inset-0 bg-(--bg-backdrop) data-animated:animate-fade-in motion-reduce:animate-none"
       />
-      <ConsoleApplicationDrawer
+      <div
         :key="step.value"
-        :drawer="drawer"
-        :animated="animated"
+        :data-animated="animated || null"
         :data-testid="`${testId}__drawer`"
-      />
+        class="absolute inset-y-0 end-0 flex w-[62%] data-animated:animate-slide-in-end motion-reduce:animate-none"
+      >
+        <Panel
+          data-fluid
+          class="h-full max-h-none rounded-(--shape-flat) border-y-0 border-e-0"
+        >
+          <PanelHeader>
+            <span class="min-w-0 truncate text-heading-xs text-(--text-default)">{{
+              drawer.title
+            }}</span>
+            <IconButton
+              icon="az az-x"
+              aria-label="Close"
+              variant="ghost"
+              size="small"
+              class="shrink-0"
+            />
+          </PanelHeader>
+          <PanelBody>
+            <div class="flex flex-col gap-(--spacing-xl)">
+              <section
+                v-for="section in drawer.sections"
+                :key="section.title"
+                class="flex flex-col gap-(--spacing-sm)"
+              >
+                <span class="text-label-md text-(--text-default)">{{ section.title }}</span>
+                <div
+                  :data-columns="section.columns ?? 1"
+                  class="grid items-end gap-(--spacing-sm) data-[columns=2]:grid-cols-2 data-[columns=3]:grid-cols-3"
+                >
+                  <template
+                    v-for="field in section.fields"
+                    :key="field.label"
+                  >
+                    <RadioGroup
+                      v-if="field.kind === 'choice'"
+                      :model-value="field.value"
+                      variant="card"
+                      orientation="horizontal"
+                      :options="field.options.map((option) => ({ value: option, label: option }))"
+                      :aria-label="field.label"
+                    />
+                    <Field
+                      key="field-1"
+                      v-else-if="field.kind === 'switch'"
+                      orientation="horizontal"
+                    >
+                      <Switch
+                        :model-value="field.on"
+                        :aria-label="field.label"
+                      />
+                      <FieldLabel>{{ field.label }}</FieldLabel>
+                    </Field>
+                    <Field
+                      key="field-2"
+                      v-else
+                    >
+                      <FieldLabel>{{ field.label }}</FieldLabel>
+                      <Input
+                        v-if="field.kind === 'text'"
+                        :model-value="field.value"
+                        size="medium"
+                        readonly
+                      />
+                      <Textarea
+                        v-else-if="field.kind === 'textarea'"
+                        :model-value="field.value"
+                        readonly
+                      />
+                      <Select
+                        v-else-if="field.kind === 'select'"
+                        :model-value="field.value"
+                        :display-value="displayAs(field.value)"
+                        size="medium"
+                      >
+                        <SelectTrigger
+                          class="w-full"
+                          :aria-label="field.label"
+                        />
+                      </Select>
+                      <CodeBlock
+                        v-else
+                        :tabs="[
+                          {
+                            label: field.label,
+                            value: field.label,
+                            code: field.value,
+                            language: 'json'
+                          }
+                        ]"
+                        :copyable="false"
+                      />
+                    </Field>
+                  </template>
+                </div>
+              </section>
+            </div>
+          </PanelBody>
+          <PanelFooter>
+            <Button
+              :label="drawer.action"
+              variant="primary"
+              size="medium"
+            />
+          </PanelFooter>
+        </Panel>
+      </div>
     </template>
   </ConsoleMockupShell>
 </template>
