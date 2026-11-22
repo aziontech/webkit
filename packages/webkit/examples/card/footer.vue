@@ -1,6 +1,7 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import Link from '@aziontech/webkit/link'
 </script>
 
 <template>
@@ -15,13 +16,11 @@
     </template>
     <template #footer>
       <div class="flex w-full items-center justify-between gap-(--spacing-sm)">
-        <span class="text-body-xs text-(--text-muted)">
-          <a
-            href="/docs"
-            class="text-link"
-            >Check documentation:</a
-          >
-        </span>
+        <Link
+          href="/docs"
+          label="Check documentation"
+          size="small"
+        />
         <div class="flex gap-(--spacing-sm)">
           <Button
             label="Cancel"

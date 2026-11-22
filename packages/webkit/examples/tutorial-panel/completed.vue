@@ -1,4 +1,5 @@
 <script setup>
+  import Link from '@aziontech/webkit/link'
   import TutorialPanel from '@aziontech/webkit/tutorial-panel'
   import { ref } from 'vue'
 
@@ -44,12 +45,11 @@
     >
       <TutorialPanel>
         <template #completion>
-          <a
+          <Link
             href="#feedback"
-            class="text-link w-fit"
-          >
-            Tell us how this tutorial went
-          </a>
+            label="Tell us how this tutorial went"
+            size="small"
+          />
         </template>
       </TutorialPanel>
     </TutorialPanel.Provider>

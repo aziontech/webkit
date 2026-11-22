@@ -21,11 +21,12 @@
       </AppHeader.Brand>
       <AppHeader.Center>
         <div class="flex w-full min-w-0 items-center">
-          <a
-            class="text-label-md text-(--text-default) no-underline"
+          <Button
             href="/pricing"
-            >Pricing</a
-          >
+            label="Pricing"
+            variant="ghost"
+            size="medium"
+          />
         </div>
       </AppHeader.Center>
       <AppHeader.End>
