@@ -19,7 +19,6 @@ import {
 } from '../lib/change-event-details'
 import { waitForCloseTransition, waitForOpenTransition } from '../presets/animations'
 import {
-  type NavigationMenuKeyboardRoot,
   type NavigationMenuTriggerEntry,
   useNavigationMenuKeyboard
 } from './use-navigation-menu-keyboard'
@@ -117,22 +116,17 @@ function createElementSlots() {
   const currentContentEl = shallowRef<HTMLElement | null>(null)
 
   return {
-    popupEl,
-    currentContentEl,
-    viewportTargetEl,
-    api: {
-      viewportTargetEl: readonly(viewportTargetEl) as Readonly<Ref<HTMLElement | null>>,
-      popupEl: readonly(popupEl) as Readonly<Ref<HTMLElement | null>>,
-      currentContentEl: readonly(currentContentEl) as Readonly<Ref<HTMLElement | null>>,
-      setViewportTargetEl: (element: HTMLElement | null) => {
-        viewportTargetEl.value = element
-      },
-      setPopupEl: (element: HTMLElement | null) => {
-        popupEl.value = element
-      },
-      setCurrentContentEl: (element: HTMLElement | null) => {
-        currentContentEl.value = element
-      }
+    viewportTargetEl: readonly(viewportTargetEl) as Readonly<Ref<HTMLElement | null>>,
+    popupEl: readonly(popupEl) as Readonly<Ref<HTMLElement | null>>,
+    currentContentEl: readonly(currentContentEl) as Readonly<Ref<HTMLElement | null>>,
+    setViewportTargetEl: (element: HTMLElement | null) => {
+      viewportTargetEl.value = element
+    },
+    setPopupEl: (element: HTMLElement | null) => {
+      popupEl.value = element
+    },
+    setCurrentContentEl: (element: HTMLElement | null) => {
+      currentContentEl.value = element
     }
   }
 }
@@ -170,18 +164,15 @@ function createOpenTimers(
   return { cancelTimers, scheduleOpen, scheduleClose }
 }
 
-interface ValueStateInput {
-  controlledValue: MaybeRefOrGetter<ItemValue | null>
-  isControlled: MaybeRefOrGetter<boolean>
-  internalValue: Ref<ItemValue | null>
-  options: UseNavigationMenuRootOptions
-  registry: ReturnType<typeof createTriggerRegistry>
-  popupEl: Readonly<Ref<HTMLElement | null>>
+function createValueState(
+  controlledValue: MaybeRefOrGetter<ItemValue | null>,
+  isControlled: MaybeRefOrGetter<boolean>,
+  internalValue: Ref<ItemValue | null>,
+  options: UseNavigationMenuRootOptions,
+  registry: ReturnType<typeof createTriggerRegistry>,
+  popupEl: Readonly<Ref<HTMLElement | null>>,
   emit: NavigationMenuRootEmit
-}
-
-function createValueState(input: ValueStateInput) {
-  const { controlledValue, isControlled, internalValue, options, registry, emit } = input
+) {
   const activationDirection = ref<NavigationMenuActivationDirection>(null)
   const activeTriggerEl = shallowRef<HTMLElement | null>(null)
   const orientation = computed(() => toValue(options.orientation))
@@ -192,7 +183,7 @@ function createValueState(input: ValueStateInput) {
 
   const notifyOpened = async () => {
     await nextTick()
-    await waitForOpenTransition(input.popupEl.value)
+    await waitForOpenTransition(popupEl.value)
     emit('open-transition-end', true)
   }
 
@@ -200,9 +191,8 @@ function createValueState(input: ValueStateInput) {
     if (details.isCanceled) return
     const previous = value.value
     if (previous === nextValue) return
-    const { triggers } = registry
     const direction = resolveActivationDirection(
-      triggers.value,
+      registry.triggers.value,
       previous,
       nextValue,
       orientation.value,
@@ -231,7 +221,9 @@ function createValueState(input: ValueStateInput) {
     orientation,
     isRtl,
     value,
-    setValue
+    setValue,
+    triggers: registry.triggers,
+    popupEl
   }
 }
 
@@ -278,45 +270,34 @@ export function useNavigationMenuRoot(
   options: UseNavigationMenuRootOptions,
   emit: NavigationMenuRootEmit
 ): UseNavigationMenuRootReturn {
-  const instant = ref(false)
-  const registry = createTriggerRegistry()
   const elements = createElementSlots()
-  const state = createValueState({
+  const registry = createTriggerRegistry()
+  const state = createValueState(
     controlledValue,
     isControlled,
     internalValue,
     options,
     registry,
-    popupEl: elements.popupEl,
+    elements.popupEl,
     emit
-  })
+  )
   const { value, setValue } = state
   const { open, popup, popupSize } = createPopupState(value, elements, emit)
   const timers = createOpenTimers(options, setValue)
   const close = () =>
     setValue(null, createChangeEventDetails('none', new Event('close'), undefined))
-  const keyboard: NavigationMenuKeyboardRoot = {
-    ...state,
-    triggers: registry.triggers,
-    popupEl: elements.popupEl
-  }
 
   return {
-    ...elements.api,
+    ...elements,
+    ...registry,
+    ...state,
     ...timers,
-    ...useNavigationMenuKeyboard(keyboard),
-    value,
+    ...useNavigationMenuKeyboard(state),
     open,
-    activationDirection: state.activationDirection,
-    activeTriggerEl: state.activeTriggerEl,
-    orientation: state.orientation,
     popupMounted: popup.mounted,
     popupTransitionStatus: popup.transitionStatus,
     popupSize,
-    instant: readonly(instant) as Readonly<Ref<boolean>>,
-    setValue,
-    registerTrigger: registry.registerTrigger,
-    unregisterTrigger: registry.unregisterTrigger,
+    instant: readonly(ref(false)) as Readonly<Ref<boolean>>,
     isItemOpen: (itemValue) => value.value === itemValue,
     close,
     unmount: () => {

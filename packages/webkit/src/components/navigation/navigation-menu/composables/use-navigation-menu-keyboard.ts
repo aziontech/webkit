@@ -62,108 +62,96 @@ function movePanelFocus(event: KeyboardEvent, items: HTMLElement[], index: numbe
   return false
 }
 
-function createPopupKeydown(root: NavigationMenuKeyboardRoot) {
-  return (event: KeyboardEvent) => {
-    const trigger = root.activeTriggerEl.value
-    const items = panelFocusables(root.popupEl.value)
-    const index = items.indexOf(document.activeElement as HTMLElement)
-    if (event.key === 'Escape') {
-      event.preventDefault()
-      root.setValue(null, createChangeEventDetails('escape-key', event, trigger ?? undefined))
-      trigger?.focus()
-      return
-    }
-    if (movePanelFocus(event, items, index)) return
-    if (event.key !== 'Tab' || !trigger) return
-    if (event.shiftKey && index <= 0) {
-      event.preventDefault()
-      trigger.focus()
-      return
-    }
-    if (!event.shiftKey && index === items.length - 1) {
-      root.setValue(null, createChangeEventDetails('focus-out', event, trigger))
-      trigger.focus()
-    }
+function onPopupKeydown(
+  { activeTriggerEl, popupEl, setValue }: NavigationMenuKeyboardRoot,
+  event: KeyboardEvent
+) {
+  const trigger = activeTriggerEl.value
+  const items = panelFocusables(popupEl.value)
+  const index = items.indexOf(document.activeElement as HTMLElement)
+  if (event.key === 'Escape') {
+    event.preventDefault()
+    setValue(null, createChangeEventDetails('escape-key', event, trigger ?? undefined))
+    trigger?.focus()
+    return
+  }
+  if (movePanelFocus(event, items, index) || event.key !== 'Tab' || !trigger) return
+  if (event.shiftKey && index <= 0) {
+    event.preventDefault()
+    trigger.focus()
+    return
+  }
+  if (!event.shiftKey && index === items.length - 1) {
+    setValue(null, createChangeEventDetails('focus-out', event, trigger))
+    trigger.focus()
   }
 }
 
 function enterPanel(
-  root: NavigationMenuKeyboardRoot,
+  { value, popupEl, orientation, isRtl, setValue }: NavigationMenuKeyboardRoot,
   event: KeyboardEvent,
   ownTrigger: HTMLElement,
   ownValue: string | number | undefined
 ): boolean {
-  const ownOpen = ownValue != null && root.value.value === ownValue
-  if (
-    event.key === 'Tab' &&
-    !event.shiftKey &&
-    ownOpen &&
-    panelFocusables(root.popupEl.value).length
-  ) {
-    event.preventDefault()
-    void focusPanel(root.popupEl, 'first')
-    return true
-  }
-  const isHorizontal = root.orientation.value === 'horizontal'
-  const enterKey = isHorizontal ? 'ArrowDown' : root.isRtl() ? 'ArrowLeft' : 'ArrowRight'
-  if (event.key !== enterKey || ownValue == null) return false
+  const ownOpen = ownValue != null && value.value === ownValue
+  const enterKey =
+    orientation.value === 'horizontal' ? 'ArrowDown' : isRtl() ? 'ArrowLeft' : 'ArrowRight'
+  const tabIn = event.key === 'Tab' && !event.shiftKey && ownOpen
+  if (tabIn ? !panelFocusables(popupEl.value).length : event.key !== enterKey || ownValue == null)
+    return false
   event.preventDefault()
-  if (!ownOpen)
-    root.setValue(ownValue, createChangeEventDetails('trigger-press', event, ownTrigger))
-  void focusPanel(root.popupEl, 'first')
+  if (!tabIn && !ownOpen && ownValue != null)
+    setValue(ownValue, createChangeEventDetails('trigger-press', event, ownTrigger))
+  void focusPanel(popupEl, 'first')
   return true
 }
 
 function moveBetweenTriggers(
-  root: NavigationMenuKeyboardRoot,
+  { triggers, orientation, isRtl, setValue }: NavigationMenuKeyboardRoot,
   event: KeyboardEvent,
-  currentIndex: number,
-  focusedIndex: number
+  baseIndex: number
 ) {
-  const triggers = root.triggers.value
-  const isHorizontal = root.orientation.value === 'horizontal'
-  const flipped = isHorizontal && root.isRtl()
+  const isHorizontal = orientation.value === 'horizontal'
+  const flipped = isHorizontal && isRtl()
   const nextKey = isHorizontal ? (flipped ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown'
   const prevKey = isHorizontal ? (flipped ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp'
+  const count = triggers.value.length
   if (event.key !== nextKey && event.key !== prevKey) return
   event.preventDefault()
-  if (!triggers.length) return
-  const baseIndex = focusedIndex !== -1 ? focusedIndex : currentIndex
-  const direction = event.key === nextKey ? 1 : -1
-  const entry = triggers[(baseIndex + direction + triggers.length) % triggers.length]
+  if (!count) return
+  const entry = triggers.value[(baseIndex + (event.key === nextKey ? 1 : -1) + count) % count]
   entry.el.focus()
-  root.setValue(entry.value, createChangeEventDetails('list-navigation', event, entry.el))
+  setValue(entry.value, createChangeEventDetails('list-navigation', event, entry.el))
 }
 
-function createTriggerKeydown(root: NavigationMenuKeyboardRoot) {
-  return (event: KeyboardEvent) => {
-    const triggers = root.triggers.value
-    const currentIndex = triggers.findIndex((entry) => entry.value === root.value.value)
-    const focusedIndex = triggers.findIndex((entry) => entry.el === document.activeElement)
-    const ownTrigger = event.currentTarget as HTMLElement
-    if (event.key === 'Escape') {
-      event.preventDefault()
-      root.setValue(null, createChangeEventDetails('escape-key', event, ownTrigger))
-      return
-    }
-    const ownValue = triggers.find((entry) => entry.el === ownTrigger)?.value
-    if (enterPanel(root, event, ownTrigger, ownValue)) return
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      if (ownValue == null) return
-      const nextValue = root.value.value === ownValue ? null : ownValue
-      root.setValue(nextValue, createChangeEventDetails('trigger-press', event, ownTrigger))
-      return
-    }
-    moveBetweenTriggers(root, event, currentIndex, focusedIndex)
+function onTriggerKeydown(root: NavigationMenuKeyboardRoot, event: KeyboardEvent) {
+  const { triggers, value, setValue } = root
+  const focusedIndex = triggers.value.findIndex((entry) => entry.el === document.activeElement)
+  const baseIndex =
+    focusedIndex !== -1
+      ? focusedIndex
+      : triggers.value.findIndex((entry) => entry.value === value.value)
+  const ownTrigger = event.currentTarget as HTMLElement
+  const ownValue = triggers.value.find((entry) => entry.el === ownTrigger)?.value
+  const toggle = event.key === 'Enter' || event.key === ' '
+  if (event.key === 'Escape' || toggle) {
+    event.preventDefault()
+    if (!toggle) setValue(null, createChangeEventDetails('escape-key', event, ownTrigger))
+    else if (ownValue != null)
+      setValue(
+        value.value === ownValue ? null : ownValue,
+        createChangeEventDetails('trigger-press', event, ownTrigger)
+      )
+    return
   }
+  if (!enterPanel(root, event, ownTrigger, ownValue)) moveBetweenTriggers(root, event, baseIndex)
 }
 
 export function useNavigationMenuKeyboard(
   root: NavigationMenuKeyboardRoot
 ): UseNavigationMenuKeyboardReturn {
   return {
-    onTriggerKeydown: createTriggerKeydown(root),
-    onPopupKeydown: createPopupKeydown(root)
+    onTriggerKeydown: (event) => onTriggerKeydown(root, event),
+    onPopupKeydown: (event) => onPopupKeydown(root, event)
   }
 }

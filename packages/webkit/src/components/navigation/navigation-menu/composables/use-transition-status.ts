@@ -8,18 +8,6 @@ export interface UseTransitionStatusReturn {
   transitionStatus: Readonly<Ref<TransitionPhase>>
 }
 
-function nextPhase(
-  isOpen: boolean,
-  isMounted: boolean,
-  status: TransitionPhase
-): { mount?: true; status: TransitionPhase } | null {
-  if (isOpen && !isMounted) return { mount: true, status: 'starting' }
-  if (isOpen && isMounted && status === 'ending') return { status: 'starting' }
-  if (!isOpen && isMounted && status !== 'ending') return { status: 'ending' }
-  if (!isOpen && !isMounted && status === 'ending') return { status: undefined }
-  return null
-}
-
 function watchIdleState(
   readOpen: () => boolean,
   mounted: Ref<boolean>,
@@ -55,10 +43,19 @@ export function useTransitionStatus(
   watch(
     readOpen,
     (isOpen) => {
-      const next = nextPhase(isOpen, mounted.value, transitionStatus.value)
-      if (!next) return
-      if (next.mount) mounted.value = true
-      transitionStatus.value = next.status
+      if (isOpen && !mounted.value) {
+        mounted.value = true
+        transitionStatus.value = 'starting'
+        return
+      }
+      if (isOpen && mounted.value && transitionStatus.value === 'ending') {
+        transitionStatus.value = 'starting'
+        return
+      }
+      if (!isOpen && mounted.value && transitionStatus.value !== 'ending')
+        transitionStatus.value = 'ending'
+      if (!isOpen && !mounted.value && transitionStatus.value === 'ending')
+        transitionStatus.value = undefined
     },
     { flush: 'sync', immediate: true }
   )
