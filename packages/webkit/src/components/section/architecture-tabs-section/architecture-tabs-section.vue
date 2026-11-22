@@ -87,7 +87,8 @@
     :eyebrow="eyebrow"
     :title="title"
     :description="description"
-    :tab-count="tabs.length"
+    :item-count="tabs.length"
+    align="split"
     header-padding="small"
     :primary-action="primaryAction"
   >

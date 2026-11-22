@@ -8,11 +8,10 @@
   import Texture from '../../content/texture/texture.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
-  import Module from '../../layout/module/module.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MediaScroll from '../../marketing/media-scroll/media-scroll.vue'
   import MediaTile from '../../marketing/media-tile/media-tile.vue'
+  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
 
   defineOptions({
     name: 'FeatureScrollSection',
@@ -102,10 +101,6 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'feature-scroll-section'
   )
 
-  const hasItems = computed(() => props.items.length > 0)
-
-  const hasHeader = computed(() => props.title.length > 0)
-
   const scenes = computed(() => resolveItemScenes(props.items))
 
   const sampleTabs = (sample: FeatureScrollSectionCode) => [
@@ -127,145 +122,130 @@
 </script>
 
 <template>
-  <section
+  <FeatureTabsSectionShell
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
+    :item-count="items.length"
+    header-size="large"
   >
-    <Module
-      v-if="hasItems"
-      :divided="false"
-      :padded="false"
+    <RegistrationFrame
+      flush
+      borders="y"
+      marks="bottom"
+      class="lg:hidden"
     >
-      <template
-        v-if="hasHeader"
-        #header
-      >
-        <ModuleHeader
-          :eyebrow="eyebrow"
-          :title="title"
-          :description="description"
-          size="large"
-        />
-      </template>
-
-      <RegistrationFrame
+      <CardGrid
         flush
-        borders="y"
-        marks="bottom"
-        class="lg:hidden"
+        variant="frame"
+        :columns="3"
       >
-        <CardGrid
-          flush
-          variant="frame"
-          :columns="3"
+        <CardGridCell
+          v-for="(item, index) in items"
+          :key="item.title"
+          variant="canvas"
+          :padded="false"
         >
-          <CardGridCell
-            v-for="(item, index) in items"
-            :key="item.title"
-            variant="canvas"
-            :padded="false"
+          <MediaTile
+            variant="plain"
+            :title="item.title"
+            :description="item.description"
           >
-            <MediaTile
-              variant="plain"
-              :title="item.title"
-              :description="item.description"
-            >
-              <template #media>
+            <template #media>
+              <div
+                v-if="scenes[index]"
+                class="h-80 w-full min-w-0"
+              >
+                <component
+                  :is="scenes[index]"
+                  v-bind="{ ...item.scene?.props, active: false }"
+                />
+              </div>
+              <div
+                v-else-if="item.code"
+                class="w-full min-w-0 p-(--spacing-md)"
+              >
+                <CodeBlock
+                  :tabs="sampleTabs(item.code)"
+                  show-line-numbers
+                  :copy-aria-label="item.code.copyAriaLabel || undefined"
+                />
+              </div>
+              <Illustration
+                v-else-if="item.illustration"
+                :name="item.illustration"
+              />
+            </template>
+          </MediaTile>
+        </CardGridCell>
+      </CardGrid>
+    </RegistrationFrame>
+
+    <RegistrationFrame
+      flush
+      borders="y"
+      marks="bottom"
+      class="hidden lg:block [--media-scroll-top:3.5rem] [--media-scroll-align:stretch]"
+    >
+      <MediaScroll :items="items">
+        <template #media="{ index, active }">
+          <div class="contents">
+            <div :class="MEDIA_FRAME_CLASS">
+              <Texture
+                variant="dots"
+                size="small"
+                class="opacity-40"
+              />
+              <div
+                class="relative z-10 flex h-full w-full items-center justify-center p-(--spacing-md) lg:p-(--spacing-xl)"
+              >
                 <div
                   v-if="scenes[index]"
-                  class="h-80 w-full min-w-0"
+                  class="h-[30rem] max-h-full w-full min-w-0"
                 >
                   <component
                     :is="scenes[index]"
-                    v-bind="{ ...item.scene?.props, active: false }"
+                    v-bind="{ ...items[index].scene?.props, active }"
                   />
                 </div>
                 <div
-                  v-else-if="item.code"
-                  class="w-full min-w-0 p-(--spacing-md)"
+                  v-else-if="items[index].code"
+                  class="w-full min-w-0 rounded-(--shape-control) shadow-(--shadow-sm)"
                 >
                   <CodeBlock
-                    :tabs="sampleTabs(item.code)"
+                    :tabs="sampleTabs(items[index].code)"
                     show-line-numbers
-                    :copy-aria-label="item.code.copyAriaLabel || undefined"
+                    v-bind="{ animateLines: true }"
+                    :copy-aria-label="items[index].code.copyAriaLabel || undefined"
                   />
                 </div>
-                <Illustration
-                  v-else-if="item.illustration"
-                  :name="item.illustration"
-                />
-              </template>
-            </MediaTile>
-          </CardGridCell>
-        </CardGrid>
-      </RegistrationFrame>
-
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="bottom"
-        class="hidden lg:block [--media-scroll-top:3.5rem] [--media-scroll-align:stretch]"
-      >
-        <MediaScroll :items="items">
-          <template #media="{ index, active }">
-            <div class="contents">
-              <div :class="MEDIA_FRAME_CLASS">
-                <Texture
-                  variant="dots"
-                  size="small"
-                  class="opacity-40"
-                />
                 <div
-                  class="relative z-10 flex h-full w-full items-center justify-center p-(--spacing-md) lg:p-(--spacing-xl)"
+                  v-else-if="items[index].illustration"
+                  class="w-full min-w-0"
                 >
-                  <div
-                    v-if="scenes[index]"
-                    class="h-[30rem] max-h-full w-full min-w-0"
-                  >
-                    <component
-                      :is="scenes[index]"
-                      v-bind="{ ...items[index].scene?.props, active }"
-                    />
-                  </div>
-                  <div
-                    v-else-if="items[index].code"
-                    class="w-full min-w-0 rounded-(--shape-control) shadow-(--shadow-sm)"
-                  >
-                    <CodeBlock
-                      :tabs="sampleTabs(items[index].code)"
-                      show-line-numbers
-                      v-bind="{ animateLines: true }"
-                      :copy-aria-label="items[index].code.copyAriaLabel || undefined"
-                    />
-                  </div>
-                  <div
-                    v-else-if="items[index].illustration"
-                    class="w-full min-w-0"
-                  >
-                    <Illustration :name="items[index].illustration" />
-                  </div>
+                  <Illustration :name="items[index].illustration" />
                 </div>
               </div>
             </div>
-          </template>
-          <template #actions="{ index }">
-            <Button
-              v-if="items[index].action"
-              :label="items[index].action.label"
-              :href="items[index].action.href"
-              :target="items[index].action.target"
-              :variant="items[index].action.variant ?? 'secondary'"
-              size="small"
-              :icon="items[index].action.trailing ? 'az az-chevron-right' : ''"
-              icon-position="trailing"
-              :animated="Boolean(items[index].action.trailing)"
-            />
-          </template>
-        </MediaScroll>
-      </RegistrationFrame>
-    </Module>
-  </section>
+          </div>
+        </template>
+        <template #actions="{ index }">
+          <Button
+            v-if="items[index].action"
+            :label="items[index].action.label"
+            :href="items[index].action.href"
+            :target="items[index].action.target"
+            :variant="items[index].action.variant ?? 'secondary'"
+            size="small"
+            :icon="items[index].action.trailing ? 'az az-chevron-right' : ''"
+            icon-position="trailing"
+            :animated="Boolean(items[index].action.trailing)"
+          />
+        </template>
+      </MediaScroll>
+    </RegistrationFrame>
+  </FeatureTabsSectionShell>
 </template>

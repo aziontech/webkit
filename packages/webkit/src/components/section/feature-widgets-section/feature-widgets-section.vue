@@ -11,12 +11,12 @@
   import Illustration from '../../content/illustration/illustration.vue'
   import BentoGrid from '../../layout/bento-grid/bento-grid.vue'
   import BentoGridCell from '../../layout/bento-grid/bento-grid-cell/bento-grid-cell.vue'
-  import Module from '../../layout/module/module.vue'
-  import ModuleHeader, {
-    type ModuleHeaderAction,
-    type ModuleHeaderAlign
+  import type {
+    ModuleHeaderAction,
+    ModuleHeaderAlign
   } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
 
   defineOptions({
     name: 'FeatureWidgetsSection',
@@ -111,10 +111,6 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'feature-widgets-section'
   )
 
-  const hasItems = computed(() => props.items.length > 0)
-
-  const hasHeader = computed(() => props.title.length > 0)
-
   const scenes = computed(() => resolveItemScenes(props.items))
 
   const doneLabel = computed(() => props.copiedLabel || t('common.copied'))
@@ -130,113 +126,83 @@
 </script>
 
 <template>
-  <section
+  <FeatureTabsSectionShell
     v-bind="$attrs"
     :data-testid="testId"
-    :id="anchor || undefined"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
+    :item-count="items.length"
+    :align="titleAlign"
+    :primary-action="primaryAction"
+    :secondary-action="secondaryAction"
   >
-    <Module
-      v-if="hasItems"
-      :divided="false"
-      :padded="false"
+    <RegistrationFrame
+      flush
+      borders="y"
+      marks="bottom"
     >
-      <template
-        v-if="hasHeader"
-        #header
-      >
-        <ModuleHeader
-          :align="titleAlign"
-          :eyebrow="eyebrow"
-          :title="title"
-          :description="description"
-        >
-          <template #actions>
-            <Button
-              v-if="primaryAction"
-              :label="primaryAction.label"
-              :href="primaryAction.href"
-              variant="secondary"
-            />
-            <Button
-              key="button-2"
-              v-if="secondaryAction"
-              :label="secondaryAction.label"
-              :href="secondaryAction.href"
-              variant="outline"
-              :icon="secondaryAction.trailing ? 'az az-chevron-right' : ''"
-              icon-position="trailing"
-            />
-          </template>
-        </ModuleHeader>
-      </template>
-      <RegistrationFrame
+      <BentoGrid
         flush
-        borders="y"
-        marks="bottom"
+        :columns="columns"
       >
-        <BentoGrid
-          flush
-          :columns="columns"
+        <BentoGridCell
+          v-for="(item, index) in items"
+          :key="item.title"
+          :padded="false"
         >
-          <BentoGridCell
-            v-for="(item, index) in items"
-            :key="item.title"
-            :padded="false"
+          <div
+            class="flex h-full w-full min-w-0 flex-col"
+            @pointerenter="hovered = index"
+            @pointermove="hovered = index"
+            @pointerleave="hovered = -1"
           >
             <div
-              class="flex h-full w-full min-w-0 flex-col"
-              @pointerenter="hovered = index"
-              @pointermove="hovered = index"
-              @pointerleave="hovered = -1"
+              v-if="scenes[index]"
+              class="h-80 w-full min-w-0 overflow-x-visible overflow-y-clip px-(--spacing-xl) pt-(--spacing-xl) [--console-mockup-fade-color:var(--bg-surface)]"
             >
-              <div
-                v-if="scenes[index]"
-                class="h-80 w-full min-w-0 overflow-x-visible overflow-y-clip px-(--spacing-xl) pt-(--spacing-xl) [--console-mockup-fade-color:var(--bg-surface)]"
-              >
-                <component
-                  :is="scenes[index]"
-                  v-bind="{ ...item.scene?.props, hovered: hovered === index }"
-                />
-              </div>
-              <Illustration
-                v-else-if="item.illustration"
-                :name="item.illustration"
+              <component
+                :is="scenes[index]"
+                v-bind="{ ...item.scene?.props, hovered: hovered === index }"
               />
-              <div class="flex flex-1 flex-col items-start gap-(--spacing-lg) p-(--spacing-xl)">
-                <p class="m-0 text-pretty text-body-md text-(--text-muted)">
-                  <strong class="font-medium text-(--text-default)">{{ item.title }}</strong>
-                  {{ item.description }}
-                </p>
-                <span
-                  v-if="item.action || item.copy"
-                  aria-live="polite"
-                  class="mt-auto flex flex-wrap gap-(--spacing-sm)"
-                >
-                  <Button
-                    v-if="item.action"
-                    :label="item.action.label"
-                    :href="item.action.href"
-                    variant="outline"
-                    size="medium"
-                    icon="az az-chevron-right"
-                    icon-position="trailing"
-                    animated
-                  />
-                  <HighlightButton
-                    v-if="item.copy"
-                    :label="copied === index ? doneLabel : item.copy.label"
-                    size="medium"
-                    :icon="copied === index ? 'az az-check' : 'az az-copy'"
-                    @click="copyPrompt(index, item.copy.text)"
-                  />
-                </span>
-              </div>
             </div>
-          </BentoGridCell>
-        </BentoGrid>
-      </RegistrationFrame>
-    </Module>
-  </section>
+            <Illustration
+              v-else-if="item.illustration"
+              :name="item.illustration"
+            />
+            <div class="flex flex-1 flex-col items-start gap-(--spacing-lg) p-(--spacing-xl)">
+              <p class="m-0 text-pretty text-body-md text-(--text-muted)">
+                <strong class="font-medium text-(--text-default)">{{ item.title }}</strong>
+                {{ item.description }}
+              </p>
+              <span
+                v-if="item.action || item.copy"
+                aria-live="polite"
+                class="mt-auto flex flex-wrap gap-(--spacing-sm)"
+              >
+                <Button
+                  v-if="item.action"
+                  :label="item.action.label"
+                  :href="item.action.href"
+                  variant="outline"
+                  size="medium"
+                  icon="az az-chevron-right"
+                  icon-position="trailing"
+                  animated
+                />
+                <HighlightButton
+                  v-if="item.copy"
+                  :label="copied === index ? doneLabel : item.copy.label"
+                  size="medium"
+                  :icon="copied === index ? 'az az-check' : 'az az-copy'"
+                  @click="copyPrompt(index, item.copy.text)"
+                />
+              </span>
+            </div>
+          </div>
+        </BentoGridCell>
+      </BentoGrid>
+    </RegistrationFrame>
+  </FeatureTabsSectionShell>
 </template>

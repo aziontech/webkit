@@ -497,7 +497,7 @@
   {
     "name": "capability-grid-section",
     "path": "src/components/section/capability-grid-section/capability-grid-section.vue",
-    "limit": "7.95 KB"
+    "limit": "8.1 KB"
   },
   {
     "name": "console-showcase-section",
@@ -551,7 +551,7 @@
   {
     "name": "feature-scroll-section",
     "path": "src/components/section/feature-scroll-section/feature-scroll-section.vue",
-    "limit": "19.7 KB",
+    "limit": "20.05 KB",
     "entryOnly": true
   },
   {
@@ -563,7 +563,7 @@
   {
     "name": "feature-widgets-section",
     "path": "src/components/section/feature-widgets-section/feature-widgets-section.vue",
-    "limit": "19.45 KB",
+    "limit": "19.8 KB",
     "entryOnly": true
   },
   {
@@ -660,13 +660,13 @@
   {
     "name": "cli-terminal-section",
     "path": "src/components/section/cli-terminal-section/cli-terminal-section.vue",
-    "limit": "46.3 KB",
+    "limit": "46.5 KB",
     "entryOnly": true
   },
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "57.25 KB",
+    "limit": "57.4 KB",
     "entryOnly": true
   },
   {

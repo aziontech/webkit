@@ -3,12 +3,10 @@
 
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAlign } from '../../layout/module-header/module-header.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import FeatureItem from '../../marketing/feature-item/feature-item.vue'
-  import CapabilityGridSectionActions from './parts/capability-grid-section-actions.vue'
+  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
 
   defineOptions({ name: 'CapabilityGridSection', inheritAttrs: false })
 
@@ -89,17 +87,6 @@
 
   const headingLevel = computed(() => (props.title ? 3 : 2))
 
-  const shown = (
-    action: CapabilityGridSectionAction | undefined
-  ): action is CapabilityGridSectionAction => Boolean(action?.label && action.href)
-
-  const buttons = computed<CapabilityGridSectionAction[]>(() => {
-    const named: CapabilityGridSectionAction[] = []
-    if (shown(props.primaryAction)) named.push({ ...props.primaryAction, variant: 'secondary' })
-    if (shown(props.secondaryAction)) named.push({ ...props.secondaryAction, variant: 'outline' })
-    return named
-  })
-
   const missingIcons = computed(() => {
     const bare = props.items.filter((item) => !item.icon).length
     return bare < props.items.length ? bare : 0
@@ -119,74 +106,55 @@
 </script>
 
 <template>
-  <section
+  <FeatureTabsSectionShell
     v-if="items.length"
     v-bind="$attrs"
-    :id="anchor || undefined"
-    class="scroll-mt-(--spacing-2xl)"
     :data-testid="testId"
-    :aria-label="title || undefined"
+    :item-count="items.length"
+    :anchor="anchor"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
+    :align="titleAlign"
+    :primary-action="primaryAction"
+    :secondary-action="secondaryAction"
   >
-    <Module
-      :divided="false"
-      :padded="false"
+    <RegistrationFrame
+      flush
+      borders="y"
+      marks="bottom"
     >
-      <template
-        v-if="title"
-        #header
-      >
-        <ModuleHeader
-          :align="titleAlign"
-          :eyebrow="eyebrow"
-          :title="title"
-          :description="description"
-        >
-          <template
-            v-if="buttons.length"
-            #actions
-          >
-            <CapabilityGridSectionActions :actions="buttons" />
-          </template>
-        </ModuleHeader>
-      </template>
-
-      <RegistrationFrame
+      <CardGrid
         flush
-        borders="y"
-        marks="bottom"
+        variant="frame"
+        :columns="columns"
       >
-        <CardGrid
-          flush
-          variant="frame"
-          :columns="columns"
+        <CardGridCell
+          v-for="item in items"
+          :key="(item.href ?? '') + item.title"
+          variant="canvas"
+          class="relative"
         >
-          <CardGridCell
-            v-for="item in items"
-            :key="(item.href ?? '') + item.title"
-            variant="canvas"
-            class="relative"
+          <FeatureItem
+            :heading-level="headingLevel"
+            :icon="item.icon ?? ''"
+            :title="item.title"
+            :description="item.description"
+            :href="item.href ?? ''"
+          />
+          <ul
+            v-if="item.points?.length"
+            class="m-0 mt-(--spacing-sm) flex list-disc flex-col gap-(--spacing-xs) ps-(--spacing-md) text-body-md text-(--text-muted)"
           >
-            <FeatureItem
-              :heading-level="headingLevel"
-              :icon="item.icon ?? ''"
-              :title="item.title"
-              :description="item.description"
-              :href="item.href ?? ''"
-            />
-            <ul
-              v-if="item.points?.length"
-              class="m-0 mt-(--spacing-sm) flex list-disc flex-col gap-(--spacing-xs) ps-(--spacing-md) text-body-md text-(--text-muted)"
+            <li
+              v-for="point in item.points"
+              :key="point"
             >
-              <li
-                v-for="point in item.points"
-                :key="point"
-              >
-                {{ point }}
-              </li>
-            </ul>
-          </CardGridCell>
-        </CardGrid>
-      </RegistrationFrame>
-    </Module>
-  </section>
+              {{ point }}
+            </li>
+          </ul>
+        </CardGridCell>
+      </CardGrid>
+    </RegistrationFrame>
+  </FeatureTabsSectionShell>
 </template>
