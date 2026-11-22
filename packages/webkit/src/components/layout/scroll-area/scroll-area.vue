@@ -56,60 +56,34 @@
     horizontal: () => props.orientation !== 'vertical'
   })
 
-  const scrollStep = 40
+  const SCROLL_STEP = 40
+
+  const KEY_SCROLLS: Partial<
+    Record<string, ['scrollTop' | 'scrollLeft', (viewport: HTMLElement) => number]>
+  > = {
+    ArrowDown: ['scrollTop', (viewport) => viewport.scrollTop + SCROLL_STEP],
+    ArrowUp: ['scrollTop', (viewport) => viewport.scrollTop - SCROLL_STEP],
+    ArrowRight: ['scrollLeft', (viewport) => viewport.scrollLeft + SCROLL_STEP],
+    ArrowLeft: ['scrollLeft', (viewport) => viewport.scrollLeft - SCROLL_STEP],
+    PageDown: ['scrollTop', (viewport) => viewport.scrollTop + viewport.clientHeight],
+    PageUp: ['scrollTop', (viewport) => viewport.scrollTop - viewport.clientHeight],
+    Home: ['scrollTop', () => 0],
+    End: ['scrollTop', (viewport) => viewport.scrollHeight]
+  }
 
   const onKeydown = (event: globalThis.KeyboardEvent) => {
     const viewport = viewportEl.value
-    if (!viewport) return
-
+    const scroll = KEY_SCROLLS[event.key]
+    if (!viewport || !scroll) return
+    const [axis, to] = scroll
     const { orientation } = props
-    const vertical = orientation === 'vertical' || orientation === 'both'
-    const horizontal = orientation === 'horizontal' || orientation === 'both'
-
-    switch (event.key) {
-      case 'ArrowDown':
-        if (!vertical) return
-        viewport.scrollTop += scrollStep
-        event.preventDefault()
-        break
-      case 'ArrowUp':
-        if (!vertical) return
-        viewport.scrollTop -= scrollStep
-        event.preventDefault()
-        break
-      case 'ArrowRight':
-        if (!horizontal) return
-        viewport.scrollLeft += scrollStep
-        event.preventDefault()
-        break
-      case 'ArrowLeft':
-        if (!horizontal) return
-        viewport.scrollLeft -= scrollStep
-        event.preventDefault()
-        break
-      case 'PageDown':
-        if (!vertical) return
-        viewport.scrollTop += viewport.clientHeight
-        event.preventDefault()
-        break
-      case 'PageUp':
-        if (!vertical) return
-        viewport.scrollTop -= viewport.clientHeight
-        event.preventDefault()
-        break
-      case 'Home':
-        if (!vertical) return
-        viewport.scrollTop = 0
-        event.preventDefault()
-        break
-      case 'End':
-        if (!vertical) return
-        viewport.scrollTop = viewport.scrollHeight
-        event.preventDefault()
-        break
-      default:
-        break
-    }
+    if (
+      orientation !== 'both' &&
+      orientation !== (axis === 'scrollTop' ? 'vertical' : 'horizontal')
+    )
+      return
+    viewport[axis] = to(viewport)
+    event.preventDefault()
   }
 
   useElementListener(viewportEl, 'keydown', onKeydown)

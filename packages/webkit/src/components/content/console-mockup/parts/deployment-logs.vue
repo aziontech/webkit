@@ -2,7 +2,6 @@
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   import ToggleGroup from '../../../action/toggle-group/toggle-group.vue'
-  import type { LogViewerLine } from '../../../code/log-viewer/injection-key'
   import LogViewer from '../../../code/log-viewer/log-viewer.vue'
   import LogViewerContent from '../../../code/log-viewer/log-viewer-content.vue'
   import Progress from '../../../feedback/progress/progress.vue'
@@ -11,17 +10,22 @@
   import Tag from '../../tag/tag.vue'
   import {
     DEFAULT_DEPLOYMENT_STEPS,
-    type DeploymentLogTuple,
     type DeploymentLogView,
+    type DeploymentPhase,
     type DeploymentStep,
+    formatDuration,
+    indexOfKey,
     LOG_VIEWS,
-    STEP_GAP_MS
+    outcomeOf,
+    STEP_GAP_MS,
+    STEP_TAGS,
+    stepDurationLabel,
+    stepStatusOf,
+    toLine,
+    tuplesFor
   } from '../lib/deployment-steps'
 
   defineOptions({ name: 'DeploymentLogs' })
-
-  type DeploymentPhase = 'running' | 'success' | 'error'
-  type DeploymentStepStatus = 'success' | 'running' | 'error' | 'skipped' | 'pending'
 
   interface Props {
     /** Steps of the deployment, each with its log lines. */
@@ -74,23 +78,12 @@
 
   const view = defineModel<DeploymentLogView>('view', { default: 'phased' })
 
-  const tuplesFor = (step: DeploymentStep): DeploymentLogTuple[] => {
-    if (step.key !== props.failAt || !step.failLogs?.length) return step.logs
-    return step.failLogs.map(([time, message]) => [
-      time,
-      message,
-      message.includes('[ERROR]') ? 'warning' : 'text'
-    ])
-  }
-
-  const stepList = computed(() => props.steps.map((step) => ({ ...step, logs: tuplesFor(step) })))
-  const lastIndex = computed(() => stepList.value.length - 1)
-  const failIndex = computed(() =>
-    props.failAt ? stepList.value.findIndex((step) => step.key === props.failAt) : -1
+  const stepList = computed(() =>
+    props.steps.map((step) => ({ ...step, logs: tuplesFor(step, props.failAt) }))
   )
-  const activeAtIndex = props.activeAt
-    ? props.steps.findIndex((step) => step.key === props.activeAt)
-    : -1
+  const lastIndex = computed(() => stepList.value.length - 1)
+  const failIndex = computed(() => indexOfKey(stepList.value, props.failAt))
+  const activeAtIndex = indexOfKey(props.steps, props.activeAt)
 
   const settledIndex = failIndex.value !== -1 ? failIndex.value : activeAtIndex
   const staticStep = settledIndex !== -1 ? settledIndex : lastIndex.value
@@ -129,52 +122,18 @@
     stream = null
   }
 
-  const stepStatus = (i: number): DeploymentStepStatus => {
-    if (phase.value === 'error') {
-      if (i < activeStep.value) return 'success'
-      return i === activeStep.value ? 'error' : 'skipped'
-    }
-    if (phase.value === 'success' || i < activeStep.value) return 'success'
-    if (i === activeStep.value && phase.value === 'running') return 'running'
-    return 'pending'
-  }
-
-  const STEP_TAGS: Partial<
-    Record<DeploymentStepStatus, { label: string; severity: 'danger' | 'neutral' }>
-  > = {
-    error: { label: 'Failed', severity: 'danger' },
-    skipped: { label: 'Skipped', severity: 'neutral' }
-  }
+  const stepStatus = (i: number) => stepStatusOf(phase.value, activeStep.value, i)
   const stepTag = (i: number) => STEP_TAGS[stepStatus(i)] ?? null
-
-  const formatDuration = (s: number) => (s >= 60 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${s}s`)
 
   const durationLabel = (i: number) => {
     const step = stepList.value[i]
-    if (!step) return ''
-    if (step.durationLabel) return step.durationLabel
-    const seconds = props.live ? (measured.value[i] ?? 0) : (step.duration ?? 0)
-    return seconds > 0 ? formatDuration(seconds) : ''
-  }
-
-  const toLine = ([time, message, type]: DeploymentLogTuple, i: number): LogViewerLine => {
-    const kind =
-      type ??
-      (message.includes('vulnerabilit')
-        ? 'warning'
-        : /successfully|finalized/.test(message)
-          ? 'success'
-          : 'text')
-    return kind === 'warning'
-      ? { id: String(i), time, type: 'text', level: 'warn', message }
-      : { id: String(i), time, type: kind, message }
+    const seconds = props.live ? (measured.value[i] ?? 0) : (step?.duration ?? 0)
+    return step ? stepDurationLabel(step, seconds) : ''
   }
 
   const linesByStep = computed(() =>
     stepList.value.map((step, i) => step.logs.slice(0, revealed.value[i]).map(toLine))
   )
-
-  const views = LOG_VIEWS
 
   const allLines = computed(() =>
     linesByStep.value.flatMap((lines, step) =>
@@ -191,25 +150,19 @@
 
   const failedTitle = computed(() => stepList.value[failIndex.value]?.title ?? '')
 
-  const elapsedLabel = computed(() => formatDuration(elapsed.value))
   const activeTitle = computed(() => stepList.value[activeStep.value]?.title ?? '')
 
-  const doneCount = computed(
-    () => stepList.value.filter((_step, i) => stepStatus(i) === 'success').length
-  )
-  const progressLabel = computed(() => `${doneCount.value}/${stepList.value.length} steps`)
+  const progressLabel = computed(() => {
+    const done = stepList.value.filter((_step, i) => stepStatus(i) === 'success').length
+    return `${done}/${stepList.value.length} steps`
+  })
 
   const timeLabel = computed(() => {
     if (props.totalLabel) return props.totalLabel
-    return props.live || totalDuration > 0 ? elapsedLabel.value : ''
+    return props.live || totalDuration > 0 ? formatDuration(elapsed.value) : ''
   })
 
-  const outcomeLabel = computed(() => {
-    const time = timeLabel.value
-    if (phase.value === 'success') return time ? `Deployed in ${time}` : 'Deployed'
-    if (phase.value === 'error') return time ? `Failed after ${time}` : 'Failed'
-    return time
-  })
+  const outcomeLabel = computed(() => outcomeOf(phase.value, timeLabel.value))
 
   const failOn = (i: number) => {
     measured.value[i] = Math.max(1, elapsed.value - stepStartedAt.value)
@@ -341,7 +294,7 @@
           <span class="text-label-sm text-(--text-muted)">{{ outcomeLabel }}</span>
           <ToggleGroup
             v-model="view"
-            :options="views"
+            :options="LOG_VIEWS"
             size="medium"
             aria-label="Log view"
           />

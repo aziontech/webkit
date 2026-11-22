@@ -117,54 +117,20 @@
     transform: `translate3d(${indicatorOffsetX.value}px, ${indicatorOffsetY.value}px, 0)`
   }))
 
-  const ROOT_CLASS =
-    'group relative inline-flex w-fit max-w-full min-w-0 items-stretch gap-(--spacing-2xs) rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-2xs) ' +
-    'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 ' +
-    'data-[fluid]:flex data-[fluid]:w-full'
-
-  const resolveOptionElement = (
-    element: globalThis.Element | ComponentPublicInstance | null
-  ): HTMLElement | null => {
-    if (!element) {
-      return null
-    }
-
-    if (element instanceof HTMLElement) {
-      return element
-    }
-
-    const el = (element as ComponentPublicInstance).$el
-
-    return el instanceof HTMLElement ? el : null
-  }
-
   const setOptionEl = (
     element: globalThis.Element | ComponentPublicInstance | null,
     index: number
   ) => {
     const el = resolveOptionElement(element)
-
-    if (!el) {
-      return
-    }
-
-    optionEls.value[index] = el
+    if (el) optionEls.value[index] = el
   }
 
   const setValue = (value: string) => {
-    if (value === selectedValue.value) {
-      return
-    }
-
-    model.value = value as TValue
+    if (value !== selectedValue.value) model.value = value as TValue
   }
 
   const selectOption = (value: string, disabled: boolean) => {
-    if (disabled) {
-      return
-    }
-
-    setValue(value)
+    if (!disabled) setValue(value)
   }
 
   const moveSelection = (direction: 'next' | 'prev' | 'first' | 'last') => {
@@ -191,15 +157,6 @@
         return
       }
     }
-  }
-
-  const KEY_MOVES: Partial<Record<string, 'next' | 'prev' | 'first' | 'last'>> = {
-    ArrowRight: 'next',
-    ArrowDown: 'next',
-    ArrowLeft: 'prev',
-    ArrowUp: 'prev',
-    Home: 'first',
-    End: 'last'
   }
 
   const onOptionKeydown = (event: globalThis.KeyboardEvent, value: string, disabled: boolean) => {
@@ -287,6 +244,27 @@
   )
 
   watch(selectedValue, scheduleIndicatorSync)
+</script>
+
+<script lang="ts">
+  const ROOT_CLASS =
+    'group relative inline-flex w-fit max-w-full min-w-0 items-stretch gap-(--spacing-2xs) rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-2xs) ' +
+    'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 ' +
+    'data-[fluid]:flex data-[fluid]:w-full'
+
+  const resolveOptionElement = (element: unknown): HTMLElement | null => {
+    const el = element instanceof HTMLElement ? element : (element as { $el?: unknown } | null)?.$el
+    return el instanceof HTMLElement ? el : null
+  }
+
+  const KEY_MOVES: Partial<Record<string, 'next' | 'prev' | 'first' | 'last'>> = {
+    ArrowRight: 'next',
+    ArrowDown: 'next',
+    ArrowLeft: 'prev',
+    ArrowUp: 'prev',
+    Home: 'first',
+    End: 'last'
+  }
 
   const INDICATOR_CLASS =
     'pointer-events-none absolute top-0 z-0 rounded-(--shape-button) bg-(--bg-selected) transition-[transform,width,height] duration-moderate-02 ease-productive-entrance ' +
@@ -302,9 +280,7 @@
     'data-[locked]:pe-(--spacing-xs) ' +
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
     'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-(--bg-disabled) disabled:text-(--text-disabled)'
-</script>
 
-<script lang="ts">
   /**
    * One segment; type a list as ToggleGroupOption of the model's union so each value is one of it. A
    * number value is coerced to its string. `locked` draws the trailing lock icon; `disabled` alone draws

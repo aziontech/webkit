@@ -72,79 +72,110 @@ const previewTransition = (): string => {
   return `width ${duration['moderate-02']} ${curve['expressive-entrance']}`
 }
 
-export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailReturn {
-  const { collapsed, width } = options
+interface RailContext {
+  collapsed: Ref<boolean>
+  width: Ref<number | null>
+  railMin: Ref<number>
+  railMax: Ref<number>
+  collapsedWidth: ComputedRef<number>
+  dir: Readonly<Ref<Direction>>
+  clamp: (value: number) => number
+}
 
-  const railEl = shallowRef<globalThis.HTMLElement | null>(null)
+const measureRail = (
+  el: globalThis.HTMLElement | null,
+  width: Ref<number | null>,
+  clamp: (value: number) => number
+) => {
+  if (width.value == null && el?.offsetWidth) width.value = clamp(el.offsetWidth)
+}
+
+const grabPointer = (event: globalThis.PointerEvent): (() => void) => {
+  const target = event.currentTarget as globalThis.HTMLElement | null
+  let captured: globalThis.HTMLElement | null = null
+  try {
+    target?.setPointerCapture(event.pointerId)
+    captured = target
+  } catch {
+    captured = null
+  }
+  globalThis.document.body.style.userSelect = 'none'
+  globalThis.document.body.style.cursor = 'col-resize'
+  return () => {
+    if (captured?.hasPointerCapture(event.pointerId))
+      captured.releasePointerCapture(event.pointerId)
+    globalThis.document.body.style.removeProperty('user-select')
+    globalThis.document.body.style.removeProperty('cursor')
+  }
+}
+
+const listenWindow = (
+  onMove: (event: globalThis.PointerEvent) => void,
+  onEnd: () => void
+): (() => void) => {
+  globalThis.addEventListener('pointermove', onMove)
+  globalThis.addEventListener('pointerup', onEnd)
+  globalThis.addEventListener('pointercancel', onEnd)
+  globalThis.addEventListener('blur', onEnd)
+  return () => {
+    globalThis.removeEventListener('pointermove', onMove)
+    globalThis.removeEventListener('pointerup', onEnd)
+    globalThis.removeEventListener('pointercancel', onEnd)
+    globalThis.removeEventListener('blur', onEnd)
+  }
+}
+
+const dragWidth = (
+  { collapsed, width, railMin, railMax, clamp }: RailContext,
+  next: number,
+  restoreWidth: number
+) => {
+  if (collapsed.value) {
+    if (next >= railMin.value) {
+      collapsed.value = false
+      width.value = clamp(next)
+    }
+    return
+  }
+  if (next < railMin.value - COLLAPSE_SNAP) {
+    width.value = clamp(restoreWidth)
+    collapsed.value = true
+    return
+  }
+  width.value = Math.max(0, Math.min(next, railMax.value))
+}
+
+const nudgeWidth = ({ collapsed, width, railMin, clamp }: RailContext, delta: number) => {
+  if (collapsed.value) {
+    if (delta > 0) collapsed.value = false
+    return
+  }
+  const next = (width.value ?? railMin.value) + delta
+  if (next < railMin.value - COLLAPSE_SNAP) {
+    collapsed.value = true
+    return
+  }
+  width.value = clamp(next)
+}
+
+function useRailDrag(context: RailContext) {
+  const { collapsed, width, railMin, collapsedWidth, dir, clamp } = context
   const resizing = ref(false)
-  const dir = useDirection(railEl)
-
-  const railMin = ref(256)
-  const railMax = ref(408)
-
-  const clamp = (value: number) => Math.min(Math.max(value, railMin.value), railMax.value)
-
   const pullProgress = ref(1)
   const peekWidth = ref(0)
-  const peeking = computed(() => resizing.value && collapsed.value)
-
-  const iconRailWidth = ref(SIDEBAR_ICON_RAIL_FALLBACK)
-  const collapsedWidth = computed(() =>
-    toValue(options.collapsedWidthToken) ? iconRailWidth.value : 0
-  )
-
-  const previewHover = ref(false)
-  const previewWidth = ref(SIDEBAR_PREVIEW_WIDTH_FALLBACK)
-
-  const previewing = computed(
-    () => previewHover.value && collapsed.value && !resizing.value && toValue(options.enabled)
-  )
-
-  const startPreview = () => {
-    previewHover.value = true
-  }
-
-  const endPreview = () => {
-    previewHover.value = false
-  }
-
   let startX = 0
   let startWidth = 0
   let restoreWidth = 0
   let dragMoved = false
-  let capturedBy: globalThis.HTMLElement | null = null
-  let capturedId = -1
-
-  const measure = () => {
-    if (width.value == null && railEl.value?.offsetWidth) {
-      width.value = clamp(railEl.value.offsetWidth)
-    }
-  }
+  let stop: (() => void) | null = null
 
   const onPointermove = (event: globalThis.PointerEvent) => {
     const travel = (event.clientX - startX) * (dir.value === 'rtl' ? -1 : 1)
     const next = startWidth + travel
-
     if (Math.abs(travel) > TAP_SLOP) dragMoved = true
-
     pullProgress.value = Math.max(0, Math.min(1, next / railMin.value))
     peekWidth.value = Math.max(collapsedWidth.value, Math.min(next, railMin.value))
-
-    if (collapsed.value) {
-      if (next >= railMin.value) {
-        collapsed.value = false
-        width.value = clamp(next)
-      }
-      return
-    }
-
-    if (next < railMin.value - COLLAPSE_SNAP) {
-      width.value = clamp(restoreWidth)
-      collapsed.value = true
-      return
-    }
-
-    width.value = Math.max(0, Math.min(next, railMax.value))
+    dragWidth(context, next, restoreWidth)
   }
 
   const endResize = () => {
@@ -153,15 +184,8 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     if (!collapsed.value) width.value = clamp(width.value ?? railMin.value)
     peekWidth.value = 0
     pullProgress.value = 1
-    if (capturedBy?.hasPointerCapture(capturedId)) capturedBy.releasePointerCapture(capturedId)
-    capturedBy = null
-    capturedId = -1
-    globalThis.document.body.style.removeProperty('user-select')
-    globalThis.document.body.style.removeProperty('cursor')
-    globalThis.removeEventListener('pointermove', onPointermove)
-    globalThis.removeEventListener('pointerup', endResize)
-    globalThis.removeEventListener('pointercancel', endResize)
-    globalThis.removeEventListener('blur', endResize)
+    stop?.()
+    stop = null
   }
 
   const tapToExpand = () => {
@@ -178,56 +202,86 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     restoreWidth = width.value ?? railMin.value
     pullProgress.value = fromCollapsed ? 0 : 1
     peekWidth.value = fromCollapsed ? collapsedWidth.value : 0
-    const target = event.currentTarget as globalThis.HTMLElement | null
-    try {
-      target?.setPointerCapture(event.pointerId)
-      capturedBy = target
-      capturedId = event.pointerId
-    } catch {
-      capturedBy = null
-      capturedId = -1
+    const release = grabPointer(event)
+    const unlisten = listenWindow(onPointermove, endResize)
+    stop = () => {
+      release()
+      unlisten()
     }
-    globalThis.document.body.style.userSelect = 'none'
-    globalThis.document.body.style.cursor = 'col-resize'
-    globalThis.addEventListener('pointermove', onPointermove)
-    globalThis.addEventListener('pointerup', endResize)
-    globalThis.addEventListener('pointercancel', endResize)
-    globalThis.addEventListener('blur', endResize)
     event.preventDefault()
   }
 
-  const nudge = (delta: number) => {
-    if (collapsed.value) {
-      if (delta > 0) collapsed.value = false
-      return
-    }
-    const next = (width.value ?? railMin.value) + delta
-    if (next < railMin.value - COLLAPSE_SNAP) {
-      collapsed.value = true
-      return
-    }
-    width.value = clamp(next)
-  }
-
-  onMounted(() => {
-    railMin.value = readTokenPx(toValue(options.minWidthToken), railMin.value)
-    railMax.value = readTokenPx(toValue(options.maxWidthToken), railMax.value)
-    previewWidth.value = readTokenPx(SIDEBAR_PREVIEW_WIDTH_TOKEN, previewWidth.value)
-    iconRailWidth.value = readTokenPx(SIDEBAR_ICON_RAIL_TOKEN, iconRailWidth.value)
-    if (width.value != null) width.value = clamp(width.value)
-    measure()
-    railEl.value?.style.removeProperty('width')
-  })
-
   onScopeDispose(endResize)
 
+  return { resizing, pullProgress, peekWidth, startResize, tapToExpand }
+}
+
+function useRailPreview(
+  collapsed: Ref<boolean>,
+  resizing: Ref<boolean>,
+  peekWidth: Ref<number>,
+  enabled: MaybeRefOrGetter<boolean>
+) {
+  const previewHover = ref(false)
+  const previewWidth = ref(SIDEBAR_PREVIEW_WIDTH_FALLBACK)
+  onMounted(() => {
+    previewWidth.value = readTokenPx(SIDEBAR_PREVIEW_WIDTH_TOKEN, previewWidth.value)
+  })
+  const previewing = computed(
+    () => previewHover.value && collapsed.value && !resizing.value && toValue(enabled)
+  )
+  const startPreview = () => {
+    previewHover.value = true
+  }
+  const endPreview = () => {
+    previewHover.value = false
+  }
+  const peeking = computed(() => resizing.value && collapsed.value)
   const railStyle = computed(() => {
-    if (!toValue(options.enabled)) return {}
+    if (!toValue(enabled)) return {}
     if (peeking.value) return { width: `${peekWidth.value}px`, transition: 'none' }
     if (previewing.value) {
       return { width: `${previewWidth.value}px`, transition: previewTransition() }
     }
     return {}
+  })
+  return { previewing, startPreview, endPreview, railStyle }
+}
+
+export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailReturn {
+  const { collapsed, width } = options
+
+  const railEl = shallowRef<globalThis.HTMLElement | null>(null)
+  const dir = useDirection(railEl)
+
+  const railMin = ref(256)
+  const railMax = ref(408)
+
+  const clamp = (value: number) => Math.min(Math.max(value, railMin.value), railMax.value)
+
+  const iconRailWidth = ref(SIDEBAR_ICON_RAIL_FALLBACK)
+  const collapsedWidth = computed(() =>
+    toValue(options.collapsedWidthToken) ? iconRailWidth.value : 0
+  )
+
+  const context: RailContext = { collapsed, width, railMin, railMax, collapsedWidth, dir, clamp }
+  const { resizing, pullProgress, peekWidth, startResize, tapToExpand } = useRailDrag(context)
+  const { previewing, startPreview, endPreview, railStyle } = useRailPreview(
+    collapsed,
+    resizing,
+    peekWidth,
+    options.enabled
+  )
+
+  const measure = () => measureRail(railEl.value, width, clamp)
+
+  onMounted(() => {
+    railMin.value = readTokenPx(toValue(options.minWidthToken), railMin.value)
+    railMax.value = readTokenPx(toValue(options.maxWidthToken), railMax.value)
+    iconRailWidth.value = readTokenPx(SIDEBAR_ICON_RAIL_TOKEN, iconRailWidth.value)
+    if (width.value != null) width.value = clamp(width.value)
+    measure()
+    railEl.value?.style.removeProperty('width')
   })
 
   const underMin = computed(() => resizing.value && pullProgress.value < 1)
@@ -258,7 +312,7 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     innerStyle,
     startResize,
     tapToExpand,
-    nudge,
+    nudge: (delta: number) => nudgeWidth(context, delta),
     measure,
     dir
   }

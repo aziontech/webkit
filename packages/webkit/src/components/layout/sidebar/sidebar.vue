@@ -1,29 +1,26 @@
 <script setup lang="ts">
-  import {
-    computed,
-    markRaw,
-    onMounted,
-    onScopeDispose,
-    provide,
-    ref,
-    useAttrs,
-    useSlots
-  } from 'vue'
+  import { computed, markRaw, onMounted, provide, ref, useAttrs, useSlots } from 'vue'
 
-  import { logicalArrowKey } from '../../../composables/use-direction'
-  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import ScrollArea from '../scroll-area/scroll-area.vue'
-  import {
-    SIDEBAR_ICON_RAIL_TOKEN,
-    SIDEBAR_NUDGE_STEP,
-    useSidebarRail
-  } from './composables/use-sidebar-rail'
+  import { useSidebarKeys } from './composables/use-sidebar-keys'
+  import { SIDEBAR_ICON_RAIL_TOKEN, useSidebarRail } from './composables/use-sidebar-rail'
   import { SidebarInjectionKey } from './injection-key'
+  import {
+    EXPAND_CLASS,
+    EXPAND_HINT_CLASS,
+    INNER_MOTION_CLASS,
+    NAV_CLASS,
+    RAIL_MOTION_CLASS,
+    RESIZE_INDICATOR_CLASS,
+    sidebarFooterBandClass,
+    sidebarFooterSlotClass,
+    sidebarScrollClass
+  } from './lib/sidebar-classes'
 
   defineOptions({
     name: 'Sidebar',
@@ -140,48 +137,17 @@
     }
   })
 
-  const isEditable = (target: EventTarget | null) => {
-    if (!(target instanceof globalThis.HTMLElement)) return false
-    if (target.isContentEditable) return true
-    return ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
-  }
-
-  const shortcutActive = computed(() => props.shortcut && collapseMode.value !== null)
-
-  const onShortcut = (event: globalThis.KeyboardEvent) => {
-    if (!shortcutActive.value || event.defaultPrevented) return
-    if (!(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey) return
-    if (event.key.toLowerCase() !== 'b' || isEditable(event.target)) return
-    event.preventDefault()
-    collapsed.value = !collapsed.value
-  }
-
-  onMounted(() => globalThis.document.addEventListener('keydown', onShortcut))
-
-  onScopeDispose(() => globalThis.document?.removeEventListener('keydown', onShortcut))
-
-  const keyShortcuts = computed(() => (shortcutActive.value ? 'Control+B Meta+B' : undefined))
-
-  const onHandleKey = (event: globalThis.KeyboardEvent, expandOnly = false) => {
-    const key = logicalArrowKey(event.key, dir.value)
-    if (key === 'ArrowRight') nudge(SIDEBAR_NUDGE_STEP)
-    else if (key === 'ArrowLeft' && !expandOnly) nudge(-SIDEBAR_NUDGE_STEP)
-    else return
-    event.preventDefault()
-  }
-
   const handleEl = ref<globalThis.HTMLElement | null>(null)
-
   const expandHandleEl = ref<globalThis.HTMLElement | null>(null)
-
-  useElementListener(handleEl, 'keydown', (event: globalThis.KeyboardEvent) => onHandleKey(event))
-  useElementListener(handleEl, 'dblclick', () => {
-    collapsed.value = true
-  })
-  useElementListener(expandHandleEl, 'keydown', (event: globalThis.KeyboardEvent) =>
-    onHandleKey(event, true)
+  const keyShortcuts = useSidebarKeys(
+    handleEl,
+    expandHandleEl,
+    () => props.shortcut && collapseMode.value !== null,
+    collapsed,
+    dir,
+    nudge,
+    tapToExpand
   )
-  useElementListener(expandHandleEl, 'click', tapToExpand)
 
   defineExpose({ measure })
 
@@ -198,23 +164,18 @@
 
   const settled = ref(false)
 
+  const settle = () => {
+    settled.value = true
+  }
+
   onMounted(() => {
     hydrated.value = true
     const raf = globalThis.requestAnimationFrame
-    if (typeof raf !== 'function') {
-      settled.value = true
-      return
-    }
-    raf(() =>
-      raf(() => {
-        settled.value = true
-      })
-    )
+    if (typeof raf === 'function') raf(() => raf(settle))
+    else settle()
   })
 
-  const setRailEl = (el: unknown) => {
-    railEl.value = (el as globalThis.HTMLElement | null) ?? null
-  }
+  const setRailEl = (el: unknown) => (railEl.value = (el as globalThis.HTMLElement | null) ?? null)
 
   const cssVars = computed(() => {
     if (!railEnabled.value) return {}
@@ -227,13 +188,6 @@
   })
 
   const asideStyle = computed(() => ({ ...cssVars.value, ...railStyle.value }))
-
-  const RAIL_MOTION_CLASS =
-    'transition-[width,min-width] duration-moderate-02 ease-expressive-entrance ' +
-    'has-[>div[data-state=closed]]:ease-productive-exit ' +
-    'data-[resizing]:transition-none ' +
-    'not-data-[settled]:transition-none ' +
-    'motion-reduce:transition-none'
 
   const rootClass = computed(() =>
     cn(
@@ -255,22 +209,12 @@
     )
   )
 
-  const NAV_CLASS =
-    'flex h-full min-h-0 flex-1 flex-col [--sidebar-menu-item-ring-offset:var(--bg-surface)] [--sidebar-menu-ring-offset:var(--bg-surface)]'
-
   const headerRegionClass = computed(() =>
     cn(
       'w-full shrink-0 p-(--spacing-md)',
       rail.value ? 'overflow-hidden px-(--spacing-xs)' : undefined
     )
   )
-
-  const INNER_MOTION_CLASS =
-    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance ' +
-    'data-[state=closed]:ease-productive-exit ' +
-    'data-[resizing]:transition-none ' +
-    'not-data-[settled]:transition-none ' +
-    'motion-reduce:transition-none motion-reduce:translate-none'
 
   const innerClass = computed(() =>
     cn(
@@ -290,48 +234,12 @@
       : 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
   )
 
-  const footerBandClass = () => {
-    if (collapseMode.value === null) return undefined
-    if (rail.value) {
-      return 'flex flex-col items-center gap-(--spacing-xs) border-t border-(--border-muted) px-(--spacing-xs) py-(--spacing-sm)'
-    }
-    return cn(
-      'flex h-14 items-center gap-(--spacing-xs)',
-      'border-t border-(--border-muted) px-(--spacing-md)',
-      !slots['footer'] ? 'justify-end' : undefined
-    )
-  }
+  const footerBandClass = () =>
+    sidebarFooterBandClass(collapseMode.value !== null, rail.value, Boolean(slots['footer']))
 
-  const footerSlotClass = () => {
-    if (collapseMode.value === null) return undefined
-    return rail.value ? 'flex min-w-0 justify-center' : 'min-w-0 flex-1'
-  }
+  const footerSlotClass = () => sidebarFooterSlotClass(collapseMode.value !== null, rail.value)
 
-  const scrollClass = () =>
-    cn(
-      'flex min-h-0 flex-1 flex-col gap-(--spacing-md) p-(--spacing-md)',
-      'scroll-py-(--spacing-2xs)',
-      slots['header'] ? 'pt-(--spacing-2xs)' : undefined,
-      rail.value ? 'px-(--spacing-xs)' : undefined
-    )
-
-  const RESIZE_INDICATOR_CLASS =
-    'pointer-events-none absolute inset-y-0 end-0 w-(--border-width-2) bg-(--accent) opacity-0 transition-opacity ' +
-    'group-hover:opacity-100 group-focus-visible:opacity-100 ' +
-    'group-data-[preview]:opacity-100 ' +
-    'group-data-[resizing]:opacity-100 ' +
-    'motion-reduce:transition-none'
-
-  const EXPAND_CLASS =
-    'group absolute inset-y-0 start-0 z-20 w-(--size-6) hover:w-(--size-10) focus-within:w-(--size-10) ' +
-    'transition-[width] duration-moderate-02 ease-expressive-exit hover:ease-expressive-entrance focus-within:ease-expressive-entrance motion-reduce:transition-none'
-
-  const EXPAND_HINT_CLASS =
-    'pointer-events-none absolute start-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] ' +
-    'rtl:translate-x-(--size-10) ps-(--spacing-2xs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit ' +
-    'group-hover:translate-x-0 rtl:group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance ' +
-    'group-focus-within:translate-x-0 rtl:group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto ' +
-    'group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none'
+  const scrollClass = () => sidebarScrollClass(Boolean(slots['header']), rail.value)
 </script>
 
 <template>

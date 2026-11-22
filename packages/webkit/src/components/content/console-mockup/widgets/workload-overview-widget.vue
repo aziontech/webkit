@@ -1,21 +1,26 @@
 <script setup lang="ts">
-  import { computed, nextTick, onMounted, ref, useId, watch } from 'vue'
+  import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
   import Button from '../../../action/button/button.vue'
   import CopyButton from '../../../action/copy-button/copy-button.vue'
   import IconButton from '../../../action/icon-button/icon-button.vue'
   import type { TextureVariant } from '../../../content/texture/texture.vue'
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
-  import RadioGroup from '../../../input/radio-group/radio-group.vue'
-  import RadioGroupItem from '../../../input/radio-group/radio-group-item/radio-group-item.vue'
   import Tabs from '../../../navigation/tabs'
   import Avatar from '../../avatar/avatar.vue'
   import Card from '../../card/card.vue'
-  import Tag, { type TagSeverity } from '../../tag/tag.vue'
+  import Tag from '../../tag/tag.vue'
+  import {
+    WORKLOAD_OVERVIEW_FACTS,
+    WORKLOAD_OVERVIEW_LINKS,
+    WORKLOAD_OVERVIEW_NODES,
+    WORKLOAD_OVERVIEW_TABS
+  } from '../lib/workload-overview-data'
   import ConsoleMockupShell, {
     type ConsoleMockupShellFade
   } from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import WorkloadDeployDrawer from '../parts/workload-deploy-drawer.vue'
 
   defineOptions({ name: 'WorkloadOverviewWidget' })
 
@@ -39,20 +44,6 @@
     active: true
   })
 
-  interface TopologyNode {
-    key: string
-    kind: string
-    icon: string
-    name: string
-    status: string
-    severity: TagSeverity
-    link?: boolean
-    dashed?: boolean
-    column: number
-    row: number
-  }
-
-  const environmentHeadingId = useId()
   const SCROLL_INSET = 16
 
   const topologyEl = ref<globalThis.HTMLElement | null>(null)
@@ -73,96 +64,6 @@
     () => nextTick(measure)
   )
 
-  const TABS = [
-    { value: 'overview', label: 'Overview' },
-    { value: 'deployments', label: 'Deployments' },
-    { value: 'settings', label: 'Settings' }
-  ]
-
-  const FACTS = {
-    domain: 'w1082318.azion.run',
-    id: '1082318',
-    created: 'Jul 13 by Jordan Avery',
-    owner: 'JA'
-  }
-
-  const NODES: TopologyNode[] = [
-    {
-      key: 'domains',
-      kind: 'Domains',
-      icon: 'az az-domains',
-      name: FACTS.domain,
-      status: '1 domain',
-      severity: 'neutral',
-      column: 1,
-      row: 1
-    },
-    {
-      key: 'workload',
-      kind: 'Workload',
-      icon: 'az az-workloads',
-      name: 'storefront-prod',
-      status: 'Live',
-      severity: 'success',
-      link: true,
-      column: 3,
-      row: 1
-    },
-    {
-      key: 'firewall',
-      kind: 'Firewall',
-      icon: 'az az-firewall',
-      name: '',
-      status: 'Not bound',
-      severity: 'neutral',
-      dashed: true,
-      column: 5,
-      row: 1
-    },
-    {
-      key: 'application',
-      kind: 'Application',
-      icon: 'az az-applications',
-      name: 'storefront-prod',
-      status: 'Active',
-      severity: 'success',
-      link: true,
-      column: 7,
-      row: 1
-    },
-    {
-      key: 'custom-page',
-      kind: 'Custom Page',
-      icon: 'az az-custom-pages',
-      name: '',
-      status: 'Not bound',
-      severity: 'neutral',
-      dashed: true,
-      column: 7,
-      row: 2
-    }
-  ]
-
-  const LINKS = [2, 4]
-
-  const SELECTED_ENVIRONMENT = 'Production'
-
-  const ENVIRONMENTS = [
-    {
-      name: 'Production',
-      tag: 'Last used',
-      selected: true,
-      description: 'Live traffic. One version serves the domain, and deploying replaces it.'
-    },
-    {
-      name: 'Preview',
-      tag: '',
-      selected: false,
-      description:
-        'Every other branch. Each version keeps its own URL, so a build can be read before it is live.'
-    }
-  ]
-
   const ENVIRONMENT_SELECT_CLASS =
     'flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default)'
 
@@ -171,12 +72,6 @@
     'data-dashed:border-dashed ' +
     'data-focused:border-(--primary) ' +
     'data-gap:mb-(--spacing-sm)'
-
-  const DEPLOY_DRAWER_CLASS =
-    'absolute inset-y-0 end-0 flex w-[47%] translate-x-full flex-col border-s border-(--border-default) bg-(--bg-surface) transition-[translate] duration-slow-01 ' +
-    'ease-productive-entrance ' +
-    'data-[state=open]:translate-x-0 ' +
-    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -199,7 +94,7 @@
           >
             <Tabs.List>
               <Tabs.Trigger
-                v-for="tab in TABS"
+                v-for="tab in WORKLOAD_OVERVIEW_TABS"
                 :key="tab.value"
                 :value="tab.value"
                 :label="tab.label"
@@ -234,7 +129,7 @@
                     <span
                       class="inline-flex items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
                     >
-                      {{ FACTS.domain }}
+                      {{ WORKLOAD_OVERVIEW_FACTS.domain }}
                       <i
                         class="az az-external-link text-body-xs leading-none"
                         aria-hidden="true"
@@ -298,11 +193,11 @@
                     <span class="text-label-sm text-(--text-muted)">Workload ID</span>
                     <div class="flex min-h-7 items-center gap-(--spacing-xs)">
                       <span class="text-body-sm tabular-nums text-(--text-default)">{{
-                        FACTS.id
+                        WORKLOAD_OVERVIEW_FACTS.id
                       }}</span>
                       <CopyButton
                         variant="outline"
-                        :value="FACTS.id"
+                        :value="WORKLOAD_OVERVIEW_FACTS.id"
                         aria-label="Copy workload ID"
                         size="small"
                       />
@@ -312,10 +207,10 @@
                     <span class="text-label-sm text-(--text-muted)">Created</span>
                     <div class="flex min-h-7 items-center gap-(--spacing-xs)">
                       <span class="truncate text-body-sm text-(--text-default)">{{
-                        FACTS.created
+                        WORKLOAD_OVERVIEW_FACTS.created
                       }}</span>
                       <Avatar
-                        :label="FACTS.owner"
+                        :label="WORKLOAD_OVERVIEW_FACTS.owner"
                         size="small"
                         variant="square"
                       />
@@ -358,7 +253,7 @@
                       class="grid grid-cols-[1fr_1.5rem_1fr_1.5rem_1fr_1.5rem_1fr_1.5rem] p-(--spacing-md)"
                     >
                       <div
-                        v-for="column in LINKS"
+                        v-for="column in WORKLOAD_OVERVIEW_LINKS"
                         :key="column"
                         :style="{ gridColumn: column, gridRow: 1 }"
                         class="relative mt-5 h-px border-t border-dashed border-(--accent)"
@@ -410,7 +305,7 @@
                         />
                       </div>
                       <div
-                        v-for="node in NODES"
+                        v-for="node in WORKLOAD_OVERVIEW_NODES"
                         :key="node.key"
                         :style="{ gridColumn: node.column, gridRow: node.row }"
                         :data-dashed="node.dashed || null"
@@ -478,152 +373,7 @@
         :data-state="tab === 'deploy' ? 'open' : 'closed'"
         class="absolute inset-0 bg-(--bg-backdrop) opacity-0 transition-opacity duration-moderate-02 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
       />
-      <aside
-        :data-state="tab === 'deploy' ? 'open' : 'closed'"
-        :class="DEPLOY_DRAWER_CLASS"
-      >
-        <div
-          class="flex shrink-0 items-start gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
-        >
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <h2 class="m-0 text-heading-xs text-(--text-default)">Deploy</h2>
-            <p class="m-0 text-body-sm text-(--text-muted)">
-              Publish storefront-prod. Review what this release carries and where it lands.
-            </p>
-          </div>
-          <IconButton
-            class="ms-auto shrink-0"
-            icon="az az-x"
-            variant="outline"
-            size="small"
-            ariaLabel="Close"
-          />
-        </div>
-
-        <div
-          class="flex min-h-0 flex-1 flex-col gap-(--spacing-xl) px-(--spacing-lg) py-(--spacing-lg)"
-        >
-          <div class="flex flex-col gap-(--spacing-sm)">
-            <h3
-              class="m-0 flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)"
-            >
-              Resources
-              <i
-                class="az az-circle-info text-body-xs text-(--text-muted)"
-                aria-hidden="true"
-              />
-            </h3>
-            <div
-              class="flex flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
-            >
-              <div class="flex items-center gap-(--spacing-sm) p-(--spacing-sm)">
-                <span
-                  class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default)"
-                >
-                  <i
-                    class="az az-applications text-body-md leading-none text-(--text-default)"
-                    aria-hidden="true"
-                  />
-                </span>
-                <span class="flex min-w-0 flex-col">
-                  <span class="flex items-center gap-(--spacing-xs) text-body-sm">
-                    <span class="text-(--text-muted)">Application</span>
-                    <span class="text-(--text-default)">storefront-prod</span>
-                    <Tag
-                      label="Ready"
-                      severity="success"
-                      size="small"
-                    />
-                  </span>
-                  <span class="text-body-sm text-(--text-muted)">AWFBBZ1Q</span>
-                </span>
-                <span
-                  class="ms-auto flex h-8 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) text-label-sm text-(--text-default)"
-                >
-                  Change Version
-                  <i
-                    class="az az-chevron-down text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                </span>
-              </div>
-              <div
-                class="flex items-center border-y border-(--border-default) bg-(--bg-canvas) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"
-              >
-                Dependencies
-                <i
-                  class="az az-chevron-down ms-auto text-(--text-muted)"
-                  aria-hidden="true"
-                />
-              </div>
-              <div class="flex items-center gap-(--spacing-sm) p-(--spacing-sm)">
-                <span
-                  class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default)"
-                >
-                  <i
-                    class="az az-object-storage text-body-md leading-none text-(--text-default)"
-                    aria-hidden="true"
-                  />
-                </span>
-                <span class="flex min-w-0 flex-col">
-                  <span class="flex items-center gap-(--spacing-xs) text-body-sm">
-                    <span class="text-(--text-muted)">Object Storage</span>
-                    <span class="text-(--text-default)">storefront-prod-storage</span>
-                  </span>
-                  <span class="text-body-sm text-(--text-muted)">Not versioned</span>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div class="flex flex-col gap-(--spacing-sm)">
-            <h3
-              :id="environmentHeadingId"
-              class="m-0 flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)"
-            >
-              Environment
-              <i
-                class="az az-circle-info text-body-xs text-(--text-muted)"
-                aria-hidden="true"
-              />
-            </h3>
-            <RadioGroup
-              :model-value="SELECTED_ENVIRONMENT"
-              variant="card"
-              :aria-labelledby="environmentHeadingId"
-            >
-              <RadioGroupItem
-                v-for="environment in ENVIRONMENTS"
-                :key="environment.name"
-                :value="environment.name"
-                :description="environment.description"
-              >
-                {{ environment.name }}
-                <template
-                  v-if="environment.tag"
-                  #tag
-                >
-                  <Tag
-                    :label="environment.tag"
-                    severity="info"
-                    size="small"
-                  />
-                </template>
-              </RadioGroupItem>
-            </RadioGroup>
-          </div>
-        </div>
-
-        <div
-          class="flex shrink-0 items-center justify-end border-t border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
-        >
-          <Button
-            label="Deploy"
-            variant="primary"
-            size="medium"
-          />
-        </div>
-      </aside>
+      <WorkloadDeployDrawer :data-state="tab === 'deploy' ? 'open' : 'closed'" />
     </template>
   </ConsoleMockupShell>
 </template>

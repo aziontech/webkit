@@ -80,20 +80,20 @@
     return overflow === 'auto' || overflow === 'scroll'
   }
 
+  function scrollContainer(element: Element) {
+    let node = element.parentElement
+    while (node && node !== globalThis.document?.body) {
+      if (scrolls(node)) return node
+      node = node.parentElement
+    }
+    return globalThis.document?.scrollingElement ?? null
+  }
+
   function reachableScroll() {
     const element = rootEl.value
     if (!element) return 0
     let total = 0
-    let node = element.parentElement
-    let container: Element | null = null
-    while (node && node !== globalThis.document?.body) {
-      if (scrolls(node)) {
-        container = node
-        break
-      }
-      node = node.parentElement
-    }
-    container ??= globalThis.document?.scrollingElement ?? null
+    const container = scrollContainer(element)
     if (container) total += container.scrollHeight - container.clientHeight
     for (const sibling of Array.from(element.parentElement?.children ?? [])) {
       if (sibling !== element && scrolls(sibling))

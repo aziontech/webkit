@@ -41,23 +41,30 @@ export function extensionOf(fileName: string): string {
   return dot > 0 ? fileName.slice(dot + 1).toLowerCase() : ''
 }
 
-export function filePreviewType(mimeType: string, fileName: string): FilePreviewType {
-  const media = mimeType.toLowerCase().split(';')[0]?.trim() ?? ''
+const mediaType = (media: string): FilePreviewType | '' => {
   if (media.startsWith('image/')) return 'image'
   if (media === 'application/pdf') return 'pdf'
   if (media.startsWith('audio/')) return 'audio'
   if (media.startsWith('video/')) return 'video'
   if (media === 'application/json' || media.endsWith('+json')) return 'json'
   if (media.startsWith('text/') || TEXT_MEDIA_TYPES.test(media)) return 'text'
-  if (media && media !== 'application/octet-stream') return 'unknown'
-  const extension = extensionOf(fileName)
+  return media && media !== 'application/octet-stream' ? 'unknown' : ''
+}
+
+const extensionType = (extension: string): FilePreviewType => {
   if (IMAGE_EXTENSIONS.has(extension)) return 'image'
   if (extension === 'pdf') return 'pdf'
   if (AUDIO_EXTENSIONS.has(extension)) return 'audio'
   if (VIDEO_EXTENSIONS.has(extension)) return 'video'
   if (extension === 'json') return 'json'
-  if (TEXT_EXTENSIONS.has(extension)) return 'text'
-  return 'unknown'
+  return TEXT_EXTENSIONS.has(extension) ? 'text' : 'unknown'
+}
+
+export function filePreviewType(mimeType: string, fileName: string): FilePreviewType {
+  return (
+    mediaType(mimeType.toLowerCase().split(';')[0]?.trim() ?? '') ||
+    extensionType(extensionOf(fileName))
+  )
 }
 
 export function formatJson(content: string): string {

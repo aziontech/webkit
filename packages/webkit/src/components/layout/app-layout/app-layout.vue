@@ -13,6 +13,8 @@
   import DrawerContent from '../../overlay/drawer/drawer-content.vue'
   import DrawerTitle from '../../overlay/drawer/drawer-title.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
+  import { useAppLayoutStorage } from './composables/use-app-layout-storage'
+  import AppLayoutSplitPanel from './parts/app-layout-split-panel.vue'
 
   defineOptions({
     name: 'AppLayout',
@@ -96,6 +98,9 @@
   const rootEl = ref<globalThis.HTMLElement | null>(null)
   const rowEl = ref<globalThis.HTMLElement | null>(null)
   const separatorEl = ref<globalThis.HTMLElement | null>(null)
+  const setSeparatorEl = (el: unknown) => {
+    separatorEl.value = el instanceof globalThis.HTMLElement ? el : null
+  }
   const dir = useDirection(rootEl)
 
   const width = ref(0)
@@ -224,71 +229,29 @@
     })
   }
 
-  interface Stored {
-    navigationOpen?: boolean
-    toolsOpen?: boolean
-    splitPanelPosition?: AppLayoutSplitPanelPosition
-    splitPanelSize?: number
-  }
-
-  const readStored = (): Stored | null => {
-    if (!props.storageKey) return null
-    try {
-      const raw = globalThis.localStorage?.getItem(props.storageKey)
-      return raw ? (JSON.parse(raw) as Stored) : null
-    } catch {
-      return null
-    }
-  }
-
   onMounted(() => {
     width.value = rootEl.value?.offsetWidth ?? 0
-    const stored = readStored()
-    if (!stored) return
-    if (typeof stored.navigationOpen === 'boolean') navigationOpen.value = stored.navigationOpen
-    if (typeof stored.toolsOpen === 'boolean') toolsOpen.value = stored.toolsOpen
-    if (stored.splitPanelPosition === 'bottom' || stored.splitPanelPosition === 'side')
-      splitPosition.value = stored.splitPanelPosition
-    if (typeof stored.splitPanelSize === 'number' && Number.isFinite(stored.splitPanelSize))
-      splitSize.value = stored.splitPanelSize
   })
 
-  watch(
-    () => [navigationOpen.value, toolsOpen.value, splitPosition.value, splitSize.value],
-    () => {
-      if (!props.storageKey) return
-      try {
-        globalThis.localStorage?.setItem(
-          props.storageKey,
-          JSON.stringify({
-            navigationOpen: navigationOpen.value,
-            toolsOpen: toolsOpen.value,
-            splitPanelPosition: splitPosition.value,
-            splitPanelSize: splitSize.value
-          } satisfies Stored)
-        )
-      } catch {
-        return
-      }
-    }
-  )
+  useAppLayoutStorage(() => props.storageKey, navigationOpen, toolsOpen, splitPosition, splitSize)
 
   const toolsTitleId = `${uid}-tools-title`
   const splitTitleId = `${uid}-split-title`
   const splitId = `${uid}-split`
   const contentId = `${uid}-content`
 
-  const SPLIT_SEPARATOR_ROW_CLASS =
-    'absolute inset-x-0 top-0 z-10 h-(--spacing-2xs) cursor-row-resize bg-transparent outline-none transition-colors duration-fast-02 ease-productive-entrance ' +
-    "before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) focus-visible:ring-2 focus-visible:ring-(--ring-color) " +
-    'data-[resizing]:bg-(--accent) ' +
-    'motion-reduce:transition-none'
-
-  const SPLIT_SEPARATOR_COLUMN_CLASS =
-    'absolute inset-y-0 start-0 z-10 w-(--spacing-2xs) cursor-col-resize bg-transparent outline-none transition-colors duration-fast-02 ease-productive-entrance ' +
-    "before:absolute before:inset-y-0 before:-inset-x-2 before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) focus-visible:ring-2 focus-visible:ring-(--ring-color) " +
-    'data-[resizing]:bg-(--accent) ' +
-    'motion-reduce:transition-none'
+  const splitPanelProps = computed(() => ({
+    size: size.value,
+    minSize: minSize.value,
+    maxSize: maxSize.value,
+    resizing: resizing.value,
+    compact: compact.value,
+    title: props.splitPanelTitle,
+    panelId: splitId,
+    titleId: splitTitleId,
+    layoutTestId: testId.value,
+    separatorRef: setSeparatorEl
+  }))
 </script>
 
 <template>
@@ -360,125 +323,28 @@
             </div>
           </div>
 
-          <section
+          <AppLayoutSplitPanel
             v-if="showSplit() && position === 'bottom'"
-            :id="splitId"
-            :aria-labelledby="splitTitleId"
-            :data-testid="`${testId}__split-panel`"
-            class="relative flex min-h-0 shrink-0 flex-col border-t border-(--border-default) bg-(--bg-surface)"
-            :style="{ height: `${size}px` }"
-          >
-            <div
-              ref="separatorEl"
-              role="separator"
-              tabindex="0"
-              aria-orientation="horizontal"
-              :aria-label="t('appLayout.resizeSplitPanel')"
-              :aria-controls="splitId"
-              :aria-valuenow="size"
-              :aria-valuemin="minSize"
-              :aria-valuemax="maxSize"
-              :data-testid="`${testId}__split-separator`"
-              :data-resizing="resizing || null"
-              :class="SPLIT_SEPARATOR_ROW_CLASS"
-              @pointerdown="startResize"
-            />
-            <div
-              class="flex h-(--spacing-2xl) shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md)"
-            >
-              <h2
-                :id="splitTitleId"
-                class="m-0 min-w-0 flex-1 truncate text-heading-2xs text-(--text-default)"
-              >
-                {{ splitPanelTitle || t('appLayout.splitPanel') }}
-              </h2>
-              <IconButton
-                v-if="!compact"
-                icon="az az-app-window"
-                :ariaLabel="t('appLayout.showAtSide')"
-                variant="ghost"
-                size="small"
-                :data-testid="`${testId}__split-position`"
-                @click="togglePosition"
-              />
-              <IconButton
-                icon="az az-x"
-                :ariaLabel="t('appLayout.closeSplitPanel')"
-                variant="ghost"
-                size="small"
-                :data-testid="`${testId}__split-close`"
-                @click="splitOpen = false"
-              />
-            </div>
-            <div
-              tabindex="0"
-              role="group"
-              :aria-labelledby="splitTitleId"
-              class="min-h-0 flex-1 overflow-auto p-(--spacing-md) outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
-            >
-              <slot name="split-panel" />
-            </div>
-          </section>
-        </div>
-
-        <section
-          v-if="showSplit() && position === 'side'"
-          :id="splitId"
-          :aria-labelledby="splitTitleId"
-          :data-testid="`${testId}__split-panel`"
-          class="relative flex h-full min-h-0 shrink-0 flex-col border-s border-(--border-default) bg-(--bg-surface)"
-          :style="{ width: `${size}px` }"
-        >
-          <div
-            ref="separatorEl"
-            role="separator"
-            tabindex="0"
-            aria-orientation="vertical"
-            :aria-label="t('appLayout.resizeSplitPanel')"
-            :aria-controls="splitId"
-            :aria-valuenow="size"
-            :aria-valuemin="minSize"
-            :aria-valuemax="maxSize"
-            :data-testid="`${testId}__split-separator`"
-            :data-resizing="resizing || null"
-            :class="SPLIT_SEPARATOR_COLUMN_CLASS"
-            @pointerdown="startResize"
-          />
-          <div
-            class="flex h-(--spacing-2xl) shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md)"
-          >
-            <h2
-              :id="splitTitleId"
-              class="m-0 min-w-0 flex-1 truncate text-heading-2xs text-(--text-default)"
-            >
-              {{ splitPanelTitle || t('appLayout.splitPanel') }}
-            </h2>
-            <IconButton
-              icon="az az-window-minimize"
-              :ariaLabel="t('appLayout.showAtBottom')"
-              variant="ghost"
-              size="small"
-              :data-testid="`${testId}__split-position`"
-              @click="togglePosition"
-            />
-            <IconButton
-              icon="az az-x"
-              :ariaLabel="t('appLayout.closeSplitPanel')"
-              variant="ghost"
-              size="small"
-              :data-testid="`${testId}__split-close`"
-              @click="splitOpen = false"
-            />
-          </div>
-          <div
-            tabindex="0"
-            role="group"
-            :aria-labelledby="splitTitleId"
-            class="min-h-0 flex-1 overflow-auto p-(--spacing-md) outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
+            v-bind="splitPanelProps"
+            :side="false"
+            @resize="startResize"
+            @toggle-position="togglePosition"
+            @close="splitOpen = false"
           >
             <slot name="split-panel" />
-          </div>
-        </section>
+          </AppLayoutSplitPanel>
+        </div>
+
+        <AppLayoutSplitPanel
+          v-if="showSplit() && position === 'side'"
+          v-bind="splitPanelProps"
+          side
+          @resize="startResize"
+          @toggle-position="togglePosition"
+          @close="splitOpen = false"
+        >
+          <slot name="split-panel" />
+        </AppLayoutSplitPanel>
 
         <section
           v-if="showTools()"

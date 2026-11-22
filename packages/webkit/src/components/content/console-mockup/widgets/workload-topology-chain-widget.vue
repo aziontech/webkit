@@ -3,6 +3,13 @@
 
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
   import Tag from '../../tag/tag.vue'
+  import {
+    type TopologyArrangement,
+    type TopologyDrawing,
+    type TopologyLayout,
+    type TopologySide,
+    WORKLOAD_TOPOLOGY_ARRANGEMENTS
+  } from '../lib/workload-topology-data'
   import ConsoleMockupShell, {
     type ConsoleMockupShellFade,
     type ConsoleMockupShellVariant
@@ -31,127 +38,6 @@
     fade: 'none',
     active: true
   })
-
-  interface TopologyNode {
-    key: string
-    eyebrow: string
-    icon: string
-    title: string
-    label: string
-    indicator?: boolean
-  }
-
-  interface TopologyColumn {
-    key: string
-    order: number
-    nodes: TopologyNode[]
-  }
-
-  type TopologySide = 'start' | 'end'
-
-  interface TopologyEdge {
-    from: string
-    to: string
-  }
-
-  type TopologyLayout = 'chain' | 'compact'
-
-  interface TopologyArrangement {
-    key: TopologyLayout
-    columns: TopologyColumn[]
-    edges: TopologyEdge[]
-  }
-
-  interface TopologyDrawing {
-    viewBox: string
-    paths: string[]
-  }
-
-  const DOMAINS: TopologyNode[] = [
-    {
-      key: 'domain-shop',
-      eyebrow: 'Domain',
-      icon: 'az az-domains',
-      title: 'shop.example.com',
-      label: 'Public'
-    },
-    {
-      key: 'domain-www',
-      eyebrow: 'Domain',
-      icon: 'az az-domains',
-      title: 'www.example.com',
-      label: 'Public'
-    },
-    {
-      key: 'domain-generated',
-      eyebrow: 'Domain',
-      icon: 'az az-domains',
-      title: 'storefront.azion.app',
-      label: 'Public'
-    }
-  ]
-
-  const WORKLOAD: TopologyNode = {
-    key: 'workload',
-    eyebrow: 'Workload',
-    icon: 'az az-workloads',
-    title: 'storefront-prod',
-    label: 'Live',
-    indicator: true
-  }
-
-  const APPLICATION: TopologyNode = {
-    key: 'application',
-    eyebrow: 'Application',
-    icon: 'az az-applications',
-    title: 'storefront',
-    label: 'Active'
-  }
-
-  const FIREWALL: TopologyNode = {
-    key: 'firewall',
-    eyebrow: 'Firewall',
-    icon: 'az az-firewall',
-    title: 'edge-rules',
-    label: 'Active'
-  }
-
-  const DOMAIN_GROUP: TopologyNode = {
-    key: 'domains',
-    eyebrow: 'Domains',
-    icon: 'az az-domains',
-    title: '',
-    label: ''
-  }
-
-  const BINDING_EDGES: TopologyEdge[] = [
-    { from: WORKLOAD.key, to: APPLICATION.key },
-    { from: WORKLOAD.key, to: FIREWALL.key }
-  ]
-
-  const ARRANGEMENTS: TopologyArrangement[] = [
-    {
-      key: 'chain',
-      columns: [
-        { key: 'domains', order: 0, nodes: DOMAINS },
-        { key: 'workload', order: 1, nodes: [WORKLOAD] },
-        { key: 'bindings', order: 2, nodes: [APPLICATION, FIREWALL] }
-      ],
-      edges: [
-        ...DOMAINS.map((domain) => ({ from: domain.key, to: WORKLOAD.key })),
-        ...BINDING_EDGES
-      ]
-    },
-    {
-      key: 'compact',
-      columns: [
-        { key: 'domains', order: 0, nodes: [DOMAIN_GROUP] },
-        { key: 'workload', order: 1, nodes: [WORKLOAD] },
-        { key: 'bindings', order: 2, nodes: [APPLICATION, FIREWALL] }
-      ],
-      edges: [{ from: DOMAIN_GROUP.key, to: WORKLOAD.key }, ...BINDING_EDGES]
-    }
-  ]
 
   const CORNER = 10
 
@@ -227,8 +113,8 @@
 
   const measure = () => {
     drawings.value = {
-      chain: draw(ARRANGEMENTS[0]),
-      compact: draw(ARRANGEMENTS[1])
+      chain: draw(WORKLOAD_TOPOLOGY_ARRANGEMENTS[0]),
+      compact: draw(WORKLOAD_TOPOLOGY_ARRANGEMENTS[1])
     }
   }
 
@@ -262,7 +148,7 @@
     :active="active"
   >
     <div
-      v-for="arrangement in ARRANGEMENTS"
+      v-for="arrangement in WORKLOAD_TOPOLOGY_ARRANGEMENTS"
       :key="arrangement.key"
       :ref="(element) => bindCanvas(arrangement.key, element)"
       :data-layout="arrangement.key"

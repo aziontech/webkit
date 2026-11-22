@@ -1,23 +1,5 @@
 <script setup lang="ts">
-  import {
-    Comment,
-    computed,
-    Fragment,
-    type FunctionalComponent,
-    h,
-    isVNode,
-    nextTick,
-    onScopeDispose,
-    provide,
-    proxyRefs,
-    readonly,
-    ref,
-    shallowRef,
-    Text,
-    useAttrs,
-    type VNode,
-    watch
-  } from 'vue'
+  import { computed, provide, proxyRefs, readonly, ref, shallowRef, useAttrs, watch } from 'vue'
 
   import {
     type AppNavGroup,
@@ -34,22 +16,12 @@
   import Avatar from '../../content/avatar/avatar.vue'
   import Brand from '../../content/brand/brand.vue'
   import type { BreadcrumbItemData } from '../../navigation/breadcrumb/breadcrumb.vue'
-  import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'
-  import BreadcrumbItem from '../../navigation/breadcrumb/breadcrumb-item/breadcrumb-item.vue'
-  import BreadcrumbList from '../../navigation/breadcrumb/breadcrumb-list.vue'
-  import BreadcrumbSeparator from '../../navigation/breadcrumb/breadcrumb-separator.vue'
   import DropdownMenu from '../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuTrigger from '../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
   import type { DropdownMenuItemValue } from '../../navigation/dropdown-menu/injection-key'
   import type { SidebarMenuNode } from '../../navigation/sidebar-menu/injection-key'
   import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
   import SidebarMenuBack from '../../navigation/sidebar-menu/sidebar-menu-back/sidebar-menu-back.vue'
-  import Command from '../../overlay/command/command.vue'
-  import CommandEmpty from '../../overlay/command/command-empty/command-empty.vue'
-  import CommandGroup from '../../overlay/command/command-group/command-group.vue'
-  import CommandInput from '../../overlay/command/command-input/command-input.vue'
-  import CommandItem from '../../overlay/command/command-item/command-item.vue'
-  import CommandList from '../../overlay/command/command-list/command-list.vue'
   import ShortcutsDialog from '../../overlay/shortcuts-dialog/shortcuts-dialog.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import AppHeader from '../app-header/app-header.vue'
@@ -60,11 +32,15 @@
   import AppHeaderStart from '../app-header/app-header-start.vue'
   import AppLayout from '../app-layout/app-layout.vue'
   import Sidebar from '../sidebar/sidebar.vue'
+  import { useConsoleLayoutNavAudit } from './composables/use-console-layout-nav-audit'
   import {
     ConsoleLayoutInjectionKey,
     type ConsoleLayoutTrail,
     ConsoleLayoutTrailsInjectionKey
   } from './injection-key'
+  import { revealActive } from './lib/reveal-active'
+  import ConsoleLayoutHeaderStart from './parts/console-layout-header-start.vue'
+  import ConsoleLayoutPalette from './parts/console-layout-palette.vue'
 
   defineOptions({
     name: 'ConsoleLayout',
@@ -225,160 +201,15 @@
 
   const pageTrail = computed(() => trails.value[trails.value.length - 1] ?? null)
 
-  const activeCrumbs = computed(() =>
-    pageTrail.value ? pageTrail.value.items() : props.breadcrumbs
-  )
-
-  const crumbItems = computed(() =>
-    activeCrumbs.value.map((crumb) => {
-      const href = hrefOf(crumb)
-      return href ? { label: crumb.label, href } : { label: crumb.label }
-    })
-  )
-
-  const pageControl = computed(() => Boolean(pageTrail.value?.hasControl()))
-
   const pageKey = ref(0)
 
-  const controlNodes = (children: unknown): VNode[] =>
-    (Array.isArray(children) ? children : [children]).flatMap((child) => {
-      if (!isVNode(child) || child.type === Comment || child.type === Text) return []
-      if (child.type === Fragment) return controlNodes(child.children)
-      return [child]
-    })
-
-  const PageCrumbControls: FunctionalComponent = () =>
-    controlNodes(pageTrail.value?.control()).flatMap((node, index) => [
-      ...(index ? [h(BreadcrumbSeparator, { key: `separator-${index}` })] : []),
-      h('li', { key: `control-${index}`, class: 'inline-flex min-w-0 items-center' }, [node])
-    ])
-
-  watch([() => appMenu.currentId, navEl], () => revealActive(), { flush: 'post' })
+  watch([() => appMenu.currentId, navEl], () => revealActive(navEl.value), { flush: 'post' })
 
   watch(currentPath, (_next, previous) => {
     if (previous) pageKey.value += 1
   })
 
-  if (dev) {
-    const warnedRoutes = new Set<string>()
-    let pageObserver: globalThis.MutationObserver | null = null
-
-    const routeOf = (href: string | null | undefined): string | null => {
-      if (!href || href.startsWith('#') || !globalThis.location) return null
-      try {
-        const url = new globalThis.URL(href, globalThis.location.href)
-        if (url.origin !== globalThis.location.origin) return null
-        const path = url.pathname
-        return path.length > 1 ? path.replace(/\/+$/, '') : path
-      } catch {
-        return null
-      }
-    }
-
-    const navigationRoutes = (): Map<string, string> => {
-      const routes = new Map<string, string>()
-      const walk = (items: ConsoleLayoutNavItem[]) => {
-        for (const item of items) {
-          const route = routeOf(hrefOf(item))
-          if (route && !routes.has(route)) routes.set(route, item.label)
-          if (item.groups && menuPath.value.includes(item.id))
-            walk(item.groups.flatMap((group) => group.items))
-          if (item.children) walk(item.children)
-        }
-      }
-      walk(props.navigation.flatMap((group) => group.items))
-      return routes
-    }
-
-    const warnDuplicateDestinations = () => {
-      const root = mainEl.value
-      const route = currentPath.value || globalThis.location?.pathname || ''
-      if (!root || warnedRoutes.has(route)) return
-      const menus = [...root.querySelectorAll('[data-testid$="__levels"]')]
-        .map((levels) => levels.parentElement)
-        .filter((menu): menu is globalThis.HTMLElement => Boolean(menu))
-      if (!menus.length) return
-      const routes = navigationRoutes()
-      const pairs: string[] = []
-      for (const menu of menus) {
-        for (const link of menu.querySelectorAll('a[href]')) {
-          const target = routeOf(link.getAttribute('href'))
-          const navLabel = target ? routes.get(target) : undefined
-          if (!target || navLabel === undefined) continue
-          const label = (
-            link.querySelector('[data-testid$="__label"]')?.textContent ??
-            link.textContent ??
-            ''
-          ).trim()
-          pairs.push(
-            `"${label}" (page SidebarMenu) and "${navLabel}" (navigation) both lead to ${target}`
-          )
-        }
-      }
-      if (!pairs.length) return
-      warnedRoutes.add(route)
-      console.warn(
-        `[webkit] <ConsoleLayout>: on route "${route}" a SidebarMenu in the page body repeats the layout navigation: ` +
-          `${[...new Set(pairs)].join('; ')}. ` +
-          'A destination appears once per screen, and a page has only its PageTabs: ' +
-          "drop the in-page menu and keep these pages in the rail or in the resource's tabs " +
-          '(rule webkit-navigation-levels).'
-      )
-    }
-
-    watch(
-      mainEl,
-      (el) => {
-        pageObserver?.disconnect()
-        pageObserver = null
-        if (!el || typeof globalThis.MutationObserver === 'undefined') return
-        pageObserver = new globalThis.MutationObserver(() => warnDuplicateDestinations())
-        pageObserver.observe(el, { childList: true, subtree: true })
-        void nextTick(warnDuplicateDestinations)
-      },
-      { flush: 'post' }
-    )
-    watch(currentPath, () => void nextTick(warnDuplicateDestinations), { flush: 'post' })
-    onScopeDispose(() => pageObserver?.disconnect())
-  }
-
-  const railScroller = (from: globalThis.HTMLElement): globalThis.HTMLElement | null => {
-    const limit = from.closest('nav')
-    let node = from.parentElement
-    while (node && limit?.contains(node)) {
-      const { overflowY } = globalThis.getComputedStyle(node)
-      if ((overflowY === 'auto' || overflowY === 'scroll') && node.scrollHeight > node.clientHeight)
-        return node
-      node = node.parentElement
-    }
-    return null
-  }
-
-  const revealActive = () => {
-    const root = navEl.value
-    const entry = root?.querySelector<globalThis.HTMLElement>('[aria-current="page"]')
-    const scroller = root && entry ? railScroller(root) : null
-    if (!entry || !scroller) return
-    const style = globalThis.getComputedStyle(scroller)
-    const padStart = Number.parseFloat(style.scrollPaddingTop) || 0
-    const padEnd = Number.parseFloat(style.scrollPaddingBottom) || 0
-    const box = scroller.getBoundingClientRect()
-    const rect = entry.getBoundingClientRect()
-    const delta =
-      rect.top < box.top + padStart
-        ? rect.top - box.top - padStart
-        : rect.bottom > box.bottom - padEnd
-          ? rect.bottom - box.bottom + padEnd
-          : 0
-    if (delta) scroller.scrollTo({ top: scroller.scrollTop + delta, behavior: 'instant' })
-  }
-
-  const onAccountSelect = (
-    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-    value: DropdownMenuItemValue
-  ) => {
-    emit('account-select', event, value)
-  }
+  if (dev) useConsoleLayoutNavAudit(mainEl, currentPath, () => props.navigation, menuPath, hrefOf)
 
   const onMenuNavigate = (
     event: globalThis.MouseEvent,
@@ -389,15 +220,6 @@
     if (!item || node.groups || node.children) return
     appMenu.activate(event, item)
     closeNavigation()
-  }
-
-  const onCrumbNavigate = (event: globalThis.MouseEvent, href: string) => {
-    const crumb = activeCrumbs.value.find((entry) => hrefOf(entry) === href)
-    if (crumb) follow(event, crumb)
-  }
-
-  const onPageCrumbClick = (event: globalThis.MouseEvent, crumb: BreadcrumbItemData) => {
-    if (hrefOf(crumb)) follow(event, crumb)
   }
 
   const MAIN_CLASS =
@@ -497,7 +319,7 @@
                 v-if="$slots['account-menu']"
                 side="top"
                 align="end"
-                @select="onAccountSelect"
+                @select="(event, value) => emit('account-select', event, value)"
               >
                 <DropdownMenuTrigger>
                   <Tooltip :content="t('consoleLayout.accountMenu')">
@@ -520,87 +342,31 @@
         <div class="@container">
           <AppHeader :data-testid="`${testId}__header`">
             <AppHeaderStart>
-              <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
-                <template v-if="compact">
-                  <Tooltip
-                    :content="t('consoleLayout.openNavigation')"
-                    side="bottom"
-                  >
-                    <IconButton
-                      icon="az az-menu"
-                      :ariaLabel="t('consoleLayout.openNavigation')"
-                      variant="outline"
-                      size="medium"
-                      @click="openNavigation"
-                    />
-                  </Tooltip>
-                  <AppHeaderBrand
-                    v-if="!pageControl"
-                    :href="home"
-                    :aria-label="t('consoleLayout.home')"
-                    class="@max-xs:hidden px-(--spacing-2xs)"
-                  >
-                    <Brand
-                      variant="default"
-                      size="small"
-                    />
-                  </AppHeaderBrand>
+              <ConsoleLayoutHeaderStart
+                :compact="compact"
+                :home="home"
+                :home-label="t('consoleLayout.home')"
+                :open-navigation-label="t('consoleLayout.openNavigation')"
+                :trail="pageTrail"
+                :breadcrumbs="breadcrumbs"
+                :href-of="hrefOf"
+                :follow="follow"
+                :layout-test-id="testId"
+                @open-navigation="openNavigation"
+              >
+                <template #header-leading>
+                  <slot
+                    name="header-leading"
+                    :compact="compact"
+                  />
                 </template>
-                <slot
-                  name="header-leading"
-                  :compact="compact"
-                />
-                <div
-                  v-if="compact && pageControl"
-                  :data-testid="`${testId}__page-control`"
-                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
-                >
-                  <Breadcrumb class="ms-0 w-full">
-                    <BreadcrumbList>
-                      <PageCrumbControls />
-                    </BreadcrumbList>
-                  </Breadcrumb>
-                </div>
-                <div
-                  v-else-if="!compact && pageControl"
-                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
-                >
-                  <Breadcrumb class="ms-0 w-full">
-                    <BreadcrumbList>
-                      <template
-                        v-for="(crumb, index) in activeCrumbs"
-                        :key="`${crumb.label}-${index}`"
-                      >
-                        <li class="inline-flex items-center">
-                          <BreadcrumbItem
-                            :label="crumb.label"
-                            :href="hrefOf(crumb) ?? '#'"
-                            @click="(event) => onPageCrumbClick(event, crumb)"
-                          />
-                        </li>
-                        <BreadcrumbSeparator />
-                      </template>
-                      <PageCrumbControls />
-                    </BreadcrumbList>
-                  </Breadcrumb>
-                </div>
-                <div
-                  v-else-if="!compact && !pageTrail && $slots['breadcrumbs']"
-                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink *:ms-0"
+                <template
+                  v-if="$slots['breadcrumbs']"
+                  #breadcrumbs
                 >
                   <slot name="breadcrumbs" />
-                </div>
-                <div
-                  v-else-if="!compact && crumbItems.length"
-                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
-                >
-                  <Breadcrumb
-                    :items="crumbItems"
-                    class="ms-0 w-full"
-                    @navigate="onCrumbNavigate"
-                  />
-                </div>
-              </div>
+                </template>
+              </ConsoleLayoutHeaderStart>
             </AppHeaderStart>
             <AppHeaderCenter />
             <AppHeaderEnd>
@@ -618,7 +384,7 @@
                 v-if="account && $slots['account-menu']"
                 side="bottom"
                 align="end"
-                @select="onAccountSelect"
+                @select="(event, value) => emit('account-select', event, value)"
               >
                 <DropdownMenuTrigger>
                   <AppHeaderAccount
@@ -666,44 +432,23 @@
       </main>
     </AppLayout>
 
-    <Command
+    <ConsoleLayoutPalette
       v-model:open="searchOpen"
+      :placeholder="searchPlaceholder || t('consoleLayout.searchPlaceholder')"
+      :pages-label="t('consoleLayout.pages')"
+      :no-match-label="t('consoleLayout.noMatch')"
+      :groups="appMenu.paletteGroups"
+      :value-prefix="NAV_VALUE"
       @select="appMenu.onPaletteSelect"
+      @query="appMenu.onQuery"
     >
-      <CommandInput
-        :placeholder="searchPlaceholder || t('consoleLayout.searchPlaceholder')"
-        @update:model-value="appMenu.onQuery"
-      />
-      <CommandList>
+      <template #search>
         <slot
           name="search"
           :query="appMenu.query"
         />
-        <CommandGroup
-          v-for="group in appMenu.paletteGroups"
-          :key="group.key"
-          :label="group.heading || t('consoleLayout.pages')"
-        >
-          <CommandItem
-            v-for="item in group.items"
-            :key="item.id"
-            :value="NAV_VALUE + item.id"
-          >
-            <template
-              v-if="item.icon"
-              #leading
-            >
-              <i
-                :class="item.icon"
-                aria-hidden="true"
-              />
-            </template>
-            {{ item.label }}
-          </CommandItem>
-        </CommandGroup>
-        <CommandEmpty>{{ t('consoleLayout.noMatch') }}</CommandEmpty>
-      </CommandList>
-    </Command>
+      </template>
+    </ConsoleLayoutPalette>
     <ShortcutsDialog :data-testid="`${testId}__shortcuts`" />
   </div>
 </template>

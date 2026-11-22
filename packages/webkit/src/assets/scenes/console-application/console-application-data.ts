@@ -1,3 +1,5 @@
+import { duration } from '@aziontech/theme/animations'
+
 /** A tab of the console Application page the scene draws. */
 export type ConsoleApplicationSceneTab =
   | 'build'
@@ -270,3 +272,31 @@ export const CONSOLE_APPLICATION_STEPS: ConsoleApplicationStep[] = [
     }
   }
 ]
+
+const POSITIVE = new Set(['Enabled', 'Active', 'Ready'])
+
+export function severityOf(value: string): 'success' | 'neutral' {
+  return POSITIVE.has(value) ? 'success' : 'neutral'
+}
+
+export function bandDelay(index: number): Record<string, string> {
+  return {
+    '--content-enter-delay': `${globalThis.parseFloat(duration['fast-01']) * (index + 1)}ms`
+  }
+}
+
+export function rowValue(row: ConsoleApplicationFormRow): string {
+  return 'value' in row ? row.value : ''
+}
+
+export function rowTag(row: ConsoleApplicationFormRow): string {
+  return 'tag' in row ? row.tag : ''
+}
+
+export function rowOn(row: ConsoleApplicationFormRow): boolean {
+  return 'on' in row ? row.on : false
+}
+
+export function displayAs(value: string): () => string {
+  return () => value
+}

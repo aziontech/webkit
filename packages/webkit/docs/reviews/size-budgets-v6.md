@@ -1149,3 +1149,9 @@ Budget-raise: prompt-input 13.1 KB → 13.85 KB (measured 13.84 KB): the PromptI
 Budget-raise: prompt-input-root 10 KB → 10.7 KB (measured 10.69 KB): the same PromptInput split, measured on the standalone root.
 Budget-raise: streaming-response 36.85 KB → 37.95 KB (measured 37.92 KB): it renders CodeBlock and the AI markdown parser, both split to meet the CODE_QUALITY 3.1 limits.
 Budget-raise: code-editor 10.6 KB → 11.5 KB (measured 11.49 KB): the CodeEditor root (737 lines) split into the pane and problems parts, the Monaco composable and session lib to meet the 400/200-line, 60-line and complexity-12 limits (CODE_QUALITY 3.1).
+Budget-raise: app-layout 24.1 KB → 24.4 KB (measured 24.37 KB): CODE_QUALITY 3.1/3.3 split: the split panel, written twice (bottom and side), renders once from a private part, and the localStorage sync moved to a composable; the part boundary costs more than the duplicate template, which gzip had nearly for free.
+Budget-raise: console-layout-root 81.6 KB → 82.45 KB (measured 82.40 KB): carries the Sidebar and AppLayout splits (0.45 KB), plus the 3.1 split of ConsoleLayout (palette and header-start parts, nav audit composable, reveal helper) to bring the root under 400 lines.
+Budget-raise: console-layout 82.95 KB → 83.7 KB (measured 83.68 KB): same as console-layout-root.
+Budget-raise: doc-layout 72.15 KB → 72.4 KB (measured 72.38 KB): carries the Sidebar and AppLayout splits.
+Budget-raise: sidebar 24.95 KB → 25.1 KB (measured 25.08 KB): CODE_QUALITY 3.1 split of useSidebarRail (164-line function) into drag, preview and key composables; the shared refs passed between them and the extra return objects cost the bytes, and splitting the Sidebar setup below 200 lines moved code out of the gzip window of its template.
+Budget-raise: sidebar-root 24.75 KB → 24.9 KB (measured 24.88 KB): same split of useSidebarRail and the Sidebar setup as the sidebar entry.
