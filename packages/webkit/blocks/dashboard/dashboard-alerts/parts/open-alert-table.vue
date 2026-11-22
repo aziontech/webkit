@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import SeverityTag from '@aziontech/webkit/severity-tag'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
@@ -65,9 +66,6 @@
     :columns="alertColumns"
     row-key="id"
     sortable
-    paginated
-    :page-size="10"
-    :page-size-options="[10, 25, 50]"
     density="compact"
     bordered
     :loading="loading"
@@ -82,6 +80,12 @@
       <TableCellStatus
         :label="row.status"
         :severity="statusSeverity[row.status]"
+      />
+    </template>
+    <template #footer>
+      <DataTablePagination
+        :page-size="10"
+        :page-size-options="[10, 25, 50]"
       />
     </template>
   </DataTable>

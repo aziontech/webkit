@@ -1,5 +1,6 @@
 <script setup>
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTableLoadMore from '@aziontech/webkit/data-table-load-more'
   import StatusCode from '@aziontech/webkit/status-code'
   import { onBeforeUnmount, ref } from 'vue'
 
@@ -46,19 +47,23 @@
   <DataTable
     :data="rows"
     :columns="columns"
-    :more-rows="rows.length < TOTAL"
-    :loading-more="loadingMore"
     virtual
     max-height="420px"
     density="compact"
     bordered
     aria-label="Requests to app.example.com"
-    @load-more="loadMore"
   >
     <template #cell-status="{ row }">
       <StatusCode
         :code="row.status"
         :method="row.method"
+      />
+    </template>
+    <template #load-more>
+      <DataTableLoadMore
+        :more-rows="rows.length < TOTAL"
+        :loading="loadingMore"
+        @load-more="loadMore"
       />
     </template>
   </DataTable>

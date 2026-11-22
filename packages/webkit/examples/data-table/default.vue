@@ -1,5 +1,6 @@
 <script setup>
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
@@ -78,8 +79,6 @@
     :columns="columns"
     row-key="id"
     sortable
-    paginated
-    :page-size="5"
     bordered
     v-model:sorting="sorting"
     @row-click="onRowClick"
@@ -125,6 +124,9 @@
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuRoot>
+    </template>
+    <template #footer>
+      <DataTablePagination :page-size="5" />
     </template>
   </DataTable>
 </template>

@@ -20,9 +20,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Surface — `Card`, `DataTable` (required)
+### A. Surface — `Card`, `DataTable`, `DataTablePagination` (required)
 
-One `Card :padded="false"` around a `DataTable :bordered="false"` with `row-key`, `sortable` with `manual-sorting` and `v-model:sorting` (the block orders the rows so `..` and the folders stay first: Size sorts on a numeric `bytes` field and Last modified on the `modifiedAt` timestamp, within folders and within files), `v-model:global-filter`, `paginated` at 50 rows (25, 50, 100), `:loading` and an `export-filename`. Name is the `principal` column; actions are `type: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
+One `Card :padded="false"` around a `DataTable :bordered="false"` with `row-key`, `sortable` with `manual-sorting` and `v-model:sorting` (the block orders the rows so `..` and the folders stay first: Size sorts on a numeric `bytes` field and Last modified on the `modifiedAt` timestamp, within folders and within files), the search text bound to the toolbar `TableSearch` `v-model` (through `FolderSearchRow` `v-model:search`), `DataTablePagination` in the `footer` slot at 50 rows (25, 50, 100), and `:loading`; Download CSV calls `exportCsv({ filename: 'files.csv' })`. Name is the `principal` column; actions are `type: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
 
 ### B. Storage title and search — `TableSearch` (required)
 

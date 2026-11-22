@@ -39,9 +39,9 @@ Beside the filter, outlined medium `IconButton`s for Refresh (the button and the
 
 The last control of the row. `CollectionPreferences` bound with `v-bind="preferencesProps"` opens a dialog that edits a draft and applies it on Confirm: the page size (10, 25, 50), the columns (shown, hidden and reordered), wrapped lines, striped rows and density. The Name and actions columns are `hideable: false`, so the panel locks them. `preferences.storageKey` saves the choice in localStorage per list; `defaults.columns` hides the ID column until someone shows it.
 
-### E. Resource table — `Card`, `DataTable` (required)
+### E. Resource table — `Card`, `DataTable`, `DataTablePagination` (required)
 
-`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `type: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
+`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, density, wrap and stripes, while `<DataTablePagination v-bind="paginationProps" manual />` in its `footer` slot is the pagination footer; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `type: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
 
 ### F. Cell presets — `TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTime` (optional)
 
@@ -120,7 +120,7 @@ Then delete `sampleResources` and its import (keep `sample.ts` only if you copie
 ## Don't
 
 - Don't add a search `Input`, a filter popover, a chip row or a row of `Select`s beside the `PropertyFilter`; one control narrows the list.
-- Don't filter, sort or page rows in a `computed` outside the collection, or pass `:data`, `paginated` and `v-model:globalFilter` by hand beside `tableProps`.
+- Don't filter, sort or page rows in a `computed` outside the collection, or pass `:data`, a non-manual `DataTablePagination` or a `TableSearch` `v-model` by hand beside `tableProps`; page with `<DataTablePagination v-bind="paginationProps" manual />` in the `footer` slot.
 - Don't build a columns popover of `Switch`es; column visibility and order belong to `CollectionPreferences`.
 - Don't wrap a bordered table in a padded card, or let the page scroll sideways for a wide table.
 - Don't add a second create button to the controls row.

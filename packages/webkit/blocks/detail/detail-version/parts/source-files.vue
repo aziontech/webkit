@@ -3,10 +3,12 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import { toast } from '@aziontech/webkit/toast'
+  import { matchesText } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
   import {
@@ -117,6 +119,15 @@
     toast.info('Upload Files', {
       description: `Files you upload land in ${bucket} and ship with the next build of this version.`
     })
+  const matchingRows = computed(() =>
+    rows.value.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        fileColumns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
+  )
 </script>
 
 <template>
@@ -153,12 +164,9 @@
             <template #default>
               <DataTable
                 ref="tableEl"
-                v-model:globalFilter="search"
-                :data="rows"
+                :data="matchingRows"
                 :columns="fileColumns"
                 row-key="id"
-                paginated
-                :page-size="10"
                 :bordered="false"
                 aria-label="Source files"
               >
@@ -239,6 +247,9 @@
                       />
                     </template>
                   </EmptyState>
+                </template>
+                <template #footer>
+                  <DataTablePagination :page-size="10" />
                 </template>
               </DataTable>
             </template>

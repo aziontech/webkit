@@ -1,8 +1,11 @@
 <script setup lang="ts">
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import { matchesText } from '@aziontech/webkit/use-collection'
+  import { computed } from 'vue'
 
   export interface SearchTableProps {
     /** The rows; each has an id and a requests count. */
@@ -42,6 +45,15 @@
 
   const noMatch = () =>
     props.filters.length ? 'Change the search or the status class.' : 'Change the search.'
+  const matchingRows = computed(() =>
+    props.rows.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        props.columns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
+  )
 </script>
 
 <template>
@@ -73,14 +85,10 @@
     </div>
 
     <DataTable
-      v-model:global-filter="search"
-      :data="rows"
+      :data="matchingRows"
       :columns="columns"
       row-key="id"
       sortable
-      paginated
-      :page-size="5"
-      :page-size-options="[5, 10, 25]"
       density="compact"
       bordered
       :loading="loading"
@@ -108,6 +116,12 @@
         <span class="tabular-nums">{{
           formatCount('requests' in row ? Number(row.requests) : 0)
         }}</span>
+      </template>
+      <template #footer>
+        <DataTablePagination
+          :page-size="5"
+          :page-size-options="[5, 10, 25]"
+        />
       </template>
     </DataTable>
   </div>

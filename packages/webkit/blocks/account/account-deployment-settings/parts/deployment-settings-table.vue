@@ -3,6 +3,7 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -81,19 +82,25 @@
     { key: 'status', label: 'Status', options: [{ value: 'Active' }, { value: 'Inactive' }] }
   ]
 
-  const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
-    useCollection({
-      items: rows,
-      columns,
-      filtering: { fields: ['name', 'description', 'reach', 'status'] },
-      propertyFiltering: { properties },
-      sorting: { defaultState: [{ desc: true, id: 'updatedAt' }] },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: {
-        storageKey: 'deployment-settings',
-        defaults: { columns: [{ id: 'type', visible: false }] }
-      }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: rows,
+    columns,
+    filtering: { fields: ['name', 'description', 'reach', 'status'] },
+    propertyFiltering: { properties },
+    sorting: { defaultState: [{ desc: true, id: 'updatedAt' }] },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: {
+      storageKey: 'deployment-settings',
+      defaults: { columns: [{ id: 'type', visible: false }] }
+    }
+  })
 
   const settingsTableEl = ref<TableExposed<SettingsRowData> | null>(null)
   const exportCsv = () => settingsTableEl.value?.exportCsv({ filename: 'deployment-settings.csv' })
@@ -268,6 +275,12 @@
                   />
                 </template>
               </EmptyState>
+            </template>
+            <template #footer>
+              <DataTablePagination
+                v-bind="paginationProps"
+                manual
+              />
             </template>
           </DataTable>
         </template>

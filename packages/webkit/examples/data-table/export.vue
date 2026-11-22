@@ -20,11 +20,10 @@
     :data="rows"
     :columns="columns"
     row-key="id"
-    export-filename="workloads.csv"
     bordered
   >
     <template #toolbar>
-      <TableExportButton />
+      <TableExportButton filename="workloads.csv" />
     </template>
   </DataTable>
 </template>

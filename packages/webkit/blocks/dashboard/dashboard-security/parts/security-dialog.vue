@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
@@ -85,8 +86,6 @@
             :columns="ipColumns"
             row-key="id"
             sortable
-            paginated
-            :page-size="10"
             density="compact"
             bordered
           >
@@ -100,6 +99,9 @@
             </template>
             <template #cell-requests="{ row }">
               <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
+            </template>
+            <template #footer>
+              <DataTablePagination :page-size="10" />
             </template>
           </DataTable>
         </div>

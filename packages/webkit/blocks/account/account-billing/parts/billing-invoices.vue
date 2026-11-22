@@ -4,6 +4,7 @@
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CurrencyAmount from '@aziontech/webkit/currency-amount'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
@@ -84,16 +85,23 @@
     actionColumn
   ]
 
-  const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
-    useCollection({
-      items: invoiceRows,
-      columns,
-      filtering: { fields: ['id', 'plan', 'cycle', 'status'] },
-      propertyFiltering: { properties, defaultQuery: props.defaultQuery },
-      sorting: { defaultState: [{ id: 'billedAt', desc: true }] },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: { storageKey: 'billing-invoices' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    status,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: invoiceRows,
+    columns,
+    filtering: { fields: ['id', 'plan', 'cycle', 'status'] },
+    propertyFiltering: { properties, defaultQuery: props.defaultQuery },
+    sorting: { defaultState: [{ id: 'billedAt', desc: true }] },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: { storageKey: 'billing-invoices' }
+  })
 
   const invoicesTableEl = ref<TableExposed<BillingInvoice> | null>(null)
   const exportCsv = () => invoicesTableEl.value?.exportCsv({ filename: 'invoices.csv' })
@@ -257,6 +265,12 @@
                 />
               </template>
             </EmptyState>
+          </template>
+          <template #footer>
+            <DataTablePagination
+              v-bind="paginationProps"
+              manual
+            />
           </template>
         </DataTable>
       </template>

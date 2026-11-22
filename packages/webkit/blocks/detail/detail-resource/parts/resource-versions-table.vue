@@ -4,12 +4,14 @@
   import Card from '@aziontech/webkit/card'
   import type { TableColumn, TableExposed } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { ref } from 'vue'
+  import { matchesText } from '@aziontech/webkit/use-collection'
+  import { computed, ref } from 'vue'
 
   import { resourceVersions as versions, resourceVersionStates as versionStates } from '../sample'
 
@@ -45,6 +47,15 @@
       loading.value = false
     }, 700)
   }
+  const matchingVersions = computed(() =>
+    versions.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        columns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
+  )
 </script>
 
 <template>
@@ -121,15 +132,11 @@
       <template #default>
         <DataTable
           ref="tableEl"
-          v-model:page="page"
-          v-model:globalFilter="search"
           v-model:columnVisibility="columnVisibility"
-          :data="versions"
+          :data="matchingVersions"
           :columns="columns"
           row-key="id"
           sortable
-          paginated
-          :page-size="10"
           :bordered="false"
           :loading="loading"
         >
@@ -217,6 +224,12 @@
                 </DropdownMenu.Item>
               </DropdownMenu.Group>
             </DropdownMenu>
+          </template>
+          <template #footer>
+            <DataTablePagination
+              v-model:page="page"
+              :page-size="10"
+            />
           </template>
         </DataTable>
       </template>

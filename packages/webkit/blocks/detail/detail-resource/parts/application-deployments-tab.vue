@@ -2,6 +2,7 @@
   import Card from '@aziontech/webkit/card'
   import type { TableColumn } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Subheader from '@aziontech/webkit/subheader'
@@ -52,8 +53,6 @@
           :data="deployments"
           :columns="deploymentColumns"
           row-key="id"
-          paginated
-          :page-size="10"
           :bordered="false"
           aria-label="Deployments"
         >
@@ -70,6 +69,9 @@
               title="No deployments yet"
               description="Deploy this application and each run lands here."
             />
+          </template>
+          <template #footer>
+            <DataTablePagination :page-size="10" />
           </template>
         </DataTable>
       </template>

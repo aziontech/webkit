@@ -5,6 +5,7 @@
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import type { TableColumn, TableExposed } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -56,6 +57,7 @@
   ])
 
   const {
+    paginationProps,
     tableProps,
     propertyFilterProps,
     preferencesProps,
@@ -306,6 +308,12 @@
                     />
                   </template>
                 </EmptyState>
+              </template>
+              <template #footer>
+                <DataTablePagination
+                  v-bind="paginationProps"
+                  manual
+                />
               </template>
             </DataTable>
           </template>

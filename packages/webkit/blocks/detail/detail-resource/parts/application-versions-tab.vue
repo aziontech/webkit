@@ -3,6 +3,7 @@
   import Card from '@aziontech/webkit/card'
   import type { TableColumn } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Subheader from '@aziontech/webkit/subheader'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
@@ -66,8 +67,6 @@
           :data="versions"
           :columns="versionColumns"
           row-key="id"
-          paginated
-          :page-size="10"
           :bordered="false"
           aria-label="Versions"
         >
@@ -95,6 +94,9 @@
               title="No versions yet"
               description="Every deploy creates a version of this application."
             />
+          </template>
+          <template #footer>
+            <DataTablePagination :page-size="10" />
           </template>
         </DataTable>
       </template>

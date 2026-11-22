@@ -37,16 +37,16 @@
 
 <template>
   <DataTable
-    v-model:filters="filters"
     :data="rows"
     :columns="columns"
-    :filter-fields="filterFields"
     row-key="id"
     aria-label="Workloads"
   >
     <template #title>Workloads</template>
     <template #toolbar>
       <TableFilter
+        v-model="filters"
+        :fields="filterFields"
         type="property"
         title="Filter workloads"
       />

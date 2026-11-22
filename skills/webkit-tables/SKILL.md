@@ -2,7 +2,7 @@
 name: webkit-tables
 description: Data tables on @aziontech/webkit — one data-driven <DataTable> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, sortable, type:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · CollectionPreferences) + FilterMenu.ChipGroup and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — TableCellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), TableCellId, TableCellStatus (one chip per row), TableCellTags, TableCellTime (avatar + relative time) and TableCellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
-last_updated: 2026-11-17
+last_updated: 2026-11-22
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-tokens, ui-verify]
 ---
@@ -95,14 +95,16 @@ sort, the page, the selection and the saved preferences. One `v-bind` carries al
 </template>
 ```
 
-`tableProps` sets `manualSorting` / `manualFiltering` / `manualPagination`, so the table renders the one
-page it is given; the header checkbox selects that page and the selection survives paging. The columns
+`tableProps` sets `manualSorting` / `manualFiltering` and `<DataTablePagination v-bind="paginationProps" manual />`
+in the `footer` slot pages it, so the table renders the one page it is given; the header checkbox selects that page and the selection survives paging. The columns
 arrive ordered and hidden per the saved preferences, with `density`, `wrapLines` and `striped`. Pass
-`:data` + `paginated` by hand only for a short, static table with no filter (a settings sub-list).
+`:data` and a plain `DataTablePagination` by hand only for a short, static table with no filter (a settings
+sub-list).
 
 ```vue
 <script setup>
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
 </script>
 
@@ -110,11 +112,8 @@ arrive ordered and hidden per the saved preferences, with `density`, `wrapLines`
   <DataTable
     :data="applications"
     :columns="columns"
-    :filter-fields="filterFields"
     row-key="id"
     sortable
-    paginated
-    :page-size="8"
     :bordered="false"
     max-height="100%"
     class="h-full"
@@ -125,6 +124,9 @@ arrive ordered and hidden per the saved preferences, with `density`, `wrapLines`
         :label="value"
         :severity="statusSeverity(value)"
       />
+    </template>
+    <template #footer>
+      <DataTablePagination :page-size="8" />
     </template>
   </DataTable>
 </template>
@@ -142,13 +144,16 @@ arrive ordered and hidden per the saved preferences, with `density`, `wrapLines`
   cast `row as …` or annotate the scope by hand. `TableColumn` comes from `@aziontech/webkit/data-table`.
 - A template ref on the Table is `ref<TableExposed<Application> | null>(null)` (`TableExposed` from
   `@aziontech/webkit/data-table`, typed by the row), which gives `exportCsv`, `reload`, `clearFilters`,
-  `getState` and `setState`; never declare a local `{ exportCsv(…) }` shape for it.
+  `getSnapshot` and `setSnapshot`; never declare a local `{ exportCsv(…) }` shape for it.
 - `class="h-full"` is a layout utility (allowed on a webkit tag): with `max-height="100%"` it lets the
   body scroll inside the table. See "Scroll the body internally".
 - `row-key` is the stable id accessor; `@row-click` opens the detail view (see the `@click.stop`
   discipline below so cell controls don't trigger it).
 - `sortable` + per-column `sortable: true` turns on the sort affordance for that column.
-- `paginated` + `:page-size` paginates client-side; `:bordered="false"` for a flush table inside a `Card`.
+- `DataTablePagination` in the `footer` slot (`:page-size`, `:page-size-options`, `v-model:page`) pages
+  client-side; without it every row renders. `:bordered="false"` for a flush table inside a `Card`.
+- Infinite loading is `DataTableLoadMore` in the `load-more` slot (`:more-rows`, `:loading`,
+  `@load-more`), the live tail `TableLiveButton v-model`, the search text `TableSearch v-model`.
 
 ### Column model
 
@@ -181,7 +186,8 @@ surface (a drawer, a panel) and does not page through a collection.
 
 The toolbar is a fixed, ordered set of context-aware controls in the `#toolbar` slot; the
 applied-filter chips render in `#filters` via `FilterMenu.ChipGroup` (with no `fields`, it reads the
-table). `filterFields` (`{ id, label, type, options? }`) drives `TableFilter`, which hosts one of the
+table, labelled by the fields `TableFilter` registers). `TableFilter` takes the `fields`
+(`{ id, label, type, options? }`) and holds the applied filters as its `v-model`; it hosts one of the
 two filters, picked by data shape: `type="menu"` (the default) is the `FilterMenu` of facets picked
 from known values, and `type="property"` is a `PropertyFilter` for typed conditions with operators
 (it shows its own tokens, so it needs no chips row). Columns are chosen in `CollectionPreferences`
@@ -294,8 +300,8 @@ actions share the first line, and every other column becomes a line of **label �
 
 A table that must show every row at once (a log, an export preview) with more than a few hundred rows
 sets `virtual`: only the rows in view (plus 8 above and below) render, the rest are space, so 10,000 rows
-mount and scroll fast. The viewport scrolls within `max-height` (40rem when unset); `estimate-row-height`
-(48) is the first guess until a row is measured. The root keeps `aria-rowcount` and every row its
+mount and scroll fast. The viewport scrolls within `max-height` (40rem when unset); a row counts 48 px
+until the first row is measured. The root keeps `aria-rowcount` and every row its
 `aria-rowindex`. A paged list does not need it — page instead.
 
 ```vue

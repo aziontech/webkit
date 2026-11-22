@@ -3,6 +3,7 @@
   import Card from '@aziontech/webkit/card'
   import type { TableColumn } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import TableCellId from '@aziontech/webkit/table-cell-id'
@@ -54,8 +55,6 @@
         :columns="accountColumns"
         row-key="id"
         :bordered="false"
-        paginated
-        :page-size="10"
         :loading="loading"
         aria-label="Accounts"
       >
@@ -136,6 +135,9 @@
               />
             </template>
           </EmptyState>
+        </template>
+        <template #footer>
+          <DataTablePagination :page-size="10" />
         </template>
       </DataTable>
     </template>

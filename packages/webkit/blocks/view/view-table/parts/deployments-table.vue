@@ -5,6 +5,7 @@
     type TableColumn,
     type TableExposed
   } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -14,13 +15,17 @@
   import TableCellLink from '@aziontech/webkit/table-cell-link'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag from '@aziontech/webkit/tag'
-  import type { CollectionTableProps } from '@aziontech/webkit/use-collection'
+  import type {
+    CollectionPaginationProps,
+    CollectionTableProps
+  } from '@aziontech/webkit/use-collection'
   import { ref } from 'vue'
 
   import { type Deployment, DEPLOYMENT_STATUS, environmentSeverity } from '../lib/deployments'
 
   defineProps<{
     tableProps: CollectionTableProps<Deployment, TableColumn>
+    paginationProps: CollectionPaginationProps
     loading: boolean
   }>()
 
@@ -160,6 +165,12 @@
           />
         </template>
       </EmptyState>
+    </template>
+    <template #footer>
+      <DataTablePagination
+        v-bind="paginationProps"
+        manual
+      />
     </template>
   </DataTable>
 </template>

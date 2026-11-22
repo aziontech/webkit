@@ -23,7 +23,7 @@ Title `Teams and permissions` and the sentence that states the model. Actions: D
 
 The view-table controls row (`view/view-table`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, description and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden when there is no team.
 
-### C. Team table — `Card`, `DataTable`, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, `Avatar`, `useCollection` (required)
+### C. Team table — `Card`, `DataTable`, `DataTablePagination`, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, `Avatar`, `useCollection` (required)
 
 `DataTable` with `v-bind="tableProps"` in a flush `Card`. Name: a square `Avatar` with the initials, the name as `TableCellLink` to the team's page and its description under it. Permissions: `TableCellTags` shows as many as fit and the rest behind `+N`; a team with every permission reads `All permissions`. Members as a number, Status as `TableCellStatus` (Active, Inactive).
 

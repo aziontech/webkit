@@ -158,15 +158,22 @@
     }
   ])
 
-  const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
-    useCollection({
-      items: rows,
-      columns,
-      filtering: { fields: ['name', 'description', 'status'] },
-      propertyFiltering: { properties },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: { storageKey: 'personal-tokens' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    status,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: rows,
+    columns,
+    filtering: { fields: ['name', 'description', 'status'] },
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: { storageKey: 'personal-tokens' }
+  })
 
   const tokensTableEl = ref<InstanceType<typeof TokensTable> | null>(null)
   const exportCsv = () => tokensTableEl.value?.exportCsv()
@@ -331,6 +338,7 @@
           v-else
           ref="tokensTableEl"
           :table-props="tableProps"
+          :pagination-props="paginationProps"
           :loading="loading"
           :status-of="statusOf"
           @action="onAction"

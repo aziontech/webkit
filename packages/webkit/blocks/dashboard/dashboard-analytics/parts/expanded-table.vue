@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
 
   export interface ExpandedTableProps {
@@ -24,8 +25,6 @@
     :columns="columns"
     row-key="id"
     sortable
-    paginated
-    :page-size="10"
     density="compact"
     bordered
   >
@@ -42,6 +41,9 @@
       <span class="tabular-nums">{{
         formatCount('requests' in row ? Number(row.requests) : 0)
       }}</span>
+    </template>
+    <template #footer>
+      <DataTablePagination :page-size="10" />
     </template>
   </DataTable>
 </template>

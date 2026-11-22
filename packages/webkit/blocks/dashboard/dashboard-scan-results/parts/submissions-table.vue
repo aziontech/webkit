@@ -1,8 +1,10 @@
 <script setup lang="ts">
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import { matchesText } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
   import type { ScanResultsSubmission } from '../dashboard-scan-results.vue'
@@ -39,6 +41,15 @@
           (status.value === 'analyzing') === (row.verdict === 'pending')) &&
         (verdict.value === 'all' || row.verdict === verdict.value) &&
         (source.value === 'all' || row.source === source.value)
+    )
+  )
+  const matchingRows = computed(() =>
+    rows.value.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        scanColumns.flatMap((column) => column.accessorKey ?? [])
+      )
     )
   )
 </script>
@@ -78,14 +89,10 @@
       />
     </div>
     <DataTable
-      v-model:global-filter="search"
-      :data="rows"
+      :data="matchingRows"
       :columns="scanColumns"
       row-key="id"
       sortable
-      paginated
-      :page-size="10"
-      :page-size-options="[10, 25, 50]"
       density="compact"
       bordered
       :loading="loading"
@@ -128,6 +135,12 @@
           :datetime="row.lastSeen"
           >{{ row.lastSeen }}</time
         >
+      </template>
+      <template #footer>
+        <DataTablePagination
+          :page-size="10"
+          :page-size-options="[10, 25, 50]"
+        />
       </template>
     </DataTable>
   </div>

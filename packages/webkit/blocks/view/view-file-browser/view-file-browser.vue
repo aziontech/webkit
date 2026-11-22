@@ -5,6 +5,7 @@
     type DropdownMenuItemValue,
     type TableExposed
   } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
@@ -319,7 +320,6 @@
             <DataTable
               ref="tableEl"
               v-model:sorting="sorting"
-              v-model:global-filter="search"
               v-model:selected-keys="selectedKeys"
               :selectable="movable"
               :row-selectable="isFile"
@@ -328,12 +328,8 @@
               row-key="id"
               sortable
               manual-sorting
-              paginated
-              :page-size="50"
-              :page-size-options="[25, 50, 100]"
               :bordered="false"
               :loading="loading"
-              export-filename="files.csv"
               @row-click="onRowClick"
               @row-remove="onRowRemove"
             >
@@ -345,6 +341,7 @@
                   <StorageTitle :name="rootName" />
 
                   <FolderSearchRow
+                    v-model:search="search"
                     :loading="loading"
                     :exportable="!!tableEl"
                     @refresh="refresh"
@@ -420,6 +417,12 @@
                   @clear-search="search = ''"
                   @add="onAddClick"
                   @add-item="onAddItem"
+                />
+              </template>
+              <template #footer>
+                <DataTablePagination
+                  :page-size="50"
+                  :page-size-options="[25, 50, 100]"
                 />
               </template>
             </DataTable>

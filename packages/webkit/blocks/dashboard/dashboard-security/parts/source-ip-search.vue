@@ -1,7 +1,10 @@
 <script setup lang="ts">
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
+  import { matchesText } from '@aziontech/webkit/use-collection'
+  import { computed } from 'vue'
 
   import type { SecuritySourceIp } from '../dashboard-security.vue'
   import { ipColumns } from '../security-cards'
@@ -15,9 +18,18 @@
     loading: boolean
   }
 
-  defineProps<SourceIpSearchProps>()
+  const props = defineProps<SourceIpSearchProps>()
 
   const search = defineModel<string>('search', { default: '' })
+  const matchingRows = computed(() =>
+    props.rows.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        ipColumns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
+  )
 </script>
 
 <template>
@@ -40,14 +52,10 @@
       </div>
     </div>
     <DataTable
-      v-model:global-filter="search"
-      :data="rows"
+      :data="matchingRows"
       :columns="ipColumns"
       row-key="id"
       sortable
-      paginated
-      :page-size="5"
-      :page-size-options="[5, 10, 25]"
       density="compact"
       bordered
       :loading="loading"
@@ -62,6 +70,12 @@
       </template>
       <template #cell-requests="{ row }">
         <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
+      </template>
+      <template #footer>
+        <DataTablePagination
+          :page-size="5"
+          :page-size-options="[5, 10, 25]"
+        />
       </template>
     </DataTable>
   </div>

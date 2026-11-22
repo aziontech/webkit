@@ -6,6 +6,7 @@
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -117,15 +118,21 @@
     { key: 'method', label: 'Method', options: [{ value: 'Authenticator app' }] }
   ]
 
-  const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
-    useCollection({
-      items: rows,
-      columns,
-      filtering: { fields: ['name', 'email', 'status', 'method'] },
-      propertyFiltering: { properties },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: { storageKey: 'account-mfa' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: rows,
+    columns,
+    filtering: { fields: ['name', 'email', 'status', 'method'] },
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: { storageKey: 'account-mfa' }
+  })
 
   const membersTableEl = ref<TableExposed<MemberRow> | null>(null)
   const exportCsv = () => membersTableEl.value?.exportCsv({ filename: 'mfa-status.csv' })
@@ -373,6 +380,12 @@
                       />
                     </template>
                   </EmptyState>
+                </template>
+                <template #footer>
+                  <DataTablePagination
+                    v-bind="paginationProps"
+                    manual
+                  />
                 </template>
               </DataTable>
             </template>

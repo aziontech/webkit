@@ -8,6 +8,7 @@
     type TableColumn,
     type TableExposed
   } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -106,6 +107,7 @@
   ]
 
   const {
+    paginationProps,
     tableProps,
     propertyFilterProps,
     preferencesProps,
@@ -355,6 +357,12 @@
                         />
                       </template>
                     </EmptyState>
+                  </template>
+                  <template #footer>
+                    <DataTablePagination
+                      v-bind="paginationProps"
+                      manual
+                    />
                   </template>
                 </DataTable>
               </template>

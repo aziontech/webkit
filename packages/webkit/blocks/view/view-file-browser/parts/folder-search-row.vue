@@ -6,6 +6,8 @@
 
   defineProps<{ loading: boolean; exportable: boolean }>()
 
+  const search = defineModel<string>('search', { default: '' })
+
   const emit = defineEmits<{
     refresh: [event: MouseEvent]
     download: [event: MouseEvent]
@@ -16,6 +18,7 @@
   <div class="flex w-full items-center gap-(--spacing-xs)">
     <div class="flex flex-1">
       <TableSearch
+        v-model="search"
         size="large"
         placeholder="Search in folder"
         class="w-full"

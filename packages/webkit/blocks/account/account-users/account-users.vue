@@ -131,15 +131,21 @@
     { key: 'status', label: 'Status', options: optionsOf('status') }
   ])
 
-  const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
-    useCollection({
-      items,
-      columns,
-      filtering: { fields: ['name', 'email', 'role', 'status'] },
-      propertyFiltering: { properties },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: { storageKey: 'account-users' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items,
+    columns,
+    filtering: { fields: ['name', 'email', 'role', 'status'] },
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: { storageKey: 'account-users' }
+  })
 
   const usersTableEl = ref<InstanceType<typeof UsersTable> | null>(null)
   const exportCsv = () => usersTableEl.value?.exportCsv()
@@ -370,6 +376,7 @@
           v-else
           ref="usersTableEl"
           :table-props="tableProps"
+          :pagination-props="paginationProps"
           :loading="loading"
           :team-options="teamOptions"
           @row-click="onRowOpen"
