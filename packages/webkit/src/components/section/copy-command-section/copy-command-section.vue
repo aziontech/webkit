@@ -6,6 +6,7 @@
   import CopyButton from '../../action/copy-button/copy-button.vue'
   import InputGroup from '../../input/input-group/input-group.vue'
   import InputGroupAddon from '../../input/input-group/input-group-addon/input-group-addon.vue'
+  import InputGroupInput from '../../input/input-group/input-group-input/input-group-input.vue'
 
   defineOptions({ name: 'CopyCommandSection', inheritAttrs: false })
 
@@ -45,12 +46,12 @@
         aria-hidden="true"
         >$</InputGroupAddon
       >
-      <input
+      <InputGroupInput
         readonly
         dir="ltr"
-        :value="value"
+        :model-value="value"
         :aria-label="label"
-        class="h-full min-w-0 flex-1 border-0 bg-(--bg-surface) px-(--spacing-md) text-label-code-sm pointer-coarse:text-label-code-lg text-(--text-default) outline-none"
+        class="px-(--spacing-md)! text-label-code-sm! pointer-coarse:text-label-code-lg!"
       />
       <CopyButton
         size="large"

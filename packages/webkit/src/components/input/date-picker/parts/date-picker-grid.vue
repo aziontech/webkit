@@ -4,6 +4,7 @@
   import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
   import { intlLocale, useLocaleContext, useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import {
     getTabViewPanelTransitionStyle,
     type TabsSlideDirection
@@ -394,11 +395,6 @@
     }
   }
 
-  const MONTH_STEP_CLASS =
-    'inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-muted) transition-colors duration-150 ease-out ' +
-    'hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
-    'focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none'
-
   const DAY_CLASS =
     'flex items-center justify-center text-(--text-default) transition-colors duration-150 ease-out ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) ' +
@@ -422,19 +418,15 @@
       class="flex w-full items-center justify-between gap-(--spacing-2xs)"
       data-testid="date-picker__caption"
     >
-      <button
-        type="button"
+      <IconButton
+        icon="az az-chevron-left"
+        variant="ghost"
+        size="small"
         data-testid="date-picker__previous-month"
         :disabled="disabledAll"
         :aria-label="t('datePicker.previousMonth')"
-        :class="MONTH_STEP_CLASS"
         @click="goToPreviousMonth"
-      >
-        <i
-          class="az az-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
-          aria-hidden="true"
-        />
-      </button>
+      />
 
       <div class="flex min-w-0 flex-1 flex-wrap items-center justify-center">
         <Select
@@ -478,19 +470,15 @@
         </Select>
       </div>
 
-      <button
-        type="button"
+      <IconButton
+        icon="az az-chevron-right"
+        variant="ghost"
+        size="small"
         data-testid="date-picker__next-month"
         :disabled="disabledAll"
         :aria-label="t('datePicker.nextMonth')"
-        :class="MONTH_STEP_CLASS"
         @click="goToNextMonth"
-      >
-        <i
-          class="az az-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
-          aria-hidden="true"
-        />
-      </button>
+      />
     </div>
 
     <div

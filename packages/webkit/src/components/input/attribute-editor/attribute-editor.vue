@@ -487,11 +487,6 @@
     'data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:h-0.5 data-[drop]:before:bg-(--accent) ' +
     "data-[drop]:before:content-[''] data-[drop=before]:before:-top-(--spacing-xs) data-[drop=after]:before:-bottom-(--spacing-xs)"
 
-  const GROUP_GRIP_CLASS =
-    'inline-flex size-7 shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) ' +
-    'hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing ' +
-    'disabled:cursor-not-allowed disabled:text-(--text-disabled) disabled:hover:bg-transparent'
-
   const HEADER_CLASS =
     'hidden min-w-0 grid-cols-[repeat(var(--attribute-editor-columns),minmax(0,1fr))_auto] gap-(--spacing-sm) text-label-sm text-(--text-default) ' +
     'group-data-[fit=md]:@md/attribute-editor:grid group-data-[fit=xl]:@xl/attribute-editor:grid group-data-[fit=3xl]:@3xl/attribute-editor:grid'
@@ -511,12 +506,6 @@
     'flex min-w-0 grid-cols-[repeat(var(--attribute-editor-columns),minmax(0,1fr))_auto] flex-col gap-(--spacing-sm) ' +
     'group-data-[fit=md]:@md/attribute-editor:grid group-data-[fit=xl]:@xl/attribute-editor:grid group-data-[fit=3xl]:@3xl/attribute-editor:grid ' +
     'group-data-[fit=md]:@md/attribute-editor:items-start group-data-[fit=xl]:@xl/attribute-editor:items-start group-data-[fit=3xl]:@3xl/attribute-editor:items-start'
-
-  const GRIP_CLASS =
-    'inline-flex shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) ' +
-    'hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing ' +
-    'disabled:cursor-not-allowed disabled:text-(--text-disabled) disabled:hover:bg-transparent ' +
-    'group-data-[size=small]/attribute-editor:size-7 group-data-[size=medium]/attribute-editor:size-8 group-data-[size=large]/attribute-editor:size-10'
 
   const REMOVE_PLACEHOLDER_CLASS =
     'hidden ' +
@@ -596,24 +585,21 @@
             class="flex items-center gap-(--spacing-2xs)"
             :data-testid="`${testId}__group-reorder`"
           >
-            <button
-              type="button"
+            <IconButton
+              icon="az az-menu"
+              variant="ghost"
+              size="small"
               data-reorder="group-grip"
-              :class="GROUP_GRIP_CLASS"
               :aria-label="t('attributeEditor.reorderGroup', { index: groupIndex + 1 })"
               :aria-describedby="hintId"
               :disabled="disabled"
               :data-testid="`${testId}__group-grip`"
+              class="cursor-grab active:cursor-grabbing"
               @pointerdown="armed = groupKey(group)"
               @pointerup="disarm"
               @pointercancel="disarm"
               @keydown="onGroupGripKeydown($event, groupIndex)"
-            >
-              <i
-                class="az az-menu"
-                aria-hidden="true"
-              />
-            </button>
+            />
             <span class="flex-1" />
             <Tooltip :content="t('attributeEditor.moveGroupUp', { index: groupIndex + 1 })">
               <IconButton
@@ -763,10 +749,11 @@
                     </Field>
                     <div class="flex justify-end gap-(--spacing-2xs)">
                       <template v-if="rowReorderShown(group)">
-                        <button
-                          type="button"
+                        <IconButton
+                          icon="az az-menu"
+                          variant="ghost"
+                          :size="size"
                           data-reorder="grip"
-                          :class="GRIP_CLASS"
                           :aria-label="
                             t('attributeEditor.reorder', {
                               index: position(index, grouped ? groupIndex : undefined)
@@ -775,16 +762,12 @@
                           :aria-describedby="hintId"
                           :disabled="disabled"
                           :data-testid="`${testId}__grip`"
+                          class="cursor-grab active:cursor-grabbing"
                           @pointerdown="armed = rowKey(item)"
                           @pointerup="disarm"
                           @pointercancel="disarm"
                           @keydown="onGripKeydown($event, index, grouped ? groupIndex : undefined)"
-                        >
-                          <i
-                            class="az az-menu"
-                            aria-hidden="true"
-                          />
-                        </button>
+                        />
                         <Tooltip
                           :content="
                             t('attributeEditor.moveUp', {

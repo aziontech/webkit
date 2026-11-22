@@ -132,7 +132,7 @@ describe('StreamingResponse', () => {
       'When'
     ])
     expect(container.querySelector('blockquote')).toHaveTextContent('A quote')
-    expect(container.querySelector('hr')).toBeTruthy()
+    expect(container.querySelector('[role="separator"]')).toBeTruthy()
     expect(container.querySelector('[data-testid="code-block"], pre')).toBeTruthy()
   })
 

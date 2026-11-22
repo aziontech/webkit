@@ -7,6 +7,7 @@
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
   import Field from '../../input/field/field.vue'
   import FieldError from '../../input/field/field-error/field-error.vue'
+  import Input from '../../input/input/input.vue'
   import Textarea from '../../input/textarea/textarea.vue'
   import AgentQuestionHeading from '../agent-question/parts/agent-question-heading.vue'
 
@@ -125,10 +126,6 @@
   const ROOT_CLASS =
     'flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) ' +
     'data-[variant=danger]:data-[status=pending]:border-(--danger-border)'
-
-  const PHRASE_CLASS =
-    'h-8 w-full rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm ' +
-    'pointer-coarse:text-body-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:bg-(--bg-disabled)'
 </script>
 
 <template>
@@ -209,15 +206,13 @@
         >
           {{ t('toolApproval.confirmLabel', { phrase: confirmationPhrase }) }}
         </label>
-        <input
+        <Input
           :id="phraseId"
           v-model="typed"
-          type="text"
           autocomplete="off"
-          spellcheck="false"
+          :spellcheck="false"
           :disabled="loading"
           :data-testid="`${testId}__phrase`"
-          :class="PHRASE_CLASS"
         />
       </div>
       <div class="flex flex-wrap justify-end gap-(--spacing-xs)">

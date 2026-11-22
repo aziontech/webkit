@@ -2,6 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import CodeBlock from '../../code/code-block/code-block.vue'
+  import Separator from '../../layout/separator/separator.vue'
   import MarkdownInline from '../lib/markdown-inline'
   import {
     type MarkdownBlock,
@@ -180,10 +181,7 @@
           </tbody>
         </table>
       </div>
-      <hr
-        v-else-if="block.type === 'rule'"
-        class="m-0 border-0 border-t border-(--border-default)"
-      />
+      <Separator v-else-if="block.type === 'rule'" />
     </template>
     <span
       v-if="streaming && !caretInline"

@@ -3,7 +3,6 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import StatusIndicator, {
     type StatusIndicatorSeverity
@@ -95,11 +94,6 @@
   const relOf = (target?: string) => (target === '_blank' ? 'noopener noreferrer' : undefined)
   const statusLinkName = (link: ContactHubSectionStatusLink) =>
     link.target === '_blank' ? `${link.label} ${t('common.newTab')}` : undefined
-
-  const STATUS_LINK_CLASS =
-    'inline-flex min-h-10 max-w-full items-center rounded-full border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) text-button-lg text-(--text-default) no-underline ' +
-    'transition-colors duration-150 ease-out hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
-    'focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -175,13 +169,14 @@
                   icon-position="trailing"
                   :animated="Boolean(lane.secondaryAction.trailing)"
                 />
-                <a
+                <Button
                   v-if="lane.statusLink"
-                  :href="safeHref(lane.statusLink.href) ?? undefined"
-                  :target="lane.statusLink.target"
-                  :rel="relOf(lane.statusLink.target)"
+                  key="status"
+                  :href="lane.statusLink.href"
+                  :target="lane.statusLink.target === '_blank' ? '_blank' : '_self'"
                   :aria-label="statusLinkName(lane.statusLink)"
-                  :class="STATUS_LINK_CLASS"
+                  variant="outline"
+                  size="large"
                 >
                   <StatusIndicator
                     v-if="lane.statusLink.severity"
@@ -198,7 +193,7 @@
                     />
                     {{ lane.statusLink.label }}
                   </span>
-                </a>
+                </Button>
               </div>
             </div>
           </CardGridCell>

@@ -12,6 +12,7 @@
   import { useFocusTrap } from '../../../composables/use-focus-trap'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import Button from '../../action/button/button.vue'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import { flattenSlot } from './flatten-slot'
 
@@ -212,10 +213,6 @@
     'bg-(--bg-surface) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance ' +
     'group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none'
 
-  const ZOOM_CLOSE_CLASS =
-    'fixed top-(--spacing-lg) end-(--spacing-lg) cursor-pointer rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-2xs) ' +
-    'text-label-md text-(--text-default) hover:bg-(--bg-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)'
-
   const ZOOM_IMAGE_CLASS =
     'pointer-events-none relative block max-h-full max-w-full rounded-(--shape-control) object-contain ' +
     'data-[flip=armed]:transition-[transform] data-[flip=armed]:duration-moderate-02 data-[flip=armed]:ease-expressive-entrance ' +
@@ -325,15 +322,16 @@
           class="absolute inset-0 cursor-zoom-out bg-(--bg-backdrop)"
           @click="close"
         ></div>
-        <button
-          type="button"
-          :data-testid="`${testId}__zoom-close`"
-          :aria-label="t('docFrame.closeFullScreen')"
-          :class="ZOOM_CLOSE_CLASS"
-          @click="close"
-        >
-          {{ t('docFrame.close') }}
-        </button>
+        <div class="fixed top-(--spacing-lg) end-(--spacing-lg)">
+          <Button
+            variant="outline"
+            size="small"
+            :label="t('docFrame.close')"
+            :aria-label="t('docFrame.closeFullScreen')"
+            :data-testid="`${testId}__zoom-close`"
+            @click="close"
+          />
+        </div>
         <img
           ref="zoomImageEl"
           :src="src"

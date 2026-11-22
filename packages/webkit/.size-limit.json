@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "79.65 KB",
+    "limit": "81.5 KB",
     "entryOnly": true
   },
   {
@@ -24,7 +24,7 @@
   {
     "name": "doc-layout",
     "path": "src/components/docs/doc-layout/doc-layout.vue",
-    "limit": "70.65 KB"
+    "limit": "72.15 KB"
   },
   {
     "name": "doc-markdown",
@@ -224,7 +224,7 @@
   {
     "name": "doc-frame",
     "path": "src/components/docs/doc-frame/doc-frame.vue",
-    "limit": "8.7 KB"
+    "limit": "9.85 KB"
   },
   {
     "name": "doc-changelog-entry",
@@ -517,7 +517,7 @@
   {
     "name": "copy-command-section",
     "path": "src/components/section/copy-command-section/copy-command-section.vue",
-    "limit": "11.4 KB",
+    "limit": "12.05 KB",
     "entryOnly": true
   },
   {
@@ -585,7 +585,7 @@
   {
     "name": "card-carousel-section",
     "path": "src/components/section/card-carousel-section/card-carousel-section.vue",
-    "limit": "7.65 KB"
+    "limit": "9.3 KB"
   },
   {
     "name": "client-mosaic-section",
@@ -1137,7 +1137,7 @@
   {
     "name": "tool-approval",
     "path": "src/components/ai/tool-approval/tool-approval.vue",
-    "limit": "14.8 KB"
+    "limit": "15.8 KB"
   },
   {
     "name": "agent-question",
@@ -1256,7 +1256,7 @@
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "36.45 KB",
+    "limit": "36.85 KB",
     "entryOnly": true
   },
   {
@@ -1909,7 +1909,7 @@
   {
     "name": "date-picker-clear",
     "path": "src/components/input/date-picker/date-picker-clear/date-picker-clear.vue",
-    "limit": "0.8 KB"
+    "limit": "3.5 KB"
   },
   {
     "name": "input-group",
@@ -2104,7 +2104,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "81 KB"
+    "limit": "82.8 KB"
   },
   {
     "name": "use-console-layout",
@@ -2184,7 +2184,7 @@
   {
     "name": "carousel",
     "path": "src/components/content/carousel/index.ts",
-    "limit": "4.95 KB"
+    "limit": "6.65 KB"
   },
   {
     "name": "carousel-item",
@@ -2194,12 +2194,12 @@
   {
     "name": "carousel-previous",
     "path": "src/components/content/carousel/carousel-previous/carousel-previous.vue",
-    "limit": "1.8 KB"
+    "limit": "3.75 KB"
   },
   {
     "name": "carousel-next",
     "path": "src/components/content/carousel/carousel-next/carousel-next.vue",
-    "limit": "1.8 KB"
+    "limit": "3.75 KB"
   },
   {
     "name": "link-directory",
@@ -2354,7 +2354,7 @@
   {
     "name": "command",
     "path": "src/components/overlay/command/index.ts",
-    "limit": "27.6 KB"
+    "limit": "28.7 KB"
   },
   {
     "name": "command-root",
@@ -2364,7 +2364,7 @@
   {
     "name": "command-input",
     "path": "src/components/overlay/command/command-input/command-input.vue",
-    "limit": "5.1 KB"
+    "limit": "7.5 KB"
   },
   {
     "name": "command-list",

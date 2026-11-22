@@ -236,11 +236,6 @@
     }
     emit('submit', event as SubmitEvent, collected)
   }
-
-  const DESCRIPTION_LINK_CLASS =
-    'underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance ' +
-    'hover:text-(--text-default) focus-visible:rounded-(--shape-flat) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) ' +
-    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -283,7 +278,7 @@
             <a
               v-if="descriptionLink"
               :href="safeHref(descriptionLink.href) ?? undefined"
-              :class="DESCRIPTION_LINK_CLASS"
+              class="text-link"
               >{{ descriptionLink.label }}</a
             >{{ descriptionAfter }}
           </template>

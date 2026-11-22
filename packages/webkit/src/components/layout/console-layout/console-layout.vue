@@ -29,7 +29,6 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
-  import { safeHref } from '../../../utils/safe-href'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import SearchTrigger from '../../action/search-trigger/search-trigger.vue'
   import Avatar from '../../content/avatar/avatar.vue'
@@ -54,6 +53,7 @@
   import ShortcutsDialog from '../../overlay/shortcuts-dialog/shortcuts-dialog.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import AppHeader from '../app-header/app-header.vue'
+  import AppHeaderBrand from '../app-header/app-header-brand.vue'
   import AppHeaderCenter from '../app-header/app-header-center.vue'
   import AppHeaderEnd from '../app-header/app-header-end.vue'
   import AppHeaderStart from '../app-header/app-header-start.vue'
@@ -399,14 +399,6 @@
     if (hrefOf(crumb)) follow(event, crumb)
   }
 
-  const DRAWER_HOME_LINK_CLASS =
-    'flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
-
-  const HEADER_HOME_LINK_CLASS =
-    'flex h-6 w-fit shrink-0 items-center @max-xs:hidden rounded-(--shape-button) px-(--spacing-2xs) transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
-
   const ACCOUNT_TRIGGER_CLASS =
     'rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance ' +
     'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
@@ -447,16 +439,16 @@
               <div
                 class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
               >
-                <a
-                  :href="safeHref(home) ?? undefined"
+                <AppHeaderBrand
+                  :href="home"
                   :aria-label="t('consoleLayout.home')"
-                  :class="DRAWER_HOME_LINK_CLASS"
+                  class="px-(--spacing-xs)"
                 >
                   <Brand
                     variant="default"
                     size="small"
                   />
-                </a>
+                </AppHeaderBrand>
               </div>
               <div
                 v-if="$slots['sidebar-header']"
@@ -546,17 +538,17 @@
                       @click="openNavigation"
                     />
                   </Tooltip>
-                  <a
+                  <AppHeaderBrand
                     v-if="!pageControl"
-                    :href="safeHref(home) ?? undefined"
+                    :href="home"
                     :aria-label="t('consoleLayout.home')"
-                    :class="HEADER_HOME_LINK_CLASS"
+                    class="@max-xs:hidden px-(--spacing-2xs)"
                   >
                     <Brand
                       variant="default"
                       size="small"
                     />
-                  </a>
+                  </AppHeaderBrand>
                 </template>
                 <slot
                   name="header-leading"
