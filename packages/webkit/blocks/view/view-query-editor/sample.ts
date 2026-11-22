@@ -289,7 +289,6 @@ LIMIT 3;`
   }
 ]
 
-/** The CSV the ImportCsv variant opens with. */
 export const sampleCsvOnStart = {
   file: { name: 'subscribers-export.csv', size: 389, type: 'text/csv' },
   text: [
