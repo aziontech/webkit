@@ -246,6 +246,9 @@ jobs:
         run: pnpm run check:size
         working-directory: packages/webkit
 
+      - name: Package lint — publint on the packed theme, icons and webkit, arethetypeswrong on theme (esm-only) and icons
+        run: pnpm --filter @aziontech/webkit run check:package-lint
+
   site:
     name: Build docs site and demos
     runs-on: ubuntu-latest
@@ -271,6 +274,20 @@ jobs:
 
       - name: Build the docs site (every route prerendered)
         run: pnpm build:docs
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: playwright-${{ runner.os }}-
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+        working-directory: apps/docs
+
+      - name: Docs smoke test — every route loads without a console error, axe in light and dark finds no violation
+        run: pnpm test:docs:smoke
 
       - name: Check that every docs link resolves
         run: pnpm check:docs:links
@@ -400,6 +417,27 @@ jobs:
 
       - name: No copy-pasted code in components or inside a block (jscpd, no baseline)
         run: pnpm --filter @aziontech/webkit run check:duplication
+
+      - name: Maintainability — no file, script block, function, line, prop or model count over the CODE_QUALITY.md 3.1 limits (no baseline)
+        run: pnpm --filter @aziontech/webkit run check:maintainability
+
+      - name: Type assertions — no as never or as unknown as, and the assertion count does not grow
+        run: pnpm --filter @aziontech/webkit run check:assertions
+
+      - name: Install typos (pinned release binary, checksum verified)
+        env:
+          TYPOS_VERSION: 1.52.2
+          TYPOS_SHA256: 3b13d1291281d39d01822e54035636487a7a0f228e70097899b1e33aeb0e7e93
+        run: |
+          bin="$RUNNER_TEMP/typos"
+          mkdir -p "$bin"
+          curl -fsSL -o "$RUNNER_TEMP/typos.tar.gz" "https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+          echo "${TYPOS_SHA256}  $RUNNER_TEMP/typos.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/typos.tar.gz" -C "$bin" ./typos
+          echo "$bin" >> "$GITHUB_PATH"
+
+      - name: Spelling — no spelling mistake in code, docs or identifiers (typos, words in _typos.toml)
+        run: pnpm run check:spelling
 
       - name: Size budgets only ratchet down (a raise needs a Budget-raise line in the PR body)
         run: pnpm --filter @aziontech/webkit run check:size-ratchet

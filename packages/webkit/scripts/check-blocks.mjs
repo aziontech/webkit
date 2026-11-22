@@ -122,10 +122,34 @@ async function consumerLinter() {
       },
       plugins: { webkit: plugin },
       rules
+    },
+    {
+      files: ['**/*.{ts,js,mjs}'],
+      languageOptions: { parser: tsParser, ecmaVersion: 2022, sourceType: 'module' },
+      plugins: { webkit: plugin },
+      rules
     }
   ]
   const linter = new Linter({ configType: 'flat' })
   return (sfc, filename) => linter.verify(sfc, config, { filename })
+}
+
+const LINTED_LOCAL = /\.(vue|ts|js|mjs)$/
+
+export function blockSources(id, p) {
+  const sources = [
+    { name: p.primary, file: `${id.replace(/\//g, '__')}__${p.primary}.vue`, sfc: p.sfc },
+    ...(p.variants || []).map((v) => ({
+      name: v.name,
+      file: `${id.replace(/\//g, '__')}__${v.name}.vue`,
+      sfc: v.sfc
+    }))
+  ]
+  const local = { ...(p.files || {}), ...(p.localSources || {}) }
+  for (const [file, sfc] of Object.entries(local).sort(([a], [b]) => a.localeCompare(b)))
+    if (LINTED_LOCAL.test(file))
+      sources.push({ name: file, file: resolve(SCRIPT_DIR, '..', 'blocks', id, file), sfc })
+  return sources
 }
 
 export async function lintBlocks(blocks) {
@@ -133,13 +157,13 @@ export async function lintBlocks(blocks) {
   const counts = {}
   const samples = {}
   for (const [id, p] of Object.entries(blocks)) {
-    for (const variant of [{ name: p.primary, sfc: p.sfc }, ...(p.variants || [])]) {
-      const messages = lint(variant.sfc, `${id.replace(/\//g, '__')}__${variant.name}.vue`)
+    for (const source of blockSources(id, p)) {
+      const messages = lint(source.sfc, source.file)
       for (const m of messages) {
         const rule = m.ruleId || 'parse-error'
         counts[id] ||= {}
         counts[id][rule] = (counts[id][rule] || 0) + 1
-        samples[id] ||= `${variant.name}: ${m.message}`
+        samples[id] ||= `${source.name}:${m.line}: ${m.message}`
       }
     }
   }
@@ -220,7 +244,7 @@ async function main() {
   for (const e of errors) process.stderr.write(`✖ ${e}\n`)
   for (const r of regressions) {
     process.stderr.write(
-      `✖ ${r.id}: ${r.count} × ${r.rule} in the block SFC (baseline allows ${r.allowed}). ${samples[r.id] ?? ''}\n`
+      `✖ ${r.id}: ${r.count} × ${r.rule} in the block page, variants and local files (baseline allows ${r.allowed}). ${samples[r.id] ?? ''}\n`
     )
   }
   if (fixed.length && !update) {
@@ -230,7 +254,7 @@ async function main() {
   }
   if (errors.length || regressions.length) {
     process.stderr.write(
-      '\nEvery block in packages/webkit/blocks is a screen the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, SFCs that pass the consumer lint, no Toaster outside an app root (blocks/shell), no block code name (AccountBilling) in text a person reads, and a data contract: typed props in, events out, sample records in a separate file, variants that import the primary instead of copying it.\n'
+      '\nEvery block in packages/webkit/blocks is a screen the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, a page, variants and local parts, lib modules and composables that pass the consumer lint, no Toaster outside an app root (blocks/shell), no block code name (AccountBilling) in text a person reads, and a data contract: typed props in, events out, sample records in a separate file, variants that import the primary instead of copying it.\n'
     )
     process.exit(1)
   }

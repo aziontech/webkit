@@ -40,6 +40,8 @@ extend-ignore-re = [
 ]
 
 [default.extend-identifiers]
+# ESLint's max-lines-per-function option "IIFEs" (immediately invoked function expressions), named in scripts/lib/maintainability.mjs.
+IIFEs = "IIFEs"
 # Sample deployment id in the create-deploy-drawer block data.
 ALF0CLL8 = "ALF0CLL8"
 

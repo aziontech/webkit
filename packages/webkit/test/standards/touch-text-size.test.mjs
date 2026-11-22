@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readdirSync, readFileSync } from 'node:fs'
-import { dirname, join, relative } from 'node:path'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { typography } from '../../../theme/src/tokens/semantic/typography.js'
@@ -65,6 +65,23 @@ const classConstants = (source) =>
     ])
   )
 
+const LOCAL_IMPORT = /import\s*\{([^}]*)\}\s*from\s*'(\.[^']*)'/g
+
+const importedClassConstants = (source, file) => {
+  const constants = new Map()
+  for (const [, names, spec] of source.matchAll(LOCAL_IMPORT)) {
+    const base = resolve(dirname(file), spec)
+    const target = [base, `${base}.ts`, `${base}.js`].find(
+      (path) => /\.(ts|js)$/.test(path) && existsSync(path)
+    )
+    if (!target) continue
+    const wanted = new Set(names.split(',').map((name) => name.trim().split(/\s+/)[0]))
+    for (const [name, value] of classConstants(readFileSync(target, 'utf8')))
+      if (wanted.has(name)) constants.set(name, value)
+  }
+  return constants
+}
+
 const classesOf = (tag, constants) => {
   const bound = tag.match(/\s:class="([^"]*)"/)?.[1] ?? ''
   const named = [...bound.matchAll(/[A-Z][A-Z0-9_]*CLASS\b/g)].map(
@@ -93,7 +110,10 @@ test('every typed native control, select and focusable read-only field steps its
   for (const dir of SCANNED) {
     for (const file of vueFiles(join(ROOT, dir))) {
       const source = readFileSync(file, 'utf8')
-      const constants = classConstants(source)
+      const constants = new Map([
+        ...importedClassConstants(source, file),
+        ...classConstants(source)
+      ])
       for (const tag of typedControls(source)) {
         if (!sixteenOnTouch(tag, constants))
           missing.push(`${relative(ROOT, file)}: ${tag.slice(0, 80)}`)

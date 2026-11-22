@@ -14,11 +14,13 @@ import { join } from 'node:path'
 import test from 'node:test'
 
 import {
+  blockSources,
   checkBlockGuidelines,
   checkBlockMetadata,
   checkSummaryComponents,
   checkToastRegions,
   compareToBaseline,
+  lintBlocks,
   parseCheckArgs
 } from '../../scripts/check-blocks.mjs'
 import {
@@ -404,6 +406,39 @@ test('checkToastRegion flags a page body that renders a Toaster and allows an ap
 test('no block outside shell/ renders a Toaster', () => {
   const blocks = readBlocks(fileURLToPath(new URL('../..', import.meta.url)))
   assert.deepEqual(checkToastRegions(blocks), [])
+})
+
+test('blockSources lints the page, every variant and every local part, lib module and composable', () => {
+  const block = {
+    primary: 'page',
+    sfc: '<template><div /></template>',
+    variants: [{ name: 'empty', sfc: '<template><p /></template>' }],
+    files: { 'data.ts': 'export const rows = []', 'notes.md': '# Notes' },
+    localSources: { 'parts/row.vue': '<template><span /></template>', 'lib/sort.ts': '' }
+  }
+  const sources = blockSources('view/view-list', block)
+  assert.deepEqual(
+    sources.map((s) => s.name),
+    ['page', 'empty', 'data.ts', 'lib/sort.ts', 'parts/row.vue']
+  )
+  assert.match(sources.at(-1).file, /blocks\/view\/view-list\/parts\/row\.vue$/)
+})
+
+test('lintBlocks reports a finding in a local part and a lib module, not only in the page', async () => {
+  const { counts } = await lintBlocks({
+    'view/view-list': {
+      primary: 'page',
+      sfc: '<template><div /></template>',
+      variants: [],
+      localSources: {
+        'parts/row.vue': '<template><button type="button">Open</button></template>',
+        'lib/data.ts':
+          "import { rows } from '@aziontech/webkit/no-such-export'\nexport const all = rows"
+      }
+    }
+  })
+  assert.equal(counts['view/view-list']['webkit/no-unowned-element'], 1)
+  assert.equal(counts['view/view-list']['webkit/no-unknown-import'], 1)
 })
 
 test('compareToBaseline only reports counts above the baseline', () => {

@@ -246,19 +246,20 @@ Blocks are what an agent copies, so the same goals apply to them:
 
 ## 4. Gates added
 
-Each is one script in `packages/webkit/scripts`, a gate in `run-gates.mjs`, a step of the
-`toolkit` job and a baseline that only shrinks. The write-time hook blocks a write that makes a
-number worse.
+Each is one script in `packages/webkit/scripts`, a gate in `run-gates.mjs` and a step of the
+`toolkit` job, with no baseline (decision CQ-E: until 6.0 merges into `main` everything counts as
+new, so a check starts from an empty list and the code is fixed).
 
-| Gate                      | Checks                                                               |
-| ------------------------- | -------------------------------------------------------------------- |
-| `check:maintainability`   | Every limit in 3.1 (lines, function length, complexity, line length) |
-| `check:duplication`       | Cloned code in components and in one block; logic two blocks copy    |
-| `check:look-alikes`       | Components that do the same job and neither uses the other (in CI)   |
-| `check:extension`         | 3.5: `data-slot` on parts, exported props types, exported context    |
-| `check:slot-reading`      | 3.6: no `isVNode` or slot walking outside the shared registry        |
-| `check:assertions`        | 3.11: count of type assertions                                       |
-| `check:blocks` (extended) | 3.12: variant size, variant imports its block, no repeated template  |
+| Gate                      | Checks                                                                                                     | State            |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------- |
+| `check:maintainability`   | Every limit in 3.1 (lines, function length, complexity, line length, props, models)                        | gate and CI step |
+| `check:duplication`       | Cloned code in components and in one block; logic two blocks copy                                          | gate and CI step |
+| `check:look-alikes`       | Components that do the same job and neither uses the other; a shared private part counts as reuse          | gate and CI step |
+| `check:extension`         | 3.5: `data-slot` on parts, exported props types, exported context                                          | planned          |
+| `check:slot-reading`      | 3.6: no `isVNode` or slot walking outside the shared registry                                              | planned          |
+| `check:assertions`        | 3.11: no `as never` or `as unknown as` (only `undefined as never` for an unbound model), assertion count   | gate and CI step |
+| `check:blocks` (extended) | 3.12: variant size, variant imports its block, no repeated template; the consumer lint on every local file | gate and CI step |
+| `check:unused` (root)     | No unused file, export or dependency (knip)                                                                | gate and CI step |
 
 Rule files change in the same lanes: `component-structure.md` (limits, the split by feature),
 `styling.md` (grouped class lines), `composables.md` (feature composables), `compound-api.md`
