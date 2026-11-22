@@ -3,7 +3,7 @@ import { onScopeDispose, type Ref, ref, watch } from 'vue'
 
 import type { DeployDrawerValues } from '../types'
 
-export const RUN_MS = 3200
+const RUN_MS = 3200
 
 /** How a deploy run ends, raised in the run toast. */
 export interface DeployRunOutcome {

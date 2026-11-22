@@ -48,8 +48,6 @@ Beside the Start from template heading, a medium search `Input` that filters the
 
 The block takes its accounts, repositories and templates through props and emits every action; it fetches nothing. `CreateHubAccount`, `CreateHubRepository`, `CreateHubTemplateSection` and `CreateHubProps` are exported from `create-hub.vue`, and `sample.ts` holds the sample repositories and templates the block renders when `repositories` or `templates` is left out (the repositories never while `loading` or `error` is set). `sampleAccounts` is what the variants pass to show a connected account.
 
-The types live in `types.ts` (re-exported by the page). The repository list, with its loading, error and no-match states and Load more paging, is `parts/repository-list.vue`; the Start from template column, with its own search, is `parts/template-gallery.vue`.
-
 | Prop            | Type                         | What it does                                                                       |
 | --------------- | ---------------------------- | ---------------------------------------------------------------------------------- |
 | `accounts`      | `CreateHubAccount[]`         | The connected GitHub accounts. `[]` (the default) shows the connect state.         |

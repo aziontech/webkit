@@ -3,5 +3,5 @@
 </script>
 
 <template>
-  <ImportCsvPage />
+  <ImportCsvPage default-open />
 </template>

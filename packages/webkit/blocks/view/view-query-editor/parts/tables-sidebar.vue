@@ -4,7 +4,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
+  import Item from '@aziontech/webkit/item-root'
   import Sidebar from '@aziontech/webkit/sidebar-root'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tooltip from '@aziontech/webkit/tooltip'

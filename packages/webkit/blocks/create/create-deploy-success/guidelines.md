@@ -45,8 +45,6 @@ One full-width secondary large `Button`, "Manage service", at the end of the col
 
 The block takes what the flow made through props and emits its actions; it fetches nothing. `DeploySuccessProps`, `DeploySuccessDeployment`, `DeploySuccessResource` and `DeploySuccessNextStep` are exported from `create-deploy-success.vue`, and `sample.ts` holds the sample deployment, resources and next steps the block renders when a data prop is left out.
 
-The types live in `types.ts` (re-exported by the page). The deployment card is `parts/deployment-card.vue`, and the Get started section with its CLI or GitHub Actions path is `parts/connect-paths.vue`, whose steps are in `lib/connect-paths.ts`.
-
 | Prop          | Type                              | What it does                                                                                      |
 | ------------- | --------------------------------- | ------------------------------------------------------------------------------------------------- |
 | `title`       | `string`                          | The outcome heading, "Resource deployed" by default.                                              |

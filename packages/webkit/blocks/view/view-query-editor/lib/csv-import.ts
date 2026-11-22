@@ -17,7 +17,7 @@ export type TypeCheck = [test: (value: string) => boolean, expected: string]
 
 export const SKIP = '__skip'
 
-export const TYPE_CHECKS: Record<string, TypeCheck> = {
+const TYPE_CHECKS: Record<string, TypeCheck> = {
   int2: [(value) => /^-?\d+$/.test(value), 'a whole number'],
   int4: [(value) => /^-?\d+$/.test(value), 'a whole number'],
   int8: [(value) => /^-?\d+$/.test(value), 'a whole number'],

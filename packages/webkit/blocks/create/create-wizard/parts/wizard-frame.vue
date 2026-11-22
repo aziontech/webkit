@@ -8,7 +8,7 @@
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import type { UseUnsavedChangesReturn } from '@aziontech/webkit/use-unsaved-changes'
-  import Wizard from '@aziontech/webkit/wizard'
+  import Wizard from '@aziontech/webkit/wizard-root'
   import { type ComponentPublicInstance, onMounted, ref } from 'vue'
 
   import DiscardDialog from './discard-dialog.vue'

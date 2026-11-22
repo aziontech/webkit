@@ -65,8 +65,6 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 The block takes the release and its impact through props and emits every action; it fetches nothing and runs no deploy of its own. `ReleaseImpactResource`, `ReleaseImpactSettings` and `ReleaseImpactProps` (with the version, dependency, environment and project types) are exported from `create-release-impact.vue`, and `sample.ts` holds the sample resources and Deployment Settings the block renders when `resources` or `impact` is left out (the impact sample never renders while `loading` or `error` is set). The switches and version selects edit a local copy of `resources`; `deploy` carries the included resources at the versions picked.
 
-The types live in `types.ts` (re-exported by the page) and the pure helpers in `lib/release-impact.ts`. Each resource card is `parts/release-resource-card.vue` and the Impact card is `parts/release-impact-panel.vue`; the ChooseSettings step is `parts/choose-settings-page.vue`, with its Deployment Settings in `sample.ts`.
-
 | Prop          | Type                      | What it does                                                                                            |
 | ------------- | ------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `resources`   | `ReleaseImpactResource[]` | The resource cards; a resource with no `versions` blocks the deploy.                                    |

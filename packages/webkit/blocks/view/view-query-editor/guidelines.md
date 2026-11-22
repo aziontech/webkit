@@ -82,8 +82,6 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 The block takes its records through props and emits every action; it fetches nothing and runs no SQL. `QueryEditorTable`, `QueryEditorHistoryEntry`, `QueryEditorResult` and `QueryEditorProps` are exported from `view-query-editor.vue`, and `sample.ts` holds the sample tables, history and statement the block renders when `tables`, `history` or `sql` is left out (the tables and history never while `loading` or `error` is set).
 
-The types live in `types.ts` (re-exported by the page). The page is wiring; its regions are parts: `parts/tables-sidebar.vue` and `parts/history-sidebar.vue` (the two side panels), `parts/table-data-view.vue` and `parts/table-definition.vue` (the Data and Definition views of a table), `parts/editor-toolbar.vue`, `parts/query-results.vue` and `parts/templates-drawer.vue`, whose templates are in `sample.ts`. The CreateDatabase and ImportCsv variants render `parts/create-database-page.vue` and `parts/import-csv-page.vue` (its preview in `parts/import-preview.vue`, its CSV reading and checks in `lib/csv-import.ts`).
-
 | Prop                   | Type                        | What it does                                                                                                        |
 | ---------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `tables`               | `QueryEditorTable[]`        | The tables with their columns and rows. Pass `[]` for a database with none.                                         |

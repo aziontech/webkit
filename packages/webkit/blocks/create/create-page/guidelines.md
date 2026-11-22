@@ -56,8 +56,6 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in an error toast with Retry; on success the page shows the toast and opens the new domain.
 
-The other create pages are parts of the block, and each variant only renders one: `parts/create-zone-form.vue`, `parts/create-purge-form.vue` and `parts/create-organization-form.vue` sit in the shared `parts/creation-frame.vue` (the creation header, the small page header, the disabled-while-saving `fieldset`, the centred `SaveBar` with Cancel and the submit button, and the discard dialog), and `parts/create-service-form.vue` keeps its own long layout, with its cache rows in `parts/service-cache-section.vue` and its option lists in `lib/service-options.ts`. They all run `use-create-form.ts`.
-
 | Prop            | Type                        | What it does                                                                        |
 | --------------- | --------------------------- | ----------------------------------------------------------------------------------- |
 | `defaultValues` | `Partial<CreatePageValues>` | The values the form starts from: Name and Domain name empty, DNSSEC off, Active on. |

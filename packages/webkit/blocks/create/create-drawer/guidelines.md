@@ -77,8 +77,6 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 The block takes its option lists, its starting values and the save state through props and emits the values; it fetches and saves nothing. `CreateDrawerProps`, `CreateDrawerValues`, `CreateDrawerEnvironment` and `CreateDrawerCertificate` are exported from `create-drawer.vue`, and `sample.ts` holds the environments and certificates the block renders when those props are left out.
 
-The block is a folder. `parts/form-drawer.vue` is the drawer frame every shape shares (the header with title and description, the disabled-while-saving `fieldset`, and the footer with its submit button and ⌘ Enter shortcut), and `parts/unsaved-changes-dialog.vue` is the discard guard. Each other shape is its own part (`parts/add-record-drawer.vue`, `parts/certificate-drawer.vue`, `parts/create-environment-drawer.vue`, `parts/deployment-settings-drawer.vue`, `parts/function-instance-drawer.vue`, and the Origins and Rules pages in `parts/origins-page.vue` and `parts/rules-page.vue`), and its variant only renders it. Their records (the sample certificate, the functions and their instances) live in `sample.ts`, their pure helpers (certificate matching and PEM reading, the environment options, JSON parsing) in `lib/`.
-
 | Prop                                           | Type                          | What it does                                                                                                                                        |
 | ---------------------------------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `environments`                                 | `CreateDrawerEnvironment[]`   | Every environment of the account, listed in the Environment select.                                                                                 |
@@ -141,7 +139,7 @@ To go live, render the block from a page that owns the request and pass what it 
 </template>
 ```
 
-Then delete the `sample.ts` import of `create-drawer.vue`; the parts of the other shapes still read their records from it.
+Then delete the `sample.ts` import of `create-drawer.vue`.
 
 ## Do
 

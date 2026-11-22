@@ -2,7 +2,7 @@
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
+  import Item from '@aziontech/webkit/item-root'
   import Sidebar from '@aziontech/webkit/sidebar-root'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'

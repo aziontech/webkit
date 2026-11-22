@@ -1,6 +1,6 @@
 import { onScopeDispose, readonly, type Ref, ref, watch, type WatchSource } from 'vue'
 
-export const RELOAD_MS = 600
+const RELOAD_MS = 600
 
 export function useReloadFlag<T>(
   source: WatchSource<T>,

@@ -24,6 +24,13 @@
   } from '../view-query-editor.vue'
   import ImportPreview from './import-preview.vue'
 
+  export interface ImportCsvPageProps {
+    /** Opens the Import drawer on mount, with the sample CSV read. */
+    defaultOpen?: boolean
+  }
+
+  const props = withDefaults(defineProps<ImportCsvPageProps>(), { defaultOpen: false })
+
   const tables = ref<QueryEditorTable[]>(
     sampleTablesWithSubscribers.map((table) => ({ ...table, rows: [...table.rows] }))
   )
@@ -51,7 +58,7 @@
     tables.value = tables.value.filter((item) => item.id !== table.id)
   }
 
-  const importOpen = ref(true)
+  const importOpen = ref(props.defaultOpen)
   const csvPicker = useFilePicker({ accept: '.csv,text/csv' })
   const importFile = ref<ImportFile | null>(null)
   const importFileError = ref('')

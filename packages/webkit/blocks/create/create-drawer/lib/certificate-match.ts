@@ -5,7 +5,7 @@ export interface CertificateSubject {
   subject: string
 }
 
-export function subjectCovers(subject: string, host: string): boolean {
+function subjectCovers(subject: string, host: string): boolean {
   const pattern = subject.toLowerCase()
   if (!pattern) return false
   if (pattern === host) return true

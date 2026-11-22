@@ -6,6 +6,13 @@ import { join } from 'node:path'
 import { cleanup, cli, cliJson, makeProject } from './lib/cli-project.mjs'
 
 const BLOCK = 'create/create-hub'
+const HUB_FILES = [
+  'src/views/create-hub.repository-list.vue',
+  'src/views/create-hub.sample.ts',
+  'src/views/create-hub.template-gallery.vue',
+  'src/views/create-hub.types.ts',
+  'src/views/create-hub.vue'
+]
 const manifestOf = (dir) => JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
 
 test('remove deletes every file of a copied block, its guidelines and its manifest entry', () => {
@@ -13,8 +20,7 @@ test('remove deletes every file of a copied block, its guidelines and its manife
   try {
     assert.equal(cli(dir, 'add', BLOCK, '--variant', 'connected', '--with-guidelines').code, 0)
     const copied = [
-      'src/views/create-hub.vue',
-      'src/views/create-hub.sample.ts',
+      ...HUB_FILES,
       'src/views/create-hub-connected.vue',
       'src/views/create-hub.guidelines.md'
     ]
@@ -56,7 +62,7 @@ test('remove by path drops one file and keeps the rest of the block', () => {
     assert.ok(!existsSync(join(dir, 'src/views/create-hub-connected.vue')))
     assert.ok(existsSync(join(dir, 'src/views/create-hub.vue')))
     const paths = manifestOf(dir).blocks[BLOCK].files.map((file) => file.path)
-    assert.deepEqual(paths, ['src/views/create-hub.sample.ts', 'src/views/create-hub.vue'])
+    assert.deepEqual(paths, HUB_FILES)
   } finally {
     cleanup(dir)
   }
@@ -72,10 +78,7 @@ test('remove names the app files that still import the block', () => {
     )
     const { json } = cliJson(dir, 'remove', BLOCK)
     assert.deepEqual(json.importers, [{ file: 'src/router.ts', imports: './views/create-hub.vue' }])
-    assert.deepEqual(json.removed.sort(), [
-      'src/views/create-hub.sample.ts',
-      'src/views/create-hub.vue'
-    ])
+    assert.deepEqual(json.removed.sort(), HUB_FILES)
   } finally {
     cleanup(dir)
   }
