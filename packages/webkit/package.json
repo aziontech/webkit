@@ -2492,6 +2492,10 @@
       "types": "./types/utils/ai-chat.d.ts",
       "default": "./src/utils/ai-chat.ts"
     },
+    "./utils/ai-chat-questions": {
+      "types": "./types/utils/ai-chat-questions.d.ts",
+      "default": "./src/utils/ai-chat-questions.ts"
+    },
     "./utils/csv": {
       "types": "./types/utils/csv.d.ts",
       "default": "./src/utils/csv.ts"
@@ -4135,6 +4139,9 @@
       ],
       "utils/ai-chat": [
         "./types/utils/ai-chat.d.ts"
+      ],
+      "utils/ai-chat-questions": [
+        "./types/utils/ai-chat-questions.d.ts"
       ],
       "utils/csv": [
         "./types/utils/csv.d.ts"
