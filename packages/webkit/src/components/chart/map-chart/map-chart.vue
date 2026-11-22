@@ -15,52 +15,31 @@
   import ChartTooltipPanel from '../chart/parts/chart-tooltip-panel.vue'
   import {
     CHART_STATE_SLOTS,
-    type ChartColor,
-    colorToken,
     formatCompact,
     isFiniteNumber,
-    maxOf,
-    minOf,
     STEP_BACKWARD,
     STEP_FORWARD,
     stepIndex
   } from '../lib'
+  import {
+    binColor,
+    BINS,
+    mapBubbles,
+    type MapItem,
+    mapItems,
+    mapShapes,
+    markId,
+    parseBox,
+    regionNamer,
+    stagePosition,
+    sumOf,
+    valueDomain
+  } from './lib/map-geometry'
+  import type { MapChartPoint, MapChartRegion, MapChartView } from './types'
 
   defineOptions({ name: 'MapChart', inheritAttrs: false })
 
-  export type MapChartView =
-    | 'world'
-    | 'americas'
-    | 'north-america'
-    | 'south-america'
-    | 'europe'
-    | 'africa'
-    | 'asia'
-    | 'oceania'
-
-  export interface MapChartRegion {
-    /** ISO 3166-1 alpha-2 country code, such as `BR`. */
-    id: string
-    /** Reading for the country; null leaves it unshaded. */
-    value: number | null
-    /** Display name; empty uses the locale's country name. */
-    name?: string
-  }
-
-  export interface MapChartPoint {
-    /** Stable id of the location. */
-    id: string
-    /** Display name, such as a city or a data center. */
-    name: string
-    /** Latitude in degrees. */
-    lat: number
-    /** Longitude in degrees. */
-    lon: number
-    /** Reading for the location; the bubble area follows it. */
-    value: number
-    /** Series slot, status or severity color of the bubble. */
-    color?: ChartColor
-  }
+  export type { MapChartPoint, MapChartRegion, MapChartView } from './types'
 
   export interface MapChartProps {
     /** Countries shaded by value on a five-step sequential scale. */
@@ -126,13 +105,6 @@
   const { width: stageWidth, height: stageHeight } = useElementSize(stageEl)
   const geometry = shallowRef<Readonly<Record<string, string>> | null>(null)
 
-  const X0 = 741
-  const KX = 4.83
-  const Y0 = 605
-  const RY = 276.7
-  const BINS = 5
-  const CELL = /M(\d+) (\d+)h(\d+)/g
-
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'map-chart')
   const summaryId = `${uid}-summary`
   const patternId = `${uid}-cell`
@@ -142,31 +114,9 @@
       ? formatCompact(value, locale.value)
       : props.formatValue(value)
 
-  const regionNames = computed(() => {
-    try {
-      return new Intl.DisplayNames([locale.value], { type: 'region' })
-    } catch {
-      return null
-    }
-  })
-  const regionName = (region: MapChartRegion) => {
-    if (region.name) return region.name
-    try {
-      return regionNames.value?.of(region.id.toUpperCase()) ?? region.id
-    } catch {
-      return region.id
-    }
-  }
+  const regionName = computed(() => regionNamer(locale.value))
 
-  const project = (lat: number, lon: number): [number, number] => {
-    const clamped = (Math.max(-80, Math.min(84, lat)) * Math.PI) / 180
-    return [X0 + KX * lon, Y0 - RY * Math.log(Math.tan(Math.PI / 4 + clamped / 2))]
-  }
-
-  const box = computed(() => {
-    const [x, y, width, height] = NETWORK_MAP_REGIONS[props.view].split(' ').map(Number)
-    return { x: x ?? 0, y: y ?? 0, width: width ?? 1590, height: height ?? 940 }
-  })
+  const box = computed(() => parseBox(NETWORK_MAP_REGIONS[props.view]))
   const viewBox = computed(
     () => `${box.value.x} ${box.value.y} ${box.value.width} ${box.value.height}`
   )
@@ -176,103 +126,18 @@
       isFiniteNumber(region.value)
     )
   )
-  const domain = computed(() => {
-    const values = shaded.value.map((region) => region.value)
-    return values.length
-      ? { min: minOf(values, Infinity), max: maxOf(values, -Infinity) }
-      : { min: 0, max: 0 }
-  })
-  const binOf = (value: number) => {
-    const { min, max } = domain.value
-    if (max <= min) return BINS - 1
-    return Math.min(BINS - 1, Math.floor(((value - min) / (max - min)) * BINS))
-  }
-  const binColor = (bin: number) => `var(--chart-sequential-${bin + 3})`
+  const domain = computed(() => valueDomain(shaded.value.map((region) => region.value)))
+  const shapes = computed(() => mapShapes(shaded.value, geometry.value, domain.value))
 
-  const anchorOf = (cells: string): [number, number] | null => {
-    let sumX = 0
-    let sumY = 0
-    let count = 0
-    for (const match of cells.matchAll(CELL)) {
-      const width = Number(match[3])
-      sumX += (Number(match[1]) + width / 2) * width
-      sumY += (Number(match[2]) + 2.5) * width
-      count += width
-    }
-    return count ? [sumX / count, sumY / count] : null
-  }
+  const bubbles = computed(() => mapBubbles(props.points))
 
-  const shapes = computed(() => {
-    const cells = geometry.value
-    if (!cells) return []
-    return shaded.value.flatMap((region) => {
-      const d = cells[region.id.toUpperCase()]
-      return d ? [{ id: region.id, d, bin: binOf(region.value) }] : []
-    })
-  })
+  type MapChartItem = MapItem<MapChartRegion & { value: number }, MapChartPoint>
 
-  const maxPoint = computed(() =>
-    maxOf(props.points.filter((point) => isFiniteNumber(point.value)).map((p) => p.value))
+  const items = computed<MapChartItem[]>(() =>
+    mapItems(shaded.value, props.points, geometry.value, regionName.value)
   )
-  const bubbles = computed(() =>
-    props.points
-      .filter((point) => isFiniteNumber(point.value))
-      .map((point) => {
-        const [x, y] = project(point.lat, point.lon)
-        const ratio = maxPoint.value > 0 ? Math.sqrt(Math.max(0, point.value) / maxPoint.value) : 0
-        return {
-          id: point.id,
-          x,
-          y,
-          r: 8 + 24 * ratio,
-          color: colorToken(point.color ?? 1),
-          source: point
-        }
-      })
-      .sort((a, b) => b.r - a.r)
-  )
-
-  interface MapItem {
-    kind: 'region' | 'point'
-    id: string
-    name: string
-    value: number
-    anchor: [number, number] | null
-    region?: MapChartRegion
-    point?: MapChartPoint
-  }
-
-  const items = computed<MapItem[]>(() => {
-    const cells = geometry.value
-    const regionItems = [...shaded.value]
-      .sort((a, b) => b.value - a.value)
-      .map<MapItem>((region) => {
-        const d = cells?.[region.id.toUpperCase()]
-        return {
-          kind: 'region',
-          id: region.id,
-          name: regionName(region),
-          value: region.value,
-          anchor: d ? anchorOf(d) : null,
-          region
-        }
-      })
-    const pointItems = [...props.points]
-      .filter((point) => isFiniteNumber(point.value))
-      .sort((a, b) => b.value - a.value)
-      .map<MapItem>((point) => ({
-        kind: 'point',
-        id: point.id,
-        name: point.name,
-        value: point.value,
-        anchor: project(point.lat, point.lon),
-        point
-      }))
-    return [...regionItems, ...pointItems]
-  })
 
   const active = computed(() => items.value.find((item) => item.id === activeKey.value) ?? null)
-  const total = computed(() => items.value.reduce((sum, item) => sum + item.value, 0))
 
   const hasError = computed(() => props.error.length > 0)
   const isEmpty = computed(() => items.value.length === 0)
@@ -300,7 +165,7 @@
   )
 
   const summary = computed(() =>
-    t('mapChart.summary', { count: items.value.length, total: valueText(total.value) })
+    t('mapChart.summary', { count: items.value.length, total: valueText(sumOf(items.value)) })
   )
   const announcement = computed(() =>
     active.value ? `${active.value.name}: ${valueText(active.value.value)}` : ''
@@ -309,14 +174,7 @@
   const readout = computed(() => {
     const item = active.value
     if (!item?.anchor || !stageWidth.value) return null
-    const scale = Math.min(
-      stageWidth.value / box.value.width,
-      stageHeight.value / box.value.height || Number.POSITIVE_INFINITY
-    )
-    const offsetX = (stageWidth.value - box.value.width * scale) / 2
-    const offsetY = (stageHeight.value - box.value.height * scale) / 2
-    const x = offsetX + (item.anchor[0] - box.value.x) * scale
-    const y = offsetY + (item.anchor[1] - box.value.y) * scale
+    const { x, y } = stagePosition(item.anchor, box.value, stageWidth.value, stageHeight.value)
     return {
       x,
       y,
@@ -337,9 +195,7 @@
     geometry.value = module.MAP_CHART_COUNTRIES
   }
 
-  onMounted(() => {
-    void loadGeometry()
-  })
+  onMounted(() => void loadGeometry())
 
   watch(
     () => props.regions.length,
@@ -354,7 +210,7 @@
     if (activeKey.value !== id) activeKey.value = id
   }
 
-  function activate(event: MouseEvent | globalThis.KeyboardEvent, item: MapItem | null) {
+  function activate(event: MouseEvent | globalThis.KeyboardEvent, item: MapChartItem | null) {
     if (!item) return
     if (item.region) emit('region-click', event, item.region)
     else if (item.point) emit('point-click', event, item.point)
@@ -375,9 +231,7 @@
   }
 
   function onClick(event: MouseEvent) {
-    const target = event.target instanceof Element ? event.target : null
-    const mark = target?.closest('[data-region], [data-point]')
-    const id = mark?.getAttribute('data-region') ?? mark?.getAttribute('data-point')
+    const id = markId(event.target)
     if (!id) return
     const item = items.value.find((entry) => entry.id === id) ?? null
     setActive(id)
@@ -389,12 +243,7 @@
 
   const dimmed = (id: string) => activeKey.value !== null && activeKey.value !== id
 
-  const REGION_CLASS =
-    'cursor-pointer opacity-0 transition-opacity duration-slow-01 ease-productive-entrance ' +
-    'motion-reduce:transition-none ' +
-    'data-[entered]:opacity-100 data-[entered]:data-[dimmed]:opacity-40'
-
-  const BUBBLE_CLASS =
+  const MARK_CLASS =
     'cursor-pointer opacity-0 transition-opacity duration-slow-01 ease-productive-entrance ' +
     'motion-reduce:transition-none ' +
     'data-[entered]:opacity-100 data-[entered]:data-[dimmed]:opacity-40'
@@ -507,7 +356,7 @@
           :data-bin="shape.bin"
           :data-dimmed="dimmed(shape.id) || null"
           :data-entered="entered || null"
-          :class="REGION_CLASS"
+          :class="MARK_CLASS"
           @pointerenter="setActive(shape.id)"
         />
         <circle
@@ -524,7 +373,7 @@
           :data-point="bubble.id"
           :data-dimmed="dimmed(bubble.id) || null"
           :data-entered="entered || null"
-          :class="BUBBLE_CLASS"
+          :class="MARK_CLASS"
           @pointerenter="setActive(bubble.id)"
         />
       </svg>
