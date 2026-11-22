@@ -49,7 +49,8 @@
         "src/components/code/log-viewer/log-viewer-header.vue": "LogViewer.Header: its level filters are toggle buttons (aria-pressed) with a dot and a count.",
         "src/components/code/code-editor": "CodeEditor: each problem row is the button that moves the caret to its marker.",
         "src/components/input/hint": "Hint: the component is the inline info trigger of its tooltip, sized to the label beside it.",
-        "src/components/input/date-picker/parts/date-picker-control-button.vue": "DatePicker field segment: the in-field calendar and clear segments that fill the field height and draw its divider, part of the date field control."
+        "src/components/input/date-picker/parts/date-picker-control-button.vue": "DatePicker field segment: the in-field calendar and clear segments that fill the field height and draw its divider, part of the date field control.",
+        "src/components/input/chip": "Chip: the remove button is part of the token itself, a round 16 or 24 px hit inside the 24 or 32 px pill with its own coarse-pointer target; IconButton's smallest step (28 px) does not fit inside the chip."
       }
     },
     "a": {
@@ -94,7 +95,9 @@
         "src/components/ai/sources": "Sources: each entry is the link to a cited source, a reference list whose job is links.",
         "src/components/content/integration-card": "IntegrationCard: its title link is stretched over the card, so the whole card is one target.",
         "src/components/content/overflow-count": "OverflowCount: its popover lists the hidden entries as full-width link rows.",
-        "src/components/layout/app-header/app-header-brand.vue": "AppHeader.Brand: the brand mark is the home link of the header."
+        "src/components/layout/app-header/app-header-brand.vue": "AppHeader.Brand: the brand mark is the home link of the header.",
+        "src/components/data/flow-diagram/flow-diagram-title": "FlowDiagram.Title: a linked title is the resource's name as its link, in the title's type and colour, truncating while its open glyph stays visible (the job Table.CellLink has in a row); Link draws link-coloured controls or underlined links in prose.",
+        "src/components/data/flow-diagram/parts/flow-diagram-card.vue": "FlowDiagram card: a linked field value is the value itself as its link, in the field's type and colour and truncating (the job Table.CellLink has in a row); Link draws link-coloured controls or underlined links in prose."
       }
     },
     "input": {
@@ -113,7 +116,8 @@
         "src/components/ai/prompt-input/prompt-input-attach-button": "PromptInput.AttachButton: the hidden file input its button opens.",
         "src/components/section/job-posting-section": "JobPostingSection: the hidden file input its Browse button opens for the resume field.",
         "src/components/data/data-grid": "DataGrid: the in-cell text editor of an editable grid cell, sized to the cell.",
-        "src/components/data/tree/parts/tree-node.vue": "Tree node: the in-place rename field of a tree item, sized to the row."
+        "src/components/data/tree/parts/tree-node.vue": "Tree node: the in-place rename field of a tree item, sized to the row.",
+        "src/components/input/date-range-picker/date-range-picker.vue": "DateRangePicker: the quick ranges are a staged single choice (native radios, applied with Apply, the Cloudscape relative-range list) drawn as compact popover option rows with a trailing check in a column-filled two-column grid; RadioGroup draws circles or cards."
       }
     },
     "textarea": {

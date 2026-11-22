@@ -102,7 +102,7 @@ const TOKEN_CHECKS = [
     id: 'rtl-double-flip',
     wide: true,
     regex:
-      /(["'`])(?=[^"'`]*(?<![\w-])az-(?:(?:(?:circle-)?(?:chevron|arrow)|chevrons|arrow-down|caret)-(?:left|right)|log-in|log-out|reply|undo)(?![\w-]))[^"'`]*?(?<![^\s"'`])(?:[^\s"'`]*:)?rtl:-?rotate-180(?![^\s"'`])/g,
+      /(["'`])(?=[^"'`]*(?<![\w-])az-(?:(?:(?:circle-)?(?:chevron|arrow)|chevrons|arrow-down|caret)-(?:left|right)|arrow-(?:left|right)-to-line|log-in|log-out|reply|undo)(?![\w-]))[^"'`]*?(?<![^\s"'`])(?:[^\s"'`]*:)?rtl:-?rotate-180(?![^\s"'`])/g,
     message:
       'rtl:rotate-180 on a directional icon. `@aziontech/webkit/styles` already mirrors every ' +
       'directional `az-*` glyph under RTL with `scale: -1 1`; adding a rotation composes with ' +

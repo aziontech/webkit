@@ -124,7 +124,7 @@
     'disabled:border-transparent disabled:bg-(--bg-disabled) motion-reduce:transition-none pointer-coarse:min-h-11 forced-colors:border-[ButtonBorder]'
 
   const BORDER_SWEEP_CLASS =
-    'pointer-events-none absolute inset-0 animate-spin [animation-duration:8s] [animation-timing-function:linear] ' +
+    'pointer-events-none absolute inset-0 animate-spin-settle ' +
     '[background:linear-gradient(90deg,var(--text-default),var(--brand-blue),var(--primary))] [filter:blur(12px)] ' +
     'motion-reduce:animate-none group-disabled/copy-prompt:hidden'
 
