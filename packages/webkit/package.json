@@ -734,6 +734,14 @@
       "types": "./types/components/data/data-table/data-table.vue.d.ts",
       "default": "./src/components/data/data-table/data-table.vue"
     },
+    "./data-table-pagination": {
+      "types": "./types/components/data/data-table/data-table-pagination/data-table-pagination.vue.d.ts",
+      "default": "./src/components/data/data-table/data-table-pagination/data-table-pagination.vue"
+    },
+    "./data-table-load-more": {
+      "types": "./types/components/data/data-table/data-table-load-more/data-table-load-more.vue.d.ts",
+      "default": "./src/components/data/data-table/data-table-load-more/data-table-load-more.vue"
+    },
     "./data-grid": {
       "types": "./types/components/data/data-grid/data-grid.vue.d.ts",
       "default": "./src/components/data/data-grid/data-grid.vue"
@@ -3093,6 +3101,12 @@
       ],
       "data-table": [
         "./types/components/data/data-table/data-table.vue.d.ts"
+      ],
+      "data-table-pagination": [
+        "./types/components/data/data-table/data-table-pagination/data-table-pagination.vue.d.ts"
+      ],
+      "data-table-load-more": [
+        "./types/components/data/data-table/data-table-load-more/data-table-load-more.vue.d.ts"
       ],
       "data-grid": [
         "./types/components/data/data-grid/data-grid.vue.d.ts"

@@ -1,8 +1,10 @@
 <script setup lang="ts">
-  import { computed, provide, ref, useAttrs, useId } from 'vue'
+  import { computed, provide, ref, useAttrs } from 'vue'
 
   import { useScrollEdges } from '../../../composables/use-scroll-edges'
+  import { useTableFrame } from './composables/use-table-frame'
   import { type TableAppliedFilter, type TableDensity, TableInjectionKey } from './injection-key'
+  import TableToolbarBand from './parts/table-toolbar-band.vue'
 
   defineOptions({
     name: 'Table',
@@ -42,24 +44,7 @@
 
   const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'table')
 
-  const captionId = `${useId()}-caption`
-  const captions = ref<number>(0)
-  const registerCaption = (): (() => void) => {
-    captions.value++
-    return () => captions.value--
-  }
-  const splitAttrs = computed<Record<string, unknown>[]>(() => {
-    const frame: Record<string, unknown> = {}
-    const own: Record<string, unknown> = {}
-    for (const name in attrs) (name.startsWith('aria-') ? own : frame)[name] = attrs[name]
-    return [frame, own]
-  })
-  const tableAttrs = computed<Record<string, unknown>>(() => {
-    const own = splitAttrs.value[1]
-    return captions.value && !own['aria-label'] && !own['aria-labelledby']
-      ? { ...own, 'aria-labelledby': captionId }
-      : own
-  })
+  const { captionId, registerCaption, frameAttrs, tableAttrs } = useTableFrame(attrs, () => false)
 
   const viewportHeightVar = computed<Record<string, string> | undefined>(() =>
     props.maxHeight ? { '--table-viewport-height': props.maxHeight } : undefined
@@ -122,7 +107,7 @@
 
 <template>
   <div
-    v-bind="splitAttrs[0]"
+    v-bind="frameAttrs"
     :data-testid="testId"
     :data-bordered="bordered || null"
     :data-density="density"
@@ -130,25 +115,11 @@
     :style="viewportHeightVar"
     :class="ROOT_CLASS"
   >
-    <div
-      v-if="$slots['title'] || $slots['toolbar']"
-      role="presentation"
-      :data-testid="`${testId}__toolbar`"
-      class="flex flex-wrap items-center gap-(--spacing-xs) border-b-(length:--border-width-default) border-solid border-(--border-default) p-(--spacing-sm)"
-    >
-      <div
-        v-if="$slots['title']"
-        class="text-label-md text-(--text-default)"
-      >
-        <slot name="title" />
-      </div>
-      <div
-        v-if="$slots['toolbar']"
-        class="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-(--spacing-xs) @max-md/table:basis-full @max-md/table:justify-start"
-      >
-        <slot name="toolbar" />
-      </div>
-    </div>
+    <TableToolbarBand
+      :test-id="testId"
+      :title="$slots['title']"
+      :toolbar="$slots['toolbar']"
+    />
 
     <div
       :data-testid="`${testId}__scroll`"
@@ -166,7 +137,7 @@
       >
         <div class="flex w-max min-w-full flex-col">
           <div
-            v-bind="tableAttrs"
+            v-bind="tableAttrs()"
             role="table"
             :data-testid="`${testId}__table`"
             class="flex w-full flex-col"

@@ -8,6 +8,7 @@ import { hostable } from '../../../test/hostable'
 import { LOCALES } from '../../../test/locales'
 import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import DataTableRoot from './data-table.vue'
+import DataTablePagination from './data-table-pagination/data-table-pagination.vue'
 
 const DataTable = hostable(DataTableRoot)
 
@@ -27,25 +28,32 @@ const order = (root: Document | HTMLElement = document): string[] =>
 const status = (): string =>
   document.body.querySelector('[data-testid="data-table__reorder-status"]')?.textContent ?? ''
 
-const mountTable = (extra: Record<string, unknown> = {}) => {
+const mountTable = (
+  extra: Record<string, unknown> = {},
+  slots: Record<string, () => unknown> = {}
+) => {
   const data = ref<Row[]>(seed())
   const events: { from: number; to: number; row: Row }[] = []
   const triggers: Event[] = []
   const Host = defineComponent({
     setup: () => () =>
-      h(DataTable, {
-        data: data.value,
-        'onUpdate:data': (next: Row[]) => (data.value = next),
-        onReorder: (event: Event, payload: { from: number; to: number; row: Row }) => {
-          triggers.push(event)
-          events.push(payload)
+      h(
+        DataTable,
+        {
+          data: data.value,
+          'onUpdate:data': (next: Row[]) => (data.value = next),
+          onReorder: (event: Event, payload: { from: number; to: number; row: Row }) => {
+            triggers.push(event)
+            events.push(payload)
+          },
+          columns: [{ accessorKey: 'name', header: 'Name', sortable: true }],
+          rowKey: 'id',
+          reorderable: true,
+          stackable: false,
+          ...extra
         },
-        columns: [{ accessorKey: 'name', header: 'Name', sortable: true }],
-        rowKey: 'id',
-        reorderable: true,
-        stackable: false,
-        ...extra
-      })
+        slots
+      )
   })
   const view = render(Host)
   return { view, data, events, triggers }
@@ -155,8 +163,11 @@ describe('DataTable', () => {
     })
 
     it('keeps grips with row selection and maps positions under pagination', async () => {
-      const { data } = mountTable({ selectable: true, paginated: true, pageSize: 2 })
-      expect(handles()).toHaveLength(2)
+      const { data } = mountTable(
+        { selectable: true },
+        { footer: () => h(DataTablePagination, { pageSize: 2 }) }
+      )
+      await waitFor(() => expect(handles()).toHaveLength(2))
       expect(
         document.body.querySelectorAll('[role="checkbox"], input[type="checkbox"]').length
       ).toBeGreaterThan(0)

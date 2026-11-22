@@ -110,22 +110,13 @@ export interface CollectionTableProps<T, C> {
   sorting: CollectionSort[]
   manualSorting: true
   manualFiltering: true
-  manualPagination: true
-  paginated: boolean
-  page: number
-  pageSize: number
-  rowCount: number
-  pageSizeOptions: number[]
   selectable: boolean
   selectedKeys: string[]
   columnVisibility: Record<string, boolean>
   wrapLines: boolean
   striped: boolean
   density: CollectionDensity
-  exportRows: (scope: CollectionExportScope) => Promise<T[]> | T[]
   'onUpdate:sorting': (value: CollectionSort[] | undefined) => void
-  'onUpdate:page': (value: number | undefined) => void
-  'onUpdate:pageSize': (value: number) => void
   'onUpdate:selectedKeys': (value: string[] | undefined) => void
   'onUpdate:columnVisibility': (value: Record<string, boolean> | undefined) => void
 }

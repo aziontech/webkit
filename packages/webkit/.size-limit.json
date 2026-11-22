@@ -99,7 +99,17 @@
   {
     "name": "data-table",
     "path": "src/components/data/data-table/data-table.vue",
-    "limit": "58.5 KB"
+    "limit": "57.3 KB"
+  },
+  {
+    "name": "data-table-pagination",
+    "path": "src/components/data/data-table/data-table-pagination/data-table-pagination.vue",
+    "limit": "5.6 KB"
+  },
+  {
+    "name": "data-table-load-more",
+    "path": "src/components/data/data-table/data-table-load-more/data-table-load-more.vue",
+    "limit": "5.2 KB"
   },
   {
     "name": "data-grid",
@@ -1716,18 +1726,18 @@
   {
     "name": "table-search",
     "path": "src/components/data/table/table-search/table-search.vue",
-    "limit": "5.1 KB"
+    "limit": "5.15 KB"
   },
   {
     "name": "table-filter",
     "path": "src/components/data/table/table-filter/table-filter.vue",
-    "limit": "6.5 KB",
+    "limit": "6.65 KB",
     "entryOnly": true
   },
   {
     "name": "table-export-button",
     "path": "src/components/data/table/table-export-button/table-export-button.vue",
-    "limit": "8.95 KB"
+    "limit": "9 KB"
   },
   {
     "name": "table-refresh-button",
@@ -1737,7 +1747,7 @@
   {
     "name": "table-live-button",
     "path": "src/components/data/table/table-live-button/table-live-button.vue",
-    "limit": "4.45 KB"
+    "limit": "4.6 KB"
   },
   {
     "name": "pagination",

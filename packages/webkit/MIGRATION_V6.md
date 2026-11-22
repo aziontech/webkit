@@ -634,8 +634,8 @@ section item arrays (`items[].illustration`):
 | `data-table`                                                                                               | `v-model:row-selection` (record)                                                 | `v-model:selected-keys` (`string[]` of row keys)                                                                                                                                                                             |
 | `data-grid`                                                                                                | `v-model:row-selection` (record)                                                 | `v-model:selected-keys` (`string[]` of row keys)                                                                                                                                                                             |
 | `data-table`                                                                                               | `v-model:expanded` (`ExpandedState`)                                             | `v-model:open-keys` (`string[]` of row ids)                                                                                                                                                                                  |
-| `data-table`                                                                                               | `v-model:pagination` (`{ pageIndex, pageSize }`, from 0)                         | `v-model:page` (from 1) + `v-model:page-size`                                                                                                                                                                                |
-| `data-table`                                                                                               | `v-model:state`, `initial-state`                                                 | `v-model:snapshot`, `default-snapshot`                                                                                                                                                                                       |
+| `data-table`                                                                                               | `v-model:pagination` (`{ pageIndex, pageSize }`, from 0)                         | `v-model:page` (from 1) + `v-model:page-size` on `DataTablePagination` in the `footer` slot                                                                                                                                  |
+| `data-table`                                                                                               | `v-model:state`, `initial-state`                                                 | `getSnapshot()` / `setSnapshot()` on the template ref (see "DataTable features are companion parts")                                                                                                                         |
 | `map-chart`                                                                                                | `v-model:active-id`                                                              | `v-model:active-key`                                                                                                                                                                                                         |
 | `tutorial-panel-provider`                                                                                  | `v-model:active`                                                                 | `v-model:active-key`                                                                                                                                                                                                         |
 | `tree`, `trace`, `split-button`                                                                            | `v-model:selected` (an id)                                                       | `v-model:selected-key`                                                                                                                                                                                                       |
@@ -718,13 +718,13 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 | `TransferList`           | `move`                    | `(payload)`                      | `(event, payload)`; the slot and exposed `move(event, direction)` / `moveAll(event, direction)` take the event first                                   |
 | `DataTable`              | `refresh`                 | `()`                             | `(event)`: the Table.RefreshButton click, or `new Event('refresh')` from `reload()`                                                                    |
 | `DataTable`              | `export`                  | `(rows)`                         | `(event, rows)`: the Table.Export click, or `new Event('export')` from `exportCsv()`                                                                   |
-| `DataTable`              | `load-more`               | `()`                             | `(event)`: the Load more click, or `new Event('load-more')` when the end of the rows nears the viewport                                                |
+| `DataTableLoadMore`      | `load-more`               | `()` (on `DataTable`)            | `(event)` on `DataTableLoadMore` in the `load-more` slot: the Load more click, or `new Event('load-more')` when the end of the rows nears the viewport |
 
 #### Types and data fields (a hand edit where the codemod cannot see the data)
 
-| Component                                                                                                                                                             | v5                                                                                       | v6                                                                                              |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `use-collection`                                                                                                                                                      | option `trackBy`                                                                         | option `itemKey` (manual)                                                                       |
+| Component                                                                                                                                                             | v5                                                                                       | v6                                                                                                                                  |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `use-collection`                                                                                                                                                      | option `trackBy`                                                                         | option `itemKey` (manual)                                                                                                           |
 | `ChatMessageState`                                                                                                                                                    | `ChatMessageStatus`                                                                      |
 | `PromptInputState`                                                                                                                                                    | `PromptInputStatus`                                                                      |
 | `ToolApprovalState`                                                                                                                                                   | `ToolApprovalStatus`                                                                     |
@@ -734,21 +734,21 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 | `UploadProgressStatus`                                                                                                                                                | `'pending' \| 'running' \| 'success' \| 'error' \| 'canceled'`                           |
 | `LogViewerStepStatus`                                                                                                                                                 | `'success' \| 'running' \| 'error' \| 'skipped' \| 'pending'`                            |
 | `TraceSpanStatus`                                                                                                                                                     | `'success' \| 'error' \| 'running'`                                                      |
-| `settings-row`                                                                                                                                                        | `SettingsRowLevel`                                                                       | `SettingsRowDepth`                                                                              |
-| `navigation-menu`                                                                                                                                                     | `NavigationMenuSide` `'top' \| 'right' \| 'bottom' \| 'left'`                            | `'top' \| 'end' \| 'bottom' \| 'start'`                                                         |
-| `drawer`                                                                                                                                                              | `DrawerSide` `'left' \| 'right'`                                                         | `'start' \| 'end'`                                                                              |
-| `doc-previous-next`                                                                                                                                                   | `DocPageLink.title`                                                                      | `DocPageLink.label`                                                                             |
+| `settings-row`                                                                                                                                                        | `SettingsRowLevel`                                                                       | `SettingsRowDepth`                                                                                                                  |
+| `navigation-menu`                                                                                                                                                     | `NavigationMenuSide` `'top' \| 'right' \| 'bottom' \| 'left'`                            | `'top' \| 'end' \| 'bottom' \| 'start'`                                                                                             |
+| `drawer`                                                                                                                                                              | `DrawerSide` `'left' \| 'right'`                                                         | `'start' \| 'end'`                                                                                                                  |
+| `doc-previous-next`                                                                                                                                                   | `DocPageLink.title`                                                                      | `DocPageLink.label`                                                                                                                 |
 | `AccordionArrowPosition`                                                                                                                                              | `AccordionIconPosition`                                                                  |
-| `tag`                                                                                                                                                                 | `TagSeverity` (status scale plus looks)                                                  | `TagSeverity` (status scale only) + `TagVariant` (`primary`, `accent`, `contrast`, `highlight`) |
-| `integration-card`                                                                                                                                                    | `CardBadgeSeverity` (with looks)                                                         | `IntegrationCardBadgeSeverity` + `IntegrationCardBadgeVariant`                                  |
-| `sidebar-menu`                                                                                                                                                        | `SidebarMenuItemTagSeverity` (with `primary`, `accent`)                                  | `SidebarMenuItemTagSeverity` (status) + `SidebarMenuItemTagVariant` (`primary`, `accent`)       |
-| `table`                                                                                                                                                               | `TableColumn.enableSorting`                                                              | `TableColumn.sortable`                                                                          |
-| `data-table`                                                                                                                                                          | `sorting`, `columnVisibility`, `globalFilter`, `filters`, `data`                         | unchanged names, now `defineModel` (same `v-model:*` contract)                                  |
-| `data-table`                                                                                                                                                          | `TableStateSnapshot.pagination`                                                          | `TableStateSnapshot.page` (from 1) + `pageSize`                                                 |
-| `data-table`                                                                                                                                                          | `TableExposed.getState()` / `setState()`                                                 | `getSnapshot()` / `setSnapshot()`                                                               |
-| `use-collection`                                                                                                                                                      | `tableProps.pagination` / `rowSelection`                                                 | `tableProps.page` / `pageSize` / `selectedKeys`                                                 |
-| `code-editor`                                                                                                                                                         | `CodeEditorMarker.severity` `'error'`                                                    | `'danger'` (`data-severity="danger"`)                                                           |
-| `chart`                                                                                                                                                               | `ChartStatus`                                                                            | `ChartSemanticSeverity`                                                                         |
+| `tag`                                                                                                                                                                 | `TagSeverity` (status scale plus looks)                                                  | `TagSeverity` (status scale only) + `TagVariant` (`primary`, `accent`, `contrast`, `highlight`)                                     |
+| `integration-card`                                                                                                                                                    | `CardBadgeSeverity` (with looks)                                                         | `IntegrationCardBadgeSeverity` + `IntegrationCardBadgeVariant`                                                                      |
+| `sidebar-menu`                                                                                                                                                        | `SidebarMenuItemTagSeverity` (with `primary`, `accent`)                                  | `SidebarMenuItemTagSeverity` (status) + `SidebarMenuItemTagVariant` (`primary`, `accent`)                                           |
+| `table`                                                                                                                                                               | `TableColumn.enableSorting`                                                              | `TableColumn.sortable`                                                                                                              |
+| `data-table`                                                                                                                                                          | `sorting`, `columnVisibility`, `data`                                                    | unchanged names, now `defineModel` (same `v-model:*` contract); `globalFilter` and `filters` moved to `TableSearch` / `TableFilter` |
+| `data-table`                                                                                                                                                          | `TableStateSnapshot.pagination`                                                          | `TableStateSnapshot.page` (from 1) + `pageSize`                                                                                     |
+| `data-table`                                                                                                                                                          | `TableExposed.getState()` / `setState()`                                                 | `getSnapshot()` / `setSnapshot()`                                                                                                   |
+| `use-collection`                                                                                                                                                      | `tableProps.pagination` / `rowSelection`                                                 | `tableProps.page` / `pageSize` / `selectedKeys`                                                                                     |
+| `code-editor`                                                                                                                                                         | `CodeEditorMarker.severity` `'error'`                                                    | `'danger'` (`data-severity="danger"`)                                                                                               |
+| `chart`                                                                                                                                                               | `ChartStatus`                                                                            | `ChartSemanticSeverity`                                                                                                             |
 | `PricingCardSlotPosition`                                                                                                                                             | `PricingCardActionsPosition`                                                             |
 | `ConversationAlignment`                                                                                                                                               | `ConversationLayout`                                                                     |
 | `MediaTabsPosition`                                                                                                                                                   | `MediaTabsSide`                                                                          |
@@ -1202,18 +1202,21 @@ takes `data` + `columns` moved to `DataTable`:
 - import Table from '@aziontech/webkit/table'
 - import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
 + import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
++ import DataTablePagination from '@aziontech/webkit/data-table-pagination'
 + import TableSearch from '@aziontech/webkit/table-search'
 
 - <Table :data="rows" :columns="columns" paginated>
-+ <DataTable :data="rows" :columns="columns" paginated>
++ <DataTable :data="rows" :columns="columns">
 -   <template #toolbar><Table.Search /></template>
 +   <template #toolbar><TableSearch /></template>
++   <template #footer><DataTablePagination /></template>
 - </Table>
 + </DataTable>
 ```
 
-- Every prop, event, slot, `v-model` and the `TableExposed` ref API of the data-driven mode is on
-  `DataTable` unchanged; `useCollection().tableProps` binds to it the same way.
+- The props, events, slots, `v-model`s and the `TableExposed` ref API of the data-driven mode are
+  on `DataTable`, except the optional features below, which are companion parts now (next
+  section); `useCollection().tableProps` binds the root and `paginationProps` the pagination.
 - The types (`TableColumn`, `TableExposed`, `TableStateSnapshot`, the slot scopes) come from
   `@aziontech/webkit/data-table` or `@aziontech/webkit/table`; `@aziontech/webkit/table-root` no
   longer exports them.
@@ -1222,8 +1225,8 @@ takes `data` + `columns` moved to `DataTable`:
 - Test ids: DataTable's root is `data-table` (its parts `data-table__row`, …); a
   hand-composed `Table` keeps `data-table`.
 - Removed with no alias: `headerKind` (use `density`, which also compacts the rows),
-  `rowsPerPageOptions` (use `pageSizeOptions`, now `[10, 25, 50, 100]` by default) and
-  `Table.Header`'s `kind` (use `density`). `useCollection().tableProps` now binds `pageSizeOptions`.
+  `rowsPerPageOptions` (use `pageSizeOptions` on `DataTablePagination`, `[10, 25, 50, 100]` by
+  default) and `Table.Header`'s `kind` (use `density`).
 - The codemod cannot tell a data-driven `<Table>` from a composed one; move the tags that pass
   `:data`, `:columns` or `v-bind="tableProps"` by hand.
 - The cell presets and toolbar controls are no longer attached to the `Table` compound, which now
@@ -1238,12 +1241,38 @@ takes `data` + `columns` moved to `DataTable`:
   | `Table.CellStatus`, `Table.CellLink`, `Table.CellId`, `Table.CellTime`, `Table.CellTags`, `Table.CellActions` | `TableCellStatus` (`@aziontech/webkit/table-cell-status`), `TableCellLink`, `TableCellId`, `TableCellTime`, `TableCellTags`, `TableCellActions` |
   | `Table.Search`, `Table.Filter`, `Table.Export`, `Table.RefreshButton`, `Table.LiveButton`                     | `TableSearch` (`@aziontech/webkit/table-search`), `TableFilter`, `TableExportButton`, `TableRefreshButton`, `TableLiveButton`                   |
 
+### DataTable features are companion parts
+
+DataTable keeps the rows, sorting, selection, tree rows, reordering, virtual rows and the toolbar
+bands on the root. Paging, load more, the search text, the structured filters, the live tail and
+the export rows moved to the parts that show them (CODE_QUALITY 3.4): each reads the table's context,
+has its own import and stays out of a table that does not use it, so a root-only table no longer
+carries them. The codemod reports every moved name with the line to write; move them by hand:
+
+| v6 before                                                                                   | v6 now                                                                                                                                                           |
+| ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `paginated`, `:page-size-options`, `v-model:page`, `v-model:page-size`                      | `<template #footer><DataTablePagination v-model:page="…" v-model:page-size="…" :page-size-options="…" /></template>` (`@aziontech/webkit/data-table-pagination`) |
+| `manual-pagination`, `:row-count`                                                           | `manual` and `:total` on `DataTablePagination`                                                                                                                   |
+| `:more-rows`, `:loading-more`, `@load-more`                                                 | `<template #load-more><DataTableLoadMore :more-rows="…" :loading="…" @load-more="…" /></template>` (`@aziontech/webkit/data-table-load-more`)                    |
+| `v-model:global-filter`                                                                     | `<TableSearch v-model="…" />` in the toolbar; a search field outside the table filters `data` itself (`matchesText` from `@aziontech/webkit/use-collection`)     |
+| `:filter-fields`, `v-model:filters`                                                         | `<TableFilter v-model="…" :fields="…" />`; `FilterMenu.ChipGroup` labels its chips with the fields the mounted `TableFilter` registers                           |
+| `v-model:live`                                                                              | `<TableLiveButton v-model="…" />`                                                                                                                                |
+| `:export-rows`, `export-filename`                                                           | `<TableExportButton :rows="…" filename="…" />` (`useCollection().exportItems` for `rows`), or `exportCsv({ filename, rows })` on the ref                         |
+| `v-model:snapshot`, `:default-snapshot`                                                     | `tableEl.value.getSnapshot()` / `tableEl.value.setSnapshot(snapshot)` (call it once the table is mounted to seed it)                                             |
+| `:estimate-row-height`                                                                      | removed: virtual rows measure themselves, a row counts 48 px until the first is measured                                                                         |
+| `useCollection().tableProps` with `paginated`, `page`, `pageSize`, `rowCount`, `exportRows` | `tableProps` on the DataTable, `<DataTablePagination v-bind="paginationProps" manual />` in its `footer` slot, `exportItems` for `TableExportButton` `rows`      |
+
+Test ids: the footer band is `data-table-pagination` (was `data-table__footer`, its loading line
+`data-table-pagination__loading`), the load-more line `data-table-load-more` (was `data-table__more`;
+its parts `__sentinel`, `__loading`, `__load` and `__end`, were `__more-sentinel`, `__more-loading`,
+`__more-button` and `__more-end`).
+
 ### Two table filters and one column chooser
 
 A table filters with one of two components, picked by the shape of the data, and chooses its
 columns in one place:
 
-- `Table.Filter` is only the toolbar slot that hosts them, wired to the DataTable's `filters`:
+- `Table.Filter` is only the toolbar slot that hosts them, wired to the DataTable's filters:
   `type="menu"` (the default) renders `FilterMenu` (facets picked from known values) and
   `type="property"` renders `PropertyFilter` (typed conditions with operators, combined with AND).
   The field / operator / value builder (`kind="builder"`, the old default) is removed with its
@@ -1263,8 +1292,8 @@ columns in one place:
 
 ### `v-model` everywhere
 
-DataTable's page is counted from 1 now, like `Pagination` (`v-model:page`; `pageIndex + 1` →
-`page`), and its selection and open rows are key arrays (`selectedKeys`, `openKeys`) instead of
+DataTable's page is counted from 1 now, like `Pagination` (`v-model:page` on `DataTablePagination`;
+`pageIndex + 1` → `page`), and its selection and open rows are key arrays (`selectedKeys`, `openKeys`) instead of
 TanStack records: `{ a: true }` → `['a']`.
 
 `Accordion`, `Tabs`, `NavigationMenu`, `CodeBlock`, `ThemeSwitcher` and `PageTabs` bind `v-model`
@@ -2347,9 +2376,10 @@ in a `computed` and rewound the page in a `watch` becomes one call:
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
-  const { tableProps, propertyFilterProps, preferencesProps } = useCollection({
+  const { tableProps, paginationProps, propertyFilterProps, preferencesProps } = useCollection({
     items: rows,
     columns,
     propertyFiltering: { properties },
@@ -2362,13 +2392,20 @@ in a `computed` and rewound the page in a `watch` becomes one call:
 <template>
   <PropertyFilter v-bind="propertyFilterProps" />
   <CollectionPreferences v-bind="preferencesProps" />
-  <DataTable v-bind="tableProps" />
+  <DataTable v-bind="tableProps">
+    <template #footer>
+      <DataTablePagination
+        v-bind="paginationProps"
+        manual
+      />
+    </template>
+  </DataTable>
 </template>
 ```
 
 - A server-side list passes `fetch({ filteringText, filter, sort, page, pageSize, signal })` returning
   `{ items, total }` instead of `items`, and drops its own `manualSorting` / `manualPagination` /
-  `rowCount` wiring: `tableProps` sets them.
+  `rowCount` wiring: `tableProps` and `paginationProps` set them.
 - The chip filter bar of the `webkit-lists` skill (a `{ fieldId: values[] }` state behind one Popover)
   becomes `PropertyFilter` tokens: each field is a property with `options`, each picked value a
   `property = value` token, and values of one field are combined with Match any.

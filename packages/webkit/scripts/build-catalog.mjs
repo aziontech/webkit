@@ -347,7 +347,15 @@ export async function build() {
     if (/^\.\/src\/components\/.+\/index\.(ts|js)$/.test(exportsMap[`./${s}`] || '')) return true
     return loadSpec(s)?.structure === 'composition'
   })
-  const compoundByLength = [...compoundRoots].sort((a, b) => b.length - a.length)
+  const companionRoots = subpaths.filter((s) => {
+    const target = exportsMap[`./${s}`] || ''
+    if (s.includes('/') || compoundRoots.includes(s) || !target.endsWith('.vue')) return false
+    const folder = `${dirname(target)}/`
+    return subpaths.some(
+      (o) => o.startsWith(`${s}-`) && (exportsMap[`./${o}`] || '').startsWith(folder)
+    )
+  })
+  const compoundByLength = [...compoundRoots, ...companionRoots].sort((a, b) => b.length - a.length)
 
   function compoundDir(c) {
     const target = exportsMap[`./${c}-root`] || exportsMap[`./${c}`] || ''
@@ -368,7 +376,7 @@ export async function build() {
   function attachedTargets(c) {
     if (attachedCache.has(c)) return attachedCache.get(c)
     const index = exportsMap[`./${c}`] || ''
-    let found = null
+    let found = companionRoots.includes(c) ? new Map() : null
     if (/\/index\.ts$/.test(index)) {
       const text = readFileSync(resolve(PKG_ROOT, index), 'utf-8')
       const dir = dirname(index)
@@ -428,6 +436,10 @@ export async function build() {
       entry.treeShakeableImport = importPath
     } else {
       entry.kind = kindFromTarget(target)
+      if (companionRoots.includes(subpath))
+        entry.subcomponents = subpaths
+          .filter((s) => parentCompound(s) === subpath)
+          .map((s) => `${PKG_NAME}/${s}`)
       if (isCompound) {
         entry.compoundRoot = true
         const rootKey = `${subpath}-root`
