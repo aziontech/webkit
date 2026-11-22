@@ -563,7 +563,7 @@ describe the new flow.
 
 ## M2.6 — Search quality
 
-Done: search understands en, pt-BR and es through `packages/webkit/src/catalog/search-lexicon.js`
+Done: search understands en, pt-BR and es through `packages/webkit/src/catalog/lexicon/synonyms.js`
 (synonym groups for patterns, translated names for components, stopwords; the longest phrase wins
 when two groups overlap). Ranking: an exact id or name first, then the whole query as an intent,
 then synonym groups (each counted once), then words in the name, components and summary; a verb
