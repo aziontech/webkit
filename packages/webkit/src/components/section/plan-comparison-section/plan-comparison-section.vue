@@ -21,6 +21,7 @@
   import PopoverTitle from '../../overlay/popover/popover-title/popover-title.vue'
   import PopoverTrigger from '../../overlay/popover/popover-trigger/popover-trigger.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
+  import { bodiesOf, isCategory } from './lib/plan-bodies'
 
   defineOptions({
     name: 'PlanComparisonSection',
@@ -174,21 +175,6 @@
   const isExcluded = (value: PlanComparisonSectionValue | undefined) => value === '—'
 
   const closingOf = (section: PlanComparisonSectionSection | undefined) => section?.action
-
-  const isCategory = (row: PlanComparisonSectionRow) =>
-    Boolean(row.group) && row.values.every((value) => value === '' || value === undefined)
-
-  const bodiesOf = (section: PlanComparisonSectionSection) =>
-    section.rows.reduce<
-      { start: number; rows: { row: PlanComparisonSectionRow; rowIndex: number }[] }[]
-    >(
-      (bodies, row, rowIndex) => {
-        if (isCategory(row)) bodies.push({ start: rowIndex, rows: [] })
-        bodies[bodies.length - 1]?.rows.push({ row, rowIndex })
-        return bodies
-      },
-      [{ start: -1, rows: [] }]
-    )
 
   const bands = computed(() =>
     props.sections.map((section) => ({ section, bodies: bodiesOf(section) }))
