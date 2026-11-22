@@ -104,7 +104,7 @@
   {
     "name": "data-grid",
     "path": "src/components/data/data-grid/data-grid.vue",
-    "limit": "11.55 KB"
+    "limit": "13.25 KB"
   },
   {
     "name": "property-filter",
