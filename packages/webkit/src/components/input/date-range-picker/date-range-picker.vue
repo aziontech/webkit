@@ -11,16 +11,8 @@
     watch
   } from 'vue'
 
-  import { useElementListener } from '../../../composables/use-element-listener'
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useFocusTrap } from '../../../composables/use-focus-trap'
-  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
-  import { usePlacement } from '../../../composables/use-placement'
-  import {
-    useLocaleContext,
-    usePortalLocale,
-    useTranslate
-  } from '../../../composables/use-translate'
+  import { useLocaleContext, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
@@ -37,9 +29,13 @@
     DatePickerInjectionKey,
     type DatePickerRange
   } from '../date-picker/injection-key'
+  import DatePickerControl from '../date-picker/parts/date-picker-control.vue'
+  import DatePickerControlButton from '../date-picker/parts/date-picker-control-button.vue'
   import DatePickerFields from '../date-picker/parts/date-picker-fields.vue'
   import DatePickerGrid from '../date-picker/parts/date-picker-grid.vue'
+  import DatePickerPopover from '../date-picker/parts/date-picker-popover.vue'
   import DatePickerTimezone from '../date-picker/parts/date-picker-timezone.vue'
+  import DatePickerTrigger from '../date-picker/parts/date-picker-trigger.vue'
   import Input from '../input/input.vue'
   import Select from '../select/select.vue'
   import SelectContent from '../select/select-content/select-content.vue'
@@ -339,8 +335,10 @@
   const offersRelative = computed(() => props.rangeSelectorMode !== 'absolute-only')
   const offersAbsolute = computed(() => props.rangeSelectorMode !== 'relative-only')
   const isOpen = computed<boolean>(() => openModel.value ?? props.defaultOpen)
-  const triggerEl = ref<HTMLElement | null>(null)
-  const panelEl = ref<HTMLElement | null>(null)
+  const controlEl = ref<InstanceType<typeof DatePickerControl> | null>(null)
+  const triggerEl = computed<HTMLElement | null>(
+    () => (controlEl.value?.$el as HTMLElement | undefined) ?? null
+  )
 
   const panelMode = ref<PanelMode>('relative')
   const relativeView = ref<RelativeView>('quick')
@@ -428,8 +426,8 @@
     draftKey.value = CUSTOM
   }
 
-  const focusIn = (selector: string): void => {
-    nextTick(() => panelEl.value?.querySelector<HTMLElement>(selector)?.focus())
+  const focusIn = (id: string): void => {
+    nextTick(() => globalThis.document?.getElementById(id)?.focus())
   }
 
   const showCustom = (): void => {
@@ -437,7 +435,7 @@
     draftKey.value = CUSTOM
     relativeView.value = 'custom'
     showError.value = false
-    focusIn(`#${CSS.escape(customAmountId)}`)
+    focusIn(customAmountId)
   }
 
   const showAbsoluteView = (view: AbsoluteView): void => {
@@ -445,10 +443,10 @@
     nextTick(() => {
       const target =
         view === 'fields'
-          ? panelEl.value?.querySelector<HTMLElement>(`#${CSS.escape(fieldsId)} input`)
-          : panelEl.value?.querySelector<HTMLElement>(
-              `#${CSS.escape(calendarId)} [role="grid"] button[tabindex="0"]`
-            )
+          ? globalThis.document?.getElementById(fieldsId)?.querySelector<HTMLElement>('input')
+          : globalThis.document
+              ?.getElementById(calendarId)
+              ?.querySelector<HTMLElement>('[role="grid"] button[tabindex="0"]')
       target?.focus()
     })
   }
@@ -464,7 +462,7 @@
     }
     relativeView.value = 'quick'
     showError.value = false
-    focusIn(`#${CSS.escape(customRangeId)}`)
+    focusIn(customRangeId)
   }
 
   const setOpen = (open: boolean): void => {
@@ -747,35 +745,10 @@
     }
   }
 
-  const isOpenRef = computed(() => isOpen.value)
-
-  const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
-    triggerRef: triggerEl,
-    panelRef: panelEl,
-    isOpen: isOpenRef,
-    side: 'bottom',
-    align: 'start',
-    sideOffset: 6,
-    onDismiss: () => setOpen(false)
-  })
-
-  useFocusTrap(panelEl, isOpenRef)
-  const { isInsideHigherLayer } = useOverlayLayer(isOpenRef, { element: panelEl })
-
-  const onDocumentMousedown = (event: MouseEvent): void => {
-    const target = event.target as Node | null
-    if (!target || !isOpen.value || isInsideHigherLayer(target)) return
-    if (!triggerEl.value?.contains(target) && !panelEl.value?.contains(target)) setOpen(false)
+  const onPopoverClose = (event: Event | null): void => {
+    if (event?.type === 'keydown') close()
+    else setOpen(false)
   }
-
-  const onPanelKeydown = (event: KeyboardEvent): void => {
-    if (event.key === 'Escape' && !event.defaultPrevented) {
-      event.preventDefault()
-      close()
-    }
-  }
-
-  useElementListener(panelEl, 'keydown', onPanelKeydown)
 
   watch(
     () => isDisabled.value,
@@ -802,55 +775,14 @@
 
   watch([refreshInterval, offersRefresh, isDisabled, mounted], startRefresh)
 
-  onMounted(() => {
-    globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
-  })
+  onBeforeUnmount(stopRefresh)
 
-  onBeforeUnmount(() => {
-    stopRefresh()
-    globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
-  })
-
-  const portalLocale = usePortalLocale()
-
-  const CONTROL_CLASS =
-    'inline-flex max-w-full items-stretch rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out ' +
-    '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) ' +
-    'data-[invalid]:border-(--danger-border) ' +
-    'data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) ' +
-    'motion-reduce:transition-none'
-
-  const PREVIOUS_CLASS =
-    'relative inline-flex shrink-0 items-center justify-center border-e border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out ' +
-    'hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed ' +
-    'disabled:text-(--text-disabled) ' +
-    'data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 ' +
-    'motion-reduce:transition-none pointer-coarse:min-w-11'
-
-  const TRIGGER_CLASS =
-    'relative text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) ' +
-    'data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 ' +
-    'data-[empty]:text-(--text-muted) ' +
-    'motion-reduce:transition-none'
-
-  const CHEVRON_CLASS =
-    'az az-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out ' +
-    'data-[state=open]:rotate-180 ' +
-    'motion-reduce:transition-none'
-
-  const NEXT_CLASS =
-    'relative inline-flex shrink-0 items-center justify-center border-s border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out ' +
-    'hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed ' +
-    'disabled:text-(--text-disabled) ' +
-    'data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 ' +
-    'motion-reduce:transition-none pointer-coarse:min-w-11'
+  const STEP_CLASS =
+    'border-(--border-input) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) ' +
+    'data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 pointer-coarse:min-w-11'
 
   const POPOVER_CLASS =
-    'flex w-min max-w-[calc(100vw-2*var(--spacing-sm))] flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) ' +
-    'outline-none [transform-origin:var(--popup-origin,top_left)] [--input-ring-offset:var(--bg-surface-raised)] ' +
-    'max-sm:inset-x-0! max-sm:top-auto! max-sm:bottom-0! max-sm:w-full! max-sm:max-w-none! max-sm:max-h-[85dvh]! max-sm:translate-none! max-sm:rounded-b-none max-sm:border-x-0 ' +
-    'max-sm:border-b-0 max-sm:pb-[env(safe-area-inset-bottom)] max-sm:[transform-origin:bottom_center]'
+    'w-min max-w-[calc(100vw-2*var(--spacing-sm))] overflow-hidden [--input-ring-offset:var(--bg-surface-raised)]'
 
   const PANEL_BODY_CLASS =
     'flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain ' +
@@ -880,40 +812,36 @@
     :data-invalid="field.invalid.value || null"
     class="inline-flex max-w-full"
   >
-    <span
-      ref="triggerEl"
+    <DatePickerControl
+      ref="controlEl"
       :data-disabled="isDisabled || null"
       :data-invalid="field.invalid.value || null"
-      :class="CONTROL_CLASS"
     >
-      <button
+      <DatePickerControlButton
         v-if="showStep"
-        type="button"
+        key="previous"
         :disabled="!canStepBack"
         :aria-label="t('dateRangePicker.previous')"
         :data-size="size"
         :data-testid="`${testId}__previous`"
-        :class="PREVIOUS_CLASS"
+        class="border-e"
+        :class="STEP_CLASS"
         @click="step(-1)"
       >
-        <span
-          aria-hidden="true"
-          data-slot="touch-target"
-          class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-        />
         <i
           class="az az-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
           aria-hidden="true"
         />
-      </button>
-      <button
-        type="button"
-        data-slot="date-range-picker-trigger"
-        :disabled="isDisabled"
-        :data-size="size"
-        :data-empty="!triggerText || null"
-        :data-testid="`${testId}__trigger`"
+      </DatePickerControlButton>
+      <DatePickerTrigger
         :id="field.controlId.value"
+        :test-id="testId"
+        :size="size"
+        :disabled="isDisabled"
+        :open="isOpen"
+        :show-placeholder="!triggerText"
+        :icon="model?.type === 'relative' ? 'az az-clock' : 'az az-calendar'"
+        data-slot="date-range-picker-trigger"
         :aria-label="
           ariaLabel || !field.field
             ? `${ariaLabel || t('dateRangePicker.label')}: ${triggerText || placeholder || t('dateRangePicker.placeholder')}${refreshText ? `, ${refreshText}` : ''}`
@@ -921,376 +849,329 @@
         "
         :aria-describedby="field.describedBy.value"
         :aria-invalid="field.invalid.value || undefined"
-        aria-haspopup="dialog"
-        :aria-expanded="isOpen"
-        :class="TRIGGER_CLASS"
+        class="focus-visible:ring-inset"
         @click="setOpen(!isOpen)"
+        ><bdi>{{ triggerParts.text || placeholder || t('dateRangePicker.placeholder') }}</bdi
+        ><template v-if="triggerParts.zone"
+          >{{ ' '
+          }}<span class="whitespace-nowrap text-(--text-muted)">{{
+            triggerParts.zone
+          }}</span></template
+        ></DatePickerTrigger
       >
-        <span
-          aria-hidden="true"
-          data-slot="touch-target"
-          class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-        />
-        <i
-          :class="model?.type === 'relative' ? 'az az-clock' : 'az az-calendar'"
-          class="shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
-          aria-hidden="true"
-        />
-        <span
-          :data-testid="`${testId}__value`"
-          class="min-w-0 flex-1 text-start tabular-nums [overflow-wrap:anywhere]"
-          ><bdi>{{ triggerParts.text || placeholder || t('dateRangePicker.placeholder') }}</bdi
-          ><template v-if="triggerParts.zone"
-            >{{ ' '
-            }}<span class="whitespace-nowrap text-(--text-muted)">{{
-              triggerParts.zone
-            }}</span></template
-          ></span
-        >
-        <i
-          :data-state="isOpen ? 'open' : 'closed'"
-          :class="CHEVRON_CLASS"
-          aria-hidden="true"
-        />
-      </button>
-      <button
+      <DatePickerControlButton
         v-if="showStep"
-        type="button"
+        key="next"
         :disabled="!canStepForward"
         :aria-label="t('dateRangePicker.next')"
         :data-size="size"
         :data-testid="`${testId}__next`"
-        :class="NEXT_CLASS"
+        class="border-s"
+        :class="STEP_CLASS"
         @click="step(1)"
       >
-        <span
-          aria-hidden="true"
-          data-slot="touch-target"
-          class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-        />
         <i
           class="az az-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
           aria-hidden="true"
         />
-      </button>
-    </span>
+      </DatePickerControlButton>
+    </DatePickerControl>
 
-    <Teleport to="body">
+    <DatePickerPopover
+      :test-id="testId"
+      :open="isOpen"
+      :anchor="triggerEl"
+      :aria-label="t('dateRangePicker.dialog')"
+      :data-size="size"
+      :class="POPOVER_CLASS"
+      @close="onPopoverClose"
+    >
       <div
-        v-if="isOpen"
-        aria-hidden="true"
-        :data-testid="`${testId}__backdrop`"
-        class="fixed inset-0 z-1099 bg-(--bg-backdrop) sm:hidden"
-      />
-      <Transition
-        enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
-        leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
+        v-if="offersRelative && offersAbsolute"
+        class="shrink-0 border-b border-(--border-default) p-(--spacing-sm)"
       >
-        <div
-          v-if="isOpen"
-          ref="panelEl"
-          :dir="portalLocale.dir"
-          :lang="portalLocale.lang"
-          role="dialog"
-          :aria-label="t('dateRangePicker.dialog')"
-          :data-testid="`${testId}__popover`"
-          :data-state="isOpen ? 'open' : 'closed'"
-          :data-side="resolvedSide"
-          :data-align="resolvedAlign"
-          :data-size="size"
-          :style="panelStyle"
-          :class="POPOVER_CLASS"
-        >
-          <div
-            v-if="offersRelative && offersAbsolute"
-            class="shrink-0 border-b border-(--border-default) p-(--spacing-sm)"
+        <ToggleGroup
+          :model-value="panelMode"
+          :options="modeOptions"
+          :aria-label="t('dateRangePicker.rangeType')"
+          :data-testid="`${testId}__mode`"
+          :size="size"
+          fluid
+          @update:model-value="setPanelMode"
+        />
+      </div>
+
+      <div
+        v-if="panelMode === 'relative'"
+        :data-size="size"
+        :data-view="relativeView"
+        :class="PANEL_BODY_CLASS"
+        :data-testid="`${testId}__relative`"
+      >
+        <template v-if="relativeView === 'quick'">
+          <fieldset
+            v-if="availableOptions.length"
+            class="@container m-0 flex min-w-0 shrink-0 flex-col border-0 px-(--spacing-2xs) pt-(--spacing-xs)"
+            :data-testid="`${testId}__quick`"
           >
-            <ToggleGroup
-              :model-value="panelMode"
-              :options="modeOptions"
-              :aria-label="t('dateRangePicker.rangeType')"
-              :data-testid="`${testId}__mode`"
-              :size="size"
-              fluid
-              @update:model-value="setPanelMode"
-            />
-          </div>
-
-          <div
-            v-if="panelMode === 'relative'"
-            :data-size="size"
-            :data-view="relativeView"
-            :class="PANEL_BODY_CLASS"
-            :data-testid="`${testId}__relative`"
-          >
-            <template v-if="relativeView === 'quick'">
-              <fieldset
-                v-if="availableOptions.length"
-                class="@container m-0 flex min-w-0 shrink-0 flex-col border-0 px-(--spacing-2xs) pt-(--spacing-xs)"
-                :data-testid="`${testId}__quick`"
-              >
-                <legend
-                  :data-testid="`${testId}__legend`"
-                  class="text-label-sm float-start w-full px-(--spacing-xs) py-(--spacing-2xs) text-(--text-muted)"
-                >
-                  {{ t('dateRangePicker.quickRanges') }}
-                </legend>
-                <div
-                  :style="{
-                    '--date-range-picker-quick-rows': quickRows
-                  }"
-                  class="grid grid-cols-1 gap-(--spacing-2xs) @[15rem]:grid-flow-col @[15rem]:grid-cols-2 @[15rem]:grid-rows-[repeat(var(--date-range-picker-quick-rows),auto)]"
-                >
-                  <label
-                    v-for="option in availableOptions"
-                    :key="option.key"
-                    :data-selected="draftKey === option.key || null"
-                    :data-testid="`${testId}__option`"
-                    :class="OPTION_CLASS"
-                  >
-                    <input
-                      :checked="draftKey === option.key"
-                      type="radio"
-                      :name="`${uid}-relative`"
-                      :value="option.key"
-                      :data-autofocus="(!offersAbsolute && draftKey === option.key) || null"
-                      class="sr-only"
-                      @change="pickOption(option.key)"
-                    />
-                    <span class="min-w-0 [overflow-wrap:anywhere]">{{ optionLabel(option) }}</span>
-                    <i
-                      v-if="draftKey === option.key"
-                      class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-default)"
-                      aria-hidden="true"
-                    />
-                  </label>
-                </div>
-              </fieldset>
-
-              <div
-                class="flex shrink-0 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs) px-(--spacing-sm) pt-(--spacing-2xs) pb-(--spacing-sm)"
-              >
-                <Button
-                  :id="customRangeId"
-                  variant="link"
-                  :label="t('dateRangePicker.custom')"
-                  icon="az az-sliders-horizontal"
-                  :size="size"
-                  :data-selected="draftKey === CUSTOM || null"
-                  :data-autofocus="(!offersAbsolute && draftKey === CUSTOM) || null"
-                  :data-testid="`${testId}__custom-range`"
-                  class="pointer-coarse:min-h-11"
-                  @click="showCustom"
-                />
-                <span
-                  v-if="draftKey === CUSTOM && parsedAmount"
-                  :data-testid="`${testId}__custom-value`"
-                  class="text-label-sm min-w-0 text-(--text-muted) [overflow-wrap:anywhere]"
-                  >{{ relativeText(parsedAmount, customUnit) }}</span
-                >
-              </div>
-            </template>
-
-            <div
-              v-else
-              role="group"
-              :aria-labelledby="customLabelId"
-              :data-selected="draftKey === CUSTOM || null"
-              :data-testid="`${testId}__custom`"
-              class="flex flex-col gap-(--spacing-xs) p-(--spacing-sm)"
+            <legend
+              :data-testid="`${testId}__legend`"
+              class="text-label-sm float-start w-full px-(--spacing-xs) py-(--spacing-2xs) text-(--text-muted)"
             >
-              <button
-                type="button"
-                :data-testid="`${testId}__quick-ranges`"
-                :class="QUICK_RANGES_CLASS"
-                @click="showQuick"
+              {{ t('dateRangePicker.quickRanges') }}
+            </legend>
+            <div
+              :style="{
+                '--date-range-picker-quick-rows': quickRows
+              }"
+              class="grid grid-cols-1 gap-(--spacing-2xs) @[15rem]:grid-flow-col @[15rem]:grid-cols-2 @[15rem]:grid-rows-[repeat(var(--date-range-picker-quick-rows),auto)]"
+            >
+              <label
+                v-for="option in availableOptions"
+                :key="option.key"
+                :data-selected="draftKey === option.key || null"
+                :data-testid="`${testId}__option`"
+                :class="OPTION_CLASS"
               >
+                <input
+                  :checked="draftKey === option.key"
+                  type="radio"
+                  :name="`${uid}-relative`"
+                  :value="option.key"
+                  :data-autofocus="(!offersAbsolute && draftKey === option.key) || null"
+                  class="sr-only"
+                  @change="pickOption(option.key)"
+                />
+                <span class="min-w-0 [overflow-wrap:anywhere]">{{ optionLabel(option) }}</span>
                 <i
-                  class="az az-chevron-left shrink-0 text-[length:inherit] leading-none"
+                  v-if="draftKey === option.key"
+                  class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
-                {{ t('dateRangePicker.showQuickRanges') }}
-              </button>
-              <span
-                :id="customLabelId"
-                class="text-label-sm text-(--text-default)"
-                >{{ t('dateRangePicker.custom') }}</span
-              >
-              <div
-                class="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)] items-end gap-x-(--spacing-xs)"
-              >
-                <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-                  <label
-                    :for="customAmountId"
-                    class="text-label-sm text-(--text-default)"
-                    >{{ t('dateRangePicker.amount') }}</label
-                  >
-                  <Input
-                    :id="customAmountId"
-                    :model-value="customAmount"
-                    type="number"
-                    :size="size"
-                    :invalid="showError && !!rangeError"
-                    :aria-describedby="showError && draftError ? errorId : undefined"
-                    :data-testid="`${testId}__amount`"
-                    @update:model-value="editCustomAmount"
-                  />
-                </div>
-                <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-                  <span
-                    :id="unitLabelId"
-                    class="text-label-sm text-(--text-default)"
-                    >{{ t('dateRangePicker.unit') }}</span
-                  >
-                  <Select
-                    :model-value="customUnit"
-                    :size="size"
-                    :aria-labelledby="unitLabelId"
-                    :data-testid="`${testId}__unit-select`"
-                    @update:model-value="editCustomUnit"
-                  >
-                    <SelectTrigger
-                      :id="customUnitId"
-                      :data-testid="`${testId}__unit`"
-                      class="pointer-coarse:h-11"
-                    />
-                    <SelectContent :data-testid="`${testId}__unit-list`">
-                      <SelectItem
-                        v-for="unit in DATE_RANGE_UNITS"
-                        :key="unit"
-                        :value="unit"
-                        >{{ unitLabel(unit) }}</SelectItem
-                      >
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+              </label>
             </div>
-          </div>
+          </fieldset>
 
           <div
-            v-else
-            :data-size="size"
-            :data-view="absoluteView"
-            :class="PANEL_BODY_CLASS"
-            :data-testid="`${testId}__absolute`"
+            class="flex shrink-0 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs) px-(--spacing-sm) pt-(--spacing-2xs) pb-(--spacing-sm)"
           >
-            <div
-              v-if="absoluteView === 'calendar'"
-              :id="calendarId"
-              class="px-(--spacing-sm) pt-(--spacing-sm)"
-              :data-testid="`${testId}__calendar`"
+            <Button
+              :id="customRangeId"
+              variant="link"
+              :label="t('dateRangePicker.custom')"
+              icon="az az-sliders-horizontal"
+              :size="size"
+              :data-selected="draftKey === CUSTOM || null"
+              :data-autofocus="(!offersAbsolute && draftKey === CUSTOM) || null"
+              :data-testid="`${testId}__custom-range`"
+              class="pointer-coarse:min-h-11"
+              @click="showCustom"
+            />
+            <span
+              v-if="draftKey === CUSTOM && parsedAmount"
+              :data-testid="`${testId}__custom-value`"
+              class="text-label-sm min-w-0 text-(--text-muted) [overflow-wrap:anywhere]"
+              >{{ relativeText(parsedAmount, customUnit) }}</span
             >
-              <div class="mx-auto w-fit">
-                <DatePickerGrid />
-              </div>
-            </div>
-            <div
-              v-else
-              :id="fieldsId"
-              class="px-(--spacing-sm) pt-(--spacing-sm)"
-              :data-testid="`${testId}__bounds`"
-            >
-              <DatePickerFields inline-labels />
-            </div>
-            <div
-              class="flex min-h-8 flex-wrap items-center justify-between gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-sm) pt-(--spacing-xs) pb-(--spacing-sm)"
-            >
-              <div
-                v-if="offersRelative"
-                class="flex items-center gap-(--spacing-xs)"
+          </div>
+        </template>
+
+        <div
+          v-else
+          role="group"
+          :aria-labelledby="customLabelId"
+          :data-selected="draftKey === CUSTOM || null"
+          :data-testid="`${testId}__custom`"
+          class="flex flex-col gap-(--spacing-xs) p-(--spacing-sm)"
+        >
+          <button
+            type="button"
+            :data-testid="`${testId}__quick-ranges`"
+            :class="QUICK_RANGES_CLASS"
+            @click="showQuick"
+          >
+            <i
+              class="az az-chevron-left shrink-0 text-[length:inherit] leading-none"
+              aria-hidden="true"
+            />
+            {{ t('dateRangePicker.showQuickRanges') }}
+          </button>
+          <span
+            :id="customLabelId"
+            class="text-label-sm text-(--text-default)"
+            >{{ t('dateRangePicker.custom') }}</span
+          >
+          <div class="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)] items-end gap-x-(--spacing-xs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+              <label
+                :for="customAmountId"
+                class="text-label-sm text-(--text-default)"
+                >{{ t('dateRangePicker.amount') }}</label
               >
-                <Checkbox
-                  :id="untilNowCheckId"
-                  :model-value="draftUntilNow"
-                  :data-testid="`${testId}__until-now`"
-                  @update:model-value="setUntilNow(Boolean($event))"
-                />
-                <label
-                  :for="untilNowCheckId"
-                  class="text-label-sm cursor-pointer text-(--text-default)"
-                  >{{ t('dateRangePicker.untilNow') }}</label
-                >
-              </div>
-              <Button
-                variant="link"
-                :label="
-                  absoluteView === 'calendar'
-                    ? t('dateRangePicker.enterDates')
-                    : t('dateRangePicker.showCalendar')
-                "
-                :icon="absoluteView === 'calendar' ? 'az az-pencil' : 'az az-calendar'"
+              <Input
+                :id="customAmountId"
+                :model-value="customAmount"
+                type="number"
                 :size="size"
-                :data-testid="`${testId}__switch-view`"
-                class="ms-auto pointer-coarse:min-h-11"
-                @click="showAbsoluteView(absoluteView === 'calendar' ? 'fields' : 'calendar')"
+                :invalid="showError && !!rangeError"
+                :aria-describedby="showError && draftError ? errorId : undefined"
+                :data-testid="`${testId}__amount`"
+                @update:model-value="editCustomAmount"
               />
             </div>
-          </div>
-
-          <div
-            class="flex shrink-0 flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
-          >
-            <DatePickerTimezone v-if="showTimeZone" />
-            <p
-              v-if="visibleError"
-              :id="errorId"
-              role="alert"
-              :data-testid="`${testId}__error`"
-              class="text-body-sm m-0 text-(--danger-foreground)"
-            >
-              {{ visibleError }}
-            </p>
-            <div class="flex items-center justify-end gap-(--spacing-xs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+              <span
+                :id="unitLabelId"
+                class="text-label-sm text-(--text-default)"
+                >{{ t('dateRangePicker.unit') }}</span
+              >
               <Select
-                v-if="offersRefresh"
-                :model-value="draftRefresh"
-                variant="ghost"
+                :model-value="customUnit"
                 :size="size"
-                :aria-label="t('dateRangePicker.refreshEvery')"
-                :data-testid="`${testId}__refresh-select`"
-                class="me-auto min-w-0"
-                @update:model-value="editRefresh"
+                :aria-labelledby="unitLabelId"
+                :data-testid="`${testId}__unit-select`"
+                @update:model-value="editCustomUnit"
               >
                 <SelectTrigger
-                  :id="refreshId"
-                  :data-testid="`${testId}__refresh-interval`"
+                  :id="customUnitId"
+                  :data-testid="`${testId}__unit`"
                   class="pointer-coarse:h-11"
-                >
-                  <template #leading>
-                    <i
-                      class="az az-refresh shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </SelectTrigger>
-                <SelectContent :data-testid="`${testId}__refresh-list`">
+                />
+                <SelectContent :data-testid="`${testId}__unit-list`">
                   <SelectItem
-                    v-for="seconds in refreshChoices"
-                    :key="seconds"
-                    :value="seconds"
-                    >{{ intervalLabel(seconds) }}</SelectItem
+                    v-for="unit in DATE_RANGE_UNITS"
+                    :key="unit"
+                    :value="unit"
+                    >{{ unitLabel(unit) }}</SelectItem
                   >
                 </SelectContent>
               </Select>
-              <Button
-                :label="t('dateRangePicker.cancel')"
-                variant="ghost"
-                :size="size"
-                :data-testid="`${testId}__cancel`"
-                @click="close"
-              />
-              <Button
-                :label="t('dateRangePicker.apply')"
-                variant="primary"
-                :size="size"
-                :data-testid="`${testId}__apply`"
-                @click="apply"
-              />
             </div>
           </div>
         </div>
-      </Transition>
-    </Teleport>
+      </div>
+
+      <div
+        v-else
+        :data-size="size"
+        :data-view="absoluteView"
+        :class="PANEL_BODY_CLASS"
+        :data-testid="`${testId}__absolute`"
+      >
+        <div
+          v-if="absoluteView === 'calendar'"
+          :id="calendarId"
+          class="px-(--spacing-sm) pt-(--spacing-sm)"
+          :data-testid="`${testId}__calendar`"
+        >
+          <div class="mx-auto w-fit">
+            <DatePickerGrid />
+          </div>
+        </div>
+        <div
+          v-else
+          :id="fieldsId"
+          class="px-(--spacing-sm) pt-(--spacing-sm)"
+          :data-testid="`${testId}__bounds`"
+        >
+          <DatePickerFields inline-labels />
+        </div>
+        <div
+          class="flex min-h-8 flex-wrap items-center justify-between gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-sm) pt-(--spacing-xs) pb-(--spacing-sm)"
+        >
+          <div
+            v-if="offersRelative"
+            class="flex items-center gap-(--spacing-xs)"
+          >
+            <Checkbox
+              :id="untilNowCheckId"
+              :model-value="draftUntilNow"
+              :data-testid="`${testId}__until-now`"
+              @update:model-value="setUntilNow(Boolean($event))"
+            />
+            <label
+              :for="untilNowCheckId"
+              class="text-label-sm cursor-pointer text-(--text-default)"
+              >{{ t('dateRangePicker.untilNow') }}</label
+            >
+          </div>
+          <Button
+            variant="link"
+            :label="
+              absoluteView === 'calendar'
+                ? t('dateRangePicker.enterDates')
+                : t('dateRangePicker.showCalendar')
+            "
+            :icon="absoluteView === 'calendar' ? 'az az-pencil' : 'az az-calendar'"
+            :size="size"
+            :data-testid="`${testId}__switch-view`"
+            class="ms-auto pointer-coarse:min-h-11"
+            @click="showAbsoluteView(absoluteView === 'calendar' ? 'fields' : 'calendar')"
+          />
+        </div>
+      </div>
+
+      <div
+        class="flex shrink-0 flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
+      >
+        <DatePickerTimezone v-if="showTimeZone" />
+        <p
+          v-if="visibleError"
+          :id="errorId"
+          role="alert"
+          :data-testid="`${testId}__error`"
+          class="text-body-sm m-0 text-(--danger-foreground)"
+        >
+          {{ visibleError }}
+        </p>
+        <div class="flex items-center justify-end gap-(--spacing-xs)">
+          <Select
+            v-if="offersRefresh"
+            :model-value="draftRefresh"
+            variant="ghost"
+            :size="size"
+            :aria-label="t('dateRangePicker.refreshEvery')"
+            :data-testid="`${testId}__refresh-select`"
+            class="me-auto min-w-0"
+            @update:model-value="editRefresh"
+          >
+            <SelectTrigger
+              :id="refreshId"
+              :data-testid="`${testId}__refresh-interval`"
+              class="pointer-coarse:h-11"
+            >
+              <template #leading>
+                <i
+                  class="az az-refresh shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
+                  aria-hidden="true"
+                />
+              </template>
+            </SelectTrigger>
+            <SelectContent :data-testid="`${testId}__refresh-list`">
+              <SelectItem
+                v-for="seconds in refreshChoices"
+                :key="seconds"
+                :value="seconds"
+                >{{ intervalLabel(seconds) }}</SelectItem
+              >
+            </SelectContent>
+          </Select>
+          <Button
+            :label="t('dateRangePicker.cancel')"
+            variant="ghost"
+            :size="size"
+            :data-testid="`${testId}__cancel`"
+            @click="close"
+          />
+          <Button
+            :label="t('dateRangePicker.apply')"
+            variant="primary"
+            :size="size"
+            :data-testid="`${testId}__apply`"
+            @click="apply"
+          />
+        </div>
+      </div>
+    </DatePickerPopover>
   </div>
 </template>

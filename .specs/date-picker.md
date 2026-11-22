@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 731a5a4a79fd5a9afd42c760a86c468ad38ffd8aa9f8a72ac33f1dc5bca25c2d
+checksum: ef08cf1cb048928e90b862280d6322217d0a09c68ad71e8f33076289213e76d5
 created: 2026-06-25
 last_updated: 2026-11-19
 ---
@@ -92,7 +92,7 @@ Tree-shaking alternative — the standalone root + the sub-component from its ow
 
 - `date-picker-clear/date-picker-clear.vue` — context-aware button that clears the draft selection through injected context; disabled when there is no selection. Placed in the `footer` slot.
 
-Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid; its caption reads `‹ Month ⌄ Year ⌄ ›`: the previous and next month arrows, and between them two ghost `Select`s, Month (the twelve month names, a month fully outside `min`/`max` disabled) and Year (from `min`'s year to `max`'s year, or ten years either side of today when unbounded, always including the shown year); picking a month or a year moves the grid there and emits `month-change`, a year that would land outside `min`/`max` keeps the month inside them), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range; each time field is a `Combobox` with `allow-custom` that lists the day in 30-minute steps under the field — plus the current time when it is between two steps, so the list opens on it — shows a clock icon and takes any typed time), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows, a `Combobox` with `allow-custom` off that filters the zones by city, zone id or offset as the person types). No part renders a native `select`. A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
+Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid; its caption reads `‹ Month ⌄ Year ⌄ ›`: the previous and next month arrows, and between them two ghost `Select`s, Month (the twelve month names, a month fully outside `min`/`max` disabled) and Year (from `min`'s year to `max`'s year, or ten years either side of today when unbounded, always including the shown year); picking a month or a year moves the grid there and emits `month-change`, a year that would land outside `min`/`max` keeps the month inside them), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range; each time field is a `Combobox` with `allow-custom` that lists the day in 30-minute steps under the field — plus the current time when it is between two steps, so the list opens on it — shows a clock icon and takes any typed time), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows, a `Combobox` with `allow-custom` off that filters the zones by city, zone id or offset as the person types), and the trigger shell both pickers render: `parts/date-picker-control.vue` (the bordered control box), `parts/date-picker-trigger.vue` (the trigger button: icon, value, chevron), `parts/date-picker-control-button.vue` (a button inside the control box, such as the clear and split buttons here and the Previous and Next buttons of `date-range-picker`) and `parts/date-picker-popover.vue` (the panel: placement, backdrop on small screens, focus trap, Escape and outside click close it). No part renders a native `select`. A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
 
 ## Props
 
