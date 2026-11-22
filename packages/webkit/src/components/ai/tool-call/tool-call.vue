@@ -66,6 +66,11 @@
   function toggle(): void {
     open.value = !isOpen.value
   }
+
+  const TRIGGER_CLASS =
+    'flex min-h-10 min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-control) text-start text-(--text-muted) ' +
+    'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -74,16 +79,16 @@
     :data-testid="testId"
     :data-status="status"
     :data-state="expandable() ? (isOpen ? 'open' : 'closed') : undefined"
-    class="flex w-full flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+    class="flex w-full flex-col gap-(--spacing-2xs)"
   >
-    <div class="flex min-h-10 items-center gap-(--spacing-sm) px-(--spacing-sm) py-(--spacing-xs)">
+    <div class="flex min-h-10 items-center gap-(--spacing-sm)">
       <button
         v-if="expandable()"
         type="button"
         :aria-expanded="isOpen ? 'true' : 'false'"
         :aria-controls="panelId"
         :data-testid="`${testId}__trigger`"
-        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-control) text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+        :class="TRIGGER_CLASS"
         @click="toggle"
       >
         <i
@@ -102,7 +107,7 @@
       </button>
       <div
         v-else
-        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)"
+        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-muted)"
       >
         <i
           class="az az-wrench shrink-0 text-(--text-muted)"
@@ -130,7 +135,7 @@
       v-show="isOpen"
       :id="panelId"
       :data-testid="`${testId}__details`"
-      class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
+      class="flex flex-col gap-(--spacing-sm) ms-(--spacing-xs) border-s border-(--border-default) ps-(--spacing-md) pb-(--spacing-xs)"
     >
       <section
         v-if="slots.input"

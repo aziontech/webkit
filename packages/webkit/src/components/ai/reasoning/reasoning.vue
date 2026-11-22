@@ -80,7 +80,7 @@
   })
 
   const TRIGGER_CLASS =
-    'inline-flex w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'inline-flex min-h-8 w-fit items-center gap-(--spacing-xs) rounded-full text-body-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance pointer-coarse:min-h-10 ' +
     'motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
@@ -126,7 +126,7 @@
       v-show="isOpen"
       :id="panelId"
       :data-testid="`${testId}__content`"
-      class="flex flex-col gap-(--spacing-xs) border-s-2 border-(--border-default) ps-(--spacing-sm) text-body-sm text-(--text-muted)"
+      class="flex flex-col gap-(--spacing-xs) ms-(--spacing-xs) border-s border-(--border-default) ps-(--spacing-md) text-body-md text-(--text-muted)"
     >
       <slot />
     </div>

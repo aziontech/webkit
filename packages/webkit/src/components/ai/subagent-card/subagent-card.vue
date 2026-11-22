@@ -168,7 +168,8 @@
   }
 
   const TRIGGER_CLASS =
-    'flex min-h-10 min-w-0 flex-1 basis-48 items-center gap-(--spacing-xs) rounded-(--shape-control) text-start ' +
+    'flex min-h-10 min-w-0 flex-1 basis-48 items-center gap-(--spacing-xs) rounded-(--shape-control) text-start text-(--text-muted) ' +
+    'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) ' +
     'pointer-coarse:min-h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 
   const CHEVRON_CLASS =
@@ -185,9 +186,9 @@
     :data-status="status"
     :data-state="expandable() ? (isOpen ? 'open' : 'closed') : undefined"
     :tabindex="expandable() ? undefined : -1"
-    class="flex w-full flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+    class="flex w-full flex-col gap-(--spacing-2xs) rounded-(--shape-control) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
   >
-    <div class="flex flex-col gap-(--spacing-2xs) px-(--spacing-sm) py-(--spacing-xs)">
+    <div class="flex flex-col gap-(--spacing-2xs)">
       <div class="flex min-h-10 flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs)">
         <button
           v-if="expandable()"
@@ -215,7 +216,7 @@
         </button>
         <div
           v-else
-          class="flex min-h-10 min-w-0 flex-1 basis-48 items-center gap-(--spacing-xs)"
+          class="flex min-h-10 min-w-0 flex-1 basis-48 items-center gap-(--spacing-xs) text-(--text-muted)"
         >
           <i
             class="az az-git-fork shrink-0 text-(--text-muted)"
@@ -265,7 +266,7 @@
       <p
         v-if="description"
         :data-testid="`${testId}__description`"
-        class="m-0 text-body-sm text-(--text-muted)"
+        class="m-0 ps-[calc(1rem+var(--spacing-xs))] text-body-sm text-(--text-muted)"
       >
         {{ description }}
       </p>
@@ -275,7 +276,7 @@
       v-show="isOpen"
       :id="panelId"
       :data-testid="`${testId}__content`"
-      class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
+      class="flex flex-col gap-(--spacing-sm) ms-(--spacing-xs) border-s border-(--border-default) ps-(--spacing-md) pb-(--spacing-xs)"
     >
       <section
         v-if="slots.input"
