@@ -26,7 +26,7 @@ export interface MapItem<R, P> {
   point?: P
 }
 
-export function project(lat: number, lon: number): [number, number] {
+function project(lat: number, lon: number): [number, number] {
   const clamped = (Math.max(-80, Math.min(84, lat)) * Math.PI) / 180
   return [X0 + KX * lon, Y0 - RY * Math.log(Math.tan(Math.PI / 4 + clamped / 2))]
 }
@@ -36,14 +36,14 @@ export function parseBox(region: string): MapBox {
   return { x: x ?? 0, y: y ?? 0, width: width ?? 1590, height: height ?? 940 }
 }
 
-export function binOf(value: number, min: number, max: number): number {
+function binOf(value: number, min: number, max: number): number {
   if (max <= min) return BINS - 1
   return Math.min(BINS - 1, Math.floor(((value - min) / (max - min)) * BINS))
 }
 
 export const binColor = (bin: number): string => `var(--chart-sequential-${bin + 3})`
 
-export function anchorOf(cells: string): [number, number] | null {
+function anchorOf(cells: string): [number, number] | null {
   let sumX = 0
   let sumY = 0
   let count = 0

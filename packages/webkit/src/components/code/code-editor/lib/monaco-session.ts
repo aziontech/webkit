@@ -10,7 +10,7 @@ import {
   toCodeEditorMarkers
 } from '../monaco'
 
-export const MARKER_OWNER = 'webkit'
+const MARKER_OWNER = 'webkit'
 
 export interface MonacoSession {
   api: CodeEditorMonaco

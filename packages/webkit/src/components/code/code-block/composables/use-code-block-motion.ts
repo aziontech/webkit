@@ -1,4 +1,13 @@
-import { nextTick, onMounted, readonly, type Ref, ref, watch } from 'vue'
+import {
+  computed,
+  type ComputedRef,
+  nextTick,
+  onMounted,
+  readonly,
+  type Ref,
+  ref,
+  watch
+} from 'vue'
 
 import { animateHeight, layoutHeight, prefersReducedMotion, slideDirectionOf } from '../lib/layout'
 import type { CodeBlockLineMotionMode, CodeBlockSlideDirection } from '../presets/transitions'
@@ -18,7 +27,7 @@ export interface UseCodeBlockMotionReturn {
   ready: Readonly<Ref<boolean>>
   revealed: Readonly<Ref<number>>
   mode: Readonly<Ref<CodeBlockLineMotionMode>>
-  slide: Readonly<Ref<CodeBlockSlideDirection>>
+  enterFrom: ComputedRef<string>
   version: Readonly<Ref<number>>
 }
 
@@ -73,7 +82,7 @@ export function useCodeBlockMotion(options: UseCodeBlockMotionOptions): UseCodeB
     ready: readonly(ready),
     revealed: readonly(revealed),
     mode: readonly(mode),
-    slide: readonly(slide),
+    enterFrom: computed(() => (mode.value === 'swap' ? (slide.value ?? 'none') : 'line')),
     version: readonly(version)
   }
 }

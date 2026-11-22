@@ -12,7 +12,7 @@ export type TraceChildren = Map<string | null, TraceSpan[]>
 export const clamp = (value: number, low: number, high: number): number =>
   Math.min(high, Math.max(low, value))
 
-export const endOf = (span: TraceSpan): number => span.start + span.duration
+const endOf = (span: TraceSpan): number => span.start + span.duration
 
 export function childrenOf(spans: TraceSpan[], known: Set<string>): TraceChildren {
   const map: TraceChildren = new Map()

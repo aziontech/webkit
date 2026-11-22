@@ -344,7 +344,7 @@
             :mode="motion.mode.value"
             :ready="motion.ready.value"
             :revealed="motion.revealed.value"
-            :slide="motion.slide.value"
+            :enter-from="motion.enterFrom.value"
             :test-id="testId"
           />
         </div>

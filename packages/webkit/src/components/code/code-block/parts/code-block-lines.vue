@@ -8,7 +8,6 @@
   import { type CodeBlockLineState, getDiffMarker } from '../lib/line-decorations'
   import {
     type CodeBlockLineMotionMode,
-    type CodeBlockSlideDirection,
     getCodeBlockLineSwapTransitionStyle,
     getCodeBlockLineTransitionStyle
   } from '../presets/transitions'
@@ -46,8 +45,8 @@
     ready: boolean
     /** Lines below this index wait hidden. */
     revealed: number
-    /** Direction of the tab swap. */
-    slide: CodeBlockSlideDirection
+    /** Where hidden lines enter from: the line itself, a tab side, or nowhere. */
+    enterFrom: string
   }
 
   const props = defineProps<Props>()
@@ -55,7 +54,6 @@
   const { split: splitChunksOf, observe } = useLazyChunks({ rowHeight: 24 })
   const chunks = computed(() => splitChunksOf(props.split ? [] : props.lines))
   const splitChunks = computed(() => splitChunksOf(props.rows))
-  const enterFrom = computed(() => (props.mode === 'swap' ? (props.slide ?? 'none') : 'line'))
   const changeLabel = (state: string) =>
     state === 'added' ? props.addedLabel : state === 'removed' ? props.removedLabel : ''
 

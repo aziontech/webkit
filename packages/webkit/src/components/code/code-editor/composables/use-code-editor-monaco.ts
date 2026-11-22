@@ -1,4 +1,4 @@
-import { nextTick, onBeforeUnmount, onMounted, readonly, type Ref, shallowRef, watch } from 'vue'
+import { nextTick, onMounted, onScopeDispose, readonly, type Ref, shallowRef, watch } from 'vue'
 
 import type { CodeEditorMarker, CodeEditorMode } from '../code-editor.vue'
 import {
@@ -162,7 +162,7 @@ export function useCodeEditorMonaco(
 
   useMonacoSync(options, () => session)
   onMounted(() => void mount())
-  onBeforeUnmount(() => {
+  onScopeDispose(() => {
     unmounted = true
     stopTheme()
     if (session) disposeSession(session, options.schemaUri)

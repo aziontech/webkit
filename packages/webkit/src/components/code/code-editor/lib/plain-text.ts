@@ -1,4 +1,4 @@
-export const INDENT = '  '
+const INDENT = '  '
 
 export interface PlainTextEdit {
   start: number
