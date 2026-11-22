@@ -233,10 +233,9 @@
   defineExpose({ focus })
 
   const BOX_CLASS =
-    'group/prompt-input-box relative flex w-full cursor-text flex-col gap-(--spacing-2xs) rounded-full border border-(--border-default) ' +
+    'group/prompt-input-box relative flex w-full cursor-text flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) ' +
     'bg-[color-mix(in_srgb,var(--bg-surface-raised)_88%,transparent)] p-(--spacing-xs) shadow-(--shadow-lg) backdrop-blur-md transition-colors ' +
     'duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--ring-color) ' +
-    'data-[multiline]:rounded-[calc(var(--shape-card)*3)] ' +
     'data-[invalid]:border-(--danger-border) ' +
     'data-[disabled]:bg-(--bg-disabled)'
 

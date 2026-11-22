@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: a2d533bd459c5575a107b7b1e8b9eb5e48e4f7e22404d77e790c6bf2200bf531
+checksum: 28be4a2ecf4b6b1a14d499facef68345207d8dd6ea38cf1c7ed6b5c41edd31fd
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -91,10 +91,10 @@ _No slots._
 
 ## Tokens
 
-| Region | Token                                                                                                                                                               |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| chip   | `var(--bg-selected)` (the user bubble's fill, which stands apart from `--bg-canvas` and `--bg-surface` in both themes), `rounded-full`, padding `var(--spacing-xs)` |
-| text   | `.text-label-sm`, `var(--text-default)` (`--text-muted` misses Lc 60 on `--bg-selected` in dark), underlined on hover when linked                                   |
+| Region | Token                                                                                                                                                                                                 |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| chip   | `var(--bg-selected)` (the user bubble's fill, which stands apart from `--bg-canvas` and `--bg-surface` in both themes), `var(--shape-control)` (the chip and tag radius), padding `var(--spacing-xs)` |
+| text   | `.text-label-sm`, `var(--text-default)` (`--text-muted` misses Lc 60 on `--bg-selected` in dark), underlined on hover when linked                                                                     |
 
 ## Theme gaps
 

@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 8
 template: 2
-checksum: 525f04eff01c5350f3e75c82e4e203e715032c4891510c8e2c4dcf23e1f54b49
+checksum: 849bc54680934bfe41411b90f5bbaddc0220f16e4979f992041462aa7e68b671
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -35,10 +35,10 @@ the file tokens; the controls the app wants (attach, dictate, model, context, to
 sub-components it places in the `actions`, `end` and `footer` slots. Each reads the composer through
 `provide` / `inject`, so the app wires nothing but its own values.
 
-At rest it is one floating pill (Attach `+`, the text, the `end` controls, a round Submit, voice or
+At rest it is one floating bar (Attach `+`, the text, the `end` controls, Submit, voice or
 Stop) on a translucent raised surface with a shadow and a backdrop blur, so a thread can scroll
-under it. A second line, attached files or references, or an open shortcut menu stack it into a
-rounded rectangle (text on its own row) until the prompt is cleared.
+under it. A second line, attached files or references, or an open shortcut menu stack it into
+two rows (text on its own row) until the prompt is cleared.
 
 ## When to use
 
@@ -305,19 +305,19 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 
 ## Slots
 
-| Slot          | Scope | Notes                                                                                                                                                                                                                           |
-| ------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `attachments` | —     | Attached context the app draws itself, above the text, before the file tokens and the references.                                                                                                                               |
-| `actions`     | —     | Controls at the inline start of the pill (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input.                                                                                                             |
-| `end`         | —     | Controls at the inline end of the pill, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input.                                                                                        |
-| `footer`      | —     | A secondary row under the pill (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input. Optional: for the single-pill look, place the pickers in `actions` / `end` instead. |
-| `hint`        | —     | Constraint text under everything; referenced by `aria-describedby`.                                                                                                                                                             |
+| Slot          | Scope | Notes                                                                                                                                                                                                                         |
+| ------------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `attachments` | —     | Attached context the app draws itself, above the text, before the file tokens and the references.                                                                                                                             |
+| `actions`     | —     | Controls at the inline start of the bar (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input.                                                                                                            |
+| `end`         | —     | Controls at the inline end of the bar, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input.                                                                                       |
+| `footer`      | —     | A secondary row under the bar (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input. Optional: for the single-bar look, place the pickers in `actions` / `end` instead. |
+| `hint`        | —     | Constraint text under everything; referenced by `aria-describedby`.                                                                                                                                                           |
 
 ## States
 
 - `data-status` mirrors `status`; `data-disabled`; `data-invalid` while over `maxLength`; `data-dragging` on the box while files are dragged over it (only with an `AttachButton`).
-- `data-multiline` on the root and the box while the composer is stacked (a rounded rectangle, text on its own row): the prompt took a second line (kept until it is cleared), `minRows` is above 1, files, references or the `attachments` slot are shown, or a shortcut menu is open. Absent, it is the single pill.
-- `ready`: Submit (primary round `IconButton`, large, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (primary `IconButton`, `az az-headphones`) takes its place.
+- `data-multiline` on the root and the box while the composer is stacked (text on its own row): the prompt took a second line (kept until it is cleared), `minRows` is above 1, files, references or the `attachments` slot are shown, or a shortcut menu is open. Absent, it is the single bar.
+- `ready`: Submit (primary `IconButton`, large, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (primary `IconButton`, `az az-headphones`) takes its place.
 - `pending` / `streaming`: Stop (secondary `IconButton`, `az az-stop`) replaces Submit; Enter does nothing.
 - `pending` / `streaming` with `queueable`: Stop stays, and Submit (primary, after Stop at the inline end) shows beside it while there is something to send; Enter and Submit emit `submit` as in `ready`. With nothing to send only Stop shows, and the voice control never does.
 - Near the limit (the prompt holds 80% of `maxLength` or more): the `n/max` counter shows before Submit and the text area is described by it; below 80% it is not rendered.
@@ -335,22 +335,22 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 
 ## Tokens
 
-| Region                   | Token                                                                                                                                                                                                                                  |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| container                | `var(--bg-surface-raised)` at 88 % (`color-mix`), `backdrop-blur-md`, `var(--shadow-lg)`, `var(--border-default)`; `rounded-full` as a pill, `calc(var(--shape-card) * 3)` stacked; focus `var(--border-strong)` + `var(--ring-color)` |
-| invalid border           | `var(--danger-border)`                                                                                                                                                                                                                 |
-| disabled surface         | `var(--bg-disabled)`                                                                                                                                                                                                                   |
-| drop panel               | `var(--bg-selected)`, dashed `var(--border-selected)`, `.text-label-md`, `var(--text-default)`                                                                                                                                         |
-| text                     | `.text-body-md`, `var(--text-default)`; placeholder `var(--text-muted)`; 40 px minimum row                                                                                                                                             |
-| Submit, Stop, voice      | large `IconButton` (40 px), `rounded-full`; Attach, Dictate and the pickers' triggers are `rounded-full` too                                                                                                                           |
-| counter, hint            | `.text-body-xs`, `var(--text-muted)`; over limit and rejected files `var(--danger-foreground)`                                                                                                                                         |
-| mode label               | `var(--text-muted)` inside the model `Button`                                                                                                                                                                                          |
-| padding / gaps           | `var(--spacing-xs)`, `var(--spacing-2xs)`, `var(--spacing-sm)`                                                                                                                                                                         |
-| row fill inset (2px gap) | `border-y border-transparent bg-clip-padding`                                                                                                                                                                                          |
+| Region                   | Token                                                                                                                                                                                                              |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| container                | `var(--bg-surface-raised)` at 88 % (`color-mix`), `backdrop-blur-md`, `var(--shadow-lg)`, `var(--border-default)`; `var(--shape-card)`, single row and stacked; focus `var(--border-strong)` + `var(--ring-color)` |
+| invalid border           | `var(--danger-border)`                                                                                                                                                                                             |
+| disabled surface         | `var(--bg-disabled)`                                                                                                                                                                                               |
+| drop panel               | `var(--bg-selected)`, dashed `var(--border-selected)`, `.text-label-md`, `var(--text-default)`                                                                                                                     |
+| text                     | `.text-body-md`, `var(--text-default)`; placeholder `var(--text-muted)`; 40 px minimum row                                                                                                                         |
+| Submit, Stop, voice      | large `IconButton` (40 px), `var(--shape-button)`; Attach, Dictate and the pickers' triggers keep their own `var(--shape-button)` too                                                                              |
+| counter, hint            | `.text-body-xs`, `var(--text-muted)`; over limit and rejected files `var(--danger-foreground)`                                                                                                                     |
+| mode label               | `var(--text-muted)` inside the model `Button`                                                                                                                                                                      |
+| padding / gaps           | `var(--spacing-xs)`, `var(--spacing-2xs)`, `var(--spacing-sm)`                                                                                                                                                     |
+| row fill inset (2px gap) | `border-y border-transparent bg-clip-padding`                                                                                                                                                                      |
 
 ## Theme gaps
 
-- No radius token between `--shape-card` (8 px) and a full pill fits the stacked composer: it uses `calc(var(--shape-card) * 3)` (24 px). A `--shape-surface` (or `--shape-composer`) token would replace it.
+- None.
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -412,7 +412,7 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 
 - Container queries: none; full width of its host. Every row is a wrapping flex row, so the line
   breaks where its controls stop fitting, at any width, with no breakpoint to keep in step.
-- Narrow: the pill's row wraps its slot controls; Submit stays at the inline end; once the text wraps the composer stacks, so the text gets the full width. With `queueable` while busy, Stop and Submit stay together at the inline end and never wrap onto separate lines; each keeps the 44 px target on coarse pointers. The model `Button` truncates the mode label first. The footer row wraps onto more lines; nothing scrolls sideways.
+- Narrow: the bar's row wraps its slot controls; Submit stays at the inline end; once the text wraps the composer stacks, so the text gets the full width. With `queueable` while busy, Stop and Submit stay together at the inline end and never wrap onto separate lines; each keeps the 44 px target on coarse pointers. The model `Button` truncates the mode label first. The footer row wraps onto more lines; nothing scrolls sideways.
 - Shortcut menu (`/`, `@`): opens above the box, and below it when the space above the box in the visible viewport (the on-screen keyboard excluded) is shorter than the list and the space below is larger, so a composer at the top of a page or a panel never draws its list off-screen; the list carries `data-side="top|bottom"`.
 - Height: the text area measures its height again whenever its own width changes (a resize observer, released when the component unmounts), so a composer mounted in a pane that starts near zero width (a split view opening on a phone) settles to one row once the pane has its width.
 - Touch: `enterkeyhint="send"` on mobile keyboards; targets 44 px on coarse pointers.

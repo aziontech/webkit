@@ -1,6 +1,6 @@
 # Sources
 
-> The sources a generative AI response drew on (Cloudscape's sources section, AI Elements Sources): a rounded `Sources` pill with the overlapping marks of up to three sources (the item's `icon` or its site's first letter) that opens an ordered list — mark, linked title, description or site. It ends the message's action row (`ChatMessage.Actions` `#trailing`). Item `n` has the id `<anchor>-source-<n>`, the target of `StreamingResponse`'s `[n]` citations; following one opens the list and brings the item into view.
+> The sources a generative AI response drew on (Cloudscape's sources section, AI Elements Sources): a small `Sources` button with the overlapping marks of up to three sources (the item's `icon` or its site's first letter) that opens an ordered list — mark, linked title, description or site. It ends the message's action row (`ChatMessage.Actions` `#trailing`). Item `n` has the id `<anchor>-source-<n>`, the target of `StreamingResponse`'s `[n]` citations; following one opens the list and brings the item into view.
 
 - Import: `import Sources from '@aziontech/webkit/sources'`
 - Category: ai · Surface: app · Structure: monolithic

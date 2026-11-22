@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: c597fd3ec1780c6a2c9719d28a29012bb3db3771e84538dc21e83deb27d9ffab
+checksum: bc4c67fe6b69a055ecac4957bd5dc3d0f37d3ae22c7cc52652022177b5819ea0
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -113,7 +113,7 @@ _none_
 | group label | `.text-label-sm`, `var(--text-muted)`                                                                                  |
 | row         | `.text-label-md` (`.text-label-lg` on coarse pointers), `var(--text-default)`, `var(--bg-hover)`, `var(--bg-selected)` |
 | row radius  | `var(--shape-control)`                                                                                                 |
-| search      | `Input` with a pill radius (`rounded-full`) and the `az-search` glyph                                                  |
+| search      | `Input` (its own `var(--shape-control)`) with the `az-search` glyph                                                    |
 | empty       | `.text-body-sm`, `var(--text-muted)`                                                                                   |
 
 ## Theme gaps

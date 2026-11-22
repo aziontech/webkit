@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 44ffb80ecf0a99d6702609b8412688c7e84a7fbfc24e369e2f09121332a915f9
+checksum: 7bed512d35d3d899063f92394841b9e636c7a20d8171c4e4bb5e9cd542009189
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -29,7 +29,7 @@ It also sets where messages sit for the whole thread (`layout`): `split` for a f
 
 The thread is a centred reading column (`--layout-measure-content`) with a 16 px gutter on a phone,
 and a larger gap before each user turn. The `composer` slot floats the composer over the bottom of
-the column: the thread scrolls under it behind a fade and is padded by its height; the round Scroll
+the column: the thread scrolls under it behind a fade and is padded by its height; the Scroll
 to latest button floats just above it.
 
 ## When to use
@@ -155,7 +155,7 @@ never read as new.
 | gap between messages  | `var(--spacing-lg)`; a user message that starts a turn adds `var(--spacing-lg)` above it                                             |
 | padding of the thread | `var(--spacing-md)`; bottom `var(--conversation-composer-height)` + `var(--spacing-md)`                                              |
 | reading width         | `var(--layout-measure-content)`                                                                                                      |
-| scroll button surface | round large `IconButton`: `var(--bg-surface-raised)` at 88 %, `backdrop-blur-md`, `var(--shadow-md)`                                 |
+| scroll button surface | large `IconButton` (`var(--shape-button)`): `var(--bg-surface-raised)` at 88 %, `backdrop-blur-md`, `var(--shadow-md)`               |
 | composer area         | fade `linear-gradient` from `var(--conversation-composer-fade, var(--bg-canvas))`; padding `var(--spacing-lg)` / `var(--spacing-md)` |
 | focus ring of the log | `var(--ring-color)`                                                                                                                  |
 
@@ -171,7 +171,7 @@ _None._
 - ARIA: `role="log"` with `aria-live="off"` (streaming chunks are not read) and `aria-label`; a separate visually hidden `aria-live="polite"` `aria-atomic="true"` region receives `"<author>: <text>"` when an assistant or system message completes or fails. User messages are not announced (the reader just typed them). It also says `Loading earlier messages`, then `Earlier messages loaded` once older messages were prepended.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons) on both buttons, idle and loading (`Button`'s own colors).
 - Reduced motion: smooth scrolling is replaced by a jump.
-- Touch target: the scroll button is a large round `IconButton` (40 px, 44 px on coarse pointers through `IconButton`).
+- Touch target: the scroll button is a large `IconButton` (40 px, 44 px on coarse pointers through `IconButton`).
 - Reading order: the composer area follows the log in the DOM, so `Tab` leaves the log's last control and reaches the composer.
 
 ## Internationalization

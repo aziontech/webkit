@@ -74,7 +74,7 @@
         icon-position="trailing"
         :disabled="disabled || models.length === 0"
         :data-testid="testId"
-        class="max-w-full min-w-0 rounded-full!"
+        class="max-w-full min-w-0"
       >
         <span class="truncate">{{ modelLabel }}</span>
         <span

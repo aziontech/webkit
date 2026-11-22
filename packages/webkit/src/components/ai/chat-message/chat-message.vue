@@ -109,7 +109,7 @@
 
   const CONTENT_CLASS =
     'flex min-w-0 flex-col gap-(--spacing-md) text-body-lg text-(--text-default) break-words ' +
-    'data-[from=user]:gap-(--spacing-sm) data-[from=user]:rounded-[calc(var(--shape-card)*3)] data-[from=user]:bg-(--bg-selected) ' +
+    'data-[from=user]:gap-(--spacing-sm) data-[from=user]:rounded-(--shape-card) data-[from=user]:bg-(--bg-selected) ' +
     'data-[from=user]:px-(--spacing-md) data-[from=user]:py-(--spacing-sm) ' +
     'data-[from=system]:text-body-sm data-[from=system]:text-(--text-muted) data-[from=system]:text-center'
 </script>

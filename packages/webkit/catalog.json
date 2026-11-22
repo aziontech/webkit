@@ -5546,17 +5546,17 @@
     {
      "name": "actions",
      "scope": "—",
-     "notes": "Controls at the inline start of the pill (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input."
+     "notes": "Controls at the inline start of the bar (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input."
     },
     {
      "name": "end",
      "scope": "—",
-     "notes": "Controls at the inline end of the pill, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input."
+     "notes": "Controls at the inline end of the bar, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input."
     },
     {
      "name": "footer",
      "scope": "—",
-     "notes": "A secondary row under the pill (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input. Optional: for the single-pill look, place the pickers in `actions` / `end` instead."
+     "notes": "A secondary row under the bar (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input. Optional: for the single-bar look, place the pickers in `actions` / `end` instead."
     },
     {
      "name": "hint",
@@ -5726,17 +5726,17 @@
     {
      "name": "actions",
      "scope": "—",
-     "notes": "Controls at the inline start of the pill (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input."
+     "notes": "Controls at the inline start of the bar (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input."
     },
     {
      "name": "end",
      "scope": "—",
-     "notes": "Controls at the inline end of the pill, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input."
+     "notes": "Controls at the inline end of the bar, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input."
     },
     {
      "name": "footer",
      "scope": "—",
-     "notes": "A secondary row under the pill (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input. Optional: for the single-pill look, place the pickers in `actions` / `end` instead."
+     "notes": "A secondary row under the bar (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input. Optional: for the single-bar look, place the pickers in `actions` / `end` instead."
     },
     {
      "name": "hint",

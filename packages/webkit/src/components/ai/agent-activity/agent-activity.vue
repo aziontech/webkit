@@ -137,7 +137,7 @@
   }
 
   const TOGGLE_CLASS =
-    'inline-flex min-h-8 w-fit items-center gap-(--spacing-xs) rounded-full text-body-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'inline-flex min-h-8 w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) text-body-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
     'motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) pointer-coarse:min-h-10'
 
   const STEP_TITLE_CLASS =

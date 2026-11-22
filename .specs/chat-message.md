@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 4
 template: 2
-checksum: d1b5068e18b22c14255bd63bfa866fd6e115db348ed15c01e931ae1233c6d724
+checksum: 51fc7e9a379412e18b0a51b4369cb6949936369e819a9422d6d089b2601e2815
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -169,14 +169,14 @@ _No motion of its own — `ResponseLoading` owns the pulsing dots shown while `p
 
 ## Tokens
 
-| Region              | Token                                                                                                                                                                                |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| user bubble surface | `var(--bg-selected)` (stands apart from `--bg-canvas` and `--bg-surface` in both themes), `calc(var(--shape-card) * 3)` (the radius of the stacked `PromptInput`), at most 80 % wide |
-| bubble padding      | `var(--spacing-md)` / `var(--spacing-sm)`                                                                                                                                            |
-| content             | `.text-body-lg`, `var(--text-default)`; blocks `var(--spacing-md)` apart                                                                                                             |
-| system line         | `.text-body-sm`, `var(--text-muted)`                                                                                                                                                 |
-| error line          | `.text-body-sm`, `var(--danger-foreground)`                                                                                                                                          |
-| gaps                | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-2xs)`                                                                                                                       |
+| Region              | Token                                                                                                                                                                         |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| user bubble surface | `var(--bg-selected)` (stands apart from `--bg-canvas` and `--bg-surface` in both themes), `var(--shape-card)` (the radius of `PromptInput` and every card), at most 80 % wide |
+| bubble padding      | `var(--spacing-md)` / `var(--spacing-sm)`                                                                                                                                     |
+| content             | `.text-body-lg`, `var(--text-default)`; blocks `var(--spacing-md)` apart                                                                                                      |
+| system line         | `.text-body-sm`, `var(--text-muted)`                                                                                                                                          |
+| error line          | `.text-body-sm`, `var(--danger-foreground)`                                                                                                                                   |
+| gaps                | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-2xs)`                                                                                                                |
 
 ## Theme gaps
 

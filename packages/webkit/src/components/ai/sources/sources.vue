@@ -80,7 +80,7 @@
   })
 
   const TRIGGER_CLASS =
-    'relative inline-flex h-8 w-fit shrink-0 items-center gap-(--spacing-xs) rounded-full ps-(--spacing-2xs) pe-(--spacing-sm) text-label-md text-(--text-muted) ' +
+    'relative inline-flex h-8 w-fit shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-control) ps-(--spacing-2xs) pe-(--spacing-sm) text-label-md text-(--text-muted) ' +
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[state=open]:bg-(--bg-hover) data-[state=open]:text-(--text-default)'
 

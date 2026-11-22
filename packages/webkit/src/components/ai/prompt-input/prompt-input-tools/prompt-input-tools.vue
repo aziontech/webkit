@@ -75,7 +75,6 @@
           :label="label || t('promptInput.tools')"
           :disabled="disabled || tools.length === 0"
           :data-testid="`${testId}__trigger`"
-          class="rounded-full!"
         />
       </DropdownMenuTrigger>
       <DropdownMenuGroup>

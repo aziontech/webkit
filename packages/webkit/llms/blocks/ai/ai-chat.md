@@ -1189,7 +1189,7 @@ export const sampleHistory: ConversationHistoryItem[] = [
     'md:bg-[linear-gradient(to_bottom,var(--bg-canvas)_55%,transparent)] md:px-(--spacing-md)'
 
   const FLOATING_CLASS =
-    'pointer-events-auto inline-flex overflow-hidden rounded-full border border-(--border-default) ' +
+    'pointer-events-auto inline-flex overflow-hidden rounded-(--shape-button) border border-(--border-default) ' +
     'bg-[color-mix(in_srgb,var(--bg-surface-raised)_80%,transparent)] shadow-(--shadow-md) backdrop-blur-md md:hidden'
 </script>
 

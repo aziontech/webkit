@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 7950a31210b998d2f5f3be3fc843892eec676a84812bb462c54aa5635967099b
+checksum: 6357f59e2afbf1e73dc90bd14cfae7fb7f6f472311d6afc98ccc46b5383db0b8
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -98,11 +98,11 @@ _No slots._
 
 ## Tokens
 
-| Region | Token                                                                                                                                                                            |
-| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| prompt | a pill (`rounded-full`, the composer's shape): `var(--bg-surface-raised)` at 88 % over the canvas, `var(--border-default)` → hover `var(--border-strong)` / `var(--bg-selected)` |
-| text   | `.text-body-sm`, `var(--text-default)`; icon `var(--text-muted)`; disabled `var(--text-disabled)`                                                                                |
-| gaps   | `var(--spacing-xs)`, padding `var(--spacing-md)` / `var(--spacing-xs)`                                                                                                           |
+| Region | Token                                                                                                                                                                               |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| prompt | `var(--shape-button)` (a suggestion is a button): `var(--bg-surface-raised)` at 88 % over the canvas, `var(--border-default)` → hover `var(--border-strong)` / `var(--bg-selected)` |
+| text   | `.text-body-sm`, `var(--text-default)`; icon `var(--text-muted)`; disabled `var(--text-disabled)`                                                                                   |
+| gaps   | `var(--spacing-xs)`, padding `var(--spacing-md)` / `var(--spacing-xs)`                                                                                                              |
 
 ## Theme gaps
 

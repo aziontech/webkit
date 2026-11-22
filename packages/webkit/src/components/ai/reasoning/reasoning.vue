@@ -80,7 +80,8 @@
   })
 
   const TRIGGER_CLASS =
-    'inline-flex min-h-8 w-fit items-center gap-(--spacing-xs) rounded-full text-body-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance pointer-coarse:min-h-10 ' +
+    'inline-flex min-h-8 w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) text-body-sm text-(--text-muted) ' +
+    'transition-colors duration-fast-02 ease-productive-entrance pointer-coarse:min-h-10 ' +
     'motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 

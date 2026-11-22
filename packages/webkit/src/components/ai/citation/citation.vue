@@ -52,7 +52,7 @@
   const external = computed<boolean>(() => /^https?:\/\//i.test(linkHref.value ?? ''))
 
   const CHIP_CLASS =
-    'inline-flex h-5 max-w-48 items-center rounded-full bg-(--bg-selected) px-(--spacing-xs) align-middle text-label-sm text-(--text-default) no-underline ' +
+    'inline-flex h-5 max-w-48 items-center rounded-(--shape-control) bg-(--bg-selected) px-(--spacing-xs) align-middle text-label-sm text-(--text-default) no-underline ' +
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none ' +
     'data-[linked]:hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>

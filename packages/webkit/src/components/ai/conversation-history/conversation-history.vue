@@ -235,7 +235,6 @@
         enterkeyhint="search"
         autocomplete="off"
         :spellcheck="false"
-        class="rounded-full"
         :data-testid="`${testId}__search`"
       >
         <template #leading>

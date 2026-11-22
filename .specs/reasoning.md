@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: ab0ff1b105cc2791b0b254b0e24586339866bd633f5dec46a493e0694b683211
+checksum: 50e8d4d5c955a15853583451eec2592aed98e222c251ad9a4a079ea292a2074b
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -104,11 +104,11 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 ## Tokens
 
-| Region | Token                                                                                                                              |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| label  | `.text-body-sm`, `var(--text-muted)` → hover `var(--text-default)`; at least 32 px tall, 40 px on coarse pointers; pill focus ring |
-| trace  | `.text-body-md`, `var(--text-muted)`, a 1 px `border-s var(--border-default)` rule, `var(--spacing-md)`                            |
-| gaps   | `var(--spacing-xs)`, `var(--spacing-sm)`                                                                                           |
+| Region | Token                                                                                                                                                |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| label  | `.text-body-sm`, `var(--text-muted)` → hover `var(--text-default)`; at least 32 px tall, 40 px on coarse pointers; `var(--shape-control)` focus ring |
+| trace  | `.text-body-md`, `var(--text-muted)`, a 1 px `border-s var(--border-default)` rule, `var(--spacing-md)`                                              |
+| gaps   | `var(--spacing-xs)`, `var(--spacing-sm)`                                                                                                             |
 
 ## Theme gaps
 

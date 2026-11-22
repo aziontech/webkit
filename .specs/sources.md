@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 302463fbfae1b891cdf94a461a38b1cffdbe7df0d90693978a426998d3abdf22
+checksum: 606148a14e7f1f4229a5c8ef75725eff1f615c8eb29f50452a97ff995b4159e4
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -15,7 +15,7 @@ last_updated: 2026-11-22
 ## Purpose
 
 The sources a generative AI response drew on (Cloudscape's sources section, AI Elements Sources): a
-rounded `Sources` pill with the overlapping marks of up to three sources (the item's `icon` or its
+small `Sources` button with the overlapping marks of up to three sources (the item's `icon` or its
 site's first letter) that opens an ordered list — mark, linked title, description or site. It ends
 the message's action row (`ChatMessage.Actions` `#trailing`). Item `n` has the id
 `<anchor>-source-<n>`, the target of `StreamingResponse`'s `[n]` citations; following one opens
@@ -108,13 +108,13 @@ _No slots._
 
 ## Tokens
 
-| Region      | Token                                                                                                                         |
-| ----------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| pill        | `.text-label-md`, `var(--text-muted)`, hover and open `var(--bg-hover)` / `var(--text-default)`, `rounded-full`, height 32 px |
-| mark        | `var(--bg-surface-raised)`, `var(--border-default)`, `rounded-full`, `.text-label-sm`; overlap ring `var(--bg-canvas)`        |
-| list        | `var(--border-default)`, `var(--shape-card)`, padding `var(--spacing-2xs)`; rows `var(--shape-control)`                       |
-| title       | `.text-body-sm`, `var(--text-default)`, underline on hover                                                                    |
-| description | `.text-body-xs`, `var(--text-muted)`                                                                                          |
+| Region      | Token                                                                                                                                 |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| pill        | `.text-label-md`, `var(--text-muted)`, hover and open `var(--bg-hover)` / `var(--text-default)`, `var(--shape-control)`, height 32 px |
+| mark        | `var(--bg-surface-raised)`, `var(--border-default)`, `rounded-full`, `.text-label-sm`; overlap ring `var(--bg-canvas)`                |
+| list        | `var(--border-default)`, `var(--shape-card)`, padding `var(--spacing-2xs)`; rows `var(--shape-control)`                               |
+| title       | `.text-body-sm`, `var(--text-default)`, underline on hover                                                                            |
+| description | `.text-body-xs`, `var(--text-muted)`                                                                                                  |
 
 ## Theme gaps
 

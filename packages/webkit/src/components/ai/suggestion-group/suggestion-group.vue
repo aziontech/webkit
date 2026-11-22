@@ -56,7 +56,7 @@
   }
 
   const ITEM_CLASS =
-    'inline-flex min-h-10 items-center gap-(--spacing-xs) rounded-full border border-(--border-default) bg-[color-mix(in_srgb,var(--bg-surface-raised)_88%,transparent)] ' +
+    'inline-flex min-h-10 items-center gap-(--spacing-xs) rounded-(--shape-button) border border-(--border-default) bg-[color-mix(in_srgb,var(--bg-surface-raised)_88%,transparent)] ' +
     'px-(--spacing-md) py-(--spacing-xs) text-start text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance ' +
     'motion-reduce:transition-none hover:not-disabled:border-(--border-strong) hover:not-disabled:bg-(--bg-selected) ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +

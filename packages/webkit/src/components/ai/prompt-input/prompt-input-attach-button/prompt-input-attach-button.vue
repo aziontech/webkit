@@ -108,7 +108,6 @@
     :icon="icon || 'az az-plus'"
     variant="ghost"
     size="medium"
-    class="rounded-full!"
     :ariaLabel="ariaLabel || t('promptInput.attach')"
     :disabled="disabled"
     :data-testid="testId"
