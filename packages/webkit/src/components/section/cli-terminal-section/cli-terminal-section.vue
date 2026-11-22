@@ -1,13 +1,11 @@
 <script setup lang="ts">
   import { computed, defineAsyncComponent, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
-  import Button from '../../action/button/button.vue'
   import CodeBlock from '../../code/code-block/code-block.vue'
   import Texture from '../../content/texture/texture.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
 
   defineOptions({
     name: 'CliTerminalSection',
@@ -65,8 +63,6 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'cli-terminal-section'
   )
 
-  const hasHeader = computed(() => props.title.length > 0)
-
   const tabs = computed(() =>
     props.session.length > 0
       ? [{ label: 'session', value: 'session', code: props.session, language: 'bash' }]
@@ -111,83 +107,51 @@
 </script>
 
 <template>
-  <section
+  <FeatureTabsSectionShell
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
+    :item-count="hasTerminal ? 1 : 0"
+    align="split"
+    header-padding="small"
+    :primary-action="primaryAction"
+    primary-variant="outline"
+    class="[--module-header-headline-span:2] [--module-header-headline-max:var(--container-xl)]"
   >
-    <Module
-      v-if="hasTerminal"
-      :divided="false"
-      :padded="false"
+    <RegistrationFrame
+      flush
+      borders="y"
+      marks="all"
     >
-      <template
-        v-if="hasHeader"
-        #header
-      >
+      <div :class="BACKDROP_CLASS">
+        <Texture
+          variant="pixelate"
+          size="small"
+          fade="none"
+        />
         <div
-          class="contents [--module-header-headline-span:2] [--module-header-headline-max:var(--container-xl)]"
+          v-if="script"
+          ref="stageEl"
+          :data-entered="entered || null"
+          :class="STAGE_CLASS"
         >
-          <ModuleHeader
-            align="split"
-            padding="small"
-            :eyebrow="eyebrow"
-            :title="title"
-            :description="description"
-          >
-            <template
-              v-if="primaryAction"
-              #actions
-            >
-              <Button
-                :label="primaryAction.label"
-                :href="primaryAction.href"
-                variant="outline"
-                size="large"
-                :target="primaryAction.target"
-                :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
-                icon-position="trailing"
-                :animated="Boolean(primaryAction.trailing)"
-              />
-            </template>
-          </ModuleHeader>
+          <ConsoleMockup :name="widget" />
         </div>
-      </template>
-
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="all"
-      >
-        <div :class="BACKDROP_CLASS">
-          <Texture
-            variant="pixelate"
-            size="small"
-            fade="none"
+        <div
+          v-else
+          class="relative z-10 mx-auto -mb-(--spacing-xs) w-full max-w-(--container-4xl) rounded-(--shape-control) shadow-(--shadow-2xl)"
+        >
+          <CodeBlock
+            :tabs="tabs"
+            :show-line-numbers="false"
+            v-bind="{ animateLines: true }"
+            :copy-aria-label="copyAriaLabel || undefined"
           />
-          <div
-            v-if="script"
-            ref="stageEl"
-            :data-entered="entered || null"
-            :class="STAGE_CLASS"
-          >
-            <ConsoleMockup :name="widget" />
-          </div>
-          <div
-            v-else
-            class="relative z-10 mx-auto -mb-(--spacing-xs) w-full max-w-(--container-4xl) rounded-(--shape-control) shadow-(--shadow-2xl)"
-          >
-            <CodeBlock
-              :tabs="tabs"
-              :show-line-numbers="false"
-              v-bind="{ animateLines: true }"
-              :copy-aria-label="copyAriaLabel || undefined"
-            />
-          </div>
         </div>
-      </RegistrationFrame>
-    </Module>
-  </section>
+      </div>
+    </RegistrationFrame>
+  </FeatureTabsSectionShell>
 </template>
