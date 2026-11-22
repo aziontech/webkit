@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import { useCarouselContext } from '../composables/use-carousel-context'
 
   defineOptions({
@@ -24,26 +25,16 @@
   const { t } = useTranslate({ carousel: en.carousel })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'carousel-next')
-
-  const ROOT_CLASS =
-    'flex h-10 w-10 items-center justify-center rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) text-(--text-muted) transition-colors duration-150 ease-out ' +
-    'hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed ' +
-    'disabled:opacity-50 motion-reduce:transition-none'
 </script>
 
 <template>
-  <button
+  <IconButton
     v-bind="$attrs"
-    type="button"
+    variant="outline"
+    icon="az az-chevron-right"
     :data-testid="testId"
     :aria-label="ariaLabel || t('carousel.next')"
     :disabled="!context.canScrollNext.value"
-    :class="ROOT_CLASS"
     @click="context.scrollNext()"
-  >
-    <i
-      class="az az-chevron-right rtl:-scale-x-100"
-      aria-hidden="true"
-    />
-  </button>
+  />
 </template>

@@ -795,11 +795,6 @@
     'transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-inset ' +
     'data-[selected]:bg-(--bg-selected) ' +
     'motion-reduce:transition-none pointer-coarse:min-h-11'
-
-  const QUICK_RANGES_CLASS =
-    'text-label-sm -ms-(--spacing-2xs) inline-flex min-h-8 w-fit cursor-pointer items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-2xs) text-(--text-muted) ' +
-    'transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
-    'focus-visible:ring-inset motion-reduce:transition-none pointer-coarse:min-h-11'
 </script>
 
 <template>
@@ -984,18 +979,15 @@
           :data-testid="`${testId}__custom`"
           class="flex flex-col gap-(--spacing-xs) p-(--spacing-sm)"
         >
-          <button
-            type="button"
+          <Button
+            variant="link"
+            icon="az az-chevron-left"
+            :label="t('dateRangePicker.showQuickRanges')"
+            :size="size"
             :data-testid="`${testId}__quick-ranges`"
-            :class="QUICK_RANGES_CLASS"
+            class="w-fit pointer-coarse:min-h-11"
             @click="showQuick"
-          >
-            <i
-              class="az az-chevron-left shrink-0 text-[length:inherit] leading-none"
-              aria-hidden="true"
-            />
-            {{ t('dateRangePicker.showQuickRanges') }}
-          </button>
+          />
           <span
             :id="customLabelId"
             class="text-label-sm text-(--text-default)"

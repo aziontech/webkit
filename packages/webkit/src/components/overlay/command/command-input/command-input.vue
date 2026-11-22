@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
+  import Button from '../../../action/button/button.vue'
   import Kbd from '../../../content/kbd/kbd.vue'
   import Input from '../../../input/input/input.vue'
   import { useCommandMenuContext } from '../composables/use-command-menu-context'
@@ -52,10 +53,6 @@
       nextTick(focusField)
     }
   )
-
-  const PREVIOUS_CLASS =
-    'flex h-8 max-w-[40%] shrink-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-150 ' +
-    'ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -64,20 +61,17 @@
     :data-testid="testId"
     :data-page="onPage ? ctx.page.value : undefined"
   >
-    <button
+    <Button
       v-if="onPage"
-      type="button"
+      variant="ghost"
+      size="medium"
+      icon="az az-chevron-left"
+      :label="ctx.pageHeading.value"
       :aria-label="backLabel"
       :data-testid="`${testId}__previous`"
-      :class="PREVIOUS_CLASS"
+      class="max-w-[40%] shrink-0"
       @click="goBack"
-    >
-      <i
-        class="az az-chevron-left shrink-0 text-label-sm text-(--text-muted) rtl:-scale-x-100"
-        aria-hidden="true"
-      />
-      <span class="truncate">{{ ctx.pageHeading.value }}</span>
-    </button>
+    />
     <Input
       ref="fieldEl"
       v-bind="attrs"

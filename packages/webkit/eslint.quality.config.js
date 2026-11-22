@@ -2,6 +2,8 @@ import typescriptParser from '@typescript-eslint/parser'
 import vuejsAccessibility from 'eslint-plugin-vuejs-accessibility'
 import vueParser from 'vue-eslint-parser'
 
+import webkit from './src/eslint-plugin/index.js'
+
 const UNBREAKABLE_LINE = [
   '^\\s*(d|points)="',
   '^\\s*["\'][^\\s"\']+ ?["\'](,| \\+)?$',
@@ -78,5 +80,14 @@ export default [
       'vuejs-accessibility/label-has-for': ['error', { required: { some: ['nesting', 'id'] } }],
       'vuejs-accessibility/no-redundant-roles': ['error', { ul: ['list'], ol: ['list'] }]
     }
+  },
+  {
+    files: [
+      'src/components/**/*.{js,ts,vue}',
+      'blocks/**/*.{js,ts,vue}',
+      'examples/**/*.{js,ts,vue}'
+    ],
+    plugins: { webkit },
+    rules: { 'webkit/no-unowned-element': ['error', { owners: true }] }
   }
 ]

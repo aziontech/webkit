@@ -15,6 +15,7 @@ import noPolymorphicAsProp from './rules/no-polymorphic-as-prop.js'
 import noRootRelativeAsset from './rules/no-root-relative-asset.js'
 import noStyleOverride from './rules/no-style-override.js'
 import noUnknownImport from './rules/no-unknown-import.js'
+import noUnownedElement from './rules/no-unowned-element.js'
 import noViewportHeightCalc from './rules/no-viewport-height-calc.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
 import noWrappedPageChrome from './rules/no-wrapped-page-chrome.js'
@@ -59,7 +60,8 @@ const rules = {
   'require-composable-scope-cleanup': requireComposableScopeCleanup,
   'no-polymorphic-as-prop': noPolymorphicAsProp,
   'no-page-navigation-menu': noPageNavigationMenu,
-  'consistent-header-action-size': consistentHeaderActionSize
+  'consistent-header-action-size': consistentHeaderActionSize,
+  'no-unowned-element': noUnownedElement
 }
 
 const FILES = [
