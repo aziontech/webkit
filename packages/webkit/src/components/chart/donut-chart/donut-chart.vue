@@ -7,10 +7,20 @@
   import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Alert from '../../feedback/alert/alert.vue'
-  import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { type ChartSeries, formatCompact, formatShare, normalizeSeries } from '../lib'
+  import ChartDataTable, { type ChartDataTableRow } from '../chart/parts/chart-data-table.vue'
+  import ChartFrame from '../chart/parts/chart-frame.vue'
+  import ChartLegendButton from '../chart/parts/chart-legend-button.vue'
+  import {
+    CHART_STATE_SLOTS,
+    type ChartSeries,
+    formatCompact,
+    formatShare,
+    normalizeSeries,
+    STEP_BACKWARD,
+    STEP_FORWARD,
+    stepIndex
+  } from '../lib'
 
   defineOptions({ name: 'DonutChart', inheritAttrs: false })
 
@@ -165,6 +175,19 @@
     }))
   )
 
+  const tableColumns = computed(() => [
+    t('donutChart.name'),
+    t('donutChart.value'),
+    t('donutChart.share')
+  ])
+  const tableRows = computed(() =>
+    legend.value.map<ChartDataTableRow>((entry) => ({
+      key: entry.id,
+      header: entry.name,
+      cells: [entry.value, entry.share]
+    }))
+  )
+
   const summary = computed(() =>
     t('donutChart.summary', { count: visible.value.length, total: valueText(total.value) })
   )
@@ -199,12 +222,8 @@
     if (last < 0) return
     const current = activeIndex.value
     const key = logicalArrowKey(event.key, dir.value)
-    if (key === 'ArrowRight' || key === 'ArrowDown')
-      setActive(current === null ? 0 : Math.min(last, current + 1))
-    else if (key === 'ArrowLeft' || key === 'ArrowUp')
-      setActive(current === null ? last : Math.max(0, current - 1))
-    else if (event.key === 'Home') setActive(0)
-    else if (event.key === 'End') setActive(last)
+    const target = stepIndex(key, current, last, STEP_FORWARD, STEP_BACKWARD)
+    if (target !== undefined) setActive(target)
     else if (event.key === 'Escape') setActive(null)
     else if (event.key === 'Enter' || event.key === ' ') {
       const slice = current === null ? undefined : slices.value[current]
@@ -232,260 +251,150 @@
     'data-[active]:[stroke-width:var(--donut-chart-lift)] ' +
     'data-[dimmed]:opacity-40 ' +
     'data-[entered]:[stroke-dasharray:var(--donut-chart-dash)]'
-
-  const LEGEND_ITEM_CLASS =
-    "relative inline-flex min-h-6 w-full items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] " +
-    'gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-2xs) text-start text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance ' +
-    'motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
-    'data-[hidden]:text-(--text-muted)'
 </script>
 
 <template>
-  <figure
+  <ChartFrame
     v-bind="$attrs"
     :data-testid="testId"
-    data-plain-ground
     :data-type="type"
     :data-size="size"
-    :data-loading="loading || null"
-    :data-error="(!loading && hasError) || null"
-    :data-empty="(!loading && !hasError && isEmpty) || null"
-    :data-refetching="refetching || null"
-    :data-table-view="tableView || null"
-    :aria-busy="loading || refetching || undefined"
-    class="m-0 flex min-w-0 flex-wrap items-center gap-(--spacing-md) transition-opacity duration-moderate-01 motion-reduce:transition-none data-[refetching]:opacity-60"
+    :loading="loading"
+    :refetching="refetching"
+    :error="error"
+    :drawable="!isEmpty"
+    :table-view="tableView"
+    :empty-title="emptyTitle || t('donutChart.emptyTitle')"
+    :empty-description="emptyDescription"
+    empty-icon="az az-chart-pie"
+    state-class="flex-1 not-data-[error]:data-[size=small]:min-h-32 not-data-[error]:data-[size=medium]:min-h-44 not-data-[error]:data-[size=large]:min-h-60"
+    :state-size="size"
+    :summary-id="summaryId"
+    :summary="summary"
+    :announcement="announcement"
+    :test-id="testId"
+    class="flex flex-wrap items-center gap-(--spacing-md) transition-opacity duration-moderate-01 motion-reduce:transition-none data-[refetching]:opacity-60"
   >
-    <Skeleton
-      v-if="loading"
-      variant="circle"
-      :width="size === 'small' ? '128px' : size === 'large' ? '240px' : '176px'"
-      :height="size === 'small' ? '128px' : size === 'large' ? '240px' : '176px'"
-      :data-testid="`${testId}__loading`"
-    />
-    <div
-      v-else-if="hasError"
-      class="flex flex-1 items-center justify-center p-(--spacing-md)"
-    >
-      <slot name="error">
-        <Alert
-          severity="danger"
-          :label="error"
-          :data-testid="`${testId}__error`"
-        />
-      </slot>
-    </div>
-    <div
-      v-else-if="isEmpty"
-      :data-size="size"
-      class="flex flex-1 items-stretch data-[size=small]:min-h-32 data-[size=medium]:min-h-44 data-[size=large]:min-h-60"
-    >
-      <slot name="empty">
-        <EmptyState
-          :title="emptyTitle || t('donutChart.emptyTitle')"
-          :description="emptyDescription"
-          icon="az az-chart-pie"
-          size="small"
-          bordered
-          :data-testid="`${testId}__empty`"
-        >
-          <template
-            v-if="$slots['empty-actions']"
-            #actions
-          >
-            <slot name="empty-actions" />
-          </template>
-        </EmptyState>
-      </slot>
-    </div>
-    <table
-      v-else-if="tableView"
-      :data-testid="`${testId}__table`"
-      class="w-full border-collapse text-body-sm text-(--text-default)"
-    >
-      <caption class="sr-only">
-        {{
-          ariaLabel || summary
-        }}
-      </caption>
-      <thead>
-        <tr>
-          <th
-            v-for="heading in [t('donutChart.name'), t('donutChart.value'), t('donutChart.share')]"
-            :key="heading"
-            scope="col"
-            class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-end text-label-sm text-(--text-muted) first:text-start"
-          >
-            {{ heading }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="entry in legend"
-          :key="entry.id"
-        >
-          <th
-            scope="row"
-            class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-2xs) text-start text-body-sm"
-          >
-            {{ entry.name }}
-          </th>
-          <td
-            class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-2xs) text-end tabular-nums"
-          >
-            {{ entry.value }}
-          </td>
-          <td
-            class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-2xs) text-end tabular-nums"
-          >
-            {{ entry.share }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <template v-else>
-      <div
-        ref="ringEl"
-        role="group"
-        :aria-roledescription="t('donutChart.roleDescription')"
-        tabindex="0"
-        :aria-label="ariaLabel || undefined"
-        :aria-describedby="summaryId"
-        :data-size="size"
-        :data-testid="`${testId}__ring`"
-        class="relative shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[size=large]:size-60 data-[size=medium]:size-44 data-[size=small]:size-32"
-      >
-        <svg
-          viewBox="0 0 100 100"
-          aria-hidden="true"
-          class="block size-full overflow-visible"
-          @pointerleave="setActive(null)"
-        >
-          <circle
-            v-for="(slice, index) in slices"
-            :key="slice.id"
-            cx="50"
-            cy="50"
-            :r="RADIUS[type]"
-            fill="none"
-            :stroke="slice.color"
-            pathLength="100"
-            transform="rotate(-90 50 50)"
-            :stroke-dashoffset="slice.offset"
-            :data-series="slice.id"
-            :data-entered="entered || null"
-            :data-active="activeIndex === index || null"
-            :data-dimmed="(activeIndex !== null && activeIndex !== index) || null"
-            :style="{
-              '--donut-chart-dash': slice.dash,
-              '--donut-chart-width': `${WIDTH[type]}`,
-              '--donut-chart-lift': `${WIDTH[type] + LIFT[type]}`,
-              transitionDelay: slice.delay
-            }"
-            :class="SLICE_CLASS"
-            @pointerenter="setActive(index)"
-          />
-        </svg>
-        <div
-          v-if="type === 'donut'"
-          :data-size="size"
-          class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-(--spacing-2xs) px-(--spacing-lg) text-center data-[size=small]:px-(--spacing-md)"
-          :data-testid="`${testId}__center`"
-        >
-          <slot
-            name="center"
-            :total="total"
-            :active="active ? active.source : null"
-          >
-            <span
-              :data-size="size"
-              :data-testid="`${testId}__center-value`"
-              class="text-big-number-sm tabular-nums text-(--text-default) data-[size=small]:text-label-code-md"
-              >{{ centerValue }}</span
-            >
-            <span
-              :data-size="size"
-              class="line-clamp-2 text-body-sm text-(--text-muted) data-[size=small]:text-body-xs"
-              >{{ centerCaption }}</span
-            >
-          </slot>
-        </div>
-      </div>
-      <ul
-        v-if="legend.length > 1"
-        :data-testid="`${testId}__legend`"
-        class="m-0 flex min-w-0 grow basis-48 list-none flex-col gap-(--spacing-2xs) p-0"
-      >
-        <li
-          v-for="entry in legend"
-          :key="entry.id"
-        >
-          <button
-            type="button"
-            :aria-pressed="!entry.hidden"
-            :data-hidden="entry.hidden || null"
-            :data-testid="`${testId}__legend-item`"
-            :class="LEGEND_ITEM_CLASS"
-            @click="toggle($event, entry.id)"
-          >
-            <span
-              :data-hidden="entry.hidden || null"
-              :style="{ '--donut-chart-key': entry.color }"
-              class="size-2.5 shrink-0 rounded-(--shape-control) bg-(--donut-chart-key) data-[hidden]:opacity-30"
-            />
-            <span class="min-w-0 flex-1 truncate">{{ entry.name }}</span>
-            <span class="text-label-code-md tabular-nums text-(--text-muted)">{{
-              entry.value
-            }}</span>
-            <span class="w-10 text-end text-label-code-md tabular-nums text-(--text-muted)">{{
-              entry.share
-            }}</span>
-          </button>
-        </li>
-      </ul>
+    <template #loading>
+      <Skeleton
+        variant="circle"
+        :width="size === 'small' ? '128px' : size === 'large' ? '240px' : '176px'"
+        :height="size === 'small' ? '128px' : size === 'large' ? '240px' : '176px'"
+        :data-testid="`${testId}__loading`"
+      />
     </template>
-
-    <p
-      :id="summaryId"
-      class="sr-only"
-    >
-      {{ summary }}
-    </p>
-    <p
-      aria-live="polite"
-      class="sr-only"
-      :data-testid="`${testId}__live`"
-    >
-      {{ announcement }}
-    </p>
+    <template #table>
+      <ChartDataTable
+        :data-testid="`${testId}__table`"
+        :caption="ariaLabel || summary"
+        :columns="tableColumns"
+        :rows="tableRows"
+      />
+    </template>
     <div
-      v-if="showRing"
-      class="sr-only"
+      ref="ringEl"
+      role="group"
+      :aria-roledescription="t('donutChart.roleDescription')"
+      tabindex="0"
+      :aria-label="ariaLabel || undefined"
+      :aria-describedby="summaryId"
+      :data-size="size"
+      :data-testid="`${testId}__ring`"
+      class="relative shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[size=large]:size-60 data-[size=medium]:size-44 data-[size=small]:size-32"
     >
-      <table :data-testid="`${testId}__twin`">
-        <caption>
-          {{
-            ariaLabel || summary
-          }}
-        </caption>
-        <thead>
-          <tr>
-            <th scope="col">{{ t('donutChart.name') }}</th>
-            <th scope="col">{{ t('donutChart.value') }}</th>
-            <th scope="col">{{ t('donutChart.share') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="entry in legend"
-            :key="entry.id"
+      <svg
+        viewBox="0 0 100 100"
+        aria-hidden="true"
+        class="block size-full overflow-visible"
+        @pointerleave="setActive(null)"
+      >
+        <circle
+          v-for="(slice, index) in slices"
+          :key="slice.id"
+          cx="50"
+          cy="50"
+          :r="RADIUS[type]"
+          fill="none"
+          :stroke="slice.color"
+          pathLength="100"
+          transform="rotate(-90 50 50)"
+          :stroke-dashoffset="slice.offset"
+          :data-series="slice.id"
+          :data-entered="entered || null"
+          :data-active="activeIndex === index || null"
+          :data-dimmed="(activeIndex !== null && activeIndex !== index) || null"
+          :style="{
+            '--donut-chart-dash': slice.dash,
+            '--donut-chart-width': `${WIDTH[type]}`,
+            '--donut-chart-lift': `${WIDTH[type] + LIFT[type]}`,
+            transitionDelay: slice.delay
+          }"
+          :class="SLICE_CLASS"
+          @pointerenter="setActive(index)"
+        />
+      </svg>
+      <div
+        v-if="type === 'donut'"
+        :data-size="size"
+        class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-(--spacing-2xs) px-(--spacing-lg) text-center data-[size=small]:px-(--spacing-md)"
+        :data-testid="`${testId}__center`"
+      >
+        <slot
+          name="center"
+          :total="total"
+          :active="active ? active.source : null"
+        >
+          <span
+            :data-size="size"
+            :data-testid="`${testId}__center-value`"
+            class="text-big-number-sm tabular-nums text-(--text-default) data-[size=small]:text-label-code-md"
+            >{{ centerValue }}</span
           >
-            <th scope="row">{{ entry.name }}</th>
-            <td>{{ entry.value }}</td>
-            <td>{{ entry.share }}</td>
-          </tr>
-        </tbody>
-      </table>
+          <span
+            :data-size="size"
+            class="line-clamp-2 text-body-sm text-(--text-muted) data-[size=small]:text-body-xs"
+            >{{ centerCaption }}</span
+          >
+        </slot>
+      </div>
     </div>
-  </figure>
+    <ul
+      v-if="legend.length > 1"
+      :data-testid="`${testId}__legend`"
+      class="m-0 flex min-w-0 grow basis-48 list-none flex-col gap-(--spacing-2xs) p-0"
+    >
+      <li
+        v-for="entry in legend"
+        :key="entry.id"
+      >
+        <ChartLegendButton
+          :color="entry.color"
+          :pressed="!entry.hidden"
+          :data-testid="`${testId}__legend-item`"
+          class="w-full text-start"
+          @click="toggle($event, entry.id)"
+        >
+          <span class="min-w-0 flex-1 truncate">{{ entry.name }}</span>
+          <span class="text-label-code-md tabular-nums text-(--text-muted)">{{ entry.value }}</span>
+          <span class="w-10 text-end text-label-code-md tabular-nums text-(--text-muted)">{{
+            entry.share
+          }}</span>
+        </ChartLegendButton>
+      </li>
+    </ul>
+    <template #twin>
+      <ChartDataTable
+        :data-testid="`${testId}__twin`"
+        :caption="ariaLabel || summary"
+        :columns="tableColumns"
+        :rows="tableRows"
+      />
+    </template>
+    <template
+      v-for="name in CHART_STATE_SLOTS.filter((slot) => $slots[slot])"
+      #[name]
+    >
+      <slot :name="name" />
+    </template>
+  </ChartFrame>
 </template>
