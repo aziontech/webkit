@@ -89,7 +89,7 @@
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "54.7 KB"
+    "limit": "56.15 KB"
   },
   {
     "name": "table-root",
@@ -1297,7 +1297,7 @@
   {
     "name": "attribute-editor",
     "path": "src/components/input/attribute-editor/attribute-editor.vue",
-    "limit": "18.9 KB"
+    "limit": "20.45 KB"
   },
   {
     "name": "code-editor",
@@ -1312,17 +1312,17 @@
   {
     "name": "combobox",
     "path": "src/components/input/combobox/combobox.vue",
-    "limit": "13.7 KB"
+    "limit": "13.85 KB"
   },
   {
     "name": "tag-editor",
     "path": "src/components/input/tag-editor/tag-editor.vue",
-    "limit": "20.8 KB"
+    "limit": "22.25 KB"
   },
   {
     "name": "schema-form",
     "path": "src/components/input/schema-form/schema-form.vue",
-    "limit": "62.55 KB"
+    "limit": "63.45 KB"
   },
   {
     "name": "use-unsaved-changes",
