@@ -53,77 +53,90 @@ const stickyCover = (el: globalThis.HTMLElement, box: globalThis.DOMRect): numbe
   return 0
 }
 
+const fadeEdges = (
+  el: globalThis.HTMLElement,
+  vertical: boolean,
+  horizontal: boolean
+): ScrollFadeEdges => {
+  const box = el.getBoundingClientRect()
+  const cover = vertical && el.scrollTop > 0 ? stickyCover(el, box) : 0
+  const span = Math.min(
+    vertical ? el.clientHeight - cover : Number.POSITIVE_INFINITY,
+    horizontal ? el.clientWidth : Number.POSITIVE_INFINITY
+  )
+  const size = Math.max(0, Math.min(MAX_FADE, Math.round(span * MAX_FADE_RATIO)))
+  const clamp = (distance: number) => Math.max(0, Math.min(size, Math.round(distance)))
+  return {
+    top: vertical ? clamp(el.scrollTop) : 0,
+    bottom: vertical ? clamp(el.scrollHeight - el.clientHeight - el.scrollTop) : 0,
+    left: horizontal ? clamp(el.scrollLeft) : 0,
+    right: horizontal ? clamp(el.scrollWidth - el.clientWidth - el.scrollLeft) : 0,
+    cover,
+    size
+  }
+}
+
+const fadeStyleOf = ({ top, bottom, left, right, cover, size }: ScrollFadeEdges) => ({
+  '--scroll-area-fade-top': `${top}px`,
+  '--scroll-area-fade-bottom': `${bottom}px`,
+  '--scroll-area-fade-left': `${left}px`,
+  '--scroll-area-fade-right': `${right}px`,
+  '--scroll-area-fade-cover': `${cover}px`,
+  '--scroll-area-fade-size': `${size}px`
+})
+
+const watchBox = (el: globalThis.HTMLElement, measure: () => void): (() => void) => {
+  let children: globalThis.Element[] = []
+  const sizeObserver = new globalThis.ResizeObserver(measure)
+  const syncChildren = () => {
+    for (const child of children) sizeObserver.unobserve(child)
+    children = Array.from(el.children)
+    for (const child of children) sizeObserver.observe(child)
+  }
+  el.addEventListener('scroll', measure, { passive: true })
+  sizeObserver.observe(el)
+  const childObserver = new globalThis.MutationObserver(() => {
+    syncChildren()
+    measure()
+  })
+  childObserver.observe(el, { childList: true })
+  syncChildren()
+  return () => {
+    el.removeEventListener('scroll', measure)
+    sizeObserver.disconnect()
+    childObserver.disconnect()
+  }
+}
+
 export function useScrollFade(options: UseScrollFadeOptions): UseScrollFadeReturn {
   const edges = ref<ScrollFadeEdges>({ ...EMPTY })
 
   let observedEl: globalThis.HTMLElement | null = null
-  let observedChildren: globalThis.Element[] = []
-  let sizeObserver: globalThis.ResizeObserver | null = null
-  let childObserver: globalThis.MutationObserver | null = null
+  let stop: (() => void) | null = null
 
   const measure = () => {
     const el = toValue(options.target)
-    if (!el || !toValue(options.enabled)) {
-      edges.value = { ...EMPTY }
-      return
-    }
-    const vertical = toValue(options.vertical)
-    const horizontal = toValue(options.horizontal)
-    const box = el.getBoundingClientRect()
-    const cover = vertical && el.scrollTop > 0 ? stickyCover(el, box) : 0
-    const span = Math.min(
-      vertical ? el.clientHeight - cover : Number.POSITIVE_INFINITY,
-      horizontal ? el.clientWidth : Number.POSITIVE_INFINITY
-    )
-    const size = Math.max(0, Math.min(MAX_FADE, Math.round(span * MAX_FADE_RATIO)))
-    const clamp = (distance: number) => Math.max(0, Math.min(size, Math.round(distance)))
-    edges.value = {
-      top: vertical ? clamp(el.scrollTop) : 0,
-      bottom: vertical ? clamp(el.scrollHeight - el.clientHeight - el.scrollTop) : 0,
-      left: horizontal ? clamp(el.scrollLeft) : 0,
-      right: horizontal ? clamp(el.scrollWidth - el.clientWidth - el.scrollLeft) : 0,
-      cover,
-      size
-    }
-  }
-
-  const syncChildren = () => {
-    for (const child of observedChildren) sizeObserver?.unobserve(child)
-    observedChildren = observedEl ? Array.from(observedEl.children) : []
-    for (const child of observedChildren) sizeObserver?.observe(child)
+    edges.value =
+      el && toValue(options.enabled)
+        ? fadeEdges(el, toValue(options.vertical), toValue(options.horizontal))
+        : { ...EMPTY }
   }
 
   const unobserve = () => {
-    observedEl?.removeEventListener('scroll', measure)
-    sizeObserver?.disconnect()
-    childObserver?.disconnect()
+    stop?.()
+    stop = null
     observedEl = null
-    observedChildren = []
-    sizeObserver = null
-    childObserver = null
   }
 
   const observe = () => {
     const el = toValue(options.enabled) ? toValue(options.target) : null
-    if (el === observedEl) {
-      measure()
-      return
+    if (el !== observedEl) {
+      unobserve()
+      if (el) {
+        observedEl = el
+        stop = watchBox(el, measure)
+      }
     }
-    unobserve()
-    if (!el) {
-      measure()
-      return
-    }
-    observedEl = el
-    el.addEventListener('scroll', measure, { passive: true })
-    sizeObserver = new globalThis.ResizeObserver(measure)
-    sizeObserver.observe(el)
-    childObserver = new globalThis.MutationObserver(() => {
-      syncChildren()
-      measure()
-    })
-    childObserver.observe(el, { childList: true })
-    syncChildren()
     measure()
   }
 
@@ -145,18 +158,7 @@ export function useScrollFade(options: UseScrollFadeOptions): UseScrollFadeRetur
     return top + bottom + left + right > 0
   })
 
-  const fadeStyle = computed(() => {
-    if (!fading.value) return undefined
-    const { top, bottom, left, right, cover, size } = edges.value
-    return {
-      '--scroll-area-fade-top': `${top}px`,
-      '--scroll-area-fade-bottom': `${bottom}px`,
-      '--scroll-area-fade-left': `${left}px`,
-      '--scroll-area-fade-right': `${right}px`,
-      '--scroll-area-fade-cover': `${cover}px`,
-      '--scroll-area-fade-size': `${size}px`
-    }
-  })
+  const fadeStyle = computed(() => (fading.value ? fadeStyleOf(edges.value) : undefined))
 
   return { edges: readonly(edges), fading, fadeStyle, measure }
 }

@@ -108,34 +108,23 @@
     hit.pane.setBasis(hit.pane.collapsed() ? hit.pane.min() : 0)
   }
 
+  const ARROW_STEPS: Partial<Record<string, ['horizontal' | 'vertical', number]>> = {
+    ArrowLeft: ['horizontal', -1],
+    ArrowRight: ['horizontal', 1],
+    ArrowUp: ['vertical', -1],
+    ArrowDown: ['vertical', 1]
+  }
+
   const onKeydown = (event: globalThis.KeyboardEvent) => {
-    const horizontal = orientation.value === 'horizontal'
-    const rtl = dir.value === 'rtl'
-    switch (event.key) {
-      case 'ArrowLeft':
-        if (horizontal) nudge(rtl ? 1 : -1)
-        break
-      case 'ArrowRight':
-        if (horizontal) nudge(rtl ? -1 : 1)
-        break
-      case 'ArrowUp':
-        if (!horizontal) nudge(-1)
-        break
-      case 'ArrowDown':
-        if (!horizontal) nudge(1)
-        break
-      case 'Home':
-        toExtreme('min')
-        break
-      case 'End':
-        toExtreme('max')
-        break
-      case 'Enter':
-        toggleCollapse()
-        break
-      default:
-        return
-    }
+    const arrow = ARROW_STEPS[event.key]
+    if (arrow) {
+      const [axis, step] = arrow
+      if (axis === orientation.value)
+        nudge(axis === 'horizontal' && dir.value === 'rtl' ? -step : step)
+    } else if (event.key === 'Home') toExtreme('min')
+    else if (event.key === 'End') toExtreme('max')
+    else if (event.key === 'Enter') toggleCollapse()
+    else return
     event.preventDefault()
   }
 

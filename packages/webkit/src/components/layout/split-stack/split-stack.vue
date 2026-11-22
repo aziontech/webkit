@@ -41,12 +41,15 @@
         return text.trim() === '' ? [] : [createTextVNode(text)]
       }
       if (typeof node !== 'object' || node === null) return []
-      const vnode = node as VNode
-      if (vnode.type === Comment) return []
-      if (vnode.type === Text) return String(vnode.children ?? '').trim() === '' ? [] : [vnode]
-      if (vnode.type === Fragment) return flatten((vnode.children ?? []) as VNodeArrayChildren)
-      return [vnode]
+      return flattenVNode(node as VNode)
     })
+  }
+
+  function flattenVNode(vnode: VNode): VNode[] {
+    if (vnode.type === Comment) return []
+    if (vnode.type === Text) return String(vnode.children ?? '').trim() === '' ? [] : [vnode]
+    if (vnode.type === Fragment) return flatten((vnode.children ?? []) as VNodeArrayChildren)
+    return [vnode]
   }
 
   function bands(): VNode[] {
