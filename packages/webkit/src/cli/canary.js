@@ -102,10 +102,64 @@ function lintFixtures(cwd, command, dir) {
   return { ok: true, byFile }
 }
 
-export function runCanary(cwd, options = {}) {
-  const lines = []
-  const say = (line = '') => lines.push(line)
+function verdict(fixture, seen) {
+  if (!seen) {
+    if (fixture.optional) {
+      return {
+        status: 'skip',
+        line: `SKIP  ${fixture.rule} ${fixture.file} — not linted by this project (${fixture.why}).`
+      }
+    }
+    return {
+      status: 'fail',
+      line: `FAIL  ${fixture.rule} ${fixture.file} — was not linted at all.`
+    }
+  }
+  if (seen.fatal) {
+    return {
+      status: 'fail',
+      line: `FAIL  ${fixture.rule} ${fixture.file} — failed to parse (${seen.fatal}); the rule never ran.`
+    }
+  }
+  if (seen.rules.has(fixture.rule))
+    return { status: 'ok', line: `OK    ${fixture.rule} ${fixture.file}` }
+  if (fixture.optional) {
+    return {
+      status: 'skip',
+      line: `SKIP  ${fixture.rule} ${fixture.file} — did not reach this file type (${fixture.why || 'no matching preset'}).`
+    }
+  }
+  return { status: 'fail', line: `FAIL  ${fixture.rule} ${fixture.file} — did not fire.` }
+}
 
+function summaryLine(fixtures, failed, skipped) {
+  const required = fixtures.filter((f) => !f.optional).length
+  if (failed !== 0) {
+    return (
+      `${failed} canary/canaries did not fire. The design-system rules are NOT reaching ` +
+      'this project, so any adoption number it reports is too low.'
+    )
+  }
+  return (
+    `${required} of ${required} required canaries fired` +
+    (skipped ? `, ${skipped} skipped` : '') +
+    ' — the rules reach this project.'
+  )
+}
+
+function reportCanaries(fixtures, lint, catalog) {
+  const verdicts = fixtures.map((fixture) => verdict(fixture, lint.byFile.get(fixture.file)))
+  const failed = verdicts.filter((v) => v.status === 'fail').length
+  const skipped = verdicts.filter((v) => v.status === 'skip').length
+  const lines = [...verdicts.map((v) => v.line), '']
+  if (!catalog.available) {
+    lines.push('The webkit catalog did not resolve, which disables the catalog-backed rules.')
+  }
+  lines.push(summaryLine(fixtures, failed, skipped))
+  return { exitCode: failed === 0 ? 0 : 1, lines }
+}
+
+export function runCanary(cwd, options = {}) {
   let command
   try {
     command = resolveEslintBin(cwd)
@@ -125,59 +179,7 @@ export function runCanary(cwd, options = {}) {
     if (!lint.ok) {
       return { exitCode: 1, lines: [`FAIL  could not lint the canaries: ${lint.reason}`] }
     }
-
-    let failed = 0
-    let skipped = 0
-    for (const fixture of fixtures) {
-      const seen = lint.byFile.get(fixture.file)
-      if (!seen) {
-        if (fixture.optional) {
-          skipped += 1
-          say(
-            `SKIP  ${fixture.rule} ${fixture.file} — not linted by this project (${fixture.why}).`
-          )
-          continue
-        }
-        failed += 1
-        say(`FAIL  ${fixture.rule} ${fixture.file} — was not linted at all.`)
-        continue
-      }
-      if (seen.fatal) {
-        failed += 1
-        say(
-          `FAIL  ${fixture.rule} ${fixture.file} — failed to parse (${seen.fatal}); the rule never ran.`
-        )
-        continue
-      }
-      if (seen.rules.has(fixture.rule)) {
-        say(`OK    ${fixture.rule} ${fixture.file}`)
-        continue
-      }
-      if (fixture.optional) {
-        skipped += 1
-        say(
-          `SKIP  ${fixture.rule} ${fixture.file} — did not reach this file type (${fixture.why || 'no matching preset'}).`
-        )
-        continue
-      }
-      failed += 1
-      say(`FAIL  ${fixture.rule} ${fixture.file} — did not fire.`)
-    }
-
-    say()
-    if (!catalog.available) {
-      say('The webkit catalog did not resolve, which disables the catalog-backed rules.')
-    }
-    const required = fixtures.filter((f) => !f.optional).length
-    say(
-      failed === 0
-        ? `${required} of ${required} required canaries fired` +
-            (skipped ? `, ${skipped} skipped` : '') +
-            ' — the rules reach this project.'
-        : `${failed} canary/canaries did not fire. The design-system rules are NOT reaching ` +
-            'this project, so any adoption number it reports is too low.'
-    )
-    return { exitCode: failed === 0 ? 0 : 1, lines }
+    return reportCanaries(fixtures, lint, catalog)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

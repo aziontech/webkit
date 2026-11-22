@@ -13,27 +13,36 @@ const words = (s) =>
     .split(/[^a-z0-9]+/)
     .filter((w) => w.length >= 2)
 
+function exampleScore(sub, example, terms) {
+  const name = words(example.name).join(' ')
+  const text = `${sub.replace(/-/g, ' ')} ${name} ${words(example.summary).join(' ')}`
+  let score = 0
+  for (const t of terms) {
+    if (sub.split('-').includes(t)) score += 10
+    if (name.split(' ').includes(t)) score += 6
+    else if (text.includes(t)) score += 2
+  }
+  return score
+}
+
+function componentExampleHits(catalog, sub, terms) {
+  if (catalog.getEntry(sub)?.kind !== 'component') return []
+  return catalog
+    .examples(sub)
+    .map((example) => ({
+      component: sub,
+      name: example.name,
+      summary: example.summary || '',
+      score: exampleScore(sub, example, terms)
+    }))
+    .filter((hit) => hit.score > 0)
+}
+
 function searchExamples(catalog, query, limit = 8) {
   const terms = words(query)
   if (!terms.length) return []
-  const hits = []
-  for (const sub of catalog.subpaths) {
-    if (catalog.getEntry(sub)?.kind !== 'component') continue
-    for (const example of catalog.examples(sub)) {
-      const name = words(example.name).join(' ')
-      const text = `${sub.replace(/-/g, ' ')} ${name} ${words(example.summary).join(' ')}`
-      let score = 0
-      for (const t of terms) {
-        if (sub.split('-').includes(t)) score += 10
-        if (name.split(' ').includes(t)) score += 6
-        else if (text.includes(t)) score += 2
-      }
-      if (score > 0) {
-        hits.push({ component: sub, name: example.name, summary: example.summary || '', score })
-      }
-    }
-  }
-  return hits
+  return catalog.subpaths
+    .flatMap((sub) => componentExampleHits(catalog, sub, terms))
     .sort((a, b) => b.score - a.score || a.component.localeCompare(b.component))
     .slice(0, limit)
 }
@@ -85,33 +94,29 @@ export function formatSearch(result) {
   return out.join('\n')
 }
 
-export function runView(catalog, id, { variant, example } = {}) {
-  const key = String(id || '').trim()
-  const looksLikeBlock = key.includes('/') || Boolean(variant)
-  const component = looksLikeBlock ? null : getComponent(catalog, key)
-  if (component?.found) {
-    const examples = component.examples || []
-    const chosen = example
-      ? examples.find((e) => e.name.toLowerCase() === String(example).toLowerCase())
-      : examples[0]
-    if (example && !chosen) {
-      return {
-        ok: false,
-        error: `${component.name} has no example "${example}". Examples: ${examples.map((e) => e.name).join(', ') || 'none'}.`
-      }
-    }
-    const { examples: _all, ...rest } = component
+function componentView(component, example) {
+  const examples = component.examples || []
+  const chosen = example
+    ? examples.find((e) => e.name.toLowerCase() === String(example).toLowerCase())
+    : examples[0]
+  if (example && !chosen) {
     return {
-      ok: true,
-      kind: 'component',
-      ...rest,
-      examples: examples.map((e) => ({ name: e.name, summary: e.summary || '' })),
-      example: chosen ? { name: chosen.name, sfc: chosen.sfc } : null
+      ok: false,
+      error: `${component.name} has no example "${example}". Examples: ${examples.map((e) => e.name).join(', ') || 'none'}.`
     }
   }
-  const block = getBlock(catalog, key, variant ? { variant } : {})
-  if (block.found) return { kind: 'block', ...block }
-  if (component && !looksLikeBlock) {
+  const { examples: _all, ...rest } = component
+  return {
+    ok: true,
+    kind: 'component',
+    ...rest,
+    examples: examples.map((e) => ({ name: e.name, summary: e.summary || '' })),
+    example: chosen ? { name: chosen.name, sfc: chosen.sfc } : null
+  }
+}
+
+function notFound(key, component, block) {
+  if (component) {
     return {
       ok: false,
       error: `No component or block "${key}".`,
@@ -127,26 +132,35 @@ export function runView(catalog, id, { variant, example } = {}) {
   }
 }
 
-export function formatView(result) {
-  const out = []
-  if (result.kind === 'block') {
-    out.push(`${result.id} — ${result.name} (block, ${result.surface})`, '')
-    if (result.note) out.push(`NOTE ${result.note}`, '')
-    out.push(result.summary, '')
-    out.push(`Variants: ${result.variants.map((v) => v.name).join(', ')}`)
-    out.push(`Imports: ${result.imports.join(', ')}`)
-    if (result.skills.length) out.push(`Skills: ${result.skills.join(', ')}`)
-    out.push(
-      '',
-      `Copy it: npx ${PACKAGE_NAME} add ${result.id}${result.variant !== result.variants[0]?.name ? ` --variant ${result.variant}` : ''}`
-    )
-    if (result.guidelines) out.push('', '--- guidelines ---', result.guidelines.trim())
-    out.push('', `--- ${result.variant}.vue ---`, result.sfc.trimEnd(), '')
-    return out.join('\n')
-  }
-  out.push(
+export function runView(catalog, id, { variant, example } = {}) {
+  const key = String(id || '').trim()
+  const looksLikeBlock = key.includes('/') || Boolean(variant)
+  const component = looksLikeBlock ? null : getComponent(catalog, key)
+  if (component?.found) return componentView(component, example)
+  const block = getBlock(catalog, key, variant ? { variant } : {})
+  if (block.found) return { kind: 'block', ...block }
+  return notFound(key, component, block)
+}
+
+function formatBlockView(result) {
+  const out = [`${result.id} — ${result.name} (block, ${result.surface})`, '']
+  if (result.note) out.push(`NOTE ${result.note}`, '')
+  out.push(result.summary, '')
+  out.push(`Variants: ${result.variants.map((v) => v.name).join(', ')}`)
+  out.push(`Imports: ${result.imports.join(', ')}`)
+  if (result.skills.length) out.push(`Skills: ${result.skills.join(', ')}`)
+  const variantFlag =
+    result.variant !== result.variants[0]?.name ? ` --variant ${result.variant}` : ''
+  out.push('', `Copy it: npx ${PACKAGE_NAME} add ${result.id}${variantFlag}`)
+  if (result.guidelines) out.push('', '--- guidelines ---', result.guidelines.trim())
+  out.push('', `--- ${result.variant}.vue ---`, result.sfc.trimEnd(), '')
+  return out.join('\n')
+}
+
+function componentHeader(result) {
+  const out = [
     `${result.name} — ${result.binding} (${result.kind}, ${result.category || 'uncategorised'})`
-  )
+  ]
   if (result.note) out.push(`NOTE ${result.note}`)
   out.push(`import ${result.binding} from '${result.import}'`)
   if (result.treeShakeableImport !== result.import) {
@@ -154,27 +168,47 @@ export function formatView(result) {
     out.push(`Root only, no dot-notation parts: import ${pascalCase(root)} from '${root}'`)
   }
   out.push('')
+  return out
+}
+
+const bulletList = (title, items) =>
+  items.length ? [title, ...items.map((u) => `  - ${u}`), ''] : []
+
+const propLine = (p) =>
+  `  ${p.name}: ${p.type}${p.default && p.default !== '—' ? ` = ${p.default}` : ''}`
+
+function componentGuidance(result) {
+  const out = []
   if (result.purpose) out.push(result.purpose, '')
   if (result.setup) out.push(`Setup: ${result.setup}`, '')
-  if (result.useWhen.length) out.push('Use when:', ...result.useWhen.map((u) => `  - ${u}`), '')
-  if (result.avoidWhen.length)
-    out.push('Avoid when:', ...result.avoidWhen.map((u) => `  - ${u}`), '')
-  if (result.props.length) {
-    out.push('Props:')
-    for (const p of result.props) {
-      out.push(`  ${p.name}: ${p.type}${p.default && p.default !== '—' ? ` = ${p.default}` : ''}`)
-    }
-    out.push('')
-  }
-  if (result.events.length) out.push(`Events: ${result.events.map((e) => e.name).join(', ')}`)
-  if (result.slots.length) out.push(`Slots: ${result.slots.map((s) => s.name).join(', ')}`)
-  if (result.subcomponents.length) out.push(`Parts: ${result.subcomponents.join(', ')}`)
-  if (result.examples.length) {
-    out.push(`Examples: ${result.examples.map((e) => e.name).join(', ')}`)
-  }
+  out.push(...bulletList('Use when:', result.useWhen))
+  out.push(...bulletList('Avoid when:', result.avoidWhen))
+  if (result.props.length) out.push('Props:', ...result.props.map(propLine), '')
+  return out
+}
+
+const namedList = (label, items, name = (item) => item.name) =>
+  items.length ? [`${label}: ${items.map(name).join(', ')}`] : []
+
+function componentSurface(result) {
+  const out = [
+    ...namedList('Events', result.events),
+    ...namedList('Slots', result.slots),
+    ...namedList('Parts', result.subcomponents, (part) => part),
+    ...namedList('Examples', result.examples)
+  ]
   if (result.example) {
     out.push('', `--- example: ${result.example.name} ---`, result.example.sfc.trimEnd())
   }
   out.push('')
-  return out.join('\n')
+  return out
+}
+
+export function formatView(result) {
+  if (result.kind === 'block') return formatBlockView(result)
+  return [
+    ...componentHeader(result),
+    ...componentGuidance(result),
+    ...componentSurface(result)
+  ].join('\n')
 }

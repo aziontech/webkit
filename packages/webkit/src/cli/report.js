@@ -4,50 +4,7 @@ import { createRequire } from 'node:module'
 import { dirname, join, relative } from 'node:path'
 
 import { loadCatalog } from '../eslint-plugin/lib/catalog.js'
-
-const UI_EXTENSIONS = ['vue', 'astro']
-
-const RULE_PURPOSE = {
-  'no-page-navigation-menu': 'free Menu in a page body (one navigation per level)',
-  'no-viewport-height-calc':
-    'page height hand-computed from the viewport (calc(100dvh - …)) instead of data-layout-fill',
-  'no-root-relative-asset':
-    'site-only /marketing-components or /media URL a copied app does not serve',
-  'no-unknown-import': 'import path that does not exist in the installed version',
-  'no-deep-internal-import': 'reaches into the package internals instead of a published entry',
-  'no-barrel-import': 'bare-package barrel import (there is no barrel entry)',
-  'no-whole-icon-set-import': 'pulls the whole icon set instead of one icon',
-  'no-hardcoded-color': 'hardcoded colour, palette class or raw text size',
-  'no-hardcoded-motion': 'literal duration/easing, or motion with no reduced-motion escape',
-  'no-physical-direction': 'physical left/right utility that does not mirror under RTL',
-  'prefer-tree-shakeable-root': 'compound entry imported where the root would do',
-  'no-deprecated-component': 'component marked deprecated in the catalog',
-  'no-deprecated-name': 'component, prop, value or icon name WebKit 6.0 renamed or removed',
-  'prefer-webkit-component': 'foreign UI library where a webkit component exists',
-  'prefer-define-model': 'hand-rolled modelValue + update:modelValue pair',
-  'no-style-override': 'class/style on a webkit component — restyling it',
-  'require-authoring-standards': 'shared authoring standards (typed slots, comments, deprecation)',
-  'require-container-width': 'Card, StatTile or ChartCard as a flex item with no width',
-  'require-header-search': 'app header without SearchTrigger, or a hand-rolled ⌘K field',
-  'no-wrapped-page-chrome':
-    'SiteFooterSection or SiteHeaderSection inside a bordered or padded wrapper',
-  'no-output-in-command': 'shell code sample that mixes the command with what it prints',
-  'prefer-href-in-menu-node': 'navigation node naming its destination path/to/url instead of href',
-  'no-gap-after-closing-section':
-    'Spacer or closing frame after a section that draws its own close',
-  'require-accessible-name': 'IconButton or ButtonGroup with no aria-label or aria-labelledby',
-  'no-dropped-children': 'content inside a webkit component with no default slot, never rendered'
-}
-
-const TEMPLATE_ONLY_RULES = [
-  'no-style-override',
-  'require-container-width',
-  'require-header-search',
-  'no-wrapped-page-chrome',
-  'no-gap-after-closing-section',
-  'require-accessible-name',
-  'no-dropped-children'
-]
+import { renderMarkdown, UI_EXTENSIONS } from './report-markdown.js'
 
 export const FORMATS = new Set(['markdown', 'json'])
 export const FAIL_MODES = new Set(['never', 'any'])
@@ -111,45 +68,35 @@ export function runESLint(cwd, patterns) {
   return { ok: true, results }
 }
 
-export function collect(results, cwd) {
-  const byRule = new Map()
-  const byFile = new Map()
-  const byExtension = new Map()
-  const uiFiles = new Set()
-  const fatalFiles = new Set()
-  const keys = []
+function tally(state, path, extension, rule) {
+  state.keys.push(`${path}::${rule}`)
+  state.byRule.set(rule, (state.byRule.get(rule) ?? 0) + 1)
+  state.byExtension.set(extension, (state.byExtension.get(extension) ?? 0) + 1)
+  const entry = state.byFile.get(path) ?? { count: 0, rules: new Set() }
+  entry.count += 1
+  entry.rules.add(rule)
+  state.byFile.set(path, entry)
+}
 
-  for (const result of results) {
-    const path = relative(cwd, result.filePath) || result.filePath
-    const extension = extensionOf(path)
-    const isUiFile = UI_EXTENSIONS.includes(extension)
-    if (isUiFile) uiFiles.add(path)
-
-    for (const message of result.messages) {
-      if (message.fatal || !message.ruleId) {
-        if (message.fatal && isUiFile) fatalFiles.add(path)
-        continue
-      }
-      const rule = message.ruleId
-      if (!rule.startsWith('webkit/')) continue
-      keys.push(`${path}::${rule}`)
-      byRule.set(rule, (byRule.get(rule) ?? 0) + 1)
-      byExtension.set(extension, (byExtension.get(extension) ?? 0) + 1)
-      const entry = byFile.get(path) ?? { count: 0, rules: new Set() }
-      entry.count += 1
-      entry.rules.add(rule)
-      byFile.set(path, entry)
+function collectResult(state, result, cwd) {
+  const path = relative(cwd, result.filePath) || result.filePath
+  const extension = extensionOf(path)
+  const isUiFile = UI_EXTENSIONS.includes(extension)
+  if (isUiFile) state.uiFiles.add(path)
+  for (const message of result.messages) {
+    if (message.fatal || !message.ruleId) {
+      if (message.fatal && isUiFile) state.fatalFiles.add(path)
+      continue
     }
+    if (message.ruleId.startsWith('webkit/')) tally(state, path, extension, message.ruleId)
   }
+}
 
-  if (uiFiles.size === 0) {
-    throw new Error('measured nothing: no .vue/.astro file reached ESLint')
-  }
-
+function summarizeCollected(state) {
+  const { byRule, byFile, byExtension, uiFiles, fatalFiles, keys } = state
   const dirtyUi = new Set([...byFile.keys(), ...fatalFiles].filter((f) => uiFiles.has(f)))
   const uiFilesClean = uiFiles.size - dirtyUi.size
   const score = Math.round((uiFilesClean / uiFiles.size) * 100)
-
   return {
     total: keys.length,
     keys,
@@ -166,99 +113,38 @@ export function collect(results, cwd) {
   }
 }
 
-function bare(rule) {
-  return rule.replace(/^webkit\//, '')
+export function collect(results, cwd) {
+  const state = {
+    byRule: new Map(),
+    byFile: new Map(),
+    byExtension: new Map(),
+    uiFiles: new Set(),
+    fatalFiles: new Set(),
+    keys: []
+  }
+  for (const result of results) collectResult(state, result, cwd)
+  if (state.uiFiles.size === 0) {
+    throw new Error('measured nothing: no .vue/.astro file reached ESLint')
+  }
+  return summarizeCollected(state)
 }
 
-export function renderMarkdown(report, { catalog }) {
-  const out = []
-  const push = (line = '') => out.push(line)
-
-  push('## Webkit adoption')
-  push()
-
-  if (!catalog.available) {
-    push(
-      '> **The webkit catalog could not be resolved, so the catalog-backed rules did nothing.** ' +
-        'This is not a clean bill of health — install `@aziontech/webkit`, or set ' +
-        '`WEBKIT_CATALOG_PATH`, and run it again.'
-    )
-    push()
+function renderJson(report, catalog) {
+  const body = {
+    package: catalog.package,
+    webkitVersion: catalog.version,
+    catalogAvailable: catalog.available,
+    total: report.total,
+    filesAffected: report.filesAffected,
+    uiFilesTotal: report.uiFilesTotal,
+    uiFilesClean: report.uiFilesClean,
+    score: report.score,
+    fatalFiles: report.fatalFiles,
+    byRule: Object.fromEntries(report.byRule),
+    byFile: report.byFile,
+    keys: report.keys
   }
-
-  push(
-    catalog.version
-      ? `Measured against \`${catalog.package}@${catalog.version}\`.`
-      : `Measured against \`${catalog.package}\` (version unknown).`
-  )
-  push()
-  push('| | |')
-  push('|---|---|')
-  push(`| Violations | **${report.total}** |`)
-  push(`| Files affected | ${report.filesAffected} |`)
-  push(
-    `| UI files clean | ${report.uiFilesClean} of ${report.uiFilesTotal} — **${report.score}%** |`
-  )
-  push()
-
-  if (report.total === 0) {
-    push('No `webkit/*` violations. Read the coverage note before celebrating.')
-    push()
-  } else {
-    push('### By rule')
-    push()
-    push('| Rule | Count | What it catches |')
-    push('|---|---:|---|')
-    for (const [rule, count] of report.byRule) {
-      push(`| \`${bare(rule)}\` | ${count} | ${RULE_PURPOSE[bare(rule)] ?? '—'} |`)
-    }
-    push()
-
-    push('### By file')
-    push()
-    push('| File | Count | Rules |')
-    push('|---|---:|---|')
-    const shown = report.byFile.slice(0, 15)
-    for (const { file, count, rules } of shown) {
-      push(`| \`${file}\` | ${count} | ${rules.map((r) => `\`${bare(r)}\``).join(', ')} |`)
-    }
-    if (report.byFile.length > shown.length) {
-      push()
-      push(`_${report.byFile.length - shown.length} more file(s) not shown._`)
-    }
-    push()
-  }
-
-  push('### Coverage — what this did and did not look at')
-  push()
-  const found = report.byExtension.length
-    ? report.byExtension.map(([ext, n]) => `\`.${ext || 'no extension'}\` (${n})`).join(', ')
-    : 'none'
-  push(`- Violations found in: ${found}.`)
-  push(
-    `- The score counts ${UI_EXTENSIONS.map((e) => `\`.${e}\``).join(' and ')} files only — those are ` +
-      'the ones the design system governs.'
-  )
-  push(
-    `- ${TEMPLATE_ONLY_RULES.map((r) => `\`${r}\``).join(', ')} cannot run on \`.astro\`: it needs ` +
-      "vue-eslint-parser's template visitor, which astro-eslint-parser does not provide. Restyled " +
-      'components inside Astro files are invisible here.'
-  )
-  push(
-    '- Raw HTML where a webkit component exists (`<button>`, `<input>`, a hand-rolled modal) is ' +
-      'caught by no rule yet — `prefer-webkit-component` matches imports from a foreign package, ' +
-      'not markup.'
-  )
-  if (report.fatalFiles.length) {
-    push(
-      `- ${report.fatalFiles.length} file(s) had a fatal parse error and were not checked at all: ` +
-        report.fatalFiles.map((f) => `\`${f}\``).join(', ') +
-        '.'
-    )
-  }
-  push()
-
-  return out.join('\n') + '\n'
+  return JSON.stringify(body, null, 2) + '\n'
 }
 
 export function runReport(cwd, options = {}) {
@@ -288,27 +174,10 @@ export function runReport(cwd, options = {}) {
   )
 
   const stdout =
-    format === 'json'
-      ? JSON.stringify(
-          {
-            package: catalog.package,
-            webkitVersion: catalog.version,
-            catalogAvailable: catalog.available,
-            total: report.total,
-            filesAffected: report.filesAffected,
-            uiFilesTotal: report.uiFilesTotal,
-            uiFilesClean: report.uiFilesClean,
-            score: report.score,
-            fatalFiles: report.fatalFiles,
-            byRule: Object.fromEntries(report.byRule),
-            byFile: report.byFile,
-            keys: report.keys
-          },
-          null,
-          2
-        ) + '\n'
-      : renderMarkdown(report, { catalog })
+    format === 'json' ? renderJson(report, catalog) : renderMarkdown(report, { catalog })
 
   const exitCode = failOn === 'any' && report.total > 0 ? 1 : 0
   return { exitCode, stdout, report }
 }
+
+export { renderMarkdown }
