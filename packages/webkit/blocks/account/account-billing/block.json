@@ -37,7 +37,14 @@
     "name": "Default",
     "file": "account-billing.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "billing-format.ts",
+    "parts/billing-invoices.vue",
+    "parts/billing-payment-details.vue",
+    "parts/billing-payment-methods.vue",
+    "parts/billing-plan-cards.vue"
+  ],
   "variants": [
     {
       "name": "Loading",
