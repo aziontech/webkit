@@ -1,22 +1,19 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import Card from '@aziontech/webkit/card'
+  import type { BarListItem } from '@aziontech/webkit/bar-list'
+  import BarList from '@aziontech/webkit/bar-list'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
-  import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import type { SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
+  import AlertsCard from './parts/alerts-card.vue'
+  import EntityTable from './parts/entity-table.vue'
+  import OpenAlertTable from './parts/open-alert-table.vue'
+  import OpenBySeverity from './parts/open-by-severity.vue'
   import {
     sampleAlerts,
     sampleEntities,
@@ -190,79 +187,6 @@
   const types = computed(() => props.types ?? (blocked.value ? [] : sampleTypes))
   const entities = computed(() => props.entities ?? (blocked.value ? [] : sampleEntities))
   const alerts = computed(() => props.alerts ?? (blocked.value ? [] : sampleAlerts))
-  const openTotal = computed(() => openByLevel.value.reduce((sum, level) => sum + level.count, 0))
-  const failed = (region: string) => `Couldn't load ${region}. ${props.error}`
-
-  const entityColumns: TableColumn[] = [
-    {
-      accessorKey: 'name',
-      header: 'Entity',
-      align: 'start',
-      principal: true,
-      grow: 2
-    },
-    {
-      accessorKey: 'type',
-      header: 'Type',
-      align: 'start',
-      minWidth: 136
-    },
-    {
-      accessorKey: 'score',
-      header: 'Risk score',
-      align: 'start',
-      sortable: true,
-      minWidth: 160
-    },
-    {
-      accessorKey: 'alerts',
-      header: 'Open alerts',
-      align: 'end',
-      sortable: true,
-      minWidth: 104
-    }
-  ]
-
-  const alertColumns: TableColumn[] = [
-    {
-      accessorKey: 'rank',
-      id: 'severity',
-      header: 'Severity',
-      align: 'start',
-      sortable: true,
-      minWidth: 120
-    },
-    {
-      accessorKey: 'title',
-      header: 'Alert',
-      align: 'start',
-      principal: true,
-      grow: 2
-    },
-    {
-      accessorKey: 'entity',
-      header: 'Entity',
-      align: 'start',
-      minWidth: 160
-    },
-    {
-      accessorKey: 'opened',
-      header: 'Opened',
-      align: 'start',
-      minWidth: 136
-    },
-    {
-      accessorKey: 'status',
-      header: 'Status',
-      align: 'start',
-      minWidth: 128
-    }
-  ]
-
-  const statusSeverity: Record<AlertsDashboardAlertStatus, TagSeverity> = {
-    Open: 'neutral',
-    Investigating: 'info'
-  }
 
   const { formatNumber } = useLocale()
 
@@ -273,6 +197,8 @@
     count: (value) => compact(value),
     percentage: (value) => `${value.toFixed(0)}%`
   }
+
+  const retry = (event: MouseEvent) => emit('retry', event)
 </script>
 
 <template>
@@ -335,240 +261,88 @@
       <div
         class="grid grid-cols-1 items-stretch gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
       >
-        <ChartCard :span="8">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Alerts per day</ChartCard.Title>
-              <Hint content="Alerts raised each day, stacked by severity level." />
-            </span>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="failed('alerts per day')"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
+        <AlertsCard
+          :span="8"
+          title="Alerts per day"
+          hint="Alerts raised each day, stacked by severity level."
+          region="alerts per day"
+          :error="error"
+          @retry="retry"
+        >
+          <Chart
+            v-model:active-index="activeIndex"
+            :series="series"
+            :labels="labels"
+            :format-value="formatters.count"
+            :height="240"
+            empty-title="No alerts in this period"
+            :empty-description="`Nothing was raised in the ${periodPhrase}. Select a longer period.`"
+            :loading="loading"
+          >
+            <Chart.Grid />
+            <Chart.Axis type="y" />
+            <Chart.Axis
+              type="x"
+              :ticks="6"
             />
-            <Chart
-              v-else
-              v-model:active-index="activeIndex"
-              :series="series"
-              :labels="labels"
-              :format-value="formatters.count"
-              :height="240"
-              empty-title="No alerts in this period"
-              :empty-description="`Nothing was raised in the ${periodPhrase}. Select a longer period.`"
-              :loading="loading"
-            >
-              <Chart.Grid />
-              <Chart.Axis type="y" />
-              <Chart.Axis
-                type="x"
-                :ticks="6"
-              />
-              <Chart.Bar stacked />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend />
-            </Chart>
-          </ChartCard.Content>
-        </ChartCard>
+            <Chart.Bar stacked />
+            <Chart.Crosshair />
+            <Chart.Tooltip />
+            <Chart.Legend />
+          </Chart>
+        </AlertsCard>
 
-        <div class="lg:col-span-4">
-          <Card title="Open by severity">
-            <template #default>
-              <Alert
-                v-if="error"
-                severity="danger"
-                :label="failed('open alerts by severity')"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
-              <ul
-                v-else-if="loading"
-                aria-busy="true"
-                class="flex flex-col gap-(--spacing-md)"
-              >
-                <li
-                  v-for="index in 5"
-                  :key="index"
-                  class="flex items-center justify-between gap-(--spacing-sm)"
-                >
-                  <Skeleton
-                    width="30%"
-                    height="1.25rem"
-                  />
-                  <Skeleton
-                    width="20%"
-                    height="1rem"
-                  />
-                </li>
-              </ul>
-              <ul
-                v-else-if="openByLevel.length"
-                class="flex flex-col gap-(--spacing-md)"
-              >
-                <li
-                  v-for="level in openByLevel"
-                  :key="level.id"
-                  class="flex items-center justify-between gap-(--spacing-sm)"
-                >
-                  <SeverityTag :severity="level.id" />
-                  <span class="flex items-baseline gap-(--spacing-xs) tabular-nums">
-                    <span class="text-body-md text-(--text-default)">{{ level.count }}</span>
-                    <span class="w-10 text-end text-body-sm text-(--text-muted)"
-                      >{{ Math.round((level.count / openTotal) * 100) }}%</span
-                    >
-                  </span>
-                </li>
-              </ul>
-              <EmptyState
-                v-else
-                size="small"
-                icon="az az-circle-check"
-                title="No open alerts"
-                description="Every alert raised in the period has been closed."
-              />
-            </template>
-          </Card>
-        </div>
+        <OpenBySeverity
+          :levels="openByLevel"
+          :loading="loading"
+          :error="error"
+          @retry="retry"
+        />
 
-        <ChartCard :span="4">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>By type</ChartCard.Title>
-              <Hint
-                content="Alerts raised in the period, by the kind of behavior that raised them."
-              />
-            </span>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="failed('alerts by type')"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <BarList
-              v-else
-              :items="types"
-              :format-value="formatters.count"
-              empty-title="No alerts in this period"
-              :loading="loading"
-              aria-label="Alerts by type"
-            />
-          </ChartCard.Content>
-        </ChartCard>
+        <AlertsCard
+          :span="4"
+          title="By type"
+          hint="Alerts raised in the period, by the kind of behavior that raised them."
+          region="alerts by type"
+          :error="error"
+          @retry="retry"
+        >
+          <BarList
+            :items="types"
+            :format-value="formatters.count"
+            empty-title="No alerts in this period"
+            :loading="loading"
+            aria-label="Alerts by type"
+          />
+        </AlertsCard>
 
-        <ChartCard :span="8">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Highest risk</ChartCard.Title>
-              <Hint
-                content="The entities with the highest risk score, from the severity and number of their open alerts."
-              />
-            </span>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="failed('highest risk')"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <DataTable
-              v-else-if="loading || entities.length"
-              :data="entities"
-              :columns="entityColumns"
-              row-key="id"
-              sortable
-              density="compact"
-              bordered
-              :loading="loading"
-            >
-              <template #cell-type="{ row }">
-                <Tag
-                  :label="row.type"
-                  severity="neutral"
-                  size="small"
-                />
-              </template>
-              <template #cell-score="{ row }">
-                <div class="flex min-w-0 items-center gap-(--spacing-sm)">
-                  <span class="w-8 shrink-0 text-end tabular-nums">{{ row.score }}</span>
-                  <SeverityTag
-                    :severity="row.level"
-                    size="small"
-                  />
-                </div>
-              </template>
-              <template #cell-alerts="{ row }">
-                <span class="tabular-nums">{{ row.alerts }}</span>
-              </template>
-            </DataTable>
-            <EmptyState
-              v-else
-              size="small"
-              icon="az az-users"
-              title="No entities at risk yet"
-              description="Entities appear here once an alert names them."
-            />
-          </ChartCard.Content>
-        </ChartCard>
+        <AlertsCard
+          :span="8"
+          title="Highest risk"
+          hint="The entities with the highest risk score, from the severity and number of their open alerts."
+          region="highest risk"
+          :error="error"
+          @retry="retry"
+        >
+          <EntityTable
+            :entities="entities"
+            :loading="loading"
+          />
+        </AlertsCard>
 
-        <ChartCard :span="12">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Open alerts</ChartCard.Title>
-              <Hint content="Every open alert, most severe first." />
-            </span>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="failed('open alerts')"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <DataTable
-              v-else-if="loading || alerts.length"
-              :data="alerts"
-              :columns="alertColumns"
-              row-key="id"
-              sortable
-              paginated
-              :page-size="10"
-              :page-size-options="[10, 25, 50]"
-              density="compact"
-              bordered
-              :loading="loading"
-            >
-              <template #cell-severity="{ row }">
-                <SeverityTag
-                  :severity="row.level"
-                  size="small"
-                />
-              </template>
-              <template #cell-status="{ row }">
-                <TableCellStatus
-                  :label="row.status"
-                  :severity="statusSeverity[row.status]"
-                />
-              </template>
-            </DataTable>
-            <EmptyState
-              v-else
-              size="small"
-              icon="az az-bell"
-              title="No open alerts"
-              description="Alerts appear here when a detection rule matches. Select a longer period to see closed ones."
-            />
-          </ChartCard.Content>
-        </ChartCard>
+        <AlertsCard
+          :span="12"
+          title="Open alerts"
+          hint="Every open alert, most severe first."
+          region="open alerts"
+          :error="error"
+          @retry="retry"
+        >
+          <OpenAlertTable
+            :alerts="alerts"
+            :loading="loading"
+          />
+        </AlertsCard>
       </div>
     </div>
   </div>

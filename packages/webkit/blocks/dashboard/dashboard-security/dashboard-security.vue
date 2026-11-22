@@ -1,36 +1,21 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Button from '@aziontech/webkit/button'
-  import Chart, { type ChartLabel, type ChartSeries } from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import type { ChartLabel, ChartSeries } from '@aziontech/webkit/chart'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import type { TagSeverity } from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { copyText } from '@aziontech/webkit/utils/clipboard'
-  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
+  import AttentionCard from './parts/attention-card.vue'
+  import MatchedChart from './parts/matched-chart.vue'
+  import SecurityCard from './parts/security-card.vue'
+  import SecurityDialog from './parts/security-dialog.vue'
+  import SourceIpSearch from './parts/source-ip-search.vue'
   import {
     sampleAttention,
     sampleCardChanges,
@@ -41,6 +26,7 @@
     sampleSourceIps,
     sampleSummary
   } from './sample'
+  import { runSecurityOption, securityCards, securityQuery } from './security-cards'
 
   /** The period every region reads. */
   export type SecurityPeriod = '1h' | '24h' | '7d' | '30d'
@@ -222,53 +208,10 @@
 
   const { formatNumber } = useLocale()
 
-  const compact = (value: number) =>
+  const formatCount = (value: number) =>
     formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
-  const formatCount = (value: number) => compact(value)
   const formatPercent = (value: number) => `${value.toFixed(value >= 10 ? 0 : 1)}%`
 
-  const ipColumns: TableColumn[] = [
-    {
-      accessorKey: 'remoteAddress',
-      id: 'remoteAddress',
-      header: 'IP address',
-      align: 'start',
-      sortable: true,
-      principal: true
-    },
-    {
-      accessorKey: 'asn',
-      id: 'asn',
-      header: 'Network',
-      align: 'start',
-      sortable: true,
-      principal: false
-    },
-    {
-      accessorKey: 'country',
-      id: 'country',
-      header: 'Country',
-      align: 'start',
-      sortable: true,
-      principal: false
-    },
-    {
-      accessorKey: 'category',
-      id: 'category',
-      header: 'Main attack',
-      align: 'start',
-      sortable: true,
-      principal: false
-    },
-    {
-      accessorKey: 'requests',
-      id: 'requests',
-      header: 'Blocked requests',
-      align: 'end',
-      sortable: true,
-      principal: false
-    }
-  ]
   const forms = [
     { label: 'Line', value: 'line' },
     { label: 'Bar', value: 'bar' }
@@ -278,138 +221,45 @@
   const activeIndex = ref<number | null>(null)
   const search = ref('')
 
-  interface CardQuery {
-    dataset: string
-    fields: string[]
-    orderBy: string
-  }
-
-  const cardQuery = (report: CardQuery) =>
-    [
-      'query {',
-      `  ${report.dataset}(`,
-      '    limit: 5000',
-      '    aggregate: { sum: requests }',
-      `    filter: { tsRange: { begin: "${range.value.begin}", end: "${range.value.end}" } }`,
-      `    orderBy: [${report.orderBy}]`,
-      '  ) {',
-      ...report.fields.map((field) => `    ${field}`),
-      '  }',
-      '}'
-    ].join('\n')
-
-  const copyQuery = async (report: CardQuery) => {
-    if (!(await copyText(cardQuery(report)))) {
-      toast.error('The query could not be copied.')
-      return
-    }
-    toast.success('Query copied.', {
-      description: 'Paste it into any GraphQL client that sends your token.'
-    })
-  }
-
-  const queries: Record<SecurityCardId, CardQuery> = {
-    matched: {
-      dataset: 'securityMetrics',
-      fields: ['ts', 'action', 'requests'],
-      orderBy: 'ts_ASC'
-    },
-    categories: {
-      dataset: 'securityMetrics',
-      fields: ['attackCategory', 'requests'],
-      orderBy: 'requests_DESC'
-    },
-    countries: {
-      dataset: 'securityMetrics',
-      fields: ['country', 'requests'],
-      orderBy: 'requests_DESC'
-    },
-    ips: {
-      dataset: 'securityMetrics',
-      fields: ['remoteAddress', 'asn', 'country', 'attackCategory', 'requests'],
-      orderBy: 'requests_DESC'
-    }
-  }
-
-  interface CardReport extends CardQuery {
-    label: string
-    description: string
-    columns: CsvColumn[]
-    rows: () => object[]
-  }
-
   const seriesRows = (series: readonly ChartSeries[], axis: readonly ChartLabel[]) =>
     axis.map((label, index) => ({
       ts: label instanceof Date ? label.toISOString() : String(label),
       ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
     }))
 
+  const cardRows: Record<SecurityCardId, () => object[]> = {
+    matched: () => seriesRows(matched.value.series, matched.value.labels),
+    categories: () => categories.value,
+    countries: () => countries.value,
+    ips: () => sourceIps.value
+  }
+
   const expanded = ref(false)
   const expandedId = ref<SecurityCardId>('matched')
-  const expandedReport = computed(() => reports[expandedId.value])
 
   const openExpanded = (id: SecurityCardId) => {
     expandedId.value = id
     expanded.value = true
   }
 
-  const onCardOption = (id: SecurityCardId, value: string | number) => {
-    const report = reports[id]
-    if (value === 'query') {
-      copyQuery(report)
-      return
-    }
-    const filename = `${id}-${periodSlug.value}.csv`
-    downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
-    toast.success('CSV exported.', { description: filename })
-  }
+  const card = (id: SecurityCardId) => ({
+    title: securityCards[id].label,
+    hint: securityCards[id].description,
+    subject: securityCards[id].subject,
+    change: changeTag(id),
+    blocked: blocked.value,
+    error: props.error
+  })
 
-  const reports: Record<SecurityCardId, CardReport> = {
-    matched: {
-      ...queries.matched,
-      label: 'Matched requests over time',
-      description: 'Requests that matched a rule: blocked, or logged and allowed through.',
-      columns: [
-        { header: 'Time', id: 'ts' },
-        { header: 'Blocked', id: 'blocked' },
-        { header: 'Logged', id: 'logged' }
-      ],
-      rows: () => seriesRows(matched.value.series, matched.value.labels)
-    },
-    categories: {
-      ...queries.categories,
-      label: 'Blocked requests by attack category',
-      description: 'Blocked requests, broken down by the attack category of the rule they matched.',
-      columns: [
-        { header: 'Attack category', id: 'name' },
-        { header: 'Blocked requests', id: 'value' }
-      ],
-      rows: () => categories.value
-    },
-    countries: {
-      ...queries.countries,
-      label: 'Blocked requests by country',
-      description: 'Blocked requests, broken down by the country they came from.',
-      columns: [
-        { header: 'Country', id: 'name' },
-        { header: 'Blocked requests', id: 'value' }
-      ],
-      rows: () => countries.value
-    },
-    ips: {
-      ...queries.ips,
-      label: 'Top source IPs by blocked requests',
-      description: 'The addresses blocked most often, with their network and main attack.',
-      columns: [
-        { header: 'IP address', id: 'remoteAddress' },
-        { header: 'Network', id: 'asn' },
-        { header: 'Country', id: 'country' },
-        { header: 'Main attack', id: 'category' },
-        { header: 'Blocked requests', id: 'requests' }
-      ],
-      rows: () => sourceIps.value
-    }
-  }
+  const onCardOption = (id: SecurityCardId, value: string | number) =>
+    runSecurityOption(value, {
+      query: securityQuery(securityCards[id], range.value),
+      filename: `${id}-${periodSlug.value}.csv`,
+      columns: securityCards[id].columns,
+      rows: cardRows[id]
+    })
+
+  const barCards = ['categories', 'countries'] as const
 </script>
 
 <template>
@@ -514,543 +364,74 @@
         v-else
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
       >
-        <ChartCard :span="8">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Matched requests over time</ChartCard.Title>
-              <Hint
-                content="Requests that matched a rule: blocked, or logged and allowed through."
-              />
-            </span>
-            <ChartCard.Action>
-              <span
-                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-              >
-                <Tag
-                  label="Sum"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-calculator"
-                />
-                <Tag
-                  v-if="changeTag('matched')"
-                  :label="changeTag('matched')?.label"
-                  :severity="changeTag('matched')?.severity"
-                  :icon="changeTag('matched')?.icon"
-                  size="small"
-                />
-                <ToggleGroup
-                  v-model="form"
-                  :options="forms"
-                  size="small"
-                  aria-label="Chart form for Matched requests over time"
-                />
-              </span>
-              <Tooltip content="Expand">
-                <IconButton
-                  icon="az az-app-window"
-                  variant="ghost"
-                  size="small"
-                  aria-label="Expand Matched requests over time"
-                  :disabled="blocked"
-                  @click="openExpanded('matched')"
-                />
-              </Tooltip>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(_event, value) => onCardOption('matched', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Matched requests over time"
-                    :disabled="blocked"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="query"
-                    label="Copy query"
-                  />
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="`Couldn't load matched requests over time. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <Chart
-              v-else
-              v-model:active-index="activeIndex"
-              :series="matched.series"
-              :labels="matched.labels"
-              :format-value="formatCount"
-              empty-title="No matched requests in this period"
-              empty-description="Nothing was recorded in this period."
-              :loading="loading"
-            >
-              <Chart.Grid />
-              <Chart.Axis type="y" />
-              <Chart.Axis type="x" />
-              <Chart.Bar
-                v-if="form === 'bar'"
-                stacked
-              />
-              <Chart.Line v-else />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend total />
-            </Chart>
-          </ChartCard.Content>
-        </ChartCard>
-        <ChartCard :span="4">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Needs attention</ChartCard.Title>
-              <Hint content="Settings and traffic on your services that ask for a decision." />
-            </span>
-            <ChartCard.Action v-if="!blocked">
-              <Tag
-                :label="`${attention.length} open`"
-                severity="neutral"
-                size="small"
-              />
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="`Couldn't load the attention list. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <div
-              v-else-if="loading"
-              class="flex flex-col gap-(--spacing-md)"
-            >
-              <div
-                v-for="row in 3"
-                :key="row"
-                class="flex flex-col gap-(--spacing-xs)"
-              >
-                <Skeleton
-                  width="60%"
-                  height="0.875rem"
-                />
-                <Skeleton
-                  width="90%"
-                  height="0.75rem"
-                />
-              </div>
-            </div>
-            <Item.List v-else>
-              <Item
-                v-for="entry in attention"
-                :key="entry.id"
-                role="listitem"
-                variant="inline"
-                size="small"
-              >
-                <Item.Media>
-                  <i
-                    :class="entry.icon"
-                    class="text-body-sm leading-none text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                </Item.Media>
-                <Item.Content>
-                  <Item.Title>{{ entry.title }}</Item.Title>
-                  <Item.Description>{{ entry.description }}</Item.Description>
-                  <span class="flex flex-wrap items-center gap-(--spacing-xs)">
-                    <Tag
-                      :label="entry.tag"
-                      :severity="entry.severity"
-                      size="small"
-                    />
-                    <Link
-                      :label="entry.action.label"
-                      :href="entry.action.href"
-                      size="small"
-                    />
-                  </span>
-                </Item.Content>
-              </Item>
-            </Item.List>
-          </ChartCard.Content>
-        </ChartCard>
-        <ChartCard :span="6">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Blocked requests by attack category</ChartCard.Title>
-              <Hint
-                content="Blocked requests, broken down by the attack category of the rule they matched."
-              />
-            </span>
-            <ChartCard.Action>
-              <span
-                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-              >
-                <Tag
-                  label="Sum"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-calculator"
-                />
-                <Tag
-                  v-if="changeTag('categories')"
-                  :label="changeTag('categories')?.label"
-                  :severity="changeTag('categories')?.severity"
-                  :icon="changeTag('categories')?.icon"
-                  size="small"
-                />
-              </span>
-              <Tooltip content="Expand">
-                <IconButton
-                  icon="az az-app-window"
-                  variant="ghost"
-                  size="small"
-                  aria-label="Expand Blocked requests by attack category"
-                  :disabled="blocked"
-                  @click="openExpanded('categories')"
-                />
-              </Tooltip>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(_event, value) => onCardOption('categories', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Blocked requests by attack category"
-                    :disabled="blocked"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="query"
-                    label="Copy query"
-                  />
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="`Couldn't load blocked requests by attack category. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <BarList
-              v-else
-              :items="categories"
-              :format-value="formatCount"
-              empty-title="No blocked requests in this period"
-              :loading="loading"
-              aria-label="Blocked requests by attack category"
-            />
-          </ChartCard.Content>
-        </ChartCard>
-        <ChartCard :span="6">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Blocked requests by country</ChartCard.Title>
-              <Hint content="Blocked requests, broken down by the country they came from." />
-            </span>
-            <ChartCard.Action>
-              <span
-                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-              >
-                <Tag
-                  label="Sum"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-calculator"
-                />
-                <Tag
-                  v-if="changeTag('countries')"
-                  :label="changeTag('countries')?.label"
-                  :severity="changeTag('countries')?.severity"
-                  :icon="changeTag('countries')?.icon"
-                  size="small"
-                />
-              </span>
-              <Tooltip content="Expand">
-                <IconButton
-                  icon="az az-app-window"
-                  variant="ghost"
-                  size="small"
-                  aria-label="Expand Blocked requests by country"
-                  :disabled="blocked"
-                  @click="openExpanded('countries')"
-                />
-              </Tooltip>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(_event, value) => onCardOption('countries', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Blocked requests by country"
-                    :disabled="blocked"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="query"
-                    label="Copy query"
-                  />
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="`Couldn't load blocked requests by country. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <BarList
-              v-else
-              :items="countries"
-              :format-value="formatCount"
-              empty-title="No blocked requests in this period"
-              :loading="loading"
-              aria-label="Blocked requests by country"
-            />
-          </ChartCard.Content>
-        </ChartCard>
-        <ChartCard :span="12">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Top source IPs by blocked requests</ChartCard.Title>
-              <Hint
-                content="The addresses blocked most often, with their network and main attack."
-              />
-            </span>
-            <ChartCard.Action>
-              <span
-                data-wide
-                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-              >
-                <Tag
-                  label="Sum"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-calculator"
-                />
-                <Tag
-                  v-if="changeTag('ips')"
-                  :label="changeTag('ips')?.label"
-                  :severity="changeTag('ips')?.severity"
-                  :icon="changeTag('ips')?.icon"
-                  size="small"
-                />
-              </span>
-              <Tooltip content="Expand">
-                <IconButton
-                  icon="az az-app-window"
-                  variant="ghost"
-                  size="small"
-                  aria-label="Expand Top source IPs by blocked requests"
-                  :disabled="blocked"
-                  @click="openExpanded('ips')"
-                />
-              </Tooltip>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(_event, value) => onCardOption('ips', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Top source IPs by blocked requests"
-                    :disabled="blocked"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="query"
-                    label="Copy query"
-                  />
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="`Couldn't load top source IPs by blocked requests. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <div
-              v-else
-              class="flex min-w-0 flex-col gap-(--spacing-sm)"
-            >
-              <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-                <div class="min-w-36 grow basis-(--container-3xs)">
-                  <Input
-                    v-model="search"
-                    size="medium"
-                    placeholder="Search addresses, networks or attacks"
-                    aria-label="Search addresses, networks or attacks"
-                  >
-                    <template #leading>
-                      <i
-                        class="az az-search"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </Input>
-                </div>
-              </div>
-              <DataTable
-                v-model:global-filter="search"
-                :data="sourceIps"
-                :columns="ipColumns"
-                row-key="id"
-                sortable
-                paginated
-                :page-size="5"
-                :page-size-options="[5, 10, 25]"
-                density="compact"
-                bordered
-                :loading="loading"
-              >
-                <template #empty>
-                  <EmptyState
-                    size="small"
-                    icon="az az-search"
-                    title="No matching rows"
-                    description="Change the search."
-                  />
-                </template>
-                <template #cell-requests="{ row }">
-                  <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
-                </template>
-              </DataTable>
-            </div>
-          </ChartCard.Content>
-        </ChartCard>
+        <SecurityCard
+          v-model:form="form"
+          :span="8"
+          v-bind="card('matched')"
+          :forms="forms"
+          @expand="openExpanded('matched')"
+          @select="(_event, value) => onCardOption('matched', value)"
+          @retry="(event) => emit('retry', event)"
+        >
+          <MatchedChart
+            v-model:active-index="activeIndex"
+            :matched="matched"
+            :format-value="formatCount"
+            :bar="form === 'bar'"
+            :loading="loading"
+          />
+        </SecurityCard>
+        <AttentionCard
+          :attention="attention"
+          :blocked="blocked"
+          :loading="loading"
+          :error="error"
+          @retry="(event) => emit('retry', event)"
+        />
+        <SecurityCard
+          v-for="id in barCards"
+          :key="id"
+          :span="6"
+          v-bind="card(id)"
+          @expand="openExpanded(id)"
+          @select="(_event, value) => onCardOption(id, value)"
+          @retry="(event) => emit('retry', event)"
+        >
+          <BarList
+            :items="id === 'categories' ? categories : countries"
+            :format-value="formatCount"
+            empty-title="No blocked requests in this period"
+            :loading="loading"
+            :aria-label="securityCards[id].label"
+          />
+        </SecurityCard>
+        <SecurityCard
+          :span="12"
+          v-bind="card('ips')"
+          wide
+          @expand="openExpanded('ips')"
+          @select="(_event, value) => onCardOption('ips', value)"
+          @retry="(event) => emit('retry', event)"
+        >
+          <SourceIpSearch
+            v-model:search="search"
+            :rows="sourceIps"
+            :format-count="formatCount"
+            :loading="loading"
+          />
+        </SecurityCard>
       </div>
     </div>
-    <Dialog
+    <SecurityDialog
       v-model:open="expanded"
-      size="large"
-    >
-      <DialogContent>
-        <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DialogTitle>{{ expandedReport.label }}</DialogTitle>
-            <DialogDescription>{{ expandedReport.description }}</DialogDescription>
-          </div>
-        </PanelHeader>
-        <PanelBody>
-          <div class="flex min-w-0 flex-col gap-(--spacing-md)">
-            <template v-if="expandedId === 'matched'">
-              <div>
-                <ToggleGroup
-                  v-model="form"
-                  :options="forms"
-                  size="small"
-                  :aria-label="`Chart form for ${expandedReport.label}`"
-                />
-              </div>
-              <Chart
-                :series="matched.series"
-                :labels="matched.labels"
-                :format-value="formatCount"
-                :height="420"
-                empty-title="No matched requests in this period"
-                empty-description="Nothing was recorded in this period."
-                :aria-label="expandedReport.label"
-              >
-                <Chart.Grid />
-                <Chart.Axis type="y" />
-                <Chart.Axis type="x" />
-                <Chart.Bar
-                  v-if="form === 'bar'"
-                  stacked
-                />
-                <Chart.Line v-else />
-                <Chart.Crosshair />
-                <Chart.Tooltip />
-                <Chart.Legend total />
-              </Chart>
-            </template>
-            <BarList
-              v-else-if="expandedId === 'categories' || expandedId === 'countries'"
-              :items="expandedId === 'categories' ? categories : countries"
-              :format-value="formatCount"
-              empty-title="No blocked requests in this period"
-              :aria-label="expandedReport.label"
-            />
-            <DataTable
-              v-else
-              :data="sourceIps"
-              :columns="ipColumns"
-              row-key="id"
-              sortable
-              paginated
-              :page-size="10"
-              density="compact"
-              bordered
-            >
-              <template #empty>
-                <EmptyState
-                  size="small"
-                  icon="az az-shield"
-                  title="No blocked requests in this period"
-                  description="Nothing was recorded in this period."
-                />
-              </template>
-              <template #cell-requests="{ row }">
-                <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
-              </template>
-            </DataTable>
-          </div>
-        </PanelBody>
-      </DialogContent>
-    </Dialog>
+      v-model:form="form"
+      :card-id="expandedId"
+      :matched="matched"
+      :categories="categories"
+      :countries="countries"
+      :source-ips="sourceIps"
+      :forms="forms"
+      :format-count="formatCount"
+    />
   </div>
 </template>

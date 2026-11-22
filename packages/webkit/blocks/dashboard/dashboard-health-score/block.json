@@ -30,7 +30,12 @@
     "name": "Default",
     "file": "dashboard-health-score.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "parts/hourly-score-card.vue",
+    "parts/open-incidents-card.vue",
+    "parts/real-user-page.vue"
+  ],
   "variants": [
     {
       "name": "Loading",
