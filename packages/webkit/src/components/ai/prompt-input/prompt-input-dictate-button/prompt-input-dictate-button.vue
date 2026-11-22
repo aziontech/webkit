@@ -158,6 +158,7 @@
       :icon="listening ? 'az az-stop' : 'az az-microphone'"
       :variant="listening ? 'secondary' : 'ghost'"
       size="medium"
+      class="rounded-full!"
       :ariaLabel="listening ? t('promptInput.dictateStop') : ariaLabel || t('promptInput.dictate')"
       :disabled="disabled"
       :data-testid="testId"

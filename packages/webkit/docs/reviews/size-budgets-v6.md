@@ -1225,3 +1225,7 @@ Budget-raise: chat-message-feedback 9.4 KB → 9.45 KB (measured 9.40 KB): the t
 Budget-raise: citation 7.15 KB → 7.25 KB (measured 7.20 KB): the chip shows the source's site and names it in the accessible name (chat look proposal, 2026-11-22).
 Budget-raise: sources 2.9 KB → 3.4 KB (measured 3.33 KB): the Sources pill draws the overlapping site marks (a private SourcesMark part) and the list shows each source's site (chat look proposal, 2026-11-22).
 Budget-raise: streaming-response 38.1 KB → 38.35 KB (measured 38.27 KB): citations carry the source's site, read from its href (chat look proposal, 2026-11-22).
+Budget-raise: conversation 7.15 KB → 7.5 KB (measured 7.47 KB): the floating composer area (the `composer` slot, its fade, the ResizeObserver that pads the thread by the composer's height) and the round blurred Scroll to latest button of the chat look proposal.
+Budget-raise: prompt-input-root 10.75 KB → 11.35 KB (measured 11.32 KB): the single floating pill that stacks into a rounded rectangle on a second line (the multiline state, the send part split out of the root to keep it under the size limits, the translucent blurred surface).
+Budget-raise: prompt-input 13.9 KB → 14.5 KB (measured 14.44 KB): the same floating pill as prompt-input-root, plus round Attach and Dictate controls.
+Budget-raise: prompt-input-context-picker 15.2 KB → 15.25 KB (measured 15.20 KB): its trigger is now round to sit in the composer pill.

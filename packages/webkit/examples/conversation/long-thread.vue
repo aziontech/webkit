@@ -1,6 +1,8 @@
 <script setup>
   import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
+  import PromptInput from '@aziontech/webkit/prompt-input'
+  import { ref } from 'vue'
 
   const questions = [
     'Which domains does storefront answer on?',
@@ -18,11 +20,13 @@
     '91% over the last 24 hours.',
     'The search pages, because every query is a new cache key.'
   ]
+
+  const prompt = ref('')
 </script>
 
 <template>
   <div
-    class="flex h-[24rem] w-full max-w-(--container-3xl) flex-col rounded-(--shape-card) border border-(--border-default)"
+    class="flex h-[32rem] w-full max-w-(--container-3xl) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default)"
   >
     <Conversation>
       <template
@@ -31,6 +35,13 @@
       >
         <ChatMessageRoot from="user">{{ question }}</ChatMessageRoot>
         <ChatMessageRoot>{{ answers[index] }}</ChatMessageRoot>
+      </template>
+      <template #composer>
+        <PromptInput
+          v-model="prompt"
+          aria-label="Ask the AI assistant"
+          @submit="prompt = ''"
+        />
       </template>
     </Conversation>
   </div>

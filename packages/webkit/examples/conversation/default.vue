@@ -1,18 +1,22 @@
 <script setup>
   import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
+  import PromptInput from '@aziontech/webkit/prompt-input'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup from '@aziontech/webkit/suggestion-group'
+  import { ref } from 'vue'
 
   const followUps = [
     { id: 'wildcard', label: 'How do I purge a whole folder?' },
     { id: 'ttl', label: 'What TTL should my images use?' }
   ]
+
+  const prompt = ref('')
 </script>
 
 <template>
   <div
-    class="flex h-[28rem] w-full max-w-(--container-3xl) flex-col rounded-(--shape-card) border border-(--border-default)"
+    class="flex h-[32rem] w-full max-w-(--container-3xl) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default)"
   >
     <Conversation>
       <ChatMessageRoot
@@ -41,6 +45,13 @@
         :items="followUps"
         aria-label="Follow-up questions"
       />
+      <template #composer>
+        <PromptInput
+          v-model="prompt"
+          aria-label="Ask the AI assistant"
+          @submit="prompt = ''"
+        />
+      </template>
     </Conversation>
   </div>
 </template>

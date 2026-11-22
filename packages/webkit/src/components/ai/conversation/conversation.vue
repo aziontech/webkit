@@ -49,9 +49,11 @@
     'load-more': [event: Event]
   }>()
 
-  defineSlots<{
+  const slots = defineSlots<{
     /** The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card). */
     default(): unknown
+    /** The composer floating over the bottom of the thread, in the reading column: `PromptInput`, with any status, alert or queue above it. The thread scrolls under it behind a fade. */
+    composer?(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -64,6 +66,8 @@
   const viewportEl = ref<HTMLElement | null>(null)
   const contentEl = ref<HTMLElement | null>(null)
   const olderEl = ref<HTMLElement | null>(null)
+  const composerEl = ref<HTMLElement | null>(null)
+  const composerHeight = ref<number>(0)
   const ready = ref<boolean>(false)
   const announcement = ref<string>('')
 
@@ -92,6 +96,7 @@
   let requested = false
   let firstBefore: Element | null = null
   let observer: ResizeObserver | undefined
+  let composerObserver: ResizeObserver | undefined
   let watcher: IntersectionObserver | undefined
 
   function settle(): void {
@@ -157,7 +162,25 @@
 
   watch(olderEl, swapOlder, { flush: 'post' })
 
+  function measureComposer(): void {
+    composerHeight.value = composerEl.value?.offsetHeight ?? 0
+  }
+
+  watch(
+    composerEl,
+    (now, was) => {
+      if (was) composerObserver?.unobserve(was)
+      if (now) composerObserver?.observe(now)
+      measureComposer()
+    },
+    { flush: 'post' }
+  )
+
   onMounted(() => {
+    if (typeof ResizeObserver !== 'undefined')
+      composerObserver = new ResizeObserver(measureComposer)
+    if (composerEl.value) composerObserver?.observe(composerEl.value)
+    measureComposer()
     scrollToBottom()
     ready.value = true
     ;[watcher, observer] = observeHistory(
@@ -172,6 +195,7 @@
   onBeforeUnmount(() => {
     observer?.disconnect()
     watcher?.disconnect()
+    composerObserver?.disconnect()
   })
 
   provide(ConversationInjectionKey, {
@@ -183,8 +207,19 @@
   defineExpose({ scrollToBottom })
 
   const VIEWPORT_CLASS =
-    'min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-(--shape-control) [overflow-anchor:none] ' +
+    'min-h-0 flex-1 overflow-y-auto overscroll-contain [overflow-anchor:none] ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
+
+  const CONTENT_CLASS =
+    'mx-auto flex min-h-full w-full max-w-(--layout-measure-content) flex-col gap-(--spacing-lg) px-(--spacing-md) pt-(--spacing-md) ' +
+    'pb-[calc(var(--conversation-composer-height,0rem)+var(--spacing-md))] ' +
+    '[&>[data-from=user]:not(:first-child,[data-grouped])]:mt-(--spacing-lg)'
+
+  const COMPOSER_CLASS =
+    'pointer-events-none absolute inset-x-0 bottom-0 z-1 bg-[linear-gradient(to_top,var(--conversation-composer-fade)_60%,transparent)] pt-(--spacing-lg)'
+
+  const SCROLL_CLASS =
+    'pointer-events-auto rounded-full! border-(--border-default) bg-[color-mix(in_srgb,var(--bg-surface-raised)_88%,transparent)]! shadow-(--shadow-md) backdrop-blur-md'
 </script>
 
 <template>
@@ -194,7 +229,10 @@
     :data-layout="layout"
     :data-pinned="pinned || null"
     :data-loading-more="loadingMore || null"
-    class="relative flex min-h-0 w-full flex-1 flex-col"
+    :style="
+      slots.composer ? { '--conversation-composer-height': `${composerHeight}px` } : undefined
+    "
+    class="relative flex min-h-0 w-full flex-1 flex-col [--conversation-composer-fade:var(--bg-canvas)]"
   >
     <div
       ref="viewportEl"
@@ -208,7 +246,7 @@
     >
       <div
         ref="contentEl"
-        class="mx-auto flex w-full max-w-(--layout-measure-content) flex-col gap-(--spacing-lg) p-(--spacing-md)"
+        :class="CONTENT_CLASS"
       >
         <div
           v-if="showOlder"
@@ -231,17 +269,29 @@
     </div>
     <div
       v-if="!pinned"
-      class="pointer-events-none absolute inset-x-0 bottom-(--spacing-sm) flex justify-center"
+      class="pointer-events-none absolute inset-x-0 bottom-[calc(var(--conversation-composer-height,0rem)+var(--spacing-sm))] z-2 flex justify-center"
     >
       <IconButton
         icon="az az-arrow-down"
         variant="outline"
-        size="medium"
-        class="pointer-events-auto bg-(--bg-surface) shadow-(--shadow-sm)"
+        size="large"
+        :class="SCROLL_CLASS"
         :ariaLabel="t('conversation.scrollToLatest')"
         :data-testid="`${testId}__scroll-to-latest`"
         @click="scrollToBottom(true)"
       />
+    </div>
+    <div
+      v-if="slots.composer"
+      ref="composerEl"
+      :data-testid="`${testId}__composer`"
+      :class="COMPOSER_CLASS"
+    >
+      <div
+        class="pointer-events-auto mx-auto flex w-full max-w-(--layout-measure-content) flex-col gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-md)"
+      >
+        <slot name="composer" />
+      </div>
     </div>
     <div
       aria-live="polite"
