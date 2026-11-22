@@ -1,24 +1,18 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
   import Field from '@aziontech/webkit/field'
   import FieldDescription from '@aziontech/webkit/field-description'
   import InputGroup from '@aziontech/webkit/input-group'
-  import Kbd from '@aziontech/webkit/kbd'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Select from '@aziontech/webkit/select'
   import SettingsGroup from '@aziontech/webkit/settings-group'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
+  import { useDrawerGuard } from './composables/use-drawer-guard'
+  import { certificateForDomain } from './lib/certificate-match'
+  import FormDrawer from './parts/form-drawer.vue'
+  import UnsavedChangesDialog from './parts/unsaved-changes-dialog.vue'
   import { sampleCertificates, sampleConnectedEnvironments, sampleEnvironments } from './sample'
 
   /** How an environment publishes its deployments. */
@@ -163,27 +157,6 @@
   const certificateLabel = (value: string) =>
     certificateOptions.value.find((option) => option.value === value)?.label ?? ''
 
-  const subjectCovers = (subject: string, host: string) => {
-    const pattern = subject.toLowerCase()
-    if (!pattern) return false
-    if (pattern === host) return true
-    if (!pattern.startsWith('*.')) return false
-    const parent = pattern.slice(2)
-    return (
-      host.endsWith(`.${parent}`) && host.slice(0, -(parent.length + 1)).split('.').length === 1
-    )
-  }
-
-  const certificateForDomain = (host: string) => {
-    const name = host.trim().toLowerCase()
-    if (!name) return ''
-    const candidates = certificateOptions.value.filter((option) =>
-      subjectCovers(option.subject, name)
-    )
-    const exact = candidates.find((option) => option.subject.toLowerCase() === name)
-    return (exact ?? candidates[0])?.value ?? ''
-  }
-
   watch(open, (isOpen) => {
     if (!isOpen) return
     Object.assign(errors, { domain: '', environment: '' })
@@ -206,7 +179,7 @@
         return
       }
       if (certificateTouched.value) return
-      form.certificate = certificateForDomain(host)
+      form.certificate = certificateForDomain(certificateOptions.value, host)
     },
     { immediate: true }
   )
@@ -259,20 +232,12 @@
     errors.environment = ''
   })
 
-  const guard = useUnsavedChanges(() => form, {
-    onDiscard: (baseline) => Object.assign(form, baseline),
-    enabled: () => open.value && !props.loading
+  const { guard, onOpenChange } = useDrawerGuard({
+    open,
+    busy: () => props.loading,
+    source: () => form,
+    onDiscard: (baseline) => Object.assign(form, baseline)
   })
-  const discardDialog = guard.dialogProps
-  const discardLabels = guard.labels
-
-  const onOpenChange = async (next: boolean) => {
-    if (next) {
-      open.value = true
-      return
-    }
-    if (await guard.confirmLeave()) open.value = false
-  }
 
   const validate = () => {
     errors.domain = form.domain.trim() ? '' : 'This field is required.'
@@ -285,17 +250,6 @@
     if (!validate()) return
     emit('submit', event, { ...form, host: fullDomain.value })
   }
-
-  const formEl = ref<HTMLFormElement | null>(null)
-
-  useShortcuts({
-    keys: 'meta+enter',
-    label: () => props.submitLabel || props.title,
-    group: 'Drawer',
-    element: formEl,
-    when: () => open.value && !props.loading,
-    handler: () => formEl.value?.requestSubmit()
-  })
 </script>
 
 <template>
@@ -313,215 +267,159 @@
     />
   </slot>
 
-  <Drawer
+  <FormDrawer
     :open="open"
-    size="large"
-    side="end"
+    :title="title"
+    :description="description"
+    :submit-label="submitLabel"
+    :shortcut-label="submitLabel || title"
+    :busy="loading"
     @update:open="onOpenChange"
+    @submit="submit"
   >
-    <DrawerContent>
-      <form
-        ref="formEl"
-        class="flex min-h-0 flex-1 flex-col"
-        :aria-label="title"
-        novalidate
-        @submit.prevent="submit"
+    <SettingsGroup
+      label="Environment"
+      hint="Where the domain answers."
+    >
+      <Field
+        required
+        :invalid="!!errors.environment"
       >
-        <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>{{ title }}</DrawerTitle>
-            <p class="text-body-sm text-(--text-muted)">{{ description }}</p>
-          </div>
-        </PanelHeader>
+        <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+          <Field.Label for="domain-environment">Environment</Field.Label>
+        </div>
+        <Select
+          v-model:open="environmentSelectOpen"
+          :model-value="form.environment"
+          size="large"
+          class="w-full"
+          placeholder="Select an environment"
+          :disabled="loading"
+          :invalid="!!errors.environment"
+          :display-value="environmentLabel"
+          @update:model-value="onEnvironmentModel"
+        >
+          <Select.Trigger id="domain-environment" />
+          <Select.Content>
+            <Select.Item
+              v-for="option in environmentOptions"
+              :key="option.value"
+              :value="option.value"
+            >
+              {{ option.label }}
+            </Select.Item>
+            <template #footer>
+              <Select.Item
+                :value="CREATE_ENVIRONMENT"
+                class="w-full"
+              >
+                Create Environment
+              </Select.Item>
+            </template>
+          </Select.Content>
+        </Select>
+        <Field.Error v-if="errors.environment">{{ errors.environment }}</Field.Error>
+        <Field.Description v-else>{{ environmentHint }}</Field.Description>
+      </Field>
+    </SettingsGroup>
 
-        <PanelBody>
-          <fieldset
-            class="m-0 flex min-w-0 flex-col border-0 p-0"
+    <SettingsGroup
+      label="Domain"
+      hint="The address this resource answers on, where it comes from, and the certificate it is served with."
+    >
+      <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+        <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
+          <Field.Legend type="label">Domain source</Field.Legend>
+          <RadioGroup
+            v-model="form.kind"
+            variant="card"
+            name="domain-kind"
+            aria-label="Domain source"
             :disabled="loading"
           >
-            <legend class="sr-only">{{ title }}</legend>
-            <SettingsGroup
-              label="Environment"
-              hint="Where the domain answers."
+            <RadioGroup.Item
+              v-for="option in kindOptions"
+              :key="option.value"
+              :value="option.value"
+              :description="option.description"
+              >{{ option.label }}</RadioGroup.Item
             >
-              <Field
-                required
-                :invalid="!!errors.environment"
-              >
-                <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                  <Field.Label for="domain-environment">Environment</Field.Label>
-                </div>
-                <Select
-                  v-model:open="environmentSelectOpen"
-                  :model-value="form.environment"
-                  size="large"
-                  class="w-full"
-                  placeholder="Select an environment"
-                  :disabled="loading"
-                  :invalid="!!errors.environment"
-                  :display-value="environmentLabel"
-                  @update:model-value="onEnvironmentModel"
-                >
-                  <Select.Trigger id="domain-environment" />
-                  <Select.Content>
-                    <Select.Item
-                      v-for="option in environmentOptions"
-                      :key="option.value"
-                      :value="option.value"
-                    >
-                      {{ option.label }}
-                    </Select.Item>
-                    <template #footer>
-                      <Select.Item
-                        :value="CREATE_ENVIRONMENT"
-                        class="w-full"
-                      >
-                        Create Environment
-                      </Select.Item>
-                    </template>
-                  </Select.Content>
-                </Select>
-                <Field.Error v-if="errors.environment">{{ errors.environment }}</Field.Error>
-                <Field.Description v-else>{{ environmentHint }}</Field.Description>
-              </Field>
-            </SettingsGroup>
+          </RadioGroup>
+        </fieldset>
 
-            <SettingsGroup
-              label="Domain"
-              hint="The address this resource answers on, where it comes from, and the certificate it is served with."
-            >
-              <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
-                  <Field.Legend type="label">Domain source</Field.Legend>
-                  <RadioGroup
-                    v-model="form.kind"
-                    variant="card"
-                    name="domain-kind"
-                    aria-label="Domain source"
-                    :disabled="loading"
-                  >
-                    <RadioGroup.Item
-                      v-for="option in kindOptions"
-                      :key="option.value"
-                      :value="option.value"
-                      :description="option.description"
-                      >{{ option.label }}</RadioGroup.Item
-                    >
-                  </RadioGroup>
-                </fieldset>
-
-                <Field
-                  :disabled="loading"
-                  required
-                  :invalid="!!errors.domain"
-                >
-                  <Field.Label>Domain</Field.Label>
-                  <InputGroup>
-                    <InputGroup.Input
-                      v-model="form.domain"
-                      placeholder="my-resource"
-                      @update:model-value="errors.domain = ''"
-                    />
-                    <InputGroup.Addon v-if="form.kind === 'free'">.azion.app</InputGroup.Addon>
-                  </InputGroup>
-                  <Field.Error v-if="errors.domain">{{ errors.domain }}</Field.Error>
-                </Field>
-
-                <template v-if="form.kind === 'own'">
-                  <Field>
-                    <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                      <Field.Label for="domain-certificate">Certificate</Field.Label>
-                    </div>
-                    <Select
-                      :model-value="form.certificate"
-                      size="large"
-                      class="w-full"
-                      :disabled="loading"
-                      :display-value="certificateLabel"
-                      @update:model-value="onCertificate"
-                    >
-                      <Select.Trigger
-                        id="domain-certificate"
-                        aria-describedby="domain-certificate-helper"
-                      />
-                      <Select.Content>
-                        <Select.Item
-                          v-for="option in certificateOptions"
-                          :key="option.value"
-                          :value="option.value"
-                        >
-                          {{ option.label }}
-                        </Select.Item>
-                      </Select.Content>
-                    </Select>
-                    <FieldDescription id="domain-certificate-helper">{{
-                      certificateHint
-                    }}</FieldDescription>
-                  </Field>
-                </template>
-
-                <Alert
-                  severity="info"
-                  label="Your resource is always accessible at an azion.app subdomain based on its name. Custom domains allow visitors to reach it at your own domain."
-                />
-              </div>
-            </SettingsGroup>
-          </fieldset>
-        </PanelBody>
-
-        <div
-          v-if="error"
-          class="px-(--spacing-md) pb-(--spacing-sm)"
+        <Field
+          :disabled="loading"
+          required
+          :invalid="!!errors.domain"
         >
-          <Alert
-            severity="danger"
-            :label="error"
-            action-label="Retry"
-            @action="submit"
-          />
-        </div>
+          <Field.Label>Domain</Field.Label>
+          <InputGroup>
+            <InputGroup.Input
+              v-model="form.domain"
+              placeholder="my-resource"
+              @update:model-value="errors.domain = ''"
+            />
+            <InputGroup.Addon v-if="form.kind === 'free'">.azion.app</InputGroup.Addon>
+          </InputGroup>
+          <Field.Error v-if="errors.domain">{{ errors.domain }}</Field.Error>
+        </Field>
 
-        <PanelFooter>
-          <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-            <Button
-              variant="primary"
-              size="medium"
-              :loading="loading"
-              type="submit"
-              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+        <template v-if="form.kind === 'own'">
+          <Field>
+            <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+              <Field.Label for="domain-certificate">Certificate</Field.Label>
+            </div>
+            <Select
+              :model-value="form.certificate"
+              size="large"
+              class="w-full"
+              :disabled="loading"
+              :display-value="certificateLabel"
+              @update:model-value="onCertificate"
             >
-              {{ submitLabel || title }}
-              <Kbd
-                meta
-                key-name="enter"
-                size="small"
-                aria-hidden="true"
+              <Select.Trigger
+                id="domain-certificate"
+                aria-describedby="domain-certificate-helper"
               />
-            </Button>
-          </div>
-        </PanelFooter>
-      </form>
-    </DrawerContent>
-  </Drawer>
+              <Select.Content>
+                <Select.Item
+                  v-for="option in certificateOptions"
+                  :key="option.value"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </Select.Item>
+              </Select.Content>
+            </Select>
+            <FieldDescription id="domain-certificate-helper">{{
+              certificateHint
+            }}</FieldDescription>
+          </Field>
+        </template>
 
-  <ConfirmDialog
-    v-bind="discardDialog"
-    data-testid="unsaved-changes-dialog"
-  >
-    <template #actions>
-      <Button
-        :label="discardLabels.keepEditing"
-        variant="ghost"
-        size="medium"
-        data-autofocus
-        @click="guard.keepEditing"
-      />
-      <Button
-        :label="discardLabels.discard"
-        variant="danger"
-        size="medium"
-        @click="guard.discardAndLeave"
-      />
+        <Alert
+          severity="info"
+          label="Your resource is always accessible at an azion.app subdomain based on its name. Custom domains allow visitors to reach it at your own domain."
+        />
+      </div>
+    </SettingsGroup>
+    <template #alert>
+      <div
+        v-if="error"
+        class="px-(--spacing-md) pb-(--spacing-sm)"
+      >
+        <Alert
+          severity="danger"
+          :label="error"
+          action-label="Retry"
+          @action="submit"
+        />
+      </div>
     </template>
-  </ConfirmDialog>
+  </FormDrawer>
+
+  <UnsavedChangesDialog
+    :guard="guard"
+    data-testid="unsaved-changes-dialog"
+  />
 </template>
