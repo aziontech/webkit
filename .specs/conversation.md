@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: b6a4b6f507adbc178936bb1962b9c732c433d7e870c6a541e1f2cb5a213b874c
+checksum: 44ffb80ecf0a99d6702609b8412688c7e84a7fbfc24e369e2f09121332a915f9
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -131,7 +131,7 @@ never read as new.
 
 - `data-pinned` on the root while the log follows the newest message; absent once the reader scrolled up (the Scroll to latest button shows). Only the reader's own scrolling unpins it (wheel, touch, pointer on the scrollbar, keys): a scroll the browser causes — a host moving the log in the DOM, a drawer opening — is corrected back to the end while pinned.
 - `data-layout` mirrors `layout`; each message carries it as `data-alignment`.
-- With the `composer` slot, the root sets `--conversation-composer-height` (the measured height of the composer area, its fade included); the thread's bottom padding and the Scroll to latest button's offset read it. `--conversation-composer-fade` (default `var(--bg-canvas)`) is the colour the fade blends into; a host on another surface sets it (`class="[--conversation-composer-fade:var(--bg-surface)]"`).
+- With the `composer` slot, the root sets `--conversation-composer-height` (the measured height of the composer area, its fade included); the thread's bottom padding and the Scroll to latest button's offset read it. `--conversation-composer-fade` is the colour the fade blends into; the root does not set it and falls back to `var(--bg-canvas)`, so a host on another surface sets it on any ancestor (a panel or a drawer body: `class="[--conversation-composer-fade:var(--bg-surface)]"`) and the fade matches that surface.
 - `data-loading-more` on the root and `aria-busy` on the log while `loadingMore`; the button is in its `loading` state.
 - With `moreMessages` or `loadingMore` the first row (`__older`, observed by an `IntersectionObserver`) holds the button (`__load-more`).
 - Scroll anchoring: while not pinned, the first message in view (or the button, while it has focus) is the anchor; growth above it is offset in the scroll position. Native `overflow-anchor` is off.
@@ -150,14 +150,14 @@ never read as new.
 
 ## Tokens
 
-| Region                | Token                                                                                                              |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| gap between messages  | `var(--spacing-lg)`; a user message that starts a turn adds `var(--spacing-lg)` above it                           |
-| padding of the thread | `var(--spacing-md)`; bottom `var(--conversation-composer-height)` + `var(--spacing-md)`                            |
-| reading width         | `var(--layout-measure-content)`                                                                                    |
-| scroll button surface | round large `IconButton`: `var(--bg-surface-raised)` at 88 %, `backdrop-blur-md`, `var(--shadow-md)`               |
-| composer area         | fade `linear-gradient` from `var(--conversation-composer-fade)`; padding `var(--spacing-lg)` / `var(--spacing-md)` |
-| focus ring of the log | `var(--ring-color)`                                                                                                |
+| Region                | Token                                                                                                                                |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| gap between messages  | `var(--spacing-lg)`; a user message that starts a turn adds `var(--spacing-lg)` above it                                             |
+| padding of the thread | `var(--spacing-md)`; bottom `var(--conversation-composer-height)` + `var(--spacing-md)`                                              |
+| reading width         | `var(--layout-measure-content)`                                                                                                      |
+| scroll button surface | round large `IconButton`: `var(--bg-surface-raised)` at 88 %, `backdrop-blur-md`, `var(--shadow-md)`                                 |
+| composer area         | fade `linear-gradient` from `var(--conversation-composer-fade, var(--bg-canvas))`; padding `var(--spacing-lg)` / `var(--spacing-md)` |
+| focus ring of the log | `var(--ring-color)`                                                                                                                  |
 
 ## Theme gaps
 

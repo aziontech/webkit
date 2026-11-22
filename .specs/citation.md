@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: cb9b0da11d2ef3f66cecb41fbb67cda64b4c86ff3df0d63c40b3a7aa69bcb0bc
+checksum: a2d533bd459c5575a107b7b1e8b9eb5e48e4f7e22404d77e790c6bf2200bf531
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -81,7 +81,7 @@ _No slots._
 - With `href`: an `<a>` (external URLs open in a new tab); without: a `role="note"` span.
 - Tooltip only when `title` is set.
 - The chip text is `site`, else `title`, else the number; a long text is cut with an ellipsis (`max-w-48`).
-- `data-slot="citation"` marks the chip, so `ChatMessage`'s Read aloud skips it; `data-linked` on a linked chip turns on the hover fill.
+- `data-slot="citation"` marks the chip, so `ChatMessage`'s Read aloud skips it; `data-linked` on a linked chip turns on the hover underline.
 
 ## Motion & Animations
 
@@ -91,10 +91,10 @@ _No slots._
 
 ## Tokens
 
-| Region | Token                                                                                            |
-| ------ | ------------------------------------------------------------------------------------------------ |
-| chip   | `var(--bg-surface-raised)`, hover `var(--bg-hover)`, `rounded-full`, padding `var(--spacing-xs)` |
-| text   | `.text-label-sm`, `var(--text-muted)`, hover `var(--text-default)`                               |
+| Region | Token                                                                                                                                                               |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| chip   | `var(--bg-selected)` (the user bubble's fill, which stands apart from `--bg-canvas` and `--bg-surface` in both themes), `rounded-full`, padding `var(--spacing-xs)` |
+| text   | `.text-label-sm`, `var(--text-default)` (`--text-muted` misses Lc 60 on `--bg-selected` in dark), underlined on hover when linked                                   |
 
 ## Theme gaps
 
@@ -120,7 +120,7 @@ _None._
 
 ## Right-to-left
 
-- Layout: symmetric margins; the chip sits inline with the sentence and follows its direction.
+- Layout: no margin of its own; the chip sits inline with the sentence and follows its direction. In a response (`StreamingResponse`), one normal space separates it from the word before, none from the punctuation after (`.` `,` `;` `:` `)`), and one space from the next chip.
 - Icons: none.
 - Keyboard: none.
 - User data: the site is a hostname and the title the source's own; both render with the document direction.

@@ -216,7 +216,7 @@
     '[&>[data-from=user]:not(:first-child,[data-grouped])]:mt-(--spacing-lg)'
 
   const COMPOSER_CLASS =
-    'pointer-events-none absolute inset-x-0 bottom-0 z-1 bg-[linear-gradient(to_top,var(--conversation-composer-fade)_60%,transparent)] pt-(--spacing-lg)'
+    'pointer-events-none absolute inset-x-0 bottom-0 z-1 bg-[linear-gradient(to_top,var(--conversation-composer-fade,var(--bg-canvas))_60%,transparent)] pt-(--spacing-lg)'
 
   const SCROLL_CLASS =
     'pointer-events-auto rounded-full! border-(--border-default) bg-[color-mix(in_srgb,var(--bg-surface-raised)_88%,transparent)]! shadow-(--shadow-md) backdrop-blur-md'
@@ -232,7 +232,7 @@
     :style="
       slots.composer ? { '--conversation-composer-height': `${composerHeight}px` } : undefined
     "
-    class="relative flex min-h-0 w-full flex-1 flex-col [--conversation-composer-fade:var(--bg-canvas)]"
+    class="relative flex min-h-0 w-full flex-1 flex-col"
   >
     <div
       ref="viewportEl"

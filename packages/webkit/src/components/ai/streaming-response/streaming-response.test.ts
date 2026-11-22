@@ -221,6 +221,23 @@ describe('StreamingResponse', () => {
     )
   })
 
+  it('puts a citation chip one space after the word and right before punctuation', () => {
+    const sources = [
+      { title: 'Cache settings', href: 'https://www.azion.com/docs' },
+      { title: 'Purge', href: 'https://example.com/purge' }
+    ]
+    const { container } = render(StreamingResponse, {
+      props: {
+        content: 'Served by azion[1] . Then (see [2] ), more [1][2]; and [1] : done [2]next',
+        sources
+      }
+    })
+    const text = container.querySelector('p')!.textContent
+    expect(text).toBe(
+      'Served by azion azion.com. Then (see example.com), more azion.com example.com; and azion.com: done example.com next'
+    )
+  })
+
   it('marks its root as the answer text', () => {
     const { getByTestId } = render(StreamingResponse, { props: { content: 'Hi' } })
     expect(getByTestId('streaming-response')).toHaveAttribute('data-slot', 'streaming-response')

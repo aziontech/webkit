@@ -56,12 +56,42 @@ function renderLeaf(node: LeafNode, sources: SourcesItem[], anchor: string): VNo
   }
 }
 
+const CLOSING = /^\s+(?=[.,;:!?)\]])/
+const WORD_START = /^[\p{L}\p{N}]/u
+const OPEN_END = /[\s([{"'“‘]$/
+
+function citationSpacing(nodes: MarkdownInlineNode[]): MarkdownInlineNode[] {
+  if (!nodes.some((node) => node.type === 'citation')) return nodes
+  const out: MarkdownInlineNode[] = []
+  nodes.forEach((node, index) => {
+    const before = nodes[index - 1]
+    const after = nodes[index + 1]
+    if (node.type === 'citation') {
+      if (before?.type === 'citation') out.push({ type: 'text', value: ' ' })
+      out.push(node)
+      return
+    }
+    if (node.type !== 'text') {
+      out.push(node)
+      return
+    }
+    let value = node.value
+    if (before?.type === 'citation') {
+      value = value.replace(CLOSING, '')
+      if (WORD_START.test(value)) value = ` ${value}`
+    }
+    if (after?.type === 'citation' && !OPEN_END.test(value)) value = `${value} `
+    out.push({ type: 'text', value })
+  })
+  return out
+}
+
 function renderNodes(
   nodes: MarkdownInlineNode[],
   sources: SourcesItem[],
   anchor: string
 ): VNodeChild[] {
-  return nodes.map((node) =>
+  return citationSpacing(nodes).map((node) =>
     'children' in node ? renderContainer(node, sources, anchor) : renderLeaf(node, sources, anchor)
   )
 }
