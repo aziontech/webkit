@@ -1010,3 +1010,4 @@ Budget-raise: console-layout 82.8 KB → 82.95 KB (measured 82.90 KB): the accou
 Budget-raise: bento-grid 2.25 KB → 2.4 KB (measured 2.38 KB): BentoGrid.Cell href: the whole tile renders as one link.
 Budget-raise: bento-grid-cell 1.75 KB → 1.95 KB (measured 1.93 KB): BentoGrid.Cell href: the whole tile renders as one link.
 Budget-raise: popover-trigger 2.5 KB → 2.55 KB (measured 2.51 KB): TriggerHost recognises AppHeaderAccount as a control so the trigger state reaches it in the server render.
+Budget-raise: property-filter 34.55 KB → 36.4 KB (measured 36.36 KB): CODE_QUALITY 3.1 split of the 947-line root into six composables, two private parts and lib modules; the option and return keys between them and the two part components are not mangled by the minifier.
