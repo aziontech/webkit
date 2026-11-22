@@ -106,14 +106,14 @@ test.describe('demo flows', () => {
 
   test('assistant answers a prompt', async ({ page }) => {
     await page.goto(`${DEMOS}/assistant`)
-    await page.getByRole('textbox').first().fill('How do I purge one URL?')
+    await page.getByRole('textbox', { name: 'Prompt' }).fill('How do I purge one URL?')
     await page.keyboard.press('Enter')
     await expect(page.getByText('from the products menu').first()).toBeVisible({ timeout: 15_000 })
   })
 
   test('assistant asks before it deploys and reports the result', async ({ page }) => {
     await page.goto(`${DEMOS}/assistant`)
-    await page.getByRole('textbox').first().fill('Deploy storefront to production')
+    await page.getByRole('textbox', { name: 'Prompt' }).fill('Deploy storefront to production')
     await page.keyboard.press('Enter')
     const deploy = page.getByRole('button', { name: 'Deploy', exact: true })
     await expect(deploy).toBeEnabled({ timeout: 15_000 })

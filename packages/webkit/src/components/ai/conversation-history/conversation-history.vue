@@ -231,6 +231,8 @@
         v-model="query"
         :aria-label="t('conversationHistory.search')"
         :placeholder="t('conversationHistory.search')"
+        role="searchbox"
+        enterkeyhint="search"
         autocomplete="off"
         :spellcheck="false"
         class="rounded-full"

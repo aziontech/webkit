@@ -148,12 +148,12 @@ describe('ConversationHistory', () => {
   it('renders neither New chat nor search unless asked', () => {
     const view = render(ConversationHistory, { props: { items, now } })
     expect(view.queryByRole('button', { name: 'New chat' })).toBeNull()
-    expect(view.queryByRole('textbox', { name: 'Search conversations' })).toBeNull()
+    expect(view.queryByRole('searchbox', { name: 'Search conversations' })).toBeNull()
   })
 
   it('filters titles case-insensitively and says when nothing matches', async () => {
     const view = render(ConversationHistory, { props: { items, now, searchable: true } })
-    const search = view.getByRole('textbox', { name: 'Search conversations' })
+    const search = view.getByRole('searchbox', { name: 'Search conversations' })
     await userEvent.type(search, 'TODAY')
     const rows = view.getAllByTestId('conversation-history__item')
     expect(rows.map((row) => row.textContent?.trim())).toEqual(['Later today', 'Earlier today'])

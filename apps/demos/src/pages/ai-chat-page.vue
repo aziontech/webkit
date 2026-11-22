@@ -73,6 +73,7 @@
 
 <template>
   <AiChat
+    class="max-md:[&_span:has(>button[aria-label='Open_conversation_history'])]:hidden"
     :messages="withSources"
     :follow-ups="followUps"
     :loading="isLoading"
@@ -87,7 +88,7 @@
     :interrupt-errors="interruptErrors"
     :hydrating="isHydrating"
     :session-generating="sessionGenerating"
-    attachable
+    :voice="false"
     @send="(_event, content) => sendMessage(content)"
     @answer-tool="(_event, answer) => addToolResult(answer)"
     @retry-interrupts="retryInterrupts()"

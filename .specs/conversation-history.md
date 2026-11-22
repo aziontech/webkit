@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 39498657f1b4309692eda9ad3f069c6de7f515a668447960140077c77fc94662
+checksum: c597fd3ec1780c6a2c9719d28a29012bb3db3771e84538dc21e83deb27d9ffab
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -127,7 +127,7 @@ _none_
 - The root is a `nav` named by `ariaLabel`; each group is a `ul` labelled by its visible heading (`aria-labelledby`).
 - Each conversation is a `button` with its title as the name; the open one carries `aria-current="page"`.
 - Delete is an `IconButton` named `Delete <title>` on every row. On touch it is always shown; with a fine pointer it fades in on hover, on keyboard focus inside the row and on the open row, and it is always in the tab order, so it is reachable by keyboard, pointer and touch.
-- New chat is a `button` named `New chat`, first in the list. The search field is an `Input` named `Search conversations`; filtering announces nothing, the rows change in place.
+- New chat is a `button` named `New chat`, first in the list. The search field is an `Input` with `role="searchbox"` (and `enterkeyhint="search"`) named `Search conversations`; filtering announces nothing, the rows change in place.
 - Keyboard: `Tab` moves through rows and their Delete; `Enter`/`Space` open a conversation.
 - Focus after a delete: when the owner removes the item whose Delete was pressed and focus was lost with it (on `body`, or on the closed `ConfirmDialog`), focus moves to the conversation that took its place, else the last one, else the list itself (`tabindex="-1"`). Tests: `conversation-history.test.ts` › moves focus to the next row after a delete.
 - Loading sets `aria-busy` on the list.
