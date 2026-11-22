@@ -27,19 +27,10 @@ export interface UseNavigationMenuListHighlightReturn {
 
 type HighlightRoot = Pick<UseNavigationMenuContextReturn, 'activeTriggerEl' | 'menuOpen'>
 
-export function useNavigationMenuListHighlight(
-  container: MaybeRefOrGetter<NavigationMenuHighlightTarget>,
-  root: HighlightRoot
-): UseNavigationMenuListHighlightReturn {
+function createHighlightTarget(resolveContainer: () => HTMLElement | null) {
   const activeTargetEl = shallowRef<HTMLElement | null>(null)
   const isVisible = ref(false)
-
-  const metrics = ref({
-    left: 0,
-    top: 0,
-    width: 0,
-    height: 0
-  })
+  const metrics = ref({ left: 0, top: 0, width: 0, height: 0 })
 
   const selectorStyle = computed<CSSProperties>(() => ({
     left: `${metrics.value.left}px`,
@@ -49,22 +40,12 @@ export function useNavigationMenuListHighlight(
     opacity: isVisible.value ? 1 : 0
   }))
 
-  const resolveContainer = () => resolveHostElement(toValue(container))
-
   const measureTarget = (target: HTMLElement) => {
     const containerEl = resolveContainer()
-
-    if (!containerEl) {
-      return
-    }
-
+    if (!containerEl) return
     const containerRect = containerEl.getBoundingClientRect()
     const targetRect = target.getBoundingClientRect()
-
-    if (targetRect.width === 0 || targetRect.height === 0) {
-      return
-    }
-
+    if (targetRect.width === 0 || targetRect.height === 0) return
     metrics.value = {
       left: targetRect.left - containerRect.left,
       top: targetRect.top - containerRect.top,
@@ -81,60 +62,19 @@ export function useNavigationMenuListHighlight(
 
   const setTarget = (target: NavigationMenuHighlightTarget) => {
     const element = resolveHostElement(target)
-
-    if (!element) {
-      return
-    }
-
+    if (!element) return
     activeTargetEl.value = element
     measureTarget(element)
   }
 
-  const syncToActiveTrigger = () => {
-    if (root.activeTriggerEl.value) {
-      setTarget(root.activeTriggerEl.value)
-    }
-  }
-
-  const leftTowardsList = (event: PointerEvent) => {
-    const related = event.relatedTarget as Node | null
-    return Boolean(related && resolveContainer()?.contains(related))
-  }
-
-  const onTargetPointerleave = (event: PointerEvent, target: NavigationMenuHighlightTarget) => {
-    if (leftTowardsList(event)) {
-      return
-    }
-
-    if (root.menuOpen.value && root.activeTriggerEl.value) {
-      setTarget(root.activeTriggerEl.value)
-      return
-    }
-
-    if (resolveHostElement(target) === activeTargetEl.value) {
-      hide()
-    }
-  }
-
-  const onListPointerleave = (event: PointerEvent) => {
-    if (leftTowardsList(event)) {
-      return
-    }
-
-    if (root.menuOpen.value) {
-      syncToActiveTrigger()
-      return
-    }
-
-    hide()
-  }
-
   const remeasure = () => {
-    if (activeTargetEl.value) {
-      measureTarget(activeTargetEl.value)
-    }
+    if (activeTargetEl.value) measureTarget(activeTargetEl.value)
   }
 
+  return { activeTargetEl, selectorStyle, hide, setTarget, remeasure }
+}
+
+function observeContainerResize(resolveContainer: () => HTMLElement | null, onResize: () => void) {
   let resizeObserver: ResizeObserver | undefined
 
   const disconnect = () => {
@@ -146,36 +86,66 @@ export function useNavigationMenuListHighlight(
     resolveContainer,
     (element) => {
       disconnect()
-
-      if (!element || typeof globalThis.ResizeObserver === 'undefined') {
-        return
-      }
-
-      resizeObserver = new globalThis.ResizeObserver(remeasure)
+      if (!element || typeof globalThis.ResizeObserver === 'undefined') return
+      resizeObserver = new globalThis.ResizeObserver(onResize)
       resizeObserver.observe(element)
     },
     { immediate: true }
   )
 
+  onScopeDispose(disconnect)
+}
+
+export function useNavigationMenuListHighlight(
+  container: MaybeRefOrGetter<NavigationMenuHighlightTarget>,
+  root: HighlightRoot
+): UseNavigationMenuListHighlightReturn {
+  const resolveContainer = () => resolveHostElement(toValue(container))
+  const { activeTargetEl, selectorStyle, hide, setTarget, remeasure } =
+    createHighlightTarget(resolveContainer)
+
+  const syncToActiveTrigger = () => {
+    if (root.activeTriggerEl.value) setTarget(root.activeTriggerEl.value)
+  }
+
+  const leftTowardsList = (event: PointerEvent) => {
+    const related = event.relatedTarget as Node | null
+    return Boolean(related && resolveContainer()?.contains(related))
+  }
+
+  const onTargetPointerleave = (event: PointerEvent, target: NavigationMenuHighlightTarget) => {
+    if (leftTowardsList(event)) return
+    if (root.menuOpen.value && root.activeTriggerEl.value) {
+      setTarget(root.activeTriggerEl.value)
+      return
+    }
+    if (resolveHostElement(target) === activeTargetEl.value) hide()
+  }
+
+  const onListPointerleave = (event: PointerEvent) => {
+    if (leftTowardsList(event)) return
+    if (root.menuOpen.value) {
+      syncToActiveTrigger()
+      return
+    }
+    hide()
+  }
+
+  observeContainerResize(resolveContainer, remeasure)
+
   watch(
     () => root.activeTriggerEl.value,
     () => {
-      if (root.menuOpen.value) {
-        syncToActiveTrigger()
-      }
+      if (root.menuOpen.value) syncToActiveTrigger()
     }
   )
 
   watch(
     () => root.menuOpen.value,
     (open) => {
-      if (open) {
-        syncToActiveTrigger()
-      }
+      if (open) syncToActiveTrigger()
     }
   )
-
-  onScopeDispose(disconnect)
 
   return {
     selectorStyle,

@@ -12,11 +12,17 @@ import {
   watch
 } from 'vue'
 
+import { resolveActivationDirection } from '../lib/activation-direction'
 import {
   createChangeEventDetails,
   type NavigationMenuChangeEventDetails
 } from '../lib/change-event-details'
 import { waitForCloseTransition, waitForOpenTransition } from '../presets/animations'
+import {
+  type NavigationMenuKeyboardRoot,
+  type NavigationMenuTriggerEntry,
+  useNavigationMenuKeyboard
+} from './use-navigation-menu-keyboard'
 import {
   type NavigationMenuPopoverSize,
   useNavigationMenuViewportSize
@@ -78,362 +84,246 @@ export interface UseNavigationMenuRootReturn {
   unmount: () => void
 }
 
-interface TriggerEntry {
-  value: NavigationMenuItemValue
-  el: HTMLElement
+type ChangeDetails = NavigationMenuChangeEventDetails
+type ItemValue = NavigationMenuItemValue
+
+function createTriggerRegistry() {
+  const triggers = shallowRef<NavigationMenuTriggerEntry[]>([])
+
+  const registerTrigger = (itemValue: ItemValue, el: HTMLElement) => {
+    const existingIndex = triggers.value.findIndex((entry) => entry.value === itemValue)
+    if (existingIndex === -1) {
+      triggers.value = [...triggers.value, { value: itemValue, el }]
+      return
+    }
+    const next = [...triggers.value]
+    next[existingIndex] = { value: itemValue, el }
+    triggers.value = next
+  }
+
+  const unregisterTrigger = (itemValue: ItemValue) => {
+    triggers.value = triggers.value.filter((entry) => entry.value !== itemValue)
+  }
+
+  const findTriggerEl = (itemValue: ItemValue) =>
+    triggers.value.find((entry) => entry.value === itemValue)?.el
+
+  return { triggers, registerTrigger, unregisterTrigger, findTriggerEl }
 }
 
-const PANEL_FOCUSABLE =
-  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-
-export function useNavigationMenuRoot(
-  controlledValue: MaybeRefOrGetter<NavigationMenuItemValue | null>,
-  isControlled: MaybeRefOrGetter<boolean>,
-  internalValue: Ref<NavigationMenuItemValue | null>,
-  options: UseNavigationMenuRootOptions,
-  emit: NavigationMenuRootEmit
-): UseNavigationMenuRootReturn {
-  const activationDirection = ref<NavigationMenuActivationDirection>(null)
+function createElementSlots() {
   const viewportTargetEl = shallowRef<HTMLElement | null>(null)
-  const activeTriggerEl = shallowRef<HTMLElement | null>(null)
   const popupEl = shallowRef<HTMLElement | null>(null)
   const currentContentEl = shallowRef<HTMLElement | null>(null)
-  const instant = ref(false)
 
-  const triggers = shallowRef<TriggerEntry[]>([])
-
-  let openTimer: ReturnType<typeof setTimeout> | null = null
-  let closeTimer: ReturnType<typeof setTimeout> | null = null
-
-  const orientation = computed(() => toValue(options.orientation))
-  const isRtl = () => toValue(options.dir) === 'rtl'
-
-  const value = computed<NavigationMenuItemValue | null>(() => {
-    if (toValue(isControlled)) {
-      return toValue(controlledValue) ?? null
-    }
-
-    return internalValue.value ?? null
-  })
-
-  const open = computed(() => value.value != null)
-
-  const {
-    mounted: popupMounted,
-    setMounted: setPopupMounted,
-    transitionStatus: popupTransitionStatus
-  } = useTransitionStatus(() => open.value)
-
-  const { popupSize } = useNavigationMenuViewportSize({
-    activeValue: value,
+  return {
     popupEl,
     currentContentEl,
     viewportTargetEl,
-    popupMounted
-  })
+    api: {
+      viewportTargetEl: readonly(viewportTargetEl) as Readonly<Ref<HTMLElement | null>>,
+      popupEl: readonly(popupEl) as Readonly<Ref<HTMLElement | null>>,
+      currentContentEl: readonly(currentContentEl) as Readonly<Ref<HTMLElement | null>>,
+      setViewportTargetEl: (element: HTMLElement | null) => {
+        viewportTargetEl.value = element
+      },
+      setPopupEl: (element: HTMLElement | null) => {
+        popupEl.value = element
+      },
+      setCurrentContentEl: (element: HTMLElement | null) => {
+        currentContentEl.value = element
+      }
+    }
+  }
+}
 
-  function cancelTimers() {
+function createOpenTimers(
+  options: UseNavigationMenuRootOptions,
+  setValue: (next: ItemValue | null, details: ChangeDetails) => void
+) {
+  let openTimer: ReturnType<typeof setTimeout> | null = null
+  let closeTimer: ReturnType<typeof setTimeout> | null = null
+
+  const cancelTimers = () => {
     if (openTimer) {
       clearTimeout(openTimer)
       openTimer = null
     }
-
     if (closeTimer) {
       clearTimeout(closeTimer)
       closeTimer = null
     }
   }
 
-  async function notifyOpenChangeComplete(isOpen: boolean) {
-    await nextTick()
-
-    if (isOpen) {
-      await waitForOpenTransition(popupEl.value)
-    } else {
-      await waitForCloseTransition(popupEl.value)
-    }
-
-    emit('open-transition-end', isOpen)
-  }
-
-  function setValue(
-    nextValue: NavigationMenuItemValue | null,
-    details: NavigationMenuChangeEventDetails
-  ) {
-    if (details.isCanceled) {
-      return
-    }
-
-    const previous = value.value
-
-    if (previous === nextValue) {
-      return
-    }
-
-    if (previous != null && nextValue != null) {
-      const previousIndex = triggers.value.findIndex((entry) => entry.value === previous)
-      const nextIndex = triggers.value.findIndex((entry) => entry.value === nextValue)
-
-      if (previousIndex !== -1 && nextIndex !== -1) {
-        if (orientation.value === 'horizontal') {
-          const forward = nextIndex > previousIndex !== isRtl()
-          activationDirection.value = forward ? 'right' : 'left'
-        } else {
-          activationDirection.value = nextIndex > previousIndex ? 'down' : 'up'
-        }
-      }
-    } else {
-      activationDirection.value = null
-    }
-
-    if (!toValue(isControlled)) {
-      internalValue.value = nextValue
-    }
-
-    activeTriggerEl.value =
-      nextValue == null
-        ? null
-        : (triggers.value.find((entry) => entry.value === nextValue)?.el ?? null)
-
-    emit('update:modelValue', nextValue, details)
-
-    if (nextValue != null) {
-      void notifyOpenChangeComplete(true)
-    }
-  }
-
-  function scheduleOpen(
-    itemValue: NavigationMenuItemValue,
-    details: NavigationMenuChangeEventDetails
-  ) {
+  const scheduleOpen = (itemValue: ItemValue, details: ChangeDetails) => {
     cancelTimers()
     openTimer = setTimeout(() => setValue(itemValue, details), toValue(options.delay))
   }
 
-  function scheduleClose(details: NavigationMenuChangeEventDetails) {
+  const scheduleClose = (details: ChangeDetails) => {
     cancelTimers()
     closeTimer = setTimeout(() => setValue(null, details), toValue(options.closeDelay))
   }
 
-  function registerTrigger(itemValue: NavigationMenuItemValue, el: HTMLElement) {
-    const existingIndex = triggers.value.findIndex((entry) => entry.value === itemValue)
+  onScopeDispose(cancelTimers)
 
-    if (existingIndex === -1) {
-      triggers.value = [...triggers.value, { value: itemValue, el }]
-      return
-    }
+  return { cancelTimers, scheduleOpen, scheduleClose }
+}
 
-    const next = [...triggers.value]
-    next[existingIndex] = { value: itemValue, el }
-    triggers.value = next
-  }
+interface ValueStateInput {
+  controlledValue: MaybeRefOrGetter<ItemValue | null>
+  isControlled: MaybeRefOrGetter<boolean>
+  internalValue: Ref<ItemValue | null>
+  options: UseNavigationMenuRootOptions
+  registry: ReturnType<typeof createTriggerRegistry>
+  popupEl: Readonly<Ref<HTMLElement | null>>
+  emit: NavigationMenuRootEmit
+}
 
-  function unregisterTrigger(itemValue: NavigationMenuItemValue) {
-    triggers.value = triggers.value.filter((entry) => entry.value !== itemValue)
-  }
-
-  function isItemOpen(itemValue: NavigationMenuItemValue) {
-    return value.value === itemValue
-  }
-
-  function close() {
-    setValue(null, createChangeEventDetails('none', new Event('close'), undefined))
-  }
-
-  function unmount() {
-    cancelTimers()
-    close()
-    setPopupMounted(false)
-  }
-
-  watch(
-    () => open.value,
-    async (isOpen) => {
-      if (isOpen) {
-        return
-      }
-
-      if (!popupMounted.value) {
-        return
-      }
-
-      await nextTick()
-      await waitForCloseTransition(popupEl.value)
-      setPopupMounted(false)
-      emit('open-transition-end', false)
-    }
+function createValueState(input: ValueStateInput) {
+  const { controlledValue, isControlled, internalValue, options, registry, emit } = input
+  const activationDirection = ref<NavigationMenuActivationDirection>(null)
+  const activeTriggerEl = shallowRef<HTMLElement | null>(null)
+  const orientation = computed(() => toValue(options.orientation))
+  const isRtl = () => toValue(options.dir) === 'rtl'
+  const value = computed<ItemValue | null>(() =>
+    toValue(isControlled) ? (toValue(controlledValue) ?? null) : (internalValue.value ?? null)
   )
 
-  function panelFocusables(): HTMLElement[] {
-    const panel = popupEl.value
-    if (!panel) return []
-    return Array.from(panel.querySelectorAll<HTMLElement>(PANEL_FOCUSABLE))
+  const notifyOpened = async () => {
+    await nextTick()
+    await waitForOpenTransition(input.popupEl.value)
+    emit('open-transition-end', true)
   }
 
-  async function focusPanel(edge: 'first' | 'last') {
-    for (let attempt = 0; attempt < 5; attempt += 1) {
-      await nextTick()
-      const items = panelFocusables()
-      if (items.length) {
-        ;(edge === 'last' ? items[items.length - 1] : items[0]).focus()
-        return
-      }
-      await new Promise((resolve) => globalThis.requestAnimationFrame(() => resolve(null)))
-    }
-  }
-
-  function onPopupKeydown(event: KeyboardEvent) {
-    const trigger = activeTriggerEl.value
-    const items = panelFocusables()
-    const index = items.indexOf(document.activeElement as HTMLElement)
-
-    if (event.key === 'Escape') {
-      event.preventDefault()
-      setValue(null, createChangeEventDetails('escape-key', event, trigger ?? undefined))
-      trigger?.focus()
-      return
-    }
-
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-      if (!items.length) return
-      event.preventDefault()
-      const step = event.key === 'ArrowDown' ? 1 : -1
-      items[(index + step + items.length) % items.length].focus()
-      return
-    }
-
-    if (event.key === 'Home' || event.key === 'End') {
-      if (!items.length) return
-      event.preventDefault()
-      items[event.key === 'Home' ? 0 : items.length - 1].focus()
-      return
-    }
-
-    if (event.key !== 'Tab' || !trigger) return
-
-    if (event.shiftKey && index <= 0) {
-      event.preventDefault()
-      trigger.focus()
-      return
-    }
-
-    if (!event.shiftKey && index === items.length - 1) {
-      setValue(null, createChangeEventDetails('focus-out', event, trigger))
-      trigger.focus()
-    }
-  }
-
-  function onTriggerKeydown(event: KeyboardEvent) {
-    const currentIndex = triggers.value.findIndex((entry) => entry.value === value.value)
-    const focusedIndex = triggers.value.findIndex((entry) => entry.el === document.activeElement)
-    const ownTrigger = event.currentTarget as HTMLElement
-
-    if (event.key === 'Escape') {
-      event.preventDefault()
-      setValue(null, createChangeEventDetails('escape-key', event, ownTrigger))
-      return
-    }
-
-    const ownValue = triggers.value.find((entry) => entry.el === ownTrigger)?.value
-    const ownOpen = ownValue != null && value.value === ownValue
-
-    if (event.key === 'Tab' && !event.shiftKey && ownOpen && panelFocusables().length) {
-      event.preventDefault()
-      void focusPanel('first')
-      return
-    }
-
-    const isHorizontal = orientation.value === 'horizontal'
-    const enterKey = isHorizontal ? 'ArrowDown' : isRtl() ? 'ArrowLeft' : 'ArrowRight'
-
-    if (event.key === enterKey && ownValue != null) {
-      event.preventDefault()
-      if (!ownOpen) setValue(ownValue, createChangeEventDetails('trigger-press', event, ownTrigger))
-      void focusPanel('first')
-      return
-    }
-
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-
-      if (ownValue == null) {
-        return
-      }
-
-      const nextValue = value.value === ownValue ? null : ownValue
-      setValue(nextValue, createChangeEventDetails('trigger-press', event, ownTrigger))
-      return
-    }
-
-    const flipped = isHorizontal && isRtl()
-    const nextKey = isHorizontal ? (flipped ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown'
-    const prevKey = isHorizontal ? (flipped ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp'
-
-    if (event.key !== nextKey && event.key !== prevKey) {
-      return
-    }
-
-    event.preventDefault()
-
-    if (!triggers.value.length) {
-      return
-    }
-
-    const baseIndex = focusedIndex !== -1 ? focusedIndex : currentIndex
-    const direction = event.key === nextKey ? 1 : -1
-    const index = (baseIndex + direction + triggers.value.length) % triggers.value.length
-    const entry = triggers.value[index]
-    entry.el.focus()
-    setValue(entry.value, createChangeEventDetails('list-navigation', event, entry.el))
+  const setValue = (nextValue: ItemValue | null, details: ChangeDetails) => {
+    if (details.isCanceled) return
+    const previous = value.value
+    if (previous === nextValue) return
+    const { triggers } = registry
+    const direction = resolveActivationDirection(
+      triggers.value,
+      previous,
+      nextValue,
+      orientation.value,
+      isRtl()
+    )
+    if (direction !== undefined) activationDirection.value = direction
+    if (!toValue(isControlled)) internalValue.value = nextValue
+    activeTriggerEl.value = nextValue == null ? null : (registry.findTriggerEl(nextValue) ?? null)
+    emit('update:modelValue', nextValue, details)
+    if (nextValue != null) void notifyOpened()
   }
 
   watch(
     () => toValue(controlledValue),
     (next) => {
-      if (toValue(isControlled) && next != null) {
-        activeTriggerEl.value =
-          triggers.value.find((entry) => entry.value === next)?.el ?? activeTriggerEl.value
-      }
+      if (toValue(isControlled) && next != null)
+        activeTriggerEl.value = registry.findTriggerEl(next) ?? activeTriggerEl.value
     }
   )
 
-  onScopeDispose(cancelTimers)
-
   return {
-    value,
-    open,
-    orientation,
     activationDirection: readonly(activationDirection) as Readonly<
       Ref<NavigationMenuActivationDirection>
     >,
-    viewportTargetEl: readonly(viewportTargetEl) as Readonly<Ref<HTMLElement | null>>,
     activeTriggerEl: readonly(activeTriggerEl) as Readonly<Ref<HTMLElement | null>>,
-    popupEl: readonly(popupEl) as Readonly<Ref<HTMLElement | null>>,
-    currentContentEl: readonly(currentContentEl) as Readonly<Ref<HTMLElement | null>>,
-    popupMounted,
-    popupTransitionStatus,
+    orientation,
+    isRtl,
+    value,
+    setValue
+  }
+}
+
+function watchPopupClose(
+  open: ComputedRef<boolean>,
+  popup: ReturnType<typeof useTransitionStatus>,
+  popupEl: Readonly<Ref<HTMLElement | null>>,
+  emit: NavigationMenuRootEmit
+) {
+  watch(
+    () => open.value,
+    async (isOpen) => {
+      if (isOpen || !popup.mounted.value) return
+      await nextTick()
+      await waitForCloseTransition(popupEl.value)
+      popup.setMounted(false)
+      emit('open-transition-end', false)
+    }
+  )
+}
+
+function createPopupState(
+  value: ComputedRef<ItemValue | null>,
+  elements: ReturnType<typeof createElementSlots>,
+  emit: NavigationMenuRootEmit
+) {
+  const open = computed(() => value.value != null)
+  const popup = useTransitionStatus(() => open.value)
+  const { popupSize } = useNavigationMenuViewportSize({
+    activeValue: value,
+    popupEl: elements.popupEl,
+    currentContentEl: elements.currentContentEl,
+    viewportTargetEl: elements.viewportTargetEl,
+    popupMounted: popup.mounted
+  })
+  watchPopupClose(open, popup, elements.popupEl, emit)
+  return { open, popup, popupSize }
+}
+
+export function useNavigationMenuRoot(
+  controlledValue: MaybeRefOrGetter<ItemValue | null>,
+  isControlled: MaybeRefOrGetter<boolean>,
+  internalValue: Ref<ItemValue | null>,
+  options: UseNavigationMenuRootOptions,
+  emit: NavigationMenuRootEmit
+): UseNavigationMenuRootReturn {
+  const instant = ref(false)
+  const registry = createTriggerRegistry()
+  const elements = createElementSlots()
+  const state = createValueState({
+    controlledValue,
+    isControlled,
+    internalValue,
+    options,
+    registry,
+    popupEl: elements.popupEl,
+    emit
+  })
+  const { value, setValue } = state
+  const { open, popup, popupSize } = createPopupState(value, elements, emit)
+  const timers = createOpenTimers(options, setValue)
+  const close = () =>
+    setValue(null, createChangeEventDetails('none', new Event('close'), undefined))
+  const keyboard: NavigationMenuKeyboardRoot = {
+    ...state,
+    triggers: registry.triggers,
+    popupEl: elements.popupEl
+  }
+
+  return {
+    ...elements.api,
+    ...timers,
+    ...useNavigationMenuKeyboard(keyboard),
+    value,
+    open,
+    activationDirection: state.activationDirection,
+    activeTriggerEl: state.activeTriggerEl,
+    orientation: state.orientation,
+    popupMounted: popup.mounted,
+    popupTransitionStatus: popup.transitionStatus,
     popupSize,
     instant: readonly(instant) as Readonly<Ref<boolean>>,
-    setViewportTargetEl: (element) => {
-      viewportTargetEl.value = element
-    },
-    setPopupEl: (element) => {
-      popupEl.value = element
-    },
-    setCurrentContentEl: (element) => {
-      currentContentEl.value = element
-    },
     setValue,
-    scheduleOpen,
-    scheduleClose,
-    cancelTimers,
-    registerTrigger,
-    unregisterTrigger,
-    isItemOpen,
-    onTriggerKeydown,
-    onPopupKeydown,
+    registerTrigger: registry.registerTrigger,
+    unregisterTrigger: registry.unregisterTrigger,
+    isItemOpen: (itemValue) => value.value === itemValue,
     close,
-    unmount
+    unmount: () => {
+      timers.cancelTimers()
+      close()
+      popup.setMounted(false)
+    }
   }
 }
 
