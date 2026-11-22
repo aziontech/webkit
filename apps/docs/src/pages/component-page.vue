@@ -5,11 +5,9 @@
   import DocProse from '@aziontech/webkit/doc-prose'
   import Tag from '@aziontech/webkit/tag'
   import { useHead } from '@unhead/vue'
-  import { computed } from 'vue'
+  import { computed, defineAsyncComponent, hydrateOnIdle } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import ApiTable from '../components/api-table.vue'
-  import DoDont from '../components/do-dont.vue'
   import ExampleCard from '../components/example-card.vue'
   import RawHtml from '../components/raw-html.vue'
   import TableOfContents from '../components/table-of-contents.vue'
@@ -19,6 +17,19 @@
   import { categoryLabel } from '../lib/nav'
   import type { ComponentDoc } from '../lib/types'
   import NotFound from './not-found-page.vue'
+
+  const ApiTable = defineAsyncComponent({
+    loader: () => import('../components/api-table.vue'),
+    hydrate: hydrateOnIdle()
+  })
+  const DoDont = defineAsyncComponent({
+    loader: () => import('../components/do-dont.vue'),
+    hydrate: hydrateOnIdle()
+  })
+  const LaterExampleCard = defineAsyncComponent({
+    loader: () => import('../components/example-card.vue'),
+    hydrate: hydrateOnIdle()
+  })
 
   const route = useRoute()
   const t = messages
@@ -185,7 +196,7 @@
         class="flex scroll-mt-20 flex-col gap-(--spacing-xl)"
       >
         <h2 class="text-heading-md">{{ t.moreExamples }}</h2>
-        <ExampleCard
+        <LaterExampleCard
           v-for="example in moreExamples"
           :key="example.file"
           :dir="doc.exampleDir"

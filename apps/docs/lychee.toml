@@ -1,0 +1,20 @@
+# External links of the built docs site (apps/docs/dist). Internal links are checked by
+# scripts/check-links.mjs. Run: pnpm --filter @aziontech/webkit-docs run check:external-links
+# after pnpm build:docs.
+
+scheme = ["https", "http"]
+exclude_all_private = true
+max_concurrency = 16
+max_retries = 3
+retry_wait_time = 2
+timeout = 30
+cache_exclude_status = "429"
+user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36"
+
+# These hosts answer automated clients with 403 or 429 whatever the page, so they are
+# checked by lychee-bot-blocked.toml, which accepts those two codes on them only.
+exclude = [
+  '^https://(www\.)?npmjs\.com/',
+  '^https://(www\.)?reddit\.com/',
+  '^https://(www\.)?instagram\.com/',
+]

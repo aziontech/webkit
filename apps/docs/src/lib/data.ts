@@ -1,55 +1,15 @@
+import blockLoaders from 'virtual:docs-block-loaders'
 import componentLoaders from 'virtual:docs-component-loaders'
+import exampleLoaders from 'virtual:docs-example-loaders'
 import index from 'virtual:docs-index'
 import { type Component, shallowReactive } from 'vue'
 import type { RouteLocationNormalized } from 'vue-router'
 
-import type { ComponentDoc, GuidelinesDoc, Highlighted, MarkdownDoc } from './types'
+import type { ComponentDoc } from './types'
 
-const EXAMPLES = '../../../../packages/webkit/examples/'
-const BLOCKS = '../../../../packages/webkit/blocks/'
 const REPO = '../../../../'
 
-const exampleComponents = import.meta.glob<Component>(
-  '../../../../packages/webkit/examples/**/*.vue',
-  {
-    import: 'default'
-  }
-)
-const exampleSources = import.meta.glob<Highlighted>(
-  '../../../../packages/webkit/examples/**/*.vue',
-  { query: '?highlight', import: 'default' }
-)
-const exampleData = import.meta.glob<Highlighted>(
-  '../../../../packages/webkit/examples/**/*.json',
-  {
-    query: '?highlight',
-    import: 'default'
-  }
-)
-const blockComponents = import.meta.glob<Component>('../../../../packages/webkit/blocks/**/*.vue', {
-  import: 'default'
-})
-const blockSources = import.meta.glob<Highlighted>('../../../../packages/webkit/blocks/**/*.vue', {
-  query: '?highlight',
-  import: 'default'
-})
-const blockManifests = import.meta.glob<Record<string, unknown>>(
-  '../../../../packages/webkit/blocks/**/block.json',
-  { import: 'default' }
-)
-const blockGuidelines = import.meta.glob<GuidelinesDoc>(
-  '../../../../packages/webkit/blocks/**/guidelines.md',
-  { query: '?guidelines', import: 'default' }
-)
-const foundationDocs = import.meta.glob<MarkdownDoc>(
-  [
-    '../../../../rules/*.md',
-    '../../../../packages/webkit/README.md',
-    '../../../../skills/webkit-azion-api/SKILL.md',
-    '../../../../skills/webkit-query-explorer/SKILL.md'
-  ],
-  { query: '?markdown', import: 'default' }
-)
+const markdownLoaders = () => import('./markdown-loaders')
 
 export { index }
 
@@ -88,58 +48,53 @@ async function preloadComponent(name: string) {
   const doc = cached<ComponentDoc>(keys.component(name))
   if (!doc?.exampleDir) return
   const dir = doc.exampleDir
+  const files = await exampleLoaders[dir]?.()
+  if (!files) return
   await Promise.all(
     doc.examples.flatMap((example) => [
-      remember(
-        keys.example(dir, example.file),
-        exampleComponents[`${EXAMPLES}${dir}/${example.file}`]
-      ),
-      remember(
-        keys.exampleSource(dir, example.file),
-        exampleSources[`${EXAMPLES}${dir}/${example.file}`]
-      ),
+      remember(keys.example(dir, example.file), files.components[example.file]),
+      remember(keys.exampleSource(dir, example.file), files.sources[example.file]),
       ...(example.json
-        ? [
-            remember(
-              keys.exampleSource(dir, example.json),
-              exampleData[`${EXAMPLES}${dir}/${example.json}`]
-            )
-          ]
+        ? [remember(keys.exampleSource(dir, example.json), files.sources[example.json])]
         : [])
     ])
   )
 }
 
-export function exampleLoader(dir: string, file: string): (() => Promise<Component>) | undefined {
-  return exampleComponents[`${EXAMPLES}${dir}/${file}`]
+export async function loadExample(dir: string, file: string): Promise<Component | undefined> {
+  const files = await exampleLoaders[dir]?.()
+  return files?.components[file]?.()
 }
 
 export async function preloadExample(dir: string, example: string) {
   const file = `${example}.vue`
-  await remember(keys.example(dir, file), exampleComponents[`${EXAMPLES}${dir}/${file}`])
+  const files = await exampleLoaders[dir]?.()
+  await remember(keys.example(dir, file), files?.components[file])
 }
 
 async function preloadBlock(id: string, withCode = true) {
   const block = findBlock(id)
   if (!block) return
-  const base = `${BLOCKS}${block.dir}/`
+  const files = await blockLoaders[block.dir]?.()
+  if (!files) return
   await Promise.all([
     ...block.states.map((state) =>
-      remember(keys.block(block.dir, state.file), blockComponents[base + state.file])
+      remember(keys.block(block.dir, state.file), files.components[state.file])
     ),
     ...(withCode
       ? [
           ...block.states.map((state) =>
-            remember(keys.blockSource(block.dir, state.file), blockSources[base + state.file])
+            remember(keys.blockSource(block.dir, state.file), files.sources[state.file])
           ),
-          remember(keys.blockManifest(block.dir), blockManifests[`${base}block.json`]),
-          remember(keys.blockGuidelines(block.dir), blockGuidelines[`${base}guidelines.md`])
+          remember(keys.blockManifest(block.dir), files.manifest),
+          remember(keys.blockGuidelines(block.dir), files.guidelines)
         ]
       : [])
   ])
 }
 
 async function preloadMarkdown(path: string) {
+  const { foundationDocs } = await markdownLoaders()
   await remember(keys.markdown(path), foundationDocs[REPO + path])
 }
 

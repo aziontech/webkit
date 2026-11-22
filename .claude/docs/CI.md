@@ -140,18 +140,18 @@ What is missing or wrong, measured on `feat/webkit-ai-ready`:
 | A11Y4 | Every route of the built docs site loads with no console error, and axe in light and dark finds no violation on the main pages and every eighth route (`SMOKE_AXE_EVERY`). The demos are not covered yet. | `test:docs:smoke` (`apps/docs/scripts/test-smoke.mjs`, `axe-core` in Playwright), `site` job | PR   | have (docs site) |
 | A11Y5 | Forced colours, 400% reflow, right-to-left, reduced motion and the screen-reader snapshots pass.                                                                                                          | existing suites in `src/test`                                                                | PR   | have             |
 | A11Y6 | Every interactive element in every example is at least 40 by 40 px or has a 40 px hit area.                                                                                                               | Playwright geometry in `apps/visual`                                                         | PR   | new              |
-| A11Y7 | The Lighthouse accessibility score is 100 on the docs home, one component page and one demo.                                                                                                              | Lighthouse CI                                                                                | PR   | new              |
+| A11Y7 | The Lighthouse accessibility score is 100 on the docs home, one component page and one demo; a failing node counts only when no `a11y-accepted.json` entry (rule, theme, selector) covers it.             | `check:lighthouse` (`apps/docs/scripts/check-lighthouse.mjs`, Lighthouse 12.8.2), `site` job | PR   | have             |
 
 ### 3.6 Performance
 
-| Id    | Passes when                                                                                                      | Tool                                          | When | Today   |
-| ----- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | ---- | ------- |
-| PERF1 | Every export is at or under its gzip budget, and no budget rises without a `Budget-raise:` line.                 | `check-size.mjs`, `check-size-ratchet`        | PR   | have    |
-| PERF2 | The CSS of the fixture apps and the package size are within budget.                                              | `check-css-size.mjs`, `package-size.test.mjs` | PR   | have    |
-| PERF3 | Every runtime scenario in `perf-budgets.json` is within its time (for example chart 10k points, tree 5k nodes).  | `performance.test.ts`                         | PR   | have    |
-| PERF4 | Importing a `-root` export pulls in no other component.                                                          | `check-size.mjs` module list                  | PR   | tighten |
-| PERF5 | On the built docs home, one component page and one demo: LCP at most 2.5 s, CLS at most 0.1, TBT at most 200 ms. | Lighthouse CI (`@lhci/cli`)                   | PR   | new     |
-| PERF6 | Every block and example renders on the server and hydrates with no warning.                                      | `ssr.test.mjs`, `hydration.test.ts`           | PR   | have    |
+| Id    | Passes when                                                                                                                                                                                                                                 | Tool                                               | When | Today   |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ---- | ------- |
+| PERF1 | Every export is at or under its gzip budget, and no budget rises without a `Budget-raise:` line.                                                                                                                                            | `check-size.mjs`, `check-size-ratchet`             | PR   | have    |
+| PERF2 | The CSS of the fixture apps and the package size are within budget.                                                                                                                                                                         | `check-css-size.mjs`, `package-size.test.mjs`      | PR   | have    |
+| PERF3 | Every runtime scenario in `perf-budgets.json` is within its time (for example chart 10k points, tree 5k nodes).                                                                                                                             | `performance.test.ts`                              | PR   | have    |
+| PERF4 | Importing a `-root` export pulls in no other component.                                                                                                                                                                                     | `check-size.mjs` module list                       | PR   | tighten |
+| PERF5 | On the built docs home and one component page (mobile profile) and one demo (desktop profile, the console), served compressed over HTTP/2 like production: the median of 3 runs has LCP at most 2.5 s, CLS at most 0.1, TBT at most 200 ms. | `check:lighthouse` (Lighthouse 12.8.2), `site` job | PR   | have    |
+| PERF6 | Every block and example renders on the server and hydrates with no warning.                                                                                                                                                                 | `ssr.test.mjs`, `hydration.test.ts`                | PR   | have    |
 
 ### 3.7 Security and supply chain
 
@@ -180,15 +180,15 @@ What is missing or wrong, measured on `feat/webkit-ai-ready`:
 
 ### 3.9 Docs and AI contract
 
-| Id   | Passes when                                                                                            | Tool                                                       | When  | Today   |
-| ---- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- | ----- | ------- |
-| DOC1 | `catalog.json`, `llms.txt` and the generated declarations equal what the code produces.                | `check:catalog`, `check:js-dts`, `check:exports`           | PR    | have    |
-| DOC2 | Every component is complete: spec, test, examples, size budget, visual baseline, exports.              | `check:complete`                                           | PR    | have    |
-| DOC3 | The docs site and demos build, and every internal link resolves.                                       | `build:docs`, `check:docs:links`                           | PR    | have    |
-| DOC4 | Every external link in the docs resolves.                                                              | `lychee`                                                   | night | new     |
-| DOC5 | Skills, rules and blocks cite only exports that exist; blocks have intents and pass the consumer lint. | `check:cited-names`, `check:blocks`, `check:examples-lint` | PR    | have    |
-| DOC6 | The MCP server answers its tests over stdio.                                                           | `@aziontech/webkit-mcp` tests                              | PR    | have    |
-| DOC7 | A fresh agent picks a sample of 10 components and blocks through the MCP and passes `webkit doctor`.   | `check-usage.mjs` (needs the API key)                      | night | tighten |
+| Id   | Passes when                                                                                                                           | Tool                                                                                                     | When  | Today   |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----- | ------- |
+| DOC1 | `catalog.json`, `llms.txt` and the generated declarations equal what the code produces.                                               | `check:catalog`, `check:js-dts`, `check:exports`                                                         | PR    | have    |
+| DOC2 | Every component is complete: spec, test, examples, size budget, visual baseline, exports.                                             | `check:complete`                                                                                         | PR    | have    |
+| DOC3 | The docs site and demos build, and every internal link resolves.                                                                      | `build:docs`, `check:docs:links`                                                                         | PR    | have    |
+| DOC4 | Every external link in the built docs resolves; only npm, Reddit and Instagram, which block automated clients, may answer 403 or 429. | `check:external-links` (`lychee` 0.24.2, `apps/docs/lychee.toml`, `lychee-bot-blocked.toml`), `site` job | PR    | have    |
+| DOC5 | Skills, rules and blocks cite only exports that exist; blocks have intents and pass the consumer lint.                                | `check:cited-names`, `check:blocks`, `check:examples-lint`                                               | PR    | have    |
+| DOC6 | The MCP server answers its tests over stdio.                                                                                          | `@aziontech/webkit-mcp` tests                                                                            | PR    | have    |
+| DOC7 | A fresh agent picks a sample of 10 components and blocks through the MCP and passes `webkit doctor`.                                  | `check-usage.mjs` (needs the API key)                                                                    | night | tighten |
 
 ### 3.10 The CI itself
 

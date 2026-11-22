@@ -5,6 +5,7 @@ import MarkdownIt from 'markdown-it'
 import { createHighlighter, type Highlighter } from 'shiki'
 
 import { previewPair } from '../../../packages/theme/src/tokens/contrast-pairs.js'
+import { FOUNDATIONS } from '../src/lib/foundations.ts'
 import {
   type Catalog,
   type CatalogEntry,
@@ -40,19 +41,42 @@ export function highlight(hl: Highlighter, code: string, lang: string): string {
   })
 }
 
-const SOURCE_URL = 'https://github.com/aziontech/webkit/blob/main/'
+const REPOSITORY = 'https://github.com/aziontech/webkit/'
+const SOURCE_REF = process.env.DOCS_SOURCE_REF || 'main'
+const SOURCE_URL = `${REPOSITORY}blob/${SOURCE_REF}/`
+const REPOSITORY_LINK =
+  /^https:\/\/github\.com\/aziontech\/webkit\/(blob|tree)\/main\/([^#?]+)(#.*)?$/
 const ABSOLUTE_HREF = /^(?:[a-z][a-z0-9+.-]*:|\/|#)/i
 
+const PAGE_OF_FILE = new Map(
+  FOUNDATIONS.filter((page) => page.markdown).map((page) => [
+    page.markdown,
+    `/foundations/${page.slug}`
+  ])
+)
+
+function repositoryHref(href: string): string {
+  const link = REPOSITORY_LINK.exec(href)
+  if (!link) return href
+  const [, kind, target = '', hash = ''] = link
+  const page = PAGE_OF_FILE.get(target)
+  return page ? `${page}${hash}` : `${REPOSITORY}${kind}/${SOURCE_REF}/${target}${hash}`
+}
+
 function sourceHref(href: string, file: string): string {
-  if (!href || ABSOLUTE_HREF.test(href)) return href
+  if (!href) return href
+  if (ABSOLUTE_HREF.test(href)) return repositoryHref(href)
   const [path = '', hash = ''] = href.split('#')
   const target = relative(REPO, resolve(dirname(file), path))
     .split('\\')
     .join('/')
   if (!target || target.startsWith('..')) return href
+  const anchor = hash ? `#${hash}` : ''
   const spec = /^\.specs\/([a-z0-9-]+)\.md$/.exec(target)
-  if (spec && !spec[1]?.startsWith('_')) return `/components/${spec[1]}${hash ? `#${hash}` : ''}`
-  return `${SOURCE_URL}${target}${hash ? `#${hash}` : ''}`
+  if (spec && !spec[1]?.startsWith('_')) return `/components/${spec[1]}${anchor}`
+  const page = PAGE_OF_FILE.get(target)
+  if (page) return `${page}${anchor}`
+  return `${SOURCE_URL}${target}${anchor}`
 }
 
 const HTML_COMMENT = /<!--[\s\S]*?-->/g
@@ -135,7 +159,7 @@ export async function markdown(file = ''): Promise<InstanceType<typeof MarkdownI
       const next = sourceHref(href, file)
       if (token && next !== href) {
         token.attrSet('href', next)
-        if (next.startsWith(SOURCE_URL)) {
+        if (next.startsWith(REPOSITORY)) {
           token.attrSet('target', '_blank')
           token.attrSet('rel', 'noopener noreferrer')
         }

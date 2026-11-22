@@ -1,11 +1,16 @@
 import { fileURLToPath } from 'node:url'
 
+import webkit from '@aziontech/webkit/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  plugins: [vue({ template: { transformAssetUrls: { includeAbsolute: false } } }), tailwindcss()],
+  plugins: [
+    webkit(),
+    vue({ template: { transformAssetUrls: { includeAbsolute: false } } }),
+    tailwindcss()
+  ],
   resolve: {
     alias: [
       {

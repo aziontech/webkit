@@ -58,6 +58,10 @@ const CI_ONLY = {
   'pnpm test:docs:smoke':
     'needs the docs build and Chromium; pnpm test:docs:smoke after pnpm build:docs',
   'pnpm check:docs:editor-chunks': 'needs the docs build; pnpm test:docs covers its logic',
+  'pnpm --filter @aziontech/webkit-docs run check:external-links':
+    'needs the docs build, lychee and the network (it requests every external link)',
+  'pnpm --filter @aziontech/webkit-docs run check:lighthouse':
+    'needs both built sites, Chromium and the network (npx downloads Lighthouse); about 2 min',
   'pnpm build:demos': 'a full demos build',
   'pnpm --filter @aziontech/webkit test:ssr': 'about 35 s; renders every block and example',
   'pnpm --filter @aziontech/webkit run test:consume': 'installs and builds a consumer app',
