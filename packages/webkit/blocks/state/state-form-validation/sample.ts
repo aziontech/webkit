@@ -1,5 +1,5 @@
 import type { FormValidationValues } from './state-form-validation.vue'
-import type { FormValidationOrigin } from './variants/section-rejected.vue'
+import type { FormValidationOrigin } from './types'
 
 export const sampleValues: FormValidationValues = {
   key: 'API_BASE_URL',

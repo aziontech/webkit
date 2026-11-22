@@ -14,6 +14,8 @@
   import { ref } from 'vue'
 
   export interface DeployDrawerFrameProps {
+    /** Drawer title and form name. */
+    title?: string
     /** One line under the title; empty for none. */
     description?: string
     /** The deploy targets are loading: skeletons stand in for the body. */
@@ -25,11 +27,16 @@
   }
 
   const props = withDefaults(defineProps<DeployDrawerFrameProps>(), {
+    title: 'Deploy',
     description: '',
     loading: false,
     blocked: false,
     reasonId: ''
   })
+
+  const emit = defineEmits<{
+    submit: [event: Event]
+  }>()
 
   const open = defineModel<boolean>('open', { default: false })
 
@@ -42,8 +49,10 @@
 
   const formEl = ref<HTMLFormElement | null>(null)
 
-  const onSubmit = () => {
-    if (!props.blocked) open.value = false
+  const onSubmit = (event: Event) => {
+    if (props.blocked) return
+    emit('submit', event)
+    open.value = false
   }
 
   useShortcuts({
@@ -75,13 +84,13 @@
       <form
         ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
-        aria-label="Deploy"
+        :aria-label="title"
         novalidate
         @submit.prevent="onSubmit"
       >
         <PanelHeader class="w-full">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>Deploy</DrawerTitle>
+            <DrawerTitle>{{ title }}</DrawerTitle>
             <p
               v-if="description"
               class="text-body-sm text-(--text-muted)"

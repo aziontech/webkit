@@ -1,6 +1,6 @@
 <script setup lang="ts">
+  import DeployForm from '../parts/deploy-form.vue'
   import { sampleImportedRepository } from '../sample'
-  import DeployForm from './form.vue'
 </script>
 
 <template>

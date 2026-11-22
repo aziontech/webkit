@@ -3,7 +3,10 @@
   "name": "CreatePage",
   "title": "Blocks/Create/CreatePage",
   "surface": "app",
-  "keyboard": { "entry": "field", "escape": "cancel" },
+  "keyboard": {
+    "entry": "field",
+    "escape": "cancel"
+  },
   "summary": "The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `AppHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `FieldError`, `Switch`, `RadioGroup` (`variant=\"card\"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.",
   "preview": {
     "layout": "fullscreen",
@@ -44,12 +47,7 @@
     "name": "Default",
     "file": "create-page.vue"
   },
-  "files": [
-    "domain-validation.ts",
-    "use-create-form.ts",
-    "parts/creation-header.vue",
-    "parts/discard-dialog.vue"
-  ],
+  "files": ["domain-validation.ts"],
   "variants": [
     {
       "name": "CreateZone",

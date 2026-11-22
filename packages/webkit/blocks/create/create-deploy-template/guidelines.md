@@ -18,9 +18,9 @@ A focused page, outside the console shell, where the user turns a template into 
 
 ## Building blocks
 
-### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 
-The creation header from `top-bar/top-bar-creation`: a small outlined back `IconButton` to the Creation Center, the `Brand` linking home, a `Breadcrumb` whose last crumb is the template and is current, and the account `Avatar` alone on the right. No sidebar, no search.
+The creation header from `top-bar/top-bar-creation`: a small outlined back `IconButton` to the Creation Center, the `Brand` linking home, a `Breadcrumb` whose last crumb is the template and is current, and the account `AppHeaderAccount` alone on the right. No sidebar, no search.
 
 ### B. Template and Git step — `Card`, `EmptyState`, `Button`, `Link` (required)
 
@@ -40,7 +40,7 @@ An outlined medium `Button` under the step that returns to the template list. It
 
 ## Data
 
-The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `create-deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out, and the imported repository, uploaded project and integration the variants pass. Every variant renders the block: the header, the preview card, Back and Escape come from it, and the variant fills the default slot with the step it is on and keeps that step's own records.
+The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `create-deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out, and the imported repository, uploaded project and integration the variants pass. Every variant renders a step from `parts/` that renders the block: the header, the preview card, Back and Escape come from it, and the step fills the default slot and keeps its own records.
 
 | Prop            | Type                     | What it does                                                                       |
 | --------------- | ------------------------ | ---------------------------------------------------------------------------------- |

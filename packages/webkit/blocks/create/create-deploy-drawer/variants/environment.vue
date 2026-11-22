@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
-  import { toast } from '@aziontech/webkit/toast'
-  import { computed, onBeforeUnmount, ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
 
+  import { useDeployRun } from '../composables/use-deploy-run'
+  import { useReloadFlag } from '../composables/use-reload-flag'
   import CreateDeployDrawer, {
     type DeployDrawerEnvironment,
     type DeployDrawerValues
   } from '../create-deploy-drawer.vue'
+  import { listFormat } from '../lib/list-format'
   import {
     sampleDefaultValues,
     sampleEnvironmentEntries,
@@ -14,10 +16,6 @@
     sampleLastUsedEnvironment,
     sampleResources
   } from '../sample'
-
-  const RELOAD_MS = 600
-  const RUN_MS = 3200
-  const RUN_TOAST = 'deploy-drawer-environment-run'
 
   const initialValues: Partial<DeployDrawerValues> = {
     ...sampleDefaultValues,
@@ -27,17 +25,14 @@
 
   const open = ref(false)
   const environment = ref('Production')
-  const reloading = ref(false)
   const defaults = ref<Partial<DeployDrawerValues>>(initialValues)
-  const deployed = ref<DeployDrawerValues | null>(null)
-
-  let reloadTimer: ReturnType<typeof setTimeout> | undefined
-  let runTimer: ReturnType<typeof setTimeout> | undefined
-
-  const listFormat = (names: string[]) =>
-    names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : (names[0] ?? '')
 
   const projectsLabel = (count: number) => `${count} ${count === 1 ? 'project' : 'projects'}`
+
+  const versionOf = (values: DeployDrawerValues) => {
+    const service = sampleResources[0]
+    return service.versions.find((entry) => entry.id === values.versions[service.key])?.name ?? ''
+  }
 
   const reachOf = (name: string) => sampleEnvironmentReach[name]
 
@@ -82,60 +77,22 @@
     })
   )
 
-  watch(environment, () => {
-    clearTimeout(reloadTimer)
-    reloading.value = true
-    reloadTimer = setTimeout(() => {
-      reloading.value = false
-    }, RELOAD_MS)
-  })
+  const reloading = useReloadFlag(environment)
 
-  watch(open, (isOpen) => {
-    if (!isOpen) defaults.value = initialValues
-  })
-
-  const edit = () => {
-    toast.dismiss(RUN_TOAST)
-    if (deployed.value) defaults.value = deployed.value
-    open.value = true
-  }
-
-  const startRun = () => {
-    const values = deployed.value
-    if (!values) return
-    clearTimeout(runTimer)
-    const service = sampleResources[0]
-    const version =
-      service.versions.find((entry) => entry.id === values.versions[service.key])?.name ?? ''
-    const targets = listFormat(deployEnvironments(values.environment))
-    const count = projectCount(values.environment)
-    toast.loading('Deploying web-app…', {
-      id: RUN_TOAST,
-      description: `${version} to ${targets}. It keeps running if you leave.`
+  const { onSubmit } = useDeployRun({
+    toastId: 'deploy-drawer-environment-run',
+    open,
+    defaults,
+    initialValues,
+    start: (values) => ({
+      title: 'Deploying web-app…',
+      description: `${versionOf(values)} to ${listFormat(deployEnvironments(values.environment))}. It keeps running if you leave.`
+    }),
+    finish: (values) => ({
+      status: 'success',
+      title: `web-app is live in ${listFormat(deployEnvironments(values.environment))}.`,
+      description: `${projectsLabel(projectCount(values.environment))} serve ${versionOf(values)} now.`
     })
-    runTimer = setTimeout(() => {
-      toast.success(`web-app is live in ${targets}.`, {
-        id: RUN_TOAST,
-        description: `${projectsLabel(count)} serve ${version} now.`,
-        duration: 0,
-        closable: true,
-        actions: [
-          { label: 'Edit', onClick: edit },
-          { label: 'Redeploy', onClick: startRun }
-        ]
-      })
-    }, RUN_MS)
-  }
-
-  const onSubmit = (_event: Event, values: DeployDrawerValues) => {
-    deployed.value = values
-    startRun()
-  }
-
-  onBeforeUnmount(() => {
-    clearTimeout(reloadTimer)
-    clearTimeout(runTimer)
-    toast.dismiss(RUN_TOAST)
   })
 </script>
 

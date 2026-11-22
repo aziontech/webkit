@@ -43,7 +43,6 @@
     "name": "Default",
     "file": "state-form-validation.vue"
   },
-  "files": ["sample.ts"],
   "variants": [
     {
       "name": "ValidationErrors",

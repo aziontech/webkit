@@ -1,23 +1,6 @@
-export type CsvRow = Record<string, string>
+import { splitCsvLine } from '@aziontech/webkit/utils/csv'
 
-const splitCsvLine = (line: string) => {
-  const cells: string[] = []
-  let cell = ''
-  let quoted = false
-  for (let i = 0; i < line.length; i += 1) {
-    const char = line[i]
-    if (quoted && char === '"' && line[i + 1] === '"') {
-      cell += '"'
-      i += 1
-    } else if (char === '"') quoted = !quoted
-    else if (char === ',' && !quoted) {
-      cells.push(cell.trim())
-      cell = ''
-    } else cell += char
-  }
-  cells.push(cell.trim())
-  return cells
-}
+export type CsvRow = Record<string, string>
 
 export const inferType = (values: string[]) => {
   const filled = values.filter((value) => value !== '')

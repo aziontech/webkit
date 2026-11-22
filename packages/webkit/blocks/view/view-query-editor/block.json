@@ -44,7 +44,18 @@
     "name": "Tables",
     "file": "view-query-editor.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "lib/sidebar-frame.ts",
+    "parts/editor-toolbar.vue",
+    "parts/history-sidebar.vue",
+    "parts/query-results.vue",
+    "parts/table-data-view.vue",
+    "parts/table-definition.vue",
+    "parts/tables-sidebar.vue",
+    "parts/templates-drawer.vue",
+    "types.ts"
+  ],
   "variants": [
     {
       "name": "Schema",

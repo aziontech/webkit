@@ -139,7 +139,7 @@ To go live, render the block from a page that owns the request and pass what it 
 </template>
 ```
 
-Then delete `sample.ts` and its import.
+Then delete the `sample.ts` import of `create-drawer.vue`.
 
 ## Do
 

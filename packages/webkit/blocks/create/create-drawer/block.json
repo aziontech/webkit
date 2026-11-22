@@ -83,7 +83,14 @@
     "name": "Default",
     "file": "create-drawer.vue"
   },
-  "files": ["sample.ts", "composables/use-drawer-guard.ts", "parts/unsaved-changes-dialog.vue"],
+  "files": [
+    "sample.ts",
+    "composables/use-drawer-guard.ts",
+    "lib/certificate-match.ts",
+    "parts/form-drawer.vue",
+    "parts/submit-button.vue",
+    "parts/unsaved-changes-dialog.vue"
+  ],
   "variants": [
     {
       "name": "AddEnvironment",

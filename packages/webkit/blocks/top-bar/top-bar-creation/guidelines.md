@@ -32,7 +32,7 @@ Inside `AppHeader.Brand`, linked to the home route through its `href` with `aria
 
 Where the flow lives: the module with an `href`, then the current page with none (`Resources › Create Resource`). The crumb links are a way out alongside the back button. A step of a wizard is not a crumb.
 
-### E. Account — `DropdownMenu` + `Avatar` (required)
+### E. Account — `DropdownMenu` + `AppHeaderAccount` (required)
 
 The signed-in user, inside a button labelled `Account menu` that opens the account `DropdownMenu`: name and email on top, Account settings, then Docs and Log out. It stays on every screen of the flow, including terminal ones, so the user never looks signed out.
 

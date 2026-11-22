@@ -20,9 +20,9 @@ The Creation Center, where a new project starts. The user arrives from Home or a
 
 ## Building blocks
 
-### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 
-The creation header from `top-bar/top-bar-creation`: a small outlined back `IconButton` to Home, the `Brand` linking home, a `Breadcrumb` with Creation Center as the single current crumb, and the account `Avatar` alone on the right. No sidebar.
+The creation header from `top-bar/top-bar-creation`: a small outlined back `IconButton` to Home, the `Brand` linking home, a `Breadcrumb` with Creation Center as the single current crumb, and the account `AppHeaderAccount` alone on the right. No sidebar.
 
 ### B. Page heading — `PageHeader` (required)
 
