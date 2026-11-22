@@ -307,10 +307,19 @@ test('add copies the sibling variant a variant imports and points the import at 
     const files = manifest.blocks['settings/settings-form'].files
     assert.deepEqual(files.map((f) => f.variant).sort(), [
       'Data',
+      'Data',
+      'Data',
+      'Data',
       'SaveAll',
       'SavePerGroup',
       'SavingOneGroup'
     ])
+    for (const part of [
+      'general-group-card.vue',
+      'notifications-group-card.vue',
+      'settings-form-save.ts'
+    ])
+      assert.ok(existsSync(join(dir, `src/views/settings-form.${part}`)), part)
     assert.deepEqual(files.find((f) => f.variant === 'SavingOneGroup').imports, {
       './save-per-group.vue': './settings-form-save-per-group.vue'
     })

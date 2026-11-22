@@ -52,8 +52,7 @@
     "parts/ai-chat-media-segment.vue",
     "parts/ai-chat-start.vue",
     "parts/ai-chat-tool-segment.vue",
-    "parts/ai-chat-turn.vue",
-    "parts/artifact-chat.vue"
+    "parts/ai-chat-turn.vue"
   ],
   "variants": [
     {

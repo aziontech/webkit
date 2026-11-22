@@ -98,7 +98,7 @@ export function primaryComponents(sfc) {
 }
 
 export function partSfcs(block) {
-  return Object.entries(block.files || {})
+  return Object.entries({ ...(block.localSources || {}), ...(block.files || {}) })
     .filter(([file]) => file.endsWith('.vue'))
     .map(([, sfc]) => sfc)
 }

@@ -48,13 +48,7 @@
     "name": "ListPage",
     "file": "shell-console.vue"
   },
-  "files": [
-    "sample.ts",
-    "parts/account-switch-page.vue",
-    "parts/account-switch-table.vue",
-    "parts/environment-breadcrumb.vue",
-    "parts/notification-list.vue"
-  ],
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "DetailPage",

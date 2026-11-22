@@ -3,7 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Item from '@aziontech/webkit/item'
+  import Item from '@aziontech/webkit/item-root'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { ref } from 'vue'

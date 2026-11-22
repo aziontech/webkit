@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import { join, relative } from 'node:path'
+import { dirname, join, normalize, relative } from 'node:path'
 
 import { GUIDELINE_FILE, guidelinesSummary } from './guidelines.mjs'
 
@@ -53,6 +53,42 @@ function blockDirs(root, out = []) {
 
 const readText = (file) => readFileSync(file, 'utf8').replace(/\n$/, '')
 
+const LOCAL_IMPORT = /(?:\bfrom\s+|\bimport\s*\(\s*)(['"])(\.{1,2}\/[^'"]+)\1/g
+const LOCAL_SUFFIXES = ['', '.ts', '.vue', '.js', '/index.ts']
+
+function localSources(dir, entries) {
+  const found = {}
+  const queue = [...entries]
+  for (let i = 0; i < queue.length; i += 1) {
+    const text = readText(join(dir, queue[i]))
+    for (const m of text.matchAll(LOCAL_IMPORT)) {
+      const target = normalize(join(dirname(queue[i]), m[2]))
+        .split('\\')
+        .join('/')
+      if (target.startsWith('..')) continue
+      const suffix = LOCAL_SUFFIXES.find((s) => {
+        const path = join(dir, target + s)
+        return existsSync(path) && !readdirSafe(path)
+      })
+      if (suffix === undefined) continue
+      const file = target + suffix
+      if (entries.includes(file) || file in found) continue
+      found[file] = readText(join(dir, file))
+      queue.push(file)
+    }
+  }
+  return found
+}
+
+function readdirSafe(path) {
+  try {
+    readdirSync(path)
+    return true
+  } catch {
+    return false
+  }
+}
+
 export function readBlocks(pkgRoot) {
   const root = join(pkgRoot, 'blocks')
   const blocks = {}
@@ -71,13 +107,24 @@ export function readBlocks(pkgRoot) {
       file: `blocks/${block.id}/${v.file}`,
       sfc: readText(join(dir, v.file))
     }))
-    const sharedSfcs = (block.files || [])
-      .filter((file) => file.endsWith('.vue'))
-      .map((file) => readText(join(dir, file)))
+    const local = localSources(dir, [
+      block.primary.file,
+      ...(block.variants || []).map((v) => v.file),
+      ...(block.files || [])
+    ])
+    const sharedSfcs = [
+      ...(block.files || []).filter((file) => file.endsWith('.vue')),
+      ...Object.keys(local).filter((file) => file.endsWith('.vue'))
+    ]
+      .filter((file, index, all) => all.indexOf(file) === index)
+      .map((file) => local[file] ?? readText(join(dir, file)))
     const imports = new Map()
-    for (const sfc of [primarySfc, ...variants.map((v) => v.sfc), ...sharedSfcs]) {
+    const modules = [...(block.files || []), ...Object.keys(local)]
+      .filter((file, index, all) => !file.endsWith('.vue') && all.indexOf(file) === index)
+      .map((file) => local[file] ?? readText(join(dir, file)))
+    for (const sfc of [primarySfc, ...variants.map((v) => v.sfc), ...sharedSfcs, ...modules]) {
       for (const imp of importsOf(sfc))
-        if (!imports.has(imp.subpath)) imports.set(imp.subpath, imp.binding)
+        if (!imports.get(imp.subpath)) imports.set(imp.subpath, imp.binding)
     }
     const subpaths = [...imports.keys()].sort()
     const entry = {
@@ -104,6 +151,7 @@ export function readBlocks(pkgRoot) {
       entry.guidelines = readText(guidelinesPath)
       entry.guidelinesSummary = guidelinesSummary(entry.guidelines)
     }
+    Object.defineProperty(entry, 'localSources', { value: local, enumerable: false })
     blocks[block.id] = entry
   }
   if (errors.length) throw new Error(`Could not read blocks:\n  ${errors.join('\n  ')}`)

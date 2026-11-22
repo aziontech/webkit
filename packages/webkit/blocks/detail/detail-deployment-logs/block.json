@@ -40,12 +40,7 @@
     "name": "Running",
     "file": "detail-deployment-logs.vue"
   },
-  "files": [
-    "sample.ts",
-    "parts/deployment-page.vue",
-    "parts/deployment-details-card.vue",
-    "parts/deployment-logs-card.vue"
-  ],
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Success",

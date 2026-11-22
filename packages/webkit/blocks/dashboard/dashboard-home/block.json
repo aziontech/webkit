@@ -45,12 +45,7 @@
     "parts/home-domain-check.vue",
     "parts/home-first-access.vue",
     "parts/home-panels.vue",
-    "parts/home-usage-band.vue",
-    "parts/summary-activity.vue",
-    "parts/summary-marketplace.vue",
-    "parts/summary-metrics.vue",
-    "parts/summary-usage-card.vue",
-    "parts/summary-zones.vue"
+    "parts/home-usage-band.vue"
   ],
   "variants": [
     {

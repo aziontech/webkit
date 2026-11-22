@@ -7,7 +7,7 @@
   import Card from '@aziontech/webkit/card'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Item from '@aziontech/webkit/item'
+  import Item from '@aziontech/webkit/item-root'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatTileGroup from '@aziontech/webkit/stat-tile-group'
   import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'

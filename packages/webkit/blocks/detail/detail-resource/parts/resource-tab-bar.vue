@@ -1,15 +1,15 @@
-<script setup lang="ts" generic="T extends string">
+<script setup lang="ts">
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Tabs from '@aziontech/webkit/tabs'
 
   defineProps<{
     /** The tabs, in order. */
-    tabs: { value: T; label: string }[]
+    tabs: { value: string; label: string }[]
     /** The tab that holds unsaved changes; empty when none does. */
     dirtyTab?: string
   }>()
 
-  const model = defineModel<T>({ required: true })
+  const model = defineModel<string>({ required: true })
 
   defineSlots<{ actions?(): unknown }>()
 </script>

@@ -38,9 +38,6 @@
   },
   "files": [
     "sample.ts",
-    "parts/actor-bar-card.vue",
-    "parts/actor-page.vue",
-    "parts/actor-requests-card.vue",
     "parts/attention-card.vue",
     "parts/matched-chart.vue",
     "parts/security-card.vue",

@@ -62,19 +62,7 @@
     "name": "Default",
     "file": "shell-docs.vue"
   },
-  "files": [
-    "sample.ts",
-    "agent-guide-data.ts",
-    "agent-setup-data.ts",
-    "article-data.ts",
-    "landing-data.ts",
-    "parts/agent-guide-article.vue",
-    "parts/agent-setup-article.vue",
-    "parts/article-page.vue",
-    "parts/landing-page.vue",
-    "parts/reference-article.vue",
-    "reference-data.ts"
-  ],
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Article",

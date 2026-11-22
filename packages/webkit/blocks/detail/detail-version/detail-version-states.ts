@@ -18,7 +18,7 @@ export interface VersionDetailStateTag {
   icon: string
 }
 
-export const STATE_TAGS: Record<VersionDetailState, VersionDetailStateTag> = {
+const STATE_TAGS: Record<VersionDetailState, VersionDetailStateTag> = {
   draft: { label: 'Draft', severity: 'warning', icon: 'az az-file-pen' },
   deployed: { label: 'Deployed', variant: 'primary', icon: '' },
   ready: { label: 'Ready', severity: 'success', icon: '' }

@@ -39,15 +39,7 @@
     "name": "Default",
     "file": "account-team-permissions.vue"
   },
-  "files": [
-    "sample.ts",
-    "lib/team-form.ts",
-    "parts/team-form-header.vue",
-    "parts/team-permissions-field.vue",
-    "parts/create-team-page.vue",
-    "parts/edit-team-page.vue",
-    "parts/team-status-group.vue"
-  ],
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "CreateTeam",
