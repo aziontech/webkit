@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 4
 template: 2
-checksum: 39eccc91fdb5af11d71f2ba464674c1efdc4da56abb66083871db5d0bbff3457
+checksum: 369fb5a786e5234b51284ead3dc995ba3f12d4ec6c18d7d194c26dcdf5fda1e2
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -169,14 +169,14 @@ _No motion of its own — `ResponseLoading` owns the pulsing dots shown while `p
 
 ## Tokens
 
-| Region              | Token                                                                                                |
-| ------------------- | ---------------------------------------------------------------------------------------------------- |
-| user bubble surface | `var(--bg-surface-raised)`, `var(--shape-card)` (the largest rounded shape token), at most 80 % wide |
-| bubble padding      | `var(--spacing-md)` / `var(--spacing-sm)`                                                            |
-| content             | `.text-body-lg`, `var(--text-default)`; blocks `var(--spacing-md)` apart                             |
-| system line         | `.text-body-sm`, `var(--text-muted)`                                                                 |
-| error line          | `.text-body-sm`, `var(--danger-foreground)`                                                          |
-| gaps                | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-2xs)`                                       |
+| Region              | Token                                                                                                                  |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| user bubble surface | `var(--bg-surface-raised)`, `calc(var(--shape-card) * 3)` (the radius of the stacked `PromptInput`), at most 80 % wide |
+| bubble padding      | `var(--spacing-md)` / `var(--spacing-sm)`                                                                              |
+| content             | `.text-body-lg`, `var(--text-default)`; blocks `var(--spacing-md)` apart                                               |
+| system line         | `.text-body-sm`, `var(--text-muted)`                                                                                   |
+| error line          | `.text-body-sm`, `var(--danger-foreground)`                                                                            |
+| gaps                | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-2xs)`                                                         |
 
 ## Theme gaps
 

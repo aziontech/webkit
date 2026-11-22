@@ -1,6 +1,6 @@
 # AI chat
 
-A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.
+A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation: one reading column the thread scrolls in, with the header controls and the composer floating over it. Beside it, the conversation history. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -18,41 +18,45 @@ A full page where a person talks with the generative AI assistant about their ac
 
 ## Building blocks
 
-### A. Header — `Tag`, `Button`
+### A. Header — `IconButton`, `Tag`, `Button`
 
-The assistant's name as the page heading, a Preview `Tag` while the feature is in preview, and a transparent New chat `Button` at the inline end, disabled while the thread is empty. New chat clears the thread without confirmation; the previous thread belongs in a history list, not in a dialog.
+No bar and no border: the thread scrolls under it. On a phone it is two round floating `IconButton`s over the thread, blurred over a translucent raised surface: Open conversation history at the inline start and New chat at the inline end; the page heading stays for assistive tech only. From the md breakpoint it is a quiet row over a fade of the canvas: a Show or Hide conversation history toggle (`aria-expanded`), the assistant's name in a small label, a Preview `Tag` while the feature is in preview, and a transparent New chat `Button` at the inline end. New chat is disabled while the thread is empty and clears it without confirmation; the previous thread stays in the history.
+
+### A2. History — `ConversationHistory`, `Drawer`
+
+The reader's earlier conversations, grouped by date, with a New chat row and a search field (`creatable`, `searchable`). From the md breakpoint a side panel at the inline start, open by default and folded away by the header toggle; on a phone a start-side `Drawer` the round menu button opens, closed by picking a conversation or New chat. The open conversation is `v-model:activeKey`; the list comes from `sample.ts` until the app gives its own.
 
 ### B. Empty state — `EmptyState`, `SuggestionGroup`
 
-Before the first message: an `EmptyState` with the assistant mark, one question as the title and one sentence on what the assistant can read, over a vertical `SuggestionGroup` of up to five support prompts with icons. Selecting a prompt sends it as the first message.
+Before the first message, inside the log so the composer stays mounted and keeps focus when the thread starts: an `EmptyState` with the assistant mark, one question as the title and one sentence on what the assistant can read, over a vertical `SuggestionGroup` of up to five support prompts with icons. Selecting a prompt sends it as the first message.
 
 ### C. Message log — `Conversation`
 
-Fills the space between header and composer and is the only part that scrolls. It follows the newest message while the reader is at the end, stops when they scroll up, and offers Scroll to the latest message. It announces each finished response once; streaming text is never read token by token.
+Fills the page and is the only part that scrolls, in a centered reading column; the header controls and the composer float over it. It follows the newest message while the reader is at the end, stops when they scroll up, and offers Scroll to the latest message. It announces each finished response once; streaming text is never read token by token.
 
 ### D. Prompt — `ChatMessage`, `ImageGallery`, `FilePreview`
 
-The reader's prompt at the inline end in a filled bubble with their name and time. The files they attached draw under the text the way media draws in a response (section L): images in an `ImageGallery`, a document in a `FilePreview`, audio and video in their players.
+The reader's prompt at the inline end in a filled bubble with the stacked composer's radius, no avatar, no visible name or time (both stay in its accessible name; the time is its tooltip). The files they attached draw under the text the way media draws in a response (section L): images in an `ImageGallery`, a document in a `FilePreview`, audio and video in their players.
 
 ### E. Response — `ChatMessage`, `Reasoning`, `StreamingResponse`
 
-The assistant's response at the inline start beside its mark. It shows the loading text while pending, a collapsed `Reasoning` that reads Thinking and then Thought for N seconds, and the Markdown answer in `StreamingResponse` with a caret while it streams. Numbered citations link to the sources. On failure the partial text stays with the error line and Try again.
+The assistant's response as plain text across the reading column, in the larger reading size, with no avatar, bubble or visible name. It shows the loading text while pending, a collapsed `Reasoning` that reads Thinking and then Thought for N seconds, and the Markdown answer in `StreamingResponse` with a caret while it streams. Each citation is a small chip with the source's site name that links to it. On failure the partial text stays with the error line and Try again.
 
 ### F. Sources — `Sources`
 
-Under a complete response that used documents: collapsed under the count, opened by a citation. Item n is citation [n].
+At the end of the action row of a complete response that used documents: a pill with up to three overlapping site marks, named by the count, that opens the list under the row; a citation opens it too. Item n is citation [n].
 
 ### G. Response actions — `ChatMessage`, `CopyButton`, `IconButton`
 
-`ChatMessage.Actions` under a complete response, always visible: Copy (`CopyButton`), Regenerate (`IconButton`, disabled while another response is generating) and `ChatMessage.Feedback` with Helpful and Not helpful.
+`ChatMessage.Actions` under a complete response, always visible: Copy (`CopyButton`), `ChatMessage.Feedback` with Helpful and Not helpful, Regenerate (`IconButton`, disabled while another response is generating), Read aloud (`show-read-aloud`, hidden where the browser has no speech synthesis), then the Sources pill in `#trailing`. Icons draw at 16px inside a 40px target.
 
 ### H. Follow-up questions — `SuggestionGroup`
 
-After the last complete response, two or three questions that narrow it, as wrapping chips aligned with the response text. They disappear as soon as the reader sends anything else.
+After the last complete response, two or three questions that narrow it, as wrapping pills aligned with the response text. They disappear as soon as the reader sends anything else.
 
 ### I. Composer — `PromptInput`, `PromptInputAttachButton`
 
-Pinned under the log, centered on the reading width. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter, and Submit becomes Stop while a response is pending or streaming. The disclaimer is its hint. With `attachable`, a `PromptInputAttachButton` (and drop and paste) attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating pill at the foot of the reading column, over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter, and Submit becomes Stop while a response is pending or streaming. The disclaimer is its hint. With `attachable`, a `PromptInputAttachButton` (and drop and paste) attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. The composer is disabled while the conversation is restored.
 
 ### J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
 
@@ -118,6 +122,8 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 | `maxFiles`          | `number`                                  | Most files on one message; default 4.                                                                                                                                                                                         |
 | `maxFileSize`       | `number`                                  | Largest file in bytes; default 10 MB.                                                                                                                                                                                         |
 | `resolveAppUrl`     | `(resource) => string \| Promise<string>` | Gives a widget that has no inline HTML a trusted `https` address; left out, only inline widgets show.                                                                                                                         |
+
+The open conversation of the history is `v-model:activeKey` (`string | null`): picking a row sets it, New chat clears it; load that conversation's messages when it changes.
 
 | Event              | Payload                     | When                                                                                                                                              |
 | ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -211,7 +217,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 
 - Show the loading text only after a second; a response that arrives faster streams directly.
 - Keep actions visible on every complete response, not on hover.
-- Cite sources inline with numbers and list them under the response.
+- Cite sources inline with site-name chips and open the list from the Sources pill.
 - Let the reader stop a response and keep what streamed, marked as stopped.
 - Keep the composer usable while a response streams so the reader can draft the next prompt.
 - Return focus to the composer when a response finishes.
@@ -243,12 +249,13 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 ## Accessibility
 
 - The log is a named `role="log"` whose own live behavior is off; a polite live region reads each finished response once, with its author.
-- Each message is an `article` named by author and time; avatars are hidden from assistive tech because the author line names the author.
+- Each message is an `article` named by author and time; the author and time are visually hidden, never removed.
 - Responses are `aria-busy` while loading or streaming; the caret is hidden.
 - The composer is named Prompt, described by its counter and disclaimer; Enter submits and an IME composition never does.
 - Feedback thumbs are toggle buttons with `aria-pressed`, and the submitted state is a status message.
-- Keyboard order: header, log (focusable to scroll), each message's links and actions, follow-ups, composer.
-- Alignment never carries meaning alone: every message has its author line.
+- Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer.
+- The phone history is a `Drawer` named Conversation history that returns focus to the menu button; the desktop toggle names what it does and carries `aria-expanded`.
+- Alignment never carries meaning alone: every message's accessible name says who wrote it.
 - Reconnecting is a polite status and Connection lost an alert; the queued messages are a list named Queued messages, each with Remove from queue; a question card is a group named by its question; the placeholders while restoring are a status named Loading the conversation.
 
 ## States
@@ -258,10 +265,11 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - Error: `error` set: the last response keeps its partial text, with the error line and Try again; with no response yet, a pending response shows the error.
 - Tools: a `tool-call` part draws as a `ToolCall` titled from `tools`, its input and output in code; one with `approval` draws the `ToolApproval` card first (see `ai/ai-action-approval`).
 - Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up fills the composer.
-- LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response, with `followUps`.
+- LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response with its Sources pill, with `followUps`.
 - Media: an answer with two charts in an `ImageGallery`, a CSV report in a `FilePreview` and an audio summary.
 - Agent: activity steps, a finished `SubagentCard` and a pending `AgentQuestion`; answering it resolves the interrupt and the card keeps the answer.
-- Restoring: `hydrating` with no messages yet shows the `Skeleton` rows and a disabled composer.
+- Restoring: `hydrating` with no messages yet shows `Skeleton` bubbles and lines and a disabled composer.
+- History: the side panel on desktop, the start drawer on a phone, with New chat and search.
 - Attachments, structured answers and rich tool results: a prompt with an image and a PDF, a `structured-output` part as JSON and a tool result with text and an image (variant Media).
 - Queue, older messages and connection: `queue` shows a `PromptQueue` over the composer, `moreMessages` a Load earlier messages button, and `connection` a Reconnecting status or a Connection lost alert.
 

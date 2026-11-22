@@ -152,33 +152,40 @@
       >
         You stopped this response.
       </p>
-      <Sources
-        v-if="status === 'success' && !stopped"
-        :items="turn.metadata?.sources ?? []"
-        :anchor="`answer-${turn.id}`"
-      />
     </template>
     <template
       v-if="turn.role === 'assistant'"
       #actions
     >
-      <ChatMessage.Actions>
+      <ChatMessage.Actions
+        show-read-aloud
+        :read-aloud-text="textOf(turn)"
+      >
         <CopyButton
-          size="small"
+          size="large"
           :value="textOf(turn)"
-        />
-        <IconButton
-          icon="az az-refresh"
-          aria-label="Regenerate response"
-          variant="ghost"
-          size="small"
-          :disabled="!ready"
-          @click="emit('retry', $event)"
         />
         <ChatMessage.Feedback
           :model-value="rating"
           @update:model-value="(value) => emit('rate', value)"
         />
+        <IconButton
+          icon="az az-refresh"
+          aria-label="Regenerate response"
+          variant="ghost"
+          size="large"
+          :disabled="!ready"
+          @click="emit('retry', $event)"
+        />
+        <template
+          v-if="!stopped && turn.metadata?.sources?.length"
+          #trailing
+        >
+          <Sources
+            :items="turn.metadata.sources"
+            :anchor="`answer-${turn.id}`"
+          />
+        </template>
       </ChatMessage.Actions>
     </template>
   </ChatMessage>

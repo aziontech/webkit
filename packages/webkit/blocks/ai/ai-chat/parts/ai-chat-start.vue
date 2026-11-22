@@ -15,27 +15,27 @@
     v-if="hydrating"
     role="status"
     aria-label="Loading the conversation"
-    class="layout-column-content layout-boundary-inline flex flex-1 flex-col gap-(--spacing-lg) py-(--spacing-md)"
+    class="flex flex-col gap-(--spacing-xl)"
   >
-    <div
-      v-for="row in 3"
+    <template
+      v-for="row in 2"
       :key="row"
-      class="flex gap-(--spacing-sm)"
     >
       <Skeleton
-        variant="circle"
-        width="2rem"
-        height="2rem"
+        width="45%"
+        height="2.75rem"
+        class="self-end"
       />
-      <div class="flex flex-1 flex-col gap-(--spacing-xs)">
-        <Skeleton width="25%" />
-        <Skeleton :width="row === 2 ? '50%' : '85%'" />
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <Skeleton width="90%" />
+        <Skeleton width="80%" />
+        <Skeleton :width="row === 2 ? '40%' : '60%'" />
       </div>
-    </div>
+    </template>
   </div>
   <div
     v-else
-    class="layout-column-content layout-boundary-inline flex flex-1 flex-col justify-center gap-(--spacing-lg) py-(--spacing-md)"
+    class="my-auto flex flex-col gap-(--spacing-lg) py-(--spacing-md)"
   >
     <EmptyState
       title="How can I help with your Azion account?"

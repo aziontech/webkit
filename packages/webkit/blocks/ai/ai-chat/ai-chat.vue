@@ -43,6 +43,7 @@
 
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
   import AiChatHeader from './parts/ai-chat-header.vue'
+  import AiChatHistory from './parts/ai-chat-history.vue'
   import AiChatStart from './parts/ai-chat-start.vue'
   import AiChatTurn from './parts/ai-chat-turn.vue'
   import { sampleSuggestions } from './sample'
@@ -141,6 +142,8 @@
     'retry-interrupts': [event: MouseEvent]
   }>()
 
+  const activeKey = defineModel<string | null>('activeKey', { default: null })
+
   const { formatDate } = useLocale()
 
   const prompt = ref('')
@@ -154,6 +157,8 @@
   const settled = ref<Record<string, AiChatQuestion>>({})
   const routed = ref<Record<string, boolean>>({})
   const toolAnswers = ref<Record<string, AiChatQuestion>>({})
+  const historyPanel = ref(true)
+  const historyDrawer = ref(false)
 
   const turns = computed(() =>
     props.messages.filter((message) => message.role === 'user' || message.role === 'assistant')
@@ -286,6 +291,7 @@
     settled.value = {}
     routed.value = {}
     toolAnswers.value = {}
+    activeKey.value = null
     emit('new-chat', event)
   }
 
@@ -317,26 +323,38 @@
 <template>
   <section
     aria-labelledby="ai-chat-title"
-    class="flex min-h-0 w-full grow basis-0 flex-col"
+    class="flex min-h-0 w-full grow basis-0"
   >
-    <AiChatHeader
-      :empty="!turns.length"
-      @new-chat="newChat"
+    <AiChatHistory
+      v-model="activeKey"
+      v-model:drawer-open="historyDrawer"
+      :panel-open="historyPanel"
+      @create="newChat"
     />
-    <div class="flex min-h-0 flex-1 flex-col">
-      <AiChatStart
-        v-if="!turns.length"
-        :hydrating="hydrating"
-        :starters="starters"
-        @select="(event, item) => send(event, item.label)"
+    <div class="relative flex min-h-0 min-w-0 flex-1 flex-col">
+      <AiChatHeader
+        :empty="!turns.length"
+        :history-open="historyPanel"
+        @new-chat="newChat"
+        @open-history="historyDrawer = true"
+        @toggle-history="historyPanel = !historyPanel"
       />
       <Conversation
-        v-else
         aria-label="Conversation with the AI assistant"
         :more-messages="moreMessages"
         :loading-more="loadingMore"
         @load-more="emit('load-more', $event)"
       >
+        <div
+          aria-hidden="true"
+          class="h-(--spacing-lg) shrink-0"
+        />
+        <AiChatStart
+          v-if="!turns.length"
+          :hydrating="hydrating"
+          :starters="starters"
+          @select="(event, item) => send(event, item.label)"
+        />
         <AiChatTurn
           v-for="turn in turns"
           :key="turn.id"
@@ -371,67 +389,61 @@
           :error-message="failure || undefined"
           @retry="emit('retry', $event, last)"
         />
-        <div
+        <SuggestionGroup
           v-if="lastAnswer && followUps?.length"
-          class="ps-[calc(2rem+var(--spacing-sm))]"
-        >
-          <SuggestionGroup
-            :items="followUps"
-            aria-label="Follow-up questions"
-            @select="(event, item) => send(event, item.label)"
+          :items="followUps"
+          aria-label="Follow-up questions"
+          @select="(event, item) => send(event, item.label)"
+        />
+        <template #composer>
+          <AiChatConnectionStatus
+            :connection="connection"
+            :resuming="resuming"
+            :session-generating="sessionGenerating"
+            :loading="loading"
           />
-        </div>
+          <Alert
+            key="alert-2"
+            v-if="interruptErrors.length"
+            severity="danger"
+            size="small"
+            title="Your answer was not sent"
+            :action-label="retryable ? 'Retry' : ''"
+            @action="emit('retry-interrupts', $event)"
+          >
+            {{ interruptErrorText(interruptErrors) }}
+          </Alert>
+          <PromptQueue
+            v-if="queued.length"
+            :items="queued"
+            @remove="(event, item) => removeQueued(event, item.id)"
+          />
+          <PromptInput
+            ref="composerEl"
+            v-model="prompt"
+            v-model:files="files"
+            :status="state"
+            :queueable="queueable"
+            :disabled="hydrating"
+            :accept="accept"
+            :max-files="maxFiles"
+            :max-file-size="maxFileSize"
+            :max-length="4000"
+            @submit="(event, { value }) => send(event, value)"
+            @stop="stop"
+          >
+            <template
+              v-if="attachable"
+              #actions
+            >
+              <PromptInputAttachButton />
+            </template>
+            <template #hint>
+              The AI assistant can make mistakes. Check important information before you act on it.
+            </template>
+          </PromptInput>
+        </template>
       </Conversation>
     </div>
-    <footer
-      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-xs) pb-(--spacing-md)"
-    >
-      <AiChatConnectionStatus
-        :connection="connection"
-        :resuming="resuming"
-        :session-generating="sessionGenerating"
-        :loading="loading"
-      />
-      <Alert
-        key="alert-2"
-        v-if="interruptErrors.length"
-        severity="danger"
-        size="small"
-        title="Your answer was not sent"
-        :action-label="retryable ? 'Retry' : ''"
-        @action="emit('retry-interrupts', $event)"
-      >
-        {{ interruptErrorText(interruptErrors) }}
-      </Alert>
-      <PromptQueue
-        v-if="queued.length"
-        :items="queued"
-        @remove="(event, item) => removeQueued(event, item.id)"
-      />
-      <PromptInput
-        ref="composerEl"
-        v-model="prompt"
-        v-model:files="files"
-        :status="state"
-        :queueable="queueable"
-        :disabled="hydrating"
-        :accept="accept"
-        :max-files="maxFiles"
-        :max-file-size="maxFileSize"
-        :max-length="4000"
-        @submit="(event, { value }) => send(event, value)"
-        @stop="stop"
-      >
-        <template
-          v-if="attachable"
-          #actions
-        >
-          <PromptInputAttachButton />
-        </template>
-        <template #hint>
-          The AI assistant can make mistakes. Check important information before you act on it.
-        </template>
-      </PromptInput>
-    </footer>
   </section>
 </template>

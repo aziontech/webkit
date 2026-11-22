@@ -20,7 +20,7 @@ The moment an assistant needs permission. The reader asked for something that ch
 
 ### A. Conversation frame — `Conversation`, `PromptInput`
 
-The thread and its composer, as in `ai/ai-chat`. While an approved action runs, the composer shows Stop, which emits `stop`; the page cancels the run with `stop()` of `useChat`.
+The thread and its composer, as in `ai/ai-chat`: a quiet title row with no divider, and the `PromptInput` pill floating in the `#composer` of `Conversation`, with the alert of unsent decisions above it. While an approved action runs, the composer shows Stop, which emits `stop`; the page cancels the run with `stop()` of `useChat`.
 
 ### B. Request — `ChatMessage`
 
@@ -40,7 +40,7 @@ After approval, the call appears as a running `ToolCall` under the card and comp
 
 ### F. Outcome — `ChatMessage`, `CopyButton`, `Button`
 
-A new response that says what changed (or that nothing ran), with Copy in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined Retry `Button` beside Copy runs the action again; an action never ends in silence.
+A new response that says what changed (or that nothing ran), with Copy and Read aloud in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined Retry `Button` beside Copy runs the action again; an action never ends in silence.
 
 ### G. Questions and failed decisions — `AgentQuestion`, `Alert`
 

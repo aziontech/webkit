@@ -15,7 +15,10 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/composables/use-chat-message-context.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/index.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/injection-key.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/lib/content-text.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/parts/chat-message-read-aloud.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/citation/citation.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/conversation-history.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation/composables/use-conversation-pin.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation/conversation.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation/injection-key.ts";
@@ -33,9 +36,11 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/index.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/injection-key.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/autosize.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/box-focus.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/references.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-menu-list.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-references.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-send.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/prompt-input-attach-button/prompt-input-attach-button.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/prompt-input-dictate-button/prompt-input-dictate-button.vue";
@@ -46,6 +51,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-queue/prompt-queue.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/reasoning/reasoning.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/response-loading/response-loading.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/sources/parts/sources-mark.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/sources/sources.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/sources/types.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/streaming-response/streaming-response.vue";
@@ -485,6 +491,7 @@
 @source "../node_modules/@aziontech/webkit/src/svg/azion/default/default.vue";
 @source "../node_modules/@aziontech/webkit/src/svg/azion/min/min.vue";
 @source "../node_modules/@aziontech/webkit/src/svg/azion/technologies/technologies.vue";
+@source "../node_modules/@aziontech/webkit/src/utils/ai-chat-questions.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/ai-chat.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/autofill.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/clipboard.ts";
