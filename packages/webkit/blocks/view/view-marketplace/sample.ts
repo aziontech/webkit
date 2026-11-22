@@ -140,3 +140,42 @@ export const sampleIntegrations: MarketplaceIntegration[] = [
     'Close an application to traffic on a schedule, such as outside business hours.'
   )
 ]
+
+export const sampleSolution = {
+  id: 'waiting-room',
+  name: 'Waiting Room',
+  vendor: 'Acme',
+  category: 'Traffic management',
+  context: 'Application',
+  version: '1.4.0',
+  updated: 'Oct 30, 2026',
+  description: 'Queue visitors during a traffic surge and let them in as capacity frees up.'
+}
+
+export const sampleSolutionChangelog = [
+  {
+    version: '1.4.0',
+    date: 'Oct 30, 2026',
+    notes: [
+      'Visitors keep their place when they reload the queue page.',
+      'New setting: the queue page title.'
+    ]
+  },
+  {
+    version: '1.3.0',
+    date: 'Aug 12, 2026',
+    notes: ['Capacity can change without restarting the queue.']
+  },
+  {
+    version: '1.2.1',
+    date: 'Jun 3, 2026',
+    notes: ['Fixed the estimated wait for queues above 10,000 visitors.']
+  }
+]
+
+export const sampleSolutionInstalls = [
+  { application: 'storefront', version: '1.3.0' },
+  { application: 'checkout', version: '1.4.0' }
+]
+
+export const sampleSolutionApplications = ['storefront', 'checkout', 'docs', 'api']

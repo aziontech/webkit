@@ -76,7 +76,7 @@ With `movable`, `selectable` with `v-model:selected-keys` adds the checkbox colu
 
 ## Data
 
-The block takes the open folder through props and emits every action; it fetches nothing. `FileBrowserEntry`, `FileBrowserTransfer` and `FileBrowserProps` are exported from `view-file-browser.vue`, and `sample.ts` holds a sample storage the block browses when `entries` is left out (and never while `loading` or `error` is set). `azion-storage.ts` maps an Azion Object Storage listing to entries.
+The block takes the open folder through props and emits every action; it fetches nothing. `FileBrowserEntry`, `FileBrowserTransfer` and `FileBrowserProps` are exported from `view-file-browser.vue`, and `sample.ts` holds a sample storage the block browses when `entries` is left out (and never while `loading` or `error` is set). `azion-storage.ts` maps an Azion Object Storage listing to entries. `lib/file-rows.ts` turns entries into table rows (glyph, size, sort, folders first) and checks a Move destination; the regions are private parts in `parts/`: the storage title, the search row, the selection bar, the name cell, the row menu, the empty folder, the error card, the upload, move and delete dialogs and the transfer card.
 
 | Prop / model            | Type                    | What it does                                                                                                            |
 | ----------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------- |

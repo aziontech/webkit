@@ -28,7 +28,7 @@
     "name": "Default",
     "file": "view-waf-tuning.vue"
   },
-  "files": ["sample.ts"],
+  "files": ["sample.ts", "parts/allow-dialog.vue"],
   "variants": [
     {
       "name": "Allow",

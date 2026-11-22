@@ -172,26 +172,25 @@ const eventTemplates: EventTemplate[] = [
   }
 ]
 
-const requestSpans = (
+const shareOf = (total: number) => (fraction: number) => Math.max(1, Math.round(total * fraction))
+
+const leadSpans = (
   method: string,
   uri: string,
   total: number,
   cache: string,
   status: number
 ): TraceSpan[] => {
-  const failed = status >= 500
-  const share = (fraction: number) => Math.max(1, Math.round(total * fraction))
+  const share = shareOf(total)
   const rules = share(0.04)
-  const lookupAt = 1 + rules
-  const lookup = share(0.03)
-  const spans: TraceSpan[] = [
+  return [
     {
       id: 'request',
       name: `${method} ${uri}`,
       service: 'Application',
       start: 0,
       duration: total,
-      status: failed ? 'error' : undefined,
+      status: status >= 500 ? 'error' : undefined,
       attributes: { 'http.method': method, 'http.status_code': status }
     },
     {
@@ -207,12 +206,91 @@ const requestSpans = (
       parentId: 'request',
       name: 'cache lookup',
       service: 'Cache',
-      start: lookupAt,
-      duration: lookup,
+      start: 1 + rules,
+      duration: share(0.03),
       attributes: { 'cache.status': cache }
     }
   ]
-  const after = lookupAt + lookup
+}
+
+const originMessage = (status: number) =>
+  status === 504
+    ? 'The origin did not answer before the timeout.'
+    : status >= 500
+      ? `The origin answered ${status} on every try.`
+      : undefined
+
+const originSpan = (
+  after: number,
+  originEnd: number,
+  firstByte: number,
+  total: number,
+  status: number
+): TraceSpan => {
+  const failed = status >= 500
+  const share = shareOf(total)
+  return {
+    id: 'origin',
+    parentId: 'request',
+    name: 'fetch origin',
+    service: 'Network',
+    start: after,
+    duration: originEnd - after,
+    status: failed ? 'error' : undefined,
+    message: originMessage(status),
+    events: failed
+      ? [{ at: after + share(0.01), name: 'connection-open' }]
+      : [
+          { at: after + share(0.01), name: 'connection-open' },
+          { at: firstByte, name: 'first-byte' }
+        ]
+  }
+}
+
+const retrySpans = (after: number, originEnd: number): TraceSpan[] => {
+  const step = Math.floor((originEnd - after) / 3)
+  return [0, 1, 2].map((attempt) => ({
+    id: `attempt-${attempt + 1}`,
+    parentId: 'origin',
+    name: `try ${attempt + 1}`,
+    service: 'Network',
+    start: after + attempt * step + 1,
+    duration: step - 2,
+    status: 'error',
+    attributes: { 'http.status_code': 502 }
+  }))
+}
+
+const storeSpans = (firstByte: number, total: number): TraceSpan[] => [
+  {
+    id: 'store',
+    parentId: 'request',
+    name: 'store in cache',
+    service: 'Cache',
+    start: firstByte,
+    duration: shareOf(total)(0.08)
+  },
+  {
+    id: 'deliver',
+    parentId: 'request',
+    name: 'deliver',
+    service: 'Network',
+    start: firstByte,
+    duration: total - firstByte - 1
+  }
+]
+
+const requestSpans = (
+  method: string,
+  uri: string,
+  total: number,
+  cache: string,
+  status: number
+): TraceSpan[] => {
+  const failed = status >= 500
+  const share = shareOf(total)
+  const spans = leadSpans(method, uri, total, cache, status)
+  const after = 1 + share(0.04) + share(0.03)
   if (cache === 'HIT' && !failed) {
     spans.push({
       id: 'deliver',
@@ -226,62 +304,9 @@ const requestSpans = (
   }
   const originEnd = failed ? total - share(0.02) : total - share(0.25)
   const firstByte = failed ? originEnd : after + share(0.3)
-  spans.push({
-    id: 'origin',
-    parentId: 'request',
-    name: 'fetch origin',
-    service: 'Network',
-    start: after,
-    duration: originEnd - after,
-    status: failed ? 'error' : undefined,
-    message:
-      status === 504
-        ? 'The origin did not answer before the timeout.'
-        : failed
-          ? `The origin answered ${status} on every try.`
-          : undefined,
-    events: failed
-      ? [{ at: after + share(0.01), name: 'connection-open' }]
-      : [
-          { at: after + share(0.01), name: 'connection-open' },
-          { at: firstByte, name: 'first-byte' }
-        ]
-  })
-  if (status === 502) {
-    const step = Math.floor((originEnd - after) / 3)
-    ;[0, 1, 2].forEach((attempt) =>
-      spans.push({
-        id: `attempt-${attempt + 1}`,
-        parentId: 'origin',
-        name: `try ${attempt + 1}`,
-        service: 'Network',
-        start: after + attempt * step + 1,
-        duration: step - 2,
-        status: 'error',
-        attributes: { 'http.status_code': 502 }
-      })
-    )
-  }
-  if (!failed) {
-    spans.push(
-      {
-        id: 'store',
-        parentId: 'request',
-        name: 'store in cache',
-        service: 'Cache',
-        start: firstByte,
-        duration: share(0.08)
-      },
-      {
-        id: 'deliver',
-        parentId: 'request',
-        name: 'deliver',
-        service: 'Network',
-        start: firstByte,
-        duration: total - firstByte - 1
-      }
-    )
-  }
+  spans.push(originSpan(after, originEnd, firstByte, total, status))
+  if (status === 502) spans.push(...retrySpans(after, originEnd))
+  if (!failed) spans.push(...storeSpans(firstByte, total))
   return spans
 }
 

@@ -40,7 +40,7 @@ Allow rules emits `allow`; the page sets `allowing` while the request runs. Succ
 
 ## Data
 
-The block takes its matches through props and emits every action; it fetches nothing. `WafTuningMatch`, `WafTuningAllowPayload` and `WafTuningProps` are exported from `view-waf-tuning.vue`, and `sample.ts` holds the sample matches the block renders when `matches` is left out (and never while `loading` or `error` is set).
+The block takes its matches through props and emits every action; it fetches nothing. `WafTuningMatch`, `WafTuningAllowPayload` and `WafTuningProps` are exported from `view-waf-tuning.vue`, and `sample.ts` holds the sample matches the block renders when `matches` is left out (and never while `loading` or `error` is set). The allow dialog is the private part `parts/allow-dialog.vue`; it keeps the reason and its validation, and the page keeps the outcome.
 
 | Prop                  | Type                    | What it does                                                                                                                                                   |
 | --------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |

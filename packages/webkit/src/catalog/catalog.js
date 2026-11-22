@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
-import { dirname, join } from 'node:path'
+import { dirname, join, posix } from 'node:path'
 
 const CANDIDATE_PKGS = ['@aziontech/webkit']
 const DEFAULT_PKG = CANDIDATE_PKGS[0]
@@ -72,9 +72,11 @@ export function hydratePart(part, readText) {
   const { sfcFile, guidelinesFile, fileSources, ...out } = part
   if (sfcFile) out.sfc = readText(sfcFile)
   if (fileSources) {
-    out.files = Object.fromEntries(
-      Object.entries(fileSources).map(([name, file]) => [name, readText(file)])
-    )
+    const dir = posix.dirname(sfcFile || '')
+    const sources = Array.isArray(fileSources)
+      ? fileSources.map((name) => [name, `${dir}/${name}`])
+      : Object.entries(fileSources)
+    out.files = Object.fromEntries(sources.map(([name, file]) => [name, readText(file)]))
   }
   if (guidelinesFile) out.guidelines = readText(guidelinesFile)
   for (const key of ['variants', 'examples']) {
