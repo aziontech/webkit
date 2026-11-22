@@ -594,7 +594,7 @@ export const serviceEdges: FlowDiagramEdgeData[] = [
 
 export const application = {
   name: 'storefront-app',
-  host: 'storefront-app-k3m9.azion.app',
+  host: 'storefront-app-k3m9.example.com',
   deployment: '4182093317',
   version: 'BX7Q2LMA'
 }
