@@ -43,7 +43,10 @@
     "sample.ts",
     "lib/team-form.ts",
     "parts/team-form-header.vue",
-    "parts/team-permissions-field.vue"
+    "parts/team-permissions-field.vue",
+    "parts/create-team-page.vue",
+    "parts/edit-team-page.vue",
+    "parts/team-status-group.vue"
   ],
   "variants": [
     {
