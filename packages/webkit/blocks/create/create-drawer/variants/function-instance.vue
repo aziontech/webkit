@@ -50,7 +50,7 @@
     globalThis.MonacoEnvironment = {
       getWorker: (_id, label) => (label === 'json' ? new JsonWorker() : new EditorWorker())
     }
-    return (await import('monaco-editor')) as unknown as CodeEditorMonacoModule
+    return await import('monaco-editor')
   }
 
   const FUNCTIONS: FunctionOption[] = [

@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TValue = unknown">
-  import { computed, provide, type Ref, ref, shallowReactive, useAttrs } from 'vue'
+  import { computed, provide, ref, shallowReactive, useAttrs } from 'vue'
 
   import { useSelectRoot } from '../../../composables/use-select-root'
   import { useTranslate } from '../../../composables/use-translate'
@@ -186,7 +186,7 @@
   provide(MultiSelectInjectionKey, {
     ...root,
     setOpen,
-    modelValue: model as unknown as Ref<unknown[]>,
+    modelValue: model,
     toggleValue,
     isSelected,
     placeholder: computed(() => props.placeholder),

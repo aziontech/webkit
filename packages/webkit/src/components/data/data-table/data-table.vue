@@ -484,7 +484,7 @@
     () =>
       props.manualSorting && props.manualFiltering && props.manualPagination && !props.getSubRows
   )
-  const records = (): RowRecord[] => data.value as unknown as RowRecord[]
+  const records = (): RowRecord[] => data.value as RowRecord[]
   const typed = <T,>(value: unknown): T => value as T
   const cellSlotOf = (id: string): `cell-${string}` => `cell-${id}`
   const headerSlotOf = (id: string): `header-${string}` => `header-${id}`

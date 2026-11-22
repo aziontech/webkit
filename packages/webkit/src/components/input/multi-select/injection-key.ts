@@ -11,7 +11,7 @@ export type MultiSelectCommitEvent = MouseEvent | KeyboardEvent
 
 export interface MultiSelectContext extends SelectRootContext {
   /** Current selection. Always an array. */
-  modelValue: Ref<unknown[]>
+  modelValue: Readonly<Ref<readonly unknown[]>>
   placeholder: ComputedRef<string>
   /** Recorded label of a value, or the value as text. */
   labelOf: (value: unknown) => string

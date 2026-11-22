@@ -73,12 +73,13 @@
   )
   const available = computed<boolean>(() => props.transcriber === 'app' || !!engine.value)
 
+  const isRecognitionConstructor = (value: unknown): value is RecognitionConstructor =>
+    typeof value === 'function'
+
   onMounted(() => {
-    const scope = window as unknown as {
-      SpeechRecognition?: RecognitionConstructor
-      webkitSpeechRecognition?: RecognitionConstructor
-    }
-    engine.value = scope.SpeechRecognition ?? scope.webkitSpeechRecognition ?? null
+    const found: unknown =
+      Reflect.get(window, 'SpeechRecognition') ?? Reflect.get(window, 'webkitSpeechRecognition')
+    engine.value = isRecognitionConstructor(found) ? found : null
   })
 
   function write(interim: string): void {

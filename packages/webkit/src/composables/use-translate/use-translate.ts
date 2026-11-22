@@ -91,9 +91,11 @@ export function cached<T>(
   return formatter
 }
 
-function lookup(messages: PartialMessages, key: string): string | PluralMessage | undefined {
+type MessageCatalog = Readonly<Record<string, Readonly<Record<string, unknown>> | undefined>>
+
+function lookup(messages: MessageCatalog, key: string): string | PluralMessage | undefined {
   const [group, name] = key.split('.') as [string, string]
-  const value = (messages as unknown as Record<string, Record<string, unknown>>)[group]?.[name]
+  const value = messages[group]?.[name]
   if (typeof value === 'string') return value
   if (value && typeof value === 'object' && 'other' in value) return value as PluralMessage
   return undefined

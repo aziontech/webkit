@@ -106,7 +106,7 @@ function merge(nodes: VNode[], aria: () => TriggerAria): boolean {
       merge(out, aria)
       return out
     }
-  } as unknown as VNode['children']
+  }
   return true
 }
 

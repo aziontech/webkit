@@ -1,4 +1,4 @@
-import { type FunctionalComponent, h } from 'vue'
+import { type FunctionalComponent, h, type Slot } from 'vue'
 
 type InputFrameSize = 'small' | 'medium' | 'large'
 
@@ -39,13 +39,9 @@ const focusOnPress = (event: globalThis.MouseEvent) => {
   frame.querySelector('input')?.focus()
 }
 
-const adornment = (slot: 'leading' | 'trailing', content: (() => unknown) | undefined) =>
+const adornment = (slot: 'leading' | 'trailing', content: Slot | undefined) =>
   content
-    ? h(
-        'span',
-        { 'data-slot': slot, class: ADORNMENT_CLASS, 'aria-hidden': 'true' },
-        content() as never
-      )
+    ? h('span', { 'data-slot': slot, class: ADORNMENT_CLASS, 'aria-hidden': 'true' }, content())
     : null
 
 const InputFrame: FunctionalComponent<InputFrameProps> = (props, { slots }) =>
