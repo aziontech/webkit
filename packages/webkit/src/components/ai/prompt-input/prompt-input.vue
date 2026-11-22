@@ -1,51 +1,32 @@
 <script setup lang="ts">
-  import {
-    computed,
-    defineAsyncComponent,
-    nextTick,
-    onMounted,
-    provide,
-    ref,
-    shallowRef,
-    useAttrs,
-    useId,
-    watch
-  } from 'vue'
+  import { computed, defineAsyncComponent, ref, useAttrs, useId } from 'vue'
 
-  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
-  import type { FileTokenGroupItem } from '../../input/file-token-group/file-token-group.vue'
-  import type { PromptInputAttachHandlers } from './injection-key'
-  import { PromptInputInjectionKey } from './injection-key'
+  import { usePromptInputAttach } from './composables/use-prompt-input-attach'
+  import { usePromptInputAutosize } from './composables/use-prompt-input-autosize'
+  import { type PromptInputQuery, usePromptInputMenu } from './composables/use-prompt-input-menu'
+  import { usePromptInputSubmit } from './composables/use-prompt-input-submit'
+  import { withoutReference } from './lib/references'
+  import PromptInputMenuList from './parts/prompt-input-menu-list.vue'
+  import type {
+    PromptInputFile,
+    PromptInputMenu,
+    PromptInputMenuOption,
+    PromptInputReference,
+    PromptInputRejectReason,
+    PromptInputStatus
+  } from './types'
 
-  export type PromptInputStatus = 'ready' | 'pending' | 'streaming'
-
-  export interface PromptInputMenuOption {
-    value: string
-    label: string
-    description?: string
-    icon?: string
-  }
-
-  export interface PromptInputMenu {
-    trigger: string
-    label: string
-    options: PromptInputMenuOption[]
-  }
-
-  export interface PromptInputReference {
-    trigger: string
-    value: string
-    label: string
-  }
-
-  /** An attached file with the upload state the owner sets on it. */
-  export type PromptInputFile = FileTokenGroupItem
-
-  /** Why picked, dropped or pasted files were not attached. */
-  export type PromptInputRejectReason = 'accept' | 'max-files' | 'max-file-size'
+  export type {
+    PromptInputFile,
+    PromptInputMenu,
+    PromptInputMenuOption,
+    PromptInputReference,
+    PromptInputRejectReason,
+    PromptInputStatus
+  } from './types'
 
   defineOptions({
     name: 'PromptInput',
@@ -153,74 +134,45 @@
   const textareaEl = ref<HTMLTextAreaElement | null>(null)
   const composing = ref<boolean>(false)
 
-  const length = computed<number>(() => model.value.length)
-  const overBy = computed<number>(() =>
-    props.maxLength > 0 ? Math.max(0, length.value - props.maxLength) : 0
-  )
-  const busy = computed<boolean>(() => props.status !== 'ready')
-  const filesPending = computed<boolean>(() =>
-    files.value.some((item) => item.loading || !!item.error)
-  )
-  const hasContent = computed<boolean>(
-    () => model.value.trim().length > 0 || files.value.length > 0
-  )
-  const canSubmit = computed<boolean>(
-    () =>
-      !props.disabled &&
-      (!busy.value || props.queueable) &&
-      overBy.value === 0 &&
-      hasContent.value &&
-      !filesPending.value
-  )
-  const showVoice = computed<boolean>(() => props.voice && !busy.value && !hasContent.value)
-
-  const attach = shallowRef<PromptInputAttachHandlers | null>(null)
   const dragging = ref<boolean>(false)
   const rejection = ref<string>('')
   const controlEl = ref<HTMLElement | null>(null)
-  const control = computed<string>(() => {
-    if (busy.value) return props.queueable && canSubmit.value ? 'stop-submit' : 'stop'
-    if (showVoice.value) return 'voice'
-    return canSubmit.value ? 'submit' : 'submit-off'
+  const { overBy, busy, canSubmit, showVoice, submit } = usePromptInputSubmit({
+    model,
+    files,
+    references,
+    rejection,
+    controlEl,
+    maxLength: () => props.maxLength,
+    status: () => props.status,
+    disabled: () => props.disabled,
+    queueable: () => props.queueable,
+    voice: () => props.voice,
+    focus,
+    send: (event, payload) => emit('submit', event, payload)
   })
   const describedBy = () => {
     const ids = [props.maxLength > 0 ? counterId : '', slots.hint ? hintId : ''].filter(Boolean)
     return ids.join(' ') || undefined
   }
 
-  function resize(): void {
-    const el = textareaEl.value
-    if (!el || typeof window === 'undefined') return
-    const style = window.getComputedStyle(el)
-    const line = Number.parseFloat(style.lineHeight) || 20
-    const padding =
-      (Number.parseFloat(style.paddingTop) || 0) + (Number.parseFloat(style.paddingBottom) || 0)
-    el.style.height = 'auto'
-    const min = props.minRows * line + padding
-    const max = props.maxRows * line + padding
-    const next = Math.min(Math.max(el.scrollHeight, min), max)
-    el.style.height = `${next}px`
-    el.style.overflowY = el.scrollHeight > max ? 'auto' : 'hidden'
-  }
+  usePromptInputAutosize(
+    textareaEl,
+    model,
+    () => props.minRows,
+    () => props.maxRows
+  )
 
-  const MAX_OPTIONS = 8
-  const query = ref<{ menu: PromptInputMenu; start: number; text: string } | null>(null)
+  const query = ref<PromptInputQuery | null>(null)
   const activeIndex = ref<number>(0)
-
-  const matches = computed<PromptInputMenuOption[]>(() => {
-    const current = query.value
-    if (!current) return []
-    const needle = current.text.toLocaleLowerCase()
-    return current.menu.options
-      .filter(
-        (option) =>
-          option.label.toLocaleLowerCase().includes(needle) ||
-          option.value.toLocaleLowerCase().includes(needle)
-      )
-      .slice(0, MAX_OPTIONS)
-  })
-  const menuOpen = computed<boolean>(() => !!query.value && matches.value.length > 0)
-  const optionId = (index: number): string => `${listId}-${index}`
+  const { matches, menuOpen, readQuery, choose, onMenuKeydown } = usePromptInputMenu(
+    textareaEl,
+    () => props.menus,
+    model,
+    references,
+    query,
+    activeIndex
+  )
   const announcement = computed<string>(() => {
     if (!query.value) return ''
     return matches.value.length
@@ -228,81 +180,14 @@
       : t('promptInput.noMatch')
   })
 
-  function readQuery(): void {
-    const el = textareaEl.value
-    if (!el || !props.menus.length) {
-      query.value = null
-      return
-    }
-    const text = el.value
-    const caret = el.selectionStart ?? text.length
-    const before = text.slice(0, caret)
-    const word = /(^|\s)(\S*)$/.exec(before)
-    const token = word?.[2] ?? ''
-    const menu = props.menus.find((candidate) => token.startsWith(candidate.trigger))
-    if (!menu || el.selectionStart !== el.selectionEnd) {
-      query.value = null
-      return
-    }
-    const next = { menu, start: caret - token.length, text: token.slice(menu.trigger.length) }
-    if (query.value?.menu !== next.menu || query.value.text !== next.text) activeIndex.value = 0
-    query.value = next
-  }
-
-  function choose(option: PromptInputMenuOption): void {
-    const current = query.value
-    const el = textareaEl.value
-    if (!current || !el) return
-    const text = el.value
-    const caret = el.selectionStart ?? text.length
-    const inserted = `${current.menu.trigger}${option.label} `
-    const next = text.slice(0, current.start) + inserted + text.slice(caret)
-    el.value = next
-    model.value = next
-    if (
-      !references.value.some(
-        (reference) =>
-          reference.trigger === current.menu.trigger && reference.value === option.value
-      )
-    ) {
-      references.value = [
-        ...references.value,
-        { trigger: current.menu.trigger, value: option.value, label: option.label }
-      ]
-    }
-    query.value = null
-    const position = current.start + inserted.length
-    void nextTick(() => {
-      el.focus()
-      el.setSelectionRange(position, position)
-    })
-  }
-
   function removeReference(reference: PromptInputReference): void {
     references.value = references.value.filter((item) => item !== reference)
-    const token = `${reference.trigger}${reference.label}`
-    const at = model.value.indexOf(token)
-    if (at === -1) return
-    const end = model.value[at + token.length] === ' ' ? at + token.length + 1 : at + token.length
-    model.value = model.value.slice(0, at) + model.value.slice(end)
+    model.value = withoutReference(model.value, reference)
   }
 
   function onInput(event: Event): void {
     model.value = (event.target as HTMLTextAreaElement).value
     readQuery()
-  }
-
-  function submit(event: MouseEvent | KeyboardEvent): void {
-    if (!canSubmit.value) return
-    const text = model.value.trim()
-    rejection.value = ''
-    emit('submit', event, {
-      value: text,
-      references: references.value.filter((reference) =>
-        text.includes(`${reference.trigger}${reference.label}`)
-      ),
-      files: files.value
-    })
   }
 
   function removeFile(index: number): void {
@@ -311,25 +196,7 @@
   }
 
   function onKeydown(event: KeyboardEvent): void {
-    if (menuOpen.value) {
-      const count = matches.value.length
-      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-        event.preventDefault()
-        activeIndex.value =
-          (activeIndex.value + (event.key === 'ArrowDown' ? 1 : count - 1)) % count
-        return
-      }
-      if ((event.key === 'Enter' || event.key === 'Tab') && !event.isComposing) {
-        event.preventDefault()
-        choose(matches.value[Math.min(activeIndex.value, count - 1)]!)
-        return
-      }
-      if (event.key === 'Escape') {
-        event.preventDefault()
-        query.value = null
-        return
-      }
-    }
+    if (onMenuKeydown(event)) return
     if (event.key !== 'Enter' || event.shiftKey || event.isComposing || composing.value) return
     event.preventDefault()
     submit(event)
@@ -337,10 +204,6 @@
 
   function focus(): void {
     textareaEl.value?.focus()
-  }
-
-  function onBoxDrag(event: DragEvent): void {
-    attach.value?.drag(event)
   }
 
   function onBoxPointerdown(event: PointerEvent): void {
@@ -352,77 +215,19 @@
     focus()
   }
 
-  provide(PromptInputInjectionKey, {
-    disabled: computed(() => props.disabled),
-    accept: computed(() => props.accept),
-    maxFiles: computed(() => props.maxFiles),
-    getText: () => model.value,
-    setText: (value: string) => {
-      model.value = value
-    },
-    maxFileSize: computed(() => props.maxFileSize),
-    fileCount: computed(() => files.value.length),
-    appendFiles: (added: File[]) => {
-      files.value = [...files.value, ...added.map((file) => ({ file }))]
-    },
-    reject: (event: Event, refused: File[], reason: PromptInputRejectReason) =>
-      emit('reject', event, { files: refused, reason }),
-    setRejection: (message: string) => {
-      rejection.value = message
-    },
-    setDragging: (value: boolean) => {
-      dragging.value = value
-    },
-    registerAttach: (handlers: PromptInputAttachHandlers) => {
-      attach.value = handlers
-      return () => {
-        if (attach.value === handlers) attach.value = null
-        dragging.value = false
-      }
-    },
-    focus
-  })
-
-  watch(
-    () => [model.value, props.minRows, props.maxRows],
-    () => void nextTick(resize)
-  )
-  watch(control, () => {
-    if (typeof document === 'undefined') return
-    const held = !!controlEl.value?.contains(document.activeElement)
-    if (!held) return
-    void nextTick(() => {
-      const active = document.activeElement as HTMLButtonElement | null
-      if (!active || active === document.body || active.disabled) focus()
-    })
-  })
-  onMounted(resize)
-
   const boxEl = ref<globalThis.HTMLElement | null>(null)
-  useElementListener(boxEl, 'dragenter', onBoxDrag)
-  useElementListener(boxEl, 'dragover', onBoxDrag)
-  useElementListener(boxEl, 'dragleave', onBoxDrag)
-  useElementListener(boxEl, 'drop', onBoxDrag)
-  const menuEl = ref<globalThis.HTMLElement | null>(null)
-  const menuSide = ref<'top' | 'bottom'>('top')
-  function placeMenu() {
-    const box = boxEl.value
-    const menu = menuEl.value
-    if (!box || !menu) return
-    const rect = box.getBoundingClientRect()
-    const viewport = globalThis.visualViewport
-    const top = viewport?.offsetTop ?? 0
-    const bottom = top + (viewport?.height ?? globalThis.innerHeight)
-    const above = rect.top - top
-    const below = bottom - rect.bottom
-    menuSide.value = above < menu.offsetHeight && below > above ? 'bottom' : 'top'
-  }
-  watch(menuOpen, (open) => {
-    if (!open) {
-      menuSide.value = 'top'
-      return
-    }
-    void nextTick(placeMenu)
+  const { paste } = usePromptInputAttach({
+    boxEl,
+    disabled: () => props.disabled,
+    accept: () => props.accept,
+    maxFiles: () => props.maxFiles,
+    maxFileSize: () => props.maxFileSize,
+    model,
+    files,
+    dragging,
+    rejection,
+    reject: (event, refused, reason) => emit('reject', event, { files: refused, reason }),
+    focus
   })
 
   defineExpose({ focus })
@@ -436,17 +241,6 @@
   const DROP_CLASS =
     'pointer-events-none absolute inset-0 z-2 flex items-center justify-center rounded-(--shape-card) border-2 border-dashed border-(--border-selected) bg-(--bg-surface) text-label-md ' +
     "text-(--text-default) before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-selected) before:content-['']"
-
-  const MENU_CLASS =
-    'absolute inset-x-0 z-(--z-control-overlay) m-0 flex ' +
-    'data-[side=bottom]:top-full data-[side=bottom]:mt-(--spacing-2xs) data-[side=top]:bottom-full data-[side=top]:mb-(--spacing-2xs) ' +
-    'max-h-72 list-none flex-col overflow-y-auto rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)'
-
-  const OPTION_CLASS =
-    'flex cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) border-y border-transparent bg-clip-padding ' +
-    'forced-colors:border-y-0 px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default) ' +
-    'hover:bg-(--bg-hover) ' +
-    'data-[active]:bg-(--bg-selected)'
 
   const TEXTAREA_CLASS =
     'w-full resize-none bg-transparent px-(--spacing-xs) py-(--spacing-2xs) text-body-md text-(--text-default) ' +
@@ -505,45 +299,16 @@
           "
         />
       </div>
-      <ul
-        v-if="menuOpen"
+      <PromptInputMenuList
+        v-if="menuOpen && query"
         :id="listId"
-        role="listbox"
-        :aria-label="query?.menu.label"
-        :data-testid="`${testId}__menu`"
-        ref="menuEl"
-        :data-trigger="query?.menu.trigger"
-        :data-side="menuSide"
-        :class="MENU_CLASS"
-      >
-        <li
-          v-for="(option, index) in matches"
-          :id="optionId(index)"
-          :key="option.value"
-          role="option"
-          tabindex="-1"
-          :aria-selected="index === activeIndex"
-          :data-active="index === activeIndex || null"
-          :class="OPTION_CLASS"
-          @mousedown.prevent
-          @click="choose(option)"
-          @keydown.enter.prevent="choose(option)"
-          @mousemove="activeIndex = index"
-        >
-          <i
-            v-if="option.icon"
-            :class="option.icon"
-            class="shrink-0 text-(--text-muted)"
-            aria-hidden="true"
-          />
-          <span class="min-w-0 truncate">{{ option.label }}</span>
-          <span
-            v-if="option.description"
-            class="min-w-0 truncate text-body-xs text-(--text-muted)"
-            >{{ option.description }}</span
-          >
-        </li>
-      </ul>
+        v-model:active-index="activeIndex"
+        :label="query.menu.label"
+        :trigger="query.menu.trigger"
+        :options="matches"
+        :test-id="testId"
+        @select="(_event: Event, option: PromptInputMenuOption) => choose(option)"
+      />
       <textarea
         ref="textareaEl"
         :value="model"
@@ -553,7 +318,7 @@
         :aria-describedby="describedBy()"
         :aria-invalid="overBy > 0 || undefined"
         :aria-controls="menuOpen ? listId : undefined"
-        :aria-activedescendant="menuOpen ? optionId(activeIndex) : undefined"
+        :aria-activedescendant="menuOpen ? `${listId}-${activeIndex}` : undefined"
         :aria-keyshortcuts="menus.length ? menus.map((menu) => menu.trigger).join(' ') : undefined"
         :disabled="disabled"
         :data-testid="`${testId}__textarea`"
@@ -563,7 +328,7 @@
         @keydown="onKeydown"
         @click="readQuery"
         @blur="query = null"
-        @paste="attach?.paste"
+        @paste="paste"
         @compositionstart="composing = true"
         @compositionend="composing = false"
       />
@@ -592,7 +357,7 @@
             :data-testid="`${testId}__counter`"
             class="text-body-xs text-(--text-muted) tabular-nums data-[invalid]:text-(--danger-foreground)"
           >
-            {{ t('promptInput.count', { count: length, max: maxLength }) }}
+            {{ t('promptInput.count', { count: model.length, max: maxLength }) }}
           </span>
           <IconButton
             v-if="busy"

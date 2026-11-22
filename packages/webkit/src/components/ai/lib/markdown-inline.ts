@@ -7,53 +7,62 @@ import type { MarkdownInline as MarkdownInlineNode } from './parse-markdown'
 
 const EXTERNAL = /^https?:/i
 
+const CODE_CLASS =
+  'rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px text-label-code-sm text-(--text-default)'
+const LINK_CLASS =
+  'text-(--text-link) underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
+
+type ContainerNode = Extract<MarkdownInlineNode, { children: MarkdownInlineNode[] }>
+type LeafNode = Exclude<MarkdownInlineNode, ContainerNode>
+
+function renderContainer(node: ContainerNode, sources: SourcesItem[], anchor: string): VNodeChild {
+  const children = renderNodes(node.children, sources, anchor)
+  switch (node.type) {
+    case 'strong':
+      return h('strong', { class: 'font-semibold' }, children)
+    case 'em':
+      return h('em', children)
+    case 'link':
+      return h(
+        'a',
+        {
+          href: node.href,
+          target: EXTERNAL.test(node.href) ? '_blank' : undefined,
+          rel: EXTERNAL.test(node.href) ? 'noopener noreferrer' : undefined,
+          class: LINK_CLASS
+        },
+        children
+      )
+  }
+}
+
+function renderLeaf(node: LeafNode, sources: SourcesItem[], anchor: string): VNodeChild {
+  switch (node.type) {
+    case 'text':
+      return node.value
+    case 'break':
+      return h('br')
+    case 'code':
+      return h('code', { dir: 'ltr', class: CODE_CLASS }, node.value)
+    case 'citation': {
+      const source = sources[node.index - 1]
+      return h(Citation, {
+        index: node.index,
+        title: source?.title ?? '',
+        href: anchor && source ? `#${sourceAnchor(anchor, node.index)}` : ''
+      })
+    }
+  }
+}
+
 function renderNodes(
   nodes: MarkdownInlineNode[],
   sources: SourcesItem[],
   anchor: string
 ): VNodeChild[] {
-  return nodes.map((node) => {
-    switch (node.type) {
-      case 'text':
-        return node.value
-      case 'break':
-        return h('br')
-      case 'strong':
-        return h('strong', { class: 'font-semibold' }, renderNodes(node.children, sources, anchor))
-      case 'em':
-        return h('em', renderNodes(node.children, sources, anchor))
-      case 'code':
-        return h(
-          'code',
-          {
-            dir: 'ltr',
-            class:
-              'rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px text-label-code-sm text-(--text-default)'
-          },
-          node.value
-        )
-      case 'link':
-        return h(
-          'a',
-          {
-            href: node.href,
-            target: EXTERNAL.test(node.href) ? '_blank' : undefined,
-            rel: EXTERNAL.test(node.href) ? 'noopener noreferrer' : undefined,
-            class:
-              'text-(--text-link) underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
-          },
-          renderNodes(node.children, sources, anchor)
-        )
-      case 'citation': {
-        const source = sources[node.index - 1]
-        return h(Citation, {
-          index: node.index,
-          title: source?.title ?? '',
-          href: anchor && source ? `#${sourceAnchor(anchor, node.index)}` : ''
-        })
-      }
-    }
-  })
+  return nodes.map((node) =>
+    'children' in node ? renderContainer(node, sources, anchor) : renderLeaf(node, sources, anchor)
+  )
 }
 
 export default defineComponent({

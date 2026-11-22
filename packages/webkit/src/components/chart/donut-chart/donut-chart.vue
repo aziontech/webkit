@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { duration } from '@aziontech/theme/animations'
   import { computed, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
   import { useChartEntrance } from '../../../composables/use-chart-entrance'
@@ -21,6 +20,7 @@
     STEP_FORWARD,
     stepIndex
   } from '../lib'
+  import { donutSlices, LIFT, RADIUS, WIDTH } from './lib/donut-slices'
 
   defineOptions({ name: 'DonutChart', inheritAttrs: false })
 
@@ -107,11 +107,6 @@
   const uid = useId()
   const { entered, scheduleEnter, resetEnter } = useChartEntrance()
 
-  const RADIUS = { donut: 40, pie: 25 } as const
-  const WIDTH = { donut: 14, pie: 50 } as const
-  const LIFT = { donut: 4, pie: 0 } as const
-  const GAP = 0.6
-
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'donut-chart')
   const summaryId = `${uid}-summary`
 
@@ -133,24 +128,7 @@
     () => !props.loading && !hasError.value && !isEmpty.value && !props.tableView
   )
 
-  const slices = computed(() => {
-    let start = 0
-    const gap = visible.value.length > 1 ? GAP : 0
-    return visible.value.map((entry, order) => {
-      const share = total.value ? (entry.total / total.value) * 100 : 0
-      const length = Math.max(0, share - gap)
-      const slice = {
-        id: entry.id,
-        color: entry.color,
-        dash: `${length} ${100 - length}`,
-        offset: -start,
-        delay: `calc(${duration['fast-02']} * ${order})`,
-        entry
-      }
-      start += share
-      return slice
-    })
-  })
+  const slices = computed(() => donutSlices(visible.value, total.value))
 
   const active = computed(() => {
     const index = activeIndex.value

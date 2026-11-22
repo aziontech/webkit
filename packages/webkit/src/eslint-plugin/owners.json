@@ -193,7 +193,7 @@
         "src/components/input/select": "Select: the listbox.",
         "src/components/input/multi-select": "MultiSelect: the listbox.",
         "src/components/input/combobox": "Combobox: the listbox.",
-        "src/components/ai/prompt-input/prompt-input.vue": "PromptInput: the mention list of the composer combobox.",
+        "src/components/ai/prompt-input/parts/prompt-input-menu-list.vue": "PromptInput: the mention list of the composer combobox.",
         "src/components/overlay/command": "Command: the result list of the command palette combobox.",
         "src/components/data/property-filter": "PropertyFilter: the suggestion list of its combobox.",
         "src/components/data/transfer-list": "TransferList: each panel is a multi-select listbox.",

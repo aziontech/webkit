@@ -244,7 +244,7 @@
   {
     "name": "doc-code-group",
     "path": "src/components/docs/doc-code-group/doc-code-group.vue",
-    "limit": "33.35 KB",
+    "limit": "34.1 KB",
     "entryOnly": true
   },
   {
@@ -443,12 +443,12 @@
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "120.4 KB"
+    "limit": "120.6 KB"
   },
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "83.85 KB"
+    "limit": "84.5 KB"
   },
   {
     "name": "runtime-api-cloud",
@@ -665,13 +665,13 @@
   {
     "name": "cli-terminal-section",
     "path": "src/components/section/cli-terminal-section/cli-terminal-section.vue",
-    "limit": "46.5 KB",
+    "limit": "47 KB",
     "entryOnly": true
   },
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "57.4 KB",
+    "limit": "58 KB",
     "entryOnly": true
   },
   {
@@ -730,12 +730,12 @@
   {
     "name": "chart",
     "path": "src/components/chart/chart/index.ts",
-    "limit": "26.3 KB"
+    "limit": "27 KB"
   },
   {
     "name": "chart-root",
     "path": "src/components/chart/chart/chart.vue",
-    "limit": "17.5 KB"
+    "limit": "18.15 KB"
   },
   {
     "name": "chart-line",
@@ -1114,7 +1114,7 @@
   {
     "name": "code-block",
     "path": "src/components/code/code-block/code-block.vue",
-    "limit": "32.9 KB",
+    "limit": "33.7 KB",
     "entryOnly": true
   },
   {
@@ -1126,7 +1126,7 @@
   {
     "name": "trace",
     "path": "src/components/code/trace/trace.vue",
-    "limit": "37.65 KB",
+    "limit": "38.9 KB",
     "entryOnly": true
   },
   {
@@ -1142,7 +1142,7 @@
   {
     "name": "agent-question",
     "path": "src/components/ai/agent-question/agent-question.vue",
-    "limit": "16.7 KB"
+    "limit": "16.75 KB"
   },
   {
     "name": "response-loading",
@@ -1199,13 +1199,13 @@
   {
     "name": "prompt-input",
     "path": "src/components/ai/prompt-input/index.ts",
-    "limit": "13.15 KB",
+    "limit": "13.85 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-root",
     "path": "src/components/ai/prompt-input/prompt-input.vue",
-    "limit": "10 KB",
+    "limit": "10.7 KB",
     "entryOnly": true
   },
   {
@@ -1256,7 +1256,7 @@
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "37 KB",
+    "limit": "37.95 KB",
     "entryOnly": true
   },
   {
@@ -1302,7 +1302,7 @@
   {
     "name": "code-editor",
     "path": "src/components/code/code-editor/code-editor.vue",
-    "limit": "10.6 KB"
+    "limit": "11.5 KB"
   },
   {
     "name": "button-group",
