@@ -79,26 +79,36 @@ function readUiMessage(data: PlainObject): McpAppFrameUiMessage | null {
   return message
 }
 
+const ownValue = (data: PlainObject, key: string): unknown =>
+  hasOwn(data, key) ? data[key] : undefined
+
+const isRpcId = (id: unknown): id is string | number =>
+  typeof id === 'string' || typeof id === 'number'
+
+function rpcFieldsValid(data: PlainObject): boolean {
+  const method = ownValue(data, 'method')
+  const id = ownValue(data, 'id')
+  const params = ownValue(data, 'params')
+  const error = ownValue(data, 'error')
+  if (method !== undefined && typeof method !== 'string') return false
+  if (id !== undefined && !isRpcId(id)) return false
+  if (method === undefined && id === undefined) return false
+  if (params !== undefined && !isPlainObject(params) && !Array.isArray(params)) return false
+  return error === undefined || isPlainObject(error)
+}
+
 function readRpcMessage(data: PlainObject): McpAppFrameRpcMessage | null {
-  const method = hasOwn(data, 'method') ? data['method'] : undefined
-  const id = hasOwn(data, 'id') ? data['id'] : undefined
-  const params = hasOwn(data, 'params') ? data['params'] : undefined
-  const error = hasOwn(data, 'error') ? data['error'] : undefined
-  if (method !== undefined && typeof method !== 'string') return null
-  if (id !== undefined && typeof id !== 'string' && typeof id !== 'number') return null
-  if (method === undefined && id === undefined) return null
+  if (!rpcFieldsValid(data)) return null
+  const method = ownValue(data, 'method')
+  const id = ownValue(data, 'id')
+  const params = ownValue(data, 'params')
+  const error = ownValue(data, 'error')
   const message: McpAppFrameRpcMessage = { jsonrpc: '2.0' }
-  if (id !== undefined) message.id = id
-  if (method !== undefined) message.method = method
-  if (params !== undefined) {
-    if (!isPlainObject(params) && !Array.isArray(params)) return null
-    message.params = params
-  }
+  if (isRpcId(id)) message.id = id
+  if (typeof method === 'string') message.method = method
+  if (isPlainObject(params) || Array.isArray(params)) message.params = params
   if (hasOwn(data, 'result')) message.result = data['result']
-  if (error !== undefined) {
-    if (!isPlainObject(error)) return null
-    message.error = error
-  }
+  if (isPlainObject(error)) message.error = error
   return message
 }
 
