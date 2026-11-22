@@ -129,7 +129,7 @@ never read as new.
 <script setup>
   import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
-  import PromptInput from '@aziontech/webkit/prompt-input'
+  import PromptInput from '@aziontech/webkit/prompt-input-root'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup from '@aziontech/webkit/suggestion-group'
   import { ref } from 'vue'
@@ -242,7 +242,7 @@ never read as new.
 <script setup>
   import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
-  import PromptInput from '@aziontech/webkit/prompt-input'
+  import PromptInput from '@aziontech/webkit/prompt-input-root'
   import { ref } from 'vue'
 
   const questions = [
