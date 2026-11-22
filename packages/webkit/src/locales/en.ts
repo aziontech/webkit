@@ -281,7 +281,10 @@ export const conversationHistory = {
   previous30: 'Previous 30 days',
   older: 'Older',
   emptyTitle: 'No conversations yet.',
-  delete: 'Delete {title}'
+  delete: 'Delete {title}',
+  newChat: 'New chat',
+  search: 'Search conversations',
+  noMatch: 'No conversations match “{query}”.'
 } as const
 
 export const qrCode = {
