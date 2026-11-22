@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 15
 template: 2
-checksum: e9d95f34dd69061084e38a647362f3b20ec0ca85b9e6751a1ca32717d77daa3c
+checksum: 11f30f59cc711db67f3907d5906d281c0bed12f1fec6bd126cf38376e4dd1719
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -38,7 +38,7 @@ The trigger prints `Last 15 minutes`, `Today`, the absolute range in the selecte
 
 ## Related
 
-- `date-picker` — the month grid, the date and time fields and the time zone selector come from its internal parts, so both pickers look and behave the same. Split: DatePicker picks one date (optionally with a time); DateRangePicker owns every range and keeps a relative window relative.
+- `date-picker` — the trigger control, the panel, the month grid, the date and time fields and the time zone selector come from its internal parts, so both pickers look and behave the same. Split: DatePicker picks one date (optionally with a time); DateRangePicker owns every range and keeps a relative window relative.
 - `timestamp` — displays a moment in time; both read the `ConfigProvider` `timeZone`.
 - `config-provider` — its `timeZone` is the zone the picker formats in while `v-model:time-zone` is unbound.
 - `field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.

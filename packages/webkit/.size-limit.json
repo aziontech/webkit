@@ -84,12 +84,12 @@
   {
     "name": "date-picker-root",
     "path": "src/components/input/date-picker/date-picker.vue",
-    "limit": "43.15 KB"
+    "limit": "43.65 KB"
   },
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "54.3 KB"
+    "limit": "54.7 KB"
   },
   {
     "name": "table-root",
@@ -1904,7 +1904,7 @@
   {
     "name": "date-picker",
     "path": "src/components/input/date-picker/index.ts",
-    "limit": "43.35 KB"
+    "limit": "43.85 KB"
   },
   {
     "name": "date-picker-clear",
