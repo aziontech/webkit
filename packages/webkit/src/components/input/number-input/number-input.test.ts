@@ -480,4 +480,28 @@ describe('NumberInput', () => {
       expect(getByTestId('number-input').getAttribute('dir')).toBe('ltr')
     })
   })
+
+  describe('field frame', () => {
+    const pressOn = (element: Element) =>
+      element.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }))
+
+    it('focuses the input when the press lands on the frame', () => {
+      const { getByTestId } = render(NumberInput, { slots: { leading: '<span>$</span>' } })
+      const input = getByTestId('number-input')
+      const root = input.parentElement as HTMLElement
+      expect(pressOn(root)).toBe(false)
+      expect(document.activeElement).toBe(input)
+    })
+
+    it('marks a read-only field on the frame and hides its adornments from assistive tech', () => {
+      const { getByTestId, getByText } = render(NumberInput, {
+        props: { readonly: true },
+        slots: { leading: '<span>$</span>', trailing: '<span>%</span>' }
+      })
+      const root = getByTestId('number-input').parentElement as HTMLElement
+      expect(root.hasAttribute('data-readonly')).toBe(true)
+      expect(getByText('$').closest('[aria-hidden="true"]')).not.toBeNull()
+      expect(getByText('%').closest('[aria-hidden="true"]')).not.toBeNull()
+    })
+  })
 })

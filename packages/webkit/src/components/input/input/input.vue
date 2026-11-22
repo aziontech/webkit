@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
-  import { useElementListener } from '../../../composables/use-element-listener'
   import { useFieldAttrs } from '../../../composables/use-field-attrs'
   import { passwordManagerHints } from '../../../utils/autofill'
+  import InputFrame from '../parts/input-frame'
 
   export type InputSize = 'small' | 'medium' | 'large'
   export type InputType = 'text' | 'email' | 'number'
@@ -69,13 +69,13 @@
 
   const attrs = useAttrs()
 
-  const rootEl = ref<globalThis.HTMLElement | null>(null)
   const inputEl = ref<globalThis.HTMLInputElement | null>(null)
 
   const {
     controlId,
     describedBy,
     passthroughAttrs,
+    controlState,
     invalid: isInvalid,
     disabled: isDisabled,
     required: isRequired
@@ -90,30 +90,12 @@
     model.value = target.value
   }
 
-  const onChromeMousedown = (event: globalThis.MouseEvent) => {
-    if (isDisabled.value) return
-    if (event.target === inputEl.value) return
-    event.preventDefault()
-    inputEl.value?.focus()
-  }
-
-  useElementListener(rootEl, 'mousedown', onChromeMousedown)
-
   defineExpose({
     /** Moves focus to the native field. */
     focus: (): void => inputEl.value?.focus()
   })
 
-  const ROOT_CLASS =
-    'group/input relative inline-flex items-center w-full cursor-text gap-(--spacing-xs) px-(--spacing-sm) rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) ' +
-    'text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none ' +
-    '[&:not(:focus-within):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong) ' +
-    'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] ' +
-    'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 ' +
-    'data-[invalid]:border-(--danger-border) ' +
-    'data-[readonly]:cursor-default ' +
-    'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-input) ' +
-    'data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0'
+  const ROOT_CLASS = 'group/input gap-(--spacing-xs) px-(--spacing-sm)'
 
   const INPUT_CLASS =
     'relative z-(--z-control) h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm ' +
@@ -123,31 +105,22 @@
 </script>
 
 <template>
-  <span
-    ref="rootEl"
+  <InputFrame
     data-slot="input"
-    :data-size="size"
-    :data-disabled="isDisabled || null"
-    :data-readonly="readonly || null"
-    :data-invalid="isInvalid || null"
-    :data-required="isRequired || null"
+    :size="size"
+    :disabled="isDisabled"
+    :readonly="readonly"
+    :invalid="isInvalid"
+    :required="isRequired"
     :data-monospace="monospace || null"
-    :data-leading="!!$slots['leading'] || null"
-    :data-trailing="!!$slots['trailing'] || null"
     :class="[ROOT_CLASS, attrs.class]"
   >
-    <span
-      aria-hidden="true"
-      data-slot="touch-target"
-      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-    />
-    <span
+    <template
       v-if="$slots['leading']"
-      class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
-      aria-hidden="true"
+      #leading
     >
       <slot name="leading" />
-    </span>
+    </template>
 
     <input
       ref="inputEl"
@@ -157,26 +130,21 @@
       :maxlength="maxLength"
       :autocomplete="autocomplete"
       :spellcheck="spellcheck"
-      :disabled="isDisabled"
       :readonly="readonly"
-      :required="isRequired"
-      :aria-invalid="isInvalid || undefined"
-      :aria-required="isRequired || undefined"
       :data-testid="testId"
       dir="auto"
       :class="INPUT_CLASS"
-      v-bind="{ ...autofillHints, ...passthroughAttrs }"
+      v-bind="{ ...controlState, ...autofillHints, ...passthroughAttrs }"
       :id="controlId"
       :aria-describedby="describedBy"
       @input="onInput"
     />
 
-    <span
+    <template
       v-if="$slots['trailing']"
-      class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
-      aria-hidden="true"
+      #trailing
     >
       <slot name="trailing" />
-    </span>
-  </span>
+    </template>
+  </InputFrame>
 </template>

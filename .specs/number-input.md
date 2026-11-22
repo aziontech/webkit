@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: 14e124da2cd0f0a66b80a0c1e15b917ab7b128822bf2be800e6e497c388284cf
+checksum: a2f61ef80c5db9e1ca822f5390b0c232e814b05e024ddc14582e5a6d99c078b7
 created: 2026-06-22
 last_updated: 2026-11-19
 ---
@@ -111,15 +111,17 @@ An optional field binds a `number | null` model and sets `nullable`:
 
 | Slot       | Scope | Notes                                                                    |
 | ---------- | ----- | ------------------------------------------------------------------------ |
-| `leading`  | —     | Content rendered before the input (e.g. `$`).                            |
+| `leading`  | —     | Content rendered before the input (e.g. `$`). Both slots: `aria-hidden`. |
 | `trailing` | —     | Content rendered after the input, before the spinner buttons (e.g. `%`). |
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `disabled`, `invalid`, `filled`, `empty` (a `nullable` field whose value is `null` shows the placeholder)
+- Visual states: `default`, `hover`, `focus-visible`, `disabled`, `readonly`, `invalid`, `filled`, `empty` (a `nullable` field whose value is `null` shows the placeholder)
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
+- `data-readonly` mirrors the `readonly` prop (no hover border, default cursor, as on `Input`)
 - `data-size` mirrors the `size` prop
+- The frame, its states, adornments and touch target are the private frame `Input` renders
 
 ## Motion & Animations
 
@@ -153,13 +155,13 @@ An optional field binds a `number | null` model and sets `nullable`:
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2` on `var(--input-ring-offset, var(--bg-canvas))`, as on `Input`
 - Keyboard map: `Tab` focuses the input; `ArrowUp`/`ArrowDown` increment/decrement by `step`; `Home`/`End` jump to `min`/`max` when defined; `Enter` commits and emits `change`.
 - Direction: the `<input>` renders `dir="auto"` (digits resolve to left-to-right inside right-to-left UI); a `dir` attribute overrides it.
 - ARIA: `role="spinbutton"` on the input (native `<input type="number">` provides this); `aria-valuenow`, `aria-valuemin`, `aria-valuemax` mirror the props; `aria-invalid` mirrors `invalid`; `aria-required` mirrors `required`; spinner buttons have `aria-label` ("Increment" / "Decrement") and `tabindex="-1"` so keyboard users use arrow keys.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none` on animated state changes.
-- Touch target: on a coarse pointer the two steppers sit side by side in an 80 px column (about 40 px each), and each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44 px tall (the frame stops clipping on a coarse pointer so the hit area is not cut). On a fine pointer the steppers stay stacked at the drawn size; arrow keys are the primary interaction.
+- Touch target: on a coarse pointer the two steppers sit side by side in an 80 px column (about 40 px each), and each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44 px tall (the frame stops clipping on a coarse pointer so the hit area is not cut). On a fine pointer the steppers stay stacked at the drawn size; arrow keys are the primary interaction. The field also has `Input`'s touch target; a press on the frame focuses the input.
 
 ## Right-to-left
 
