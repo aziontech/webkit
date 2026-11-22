@@ -22,152 +22,127 @@ function findClosing(text: string, marker: string, from: number): number {
   return index
 }
 
-interface InlineScan {
-  text: string
-  i: number
-  plain: string
-  out: MarkdownInline[]
-}
-
 type ScanStep = 'next' | 'stop' | undefined
 
 const ESCAPABLE = /[\\`*_[\]()#>|-]/
 const CITATION = /^\[(\d{1,3})\](?!\()/
 
-function flushPlain(scan: InlineScan): void {
-  pushText(scan.out, scan.plain)
-  scan.plain = ''
+let text = ''
+let at = 0
+let plain = ''
+let out: MarkdownInline[] = []
+
+function flushPlain(): void {
+  pushText(out, plain)
+  plain = ''
 }
 
-function scanEscape(scan: InlineScan): ScanStep {
-  const { text, i } = scan
-  if (text[i] !== '\\' || i + 1 >= text.length || !ESCAPABLE.test(text[i + 1] ?? '')) return
-  scan.plain += text[i + 1]
-  scan.i += 2
-  return 'next'
-}
-
-function scanBreak(scan: InlineScan): ScanStep {
-  if (scan.text[scan.i] !== '\n') return
-  flushPlain(scan)
-  scan.out.push({ type: 'break' })
-  scan.i += 1
-  return 'next'
-}
-
-function scanCode(scan: InlineScan): ScanStep {
-  const { text, i } = scan
-  if (text[i] !== '`') return
-  flushPlain(scan)
-  const end = text.indexOf('`', i + 1)
+function scanPlain(char: string): ScanStep {
+  if (char === '\\' && at + 1 < text.length && ESCAPABLE.test(text[at + 1] as string)) {
+    plain += text[at + 1]
+    at += 2
+    return 'next'
+  }
+  if (char !== '\n' && char !== '`') return
+  flushPlain()
+  if (char === '\n') {
+    out.push({ type: 'break' })
+    at += 1
+    return 'next'
+  }
+  const end = text.indexOf('`', at + 1)
   const stop = end === -1 ? text.length : end
-  scan.out.push({ type: 'code', value: text.slice(i + 1, stop) })
-  scan.i = stop + 1
+  out.push({ type: 'code', value: text.slice(at + 1, stop) })
+  at = stop + 1
   return 'next'
 }
 
-function scanStrong(scan: InlineScan): ScanStep {
-  const { text, i } = scan
-  const pair = text.slice(i, i + 2)
+function scanStrong(): ScanStep {
+  const pair = text.slice(at, at + 2)
   if (pair !== '**' && pair !== '__') return
-  flushPlain(scan)
-  const end = findClosing(text, pair, i + 2)
+  flushPlain()
+  const end = findClosing(text, pair, at + 2)
   const stop = end === -1 ? text.length : end
-  const inner = text.slice(i + 2, stop)
-  if (inner) scan.out.push({ type: 'strong', children: parseInline(inner) })
-  scan.i = stop + 2
+  const inner = text.slice(at + 2, stop)
+  if (inner) out.push({ type: 'strong', children: parseInline(inner) })
+  at = stop + 2
   return 'next'
 }
 
-function scanEmphasis(scan: InlineScan): ScanStep {
-  const { text, i } = scan
-  const char = text[i] ?? ''
-  if ((char !== '*' && char !== '_') || text[i + 1] === ' ' || i + 1 >= text.length) return
-  const wordBefore = char === '_' && /\w/.test(text[i - 1] ?? '')
-  const end = wordBefore ? -1 : findClosing(text, char, i + 1)
-  if (end <= i + 1) return
-  flushPlain(scan)
-  scan.out.push({ type: 'em', children: parseInline(text.slice(i + 1, end)) })
-  scan.i = end + 1
+function scanEmphasis(char: string): ScanStep {
+  if ((char !== '*' && char !== '_') || text[at + 1] === ' ' || at + 1 >= text.length) return
+  const end = char === '_' && /\w/.test(text[at - 1] ?? '') ? -1 : findClosing(text, char, at + 1)
+  if (end <= at + 1) return
+  flushPlain()
+  out.push({ type: 'em', children: parseInline(text.slice(at + 1, end)) })
+  at = end + 1
   return 'next'
 }
 
-function scanLink(scan: InlineScan, close: number): ScanStep {
-  const { text, i } = scan
-  flushPlain(scan)
+function scanLink(close: number): ScanStep {
+  flushPlain()
   const end = text.indexOf(')', close + 2)
-  const label = parseInline(text.slice(i + 1, close))
+  const label = parseInline(text.slice(at + 1, close))
   if (end === -1) {
-    scan.out.push(...label)
+    out.push(...label)
     return 'stop'
   }
   const href = safeHref(text.slice(close + 2, end))
-  if (href) scan.out.push({ type: 'link', href, children: label })
-  else scan.out.push(...label)
-  scan.i = end + 1
+  if (href) out.push({ type: 'link', href, children: label })
+  else out.push(...label)
+  at = end + 1
   return 'next'
 }
 
-function scanBracket(scan: InlineScan): ScanStep {
-  const { text, i } = scan
-  if (text[i] !== '[') return
-  const citation = CITATION.exec(text.slice(i))
-  if (citation) {
-    flushPlain(scan)
-    scan.out.push({ type: 'citation', index: Number(citation[1]) })
-    scan.i += citation[0].length
-    return 'next'
+function scanBracket(char: string): ScanStep {
+  if (char === '[') {
+    const citation = CITATION.exec(text.slice(at))
+    if (citation) {
+      flushPlain()
+      out.push({ type: 'citation', index: Number(citation[1]) })
+      at += citation[0].length
+      return 'next'
+    }
+    const close = text.indexOf(']', at + 1)
+    if (close === -1) {
+      flushPlain()
+      pushText(out, text.slice(at + 1))
+      return 'stop'
+    }
+    if (text[close + 1] === '(') return scanLink(close)
   }
-  const close = text.indexOf(']', i + 1)
-  if (close === -1) {
-    flushPlain(scan)
-    pushText(scan.out, text.slice(i + 1))
-    return 'stop'
-  }
-  return text[close + 1] === '(' ? scanLink(scan, close) : undefined
-}
-
-function scanImage(scan: InlineScan): ScanStep {
-  const { text, i } = scan
-  if (text[i] !== '!' || text[i + 1] !== '[') return
-  const close = text.indexOf(']', i + 2)
+  if (char !== '!' || text[at + 1] !== '[') return
+  const close = text.indexOf(']', at + 2)
   if (close === -1 || text[close + 1] !== '(') return
   const end = text.indexOf(')', close + 2)
-  scan.plain += text.slice(i + 2, close)
-  scan.i = end === -1 ? text.length : end + 1
+  plain += text.slice(at + 2, close)
+  at = end === -1 ? text.length : end + 1
   return 'next'
 }
 
-const INLINE_SCANNERS = [
-  scanEscape,
-  scanBreak,
-  scanCode,
-  scanStrong,
-  scanEmphasis,
-  scanBracket,
-  scanImage
-]
-
-function scanInline(scan: InlineScan): ScanStep {
-  for (const scanner of INLINE_SCANNERS) {
-    const step = scanner(scan)
-    if (step) return step
-  }
-  return undefined
-}
-
-export function parseInline(text: string): MarkdownInline[] {
-  const scan: InlineScan = { text, i: 0, plain: '', out: [] }
-  while (scan.i < text.length) {
-    const step = scanInline(scan)
+function scanAll(): MarkdownInline[] {
+  while (at < text.length) {
+    const char = text[at] as string
+    const step = scanPlain(char) || scanStrong() || scanEmphasis(char) || scanBracket(char)
     if (step === 'stop') break
     if (!step) {
-      scan.plain += text[scan.i]
-      scan.i += 1
+      plain += char
+      at += 1
     }
   }
-  flushPlain(scan)
-  return scan.out
+  flushPlain()
+  return out
+}
+
+export function parseInline(source: string): MarkdownInline[] {
+  const outer = [text, at, plain, out] as const
+  text = source
+  at = 0
+  plain = ''
+  out = []
+  const result = scanAll()
+  ;[text, at, plain, out] = outer
+  return result
 }
 
 export function plainText(nodes: MarkdownInline[]): string {

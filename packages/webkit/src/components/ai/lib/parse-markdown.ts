@@ -63,102 +63,88 @@ export function parseMarkdownIncremental(source: string, previous?: MarkdownPars
   return { source: text, blocks, starts }
 }
 
-interface BlockScan {
-  lines: string[]
-  i: number
-  blocks: MarkdownBlock[]
-}
+let lines: string[] = []
+let row = 0
+let blocks: MarkdownBlock[] = []
 
-const lineAt = (scan: BlockScan, index = scan.i): string => scan.lines[index] ?? ''
-
-function parseFence(scan: BlockScan): boolean {
-  const fence = FENCE.exec(lineAt(scan))
+function parseFence(line: string): boolean {
+  const fence = FENCE.exec(line)
   if (!fence) return false
-  const marker = fence[1] ?? ''
+  const marker = fence[1] as string
   const body: string[] = []
-  scan.i += 1
   let closed = false
-  while (scan.i < scan.lines.length) {
-    const current = lineAt(scan)
-    scan.i += 1
+  while (++row < lines.length) {
+    const current = lines[row] as string
     if (current.trim().startsWith(marker)) {
       closed = true
+      row += 1
       break
     }
     body.push(current)
   }
-  scan.blocks.push({ type: 'code', language: fence[2] || 'text', value: body.join('\n'), closed })
+  blocks.push({ type: 'code', language: fence[2] || 'text', value: body.join('\n'), closed })
   return true
 }
 
-function parseHeading(scan: BlockScan): boolean {
-  const heading = HEADING.exec(lineAt(scan))
-  if (!heading) return false
-  const level = Math.min(6, (heading[1] ?? '').length + 2) as 3 | 4 | 5 | 6
-  scan.blocks.push({ type: 'heading', level, children: parseInline(heading[2] ?? '') })
-  scan.i += 1
+function parseHeading(line: string): boolean {
+  const heading = HEADING.exec(line)
+  if (heading) {
+    const level = Math.min(6, (heading[1] as string).length + 2) as 3 | 4 | 5 | 6
+    blocks.push({ type: 'heading', level, children: parseInline(heading[2] as string) })
+  } else if (RULE.test(line)) blocks.push({ type: 'rule' })
+  else return false
+  row += 1
   return true
 }
 
-function parseRule(scan: BlockScan): boolean {
-  if (!RULE.test(lineAt(scan))) return false
-  scan.blocks.push({ type: 'rule' })
-  scan.i += 1
-  return true
-}
-
-function parseTable(scan: BlockScan): boolean {
-  const line = lineAt(scan)
-  if (!line.includes('|') || !TABLE_DIVIDER.test(lineAt(scan, scan.i + 1))) return false
+function parseTable(line: string): boolean {
+  if (!line.includes('|') || !TABLE_DIVIDER.test(lines[row + 1] ?? '')) return false
   const header = splitRow(line).map(parseInline)
   const rows: MarkdownInline[][][] = []
-  scan.i += 2
-  while (scan.i < scan.lines.length && lineAt(scan).includes('|') && lineAt(scan).trim()) {
-    rows.push(splitRow(lineAt(scan)).map(parseInline))
-    scan.i += 1
+  row += 2
+  while (
+    row < lines.length &&
+    (lines[row] as string).includes('|') &&
+    (lines[row] as string).trim()
+  ) {
+    rows.push(splitRow(lines[row] as string).map(parseInline))
+    row += 1
   }
-  scan.blocks.push({ type: 'table', header, rows })
+  blocks.push({ type: 'table', header, rows })
   return true
 }
 
-function parseQuote(scan: BlockScan): boolean {
+function parseQuote(line: string): boolean {
+  if (!QUOTE.test(line)) return false
   const body: string[] = []
-  let match = QUOTE.exec(lineAt(scan))
-  if (!match) return false
-  while (match && scan.i < scan.lines.length) {
-    body.push(match[1] ?? '')
-    scan.i += 1
-    match = QUOTE.exec(lineAt(scan))
+  while (row < lines.length && QUOTE.test(lines[row] as string)) {
+    body.push((QUOTE.exec(lines[row] as string) as RegExpExecArray)[1] as string)
+    row += 1
   }
-  scan.blocks.push({ type: 'quote', children: parseInline(body.join('\n')) })
+  blocks.push({ type: 'quote', children: parseInline(body.join('\n')) })
   return true
 }
 
-function collectListItems(scan: BlockScan, pattern: RegExp, ordered: boolean): string[] {
-  const items: string[] = []
-  while (scan.i < scan.lines.length) {
-    const current = lineAt(scan)
-    const match = pattern.exec(current)
-    if (match) items.push((ordered ? match[2] : match[1]) ?? '')
-    else if (current.trim() && /^\s{2,}/.test(current) && items.length)
-      items[items.length - 1] += `\n${current.trim()}`
-    else break
-    scan.i += 1
-  }
-  return items
-}
-
-function parseList(scan: BlockScan): boolean {
-  const line = lineAt(scan)
+function parseList(line: string): boolean {
   const bullet = BULLET.exec(line)
   const ordered = ORDERED.exec(line)
   if (!bullet && !ordered) return false
   const isOrdered = !bullet
-  const items = collectListItems(scan, isOrdered ? ORDERED : BULLET, isOrdered)
-  scan.blocks.push({
+  const pattern = isOrdered ? ORDERED : BULLET
+  const items: string[] = []
+  while (row < lines.length) {
+    const current = lines[row] as string
+    const match = pattern.exec(current)
+    if (match) items.push((isOrdered ? match[2] : match[1]) as string)
+    else if (current.trim() && /^\s{2,}/.test(current) && items.length)
+      items[items.length - 1] += `\n${current.trim()}`
+    else break
+    row += 1
+  }
+  blocks.push({
     type: 'list',
     ordered: isOrdered,
-    start: isOrdered ? Number(ordered?.[1]) : 1,
+    start: isOrdered ? Number((ordered as RegExpExecArray)[1]) : 1,
     items: items.map(parseInline)
   })
   return true
@@ -166,53 +152,50 @@ function parseList(scan: BlockScan): boolean {
 
 const PARAGRAPH_BREAKS = [FENCE, HEADING, QUOTE, BULLET, ORDERED]
 
-function endsParagraph(current: string, length: number): boolean {
-  if (!current.trim()) return true
-  if (PARAGRAPH_BREAKS.some((pattern) => pattern.test(current))) return true
-  return length > 0 && RULE.test(current)
-}
-
-function parseParagraph(scan: BlockScan): boolean {
+function parseParagraph(): void {
   const paragraph: string[] = []
-  while (scan.i < scan.lines.length && !endsParagraph(lineAt(scan), paragraph.length)) {
-    paragraph.push(lineAt(scan))
-    scan.i += 1
+  while (row < lines.length) {
+    const current = lines[row] as string
+    if (
+      !current.trim() ||
+      PARAGRAPH_BREAKS.some((pattern) => pattern.test(current)) ||
+      (paragraph.length > 0 && RULE.test(current))
+    )
+      break
+    paragraph.push(current)
+    row += 1
   }
-  scan.blocks.push({ type: 'paragraph', children: parseInline(paragraph.join('\n')) })
-  return true
+  blocks.push({ type: 'paragraph', children: parseInline(paragraph.join('\n')) })
 }
 
-const BLOCK_PARSERS = [
-  parseFence,
-  parseHeading,
-  parseRule,
-  parseTable,
-  parseQuote,
-  parseList,
-  parseParagraph
-]
-
-function lineOffsets(lines: string[]): number[] {
+function parseBlocks(source: string[]): { blocks: MarkdownBlock[]; starts: number[] } {
+  const starts: number[] = []
   const offsets: number[] = []
   let offset = 0
-  for (const line of lines) {
+  for (const line of source) {
     offsets.push(offset)
     offset += line.length + 1
   }
-  return offsets
-}
-
-function parseBlocks(lines: string[]): { blocks: MarkdownBlock[]; starts: number[] } {
-  const scan: BlockScan = { lines, i: 0, blocks: [] }
-  const starts: number[] = []
-  const offsets = lineOffsets(lines)
-  while (scan.i < lines.length) {
-    if (!lineAt(scan).trim()) {
-      scan.i += 1
-      continue
+  lines = source
+  row = 0
+  blocks = []
+  while (row < lines.length) {
+    const line = lines[row] as string
+    if (!line.trim()) row += 1
+    else {
+      starts[blocks.length] = offsets[row] as number
+      if (!(
+        parseFence(line) ||
+        parseHeading(line) ||
+        parseTable(line) ||
+        parseQuote(line) ||
+        parseList(line)
+      ))
+        parseParagraph()
     }
-    starts[scan.blocks.length] = offsets[scan.i] ?? 0
-    BLOCK_PARSERS.some((parse) => parse(scan))
   }
-  return { blocks: scan.blocks, starts }
+  const result = { blocks, starts }
+  lines = []
+  blocks = []
+  return result
 }

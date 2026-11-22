@@ -12,41 +12,31 @@ const CODE_CLASS =
 const LINK_CLASS =
   'text-(--text-link) underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 
-interface RenderContext {
-  sources: SourcesItem[]
-  anchor: string
-}
-
 type ContainerNode = Extract<MarkdownInlineNode, { children: MarkdownInlineNode[] }>
 type LeafNode = Exclude<MarkdownInlineNode, ContainerNode>
 
-function renderLink(href: string, children: VNodeChild[]): VNodeChild {
-  const external = EXTERNAL.test(href)
-  return h(
-    'a',
-    {
-      href,
-      target: external ? '_blank' : undefined,
-      rel: external ? 'noopener noreferrer' : undefined,
-      class: LINK_CLASS
-    },
-    children
-  )
-}
-
-function renderContainer(node: ContainerNode, context: RenderContext): VNodeChild {
-  const children = renderNodes(node.children, context)
+function renderContainer(node: ContainerNode, sources: SourcesItem[], anchor: string): VNodeChild {
+  const children = renderNodes(node.children, sources, anchor)
   switch (node.type) {
     case 'strong':
       return h('strong', { class: 'font-semibold' }, children)
     case 'em':
       return h('em', children)
     case 'link':
-      return renderLink(node.href, children)
+      return h(
+        'a',
+        {
+          href: node.href,
+          target: EXTERNAL.test(node.href) ? '_blank' : undefined,
+          rel: EXTERNAL.test(node.href) ? 'noopener noreferrer' : undefined,
+          class: LINK_CLASS
+        },
+        children
+      )
   }
 }
 
-function renderLeaf(node: LeafNode, { sources, anchor }: RenderContext): VNodeChild {
+function renderLeaf(node: LeafNode, sources: SourcesItem[], anchor: string): VNodeChild {
   switch (node.type) {
     case 'text':
       return node.value
@@ -65,9 +55,13 @@ function renderLeaf(node: LeafNode, { sources, anchor }: RenderContext): VNodeCh
   }
 }
 
-function renderNodes(nodes: MarkdownInlineNode[], context: RenderContext): VNodeChild[] {
+function renderNodes(
+  nodes: MarkdownInlineNode[],
+  sources: SourcesItem[],
+  anchor: string
+): VNodeChild[] {
   return nodes.map((node) =>
-    'children' in node ? renderContainer(node, context) : renderLeaf(node, context)
+    'children' in node ? renderContainer(node, sources, anchor) : renderLeaf(node, sources, anchor)
   )
 }
 
@@ -79,6 +73,6 @@ export default defineComponent({
     anchor: { type: String, default: '' }
   },
   setup(props) {
-    return () => renderNodes(props.nodes, { sources: props.sources, anchor: props.anchor })
+    return () => renderNodes(props.nodes, props.sources, props.anchor)
   }
 })
