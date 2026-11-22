@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import DeployForm from './form.vue'
+  import DeployForm from '../parts/deploy-form.vue'
 </script>
 
 <template>
