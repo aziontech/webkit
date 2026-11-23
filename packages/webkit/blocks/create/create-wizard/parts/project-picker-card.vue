@@ -7,6 +7,7 @@
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
 
   import { type ServiceWizardPicker, wireSubWidths, wireWidths } from '../lib/service-wizard'
   import { projectModes } from '../sample'
@@ -100,6 +101,7 @@
         <div
           class="border-t border-(--border-default)"
           role="radiogroup"
+          @keydown="onRadioListKeydown"
           aria-label="Projects"
         >
           <Item.List>
@@ -110,6 +112,13 @@
               clickable
               role="radio"
               :aria-checked="option.value === projectPicker.chosen"
+              :tabindex="
+                radioListTabIndex(
+                  option.value,
+                  projectPicker.chosen,
+                  projectPicker.visible.map((entry) => entry.value)
+                )
+              "
               @click="projectPicker.chosen = option.value"
             >
               <Item.Media>

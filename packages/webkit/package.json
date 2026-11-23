@@ -2517,6 +2517,10 @@
       "types": "./types/utils/focus-invalid.d.ts",
       "default": "./src/utils/focus-invalid.ts"
     },
+    "./utils/radio-list": {
+      "types": "./types/utils/radio-list.d.ts",
+      "default": "./src/utils/radio-list.ts"
+    },
     "./styles/country-flags": {
       "types": "./types/css.d.ts",
       "default": "./src/styles/country-flags.css"

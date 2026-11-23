@@ -4,6 +4,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Tag from '@aziontech/webkit/tag'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
   import { computed, ref } from 'vue'
 
   import type { CreateWizardPolicy } from '../types'
@@ -68,6 +69,7 @@
       <div
         class="flex flex-col"
         role="radiogroup"
+        @keydown="onRadioListKeydown"
         aria-label="Policies"
       >
         <Item
@@ -77,6 +79,13 @@
           clickable
           role="radio"
           :aria-checked="choice === option.value"
+          :tabindex="
+            radioListTabIndex(
+              option.value,
+              choice,
+              visible.map((entry) => entry.value)
+            )
+          "
           @click="choose(option)"
         >
           <Item.Media>
