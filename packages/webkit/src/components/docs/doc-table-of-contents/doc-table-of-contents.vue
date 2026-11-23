@@ -65,7 +65,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ docTableOfContents: en.docTableOfContents })
+  const { t } = useTranslate({ docTableOfContents: en.docTableOfContents, common: en.common })
   const railTitle = computed(() => props.title || t('docTableOfContents.title'))
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-table-of-contents')
@@ -186,13 +186,15 @@
     'motion-reduce:transition-none'
 
   const ITEM_LINK_CLASS =
-    'block w-full rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted) no-underline transition-colors duration-moderate-01 ' +
+    'block w-full rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) pointer-coarse:min-h-11 pointer-coarse:content-center text-label-sm text-(--text-muted) no-underline ' +
+    'transition-colors duration-moderate-01 ' +
     'ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color) ' +
     'data-[active]:text-(--text-default) ' +
     'motion-reduce:transition-none'
 
   const LINK_CLASS =
-    'flex w-full items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted) no-underline transition-colors ' +
+    'flex w-full items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) pointer-coarse:min-h-11 text-label-sm ' +
+    'text-(--text-muted) no-underline transition-colors ' +
     'duration-moderate-01 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color) ' +
     'motion-reduce:transition-none'
 </script>
@@ -309,7 +311,12 @@
               class="shrink-0"
               aria-hidden="true"
             />
-            {{ link.label }}
+            {{ link.label
+            }}<span
+              v-if="isExternal(link.href)"
+              class="sr-only"
+              >{{ ` ${t('common.newTab')}` }}</span
+            >
           </a>
         </li>
       </ul>

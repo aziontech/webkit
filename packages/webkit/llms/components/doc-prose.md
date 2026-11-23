@@ -19,7 +19,7 @@
 
 ## Don’t
 
-- To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-content` (`--layout-measure-content`, 876px).
+- To cap the whole column — `DocProse` caps only running text (see the reading measure under Tokens). The consumer sets the column width with `.layout-column-content` (`--layout-measure-content`, 876px).
 - To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.
 - For a single run of body copy in an application screen — use the `text-body-*` tokens directly.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

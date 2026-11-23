@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The console rail, whole: a header whose search field opens a ⌘K palette, grouped navigation composed with `Menu`, and a footer carrying the account identity and its menu. The navigation scrolls inside the built-in `ScrollArea` while the header and footer stay put. `Menu` takes `role=\"presentation\"` because the sidebar is already the `<nav>` landmark — it drops its accessible name with the role, so the region has exactly one name. Expand \"Edge Functions\" for a level that opens in place behind the indent rail; activate \"Settings\" for a drill level that replaces the menu.",
+   "summary": "The console rail, whole: a header whose search field opens a ⌘K palette, grouped navigation composed with `Menu`, and a footer carrying the account identity and its menu. The navigation scrolls inside the built-in `ScrollArea` while the header and footer stay put. `Menu` takes `role=\"presentation\"` because the sidebar is already the `<nav>` landmark — it drops its accessible name with the role, so the region has exactly one name. Expand \"Functions\" for a level that opens in place behind the indent rail; activate \"Settings\" for a drill level that replaces the menu.",
    "file": "examples/sidebar/default.vue"
   },
   {

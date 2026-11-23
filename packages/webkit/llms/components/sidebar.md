@@ -307,7 +307,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
           />
           <SidebarMenuSub default-open>
             <SidebarMenuSubTrigger
-              label="Edge Functions"
+              label="Functions"
               type="inline"
             />
             <SidebarMenuSubContent>

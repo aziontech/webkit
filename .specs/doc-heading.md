@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 0f25c66f4e519f92227d321577371b886625137e5e648b5bd5feb8c1c6cbe37a
+checksum: 80efd3fc1f5a6bf066fa6c88f8d70282e36b91fa12ddbf367f22b4f16d61b859
 created: 2026-11-11
-last_updated: 2026-11-18
+last_updated: 2026-11-22
 ---
 
 # DocHeading — Component Spec
@@ -122,8 +122,8 @@ The glyph fades in with `transition-opacity duration-150`; `motion-reduce:transi
 
 ## Examples
 
-- Default — an `h2` with an anchor.
-- Levels — `h1` to `h4`.
+- Default — an `h2` with an anchor, inside `DocProse`, which owns the type scale.
+- Levels — `h1` to `h4`, inside `DocProse`, so each level shows its size.
 
 ## Constraints — DO NOT
 

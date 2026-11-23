@@ -7,7 +7,7 @@
   import { ref } from 'vue'
 
   const versions = ref([
-    'Purge the cache from **Edge Cache › Purge**: choose *URL*, paste the paths and confirm.',
+    'Purge the cache from **Cache › Purge**: choose *URL*, paste the paths and confirm.',
     'Use a **wildcard purge** (`/assets/*`) when many files changed at once; it clears every match in one request.',
     'If the files change on every deploy, add a **version to the file name** instead of purging: the new name is a new cache entry.'
   ])

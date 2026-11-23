@@ -24,7 +24,7 @@
             />
             <SidebarMenuSub default-open>
               <SidebarMenuSubTrigger
-                label="Edge Application"
+                label="Applications"
                 type="inline"
               />
               <SidebarMenuSubContent>
@@ -42,7 +42,7 @@
             </SidebarMenuSub>
             <SidebarMenuSub>
               <SidebarMenuSubTrigger
-                label="Edge Functions"
+                label="Functions"
                 type="inline"
               />
               <SidebarMenuSubContent>

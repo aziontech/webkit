@@ -22,7 +22,7 @@
   "Naming: Radix and shadcn `ToggleGroup` is a group of `aria-pressed` toggles with `type=\"single\" | \"multiple\"`. This component is the single-select segmented control (Cloudscape and Geist call it a segmented control): one value is always selected and the segments are radios. There is no multiple mode; for several independent toggles use `checkbox`es or `ButtonGroup` toggles."
  ],
  "bestPractices": [
-  "Keep labels to one or two words: segments never wrap (`whitespace-nowrap`) and long labels truncate.",
+  "Keep labels to one or two words. When the options do not fit their container they flow onto another row, and a label breaks across lines only when one option alone is wider than the group; a label is never cut off.",
   "Give every option a unique `value`; values are coerced to strings and used as the list key and the selection identity, so duplicates collide.",
   "Pass `ariaLabel` whenever no visible label names the group.",
   "Use `fluid` to make the group fill a narrow container and share its width across segments, instead of styling the width at the call site.",

@@ -215,6 +215,27 @@ describe('DocLayout', () => {
     replace.mockRestore()
   })
 
+  it('offers the outline as an On this page disclosure above the article', async () => {
+    const { findByTestId, getByRole } = mount()
+    const disclosure = await findByTestId('doc-layout__outline-disclosure')
+    expect(disclosure.tagName).toBe('DETAILS')
+    expect(disclosure.compareDocumentPosition(getByRole('main'))).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING
+    )
+    await userEvent.click(disclosure.querySelector('summary')!)
+    expect((disclosure as HTMLDetailsElement).open).toBe(true)
+    await userEvent.click(within(disclosure).getByRole('link', { name: 'Deploy with Azion CLI' }))
+    expect((disclosure as HTMLDetailsElement).open).toBe(false)
+    expect(document.activeElement?.id).toBe('deploy-with-cli')
+  })
+
+  it('renders the aside content under the article for narrow viewports', async () => {
+    const { findByTestId, getByRole } = mount({}, { aside: () => h('p', 'Ready to build?') })
+    const inline = await findByTestId('doc-layout__aside-inline')
+    expect(within(inline).getByText('Ready to build?')).toBeTruthy()
+    expect(getByRole('main').compareDocumentPosition(inline)).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+  })
+
   it('jumps from a heading anchor through the provided heading navigation', async () => {
     const { getByRole } = mount()
     const main = within(getByRole('main'))

@@ -11564,7 +11564,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - Contrast: gradient passes ≥4.5:1 for the `--color-base-white` foreground due to the `--bg-backdrop` overlay; disabled state pairs `--bg-disabled` with `--text-disabled`.
 - `motion-reduce:transition-none` on every transition class.
 - Pause, Stop, Hide (WCAG 2.2.2): the glow turns once and stops by itself after 4.2 seconds, resting on the static glow; `motion-reduce:animate-none` keeps it still from the start.
-- Touch target ≥40×40 px at `size: 'large'`; smaller sizes are for dense toolbars and surface a larger hit area via the surrounding container.
+- Touch target: on a coarse pointer an invisible `[data-slot=touch-target]` span grows the hit area of every size to at least 44 × 44 px, as on `Button`.
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button.
 
 ## Examples
@@ -11940,7 +11940,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ## Do
 
-- Keep labels to one or two words: segments never wrap (`whitespace-nowrap`) and long labels truncate.
+- Keep labels to one or two words. When the options do not fit their container they flow onto another row, and a label breaks across lines only when one option alone is wider than the group; a label is never cut off.
 - Give every option a unique `value`; values are coerced to strings and used as the list key and the selection identity, so duplicates collide.
 - Pass `ariaLabel` whenever no visible label names the group.
 - Use `fluid` to make the group fill a narrow container and share its width across segments, instead of styling the width at the call site.
@@ -11992,7 +11992,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - Indicator: an `aria-hidden` span positioned under the selected segment from its measured size and offset; hidden when nothing is selected or the selected segment is not rendered. It re-measures on option, selection and size changes (`ResizeObserver`).
 - Option normalization: a missing `label` falls back to `value`, then to `Option <n>`; a missing `value` falls back to `label`, then to the index.
 - Test ids: root `toggle-group` (consumer `data-testid` wins), `<testId>__indicator`, `<testId>__option`, `<testId>__option-lock`.
-- Reflow: the root is capped at the width of its container (`max-w-full`, `min-w-0`) and the options shrink, truncating their labels, instead of overflowing a narrow box.
+- Reflow: the root is capped at the width of its container (`max-w-full`, `min-w-0`) and wraps (`flex-wrap`): options that do not fit move to another row, the selected-option indicator follows them, and a label wraps inside its option only when that option alone is wider than the group. Heights are minimums (28 / 32 / 40 px for one row), so a wrapped group grows instead of clipping.
 
 ## Accessibility
 
@@ -14042,7 +14042,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
   import { ref } from 'vue'
 
   const versions = ref([
-    'Purge the cache from **Edge Cache › Purge**: choose *URL*, paste the paths and confirm.',
+    'Purge the cache from **Cache › Purge**: choose *URL*, paste the paths and confirm.',
     'Use a **wildcard purge** (`/assets/*`) when many files changed at once; it clears every match in one request.',
     'If the files change on every deploy, add a **version to the file name** instead of purging: the new name is a new cache entry.'
   ])
@@ -16271,7 +16271,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 <template>
   <div class="w-full max-w-(--container-xl) pt-(--spacing-xl)">
     <Tracker
-      aria-label="Edge Application uptime, last 90 days"
+      aria-label="Application uptime, last 90 days"
       :items="days"
     />
     <div
@@ -22533,7 +22533,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
   const model = ref([
     [
-      { id: 1, label: 'Edge Functions' },
+      { id: 1, label: 'Functions' },
       { id: 2, label: 'WAF' },
       { id: 3, label: 'Image Processor' }
     ],
@@ -22823,6 +22823,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - Use `label` for plain copy and the default slot when the copy needs inline links; each link is a `Link` with `inline`.
 - Set `title` when the alert says two things: what happened (the title, a few words, no end period) and what it means or what to do (the copy). A one-sentence alert needs no title. A title alone, with no copy, is allowed for a short notice that still wants the heading weight.
 - Use either the built-in action (`actionLabel` with `@action`) or the `actions` slot, not both. The slot replaces the button.
+- The `life` timer pauses while the pointer is over the alert or focus is inside it, and resumes with the time left when both leave, so the alert never disappears while it is being read or used. Keep `life` for `info` and `success` status messages.
 - Once `closable` or `life` dismisses the message, it stays hidden until it is remounted. Listen to `close` to keep your own state in sync.
 - Use `size="small"` inside dense surfaces such as cards and drawers.
 
@@ -22994,19 +22995,19 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 <template>
   <EmptyState
-    title="No resource yet"
-    description="Get started by creating your first resource."
+    title="No applications yet"
+    description="Create an application to start serving your site from Azion."
     icon="az az-inbox"
   >
     <template #actions>
       <div class="flex gap-(--spacing-3)">
         <Button
-          variant="secondary"
-          label="Secondary Item"
+          variant="primary"
+          label="Create application"
         />
         <Button
           variant="outline"
-          label="Create Item"
+          label="Import from GitHub"
         />
       </div>
       <Link
@@ -28247,9 +28248,9 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
     home-href="/"
   >
     <Footer.Column title="Products">
-      <Footer.Link href="/products/edge-application">Edge Application</Footer.Link>
-      <Footer.Link href="/products/edge-firewall">Edge Firewall</Footer.Link>
-      <Footer.Link href="/products/edge-storage">Edge Storage</Footer.Link>
+      <Footer.Link href="/products/applications">Applications</Footer.Link>
+      <Footer.Link href="/products/firewall">Firewall</Footer.Link>
+      <Footer.Link href="/products/object-storage">Object Storage</Footer.Link>
     </Footer.Column>
     <Footer.Column title="Developers">
       <Footer.Link href="/documentation">Docs</Footer.Link>
@@ -29531,7 +29532,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
           />
           <SidebarMenuSub default-open>
             <SidebarMenuSubTrigger
-              label="Edge Functions"
+              label="Functions"
               type="inline"
             />
             <SidebarMenuSubContent>
@@ -31084,7 +31085,7 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
           href="/applications"
         />
         <SidebarMenuItem
-          label="Edge Firewall"
+          label="Firewall"
           icon="az az-shield"
           href="/edge-firewall"
           tag-value="Beta"
@@ -32358,7 +32359,7 @@ packages/webkit/src/components/overlay/command/
 - Below `md` the dialog is a bottom sheet, capped at 80% of the **visible** viewport (`dvh`, not `vh`: on mobile browsers `vh` is the largest viewport with the toolbars retracted, so a `vh` sheet can extend under the URL bar with its footer off-screen).
 - Exactly one element caps the sheet (the panel) and exactly one element scrolls (`panel-body`), so the title and footer actions stay reachable while the body scrolls. The motion wrapper only positions and animates; it declares no cap and no scroll of its own.
 - The page behind the overlay is scroll-locked while the dialog is open, and the lock is released on close.
-- Phones: below `md` the panel is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content, its direct children stretch to equal widths and it keeps `env(safe-area-inset-bottom)` clear.
+- Phones: below `md` the panel is a bottom sheet: full width, as tall as its content (`h-fit`), rounded top corners, capped at 80 dvh and at 90 dvh below `sm`, where its body scrolls. It never grows to the full screen, so a short confirmation stays a compact sheet and the page it is about stays in view above it. The `PanelFooter` stays pinned under the scrolling content, its direct children stretch to equal widths and it keeps `env(safe-area-inset-bottom)` clear.
 - Server render and hydration: the phone layout and its motion timing are CSS breakpoints (`max-md:` / `md:` utilities), so the server HTML and the hydrated DOM are identical at every width.
 
 ## Accessibility

@@ -4,9 +4,9 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: f9df0fd44645b8d79db517f4b41196a507615966c4f0269e26743666281f5c29
+checksum: 904451dcb4e087d9bb56600063cef176ef1bb50707523358073b9070e6468353
 created: 2026-08-22
-last_updated: 2026-11-18
+last_updated: 2026-11-22
 ---
 
 # DocTableOfContents — Component Spec
@@ -126,6 +126,7 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 - The marker is never the only signal: the active entry also changes ink and carries `aria-current`, so the state does not depend on seeing the dash.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: entries are padded rows; the rail itself is not interactive.
+- A link that opens a new tab (every external `href` in a link group) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
 ## Performance
 

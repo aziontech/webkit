@@ -34,11 +34,11 @@
 </script>
 
 <template>
-  <div
+  <li
     ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex w-full items-stretch gap-(--spacing-md) last:[&_[data-step-body]]:pb-0 last:[&_[data-step-connector]]:hidden"
+    class="flex w-full items-stretch gap-(--spacing-md) pt-0! last:[&_[data-step-body]]:pb-0 last:[&_[data-step-connector]]:hidden"
   >
     <div class="flex w-8 shrink-0 flex-col items-center">
       <span
@@ -69,5 +69,5 @@
         <slot />
       </div>
     </div>
-  </div>
+  </li>
 </template>

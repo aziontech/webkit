@@ -21,6 +21,31 @@ afterEach(() => {
 })
 
 describe('DocPrompt', () => {
+  describe('capped block disclosure', () => {
+    it('ties Show more to the prompt with aria-expanded and aria-controls', async () => {
+      const style = document.createElement('style')
+      style.textContent =
+        '[data-testid="doc-prompt"] p[data-variant="block"][data-state="closed"] { max-height: 2rem; overflow: hidden; }'
+      document.head.append(style)
+      try {
+        const { getByRole, container } = render(DocPrompt, {
+          props: { variant: 'block' },
+          slots: { default: Array.from({ length: 12 }, () => PROMPT).join(' ') }
+        })
+        const button = await waitFor(() => getByRole('button', { name: /show more/i }))
+        const prompt = container.querySelector('p[data-variant="block"]') as HTMLElement
+        expect(prompt.id).not.toBe('')
+        expect(button.getAttribute('aria-controls')).toBe(prompt.id)
+        expect(button.getAttribute('aria-expanded')).toBe('false')
+
+        await fireEvent.click(button)
+        await waitFor(() => expect(button.getAttribute('aria-expanded')).toBe('true'))
+      } finally {
+        style.remove()
+      }
+    })
+  })
+
   describe('rendering & testid', () => {
     it('renders the prompt text with the derived testid', () => {
       const { getByTestId, getByText } = render(DocPrompt, { slots: { default: PROMPT } })

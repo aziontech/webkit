@@ -7,6 +7,7 @@
     onUpdated,
     ref,
     useAttrs,
+    useId,
     useSlots
   } from 'vue'
 
@@ -55,6 +56,7 @@
 
   const promptEl = ref<globalThis.HTMLElement | null>(null)
   const expanded = ref(false)
+  const promptId = useId()
   const capped = ref(false)
   const overflow = ref<'start' | 'end' | 'both' | ''>('')
   const blockFitsOneLine = ref(false)
@@ -222,6 +224,7 @@
       <div class="min-w-0 flex-1">
         <div class="relative">
           <p
+            :id="promptId"
             ref="promptEl"
             :data-variant="variant"
             :data-state="variant === 'block' ? (expanded ? 'open' : 'closed') : undefined"
@@ -261,6 +264,8 @@
             :icon="expanded ? 'az az-chevron-up' : 'az az-chevron-down'"
             variant="outline"
             size="small"
+            :aria-expanded="expanded"
+            :aria-controls="promptId"
             @click="toggle"
           />
         </div>

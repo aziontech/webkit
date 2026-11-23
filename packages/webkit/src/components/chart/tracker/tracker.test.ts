@@ -13,7 +13,7 @@ const week: TrackerItem[] = [
 
 const mount = (props: Record<string, unknown> = {}) =>
   render(Tracker, {
-    props: { items: week, ariaLabel: 'Edge Application uptime, last 4 days', ...props }
+    props: { items: week, ariaLabel: 'Application uptime, last 4 days', ...props }
   })
 
 const activeIndexOf = (view: ReturnType<typeof mount>) =>
@@ -31,7 +31,7 @@ describe('Tracker', () => {
     const root = mount().getByTestId('tracker')
     expect(root.getAttribute('role')).toBe('group')
     expect(root.getAttribute('aria-roledescription')).toBe('status history')
-    expect(root.getAttribute('aria-label')).toBe('Edge Application uptime, last 4 days')
+    expect(root.getAttribute('aria-label')).toBe('Application uptime, last 4 days')
     expect(root.getAttribute('tabindex')).toBe('0')
   })
 

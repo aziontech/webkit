@@ -4,9 +4,9 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: ff177bab7561c59e5ed64aec92b0a8997609ddd7e0a75b6688538c81c91e9f21
+checksum: 1a066f64f38cb2494dc8995578193d1ec06306f78223958053586ec138297a30
 created: 2026-08-22
-last_updated: 2026-11-18
+last_updated: 2026-11-22
 ---
 
 # DocPageHeader — Component Spec
@@ -138,6 +138,7 @@ _none_
 - The ISO date is parsed and rendered in **UTC** on purpose: read as local time, a bare `2026-06-30` becomes the 29th for every reader west of Greenwich.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: each meta-line entry is a standard `small` button (28px) with its own hover surface; nothing else is interactive.
+- An action with `target: '_blank'` gets an `aria-label` of its label plus ` (opens in a new tab)` (`common.newTab`), so it announces that it opens a new tab.
 
 ## Examples
 

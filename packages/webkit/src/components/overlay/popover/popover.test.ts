@@ -4,6 +4,7 @@ import { userEvent } from 'vitest/browser'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/popover/default.vue'
+import FilterBuilder from '../../../../examples/popover/filter-builder.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Popover, {
   PopoverClose,
@@ -296,6 +297,17 @@ describe('Popover', () => {
 
       await fireEvent.keyDown(document, { key: 'Escape' })
       await waitFor(() => expect(panel()).toBeNull())
+    })
+
+    it('the FilterBuilder example closes on Escape and returns focus to its trigger', async () => {
+      render(FilterBuilder)
+      const trigger = control()
+      await userEvent.click(trigger)
+      await waitFor(() => expect(panel()).not.toBeNull())
+
+      await userEvent.keyboard('{Escape}')
+      await waitFor(() => expect(panel()).toBeNull())
+      expect(document.activeElement).toBe(trigger)
     })
 
     // ---- v-model:open round-trip -------------------------------------------------

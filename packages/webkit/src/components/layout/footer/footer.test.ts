@@ -35,8 +35,8 @@ const compoundComponents = {
 // status/language pair.
 const composedBands = `
     <FooterColumn title="Products">
-      <FooterLink href="/products/edge-application">Edge Application</FooterLink>
-      <FooterLink href="/products/edge-firewall">Edge Firewall</FooterLink>
+      <FooterLink href="/products/applications">Applications</FooterLink>
+      <FooterLink href="/products/firewall">Firewall</FooterLink>
     </FooterColumn>
     <FooterColumn title="Company">
       <FooterLink href="/about">About us</FooterLink>
@@ -340,8 +340,8 @@ describe('Footer', () => {
   describe('FooterLink — anchor root with href and attribute fallthrough', () => {
     it('renders an <a> pointing at href with the slot as its label', () => {
       const { getByRole } = renderComposed()
-      const link = getByRole('link', { name: 'Edge Application' })
-      expect(link.getAttribute('href')).toBe('/products/edge-application')
+      const link = getByRole('link', { name: 'Applications' })
+      expect(link.getAttribute('href')).toBe('/products/applications')
     })
 
     it('forwards consumer attributes (target, rel) onto the anchor root', () => {

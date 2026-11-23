@@ -127,9 +127,9 @@
     home-href="/"
   >
     <Footer.Column title="Products">
-      <Footer.Link href="/products/edge-application">Edge Application</Footer.Link>
-      <Footer.Link href="/products/edge-firewall">Edge Firewall</Footer.Link>
-      <Footer.Link href="/products/edge-storage">Edge Storage</Footer.Link>
+      <Footer.Link href="/products/applications">Applications</Footer.Link>
+      <Footer.Link href="/products/firewall">Firewall</Footer.Link>
+      <Footer.Link href="/products/object-storage">Object Storage</Footer.Link>
     </Footer.Column>
     <Footer.Column title="Developers">
       <Footer.Link href="/documentation">Docs</Footer.Link>
@@ -268,9 +268,9 @@
     home-href="/"
   >
     <Footer.Column title="Products">
-      <Footer.Link href="/products/edge-application">Edge Application</Footer.Link>
-      <Footer.Link href="/products/edge-firewall">Edge Firewall</Footer.Link>
-      <Footer.Link href="/products/edge-storage">Edge Storage</Footer.Link>
+      <Footer.Link href="/products/applications">Applications</Footer.Link>
+      <Footer.Link href="/products/firewall">Firewall</Footer.Link>
+      <Footer.Link href="/products/object-storage">Object Storage</Footer.Link>
     </Footer.Column>
     <Footer.Column title="Developers">
       <Footer.Link href="/documentation">Docs</Footer.Link>

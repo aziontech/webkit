@@ -14,13 +14,20 @@ import DocCard from './doc-card.vue'
 
 describe('DocCard', () => {
   describe('rendering & testid', () => {
+    it('says a target="_blank" card opens in a new tab', () => {
+      const { getByRole } = render(DocCard, {
+        props: { title: 'Functions', href: 'https://example.com/functions', target: '_blank' }
+      })
+      expect(getByRole('link', { name: /Functions ?\(opens in a new tab\)/ })).toBeInTheDocument()
+    })
+
     it('renders the title and copy with the derived testid', () => {
       const { getByTestId, getByText } = render(DocCard, {
-        props: { title: 'Edge Application' },
+        props: { title: 'Applications' },
         slots: { default: 'Serve at the edge.' }
       })
       expect(getByTestId('doc-card')).toBeInTheDocument()
-      expect(getByText('Edge Application')).toBeInTheDocument()
+      expect(getByText('Applications')).toBeInTheDocument()
       expect(getByText('Serve at the edge.')).toBeInTheDocument()
     })
 

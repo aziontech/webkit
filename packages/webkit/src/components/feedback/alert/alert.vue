@@ -104,6 +104,9 @@
 
   let dismissTimer: ReturnType<typeof setTimeout> | undefined
   let dismissEvent: Event | undefined
+  let remainingLife = 0
+  let timerStartedAt = 0
+  let holds = 0
 
   const clearDismissTimer = () => {
     if (dismissTimer !== undefined) {
@@ -141,12 +144,35 @@
     }
   }
 
+  const startDismissTimer = () => {
+    if (remainingLife > 0 && dismissTimer === undefined && holds === 0) {
+      timerStartedAt = Date.now()
+      dismissTimer = setTimeout(() => dismiss(), remainingLife)
+    }
+  }
+
+  const pauseDismissTimer = () => {
+    holds += 1
+    if (dismissTimer !== undefined) {
+      clearDismissTimer()
+      remainingLife -= Date.now() - timerStartedAt
+    }
+  }
+
+  const resumeDismissTimer = () => {
+    holds = Math.max(0, holds - 1)
+    startDismissTimer()
+  }
+
   useElementListener(rootEl, 'keydown', onEscape)
+  useElementListener(rootEl, 'pointerenter', pauseDismissTimer)
+  useElementListener(rootEl, 'pointerleave', resumeDismissTimer)
+  useElementListener(rootEl, 'focusin', pauseDismissTimer)
+  useElementListener(rootEl, 'focusout', resumeDismissTimer)
 
   onMounted(() => {
-    if (props.life > 0) {
-      dismissTimer = setTimeout(() => dismiss(), props.life)
-    }
+    remainingLife = props.life
+    startDismissTimer()
   })
 
   onUnmounted(() => {

@@ -10,19 +10,19 @@
       v-for="size in ['small', 'medium']"
       :key="size"
       :size="size"
-      title="No resource yet"
-      description="Get started by creating your first resource."
+      title="No applications yet"
+      description="Create an application to start serving your site from Azion."
       icon="az az-inbox"
     >
       <template #actions>
         <div class="flex gap-(--spacing-3)">
           <Button
-            variant="secondary"
-            label="Secondary Item"
+            variant="primary"
+            label="Create application"
           />
           <Button
             variant="outline"
-            label="Create Item"
+            label="Import from GitHub"
           />
         </div>
         <Link

@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: ad0f0383c33ec92247b8c7e5ede476c7a3db91ac4241fb507dbf3ba32eb9260c
+checksum: 833e6d681974c913d2254d19178e34eeeea5ccf4a88a0f9373a9b65ae1223328
 created: 2026-05-22
-last_updated: 2026-11-21
+last_updated: 2026-11-22
 ---
 
 # Alert — Component Spec
@@ -47,6 +47,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 - Use `label` for plain copy and the default slot when the copy needs inline links; each link is a `Link` with `inline`.
 - Set `title` when the alert says two things: what happened (the title, a few words, no end period) and what it means or what to do (the copy). A one-sentence alert needs no title. A title alone, with no copy, is allowed for a short notice that still wants the heading weight.
 - Use either the built-in action (`actionLabel` with `@action`) or the `actions` slot, not both. The slot replaces the button.
+- The `life` timer pauses while the pointer is over the alert or focus is inside it, and resumes with the time left when both leave, so the alert never disappears while it is being read or used. Keep `life` for `info` and `success` status messages.
 - Once `closable` or `life` dismisses the message, it stays hidden until it is remounted. Listen to `close` to keep your own state in sync.
 - Use `size="small"` inside dense surfaces such as cards and drawers.
 

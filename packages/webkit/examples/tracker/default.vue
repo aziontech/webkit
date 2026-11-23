@@ -26,7 +26,7 @@
 <template>
   <div class="w-full max-w-(--container-xl) pt-(--spacing-xl)">
     <Tracker
-      aria-label="Edge Application uptime, last 90 days"
+      aria-label="Application uptime, last 90 days"
       :items="days"
     />
     <div

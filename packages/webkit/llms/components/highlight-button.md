@@ -69,7 +69,7 @@
 - Contrast: gradient passes ≥4.5:1 for the `--color-base-white` foreground due to the `--bg-backdrop` overlay; disabled state pairs `--bg-disabled` with `--text-disabled`.
 - `motion-reduce:transition-none` on every transition class.
 - Pause, Stop, Hide (WCAG 2.2.2): the glow turns once and stops by itself after 4.2 seconds, resting on the static glow; `motion-reduce:animate-none` keeps it still from the start.
-- Touch target ≥40×40 px at `size: 'large'`; smaller sizes are for dense toolbars and surface a larger hit area via the surrounding container.
+- Touch target: on a coarse pointer an invisible `[data-slot=touch-target]` span grows the hit area of every size to at least 44 × 44 px, as on `Button`.
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button.
 
 ## Right-to-left
@@ -85,7 +85,7 @@
 
 ## Responsive
 
-- The control never wraps its label; drawn heights are 28 / 32 / 40 px. The glow needs `overflow-hidden` on the root, which also clips a touch-target extension, so prefer `size="large"` (40 px) on touch-first surfaces.
+- The control never wraps its label; drawn heights are 28 / 32 / 40 px. The glow is clipped by an inner layer, not the root, so the `[data-slot=touch-target]` span can extend the hit area to 44 px on a coarse pointer.
 - Consumer attributes (`id`, `aria-*`, `name`, `form`, `class`) land on the anchor or button (`v-bind="$attrs"`); the class is not merged with tailwind-merge, which keeps the entry near the Button budget.
 
 ## Examples

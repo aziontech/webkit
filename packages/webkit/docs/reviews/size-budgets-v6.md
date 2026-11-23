@@ -1286,3 +1286,32 @@ Budget-raise: console-trace-scene 84.65 KB → 84.75 KB (measured 84.75 KB): ren
 Budget-raise: console-application-scene 121.95 KB → 122.6 KB (measured 122.57 KB): renders tables and charts that carry the column cover and the tooltip clamp (A5-008, A5-220).
 Budget-raise: transfer-list 7.9 KB → 8.05 KB (measured 8.04 KB): keeps keyboard focus on the controls after a move disables the pressed button (A5-020).
 Budget-raise: transfer-list-controls 4.15 KB → 4.35 KB (measured 4.33 KB): same (A5-020).
+Budget-raise: doc-layout 72.9 KB → 74.35 KB: below xl the outline opens from an On this page disclosure and the aside renders under the article (audit round 5, lane F01).
+Budget-raise: doc-markdown 40.55 KB → 40.7 KB: renders DocCard, DocItem, DocSteps and DocCallout, which grew for accessibility (audit round 5, lane F01).
+Budget-raise: date-range-picker 56.35 KB → 56.4 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: property-filter 36.5 KB → 36.55 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: doc-prose 4.55 KB → 4.6 KB: reading measure on running text (audit round 5, lane F01).
+Budget-raise: doc-callout 9.25 KB → 9.4 KB: body copy style and the Alert life-timer pause (audit round 5, lane F01).
+Budget-raise: doc-card 1.6 KB → 2.45 KB: announces a new-tab link to assistive technology (common.newTab through useTranslate) (audit round 5, lane F01).
+Budget-raise: doc-item 12.9 KB → 13.8 KB: announces a new-tab link to assistive technology (common.newTab through useTranslate) (audit round 5, lane F01).
+Budget-raise: doc-prompt 13.15 KB → 13.2 KB: aria-expanded and aria-controls on the show-more toggle (audit round 5, lane F01).
+Budget-raise: doc-page-header 32.4 KB → 32.6 KB: names a new-tab action for assistive technology (audit round 5, lane F01).
+Budget-raise: console-application-scene 121.95 KB → 122.05 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: console-trace-scene 84.65 KB → 84.9 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: article-index-section 36.6 KB → 36.65 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: hero-form-section 52.55 KB → 52.65 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: pricing-plans-section 22.1 KB → 22.15 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: job-posting-section 58.95 KB → 59.05 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: newsletter-section 13.75 KB → 13.9 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: chart 27 KB → 27.1 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: chart-root 18.2 KB → 18.3 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: map-chart 18.55 KB → 18.65 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: error-boundary 7.25 KB → 7.3 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: code-block 33.85 KB → 33.9 KB: 44px code tabs on a coarse pointer (audit round 5, lane F01).
+Budget-raise: log-viewer-content 29.45 KB → 29.55 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: trace 39 KB → 39.05 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: mcp-app-frame 10 KB → 10.05 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: streaming-response 38.1 KB → 38.15 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: highlight-button 2.45 KB → 2.55 KB: 44px touch target on a coarse pointer and the glow clipped by an inner layer (audit round 5, lane F01).
+Budget-raise: log-viewer 43.5 KB → 43.6 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: log-viewer-steps 41.9 KB → 42.05 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).

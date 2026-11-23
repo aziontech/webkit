@@ -18,6 +18,7 @@
 - Use `label` for plain copy and the default slot when the copy needs inline links; each link is a `Link` with `inline`.
 - Set `title` when the alert says two things: what happened (the title, a few words, no end period) and what it means or what to do (the copy). A one-sentence alert needs no title. A title alone, with no copy, is allowed for a short notice that still wants the heading weight.
 - Use either the built-in action (`actionLabel` with `@action`) or the `actions` slot, not both. The slot replaces the button.
+- The `life` timer pauses while the pointer is over the alert or focus is inside it, and resumes with the time left when both leave, so the alert never disappears while it is being read or used. Keep `life` for `info` and `success` status messages.
 - Once `closable` or `life` dismisses the message, it stays hidden until it is remounted. Listen to `close` to keep your own state in sync.
 - Use `size="small"` inside dense surfaces such as cards and drawers.
 

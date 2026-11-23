@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
   import Item from '../../content/item/item.vue'
   import ItemActions from '../../content/item/item-actions.vue'
@@ -38,6 +40,7 @@
   })
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ common: en.common })
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-item')
 
@@ -89,7 +92,12 @@
           :rel="target === '_blank' ? 'noreferrer' : undefined"
           class="text-inherit no-underline after:absolute after:inset-0 after:content-[''] focus-visible:outline-none"
         >
-          {{ title }}
+          {{ title
+          }}<span
+            v-if="target === '_blank'"
+            class="sr-only"
+            >{{ ` ${t('common.newTab')}` }}</span
+          >
         </a>
         <template v-else>{{ title }}</template>
       </ItemTitle>

@@ -76,7 +76,8 @@
     '[&_:is(h1,h2)+:is(h2,h3,h4):not([data-doc-chrome],[data-doc-chrome]_*)]:pt-(--spacing-md) ' +
     '[&_h3+:is(h4,p,ul,ol,blockquote):not([data-doc-chrome],[data-doc-chrome]_*)]:pt-(--spacing-sm) ' +
     '[&_h4+:is(h4,p,ul,ol,blockquote):not([data-doc-chrome],[data-doc-chrome]_*)]:pt-(--spacing-xs) ' +
-    '[&_h3+[data-doc-block]]:mt-(--spacing-sm) [&_h4+[data-doc-block]]:mt-(--spacing-xs)'
+    '[&_h3+[data-doc-block]]:mt-(--spacing-sm) [&_h4+[data-doc-block]]:mt-(--spacing-xs) ' +
+    '[&_:is(p,ul,ol,blockquote):not([data-doc-block],[data-doc-chrome],[data-doc-chrome]_*)]:max-w-(--container-xl)'
 </script>
 
 <template>

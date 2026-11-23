@@ -297,7 +297,7 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
           href="/applications"
         />
         <SidebarMenuItem
-          label="Edge Firewall"
+          label="Firewall"
           icon="az az-shield"
           href="/edge-firewall"
           tag-value="Beta"
@@ -411,7 +411,7 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
             />
             <SidebarMenuSub default-open>
               <SidebarMenuSubTrigger
-                label="Edge Application"
+                label="Applications"
                 type="inline"
               />
               <SidebarMenuSubContent>
@@ -429,7 +429,7 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
             </SidebarMenuSub>
             <SidebarMenuSub>
               <SidebarMenuSubTrigger
-                label="Edge Functions"
+                label="Functions"
                 type="inline"
               />
               <SidebarMenuSubContent>

@@ -59,6 +59,7 @@
 - The marker is never the only signal: the active entry also changes ink and carries `aria-current`, so the state does not depend on seeing the dash.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: entries are padded rows; the rail itself is not interactive.
+- A link that opens a new tab (every external `href` in a link group) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
 ## Examples
 

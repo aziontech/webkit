@@ -119,7 +119,8 @@
   })
 
   const TAB_CLASS =
-    'relative z-2 inline-flex h-8 shrink-0 items-center justify-center rounded-(--shape-control) px-(--spacing-sm) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ' +
+    'relative z-2 inline-flex h-8 pointer-coarse:h-11 shrink-0 items-center justify-center rounded-(--shape-control) px-(--spacing-sm) text-label-sm text-(--text-muted) ' +
+    'transition-colors duration-fast-02 ' +
     'ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
     'focus-visible:ring-offset-(--bg-canvas) ' +
     'data-[state=active]:text-(--text-default) ' +

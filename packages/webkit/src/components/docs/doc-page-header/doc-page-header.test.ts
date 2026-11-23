@@ -112,6 +112,14 @@ describe('DocPageHeader', () => {
   })
 
   describe('the meta line', () => {
+    it('says an action that opens a new tab does so', () => {
+      const { getByRole } = render(DocPageHeader, {
+        props: { title: 'T', lastUpdated: '2026-06-30', metaActions: META_ACTIONS }
+      })
+      const edit = getByRole('link', { name: 'Edit this page (opens in a new tab)' })
+      expect(edit.getAttribute('target')).toBe('_blank')
+    })
+
     it('renders one control per entry, in reading order', () => {
       const { getByTestId } = render(DocPageHeader, {
         props: { title: 'T', lastUpdated: '2026-06-30', metaActions: META_ACTIONS }

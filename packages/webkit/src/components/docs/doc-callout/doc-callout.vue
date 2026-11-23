@@ -45,7 +45,7 @@
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-callout')
 
   const COPY_CLASS =
-    'text-(--text-default) [&_:is(p,ul,ol)+:is(p,ul,ol)]:pt-(--spacing-sm) [&_ul]:list-disc [&_ul]:ps-(--spacing-lg) [&_ol]:list-decimal [&_ol]:ps-(--spacing-lg) ' +
+    'text-body-sm tracking-normal text-(--text-default) [&_:is(p,ul,ol)+:is(p,ul,ol)]:pt-(--spacing-sm) [&_ul]:list-disc [&_ul]:ps-(--spacing-lg) [&_ol]:list-decimal [&_ol]:ps-(--spacing-lg) ' +
     '[&_li+li]:pt-(--spacing-xs) [&_strong]:font-normal [&_a]:font-normal [&_a]:text-inherit! [&_a]:underline [&_a]:underline-offset-2 [&_code:not(pre_*)]:rounded-(--shape-control) ' +
     '[&_code:not(pre_*)]:inset-ring [&_code:not(pre_*)]:forced-colors:border [&_code:not(pre_*)]:px-(--spacing-2xs) [&_code:not(pre_*)]:text-label-code-sm ' +
     '[&_code:not(pre_*)]:text-(--text-default) [&_code:not(pre_*)]:wrap-anywhere [&_code:not(pre_*)]:box-decoration-clone ' +

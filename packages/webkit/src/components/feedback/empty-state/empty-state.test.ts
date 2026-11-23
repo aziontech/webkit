@@ -3,11 +3,29 @@ import { describe, expect, it } from 'vitest'
 
 import Bordered from '../../../../examples/empty-state/bordered.vue'
 import Default from '../../../../examples/empty-state/default.vue'
+import Icon from '../../../../examples/empty-state/icon.vue'
+import NoAdornment from '../../../../examples/empty-state/no-adornment.vue'
 import Sizes from '../../../../examples/empty-state/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import EmptyState from './empty-state.vue'
 
 describe('EmptyState', () => {
+  it.each([
+    ['Default', Default],
+    ['Bordered', Bordered],
+    ['Icon', Icon],
+    ['NoAdornment', NoAdornment],
+    ['Sizes', Sizes]
+  ])('the %s example leads with one primary action in real copy', (_, example) => {
+    const { container } = render(example)
+    for (const actions of container.querySelectorAll('[data-testid="empty-state"]')) {
+      const buttons = [...actions.querySelectorAll<HTMLElement>('[data-testid="button"]')]
+      expect(buttons[0]?.dataset['variant']).toBe('primary')
+      expect(buttons.filter((button) => button.dataset['variant'] === 'primary')).toHaveLength(1)
+      for (const button of buttons) expect(button.textContent).not.toMatch(/\bItem\b/)
+    }
+  })
+
   it('renders the title and defaults the testid to feedback-empty-state', () => {
     const { getByTestId } = within(
       render(EmptyState, { props: { title: 'No resource yet' } }).container as HTMLElement
@@ -162,7 +180,7 @@ describe('EmptyState', () => {
   describe('composed stories', () => {
     it('renders the Default story fixture', () => {
       const { getByTestId } = within(render(Default).container as HTMLElement)
-      expect(getByTestId('empty-state__title').textContent).toBe('No resource yet')
+      expect(getByTestId('empty-state__title').textContent).toBe('No applications yet')
       expect(getByTestId('empty-state__actions')).toBeTruthy()
     })
 

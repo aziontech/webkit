@@ -81,7 +81,7 @@
 
 ## States
 
-- Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when the page registered at least one heading (the `aside` slot renders under the outline, never on its own); the palette `open` / `closed`.
+- Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when the page registered at least one heading (the `aside` slot renders under the outline, never on its own); below `xl` the same outline is a collapsed "On this page" disclosure (a native `details`, `open` / closed) above the article that closes when an entry is chosen, and the `aside` content renders under the article; the palette `open` / `closed`.
 - Outline: built from the headings the page registers, in document order, updated as a page mounts, changes or leaves (a route change swaps the entries); no heading registers on the server, so the server render and the first client render carry no outline rail and it appears once the page mounts. The entry of the heading nearest the top of the viewport (under the header) carries `aria-current="location"`; choosing an entry or a heading anchor scrolls the heading under the header and updates the address hash.
 - Unsafe `href` on a navigation row, crumb, section or palette page (`javascript:`, `data:`, any non-web scheme, `//host`): the row renders with no link and choosing it, by pointer or keyboard, follows nothing; `navigate` still fires, so the handler decides.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the article owns its states).
@@ -123,9 +123,9 @@
 
 ## Responsive
 
-- Breakpoints (viewport, because the layout is the page): the navigation rail shows from `lg`, resizable and collapsible, and is a drawer below (no resize or collapse there); the outline rail shows from `xl`; the section links show from `lg`. The header is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on a narrow header.
+- Breakpoints (viewport, because the layout is the page): the navigation rail shows from `lg`, resizable and collapsible, and is a drawer below (no resize or collapse there); the outline rail shows from `xl`, and below it the outline is a collapsed "On this page" disclosure above the article; the section links show from `lg`. Under a header narrower than `24rem` (the header's `@container`) the `Docs` badge beside the mark is hidden, so it never slides under the search button. The header is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on a narrow header.
 - Header: the search and the `actions` slot always sit at the inline end, pushed there by an empty `AppHeader.Center`; at every width the mark stays at the start and the search never moves next to it.
-- Narrow: the article takes the full width; the end rail content (`aside`) is not repeated under the article.
+- Narrow: the article takes the full width; the outline opens from the "On this page" disclosure above it, and the end rail content (`aside`) renders once under the article, before the footer, so a call to action never disappears on a tablet or a phone.
 - Touch: menu button and search are 32 px controls, 44 px on coarse pointers through their components.
 - Reflow: no horizontal scroll at 320 px; the document scrolls, never an inner region.
 
