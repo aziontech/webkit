@@ -5,8 +5,22 @@ import {
   type AzionStorageObjectsResponse,
   toFileBrowserEntries
 } from '../../../../blocks/view/view-file-browser/azion-storage'
+import EmptyFolder from '../../../../blocks/view/view-file-browser/variants/empty.vue'
 import InsideAFolder from '../../../../blocks/view/view-file-browser/variants/inside-a-folder.vue'
 import ViewFileBrowser from '../../../../blocks/view/view-file-browser/view-file-browser.vue'
+
+const readsLeftToRight = (el: Element, first: string, last: string): boolean => {
+  const text = el.firstChild as Text
+  const content = text.textContent ?? ''
+  const box = (word: string) => {
+    const range = document.createRange()
+    const start = content.indexOf(word)
+    range.setStart(text, start)
+    range.setEnd(text, start + word.length)
+    return range.getBoundingClientRect()
+  }
+  return box(first).left < box(last).left
+}
 
 const firstCells = (root: Element) =>
   Array.from(root.querySelectorAll('[role=row]'))
@@ -138,6 +152,28 @@ describe('view/view-file-browser block', () => {
     expect(view.queryByText('robots.txt')).toBeNull()
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
     expect(view.emitted('refresh')).toHaveLength(1)
+  })
+
+  it('shows the empty state in an empty nested folder, with no parent row counted (Empty)', async () => {
+    const view = render(EmptyFolder)
+    await waitFor(() => expect(view.getByText('This folder is empty')).toBeTruthy())
+    expect(firstCells(view.container as HTMLElement)).not.toContain('..')
+    expect(view.queryByText(/Showing 1 to 1 of 1/)).toBeNull()
+  })
+
+  it('keeps names, sizes and times reading left to right in a right-to-left page', async () => {
+    document.documentElement.dir = 'rtl'
+    try {
+      const view = render(ViewFileBrowser)
+      const size = await waitFor(() => view.getByText('64 B'))
+      expect(readsLeftToRight(size, '64', 'B')).toBe(true)
+      const time = view.container.querySelector('time')!
+      expect(time.getAttribute('dir')).toBe('auto')
+      const folder = view.getAllByRole('button').find((b) => b.textContent?.trim().endsWith('/'))!
+      expect(getComputedStyle(folder).direction).toBe('ltr')
+    } finally {
+      document.documentElement.removeAttribute('dir')
+    }
   })
 
   it('shows the error message with Retry in place of the table', async () => {

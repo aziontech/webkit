@@ -28,7 +28,7 @@
       <div class="flex w-full flex-col gap-(--spacing-sm)">
         <StorageTitle :name="rootName" />
         <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
-          <div class="min-w-0">
+          <div class="min-w-0 flex-1">
             <Breadcrumb
               :items="crumbs"
               class="w-full"

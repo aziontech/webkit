@@ -110,7 +110,7 @@ export const listRows = (entries: FileBrowserEntry[], nested: boolean): FileRow[
       .map((entry) => toRow(kind, kind === 'folder' ? folderName(entry.name) : entry.name, entry))
       .sort((a, b) => a.name.localeCompare(b.name))
   const list: FileRow[] = [...ofKind('folder'), ...ofKind('file')]
-  if (nested) list.unshift(toRow('parent', '..'))
+  if (nested && list.length) list.unshift(toRow('parent', '..'))
   return list
 }
 

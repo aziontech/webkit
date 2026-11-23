@@ -42,11 +42,13 @@
       v-else-if="item.kind === 'folder'"
       variant="link"
       :label="value"
+      dir="ltr"
       class="min-w-0"
       @click.stop="(event: MouseEvent) => emit('open', event, item)"
     />
     <span
       v-else
+      dir="ltr"
       class="truncate"
       >{{ value }}</span
     >

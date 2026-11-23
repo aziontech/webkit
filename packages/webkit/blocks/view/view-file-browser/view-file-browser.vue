@@ -171,7 +171,10 @@
 
   const pathCrumbs = computed(() => [
     { label: rootName.value, href: '0' },
-    ...folderPath.value.map((segment, index) => ({ label: segment, href: String(index + 1) }))
+    ...folderPath.value.map((segment, index) => ({
+      label: segment.replace(/\/$/, ''),
+      href: String(index + 1)
+    }))
   ])
   const onCrumb = (event: MouseEvent, href: string) => {
     event.preventDefault()
@@ -349,7 +352,7 @@
                   />
 
                   <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
-                    <div class="min-w-0">
+                    <div class="min-w-0 flex-1">
                       <Breadcrumb
                         :items="pathCrumbs"
                         class="w-full"
@@ -392,7 +395,11 @@
               </template>
 
               <template #cell-bytes="{ row: item }">
-                <span class="text-(--text-muted)">{{ item.size }}</span>
+                <span
+                  dir="ltr"
+                  class="text-(--text-muted)"
+                  >{{ item.size }}</span
+                >
               </template>
 
               <template #cell-modifiedAt="{ row: item }">
