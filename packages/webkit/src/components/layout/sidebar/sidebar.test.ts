@@ -7,9 +7,11 @@ import Default from '../../../../examples/sidebar/default.vue'
 import IconRail from '../../../../examples/sidebar/icon-rail.vue'
 import Resizable from '../../../../examples/sidebar/resizable.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
 import SidebarMenuGroup from '../../navigation/sidebar-menu/sidebar-menu-group/sidebar-menu-group.vue'
 import SidebarMenuItem from '../../navigation/sidebar-menu/sidebar-menu-item/sidebar-menu-item.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import SidebarCompound from './index'
 import Sidebar from './sidebar.vue'
 import SidebarFooter from './sidebar-footer.vue'
@@ -103,6 +105,17 @@ describe('Sidebar', () => {
     it('exposes a navigation landmark named like the sidebar', () => {
       const { getByRole } = render(Sidebar)
       expect(getByRole('navigation', { name: 'Sidebar' })).toBeTruthy()
+    })
+
+    it.each([
+      ['es', 'Barra lateral'],
+      ['pt-BR', 'Barra lateral']
+    ])('names the navigation landmark from the %s catalog', (locale, name) => {
+      const { getByRole } = render(ConfigProvider, {
+        props: { locale, catalogs: LOCALES },
+        slots: { default: () => h(Sidebar) }
+      })
+      expect(getByRole('navigation', { name })).toBeTruthy()
     })
 
     it('names the navigation landmark from ariaLabel', () => {
