@@ -123,7 +123,9 @@
 
   const hasMedia = computed(() => media.value.kind !== null)
 
-  const mediaPadded = computed(() => media.value.kind === 'widget')
+  const mediaPadded = computed(
+    () => media.value.kind === 'widget' || media.value.kind === 'illustration'
+  )
 
   const primary = computed(() =>
     props.primaryAction?.label && props.primaryAction.href ? props.primaryAction : null
