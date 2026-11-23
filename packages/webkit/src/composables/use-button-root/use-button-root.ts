@@ -1,6 +1,8 @@
-import { computed, type ComputedRef, type FunctionalComponent, h, useAttrs } from 'vue'
+import { computed, type ComputedRef, type FunctionalComponent, h, inject, useAttrs } from 'vue'
 
+import { common } from '../../locales/en'
 import { safeHref } from '../../utils/safe-href'
+import { LocaleInjectionKey } from '../use-translate'
 
 export interface UseButtonRootProps {
   /** Disables interaction. */
@@ -22,6 +24,8 @@ export interface UseButtonRootReturn {
   rootAttrs: ComputedRef<Record<string, unknown>>
   /** Click handler that blocks activation while inert and emits otherwise. */
   onClick: (event: MouseEvent) => void
+  /** The localized new-tab notice when the root is an anchor opening a new tab; empty otherwise. */
+  newTab: ComputedRef<string>
 }
 
 const Root: FunctionalComponent<{ tag: 'a' | 'button' }> = ({ tag }, { attrs, slots }) =>
@@ -40,6 +44,7 @@ export function useButtonRoot(
   emitClick: (event: MouseEvent) => void
 ): UseButtonRootReturn {
   const attrs = useAttrs()
+  const locale = inject(LocaleInjectionKey, null)
 
   const rootAttrs = computed(() => {
     const href = safeHref(props.href, isDownload(attrs['download']))
@@ -63,9 +68,16 @@ export function useButtonRoot(
     }
   })
 
+  const newTab = computed(() =>
+    rootAttrs.value.tag === 'a' && props.target === '_blank'
+      ? (locale?.messages.value.common?.newTab ?? common.newTab)
+      : ''
+  )
+
   return {
     Root,
     rootAttrs,
+    newTab,
     onClick: (event: MouseEvent) => {
       if (props.disabled || props.loading) event.preventDefault()
       else emitClick(event)
