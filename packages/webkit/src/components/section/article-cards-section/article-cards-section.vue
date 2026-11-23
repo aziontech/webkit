@@ -3,13 +3,11 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import { safeHref } from '../../../utils/safe-href'
   import type { ThirdPartyLogoMark } from '../../content/third-party-logo/third-party-logo.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
-  import Module from '../../layout/module/module.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import { linkedCell } from '../lib/linked-cell'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'ArticleCardsSection',
@@ -56,7 +54,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<ArticleCardsSectionProps>(), {
+  withDefaults(defineProps<ArticleCardsSectionProps>(), {
     align: 'start',
     anchor: '',
     eyebrow: '',
@@ -73,12 +71,6 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'article-cards-section'
   )
 
-  const hasTitle = computed(() => props.title.length > 0)
-
-  const CARD_LINK_CLASS =
-    'group/post flex h-full flex-col transition-colors duration-fast-02 ease-productive-entrance ' +
-    'hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none'
-
   const MARK_IMAGE_CLASS =
     'h-8 w-auto max-w-40 object-contain transition-[scale] duration-moderate-02 ease-productive-entrance ' +
     'group-hover/post:scale-105 motion-reduce:transition-none brightness-0 ' +
@@ -86,94 +78,71 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
     :data-testid="testId"
-    :id="anchor || undefined"
-    class="scroll-mt-(--spacing-2xl)"
     :data-align="align"
-    :aria-label="title || undefined"
+    :anchor="anchor"
+    :eyebrow="eyebrow"
+    :title="title"
+    :align="align"
+    :filled="items.length > 0"
   >
-    <Module
-      v-if="items.length > 0"
-      :divided="false"
-      :padded="false"
+    <CardGrid
+      flush
+      variant="frame"
+      :columns="3"
+      :mobile-columns="1"
+      :role="ariaLabel ? 'group' : undefined"
+      :aria-label="ariaLabel || undefined"
     >
-      <template
-        v-if="hasTitle"
-        #header
+      <CardGridCell
+        v-for="item in items"
+        :key="item.id"
+        variant="canvas"
+        :padded="false"
       >
-        <ModuleHeader
-          :align="align"
-          :eyebrow="eyebrow"
-          :title="title"
-        />
-      </template>
-
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="all"
-      >
-        <CardGrid
-          flush
-          variant="frame"
-          :columns="3"
-          :mobile-columns="1"
-          :role="ariaLabel ? 'group' : undefined"
-          :aria-label="ariaLabel || undefined"
+        <a
+          v-bind="linkedCell(item)"
+          class="group/post flex h-full flex-col"
         >
-          <CardGridCell
-            v-for="item in items"
-            :key="item.id"
-            variant="canvas"
-            :padded="false"
+          <span
+            class="flex aspect-video items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface)"
           >
-            <a
-              :href="safeHref(item.href) ?? undefined"
-              :target="item.target"
-              :rel="item.target === '_blank' ? 'noopener' : undefined"
-              :class="CARD_LINK_CLASS"
-            >
+            <img
+              v-if="item.image"
+              :src="item.image"
+              alt=""
+              loading="lazy"
+              decoding="async"
+              class="size-full object-cover transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/post:scale-105 motion-reduce:transition-none"
+            />
+            <img
+              v-else-if="item.mark"
+              :src="item.mark.logo"
+              :alt="item.mark.name"
+              decoding="async"
+              :class="MARK_IMAGE_CLASS"
+            />
+          </span>
+          <span class="flex flex-1 flex-col gap-(--spacing-sm) p-(--spacing-xl)">
+            <h3 class="m-0 line-clamp-2 text-balance text-heading-sm text-(--text-default)">
+              {{ item.title }}
               <span
-                class="flex aspect-video items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface)"
+                v-if="item.target === '_blank'"
+                class="sr-only"
+                >{{ t('common.newTab') }}</span
               >
-                <img
-                  v-if="item.image"
-                  :src="item.image"
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  class="size-full object-cover transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/post:scale-105 motion-reduce:transition-none"
-                />
-                <img
-                  v-else-if="item.mark"
-                  :src="item.mark.logo"
-                  :alt="item.mark.name"
-                  decoding="async"
-                  :class="MARK_IMAGE_CLASS"
-                />
-              </span>
-              <span class="flex flex-1 flex-col gap-(--spacing-sm) p-(--spacing-xl)">
-                <h3 class="m-0 line-clamp-2 text-balance text-heading-sm text-(--text-default)">
-                  {{ item.title }}
-                  <span
-                    v-if="item.target === '_blank'"
-                    class="sr-only"
-                    >{{ t('common.newTab') }}</span
-                  >
-                </h3>
-                <p class="m-0 text-pretty text-body-sm text-(--text-muted)">
-                  {{ item.description }}
-                </p>
-                <p class="m-0 mt-auto pt-(--spacing-sm) text-overline-sm text-(--text-muted)">
-                  {{ item.meta }}
-                </p>
-              </span>
-            </a>
-          </CardGridCell>
-        </CardGrid>
-      </RegistrationFrame>
-    </Module>
-  </section>
+            </h3>
+            <p class="m-0 text-pretty text-body-sm text-(--text-muted)">
+              {{ item.description }}
+            </p>
+            <p class="m-0 mt-auto pt-(--spacing-sm) text-overline-sm text-(--text-muted)">
+              {{ item.meta }}
+            </p>
+          </span>
+        </a>
+      </CardGridCell>
+    </CardGrid>
+  </SectionBand>
 </template>

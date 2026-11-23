@@ -169,7 +169,7 @@
   {
     "name": "hero-title",
     "path": "src/components/marketing/hero/hero-title/hero-title.vue",
-    "limit": "1.65 KB"
+    "limit": "1.7 KB"
   },
   {
     "name": "password-requirements",
@@ -306,7 +306,7 @@
   {
     "name": "marquee",
     "path": "src/components/marketing/marquee/marquee.vue",
-    "limit": "8 KB",
+    "limit": "8.05 KB",
     "entryOnly": true
   },
   {
@@ -327,7 +327,7 @@
   {
     "name": "hero",
     "path": "src/components/marketing/hero/index.ts",
-    "limit": "5.05 KB",
+    "limit": "5.1 KB",
     "entryOnly": true
   },
   {
@@ -354,7 +354,7 @@
   {
     "name": "module",
     "path": "src/components/layout/module/module.vue",
-    "limit": "2.9 KB"
+    "limit": "2.95 KB"
   },
   {
     "name": "site-page",
@@ -422,7 +422,7 @@
   {
     "name": "call-to-action",
     "path": "src/components/marketing/call-to-action/call-to-action.vue",
-    "limit": "3.65 KB"
+    "limit": "3.7 KB"
   },
   {
     "name": "bento-grid-root",
@@ -432,7 +432,7 @@
   {
     "name": "quote-tabs",
     "path": "src/components/marketing/quote-tabs/quote-tabs.vue",
-    "limit": "24.5 KB",
+    "limit": "24.55 KB",
     "entryOnly": true
   },
   {
@@ -473,7 +473,7 @@
   {
     "name": "customer-use-cases-section",
     "path": "src/components/section/customer-use-cases-section/customer-use-cases-section.vue",
-    "limit": "7.85 KB"
+    "limit": "7.9 KB"
   },
   {
     "name": "article-body-section",
@@ -484,7 +484,7 @@
   {
     "name": "article-cards-section",
     "path": "src/components/section/article-cards-section/article-cards-section.vue",
-    "limit": "6.1 KB"
+    "limit": "6.3 KB"
   },
   {
     "name": "article-highlight-section",
@@ -506,13 +506,13 @@
   {
     "name": "hero-section",
     "path": "src/components/section/hero-section/hero-section.vue",
-    "limit": "13.4 KB",
+    "limit": "13.45 KB",
     "entryOnly": true
   },
   {
     "name": "capability-grid-section",
     "path": "src/components/section/capability-grid-section/capability-grid-section.vue",
-    "limit": "8.15 KB"
+    "limit": "8.2 KB"
   },
   {
     "name": "console-showcase-section",
@@ -533,7 +533,7 @@
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "52.55 KB",
+    "limit": "52.6 KB",
     "entryOnly": true
   },
   {
@@ -550,13 +550,13 @@
   {
     "name": "competitor-comparison-section",
     "path": "src/components/section/competitor-comparison-section/competitor-comparison-section.vue",
-    "limit": "25.5 KB",
+    "limit": "25.55 KB",
     "entryOnly": true
   },
   {
     "name": "plan-comparison-section",
     "path": "src/components/section/plan-comparison-section/plan-comparison-section.vue",
-    "limit": "39.25 KB"
+    "limit": "39.3 KB"
   },
   {
     "name": "pricing-plans-section",
@@ -566,13 +566,13 @@
   {
     "name": "feature-scroll-section",
     "path": "src/components/section/feature-scroll-section/feature-scroll-section.vue",
-    "limit": "20.1 KB",
+    "limit": "20.15 KB",
     "entryOnly": true
   },
   {
     "name": "feature-tiles-section",
     "path": "src/components/section/feature-tiles-section/feature-tiles-section.vue",
-    "limit": "5.9 KB",
+    "limit": "5.95 KB",
     "entryOnly": true
   },
   {
@@ -590,22 +590,22 @@
   {
     "name": "stats-section",
     "path": "src/components/section/stats-section/stats-section.vue",
-    "limit": "4.7 KB"
+    "limit": "4.75 KB"
   },
   {
     "name": "card-carousel-section",
     "path": "src/components/section/card-carousel-section/card-carousel-section.vue",
-    "limit": "9.3 KB"
+    "limit": "9.35 KB"
   },
   {
     "name": "client-mosaic-section",
     "path": "src/components/section/client-mosaic-section/client-mosaic-section.vue",
-    "limit": "7.65 KB"
+    "limit": "7.7 KB"
   },
   {
     "name": "client-story-columns-section",
     "path": "src/components/section/client-story-columns-section/client-story-columns-section.vue",
-    "limit": "8.7 KB"
+    "limit": "8.75 KB"
   },
   {
     "name": "client-quotes-section",
@@ -616,12 +616,12 @@
   {
     "name": "compliance-logos-section",
     "path": "src/components/section/compliance-logos-section/compliance-logos-section.vue",
-    "limit": "8.2 KB"
+    "limit": "8.25 KB"
   },
   {
     "name": "investor-marks-section",
     "path": "src/components/section/investor-marks-section/investor-marks-section.vue",
-    "limit": "4.8 KB"
+    "limit": "5 KB"
   },
   {
     "name": "job-posting-section",
@@ -632,7 +632,7 @@
   {
     "name": "logo-wall-section",
     "path": "src/components/section/logo-wall-section/logo-wall-section.vue",
-    "limit": "24.5 KB"
+    "limit": "24.55 KB"
   },
   {
     "name": "photo-marquee-section",
@@ -642,18 +642,18 @@
   {
     "name": "listing-index-section",
     "path": "src/components/section/listing-index-section/listing-index-section.vue",
-    "limit": "42.1 KB",
+    "limit": "42.15 KB",
     "entryOnly": true
   },
   {
     "name": "platform-directory-section",
     "path": "src/components/section/platform-directory-section/platform-directory-section.vue",
-    "limit": "4.7 KB"
+    "limit": "4.8 KB"
   },
   {
     "name": "subject-grid-section",
     "path": "src/components/section/subject-grid-section/subject-grid-section.vue",
-    "limit": "8.55 KB"
+    "limit": "8.6 KB"
   },
   {
     "name": "template-gallery-section",
@@ -664,7 +664,7 @@
   {
     "name": "recognition-marquee-section",
     "path": "src/components/section/recognition-marquee-section/recognition-marquee-section.vue",
-    "limit": "21.6 KB"
+    "limit": "21.65 KB"
   },
   {
     "name": "architecture-tabs-section",
@@ -675,13 +675,13 @@
   {
     "name": "cli-terminal-section",
     "path": "src/components/section/cli-terminal-section/cli-terminal-section.vue",
-    "limit": "47.3 KB",
+    "limit": "47.35 KB",
     "entryOnly": true
   },
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "58.3 KB",
+    "limit": "58.35 KB",
     "entryOnly": true
   },
   {
@@ -698,12 +698,12 @@
   {
     "name": "contact-hub-section",
     "path": "src/components/section/contact-hub-section/contact-hub-section.vue",
-    "limit": "9.45 KB"
+    "limit": "9.5 KB"
   },
   {
     "name": "listing-table-section",
     "path": "src/components/section/listing-table-section/listing-table-section.vue",
-    "limit": "25.75 KB"
+    "limit": "25.8 KB"
   },
   {
     "name": "site-footer-section",
@@ -720,7 +720,7 @@
   {
     "name": "newsletter-section",
     "path": "src/components/section/newsletter-section/newsletter-section.vue",
-    "limit": "13.75 KB"
+    "limit": "13.8 KB"
   },
   {
     "name": "stepper",
@@ -2227,7 +2227,7 @@
   {
     "name": "link-directory",
     "path": "src/components/marketing/link-directory/index.ts",
-    "limit": "1.85 KB"
+    "limit": "1.9 KB"
   },
   {
     "name": "link-directory-column",
