@@ -21,7 +21,7 @@
 
 <template>
   <div
-    class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
+    class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
   >
     <div
       v-if="!historyOpen"
@@ -38,6 +38,7 @@
     <Button
       variant="primary"
       size="medium"
+      class="shrink-0"
       icon="az az-play"
       :loading="running"
       :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"

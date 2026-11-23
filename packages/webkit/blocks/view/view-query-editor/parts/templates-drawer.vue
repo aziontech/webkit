@@ -54,7 +54,11 @@
       </PanelHeader>
 
       <PanelBody>
-        <div class="flex flex-col gap-(--spacing-md)">
+        <div
+          class="flex flex-col gap-(--spacing-md) outline-none"
+          tabindex="-1"
+          data-autofocus
+        >
           <Input
             v-model="templateQuery"
             size="large"
