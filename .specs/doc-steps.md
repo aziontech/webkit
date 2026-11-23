@@ -4,9 +4,9 @@ category: docs
 structure: composition
 status: implemented
 spec_version: 3
-checksum: c8d5eb5113ab0e331420fff39f3ce829004a542ebd023527642a67e2609b2be3
+checksum: a80e3aec60d5b68262f45f83fdd2b299d6b41893aee4bc58bd3217a2f942a4bc
 created: 2026-08-22
-last_updated: 2026-11-16
+last_updated: 2026-11-22
 ---
 
 # DocSteps — Component Spec
@@ -104,7 +104,7 @@ _none_
 
 - Visible focus: the column is not focusable; `Tab` reaches only interactive content nested inside a step's body.
 - Keyboard map: none of its own.
-- ARIA: the column is a plain block. The circled indices and the rail are decorative (`aria-hidden`, owned by `DocSteps.Step`), so assistive tech reads the step headings and bodies in document order — the same order the numbers claim.
+- ARIA: the column is an ordered list (`ol`, its markers removed) and each `DocSteps.Step` a list item (`li`), so assistive tech announces the step count and each step's position ("2 of 5"). The circled indices and the rail are decorative (`aria-hidden`, owned by `DocSteps.Step`): the list position already says the number, so it is not read twice. The step title stays text, not a heading: a heading level would need a new prop.
 - Contrast: inherited from `DocSteps.Step`; the column paints nothing.
 - Touch target: not applicable; the component is not interactive.
 

@@ -30,6 +30,14 @@ const circleText = (step: Element) =>
 
 describe('DocSteps', () => {
   describe('rendering & testid', () => {
+    it('exposes the steps as an ordered list, one list item per step', () => {
+      const { getByRole, getAllByRole } = render(host(THREE_STEPS))
+      expect(getByRole('list').tagName).toBe('OL')
+      const items = getAllByRole('listitem')
+      expect(items).toHaveLength(3)
+      expect(items[1]).toHaveTextContent('Link the project')
+    })
+
     it('renders the column with the derived testid and every step title', () => {
       const { getByTestId, getByText } = render(host(THREE_STEPS))
       expect(getByTestId('doc-steps')).toBeInTheDocument()
