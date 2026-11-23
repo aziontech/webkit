@@ -49,7 +49,7 @@ describe('account/account-users', () => {
     await fireEvent.click(option('Finance'))
     await fireEvent.click(option('Support'))
     expect(view.emitted('teams-change')).toBeUndefined()
-    await fireEvent.keyDown(document.querySelector('[role="listbox"]')!, { key: 'Escape' })
+    await fireEvent.keyDown(trigger, { key: 'Escape' })
     await waitFor(() => expect(view.emitted('teams-change')).toHaveLength(1))
     const [[payload]] = view.emitted('teams-change') as [[{ teams: string[] }]]
     expect(payload.teams).toEqual(['developers', 'security', 'finance', 'support'])

@@ -2,7 +2,7 @@ import {
   useUnsavedChanges,
   type UseUnsavedChangesReturn
 } from '@aziontech/webkit/use-unsaved-changes'
-import { type MaybeRefOrGetter, onScopeDispose, toValue, watch } from 'vue'
+import { type MaybeRefOrGetter, onScopeDispose, toValue } from 'vue'
 
 export function useTeamLeaveGuard<T>(
   rootEl: MaybeRefOrGetter<HTMLElement | null>,
@@ -14,24 +14,16 @@ export function useTeamLeaveGuard<T>(
   const onLeaveClick = async (event: MouseEvent) => {
     const target = event.target instanceof Element ? event.target : null
     const link = target?.closest<HTMLAnchorElement>('a[href]')
-    if (!link || !guard.isDirty.value || event.defaultPrevented) return
+    if (!link || !toValue(rootEl)?.contains(link)) return
+    if (!guard.isDirty.value) return
     event.preventDefault()
     if (await guard.confirmLeave()) window.location.assign(link.href)
   }
 
-  const stop = watch(
-    () => toValue(rootEl),
-    (next, before) => {
-      before?.removeEventListener('click', onLeaveClick, true)
-      next?.addEventListener('click', onLeaveClick, true)
-    },
-    { immediate: true, flush: 'post' }
-  )
-
-  onScopeDispose(() => {
-    stop()
-    toValue(rootEl)?.removeEventListener('click', onLeaveClick, true)
-  })
+  if (typeof document !== 'undefined') {
+    document.addEventListener('click', onLeaveClick, true)
+    onScopeDispose(() => document.removeEventListener('click', onLeaveClick, true))
+  }
 
   return guard
 }

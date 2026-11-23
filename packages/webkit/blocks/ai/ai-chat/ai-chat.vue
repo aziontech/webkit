@@ -39,7 +39,7 @@
     groupQuestions,
     skipQuestion
   } from '@aziontech/webkit/utils/ai-chat-questions'
-  import { computed, onMounted, ref, watch } from 'vue'
+  import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
   import AiChatHeader from './parts/ai-chat-header.vue'
@@ -247,7 +247,8 @@
     return props.tools[call.name] ?? { title: '' }
   }
 
-  onMounted(() => composerEl.value?.focus())
+  const footerEl = ref<HTMLElement | null>(null)
+  onMounted(() => nextTick(() => footerEl.value?.querySelector('textarea')?.focus()))
 
   watch(
     () => props.loading,
@@ -386,6 +387,7 @@
       </Conversation>
     </div>
     <footer
+      ref="footerEl"
       class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-xs) pb-(--spacing-md)"
     >
       <AiChatConnectionStatus

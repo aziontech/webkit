@@ -17,6 +17,13 @@ import type {
   AiChatToolCallPart
 } from '../../../utils/ai-chat'
 
+describe('ai/ai-chat entry', () => {
+  it('focuses the composer when the chat opens', async () => {
+    const view = render(AiChat)
+    await waitFor(() => expect(document.activeElement).toBe(view.getByRole('textbox')))
+  })
+})
+
 describe('ai/ai-chat Artifact', () => {
   describe('wide', () => {
     beforeEach(async () => {
@@ -101,11 +108,6 @@ describe('ai/ai-chat', () => {
     expect(view.container.textContent).toContain('Acme Inc. is on the Business plan.')
     expect(view.container.textContent).toContain('Which plan am I on?')
     expect(view.queryByText('How can I help with your Azion account?')).toBeNull()
-  })
-
-  it('focuses the composer when the chat opens', async () => {
-    const view = render(AiChat)
-    await waitFor(() => expect(document.activeElement).toBe(view.getByRole('textbox')))
   })
 
   it('skips system and activity messages', () => {
