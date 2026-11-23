@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 import type { Page } from '@playwright/test'
 
-export type KeyboardEntry = 'field' | 'page'
+export type KeyboardEntry = 'field' | 'page' | 'prompt'
 
 export type KeyboardTarget = {
   entry: KeyboardEntry
@@ -61,7 +61,7 @@ export const DEMO_ROUTES: { name: string; path: string; target: KeyboardTarget }
   { name: 'onboarding', path: '/onboarding', target: { entry: 'field' } },
   { name: 'onboarding-plan', path: '/onboarding/plan', target: { entry: 'field' } },
   { name: 'onboarding-profile', path: '/onboarding/profile', target: { entry: 'field' } },
-  { name: 'assistant', path: '/assistant', target: { entry: 'page' } },
+  { name: 'assistant', path: '/assistant', target: { entry: 'prompt' } },
   { name: 'ai-keys', path: '/settings/ai-keys', target: { entry: 'page' } }
 ]
 
@@ -207,6 +207,19 @@ function keyboardStart(entry: KeyboardEntry): KeyboardStart {
 
   const active = document.activeElement
   const inModal = Boolean(modal && active && modal.contains(active) && active !== modal)
+  if (entry === 'prompt') {
+    const ok = Boolean(
+      active && active.matches(FIELD) && active.closest('[data-testid*="prompt-input"]')
+    )
+    return {
+      entry: {
+        ok,
+        description: ok
+          ? ''
+          : `focus starts on ${active && active !== document.body ? describe(active) : 'the page'}, not the message box`
+      }
+    }
+  }
   if (entry === 'field') {
     const fields = Array.from(scope.querySelectorAll(FIELD)).filter(
       (field) => visible(field) && enabled(field)

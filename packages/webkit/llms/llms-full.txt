@@ -1619,6 +1619,7 @@ const hintId = useId() // stable id for the ARIA association
 | Moment | Behaviour |
 | --- | --- |
 | Opening a task (create page, drawer, form dialog) | Focus lands in the first field. |
+| Opening a chat (assistant page, chat drawer) | Focus lands in the message box, the field the next message is typed in. |
 | Opening a page you browse (list, detail, settings) | Focus lands on the page `h1` (`tabindex="-1"`, no visible ring), so a screen reader announces the page. |
 | `Esc` | Closes the top layer only: menu, then dialog, then drawer. On a full-page task it means Cancel, through the unsaved-changes guard. On a browse page it does nothing. |
 | `Enter`, `⌘ Enter` (`Ctrl Enter` off Apple) | `Enter` submits a short single-line form; `⌘ Enter` submits from a textarea or the code editor. |

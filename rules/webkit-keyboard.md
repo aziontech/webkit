@@ -13,6 +13,7 @@ one control.
 | Moment                                             | Behaviour                                                                                                                                                            |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Opening a task (create page, drawer, form dialog)  | Focus lands in the first field.                                                                                                                                      |
+| Opening a chat (assistant page, chat drawer)       | Focus lands in the message box, the field the next message is typed in.                                                                                              |
 | Opening a page you browse (list, detail, settings) | Focus lands on the page `h1` (`tabindex="-1"`, no visible ring), so a screen reader announces the page.                                                              |
 | `Esc`                                              | Closes the top layer only: menu, then dialog, then drawer. On a full-page task it means Cancel, through the unsaved-changes guard. On a browse page it does nothing. |
 | `Enter`, `⌘ Enter` (`Ctrl Enter` off Apple)        | `Enter` submits a short single-line form; `⌘ Enter` submits from a textarea or the code editor.                                                                      |
@@ -145,7 +146,7 @@ macOS, `Ctrl` on Windows, Linux and ChromeOS.
 ## Don't
 
 - Do not put focus on a button, the first link or the page body when a page opens; a task starts
-  in its first field and a browse page on its `h1`.
+  in its first field, a chat in its message box and a browse page on its `h1`.
 - Do not draw a focus ring on the `h1` that took focus: it is a heading, not a control.
 - Do not let `Esc` close two layers at once, leave a full-page task without the unsaved-changes
   guard, or do anything on a browse page.
