@@ -11,7 +11,7 @@
   })
 
   export interface AppHeaderAccountProps {
-    /** Name of the signed-in account; the avatar draws its first two characters as initials. */
+    /** Name of the signed-in account; the avatar draws the first letters of its first and last words as initials. */
     name?: string
     /** Photo URL of the account; replaces the initials. */
     src?: string

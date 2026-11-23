@@ -337,7 +337,9 @@ describe('ConsoleLayout', () => {
         { 'account-menu': () => h('p', 'Account settings') }
       )
       expect(getByText('Ana Souza')).toBeTruthy()
-      const trigger = within(getByRole('banner')).getByRole('button', { name: 'AN, account menu' })
+      const trigger = within(getByRole('banner')).getByRole('button', {
+        name: 'AS, Ana Souza, account menu'
+      })
       await userEvent.click(trigger)
       await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
       expect(within(document.body).getAllByText('Account settings').length).toBeGreaterThan(0)
@@ -357,7 +359,7 @@ describe('ConsoleLayout', () => {
         { 'account-menu': accountMenu }
       )
       const trigger = within(getByRole('banner')).getByRole('button', {
-        name: 'JA, account menu'
+        name: 'JD, Jane Doe, account menu'
       })
       await userEvent.click(trigger)
       const option = await waitFor(() =>
@@ -390,16 +392,16 @@ describe('ConsoleLayout', () => {
       expect(value).toBe('settings')
     })
 
-    it('starts the header avatar trigger name with the visible initials', async () => {
+    it('starts the header avatar trigger name with the visible initials, then the full name', async () => {
       const { container, getByRole } = mount(
         { account: { name: 'Jane Doe' } },
         {},
         { 'account-menu': accountMenu }
       )
       const trigger = within(getByRole('banner')).getByRole('button', {
-        name: 'JA, account menu'
+        name: 'JD, Jane Doe, account menu'
       })
-      expect(trigger.textContent?.trim()).toBe('JA')
+      expect(trigger.textContent?.trim()).toBe('JD')
       const results = await axe.run(container, {
         runOnly: { type: 'rule', values: ['label-content-name-mismatch'] }
       })

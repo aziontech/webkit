@@ -409,7 +409,7 @@ export const ptBR: Messages = {
     home: 'Página inicial da Azion',
     openNavigation: 'Abrir navegação',
     accountMenu: 'Menu da conta',
-    accountMenuFor: '{initials}, menu da conta',
+    accountMenuFor: '{initials}, {name}, menu da conta',
     searchPlaceholder: 'Buscar páginas e comandos',
     noMatch: 'Nenhuma página ou comando corresponde à busca.',
     pages: 'Páginas',

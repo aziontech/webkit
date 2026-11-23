@@ -59,12 +59,17 @@ describe('Avatar', () => {
     const { getByTestId, queryByTestId } = render(Avatar, { props: { label: 'herbert' } })
 
     const labelEl = getByTestId('avatar__label')
-    // slice(0,2).toUpperCase() => 'HE'
     expect(labelEl).toHaveTextContent('HE')
 
     // no image, no icon
     expect(queryByTestId('avatar__image')).toBeNull()
     expect(queryByTestId('avatar__icon')).toBeNull()
+  })
+
+  it('draws a full name as the first letters of its first and last words', () => {
+    const { getByTestId } = render(Avatar, { props: { label: 'Jane Q. Doe' } })
+
+    expect(getByTestId('avatar__label')).toHaveTextContent(/^JD$/)
   })
 
   it('exposes role="img" and an aria-label equal to the initials on the root when showing a label', () => {

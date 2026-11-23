@@ -4,6 +4,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
+  import { initialsOf } from '../../../utils/initials'
 
   defineOptions({
     name: 'Avatar',
@@ -20,7 +21,7 @@
     src?: string
     /** Accessible name: the image's alt with `src`, and the name of the initials or icon fallback without it. */
     alt?: string
-    /** Initials shown when no image (normalized to two uppercase characters). */
+    /** Initials shown when no image: a full name becomes the first letters of its first and last words, one word its first two characters, uppercased. */
     label?: string
     /** Icon class for the fallback when no image or label (Azion icon class). */
     icon?: string
@@ -55,11 +56,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'avatar')
 
-  const normalizedLabel = computed(() => {
-    const value = props.label.trim()
-    if (!value) return ''
-    return value.slice(0, 2).toUpperCase()
-  })
+  const normalizedLabel = computed(() => initialsOf(props.label))
 
   const content = computed(() => {
     if (props.src && !imageFailed.value) return 'image'

@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { initialsOf } from '../../../utils/initials'
 
   defineOptions({
     name: 'AvatarGroup',
@@ -68,13 +69,8 @@
   const showsPhoto = (item: AvatarGroupItem) =>
     Boolean(item.src) && !failedSources.value.includes(item.src as string)
 
-  const initialsOf = (item: AvatarGroupItem) => {
-    if (item.label) return item.label.trim().slice(0, 2).toUpperCase()
-    const words = item.name.trim().split(/\s+/).filter(Boolean)
-    const first = words[0]?.charAt(0) ?? ''
-    const last = words.length > 1 ? (words[words.length - 1]?.charAt(0) ?? '') : ''
-    return `${first}${last}`.toUpperCase()
-  }
+  const itemInitials = (item: AvatarGroupItem) =>
+    item.label ? item.label.trim().slice(0, 2).toUpperCase() : initialsOf(item.name)
 
   function onImageError(src: string | undefined) {
     if (src && !failedSources.value.includes(src)) failedSources.value.push(src)
@@ -139,7 +135,7 @@
         aria-hidden="true"
         class="leading-none"
       >
-        {{ initialsOf(item) }}
+        {{ itemInitials(item) }}
       </span>
     </span>
     <button
