@@ -4,6 +4,7 @@
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
   import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, watch } from 'vue'
 
   /** One file of the upload, with its state and progress. */
@@ -33,6 +34,7 @@
   const MAX_ROWS = 50
 
   const folderPicker = useFilePicker({ directory: true, multiple: true })
+  const { formatFileSize } = useLocale()
   const received = ref(0)
   const files = ref<ProjectIntakeUpload[]>([])
 
@@ -44,7 +46,6 @@
     { immediate: true }
   )
 
-  const doneCount = computed(() => files.value.filter((file) => file.status === 'success').length)
   const failedCount = computed(() => files.value.filter((file) => file.status === 'error').length)
   const shownFiles = computed(() =>
     files.value.length <= MAX_ROWS
@@ -52,6 +53,12 @@
       : files.value.filter((file) => file.status !== 'success').slice(0, MAX_ROWS)
   )
   const totalSize = computed(() => files.value.reduce((sum, file) => sum + (file.size ?? 0), 0))
+
+  const failedLabel = computed(() =>
+    failedCount.value === 1
+      ? '1 file could not be uploaded. Retry it, or remove it from the folder and drop the project again.'
+      : `${failedCount.value} files could not be uploaded. Retry them, or remove them from the folder and drop the project again.`
+  )
 
   const chooseFolder = async (event: MouseEvent) => {
     const chosen = await folderPicker.open()
@@ -93,9 +100,14 @@
       class="animate-fade-in motion-reduce:animate-none fixed inset-0 z-(--z-control-overlay) flex flex-col items-center justify-center gap-(--spacing-lg) bg-(--bg-canvas) p-(--spacing-xl)"
     >
       <header class="flex flex-col items-center gap-(--spacing-2xs) text-center">
-        <h1 class="text-heading-sm text-(--text-default)">Initializing</h1>
-        <p class="text-body-sm text-(--text-muted)">
-          Setting up your deployment. {{ doneCount }} of {{ files.length }} files.
+        <h1 class="text-heading-sm text-(--text-default)">
+          {{ failedCount ? 'Upload paused' : 'Initializing' }}
+        </h1>
+        <p
+          v-if="!failedCount"
+          class="text-body-sm text-(--text-muted)"
+        >
+          Setting up your deployment.
         </p>
       </header>
 
@@ -104,7 +116,7 @@
         severity="danger"
         size="small"
         class="w-full max-w-(--container-md)"
-        :label="`${failedCount} file could not be uploaded. Retry it, or remove it from the folder and drop the project again.`"
+        :label="failedLabel"
         action-label="Retry"
         @action="(event: MouseEvent) => retry(event)"
       />
@@ -118,7 +130,7 @@
       />
 
       <p class="text-body-xs text-(--text-muted)">
-        {{ files.length }} files, {{ (totalSize / 1000).toFixed(2) }} KB
+        {{ files.length }} files, {{ formatFileSize(totalSize) }}
       </p>
     </div>
   </div>

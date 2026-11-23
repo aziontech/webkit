@@ -35,6 +35,8 @@ describe('state/state-project-intake', () => {
   it('UploadError: Retry clears the failure and emits retry for every failed file', async () => {
     const view = render(StateProjectIntake, { props: { uploads: sampleFailedUploads } })
     expect(view.container.textContent).toContain('1 file could not be uploaded')
+    expect(view.getByRole('heading', { level: 1 }).textContent?.trim()).toBe('Upload paused')
+    expect(view.container.textContent).not.toContain('Setting up your deployment')
     const alertRetry = Array.from(
       view.container.querySelectorAll('[role="alert"] button, [role="status"] button')
     ).find((b) => b.textContent?.trim() === 'Retry') as HTMLButtonElement
@@ -57,8 +59,9 @@ describe('state/state-project-intake', () => {
         ]
       }
     })
-    expect(view.container.textContent).toContain('Setting up your deployment. 1 of 2 files.')
-    expect(view.container.textContent).toContain('2 files, 5.00 KB')
+    expect(view.container.textContent).toContain('Setting up your deployment.')
+    expect(view.container.textContent).not.toContain('1 of 2 files')
+    expect(view.container.textContent).toContain('2 files, 5 kB')
     expect(view.container.textContent).not.toContain(sampleUploads[0].name)
     expect(view.queryByRole('button', { name: 'Choose a folder' })).toBeNull()
   })
