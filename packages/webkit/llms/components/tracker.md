@@ -50,13 +50,15 @@
 
 ## States
 
-- Visual states: `default`, `active block` (pointer or keyboard; the others dim), `loading` (Skeleton strip), `empty` (one neutral strip announced as No data), `error` (inline danger line, `role="alert"`)
+- Visual states: `default`, `active block` (pointer or keyboard; the others dim), `loading` (Skeleton strip), `empty` (one dashed strip that reads No data on screen and is announced as No data), `error` (inline danger line, `role="alert"`)
 - `data-loading` mirrors `loading`
 - `data-severity` on each block: `success` | `warning` | `danger` | `info` | `none`
 - `data-active` on the active block; `data-dimmed` on every other block while one is active
 - `data-state="open|closed"` on the readout: `open` while a block is active; `data-moving` while it follows from one block to the next
 
 - Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
+- Narrow strips: every block keeps at least 6px; when the strip is too narrow for one block per period, consecutive periods merge into one block per bucket (the same number of periods each, the last bucket shorter), coloured by the worst state in it (danger, then warning, then info, then success). The readout and the live region read the bucket as `{count} periods. Worst: {label}`; pointer and arrow keys move by block, and `v-model:activeIndex` carries the worst period of the active block. A strip measured as zero wide (the server render) draws one block per period.
 
 ## Accessibility
 
@@ -92,14 +94,13 @@
 
   const { formatDate } = useLocale()
 
+  const dayOf = (index) => new Date(Date.UTC(2026, 10, 10 - (DAYS - 1 - index)))
+  const shortDate = (date) => formatDate(date, { month: 'short', day: 'numeric', timeZone: 'UTC' })
+
   const days = Array.from({ length: DAYS }, (_, index) => {
-    const date = new Date(Date.UTC(2026, 10, 10 - (DAYS - 1 - index)))
+    const date = dayOf(index)
     const id = date.toISOString().slice(0, 10)
-    const day = formatDate(date, {
-      month: 'short',
-      day: 'numeric',
-      timeZone: 'UTC'
-    })
+    const day = shortDate(date)
     if (index === DAYS - 1) return { id, label: `${day} · No data` }
     if (index === OUTAGE_DAY) return { id, severity: 'danger', label: `${day} · Partial outage` }
     if (index === DEGRADED_DAY)
@@ -114,6 +115,13 @@
       aria-label="Edge Application uptime, last 90 days"
       :items="days"
     />
+    <div
+      aria-hidden="true"
+      class="mt-(--spacing-xs) flex justify-between text-label-sm text-(--text-muted)"
+    >
+      <span>{{ shortDate(dayOf(0)) }}</span>
+      <span>{{ shortDate(dayOf(DAYS - 1)) }}</span>
+    </div>
   </div>
 </template>
 ```

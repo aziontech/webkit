@@ -14974,6 +14974,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on interactive rows (the offset takes the surface color, so it never shows as a white gap in the dark theme).
 - `aria-busy` on the root while `loading` or `refetching`.
 - Name and value text clear 4.5:1 on the tinted fill and on the bare surface in both themes.
+- The bar ends on a 2px inline-end cap in the full hue (a solid mark, APCA Lc 30 or more on the surface in both themes), so the length reads in dark, where the tint alone stays under the mark target.
 - Interactive rows are 32px tall and full width; a transparent hit area (`before:` pseudo-element, 4px above and below) makes the pointer target 40px without changing the look.
 - Forced colors: the bar fill keeps its colour (`forced-color-adjust: none`); forced to `Canvas` it vanished and left only the labels (`src/test/forced-colors-charts.test.ts`).
 
@@ -15367,7 +15368,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
   - Events: _none_.
   - Slots: `default` — the consumer's tags, buttons and dropdown.
 - `chart-card-drag-handle/chart-card-drag-handle.vue` — a grip button that arms native drag on the card while pressed; arrow keys emit the root's `move`.
-  - Props: `ariaLabel?: string` (default `''`; empty uses the locale catalog, `Move card` in English).
+  - Props: `ariaLabel?: string` (default `''`; empty reads `Move` plus the card title, or the locale catalog's `Move card` when the card has no title). The handle is described by the key hint (`Use the arrow keys to move the card.`) and shows the move glyph (`az az-move`).
   - Events: _none_ (flows through the root's `move`, `drag-start`, `drag-end`).
   - Slots: _none_.
 - `chart-card-content/chart-card-content.vue` — the body; fills the remaining height.
@@ -15402,7 +15403,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 - The card is a `role="group"` named by its title (`aria-labelledby`) or by `ariaLabel`; it is not a region landmark, so ten cards on a dashboard add no landmarks.
 - The drag and resize handles draw 24 px but take pointer input over 40 px (a transparent `before:` hit area 8 px around them).
-- Drag handle: a real `<button>` named "Move card". Keyboard map: arrow keys emit `move` with the direction; the page reorders and keeps focus on the handle. Dragging never requires a pointer.
+- Drag handle: a real `<button>` named "Move" plus the card title ("Move card" without a title), described by the arrow-key hint. Keyboard map: arrow keys emit `move` with the direction; the page reorders and keeps focus on the handle, and the handle announces "Moved to position 2 of 3" through the shared polite live region. Dragging never requires a pointer.
 - Resize handle: `role="separator"`, one tab stop, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` such as "6 of 12 columns, 552 pixels tall". Keyboard map: Left / Right change the span by one column, Up / Down change the height by 24 pixels, Home / End jump to the smallest and largest span, Escape cancels a pointer resize in progress.
 - Both handles are at least 24px with a visible focus ring `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - `motion-reduce:transition-none` on every transition.
@@ -15656,7 +15657,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - Add bands only when the range has agreed limits (a quota, an SLO, a CPU ceiling); without them the arc draws in `--chart-series-1`, the default chart color, and the reading carries no judgment.
 - Name every band (`label`) so the value is read with its meaning, not only with a color.
 - Use status severities for bands (`success`, `warning`, `danger`) and the findings levels (`severity-critical` … `severity-info`) only when the reading is a severity.
-- Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`.
+- Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`. A unit word after a space (`92 ms`) is set apart in the muted sans text face, so the display figure face never turns it into capitals.
 
 ## Don’t
 
@@ -16016,6 +16017,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
+- `data-carded` is set when the tile sits in a `ChartCard` and not in a group (injected, no prop): the card owns the only frame, so the tile drops its own border, radius and surface; put it in an unpadded `ChartCard.Content` (`:padded="false"`), since the tile keeps its own padding
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
 - Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value.
@@ -16150,7 +16152,6 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
       :value="70"
       unit="%"
       :delta="-1.5"
-      inverse
     />
   </StatTileGroup>
 </template>
@@ -16212,13 +16213,15 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 ## States
 
-- Visual states: `default`, `active block` (pointer or keyboard; the others dim), `loading` (Skeleton strip), `empty` (one neutral strip announced as No data), `error` (inline danger line, `role="alert"`)
+- Visual states: `default`, `active block` (pointer or keyboard; the others dim), `loading` (Skeleton strip), `empty` (one dashed strip that reads No data on screen and is announced as No data), `error` (inline danger line, `role="alert"`)
 - `data-loading` mirrors `loading`
 - `data-severity` on each block: `success` | `warning` | `danger` | `info` | `none`
 - `data-active` on the active block; `data-dimmed` on every other block while one is active
 - `data-state="open|closed"` on the readout: `open` while a block is active; `data-moving` while it follows from one block to the next
 
 - Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
+- Narrow strips: every block keeps at least 6px; when the strip is too narrow for one block per period, consecutive periods merge into one block per bucket (the same number of periods each, the last bucket shorter), coloured by the worst state in it (danger, then warning, then info, then success). The readout and the live region read the bucket as `{count} periods. Worst: {label}`; pointer and arrow keys move by block, and `v-model:activeIndex` carries the worst period of the active block. A strip measured as zero wide (the server render) draws one block per period.
 
 ## Accessibility
 
@@ -16246,14 +16249,13 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
   const { formatDate } = useLocale()
 
+  const dayOf = (index) => new Date(Date.UTC(2026, 10, 10 - (DAYS - 1 - index)))
+  const shortDate = (date) => formatDate(date, { month: 'short', day: 'numeric', timeZone: 'UTC' })
+
   const days = Array.from({ length: DAYS }, (_, index) => {
-    const date = new Date(Date.UTC(2026, 10, 10 - (DAYS - 1 - index)))
+    const date = dayOf(index)
     const id = date.toISOString().slice(0, 10)
-    const day = formatDate(date, {
-      month: 'short',
-      day: 'numeric',
-      timeZone: 'UTC'
-    })
+    const day = shortDate(date)
     if (index === DAYS - 1) return { id, label: `${day} · No data` }
     if (index === OUTAGE_DAY) return { id, severity: 'danger', label: `${day} · Partial outage` }
     if (index === DEGRADED_DAY)
@@ -16268,6 +16270,13 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
       aria-label="Edge Application uptime, last 90 days"
       :items="days"
     />
+    <div
+      aria-hidden="true"
+      class="mt-(--spacing-xs) flex justify-between text-label-sm text-(--text-muted)"
+    >
+      <span>{{ shortDate(dayOf(0)) }}</span>
+      <span>{{ shortDate(dayOf(DAYS - 1)) }}</span>
+    </div>
   </div>
 </template>
 ```
@@ -16362,7 +16371,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - Visual states: `default`, `hover`, `focus-visible` on tabs and copy control
 - `data-state` on tabs: `active` | `inactive`; the active tab's text colour switches on `data-[state=active]:` in the tab's flat class, never a `:class` ternary
 - `data-state` on code lines: `default` | `added` | `removed` | `highlighted`; in the split view a side with no line opposite a change is `empty` (`var(--bg-canvas)`)
-- `data-split` on the panel when the active tab with an `original` draws side by side
+- `data-split` on the panel when the active tab with an `original` draws side by side. A `split` diff draws unified while the block's content is narrower than 640px (40rem, measured with a size observer; a block not measured yet, as in the server render, draws split), so on a phone the changed values are never cut in two 150px columns
 - `data-disabled` not used (tabs are not disabled in v2)
 - `data-type` on the root: `code` | `output`; `output` paints the shell `--bg-canvas` and every line flat in `--text-muted`
 
@@ -21052,7 +21061,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 ## States
 
-- Visual states: `default`, `hover` (row), `focus-visible` (the cursor ring on the active cell or header), `selected` (cells in the range: `data-selected`, `aria-selected="true"`; rows checked: `data-state="selected"`), `editing` (`data-editing` on the cell with the editor open), `readonly` (`data-readonly` on the root; non-editable cells carry `aria-readonly`).
+- Visual states: `default`, `hover` (row), `focus-visible` (the cursor ring on the active cell or header), `selected` (cells in a range of two or more cells: `data-selected`, `aria-selected="true"`; the cursor cell alone is shown by its focus ring and is not painted as selected, so a grid nobody touched shows no selection; rows checked: `data-state="selected"`), `editing` (`data-editing` on the cell with the editor open), `readonly` (`data-readonly` on the root; non-editable cells carry `aria-readonly`).
 - `invalid`: a number cell whose text is not a number stays in its editor on Enter or Tab, with `data-invalid` on the cell and the editor, `aria-invalid="true"` and `aria-describedby` pointing to a message (`dataGrid.invalidNumber`, `role="alert"`) under the cell; nothing is committed until the text parses or Escape restores the value. Blur with an invalid text discards it and keeps the previous value.
 - `paste`: Ctrl+V or Cmd+V on the cell cursor reads the `paste` event's `text/plain` (no clipboard permission prompt) as tab-separated text: rows by line break (CRLF or LF), cells by tab, one trailing line break ignored, and a cell wrapped in double quotes may hold tabs and line breaks (`""` is a quote), the way Excel and Google Sheets copy. The block is written from the top-left cell of the selected range (the cursor cell when there is no range), clipped at the last row and column (a paste never adds rows; rows are the app's, through `row-add`); a single value with a range of several cells selected fills every cell of the range. Each value is read the way an in-cell edit commits it: `number` parses a number (empty clears it), `boolean` takes `true` / `false`, `1` / `0`, `yes` / `no` or the localized Yes / No (case-insensitive), `select` takes an option value or an option label (case-insensitive), `text` takes the text as is (empty clears it). A value that does not fit, a cell of a non-editable column and every cell of a `readonly` grid are skipped and keep their value. Afterwards the selected range is the pasted area, the cursor on its top-left cell, and a polite status announces the result (`dataGrid.pasted`, `dataGrid.pastedSkipped`, `dataGrid.pasteReadonly`). While an in-cell editor is open the grid does not handle the paste, so the editor's native paste inserts the text; on the header row a paste does nothing.
 - `copy`: Ctrl+C or Cmd+C on the cell cursor writes the selected range to the native `copy` event's `clipboardData` as `text/plain` and cancels the event, so it needs no clipboard permission and works on an insecure (plain http) origin. When the browser fires no `copy` event for the shortcut, the grid runs the copy command itself. Rows go by `\n`, cells by tab, and a cell holding a tab, a line break or a double quote is wrapped in double quotes with each quote doubled, the way Excel and Google Sheets copy, so a copied range pastes back into the grid cell for cell. While an in-cell editor is open the grid does not handle the copy, so the editor's native copy takes its selected text.
@@ -21063,7 +21072,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 ## Accessibility
 
-- Pattern: the WAI-ARIA APG **data grid**. The grid element is `role="grid"` with `aria-rowcount` (rows + header) and `aria-colcount`, named by `ariaLabel`, or by an `aria-labelledby` / `aria-describedby` passed to DataGrid (both are forwarded to the grid element, not the frame), `aria-multiselectable="true"` (a cell range can always be selected) and `aria-readonly="true"` while `readonly`. Rows are `role="row"` with `aria-rowindex` (1-based, header is 1) and `aria-selected` when row selection is on; header cells `role="columnheader"`, body cells `role="gridcell"`, each with `aria-colindex`; every gridcell carries `aria-selected` (`true` in the range, `false` outside it) and a cell that cannot be edited `aria-readonly="true"`. The empty state renders outside the grid's rows, so `aria-rowcount` stays exact.
+- Pattern: the WAI-ARIA APG **data grid**. The grid element is `role="grid"` with `aria-rowcount` (rows + header) and `aria-colcount`, named by `ariaLabel`, or by an `aria-labelledby` / `aria-describedby` passed to DataGrid (both are forwarded to the grid element, not the frame), `aria-multiselectable="true"` (a cell range can always be selected) and `aria-readonly="true"` while `readonly`. Rows are `role="row"` with `aria-rowindex` (1-based, header is 1) and `aria-selected` when row selection is on; header cells `role="columnheader"`, body cells `role="gridcell"`, each with `aria-colindex`; every gridcell carries `aria-selected` (`true` in a range of two or more cells, `false` outside it and on a lone cursor cell) and a cell that cannot be edited `aria-readonly="true"`. The empty state renders outside the grid's rows, so `aria-rowcount` stays exact.
 - One tab stop: exactly one cell of the grid has `tabindex="0"` (the active cell, the first body cell at start; the header row is part of the cursor), every other cell, checkbox and resize handle `-1`. `Tab` enters the grid on the active cell and `Tab` / `Shift+Tab` leave it. The editor inside a cell takes focus while editing and returns it to the cell when it closes.
 - Keyboard map (cell cursor): `Arrow` keys move one cell, up into the header row and back (inline arrows follow the reading direction); `Home` / `End` the first / last cell of the row; `Ctrl+Home` / `Ctrl+End` the first / last cell of the grid; `PageUp` / `PageDown` ten rows; `Shift` with an arrow, `Home` or `End` extends the range over body cells; `Tab` / `Shift+Tab` leave the grid. `Enter` or `F2` opens the editor of a body cell and, on a header cell, moves focus to its resize handle; typing a character opens a text or number editor with that character (select and boolean cells do not open on typing); `Space` toggles a boolean cell, the row checkbox, or Select all on its header; `Delete` / `Backspace` clears an editable text or number cell; `Ctrl+C` / `Cmd+C` copies the range; `Ctrl+V` / `Cmd+V` pastes a tab-separated block from the top-left cell of the range, or fills the range with a single value (see States); `Ctrl+A` / `Cmd+A` selects every cell.
 - Keyboard map (editing): `Enter` commits and moves down; `Tab` / `Shift+Tab` commit and move to the next / previous cell (wrapping across rows), the one case where Tab moves inside the grid; `Escape` cancels and restores the value; blur commits. A select editor is a native `select`: its arrow keys change the choice without committing, and Enter, Tab or blur commit it. An invalid number keeps the editor open (see States).
@@ -21346,8 +21355,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
   const columns = [
     { accessorKey: 'name', header: 'Name' },
-    { accessorKey: 'id', header: 'ID', sortable: false },
     { accessorKey: 'status', header: 'Status' },
+    { accessorKey: 'id', header: 'ID', sortable: false },
     { accessorKey: 'editor', header: 'Last Editor', sortable: false, grow: 2 },
     { accessorKey: 'modified', header: 'Last Modified', grow: 2 },
     { id: 'actions', header: '', type: 'action', sortable: false }
@@ -21399,7 +21408,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
         <DropdownMenuTrigger>
           <IconButton
             icon="az az-ellipsis-vertical"
-            aria-label="Row actions"
+            :aria-label="`Actions for ${row.name}`"
             variant="ghost"
             size="small"
           />
@@ -22679,7 +22688,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - Double-click is never the only way: `item-double-click` duplicates an action the app also offers through `item-click`, `Enter` or the row actions.
 - Contrast ≥4.5:1 for label and description on the canvas, the hover fill and `var(--bg-selected)` in both themes; disabled text follows the disabled-token exemption.
 - `motion-reduce:transition-none` on the chevron and selection transitions; `motion-reduce:before:transition-none` on the hover layer.
-- Touch target: rows are 24 / 32 / 40px tall by `size` and full width (the same deviation as `bar-list` below 40px), justified by row density in file trees; prefer `large` where touch is the main input. The whole row is the activation target and the chevron box extends to the row height.
+- Touch target: rows are 24 / 32 / 40px tall by `size` and full width on a fine pointer, justified by row density in file trees; on a coarse pointer (`pointer-coarse:`) every row grows to 44px, and the chevron carries an invisible, `aria-hidden` hit area 44px wide (`data-slot="touch-target"`), so a folder opens from a 44 x 44 target. The whole row is the activation target, and in a tree without selection a row tap on a parent also toggles it.
 
 ## Examples
 

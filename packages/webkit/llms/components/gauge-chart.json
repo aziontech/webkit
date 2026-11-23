@@ -31,7 +31,7 @@
   "Add bands only when the range has agreed limits (a quota, an SLO, a CPU ceiling); without them the arc draws in `--chart-series-1`, the default chart color, and the reading carries no judgment.",
   "Name every band (`label`) so the value is read with its meaning, not only with a color.",
   "Use status severities for bands (`success`, `warning`, `danger`) and the findings levels (`severity-critical` … `severity-info`) only when the reading is a severity.",
-  "Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`."
+  "Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`. A unit word after a space (`92 ms`) is set apart in the muted sans text face, so the display figure face never turns it into capitals."
  ],
  "props": [
   {

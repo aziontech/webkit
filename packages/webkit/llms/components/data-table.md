@@ -249,8 +249,8 @@
 
   const columns = [
     { accessorKey: 'name', header: 'Name' },
-    { accessorKey: 'id', header: 'ID', sortable: false },
     { accessorKey: 'status', header: 'Status' },
+    { accessorKey: 'id', header: 'ID', sortable: false },
     { accessorKey: 'editor', header: 'Last Editor', sortable: false, grow: 2 },
     { accessorKey: 'modified', header: 'Last Modified', grow: 2 },
     { id: 'actions', header: '', type: 'action', sortable: false }
@@ -302,7 +302,7 @@
         <DropdownMenuTrigger>
           <IconButton
             icon="az az-ellipsis-vertical"
-            aria-label="Row actions"
+            :aria-label="`Actions for ${row.name}`"
             variant="ghost"
             size="small"
           />
@@ -386,8 +386,8 @@
 
   const columns = [
     { accessorKey: 'name', header: 'Name' },
-    { accessorKey: 'id', header: 'ID', sortable: false },
     { accessorKey: 'status', header: 'Status' },
+    { accessorKey: 'id', header: 'ID', sortable: false },
     { accessorKey: 'editor', header: 'Last Editor', sortable: false, grow: 2 },
     { accessorKey: 'modified', header: 'Last Modified', grow: 2 },
     { id: 'actions', header: '', type: 'action', sortable: false }
@@ -441,7 +441,7 @@
         <DropdownMenuTrigger>
           <IconButton
             icon="az az-ellipsis-vertical"
-            aria-label="Row actions"
+            :aria-label="`Actions for ${row.name}`"
             variant="ghost"
             size="small"
           />
@@ -524,8 +524,8 @@
 
   const columns = [
     { accessorKey: 'name', header: 'Name' },
-    { accessorKey: 'id', header: 'ID', sortable: false },
     { accessorKey: 'status', header: 'Status' },
+    { accessorKey: 'id', header: 'ID', sortable: false },
     { accessorKey: 'editor', header: 'Last Editor', sortable: false, grow: 2 },
     { accessorKey: 'modified', header: 'Last Modified', grow: 2 },
     { id: 'actions', header: '', type: 'action', sortable: false }
@@ -577,7 +577,7 @@
         <DropdownMenuTrigger>
           <IconButton
             icon="az az-ellipsis-vertical"
-            aria-label="Row actions"
+            :aria-label="`Actions for ${row.name}`"
             variant="ghost"
             size="small"
           />

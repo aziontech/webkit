@@ -129,7 +129,7 @@
 - Double-click is never the only way: `item-double-click` duplicates an action the app also offers through `item-click`, `Enter` or the row actions.
 - Contrast ≥4.5:1 for label and description on the canvas, the hover fill and `var(--bg-selected)` in both themes; disabled text follows the disabled-token exemption.
 - `motion-reduce:transition-none` on the chevron and selection transitions; `motion-reduce:before:transition-none` on the hover layer.
-- Touch target: rows are 24 / 32 / 40px tall by `size` and full width (the same deviation as `bar-list` below 40px), justified by row density in file trees; prefer `large` where touch is the main input. The whole row is the activation target and the chevron box extends to the row height.
+- Touch target: rows are 24 / 32 / 40px tall by `size` and full width on a fine pointer, justified by row density in file trees; on a coarse pointer (`pointer-coarse:`) every row grows to 44px, and the chevron carries an invisible, `aria-hidden` hit area 44px wide (`data-slot="touch-target"`), so a folder opens from a 44 x 44 target. The whole row is the activation target, and in a tree without selection a row tap on a parent also toggles it.
 
 ## Right-to-left
 
