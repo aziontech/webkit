@@ -35,6 +35,22 @@
     }
   )
 
+  const rootEl = ref<HTMLElement | null>(null)
+  const boxEl = ref<HTMLElement | null>(null)
+  const nudge = ref(0)
+
+  function keepInside(x: number): void {
+    const box = boxEl.value
+    const panel = box?.firstElementChild
+    const width = rootEl.value?.clientWidth ?? 0
+    if (!box || !panel || !width) return
+    const shape = panel.getBoundingClientRect()
+    const start = x + shape.left - box.getBoundingClientRect().left
+    if (start < 0 || shape.width >= width) nudge.value = -start
+    else if (start + shape.width > width) nudge.value = width - start - shape.width
+    else nudge.value = 0
+  }
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-tooltip')
 
   const readout = computed(() => {
@@ -76,10 +92,19 @@
       })
     }
   })
+
+  watch(
+    () => readout.value && `${readout.value.x}:${readout.value.y}:${readout.value.side}`,
+    () => {
+      if (readout.value) keepInside(readout.value.x)
+    },
+    { flush: 'post' }
+  )
 </script>
 
 <template>
   <div
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     aria-hidden="true"
@@ -87,8 +112,9 @@
   >
     <div
       v-if="readout"
+      ref="boxEl"
       :data-moving="moving || null"
-      :style="{ left: '0', translate: `${readout.x}px ${readout.y}px` }"
+      :style="{ left: '0', translate: `${readout.x + nudge}px ${readout.y}px` }"
       class="absolute top-0 data-[moving]:transition-[translate] data-[moving]:duration-fast-02 data-[moving]:ease-productive-entrance motion-reduce:transition-none"
     >
       <ChartTooltipPanel
