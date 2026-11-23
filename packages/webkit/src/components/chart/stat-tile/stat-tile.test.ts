@@ -47,11 +47,33 @@ describe('StatTile', () => {
     expect(view.queryByTestId('stat-tile__sparkline')).toBeNull()
   })
 
-  it('draws no placeholder curve in the no-data band', () => {
+  it('draws a gray placeholder curve, never the trend, in the no-data band', () => {
     const view = mount({ value: null, trend: [1, 2, 3] })
     const band = view.getByTestId('stat-tile__empty')
-    expect(band.querySelector('svg, [data-testid="spark-chart"]')).toBeNull()
-    expect(band.textContent?.trim()).toBe('No data')
+    expect(band.getAttribute('data-band')).toBe('no-data')
+    expect(view.getByTestId('stat-tile__placeholder').getAttribute('aria-hidden')).toBeNull()
+    expect(
+      view.getByTestId('stat-tile__placeholder').querySelector('svg')?.getAttribute('aria-hidden')
+    ).toBe('true')
+    expect(view.getByTestId('stat-tile__empty-label').textContent).toContain('No data')
+  })
+
+  it('draws the placeholder curve with Not enough data when the trend has under two points', () => {
+    const view = mount({ trend: [null, 4, null] })
+    expect(view.queryByTestId('stat-tile__sparkline')).toBeNull()
+    expect(view.getByTestId('stat-tile__empty')).toHaveAttribute('data-band', 'not-enough-data')
+    expect(view.getByTestId('stat-tile__empty')).toHaveAttribute('data-band-shown')
+    expect(view.getByTestId('stat-tile__empty-label').textContent).toContain('Not enough data')
+  })
+
+  it('keeps the band while loading when the tile has a trend, with no label', () => {
+    const view = mount({ loading: true, trend: [] as number[] })
+    expect(view.queryByTestId('stat-tile__empty')).toBeNull()
+    view.unmount()
+    const held = mount({ loading: true, trend: [null, null, null] })
+    expect(held.getByTestId('stat-tile__empty')).toHaveAttribute('data-band', 'loading')
+    expect(held.getByTestId('stat-tile__placeholder')).toBeTruthy()
+    expect(held.queryByTestId('stat-tile__empty-label')).toBeNull()
   })
 
   it('reads a rise as good, and as bad when inverse', () => {
@@ -132,6 +154,7 @@ describe('StatTile', () => {
     expect(root.hasAttribute('data-error')).toBe(true)
     expect(view.getByTestId('stat-tile__value').textContent?.trim()).toBe('–')
     expect(view.getByTestId('stat-tile__empty-label').textContent).toContain("Couldn't load")
+    expect(view.getByTestId('stat-tile__empty')).toHaveAttribute('data-band', 'error')
     expect(view.getByTestId('stat-tile__empty').textContent).not.toContain('No data')
     expect(view.queryByTestId('stat-tile__delta')).toBeNull()
     expect(view.queryByTestId('stat-tile__sparkline')).toBeNull()

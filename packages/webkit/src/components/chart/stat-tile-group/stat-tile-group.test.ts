@@ -21,6 +21,26 @@ const Strip = (props: Record<string, unknown> = {}) =>
   })
 
 describe('StatTileGroup', () => {
+  it('gives a tile with no trend a placeholder band the row shows when a sibling draws one', () => {
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(StatTileGroup, null, {
+            default: () => [
+              h(StatTile, { label: 'Transactions', value: 15300, trend: [1, 3, 2, 5] }),
+              h(StatTile, { label: 'Cautioned', value: 0, 'data-testid': 'cautioned' })
+            ]
+          })
+      })
+    )
+    expect(view.getByTestId('stat-tile-group').className).toContain('group/stat-tile-group')
+    const band = view.getByTestId('cautioned__empty')
+    expect(band).toHaveAttribute('data-band', 'not-enough-data')
+    expect(band).not.toHaveAttribute('data-band-shown')
+    expect(band.className).toContain('group-has-[[data-band-shown]]/stat-tile-group:block')
+    expect(view.getByTestId('stat-tile__sparkline')).toHaveAttribute('data-band-shown')
+  })
+
   it('renders the fallback data-testid and lets a consumer override it', () => {
     const fallback = render(Strip())
     expect(fallback.getByTestId('stat-tile-group')).toBeTruthy()

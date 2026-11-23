@@ -25,7 +25,6 @@
   "`stats` — the marketing figure band, with no delta and no live data.",
   "`spark-chart` — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.",
   "`tag` — the delta renders as a `Tag`; the empty band's \"No data\" is a `Tag` too.",
-  "`separator` — carries the \"No data\" `Tag` across the empty band.",
   "`stat-tile-group` — one card split into cells, one per tile: the KPI strip of an overview."
  ],
  "bestPractices": [
@@ -33,7 +32,7 @@
   "Set `inverse` on every metric where a rise is bad, so a growing threat count reads as a regression.",
   "Keep the label in sentence case with no trailing colon.",
   "Put the unit in `unit` (\"GB\", \"ms\", \"%\"), not inside `formatValue`, so it reads muted beside the figure.",
-  "Leave `trend` out for a strip of figures with no history; the tile then has no chart band.",
+  "Leave `trend` out for a strip of figures with no history; the tile then has no chart band. In a row where some tiles have a trend, the others draw the gray placeholder band by themselves; do not fake a trend for them.",
   "Give the sparkline the same buckets as the chart below it, about twelve points.",
   "For a KPI strip that reads as one band (an overview's usage row), put the tiles in a `StatTileGroup`; do not hand-build the card, the grid or the dividers. Separate tiles are for figures that stand alone.",
   "Use `variant=\"mono\"` (default) for usage figures with a delta, `variant=\"sans\"` for a summary row of plain figures (requests, data transferred, error rate) above its charts. Keep one variant per row.",
@@ -101,7 +100,7 @@
    "type": "(number | null)[]",
    "default": "[]",
    "required": "false",
-   "doc": "Sparkline values, oldest first; `null` leaves a gap, as in `spark-chart`. Empty hides the sparkline."
+   "doc": "Sparkline values, oldest first. Under two points draws a gray placeholder curve; empty leaves the figure alone unless a sibling in its group draws a band."
   },
   {
    "name": "loading",

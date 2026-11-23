@@ -1080,6 +1080,7 @@ export const es: Messages = {
   statTile: {
     noValue: 'Sin valor',
     noData: 'Sin datos',
+    notEnoughData: 'Datos insuficientes',
     loadError: 'No se pudo cargar',
     better: 'mejor',
     worse: 'peor',
