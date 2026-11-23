@@ -102,6 +102,7 @@
   const onWideChange = () => {
     sideBySide.value = Boolean(wideQuery?.matches)
   }
+  const hydrated = ref(false)
 
   const {
     autoplayEnabled,
@@ -136,6 +137,7 @@
     wideQuery = globalThis.matchMedia?.(WIDE) ?? null
     wideQuery?.addEventListener('change', onWideChange)
     onWideChange()
+    hydrated.value = true
   })
 
   onScopeDispose(() => wideQuery?.removeEventListener('change', onWideChange))
@@ -288,7 +290,7 @@
             </div>
 
             <div
-              v-if="isActive(index)"
+              v-if="isActive(index) && !(hydrated && sideBySide)"
               :id="rowMediaId(index)"
               :hidden="sideBySide || undefined"
               :class="TAB_MEDIA_CLASS"
@@ -338,6 +340,7 @@
         />
 
         <div
+          v-if="sideBySide || !hydrated"
           class="contents group-data-[orientation=horizontal]/media-tabs:grid group-data-[orientation=horizontal]/media-tabs:min-h-[var(--media-tabs-media-min-lg,24rem)]"
         >
           <div

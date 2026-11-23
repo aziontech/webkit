@@ -7,9 +7,9 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: ebc6df267db87e8cb667992a6fe4d699735b908e22192ca06aa08377f5236222
+checksum: d955b59cee0262b6bd42c06c5cae03b488936ac7022785202799c7374e0fd205
 created: 2026-09-24
-last_updated: 2026-11-19
+last_updated: 2026-11-23
 ---
 
 # Media Tabs — Component Spec
@@ -91,7 +91,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 | `tabsSide`         | `'start' \| 'end' \| 'top' \| 'bottom'` | `'start'`    | false    | Which side of the media the tabs sit on. Below the `lg` breakpoint every side stacks, with the active tab's media inside its row.                                                                    |
 | `size`             | `'small' \| 'medium' \| 'large'`        | `'medium'`   | false    | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down.                                                   |
 | `selectOn`         | `'hover' \| 'click'`                    | `'hover'`    | false    | What moves the selection as the reader points at a row. A click always selects, on either setting.                                                                                                   |
-| `autoplay`         | `boolean`                               | `true`       | false    | Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion or below `lg`.                   |
+| `autoplay`         | `boolean`                               | `true`       | false    | Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion or below `lg`.     |
 | `autoplayInterval` | `number`                                | `5000`       | false    | Milliseconds each tab is held before the band advances.                                                                                                                                              |
 | `showProgress`     | `boolean`                               | `true`       | false    | Advances a hairline along the active row's bottom edge while the timer runs.                                                                                                                         |
 | `texture`          | `TextureVariant`                        | `'none'`     | false    | Texture the media column is grounded with; `none` leaves it bare.                                                                                                                                    |
@@ -129,6 +129,7 @@ None. The tab shown is the `v-model` (`update:modelValue`).
 - The band holds at most three tabs when the side is `start` or `end` and five when it is `top` or `bottom`; `items` past the limit are dropped, so the tabs, the rotation and the media frame always agree on the same set
 - Tabs in a row (`top`, `bottom`) are compact from `lg` up: no minimum row height, `--spacing-md` of inset, the title keeps `.text-heading-md` (`.text-heading-xs` at `size` `small`, with the description at `.text-body-xs`) and the description drops to `.text-body-sm`; below `lg` they stack at the full-size treatment
 - With the tabs in a row, the media of every tab sits stacked in one cell, so the frame is as tall as the tallest medium and no shorter than `--media-tabs-media-min-lg` (`24rem` unless set); `--media-tabs-media-min` floors the active tab's media inside its row below `lg`; `--media-tabs-media-bg` sets the media's fill (`--bg-canvas` unless set)
+- The server renders the side media cell and the open row's inline medium both (CSS shows the one that fits the width); once mounted only the one that matches the width stays in the document, so a slotted scene, illustration or code sample is never drawn twice
 - `data-tabs-side` carries the side and `data-orientation` the axis it implies (`vertical` for `start` and `end`, `horizontal` for `top` and `bottom`); `top` and `bottom` share each tab's frame edges with the next so the row draws one hairline between tabs, `end` shares the seam with the media on the tabs' side and `bottom` puts the media above the row, and every side keeps one hairline at the seam between the tabs and the media
 - The media column is grounded on a `texture` the band paints itself, behind the media: `texture` picks the material, `textureSize` its pitch and `textureFade` how it reaches zero before the column's edges. The default `none` leaves the column bare
 - Empty: when `items` is empty the band renders nothing

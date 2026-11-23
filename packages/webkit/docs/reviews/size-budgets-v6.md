@@ -1646,3 +1646,5 @@ Budget-raise: prompt-input-root 11.55 KB → 11.85 KB (measured 11.82 KB): the m
 Budget-raise: sources 4 KB → 4.05 KB (measured 4.01 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
 Budget-raise: streaming-response 42.9 KB → 43.35 KB (measured 43.32 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
 Budget-raise: conversation-history 9 KB → 9.05 KB (measured 9.01 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: media-tabs 10.2 KB → 10.25 KB (measured 10.21 KB): once mounted MediaTabs keeps only the media copy that fits the width, so a slotted scene is never drawn twice (A5-FU-C-4).
+Budget-raise: feature-tabs-section 59.55 KB → 59.6 KB (measured 59.58 KB): carries the MediaTabs single-copy media change (A5-FU-C-4).
