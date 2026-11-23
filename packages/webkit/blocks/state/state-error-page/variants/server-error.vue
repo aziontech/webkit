@@ -30,6 +30,7 @@
       />
       <Button
         label="System status"
+        aria-label="System status (opens in a new tab)"
         variant="outline"
         icon="az az-external-link"
         size="medium"

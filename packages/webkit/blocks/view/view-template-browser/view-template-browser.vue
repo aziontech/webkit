@@ -160,6 +160,7 @@
         <template #actions>
           <Button
             label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
@@ -387,6 +388,7 @@ npm run dev</code></pre>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
               label="View repository"
+              aria-label="View repository (opens in a new tab)"
               icon="az az-external-link"
               icon-position="trailing"
               variant="outline"
