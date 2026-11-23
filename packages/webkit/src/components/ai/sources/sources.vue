@@ -36,7 +36,7 @@
   const open = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ sources: en.sources })
+  const { t } = useTranslate({ sources: en.sources, common: en.common })
   const uid = useId()
   const panelId = `${uid}-panel`
 
@@ -77,8 +77,8 @@
   })
 
   const TRIGGER_CLASS =
-    'inline-flex w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
-    'motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
+    'inline-flex min-h-6 w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'pointer-coarse:min-h-11 motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -135,9 +135,19 @@
             :href="safeHref(item.href) ?? undefined"
             :target="external(item.href) ? '_blank' : undefined"
             :rel="external(item.href) ? 'noopener noreferrer' : undefined"
-            class="truncate text-body-sm text-(--text-link) underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+            :data-testid="`${testId}__link`"
+            class="group/link inline-flex min-w-0 max-w-full items-center gap-1 text-body-sm text-(--text-link) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
           >
-            {{ item.title }}
+            <span class="truncate underline-offset-2 group-hover/link:underline">{{
+              item.title
+            }}</span>
+            <template v-if="external(item.href)">
+              {{ ' ' }}<span class="sr-only">{{ t('common.newTab') }}</span>
+              <i
+                class="az az-external-link shrink-0 text-body-xs leading-none"
+                aria-hidden="true"
+              />
+            </template>
           </a>
           <span
             v-else

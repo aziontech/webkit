@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 87bd87062b50302e4e79d382697af955e79d4256b9f8ea7832777fd2347a618a
+checksum: 4f74f1e897bff52261a524c68adbf98453ab30ab015c2f472eeb69644ef0ed37
 created: 2026-11-11
 last_updated: 2026-11-21
 ---
@@ -145,7 +145,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 - Container queries: none.
 - Narrow: the trigger and Skip wrap.
-- Touch: the trigger is text-sized; Skip is a small `Button` (44 px on coarse pointers).
+- Touch: the trigger is at least 24 px tall, 44 px on coarse pointers; Skip is a small `Button` (44 px on coarse pointers).
 - Reflow: no horizontal scroll.
 
 ## Performance

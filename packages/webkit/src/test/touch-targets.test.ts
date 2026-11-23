@@ -6,14 +6,19 @@ import { commands, page } from 'vitest/browser'
 import { h, nextTick } from 'vue'
 
 import AccordionDefault from '../../examples/accordion/default.vue'
+import CitationDefault from '../../examples/citation/default.vue'
 import ConsoleShowcaseDefault from '../../examples/console-showcase-section/default.vue'
+import ConversationHistoryDefault from '../../examples/conversation-history/default.vue'
 import DatePickerDefault from '../../examples/date-picker/default.vue'
 import DropdownMenuStates from '../../examples/dropdown-menu/states.vue'
 import FooterDefault from '../../examples/footer/default.vue'
 import InputDefault from '../../examples/input/default.vue'
 import MultiSelectDefault from '../../examples/multi-select/default.vue'
 import NumberInputDefault from '../../examples/number-input/default.vue'
+import PromptInputShortcutMenus from '../../examples/prompt-input/shortcut-menus.vue'
+import ReasoningDefault from '../../examples/reasoning/default.vue'
 import SelectDefault from '../../examples/select/default.vue'
+import SourcesDefault from '../../examples/sources/default.vue'
 import TabsDefault from '../../examples/tabs/default.vue'
 import ThemeSwitcherDefault from '../../examples/theme-switcher/default.vue'
 
@@ -140,6 +145,38 @@ describe('tap targets on a coarse pointer (styled)', () => {
       const option = group.querySelector<HTMLElement>('[role="radio"]')!
       expect(option.getBoundingClientRect().height).toBeGreaterThanOrEqual(28)
       expect(hitSpan(option, 'y')).toBeGreaterThanOrEqual(44)
+    })
+
+    it.each([
+      ['Reasoning', ReasoningDefault, '[data-testid="reasoning__trigger"]'],
+      ['Sources', SourcesDefault, '[data-testid="sources__trigger"]'],
+      ['ConversationHistory', ConversationHistoryDefault, '[data-slot="conversation-history-item"]']
+    ])('%s trigger rows are 44px tall', async (_name, component, selector) => {
+      await touch()
+      const view = await mount(component)
+      const row = view.container.querySelector<HTMLElement>(selector)!
+      expect(row.getBoundingClientRect().height).toBeGreaterThanOrEqual(44)
+    })
+
+    it('Citation markers answer a tap across 44px', async () => {
+      await touch()
+      const view = await mount(CitationDefault)
+      const marker = view.container.querySelector<HTMLElement>('a[data-testid="citation"]')!
+      expect(marker.getBoundingClientRect().height).toBeLessThan(44)
+      expect(hitSpan(marker, 'y')).toBeGreaterThanOrEqual(44)
+    })
+
+    it('PromptInput shortcut menu rows are 44px tall', async () => {
+      await touch()
+      const view = await mount(PromptInputShortcutMenus)
+      const textarea = view.container.querySelector<HTMLTextAreaElement>('textarea')!
+      textarea.focus()
+      await fireEvent.update(textarea, '/')
+      textarea.setSelectionRange(1, 1)
+      await fireEvent.click(textarea)
+      await settle()
+      const option = document.body.querySelector<HTMLElement>('[role="option"]')!
+      expect(option.getBoundingClientRect().height).toBeGreaterThanOrEqual(44)
     })
   })
 })

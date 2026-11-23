@@ -137,20 +137,21 @@
   const dragging = ref<boolean>(false)
   const rejection = ref<string>('')
   const controlEl = ref<HTMLElement | null>(null)
-  const { overBy, busy, canSubmit, showVoice, submit } = usePromptInputSubmit({
-    model,
-    files,
-    references,
-    rejection,
-    controlEl,
-    maxLength: () => props.maxLength,
-    status: () => props.status,
-    disabled: () => props.disabled,
-    queueable: () => props.queueable,
-    voice: () => props.voice,
-    focus,
-    send: (event, payload) => emit('submit', event, payload)
-  })
+  const { overBy, busy, canSubmit, showVoice, submit, enterKeyHint, submitOnEnter } =
+    usePromptInputSubmit({
+      model,
+      files,
+      references,
+      rejection,
+      controlEl,
+      maxLength: () => props.maxLength,
+      status: () => props.status,
+      disabled: () => props.disabled,
+      queueable: () => props.queueable,
+      voice: () => props.voice,
+      focus,
+      send: (event, payload) => emit('submit', event, payload)
+    })
   const describedBy = () => {
     const ids = [props.maxLength > 0 ? counterId : '', slots.hint ? hintId : ''].filter(Boolean)
     return ids.join(' ') || undefined
@@ -196,10 +197,7 @@
   }
 
   function onKeydown(event: KeyboardEvent): void {
-    if (onMenuKeydown(event)) return
-    if (event.key !== 'Enter' || event.shiftKey || event.isComposing || composing.value) return
-    event.preventDefault()
-    submit(event)
+    if (!onMenuKeydown(event)) submitOnEnter(event, composing.value)
   }
 
   function focus(): void {
@@ -317,12 +315,13 @@
         :aria-label="ariaLabel || t('promptInput.label')"
         :aria-describedby="describedBy()"
         :aria-invalid="overBy > 0 || undefined"
+        :aria-autocomplete="menus.length ? 'list' : undefined"
         :aria-controls="menuOpen ? listId : undefined"
         :aria-activedescendant="menuOpen ? `${listId}-${activeIndex}` : undefined"
         :aria-keyshortcuts="menus.length ? menus.map((menu) => menu.trigger).join(' ') : undefined"
         :disabled="disabled"
         :data-testid="`${testId}__textarea`"
-        enterkeyhint="send"
+        :enterkeyhint="enterKeyHint"
         :class="TEXTAREA_CLASS"
         @input="onInput"
         @keydown="onKeydown"
@@ -355,7 +354,7 @@
             :id="counterId"
             :data-invalid="overBy > 0 || null"
             :data-testid="`${testId}__counter`"
-            class="text-body-xs text-(--text-muted) tabular-nums data-[invalid]:text-(--danger-foreground)"
+            class="text-body-xs text-(--text-muted) tabular-nums data-[invalid]:text-(--text-danger)"
           >
             {{ t('promptInput.count', { count: model.length, max: maxLength }) }}
           </span>
@@ -408,7 +407,7 @@
     <div
       aria-live="polite"
       :data-testid="`${testId}__rejected`"
-      class="px-(--spacing-xs) text-body-xs text-(--danger-foreground) empty:hidden"
+      class="px-(--spacing-xs) text-body-xs text-(--text-danger) empty:hidden"
     >
       {{ rejection }}
     </div>

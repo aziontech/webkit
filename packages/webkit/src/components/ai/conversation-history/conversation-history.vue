@@ -159,7 +159,7 @@
     'motion-reduce:transition-none'
 
   const ITEM_BUTTON_CLASS =
-    'flex h-8 min-w-0 flex-1 items-center rounded-(--shape-control) px-(--spacing-xs) text-start text-label-sm text-(--text-default) outline-none ' +
+    'flex h-8 min-w-0 flex-1 items-center pointer-coarse:h-11 rounded-(--shape-control) px-(--spacing-xs) text-start text-label-sm text-(--text-default) outline-none ' +
     'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
 </script>
 

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 25803f70de6e466a8919dac2f747391f4b69723f020268f2b1b622ad3d8c2d1a
+checksum: 3d6ad4db8e2b7b4ba1e43266f2e4e1337a0bf2d815bd3e9faab9416569cd9fc9
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -146,7 +146,7 @@ _none_
 
 - Container queries: none; it fills the width it is given.
 - Narrow: titles truncate on one line with the full title in `title`.
-- Touch: rows are 32 px tall with the Delete button's 40 px touch target.
+- Touch: rows are 32 px tall, 44 px on coarse pointers, so the row and its Delete button share one 44 px band.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Performance

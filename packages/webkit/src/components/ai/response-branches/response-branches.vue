@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, nextTick, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -43,10 +43,27 @@
     Math.min(last.value, Math.max(0, Math.floor(model.value || 0)))
   )
 
+  const pagerEl = ref<HTMLElement | null>(null)
+
+  function keepFocus(step: number): void {
+    const buttons = pagerEl.value?.querySelectorAll<HTMLButtonElement>('button')
+    if (!buttons?.length || !pagerEl.value?.contains(document.activeElement)) return
+    void nextTick(() => {
+      const active = document.activeElement
+      const lost =
+        !active ||
+        active === document.body ||
+        (active instanceof HTMLButtonElement && active.disabled)
+      if (lost) buttons[step < 0 ? buttons.length - 1 : 0]?.focus()
+    })
+  }
+
   const go = (step: number): void => {
     if (props.disabled) return
     const next = Math.min(last.value, Math.max(0, index.value + step))
-    if (next !== index.value) model.value = next
+    if (next === index.value) return
+    model.value = next
+    keepFocus(step)
   }
 </script>
 
@@ -61,6 +78,7 @@
     <slot :index="index" />
     <div
       v-if="count > 1"
+      ref="pagerEl"
       role="group"
       :aria-label="ariaLabel || t('responseBranches.label')"
       :data-testid="`${testId}__pager`"

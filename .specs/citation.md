@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 08f94ca36d550521813b1634d31c568f431140a2c82cff7a9815961f2d259cbb
+checksum: 27c74f63f852e09f4858301649c09f8a0fe02de1020960406878b0616614ab4e
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -124,7 +124,7 @@ _None._
 
 - Container queries: none: fixed size.
 - Narrow: unchanged.
-- Touch: inline exception (see Accessibility).
+- Touch: inline exception (see Accessibility); on coarse pointers a linked marker still answers a tap across 44 px through an invisible hit area, as `IconButton` does.
 - Reflow: inline.
 
 ## Performance

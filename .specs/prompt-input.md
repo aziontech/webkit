@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 7
 template: 2
-checksum: b14f378fc9b1b94a8d3eb61a759bca41b7f829af470e1c0632011e063197705e
+checksum: 43b54904133654d0a394c361f1b9de354d3fa65601fc528d05f75fb7d70025f9
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -20,7 +20,8 @@ toolbar under it, files attached by a button, by dropping them on the box or by 
 model and mode picker, dictation, a voice-conversation control that stands in for Submit while the
 prompt is empty, a Submit control that becomes Stop while a response is generated, a secondary row
 under the box (a context picker, tools, links), an optional character limit with a counter, and
-constraint text under it all. Enter submits; Shift+Enter adds a line; an IME composition never
+constraint text under it all. Enter submits on a fine pointer; Shift+Enter adds a line; on a
+coarse pointer (a phone keyboard) Enter adds a line and Submit sends; an IME composition never
 submits.
 
 It is controlled: the owner holds the text and the files, receives `submit` with the trimmed prompt,
@@ -346,8 +347,8 @@ _None._
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the container shows `focus-within:ring-2 focus-within:ring-(--ring-color)`.
-- Keyboard map: `Enter` submits (while a response runs only with `queueable`); `Shift+Enter` new line; `Tab` moves through the attachments, the toolbar start controls, the toolbar end controls, Submit / Stop / voice, then the footer row. IME composition (`isComposing`, or between `compositionstart` and `compositionend`) never submits.
-- Shortcut menus (`menus`): typing a trigger at the start of a word opens a listbox above the input with up to eight options matching what follows it. Focus stays in the text area, which points at the list with `aria-controls` and at the highlighted option with `aria-activedescendant` (a `textarea` cannot take `role="combobox"`); `ArrowDown`/`ArrowUp` move, `Enter` or `Tab` choose, `Escape` closes, and Enter does not submit while the list is open. A polite status reads `3 suggestions` or `No matches`. The text area lists the triggers in `aria-keyshortcuts`. References are a list named `References` of removable `Chip`s.
+- Keyboard map: `Enter` submits on a fine pointer (while a response runs only with `queueable`), and adds a line on a coarse pointer, where Submit sends; `Shift+Enter` new line; `Tab` moves through the attachments, the toolbar start controls, the toolbar end controls, Submit / Stop / voice, then the footer row. IME composition (`isComposing`, or between `compositionstart` and `compositionend`) never submits.
+- Shortcut menus (`menus`): typing a trigger at the start of a word opens a listbox above the input with up to eight options matching what follows it. Focus stays in the text area, which points at the list with `aria-controls` and at the highlighted option with `aria-activedescendant` (a `textarea` cannot take `role="combobox"` or `aria-expanded`, so it carries `aria-autocomplete="list"` while `menus` is set); `ArrowDown`/`ArrowUp` move, `Enter` or `Tab` choose, `Escape` closes, and Enter does not submit while the list is open. A polite status reads `3 suggestions` or `No matches`. The text area lists the triggers in `aria-keyshortcuts`. References are a list named `References` of removable `Chip`s.
 - Files: the tokens are `FileTokenGroup`'s list (named `Files`) with a named remove button each; focus moves as that component defines. The drop panel is decorative (`aria-hidden`); the attach button is the keyboard path. Rejections are announced politely and shown as text.
 - Pickers: each opens a `DropdownMenu` (`menu` with `menuitemradio` / `menuitemcheckbox`), so arrows, typeahead, `Escape` and focus return come from it. The model trigger's name is its visible text (model and mode). Enabled tools are a list named `Enabled tools` of removable `Chip`s.
 - Dictation: the control's name says what pressing it does (`Dictate` / `Stop dictation`), with no `aria-pressed`; the listening status is a polite live region. Where the browser has no speech recognition the control is not rendered.
@@ -405,7 +406,7 @@ _None._
   breaks where its controls stop fitting, at any width, with no breakpoint to keep in step.
 - Narrow: the toolbar wraps its slot controls; Submit stays at the inline end. With `queueable` while busy, Stop and Submit stay together at the inline end and never wrap onto separate lines; each keeps the 44 px target on coarse pointers. The model `Button` truncates the mode label first. The footer row wraps onto more lines; nothing scrolls sideways.
 - Shortcut menu (`/`, `@`): opens above the box, and below it when the space above the box in the visible viewport (the on-screen keyboard excluded) is shorter than the list and the space below is larger, so a composer at the top of a page or a panel never draws its list off-screen; the list carries `data-side="top|bottom"`.
-- Touch: `enterkeyhint="send"` on mobile keyboards; targets 44 px on coarse pointers.
+- Touch: `enterkeyhint="send"` on a fine pointer and `enterkeyhint="enter"` on a coarse pointer, where Enter adds a line so a multi-line prompt can be typed on a soft keyboard; targets 44 px on coarse pointers, shortcut menu rows included.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Performance

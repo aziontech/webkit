@@ -124,7 +124,7 @@
           :aria-label="t('artifactPreview.openLabel', { title })"
           variant="outline"
           size="small"
-          icon="az az-external-link"
+          icon="az az-maximize"
           icon-position="trailing"
           :data-testid="`${testId}__open`"
           @click="(event: MouseEvent) => emit('open', event)"

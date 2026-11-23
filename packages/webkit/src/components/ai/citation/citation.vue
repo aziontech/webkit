@@ -42,7 +42,7 @@
   const external = computed<boolean>(() => /^https?:\/\//i.test(linkHref.value ?? ''))
 
   const LINK_CLASS =
-    'mx-0.5 inline-flex min-w-4 items-center justify-center rounded-(--shape-control) bg-(--bg-surface-raised) px-1 align-super text-label-sm leading-none text-(--text-link) ' +
+    'relative mx-0.5 inline-flex min-w-4 items-center justify-center rounded-(--shape-control) bg-(--bg-surface-raised) px-1 align-super text-label-sm leading-none text-(--text-link) ' +
     'no-underline transition-colors duration-fast-02 ease-productive-entrance ' +
     'motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
@@ -63,6 +63,11 @@
       :class="LINK_CLASS"
     >
       {{ index }}
+      <span
+        aria-hidden="true"
+        :data-testid="`${testId}__hit-area`"
+        class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+      />
     </a>
     <span
       v-else

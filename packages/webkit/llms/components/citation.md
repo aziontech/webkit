@@ -72,7 +72,7 @@ _None. Exports: `"./citation"`. Composed DS components: `tooltip`._
 
 - Container queries: none: fixed size.
 - Narrow: unchanged.
-- Touch: inline exception (see Accessibility).
+- Touch: inline exception (see Accessibility); on coarse pointers a linked marker still answers a tap across 44 px through an invisible hit area, as `IconButton` does.
 - Reflow: inline.
 
 ## Examples

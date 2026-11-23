@@ -62,7 +62,7 @@
 
 - The pager is `role="group"` named by `ariaLabel` (`Response versions`); Previous and Next are `IconButton`s named `Previous version` / `Next version`.
 - The counter (`2 of 3`) is a polite live region, so moving announces the new position once; the slot is not live.
-- Keyboard: `Tab` reaches Previous and Next; `Enter`/`Space` move; a disabled end button leaves the tab order.
+- Keyboard: `Tab` reaches Previous and Next; `Enter`/`Space` move; a disabled end button leaves the tab order. When the focused arrow reaches an end and turns disabled, focus moves to the other arrow instead of falling to the page.
 
 ## Right-to-left
 

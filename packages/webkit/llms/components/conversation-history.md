@@ -94,7 +94,7 @@
 
 - Container queries: none; it fills the width it is given.
 - Narrow: titles truncate on one line with the full title in `title`.
-- Touch: rows are 32 px tall with the Delete button's 40 px touch target.
+- Touch: rows are 32 px tall, 44 px on coarse pointers, so the row and its Delete button share one 44 px band.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Examples

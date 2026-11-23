@@ -9,7 +9,8 @@ export const ptBR: Messages = {
     expired: 'Pedido expirado',
     confirmLabel: 'Digite {phrase} para confirmar',
     arguments: 'Argumentos',
-    invalidArguments: 'Estes argumentos não são válidos. Corrija-os para aprovar.'
+    invalidArguments: 'Estes argumentos não são válidos. Corrija-os para aprovar.',
+    phraseMismatch: 'O texto não corresponde a {phrase}. Digite exatamente para confirmar.'
   },
   agentQuestion: {
     submit: 'Enviar',

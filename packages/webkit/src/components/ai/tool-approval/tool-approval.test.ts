@@ -70,6 +70,51 @@ describe('ToolApproval', () => {
     expect(emitted('approve')).toHaveLength(1)
   })
 
+  it('sets the phrase apart as code and says when the typed text does not match', async () => {
+    const { getByLabelText, getByTestId, queryByTestId, getByRole } = render(ToolApproval, {
+      props: { ...base, confirmationPhrase: 'storefront' }
+    })
+    expect(getByTestId('tool-approval__phrase-text').tagName).toBe('CODE')
+    const field = getByLabelText('Type storefront to confirm')
+    expect(field).toHaveAttribute('autocapitalize', 'off')
+    await userEvent.type(field, 'store')
+    expect(queryByTestId('tool-approval__phrase-error')).toBeNull()
+    expect(field).not.toHaveAttribute('aria-invalid')
+    await userEvent.type(field, 'frnt!')
+    expect(field).toHaveAttribute('aria-invalid', 'true')
+    expect(getByTestId('tool-approval__phrase-error')).toHaveTextContent('storefront')
+    expect(field.getAttribute('aria-describedby')).toContain(
+      getByTestId('tool-approval__phrase-error').id
+    )
+    expect(getByRole('button', { name: 'Approve' })).toBeDisabled()
+  })
+
+  it('keeps the edited arguments on their lines instead of soft-wrapping them', () => {
+    const { getByLabelText } = render(ToolApproval, {
+      props: { ...base, editable: true, modelValue: '{}' }
+    })
+    expect(getByLabelText('Arguments')).toHaveAttribute('wrap', 'off')
+  })
+
+  it('moves focus to its heading when the decision removes the focused button', async () => {
+    const view = render(ToolApproval, { props: base })
+    view.getByRole('button', { name: 'Approve' }).focus()
+    await view.rerender({ ...base, status: 'approved' })
+    await nextTick()
+    expect(document.activeElement).toBe(view.getByTestId('tool-approval__title'))
+  })
+
+  it('leaves focus alone when it was elsewhere on the page', async () => {
+    const outside = document.createElement('button')
+    document.body.append(outside)
+    outside.focus()
+    const view = render(ToolApproval, { props: base })
+    await view.rerender({ ...base, status: 'denied' })
+    await nextTick()
+    expect(document.activeElement).toBe(outside)
+    outside.remove()
+  })
+
   it('shows no input field unless editable', () => {
     const { queryByLabelText } = render(ToolApproval, { props: { ...base, modelValue: '{}' } })
     expect(queryByLabelText('Arguments')).toBeNull()

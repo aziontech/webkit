@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -80,8 +80,20 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'tool-approval'
   )
+  const rootEl = ref<HTMLElement | null>(null)
   const headingEl = ref<InstanceType<typeof AgentQuestionHeading> | null>(null)
   const typed = ref<string>('')
+  const phraseMismatch = computed<boolean>(() => {
+    const value = typed.value.trim()
+    return (
+      !!props.confirmationPhrase &&
+      value.length >= props.confirmationPhrase.length &&
+      value !== props.confirmationPhrase
+    )
+  })
+  const confirmLabelParts = computed<string[]>(() =>
+    t('toolApproval.confirmLabel', { phrase: '\u0000' }).split('\u0000')
+  )
   const confirmed = computed<boolean>(
     () =>
       (!props.confirmationPhrase || typed.value.trim() === props.confirmationPhrase) &&
@@ -102,8 +114,12 @@
 
   watch(
     () => props.status,
-    (status) => {
+    (status, previous) => {
       if (status === 'pending') typed.value = ''
+      if (previous !== 'pending' || status === 'pending' || typeof document === 'undefined') return
+      const active = document.activeElement
+      const focusWasInside = !active || active === document.body || !!rootEl.value?.contains(active)
+      if (focusWasInside) void nextTick(focus)
     }
   )
 
@@ -130,6 +146,7 @@
 
 <template>
   <div
+    ref="rootEl"
     v-bind="$attrs"
     role="group"
     :aria-labelledby="titleId"
@@ -142,7 +159,7 @@
     <div class="flex items-start gap-(--spacing-sm)">
       <i
         :data-variant="variant"
-        class="az az-shield mt-0.5 shrink-0 text-(--text-muted) data-[variant=danger]:text-(--danger-foreground)"
+        class="az az-shield mt-0.5 shrink-0 text-(--text-muted) data-[variant=danger]:text-(--danger-mark)"
         aria-hidden="true"
       />
       <AgentQuestionHeading
@@ -180,6 +197,7 @@
         dir="ltr"
         spellcheck="false"
         autocomplete="off"
+        wrap="off"
         monospace
         auto-resize
         :min-rows="3"
@@ -196,25 +214,39 @@
       </FieldError>
     </Field>
     <template v-if="status === 'pending'">
-      <div
+      <Field
         v-if="confirmationPhrase"
-        class="flex flex-col gap-(--spacing-2xs)"
+        :invalid="phraseMismatch"
+        :disabled="loading"
       >
         <label
           :for="phraseId"
           class="text-label-sm text-(--text-default)"
         >
-          {{ t('toolApproval.confirmLabel', { phrase: confirmationPhrase }) }}
+          {{ confirmLabelParts[0]
+          }}<code
+            dir="ltr"
+            class="rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px text-label-code-sm text-(--text-default) [overflow-wrap:anywhere]"
+            :data-testid="`${testId}__phrase-text`"
+            >{{ confirmationPhrase }}</code
+          >{{ confirmLabelParts[1] }}
         </label>
         <Input
           :id="phraseId"
           v-model="typed"
           autocomplete="off"
+          autocapitalize="off"
           :spellcheck="false"
           :disabled="loading"
           :data-testid="`${testId}__phrase`"
         />
-      </div>
+        <FieldError
+          v-if="phraseMismatch"
+          :data-testid="`${testId}__phrase-error`"
+        >
+          {{ t('toolApproval.phraseMismatch', { phrase: confirmationPhrase }) }}
+        </FieldError>
+      </Field>
       <div class="flex flex-wrap justify-end gap-(--spacing-xs)">
         <Button
           :label="denyLabel || t('toolApproval.deny')"

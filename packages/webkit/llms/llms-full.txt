@@ -13441,7 +13441,7 @@ never read as new.
 
 # Prompt Input
 
-> The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attached by a button, by dropping them on the box or by pasting them, a model and mode picker, dictation, a voice-conversation control that stands in for Submit while the prompt is empty, a Submit control that becomes Stop while a response is generated, a secondary row under the box (a context picker, tools, links), an optional character limit with a counter, and constraint text under it all. Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text and the files, receives `submit` with the trimmed prompt, its references and its files, and clears them. While `status` is `pending` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop. With `queueable` the owner keeps a queue of prompts to send after the response (TanStack AI `useChat` queues a `sendMessage` made while it streams): Submit then stays beside Stop, and Enter or Submit sends the next prompt into that queue while Stop still ends the response. The anatomy is composed by the app: the root draws the box, the text area, Submit / Stop / voice and the file tokens; the controls the app wants (attach, dictate, model, context, tools) are sub-components it places in the `actions`, `end` and `footer` slots. Each reads the composer through `provide` / `inject`, so the app wires nothing but its own values.
+> The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attached by a button, by dropping them on the box or by pasting them, a model and mode picker, dictation, a voice-conversation control that stands in for Submit while the prompt is empty, a Submit control that becomes Stop while a response is generated, a secondary row under the box (a context picker, tools, links), an optional character limit with a counter, and constraint text under it all. Enter submits on a fine pointer; Shift+Enter adds a line; on a coarse pointer (a phone keyboard) Enter adds a line and Submit sends; an IME composition never submits. It is controlled: the owner holds the text and the files, receives `submit` with the trimmed prompt, its references and its files, and clears them. While `status` is `pending` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop. With `queueable` the owner keeps a queue of prompts to send after the response (TanStack AI `useChat` queues a `sendMessage` made while it streams): Submit then stays beside Stop, and Enter or Submit sends the next prompt into that queue while Stop still ends the response. The anatomy is composed by the app: the root draws the box, the text area, Submit / Stop / voice and the file tokens; the controls the app wants (attach, dictate, model, context, tools) are sub-components it places in the `actions`, `end` and `footer` slots. Each reads the composer through `provide` / `inject`, so the app wires nothing but its own values.
 
 - Import: `import PromptInputRoot from '@aziontech/webkit/prompt-input-root'`
 - Compound import (dot notation, not tree-shakeable): `import PromptInput from '@aziontech/webkit/prompt-input'`
@@ -13642,8 +13642,8 @@ packages/webkit/src/components/ai/prompt-input/
 ## Accessibility
 
 - Visible focus: the container shows `focus-within:ring-2 focus-within:ring-(--ring-color)`.
-- Keyboard map: `Enter` submits (while a response runs only with `queueable`); `Shift+Enter` new line; `Tab` moves through the attachments, the toolbar start controls, the toolbar end controls, Submit / Stop / voice, then the footer row. IME composition (`isComposing`, or between `compositionstart` and `compositionend`) never submits.
-- Shortcut menus (`menus`): typing a trigger at the start of a word opens a listbox above the input with up to eight options matching what follows it. Focus stays in the text area, which points at the list with `aria-controls` and at the highlighted option with `aria-activedescendant` (a `textarea` cannot take `role="combobox"`); `ArrowDown`/`ArrowUp` move, `Enter` or `Tab` choose, `Escape` closes, and Enter does not submit while the list is open. A polite status reads `3 suggestions` or `No matches`. The text area lists the triggers in `aria-keyshortcuts`. References are a list named `References` of removable `Chip`s.
+- Keyboard map: `Enter` submits on a fine pointer (while a response runs only with `queueable`), and adds a line on a coarse pointer, where Submit sends; `Shift+Enter` new line; `Tab` moves through the attachments, the toolbar start controls, the toolbar end controls, Submit / Stop / voice, then the footer row. IME composition (`isComposing`, or between `compositionstart` and `compositionend`) never submits.
+- Shortcut menus (`menus`): typing a trigger at the start of a word opens a listbox above the input with up to eight options matching what follows it. Focus stays in the text area, which points at the list with `aria-controls` and at the highlighted option with `aria-activedescendant` (a `textarea` cannot take `role="combobox"` or `aria-expanded`, so it carries `aria-autocomplete="list"` while `menus` is set); `ArrowDown`/`ArrowUp` move, `Enter` or `Tab` choose, `Escape` closes, and Enter does not submit while the list is open. A polite status reads `3 suggestions` or `No matches`. The text area lists the triggers in `aria-keyshortcuts`. References are a list named `References` of removable `Chip`s.
 - Files: the tokens are `FileTokenGroup`'s list (named `Files`) with a named remove button each; focus moves as that component defines. The drop panel is decorative (`aria-hidden`); the attach button is the keyboard path. Rejections are announced politely and shown as text.
 - Pickers: each opens a `DropdownMenu` (`menu` with `menuitemradio` / `menuitemcheckbox`), so arrows, typeahead, `Escape` and focus return come from it. The model trigger's name is its visible text (model and mode). Enabled tools are a list named `Enabled tools` of removable `Chip`s.
 - Dictation: the control's name says what pressing it does (`Dictate` / `Stop dictation`), with no `aria-pressed`; the listening status is a polite live region. Where the browser has no speech recognition the control is not rendered.
@@ -14026,7 +14026,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 - The pager is `role="group"` named by `ariaLabel` (`Response versions`); Previous and Next are `IconButton`s named `Previous version` / `Next version`.
 - The counter (`2 of 3`) is a polite live region, so moving announces the new position once; the slot is not live.
-- Keyboard: `Tab` reaches Previous and Next; `Enter`/`Space` move; a disabled end button leaves the tab order.
+- Keyboard: `Tab` reaches Previous and Next; `Enter`/`Space` move; a disabled end button leaves the tab order. When the focused arrow reaches an end and turns disabled, focus moves to the other arrow instead of falling to the page.
 
 ## Examples
 
@@ -14235,7 +14235,7 @@ shared with `StreamingResponse`._
 - Visible focus: trigger, links and the targeted item show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Keyboard map: `Tab` to the trigger, `Enter` / `Space` toggles; `Tab` through the links.
 - ARIA: `button` with `aria-expanded` / `aria-controls`; the list is an `<ol aria-label="Sources">` so numbers are announced by position; the visual number chip is `aria-hidden`.
-- External links open in a new tab with `rel="noopener noreferrer"`.
+- External links open in a new tab with `rel="noopener noreferrer"`, followed by an `aria-hidden` `az-external-link` glyph and the sr-only `common.newTab` text.
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the title as plain text.
 
 ## Examples
@@ -14341,7 +14341,7 @@ components: `code-block`, `citation`._
 - Visible focus: links and the table scroller carry `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Keyboard map: `Tab` reaches links, citations, the copy control of each code block and a wide table's scroller.
 - ARIA: `aria-busy` while streaming (screen readers wait); the caret is `aria-hidden`; headings start at `h3` (`#` → `h3`) so a response never outranks the page; tables use `th scope="col"`. Announcing the finished text is the `Conversation`'s job.
-- External links open in a new tab with `rel="noopener noreferrer"`.
+- External links open in a new tab with `rel="noopener noreferrer"`, followed by an `aria-hidden` `az-external-link` glyph and the sr-only `common.newTab` text, so the new tab is seen and heard.
 - Contrast ≥4.5:1 for body, muted quote and link text.
 
 ## Examples
@@ -14717,17 +14717,17 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 ## States
 
 - `data-status` mirrors `status`; `data-variant`.
-- `pending`: phrase field (when `confirmationPhrase`), Deny (outlined) and Approve (primary, or danger with `variant="danger"`); Approve disabled until the phrase matches.
+- `pending`: phrase field (when `confirmationPhrase`; the phrase in its label is inline code), Deny (outlined) and Approve (primary, or danger with `variant="danger"`); Approve disabled until the phrase matches. Once the typed text is as long as the phrase and still differs, the field is `aria-invalid` with a `FieldError` (`toolApproval.phraseMismatch`).
 - `editable` + `pending`: a monospace `Textarea` labelled `Arguments` under the body, growing to 12 lines, then scrolling; disabled while `loading`.
 - `invalid` (with `editable` + `pending`): the field is `aria-invalid` with its `FieldError`; Approve is disabled (with `confirmationPhrase`, it also needs the phrase).
 - `editable` once resolved: the field stays `readonly` as the record of the arguments that ran.
-- `approved` (success), `denied` (warning), `expired` (neutral): a `StatusIndicator` with the outcome; the typed phrase resets when the card returns to `pending`.
+- `approved` (success), `denied` (warning), `expired` (neutral): a `StatusIndicator` with the outcome; the typed phrase resets when the card returns to `pending`. When the status leaves `pending` while focus was inside the card (or on the page body), focus moves to the heading so it never falls to the page.
 
 ## Accessibility
 
 - Visible focus: buttons and the phrase input show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`; the heading shows a ring when `focus()` moves focus to it.
 - Keyboard map: `Tab` through the body, the arguments field (with `editable`), the phrase field, Deny, Approve; in the arguments field `Enter` adds a line and `Tab` leaves it; `Enter` / `Space` activate Deny and Approve. No focus trap, no initial focus (Cloudscape: the one-time decision card is not a dialog).
-- ARIA: `role="group"` labelled by its `h3` title and described by the description; both fields have visible `<label>`s; the invalid arguments field is `aria-invalid` and described by its `FieldError` (`role="alert"`); a polite live region announces the outcome; outcomes are text, never color alone.
+- ARIA: `role="group"` labelled by its `h3` title and described by the description; both fields have visible `<label>`s; the invalid arguments field and a mismatched phrase field are `aria-invalid` and described by their `FieldError` (`role="alert"`); the phrase field sets `autocapitalize="off"`; a polite live region announces the outcome; outcomes are text, never color alone.
 
 ## Examples
 

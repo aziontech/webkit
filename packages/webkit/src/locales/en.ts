@@ -1253,7 +1253,8 @@ export const toolApproval = {
   expired: 'Request expired',
   confirmLabel: 'Type {phrase} to confirm',
   arguments: 'Arguments',
-  invalidArguments: 'These arguments are not valid. Correct them to approve.'
+  invalidArguments: 'These arguments are not valid. Correct them to approve.',
+  phraseMismatch: 'This does not match {phrase}. Type it exactly to confirm.'
 } as const
 
 export const agentQuestion = {

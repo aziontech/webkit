@@ -17,13 +17,13 @@
   >
     <span
       v-if="title"
-      class="line-clamp-2 min-w-0 text-label-sm break-words text-(--text-default)"
+      class="line-clamp-2 min-w-0 text-title-sm break-words text-(--text-default)"
     >
       {{ title }}
     </span>
     <code
       dir="ltr"
-      class="max-w-full truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code-sm text-(--text-muted)"
+      class="max-w-full truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px text-body-code-sm text-(--text-muted)"
       >{{ name }}</code
     >
   </span>

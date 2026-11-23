@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 38289932408aab46268d5da1066589b980c03d3337c34f02fbfe7c4473324ba5
+checksum: 88e862050bdaaff76771bb59b4b5d9eb05642129e43c40b54881330a7e2ec9a6
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -116,7 +116,7 @@ _none_ besides `update:modelValue`.
 
 - The pager is `role="group"` named by `ariaLabel` (`Response versions`); Previous and Next are `IconButton`s named `Previous version` / `Next version`.
 - The counter (`2 of 3`) is a polite live region, so moving announces the new position once; the slot is not live.
-- Keyboard: `Tab` reaches Previous and Next; `Enter`/`Space` move; a disabled end button leaves the tab order.
+- Keyboard: `Tab` reaches Previous and Next; `Enter`/`Space` move; a disabled end button leaves the tab order. When the focused arrow reaches an end and turns disabled, focus moves to the other arrow instead of falling to the page.
 
 ## Internationalization
 

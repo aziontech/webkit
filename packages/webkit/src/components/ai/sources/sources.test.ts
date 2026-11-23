@@ -61,8 +61,12 @@ describe('Sources', () => {
     const rows = getAllByTestId('sources__item')
     expect(rows[0]).toHaveAttribute('id', 'answer-source-1')
     expect(rows[1]).toHaveAttribute('id', 'answer-source-2')
-    expect(getByRole('link', { name: 'Real-Time Purge' })).toHaveAttribute('target', '_blank')
-    expect(getByRole('link', { name: 'Cache settings' })).not.toHaveAttribute('target')
+    const external = getByRole('link', { name: 'Real-Time Purge (opens in a new tab)' })
+    expect(external).toHaveAttribute('target', '_blank')
+    expect(external.querySelector('.az-external-link')).toHaveAttribute('aria-hidden', 'true')
+    const local = getByRole('link', { name: 'Cache settings' })
+    expect(local).not.toHaveAttribute('target')
+    expect(local.querySelector('.az-external-link')).toBeNull()
   })
 
   it('opens when a citation hash points at one of its items', async () => {

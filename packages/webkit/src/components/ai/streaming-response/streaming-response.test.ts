@@ -136,6 +136,18 @@ describe('StreamingResponse', () => {
     expect(container.querySelector('[data-testid="code-block"], pre')).toBeTruthy()
   })
 
+  it('marks only external links as opening a new tab', () => {
+    const content = '[docs](https://www.example.com/docs) and [below](#purge)'
+    const { getByRole } = render(StreamingResponse, { props: { content } })
+    expect(getByRole('link', { name: 'docs (opens in a new tab)' })).toHaveAttribute(
+      'target',
+      '_blank'
+    )
+    const local = getByRole('link', { name: 'below' })
+    expect(local).not.toHaveAttribute('target')
+    expect(local.querySelector('.az-external-link')).toBeNull()
+  })
+
   it('never injects model HTML and drops unsafe links', () => {
     const content =
       'Hi <script>window.pwnedFlag = true</script> <img src=x onerror="window.pwnedFlag = true"> [click](javascript:window.pwnedFlag=true) [ok](https://a.b)'
@@ -144,9 +156,10 @@ describe('StreamingResponse', () => {
     expect(container.querySelector('img')).toBeNull()
     expect(container).toHaveTextContent('<script>window.pwnedFlag = true</script>')
     expect(queryByRole('link', { name: 'click' })).toBeNull()
-    const ok = getByRole('link', { name: 'ok' })
+    const ok = getByRole('link', { name: 'ok (opens in a new tab)' })
     expect(ok).toHaveAttribute('href', 'https://a.b')
     expect(ok).toHaveAttribute('rel', 'noopener noreferrer')
+    expect(ok.querySelector('.az-external-link')).toHaveAttribute('aria-hidden', 'true')
     expect((window as unknown as { pwnedFlag?: boolean }).pwnedFlag).toBeUndefined()
   })
 

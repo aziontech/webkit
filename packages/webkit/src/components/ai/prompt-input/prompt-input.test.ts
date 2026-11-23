@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { render, screen } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { userEvent as keys } from 'vitest/browser'
+import { commands, userEvent as keys } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import DefaultExample from '../../../../examples/prompt-input/default.vue'
@@ -62,6 +62,25 @@ describe('PromptInput', () => {
     await userEvent.keyboard('{Enter}')
     expect(submitted).toEqual(['first line\nsecond'])
     expect(submitEvents[0]).toBeInstanceOf(KeyboardEvent)
+  })
+
+  it('adds a line on Enter with a coarse pointer, where the Submit button sends', async () => {
+    await commands.emulateTouch(true)
+    try {
+      const { getByRole, value, submitted } = harness()
+      const textarea = getByRole('textbox')
+      expect(matchMedia('(pointer: coarse)').matches).toBe(true)
+      await nextTick()
+      expect(textarea).toHaveAttribute('enterkeyhint', 'enter')
+      await userEvent.click(textarea)
+      await userEvent.keyboard('line one{Enter}line two')
+      expect(value.value).toBe('line one\nline two')
+      expect(submitted).toEqual([])
+      await userEvent.click(getByRole('button', { name: 'Submit' }))
+      expect(submitted).toEqual(['line one\nline two'])
+    } finally {
+      await commands.emulateTouch(false)
+    }
   })
 
   it('submits from the Submit button, which stays disabled while empty', async () => {
@@ -233,6 +252,7 @@ describe('PromptInput', () => {
       expect(options.map((option) => option.textContent?.trim())).toEqual(['image-resizeFunction'])
       expect(input.getAttribute('aria-controls')).toBe(listbox()!.id)
       expect(input.getAttribute('aria-activedescendant')).toBe(options[0]!.id)
+      expect(input).toHaveAttribute('aria-autocomplete', 'list')
       expect(document.body.textContent).toContain('1 suggestion')
       await expectNoA11yViolations(document.body.firstElementChild as HTMLElement)
     })
