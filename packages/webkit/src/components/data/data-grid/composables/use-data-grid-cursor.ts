@@ -29,6 +29,9 @@ export function useDataGridCursor(
   const active = ref<DataGridCell>({ row: 0, col: 0 })
   const anchor = ref<DataGridCell>({ row: 0, col: 0 })
   const bounds = computed(() => boundsOf(anchor.value, active.value))
+  const spans = computed<boolean>(
+    () => anchor.value.row !== active.value.row || anchor.value.col !== active.value.col
+  )
 
   const focusActive = (): void => {
     void nextTick(() => {
@@ -40,6 +43,7 @@ export function useDataGridCursor(
     active: readonly(active),
     bounds,
     inRange: (row, col) =>
+      spans.value &&
       row >= Math.max(bounds.value.top, 0) &&
       row <= bounds.value.bottom &&
       col >= bounds.value.start &&

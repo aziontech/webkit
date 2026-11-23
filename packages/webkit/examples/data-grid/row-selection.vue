@@ -1,5 +1,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataGrid from '@aziontech/webkit/data-grid'
   import { ref } from 'vue'
 
@@ -9,16 +10,21 @@
     { id: 'r3', host: 'docs.example.com', ttl: 3600, proxied: false }
   ])
   const selection = ref([])
+  const confirming = ref(false)
   let next = 4
 
   const columns = [
-    { id: 'host', header: 'Host', width: 220 },
-    { id: 'ttl', header: 'TTL (seconds)', type: 'number', align: 'end', width: 140 },
+    { id: 'host', header: 'Host', width: 150 },
+    { id: 'ttl', header: 'TTL (seconds)', type: 'number', align: 'end', width: 120 },
     { id: 'proxied', header: 'Proxied', type: 'boolean', width: 120 }
   ]
 
   const addRow = () => {
     rows.value = [...rows.value, { id: `r${next++}`, host: '', ttl: 3600, proxied: false }]
+  }
+  const confirmRemove = (event, remove) => {
+    remove(event)
+    confirming.value = false
   }
   const removeRows = (event, removed) => {
     const ids = new Set(removed.map((row) => row.id))
@@ -45,13 +51,27 @@
         size="small"
         @click="add"
       />
-      <Button
-        label="Delete rows"
-        variant="outline"
-        size="small"
-        :disabled="selectedCount === 0"
-        @click="remove"
-      />
+      <ConfirmDialog
+        v-model:open="confirming"
+        :title="selectedCount === 1 ? 'Delete 1 record' : `Delete ${selectedCount} records`"
+        description="The selected DNS records stop answering as soon as they are deleted. This cannot be undone."
+        :confirm-label="selectedCount === 1 ? 'Delete record' : 'Delete records'"
+        variant="danger"
+        @confirm="(event) => confirmRemove(event, remove)"
+      >
+        <template #trigger>
+          <Button
+            :label="
+              selectedCount === 0
+                ? 'Delete rows'
+                : `Delete ${selectedCount} ${selectedCount === 1 ? 'row' : 'rows'}`
+            "
+            variant="danger"
+            size="small"
+            :disabled="selectedCount === 0"
+          />
+        </template>
+      </ConfirmDialog>
     </template>
   </DataGrid>
 </template>

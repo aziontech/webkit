@@ -108,7 +108,8 @@ describe('DataGrid', () => {
     expect(cell(1, 'seats').getAttribute('aria-colindex')).toBe('3')
     expect(grid.getAttribute('aria-multiselectable')).toBe('true')
     expect(cell(1, 'seats').getAttribute('aria-selected')).toBe('false')
-    expect(cell(0, 'name').getAttribute('aria-selected')).toBe('true')
+    expect(cell(0, 'name').getAttribute('aria-selected')).toBe('false')
+    expect(cell(0, 'name').hasAttribute('data-selected')).toBe(false)
     expect(cell(0, 'id').getAttribute('aria-readonly')).toBe('true')
     expect(cell(0, 'plan').textContent).toContain('Pro')
     expect(cell(1, 'active').textContent).toContain('No')
@@ -523,5 +524,17 @@ describe('DataGrid', () => {
     const first = readonly.getAllByRole('gridcell')[0] as HTMLElement
     await fireEvent.dblClick(first)
     expect(readonly.queryByTestId('data-grid__editor')).toBeNull()
+  })
+
+  it('asks before the row-selection example deletes rows, and names the count', async () => {
+    const view = render(RowSelection)
+    const checkboxes = view.getAllByRole('checkbox', { name: /Select row/ })
+    await userEvent.click(checkboxes[0] as HTMLElement)
+    await userEvent.click(checkboxes[1] as HTMLElement)
+    await userEvent.click(view.getByRole('button', { name: 'Delete 2 rows' }))
+    expect(view.getAllByRole('row')).toHaveLength(4)
+    const dialog = await within(document.body).findByRole('alertdialog')
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Delete records' }))
+    await waitFor(() => expect(view.getAllByRole('row')).toHaveLength(2))
   })
 })
