@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: ee0beaedf6b6ba0d53d6adcc799d1e0ef9f020ed89c52a0b11a8fa57c5242257
+checksum: 79780ad121e5b72be6a18221c321930c46f8f0f6332ae2c916b64845a7fb57a3
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -31,9 +31,9 @@ fenced code block is one filled card (`--bg-surface-raised`, `--shape-card`, no 
 names the language on the start and holds the icon-only copy control on the end; the header sticks to
 the top of the log while a long block scrolls past, the code is never capped in height and scrolls
 sideways. While a fence is still open the same card shows the language header over plain text, so the
-block does not jump when it closes. Numbered citations `[1]` become `Citation` chips holding
-the source's site (from its `href`), resolved against `sources` and linked to the `Sources` list
-through a shared `anchor`. A blinking caret marks the end while
+block does not jump when it closes. Numbered citations become `Citation` chips resolved
+against `sources`: `[1]` one chip with the site's mark and name, and a run of markers (`[1][2]`,
+`[1] [2]`, `[1, 2]`) one chip with `+1` whose card pages through both sources. A blinking caret marks the end while
 `streaming`; the region is `aria-busy` until the stream ends.
 
 ## When to use
@@ -51,7 +51,7 @@ through a shared `anchor`. A blinking caret marks the end while
 ## Related
 
 - `chat-message` — the host of a response.
-- `citation`, `sources` — inline references and the list they point at.
+- `citation`, `sources` — inline references and the panel that lists every source.
 - `code-block` — what fenced code renders as.
 - `response-loading` — the loading text before the first token, or a bar where a table is coming.
 
@@ -59,7 +59,7 @@ through a shared `anchor`. A blinking caret marks the end while
 
 - Pass the accumulated text on every chunk; the parser is cheap and the output is keyed by block.
 - Keep `streaming` true until the stream closes, then false (removes the caret, highlights an open fence).
-- Give the response and its `Sources` the same `anchor` so `[n]` links to item `n`.
+- Pass the response and its `Sources` the same array, so `[n]` is item `n` in both.
 - Do not post-process model output into HTML; there is no HTML path.
 
 ## Usage
@@ -76,13 +76,9 @@ through a shared `anchor`. A blinking caret marks the end while
   <StreamingResponse
     content="Purge one URL from **Real-Time Purge** [1]."
     :sources="sources"
-    anchor="answer-1"
     :streaming="false"
   />
-  <Sources
-    :items="sources"
-    anchor="answer-1"
-  />
+  <Sources :items="sources" />
 </template>
 ```
 
@@ -90,18 +86,18 @@ through a shared `anchor`. A blinking caret marks the end while
 
 _None public. Internals shared by the AI family in `src/components/ai/lib/`: `parse-markdown.ts`
 (`parseMarkdown`, `parseInline`, `safeHref`, `plainText`), `markdown-inline.ts` (recursive inline
-renderer, also used by `ToolApproval` for backticks in its title) and `markdown-list.ts` (recursive
-list renderer: nested lists render inside their item). Exports: `"./streaming-response"`. Composed DS
+renderer, also used by `ToolApproval` and `AgentQuestion`, where a citation marker stays plain `[n]` text),
+`markdown-inline-cited.ts` (the same renderer with `Citation` chips, used here) and `markdown-list.ts`
+(recursive list renderer: nested lists render inside their item). Exports: `"./streaming-response"`. Composed DS
 components: `code-block`, `citation`._
 
 ## Props
 
-| Prop        | Type            | Default | Required | JSDoc                                                                                                                                                              |
-| ----------- | --------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `content`   | `string`        | `''`    | false    | The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, tel, relative and hash links survive. |
-| `streaming` | `boolean`       | `false` | false    | Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes.                                  |
-| `sources`   | `SourcesItem[]` | `[]`    | false    | Sources the `[n]` citations in the content resolve against (site in the chip, title in the tooltip and the accessible name).                                       |
-| `anchor`    | `string`        | `''`    | false    | The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers.                                                |
+| Prop        | Type            | Default | Required | JSDoc                                                                                                                                                                              |
+| ----------- | --------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `content`   | `string`        | `''`    | false    | The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, tel, relative and hash links survive.                 |
+| `streaming` | `boolean`       | `false` | false    | Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes.                                                  |
+| `sources`   | `SourcesItem[]` | `[]`    | false    | Sources the `[n]`, `[n][m]` and `[n, m]` citations in the content resolve against: each becomes a chip with the site's favicon and name that opens a card of the sources it cites. |
 
 ## Events
 

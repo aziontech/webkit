@@ -252,13 +252,12 @@ describe('StreamingResponse', () => {
     expect(codeBlockUpdates).toBe(0)
   })
 
-  it('links citations to the sources anchor', () => {
+  it('renders a citation as a chip named after its source', () => {
     const { getByRole } = render(StreamingResponse, {
-      props: { content: 'Fast [1].', sources: [{ title: 'Real-Time Purge' }], anchor: 'answer' }
+      props: { content: 'Fast [1].', sources: [{ title: 'Real-Time Purge' }] }
     })
-    expect(getByRole('link', { name: 'Source 1: Real-Time Purge' })).toHaveAttribute(
-      'href',
-      '#answer-source-1'
+    expect(getByRole('button', { name: 'Source 1: Real-Time Purge' })).toHaveTextContent(
+      'Real-Time Purge'
     )
   })
 
@@ -266,13 +265,36 @@ describe('StreamingResponse', () => {
     const { getByRole } = render(StreamingResponse, {
       props: {
         content: 'Cached [1].',
-        sources: [{ title: 'Cache settings', href: 'https://www.azion.com/en/documentation/' }],
-        anchor: 'answer'
+        sources: [{ title: 'Cache settings', href: 'https://www.azion.com/en/documentation/' }]
       }
     })
-    expect(getByRole('link', { name: 'Source 1, azion.com: Cache settings' })).toHaveTextContent(
+    expect(getByRole('button', { name: 'Source 1, azion.com: Cache settings' })).toHaveTextContent(
       'azion.com'
     )
+  })
+
+  it('folds adjacent and comma-separated markers into one chip with a count', () => {
+    const { getAllByRole } = render(StreamingResponse, {
+      props: {
+        content: 'Cached [1][2] and purged [1, 2].',
+        sources: [
+          { title: 'Cache settings', href: 'https://www.azion.com/docs', site: 'Azion' },
+          { title: 'aziontech/azion', href: 'https://github.com/aziontech/azion' }
+        ]
+      }
+    })
+    const chips = getAllByRole('button', { name: 'Azion +1, sources 1, 2' })
+    expect(chips).toHaveLength(2)
+    expect(chips[0]).toHaveTextContent('Azion+1')
+  })
+
+  it('parses citation markers into one node per run of numbers', () => {
+    expect(parseInline('a [1][2] [3] b [4, 5]')).toEqual([
+      { type: 'text', value: 'a ' },
+      { type: 'citation', indexes: [1, 2, 3] },
+      { type: 'text', value: ' b ' },
+      { type: 'citation', indexes: [4, 5] }
+    ])
   })
 
   it('puts a citation chip one space after the word and right before punctuation', () => {
@@ -286,9 +308,11 @@ describe('StreamingResponse', () => {
         sources
       }
     })
-    const text = container.querySelector('p')!.textContent
+    const paragraph = container.querySelector('p')!.cloneNode(true) as HTMLElement
+    paragraph.querySelectorAll('[data-testid="sources-mark"]').forEach((mark) => mark.remove())
+    const text = paragraph.textContent
     expect(text).toBe(
-      'Served by azion azion.com. Then (see example.com), more azion.com example.com; and azion.com: done example.com next'
+      'Served by azion azion.com. Then (see example.com), more azion.com+1; and azion.com: done example.com next'
     )
   })
 
@@ -299,7 +323,7 @@ describe('StreamingResponse', () => {
 
   it('has no axe violations', async () => {
     const { container } = render(StreamingResponse, {
-      props: { content: rich, sources: [{ title: 'Docs' }], anchor: 'a' }
+      props: { content: rich, sources: [{ title: 'Docs' }] }
     })
     await expectNoA11yViolations(container)
   })
