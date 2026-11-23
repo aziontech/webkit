@@ -6,6 +6,7 @@
   <ViewWafTuning
     :default-selected-keys="['1005', '1201']"
     default-open
+    default-reason="Checkout posts the cart as JSON, which these rules read as an attack."
     allow-error="The allowed rules weren't created. Nothing changed in the rule set; try again."
   />
 </template>

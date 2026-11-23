@@ -14,6 +14,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { matchesText } from '@aziontech/webkit/use-collection'
   import { useLocale } from '@aziontech/webkit/use-locale'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, ref, watch } from 'vue'
 
   import AllowDialog from './parts/allow-dialog.vue'
@@ -57,6 +58,8 @@
     defaultSelectedKeys?: string[]
     /** Opens the allow dialog on the checked rules when the block opens. */
     defaultOpen?: boolean
+    /** The reason the allow dialog opens with, as a failed submit keeps it. */
+    defaultReason?: string
     /** The allow request is in flight: the dialog locks and Allow rules spins. */
     allowing?: boolean
     /** Why the allowed rules were not created, shown at the top of the dialog. */
@@ -69,6 +72,7 @@
     error: '',
     defaultSelectedKeys: () => [],
     defaultOpen: false,
+    defaultReason: '',
     allowing: false,
     allowError: ''
   })
@@ -95,8 +99,8 @@
       principal: true,
       hideable: false
     },
-    { accessorKey: 'threat', header: 'Threat', grow: 2 },
     { accessorKey: 'hits', header: 'Hits', sortable: true, minWidth: 80 },
+    { accessorKey: 'threat', header: 'Threat', grow: 2 },
     { accessorKey: 'ips', header: 'Top IP addresses', grow: 3 },
     { accessorKey: 'countries', header: 'Top countries', grow: 2 },
     { accessorKey: 'paths', header: 'Top paths', grow: 3 }
@@ -111,6 +115,14 @@
 
   const threshold = ref('100')
   const search = ref('')
+  const searchEl = ref<InstanceType<typeof Input> | null>(null)
+  useShortcuts({
+    keys: '/',
+    label: 'Focus search',
+    element: () => (searchEl.value?.$el as HTMLElement | null | undefined) ?? null,
+    when: () => !props.loading,
+    handler: () => searchEl.value?.focus()
+  })
   const selectedKeys = ref<string[]>([...props.defaultSelectedKeys])
   const sorting = ref([{ id: 'hits', desc: true }])
 
@@ -247,9 +259,11 @@
           </div>
           <div class="min-w-36 grow basis-(--container-2xs)">
             <Input
+              ref="searchEl"
               v-model="search"
               size="medium"
               placeholder="Search by rule, IP, country or path"
+              aria-keyshortcuts="/"
               aria-label="Search matched requests"
               class="w-full"
               :disabled="loading"
@@ -367,6 +381,7 @@
       :path-count="pathCount"
       :allowing="allowing"
       :allow-error="allowError"
+      :default-reason="defaultReason"
       @allow="allow"
     />
   </div>

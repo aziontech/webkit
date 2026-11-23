@@ -1,6 +1,8 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import WafAllow from '../../../../blocks/view/view-waf-tuning/variants/allow.vue'
+import WafAllowError from '../../../../blocks/view/view-waf-tuning/variants/allow-error.vue'
 import ViewWafTuning from '../../../../blocks/view/view-waf-tuning/view-waf-tuning.vue'
 import { useToastRegion } from '../../toast-region'
 
@@ -17,6 +19,30 @@ describe('view/view-waf-tuning block', () => {
     expect(view.queryByText('No rule reaches the minimum')).toBeNull()
     await fireEvent.click(view.getByRole('button', { name: 'Clear search' }))
     await waitFor(() => expect(view.queryByText('No matching rules')).toBeNull())
+  })
+
+  it('asks for the reason with no stray placeholder (Allow)', async () => {
+    render(WafAllow)
+    const reason = await waitFor(() => document.body.querySelector('textarea')!)
+    expect(reason.getAttribute('placeholder') ?? '').toBe('')
+    expect(reason.value).toBe('')
+  })
+
+  it('keeps the submitted reason after a failed allow (AllowError)', async () => {
+    render(WafAllowError)
+    const reason = await waitFor(() => document.body.querySelector('textarea')!)
+    expect(reason.value).toMatch(/\S/)
+  })
+
+  it('focuses Search matched requests on / with nothing focused', async () => {
+    const view = render(ViewWafTuning)
+    const field = await waitFor(() =>
+      view.getByRole('textbox', { name: 'Search matched requests' })
+    )
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    await fireEvent.keyDown(document.body, { key: '/' })
+    await waitFor(() => expect(document.activeElement).toBe(field))
+    expect(field.getAttribute('aria-keyshortcuts')).toBe('/')
   })
 
   it('reads Allow selected while nothing is checked', () => {
