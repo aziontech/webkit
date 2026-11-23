@@ -244,9 +244,11 @@ describe('view/view-events-explorer block', () => {
     }
   })
 
-  it('opens the event drawer on a phone without focusing a search field (EventDocument)', async () => {
+  it('opens the event drawer on a phone without focusing a search field', async () => {
     await page.viewport(390, 844)
-    render(EventsExplorerEventDocument)
+    const view = render(ViewEventsExplorer)
+    const [open] = await waitFor(() => view.getAllByRole('button', { name: /^Open event / }))
+    await fireEvent.click(open!)
     const drawer = await waitFor(() => document.querySelector<HTMLElement>('[role="dialog"]')!)
     await waitFor(() => expect(drawer.contains(document.activeElement)).toBe(true))
     expect(['INPUT', 'TEXTAREA']).not.toContain(document.activeElement?.tagName)

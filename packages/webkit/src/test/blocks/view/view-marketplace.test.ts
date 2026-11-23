@@ -95,7 +95,8 @@ describe('view/view-marketplace block', () => {
     expect(view.queryByRole('heading', { name: 'Featured' })).toBeNull()
     const tokens = view.getAllByTestId('property-filter__token')
     expect(tokens.some((token) => token.textContent?.includes('kubernetes'))).toBe(true)
-    await fireEvent.click(view.getByRole('button', { name: 'Clear filters' }))
+    const clear = view.getAllByRole('button', { name: 'Clear filters' })
+    await fireEvent.click(clear.at(-1)!)
     await waitFor(() => expect(view.getByRole('heading', { name: 'Featured' })).toBeTruthy())
   })
 

@@ -60,7 +60,7 @@ describe('view blocks, styled layout', () => {
     const view = render(FileBrowserInsideAFolder)
     const labels = await waitFor(() => {
       const found = view.container.querySelectorAll<HTMLElement>(
-        '[data-testid$="breadcrumb-item__label"]'
+        '[data-testid^="breadcrumb__item-"][data-testid$="__label"]'
       )
       expect(found.length).toBeGreaterThan(1)
       return Array.from(found)
