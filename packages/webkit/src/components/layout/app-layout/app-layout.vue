@@ -354,7 +354,7 @@
           :style="{ width: `${toolsWidth}px` }"
         >
           <div
-            class="flex h-(--spacing-2xl) shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md)"
+            class="flex h-14 shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md)"
           >
             <h2
               :id="toolsTitleId"
@@ -392,7 +392,7 @@
       :data-testid="`${testId}__navigation-drawer`"
     >
       <DrawerContent>
-        <PanelHeader class="min-h-(--spacing-2xl) py-(--spacing-xs)">
+        <PanelHeader class="py-(--spacing-xs)">
           <DrawerTitle class="sr-only">
             {{ navigationAriaLabel || t('appLayout.navigation') }}
           </DrawerTitle>

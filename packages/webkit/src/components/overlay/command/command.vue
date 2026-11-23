@@ -235,7 +235,7 @@
     @update:open="(value) => setOpen(value)"
   >
     <DialogContent class="md:items-start md:pt-[15dvh]">
-      <PanelHeader class="min-h-(--spacing-2xl) py-(--spacing-xs) sm:hidden">
+      <PanelHeader class="py-(--spacing-xs) sm:hidden">
         <DialogTitle class="sr-only">{{ t('command.title') }}</DialogTitle>
       </PanelHeader>
       <div

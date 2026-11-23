@@ -42,7 +42,7 @@
       class="flex min-h-0 flex-col"
     >
       <div
-        class="flex h-(--spacing-2xl) shrink-0 items-center border-b border-(--border-default) px-(--spacing-md) text-label-md text-(--text-default)"
+        class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md) text-label-md text-(--text-default)"
       >
         Code
       </div>
