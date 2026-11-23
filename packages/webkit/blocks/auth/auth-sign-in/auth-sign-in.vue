@@ -4,7 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import PageHeader from '@aziontech/webkit/page-header'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, nextTick, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import { useCardHeight } from './composables/use-card-height'
   import { fillEmail, resolveSignInCopy, type SignInCopy } from './lib/sign-in-copy'
@@ -149,6 +149,10 @@
     }
   }
 
+  onMounted(() => {
+    if (step.value === 'email' || step.value === 'password') focusField(`login-${step.value}`)
+  })
+
   watch([() => props.error, () => props.notice], showOutcome)
   watch(
     () => props.loading,
@@ -210,6 +214,7 @@
     else {
       emit('continue', event, email.value.trim())
       step.value = 'password'
+      focusField('login-password')
     }
   }
 
@@ -339,6 +344,7 @@
                   <StepBack
                     :label="copy.changeEmail"
                     :text="email"
+                    username
                     @back="backToEmail"
                   />
 

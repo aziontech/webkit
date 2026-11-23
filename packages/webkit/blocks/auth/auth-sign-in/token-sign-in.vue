@@ -87,9 +87,7 @@
 
   const clearsEntry = (error: string) => error === 'rejected' || error === 'no-access'
 
-  onMounted(() => {
-    if (clearsEntry(props.error)) focusToken()
-  })
+  onMounted(focusToken)
 
   watch(
     () => [props.error, props.loading] as const,

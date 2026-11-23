@@ -7,9 +7,11 @@
     label: string
     /** The text beside the control. */
     text: string
+    /** The text is the account email: keep it in the form as the username password managers pair. */
+    username?: boolean
   }
 
-  defineProps<StepBackProps>()
+  withDefaults(defineProps<StepBackProps>(), { username: false })
 
   const emit = defineEmits<{
     back: [event: MouseEvent]
@@ -28,5 +30,16 @@
       />
     </Tooltip>
     <span class="truncate text-label-sm text-(--text-default)">{{ text }}</span>
+    <input
+      v-if="username"
+      type="email"
+      name="email"
+      class="sr-only"
+      autocomplete="username"
+      :value="text"
+      readonly
+      tabindex="-1"
+      aria-hidden="true"
+    />
   </div>
 </template>

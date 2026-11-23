@@ -4,7 +4,8 @@ export const SIGN_IN_COPY = {
     home: 'Azion home',
     documentation: 'Documentation',
     badCredentials: 'Incorrect email or password. Check both and try again.',
-    serviceUnavailable: 'Sign-in is unavailable right now. Your credentials are fine.',
+    serviceUnavailable:
+      'Sign-in is unavailable right now. What you entered is kept; retry in a few minutes.',
     serverError: 'Sign-in failed on our side. You are still signed out. Error 500.',
     timeout: 'The server did not answer in time. Your session may already be open.',
     sessionExpired: 'Your session expired. Sign in again to pick up where you left off.',
@@ -62,7 +63,8 @@ export const SIGN_IN_COPY = {
     home: 'Página inicial da Azion',
     documentation: 'Documentação',
     badCredentials: 'E-mail ou senha incorretos. Confira os dois e tente de novo.',
-    serviceUnavailable: 'O login está indisponível no momento. Suas credenciais estão corretas.',
+    serviceUnavailable:
+      'O login está indisponível no momento. O que você digitou foi mantido; tente de novo em alguns minutos.',
     serverError: 'O login falhou do nosso lado. Você continua desconectado. Erro 500.',
     timeout: 'O servidor não respondeu a tempo. Sua sessão pode já estar aberta.',
     sessionExpired: 'Sua sessão expirou. Entre de novo para continuar de onde parou.',
@@ -121,7 +123,7 @@ export const SIGN_IN_COPY = {
     documentation: 'Documentación',
     badCredentials: 'Correo o contraseña incorrectos. Revisa ambos y vuelve a intentarlo.',
     serviceUnavailable:
-      'El inicio de sesión no está disponible ahora. Tus credenciales son correctas.',
+      'El inicio de sesión no está disponible ahora. Lo que escribiste se conserva; vuelve a intentarlo en unos minutos.',
     serverError: 'El inicio de sesión falló de nuestro lado. Sigues sin sesión. Error 500.',
     timeout: 'El servidor no respondió a tiempo. Puede que tu sesión ya esté abierta.',
     sessionExpired: 'Tu sesión caducó. Inicia sesión de nuevo para seguir donde lo dejaste.',
