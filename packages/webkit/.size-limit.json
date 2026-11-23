@@ -2,12 +2,12 @@
   {
     "name": "app-layout",
     "path": "src/components/layout/app-layout/app-layout.vue",
-    "limit": "24.4 KB"
+    "limit": "24.45 KB"
   },
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "82.6 KB",
+    "limit": "82.65 KB",
     "entryOnly": true
   },
   {
@@ -2119,7 +2119,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "83.9 KB"
+    "limit": "83.95 KB"
   },
   {
     "name": "use-console-layout",
