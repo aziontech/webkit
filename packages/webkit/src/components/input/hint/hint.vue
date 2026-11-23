@@ -53,7 +53,8 @@
     () => (pinned.value ? globalThis.document : undefined),
     'pointerdown',
     (event: globalThis.PointerEvent) => {
-      if (!triggerEl.value?.contains(event.target as globalThis.Node | null)) unpin()
+      const target = event.target instanceof globalThis.Node ? event.target : null
+      if (!triggerEl.value?.contains(target)) unpin()
     }
   )
   useEventListener(

@@ -49,9 +49,15 @@ export interface UseListboxContentReturn {
   navigate: (key: string) => void
 }
 
-function tabStaysInPanel(event: globalThis.KeyboardEvent, root: globalThis.HTMLElement | null) {
-  const from = event.target as globalThis.Node | null
-  if (!root || !from) return false
+const NAVIGATION_KEYS = new Set(['ArrowDown', 'ArrowUp', 'Home', 'End'])
+
+function tabStaysInPanel(
+  event: globalThis.KeyboardEvent,
+  root: globalThis.HTMLElement | null,
+  holdTab: boolean | undefined
+) {
+  const from = event.target
+  if (event.key !== 'Tab' || holdTab || !root || !(from instanceof globalThis.Node)) return false
   const side = event.shiftKey
     ? globalThis.Node.DOCUMENT_POSITION_PRECEDING
     : globalThis.Node.DOCUMENT_POSITION_FOLLOWING
@@ -77,7 +83,7 @@ function listboxKeydown(
   root: globalThis.HTMLElement | null
 ): void {
   const key = event.key
-  if (key === 'Tab' && !holdTab && tabStaysInPanel(event, root)) return
+  if (tabStaysInPanel(event, root, holdTab)) return
   if (key === 'Escape' || key === 'Tab') {
     if (key === 'Escape' || event.shiftKey || holdTab) event.preventDefault()
     return close(key === 'Tab')
@@ -86,7 +92,7 @@ function listboxKeydown(
     if (typeahead(key)) event.preventDefault()
     return
   }
-  if (key !== 'ArrowDown' && key !== 'ArrowUp' && key !== 'Home' && key !== 'End') return
+  if (!NAVIGATION_KEYS.has(key)) return
   event.preventDefault()
   navigate(key)
 }
