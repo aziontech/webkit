@@ -67,7 +67,7 @@ The block takes its records through props and emits every action; it fetches not
 | `templates`      | `TemplateBrowserTemplate[]` | The catalog; the search, the properties and the category sections run on it in the browser.            |
 | `loading`        | `boolean`                   | The catalog is loading: the filter disables and two sections of skeleton tiles hold the layout.        |
 | `error`          | `string`                    | Why the catalog failed to load, shown in the danger `Alert` with Retry over the Import from Git state. |
-| `defaultText`    | `string`                    | Search text the filter starts with.                                                                    |
+| `defaultText`    | `string`                    | Search text the filter starts with, shown as a free-text token.                                        |
 | `defaultPreview` | `string`                    | Id of the template whose preview drawer starts open.                                                   |
 
 | Event    | Payload             | When                                     |
