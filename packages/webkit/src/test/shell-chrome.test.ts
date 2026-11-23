@@ -107,6 +107,15 @@ describe('the compact console header still says where the page is (styled)', () 
     view.unmount()
   })
 
+  it('puts the navigation in a drawer on a tablet, so the page keeps the width', async () => {
+    const { view } = await header(900)
+    const rail = view.container.querySelector<HTMLElement>(
+      '[data-testid="console-layout__navigation"]'
+    )
+    expect(rail?.getClientRects().length ?? 0).toBe(0)
+    view.unmount()
+  })
+
   it('drops the trail on a phone, where the header has no room', async () => {
     const { view, trail } = await header(390)
     expect(trail?.getClientRects().length ?? 0).toBe(0)
