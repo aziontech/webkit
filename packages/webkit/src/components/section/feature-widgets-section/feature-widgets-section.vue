@@ -123,6 +123,10 @@
   }
 
   onScopeDispose(() => clearTimeout(copiedTimer))
+
+  const COPY_TEXT_CLASS =
+    'm-0 w-full rounded-(--shape-control) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-(--spacing-xs) text-start text-label-code-sm break-words ' +
+    'whitespace-pre-wrap text-(--text-default)'
 </script>
 
 <template>
@@ -175,6 +179,14 @@
               <p class="m-0 text-pretty text-body-md text-(--text-muted)">
                 <strong class="font-medium text-(--text-default)">{{ item.title }}</strong>
                 {{ item.description }}
+              </p>
+              <p
+                v-if="item.copy"
+                dir="ltr"
+                data-slot="copy-text"
+                :class="COPY_TEXT_CLASS"
+              >
+                {{ item.copy.text }}
               </p>
               <span
                 v-if="item.action || item.copy"
