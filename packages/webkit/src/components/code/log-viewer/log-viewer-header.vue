@@ -62,7 +62,7 @@
           :data-testid="`${testId}__line-count`"
           class="shrink-0 whitespace-nowrap text-label-sm tabular-nums text-(--text-muted)"
         >
-          {{ ctx.lineCountLabel.value }}
+          <bdi>{{ ctx.lineCountLabel.value }}</bdi>
         </span>
 
         <div

@@ -191,7 +191,7 @@
   const AXIS_CLASS =
     '[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
     'grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) ' +
-    'data-[view=timeline]:grid-cols-1 data-[view=tree]:grid-cols-[minmax(0,1fr)_auto]'
+    'data-[view=timeline]:grid-cols-1 data-[view=tree]:grid-cols-[minmax(0,1fr)_auto] @max-xl/trace:data-[view=waterfall]:grid-cols-1'
 
   const TICK_CLASS =
     'absolute inset-y-0 start-(--trace-tick-at) flex w-0 items-center justify-center ' +
@@ -255,7 +255,8 @@
     >
       <div
         v-if="layout !== 'timeline'"
-        class="flex items-center border-e border-(--border-muted) py-(--spacing-xs) ps-[calc(var(--spacing-xs)+1.25rem+var(--spacing-2xs))] pe-(--spacing-sm)"
+        :data-view="layout"
+        class="flex items-center @max-xl/trace:data-[view=waterfall]:hidden border-e border-(--border-muted) py-(--spacing-xs) ps-[calc(var(--spacing-xs)+1.25rem+var(--spacing-2xs))] pe-(--spacing-sm)"
       >
         <span class="text-label-sm text-(--text-muted)">{{ t('trace.span') }}</span>
       </div>
@@ -287,9 +288,9 @@
             :style="{ '--trace-tick-at': `${tick.at * 100}%` }"
             :class="TICK_CLASS"
           >
-            <span class="text-label-sm whitespace-nowrap text-(--text-muted) tabular-nums">{{
+            <bdi class="text-label-sm whitespace-nowrap text-(--text-muted) tabular-nums">{{
               tick.label
-            }}</span>
+            }}</bdi>
           </span>
         </div>
       </div>

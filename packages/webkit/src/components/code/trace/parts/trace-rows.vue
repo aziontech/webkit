@@ -34,14 +34,14 @@
 
   const ROW_CLASS =
     '[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
-    'grid min-h-9 w-full cursor-pointer grid-cols-[var(--trace-name)_minmax(0,1fr)] ' +
+    'grid min-h-9 w-full cursor-pointer grid-cols-1 @xl/trace:grid-cols-[var(--trace-name)_minmax(0,1fr)] ' +
     'data-[view=tree]:grid-cols-[minmax(0,1fr)_auto] ' +
     'items-stretch border-b border-(--border-muted) text-start transition-colors duration-150 ease-out ' +
     'last:border-b-0 hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset ' +
     'data-selected:bg-(--bg-selected) ' +
     'motion-reduce:transition-none pointer-coarse:min-h-11'
   const NAME_CELL_CLASS =
-    'flex min-w-0 items-center gap-(--spacing-2xs) border-e border-(--border-muted) py-(--spacing-xs) ps-[calc(var(--spacing-xs)+var(--trace-span-depth)*var(--spacing-md))] ' +
+    'flex min-w-0 items-center gap-(--spacing-2xs) border-e border-(--border-muted) @max-xl/trace:data-[view=waterfall]:border-e-0 py-(--spacing-xs) ps-[calc(var(--spacing-xs)+var(--trace-span-depth)*var(--spacing-md))] ' +
     'pe-(--spacing-sm)'
   const BAR_CLASS =
     'absolute inset-y-0 start-[calc(var(--trace-span-offset)*100%)] w-[calc(var(--trace-span-width)*100%)] rounded-(--shape-button) border ' +
@@ -93,6 +93,7 @@
     >
       <span
         role="gridcell"
+        :data-view="layout"
         :class="NAME_CELL_CLASS"
       >
         <span
@@ -118,8 +119,11 @@
           class="shrink-0 text-[0.9em] leading-none text-(--text-muted)"
           aria-hidden="true"
         />
-        <span class="truncate text-body-code-sm text-(--text-default)"
-          ><bdi>{{ row.span.name }}</bdi></span
+        <span
+          dir="ltr"
+          class="truncate text-start text-body-code-sm text-(--text-default)"
+          :data-testid="`${testId}__name`"
+          >{{ row.span.name }}</span
         >
         <span
           v-if="row.span.service"
@@ -153,12 +157,14 @@
         :data-testid="`${testId}__times`"
         class="flex items-center gap-(--spacing-md) px-(--spacing-md) py-(--spacing-xs) text-label-sm tabular-nums"
       >
-        <span class="w-20 text-end text-(--text-muted)">+{{ format(row.span.start) }}</span>
+        <span class="w-20 text-end text-(--text-muted)"
+          ><bdi>+{{ format(row.span.start) }}</bdi></span
+        >
         <span
           :data-status="row.status"
           :data-root="row.root || null"
           class="w-20 text-end data-[status=error]:text-(--text-danger) data-[status=success]:text-(--text-default) data-[status=running]:text-(--warning-foreground)"
-          >{{ format(row.span.duration) }}</span
+          ><bdi>{{ format(row.span.duration) }}</bdi></span
         >
       </span>
       <span
@@ -181,7 +187,7 @@
               :data-flip="row.flip || null"
               :class="BAR_DURATION_CLASS"
               aria-hidden="true"
-              >{{ format(row.span.duration) }}</span
+              ><bdi>{{ format(row.span.duration) }}</bdi></span
             >
           </span>
           <span

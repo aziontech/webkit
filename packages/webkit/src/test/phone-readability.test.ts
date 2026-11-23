@@ -8,8 +8,10 @@ import { defineComponent, h, nextTick } from 'vue'
 import ChartDefault from '../../examples/chart/default.vue'
 import CodeBlockDiff from '../../examples/code-block/computed-diff.vue'
 import CodeEditorDiff from '../../examples/code-editor/diff.vue'
+import LogViewerLevels from '../../examples/log-viewer/levels.vue'
 import MapView from '../../examples/map-chart/view.vue'
 import SparkCards from '../../examples/spark-chart/cards.vue'
+import TraceDefault from '../../examples/trace/default.vue'
 import TrackerDefault from '../../examples/tracker/default.vue'
 
 const settle = async (): Promise<void> => {
@@ -111,5 +113,47 @@ describe('content stays readable at phone and desktop widths', () => {
     for (const pane of panes) {
       expect(pane.getBoundingClientRect().height).toBeGreaterThanOrEqual(height * 16 - 1)
     }
+  })
+
+  it.each(['ltr', 'rtl'] as const)(
+    'puts each trace span name on its own line at 390px (%s)',
+    async (dir) => {
+      const { container } = render(
+        defineComponent({
+          setup: () => () =>
+            h('div', { dir, style: { width: '390px' } }, [h(TraceDefault as Component)])
+        })
+      )
+      await settle()
+      await settle()
+      const names = Array.from(
+        container.querySelectorAll<HTMLElement>('[data-testid="trace__name"]')
+      )
+      expect(names.length).toBeGreaterThan(2)
+      for (const name of names) {
+        expect(name.scrollWidth, name.textContent ?? '').toBeLessThanOrEqual(name.clientWidth)
+      }
+      const duration = container.querySelector<HTMLElement>('[data-testid="trace__bar"] bdi')
+      expect(duration?.textContent).toMatch(/^\d[\d.,]*\s?m?s$/)
+    }
+  )
+
+  it('starts every log line at the left edge in right-to-left', async () => {
+    const { container } = render(
+      defineComponent({
+        setup: () => () =>
+          h('div', { dir: 'rtl', style: { width: '390px' } }, [h(LogViewerLevels as Component)])
+      })
+    )
+    await settle()
+    await settle()
+    const body = container.querySelector<HTMLElement>('[data-testid="log-viewer__body"]')!
+    const frame = body.getBoundingClientRect()
+    const lines = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-testid="log-viewer__line"]')
+    )
+    expect(lines.length).toBeGreaterThan(0)
+    for (const line of lines)
+      expect(line.getBoundingClientRect().left).toBeGreaterThanOrEqual(frame.left - 1)
   })
 })

@@ -109,7 +109,7 @@
       >
         <dt class="text-label-sm text-(--text-muted)">{{ fact.label }}</dt>
         <dd class="m-0 truncate text-body-sm text-(--text-default) tabular-nums">
-          {{ fact.value }}
+          <bdi>{{ fact.value }}</bdi>
         </dd>
       </div>
     </dl>
@@ -135,7 +135,7 @@
           :key="item.key"
         >
           <dt class="truncate text-label-sm text-(--text-muted) tabular-nums">
-            {{ item.time }}
+            <bdi>{{ item.time }}</bdi>
           </dt>
           <dd class="m-0 min-w-0 text-label-code-sm break-words text-(--text-default)">
             <bdi>{{ item.name }}</bdi>

@@ -93,7 +93,7 @@
             :data-root="item.root || null"
             aria-hidden="true"
             :class="FLAME_BAR_LABEL_CLASS"
-            ><bdi>{{ item.span.name }}</bdi> · {{ format(item.span.duration) }}</span
+            ><bdi>{{ item.span.name }}</bdi> · <bdi>{{ format(item.span.duration) }}</bdi></span
           >
         </span>
         <span
