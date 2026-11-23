@@ -67,7 +67,7 @@
 - With exactly one action the band is a link to that action's `href` (unless `linked` is `false`), and that lone action renders as an outlined button closed by the trailing chevron; with two the first is secondary, the second outlined, and the band is not a link
 - `size="medium"` aligns the copy to the top of the media, `size="large"` centres it
 - `orientation` and `texture` are forwarded to the media split
-- Media precedence: `scene`, `widget`, `illustration`. A widget is inset from the cell's edges (`media-split`'s `mediaPadded`); a scene and an illustration run flush
+- Media precedence: `scene`, `widget`, `illustration`. A widget and an illustration are inset from the cell's edges (`media-split`'s `mediaPadded`), so a drawn window never lies on the band's frame and scales inside the cell on a phone; a scene runs flush
 - A widget plays its beat while the pointer is over the band, and shows its finished state on touch and under reduced motion (owned by `console-mockup`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
 - Scenes and the widget load on demand (`defineAsyncComponent`)
 - An action's `variant` (`secondary`, `outline`, `ghost`) wins over the drawn default; an action's `icon` is drawn before the label when it has no trailing chevron
@@ -96,6 +96,7 @@
 ## Responsive
 
 - Container queries: none; `media-split` stacks the media under the copy below `lg`.
+- Vertical: a console picture under the copy is at most `var(--container-3xl)` wide, centred, so a wide band never grows its cards past the frame's height and the whole scene stays inside the frame.
 - Narrow (≤ 640 px): one column; a widget and an illustration scale down with the cell.
 - Touch: a widget shows its finished state instead of the hover beat.
 - Reflow: no horizontal scroll at 320 px.

@@ -20993,7 +20993,7 @@
     {
      "name": "actions",
      "scope": "—",
-     "notes": "A trailing control under the attribution, floored so a row of quotes aligns on it."
+     "notes": "A trailing control under the attribution, floored so a row of quotes aligns on it; several controls sit in a row that wraps, `var(--spacing-sm)` apart."
     }
    ],
    "surface": "site",
@@ -28245,7 +28245,7 @@
      "type": "HeroFormSectionMessages",
      "default": "—",
      "required": "true",
-     "doc": "Copy of the form outcomes: `{ missing, invalidEmail, success, error }`."
+     "doc": "Copy of the form outcomes: `{ missing, invalidEmail, success, successDescription?, error }`."
     },
     {
      "name": "eyebrow",
@@ -28329,7 +28329,7 @@
      "type": "HeroFormSectionField[]",
      "default": "[]",
      "required": "false",
-     "doc": "The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it."
+     "doc": "The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel?, autocomplete? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it, `autocomplete` is the autofill hint of a text control."
     },
     {
      "name": "submitLabel",
@@ -28364,7 +28364,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "The site sent the values: the form gives way to `messages.success`."
+     "doc": "The site sent the values: the form gives way to a confirmation of `messages.success`, in the form's footprint."
     },
     {
      "name": "failed",
@@ -29561,7 +29561,7 @@
      "type": "SubjectGridSectionClosing",
      "default": "undefined",
      "required": "false",
-     "doc": "Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent."
+     "doc": "Call to action across the cells left in the grid's last row; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent."
     },
     {
      "name": "ariaLabel",

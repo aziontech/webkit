@@ -1,6 +1,6 @@
 # Subject Grid Section
 
-> A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-grid-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `registration-frame`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.
+> A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans every cell left in the grid's last row so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-grid-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `registration-frame`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.
 
 - Import: `import SubjectGridSection from '@aziontech/webkit/subject-grid-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -14,7 +14,7 @@
 ## Do
 
 - Give every subject a unique `slug`; it is the card's `id`, so a `#slug` link lands on it.
-- Keep the subject count at a multiple of three plus one when `closing` is set, so the closing cell fills the last row exactly.
+- Keep the subject count at a multiple of three plus one when `closing` is set, so the closing cell takes two thirds of the last row on desktop; any other count still ends flush, with the closing cell across one cell or a full row.
 - Keep each subject's articles to a handful; the card grows with its list.
 
 ## Don’t
@@ -35,13 +35,13 @@
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page `id` of the band, the target of a `#hash` link. |
 | `subjects` | `SubjectGridSectionSubject[]` | `[]` | false | The subject cards, in order; each is `{ slug, title, description, articles }` where every article is `{ label, href }`. Subjects without a title or a linked article are skipped. |
-| `closing` | `SubjectGridSectionClosing` | `undefined` | false | Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `closing` | `SubjectGridSectionClosing` | `undefined` | false | Call to action across the cells left in the grid's last row; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the band; empty leaves the section unnamed. Set it so the band is a named region landmark. |
 
 ## States
 
 - Visual states: `default`
-- Three columns from the large breakpoint, one below the small one, on `card-grid`'s `fixed` layout (equal tracks whatever the count), so the closing cell really spans two columns from the small breakpoint up and takes two thirds of the last row on desktop, as on azion.com's learning page
+- Three columns from the large breakpoint, one below the small one, on `card-grid`'s `fixed` layout (equal tracks whatever the count), so the closing cell spans the cells the subjects leave in the last row (`3 - count % 3` from the large breakpoint, `2 - count % 2` from the small one), never leaving a divider-coloured empty cell; with a count of three times n plus one it takes two thirds of the last row on desktop, as on azion.com's learning page
 - Empty: when no subject carries a title and a linked article the band renders nothing — not the grid, not the closing cell
 
 ## Accessibility

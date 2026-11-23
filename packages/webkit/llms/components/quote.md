@@ -58,7 +58,7 @@
 | --- | --- | --- |
 | `default` | — | Quotation body; replaces the `text` prop when provided. |
 | `mark` | — | The company mark; replaces the image built from `logo`, for a mark that owns its own theming. |
-| `actions` | — | A trailing control under the attribution, floored so a row of quotes aligns on it. |
+| `actions` | — | A trailing control under the attribution, floored so a row of quotes aligns on it; several controls sit in a row that wraps, `var(--spacing-sm)` apart. |
 
 ## States
 

@@ -63,7 +63,7 @@
 - Filtered (`category-search`): the selected category keeps the entries whose `categories` hold it, the show-all segment keeps every one; the search matches the title and the description; both combine
 - Filtered (`facets`): each facet keeps the entries whose `facets[id]` holds the selected value; its `allLabel` option keeps every one; the facets combine
 - Option search (`facets`): a dropdown whose `options` number more than seven renders a search field above its options; shorter lists render none
-- Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize`; changing a filter returns to the first page
+- Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize` and moves keyboard focus to the link of the first revealed item, so focus never drops to the page when the button leaves and a screen reader reads the new item; changing a filter returns to the first page
 - Leading: until a filter applies, the first `leading` entries are skipped
 - Empty: when no entry matches, the list and the load-more button are not rendered; with `emptyTitle` set, an `EmptyState` (search icon) renders `emptyTitle` and `emptyDescription`, and an `emptyActionLabel` button clears every filter
 - `data-variant` on the list mirrors the row layout: `byline` spreads the copy so the byline sits at the foot, `center` centres it

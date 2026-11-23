@@ -10,7 +10,8 @@
  ],
  "related": [
   "`newsletter-section` — the other form section; same `submit` and state contract.",
-  "`alert` — renders the success and failure messages."
+  "`alert` — renders the failure message.",
+  "`empty-state` — renders the confirmation that replaces the form once the values are sent."
  ],
  "bestPractices": [
   "Give every field a unique `name`; it is the key of the submitted value.",
