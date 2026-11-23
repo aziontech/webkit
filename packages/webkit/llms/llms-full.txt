@@ -342,19 +342,19 @@ one that is.
 | `--code-syntax-string` | `#004799` | `#99C9FF` | String literals. |
 | `--success` | `#78EDA2` | `#0A2916` | The box of a success message, tag or badge. |
 | `--success-border` | `#22C55E66` | `#22C55E66` | The edge of a success box. |
-| `--success-foreground` | `#0A2916` | `#52E086` | Text and icons on --success, and success icons on a surface. |
+| `--success-foreground` | `#0A2916` | `#52E086` | Text and icons on --success; on a surface, --success-mark. |
 | `--success-mark` | `#16833F` | `#18B452` | A success mark standing on the page: the status dot, the outcome disc. |
 | `--warning` | `#FAD76B` | `#312602` | The box of a warning message, tag or badge. |
 | `--warning-border` | `#F7BD0880` | `#F7BD0880` | The edge of a warning box. |
-| `--warning-foreground` | `#312602` | `#F7BD08` | Text and icons on --warning, and warning icons on a surface. |
+| `--warning-foreground` | `#312602` | `#F7BD08` | Text and icons on --warning; on a surface, --warning-mark. |
 | `--warning-mark` | `#947105` | `#C59707` | A warning mark standing on the page: the status dot, the outcome disc. |
 | `--danger` | `#F3A5A5` | `#5B0B0B` | The box of an error message, tag or badge, and the danger button. |
 | `--danger-border` | `#E74B4B` | `#E74B4B` | The edge of a danger box and the outline of an invalid field. |
-| `--danger-foreground` | `#2E0606` | `#F9D2D2` | Text and icons on --danger, and error icons on a surface. |
+| `--danger-foreground` | `#2E0606` | `#F9D2D2` | Text and icons on --danger; on a surface, --danger-mark. |
 | `--danger-mark` | `#E51A1A` | `#ED7878` | An error mark standing on the page: the status dot, the outcome disc. |
 | `--info` | `#99C9FF` | `#001833` | The box of an informational message, tag or badge. |
 | `--info-border` | `#0072F566` | `#0072F566` | The edge of an info box. |
-| `--info-foreground` | `#003066` | `#99C9FF` | Text and icons on --info, and info icons on a surface. |
+| `--info-foreground` | `#003066` | `#99C9FF` | Text and icons on --info; on a surface, --info-mark. |
 | `--info-mark` | `#0072F5` | `#3392FF` | An info mark standing on the page: the status dot, the outcome disc. |
 | `--illustration-ground` | `#F5F5F5` | `#000000` | The ground an illustration scene stands on. |
 | `--illustration-surface` | `#FFFFFF` | `#0A0A0A` | Panels drawn inside an illustration. |
@@ -23378,7 +23378,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 # Outcome Icon
 
-> Use OutcomeIcon for the bare round glyph that says how one run ended, with no label; with a label, the state of a resource is a StatusIndicator. A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run). It replaces the design sample's `StateMark` and `SuccessMark`. With `animated` the disc scales in and the glyph draws itself when the mark appears and every time its severity changes, so an outcome screen or a finished row can mark the moment a run lands; under reduced motion it shows at once.
+> Use OutcomeIcon for the bare round glyph that says how one run ended, with no label; with a label, the state of a resource is a StatusIndicator. A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run). With `animated` the disc scales in and the glyph draws itself when the mark appears and every time its severity changes, so an outcome screen or a finished row can mark the moment a run lands; under reduced motion it shows at once.
 
 - Import: `import OutcomeIcon from '@aziontech/webkit/outcome-icon'`
 - Category: feedback · Surface: app · Structure: monolithic
@@ -23386,7 +23386,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 ## When to use
 
 - At the head of an outcome screen (deploy succeeded or failed), at the large size, animated.
-- In a checklist or a list of steps, at the small size, to say a step is done or not set.
+- In a checklist of finished items, at the small size, to say one is done or not set.
 - Beside a label that reports a finished run, when the run's state turns from running to an outcome.
 
 ## Do
@@ -23398,6 +23398,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 ## Don’t
 
 - A state that is still running → use `spinner` or `status-indicator` with `loading`.
+- Steps that can still be running, or a static icon → an `az-circle-*` icon in `-mark`.
 - A labelled status pill in a table cell → use `tag` or `status-indicator`.
 - A message with text and actions → use `alert` or `toast`.
 

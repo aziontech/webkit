@@ -318,12 +318,12 @@
             <span class="flex size-5 shrink-0 items-center justify-center">
               <i
                 v-if="stepStatus(i) === 'success'"
-                class="az az-circle-check text-(--success-foreground)"
+                class="az az-circle-check text-(--success-mark)"
                 aria-hidden="true"
               />
               <i
                 v-else-if="stepStatus(i) === 'error'"
-                class="az az-circle-x text-(--danger-foreground)"
+                class="az az-circle-x text-(--danger-mark)"
                 aria-hidden="true"
               />
               <i

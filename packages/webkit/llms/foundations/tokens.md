@@ -323,19 +323,19 @@ one that is.
 | `--code-syntax-string` | `#004799` | `#99C9FF` | String literals. |
 | `--success` | `#78EDA2` | `#0A2916` | The box of a success message, tag or badge. |
 | `--success-border` | `#22C55E66` | `#22C55E66` | The edge of a success box. |
-| `--success-foreground` | `#0A2916` | `#52E086` | Text and icons on --success, and success icons on a surface. |
+| `--success-foreground` | `#0A2916` | `#52E086` | Text and icons on --success; on a surface, --success-mark. |
 | `--success-mark` | `#16833F` | `#18B452` | A success mark standing on the page: the status dot, the outcome disc. |
 | `--warning` | `#FAD76B` | `#312602` | The box of a warning message, tag or badge. |
 | `--warning-border` | `#F7BD0880` | `#F7BD0880` | The edge of a warning box. |
-| `--warning-foreground` | `#312602` | `#F7BD08` | Text and icons on --warning, and warning icons on a surface. |
+| `--warning-foreground` | `#312602` | `#F7BD08` | Text and icons on --warning; on a surface, --warning-mark. |
 | `--warning-mark` | `#947105` | `#C59707` | A warning mark standing on the page: the status dot, the outcome disc. |
 | `--danger` | `#F3A5A5` | `#5B0B0B` | The box of an error message, tag or badge, and the danger button. |
 | `--danger-border` | `#E74B4B` | `#E74B4B` | The edge of a danger box and the outline of an invalid field. |
-| `--danger-foreground` | `#2E0606` | `#F9D2D2` | Text and icons on --danger, and error icons on a surface. |
+| `--danger-foreground` | `#2E0606` | `#F9D2D2` | Text and icons on --danger; on a surface, --danger-mark. |
 | `--danger-mark` | `#E51A1A` | `#ED7878` | An error mark standing on the page: the status dot, the outcome disc. |
 | `--info` | `#99C9FF` | `#001833` | The box of an informational message, tag or badge. |
 | `--info-border` | `#0072F566` | `#0072F566` | The edge of an info box. |
-| `--info-foreground` | `#003066` | `#99C9FF` | Text and icons on --info, and info icons on a surface. |
+| `--info-foreground` | `#003066` | `#99C9FF` | Text and icons on --info; on a surface, --info-mark. |
 | `--info-mark` | `#0072F5` | `#3392FF` | An info mark standing on the page: the status dot, the outcome disc. |
 | `--illustration-ground` | `#F5F5F5` | `#000000` | The ground an illustration scene stands on. |
 | `--illustration-surface` | `#FFFFFF` | `#0A0A0A` | Panels drawn inside an illustration. |

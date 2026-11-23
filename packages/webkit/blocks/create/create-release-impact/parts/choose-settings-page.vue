@@ -232,7 +232,7 @@
                 >
                   <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="az az-circle-alert shrink-0 text-(--warning-foreground)"
+                      class="az az-circle-alert shrink-0 text-(--warning-mark)"
                       aria-hidden="true"
                     />
                     <span class="truncate text-label-md text-(--text-default)">

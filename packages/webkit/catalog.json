@@ -2211,7 +2211,7 @@
     "type": "color",
     "light": "#0A2916",
     "dark": "#52E086",
-    "purpose": "Text and icons on --success, and success icons on a surface."
+    "purpose": "Text and icons on --success; on a surface, --success-mark."
    },
    "--success-mark": {
     "group": "success",
@@ -2239,7 +2239,7 @@
     "type": "color",
     "light": "#312602",
     "dark": "#F7BD08",
-    "purpose": "Text and icons on --warning, and warning icons on a surface."
+    "purpose": "Text and icons on --warning; on a surface, --warning-mark."
    },
    "--warning-mark": {
     "group": "warning",
@@ -2267,7 +2267,7 @@
     "type": "color",
     "light": "#2E0606",
     "dark": "#F9D2D2",
-    "purpose": "Text and icons on --danger, and error icons on a surface."
+    "purpose": "Text and icons on --danger; on a surface, --danger-mark."
    },
    "--danger-mark": {
     "group": "danger",
@@ -2295,7 +2295,7 @@
     "type": "color",
     "light": "#003066",
     "dark": "#99C9FF",
-    "purpose": "Text and icons on --info, and info icons on a surface."
+    "purpose": "Text and icons on --info; on a surface, --info-mark."
    },
    "--info-mark": {
     "group": "info",

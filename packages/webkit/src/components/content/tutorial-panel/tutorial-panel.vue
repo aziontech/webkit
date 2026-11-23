@@ -214,7 +214,7 @@
           >
             <span
               aria-hidden="true"
-              class="az az-circle-check text-(--text-success)"
+              class="az az-circle-check text-(--success-mark)"
             />
             {{ t('tutorialPanel.completedTitle') }}
           </h3>

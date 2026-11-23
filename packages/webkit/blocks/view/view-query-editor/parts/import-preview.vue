@@ -58,7 +58,7 @@
           class="flex gap-(--spacing-xs) text-body-sm text-(--text-default)"
         >
           <i
-            class="az az-circle-x mt-(--spacing-2xs) shrink-0 text-(--danger-foreground)"
+            class="az az-circle-x mt-(--spacing-2xs) shrink-0 text-(--danger-mark)"
             aria-hidden="true"
           />
           <span

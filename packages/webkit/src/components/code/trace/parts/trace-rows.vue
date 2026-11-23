@@ -149,7 +149,7 @@
           />
           <i
             v-if="row.span.status === 'error'"
-            class="az az-circle-alert text-(--danger-foreground)"
+            class="az az-circle-alert text-(--danger-mark)"
           />
         </span>
       </span>

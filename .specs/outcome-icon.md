@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 29dcb308c4141acf07ae55e8936f7ad096067a31ba571776d865e566d18d88bf
+checksum: ecf8cd9269d397f325fb8a72e3daa1427705b2cb2fa9f3e07da87b7afa5ecf57
 created: 2026-11-11
-last_updated: 2026-11-16
+last_updated: 2026-11-23
 ---
 
 # OutcomeIcon — Component Spec
@@ -16,17 +16,18 @@ last_updated: 2026-11-16
 
 Use OutcomeIcon for the bare round glyph that says how one run ended, with no label; with a label, the state of a resource is a StatusIndicator.
 
-A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run). It replaces the design sample's `StateMark` and `SuccessMark`. With `animated` the disc scales in and the glyph draws itself when the mark appears and every time its severity changes, so an outcome screen or a finished row can mark the moment a run lands; under reduced motion it shows at once.
+A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run). With `animated` the disc scales in and the glyph draws itself when the mark appears and every time its severity changes, so an outcome screen or a finished row can mark the moment a run lands; under reduced motion it shows at once.
 
 ## When to use
 
 - At the head of an outcome screen (deploy succeeded or failed), at the large size, animated.
-- In a checklist or a list of steps, at the small size, to say a step is done or not set.
+- In a checklist of finished items, at the small size, to say one is done or not set.
 - Beside a label that reports a finished run, when the run's state turns from running to an outcome.
 
 ## When NOT to use
 
 - A state that is still running → use `spinner` or `status-indicator` with `loading`.
+- Steps that can still be running, or a static icon → an `az-circle-*` icon in `-mark`.
 - A labelled status pill in a table cell → use `tag` or `status-indicator`.
 - A message with text and actions → use `alert` or `toast`.
 
