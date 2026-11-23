@@ -182,7 +182,7 @@
             variant="none"
             :padded="false"
             :data-cell="cell.text ? 'story' : 'logo'"
-            class="min-h-[clamp(180px,18vw,240px)] max-md:data-[span=2]:col-span-full max-sm:data-[cell=story]:col-span-full"
+            class="min-h-[clamp(180px,18vw,240px)] max-md:data-[span=2]:col-span-full max-lg:data-[cell=story]:col-span-2"
           >
             <div
               v-if="cell.text"
