@@ -51,7 +51,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ link: en.link })
+  const { t } = useTranslate({ link: en.link, common: en.common })
 
   const EXTERNAL_ICON = 'az az-external-link'
 
@@ -108,7 +108,12 @@
       class="ms-(--spacing-2xs) inline-block text-[length:inherit] leading-none"
       aria-hidden="true"
       :data-testid="`${testId}__icon`"
-  /></a>
+    /><span
+      v-if="target === '_blank'"
+      class="sr-only"
+      >{{ ` ${t('common.newTab')}` }}</span
+    ></a
+  >
   <a
     v-else
     :href="safeHref(href) ?? '#'"
@@ -128,6 +133,11 @@
       >
         <slot>{{ label || t('link.label') }}</slot>
       </span>
+      <span
+        v-if="target === '_blank'"
+        class="sr-only"
+        >{{ ` ${t('common.newTab')}` }}</span
+      >
       <i
         v-if="resolvedIcon"
         :class="[resolvedIcon, directionalIconClass(resolvedIcon)]"
