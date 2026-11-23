@@ -19,6 +19,7 @@
 - Give every `DashboardGrid.Item` a `label` (the card's title): it is the name the live region announces.
 - Offer Reset layout once the layout differs from the default.
 - Bound the sizes (`min-span`, `max-span`, `min-height`, `max-height`) so no card becomes unreadable.
+- A metric widget is a `StatTile` placed directly in the item: the tile is already a framed surface, so wrapping it in a `ChartCard` draws a card inside a card.
 
 ## Don’t
 
@@ -157,7 +158,6 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 
 ```vue
 <script setup>
-  import ChartCard from '@aziontech/webkit/chart-card'
   import DashboardGrid from '@aziontech/webkit/dashboard-grid'
   import StatTile from '@aziontech/webkit/stat-tile'
   import { ref } from 'vue'
@@ -213,19 +213,16 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
       :item-id="item.id"
       :label="tiles[item.id].title"
     >
-      <ChartCard :aria-label="tiles[item.id].title">
-        <ChartCard.Content>
-          <StatTile
-            :label="tiles[item.id].title"
-            :value="tiles[item.id].value"
-            :unit="tiles[item.id].unit"
-            :delta="tiles[item.id].delta"
-            delta-label="vs previous 24 hours"
-            :inverse="tiles[item.id].inverse"
-            :trend="tiles[item.id].trend"
-          />
-        </ChartCard.Content>
-      </ChartCard>
+      <StatTile
+        :label="tiles[item.id].title"
+        :value="tiles[item.id].value"
+        :unit="tiles[item.id].unit"
+        :delta="tiles[item.id].delta"
+        delta-label="vs previous 24 hours"
+        :inverse="tiles[item.id].inverse"
+        :trend="tiles[item.id].trend"
+        class="flex-1"
+      />
     </DashboardGrid.Item>
   </DashboardGrid>
 </template>

@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 6
 template: 2
-checksum: 06a05e5e0c202eb3435e8cd4fd4da8582a71e36dc5165942e7ec99463de32e27
+checksum: efdd2884c6703e407296b982dd5eeda7058d537aa2633b52b72b26ed4ffb50eb
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -49,6 +49,7 @@ item, on top of the existing `ChartCard` handles.
 - Give every `DashboardGrid.Item` a `label` (the card's title): it is the name the live region announces.
 - Offer Reset layout once the layout differs from the default.
 - Bound the sizes (`min-span`, `max-span`, `min-height`, `max-height`) so no card becomes unreadable.
+- A metric widget is a `StatTile` placed directly in the item: the tile is already a framed surface, so wrapping it in a `ChartCard` draws a card inside a card.
 
 ## Usage
 

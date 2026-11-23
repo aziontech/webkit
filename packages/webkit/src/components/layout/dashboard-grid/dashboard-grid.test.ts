@@ -4,6 +4,7 @@ import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { h, nextTick, ref } from 'vue'
 
+import Default from '../../../../examples/dashboard-grid/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ChartCard, {
   ChartCardContent,
@@ -249,6 +250,24 @@ describe('DashboardGrid', () => {
       const { view } = mount(props)
       await expectNoA11yViolations(view.container)
       view.unmount()
+    }
+  })
+
+  it('the default example draws one frame per widget, never a card inside a card', async () => {
+    const view = render(Default)
+    await nextTick()
+    const framed = (el: Element) => {
+      const style = getComputedStyle(el)
+      return parseFloat(style.borderTopWidth) > 0 && parseFloat(style.borderBottomWidth) > 0
+    }
+    const items = view.container.querySelectorAll('[data-testid="dashboard-grid-item"]')
+    expect(items.length).toBeGreaterThan(0)
+    for (const item of items) {
+      const width = item.getBoundingClientRect().width
+      const frames = [item, ...item.querySelectorAll('*')]
+        .filter(framed)
+        .filter((el) => el.getBoundingClientRect().width >= width * 0.8)
+      expect(frames).toHaveLength(1)
     }
   })
 })

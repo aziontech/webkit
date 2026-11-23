@@ -21,6 +21,7 @@
   "Offer an explicit Edit layout toggle (`aria-pressed`) and turn `editing` on with it, so handles do not crowd the read-only view.",
   "Give every `DashboardGrid.Item` a `label` (the card's title): it is the name the live region announces.",
   "Offer Reset layout once the layout differs from the default.",
-  "Bound the sizes (`min-span`, `max-span`, `min-height`, `max-height`) so no card becomes unreadable."
+  "Bound the sizes (`min-span`, `max-span`, `min-height`, `max-height`) so no card becomes unreadable.",
+  "A metric widget is a `StatTile` placed directly in the item: the tile is already a framed surface, so wrapping it in a `ChartCard` draws a card inside a card."
  ]
 }
