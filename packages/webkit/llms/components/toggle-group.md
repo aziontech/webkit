@@ -99,7 +99,7 @@
 ## Responsive
 
 - The root is capped at its container (`max-w-full`, `min-w-0`); options that do not fit flow onto another row instead of truncating, and `fluid` makes the options in each row share its full width.
-- Touch: a touch-target span grows each segment to 44px under `pointer-coarse`; prefer `size="large"` on touch-first surfaces.
+- Touch: under `pointer-coarse` each segment is drawn at least 44px tall, so a group that wraps its options onto several rows still gives every option a full 44px target; a touch-target span also widens each segment's hit area.
 - No hover-only affordance: selection, focus and disabled states are all visible without hover.
 
 ## Examples

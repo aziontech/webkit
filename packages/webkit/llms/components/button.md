@@ -101,7 +101,6 @@
 - Touch target ≥40×40 px where the control is interactive.
 - Forced colors: the filled variants (primary, secondary, danger) have no border of their own, so under `forced-colors: active` every button draws a 1px `ButtonBorder` edge (`GrayText` when disabled); outside forced colors nothing changes.
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button (with `download`, `blob:` and `data:` are kept).
-- A link that opens a new tab (`target="_blank"`) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
 ## Right-to-left
 
