@@ -1,6 +1,15 @@
 <script setup lang="ts">
   import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'
-  import { computed, defineAsyncComponent, hydrateOnIdle, onMounted, ref } from 'vue'
+  import {
+    type ComponentPublicInstance,
+    computed,
+    defineAsyncComponent,
+    hydrateOnIdle,
+    nextTick,
+    onMounted,
+    ref,
+    watch
+  } from 'vue'
   import { useRoute } from 'vue-router'
 
   import { messages } from '../lib/i18n'
@@ -30,8 +39,17 @@
   })
 
   const mounted = ref(false)
+  const rootEl = ref<ComponentPublicInstance | null>(null)
+
+  async function revealActive() {
+    await nextTick()
+    const root = rootEl.value?.$el as HTMLElement | undefined
+    root?.querySelector('[aria-current="page"]')?.scrollIntoView({ block: 'nearest' })
+  }
+
   onMounted(() => {
     mounted.value = true
+    requestAnimationFrame(revealActive)
   })
 
   const current = computed(() => {
@@ -39,10 +57,15 @@
     if (path !== '/assets') return path
     return `${path}${(mounted.value && route.hash) || '#brand'}`
   })
+
+  watch(current, revealActive)
 </script>
 
 <template>
-  <SidebarMenuRoot role="presentation">
+  <SidebarMenuRoot
+    ref="rootEl"
+    role="presentation"
+  >
     <SideNavGroup
       v-for="group in groups"
       :key="group.label"
