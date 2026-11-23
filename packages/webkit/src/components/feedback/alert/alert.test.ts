@@ -297,6 +297,39 @@ describe('Alert', () => {
       expect(event?.type).toBe('timeout')
     })
 
+    it('pauses the life timer while hovered and resumes it on leave', async () => {
+      const { getByTestId, emitted } = render(Alert, {
+        props: { label: 'Fleeting', life: 80 },
+        ...realTransition
+      })
+
+      const root = getByTestId('alert')
+      await fireEvent.pointerEnter(root)
+      await new Promise((resolve) => setTimeout(resolve, 200))
+      expect(emitted('close')).toBeUndefined()
+
+      await fireEvent.pointerLeave(root)
+      await waitFor(() => {
+        expect(emitted('close')).toHaveLength(1)
+      })
+    })
+
+    it('pauses the life timer while focus is inside', async () => {
+      const { getByTestId, emitted } = render(Alert, {
+        props: { label: 'Fleeting', life: 80, actionLabel: 'Undo' },
+        ...realTransition
+      })
+
+      getByTestId('alert__action').focus()
+      await new Promise((resolve) => setTimeout(resolve, 200))
+      expect(emitted('close')).toBeUndefined()
+
+      getByTestId('alert__action').blur()
+      await waitFor(() => {
+        expect(emitted('close')).toHaveLength(1)
+      })
+    })
+
     it('sets no inline transition on the root', () => {
       const { getByTestId } = render(Alert, { props: { label: 'Fade', closable: true } })
       expect(getByTestId('alert').style.transition).toBe('')

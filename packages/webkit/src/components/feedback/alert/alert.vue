@@ -104,6 +104,10 @@
 
   let dismissTimer: ReturnType<typeof setTimeout> | undefined
   let dismissEvent: Event | undefined
+  let remainingLife = 0
+  let timerStartedAt = 0
+  let hovered = false
+  let focused = false
 
   const clearDismissTimer = () => {
     if (dismissTimer !== undefined) {
@@ -141,12 +145,57 @@
     }
   }
 
+  const startDismissTimer = () => {
+    if (remainingLife <= 0 || dismissTimer !== undefined || hovered || focused) {
+      return
+    }
+
+    timerStartedAt = Date.now()
+    dismissTimer = setTimeout(() => dismiss(), remainingLife)
+  }
+
+  const pauseDismissTimer = () => {
+    if (dismissTimer === undefined) {
+      return
+    }
+
+    clearDismissTimer()
+    remainingLife = Math.max(0, remainingLife - (Date.now() - timerStartedAt))
+  }
+
+  const onPointerenter = () => {
+    hovered = true
+    pauseDismissTimer()
+  }
+
+  const onPointerleave = () => {
+    hovered = false
+    startDismissTimer()
+  }
+
+  const onFocusin = () => {
+    focused = true
+    pauseDismissTimer()
+  }
+
+  const onFocusout = (event: FocusEvent) => {
+    if (rootEl.value?.contains(event.relatedTarget as Node | null)) {
+      return
+    }
+
+    focused = false
+    startDismissTimer()
+  }
+
   useElementListener(rootEl, 'keydown', onEscape)
+  useElementListener(rootEl, 'pointerenter', onPointerenter)
+  useElementListener(rootEl, 'pointerleave', onPointerleave)
+  useElementListener(rootEl, 'focusin', onFocusin)
+  useElementListener(rootEl, 'focusout', onFocusout)
 
   onMounted(() => {
-    if (props.life > 0) {
-      dismissTimer = setTimeout(() => dismiss(), props.life)
-    }
+    remainingLife = props.life
+    startDismissTimer()
   })
 
   onUnmounted(() => {
