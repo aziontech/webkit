@@ -3,5 +3,5 @@
 </script>
 
 <template>
-  <SavePerGroup default-saving-general />
+  <SavePerGroup :general="{ defaultDraft: { language: 'es' }, loading: true }" />
 </template>

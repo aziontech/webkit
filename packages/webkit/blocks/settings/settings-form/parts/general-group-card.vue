@@ -9,28 +9,67 @@
   import Subheader from '@aziontech/webkit/subheader'
   import { computed, nextTick, reactive, ref } from 'vue'
 
-  import { saveWithToast } from '../settings-form-save'
+  import { useCardSave } from '../composables/use-card-save'
 
-  const props = withDefaults(defineProps<{ defaultSaving?: boolean }>(), { defaultSaving: false })
+  /** The saved General group, and the values its Save sends. */
+  export interface GeneralGroupValues {
+    /** The name shown across the account. */
+    fullName: string
+    /** Interface language option value. */
+    language: string
+  }
 
-  const general = reactive({ fullName: 'Alex Morgan', language: 'en' })
-  const savingGeneral = ref(props.defaultSaving)
+  export interface GeneralGroupCardProps {
+    /** The saved values; Save stays disabled until the group differs from them. */
+    values?: GeneralGroupValues
+    /** Unsaved edits the group opens with, so it starts dirty. */
+    defaultDraft?: Partial<GeneralGroupValues>
+    /** The save of this group is in flight: its rows lock and its Save spins. */
+    loading?: boolean
+    /** Why the save failed, shown in the error toast with Retry; the edits are kept. */
+    error?: string
+  }
 
+  const props = withDefaults(defineProps<GeneralGroupCardProps>(), {
+    values: () => ({ fullName: 'Alex Morgan', language: 'en' }),
+    defaultDraft: () => ({}),
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{ submit: [event: Event, values: GeneralGroupValues] }>()
+
+  const general = reactive<GeneralGroupValues>({ ...props.values, ...props.defaultDraft })
   const generalSubmitted = ref(false)
   const nameEmpty = computed(() => !general.fullName.trim())
-  const saveGeneral = () => {
-    generalSubmitted.value = true
-    if (nameEmpty.value) {
-      nextTick(() => document.getElementById('group-full-name')?.focus())
-      return
+
+  const { dirty, submitting, submit } = useCardSave({
+    id: 'general-group',
+    values: general,
+    saved: () => props.values,
+    loading: () => props.loading,
+    error: () => props.error,
+    savedMessage: 'General settings saved.',
+    failedMessage: "The general settings weren't saved.",
+    valid: () => {
+      generalSubmitted.value = true
+      return !nameEmpty.value
+    },
+    onInvalid: () => nextTick(() => document.getElementById('group-full-name')?.focus()),
+    onSubmit: (event, values) => {
+      generalSubmitted.value = false
+      emit('submit', event, values)
     }
-    generalSubmitted.value = false
-    saveWithToast(savingGeneral, 'General settings')
-  }
+  })
 </script>
 
 <template>
-  <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+  <form
+    class="layout-section-start flex flex-col gap-(--layout-group-gap)"
+    aria-label="General"
+    novalidate
+    @submit.prevent="submit"
+  >
     <Subheader
       title="General"
       size="small"
@@ -39,7 +78,7 @@
       <template #default>
         <fieldset
           class="m-0 flex min-w-0 flex-col border-0 p-0"
-          :disabled="savingGeneral"
+          :disabled="submitting"
         >
           <legend class="sr-only">General</legend>
           <Item.List>
@@ -53,7 +92,7 @@
                     id="group-full-name"
                     v-model="general.fullName"
                     size="large"
-                    :disabled="savingGeneral"
+                    :disabled="submitting"
                     class="w-full"
                     aria-label="Full name"
                     required
@@ -80,7 +119,7 @@
                   id="preferences-language"
                   v-model="general.language"
                   size="large"
-                  :disabled="savingGeneral"
+                  :disabled="submitting"
                   aria-label="Language"
                   class="w-full"
                 />
@@ -95,11 +134,12 @@
             label="Save"
             variant="secondary"
             size="medium"
-            :loading="savingGeneral"
-            @click="saveGeneral"
+            type="submit"
+            :loading="submitting"
+            :disabled="!dirty"
           />
         </div>
       </template>
     </Card>
-  </section>
+  </form>
 </template>

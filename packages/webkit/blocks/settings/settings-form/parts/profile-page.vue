@@ -11,10 +11,14 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
-  import { toast } from '@aziontech/webkit/toast'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  import { type ProfileAccountErrors, sampleProfileAccount } from '../sample'
+  import { useCardSave } from '../composables/use-card-save'
+  import {
+    type ProfileAccountErrors,
+    type ProfileAccountForm,
+    sampleProfileAccount
+  } from '../sample'
   import ProfileAddressGroup from './profile-address-group.vue'
   import ProfileAppearanceGroup from './profile-appearance-group.vue'
   import ProfileCompanyGroup from './profile-company-group.vue'
@@ -22,24 +26,38 @@
   import ProfileSourceControlGroup from './profile-source-control-group.vue'
 
   export interface ProfileProps {
-    /** The page opens on its first load: Skeleton rows stand in for the sections. */
-    defaultLoading?: boolean
-    /** The page opens on a failed load: a danger Alert with Retry replaces the sections. */
-    defaultLoadFailed?: boolean
+    /** The saved account; the form opens on it and Discard returns to it. Left out, the sample renders. */
+    profile?: ProfileAccountForm
+    /** The first load is in flight: Skeleton rows stand in for the sections. */
+    loading?: boolean
+    /** Why the first load failed, shown in a danger Alert with Retry in place of the sections. */
+    error?: string
+    /** The save is in flight: the fieldset and Discard lock and Save spins. */
+    saving?: boolean
+    /** Why the save failed, shown in the error toast with Retry; the edits are kept. */
+    saveError?: string
+    /** The account deletion is in flight; the dialog closes when it ends. */
+    deleting?: boolean
   }
 
   const props = withDefaults(defineProps<ProfileProps>(), {
-    defaultLoading: false,
-    defaultLoadFailed: false
+    profile: () => sampleProfileAccount,
+    loading: false,
+    error: '',
+    saving: false,
+    saveError: '',
+    deleting: false
   })
 
-  const form = reactive({ ...sampleProfileAccount })
-  const saving = ref(false)
-  const baseline = ref(JSON.stringify(form))
-  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
+  const emit = defineEmits<{
+    submit: [event: Event, values: ProfileAccountForm]
+    retry: [event: MouseEvent]
+    delete: [event: Event]
+  }>()
+
+  const form = reactive<ProfileAccountForm>({ ...props.profile })
   const errors = reactive<ProfileAccountErrors>({ accountName: '', billingEmails: '' })
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  const SAVE_TOAST = 'profile-save'
 
   const validate = () => {
     const emails = form.billingEmails
@@ -52,64 +70,49 @@
       : emails.every((value) => emailPattern.test(value))
         ? ''
         : 'Enter valid email addresses, separated by semicolons.'
-    const first = (['accountName', 'billingEmails'] as const).find((field) => errors[field])
-    if (first) nextTick(() => document.getElementById(`profile-${first}`)?.focus())
-    return !first
+    return !(errors.accountName || errors.billingEmails)
   }
 
-  const save = () => {
-    if (saving.value || !validate()) return
-    saving.value = true
-    toast.dismiss(SAVE_TOAST)
-    setTimeout(() => {
-      saving.value = false
-      if (form.accountName.trim().toLowerCase() === 'offline') {
-        toast.error("The profile wasn't saved.", {
-          id: SAVE_TOAST,
-          description: "The request didn't reach the server. Your changes are kept.",
-          action: { label: 'Retry', onClick: () => save() }
-        })
-        return
-      }
-      baseline.value = JSON.stringify(form)
-      toast.success('Profile saved.', { id: SAVE_TOAST })
-    }, 900)
-  }
-
-  const onSaveShortcut = () => {
-    if (!dirty.value || saving.value) return
-    save()
-  }
-  const loading = ref(props.defaultLoading)
-  const loadFailed = ref(props.defaultLoadFailed)
-  const retryLoad = () => {
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-    }, 700)
-  }
+  const {
+    dirty,
+    baseline,
+    discard: restore,
+    submitting: saving,
+    submit: save
+  } = useCardSave({
+    id: 'profile',
+    values: form,
+    saved: () => props.profile,
+    loading: () => props.saving,
+    error: () => props.saveError,
+    savedMessage: 'Profile saved.',
+    failedMessage: "The profile wasn't saved.",
+    valid: validate,
+    onInvalid: () => {
+      const first = errors.accountName ? 'accountName' : 'billingEmails'
+      nextTick(() => document.getElementById(`profile-${first}`)?.focus())
+    },
+    onSubmit: (event, values) => emit('submit', event, values)
+  })
 
   const deleteOpen = ref(false)
-  const deleting = ref(false)
-  const savedName = computed<string>(() => JSON.parse(baseline.value).accountName)
+  const savedName = computed(() => baseline.value.accountName)
   const openDelete = () => {
     deleteOpen.value = true
   }
-  const confirmDelete = () => {
-    if (deleting.value) return
-    deleting.value = true
-    setTimeout(() => {
-      deleting.value = false
-      deleteOpen.value = false
-      toast.success('Account scheduled for deletion.', {
-        description: 'You get an email to confirm it; nothing is deleted before then.'
-      })
-    }, 800)
+  const confirmDelete = (event: Event) => {
+    if (props.deleting) return
+    emit('delete', event)
   }
+  watch(
+    () => props.deleting,
+    (now, before) => {
+      if (before && !now) deleteOpen.value = false
+    }
+  )
 
   const discard = () => {
-    Object.assign(form, JSON.parse(baseline.value))
+    restore()
     Object.assign(errors, { accountName: '', billingEmails: '' })
   }
 </script>
@@ -155,18 +158,18 @@
               </Card>
             </div>
             <div
-              v-else-if="loadFailed"
+              v-else-if="error"
               class="mt-(--layout-section-gap)"
             >
               <Alert severity="danger">
-                The profile could not be loaded. Nothing was changed; try again.
+                {{ error }}
                 <template #actions>
                   <Button
                     type="button"
                     label="Retry"
                     variant="secondary"
                     size="small"
-                    @click="retryLoad"
+                    @click="emit('retry', $event)"
                   />
                 </template>
               </Alert>
@@ -265,7 +268,7 @@
         >
           <SaveBar
             v-if="dirty || saving"
-            @save="onSaveShortcut"
+            @save="save"
           >
             You have unsaved changes.
 
@@ -281,8 +284,8 @@
               <Button
                 variant="primary"
                 size="medium"
+                type="submit"
                 :loading="saving"
-                @click="save"
                 aria-keyshortcuts="Meta+S Control+S"
               >
                 Save

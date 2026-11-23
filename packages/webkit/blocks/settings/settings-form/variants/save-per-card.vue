@@ -1,15 +1,33 @@
 <script setup lang="ts">
   import PageHeader from '@aziontech/webkit/page-header'
 
-  import DeploymentProtectionCard from '../parts/deployment-protection-card.vue'
-  import PreviewToolbarCard from '../parts/preview-toolbar-card.vue'
+  import DeploymentProtectionCard, {
+    type DeploymentProtectionCardProps,
+    type DeploymentProtectionValues
+  } from '../parts/deployment-protection-card.vue'
+  import PreviewToolbarCard, {
+    type PreviewToolbarCardProps,
+    type PreviewToolbarValues
+  } from '../parts/preview-toolbar-card.vue'
+
+  /** Which card a Save sent, and its values. */
+  export type SavePerCardSubmit =
+    | { card: 'preview-toolbar'; values: PreviewToolbarValues }
+    | { card: 'deployment-protection'; values: DeploymentProtectionValues }
 
   export interface SavePerCardProps {
-    /** Preview Toolbar opens with its save in flight: its selects are disabled and its Save spins. */
-    defaultSavingToolbar?: boolean
+    /** The Preview Toolbar card: saved values, opening draft, and its own save loading and error. */
+    previewToolbar?: PreviewToolbarCardProps
+    /** The Deployment Protection card: saved values, opening draft, and its own save loading and error. */
+    deploymentProtection?: DeploymentProtectionCardProps
   }
 
-  const props = withDefaults(defineProps<SavePerCardProps>(), { defaultSavingToolbar: false })
+  const props = withDefaults(defineProps<SavePerCardProps>(), {
+    previewToolbar: () => ({}),
+    deploymentProtection: () => ({})
+  })
+
+  const emit = defineEmits<{ submit: [event: Event, payload: SavePerCardSubmit] }>()
 </script>
 
 <template>
@@ -20,8 +38,14 @@
       size="small"
     />
 
-    <PreviewToolbarCard :default-saving="props.defaultSavingToolbar" />
+    <PreviewToolbarCard
+      v-bind="props.previewToolbar"
+      @submit="(event, values) => emit('submit', event, { card: 'preview-toolbar', values })"
+    />
 
-    <DeploymentProtectionCard />
+    <DeploymentProtectionCard
+      v-bind="props.deploymentProtection"
+      @submit="(event, values) => emit('submit', event, { card: 'deployment-protection', values })"
+    />
   </div>
 </template>

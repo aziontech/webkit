@@ -1,15 +1,33 @@
 <script setup lang="ts">
   import PageHeader from '@aziontech/webkit/page-header'
 
-  import GeneralGroupCard from '../parts/general-group-card.vue'
-  import NotificationsGroupCard from '../parts/notifications-group-card.vue'
+  import GeneralGroupCard, {
+    type GeneralGroupCardProps,
+    type GeneralGroupValues
+  } from '../parts/general-group-card.vue'
+  import NotificationsGroupCard, {
+    type NotificationsGroupCardProps,
+    type NotificationsGroupValues
+  } from '../parts/notifications-group-card.vue'
+
+  /** Which group a Save sent, and its values. */
+  export type SavePerGroupSubmit =
+    | { group: 'general'; values: GeneralGroupValues }
+    | { group: 'notifications'; values: NotificationsGroupValues }
 
   export interface SavePerGroupProps {
-    /** General opens with its save in flight: its rows are disabled and its Save spins. */
-    defaultSavingGeneral?: boolean
+    /** The General group: saved values, opening draft, and its own save loading and error. */
+    general?: GeneralGroupCardProps
+    /** The Notifications group: saved values, opening draft, and its own save loading and error. */
+    notifications?: NotificationsGroupCardProps
   }
 
-  const props = withDefaults(defineProps<SavePerGroupProps>(), { defaultSavingGeneral: false })
+  const props = withDefaults(defineProps<SavePerGroupProps>(), {
+    general: () => ({}),
+    notifications: () => ({})
+  })
+
+  const emit = defineEmits<{ submit: [event: Event, payload: SavePerGroupSubmit] }>()
 </script>
 
 <template>
@@ -20,8 +38,14 @@
       size="small"
     />
 
-    <GeneralGroupCard :default-saving="props.defaultSavingGeneral" />
+    <GeneralGroupCard
+      v-bind="props.general"
+      @submit="(event, values) => emit('submit', event, { group: 'general', values })"
+    />
 
-    <NotificationsGroupCard />
+    <NotificationsGroupCard
+      v-bind="props.notifications"
+      @submit="(event, values) => emit('submit', event, { group: 'notifications', values })"
+    />
   </div>
 </template>

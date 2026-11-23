@@ -5,11 +5,50 @@
   import Field from '@aziontech/webkit/field'
   import Link from '@aziontech/webkit/link'
   import Select from '@aziontech/webkit/select'
-  import { reactive, ref } from 'vue'
+  import { reactive } from 'vue'
 
-  import { saveWithToast } from '../settings-form-save'
+  import { useCardSave } from '../composables/use-card-save'
 
-  const props = withDefaults(defineProps<{ defaultSaving?: boolean }>(), { defaultSaving: false })
+  /** The saved Preview Toolbar card, and the values its Save sends. */
+  export interface PreviewToolbarValues {
+    /** Toolbar setting for pre-production deployments. */
+    preprod: string
+    /** Toolbar setting for production deployments. */
+    prod: string
+  }
+
+  export interface PreviewToolbarCardProps {
+    /** The saved values; Save stays disabled until the card differs from them. */
+    values?: PreviewToolbarValues
+    /** Unsaved edits the card opens with, so it starts dirty. */
+    defaultDraft?: Partial<PreviewToolbarValues>
+    /** The save of this card is in flight: its fields lock and its Save spins. */
+    loading?: boolean
+    /** Why the save failed, shown in the error toast with Retry; the edits are kept. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<PreviewToolbarCardProps>(), {
+    values: () => ({ preprod: 'default', prod: 'default' }),
+    defaultDraft: () => ({}),
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{ submit: [event: Event, values: PreviewToolbarValues] }>()
+
+  const toolbar = reactive<PreviewToolbarValues>({ ...props.values, ...props.defaultDraft })
+
+  const { dirty, submitting, submit } = useCardSave({
+    id: 'preview-toolbar',
+    values: toolbar,
+    saved: () => props.values,
+    loading: () => props.loading,
+    error: () => props.error,
+    savedMessage: 'Preview Toolbar saved.',
+    failedMessage: "The Preview Toolbar settings weren't saved.",
+    onSubmit: (event, values) => emit('submit', event, values)
+  })
 
   const toolbarOptions = [
     { label: 'Team default', value: 'default' },
@@ -18,9 +57,6 @@
   ]
   const toolbarLabel = (value: string) =>
     toolbarOptions.find((option) => option.value === value)?.label ?? ''
-  const toolbar = reactive({ preprod: 'default', prod: 'default' })
-  const savingToolbar = ref(props.defaultSaving)
-  const saveToolbar = () => saveWithToast(savingToolbar, 'Preview Toolbar')
 
   const PREVIEW_TOOLBAR_NOTE =
     'Enable the Preview Toolbar on your deployments. To use the toolbar in production, ' +
@@ -28,12 +64,17 @@
 </script>
 
 <template>
-  <div class="layout-section-start">
+  <form
+    class="layout-section-start"
+    aria-label="Preview Toolbar"
+    novalidate
+    @submit.prevent="submit"
+  >
     <Card title="Preview Toolbar">
       <template #default>
         <fieldset
           class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
-          :disabled="savingToolbar"
+          :disabled="submitting"
         >
           <legend class="sr-only">Preview Toolbar</legend>
 
@@ -48,7 +89,7 @@
               <Select
                 v-model="toolbar.preprod"
                 size="large"
-                :disabled="savingToolbar"
+                :disabled="submitting"
                 :display-value="toolbarLabel"
               >
                 <Select.Trigger id="tb-preprod" />
@@ -68,7 +109,7 @@
               <Select
                 v-model="toolbar.prod"
                 size="large"
-                :disabled="savingToolbar"
+                :disabled="submitting"
                 :display-value="toolbarLabel"
               >
                 <Select.Trigger id="tb-prod" />
@@ -97,11 +138,12 @@
             label="Save"
             variant="secondary"
             size="medium"
-            :loading="savingToolbar"
-            @click="saveToolbar"
+            type="submit"
+            :loading="submitting"
+            :disabled="!dirty"
           />
         </div>
       </template>
     </Card>
-  </div>
+  </form>
 </template>

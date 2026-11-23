@@ -3,5 +3,5 @@
 </script>
 
 <template>
-  <Profile default-loading />
+  <Profile loading />
 </template>
