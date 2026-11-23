@@ -8,9 +8,11 @@ export type Resource = {
   domainCount: number
   status: 'Live' | 'Inactive'
   owner: string
+  createdAt: Date
   modifiedAt: Date
   lastModified: string
   dnssec: boolean
+  deployed: boolean
 }
 
 const OWNERS = ['Amy Chen', 'Ben Carter', 'Chloe Park', 'David Kim', 'Ella Grant', 'Frank Miller']
@@ -30,9 +32,11 @@ function seed(n: number): Resource {
     domainCount: aliases.length,
     status: n === 7 ? 'Inactive' : 'Live',
     owner: OWNERS[n % OWNERS.length],
+    createdAt: new Date(REFERENCE - (n - 1) * 18 * 86_400_000),
     modifiedAt: new Date(REFERENCE - (n - 1) * 18 * 86_400_000),
     lastModified: AGES[Math.min(n - 1, AGES.length - 1)],
-    dnssec: n % 2 === 0
+    dnssec: n % 2 === 0,
+    deployed: true
   }
 }
 
@@ -44,27 +48,61 @@ export function findResource(id: unknown): Resource | undefined {
   return resources.value.find((item) => item.id === String(id))
 }
 
-export function createResource(input: { name: string; domain: string; dnssec: boolean }) {
+export function createResource(input: {
+  name: string
+  domain: string
+  dnssec: boolean
+  active?: boolean
+}) {
   nextId += 1
+  const now = new Date()
   const resource: Resource = {
     id: String(nextId),
     name: input.name,
     domain: input.domain,
     domains: [input.domain],
     domainCount: 0,
-    status: 'Live',
+    status: input.active === false ? 'Inactive' : 'Live',
     owner: OWNERS[0],
-    modifiedAt: new Date(REFERENCE),
+    createdAt: now,
+    modifiedAt: now,
     lastModified: 'just now',
-    dnssec: input.dnssec
+    dnssec: input.dnssec,
+    deployed: false
   }
   resources.value = [resource, ...resources.value]
   return resource
 }
 
+export function cloneResource(id: string): Resource | undefined {
+  const source = findResource(id)
+  if (!source) return undefined
+  const taken = new Set(resources.value.map((item) => item.name))
+  let name = `${source.name}-copy`
+  for (let n = 2; taken.has(name); n += 1) name = `${source.name}-copy-${n}`
+  nextId += 1
+  const now = new Date()
+  const copy: Resource = {
+    ...source,
+    id: String(nextId),
+    name,
+    createdAt: now,
+    modifiedAt: now,
+    lastModified: 'just now',
+    deployed: false
+  }
+  const index = resources.value.findIndex((item) => item.id === id)
+  resources.value = [
+    ...resources.value.slice(0, index + 1),
+    copy,
+    ...resources.value.slice(index + 1)
+  ]
+  return copy
+}
+
 export function updateResource(id: string, patch: Partial<Resource>) {
   resources.value = resources.value.map((item) =>
-    item.id === id ? { ...item, ...patch, lastModified: 'just now' } : item
+    item.id === id ? { ...item, ...patch, modifiedAt: new Date(), lastModified: 'just now' } : item
   )
 }
 

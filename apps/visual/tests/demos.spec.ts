@@ -55,10 +55,13 @@ test.describe('demo flows', () => {
     await expect(page).toHaveURL(/\/resources\/new$/)
     await page.getByRole('textbox', { name: 'Name', exact: true }).fill('shop-api')
     await page.getByRole('textbox', { name: 'Domain name', exact: true }).fill('shop.example.com')
-    await page.getByRole('button', { name: 'Save', exact: true }).click()
+    await page.getByRole('button', { name: 'Create resource', exact: true }).click()
     await expect(page).toHaveURL(/\/resources\/\d+$/)
     await expect(page.getByText('shop.example.com').first()).toBeVisible()
     await expect(toastTitle(page, 'shop-api was created.')).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'shop-api' })).toBeVisible()
+    await expect(page.getByText('No deployment yet')).toBeVisible()
+    await expect(page.getByText('just now by Amy Chen')).toBeVisible()
   })
 
   test('detail → edit → save', async ({ page }) => {
@@ -80,6 +83,111 @@ test.describe('demo flows', () => {
     await expect(toastTitle(page, 'resource-01 was deleted.')).toBeVisible()
     await expect(page.getByRole('link', { name: 'resource-01', exact: true })).toHaveCount(0)
   })
+
+  test('detail and edit are headed by the resource name', async ({ page }) => {
+    await page.goto(`${DEMOS}/resources/${FIRST}`)
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('resource-01')
+    await page.goto(`${DEMOS}/resources/${FIRST}/edit`)
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('resource-01')
+  })
+
+  test('edit saves with Control+S', async ({ page }) => {
+    await page.goto(`${DEMOS}/resources/${FIRST}/edit`)
+    await page.locator('#resource-name').fill('resource-01-keyboard')
+    await page.keyboard.press('Control+S')
+    await expect(page).toHaveURL(new RegExp(`/resources/${FIRST}$`))
+    await expect(toastTitle(page, 'resource-01-keyboard was saved.')).toBeVisible()
+  })
+
+  test('the row menu opens the same delete dialog as the delete route', async ({ page }) => {
+    await page.goto(`${DEMOS}/resources`)
+    await page.locator('[data-testid="table-cell-actions"]').first().getByRole('button').click()
+    await page.getByRole('menuitem', { name: 'Delete' }).click()
+    await expect(page).toHaveURL(new RegExp(`/resources/${FIRST}/delete$`))
+    const dialog = page.getByRole('alertdialog', { name: 'Delete resource' })
+    await expect(dialog.getByRole('button', { name: 'Copy resource-01' })).toBeVisible()
+  })
+
+  test('focus lands on a row after the delete dialog closes', async ({ page }) => {
+    await page.goto(`${DEMOS}/resources/${FIRST}/delete`)
+    await expect(page.getByRole('alertdialog', { name: 'Delete resource' })).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(page).toHaveURL(/\/resources$/)
+    await expect(page.getByRole('link', { name: 'resource-01', exact: true })).toBeFocused()
+
+    await page.goto(`${DEMOS}/resources/${FIRST}/delete`)
+    const dialog = page.getByRole('alertdialog', { name: 'Delete resource' })
+    await dialog.getByRole('textbox').fill('resource-01')
+    await dialog.getByRole('button', { name: 'Delete resource' }).click()
+    await expect(page).toHaveURL(/\/resources$/)
+    await expect(page.getByRole('link', { name: 'resource-02', exact: true })).toBeFocused()
+  })
+
+  test('Clone adds a copy of the row', async ({ page }) => {
+    await page.goto(`${DEMOS}/resources`)
+    await page.locator('[data-testid="table-cell-actions"]').first().getByRole('button').click()
+    await page.getByRole('menuitem', { name: 'Clone' }).click()
+    await expect(page.getByRole('link', { name: 'resource-01-copy', exact: true })).toBeVisible()
+  })
+
+  test('the account menu and the create page avatar lead to Account settings', async ({ page }) => {
+    await page.goto(`${DEMOS}/resources`)
+    await page.getByRole('button', { name: /account menu/ }).first().click()
+    await page.getByRole('menuitem', { name: 'Account settings' }).click()
+    await expect(page).toHaveURL(/\/settings$/)
+    await page.goto(`${DEMOS}/resources/new`)
+    await page.getByRole('button', { name: 'Account settings' }).click()
+    await expect(page).toHaveURL(/\/settings$/)
+  })
+
+  test('a sidebar row with no page is disabled', async ({ page }) => {
+    await page.goto(`${DEMOS}/resources`)
+    await expect(page.getByRole('button', { name: /Projects/ }).first()).toBeDisabled()
+  })
+
+  test('the profile opens on the signed-in account and saves with Control+S', async ({ page }) => {
+    await page.goto(`${DEMOS}/settings`)
+    await expect(page.locator('#full-name')).toHaveValue('Amy Chen')
+    await expect(page.locator('#email')).toHaveValue('amy.chen@example.com')
+    await page.locator('#full-name').fill('Amy Chen-Park')
+    await page.keyboard.press('Control+S')
+    await expect(page.getByText('This field is required.')).toHaveCount(0)
+  })
+
+  test('each plan card prints its description once', async ({ page }) => {
+    await page.goto(`${DEMOS}/onboarding/plan`)
+    await expect(page.getByText('Start free for personal projects and experimentation')).toHaveCount(1)
+  })
+
+  test('an unknown address shows a not-found page and keeps the URL', async ({ page }) => {
+    await page.goto(`${DEMOS}/nope-404`)
+    await expect(page).toHaveURL(/\/nope-404$/)
+    await expect(page.getByRole('heading', { level: 1, name: 'Page not found' })).toBeVisible()
+  })
+
+  test('on a phone the list shows each row status', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto(`${DEMOS}/resources`)
+    await expect(page.locator('[data-stacked]').getByText('Inactive').first()).toBeVisible()
+  })
+
+  for (const width of [390, 1280]) {
+    test(`the demo controls cover no control at ${width}`, async ({ page }) => {
+      await page.setViewportSize({ width, height: width < 600 ? 844 : 900 })
+      await page.goto(`${DEMOS}/settings`)
+      await page.locator('#full-name').fill('Amy Chen-Park')
+      const bar = await page.locator('[data-demo-bar]').boundingBox()
+      const covered = await page.evaluate((top) => {
+        const controls = [...document.querySelectorAll('main button, main a, main input, nav button')]
+        return controls
+          .filter((el) => !el.closest('[data-demo-bar]'))
+          .map((el) => el.getBoundingClientRect())
+          .filter((box) => box.width > 0 && box.bottom > top && box.top < innerHeight)
+          .map((box) => `${box.left},${box.top}`)
+      }, bar?.y ?? 0)
+      expect(covered).toEqual([])
+    })
+  }
 
   test('deploy → toast with Edit and Redeploy', async ({ page }) => {
     await page.goto(`${DEMOS}/resources/${FIRST}/deploy`)

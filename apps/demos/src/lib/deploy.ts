@@ -58,7 +58,7 @@ function finish() {
     return
   }
   run.status = 'success'
-  updateResource(run.resourceId, { status: 'Live' })
+  updateResource(run.resourceId, { status: 'Live', deployed: true })
   toast.success(`${run.name} is live.`, {
     id: RUN_TOAST,
     description: `It is available at ${run.domain}.`,

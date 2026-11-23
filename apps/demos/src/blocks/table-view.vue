@@ -3,7 +3,6 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable, {
     type DropdownMenuItemValue,
     type TableColumn,
@@ -14,7 +13,6 @@
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
@@ -24,7 +22,7 @@
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, ref, useId, watch } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
   import { sampleResources } from './table-view.sample'
 
@@ -72,7 +70,6 @@
       event: Event,
       payload: { value: DropdownMenuItemValue; resource: TableViewResource }
     ]
-    delete: [event: Event, resource: TableViewResource]
   }>()
 
   const source = computed<TableViewResource[]>(
@@ -135,31 +132,8 @@
   const resourcesTableEl = ref<TableExposed<TableViewResource> | null>(null)
   const exportCsv = () => resourcesTableEl.value?.exportCsv({ filename: 'resources.csv' })
 
-  const pending = ref<TableViewResource | null>(null)
-  const deleteOpen = ref(false)
-  const confirmation = ref('')
-  const confirmLabelId = useId()
-  const canDelete = computed(
-    () => pending.value !== null && confirmation.value.trim() === pending.value.name
-  )
-
-  const onRowAction = (event: Event, value: DropdownMenuItemValue, row: TableViewResource) => {
-    if (value !== 'delete') {
-      emit('row-action', event, { value, resource: row })
-      return
-    }
-    pending.value = row
-    confirmation.value = ''
-    deleteOpen.value = true
-  }
-
-  const confirmDelete = (event: Event) => {
-    const resource = pending.value
-    if (!canDelete.value || !resource) return
-    items.value = items.value.filter((item) => item.id !== resource.id)
-    deleteOpen.value = false
-    emit('delete', event, resource)
-  }
+  const onRowAction = (event: Event, value: DropdownMenuItemValue, row: TableViewResource) =>
+    emit('row-action', event, { value, resource: row })
 </script>
 
 <template>
@@ -285,6 +259,7 @@
                   v-bind="tableProps"
                   :loading="loading || fetching"
                   sortable
+                  stackable
                   :bordered="false"
                 >
                   <template #cell-name="{ row }">
@@ -404,48 +379,5 @@
         </section>
       </section>
     </div>
-    <ConfirmDialog
-      v-model:open="deleteOpen"
-      title="Delete resource"
-      size="medium"
-    >
-      <div class="flex flex-col gap-(--spacing-md)">
-        <Alert
-          severity="warning"
-          label="Once confirmed, this action can't be reversed."
-        />
-        <p class="m-0 text-body-sm text-(--text-muted)">
-          The selected resource will be deleted, along with its domains and settings.
-        </p>
-        <p
-          :id="confirmLabelId"
-          class="m-0 text-body-sm text-(--text-default)"
-        >
-          Type <code class="text-label-code-sm">{{ pending?.name }}</code> to confirm.
-        </p>
-        <Input
-          v-model="confirmation"
-          :aria-labelledby="confirmLabelId"
-          autocomplete="off"
-          class="w-full"
-          @keydown.enter="confirmDelete"
-        />
-      </div>
-      <template #actions="{ close }">
-        <Button
-          label="Cancel"
-          variant="outline"
-          size="medium"
-          @click="close"
-        />
-        <Button
-          label="Delete resource"
-          variant="danger"
-          size="medium"
-          :disabled="!canDelete"
-          @click="confirmDelete"
-        />
-      </template>
-    </ConfirmDialog>
   </div>
 </template>

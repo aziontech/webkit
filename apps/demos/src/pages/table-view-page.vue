@@ -4,7 +4,7 @@
   import { useRouter } from 'vue-router'
 
   import TableView, { type TableViewResource } from '../blocks/table-view.vue'
-  import { deleteResource, resources } from '../lib/store'
+  import { cloneResource, resources } from '../lib/store'
 
   const router = useRouter()
   const loading = ref(false)
@@ -25,11 +25,11 @@
   ) => {
     if (value === 'view') router.push(`/resources/${resource.id}`)
     if (value === 'deploy') router.push(`/resources/${resource.id}/deploy`)
-  }
-
-  const onDelete = (_event: Event, resource: TableViewResource) => {
-    deleteResource(resource.id)
-    toast.success(`${resource.name} was deleted.`, { closable: true })
+    if (value === 'delete') router.push(`/resources/${resource.id}/delete`)
+    if (value === 'duplicate') {
+      const copy = cloneResource(resource.id)
+      if (copy) toast.success(`${copy.name} was created from ${resource.name}.`, { closable: true })
+    }
   }
 </script>
 
@@ -41,6 +41,5 @@
     @refresh="refresh"
     @retry="refresh"
     @row-action="onRowAction"
-    @delete="onDelete"
   />
 </template>
