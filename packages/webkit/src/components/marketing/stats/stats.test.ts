@@ -105,11 +105,11 @@ describe('Stats', () => {
     const { container } = render(Stats, { props: { items } })
     const latency = container.querySelectorAll('figure')[2]
 
-    expect([...latency.querySelectorAll('span')].map((el) => el.textContent)).toEqual([
-      '<',
-      '15',
-      'ms'
-    ])
+    expect(
+      [...latency.querySelectorAll('[data-testid="stats__value"] > span')].map(
+        (el) => el.textContent
+      )
+    ).toEqual(['<', '15', 'ms'])
   })
 
   it('omits the prefix and the suffix when the item carries neither', () => {
@@ -117,9 +117,11 @@ describe('Stats', () => {
       props: { items: [{ value: '42', label: 'Regions' }] }
     })
 
-    expect([...container.querySelectorAll('figure span')].map((el) => el.textContent)).toEqual([
-      '42'
-    ])
+    expect(
+      [...container.querySelectorAll('[data-testid="stats__value"] > span')].map(
+        (el) => el.textContent
+      )
+    ).toEqual(['42'])
     expect(container.querySelector('figcaption')).toHaveTextContent('Regions')
   })
 
