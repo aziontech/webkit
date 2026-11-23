@@ -1220,3 +1220,52 @@ Budget-raise: drawer-content 18.3 KB → 18.35 KB (measured 18.31 KB): after eve
 Budget-raise: popover 11.3 KB → 11.35 KB (measured 11.31 KB): after every step-6 lane merged, it carries the split cost of more than one shared piece at once (placement, listbox, combobox, navigation menu, sidebar, table parts); each lane measured its own share alone (decision CQ-E8).
 Budget-raise: shortcuts-dialog 27.2 KB → 27.25 KB (measured 27.22 KB): after every step-6 lane merged, it carries the split cost of more than one shared piece at once (placement, listbox, combobox, navigation menu, sidebar, table parts); each lane measured its own share alone (decision CQ-E8).
 Budget-raise: package packedBytes 8,500,000 → 8,550,000 bytes (measured 8,502,714): the DataTable companion parts, the block parts, lib and composable files of step 6 and their llms pages are many more small files in the tarball once every lane is merged.
+
+## Audit-5 lane F05 (layout and navigation), 2026-11-22
+
+Budget-raise: app-layout 24.4 KB → 24.45 KB (measured 24.41 KB): the ConsoleLayout and AppLayout fixes: account name in the trigger, compact breadcrumbs, touch areas, inline sub-menu in its menus (A5-024, A5-228, A5-231, A5-232); a named ScrollArea exposes role region (A5-028).
+Budget-raise: console-layout-root 82.6 KB → 83.05 KB (measured 83.03 KB): the ConsoleLayout and AppLayout fixes: account name in the trigger, compact breadcrumbs, touch areas, inline sub-menu in its menus (A5-024, A5-228, A5-231, A5-232); a named ScrollArea exposes role region (A5-028).
+Budget-raise: doc-layout 72.9 KB → 73.2 KB (measured 73.17 KB): the ConsoleLayout and AppLayout fixes: account name in the trigger, compact breadcrumbs, touch areas, inline sub-menu in its menus (A5-024, A5-228, A5-231, A5-232); a named ScrollArea exposes role region (A5-028).
+Budget-raise: date-picker-root 44 KB → 44.05 KB (measured 44.03 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: data-table 57.7 KB → 57.75 KB (measured 57.70 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: doc-page-header 32.4 KB → 32.65 KB (measured 32.63 KB): a sub-menu with no room beside its parent opens inline under its sub-trigger on a phone (A5-230).
+Budget-raise: quote 15.2 KB → 15.25 KB (measured 15.21 KB): Avatar draws a full name as first and last initials through the shared initials helper (A5-024).
+Budget-raise: quote-tabs 24.5 KB → 24.6 KB (measured 24.58 KB): Avatar draws a full name as first and last initials through the shared initials helper (A5-024).
+Budget-raise: console-application-scene 121.95 KB → 122.1 KB (measured 122.05 KB): Avatar draws a full name as first and last initials through the shared initials helper (A5-024).
+Budget-raise: console-trace-scene 84.65 KB → 84.8 KB (measured 84.76 KB): Avatar draws a full name as first and last initials through the shared initials helper (A5-024).
+Budget-raise: article-index-section 36.6 KB → 36.7 KB (measured 36.65 KB): Avatar draws a full name as first and last initials through the shared initials helper (A5-024).
+Budget-raise: site-header-section 59.45 KB → 59.8 KB (measured 59.75 KB): a sub-menu with no room beside its parent opens inline under its sub-trigger on a phone (A5-230); the menu bar arrow keys also reach its plain link triggers (A5-027).
+Budget-raise: plan-comparison-section 39.25 KB → 39.3 KB (measured 39.25 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: network-section 27.1 KB → 27.15 KB (measured 27.10 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: logo-wall-section 24.5 KB → 24.55 KB (measured 24.54 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: recognition-marquee-section 21.6 KB → 21.7 KB (measured 21.69 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: cli-terminal-section 47.15 KB → 47.2 KB (measured 47.15 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: feature-tabs-section 58.15 KB → 58.2 KB (measured 58.16 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: settings-group 8.3 KB → 8.35 KB (measured 8.32 KB): the ConsoleLayout and AppLayout fixes: account name in the trigger, compact breadcrumbs, touch areas, inline sub-menu in its menus (A5-024, A5-228, A5-231, A5-232); a named ScrollArea exposes role region (A5-028).
+Budget-raise: select 23 KB → 23.05 KB (measured 23.02 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: code-block 33.85 KB → 33.9 KB (measured 33.87 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: chat-message-root 18.95 KB → 19.05 KB (measured 19.01 KB): Avatar draws a full name as first and last initials through the shared initials helper (A5-024).
+Budget-raise: streaming-response 38.1 KB → 38.15 KB (measured 38.14 KB): Avatar draws a full name as first and last initials through the shared initials helper (A5-024).
+Budget-raise: table-cell-time 19 KB → 19.05 KB (measured 19.04 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: filter-menu-chip-group 21.95 KB → 22 KB (measured 21.98 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: split-button 16.9 KB → 17.1 KB (measured 17.09 KB): a sub-menu with no room beside its parent opens inline under its sub-trigger on a phone (A5-230).
+Budget-raise: avatar 12.25 KB → 12.3 KB (measured 12.26 KB): Avatar draws a full name as first and last initials through the shared initials helper (A5-024).
+Budget-raise: date-picker 44.15 KB → 44.2 KB (measured 44.18 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: context-menu 11.5 KB → 11.7 KB (measured 11.67 KB): a sub-menu with no room beside its parent opens inline under its sub-trigger on a phone (A5-230).
+Budget-raise: dropdown-menu 12.5 KB → 12.75 KB (measured 12.71 KB): a sub-menu with no room beside its parent opens inline under its sub-trigger on a phone (A5-230).
+Budget-raise: dropdown-menu-sub-content 5.05 KB → 5.3 KB (measured 5.25 KB): a sub-menu with no room beside its parent opens inline under its sub-trigger on a phone (A5-230).
+Budget-raise: select-content 19.35 KB → 19.4 KB (measured 19.35 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: footer 3.85 KB → 3.9 KB (measured 3.88 KB): the ConsoleLayout and AppLayout fixes: account name in the trigger, compact breadcrumbs, touch areas, inline sub-menu in its menus (A5-024, A5-228, A5-231, A5-232); a named ScrollArea exposes role region (A5-028).
+Budget-raise: console-layout 83.9 KB → 84.35 KB (measured 84.33 KB): the ConsoleLayout and AppLayout fixes: account name in the trigger, compact breadcrumbs, touch areas, inline sub-menu in its menus (A5-024, A5-228, A5-231, A5-232); a named ScrollArea exposes role region (A5-028).
+Budget-raise: app-header-account 13.7 KB → 13.9 KB (measured 13.85 KB): the ConsoleLayout and AppLayout fixes: account name in the trigger, compact breadcrumbs, touch areas, inline sub-menu in its menus (A5-024, A5-228, A5-231, A5-232); a named ScrollArea exposes role region (A5-028).
+Budget-raise: sidebar 25.25 KB → 25.3 KB (measured 25.26 KB): the ConsoleLayout and AppLayout fixes: account name in the trigger, compact breadcrumbs, touch areas, inline sub-menu in its menus (A5-024, A5-228, A5-231, A5-232); a named ScrollArea exposes role region (A5-028).
+Budget-raise: sidebar-root 25.05 KB → 25.1 KB (measured 25.06 KB): the ConsoleLayout and AppLayout fixes: account name in the trigger, compact breadcrumbs, touch areas, inline sub-menu in its menus (A5-024, A5-228, A5-231, A5-232); a named ScrollArea exposes role region (A5-028).
+Budget-raise: breadcrumb 26.6 KB → 26.8 KB (measured 26.79 KB): a sub-menu with no room beside its parent opens inline under its sub-trigger on a phone (A5-230).
+Budget-raise: breadcrumb-root 26.55 KB → 26.8 KB (measured 26.75 KB): a sub-menu with no room beside its parent opens inline under its sub-trigger on a phone (A5-230).
+Budget-raise: navigation-menu 26.6 KB → 26.9 KB (measured 26.89 KB): the menu bar arrow keys also reach its plain link triggers (A5-027).
+Budget-raise: navigation-menu-root 15.8 KB → 16.05 KB (measured 16.00 KB): the menu bar arrow keys also reach its plain link triggers (A5-027).
+Budget-raise: dialog 23.25 KB → 23.3 KB (measured 23.25 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: dialog-body 13.9 KB → 13.95 KB (measured 13.91 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: drawer 23.4 KB → 23.45 KB (measured 23.42 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: drawer-body 13.9 KB → 13.95 KB (measured 13.91 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).
+Budget-raise: panel-body 13.9 KB → 13.95 KB (measured 13.91 KB): a named ScrollArea exposes role region (A5-028) (inherited through ScrollArea or Avatar).

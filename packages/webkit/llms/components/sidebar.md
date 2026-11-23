@@ -127,6 +127,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 
 ## Accessibility
 
+- Landmarks: the `<nav>` region is the sidebar's one landmark, named by `ariaLabel` (default `Sidebar`); the root is a plain `div`, so the sidebar never adds an unnamed or duplicate `complementary` landmark beside it.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
   The **scroll viewport is not a tab stop** (`tabindex="-1"` on the built-in `ScrollArea`): a scroll
