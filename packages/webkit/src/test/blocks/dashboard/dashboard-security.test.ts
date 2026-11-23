@@ -38,7 +38,7 @@ describe('dashboard/dashboard-security#ByActor', () => {
     const view = render(SecurityByActor)
     const input = view.getByRole('textbox', { name: 'Destination host' }) as HTMLInputElement
     expect(input.placeholder).toBe('Filter by host')
-    expect(input.closest('[data-testid="input"]')?.textContent).toContain('Destination')
+    expect(input.parentElement?.parentElement?.textContent).toContain('Destination')
   })
 
   it('moves the time range to the header and the closed-set filters into FilterMenu', async () => {

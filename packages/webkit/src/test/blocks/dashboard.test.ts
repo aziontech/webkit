@@ -200,7 +200,7 @@ describe('dashboard/dashboard-analytics data shapes', () => {
     expect(charts.length).toBeGreaterThanOrEqual(3)
     for (const chart of charts) expect(chart.getAttribute('aria-busy')).toBe('true')
     expect(view.container.querySelector('[data-loading]')).toBeNull()
-    expect(view.getByRole('status').textContent).toContain('Updating')
+    expect(view.getByTestId('period-header__updating').textContent).toContain('Updating')
     expect(view.getByRole('group', { name: 'Key figures' }).getAttribute('aria-busy')).toBe('true')
   })
 
