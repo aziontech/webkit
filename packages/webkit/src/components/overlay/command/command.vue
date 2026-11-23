@@ -27,7 +27,14 @@
     type CommandItemValue,
     type CommandRegisteredItem
   } from './injection-key'
-  import { groupStatsOf, matchesShortcut, sortVisibleItems } from './lib/command-order'
+  import {
+    arrangeRankedDom,
+    type CommandDomSnapshot,
+    groupStatsOf,
+    matchesShortcut,
+    restoreDomOrder,
+    sortVisibleItems
+  } from './lib/command-order'
   import { claimShortcut } from './shortcut-registry'
 
   defineOptions({
@@ -110,6 +117,17 @@
   )
 
   const navigableItems = computed(() => visibleItems.value.filter((item) => !item.disabled.value))
+
+  const domSnapshot: CommandDomSnapshot = new Map()
+
+  watch(
+    [visibleItems, ranking],
+    ([visible, ranked]) => {
+      if (ranked) arrangeRankedDom(visible, domSnapshot)
+      else restoreDomOrder(domSnapshot)
+    },
+    { flush: 'post' }
+  )
 
   const pages = useCommandPages(pageModel, (name) => {
     pageModel.value = name

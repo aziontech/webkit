@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 13
 template: 2
-checksum: 106cb41ea65b13fbd4ddedfd9aee15e0b428158ae721980140024a3754c16f57
+checksum: b7eac18e7982a091d51d6d707d01fa05751ba8057941b049d6ac31bb6d908ec5
 created: 2026-07-23
 last_updated: 2026-11-19
 ---
@@ -141,7 +141,7 @@ packages/webkit/src/components/overlay/command/
   - Props: `placeholder: string` default `''` — input placeholder text; empty uses the locale catalog (`Search everything` in English). `ariaLabel: string` default `''` — accessible name for the search field; when empty it falls back to `placeholder`, so the field keeps its name after the placeholder disappears on the first keystroke.
   - Events: _none_ (the query lives in the injected context).
   - Slots: _none_.
-- `command-list/command-list.vue` — the scrollable results region. `role="listbox"` while at least one item is visible; with no visible item it drops the role (an empty listbox fails `aria-required-children`) and shows the `Empty` part. While the query is not empty it carries `data-ranked` and becomes a flex column, so groups and ungrouped items take their rank as a CSS `order` (the DOM order is untouched, so no consumer node is moved or re-created).
+- `command-list/command-list.vue` — the scrollable results region. `role="listbox"` while at least one item is visible; with no visible item it drops the role (an empty listbox fails `aria-required-children`) and shows the `Empty` part. While the query is not empty it carries `data-ranked` and becomes a flex column, so groups and ungrouped items take their rank as a CSS `order`, and the root also moves the visible groups and rows in the DOM into that ranked order (nothing is re-created), so a screen reader reads the results in the order they are seen (WCAG 1.3.2). When the query empties, every moved node goes back to its original place.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — one or more `<Command.Group>` / `<Command.Item>` / `<Command.Separator>`, plus an optional `<Command.Empty>`.

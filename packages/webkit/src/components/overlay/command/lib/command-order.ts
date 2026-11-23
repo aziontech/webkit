@@ -55,6 +55,37 @@ export function sortVisibleItems(
     .map((entry) => entry.item)
 }
 
+export type CommandDomSnapshot = Map<Element, Node[]>
+
+export function arrangeRankedDom(
+  visible: CommandRegisteredItem[],
+  snapshot: CommandDomSnapshot
+): void {
+  const place = (parent: Element, node: Element) => {
+    if (!snapshot.has(parent)) snapshot.set(parent, Array.from(parent.childNodes))
+    parent.appendChild(node)
+  }
+  const placedGroups = new Set<Element>()
+  for (const item of visible) {
+    const el = item.el.value
+    const parent = el?.parentElement
+    if (!el || !parent) continue
+    const group = item.groupId === null ? null : el.closest('[role="group"]')
+    if (group?.parentElement && !placedGroups.has(group)) {
+      placedGroups.add(group)
+      place(group.parentElement, group)
+    }
+    place(parent, el)
+  }
+}
+
+export function restoreDomOrder(snapshot: CommandDomSnapshot): void {
+  snapshot.forEach((nodes, parent) => {
+    for (const node of nodes) if (node.parentNode === parent) parent.appendChild(node)
+  })
+  snapshot.clear()
+}
+
 export function matchesShortcut(
   shortcut: string,
   event: globalThis.KeyboardEvent,
