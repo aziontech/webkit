@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { type ComponentPublicInstance } from 'vue'
+  import { type ComponentPublicInstance, computed, useAttrs } from 'vue'
 
   import { usePortalLocale } from '../../../../composables/use-translate'
   import { usePopoverContext } from '../composables/use-popover-context'
@@ -13,7 +13,9 @@
     default(): unknown
   }>()
 
+  const attrs = useAttrs()
   const ctx = usePopoverContext()
+  const testId = computed(() => String(attrs['data-testid'] ?? 'popover-content'))
 
   const setPanelEl = (el: globalThis.Element | ComponentPublicInstance | null) => {
     ctx.panelEl.value = el instanceof HTMLElement ? el : null
@@ -48,7 +50,7 @@
           ctx.hasTitle.value ? ctx.titleId : ctx.triggerEl.value?.id || ctx.triggerId
         "
         :aria-describedby="ctx.hasDescription.value ? ctx.descriptionId : undefined"
-        :data-testid="`${ctx.testId}__panel`"
+        :data-testid="testId"
         :data-state="ctx.isOpen.value ? 'open' : 'closed'"
         :data-side="ctx.side.value"
         :data-align="ctx.align.value"
@@ -58,7 +60,7 @@
         :class="PANEL_CLASS"
       >
         <div
-          :data-testid="`${ctx.testId}__body`"
+          :data-testid="`${testId}__body`"
           class="flex flex-col"
         >
           <slot />

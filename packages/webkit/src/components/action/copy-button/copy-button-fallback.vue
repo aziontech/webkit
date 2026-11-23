@@ -63,7 +63,7 @@
     :data-testid="`${testId}__fallback`"
   >
     <Anchor :el="anchor" />
-    <PopoverContent>
+    <PopoverContent :data-testid="`${testId}__fallback__panel`">
       <div class="flex flex-col gap-(--spacing-xs) p-(--spacing-sm)">
         <PopoverTitle>{{ t('copyButton.fallbackTitle') }}</PopoverTitle>
         <Input

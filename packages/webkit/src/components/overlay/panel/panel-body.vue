@@ -4,8 +4,7 @@
 
   import { cn } from '../../../utils/cn'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
-  import { DrawerInjectionKey, DrawerPanelScrollInjectionKey } from '../drawer/injection-key'
-  import { PanelInjectionKey } from './injection-key'
+  import { DrawerPanelScrollInjectionKey } from '../drawer/injection-key'
 
   defineOptions({
     name: 'PanelBody',
@@ -17,8 +16,6 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(PanelInjectionKey)
-  const drawerCtx = inject(DrawerInjectionKey, null)
   const drawerScrollHost = inject(DrawerPanelScrollInjectionKey, false)
 
   const CONTENT_CLASS =
@@ -40,18 +37,18 @@
   useResizeObserver(contentEl, measure)
   useMutationObserver(contentEl, measure, { childList: true, subtree: true })
 
-  const scrollTestId = computed(() => `${drawerCtx?.testId ?? ctx?.testId ?? 'panel'}__scroll`)
+  const testId = computed(() => String(attrs['data-testid'] ?? 'panel-body'))
 </script>
 
 <template>
   <ScrollArea
     v-if="drawerScrollHost"
     :class="cn('min-h-0 min-w-0 flex-1', attrs.class as string | undefined)"
-    :data-testid="scrollTestId"
+    :data-testid="testId"
   >
     <div
       :class="CONTENT_CLASS"
-      :data-testid="`${ctx?.testId}__content`"
+      :data-testid="`${testId}__content`"
     >
       <slot />
     </div>
@@ -61,7 +58,7 @@
     ref="contentEl"
     :tabindex="needsFocus ? 0 : undefined"
     :class="cn(SCROLL_CONTENT_CLASS, attrs.class as string | undefined)"
-    :data-testid="`${ctx?.testId}__content`"
+    :data-testid="testId"
   >
     <slot />
   </div>

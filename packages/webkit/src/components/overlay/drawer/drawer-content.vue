@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, provide, ref, unref, useAttrs } from 'vue'
+  import { computed, h, inject, provide, ref, unref, useAttrs } from 'vue'
 
   import { useModalOverlay } from '../../../composables/use-modal-overlay'
   import { usePortalLocale } from '../../../composables/use-translate'
@@ -29,15 +29,17 @@
     modal: isModal
   })
   const portalLocale = usePortalLocale()
-  const testId = computed(() => ctx?.testId ?? 'drawer')
+  const testId = computed(() => String(attrs['data-testid'] ?? 'drawer-content'))
 
   const forwardedAttrs = computed(() =>
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'class'))
   )
 
+  const AutoClose = () => h(DrawerClose, { 'data-testid': `${ctx?.testId ?? 'drawer'}__close` })
+
   provide(PanelHeaderEndInjectionKey, {
     panelTestId: `${testId.value}__panel-shell`,
-    component: computed(() => (ctx?.closable ? DrawerClose : null))
+    component: computed(() => (ctx?.closable ? AutoClose : null))
   })
   provide(DrawerPanelScrollInjectionKey, true)
 
@@ -98,7 +100,7 @@
         :data-state="motionState"
         :data-side="side"
         :data-size="drawerSize"
-        :data-testid="`${testId}__panel`"
+        :data-testid="testId"
         tabindex="-1"
       >
         <Panel

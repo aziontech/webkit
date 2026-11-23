@@ -168,7 +168,7 @@ const overlays = () => [
 
 const PANELS = {
   dialog: '[role="dialog"][aria-modal="true"]',
-  popover: '[data-testid="popover__panel"]',
+  popover: '[data-testid="popover-content"]',
   tooltip: '[role="tooltip"]',
   select: '[role="listbox"]',
   menu: '[role="menu"]'

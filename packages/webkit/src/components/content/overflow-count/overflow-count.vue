@@ -141,7 +141,7 @@
         />
       </PopoverTrigger>
 
-      <PopoverContent>
+      <PopoverContent :data-testid="`${testId}__popover__panel`">
         <div
           class="flex flex-col gap-(--spacing-xs) border-b-(length:--border-width-default) border-solid border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
         >

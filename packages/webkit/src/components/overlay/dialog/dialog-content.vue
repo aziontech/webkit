@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, provide, ref, useAttrs } from 'vue'
+  import { computed, h, inject, provide, ref, useAttrs } from 'vue'
 
   import { useModalOverlay } from '../../../composables/use-modal-overlay'
   import { usePortalLocale } from '../../../composables/use-translate'
@@ -26,15 +26,17 @@
     exitMs: DIALOG_EXIT_MS
   })
   const portalLocale = usePortalLocale()
-  const testId = computed(() => ctx?.testId ?? 'dialog')
+  const testId = computed(() => String(attrs['data-testid'] ?? 'dialog-content'))
 
   const forwardedAttrs = computed(() =>
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'class'))
   )
 
+  const AutoClose = () => h(DialogClose, { 'data-testid': `${ctx?.testId ?? 'dialog'}__close` })
+
   provide(PanelHeaderEndInjectionKey, {
     panelTestId: `${testId.value}__panel-shell`,
-    component: computed(() => (ctx?.closable ? DialogClose : null))
+    component: computed(() => (ctx?.closable ? AutoClose : null))
   })
 
   const BACKDROP_CLASS =
@@ -83,7 +85,7 @@
         :aria-modal="true"
         :aria-labelledby="ctx?.titleId"
         :aria-describedby="ctx?.hasDescription.value ? ctx.descriptionId : undefined"
-        :data-testid="`${testId}__panel`"
+        :data-testid="testId"
         tabindex="-1"
       >
         <div

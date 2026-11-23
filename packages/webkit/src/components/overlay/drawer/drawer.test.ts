@@ -27,8 +27,8 @@ const settle = async () => {
 
 const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data-testid="${id}"]`)
 
-const panel = () => byTestId('drawer__panel')
-const backdrop = () => byTestId('drawer__backdrop')
+const panel = () => byTestId('drawer-content')
+const backdrop = () => byTestId('drawer-content__backdrop')
 
 /**
  * A realistic composed tree wired like the Default example: Root > Trigger
@@ -91,7 +91,7 @@ describe('Drawer', () => {
 
         // The Root + Trigger render in-place; DrawerContent teleports nothing until open.
         expect(getByTestId('drawer').getAttribute('data-state')).toBe('closed')
-        const trigger = getByTestId('drawer__trigger')
+        const trigger = getByTestId('drawer-trigger')
         expect(trigger.hasAttribute('role')).toBe(false)
         expect(trigger.hasAttribute('tabindex')).toBe(false)
         const button = trigger.querySelector('button') as HTMLElement
@@ -108,7 +108,7 @@ describe('Drawer', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.click(getByTestId('drawer__trigger'))
+        await fireEvent.click(getByTestId('drawer-trigger'))
         await settle()
 
         // Root reflects the injected open state.
@@ -121,20 +121,20 @@ describe('Drawer', () => {
         expect(dlg!.getAttribute('role')).toBe('dialog')
         expect(dlg!.getAttribute('aria-modal')).toBe('true')
 
-        const title = byTestId('drawer__title')!
-        const description = byTestId('drawer__description')!
+        const title = byTestId('drawer-title')!
+        const description = byTestId('drawer-description')!
         expect(dlg!.getAttribute('aria-labelledby')).toBe(title.id)
         expect(dlg!.getAttribute('aria-describedby')).toBe(description.id)
         expect(title.textContent).toContain('Edit settings')
         expect(description.textContent).toContain('Update the workspace configuration.')
         // The internal Panel shell mounts under the same injected testId.
-        expect(byTestId('drawer__panel-shell')).not.toBeNull()
+        expect(byTestId('drawer-content__panel-shell')).not.toBeNull()
       })
 
       it('opens on Enter and on Space keydown on the trigger', async () => {
         const enter = render(composed())
         await settle()
-        await fireEvent.keyDown(enter.getByTestId('drawer__trigger'), { key: 'Enter' })
+        await fireEvent.keyDown(enter.getByTestId('drawer-trigger'), { key: 'Enter' })
         await settle()
         expect(panel()).not.toBeNull()
 
@@ -143,7 +143,7 @@ describe('Drawer', () => {
 
         const space = render(composed())
         await settle()
-        await fireEvent.keyDown(space.getByTestId('drawer__trigger'), { key: ' ' })
+        await fireEvent.keyDown(space.getByTestId('drawer-trigger'), { key: ' ' })
         await settle()
         expect(panel()).not.toBeNull()
       })
@@ -160,7 +160,7 @@ describe('Drawer', () => {
         })
         await settle()
 
-        await fireEvent.click(getByTestId('drawer__trigger'))
+        await fireEvent.click(getByTestId('drawer-trigger'))
         await settle()
 
         expect(onUpdate).toHaveBeenCalledWith(true)
@@ -197,7 +197,7 @@ describe('Drawer', () => {
         expect(panel()).not.toBeNull()
 
         // DrawerClose (IconButton) calls ctx.close() -> update:open(false).
-        const close = byTestId('drawer__close')!
+        const close = byTestId('drawer-close')!
         await fireEvent.click(close)
         await settle()
 
@@ -211,7 +211,7 @@ describe('Drawer', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        const trigger = getByTestId('drawer__trigger')
+        const trigger = getByTestId('drawer-trigger')
         await fireEvent.click(trigger)
         await settle()
         expect(panel()).not.toBeNull()
@@ -231,7 +231,7 @@ describe('Drawer', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.click(getByTestId('drawer__trigger'))
+        await fireEvent.click(getByTestId('drawer-trigger'))
         await settle()
 
         const bd = backdrop()
@@ -248,7 +248,7 @@ describe('Drawer', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.click(getByTestId('drawer__trigger'))
+        await fireEvent.click(getByTestId('drawer-trigger'))
         await settle()
 
         const close = byTestId('drawer__close')!
@@ -267,7 +267,7 @@ describe('Drawer', () => {
         const { getByTestId } = render(composed({ dismissible: false }))
         await settle()
 
-        await fireEvent.click(getByTestId('drawer__trigger'))
+        await fireEvent.click(getByTestId('drawer-trigger'))
         await settle()
         expect(panel()).not.toBeNull()
 
@@ -329,7 +329,7 @@ describe('Drawer', () => {
           expect(getByTestId('drawer').getAttribute('data-state')).toBe('open')
           expect(panel()).not.toBeNull()
           // Panel shell testid is derived from the same injected testId.
-          expect(byTestId('drawer__panel-shell')).not.toBeNull()
+          expect(byTestId('drawer-content__panel-shell')).not.toBeNull()
         }
       )
     })
@@ -386,13 +386,13 @@ describe('Drawer', () => {
         const { getByTestId } = render(Default)
         await settle()
 
-        await fireEvent.click(getByTestId('drawer__trigger'))
+        await fireEvent.click(getByTestId('drawer-trigger'))
         await settle()
 
         const dlg = panel()
         expect(dlg).not.toBeNull()
         expect(dlg!.getAttribute('role')).toBe('dialog')
-        expect(byTestId('drawer__title')!.textContent).toContain('Drawer Title')
+        expect(byTestId('drawer-title')!.textContent).toContain('Drawer Title')
       })
     })
   })
@@ -421,7 +421,7 @@ describe('Drawer', () => {
     const openWithKey = async (key: string) => {
       const { getByTestId } = render(twoActions)
       await settle()
-      const trigger = getByTestId('drawer__trigger').querySelector('button')!
+      const trigger = getByTestId('drawer-trigger').querySelector('button')!
       trigger.focus()
       await userEvent.keyboard(key)
       await settle()
@@ -493,7 +493,7 @@ describe('Drawer', () => {
     it('teleports the panel inside a portal wrapper derived from the root testid', async () => {
       render(composed({ defaultOpen: true }))
       await settle()
-      const portal = byTestId('drawer__portal')
+      const portal = byTestId('drawer-content__portal')
       expect(portal).not.toBeNull()
       expect(portal!.parentElement).toBe(document.body)
       expect(portal!.contains(panel())).toBe(true)
@@ -510,7 +510,7 @@ describe('Drawer', () => {
       const bd = backdrop()
       expect(bd).not.toBeNull()
       expect(bd!.getAttribute('aria-hidden')).toBe('true')
-      expect(byTestId('drawer__portal')!.contains(bd)).toBe(true)
+      expect(byTestId('drawer-content__portal')!.contains(bd)).toBe(true)
       expect(panel()!.getAttribute('aria-modal')).toBe('true')
     })
   })
@@ -713,7 +713,7 @@ describe('Drawer', () => {
       await settle()
       const close = byTestId('drawer__close')!
       expect(close).not.toBeNull()
-      expect(close.closest('header')).toBe(byTestId('drawer__panel-shell__header'))
+      expect(close.closest('header')).toBe(byTestId('panel-header'))
       expect(close.hasAttribute('disabled')).toBe(false)
     })
 
@@ -723,7 +723,7 @@ describe('Drawer', () => {
       await settle()
 
       await fireEvent.keyDown(document, { key: 'Escape' })
-      await fireEvent.click(byTestId('drawer__backdrop')!)
+      await fireEvent.click(byTestId('drawer-content__backdrop')!)
       await settle()
       expect(getByTestId('drawer').getAttribute('data-state')).toBe('open')
 
@@ -768,7 +768,7 @@ describe('Drawer', () => {
       await settle()
       await fireEvent.click(view.getByRole('button', { name: 'Open drawer' }))
       await settle()
-      expect(byTestId('drawer__panel')).not.toBeNull()
+      expect(byTestId('drawer-content')).not.toBeNull()
       expect(byTestId('drawer__close')).not.toBeNull()
     })
   })

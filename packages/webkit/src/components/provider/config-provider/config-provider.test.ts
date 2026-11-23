@@ -117,7 +117,7 @@ describe('ConfigProvider', () => {
       })
       render(withProvider({ locale: 'pt-BR' }, () => h(Tree)))
       await settle()
-      const close = document.body.querySelector('[data-testid="dialog__close"]')
+      const close = document.body.querySelector('[data-testid="dialog-close"]')
       expect(close?.getAttribute('aria-label')).toBe('Fechar')
     })
 

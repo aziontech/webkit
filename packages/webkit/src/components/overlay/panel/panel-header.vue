@@ -15,6 +15,7 @@
 
   const attrs = useAttrs()
   const ctx = inject(PanelInjectionKey)
+  const testId = computed(() => String(attrs['data-testid'] ?? 'panel-header'))
   const headerEnd = inject(PanelHeaderEndInjectionKey, null)
   const endComponent = computed(() =>
     headerEnd && headerEnd.panelTestId === ctx?.testId ? headerEnd.component.value : null
@@ -29,7 +30,7 @@
   <header
     role="none"
     :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
-    :data-testid="`${ctx?.testId}__header`"
+    :data-testid="testId"
   >
     <template v-if="endComponent">
       <div class="flex min-w-0 flex-1 items-center justify-between gap-(--spacing-xs)">

@@ -140,7 +140,7 @@
           />
         </button>
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent :data-testid="`${testId}__popover__panel`">
         <div
           ref="bodyEl"
           :data-testid="`${testId}__step`"
