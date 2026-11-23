@@ -208,7 +208,7 @@
       type:
         index === current.logs.length - 1 && current.status === 'Completed' ? 'success' : 'text',
       level: entry.level,
-      message: `${entry.level.toUpperCase()} ${entry.message}`
+      message: entry.message
     }))
   })
 

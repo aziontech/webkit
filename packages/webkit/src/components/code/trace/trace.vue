@@ -189,7 +189,7 @@
     'data-bordered:rounded-(--shape-card) data-bordered:border data-bordered:border-(--border-default)'
 
   const AXIS_CLASS =
-    '[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
+    '[--trace-name:min(55%,13rem)] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
     'grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) ' +
     'data-[view=timeline]:grid-cols-1 data-[view=tree]:grid-cols-[minmax(0,1fr)_auto]'
 
@@ -199,13 +199,13 @@
     '@max-xs/trace:data-[density=mid]:hidden @max-xl/trace:data-[density=quarter]:hidden'
 
   const GRID_LINES_CLASS =
-    '[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
+    '[--trace-name:min(55%,13rem)] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
     'pointer-events-none absolute inset-y-0 start-[calc(var(--trace-name)+var(--spacing-md))] end-(--spacing-md) hidden ' +
     '@xl/trace:block ' +
     'data-[view=timeline]:start-(--spacing-md)'
 
   const SKELETON_CLASS =
-    '[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
+    '[--trace-name:min(55%,13rem)] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
     'grid min-h-9 grid-cols-[var(--trace-name)_minmax(0,1fr)] items-center border-b border-(--border-muted) ' +
     'last:border-b-0'
 </script>

@@ -14,6 +14,9 @@
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
 
   import { crumbs, deployTabs, installTabs, metaActions, related, testTabs } from '../article-data'
+  import { useShellDocsPage } from '../composables/use-shell-docs-page'
+
+  useShellDocsPage('first-deploy')
 </script>
 
 <template>

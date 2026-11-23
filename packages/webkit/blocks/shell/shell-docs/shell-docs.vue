@@ -16,8 +16,9 @@
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
-  import { ref } from 'vue'
+  import { computed, provide, ref } from 'vue'
 
+  import { ShellDocsInjectionKey } from './injection-key'
   import {
     sampleFooterColumns,
     sampleNavigation,
@@ -65,12 +66,18 @@
     socials: () => sampleSocials
   })
 
-  defineSlots<{
+  const slots = defineSlots<{
     /** The page body: the route's article; the sample guide stands in for RouterView. */
     default(): unknown
   }>()
 
   const crumbs = [{ label: 'Functions', href: '/docs/functions' }, { label: 'Getting started' }]
+
+  const pageId = ref('')
+  provide(ShellDocsInjectionKey, pageId)
+  const activeId = computed(
+    () => pageId.value || (slots.default ? '' : 'functions-getting-started')
+  )
 
   const { mode: theme } = useColorMode()
 
@@ -80,6 +87,7 @@
 <template>
   <DocLayout
     :navigation="navigation"
+    :active-id="activeId"
     :sections="sections"
     home="/docs"
     :outline-groups="outlineGroups"

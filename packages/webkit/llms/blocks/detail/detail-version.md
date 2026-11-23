@@ -222,6 +222,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref, watch } from 'vue'
 
+  import { usePhoneWidth } from './composables/use-phone-width'
   import { ADD_ENVIRONMENT, ADD_VERSION, VERSION_TABS as tabs } from './detail-version-states'
   import CreatingWire from './parts/creating-wire.vue'
   import EnvironmentSwitcher from './parts/environment-switcher.vue'
@@ -404,6 +405,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
   const environmentQuery = ref('')
   const form = reactive<VersionDetailSettings>({ name: '', active: false, modules: {} })
   const historyBasis = ref(348)
+  const phone = usePhoneWidth()
   const description = ref('')
   const draftText = ref('')
   const editing = ref(false)
@@ -536,7 +538,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
     </nav>
     <div class="grid min-h-0 flex-1">
       <Resizable
-        orientation="horizontal"
+        :orientation="phone ? 'vertical' : 'horizontal'"
         aria-label="Version workspace"
       >
         <Resizable.Pane aria-label="Version settings">

@@ -55,6 +55,21 @@ describe('Avatar', () => {
   })
 
   // --- label branch: normalized to two uppercase chars --------------------
+  it.each([
+    ['John Smith', 'JS'],
+    ['Mara Lin', 'ML'],
+    ['Jane Q. Doe', 'JD'],
+    ['Acme Inc.', 'AI'],
+    ['jd', 'JD']
+  ])('draws the initials of %j as %j', (label, initials) => {
+    const { getByTestId } = render(Avatar, { props: { label } })
+    expect(getByTestId('avatar__label').textContent?.trim()).toBe(initials)
+    expect(getByTestId('avatar')).toHaveAttribute(
+      'aria-label',
+      label.includes(' ') ? label : initials
+    )
+  })
+
   it('renders the initials, normalized to two uppercase characters, when there is a label but no src', () => {
     const { getByTestId, queryByTestId } = render(Avatar, { props: { label: 'herbert' } })
 

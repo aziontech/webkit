@@ -187,6 +187,7 @@
       orientation="both"
       fade
       :data-testid="`${testId}__body`"
+      dir="ltr"
       class="h-full min-h-0 bg-(--bg-canvas) sm:data-[orientation=both]:overflow-x-hidden"
     >
       <template v-if="ctx.filteredLines.value.length">

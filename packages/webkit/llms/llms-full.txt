@@ -11114,6 +11114,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-waf-tunin
 
 ## Accessibility
 
+- A link with `target="_blank"` ends its accessible name with the visually hidden `common.newTab` text (`(opens in a new tab)`), part `__new-tab`; a same-tab link or a button adds nothing.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
@@ -11659,6 +11660,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ## Accessibility
 
+- A link with `target="_blank"` appends the `common.newTab` text (`(opens in a new tab)`) to its `ariaLabel`, so the name says the link opens a new tab.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
@@ -17272,7 +17274,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 ## Do
 
-- Pass initials in `label` (`"JD"`); it keeps the first two characters, so a full name shows its first two letters, not initials.
+- Pass the person's name or initials in `label` (`"Jane Doe"` or `"JD"`): a name of two or more words draws the first letter of its first and last words (`JD`) and keeps the whole name as the accessible name; a single word keeps its first two characters.
 - Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
 - Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `az az-user`).
 - For a generated mark, pass the full name in `label` (`"Acme Inc."`) with `pattern="marble"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.
@@ -17296,7 +17298,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 | --- | --- | --- | --- | --- |
 | `src` | `string` | `''` | false | Image URL. When set, renders a photo and takes precedence over label and icon. |
 | `alt` | `string` | `''` | false | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it. |
-| `label` | `string` | `''` | false | Initials shown when no image (normalized to two uppercase characters). |
+| `label` | `string` | `''` | false | Name or initials shown when no image: the first letters of the first and last words, or the first two characters of one word, uppercased. |
 | `icon` | `string` | `'az az-user'` | false | Icon class for the fallback when no image or label (Azion icon class). |
 | `variant` | `AvatarVariant` | `'circle'` | false | Visual shape of the avatar container. |
 | `size` | `AvatarSize` | `'medium'` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
@@ -26849,9 +26851,9 @@ packages/webkit/src/components/input/radio-group/
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`, `disabled`
 - `data-checked` mirrors the `modelValue` prop (toggled-on state)
 - `data-variant` mirrors the `variant` prop (`default` | `privacy`)
-- `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions.
+- `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions. The treatment keys on the native `:disabled` state, so a switch inside a disabled `fieldset` reads disabled too.
 - `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`); with `aria-invalid` on the control, it paints the danger border while unchecked
-- Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`data-[disabled]:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows
+- Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`disabled:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows
 - Touch: an invisible `::after` extends the hit area of the 36 × 20 px track to 24 px tall, and to 44 × 44 px on a coarse pointer.
 
 ## Accessibility
@@ -30396,6 +30398,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 
 ## Accessibility
 
+- `target="_blank"` adds the visually hidden `common.newTab` text (`(opens in a new tab)`) after the label, part `__new-tab`, so a screen reader hears what the external glyph shows.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter` activates.
 - ARIA: `aria-disabled` and `tabindex="-1"` when disabled.

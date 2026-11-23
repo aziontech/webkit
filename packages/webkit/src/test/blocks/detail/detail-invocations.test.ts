@@ -30,6 +30,15 @@ describe('invocations', () => {
     )
   })
 
+  it('prints the log level once, in its column, not again in the message', () => {
+    render(DetailInvocations)
+    const messages = [...document.querySelectorAll('[data-testid$="__line-message"]')]
+    expect(messages.length).toBeGreaterThan(2)
+    for (const message of messages) {
+      expect(message.textContent?.trim()).not.toMatch(/^(INFO|DEBUG|WARN|ERROR)\b/)
+    }
+  })
+
   it('opens a failed run on its failing span', async () => {
     render(Failed)
     expect(selectedSpan()?.dataset.spanId).toBe('response')

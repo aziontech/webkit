@@ -33,7 +33,7 @@
   }>()
 
   const ROW_CLASS =
-    '[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
+    '[--trace-name:min(55%,13rem)] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
     'grid min-h-9 w-full cursor-pointer grid-cols-[var(--trace-name)_minmax(0,1fr)] ' +
     'data-[view=tree]:grid-cols-[minmax(0,1fr)_auto] ' +
     'items-stretch border-b border-(--border-muted) text-start transition-colors duration-150 ease-out ' +
@@ -118,7 +118,10 @@
           class="shrink-0 text-[0.9em] leading-none text-(--text-muted)"
           aria-hidden="true"
         />
-        <span class="truncate text-body-code-sm text-(--text-default)"
+        <span
+          class="truncate text-body-code-sm text-(--text-default)"
+          :title="row.span.name"
+          :data-testid="`${testId}__name`"
           ><bdi>{{ row.span.name }}</bdi></span
         >
         <span

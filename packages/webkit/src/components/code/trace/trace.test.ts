@@ -61,6 +61,13 @@ describe('Trace', () => {
     expect(b?.getAttribute('aria-label')).toBe('encode, +220 ms, 1.50 s, Failed')
   })
 
+  it('carries each full span name as the title of its name cell', () => {
+    const view = render(Default)
+    const names = view.getAllByTestId('trace__name')
+    expect(names.length).toBeGreaterThan(2)
+    for (const name of names) expect(name.getAttribute('title')).toBe(name.textContent?.trim())
+  })
+
   it('collapses and expands a parent from its toggle', async () => {
     const view = render(Trace, { props: { spans } })
     const toggles = view.getAllByTestId('trace__toggle')

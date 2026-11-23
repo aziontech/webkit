@@ -26,7 +26,7 @@
   "`brand` — the product mark, not a person."
  ],
  "bestPractices": [
-  "Pass initials in `label` (`\"JD\"`); it keeps the first two characters, so a full name shows its first two letters, not initials.",
+  "Pass the person's name or initials in `label` (`\"Jane Doe\"` or `\"JD\"`): a name of two or more words draws the first letter of its first and last words (`JD`) and keeps the whole name as the accessible name; a single word keeps its first two characters.",
   "Set `alt` to the person's name (\"Jane Doe\"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role=\"img\"`), so a screen reader hears \"Jane Doe\", not \"JD\". Without `alt` the name falls back to the initials, then \"Avatar\" for an image or \"User avatar\" for the icon.",
   "Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `az az-user`).",
   "For a generated mark, pass the full name in `label` (`\"Acme Inc.\"`) with `pattern=\"marble\"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.",
@@ -52,7 +52,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Initials shown when no image (normalized to two uppercase characters)."
+   "doc": "Name or initials shown when no image: the first letters of the first and last words, or the first two characters of one word, uppercased."
   },
   {
    "name": "icon",

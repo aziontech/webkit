@@ -71,10 +71,18 @@
           :href="homeHref"
           aria-label="Azion home"
         >
-          <Brand
-            variant="default"
-            size="small"
-          />
+          <span class="flex max-sm:hidden">
+            <Brand
+              variant="default"
+              size="small"
+            />
+          </span>
+          <span class="flex sm:hidden">
+            <Brand
+              variant="reduced"
+              size="small"
+            />
+          </span>
         </AppHeader.Brand>
         <Breadcrumb
           v-if="breadcrumb.length > 0"

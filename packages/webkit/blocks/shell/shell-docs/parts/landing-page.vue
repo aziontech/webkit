@@ -10,6 +10,7 @@
   import DocProse from '@aziontech/webkit/doc-prose'
   import Link from '@aziontech/webkit/link'
 
+  import { useShellDocsPage } from '../composables/use-shell-docs-page'
   import {
     attacks,
     compliance,
@@ -19,6 +20,8 @@
     prompt,
     templates
   } from '../landing-data'
+
+  useShellDocsPage('overview')
 </script>
 
 <template>
