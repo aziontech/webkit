@@ -1,8 +1,11 @@
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 
 import type { SchemaEditorTable } from '../../../../blocks/edit/edit-schema/edit-schema.vue'
 import EditSchema from '../../../../blocks/edit/edit-schema/edit-schema.vue'
+import AddColumn from '../../../../blocks/edit/edit-schema/variants/add-column.vue'
+import ChangeType from '../../../../blocks/edit/edit-schema/variants/change-type.vue'
 import ImportCsv from '../../../../blocks/edit/edit-schema/variants/import-csv.vue'
 import { useToastRegion } from '../../toast-region'
 
@@ -160,5 +163,48 @@ describe('edit/edit-schema data contract', () => {
     )!
     await fireEvent.click(retry)
     expect(emitted('add-column')).toHaveLength(2)
+  })
+})
+
+describe('edit/edit-schema Type picker', () => {
+  const typeTrigger = () =>
+    Array.from(drawer().querySelectorAll<HTMLElement>('[data-testid="select-trigger"]')).find(
+      (trigger) => trigger.textContent?.includes('varchar') || trigger.textContent?.includes('text')
+    )!
+
+  it('shows only the type name in the Add column and Change type triggers', async () => {
+    const { unmount } = render(AddColumn)
+    await waitFor(() => expect(typeTrigger().textContent).toContain('varchar'))
+    expect(typeTrigger().textContent).not.toContain('Variable-length')
+    unmount()
+    render(ChangeType)
+    const trigger = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>(
+        '[role="alertdialog"] [data-testid="select-trigger"], [role="dialog"] [data-testid="select-trigger"]'
+      )
+      expect(el?.textContent?.trim()).toBeTruthy()
+      return el!
+    })
+    expect(trigger.textContent).not.toMatch(/[a-z0-9][A-Z][a-z]+/)
+  })
+
+  it('moves from the search field to the options with ArrowDown and closes on Escape', async () => {
+    render(AddColumn)
+    await waitFor(() => expect(typeTrigger()).toBeTruthy())
+    await userEvent.click(typeTrigger())
+    const search = await waitFor(() => {
+      const field = document.querySelector<HTMLInputElement>('input[aria-label="Search types"]')
+      expect(field).not.toBeNull()
+      return field!
+    })
+    search.focus()
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() => expect(document.activeElement?.getAttribute('role')).toBe('option'))
+    search.focus()
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() =>
+      expect(document.querySelector('input[aria-label="Search types"]')).toBeNull()
+    )
+    expect(drawer()).not.toBeNull()
   })
 })
