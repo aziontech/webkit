@@ -513,6 +513,24 @@ describe('Breadcrumb', () => {
       expect(narrow.getByTestId(`${TESTID}__overflow-menu`)).toBeTruthy()
     })
 
+    it('folds every ancestor into the overflow menu below 360px so the current page keeps the row', async () => {
+      const two = [{ label: 'Domains', href: '/domains' }, { label: 'Create Domain' }]
+      const { getByTestId, queryByTestId } = await renderMounted(
+        defineComponent({
+          setup: () => () =>
+            h('div', { style: { width: '300px' } }, [h(Breadcrumb, { items: two })])
+        })
+      )
+      expect(queryByTestId(`${TESTID}__item-0`)).toBeNull()
+      expect(queryByTestId(`${TESTID}__separator-overflow-before`)).toBeNull()
+      expect(getByTestId(`${TESTID}__item-last`).textContent).toContain('Create Domain')
+      await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))
+      const option = document.body.querySelector(
+        `[data-testid="${TESTID}__overflow-item-0"]`
+      ) as HTMLElement
+      expect(option.getAttribute('href')).toBe('/domains')
+    })
+
     it('renders collapsed segments as links in the overflow menu', async () => {
       const { getByTestId } = await renderMounted(inBox(400))
       await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))
