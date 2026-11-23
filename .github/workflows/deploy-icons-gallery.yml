@@ -43,18 +43,25 @@ jobs:
       - name: Install workspace dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Azion CLI
+      - name: Install Azion CLI (pinned release, checksum verified)
+        env:
+          AZION_CLI_VERSION: 4.26.2
+          AZION_CLI_SHA256: 16c8152b2fcbaacca0ae00c538355675259a2f5df7faecff56c9eeb79be7d672
         run: |
-          curl -o azionlinux https://downloads.azion.com/linux/x86_64/azion
-          sudo mv azionlinux /usr/bin/azion
-          sudo chmod u+x /usr/bin/azion
+          zip="$RUNNER_TEMP/azion.zip"
+          curl -fsSL -o "$zip" "https://github.com/aziontech/azion/releases/download/${AZION_CLI_VERSION}/azion_${AZION_CLI_VERSION}_linux_amd64.zip"
+          echo "${AZION_CLI_SHA256}  $zip" | sha256sum -c -
+          unzip -q -o "$zip" azion -d "$RUNNER_TEMP/azion-cli"
+          sudo install -m 0755 "$RUNNER_TEMP/azion-cli/azion" /usr/local/bin/azion
 
       - name: Show the Azion CLI version
         run: azion --version
 
       - name: Configure token
+        env:
+          AZION_PERSONAL_TOKEN: ${{ secrets.AZION_PERSONAL_TOKEN }}
         run: |
-          azion -t ${{ secrets.AZION_PERSONAL_TOKEN }}
+          azion -t "$AZION_PERSONAL_TOKEN"
           azion whoami
 
       - name: Build @aziontech/icons

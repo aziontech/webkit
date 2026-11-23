@@ -266,10 +266,13 @@
       size="large"
       :data-testid="`${testId}__viewer`"
     >
-      <DialogContent @keydown="onViewerKeydown">
+      <DialogContent
+        :data-testid="`${testId}__viewer__panel`"
+        @keydown="onViewerKeydown"
+      >
         <PanelHeader class="w-full">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DialogTitle>
+            <DialogTitle :data-testid="`${testId}__viewer__title`">
               <bdi>{{ active ? nameOf(active.alt, active.position) : '' }}</bdi>
             </DialogTitle>
             <DialogDescription

@@ -7,7 +7,7 @@ spec_version: 12
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 7b91ef8f069ad94e44fba37687e59756a679825952ac422000e67903c6b4222a
+checksum: 8b8ba863ba9209a1145503ef295b3660878f62f6d3db9e3a09b2492bf01205c2
 created: 2026-06-30
 last_updated: 2026-11-18
 ---
@@ -101,7 +101,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the consumer's trigger element. The trigger forwards aria + click; the consumer must not bind those itself.
-- `popover-content/popover-content.vue` — renders the floating panel via a single `<Teleport to="body">` + `<Transition>`, with its default slot (`Popover.Header`, the free-form body, `Popover.Footer`) arranged inline as a flex column inside the panel. It owns the panel element and its surface/border/radius/shadow, `position: fixed` anchoring (from the injected `panelStyle`), `role="dialog"` + `aria-modal="false"`, `aria-labelledby` / `aria-describedby` (from injected `titleId`/`descriptionId`), the open/close `animate-popup-scale-in` / `animate-popup-scale-out`, and `data-state` / `data-side` / `data-align`. It assigns the panel element to the injected `panelEl` (function ref) so the root's placement, focus, `Esc`/`Tab` and outside-click logic operate on it. Because the content lives in the same teleported element as the animation, the scale animation carries the whole panel on enter/leave.
+- `popover-content/popover-content.vue` — renders the floating panel via a single `<Teleport to="body">` + `<Transition>`, with its default slot (`Popover.Header`, the free-form body, `Popover.Footer`) arranged inline as a flex column inside the panel. It owns the panel element and its surface/border/radius/shadow, `position: fixed` anchoring (from the injected `panelStyle`), `role="dialog"` + `aria-modal="false"`, `aria-labelledby` / `aria-describedby` (from injected `titleId`/`descriptionId`), the open/close `animate-popup-scale-in` / `animate-popup-scale-out`, and `data-state` / `data-side` / `data-align`. It assigns the panel element to the injected `panelEl` (function ref) so the root's placement, focus, `Esc`/`Tab` and outside-click logic operate on it. Because the content lives in the same teleported element as the animation, the scale animation carries the whole panel on enter/leave. Its test id falls back to its own name, `popover-content` (the slot wrapper is `popover-content__body`), and a `data-testid` passed to it wins.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — the popover anatomy (`Popover.Header`, body content, `Popover.Footer`).

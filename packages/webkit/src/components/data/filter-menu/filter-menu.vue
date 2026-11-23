@@ -277,7 +277,7 @@
       </Transition>
     </PopoverTrigger>
 
-    <PopoverContent>
+    <PopoverContent :data-testid="`${testId}__panel`">
       <PopoverTitle class="sr-only">{{ triggerLabel }}</PopoverTitle>
       <div
         ref="panelEl"

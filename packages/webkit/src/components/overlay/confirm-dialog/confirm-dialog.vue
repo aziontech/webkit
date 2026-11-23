@@ -137,18 +137,26 @@
     :dismissible="!loading"
     :closable="false"
   >
-    <DialogTrigger v-if="$slots['trigger']">
+    <DialogTrigger
+      :data-testid="`${testId}__trigger`"
+      v-if="$slots['trigger']"
+    >
       <slot name="trigger" />
     </DialogTrigger>
     <DialogContent
+      :data-testid="`${testId}__panel`"
       v-bind="contentAttrs"
       role="alertdialog"
     >
       <PanelHeader class="w-full">
-        <DialogTitle>{{ title }}</DialogTitle>
+        <DialogTitle :data-testid="`${testId}__title`">{{ title }}</DialogTitle>
       </PanelHeader>
       <PanelBody>
-        <DialogDescription v-if="description">{{ description }}</DialogDescription>
+        <DialogDescription
+          :data-testid="`${testId}__description`"
+          v-if="description"
+          >{{ description }}</DialogDescription
+        >
         <slot />
         <div
           v-if="confirmationPhrase"

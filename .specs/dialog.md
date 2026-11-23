@@ -7,7 +7,7 @@ spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 790acbb521efc1d807ccbda7e739bcba92ad4a2f4d52430bdfc8fde7783cb639
+checksum: 88d1abaec0c12cc2ec8bf1ff258e4c57ccc3cd8ffa0359a4fde77ded23a83cea
 created: 2026-05-22
 last_updated: 2026-11-20
 ---
@@ -95,10 +95,12 @@ Tree-shaking: `@aziontech/webkit/dialog-root` is the root alone (nothing attache
 
 - `index.ts` — the compound: the root with every part attached by `Object.assign` (`Dialog.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Dialog.Header`, `Dialog.Body` and `Dialog.Footer`, each importable on its own as `@aziontech/webkit/dialog-header`, `dialog-body` and `dialog-footer` (the same `panel-header`, `panel-body` and `panel-footer` files). It adds no component of its own. Exported at `@aziontech/webkit/dialog`; the root alone is `@aziontech/webkit/dialog-root`. The parts stay in the root folder (flat).
 - `dialog-close.vue` — Public sub-component `dialog-close`: the close (X) `IconButton`. `Dialog.Content` puts one at the end of its `PanelHeader` while `closable` is true, so a consumer places it by hand only in a custom header with `:closable="false"`. It always closes the dialog.
-- `dialog-content.vue` — Public sub-component `dialog-content`: the modal itself. It teleports to `body` (kept mounted through the exit transition), renders the overlay (`aria-hidden`, `__backdrop` test id; a click on it closes the dialog when `dismissible`) and the `role="dialog"` panel, traps focus, scroll-locks the page and restores focus on close.
+- `dialog-content.vue` — Public sub-component `dialog-content`: the modal itself. It teleports to `body` (kept mounted through the exit transition), renders the overlay (`aria-hidden`, `dialog-content__backdrop` test id; a click on it closes the dialog when `dismissible`) and the `role="dialog"` panel, traps focus, scroll-locks the page and restores focus on close.
 - `dialog-description.vue` — Public sub-component `dialog-description`.
 - `dialog-title.vue` — Public sub-component `dialog-title`.
 - `dialog-trigger.vue` — Public sub-component `dialog-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the dialog on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
+
+- Test ids: each part falls back to its own name (`dialog-trigger`, `dialog-content`, `dialog-title`, `dialog-description`, `dialog-close`, and `panel-header`, `panel-body`, `panel-footer` for the shared regions), and a `data-testid` passed to the part wins; the root's `data-testid` does not rename the parts. The inner overlay and shell of `dialog-content` are `dialog-content__backdrop`, `__portal` and `__panel-shell`. The close button `Dialog.Content` adds while `closable` belongs to the root: `dialog__close`, or `<root test id>__close`.
 
 ## Props
 

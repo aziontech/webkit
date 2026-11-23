@@ -1255,3 +1255,5 @@ Budget-raise: table-cell-link 20.4 KB → 20.55 KB (measured 20.54 KB): it shows
 Budget-raise: table-cell-tags 16.55 KB → 16.7 KB (measured 16.69 KB): it shows OverflowCount and Link, which grew for touch and the new-tab text (A5-214, A5-016).
 Budget-raise: pricing-card 5.3 KB → 5.35 KB (measured 5.33 KB): no empty slot band, and a primary action on the tagged plan (A5-069).
 Budget-raise: link 2.45 KB → 2.7 KB (measured 2.68 KB): a `_blank` link carries visually hidden "(opens in a new tab)" text from the shared `common` catalog (A5-016).
+Budget-raise: dialog-content 18.15 KB → 18.2 KB (measured 18.19 KB): the parts take their own test id with a consumer override, and the close button the root adds keeps the root's test id through a small render function (audit A5-161, decision A5-F19-1).
+Budget-raise: command 28.7 KB → 28.75 KB (measured 28.72 KB): Command renders DialogContent, so it carries the same own-test-id change, plus the ids it now passes to the parts so its own test ids stay the same (audit A5-161, decision A5-F19-1).

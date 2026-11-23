@@ -669,6 +669,19 @@ function checkTestid(rel, text) {
         )
       )
   }
+  const ownFallback = staticTestidFallbacks(text).some((f) => f.value === stem)
+  const inherited =
+    text.match(/:data-testid="`\$\{\s*(?:ctx|context)\??\.testId\b/) ??
+    text.match(/testId\s*=\s*computed\(\s*\(\)\s*=>\s*(?:ctx|context)\??\.testId\b/)
+  if (!rel.includes('/parts/') && !ownFallback && inherited)
+    out.push(
+      v(
+        'testid',
+        rel,
+        lineOf(text, inherited.index),
+        `"${stem}" builds its test id from its parent's context — fall back to its own name "${stem}" and let the consumer's data-testid win (${RULE_DOC}).`
+      )
+    )
   for (const m of text.matchAll(/\$\{\s*[\w.]*[tT]est[iI]d\s*\}-(?=[a-z])/g)) {
     out.push(
       v(

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { inject, useAttrs } from 'vue'
+  import { computed, inject, useAttrs } from 'vue'
 
   import { useDialogTrigger } from '../../../composables/use-dialog-trigger'
   import { TriggerHost } from '../parts/trigger-host'
@@ -16,6 +16,7 @@
 
   const attrs = useAttrs()
   const ctx = inject(DialogInjectionKey)
+  const testId = computed(() => String(attrs['data-testid'] ?? 'dialog-trigger'))
 
   const { aria, activate, onKeydown, onControl } = useDialogTrigger(ctx)
 </script>
@@ -25,7 +26,7 @@
     :aria="aria"
     as-button
     :class="attrs.class"
-    :data-testid="`${ctx?.testId}__trigger`"
+    :data-testid="testId"
     @click="activate"
     @keydown="onKeydown"
     @control="onControl"

@@ -696,6 +696,18 @@ test('the data contract flags a primary with no props, inline records and copied
     ),
     ['view/x:variant-fork:Fork']
   )
+  const screen = Array.from({ length: 80 }, (_, line) => `<p>shared screen line ${line}</p>`)
+  const siblings = [
+    { name: 'Profile', sfc: ['<template>', ...screen, '</template>'].join('\n') },
+    { name: 'ProfileLoading', sfc: ['<template loading>', ...screen, '</template>'].join('\n') },
+    { name: 'Short', sfc: screen.slice(0, 10).join('\n') }
+  ]
+  assert.deepEqual(
+    dataContractKeys('view/x', { sfc: primary, variants: siblings }).filter((key) =>
+      key.includes(':variant-')
+    ),
+    ['view/x:variant-sibling-copy:ProfileLoading']
+  )
   assert.ok(sharedLineRatio('a\nb\nc', 'a\nb\nc') === 1)
   assert.ok(sharedLineRatio('a\nb\nc', 'x\ny') === 0)
 })

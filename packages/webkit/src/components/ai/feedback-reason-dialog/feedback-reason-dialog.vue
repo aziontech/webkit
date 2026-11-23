@@ -118,11 +118,15 @@
     size="small"
     :data-testid="testId"
   >
-    <DialogContent>
+    <DialogContent :data-testid="`${testId}__panel`">
       <PanelHeader class="w-full">
         <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-          <DialogTitle>{{ title || t('feedbackReasonDialog.title') }}</DialogTitle>
-          <DialogDescription>{{ t('feedbackReasonDialog.description') }}</DialogDescription>
+          <DialogTitle :data-testid="`${testId}__title`">{{
+            title || t('feedbackReasonDialog.title')
+          }}</DialogTitle>
+          <DialogDescription :data-testid="`${testId}__description`">{{
+            t('feedbackReasonDialog.description')
+          }}</DialogDescription>
         </div>
       </PanelHeader>
       <form

@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 8
-checksum: 0025c358a151a962a660be371d777fee59c9dc286ceebd1988a2927532a72bd6
+checksum: ad427b54d28baf80277eb0120f8bc3161d2dcbe2ead75477dd0eebecee3524da
 created: 2026-05-22
 last_updated: 2026-11-17
 ---
@@ -78,9 +78,10 @@ Tree-shaking: `@aziontech/webkit/panel-root` is the root alone, and `panel-heade
 ## Sub-components
 
 - `index.ts` — the compound: `Panel` with `Panel.Header`, `Panel.Body` and `Panel.Footer` attached by `Object.assign`, exported at `@aziontech/webkit/panel`; the root alone is `@aziontech/webkit/panel-root`.
-- `panel-body.vue` — Public sub-component `panel-body`.
+- `panel-body.vue` — Public sub-component `panel-body`. Inside a drawer it wraps its content in a `ScrollArea` (`panel-body`) around the padded region (`panel-body__content`).
 - `panel-footer.vue` — Public sub-component `panel-footer`.
 - `panel-header.vue` — Public sub-component `panel-header`. Inside `DialogContent` / `DrawerContent` it appends the overlay's close button after its content (the content then sits in one flex row that keeps its own start/end spread), while the overlay's `closable` is true; a `PanelHeader` of a nested `Panel` gets nothing. Standalone it renders only its slot.
+- Test ids: each region falls back to its own name (`panel-header`, `panel-body`, `panel-footer`) and a `data-testid` passed to the region wins; the shell's `data-testid` does not rename the regions.
 
 ## Props
 

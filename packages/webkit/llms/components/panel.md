@@ -56,9 +56,10 @@
 ## Sub-components
 
 - `index.ts` — the compound: `Panel` with `Panel.Header`, `Panel.Body` and `Panel.Footer` attached by `Object.assign`, exported at `@aziontech/webkit/panel`; the root alone is `@aziontech/webkit/panel-root`.
-- `panel-body.vue` — Public sub-component `panel-body`.
+- `panel-body.vue` — Public sub-component `panel-body`. Inside a drawer it wraps its content in a `ScrollArea` (`panel-body`) around the padded region (`panel-body__content`).
 - `panel-footer.vue` — Public sub-component `panel-footer`.
 - `panel-header.vue` — Public sub-component `panel-header`. Inside `DialogContent` / `DrawerContent` it appends the overlay's close button after its content (the content then sits in one flex row that keeps its own start/end spread), while the overlay's `closable` is true; a `PanelHeader` of a nested `Panel` gets nothing. Standalone it renders only its slot.
+- Test ids: each region falls back to its own name (`panel-header`, `panel-body`, `panel-footer`) and a `data-testid` passed to the region wins; the shell's `data-testid` does not rename the regions.
 
 ## States
 

@@ -16,7 +16,7 @@ import Popover, {
 } from './index'
 
 /** The panel Teleports to <body>, escaping the render container. */
-const panel = () => document.body.querySelector<HTMLElement>('[data-testid="popover__panel"]')
+const panel = () => document.body.querySelector<HTMLElement>('[data-testid="popover-content"]')
 
 const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data-testid="${id}"]`)
 const control = () =>
@@ -94,7 +94,7 @@ afterEach(() => {
   // stranded by a mid-transition unmount, keeping document.body queries
   // deterministic without yanking a live Teleport target from under Vue.
   cleanup()
-  document.body.querySelectorAll('[data-testid$="__panel"]').forEach((el) => el.remove())
+  document.body.querySelectorAll('[role="dialog"][data-state]').forEach((el) => el.remove())
 })
 
 describe('Popover', () => {
@@ -155,7 +155,7 @@ describe('Popover', () => {
       expect(dialog.closest('[data-testid="popover"]')).toBeNull()
 
       // PopoverContent Teleports the composed anatomy into the panel body.
-      const body = byTestId('popover__body') as HTMLElement
+      const body = byTestId('popover-content__body') as HTMLElement
       expect(dialog.contains(body)).toBe(true)
       expect(body.textContent).toContain('Only active domains are shown by default.')
 
@@ -186,7 +186,7 @@ describe('Popover', () => {
         await fireEvent.keyDown(view.getByTestId('popover-trigger'), { key })
         await waitFor(() => expect(panel()).not.toBeNull())
         view.unmount()
-        document.body.querySelectorAll('[data-testid$="__panel"]').forEach((el) => el.remove())
+        document.body.querySelectorAll('[role="dialog"][data-state]').forEach((el) => el.remove())
       }
     })
 
@@ -685,8 +685,9 @@ describe('Popover', () => {
 
       await fireEvent.click(trigger)
       await waitFor(() =>
-        expect(document.body.querySelector('[data-testid="domain-filters__panel"]')).not.toBeNull()
+        expect(document.body.querySelector('[data-testid="popover-content"]')).not.toBeNull()
       )
+      expect(document.body.querySelector('[data-testid^="domain-filters__"]')).toBeNull()
     })
 
     // ---- Accessibility ----------------------------------------------------------------

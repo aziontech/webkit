@@ -391,9 +391,12 @@
       size="small"
       :data-testid="`${testId}__navigation-drawer`"
     >
-      <DrawerContent>
+      <DrawerContent :data-testid="`${testId}__navigation-drawer__panel`">
         <PanelHeader class="min-h-(--spacing-2xl) py-(--spacing-xs)">
-          <DrawerTitle class="sr-only">
+          <DrawerTitle
+            :data-testid="`${testId}__navigation-drawer__title`"
+            class="sr-only"
+          >
             {{ navigationAriaLabel || t('appLayout.navigation') }}
           </DrawerTitle>
         </PanelHeader>
@@ -413,9 +416,12 @@
       size="small"
       :data-testid="`${testId}__tools-drawer`"
     >
-      <DrawerContent>
+      <DrawerContent :data-testid="`${testId}__tools-drawer__panel`">
         <PanelHeader>
-          <DrawerTitle class="min-w-0 truncate">
+          <DrawerTitle
+            :data-testid="`${testId}__tools-drawer__title`"
+            class="min-w-0 truncate"
+          >
             {{ toolsLabel || t('appLayout.tools') }}
           </DrawerTitle>
         </PanelHeader>

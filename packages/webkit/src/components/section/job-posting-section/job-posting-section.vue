@@ -448,12 +448,17 @@
         size="small"
         :data-testid="`${testId}__dialog`"
       >
-        <DialogContent>
+        <DialogContent :data-testid="`${testId}__dialog__panel`">
           <PanelHeader class="w-full">
-            <DialogTitle>{{ messages.successTitle }}</DialogTitle>
+            <DialogTitle :data-testid="`${testId}__dialog__title`">{{
+              messages.successTitle
+            }}</DialogTitle>
           </PanelHeader>
           <PanelBody>
-            <DialogDescription class="m-0 text-body-sm text-(--text-muted)">
+            <DialogDescription
+              :data-testid="`${testId}__dialog__description`"
+              class="m-0 text-body-sm text-(--text-muted)"
+            >
               {{ messages.successDescription }}
             </DialogDescription>
           </PanelBody>

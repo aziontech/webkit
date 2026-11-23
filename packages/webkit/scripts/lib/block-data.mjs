@@ -1,6 +1,7 @@
 const COPY_RATIO = 0.9
 const FORK_RATIO = 0.6
 const FORK_MIN_LINES = 60
+const SIBLING_RATIO = 0.8
 const RECORD_LIMIT = 3
 
 function scriptOf(sfc) {
@@ -55,6 +56,19 @@ export function dataContractKeys(id, block) {
     )
       keys.push(`${id}:variant-fork:${variant.name}`)
   }
+  keys.push(...siblingCopyKeys(id, block.variants || []))
+  return keys
+}
+
+function siblingCopyKeys(id, variants) {
+  const keys = []
+  const long = variants.filter((v) => String(v.sfc).split('\n').length >= FORK_MIN_LINES)
+  long.forEach((variant, index) => {
+    const twin = long
+      .slice(0, index)
+      .find((other) => sharedLineRatio(variant.sfc, other.sfc) >= SIBLING_RATIO)
+    if (twin) keys.push(`${id}:variant-sibling-copy:${variant.name}`)
+  })
   return keys
 }
 

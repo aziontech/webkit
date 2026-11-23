@@ -163,7 +163,7 @@
         >
       </button>
     </PopoverTrigger>
-    <PopoverContent>
+    <PopoverContent :data-testid="`${testId}__panel`">
       <PopoverTitle class="sr-only">{{ t('timestamp.title') }}</PopoverTitle>
       <dl
         v-if="open"

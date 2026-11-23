@@ -32329,6 +32329,8 @@ packages/webkit/src/components/overlay/command/
 - `dialog-title.vue` — Public sub-component `dialog-title`.
 - `dialog-trigger.vue` — Public sub-component `dialog-trigger`.
 
+- Test ids: each part falls back to its own name (`dialog-trigger`, `dialog-content`, `dialog-title`, `dialog-description`, `dialog-close`, and `panel-header`, `panel-body`, `panel-footer` for the shared regions), and a…
+
 ## v-model
 
 | Model | Type | Default | Emits | Notes |
@@ -32493,6 +32495,8 @@ packages/webkit/src/components/overlay/command/
 - `drawer-description.vue` — Public sub-component `drawer-description`.
 - `drawer-title.vue` — Public sub-component `drawer-title`.
 - `drawer-trigger.vue` — Public sub-component `drawer-trigger`.
+
+- Test ids: each part falls back to its own name (`drawer-trigger`, `drawer-content`, `drawer-title`, `drawer-description`, `drawer-close`, and `panel-header`, `panel-body`, `panel-footer` for the shared regions), and a…
 
 ## v-model
 
@@ -32776,6 +32780,7 @@ packages/webkit/src/components/overlay/command/
 - `panel-body.vue` — Public sub-component `panel-body`.
 - `panel-footer.vue` — Public sub-component `panel-footer`.
 - `panel-header.vue` — Public sub-component `panel-header`.
+- Test ids: each region falls back to its own name (`panel-header`, `panel-body`, `panel-footer`) and a `data-testid` passed to the region wins; the shell's `data-testid` does not rename the regions.
 
 ## States
 

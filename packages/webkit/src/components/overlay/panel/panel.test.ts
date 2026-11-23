@@ -10,12 +10,10 @@ import PanelBody from './panel-body.vue'
 import PanelFooter from './panel-footer.vue'
 import PanelHeader from './panel-header.vue'
 
-// Panel is a presentational shell: a <div> root that `provide`s PanelInjectionKey
-// ({ testId }). Header / Content / Footer are context-aware sub-components — each
-// reads that injected testId to build its own data-testid (`__header`, `__content`,
-// `__footer`). No Teleport, no data-state, no emits, no v-model. So the meaningful
-// assertions are: the sub-components render their own semantic roots, and the
-// injected context flows to their testids and follows a data-testid override.
+// Panel is a presentational shell: a div root. Header, Body and Footer are their own
+// components, so each falls back to its own name as test id (panel-header, panel-body,
+// panel-footer) and a data-testid passed to the part wins; an override on the shell
+// does not rename the parts.
 
 /** Realistic composed tree: shell + all three regions with real slot content. */
 const composed = (props: Record<string, unknown> = {}, testId?: string) =>
@@ -55,35 +53,42 @@ describe('Panel', () => {
   it('exposes the sub-components as real components and renders their semantic roots', () => {
     const { getByTestId } = render(composed())
 
-    const header = getByTestId('panel__header')
-    const footer = getByTestId('panel__footer')
-    const content = getByTestId('panel__content')
+    const header = getByTestId('panel-header')
+    const footer = getByTestId('panel-footer')
+    const content = getByTestId('panel-body')
 
     expect(header.tagName).toBe('HEADER')
     expect(footer.tagName).toBe('FOOTER')
     expect(content.tagName).toBe('DIV')
   })
 
-  it('delivers the shell testid to every sub-component through provide/inject', () => {
-    const { getByTestId } = render(composed())
-
-    // Header / Content / Footer show no model-value wiring — their testids are
-    // derived purely from the injected PanelContext.testId.
-    expect(getByTestId('panel__header')).toBeTruthy()
-    expect(getByTestId('panel__content')).toBeTruthy()
-    expect(getByTestId('panel__footer')).toBeTruthy()
-  })
-
-  it('propagates a data-testid override from the shell to the sub-component testids', () => {
+  it('gives every sub-component its own name as test id, whatever the shell is called', () => {
     const { getByTestId } = render(composed({}, 'edit-domain-panel'))
 
     expect(getByTestId('edit-domain-panel')).toBeTruthy()
-    expect(getByTestId('edit-domain-panel__header').tagName).toBe('HEADER')
-    expect(getByTestId('edit-domain-panel__content').tagName).toBe('DIV')
-    expect(getByTestId('edit-domain-panel__footer').tagName).toBe('FOOTER')
+    expect(getByTestId('panel-header').tagName).toBe('HEADER')
+    expect(getByTestId('panel-body').tagName).toBe('DIV')
+    expect(getByTestId('panel-footer').tagName).toBe('FOOTER')
+    expect(document.querySelector('[data-testid^="edit-domain-panel__"]')).toBeNull()
+  })
 
-    // The default fallback testids no longer exist once overridden.
-    expect(() => getByTestId('panel__header')).toThrow()
+  it('lets a data-testid on a sub-component win over its own name', () => {
+    const Tree = defineComponent({
+      components: { Panel, PanelHeader, PanelBody, PanelFooter },
+      template: `
+        <Panel>
+          <PanelHeader data-testid="domain-header">Edit domain</PanelHeader>
+          <PanelBody data-testid="domain-body">Body</PanelBody>
+          <PanelFooter data-testid="domain-footer">Footer</PanelFooter>
+        </Panel>
+      `
+    })
+    const { getByTestId, queryByTestId } = render(Tree)
+
+    expect(getByTestId('domain-header').tagName).toBe('HEADER')
+    expect(getByTestId('domain-body').tagName).toBe('DIV')
+    expect(getByTestId('domain-footer').tagName).toBe('FOOTER')
+    expect(queryByTestId('panel-header')).toBeNull()
   })
 
   it('renders content as a plain div (no ScrollArea) when no drawer scroll host is present', () => {
@@ -96,8 +101,8 @@ describe('Panel', () => {
     // utility classes never apply and any scroll measurement would be a false
     // negative. Scrolling is exercised through Drawer and Dialog, which are the
     // contexts that mount this shell.
-    expect(getByTestId('panel__content').tagName).toBe('DIV')
-    expect(queryByTestId('panel__scroll')).toBeNull()
+    expect(getByTestId('panel-body').tagName).toBe('DIV')
+    expect(queryByTestId('panel-body__content')).toBeNull()
     expect(getByText('Adjust the domain configuration below.')).toBeTruthy()
   })
 
@@ -126,8 +131,8 @@ describe('Panel', () => {
 
     const { getByTestId, getByText } = render(Tree)
 
-    const scroll = getByTestId('panel__scroll')
-    const content = getByTestId('panel__content')
+    const scroll = getByTestId('panel-body')
+    const content = getByTestId('panel-body__content')
     expect(scroll).toBeTruthy()
     // Content div is nested INSIDE the ScrollArea host, not a sibling.
     expect(scroll.contains(content)).toBe(true)
@@ -163,7 +168,7 @@ describe('Panel', () => {
           )
       })
     )
-    const content = view.getByTestId('panel__content')
+    const content = view.getByTestId('panel-body')
     content.style.height = '40px'
     content.style.overflowY = 'auto'
     await nextTick()

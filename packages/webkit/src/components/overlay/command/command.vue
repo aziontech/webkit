@@ -234,9 +234,16 @@
     :data-testid="testId"
     @update:open="(value) => setOpen(value)"
   >
-    <DialogContent class="md:items-start md:pt-[15dvh]">
+    <DialogContent
+      :data-testid="`${testId}__panel`"
+      class="md:items-start md:pt-[15dvh]"
+    >
       <PanelHeader class="min-h-(--spacing-2xl) py-(--spacing-xs) sm:hidden">
-        <DialogTitle class="sr-only">{{ t('command.title') }}</DialogTitle>
+        <DialogTitle
+          :data-testid="`${testId}__title`"
+          class="sr-only"
+          >{{ t('command.title') }}</DialogTitle
+        >
       </PanelHeader>
       <div
         class="flex flex-col"

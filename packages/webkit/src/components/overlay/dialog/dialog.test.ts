@@ -23,8 +23,8 @@ const settle = async () => {
 
 const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data-testid="${id}"]`)
 
-const panel = () => byTestId('dialog__panel')
-const backdrop = () => byTestId('dialog__backdrop')
+const panel = () => byTestId('dialog-content')
+const backdrop = () => byTestId('dialog-content__backdrop')
 
 /**
  * A realistic composed tree wired exactly like the Default example: Root >
@@ -71,7 +71,7 @@ describe('Dialog', () => {
 
         // The Root + Trigger render in-place; DialogContent teleports nothing until open.
         expect(getByTestId('dialog').getAttribute('data-state')).toBe('closed')
-        const trigger = getByTestId('dialog__trigger')
+        const trigger = getByTestId('dialog-trigger')
         expect(trigger.hasAttribute('role')).toBe(false)
         expect(trigger.hasAttribute('tabindex')).toBe(false)
         const button = trigger.querySelector('button') as HTMLElement
@@ -88,7 +88,7 @@ describe('Dialog', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.click(getByTestId('dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog-trigger'))
         await settle()
 
         // Root reflects the injected open state.
@@ -101,8 +101,8 @@ describe('Dialog', () => {
         expect(dialog!.getAttribute('role')).toBe('dialog')
         expect(dialog!.getAttribute('aria-modal')).toBe('true')
 
-        const title = byTestId('dialog__title')!
-        const description = byTestId('dialog__description')!
+        const title = byTestId('dialog-title')!
+        const description = byTestId('dialog-description')!
         expect(dialog!.getAttribute('aria-labelledby')).toBe(title.id)
         expect(dialog!.getAttribute('aria-describedby')).toBe(description.id)
         expect(title.textContent).toContain('Delete domain')
@@ -113,7 +113,7 @@ describe('Dialog', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.keyDown(getByTestId('dialog__trigger'), { key: 'Enter' })
+        await fireEvent.keyDown(getByTestId('dialog-trigger'), { key: 'Enter' })
         await settle()
         expect(panel()).not.toBeNull()
       })
@@ -130,7 +130,7 @@ describe('Dialog', () => {
         })
         await settle()
 
-        await fireEvent.click(getByTestId('dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog-trigger'))
         await settle()
 
         expect(onUpdate).toHaveBeenCalledTimes(1)
@@ -167,7 +167,7 @@ describe('Dialog', () => {
         expect(panel()).not.toBeNull()
 
         // DialogClose (IconButton) calls ctx.close() -> update:open(false).
-        const close = byTestId('dialog__close')!
+        const close = byTestId('dialog-close')!
         await fireEvent.click(close)
         await settle()
 
@@ -182,7 +182,7 @@ describe('Dialog', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        const trigger = getByTestId('dialog__trigger')
+        const trigger = getByTestId('dialog-trigger')
         await fireEvent.click(trigger)
         await settle()
         expect(panel()).not.toBeNull()
@@ -202,7 +202,7 @@ describe('Dialog', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.click(getByTestId('dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog-trigger'))
         await settle()
 
         const bd = backdrop()
@@ -219,7 +219,7 @@ describe('Dialog', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.click(getByTestId('dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog-trigger'))
         await settle()
 
         const close = byTestId('dialog__close')!
@@ -238,7 +238,7 @@ describe('Dialog', () => {
         const { getByTestId } = render(composed({ dismissible: false }))
         await settle()
 
-        await fireEvent.click(getByTestId('dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog-trigger'))
         await settle()
         expect(panel()).not.toBeNull()
 
@@ -271,7 +271,7 @@ describe('Dialog', () => {
           expect(getByTestId('dialog').getAttribute('data-state')).toBe('open')
           expect(panel()).not.toBeNull()
           // Panel shell testid is derived from the same injected testId.
-          expect(byTestId('dialog__panel-shell')).not.toBeNull()
+          expect(byTestId('dialog-content__panel-shell')).not.toBeNull()
         }
       )
     })
@@ -298,7 +298,7 @@ describe('Dialog', () => {
         await settle()
         expect(document.body.style.overflow).toBe(before)
 
-        await fireEvent.click(getByTestId('dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog-trigger'))
         await settle()
         expect(document.body.style.overflow).toBe('hidden')
 
@@ -349,13 +349,13 @@ describe('Dialog', () => {
         const { getByTestId } = render(Default)
         await settle()
 
-        await fireEvent.click(getByTestId('dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog-trigger'))
         await settle()
 
         const dialog = panel()
         expect(dialog).not.toBeNull()
         expect(dialog!.getAttribute('role')).toBe('dialog')
-        expect(byTestId('dialog__title')!.textContent).toContain('Dialog Title')
+        expect(byTestId('dialog-title')!.textContent).toContain('Dialog Title')
       })
     })
   })
@@ -389,7 +389,7 @@ describe('Dialog', () => {
     const openWithKey = async (key: string) => {
       const { getByTestId } = render(twoActions)
       await settle()
-      const trigger = getByTestId('dialog__trigger').querySelector('button')!
+      const trigger = getByTestId('dialog-trigger').querySelector('button')!
       trigger.focus()
       await userEvent.keyboard(key)
       await settle()
@@ -494,7 +494,7 @@ describe('Dialog', () => {
     it('teleports the panel inside a portal wrapper derived from the root testid', async () => {
       render(composed({ defaultOpen: true }))
       await settle()
-      const portal = byTestId('dialog__portal')
+      const portal = byTestId('dialog-content__portal')
       expect(portal).not.toBeNull()
       expect(portal!.parentElement).toBe(document.body)
       expect(portal!.contains(panel())).toBe(true)
@@ -511,7 +511,7 @@ describe('Dialog', () => {
       const bd = backdrop()
       expect(bd).not.toBeNull()
       expect(bd!.getAttribute('aria-hidden')).toBe('true')
-      expect(byTestId('dialog__portal')!.contains(bd)).toBe(true)
+      expect(byTestId('dialog-content__portal')!.contains(bd)).toBe(true)
       expect(panel()!.getAttribute('aria-modal')).toBe('true')
     })
   })
@@ -670,7 +670,7 @@ describe('Dialog', () => {
       await settle()
       const close = byTestId('dialog__close')!
       expect(close).not.toBeNull()
-      expect(close.closest('header')).toBe(byTestId('dialog__panel-shell__header'))
+      expect(close.closest('header')).toBe(byTestId('panel-header'))
       expect(close.hasAttribute('disabled')).toBe(false)
     })
 
@@ -680,7 +680,7 @@ describe('Dialog', () => {
       await settle()
 
       await fireEvent.keyDown(document, { key: 'Escape' })
-      await fireEvent.click(byTestId('dialog__backdrop')!)
+      await fireEvent.click(byTestId('dialog-content__backdrop')!)
       await settle()
       expect(getByTestId('dialog').getAttribute('data-state')).toBe('open')
 
@@ -695,7 +695,7 @@ describe('Dialog', () => {
       await settle()
 
       expect(byTestId('dialog__close')).toBeNull()
-      expect(byTestId('dialog__panel-shell__header')).not.toBeNull()
+      expect(byTestId('panel-header')).not.toBeNull()
       await fireEvent.keyDown(document, { key: 'Escape' })
       await settle()
       expect(getByTestId('dialog').getAttribute('data-state')).toBe('closed')
@@ -709,7 +709,7 @@ describe('Dialog', () => {
         })
       )
       await settle()
-      await fireEvent.click(byTestId('dialog__close')!)
+      await fireEvent.click(byTestId('dialog-close')!)
       await settle()
       expect(getByTestId('dialog').getAttribute('data-state')).toBe('closed')
     })
@@ -739,7 +739,7 @@ describe('Dialog', () => {
       await settle()
       await fireEvent.click(view.getByRole('button', { name: 'Open dialog' }))
       await settle()
-      expect(byTestId('dialog__panel')).not.toBeNull()
+      expect(byTestId('dialog-content')).not.toBeNull()
       expect(byTestId('dialog__close')).not.toBeNull()
     })
   })
