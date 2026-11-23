@@ -178,6 +178,26 @@ const pressShortcut = (key: string, target: Element = document.body) => {
 describe('edit-function keyboard', () => {
   const argumentsProps = { document: 'arguments' as const, defaultOpenKeys: ['field-1'] }
 
+  it('asks before a link on the page leaves the function with unsaved changes', async () => {
+    const view = render(EditFunction, { props: argumentsProps })
+    const link = document.createElement('a')
+    link.href = '/functions'
+    link.textContent = 'Functions'
+    document.body.appendChild(link)
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
+    expect(document.body.textContent).not.toContain('Unsaved changes')
+
+    await userEvent.click(view.getByRole('button', { name: 'Move quality up' }))
+    const click = new MouseEvent('click', { bubbles: true, cancelable: true })
+    link.dispatchEvent(click)
+    expect(click.defaultPrevented).toBe(true)
+    await waitFor(() => expect(document.body.textContent).toContain('Unsaved changes'))
+    await fireEvent.click(buttonIn(document, 'Keep editing'))
+    await waitFor(() => expect(document.body.textContent).not.toContain('Unsaved changes'))
+    expect(buttonIn(document, 'Save')).toBeTruthy()
+    link.remove()
+  })
+
   it('saves on Command S only while the function has changes', async () => {
     const view = render(EditFunction, { props: argumentsProps })
     expect(pressShortcut('s').defaultPrevented).toBe(false)
