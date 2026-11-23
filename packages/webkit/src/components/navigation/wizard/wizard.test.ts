@@ -6,6 +6,7 @@ import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { page } from 'vitest/browser'
 import { defineComponent, nextTick } from 'vue'
 
+import Validation from '../../../../examples/wizard/validation.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import ConfigProvider from '../../provider/config-provider/config-provider.vue'
@@ -432,6 +433,21 @@ describe('Wizard', () => {
       await userEvent.click(button(view, 'Previous'))
       await vi.waitFor(() => expect(document.activeElement).toBe(headingOf(view)))
       expect(headingOf(view).textContent?.trim()).toBe('Configure')
+    })
+
+    it('a blocked Next moves focus to the invalid field, which names its error', async () => {
+      const view = render(Validation)
+      const next = view.getByRole('button', { name: 'Next' })
+      next.focus()
+      await userEvent.keyboard('{Enter}')
+
+      const name = view.getByRole('textbox', { name: /Name/ })
+      await vi.waitFor(() => expect(document.activeElement).toBe(name))
+      expect(name.getAttribute('aria-invalid')).toBe('true')
+      const describedBy = (name.getAttribute('aria-describedby') ?? '').split(' ')
+      const error = view.getByText('Enter a name to continue.')
+      expect(describedBy).toContain(error.closest('[id]')?.id)
+      await expectNoA11yViolations(view.container)
     })
   })
 
