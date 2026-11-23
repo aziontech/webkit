@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
   import Item from '../../content/item/item.vue'
   import ItemActions from '../../content/item/item-actions.vue'
   import ItemContent from '../../content/item/item-content.vue'
@@ -31,6 +33,8 @@
     stackable?: boolean
     /** Extra guidance in a Hint glyph beside the title; empty renders no glyph. */
     hint?: string
+    /** Marks the setting as required after its title, as a required field label does. */
+    required?: boolean
   }
 
   withDefaults(defineProps<SettingsRowProps>(), {
@@ -38,7 +42,8 @@
     variant: 'field',
     depth: 0,
     stackable: false,
-    hint: ''
+    hint: '',
+    required: false
   })
 
   defineSlots<{
@@ -51,6 +56,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ field: en.field })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'settings-row')
 
@@ -90,6 +96,18 @@
         >
           <ItemTitle :data-testid="`${testId}__title`">
             <slot name="title">{{ title }}</slot>
+            <span
+              v-if="required"
+              :data-testid="`${testId}__required`"
+              class="text-label-sm text-(--text-muted)"
+            >
+              <span
+                aria-hidden="true"
+                class="text-(--text-brand)"
+                >*</span
+              >
+              {{ t('field.required') }}
+            </span>
             <Hint
               v-if="hint"
               :content="hint"

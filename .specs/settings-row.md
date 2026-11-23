@@ -3,10 +3,10 @@ name: settings-row
 category: layout
 structure: monolithic
 status: implemented
-checksum: bade8cff3f2c50d097409ebbfb4a9567061e1cd9579b36366c224b52c546d637
-spec_version: 8
+checksum: 28ccfe14e4a20551d192ff2773bff1bf6aa596d0b94292eb6b9993d496e3e644
+spec_version: 9
 created: 2026-11-10
-last_updated: 2026-11-17
+last_updated: 2026-11-22
 ---
 
 # SettingsRow — Component Spec
@@ -100,6 +100,7 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 | `depth`       | `0 \| 1 \| 2`                       | `0`       | false    | Indent depth under a rule, for a setting that only applies when its parent is on.                                              |
 | `stackable`   | `boolean`                           | `false`   | false    | Stack a field control under the copy below the lg container of the row instead of md, for a value that needs the full measure. |
 | `hint`        | `string`                            | `''`      | false    | Extra guidance in a Hint glyph beside the title; empty renders no glyph.                                                       |
+| `required`    | `boolean`                           | `false`   | false    | Marks the setting as required after its title, as a required field label does.                                                |
 
 ## Events
 
@@ -115,7 +116,7 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 
 ## States
 
-- Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set)
+- Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set), `required` (after the title, the same marker a required `Field.Label` renders: a brand `*` hidden from assistive tech, then the `field.required` string, "(Required)" in English)
 - `data-row-variant` mirrors `variant` and `data-depth` mirrors `depth` on the root; `data-stackable` is set when `stackable` is on
 - Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
 - Responsive: the row is the `@container/settings-row`. The description wraps in full at every width; it is never clamped or cut with an ellipsis. From `@md` of the row up, a `field` control keeps the end cell, capped at the 3xs container; below `@md` (a phone) it moves under the copy at full width. With `stackable` the move happens below `@lg` instead. A `compact` control stays at the end side at every width; a `stacked` control is always under the copy.
@@ -144,7 +145,7 @@ _none_
 - Keyboard map: `Tab` reaches the control; the row is not interactive.
 - ARIA: the row is an `Item` (a `listitem` inside `Item.List`); the control carries `aria-label` equal to the title, and a message is linked with `aria-describedby`.
 - No truncation: the description shows its full text to every user at every width (WCAG 1.4.10 Reflow). `hint` holds the longer explanation: its glyph is a focusable button whose accessible name and tooltip are the hint text, reachable with `Tab` and revealed on hover or focus.
-- Contrast ≥4.5:1 for the title and the muted description.
+- Contrast ≥4.5:1 for the title and the muted description. The required `*` is brand text in the logo orange, the owner-accepted exception the `Field.Label` asterisk carries; it is `aria-hidden`, and the "(Required)" text after it is what a screen reader reads. The control in the slot still sets its own `required`.
 
 ## Examples
 

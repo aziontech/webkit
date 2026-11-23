@@ -14,6 +14,7 @@
     <template #default>
       <Item.List>
         <SettingsRow
+          required
           title="Name"
           description="Give a unique and descriptive name to identify the resource."
         >

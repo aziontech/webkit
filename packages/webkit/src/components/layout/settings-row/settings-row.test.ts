@@ -105,6 +105,20 @@ describe('SettingsRow', () => {
     expect(getByRole('button', { name: hint })).toBe(glyph)
   })
 
+  it('marks a required row after its title, as a required field label does', () => {
+    const { getByTestId, queryByTestId } = within(
+      render(inList({ title: 'Name', required: true })).container as HTMLElement
+    )
+
+    const marker = getByTestId('settings-row__required')
+    expect(getByTestId('settings-row__title').contains(marker)).toBe(true)
+    expect(marker.textContent?.replace(/\s+/g, ' ').trim()).toBe('* (Required)')
+    expect(marker.querySelector('[aria-hidden="true"]')?.textContent).toBe('*')
+    const optional = render(inList({ title: 'Region' })).container as HTMLElement
+    expect(within(optional).queryByTestId('settings-row__required')).toBeNull()
+    expect(queryByTestId('settings-row__required')).toBe(marker)
+  })
+
   it('renders no Hint when hint is empty', () => {
     const { queryByTestId, queryByRole } = within(
       render(inList({ title: 'Name' })).container as HTMLElement

@@ -46,6 +46,13 @@
     {
       "rule": "color-contrast",
       "themes": ["light"],
+      "selector": "[data-testid$=\"settings-row__required\"] [aria-hidden=\"true\"]",
+      "token": "--text-brand",
+      "reason": "brand: brand text is the logo orange #F3652B, the one orange in content; owner decision 2026-11-18"
+    },
+    {
+      "rule": "color-contrast",
+      "themes": ["light"],
       "selector": "[data-testid$=\"tag\"][data-variant=\"highlight\"]",
       "token": "--text-brand",
       "reason": "brand: brand text is the logo orange #F3652B, the one orange in content; owner decision 2026-11-18"
