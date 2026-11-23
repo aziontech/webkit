@@ -61,7 +61,7 @@ test.describe('demo flows', () => {
     await expect(toastTitle(page, 'shop-api was created.')).toBeVisible()
     await expect(page.getByRole('heading', { level: 1, name: 'shop-api' })).toBeVisible()
     await expect(page.getByText('No deployment yet')).toBeVisible()
-    await expect(page.getByText('just now by Amy Chen')).toBeVisible()
+    await expect(page.getByText(/^now by Amy Chen$/)).toBeVisible()
   })
 
   test('detail → edit → save', async ({ page }) => {
@@ -132,7 +132,10 @@ test.describe('demo flows', () => {
 
   test('the account menu and the create page avatar lead to Account settings', async ({ page }) => {
     await page.goto(`${DEMOS}/resources`)
-    await page.getByRole('button', { name: /account menu/ }).first().click()
+    await page
+      .getByRole('button', { name: /account menu/ })
+      .first()
+      .click()
     await page.getByRole('menuitem', { name: 'Account settings' }).click()
     await expect(page).toHaveURL(/\/settings$/)
     await page.goto(`${DEMOS}/resources/new`)
@@ -156,7 +159,9 @@ test.describe('demo flows', () => {
 
   test('each plan card prints its description once', async ({ page }) => {
     await page.goto(`${DEMOS}/onboarding/plan`)
-    await expect(page.getByText('Start free for personal projects and experimentation')).toHaveCount(1)
+    await expect(
+      page.getByText('Start free for personal projects and experimentation')
+    ).toHaveCount(1)
   })
 
   test('an unknown address shows a not-found page and keeps the URL', async ({ page }) => {
@@ -178,7 +183,9 @@ test.describe('demo flows', () => {
       await page.locator('#full-name').fill('Amy Chen-Park')
       const bar = await page.locator('[data-demo-bar]').boundingBox()
       const covered = await page.evaluate((top) => {
-        const controls = [...document.querySelectorAll('main button, main a, main input, nav button')]
+        const controls = [
+          ...document.querySelectorAll('main button, main a, main input, nav button')
+        ]
         return controls
           .filter((el) => !el.closest('[data-demo-bar]'))
           .map((el) => el.getBoundingClientRect())
