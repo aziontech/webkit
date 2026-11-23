@@ -878,3 +878,13 @@ This register starts from the review of 12–16 November 2026 (192 rows: 178 don
 | ----- | -------- | ------ | ----- |
 | OI-01 | OutcomeIcon stays a component: the filled two-colour disc, the draw-in animation and the translated screen-reader name are things an icon cannot do. It is for the moment a run ends (an outcome screen, a checklist of finished items). Steps that can still be running and every small static mark use the outline `az-circle-*` icons. | implemented | `.specs/outcome-icon.md` § When NOT to use |
 | OI-02 | A status icon on a surface takes its `-mark` colour, never `-foreground` (made for the pale fill, near black in light) or the raw fill colour. Fixed in DeploymentLogs, Trace, TutorialPanel (its `--text-success` token does not exist) and two blocks; the token descriptions now say the same. | implemented | `deployment-logs.vue`, `trace-rows.vue`, `tutorial-panel.vue`, `choose-settings-page.vue`, `import-preview.vue`, `token-purpose.js` |
+
+## 2026-11-23 — Audit-5 follow-ups, lane B2
+
+| ID         | Decision | Status | Where |
+| ---------- | -------- | ------ | ----- |
+| A5-FU-B2-1 | Controls joined side by side (ToggleGroup segments, ButtonGroup buttons, the two SplitButton halves) grow their touch target only vertically, to 44px tall; ToggleGroup segments are also at least 44px wide on a coarse pointer. A tap never lands on a neighbour. | done | toggle-group, button-group, split-button; `touch-targets.test.ts` |
+| A5-FU-B2-2 | A Tag or Badge label with no letter (a count, `+10.5%`, `#1024`) renders `dir="ltr"` instead of `dir="auto"`, so engines that resolve a letterless `auto` run to the page direction still keep its sign and unit in order; labels with letters keep `dir="auto"`. | done | `src/utils/text-direction.ts`, tag, badge, avatar-group; `rtl.test.ts` |
+| A5-FU-B2-3 | DatePicker loads its calendar grid and date fields the first time it opens, and shows the popover once they have loaded (not a placeholder), so the focus trap lands on the active day. Its budgets are measured entry-only. DateRangePicker is left as is (another session edits it). | done | date-picker; `.size-limit.json` |
+| A5-FU-B2-4 | ConversationHistory estimates an unmounted row at 48px (the 44px touch row plus the 4px list gap) on every pointer; a fine-pointer row (40px) is over-estimated until its chunk mounts and is measured. | done | conversation-history |
+| A5-FU-B2-5 | A nested ConfigProvider inherits every setting it does not set (locale, registered catalogs, `messages` overrides, `now`, `timeZone`), and merges its own `messages` over the outer ones. | done | use-locale; config-provider spec |
