@@ -6,10 +6,13 @@ import { commands, page } from 'vitest/browser'
 import { h, nextTick } from 'vue'
 
 import AccordionDefault from '../../examples/accordion/default.vue'
+import CodeBlockUnevenTabs from '../../examples/code-block/uneven-tabs.vue'
 import ConsoleShowcaseDefault from '../../examples/console-showcase-section/default.vue'
 import DatePickerDefault from '../../examples/date-picker/default.vue'
+import DocTableOfContentsDefault from '../../examples/doc-table-of-contents/default.vue'
 import DropdownMenuStates from '../../examples/dropdown-menu/states.vue'
 import FooterDefault from '../../examples/footer/default.vue'
+import HighlightButtonSizes from '../../examples/highlight-button/sizes.vue'
 import InputDefault from '../../examples/input/default.vue'
 import MultiSelectDefault from '../../examples/multi-select/default.vue'
 import NumberInputDefault from '../../examples/number-input/default.vue'
@@ -83,6 +86,17 @@ describe('tap targets on a coarse pointer (styled)', () => {
       expect(hitSpan(target, 'y')).toBeGreaterThanOrEqual(44)
     })
 
+    it('HighlightButton answers a tap across 44 x 44 at every size', async () => {
+      await touch()
+      const view = await mount(HighlightButtonSizes)
+      const buttons = byTestId(view.container as HTMLElement, 'highlight-button')
+      expect(buttons.length).toBeGreaterThanOrEqual(3)
+      for (const button of buttons) {
+        expect(hitSpan(button, 'y')).toBeGreaterThanOrEqual(44)
+      }
+      expect(buttons.some((button) => button.getBoundingClientRect().height < 40)).toBe(true)
+    })
+
     it('NumberInput steppers are 44px tall to the touch', async () => {
       await touch()
       const view = await mount(NumberInputDefault)
@@ -107,7 +121,13 @@ describe('tap targets on a coarse pointer (styled)', () => {
     it.each([
       ['Tabs', TabsDefault, '[role="tab"]'],
       ['Accordion', AccordionDefault, '[data-testid="accordion-trigger"]'],
-      ['FooterLink', FooterDefault, '[data-testid="footer-link"]']
+      ['FooterLink', FooterDefault, '[data-testid="footer-link"]'],
+      ['CodeBlock tab', CodeBlockUnevenTabs, '[role="tab"]'],
+      [
+        'DocTableOfContents link',
+        DocTableOfContentsDefault,
+        '[data-testid="doc-table-of-contents"] a'
+      ]
     ])('%s rows are 44px tall', async (_name, component, selector) => {
       await touch()
       const view = await mount(component)

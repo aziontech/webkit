@@ -114,6 +114,12 @@ describe('DocTableOfContents', () => {
       const link = getByText('View source').closest('a')
       expect(link?.getAttribute('href')).toBe('https://github.com/aziontech')
     })
+
+    it('says an external group link opens in a new tab', () => {
+      const { getByRole } = render(DocTableOfContents, { props: { items: ITEMS, groups: GROUPS } })
+      const link = getByRole('link', { name: /^View source ?\(opens in a new tab\)$/ })
+      expect(link.getAttribute('target')).toBe('_blank')
+    })
   })
 
   describe('the select event', () => {

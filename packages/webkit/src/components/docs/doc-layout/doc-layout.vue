@@ -17,6 +17,7 @@
   import AppHeaderCenter from '../../layout/app-header/app-header-center.vue'
   import AppHeaderEnd from '../../layout/app-header/app-header-end.vue'
   import AppHeaderStart from '../../layout/app-header/app-header-start.vue'
+  import ConsoleLayoutPalette from '../../layout/console-layout/parts/console-layout-palette.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import Sidebar from '../../layout/sidebar/sidebar.vue'
   import NavigationMenu from '../../navigation/navigation-menu/navigation-menu.vue'
@@ -27,12 +28,6 @@
   import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
   import SidebarMenuBack from '../../navigation/sidebar-menu/sidebar-menu-back/sidebar-menu-back.vue'
   import SkipLink from '../../navigation/skip-link/skip-link.vue'
-  import Command from '../../overlay/command/command.vue'
-  import CommandEmpty from '../../overlay/command/command-empty/command-empty.vue'
-  import CommandGroup from '../../overlay/command/command-group/command-group.vue'
-  import CommandInput from '../../overlay/command/command-input/command-input.vue'
-  import CommandItem from '../../overlay/command/command-item/command-item.vue'
-  import CommandList from '../../overlay/command/command-list/command-list.vue'
   import Drawer from '../../overlay/drawer/drawer.vue'
   import DrawerContent from '../../overlay/drawer/drawer-content.vue'
   import DrawerTitle from '../../overlay/drawer/drawer-title.vue'
@@ -42,6 +37,7 @@
     type DocTableOfContentsGroup
   } from '../doc-table-of-contents/doc-table-of-contents.vue'
   import { useDocLayoutOutline } from './composables/use-doc-layout-outline'
+  import DocLayoutOutlineDisclosure from './parts/doc-layout-outline-disclosure.vue'
 
   defineOptions({
     name: 'DocLayout',
@@ -174,8 +170,7 @@
   }
 
   const OUTLINE_CLASS =
-    'sticky top-(--layout-header-height) flex max-h-[calc(100dvh-var(--layout-header-height))] flex-col gap-(--spacing-lg) overflow-y-auto px-(--spacing-md) pt-(--spacing-md) ' +
-    'pb-(--spacing-lg)'
+    'sticky top-(--layout-header-height) flex max-h-[calc(100dvh-var(--layout-header-height))] flex-col gap-(--spacing-lg) overflow-y-auto p-(--spacing-md) pb-(--spacing-lg)'
 </script>
 
 <template>
@@ -208,6 +203,7 @@
               :href="home"
               :aria-label="t('docLayout.home')"
               :label="t('docLayout.badge')"
+              class="@max-sm:[&>[data-testid$=__label]]:hidden"
             >
               <Brand
                 variant="default"
@@ -288,6 +284,15 @@
       </div>
 
       <div class="flex min-w-0 flex-1 flex-col">
+        <DocLayoutOutlineDisclosure
+          v-if="outline.length"
+          :items="outline"
+          :groups="outlineGroups"
+          :active-id="activeHeading"
+          :data-testid="`${testId}__outline-disclosure`"
+          class="xl:hidden"
+          @select="jumpTo"
+        />
         <main
           :id="mainId"
           :data-testid="`${testId}__main`"
@@ -295,6 +300,13 @@
         >
           <slot />
         </main>
+        <div
+          v-if="outline.length && $slots['aside']"
+          :data-testid="`${testId}__aside-inline`"
+          class="px-(--layout-boundary-inline) pb-(--spacing-xl) xl:hidden"
+        >
+          <slot name="aside" />
+        </div>
         <slot name="footer" />
       </div>
 
@@ -367,34 +379,22 @@
       </DrawerContent>
     </Drawer>
 
-    <Command
+    <ConsoleLayoutPalette
       v-model:open="searchOpen"
+      :placeholder="t('docLayout.search')"
+      :pages-label="t('docLayout.pages')"
+      :no-match-label="t('docLayout.noMatch')"
+      :groups="appMenu.paletteGroups"
+      :value-prefix="NAV_VALUE"
       @select="appMenu.onPaletteSelect"
+      @query="appMenu.onQuery"
     >
-      <CommandInput
-        :placeholder="t('docLayout.search')"
-        @update:model-value="appMenu.onQuery"
-      />
-      <CommandList>
+      <template #search>
         <slot
           name="search"
           :query="appMenu.query"
         />
-        <CommandGroup
-          v-for="group in appMenu.paletteGroups"
-          :key="group.key"
-          :label="group.heading || t('docLayout.pages')"
-        >
-          <CommandItem
-            v-for="item in group.items"
-            :key="item.id"
-            :value="NAV_VALUE + item.id"
-          >
-            {{ item.label }}
-          </CommandItem>
-        </CommandGroup>
-        <CommandEmpty>{{ t('docLayout.noMatch') }}</CommandEmpty>
-      </CommandList>
-    </Command>
+      </template>
+    </ConsoleLayoutPalette>
   </div>
 </template>
