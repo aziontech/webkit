@@ -150,7 +150,7 @@
       :style="{ anchorName }"
       :class="OVERFLOW_CLASS"
     >
-      +{{ hidden.length }}
+      <span dir="ltr">+{{ hidden.length }}</span>
       <span
         aria-hidden="true"
         data-slot="touch-target"
