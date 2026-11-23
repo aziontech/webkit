@@ -47,7 +47,7 @@
   })
 
   const TAB_CLASS =
-    'inline-flex h-8 items-center rounded-(--shape-control) px-3 text-body-sm font-semibold text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'inline-flex h-8 shrink-0 items-center whitespace-nowrap rounded-(--shape-control) px-3 text-body-sm font-semibold text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
     'data-active:bg-(--bg-contrast) data-active:font-bold data-active:text-(--text-contrast) ' +
     'motion-reduce:transition-none'
 </script>
@@ -59,13 +59,17 @@
     :texture="texture"
     :active="active"
     :width="1440"
+    :mobile-width="720"
   >
     <div class="flex h-full flex-col">
       <ConsoleMockupShellItem :order="0">
-        <div class="flex min-h-16 items-center justify-between px-(--spacing-xl) pt-(--spacing-md)">
+        <div
+          class="flex min-h-16 items-center justify-between gap-(--spacing-md) px-(--spacing-xl) pt-(--spacing-md)"
+        >
           <nav
             aria-label="Breadcrumb"
-            class="flex items-center gap-(--spacing-xs) text-body-lg font-medium"
+            data-slot="application-version-breadcrumb"
+            class="flex min-w-0 items-center gap-(--spacing-xs) whitespace-nowrap text-body-lg font-medium"
           >
             <span class="px-0.5 text-(--text-muted)">Applications</span>
             <i
@@ -77,10 +81,10 @@
               class="az az-chevron-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
               aria-hidden="true"
             />
-            <span class="px-0.5 text-(--text-default)">A7TEE0XR</span>
+            <span class="truncate px-0.5 text-(--text-default)">A7TEE0XR</span>
           </nav>
-          <div class="flex items-center gap-(--spacing-sm)">
-            <span class="text-body-xs text-(--text-muted)">
+          <div class="flex shrink-0 items-center gap-(--spacing-sm)">
+            <span class="whitespace-nowrap text-body-xs text-(--text-muted)">
               Created Sep 24, 2026 · by {{ APPLICATION_VERSION_EDITOR }}
             </span>
             <Tag
@@ -94,7 +98,10 @@
       </ConsoleMockupShellItem>
 
       <ConsoleMockupShellItem :order="1">
-        <div class="flex items-center gap-(--spacing-xs) px-(--spacing-xl) pt-(--spacing-md)">
+        <div
+          data-slot="application-version-tabs"
+          class="flex items-center gap-(--spacing-xs) overflow-hidden px-(--spacing-xl) pt-(--spacing-md)"
+        >
           <span
             v-for="item in APPLICATION_VERSION_TABS"
             :key="item.value"

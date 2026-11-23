@@ -87,6 +87,18 @@ describe('ConsoleMockup', () => {
       expect((await frameOf(bare)).getAttribute('data-variant')).toBe('bare')
     })
 
+    it('keeps the application-version breadcrumb and tabs on one line at any width', async () => {
+      const view = render(host({ name: 'application-version' }))
+      const frame = await frameOf(view)
+      const crumbs = frame.querySelector('[data-slot="application-version-breadcrumb"]')!
+      const tabs = [...frame.querySelectorAll('[data-slot="application-version-tabs"] > span')]
+
+      expect(crumbs.classList.contains('whitespace-nowrap')).toBe(true)
+      expect(crumbs.classList.contains('min-w-0')).toBe(true)
+      expect(tabs.length).toBeGreaterThan(0)
+      tabs.forEach((tab) => expect(tab.classList.contains('whitespace-nowrap')).toBe(true))
+    })
+
     it('forwards variant and fade to a widget that declares them', async () => {
       const view = render(host({ name: 'workloads-list', variant: 'bare', fade: 'bottom' }))
       const frame = await frameOf(view)
