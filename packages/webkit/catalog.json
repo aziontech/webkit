@@ -14347,7 +14347,7 @@
      "type": "string",
      "default": "'100%'",
      "required": "false",
-     "doc": "CSS width (any length)."
+     "doc": "CSS width (any length); a rectangle never grows past its container."
     },
     {
      "name": "height",
@@ -36550,7 +36550,8 @@
     "ToggleGroup",
     "Tooltip",
     "Trace",
-    "use-shortcuts"
+    "use-shortcuts",
+    "use-unsaved-changes"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -36587,7 +36588,8 @@
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/trace",
-    "@aziontech/webkit/use-shortcuts"
+    "@aziontech/webkit/use-shortcuts",
+    "@aziontech/webkit/use-unsaved-changes"
    ],
    "primary": "Code",
    "guidelinesSummary": "The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the Services breadcrumb, the ⌘K palette and the `main`. The editor pins its own panes, so its root carries `data-layout-fill`: the layout's `main` stops scrolling and the root fills it (`h-dvh` only sizes a standalone preview).",
@@ -37709,7 +37711,7 @@
     "@aziontech/webkit/toggle-group"
    ],
    "primary": "Idle",
-   "guidelinesSummary": "The async-action pattern, and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`. The run toast rides the app's one toast region, never the page's: the app installs `ToastPlugin` (`app.use(ToastPlugin, { position: 'bottom-end' })`) or mounts one `Toaster` near its root, beside `ConsoleLayout`, and this page body only imports `toast` from `@aziontech/webkit/toast`. A `Toaster` inside a page body is a second region for the whole app: only the first `Toaster` to mount is active, and it gives that up when it unmounts, so a page's copy is either inert or, when it mounted first, stops every toast once the user leaves the page, the opposite of a run toast that follows the user. The docs preview mounts one region around the block the way an app root does, so its frames show the toasts; a copy of the page shows them wherever the app has mounted the region. The toasts are raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the app's `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast, Error the permanent failure toast and Success the success toast; leaving the page dismisses the toast so the next story starts clean.",
+   "guidelinesSummary": "The async-action pattern, and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress travels with the user as a toast, and its outcome comes back as a toast when the user is not looking at this page, on success and on failure. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`. The run toast rides the app's one toast region, never the page's: the app installs `ToastPlugin` (`app.use(ToastPlugin, { position: 'bottom-end' })`) or mounts one `Toaster` near its root, beside `ConsoleLayout`, and this page body only imports `toast` from `@aziontech/webkit/toast`. A `Toaster` inside a page body is a second region for the whole app: only the first `Toaster` to mount is active, and it gives that up when it unmounts, so a page's copy is either inert or, when it mounted first, stops every toast once the user leaves the page, the opposite of a run toast that follows the user. The docs preview mounts one region around the block the way an app root does, so its frames show the toasts; a copy of the page shows them wherever the app has mounted the region. The toasts are raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the app's `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast. When the run ends while this page is on screen, the outcome `Alert` is the outcome and the progress toast is dismissed: a toast repeating the Alert would cover the failed step on a phone. When the page is out of view (`document.visibilityState === 'hidden'`), Error raises the permanent failure toast and Success the success toast; in an app, the run store raises them the same way when the user has moved to another page. Leaving the page dismisses the toast so the next story starts clean.",
    "variants": [
     {
      "name": "Running"
@@ -38143,14 +38145,16 @@
     "Button",
     "FileDropzone",
     "UploadProgress",
-    "use-file-picker"
+    "use-file-picker",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
     "@aziontech/webkit/button",
     "@aziontech/webkit/file-dropzone",
     "@aziontech/webkit/upload-progress",
-    "@aziontech/webkit/use-file-picker"
+    "@aziontech/webkit/use-file-picker",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "DropZone",
    "guidelinesSummary": "The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: a drop target fills the page body and says what will happen, with a Choose a folder button for anyone not dragging; once it is dropped, a full-screen Initializing overlay lists the received files with their status until the upload is done and the deploy takes over. DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`shell/shell-console`); Initializing covers the whole screen.",

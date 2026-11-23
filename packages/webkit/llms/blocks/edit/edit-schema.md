@@ -1119,7 +1119,11 @@ export const createdDescription = (rows: number, relations: number) =>
                 <Field orientation="horizontal">
                   <Field.Content>
                     <Field.Title>Not null</Field.Title>
-                    <Field.Description>Require a value in every row.</Field.Description>
+                    <Field.Description>{{
+                      columnForm.primaryKey
+                        ? 'Always on for a primary key.'
+                        : 'Require a value in every row.'
+                    }}</Field.Description>
                   </Field.Content>
                   <Switch
                     :model-value="columnForm.notNull || columnForm.primaryKey"
@@ -1247,13 +1251,12 @@ export const createdDescription = (rows: number, relations: number) =>
 
   import { filterTypes, glyphOf, TYPES } from '../lib/column-types'
 
-  const props = withDefaults(
-    defineProps<{ searchable?: boolean; displayValue?: (value: string) => string }>(),
-    { searchable: false, displayValue: undefined }
-  )
+  const props = withDefaults(defineProps<{ searchable?: boolean }>(), { searchable: false })
 
   const type = defineModel<string>('type', { required: true })
   const query = defineModel<string>('query', { default: '' })
+
+  const typeName = (value: string) => value
 
   const types = computed(() => (props.searchable ? filterTypes(query.value) : TYPES))
 </script>
@@ -1263,7 +1266,7 @@ export const createdDescription = (rows: number, relations: number) =>
     v-model="type"
     size="large"
     class="w-full"
-    :display-value="displayValue"
+    :display-value="typeName"
   >
     <Select.Trigger>
       <template #leading>
@@ -1285,7 +1288,8 @@ export const createdDescription = (rows: number, relations: number) =>
           class="w-full"
           placeholder="Search types"
           aria-label="Search types"
-          @keydown.stop
+          @keydown.home.stop
+          @keydown.end.stop
         />
       </template>
       <Select.Group label="Data types">
@@ -1374,7 +1378,6 @@ export const createdDescription = (rows: number, relations: number) =>
             v-model:type="columns[index].type"
             v-model:query="query"
             searchable
-            :display-value="(value: string) => value"
           />
         </template>
         <template #cell-defaultValue="{ index }">
