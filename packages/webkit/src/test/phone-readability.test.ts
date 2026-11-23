@@ -6,7 +6,9 @@ import type { Component } from 'vue'
 import { defineComponent, h, nextTick } from 'vue'
 
 import ChartDefault from '../../examples/chart/default.vue'
+import MapView from '../../examples/map-chart/view.vue'
 import SparkCards from '../../examples/spark-chart/cards.vue'
+import TrackerDefault from '../../examples/tracker/default.vue'
 
 const settle = async (): Promise<void> => {
   await nextTick()
@@ -20,7 +22,7 @@ const inBox = (view: Component, width: number) =>
     })
   )
 
-describe('content stays readable in a phone-width box', () => {
+describe('content stays readable at phone and desktop widths', () => {
   it.each([320, 390])('spark-chart cards keep every metric name whole at %ipx', async (width) => {
     const { container } = inBox(SparkCards as Component, width)
     await settle()
@@ -55,6 +57,32 @@ describe('content stays readable in a phone-width box', () => {
         expect(box.left, `step ${step}`).toBeGreaterThanOrEqual(frame.left - 1)
         expect(box.right, `step ${step}`).toBeLessThanOrEqual(frame.right + 1)
       }
+    }
+  )
+
+  it('caps a tall map region at the 60dvh stage, so its key stays near the map', async () => {
+    const { container } = inBox(MapView as Component, 1280)
+    await settle()
+    const plot = container.querySelector<HTMLElement>('[data-testid="map-chart__plot"]')!
+    expect(plot.getBoundingClientRect().width).toBeGreaterThan(1200)
+    expect(plot.getBoundingClientRect().height).toBeLessThanOrEqual(window.innerHeight * 0.6 + 1)
+  })
+
+  it.each([320, 390])(
+    'merges tracker days into readable blocks at %ipx, worst state first',
+    async (width) => {
+      const { container } = inBox(TrackerDefault as Component, width)
+      await settle()
+      await settle()
+      const blocks = Array.from(
+        container.querySelectorAll<HTMLElement>('[data-testid="tracker__block"]')
+      )
+      expect(blocks.length).toBeLessThan(90)
+      for (const block of blocks)
+        expect(block.getBoundingClientRect().width).toBeGreaterThanOrEqual(5.5)
+      const severities = blocks.map((block) => block.dataset['severity'])
+      expect(severities).toContain('danger')
+      expect(severities).toContain('warning')
     }
   )
 })

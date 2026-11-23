@@ -8,6 +8,7 @@
   import * as en from '../../../locales/en'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { categoryLayout, type ChartSemanticSeverity, colorToken } from '../lib'
+  import { bucketCapacity, bucketOf, trackerBuckets } from './lib/tracker-buckets'
 
   defineOptions({ name: 'Tracker', inheritAttrs: false })
 
@@ -56,7 +57,21 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tracker')
   const hasError = computed(() => !props.loading && props.error.length > 0)
-  const count = computed(() => (props.loading || hasError.value ? 0 : props.items.length))
+  const buckets = computed(() =>
+    trackerBuckets(
+      props.items.map((item) => item.severity),
+      stripWidth.value ? bucketCapacity(stripWidth.value) : props.items.length
+    )
+  )
+  const count = computed(() => (props.loading || hasError.value ? 0 : buckets.value.length))
+  const activeBucket = computed(() => bucketOf(buckets.value, activeIndex.value))
+  const bucketLabel = (index: number): string => {
+    const bucket = buckets.value[index]
+    if (!bucket) return ''
+    const label = props.items[bucket.worst]?.label ?? ''
+    if (bucket.start === bucket.end) return label
+    return t('tracker.summaryWorst', { count: bucket.end - bucket.start + 1, label })
+  }
   const isEmpty = computed(() => !props.loading && !hasError.value && props.items.length === 0)
   const statusOf = (item: TrackerItem): ChartSemanticSeverity | undefined => item.severity
 
@@ -72,28 +87,29 @@
   })
 
   const blocks = computed(() =>
-    isEmpty.value
-      ? [{ key: 'empty', severity: 'none', color: colorToken('other') }]
-      : props.items.map((item, index) => ({
-          key: item.id ?? String(index),
-          severity: statusOf(item) ?? 'none',
-          color: colorToken(statusOf(item) ?? 'other')
-        }))
+    buckets.value.map((bucket) => {
+      const item = props.items[bucket.worst]
+      return {
+        key: props.items[bucket.start]?.id ?? String(bucket.start),
+        severity: (item && statusOf(item)) ?? 'none',
+        color: colorToken((item && statusOf(item)) ?? 'other')
+      }
+    })
   )
 
   const announcement = computed(() => {
     if (props.loading) return ''
     if (isEmpty.value) return t('tracker.noData')
-    return activeIndex.value === null ? '' : (props.items[activeIndex.value]?.label ?? '')
+    return activeBucket.value === null ? '' : bucketLabel(activeBucket.value)
   })
 
   const readout = computed(() => {
-    const index = shownIndex.value
+    const index = bucketOf(buckets.value, shownIndex.value)
     if (index === null || count.value === 0) return null
     const logical = categoryLayout(count.value, 0, stripWidth.value, true).position(index)
     const center = dir.value === 'rtl' ? stripWidth.value - logical : logical
     return {
-      label: props.items[index]?.label ?? '',
+      label: bucketLabel(index),
       translate: `clamp(0rem, calc(${center}px - 50%), calc(${stripWidth.value}px - 100%)) 0`
     }
   })
@@ -115,15 +131,18 @@
     if (activeIndex.value !== index) activeIndex.value = index
   }
 
+  const setActiveBucket = (index: number) => setActiveIndex(buckets.value[index]?.worst ?? null)
+
   function onKeydown(event: globalThis.KeyboardEvent) {
     const last = count.value - 1
     if (last < 0) return
-    const current = activeIndex.value
+    const current = activeBucket.value
     const key = logicalArrowKey(event.key, dir.value)
-    if (key === 'ArrowRight') setActiveIndex(current === null ? 0 : Math.min(last, current + 1))
-    else if (key === 'ArrowLeft') setActiveIndex(current === null ? last : Math.max(0, current - 1))
-    else if (event.key === 'Home') setActiveIndex(0)
-    else if (event.key === 'End') setActiveIndex(last)
+    if (key === 'ArrowRight') setActiveBucket(current === null ? 0 : Math.min(last, current + 1))
+    else if (key === 'ArrowLeft')
+      setActiveBucket(current === null ? last : Math.max(0, current - 1))
+    else if (event.key === 'Home') setActiveBucket(0)
+    else if (event.key === 'End') setActiveBucket(last)
     else if (event.key === 'Escape') setActiveIndex(null)
     else return
     event.preventDefault()
@@ -135,7 +154,7 @@
     const strip = stripEl.value
     if (!strip || !count.value) return
     const rect = strip.getBoundingClientRect()
-    setActiveIndex(
+    setActiveBucket(
       categoryLayout(count.value, 0, rect.width, true).indexAt(
         dir.value === 'rtl' ? rect.right - event.clientX : event.clientX - rect.left
       )
@@ -156,6 +175,10 @@
     'data-[moving]:transition-[translate,opacity] ' +
     'data-[state=open]:opacity-100 ' +
     'motion-reduce:transition-none motion-reduce:data-[moving]:transition-none'
+
+  const EMPTY_CLASS =
+    'flex h-full min-w-0 flex-1 items-center justify-center rounded-(--shape-control) border border-dashed border-(--border-default) ' +
+    'text-label-sm text-(--text-muted)'
 
   const BLOCK_CLASS =
     'h-full min-w-0 flex-1 bg-(--tracker-block) forced-color-adjust-none transition-opacity duration-fast-02 ease-productive-entrance ' +
@@ -218,15 +241,24 @@
         @pointerleave="onPointerleave"
       >
         <span
-          v-for="(block, index) in blocks"
-          :key="block.key"
+          v-if="isEmpty"
           :data-testid="`${testId}__block`"
-          :data-severity="block.severity"
-          :data-active="(activeIndex !== null && index === activeIndex) || null"
-          :data-dimmed="(activeIndex !== null && index !== activeIndex) || null"
-          :style="{ '--tracker-block': block.color }"
-          :class="BLOCK_CLASS"
-        />
+          data-severity="none"
+          :class="EMPTY_CLASS"
+          >{{ t('tracker.noData') }}</span
+        >
+        <template v-else>
+          <span
+            v-for="(block, index) in blocks"
+            :key="block.key"
+            :data-testid="`${testId}__block`"
+            :data-severity="block.severity"
+            :data-active="(activeBucket !== null && index === activeBucket) || null"
+            :data-dimmed="(activeBucket !== null && index !== activeBucket) || null"
+            :style="{ '--tracker-block': block.color }"
+            :class="BLOCK_CLASS"
+          />
+        </template>
       </div>
     </template>
     <p
