@@ -7,7 +7,7 @@ spec_version: 11
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-17
-checksum: c2fc6e4dbe29d9c833d24992ed39fbdc623ebe390be6e4fe01370f1a154f3a4e
+checksum: 06936980c743f1710dad98e245bba4e51ca3ce82235e054b69043d609820bbc6
 ---
 
 # MediaSplitSection — Component Spec
@@ -144,6 +144,7 @@ _none_
 ## Responsive
 
 - Container queries: none; `media-split` stacks the media under the copy below `lg`.
+- Vertical: a console picture under the copy is at most `var(--container-3xl)` wide, centred, so a wide band never grows its cards past the frame's height and the whole scene stays inside the frame.
 - Narrow (≤ 640 px): one column; a widget and an illustration scale down with the cell.
 - Touch: a widget shows its finished state instead of the hover beat.
 - Reflow: no horizontal scroll at 320 px.

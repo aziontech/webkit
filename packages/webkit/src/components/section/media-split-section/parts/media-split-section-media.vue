@@ -34,7 +34,7 @@
   <div
     v-if="media.mockup"
     :data-orientation="orientation"
-    class="flex w-full self-stretch max-lg:min-h-(--size-80) data-[orientation=vertical]:min-h-(--size-80)"
+    class="flex w-full self-stretch max-lg:min-h-(--size-80) data-[orientation=vertical]:mx-auto data-[orientation=vertical]:min-h-(--size-80) data-[orientation=vertical]:max-w-(--container-3xl)"
   >
     <component
       :is="media.scene"
