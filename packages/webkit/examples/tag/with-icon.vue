@@ -5,44 +5,44 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <Tag
-      label="Label"
+      label="Primary"
       variant="primary"
-      icon="az az-box"
+      icon="az az-tag"
     />
     <Tag
-      label="Label"
+      label="Neutral"
       severity="neutral"
       icon="az az-box"
     />
     <Tag
-      label="Label"
+      label="Accent"
       variant="accent"
-      icon="az az-box"
+      icon="az az-sparkles"
     />
     <Tag
-      label="Label"
+      label="Success"
       severity="success"
-      icon="az az-box"
+      icon="az az-circle-check"
     />
     <Tag
-      label="Label"
+      label="Warning"
       severity="warning"
-      icon="az az-box"
+      icon="az az-triangle-alert"
     />
     <Tag
-      label="Label"
+      label="Danger"
       severity="danger"
-      icon="az az-box"
+      icon="az az-circle-x"
     />
     <Tag
-      label="Label"
+      label="Info"
       severity="info"
-      icon="az az-box"
+      icon="az az-info"
     />
     <Tag
-      label="Label"
+      label="Contrast"
       variant="contrast"
-      icon="az az-box"
+      icon="az az-star"
     />
   </div>
 </template>

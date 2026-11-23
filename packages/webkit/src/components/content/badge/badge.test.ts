@@ -2,6 +2,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/badge/default.vue'
+import Severities from '../../../../examples/badge/severities.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Badge from './badge.vue'
 
@@ -10,6 +11,17 @@ const VARIANTS = ['primary', 'secondary'] as const
 const SIZES = ['small', 'medium', 'large'] as const
 
 describe('Badge', () => {
+  it('sets every count of the Severities example beside a word that says what it counts', () => {
+    const badges = render(Severities).getAllByTestId('badge')
+    const words = badges.map((badge) =>
+      badge.parentElement?.textContent?.replace(badge.textContent ?? '', '').trim()
+    )
+
+    expect(badges).toHaveLength(SEVERITIES.length + VARIANTS.length)
+    expect(words.every(Boolean)).toBe(true)
+    expect(new Set(words).size).toBe(words.length)
+  })
+
   it('renders the value fallback text inside the value sub-element when no slot is given', () => {
     const { getByTestId } = render(Badge, { props: { label: '99' } })
 
