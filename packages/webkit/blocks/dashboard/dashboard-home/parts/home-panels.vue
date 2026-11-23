@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
@@ -33,8 +32,6 @@
   }
 
   defineProps<HomePanelsProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 
   const CARD_GRID_CLASS =
     'animate-content-enter motion-reduce:animate-none mt-(--spacing-lg) grid w-full min-w-0 grid-cols-1 gap-(--layout-group-gap) ' +
@@ -72,13 +69,12 @@
       </h2>
 
       <div class="min-w-0 xl:min-h-0 xl:flex-1 xl:overflow-y-auto xl:overscroll-contain">
-        <Alert
+        <p
           v-if="error"
-          severity="danger"
-          :label="`Couldn't load ${panel.label.toLowerCase()}. ${error}`"
-          action-label="Retry"
-          @action="(event) => emit('retry', event)"
-        />
+          class="text-body-sm text-(--text-muted)"
+        >
+          Not available.
+        </p>
         <div
           v-else-if="loading"
           key="panel-loading"
@@ -126,7 +122,10 @@
                     :title="resource.presetLabel"
                   />
                 </span>
-                <span class="min-w-0 truncate text-label-md text-(--text-default)">
+                <span
+                  class="min-w-0 truncate text-label-md text-(--text-default)"
+                  dir="auto"
+                >
                   {{ resource.name }}
                 </span>
               </Item.Title>

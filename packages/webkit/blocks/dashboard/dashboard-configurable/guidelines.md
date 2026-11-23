@@ -78,7 +78,13 @@ crosshair on every card. A legend with totals appears only when a card has more 
 
 ### J. Load failure — `Alert` (required)
 
-When `error` is set, every card keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <card>.` followed by the message, with Retry, which emits `retry`.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
+
+### K. Move up and Move down — `IconButton` (required in edit mode on one column)
+
+Below `@3xl` of the grid the board is one column, so the span tags and the resize handle hide, and
+each card offers ghost Move up and Move down buttons in place of the drag handle: native drag and
+drop does not work with touch. Each move is announced in the live region.
 
 ## Data
 
@@ -90,13 +96,13 @@ The block takes its series through props and emits every change; it fetches noth
 | `series`          | `ConfigurableDashboardSeries` | The series of each chart card, by card (`requests`, `regions`, `transfer`, `errors`, `latency`). A card left out shows its empty state. |
 | `sources`         | `BarListItem[]`               | The services ranked in Top sources. `[]` shows its empty state.                                                                         |
 | `loading`         | `boolean`                     | The period is loading; every card shows its skeleton.                                                                                   |
-| `error`           | `string`                      | Why the period could not load; each card shows `Couldn't load <card>.` and this message in a danger `Alert` with Retry.                 |
+| `error`           | `string`                      | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.`          |
 | `v-model:layout`  | `DashboardGridLayoutItem[]`   | The order, span and height of the cards; defaults to the built-in layout, which Reset layout restores.                                  |
 | `v-model:editing` | `boolean`                     | Edit mode (handles, resize corners, span tags and the help line); default `false`.                                                      |
 
 | Event            | Payload   | When                                                               |
 | ---------------- | --------- | ------------------------------------------------------------------ |
-| `retry`          | `(event)` | Retry in any card's error alert.                                   |
+| `retry`          | `(event)` | Retry in the page's error alert.                                   |
 | `update:layout`  | `(value)` | A card was moved or resized, or Reset layout restored the default. |
 | `update:editing` | `(value)` | Edit layout or Done.                                               |
 
@@ -167,7 +173,7 @@ Then delete `sample.ts` and its import.
 - Editing: `v-model:editing` is `true`; handles and resize corners on every card, span tags in the headers, help line visible.
 - Loading: `loading` is set; every chart renders its own `Skeleton` inside its card; the layout holds its shape.
 - Empty: nothing recorded yet (`series` is `{}`, `sources` is `[]`); each card keeps its place and size and shows its empty state.
-- Error: the request failed (`error` is set); every card keeps its place, size and header with a danger `Alert` that names what did not load, carries the message and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 

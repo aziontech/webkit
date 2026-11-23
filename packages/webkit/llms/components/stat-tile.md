@@ -54,7 +54,7 @@
 | `inverse` | `boolean` | `false` | false | A rise is bad for this metric; flips the delta between success and danger. |
 | `trend` | `(number \| null)[]` | `[]` | false | Sparkline values, oldest first; `null` leaves a gap, as in `spark-chart`. Empty hides the sparkline. |
 | `loading` | `boolean` | `false` | false | Renders Skeleton lines in place of the figure, delta and sparkline. |
-| `error` | `string` | `''` | false | Why the value failed to load. When set, the tile shows a dash and a danger band that says it could not load, never No data. |
+| `error` | `string` | `''` | false | Why the value failed to load. When set, the tile shows a dash and a neutral band that says it could not load, never No data. |
 
 ## Slots
 
@@ -65,7 +65,7 @@
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `error` (a dash over the same band with a `danger` "Couldn't load" `Tag` in place of "No data"; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
+- Visual states: `default`, `loading` (Skeleton), `error` (a dash over the same band with a `neutral` "Couldn't load" `Tag` in place of "No data", kept quiet because the danger `Alert` that explains the failure and offers Retry belongs to the page or region, not to every tile; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
@@ -82,6 +82,7 @@
 - The delta pairs an arrow icon and a signed value with its period, and a visually hidden word (better / worse), so its meaning never rests on color.
 - The sparkline is a decorative `spark-chart` (`aria-hidden`); the figure and delta carry the information.
 - Proportional figures on the big number; `tabular-nums` on the delta.
+- Right-to-left: the figure with its unit and the signed delta are left-to-right isolates (`dir="ltr"`), so `110 GB` and `+10.5%` keep their order inside a right-to-left page.
 - Text contrast at least 4.5:1 in both themes.
 
 ## Examples

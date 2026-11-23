@@ -106,26 +106,25 @@ The verdict of each row, in the same hue as its donut slice.
 
 ### P. Load failure — `Alert` (required)
 
-With `error` set, a danger `Alert` with Retry takes the place of each card's content, naming what did
-not load (`Couldn't load verdicts.`); the tiles read as a dash.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ## Data
 
 The block takes its records through props and emits every action; it fetches nothing. `ScanResultsSubmission`, `ScanResultsSummary`, `ScanResultsVerdict`, `ScanResultsSource` and `ScanResultsDashboardProps` are exported from `dashboard-scan-results.vue`, and `sample.ts` holds the sample figures, splits and submissions the block renders when a data prop is left out (and never while `loading` or `error` is set).
 
-| Prop           | Type                      | What it does                                                                                                  |
-| -------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `summary`      | `ScanResultsSummary`      | The six tiles and the Held and flagged card. All zeros is the nothing-submitted state.                        |
-| `verdictSplit` | `ChartSeries[]`           | One donut slice per verdict, each with its status color. `[]` shows `No verdict yet`.                         |
-| `sources`      | `BarListItem[]`           | One bar per source. `[]` shows `No items yet`.                                                                |
-| `submissions`  | `ScanResultsSubmission[]` | The Submissions rows; the search and the filters run on them in the browser. `[]` shows `No items yet`.       |
-| `loading`      | `boolean`                 | The period is loading: every region shows its Skeleton.                                                       |
-| `error`        | `string`                  | Why the request failed, shown after `Couldn't load verdicts.` (sources, submissions…) in each danger `Alert`. |
+| Prop           | Type                      | What it does                                                                                                                   |
+| -------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `summary`      | `ScanResultsSummary`      | The six tiles and the Held and flagged card. All zeros is the nothing-submitted state.                                         |
+| `verdictSplit` | `ChartSeries[]`           | One donut slice per verdict, each with its status color. `[]` shows `No verdict yet`.                                          |
+| `sources`      | `BarListItem[]`           | One bar per source. `[]` shows `No items yet`.                                                                                 |
+| `submissions`  | `ScanResultsSubmission[]` | The Submissions rows; the search and the filters run on them in the browser. `[]` shows `No items yet`.                        |
+| `loading`      | `boolean`                 | The period is loading: every region shows its Skeleton.                                                                        |
+| `error`        | `string`                  | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.` |
 
-| Event     | Payload   | When                              |
-| --------- | --------- | --------------------------------- |
-| `refresh` | `(event)` | Refresh in the page heading.      |
-| `retry`   | `(event)` | Retry in any of the error alerts. |
+| Event     | Payload   | When                             |
+| --------- | --------- | -------------------------------- |
+| `refresh` | `(event)` | Refresh in the page heading.     |
+| `retry`   | `(event)` | Retry in the page's error alert. |
 
 The `Held deliveries` and `Early delivery alerts` links point at `#held` and `#alerts`; point them at your pages. To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -186,7 +185,7 @@ Then delete `sample.ts` and its import.
 - Default: results with verdicts, exceptions and the submissions table.
 - Loading: `loading`; tiles, donut and bar list render their own `Skeleton`, the summary card holds Skeleton lines and the table shows Skeleton rows.
 - Empty: nothing submitted yet (a zero `summary`, `[]` splits and `submissions`); tiles read zero, verdicts and sources keep their box with an `EmptyState`, and the Submissions card drops the filters and the table for one `EmptyState`.
-- Error: `error`; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -199,7 +198,7 @@ Then delete `sample.ts` and its import.
 - `Default` — primary (the code below)
 - `Loading` — While the results load, the tiles, the donut and the bar list render their own Skeleton, the summary holds Skeleton lines and the table shows Skeleton rows, so the page does not reflow when data arrives.
 - `Empty` — Nothing has been sent for analysis yet. The tiles read zero, the verdicts and sources keep their box with an EmptyState, and the Submissions card drops the filters and the table for one EmptyState that says what fills it.
-- `Error` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `Error` — The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-scan-results", { variant })`, or the file under `blocks/dashboard/dashboard-scan-results/variants/`.
 
@@ -337,6 +336,14 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           />
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the scan results. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-scan-results__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <section aria-label="Summary">
         <ul
@@ -373,13 +380,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load verdicts. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <DonutChart
               v-else
               :series="verdictSplit"
@@ -404,13 +410,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load sources. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <BarList
               v-else
               :items="sourceItems"
@@ -427,7 +432,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           :loading="loading"
           :error="error"
           :format-count="formatCount"
-          @retry="(event) => emit('retry', event)"
         />
 
         <ChartCard :span="12">
@@ -440,13 +444,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load submissions. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <SubmissionsTable
               v-else-if="loading || submissions.length"
               :submissions="submissions"
@@ -744,7 +747,6 @@ export const sampleSubmissions: ScanResultsSubmission[] = [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import Card from '@aziontech/webkit/card'
   import Link from '@aziontech/webkit/link'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -763,21 +765,18 @@ export const sampleSubmissions: ScanResultsSubmission[] = [
   }
 
   defineProps<HeldFlaggedCardProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
   <div class="lg:col-span-4">
     <Card title="Held and flagged">
       <template #default>
-        <Alert
+        <p
           v-if="error"
-          severity="danger"
-          :label="`Couldn't load held and flagged submissions. ${error}`"
-          action-label="Retry"
-          @action="(event: MouseEvent) => emit('retry', event)"
-        />
+          class="text-body-sm text-(--text-muted)"
+        >
+          Not available.
+        </p>
         <div
           v-else-if="loading || !summary"
           aria-busy="true"

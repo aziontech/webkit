@@ -32,11 +32,34 @@ describe('dashboard/dashboard-configurable', () => {
     ])
   })
 
-  it('names each card in its error alert and emits retry', async () => {
+  it('shows one page alert with one Retry when the period fails, and quiet cards', async () => {
     const view = render(DashboardConfigurable, { props: { error: 'The API answered 503.' } })
-    expect(view.container.textContent).toContain("Couldn't load top sources. The API answered 503.")
+    expect(view.getAllByRole('alert')).toHaveLength(1)
+    expect(view.getByRole('alert').textContent).toContain(
+      "Couldn't load the traffic overview. The API answered 503."
+    )
     expect(view.container.textContent).not.toContain('payments-api')
-    await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])
+    expect(view.getAllByText('Not available.').length).toBeGreaterThan(1)
+    const retries = view.getAllByRole('button', { name: 'Retry' })
+    expect(retries).toHaveLength(1)
+    await fireEvent.click(retries[0]!)
     expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
+  })
+
+  it('moves a card with Move up and Move down while editing', async () => {
+    const view = render(DashboardConfigurable, {
+      props: {
+        layout: [
+          { id: 'requests', span: 12 },
+          { id: 'latency', span: 12 }
+        ]
+      }
+    })
+    await fireEvent.click(view.getByRole('button', { name: 'Edit layout' }))
+    const up = view.getAllByRole('button', { name: /^Move .* up$/ })
+    expect((up[0] as HTMLButtonElement).disabled).toBe(true)
+    await fireEvent.click(up[1]!)
+    const moved = view.emitted<unknown[]>('update:layout')?.at(-1)?.[0] as { id: string }[]
+    expect(moved.map((card) => card.id)).toEqual(['latency', 'requests'])
   })
 })

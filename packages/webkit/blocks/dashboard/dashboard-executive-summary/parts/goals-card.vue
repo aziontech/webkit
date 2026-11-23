@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import Card from '@aziontech/webkit/card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Progress from '@aziontech/webkit/progress'
@@ -25,20 +24,17 @@
   }
 
   defineProps<GoalsCardProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
   <Card :title="quarter + ' goals'">
     <template #default>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load ${quarter} goals. ${error}`"
-        action-label="Retry"
-        @action="(event: MouseEvent) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <ul
         v-else-if="loading"
         aria-busy="true"
@@ -89,11 +85,18 @@
           <div
             class="flex items-center justify-between gap-(--spacing-sm) text-body-sm text-(--text-muted)"
           >
-            <span class="tabular-nums">
+            <span
+              class="tabular-nums"
+              dir="auto"
+            >
               {{ formatters[goal.format](goal.current) }} of
               {{ formatters[goal.format](goal.target) }}
             </span>
-            <span class="tabular-nums">{{ Math.round((goal.current / goal.target) * 100) }}%</span>
+            <span
+              class="tabular-nums"
+              dir="ltr"
+              >{{ Math.round((goal.current / goal.target) * 100) }}%</span
+            >
           </div>
         </li>
       </ul>

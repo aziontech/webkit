@@ -3,5 +3,5 @@
 </script>
 
 <template>
-  <SavePerCard default-saving-toolbar />
+  <SavePerCard :preview-toolbar="{ defaultDraft: { prod: 'enabled' }, loading: true }" />
 </template>

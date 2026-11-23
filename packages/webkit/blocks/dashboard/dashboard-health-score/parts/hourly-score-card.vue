@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
@@ -21,8 +20,6 @@
   }
 
   defineProps<HourlyScoreCardProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -34,13 +31,12 @@
       </span>
     </ChartCard.Header>
     <ChartCard.Content>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load hourly score. ${error}`"
-        action-label="Retry"
-        @action="(event) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <ul
         v-else-if="loading"
         aria-busy="true"

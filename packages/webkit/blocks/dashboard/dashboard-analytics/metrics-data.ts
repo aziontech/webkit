@@ -358,10 +358,10 @@ export const products: Product[] = [
         format: 'count',
         form: 'line',
         series: [
-          { id: '2xx', name: 'Status 2xx', base: 1700000 },
-          { id: '3xx', name: 'Status 3xx', base: 240000 },
-          { id: '4xx', name: 'Status 4xx', base: 60000 },
-          { id: '5xx', name: 'Status 5xx', base: 6000 }
+          { id: '2xx', name: 'Status 2xx', base: 1700000, color: 1 },
+          { id: '3xx', name: 'Status 3xx', base: 240000, color: 2 },
+          { id: '4xx', name: 'Status 4xx', base: 60000, color: 'warning' },
+          { id: '5xx', name: 'Status 5xx', base: 6000, color: 'danger' }
         ]
       },
       {
@@ -825,10 +825,10 @@ export const overviewHighlights: Highlight[] = [
     format: 'count',
     form: 'line',
     series: [
-      { id: '2xx', name: 'Status 2xx', base: 1700000 },
-      { id: '3xx', name: 'Status 3xx', base: 240000 },
-      { id: '4xx', name: 'Status 4xx', base: 60000 },
-      { id: '5xx', name: 'Status 5xx', base: 6600 }
+      { id: '2xx', name: 'Status 2xx', base: 1700000, color: 1 },
+      { id: '3xx', name: 'Status 3xx', base: 240000, color: 2 },
+      { id: '4xx', name: 'Status 4xx', base: 60000, color: 'warning' },
+      { id: '5xx', name: 'Status 5xx', base: 6600, color: 'danger' }
     ]
   },
   {

@@ -3,5 +3,5 @@
 </script>
 
 <template>
-  <Profile default-load-failed />
+  <Profile error="The profile could not be loaded. Nothing was changed; try again." />
 </template>

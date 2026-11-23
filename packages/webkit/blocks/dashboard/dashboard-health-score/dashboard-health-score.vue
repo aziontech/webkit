@@ -177,6 +177,14 @@
           </div>
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the experience score. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-health-score__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <div
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
@@ -199,13 +207,12 @@
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load overall score. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <div
               v-else
               class="grid grid-cols-1 items-center gap-(--spacing-lg) md:grid-cols-[minmax(0,12rem)_1fr]"
@@ -261,13 +268,12 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load score per application. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <BarList
               v-else
               :items="applications"
@@ -288,13 +294,12 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load score per location. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <BarList
               v-else
               :items="locations"
@@ -313,7 +318,6 @@
           :loading="loading"
           :error="error"
           :phrase="phrase"
-          @retry="(event) => emit('retry', event)"
         />
       </div>
 
@@ -322,7 +326,6 @@
         :loading="loading"
         :error="error"
         :phrase="phrase"
-        @retry="(event) => emit('retry', event)"
       />
     </div>
   </div>

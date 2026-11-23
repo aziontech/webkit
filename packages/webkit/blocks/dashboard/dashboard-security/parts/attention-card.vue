@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
@@ -21,8 +20,6 @@
   }
 
   defineProps<AttentionCardProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -41,13 +38,12 @@
       </ChartCard.Action>
     </ChartCard.Header>
     <ChartCard.Content>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load the attention list. ${error}`"
-        action-label="Retry"
-        @action="(event: MouseEvent) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <div
         v-else-if="loading"
         class="flex flex-col gap-(--spacing-md)"

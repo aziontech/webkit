@@ -57,6 +57,7 @@
           :columns="zoneColumns"
           row-key="id"
           density="compact"
+          stackable
           :bordered="false"
         >
           <template #cell-domain="{ row }">

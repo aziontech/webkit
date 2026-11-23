@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import Hint from '@aziontech/webkit/hint'
 
@@ -18,8 +17,6 @@
 
   withDefaults(defineProps<AlertsCardProps>(), { error: '' })
 
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
-
   defineSlots<{ default(): unknown }>()
 </script>
 
@@ -32,13 +29,12 @@
       </span>
     </ChartCard.Header>
     <ChartCard.Content>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load ${region}. ${error}`"
-        action-label="Retry"
-        @action="(event: MouseEvent) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <slot v-else />
     </ChartCard.Content>
   </ChartCard>

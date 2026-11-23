@@ -116,27 +116,26 @@ A timing has no "previous period" the reader acts on here, so these tiles carry 
 
 ### O. Load failure — `Alert` (required)
 
-With `error` set, a danger `Alert` with Retry takes the place of each region's content, naming what
-did not load (`Couldn't load overall score.`); the score shows a dash with no band.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ## Data
 
 The block takes its records through props and emits every action; it fetches nothing. `HealthScoreOverall`, `HealthScoreHourlyRow`, `HealthScoreIncident`, `HealthScoreBand`, `HealthScorePeriod` and `HealthScoreDashboardProps` are exported from `dashboard-health-score.vue`, and `sample.ts` holds the sample score, rankings, hourly rows and incidents the block renders when a data prop is left out (and never while `loading` or `error` is set). The RealUser variant is a separate page and keeps its own sample figures.
 
-| Prop / model     | Type                     | What it does                                                                                                               |
-| ---------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| `overall`        | `HealthScoreOverall`     | The score, its band, the top cause and the score line with its labels. `score: null` shows a dash, no band.                |
-| `applications`   | `BarListItem[]`          | Score per application, lowest first; the cause goes in the name (`Video calls · packet loss`).                             |
-| `locations`      | `BarListItem[]`          | Score per location, the same shape.                                                                                        |
-| `hourly`         | `HealthScoreHourlyRow[]` | One tracker row per application with one block per hour.                                                                   |
-| `incidents`      | `HealthScoreIncident[]`  | The incidents still open, each linking to `/incidents/<id>`. Pass `[]` for `No open incidents`.                            |
-| `loading`        | `boolean`                | The period is loading: every region shows its Skeleton.                                                                    |
-| `error`          | `string`                 | Why the request failed, shown after `Couldn't load overall score.` (hourly score, open incidents…) in each danger `Alert`. |
-| `v-model:period` | `HealthScorePeriod`      | The period every region reads and the empty states name; refetch when it changes. Defaults to `Last 24 hours`.             |
+| Prop / model     | Type                     | What it does                                                                                                                   |
+| ---------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `overall`        | `HealthScoreOverall`     | The score, its band, the top cause and the score line with its labels. `score: null` shows a dash, no band.                    |
+| `applications`   | `BarListItem[]`          | Score per application, lowest first; the cause goes in the name (`Video calls · packet loss`).                                 |
+| `locations`      | `BarListItem[]`          | Score per location, the same shape.                                                                                            |
+| `hourly`         | `HealthScoreHourlyRow[]` | One tracker row per application with one block per hour.                                                                       |
+| `incidents`      | `HealthScoreIncident[]`  | The incidents still open, each linking to `/incidents/<id>`. Pass `[]` for `No open incidents`.                                |
+| `loading`        | `boolean`                | The period is loading: every region shows its Skeleton.                                                                        |
+| `error`          | `string`                 | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.` |
+| `v-model:period` | `HealthScorePeriod`      | The period every region reads and the empty states name; refetch when it changes. Defaults to `Last 24 hours`.                 |
 
-| Event   | Payload   | When                              |
-| ------- | --------- | --------------------------------- |
-| `retry` | `(event)` | Retry in any of the error alerts. |
+| Event   | Payload   | When                             |
+| ------- | --------- | -------------------------------- |
+| `retry` | `(event)` | Retry in the page's error alert. |
 
 To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -202,7 +201,7 @@ Then delete `sample.ts` and its import.
 - Loading: `loading`; the chart, rankings and trackers render their own `Skeleton`; incidents hold Skeleton rows.
 - Empty: a period with no samples (`overall.score: null`, every list `[]`); the score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.
 - RealUser: the real-user monitoring page; the vitals and the trend tiles follow the Period select.
-- Error: `error`; the score shows a dash, and every region keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -215,7 +214,7 @@ Then delete `sample.ts` and its import.
 - `Default` — primary (the code below)
 - `Loading` — While the period loads, the chart, the rankings and the trackers render their own Skeleton and the incidents hold Skeleton rows, so the page does not reflow when data arrives.
 - `Empty` — A period with no samples. The score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.
-- `Error` — The request for the period failed: the score shows a dash, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `Error` — The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 - `RealUser` — Real-user monitoring: a Period Select in the header drives four vitals StatTiles (page load time, largest contentful paint, first input delay, sessions) that read a median value beside its unit with no delta and a Hint on the label, over a two-column grid of trend StatTiles with the latest value, a sparkline of the period and the period name in the aside.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-health-score", { variant })`, or the file under `blocks/dashboard/dashboard-health-score/variants/`.
@@ -402,6 +401,14 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           </div>
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the experience score. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-health-score__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <div
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
@@ -424,13 +431,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load overall score. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <div
               v-else
               class="grid grid-cols-1 items-center gap-(--spacing-lg) md:grid-cols-[minmax(0,12rem)_1fr]"
@@ -486,13 +492,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load score per application. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <BarList
               v-else
               :items="applications"
@@ -513,13 +518,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load score per location. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <BarList
               v-else
               :items="locations"
@@ -538,7 +542,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           :loading="loading"
           :error="error"
           :phrase="phrase"
-          @retry="(event) => emit('retry', event)"
         />
       </div>
 
@@ -547,7 +550,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         :loading="loading"
         :error="error"
         :phrase="phrase"
-        @retry="(event) => emit('retry', event)"
       />
     </div>
   </div>
@@ -1593,7 +1595,6 @@ export const sampleFractions = (seed: string, count: number): number[] => {
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
@@ -1615,8 +1616,6 @@ export const sampleFractions = (seed: string, count: number): number[] => {
   }
 
   defineProps<HourlyScoreCardProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -1628,13 +1627,12 @@ export const sampleFractions = (seed: string, count: number): number[] => {
       </span>
     </ChartCard.Header>
     <ChartCard.Content>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load hourly score. ${error}`"
-        action-label="Retry"
-        @action="(event) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <ul
         v-else-if="loading"
         aria-busy="true"
@@ -1698,7 +1696,6 @@ export const sampleFractions = (seed: string, count: number): number[] => {
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import Card from '@aziontech/webkit/card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Item from '@aziontech/webkit/item'
@@ -1719,8 +1716,6 @@ export const sampleFractions = (seed: string, count: number): number[] => {
   }
 
   defineProps<OpenIncidentsCardProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -1729,13 +1724,12 @@ export const sampleFractions = (seed: string, count: number): number[] => {
     :padded="error !== ''"
   >
     <template #default>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load open incidents. ${error}`"
-        action-label="Retry"
-        @action="(event) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <Item.List
         v-else-if="loading"
         key="item.list-1"

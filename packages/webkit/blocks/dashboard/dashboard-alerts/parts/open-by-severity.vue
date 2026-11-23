@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import Card from '@aziontech/webkit/card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import SeverityTag from '@aziontech/webkit/severity-tag'
@@ -19,8 +18,6 @@
 
   const props = withDefaults(defineProps<OpenBySeverityProps>(), { loading: false, error: '' })
 
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
-
   const openTotal = computed(() => props.levels.reduce((sum, level) => sum + level.count, 0))
 </script>
 
@@ -28,13 +25,12 @@
   <div class="lg:col-span-4">
     <Card title="Open by severity">
       <template #default>
-        <Alert
+        <p
           v-if="error"
-          severity="danger"
-          :label="`Couldn't load open alerts by severity. ${error}`"
-          action-label="Retry"
-          @action="(event: MouseEvent) => emit('retry', event)"
-        />
+          class="text-body-sm text-(--text-muted)"
+        >
+          Not available.
+        </p>
         <ul
           v-else-if="loading"
           aria-busy="true"

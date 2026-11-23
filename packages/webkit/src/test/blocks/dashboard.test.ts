@@ -120,11 +120,11 @@ describe('dashboard/dashboard-analytics data', () => {
     ).toBe(true)
   })
 
-  it('shows the error in every card and emits retry', async () => {
+  it('shows the error once for the page and emits retry', async () => {
     const view = render(Analytics, { props: { error: 'The API answered 503.' } })
-    expect(view.container.textContent).toContain("Couldn't load top hosts. The API answered 503.")
+    expect(view.container.textContent).toContain("Couldn't load analytics. The API answered 503.")
     const retries = view.getAllByRole('button', { name: 'Retry' })
-    expect(retries).toHaveLength(4)
+    expect(retries).toHaveLength(1)
     await fireEvent.click(retries[0])
     expect(view.emitted('retry')).toHaveLength(1)
   })
@@ -200,6 +200,8 @@ describe('dashboard/dashboard-analytics data shapes', () => {
     expect(charts.length).toBeGreaterThanOrEqual(3)
     for (const chart of charts) expect(chart.getAttribute('aria-busy')).toBe('true')
     expect(view.container.querySelector('[data-loading]')).toBeNull()
+    expect(view.getByTestId('period-header__updating').textContent).toContain('Updating')
+    expect(view.getByRole('group', { name: 'Key figures' }).getAttribute('aria-busy')).toBe('true')
   })
 
   it('takes null gaps in a trend and sets the KPI tiles as the cells of one group', () => {

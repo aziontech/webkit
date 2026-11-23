@@ -108,7 +108,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — period, source, or a link.
-- `chart-card-resize-handle/chart-card-resize-handle.vue` — the corner grip that resizes the card: pointer drag with pointer capture, arrow keys from the keyboard. A `role="separator"` with `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` naming columns and height. Renders nothing unless the root is `resizable`.
+- `chart-card-resize-handle/chart-card-resize-handle.vue` — the corner grip that resizes the card: pointer drag with pointer capture, arrow keys from the keyboard. A `role="separator"` with `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` naming columns and height. Renders nothing unless the root is `resizable`. Inside a `DashboardGrid` narrower than `@3xl`, where the board is one column and a span changes nothing, it is hidden (`@max-3xl/dashboard-grid:hidden`).
   - Props: `ariaLabel?: string` (default `''`; empty uses the locale catalog, `Resize card` in English).
   - Events: _none_ (flows through the root's `update:span`, `update:height`, `resize-start`, `resize-end`).
   - Slots: _none_.

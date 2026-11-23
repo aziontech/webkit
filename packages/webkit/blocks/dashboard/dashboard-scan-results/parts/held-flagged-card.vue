@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import Card from '@aziontech/webkit/card'
   import Link from '@aziontech/webkit/link'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -18,21 +17,18 @@
   }
 
   defineProps<HeldFlaggedCardProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
   <div class="lg:col-span-4">
     <Card title="Held and flagged">
       <template #default>
-        <Alert
+        <p
           v-if="error"
-          severity="danger"
-          :label="`Couldn't load held and flagged submissions. ${error}`"
-          action-label="Retry"
-          @action="(event: MouseEvent) => emit('retry', event)"
-        />
+          class="text-body-sm text-(--text-muted)"
+        >
+          Not available.
+        </p>
         <div
           v-else-if="loading || !summary"
           aria-busy="true"

@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vu
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
+import ProfilePage from '../../../../blocks/settings/settings-form/parts/profile-page.vue'
 import SettingsForm from '../../../../blocks/settings/settings-form/settings-form.vue'
 import Profile from '../../../../blocks/settings/settings-form/variants/profile.vue'
 import Failed from '../../../../blocks/settings/settings-form/variants/profile-error.vue'
@@ -43,10 +44,19 @@ describe('settings/settings-form · Profile', () => {
     expect(confirm).toBeDisabled()
     await userEvent.type(within(dialog).getByRole('textbox'), 'Acme')
     await waitFor(() => expect(confirm).toBeEnabled())
-    await fireEvent.click(confirm)
-    await waitFor(() =>
-      expect(document.body.textContent).toContain('Account scheduled for deletion.')
-    )
+  })
+
+  it('emits delete and closes the dialog only once the deletion ends', async () => {
+    const view = render(ProfilePage)
+    await fireEvent.click(view.getByRole('button', { name: 'Delete account' }))
+    const dialog = await view.findByRole('alertdialog', { name: 'Delete account' })
+    await userEvent.type(within(dialog).getByRole('textbox'), 'Acme')
+    await fireEvent.click(within(dialog).getByRole('button', { name: 'Delete account' }))
+    expect(view.emitted('delete')).toHaveLength(1)
+    await view.rerender({ deleting: true })
+    expect(view.queryByRole('alertdialog')).toBeTruthy()
+    await view.rerender({ deleting: false })
+    await waitFor(() => expect(view.queryByRole('alertdialog')).toBeNull())
   })
 
   it('shows Skeleton cards while loading and a Retry alert when it fails', async () => {
@@ -56,13 +66,12 @@ describe('settings/settings-form · Profile', () => {
     loading.unmount()
     const failed = render(Failed)
     expect(failed.container.textContent).toContain('The profile could not be loaded.')
-    await fireEvent.click(failed.getByRole('button', { name: 'Retry' }))
-    await waitFor(
-      () => expect(failed.getByRole('textbox', { name: 'Account name' })).toBeTruthy(),
-      {
-        timeout: 3000
-      }
-    )
+    failed.unmount()
+    const page = render(ProfilePage, { props: { error: 'The profile could not be loaded.' } })
+    await fireEvent.click(page.getByRole('button', { name: 'Retry' }))
+    expect(page.emitted<unknown[]>('retry')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
+    await page.rerender({ error: '' })
+    expect(page.getByRole('textbox', { name: 'Account name' })).toBeTruthy()
   })
 })
 
@@ -171,8 +180,8 @@ describe('settings/settings-form save shortcut', () => {
     expect(values).toMatchObject({ email: 'alex.morgan@example.com' })
   })
 
-  it('saves the Profile variant on Command S and leaves the browser save alone when clean', async () => {
-    const view = render(Profile)
+  it('saves the Profile on Command S and leaves the browser save alone when clean', async () => {
+    const view = render(ProfilePage)
     expect(pressShortcut('s').defaultPrevented).toBe(false)
     const name = view.getByRole('textbox', { name: 'Account name' }) as HTMLInputElement
     await fireEvent.update(name, 'Acme Labs')
@@ -184,6 +193,8 @@ describe('settings/settings-form save shortcut', () => {
     expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+S Control+S')
     name.focus()
     expect(pressShortcut('s', name).defaultPrevented).toBe(true)
+    expect(view.emitted<unknown[]>('submit')?.[0]?.[1]).toMatchObject({ accountName: 'Acme Labs' })
+    await view.rerender({ saving: true })
     await waitFor(() => expect(save.getAttribute('aria-busy')).toBe('true'))
   })
 })

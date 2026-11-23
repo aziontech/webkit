@@ -161,7 +161,6 @@
       !blocked.value &&
       (goals.value.length > 0 || Object.values(kpis.value).some((kpi) => kpi?.value != null))
   )
-  const failed = (card: string) => `Couldn't load ${card}. ${props.error}`
 
   const { formatNumber } = useLocale()
 
@@ -258,6 +257,14 @@
           />
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the executive summary. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-executive-summary__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <section aria-label="Scorecard">
         <ul
@@ -312,13 +319,12 @@
               </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
-              <Alert
+              <p
                 v-if="error"
-                severity="danger"
-                :label="failed(trend.title.toLowerCase())"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
+                class="text-body-sm text-(--text-muted)"
+              >
+                Not available.
+              </p>
               <Chart
                 v-else
                 v-model:active-index="activeIndex"
@@ -353,7 +359,6 @@
             :formatters="formatters"
             :loading="loading"
             :error="error"
-            @retry="(event) => emit('retry', event)"
           />
 
           <CommentaryCard
@@ -361,7 +366,6 @@
             :notes="notes"
             :loading="loading"
             :error="error"
-            @retry="(event) => emit('retry', event)"
           />
         </div>
       </div>

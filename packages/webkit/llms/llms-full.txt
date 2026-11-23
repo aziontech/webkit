@@ -5380,7 +5380,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Default: the populated page for the selected period (`v-model:period`).
 - Loading: `loading` is set; tiles, chart, bar list and both tables render their own `Skeleton`; Open by severity holds Skeleton rows.
 - Empty: a period with no alerts (`kpis` is `{}` and every list is `[]`); tiles show a dash with no delta, and every region keeps its box with an `EmptyState` that says why and what to do next.
-- Error: the request for the period failed (`error` is set); tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load, carries the message and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -5404,7 +5404,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Surface: app
 - Source: `blocks/dashboard/dashboard-analytics/dashboard-analytics.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-analytics")`
-- Components: Alert, Chart, ChartCard, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Hint, IconButton, Input, Link, PageHeader, PageTabs, `PanelBody`, `PanelHeader`, Select, StatTile, StatTileGroup, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-collection`, `use-locale`, `utils/clipboard`, `utils/csv`
+- Components: Alert, Chart, ChartCard, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Hint, IconButton, Input, Link, PageHeader, PageTabs, `PanelBody`, `PanelHeader`, Select, Spinner, StatTile, StatTileGroup, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-collection`, `use-locale`, `utils/clipboard`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -5534,7 +5534,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Expanded: `defaultExpanded="requests"`; the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
 - MetricsOverview: six cross-product tiles and six highlight cards, each with a footer link to its product dashboard.
 - Usage: the Data usage page, consumption per meter and per project against the previous period.
-- Error: `error` holds the message; the request for the period failed, tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -5658,7 +5658,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Default: the populated breakdown for the period (`v-model:period`).
 - Loading: `loading` is set; every tile, both charts and the table hold their place with a `Skeleton`.
 - Empty: nothing billed in the period (`kpis` is `{}` and every list is `[]`); tiles show a dash with no delta or trend, the exports disable, and the stacked chart, donut and table each keep their box with an `EmptyState` that names the reason.
-- Error: the request for the period failed (`error` is set); tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load, carries the message and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -5682,7 +5682,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Surface: app
 - Source: `blocks/dashboard/dashboard-configurable/dashboard-configurable.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-configurable")`
-- Components: Alert, BarList, Button, Chart, ChartCard, DashboardGrid, DonutChart, Hint, PageHeader, Tag, `use-locale`
+- Components: Alert, BarList, Button, Chart, ChartCard, DashboardGrid, DonutChart, Hint, IconButton, PageHeader, Tag, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-layout`, `webkit-ui-states`
 
 ## Asked as
@@ -5725,6 +5725,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - H. Ranked cards — `BarList` (optional)
 - I. Time series cards — `Chart` (optional)
 - J. Load failure — `Alert` (required)
+- K. Move up and Move down — `IconButton` (required in edit mode on one column)
 
 What each part takes: [blocks/dashboard/dashboard-configurable.md](blocks/dashboard/dashboard-configurable.md).
 
@@ -5782,7 +5783,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Editing: `v-model:editing` is `true`; handles and resize corners on every card, span tags in the headers, help line visible.
 - Loading: `loading` is set; every chart renders its own `Skeleton` inside its card; the layout holds its shape.
 - Empty: nothing recorded yet (`series` is `{}`, `sources` is `[]`); each card keeps its place and size and shows its empty state.
-- Error: the request failed (`error` is set); every card keeps its place, size and header with a danger `Alert` that names what did not load, carries the message and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -5899,7 +5900,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Default: the reported quarter (`v-model:quarter`).
 - Loading: `loading` is set; tiles and charts render their own `Skeleton`; goals and commentary hold Skeleton rows.
 - Empty: a quarter with nothing reported (`kpis` and `trends` are `{}`, `goals` and `notes` are `[]`); tiles show a dash with no delta, every trend card keeps its box with an `EmptyState` that names the quarter, and goals and commentary say what fills them.
-- Error: the request for the quarter failed (`error` is set); tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load, carries the message and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -6019,7 +6020,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Loading: `loading`; the chart, rankings and trackers render their own `Skeleton`; incidents hold Skeleton rows.
 - Empty: a period with no samples (`overall.score: null`, every list `[]`); the score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.
 - RealUser: the real-user monitoring page; the vitals and the trend tiles follow the Period select.
-- Error: `error`; the score shows a dash, and every region keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -6142,7 +6143,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 ## States
 
 - Default: populated Home for an account that owns resources (`metrics`, `projects`, `resources`, `domains`, `recents`): usage band, agent card, resource panels.
-- Error: `error` holds the message; Home's data could not load, and the usage band and every panel show a danger `Alert` with Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 - Empty: `projects`, `resources`, `domains` and `recents` are all `[]`; a brand-new account gets the first-access screen with the greeting, the command prompt that opens the palette, and the three doors (create a project, add a domain with an availability check, set up an agent).
 - Summary: the classic overview; metric tiles with the window caption, the resources and recent activity tables, and the aside with monthly usage and a featured marketplace template.
 
@@ -6262,7 +6263,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Default: results with verdicts, exceptions and the submissions table.
 - Loading: `loading`; tiles, donut and bar list render their own `Skeleton`, the summary card holds Skeleton lines and the table shows Skeleton rows.
 - Empty: nothing submitted yet (a zero `summary`, `[]` splits and `submissions`); tiles read zero, verdicts and sources keep their box with an `EmptyState`, and the Submissions card drops the filters and the table for one `EmptyState`.
-- Error: `error`; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -6388,7 +6389,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Loading: `loading`; every tile, chart and the table hold a `Skeleton`; Needs attention shows three placeholder rows.
 - Empty: no rule set yet (every list `[]`, tiles with `null` values); tiles read as dashes and one bordered `EmptyState` offers `Add rule set` instead of a grid of empty charts.
 - ByActor: request activity per actor with the rule that decided each request; NoMatch is a state of it.
-- Error: `error`; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -6412,7 +6413,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Surface: app
 - Source: `blocks/dashboard/dashboard-service-monitoring/dashboard-service-monitoring.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-service-monitoring")`
-- Components: Alert, Chart, ChartCard, EmptyState, Hint, Item, PageHeader, Skeleton, StatTile, StatusIndicator, Tag, ToggleGroup
+- Components: Alert, Chart, ChartCard, EmptyState, Hint, Item, Link, PageHeader, Skeleton, StatTile, StatusIndicator, Tag, ToggleGroup
 - Skills: `webkit-data-viz`, `webkit-ui-states`
 
 ## Asked as
@@ -6454,6 +6455,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - J. Alert rail — `Item` (required)
 - K. Empty regions — `EmptyState` (required)
 - L. Load failure — `Alert` (required)
+- M. Jump to the open alerts — `Link` (required below `xl`)
 
 What each part takes: [blocks/dashboard/dashboard-service-monitoring.md](blocks/dashboard/dashboard-service-monitoring.md).
 
@@ -6506,7 +6508,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Default: services reporting, both charts populated, open alerts in the rail.
 - Loading: `loading`; every tile, both charts and the rail hold Skeletons; the window switch stays usable.
 - Empty: no traffic yet (`latency: null` per service, no series, `alerts: []`); tiles show a dash, both charts say metrics appear once a service serves requests, and the rail reads `No open alerts`.
-- Error: `error`; tiles show a dash, and both charts and the alert rail show a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -6627,7 +6629,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Default: Traffic over the last 24 hours.
 - OwnPeriod: `v-model:view` set to Executive summary; the shared filter and chip are hidden and the quarter `ToggleGroup` shows.
 - Loading: `loading` with no `data`; tiles, chart and list render their Skeletons.
-- Error: `error`; the tiles show dashes and each card keeps its header with a danger `Alert` and Retry, which emits `retry`.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 - Empty: `data` with no series and no bars; the tiles show dashes, the chart and the ranked list show their empty state (`No data in this period`).
 - Refetching: `loading` while `data` is shown, after a period change or Refresh; the chart holds the previous render at reduced opacity and Refresh shows its spinner.
 
@@ -8442,7 +8444,7 @@ What each part takes: [blocks/settings/settings-form.md](blocks/settings/setting
 
 ## Data
 
-The SaveAll form takes the saved profile and the save request's state through props and emits the values; it fetches nothing and fakes no save. `SettingsFormProfile` and `SettingsFormProps` are exported from `settings-form.vue`, and `sample.ts` holds the sample profile the form opens on when `profile` is left out. The form keeps its own draft; `profile` is the baseline that Discard returns to, and a new `profile` resets the form to it. The SavePerGroup, SavePerCard and Profile variants are their own screens and still run on their own local data.
+The SaveAll form takes the saved profile and the save request's state through props and emits the values; it fetches nothing and fakes no save. `SettingsFormProfile` and `SettingsFormProps` are exported from `settings-form.vue`, and `sample.ts` holds the sample profile the form opens on when `profile` is left out. The form keeps its own draft; `profile` is the baseline that Discard returns to, and a new `profile` resets the form to it. The SavePerGroup, SavePerCard and Profile variants work the same way: they fetch nothing and fake no save. SavePerGroup takes `general` and `notifications`, SavePerCard takes `previewToolbar` and `deploymentProtection`, each an object of that card's `values`, `defaultDraft`, `loading` and `error`, and both emit `submit(event, { group | card, values })`. Profile takes `profile`, `loading` and `error` for the first load (Retry emits `retry`), `saving` and `saveError` for the save (Save emits `submit(event, values)`), and `deleting` for Delete account (the confirmed dialog emits `delete` and closes when `deleting` ends).
 
 Prop: `profile`, `defaultDraft`, `loading`, `error`.
 
@@ -8482,7 +8484,7 @@ What each prop and event does, and the go-live code: [blocks/settings/settings-f
 - **Save:** exactly "Save" for the footer and every group or card; Discard is exactly "Discard", never "Cancel": it restores the saved values and the reader stays on the page.
 - **Errors:** what is wrong plus what to do, e.g. "Enter a valid email address."
 - **Docs link:** names the topic, e.g. "Learn more about the Preview Toolbar".
-- **Profile:** section hints are one sentence on what the group affects ("The company that owns the account, as it appears on every invoice."); optional fields say it in the description ("Optional. Apartment, suite or floor."); the destructive row uses one verb for the title and the button ("Delete personal account" with "Delete account", never "Remove"); the save bar reads "You have unsaved changes."; the load failure reads "The profile could not be loaded. Nothing was changed; try again." with "Retry"; the delete toast reads "Account scheduled for deletion."
+- **Profile:** section hints are one sentence on what the group affects ("The company that owns the account, as it appears on every invoice."); optional fields say it in the description ("Optional. Apartment, suite or floor."); the destructive row uses one verb for the title and the button ("Delete personal account" with "Delete account", never "Remove"); the save bar reads "You have unsaved changes."; the load failure reads "The profile could not be loaded. Nothing was changed; try again." with "Retry"; the app confirms the deletion itself once `deleting` ends
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -8500,11 +8502,11 @@ What each prop and event does, and the go-live code: [blocks/settings/settings-f
 - SaveAll: the default props (`profile` left out renders the sample); Profile with General, Preferences and Notifications in one fieldset and one sticky Discard and Save footer.
 - Saving: `loading` with an edit in `defaultDraft`; the whole fieldset and Discard are disabled and Save shows its loading state.
 - SaveError: `error` with an edit in `defaultDraft`; the server rejects the save; an error toast with Retry says the changes are kept, and the form stays dirty with every entry.
-- SavePerGroup: Preferences split into General and Notifications cards, each with its own secondary Save.
-- SavingOneGroup: General is saving with its rows disabled while Notifications stays editable.
+- SavePerGroup: Preferences split into General and Notifications cards, each with its own secondary Save, disabled until that card changes.
+- SavingOneGroup: General has an edit in flight (`loading` with a `defaultDraft`), its rows disabled while Notifications stays editable.
 - SavePerCard: Project settings with Preview Toolbar and Deployment Protection cards, each with an info `Alert`, its fields and its own Save.
-- SavingOneCard: Preview Toolbar is saving with its selects disabled while Deployment Protection stays editable.
-- Profile: the profile filled from the account (Billing emails empty and required), save bar hidden until a saved field changes. Saving with Account name set to `Offline` walks the failure toast; an empty Account name or a malformed billing address walks the field errors. Delete account opens the type-to-confirm dialog.
+- SavingOneCard: Preview Toolbar has an edit in flight, its selects disabled while Deployment Protection stays editable.
+- Profile: the profile filled from the account (Billing emails empty and required), save bar hidden until a saved field changes. `saveError` shows the failure toast with Retry; an empty Account name or a malformed billing address walks the field errors. Delete account opens the type-to-confirm dialog.
 - ProfileLoading: the first load; `Skeleton` cards in place of the sections.
 - ProfileError: the account did not load; a danger Alert with Retry.
 
@@ -16001,7 +16003,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 | `inverse` | `boolean` | `false` | false | A rise is bad for this metric; flips the delta between success and danger. |
 | `trend` | `(number \| null)[]` | `[]` | false | Sparkline values, oldest first; `null` leaves a gap, as in `spark-chart`. Empty hides the sparkline. |
 | `loading` | `boolean` | `false` | false | Renders Skeleton lines in place of the figure, delta and sparkline. |
-| `error` | `string` | `''` | false | Why the value failed to load. When set, the tile shows a dash and a danger band that says it could not load, never No data. |
+| `error` | `string` | `''` | false | Why the value failed to load. When set, the tile shows a dash and a neutral band that says it could not load, never No data. |
 
 ## Slots
 
@@ -16012,7 +16014,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `error` (a dash over the same band with a `danger` "Couldn't load" `Tag` in place of "No data"; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
+- Visual states: `default`, `loading` (Skeleton), `error` (a dash over the same band with a `neutral` "Couldn't load" `Tag` in place of "No data", kept quiet because the danger `Alert` that explains the failure and offers Retry belongs to the page or region, not to every tile; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
@@ -16029,6 +16031,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - The delta pairs an arrow icon and a signed value with its period, and a visually hidden word (better / worse), so its meaning never rests on color.
 - The sparkline is a decorative `spark-chart` (`aria-hidden`); the figure and delta carry the information.
 - Proportional figures on the big number; `tabular-nums` on the delta.
+- Right-to-left: the figure with its unit and the signed delta are left-to-right isolates (`dir="ltr"`), so `110 GB` and `+10.5%` keep their order inside a right-to-left page.
 - Text contrast at least 4.5:1 in both themes.
 
 ## Examples
@@ -28669,7 +28672,7 @@ context, so a consumer never wires one part to the other.
 
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop on the root
-- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--toast-offset-bottom` (so the `toaster` stacks above the bar), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it, whether the content scrolls in a scroll region of its own or the page itself scrolls; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. The other variants publish nothing.
+- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--toast-offset-bottom` (so the `toaster` stacks above the bar), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it, whether the content scrolls in a scroll region of its own or the page itself scrolls; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. Every other variant sits at the bottom too, so it publishes `--toast-offset-bottom` the same way (a toast never covers its Save or Discard) but no `--save-bar-inset` and no reserved height.
 - Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Accessibility

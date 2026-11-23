@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import type { BarListItem } from '@aziontech/webkit/bar-list'
   import BarList from '@aziontech/webkit/bar-list'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
@@ -232,6 +233,14 @@
           </div>
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the alerts. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-alerts__error"
+        @action="retry"
+      />
 
       <section aria-label="Summary">
         <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
@@ -267,7 +276,6 @@
           hint="Alerts raised each day, stacked by severity level."
           region="alerts per day"
           :error="error"
-          @retry="retry"
         >
           <Chart
             v-model:active-index="activeIndex"
@@ -296,7 +304,6 @@
           :levels="openByLevel"
           :loading="loading"
           :error="error"
-          @retry="retry"
         />
 
         <AlertsCard
@@ -305,7 +312,6 @@
           hint="Alerts raised in the period, by the kind of behavior that raised them."
           region="alerts by type"
           :error="error"
-          @retry="retry"
         >
           <BarList
             :items="types"
@@ -322,7 +328,6 @@
           hint="The entities with the highest risk score, from the severity and number of their open alerts."
           region="highest risk"
           :error="error"
-          @retry="retry"
         >
           <EntityTable
             :entities="entities"
@@ -336,7 +341,6 @@
           hint="Every open alert, most severe first."
           region="open alerts"
           :error="error"
-          @retry="retry"
         >
           <OpenAlertTable
             :alerts="alerts"

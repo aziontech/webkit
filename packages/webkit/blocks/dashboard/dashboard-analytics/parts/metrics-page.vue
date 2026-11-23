@@ -74,12 +74,7 @@
       .filter((panel) => !currentView.value || currentView.value.panels.includes(panel.id))
       .map((panel) => ({
         ...panel,
-        series: seededSeries(
-          `${product.value.id}:${panel.id}`,
-          panel.series,
-          currentPeriod.value,
-          panel.rate
-        )
+        series: seededSeries(product.value.id, panel.series, currentPeriod.value, panel.rate)
       }))
   )
 

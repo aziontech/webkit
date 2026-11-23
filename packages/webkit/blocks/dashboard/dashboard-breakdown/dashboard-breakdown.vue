@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import DonutChart from '@aziontech/webkit/donut-chart'
@@ -272,6 +273,14 @@
           />
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the cost breakdown. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-breakdown__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
         <li
@@ -309,7 +318,6 @@
           :exportable="exportable"
           :error="error"
           @select="(event, value) => onCardOption(event, 'spend-by-category', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <Chart
             :series="series"
@@ -343,7 +351,6 @@
           :exportable="exportable"
           :error="error"
           @select="(event, value) => onCardOption(event, 'current-split', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <DonutChart
             :series="split"
@@ -363,7 +370,6 @@
           :exportable="exportable"
           :error="error"
           @select="(event, value) => onCardOption(event, 'top-contributors', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <ContributorsTable
             :contributors="contributors"

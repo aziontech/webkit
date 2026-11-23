@@ -60,7 +60,7 @@
   const cards = computed(() =>
     overviewHighlights.map((highlight) => ({
       ...highlight,
-      series: seededSeries(`overview:${highlight.id}`, highlight.series, currentPeriod.value)
+      series: seededSeries('overview', highlight.series, currentPeriod.value)
     }))
   )
 

@@ -103,7 +103,7 @@ The author's initials beside each note.
 
 ### O. Load failure — `Alert` (required)
 
-When `error` is set, every card keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <card>.` followed by the message, with Retry, which emits `retry`.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ## Data
 
@@ -117,12 +117,12 @@ The block takes its figures and records through props and emits every action; it
 | `trends`          | `ExecutiveSummaryDashboardTrends` | Each trend card's monthly values and change tag, by metric. A metric left out shows the card's empty state.                                                             |
 | `notes`           | `ExecutiveSummaryDashboardNote[]` | The notes from the leads, newest first. `[]` shows No notes.                                                                                                            |
 | `loading`         | `boolean`                         | The quarter is loading; tiles and charts show their skeleton, goals and commentary hold skeleton rows, Export disables.                                                 |
-| `error`           | `string`                          | Why the quarter could not load; each card shows `Couldn't load <card>.` and this message in a danger `Alert` with Retry.                                                |
+| `error`           | `string`                          | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.`                                          |
 | `v-model:quarter` | `string`                          | The selected quarter (`Q3 2026` down to `Q3 2025`); default `Q3 2026`. Refetch when it changes.                                                                         |
 
 | Event            | Payload   | When                                                                      |
 | ---------------- | --------- | ------------------------------------------------------------------------- |
-| `retry`          | `(event)` | Retry in any card's error alert.                                          |
+| `retry`          | `(event)` | Retry in the page's error alert.                                          |
 | `export`         | `(event)` | Export in the header; the block downloads the scorecard and goals as CSV. |
 | `update:quarter` | `(value)` | The reader picked another quarter.                                        |
 
@@ -187,7 +187,7 @@ Then delete `sample.ts` and its import.
 - Default: the reported quarter (`v-model:quarter`).
 - Loading: `loading` is set; tiles and charts render their own `Skeleton`; goals and commentary hold Skeleton rows.
 - Empty: a quarter with nothing reported (`kpis` and `trends` are `{}`, `goals` and `notes` are `[]`); tiles show a dash with no delta, every trend card keeps its box with an `EmptyState` that names the quarter, and goals and commentary say what fills them.
-- Error: the request for the quarter failed (`error` is set); tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load, carries the message and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -199,7 +199,7 @@ Then delete `sample.ts` and its import.
 - `Default` — primary (the code below)
 - `Loading` — While the quarter loads, the tiles and charts render their own Skeleton and the goals and commentary hold Skeleton rows, so the page does not reflow when data arrives.
 - `Empty` — A quarter with nothing reported. The tiles show a dash with no delta, every trend card keeps its box with an EmptyState that names the quarter and points to a later one, and the goals and commentary each say what fills them.
-- `Error` — The request for the quarter failed: the tiles read as dashes, and every trend card, the goals and the commentary keep their header with a danger Alert that names what did not load and offers Retry.
+- `Error` — The request for the quarter failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-executive-summary", { variant })`, or the file under `blocks/dashboard/dashboard-executive-summary/variants/`.
 
@@ -369,7 +369,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
       !blocked.value &&
       (goals.value.length > 0 || Object.values(kpis.value).some((kpi) => kpi?.value != null))
   )
-  const failed = (card: string) => `Couldn't load ${card}. ${props.error}`
 
   const { formatNumber } = useLocale()
 
@@ -466,6 +465,14 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           />
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the executive summary. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-executive-summary__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <section aria-label="Scorecard">
         <ul
@@ -520,13 +527,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
               </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
-              <Alert
+              <p
                 v-if="error"
-                severity="danger"
-                :label="failed(trend.title.toLowerCase())"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
+                class="text-body-sm text-(--text-muted)"
+              >
+                Not available.
+              </p>
               <Chart
                 v-else
                 v-model:active-index="activeIndex"
@@ -561,7 +567,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             :formatters="formatters"
             :loading="loading"
             :error="error"
-            @retry="(event) => emit('retry', event)"
           />
 
           <CommentaryCard
@@ -569,7 +574,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             :notes="notes"
             :loading="loading"
             :error="error"
-            @retry="(event) => emit('retry', event)"
           />
         </div>
       </div>
@@ -890,7 +894,6 @@ export const trendCharts: {
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Card from '@aziontech/webkit/card'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -911,8 +914,6 @@ export const trendCharts: {
   }
 
   defineProps<CommentaryCardProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -921,13 +922,12 @@ export const trendCharts: {
     :padded="error !== ''"
   >
     <template #default>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load commentary. ${error}`"
-        action-label="Retry"
-        @action="(event: MouseEvent) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <Item.List
         v-else-if="loading"
         key="item.list-1"
@@ -1000,7 +1000,6 @@ export const trendCharts: {
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import Card from '@aziontech/webkit/card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Progress from '@aziontech/webkit/progress'
@@ -1026,20 +1025,17 @@ export const trendCharts: {
   }
 
   defineProps<GoalsCardProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
   <Card :title="quarter + ' goals'">
     <template #default>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load ${quarter} goals. ${error}`"
-        action-label="Retry"
-        @action="(event: MouseEvent) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <ul
         v-else-if="loading"
         aria-busy="true"
@@ -1090,11 +1086,18 @@ export const trendCharts: {
           <div
             class="flex items-center justify-between gap-(--spacing-sm) text-body-sm text-(--text-muted)"
           >
-            <span class="tabular-nums">
+            <span
+              class="tabular-nums"
+              dir="auto"
+            >
               {{ formatters[goal.format](goal.current) }} of
               {{ formatters[goal.format](goal.target) }}
             </span>
-            <span class="tabular-nums">{{ Math.round((goal.current / goal.target) * 100) }}%</span>
+            <span
+              class="tabular-nums"
+              dir="ltr"
+              >{{ Math.round((goal.current / goal.target) * 100) }}%</span
+            >
           </div>
         </li>
       </ul>

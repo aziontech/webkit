@@ -50,7 +50,7 @@ describe('dashboard/dashboard-alerts', () => {
 
   it('names each region in its error alert and emits retry', async () => {
     const view = render(DashboardAlerts, { props: { error: 'The API answered 503.' } })
-    expect(view.container.textContent).toContain("Couldn't load open alerts. The API answered 503.")
+    expect(view.container.textContent).toContain("Couldn't load the alerts. The API answered 503.")
     expect(view.container.textContent).not.toContain('ava.wilson')
     await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])
     expect(view.emitted('retry')).toHaveLength(1)

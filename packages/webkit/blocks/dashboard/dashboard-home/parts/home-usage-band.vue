@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import claudeMark from '@aziontech/webkit/assets/claude-symbol-color.svg'
   import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
   import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
@@ -26,6 +25,8 @@
   export interface HomeUsageBandProps {
     /** The usage tiles, in the order they render. */
     tiles: HomeUsageTile[]
+    /** What every delta compares against. */
+    comparison: string
     /** The figures are loading. */
     loading: boolean
     /** Why the figures could not load; empty shows the tiles. */
@@ -33,8 +34,6 @@
   }
 
   defineProps<HomeUsageBandProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 
   const agentSetup = defineModel<boolean>('agentSetup', { required: true })
 
@@ -60,13 +59,12 @@
     aria-label="Usage"
   >
     <div class="min-w-0 xl:flex-1">
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load usage. ${error}`"
-        action-label="Retry"
-        @action="(event) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <StatTileGroup v-else>
         <StatTile
           v-for="metric in tiles"
@@ -75,6 +73,7 @@
           :value="metric.value"
           :unit="metric.unit"
           :delta="metric.delta"
+          :delta-label="comparison"
           :loading="loading"
           :error="error"
         >

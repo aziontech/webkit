@@ -91,7 +91,7 @@ The author's initials beside each note.
 
 ### O. Load failure — `Alert` (required)
 
-When `error` is set, every card keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <card>.` followed by the message, with Retry, which emits `retry`.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ## Data
 
@@ -105,12 +105,12 @@ The block takes its figures and records through props and emits every action; it
 | `trends`          | `ExecutiveSummaryDashboardTrends` | Each trend card's monthly values and change tag, by metric. A metric left out shows the card's empty state.                                                             |
 | `notes`           | `ExecutiveSummaryDashboardNote[]` | The notes from the leads, newest first. `[]` shows No notes.                                                                                                            |
 | `loading`         | `boolean`                         | The quarter is loading; tiles and charts show their skeleton, goals and commentary hold skeleton rows, Export disables.                                                 |
-| `error`           | `string`                          | Why the quarter could not load; each card shows `Couldn't load <card>.` and this message in a danger `Alert` with Retry.                                                |
+| `error`           | `string`                          | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.`                                          |
 | `v-model:quarter` | `string`                          | The selected quarter (`Q3 2026` down to `Q3 2025`); default `Q3 2026`. Refetch when it changes.                                                                         |
 
 | Event            | Payload   | When                                                                      |
 | ---------------- | --------- | ------------------------------------------------------------------------- |
-| `retry`          | `(event)` | Retry in any card's error alert.                                          |
+| `retry`          | `(event)` | Retry in the page's error alert.                                          |
 | `export`         | `(event)` | Export in the header; the block downloads the scorecard and goals as CSV. |
 | `update:quarter` | `(value)` | The reader picked another quarter.                                        |
 
@@ -175,7 +175,7 @@ Then delete `sample.ts` and its import.
 - Default: the reported quarter (`v-model:quarter`).
 - Loading: `loading` is set; tiles and charts render their own `Skeleton`; goals and commentary hold Skeleton rows.
 - Empty: a quarter with nothing reported (`kpis` and `trends` are `{}`, `goals` and `notes` are `[]`); tiles show a dash with no delta, every trend card keeps its box with an `EmptyState` that names the quarter, and goals and commentary say what fills them.
-- Error: the request for the quarter failed (`error` is set); tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load, carries the message and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 

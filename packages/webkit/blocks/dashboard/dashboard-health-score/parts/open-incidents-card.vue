@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import Card from '@aziontech/webkit/card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Item from '@aziontech/webkit/item'
@@ -20,8 +19,6 @@
   }
 
   defineProps<OpenIncidentsCardProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -30,13 +27,12 @@
     :padded="error !== ''"
   >
     <template #default>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load open incidents. ${error}`"
-        action-label="Retry"
-        @action="(event) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <Item.List
         v-else-if="loading"
         key="item.list-1"

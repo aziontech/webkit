@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import type { ChartLabel, ChartSeries } from '@aziontech/webkit/chart'
   import Hint from '@aziontech/webkit/hint'
   import StatTile from '@aziontech/webkit/stat-tile'
@@ -267,8 +268,20 @@
         title="Analytics"
         description="Requests, data transferred and errors your services handled in the period."
         :options="comparedPeriods"
+        :refetching="refetching"
       />
-      <StatTileGroup aria-label="Key figures">
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load analytics. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-analytics__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
+      <StatTileGroup
+        aria-label="Key figures"
+        :aria-busy="refetching || undefined"
+      >
         <StatTile
           v-for="figure in figures"
           :key="figure.id"
@@ -300,7 +313,6 @@
           wide
           @expand="openExpanded('requests')"
           @select="(_event, value) => onCardOption('requests', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <SeriesChart
             v-model:active-index="activeIndex"
@@ -323,7 +335,6 @@
           :forms="chartForms"
           @expand="openExpanded('status-codes')"
           @select="(_event, value) => onCardOption('status-codes', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <SeriesChart
             v-model:active-index="activeIndex"
@@ -343,7 +354,6 @@
           v-bind="card('countries')"
           @expand="openExpanded('countries')"
           @select="(_event, value) => onCardOption('countries', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <SeriesChart
             ranking
@@ -363,7 +373,6 @@
           wide
           @expand="openExpanded('hosts')"
           @select="(_event, value) => onCardOption('hosts', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <SearchTable
             v-model:search="search"
@@ -372,6 +381,7 @@
             search-label="Search hosts or services"
             :format-count="formatters.count"
             :loading="loading"
+            :aria-busy="refetching || undefined"
             v-bind="empty"
           />
         </MetricCard>

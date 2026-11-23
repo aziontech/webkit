@@ -154,9 +154,7 @@ transferred per project. The empty copy is `No usage yet` /
 
 ### R. Failure — `Alert` (required)
 
-When the period cannot load (`error`), every card keeps its header and shows a danger `Alert` with
-Retry in place of its chart or table, naming what did not load
-(`Couldn't load top hosts. Check your connection and retry.`); Expand and Export CSV disable.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners. Expand and Export CSV disable.
 
 ## Data
 
@@ -175,13 +173,13 @@ The block takes its figures through props and emits its actions; it fetches noth
 | `range`           | `AnalyticsDashboardRange`        | The period's window as ISO timestamps, written into the query each card menu copies.                                                                   |
 | `defaultExpanded` | `AnalyticsDashboardCardId \| ''` | The card whose expanded dialog is open on first render.                                                                                                |
 | `loading`         | `boolean`                        | The period is loading: every tile, chart and the table hold a `Skeleton`, Expand and Export CSV disable.                                               |
-| `error`           | `string`                         | Why the period could not load; each card shows `Couldn't load <card>.` and the message in a danger `Alert`.                                            |
+| `error`           | `string`                         | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.`                         |
 | `refetching`      | `boolean`                        | The period is reloading over figures already shown: the data stays and every chart holds its previous render at reduced opacity.                       |
 
 | Event           | Payload   | When                             |
 | --------------- | --------- | -------------------------------- |
 | `update:period` | `(value)` | The Period `Select` changed.     |
-| `retry`         | `(event)` | Retry in any card's error alert. |
+| `retry`         | `(event)` | Retry in the page's error alert. |
 
 The queries the card menus copy run as-is against the Azion Real-Time Metrics API
 (`POST /v4/metrics/graphql`). What the API expects, so a live page asks for the right shapes:
@@ -285,7 +283,7 @@ Then delete `sample.ts` and its import.
 - Expanded: `defaultExpanded="requests"`; the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
 - MetricsOverview: six cross-product tiles and six highlight cards, each with a footer link to its product dashboard.
 - Usage: the Data usage page, consumption per meter and per project against the previous period.
-- Error: `error` holds the message; the request for the period failed, tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 

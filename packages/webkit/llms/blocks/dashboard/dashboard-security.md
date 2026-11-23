@@ -140,9 +140,7 @@ destination, method and the rule that decided it; outcome and severity are two d
 
 ### R. Load failure — `Alert` (required)
 
-With `error` set, a danger `Alert` with Retry takes the place of each card's content, naming what
-did not load (`Couldn't load matched requests over time.`); the card actions disable and the tiles
-read as a dash.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners. Expand and Export CSV disable.
 
 ### S. Loading placeholders — `Skeleton` (required)
 
@@ -156,25 +154,25 @@ The primary action of the empty state, linking to the rules page.
 
 The block takes its records through props and emits every action; it fetches nothing. `SecuritySummary`, `SecurityMetric`, `SecurityMatchedRequests`, `SecuritySourceIp`, `SecurityAttentionEntry`, `SecurityCardChanges`, `SecurityPeriodRange`, `SecurityPeriod`, `SecurityCardId` and `SecurityDashboardProps` are exported from `dashboard-security.vue`, and `sample.ts` holds the sample figures, series, breakdowns, IPs and attention entries the block renders when a data prop is left out (and never while `loading` or `error` is set). Export CSV and Copy query run in the browser on the data the block holds. The ByActor variant is a separate page and keeps its own sample log.
 
-| Prop / model      | Type                       | What it does                                                                                                |
-| ----------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `summary`         | `SecuritySummary`          | The three tiles: value, change and sparkline. A `null` value shows a dash.                                  |
-| `matchedRequests` | `SecurityMatchedRequests`  | The Blocked and Logged series with their labels.                                                            |
-| `categories`      | `BarListItem[]`            | Blocked requests by attack category.                                                                        |
-| `countries`       | `BarListItem[]`            | Blocked requests by country.                                                                                |
-| `sourceIps`       | `SecuritySourceIp[]`       | The Top source IPs rows; the search runs on them in the browser.                                            |
-| `attention`       | `SecurityAttentionEntry[]` | The Needs attention list, each with the link that resolves it.                                              |
-| `changes`         | `SecurityCardChanges`      | Each card's change against the previous period, in percent; a rise is danger, a fall success.               |
-| `range`           | `SecurityPeriodRange`      | The start and end of the period, written into the copied query.                                             |
-| `loading`         | `boolean`                  | The period is loading: tiles, charts and the table show Skeletons, the card actions disable.                |
-| `error`           | `string`                   | Why the request failed, shown after `Couldn't load matched requests over time.` (…) in each danger `Alert`. |
-| `v-model:period`  | `SecurityPeriod`           | The period the tiles compare against; refetch when it changes. Defaults to `24h`.                           |
+| Prop / model      | Type                       | What it does                                                                                                                   |
+| ----------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `summary`         | `SecuritySummary`          | The three tiles: value, change and sparkline. A `null` value shows a dash.                                                     |
+| `matchedRequests` | `SecurityMatchedRequests`  | The Blocked and Logged series with their labels.                                                                               |
+| `categories`      | `BarListItem[]`            | Blocked requests by attack category.                                                                                           |
+| `countries`       | `BarListItem[]`            | Blocked requests by country.                                                                                                   |
+| `sourceIps`       | `SecuritySourceIp[]`       | The Top source IPs rows; the search runs on them in the browser.                                                               |
+| `attention`       | `SecurityAttentionEntry[]` | The Needs attention list, each with the link that resolves it.                                                                 |
+| `changes`         | `SecurityCardChanges`      | Each card's change against the previous period, in percent; a rise is danger, a fall success.                                  |
+| `range`           | `SecurityPeriodRange`      | The start and end of the period, written into the copied query.                                                                |
+| `loading`         | `boolean`                  | The period is loading: tiles, charts and the table show Skeletons, the card actions disable.                                   |
+| `error`           | `string`                   | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.` |
+| `v-model:period`  | `SecurityPeriod`           | The period the tiles compare against; refetch when it changes. Defaults to `24h`.                                              |
 
 Every region empty (`[]` lists and no series) is the no-rule-set state: one `EmptyState` with `Add rule set` replaces the grid.
 
-| Event   | Payload   | When                              |
-| ------- | --------- | --------------------------------- |
-| `retry` | `(event)` | Retry in any of the error alerts. |
+| Event   | Payload   | When                             |
+| ------- | --------- | -------------------------------- |
+| `retry` | `(event)` | Retry in the page's error alert. |
 
 To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -244,7 +242,7 @@ Then delete `sample.ts` and its import.
 - Loading: `loading`; every tile, chart and the table hold a `Skeleton`; Needs attention shows three placeholder rows.
 - Empty: no rule set yet (every list `[]`, tiles with `null` values); tiles read as dashes and one bordered `EmptyState` offers `Add rule set` instead of a grid of empty charts.
 - ByActor: request activity per actor with the rule that decided each request; NoMatch is a state of it.
-- Error: `error`; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -258,7 +256,7 @@ Then delete `sample.ts` and its import.
 - `Default` — primary (the code below)
 - `Loading` — The first load: every tile, chart and the table hold a Skeleton, and Needs attention shows three placeholder rows.
 - `Empty` — No security rules set up yet: the tiles read as dashes, and one bordered EmptyState names the reason and offers Add rule set instead of a grid of empty charts.
-- `Error` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `Error` — The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 - `ByActor` — Request activity per actor: a Time range Select and a Refresh IconButton in the header over a FilterMenu (actor, outcome, category) with its chips and a destination Input; seven outcome StatTiles (requests, allowed, blocked, held, approved, denied, over budget), outcomes over time as stacked bars in status colors, three BarList breakdowns (actor, category, destination) and a request log DataTable with an outcome Tag, a SeverityTag and the rule that decided each request. A filter that matches nothing shows Clear filters.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-security", { variant })`, or the file under `blocks/dashboard/dashboard-security/variants/`.
@@ -267,6 +265,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Button from '@aziontech/webkit/button'
   import type { ChartLabel, ChartSeries } from '@aziontech/webkit/chart'
@@ -557,6 +556,14 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           </Select>
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load security data. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-security__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
       <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-3">
         <li class="flex min-w-0 flex-col">
           <StatTile
@@ -639,7 +646,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           :forms="forms"
           @expand="openExpanded('matched')"
           @select="(_event, value) => onCardOption('matched', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <MatchedChart
             v-model:active-index="activeIndex"
@@ -654,7 +660,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           :blocked="blocked"
           :loading="loading"
           :error="error"
-          @retry="(event) => emit('retry', event)"
         />
         <SecurityCard
           v-for="id in barCards"
@@ -663,7 +668,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           v-bind="card(id)"
           @expand="openExpanded(id)"
           @select="(_event, value) => onCardOption(id, value)"
-          @retry="(event) => emit('retry', event)"
         >
           <BarList
             :items="id === 'categories' ? categories : countries"
@@ -679,7 +683,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           wide
           @expand="openExpanded('ips')"
           @select="(_event, value) => onCardOption('ips', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <SourceIpSearch
             v-model:search="search"
@@ -1332,7 +1335,6 @@ export const sampleActorRows: ActorActivityRow[] = [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
@@ -1354,8 +1356,6 @@ export const sampleActorRows: ActorActivityRow[] = [
   }
 
   defineProps<AttentionCardProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -1374,13 +1374,12 @@ export const sampleActorRows: ActorActivityRow[] = [
       </ChartCard.Action>
     </ChartCard.Header>
     <ChartCard.Content>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load the attention list. ${error}`"
-        action-label="Retry"
-        @action="(event: MouseEvent) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <div
         v-else-if="loading"
         class="flex flex-col gap-(--spacing-md)"
@@ -1501,7 +1500,6 @@ export const sampleActorRows: ActorActivityRow[] = [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import Hint from '@aziontech/webkit/hint'
@@ -1546,7 +1544,6 @@ export const sampleActorRows: ActorActivityRow[] = [
   const emit = defineEmits<{
     expand: [event: MouseEvent]
     select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
-    retry: [event: MouseEvent]
   }>()
 
   const form = defineModel<string>('form', { default: '' })
@@ -1628,13 +1625,12 @@ export const sampleActorRows: ActorActivityRow[] = [
       </ChartCard.Action>
     </ChartCard.Header>
     <ChartCard.Content>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load ${subject}. ${error}`"
-        action-label="Retry"
-        @action="(event: MouseEvent) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <slot v-else />
     </ChartCard.Content>
   </ChartCard>
@@ -1819,6 +1815,7 @@ export const sampleActorRows: ActorActivityRow[] = [
       row-key="id"
       sortable
       density="compact"
+      stackable
       bordered
       :loading="loading"
     >

@@ -40,7 +40,7 @@ describe('dashboard/dashboard-breakdown', () => {
   it('disables the exports and names each card while failed, and emits retry', async () => {
     const view = render(DashboardBreakdown, { props: { error: 'The API answered 503.' } })
     expect(view.container.textContent).toContain(
-      "Couldn't load top contributors. The API answered 503."
+      "Couldn't load the cost breakdown. The API answered 503."
     )
     expect(view.container.textContent).not.toContain('worker-pool')
     expect((view.getByRole('button', { name: 'Export CSV' }) as HTMLButtonElement).disabled).toBe(

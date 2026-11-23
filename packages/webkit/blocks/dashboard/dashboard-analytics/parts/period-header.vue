@@ -2,6 +2,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
+  import Spinner from '@aziontech/webkit/spinner'
   import Tooltip from '@aziontech/webkit/tooltip'
 
   /** One entry of the Period Select. */
@@ -44,6 +45,15 @@
     :description="description"
   >
     <template #actions>
+      <span
+        v-if="refetching && !refreshable"
+        class="inline-flex items-center gap-(--spacing-2xs) text-body-sm text-(--text-muted)"
+        role="status"
+        data-testid="period-header__updating"
+      >
+        <Spinner />
+        Updating
+      </span>
       <Select
         variant="ghost"
         v-model="period"

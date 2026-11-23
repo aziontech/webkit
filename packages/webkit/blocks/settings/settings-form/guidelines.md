@@ -34,7 +34,7 @@ One `SettingsRow` per setting, with a `title` and a one-sentence `description`. 
 
 ### D. Save — `SaveBar`, `Button` (required)
 
-SaveAll ends with one full-bleed sticky `SaveBar variant="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard and Save stay disabled until the form differs from what was saved (`useUnsavedChanges` tracks the baseline and `commit()` moves it on a successful save). Discard puts back the last saved values and clears the errors. A successful save shows a `Profile saved.` success toast; a rejected one shows an error toast (`The profile wasn't saved.`, the changes kept) with Retry, and leaves the form dirty. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, confirmed by a toast naming the card, and SavePerCard puts an optional docs `Link` on the footer's start.
+SaveAll ends with one full-bleed sticky `SaveBar variant="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard and Save stay disabled until the form differs from what was saved (`useUnsavedChanges` tracks the baseline and `commit()` moves it on a successful save). Discard puts back the last saved values and clears the errors. A successful save shows a `Profile saved.` success toast; a rejected one shows an error toast (`The profile wasn't saved.`, the changes kept) with Retry, and leaves the form dirty. In SavePerGroup and SavePerCard there is no `SaveBar`: each group or card is its own `form` with its own baseline (`useUnsavedChanges`, through the block's `useCardSave`), and its `Card` footer carries a secondary submit Save for that card only, disabled until that card differs from what was saved. Save emits `submit` with the card's values; the card's `loading` locks its fieldset and spins its Save, and when `loading` falls with no `error` the card's values become its baseline and a toast naming the card confirms; with an `error` an error toast with Retry says the card wasn't saved and the edits stay. A dirty card asks the browser to confirm a reload or a tab close. SavePerCard puts an optional docs `Link` on the footer's start.
 
 ### E. Profile sections — `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch`, `Button` (Profile only)
 
@@ -48,7 +48,7 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 ## Data
 
-The SaveAll form takes the saved profile and the save request's state through props and emits the values; it fetches nothing and fakes no save. `SettingsFormProfile` and `SettingsFormProps` are exported from `settings-form.vue`, and `sample.ts` holds the sample profile the form opens on when `profile` is left out. The form keeps its own draft; `profile` is the baseline that Discard returns to, and a new `profile` resets the form to it. The SavePerGroup, SavePerCard and Profile variants are their own screens and still run on their own local data.
+The SaveAll form takes the saved profile and the save request's state through props and emits the values; it fetches nothing and fakes no save. `SettingsFormProfile` and `SettingsFormProps` are exported from `settings-form.vue`, and `sample.ts` holds the sample profile the form opens on when `profile` is left out. The form keeps its own draft; `profile` is the baseline that Discard returns to, and a new `profile` resets the form to it. The SavePerGroup, SavePerCard and Profile variants work the same way: they fetch nothing and fake no save. SavePerGroup takes `general` and `notifications`, SavePerCard takes `previewToolbar` and `deploymentProtection`, each an object of that card's `values`, `defaultDraft`, `loading` and `error`, and both emit `submit(event, { group | card, values })`. Profile takes `profile`, `loading` and `error` for the first load (Retry emits `retry`), `saving` and `saveError` for the save (Save emits `submit(event, values)`), and `deleting` for Delete account (the confirmed dialog emits `delete` and closes when `deleting` ends).
 
 | Prop           | Type                           | What it does                                                                                                                                                                          |
 | -------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -129,7 +129,7 @@ Then delete `sample.ts` and its import.
 - **Save:** exactly "Save" for the footer and every group or card; Discard is exactly "Discard", never "Cancel": it restores the saved values and the reader stays on the page.
 - **Errors:** what is wrong plus what to do, e.g. "Enter a valid email address."
 - **Docs link:** names the topic, e.g. "Learn more about the Preview Toolbar".
-- **Profile:** section hints are one sentence on what the group affects ("The company that owns the account, as it appears on every invoice."); optional fields say it in the description ("Optional. Apartment, suite or floor."); the destructive row uses one verb for the title and the button ("Delete personal account" with "Delete account", never "Remove"); the save bar reads "You have unsaved changes."; the load failure reads "The profile could not be loaded. Nothing was changed; try again." with "Retry"; the delete toast reads "Account scheduled for deletion."
+- **Profile:** section hints are one sentence on what the group affects ("The company that owns the account, as it appears on every invoice."); optional fields say it in the description ("Optional. Apartment, suite or floor."); the destructive row uses one verb for the title and the button ("Delete personal account" with "Delete account", never "Remove"); the save bar reads "You have unsaved changes."; the load failure reads "The profile could not be loaded. Nothing was changed; try again." with "Retry"; the app confirms the deletion itself once `deleting` ends
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -147,11 +147,11 @@ Then delete `sample.ts` and its import.
 - SaveAll: the default props (`profile` left out renders the sample); Profile with General, Preferences and Notifications in one fieldset and one sticky Discard and Save footer.
 - Saving: `loading` with an edit in `defaultDraft`; the whole fieldset and Discard are disabled and Save shows its loading state.
 - SaveError: `error` with an edit in `defaultDraft`; the server rejects the save; an error toast with Retry says the changes are kept, and the form stays dirty with every entry.
-- SavePerGroup: Preferences split into General and Notifications cards, each with its own secondary Save.
-- SavingOneGroup: General is saving with its rows disabled while Notifications stays editable.
+- SavePerGroup: Preferences split into General and Notifications cards, each with its own secondary Save, disabled until that card changes.
+- SavingOneGroup: General has an edit in flight (`loading` with a `defaultDraft`), its rows disabled while Notifications stays editable.
 - SavePerCard: Project settings with Preview Toolbar and Deployment Protection cards, each with an info `Alert`, its fields and its own Save.
-- SavingOneCard: Preview Toolbar is saving with its selects disabled while Deployment Protection stays editable.
-- Profile: the profile filled from the account (Billing emails empty and required), save bar hidden until a saved field changes. Saving with Account name set to `Offline` walks the failure toast; an empty Account name or a malformed billing address walks the field errors. Delete account opens the type-to-confirm dialog.
+- SavingOneCard: Preview Toolbar has an edit in flight, its selects disabled while Deployment Protection stays editable.
+- Profile: the profile filled from the account (Billing emails empty and required), save bar hidden until a saved field changes. `saveError` shows the failure toast with Retry; an empty Account name or a malformed billing address walks the field errors. Delete account opens the type-to-confirm dialog.
 - ProfileLoading: the first load; `Skeleton` cards in place of the sections.
 - ProfileError: the account did not load; a danger Alert with Retry.
 

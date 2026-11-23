@@ -75,26 +75,26 @@ The applied period as a chip under the controls (`Period: Last 24 hours`), bound
 
 ### G. Dashboard body — `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `Alert` (required)
 
-The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s with a `Hint` each, the delta read against the comparison period (`vs previous 24 hours`, or `vs previous quarter`), then a `ChartCard` spanning 8 of 12 columns with the dashboard's `Chart` (stacked bars, areas or lines, a `Chart.Tooltip total` when it has more than one series, and a legend with totals) and a `ChartCard` spanning 4 with a ranked `BarList`. When the body fails to load, each card keeps its header and shows a danger `Alert` with Retry. Each body here is a placeholder with sample figures: in an app, render the matching dashboard block in its place (the bodies of `dashboard-analytics`, `dashboard-security`, `dashboard-scan-results`, `dashboard-breakdown` and the rest), and render `dashboard-configurable` for the Custom entry under Yours. Don't ship the placeholder bodies as the real dashboards.
+The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s with a `Hint` each, the delta read against the comparison period (`vs previous 24 hours`, or `vs previous quarter`), then a `ChartCard` spanning 8 of 12 columns with the dashboard's `Chart` (stacked bars, areas or lines, a `Chart.Tooltip total` when it has more than one series, and a legend with totals) and a `ChartCard` spanning 4 with a ranked `BarList`. When the body fails to load, one danger `Alert` under the page heading offers Retry, and each card keeps its header over a quiet `Not available.` line. Each body here is a placeholder with sample figures: in an app, render the matching dashboard block in its place (the bodies of `dashboard-analytics`, `dashboard-security`, `dashboard-scan-results`, `dashboard-breakdown` and the rest), and render `dashboard-configurable` for the Custom entry under Yours. Don't ship the placeholder bodies as the real dashboards.
 
 ## Data
 
 The block takes its views and the selected view's data through props and emits every action; it fetches nothing. `DashboardSwitcherView`, `DashboardSwitcherFigure`, `DashboardSwitcherData`, `DashboardSwitcherFigureValue`, `DashboardSwitcherPeriod`, `DashboardSwitcherQuarter`, `DashboardSwitcherFormat`, `DashboardSwitcherMarkForm` and `DashboardSwitcherProps` are exported from `dashboard-switcher.vue`, and `sample.ts` holds the sample views and a generator of their figures that the block renders when `views` or `data` is left out (and never while `loading` or `error` is set).
 
-| Prop / model      | Type                       | What it does                                                                                                     |
-| ----------------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `views`           | `DashboardSwitcherView[]`  | The dashboards in the picker, grouped by `group`, each with its figures, chart and breakdown titles and formats. |
-| `data`            | `DashboardSwitcherData`    | The selected view's figure values by id, chart labels and series, and breakdown bars for the period.             |
-| `loading`         | `boolean`                  | A request is in flight. With no `data` it is the first load (Skeletons); with `data` it is a refetch.            |
-| `error`           | `string`                   | Why the view failed to load, shown after `Couldn't load requests over time.` in each card's danger `Alert`.      |
-| `v-model:view`    | `string`                   | The selected view's `value`. Defaults to `traffic`.                                                              |
-| `v-model:period`  | `DashboardSwitcherPeriod`  | The shared period, bound to the FilterMenu and its chip. Defaults to `24h`.                                      |
-| `v-model:quarter` | `DashboardSwitcherQuarter` | The quarter of a view that owns its period. Defaults to `q4`.                                                    |
+| Prop / model      | Type                       | What it does                                                                                                                   |
+| ----------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `views`           | `DashboardSwitcherView[]`  | The dashboards in the picker, grouped by `group`, each with its figures, chart and breakdown titles and formats.               |
+| `data`            | `DashboardSwitcherData`    | The selected view's figure values by id, chart labels and series, and breakdown bars for the period.                           |
+| `loading`         | `boolean`                  | A request is in flight. With no `data` it is the first load (Skeletons); with `data` it is a refetch.                          |
+| `error`           | `string`                   | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.` |
+| `v-model:view`    | `string`                   | The selected view's `value`. Defaults to `traffic`.                                                                            |
+| `v-model:period`  | `DashboardSwitcherPeriod`  | The shared period, bound to the FilterMenu and its chip. Defaults to `24h`.                                                    |
+| `v-model:quarter` | `DashboardSwitcherQuarter` | The quarter of a view that owns its period. Defaults to `q4`.                                                                  |
 
 | Event     | Payload   | When                                |
 | --------- | --------- | ----------------------------------- |
 | `refresh` | `(event)` | Refresh at the end of the controls. |
-| `retry`   | `(event)` | Retry in either card's error alert. |
+| `retry`   | `(event)` | Retry in the page's error alert.    |
 
 To go live, render the block from a page that owns the request and refetch when the view, the period or the quarter changes:
 
@@ -161,7 +161,7 @@ Then delete `sample.ts` and its import.
 - Default: Traffic over the last 24 hours.
 - OwnPeriod: `v-model:view` set to Executive summary; the shared filter and chip are hidden and the quarter `ToggleGroup` shows.
 - Loading: `loading` with no `data`; tiles, chart and list render their Skeletons.
-- Error: `error`; the tiles show dashes and each card keeps its header with a danger `Alert` and Retry, which emits `retry`.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 - Empty: `data` with no series and no bars; the tiles show dashes, the chart and the ranked list show their empty state (`No data in this period`).
 - Refetching: `loading` while `data` is shown, after a period change or Refresh; the chart holds the previous render at reduced opacity and Refresh shows its spinner.
 
@@ -176,7 +176,7 @@ Then delete `sample.ts` and its import.
 - `Default` — primary (the code below)
 - `OwnPeriod` — Executive summary chosen: a dashboard that owns its period, so the shared Filter and its Period chip are hidden and a quarter `ToggleGroup` takes their place in the controls row; the tiles compare against the previous quarter and the chart runs week by week.
 - `Loading` — The body of the chosen dashboard while it loads: the controls stay usable, the tiles, the chart and the ranked list render their own Skeleton in their final boxes, so nothing reflows when the data arrives.
-- `Error` — The chosen dashboard could not load: the tiles show dashes and the chart and ranked-list cards keep their headers with a danger `Alert` and Retry, which refetches the body.
+- `Error` — The chosen dashboard could not load: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 - `Empty` — The period has no data: the tiles show dashes, the chart and the ranked list show their empty state (`No data in this period`), and the controls stay usable to widen the period.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-switcher", { variant })`, or the file under `blocks/dashboard/dashboard-switcher/variants/`.
@@ -404,6 +404,14 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         title="Dashboards"
         description="Traffic, security and business views across every workload, plus a layout of your own."
       />
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the dashboard. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-switcher__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <section
         aria-label="Dashboard controls"
@@ -522,13 +530,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
-              <Alert
+              <p
                 v-if="error"
-                severity="danger"
-                :label="`Couldn't load ${active.chart.title.toLowerCase()}. ${error}`"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
+                class="text-body-sm text-(--text-muted)"
+              >
+                Not available.
+              </p>
               <Chart
                 v-else
                 v-model:active-index="activeIndex"
@@ -565,13 +572,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
-              <Alert
+              <p
                 v-if="error"
-                severity="danger"
-                :label="`Couldn't load ${active.breakdown.title.toLowerCase()}. ${error}`"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
+                class="text-body-sm text-(--text-muted)"
+              >
+                Not available.
+              </p>
               <BarList
                 v-else
                 :items="data?.breakdown ?? []"

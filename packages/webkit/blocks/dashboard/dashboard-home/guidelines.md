@@ -60,8 +60,7 @@ for Recents).
 
 ### F. Failure — `Alert` (required)
 
-When Home's data cannot load, the usage band and each panel show a danger `Alert` with Retry in place
-of their content; the greeting and the agent card stay.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ### G. Classic summary — `StatTile`, `Card`, `IconButton`, `Tooltip` (optional)
 
@@ -102,25 +101,25 @@ is an outlined `Copy prompt` `Button`.
 
 The block takes its figures and rows through props and emits every action; it fetches nothing. `HomeDashboardProps` and the record types (`HomeDashboardMetrics`, `HomeDashboardResource`, `HomeDashboardDomainAvailability`) are exported from `dashboard-home.vue`, and `sample.ts` holds the sample name, figures and rows the block renders when a prop is left out (the figures and rows never while `loading` or `error` is set). The tile labels, units and hints and the panel headings stay in the SFC.
 
-| Prop                  | Type                              | What it does                                                                                                 |
-| --------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `userName`            | `string`                          | The first name in the greeting.                                                                              |
-| `greeting`            | `string`                          | The time-of-day greeting before it; defaults to `Good morning`.                                              |
-| `metrics`             | `HomeDashboardMetrics`            | The value and delta of each usage tile, keyed by tile id; a tile left out reads as a dash.                   |
-| `projects`            | `HomeDashboardResource[]`         | The Projects panel rows, each with its `href` and preset icon.                                               |
-| `resources`           | `HomeDashboardResource[]`         | The Resources panel rows.                                                                                    |
-| `domains`             | `HomeDashboardResource[]`         | The Domains panel rows.                                                                                      |
-| `recents`             | `HomeDashboardResource[]`         | The Recents panel rows, most recent first, each with its `typeLabel`.                                        |
-| `domainAvailability`  | `HomeDashboardDomainAvailability` | The answer to the last `check-domain`; the popover shows `Checking` until its `name` matches the field.      |
-| `v-model:agent-setup` | `boolean`                         | Whether the agent card shows; Dismiss sets it to `false`, so persist it to dismiss the card for good.        |
-| `loading`             | `boolean`                         | Home's data is loading: the tiles and the panels hold a `Skeleton`.                                          |
-| `error`               | `string`                          | Why Home's data could not load, shown after `Couldn't load <thing>.` in the band's and each panel's `Alert`. |
+| Prop                  | Type                              | What it does                                                                                                                   |
+| --------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `userName`            | `string`                          | The first name in the greeting.                                                                                                |
+| `greeting`            | `string`                          | The time-of-day greeting before it; defaults to `Good morning`.                                                                |
+| `metrics`             | `HomeDashboardMetrics`            | The value and delta of each usage tile, keyed by tile id; a tile left out reads as a dash.                                     |
+| `projects`            | `HomeDashboardResource[]`         | The Projects panel rows, each with its `href` and preset icon.                                                                 |
+| `resources`           | `HomeDashboardResource[]`         | The Resources panel rows.                                                                                                      |
+| `domains`             | `HomeDashboardResource[]`         | The Domains panel rows.                                                                                                        |
+| `recents`             | `HomeDashboardResource[]`         | The Recents panel rows, most recent first, each with its `typeLabel`.                                                          |
+| `domainAvailability`  | `HomeDashboardDomainAvailability` | The answer to the last `check-domain`; the popover shows `Checking` until its `name` matches the field.                        |
+| `v-model:agent-setup` | `boolean`                         | Whether the agent card shows; Dismiss sets it to `false`, so persist it to dismiss the card for good.                          |
+| `loading`             | `boolean`                         | Home's data is loading: the tiles and the panels hold a `Skeleton`.                                                            |
+| `error`               | `string`                          | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.` |
 
 Pass `[]` for all four lists on an account that owns nothing: the page becomes the first-access screen.
 
 | Event               | Payload         | When                                                                             |
 | ------------------- | --------------- | -------------------------------------------------------------------------------- |
-| `retry`             | `(event)`       | Retry in the usage band's or a panel's error alert.                              |
+| `retry`             | `(event)`       | Retry in the page's error alert.                                                 |
 | `update:agentSetup` | `(value)`       | Dismiss on the agent card.                                                       |
 | `create-project`    | `(event)`       | Create Project on the first-access screen.                                       |
 | `check-domain`      | `(name)`        | A valid domain stayed in the field for 900 ms; answer with `domainAvailability`. |
@@ -202,7 +201,7 @@ Then delete `sample.ts` and its import.
 ## States
 
 - Default: populated Home for an account that owns resources (`metrics`, `projects`, `resources`, `domains`, `recents`): usage band, agent card, resource panels.
-- Error: `error` holds the message; Home's data could not load, and the usage band and every panel show a danger `Alert` with Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 - Empty: `projects`, `resources`, `domains` and `recents` are all `[]`; a brand-new account gets the first-access screen with the greeting, the command prompt that opens the palette, and the three doors (create a project, add a domain with an availability check, set up an agent).
 - Summary: the classic overview; metric tiles with the window caption, the resources and recent activity tables, and the aside with monthly usage and a featured marketplace template.
 

@@ -180,10 +180,18 @@
           <div class="w-full min-w-0 sm:w-(--container-3xs)">
             <Input
               v-model="destination"
-              placeholder="api.example.com"
+              placeholder="Filter by host"
               size="medium"
               aria-label="Destination host"
-            />
+            >
+              <template #leading>
+                <span
+                  class="text-body-sm text-(--text-muted)"
+                  aria-hidden="true"
+                  >Destination</span
+                >
+              </template>
+            </Input>
           </div>
         </div>
         <FilterMenu.ChipGroup

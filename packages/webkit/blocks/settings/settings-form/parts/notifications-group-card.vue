@@ -5,17 +5,62 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Subheader from '@aziontech/webkit/subheader'
   import Switch from '@aziontech/webkit/switch'
-  import { reactive, ref } from 'vue'
+  import { reactive } from 'vue'
 
-  import { saveWithToast } from '../settings-form-save'
+  import { useCardSave } from '../composables/use-card-save'
 
-  const notifications = reactive({ productUpdates: true, securityAlerts: true })
-  const savingNotifications = ref(false)
-  const saveNotifications = () => saveWithToast(savingNotifications, 'Notification settings')
+  /** The saved Notifications group, and the values its Save sends. */
+  export interface NotificationsGroupValues {
+    /** Occasional product emails. */
+    productUpdates: boolean
+    /** Emails on a new sign-in or key change. */
+    securityAlerts: boolean
+  }
+
+  export interface NotificationsGroupCardProps {
+    /** The saved values; Save stays disabled until the group differs from them. */
+    values?: NotificationsGroupValues
+    /** Unsaved edits the group opens with, so it starts dirty. */
+    defaultDraft?: Partial<NotificationsGroupValues>
+    /** The save of this group is in flight: its rows lock and its Save spins. */
+    loading?: boolean
+    /** Why the save failed, shown in the error toast with Retry; the edits are kept. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<NotificationsGroupCardProps>(), {
+    values: () => ({ productUpdates: true, securityAlerts: true }),
+    defaultDraft: () => ({}),
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{ submit: [event: Event, values: NotificationsGroupValues] }>()
+
+  const notifications = reactive<NotificationsGroupValues>({
+    ...props.values,
+    ...props.defaultDraft
+  })
+
+  const { dirty, submitting, submit } = useCardSave({
+    id: 'notifications-group',
+    values: notifications,
+    saved: () => props.values,
+    loading: () => props.loading,
+    error: () => props.error,
+    savedMessage: 'Notification settings saved.',
+    failedMessage: "The notification settings weren't saved.",
+    onSubmit: (event, values) => emit('submit', event, values)
+  })
 </script>
 
 <template>
-  <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+  <form
+    class="layout-section-start flex flex-col gap-(--layout-group-gap)"
+    aria-label="Notifications"
+    novalidate
+    @submit.prevent="submit"
+  >
     <Subheader
       title="Notifications"
       size="small"
@@ -24,7 +69,7 @@
       <template #default>
         <fieldset
           class="m-0 flex min-w-0 flex-col border-0 p-0"
-          :disabled="savingNotifications"
+          :disabled="submitting"
         >
           <legend class="sr-only">Notifications</legend>
           <Item.List>
@@ -36,7 +81,7 @@
               <Switch
                 v-model="notifications.productUpdates"
                 aria-label="Product updates"
-                :disabled="savingNotifications"
+                :disabled="submitting"
               />
             </SettingsRow>
 
@@ -48,7 +93,7 @@
               <Switch
                 v-model="notifications.securityAlerts"
                 aria-label="Security alerts"
-                :disabled="savingNotifications"
+                :disabled="submitting"
               />
             </SettingsRow>
           </Item.List>
@@ -60,11 +105,12 @@
             label="Save"
             variant="secondary"
             size="medium"
-            :loading="savingNotifications"
-            @click="saveNotifications"
+            type="submit"
+            :loading="submitting"
+            :disabled="!dirty"
           />
         </div>
       </template>
     </Card>
-  </section>
+  </form>
 </template>
