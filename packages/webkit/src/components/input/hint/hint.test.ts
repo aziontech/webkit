@@ -186,4 +186,35 @@ describe('Hint', () => {
       expect(target?.getAttribute('aria-hidden')).toBe('true')
     })
   })
+
+  describe('touch', () => {
+    const tap = async (el: HTMLElement) => {
+      await fireEvent.pointerDown(el, { pointerType: 'touch' })
+      await fireEvent.pointerUp(el, { pointerType: 'touch' })
+      await fireEvent.click(el)
+      await settle()
+    }
+
+    it('a tap shows the text and keeps it until a second tap', async () => {
+      const { getByTestId } = render(Hint, { props: { content: TEXT } })
+      const trigger = getByTestId('hint__trigger')
+      await tap(trigger)
+      expect(panel()?.textContent).toContain(TEXT)
+      await tap(trigger)
+      await vi.waitFor(() => expect(panel()).toBeNull())
+    })
+
+    it('a tap outside or Escape closes the tapped hint', async () => {
+      const { getByTestId } = render(Hint, { props: { content: TEXT } })
+      const trigger = getByTestId('hint__trigger')
+      await tap(trigger)
+      expect(panel()).not.toBeNull()
+      await fireEvent.pointerDown(document.body, { pointerType: 'touch' })
+      await vi.waitFor(() => expect(panel()).toBeNull())
+      await tap(trigger)
+      expect(panel()).not.toBeNull()
+      await fireEvent.keyDown(document, { key: 'Escape' })
+      await vi.waitFor(() => expect(panel()).toBeNull())
+    })
+  })
 })
