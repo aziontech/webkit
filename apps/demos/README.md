@@ -19,7 +19,7 @@ pnpm preview:demos   # preview the build on http://localhost:4174
 | Route                                | Screen (block)                                               | What it does                                                                                     |
 | ------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
 | `/resources`                         | `view/view-table` in `ConsoleLayout` (`shell/shell-console`) | List with filters, preferences and row actions (View, Deploy, Delete)                            |
-| `/resources/new`                     | `create/create-page`                                         | Create with validation; Save adds the resource, toasts and opens its detail                      |
+| `/resources/new`                     | `create/create-page`                                         | Create with validation; Create resource adds it, toasts and opens its detail                     |
 | `/resources/:id`                     | `detail/detail-resource`                                     | Detail of the resource; Resource actions → Copy URL, Settings (opens the edit page)              |
 | `/resources/:id/edit`                | `edit/edit-resource`                                         | Edit with the save bar; Save updates the store, toasts and returns to the detail                 |
 | `/resources/:id/delete`              | `edit/edit-delete-dialog` over the list                      | Typed confirmation; Delete removes the row, toasts and closes                                    |
