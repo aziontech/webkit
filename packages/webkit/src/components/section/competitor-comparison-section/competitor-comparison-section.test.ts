@@ -126,6 +126,24 @@ describe('CompetitorComparisonSection', () => {
     }
   )
 
+  it('keys the support glyphs in a visible legend above the table', () => {
+    const { getByTestId } = band()
+
+    const legend = getByTestId('competitor-comparison-section__legend')
+    const entries = Array.from(legend.querySelectorAll('li'))
+    expect(entries.map((entry) => entry.textContent?.trim())).toEqual([
+      'Full support',
+      'Partial support',
+      'Not available'
+    ])
+    expect(entries.map((entry) => entry.querySelector('i')?.getAttribute('data-level'))).toEqual([
+      'full',
+      'partial',
+      'none'
+    ])
+    expect(legend.nextElementSibling?.tagName).toBe('TABLE')
+  })
+
   it('aligns the capability column head to the start and draws category heads in the brand orange', () => {
     const { getByRole, getByText } = band()
 
