@@ -44,10 +44,28 @@ describe('ConfigProvider', () => {
       expect(root.getAttribute('dir')).toBe('ltr')
     })
 
-    it('defaults to the device locale (pinned to en-US in this suite), left to right', () => {
+    it('defaults to the device locale (pinned to en-US in this suite) and sets no direction', () => {
       const { getByTestId } = render(ConfigProvider)
       expect(getByTestId('config-provider').getAttribute('lang')).toBe('en-US')
-      expect(getByTestId('config-provider').getAttribute('dir')).toBe('ltr')
+      expect(getByTestId('config-provider').hasAttribute('dir')).toBe(false)
+    })
+
+    it('inherits a right-to-left page when it sets only now or timeZone', () => {
+      const Probe = defineComponent({
+        setup: () => {
+          const { dir } = useLocale()
+          return () => h('span', { 'data-testid': 'probe' }, dir.value)
+        }
+      })
+      const { getAllByTestId, getByTestId } = render(
+        withProvider({ dir: 'rtl' }, () =>
+          h(ConfigProvider, { timeZone: 'UTC', now: 0 }, { default: () => h(Probe) })
+        )
+      )
+      const inner = getAllByTestId('config-provider')[1]!
+      expect(inner.hasAttribute('dir')).toBe(false)
+      expect(inner.closest('[dir]')?.getAttribute('dir')).toBe('rtl')
+      expect(getByTestId('probe').textContent).toBe('rtl')
     })
 
     it('derives dir="rtl" from an Arabic, Hebrew, Persian or Urdu locale', () => {

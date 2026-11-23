@@ -1,4 +1,4 @@
-import { computed, type ComputedRef, type MaybeRefOrGetter, provide, toValue } from 'vue'
+import { computed, type ComputedRef, inject, type MaybeRefOrGetter, provide, toValue } from 'vue'
 
 import type {
   Direction,
@@ -205,14 +205,25 @@ function epochOf(value: string | number | Date | undefined | null): number | und
   return Number.isNaN(time) ? undefined : time
 }
 
-export function provideLocale(options: ProvideLocaleOptions): LocaleContext {
+/** What `provideLocale` returns: the provided context, plus the direction the provider sets itself. */
+export interface ProvidedLocale extends LocaleContext {
+  /** Direction from an explicit `dir` or `locale`; undefined when the provider inherits the direction around it. */
+  ownDir: ComputedRef<Direction | undefined>
+}
+
+export function provideLocale(options: ProvideLocaleOptions): ProvidedLocale {
+  const parent = inject(LocaleInjectionKey, null)
   const device = useDeviceLocale()
   const explicit = computed(() => toValue(options.locale) || '')
   const locale = computed(() => explicit.value || device.value)
-  const dir = computed<Direction>(() => {
+  const ownDir = computed<Direction | undefined>(() => {
     const requested = toValue(options.dir) ?? 'auto'
     if (requested !== 'auto') return requested
-    if (explicit.value) return directionOf(explicit.value)
+    return explicit.value ? directionOf(explicit.value) : undefined
+  })
+  const dir = computed<Direction>(() => {
+    if (ownDir.value) return ownDir.value
+    if (parent) return parent.dir.value
     return findCatalog(locale.value, toValue(options.catalogs)) ? directionOf(locale.value) : 'ltr'
   })
   const messages = computed(() => {
@@ -225,7 +236,7 @@ export function provideLocale(options: ProvideLocaleOptions): LocaleContext {
   const timeZone = computed<string | undefined>(() => toValue(options.timeZone) || undefined)
   const context: LocaleContext = { locale, dir, messages, now, timeZone }
   provide(LocaleInjectionKey, context)
-  return context
+  return { ...context, ownDir }
 }
 
 export function useLocale(fallback: PartialMessages = {}): UseLocaleReturn {

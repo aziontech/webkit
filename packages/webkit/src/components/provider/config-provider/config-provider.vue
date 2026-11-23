@@ -25,7 +25,7 @@
     catalogs?: Record<string, Messages>
     /** Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`). */
     messages?: PartialMessages
-    /** Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left). */
+    /** Text direction of the subtree; `auto` derives it from `locale` (`ar`, `he`, `fa`, `ur` are right-to-left), and with no `locale` inherits the direction around the provider. */
     dir?: DirectionSetting
     /** Reference time for every relative time below the provider (`TableCellTime`, `useLocale().formatRelativeTime`); unset reads the real clock, ticking each minute. */
     now?: string | number | Date
@@ -69,7 +69,7 @@
   <div
     v-bind="$attrs"
     :lang="context.locale.value"
-    :dir="context.dir.value"
+    :dir="context.ownDir.value"
     :data-testid="testId"
   >
     <slot />
