@@ -8,7 +8,7 @@
     variant="divider"
     :columns="3"
   >
-    <div class="relative bg-(--bg-canvas) p-(--spacing-xl)">
+    <div class="bg-(--bg-canvas) p-(--spacing-xl)">
       <FeatureItem
         icon="az az-edge-nodes"
         title="Consistent global speed"
@@ -16,7 +16,7 @@
         href="/products/edge-application"
       />
     </div>
-    <div class="relative bg-(--bg-canvas) p-(--spacing-xl)">
+    <div class="bg-(--bg-canvas) p-(--spacing-xl)">
       <FeatureItem
         icon="az az-load-balancer"
         title="Safer high-traffic launches"
@@ -24,7 +24,7 @@
         href="/products/load-balancer"
       />
     </div>
-    <div class="relative bg-(--bg-canvas) p-(--spacing-xl)">
+    <div class="bg-(--bg-canvas) p-(--spacing-xl)">
       <FeatureItem
         icon="az az-code"
         title="Compatible with your framework"
