@@ -211,7 +211,11 @@ export const ptBR: Messages = {
   articleIndexSection: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    noMatch: 'Nenhum resultado encontrado.'
+    noMatch: 'Nenhum resultado encontrado.',
+    results: {
+      one: '{count} resultado',
+      other: '{count} resultados'
+    }
   },
   attributeEditor: {
     add: 'Adicionar item',

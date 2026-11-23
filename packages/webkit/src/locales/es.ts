@@ -211,7 +211,11 @@ export const es: Messages = {
   articleIndexSection: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    noMatch: 'No se encontraron resultados.'
+    noMatch: 'No se encontraron resultados.',
+    results: {
+      one: '{count} resultado',
+      other: '{count} resultados'
+    }
   },
   attributeEditor: {
     add: 'Agregar elemento',

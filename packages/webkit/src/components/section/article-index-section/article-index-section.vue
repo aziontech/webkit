@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { useMediaQuery } from '@vueuse/core'
   import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useLoadMore } from '../../../composables/use-load-more'
@@ -211,7 +212,15 @@
     props.moreLabel ? props.pageSize : 0
   )
 
-  watch([category, query, selection], resetPages)
+  const coarse = useMediaQuery('(pointer: coarse)')
+  const controlSize = computed(() => (coarse.value ? 'large' : 'medium'))
+
+  const announcement = ref('')
+  watch([category, query, selection], () => {
+    resetPages()
+    const count = matches.value.length
+    announcement.value = count > 0 ? t('articleIndexSection.results', { count }) : ''
+  })
 
   onMounted(async () => {
     if (faceted.value || !props.categoryParam) return
@@ -238,9 +247,13 @@
     }
   }
 
+  const CATEGORY_STRIP_CLASS =
+    'min-w-0 overflow-x-auto max-lg:pe-(--spacing-xl) max-lg:[mask-image:linear-gradient(to_right,black_calc(100%-var(--spacing-xl)),transparent)] ' +
+    'max-lg:rtl:[mask-image:linear-gradient(to_left,black_calc(100%-var(--spacing-xl)),transparent)]'
+
   const ROW_CLASS =
     'group/row relative grid transition-colors duration-fast-02 ease-productive-entrance ' +
-    'hover:bg-(--bg-hover) motion-reduce:transition-none lg:grid-cols-[minmax(0,2fr)_minmax(0,5fr)]'
+    'hover:bg-(--bg-hover) motion-reduce:transition-none md:grid-cols-[minmax(0,2fr)_minmax(0,5fr)]'
 
   const ROW_TITLE_LINK_CLASS =
     "text-pretty text-heading-sm text-(--text-default) no-underline after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:ring-2 " +
@@ -285,13 +298,13 @@
 
           <div
             v-if="showCategories"
-            class="min-w-0 overflow-x-auto"
+            :class="CATEGORY_STRIP_CLASS"
           >
             <ToggleGroup
               v-model="category"
               :options="options"
               :aria-label="categoryAriaLabel || undefined"
-              size="medium"
+              :size="controlSize"
               class="w-max max-w-none"
             />
           </div>
@@ -302,7 +315,7 @@
           >
             <Input
               v-model="query"
-              size="medium"
+              :size="controlSize"
               type="text"
               :placeholder="searchPlaceholder || undefined"
               :aria-label="searchAriaLabel || undefined"
@@ -361,7 +374,7 @@
               />
               <article :class="ROW_CLASS">
                 <div
-                  class="flex aspect-40/21 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface) lg:border-e lg:border-b-0"
+                  class="flex aspect-40/21 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface) md:border-e md:border-b-0"
                 >
                   <img
                     v-if="item.image"
@@ -401,7 +414,7 @@
                       </h3>
                       <p
                         v-if="item.description"
-                        class="m-0 line-clamp-2 text-pretty text-body-sm text-(--text-muted) group-data-[filters=facets]/rows:line-clamp-none group-data-[filters=facets]/rows:text-body-lg"
+                        class="m-0 line-clamp-2 text-pretty text-body-sm text-(--text-muted) group-data-[filters=facets]/rows:line-clamp-none"
                       >
                         {{ item.description }}
                       </p>
@@ -457,6 +470,13 @@
         :action-label="emptyActionLabel"
         @clear="clearFilters"
       />
+      <p
+        role="status"
+        data-slot="result-count"
+        class="sr-only"
+      >
+        {{ announcement }}
+      </p>
     </Module>
   </section>
 </template>
