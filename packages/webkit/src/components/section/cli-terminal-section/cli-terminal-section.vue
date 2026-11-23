@@ -5,7 +5,7 @@
   import Texture from '../../content/texture/texture.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'CliTerminalSection',
@@ -107,14 +107,16 @@
 </script>
 
 <template>
-  <FeatureTabsSectionShell
+  <SectionBand
     v-bind="$attrs"
     :data-testid="testId"
     :anchor="anchor"
+    :label="title"
     :eyebrow="eyebrow"
     :title="title"
     :description="description"
-    :item-count="hasTerminal ? 1 : 0"
+    :filled="hasTerminal"
+    :framed="false"
     align="split"
     header-padding="small"
     :primary-action="primaryAction"
@@ -153,5 +155,5 @@
         </div>
       </div>
     </RegistrationFrame>
-  </FeatureTabsSectionShell>
+  </SectionBand>
 </template>

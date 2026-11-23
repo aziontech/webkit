@@ -8,7 +8,7 @@
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
   import Link from '../../navigation/link/link.vue'
-  import FeatureTabsSectionShell from './parts/feature-tabs-section-shell.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'FeatureTabsSection',
@@ -100,14 +100,16 @@
 </script>
 
 <template>
-  <FeatureTabsSectionShell
+  <SectionBand
     v-bind="$attrs"
     :data-testid="testId"
     :anchor="anchor"
+    :label="title"
     :eyebrow="eyebrow"
     :title="title"
     :description="description"
-    :item-count="tabs.length"
+    :filled="tabs.length > 0"
+    :framed="false"
     align="split"
     :primary-action="primaryAction"
   >
@@ -171,5 +173,5 @@
         />
       </div>
     </RegistrationFrame>
-  </FeatureTabsSectionShell>
+  </SectionBand>
 </template>

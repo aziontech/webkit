@@ -5,7 +5,7 @@
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Diagram, { type DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
-  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'ArchitectureTabsSection',
@@ -80,14 +80,16 @@
 </script>
 
 <template>
-  <FeatureTabsSectionShell
+  <SectionBand
     v-bind="$attrs"
     :data-testid="testId"
     :anchor="anchor"
+    :label="title"
     :eyebrow="eyebrow"
     :title="title"
     :description="description"
-    :item-count="tabs.length"
+    :filled="tabs.length > 0"
+    :framed="false"
     align="split"
     header-padding="small"
     :primary-action="primaryAction"
@@ -115,5 +117,5 @@
         </template>
       </MediaTabs>
     </RegistrationFrame>
-  </FeatureTabsSectionShell>
+  </SectionBand>
 </template>

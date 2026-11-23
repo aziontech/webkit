@@ -12,7 +12,7 @@
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MediaScroll from '../../marketing/media-scroll/media-scroll.vue'
   import MediaTile from '../../marketing/media-tile/media-tile.vue'
-  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'FeatureScrollSection',
@@ -131,14 +131,16 @@
 </script>
 
 <template>
-  <FeatureTabsSectionShell
+  <SectionBand
     v-bind="$attrs"
     :data-testid="testId"
     :anchor="anchor"
+    :label="title"
     :eyebrow="eyebrow"
     :title="title"
     :description="description"
-    :item-count="items.length"
+    :filled="items.length > 0"
+    :framed="false"
     header-size="large"
   >
     <RegistrationFrame
@@ -260,5 +262,5 @@
         </template>
       </MediaScroll>
     </RegistrationFrame>
-  </FeatureTabsSectionShell>
+  </SectionBand>
 </template>

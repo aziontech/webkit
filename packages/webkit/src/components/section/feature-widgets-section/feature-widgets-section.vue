@@ -16,7 +16,7 @@
     ModuleHeaderAlign
   } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'FeatureWidgetsSection',
@@ -130,14 +130,16 @@
 </script>
 
 <template>
-  <FeatureTabsSectionShell
+  <SectionBand
     v-bind="$attrs"
     :data-testid="testId"
     :anchor="anchor"
+    :label="title"
     :eyebrow="eyebrow"
     :title="title"
     :description="description"
-    :item-count="items.length"
+    :filled="items.length > 0"
+    :framed="false"
     :align="titleAlign"
     :primary-action="primaryAction"
     :secondary-action="secondaryAction"
@@ -216,5 +218,5 @@
         </BentoGridCell>
       </BentoGrid>
     </RegistrationFrame>
-  </FeatureTabsSectionShell>
+  </SectionBand>
 </template>

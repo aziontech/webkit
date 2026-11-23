@@ -83,6 +83,7 @@
     :data-testid="testId"
     :data-align="align"
     :anchor="anchor"
+    :label="title"
     :eyebrow="eyebrow"
     :title="title"
     :align="align"

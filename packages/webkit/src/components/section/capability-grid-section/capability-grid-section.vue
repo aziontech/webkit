@@ -6,7 +6,7 @@
   import type { ModuleHeaderAlign } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import FeatureItem from '../../marketing/feature-item/feature-item.vue'
-  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({ name: 'CapabilityGridSection', inheritAttrs: false })
 
@@ -106,12 +106,14 @@
 </script>
 
 <template>
-  <FeatureTabsSectionShell
+  <SectionBand
     v-if="items.length"
     v-bind="$attrs"
     :data-testid="testId"
-    :item-count="items.length"
+    :filled="items.length > 0"
+    :framed="false"
     :anchor="anchor"
+    :label="title"
     :eyebrow="eyebrow"
     :title="title"
     :description="description"
@@ -156,5 +158,5 @@
         </CardGridCell>
       </CardGrid>
     </RegistrationFrame>
-  </FeatureTabsSectionShell>
+  </SectionBand>
 </template>
