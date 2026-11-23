@@ -62,7 +62,7 @@
     error?: string
     /** The application the last install succeeded on; the drawer and a toast confirm it. */
     installedApplication?: string
-    /** Search text the filter starts with. */
+    /** Search text the filter starts with, shown as a free-text token. */
     defaultText?: string
     /** Id of the integration whose drawer starts open. */
     defaultIntegration?: string
@@ -142,8 +142,14 @@
 
   const { items, propertyFilterProps, status, filtersActive, clearFilters } = useCollection({
     items: () => catalog.value.map(withStatus),
-    filtering: { fields: ['name', 'vendor', 'description'], defaultText: props.defaultText },
-    propertyFiltering: { properties },
+    filtering: { fields: ['name', 'vendor', 'description'] },
+    propertyFiltering: {
+      properties,
+      defaultQuery: {
+        tokens: props.defaultText ? [{ operator: ':', value: props.defaultText }] : [],
+        operation: 'and'
+      }
+    },
     url: true
   })
 
@@ -192,15 +198,51 @@
     emit('install', event, { integration, application: form.application })
   }
 
+  let announced = false
+  const announce = () => {
+    const item = selected.value
+    if (!item || detailOpen.value || run.state === 'idle') {
+      toast.dismiss(INSTALL_TOAST)
+      return
+    }
+    if (announced && run.state !== 'running') return
+    announced = run.state !== 'running'
+    const { application, reason } = run
+    if (run.state === 'running')
+      toast.loading(`Installing ${item.name} on ${application}…`, {
+        description: 'It keeps running while you work elsewhere.',
+        id: INSTALL_TOAST
+      })
+    else if (run.state === 'succeeded')
+      toast.success(`${item.name} is installed on ${application}.`, {
+        description: 'It runs from the next request to the application.',
+        id: INSTALL_TOAST,
+        closable: true,
+        actions: [
+          { label: 'Configure', onClick: configure },
+          { label: 'Open application', onClick: () => toast.dismiss(INSTALL_TOAST) }
+        ]
+      })
+    else
+      toast.error(`${item.name} wasn't installed on ${application}.`, {
+        description: reason,
+        id: INSTALL_TOAST,
+        duration: 0,
+        closable: true,
+        actions: [
+          { label: 'Edit', onClick: configure },
+          { label: 'Reinstall', onClick: (event: MouseEvent) => install(event) }
+        ]
+      })
+  }
+
   const showRunning = () => {
     const item = selected.value
     if (!item) return
     const application = form.application
+    announced = false
     Object.assign(run, { state: 'running', application, reason: '' })
-    toast.loading(`Installing ${item.name} on ${application}…`, {
-      description: 'It keeps running if you close this panel.',
-      id: INSTALL_TOAST
-    })
+    announce()
   }
 
   const showSucceeded = (application: string) => {
@@ -210,16 +252,9 @@
       item.installedOn = [...item.installedOn, application]
     form.application = ''
     showErrors.value = false
+    announced = false
     Object.assign(run, { state: 'succeeded', application, reason: '' })
-    toast.success(`${item.name} is installed on ${application}.`, {
-      description: 'It runs from the next request to the application.',
-      id: INSTALL_TOAST,
-      closable: true,
-      actions: [
-        { label: 'Configure', onClick: configure },
-        { label: 'Open application', onClick: () => toast.dismiss(INSTALL_TOAST) }
-      ]
-    })
+    announce()
   }
 
   const showFailed = (reason: string) => {
@@ -227,17 +262,9 @@
     if (!item) return
     const application = run.application || form.application
     form.application = application
+    announced = false
     Object.assign(run, { state: 'failed', application, reason })
-    toast.error(`${item.name} wasn't installed on ${application}.`, {
-      description: reason,
-      id: INSTALL_TOAST,
-      duration: 0,
-      closable: true,
-      actions: [
-        { label: 'Edit', onClick: configure },
-        { label: 'Reinstall', onClick: (event: MouseEvent) => install(event) }
-      ]
-    })
+    announce()
   }
 
   const reinstall = (event: MouseEvent) => {
@@ -245,6 +272,7 @@
     install(event)
   }
 
+  watch(detailOpen, announce)
   watch(
     () => props.installing,
     (next) => {

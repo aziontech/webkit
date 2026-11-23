@@ -44,7 +44,7 @@ describe('view/view-marketplace block', () => {
     )
   })
 
-  it('shows the installed state on the tile, in the drawer and in a toast with Configure and Open application', async () => {
+  it('shows the installed state in the drawer, then in a toast with Configure and Open application once it closes', async () => {
     const view = render(Installed)
     const drawer = await waitFor(() => view.getByRole('dialog'))
     await waitFor(() =>
@@ -53,6 +53,8 @@ describe('view/view-marketplace block', () => {
     expect(
       within(drawer).queryByText('Select the application to install Request Signer on.')
     ).toBeNull()
+    expect(toastWith('Request Signer is installed on storefront.')).toBeFalsy()
+    await fireEvent.click(drawer.querySelector<HTMLButtonElement>('[data-testid="drawer__close"]')!)
     const toast = await waitFor(() => {
       const node = toastWith('Request Signer is installed on storefront.')
       expect(node).toBeTruthy()
@@ -63,7 +65,7 @@ describe('view/view-marketplace block', () => {
     expect(toast.textContent).not.toMatch(/View deployments|Try again|Retry/)
   })
 
-  it('reports a failed install inline and in a permanent toast with Edit and Reinstall', async () => {
+  it('reports a failed install inline, and in a permanent toast with Edit and Reinstall once the drawer closes', async () => {
     const view = render(ViewMarketplace, {
       props: {
         defaultIntegration: 'request-signer',
@@ -76,6 +78,8 @@ describe('view/view-marketplace block', () => {
       expect(within(drawer).getByText(/wasn't installed on checkout/)).toBeTruthy()
     )
     expect(within(drawer).getByRole('button', { name: 'Reinstall' })).toBeTruthy()
+    expect(toastWith("Request Signer wasn't installed on checkout.")).toBeFalsy()
+    await fireEvent.click(drawer.querySelector<HTMLButtonElement>('[data-testid="drawer__close"]')!)
     const toast = await waitFor(() => {
       const node = toastWith("Request Signer wasn't installed on checkout.")
       expect(node).toBeTruthy()
@@ -89,6 +93,8 @@ describe('view/view-marketplace block', () => {
     const view = render(NoMatch)
     await waitFor(() => expect(view.getByText('No matching integrations')).toBeTruthy())
     expect(view.queryByRole('heading', { name: 'Featured' })).toBeNull()
+    const tokens = view.getAllByTestId('property-filter__token')
+    expect(tokens.some((token) => token.textContent?.includes('kubernetes'))).toBe(true)
     await fireEvent.click(view.getByRole('button', { name: 'Clear filters' }))
     await waitFor(() => expect(view.getByRole('heading', { name: 'Featured' })).toBeTruthy())
   })

@@ -2,7 +2,6 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DataTable from '@aziontech/webkit/data-table'
-  import DocProse from '@aziontech/webkit/doc-prose'
   import Field from '@aziontech/webkit/field'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import Link from '@aziontech/webkit/link'
@@ -95,6 +94,10 @@
     { id: 'update', header: '', minWidth: 120, hideable: false }
   ]
 
+  const HEADING_CLASS = 'm-0 text-heading-2xs text-(--text-default)'
+  const TEXT_CLASS = 'm-0 text-body-md text-(--text-default)'
+  const CODE_CLASS = 'text-label-code-sm text-(--text-default)'
+
   onBeforeUnmount(() => {
     clearTimeout(timer)
     toast.dismiss(RUN_TOAST)
@@ -154,41 +157,45 @@
           </Tabs.List>
           <div class="relative isolate w-full">
             <Tabs.Content value="overview">
-              <div>
-                <DocProse>
-                  <p>{{ integration.description }}</p>
-                  <p>
-                    When the requests per second pass the capacity you set, new visitors see a queue
-                    page with their place and the estimated wait. Visitors already inside are never
-                    queued.
-                  </p>
-                  <h2>What it needs</h2>
-                  <ul>
-                    <li>Read the visitor's session cookie.</li>
-                    <li>Answer requests with the queue page.</li>
+              <div class="flex max-w-(--container-md) flex-col gap-(--spacing-md)">
+                <p :class="TEXT_CLASS">
+                  When the requests per second pass the capacity you set, new visitors see a queue
+                  page with their place and the estimated wait. Visitors already inside are never
+                  queued.
+                </p>
+                <section class="flex flex-col gap-(--spacing-xs)">
+                  <h2 :class="HEADING_CLASS">What it needs</h2>
+                  <ul class="m-0 flex list-disc flex-col gap-(--spacing-2xs) ps-(--spacing-lg)">
+                    <li :class="TEXT_CLASS">Read the visitor's session cookie.</li>
+                    <li :class="TEXT_CLASS">Answer requests with the queue page.</li>
                   </ul>
-                </DocProse>
+                </section>
               </div>
             </Tabs.Content>
             <Tabs.Content value="usage">
-              <div>
-                <DocProse>
-                  <h2>Set the capacity</h2>
-                  <p>
-                    Open Configure on the application and set <code>capacity</code> to the requests
-                    per second your origin serves comfortably. Start at 80 percent of your measured
-                    peak.
+              <div class="flex max-w-(--container-md) flex-col gap-(--spacing-md)">
+                <section class="flex flex-col gap-(--spacing-xs)">
+                  <h2 :class="HEADING_CLASS">Set the capacity</h2>
+                  <p :class="TEXT_CLASS">
+                    Open Configure on the application and set
+                    <code :class="CODE_CLASS">capacity</code> to the requests per second your origin
+                    serves comfortably. Start at 80 percent of your measured peak.
                   </p>
-                  <h2>Let people in faster</h2>
-                  <p>
-                    Lower <code>session_minutes</code> so visitors who left free their place sooner.
+                </section>
+                <section class="flex flex-col gap-(--spacing-xs)">
+                  <h2 :class="HEADING_CLASS">Let people in faster</h2>
+                  <p :class="TEXT_CLASS">
+                    Lower <code :class="CODE_CLASS">session_minutes</code> so visitors who left free
+                    their place sooner.
                   </p>
-                  <h2>Test it</h2>
-                  <p>
+                </section>
+                <section class="flex flex-col gap-(--spacing-xs)">
+                  <h2 :class="HEADING_CLASS">Test it</h2>
+                  <p :class="TEXT_CLASS">
                     Set the capacity to 1 on a preview environment and open the application in two
                     browsers; the second one sees the queue page.
                   </p>
-                </DocProse>
+                </section>
               </div>
             </Tabs.Content>
             <Tabs.Content value="changelog">
