@@ -2,7 +2,7 @@
   import DocProse from '@aziontech/webkit/doc-prose'
   import { type Component, computed, onMounted, onScopeDispose, ref } from 'vue'
 
-  import { cached, keys } from '../lib/data'
+  import { cached, keys } from '../lib/route-data'
   import { scheduleMount } from '../lib/mount-queue'
   import type { Highlighted } from '../lib/types'
   import CodeView from './code-view.vue'
