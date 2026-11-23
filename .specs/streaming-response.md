@@ -3,9 +3,9 @@ name: streaming-response
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: eb667e3a512bc2be79eb5e6a531f3948901ea039d1e90708dacec448c1cd3395
+checksum: ee0beaedf6b6ba0d53d6adcc799d1e0ef9f020ed89c52a0b11a8fa57c5242257
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -18,13 +18,20 @@ Renders a model's Markdown as it streams in (AI Elements Response / Streamdown),
 is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so
 raw HTML in model output shows as text, `javascript:`, `data:` and protocol-relative links are dropped (only `http(s)`,
 `mailto`, `tel`, relative and `#` links survive, checked by the shared `safeHref`), and images render as their alt text. It covers what
-responses use: paragraphs, headings, bold, italic, inline code, links, lists, block quotes, GFM tables,
-rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while
+responses use: paragraphs, headings, bold, italic, inline code, links, lists (nested by indenting an
+item's lines under it, to any depth), block quotes, GFM tables, rules and fenced code (rendered with
+`CodeBlock`, copyable). Incomplete Markdown is tolerated while
 streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>`
 until it closes (no highlighting churn), and a half-written link shows its text only.
 
 Text renders at the reading size (`.text-body-lg`) with a full step (`--spacing-md`) between blocks,
-the plain, wide answer column of a chat. Numbered citations `[1]` become `Citation` chips holding
+the plain, wide answer column of a chat. Headings are bold, with an extra `--spacing-sm` above them so
+a section reads as a new start: `#` at `.text-heading-md`, every deeper level at the reading size. A
+fenced code block is one filled card (`--bg-surface-raised`, `--shape-card`, no border) whose header
+names the language on the start and holds the icon-only copy control on the end; the header sticks to
+the top of the log while a long block scrolls past, the code is never capped in height and scrolls
+sideways. While a fence is still open the same card shows the language header over plain text, so the
+block does not jump when it closes. Numbered citations `[1]` become `Citation` chips holding
 the source's site (from its `href`), resolved against `sources` and linked to the `Sources` list
 through a shared `anchor`. A blinking caret marks the end while
 `streaming`; the region is `aria-busy` until the stream ends.
@@ -82,8 +89,9 @@ through a shared `anchor`. A blinking caret marks the end while
 ## Sub-components
 
 _None public. Internals shared by the AI family in `src/components/ai/lib/`: `parse-markdown.ts`
-(`parseMarkdown`, `parseInline`, `safeHref`, `plainText`) and `markdown-inline.vue` (recursive inline
-renderer, also used by `ToolApproval` for backticks in its title). Exports: `"./streaming-response"`. Composed DS
+(`parseMarkdown`, `parseInline`, `safeHref`, `plainText`), `markdown-inline.ts` (recursive inline
+renderer, also used by `ToolApproval` for backticks in its title) and `markdown-list.ts` (recursive
+list renderer: nested lists render inside their item). Exports: `"./streaming-response"`. Composed DS
 components: `code-block`, `citation`._
 
 ## Props
@@ -108,7 +116,8 @@ _No slots — the content is the `content` string._
 - `data-streaming` and `aria-busy="true"` while `streaming`.
 - `data-slot="streaming-response"` on the root marks the answer text, which `ChatMessage.Actions` Read aloud speaks.
 - Caret: inside the last paragraph or heading, else after the last block; only while `streaming`.
-- Open fence while streaming: `<pre data-testid="…__pending-code">`; closed fence or stream ended: `CodeBlock`.
+- Open fence while streaming: the card `data-testid="…__pending-code"` (language header over a `<pre>`); closed fence or stream ended: `CodeBlock` with `show-label`, `:bordered="false"` and no height cap (`--code-block-max-height: none`).
+- Lists: a nested list carries `data-nested` (top margin `--spacing-xs`, an unordered one uses circles); `data-ordered` switches to decimals.
 
 ## Motion & Animations
 
@@ -121,8 +130,9 @@ _No slots — the content is the `content` string._
 | Region      | Token                                                                                              |
 | ----------- | -------------------------------------------------------------------------------------------------- |
 | body        | `.text-body-lg`, `var(--text-default)`                                                             |
-| headings    | `.text-heading-sm` (`#`), `.text-heading-xs`, `.text-heading-2xs`, `.text-label-md`                |
+| headings    | `.text-heading-md` (`#`), `.text-body-lg` (`##` and deeper), `font-semibold`, `--spacing-sm` above |
 | inline code | `.text-label-code-sm`, `var(--bg-surface-raised)`, `var(--shape-control)`                          |
+| code block  | `var(--bg-surface-raised)`, `var(--shape-card)`, header `.text-label-code-sm` `var(--text-muted)`  |
 | links       | `var(--text-link)`                                                                                 |
 | quote       | `var(--border-strong)`, `var(--text-muted)`                                                        |
 | table       | `var(--border-default)`, `var(--border-muted)`, header `var(--bg-surface-raised)`, `.text-body-sm` |
@@ -168,7 +178,7 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
 
 ## Examples
 
-_Examples in `packages/webkit/examples/streaming-response/`: Default (rich Markdown), Streaming (simulated tokens), With citations, Unsafe input._
+_Examples in `packages/webkit/examples/streaming-response/`: Default (rich Markdown with a nested list, a code card and a quote), Streaming (simulated tokens), With citations, Unsafe input._
 
 ## Constraints — DO NOT
 

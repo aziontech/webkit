@@ -14404,7 +14404,7 @@ shared with `StreamingResponse`. A private part, `parts/sources-mark.vue`, draws
 
 # Streaming Response
 
-> Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:`, `data:` and protocol-relative links are dropped (only `http(s)`, `mailto`, `tel`, relative and `#` links survive, checked by the shared `safeHref`), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists, block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Text renders at the reading size (`.text-body-lg`) with a full step (`--spacing-md`) between blocks, the plain, wide answer column of a chat. Numbered citations `[1]` become `Citation` chips holding the source's site (from its `href`), resolved against `sources` and linked to the `Sources` list through a shared `anchor`. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.
+> Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:`, `data:` and protocol-relative links are dropped (only `http(s)`, `mailto`, `tel`, relative and `#` links survive, checked by the shared `safeHref`), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists (nested by indenting an item's lines under it, to any depth), block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Text renders at the reading size (`.text-body-lg`) with a full step (`--spacing-md`) between blocks, the plain, wide answer column of a chat. Headings are bold, with an extra `--spacing-sm` above them so a section reads as a new start: `#` at `.text-heading-md`, every deeper level at the reading size. A fenced code block is one filled card (`--bg-surface-raised`, `--shape-card`, no border) whose header names the language on the start and holds the icon-only copy control on the end; the header sticks to the top of the log while a long block scrolls past, the code is never capped in height and scrolls sideways. While a fence is still open the same card shows the language header over plain text, so the block does not jump when it closes. Numbered citations `[1]` become `Citation` chips holding the source's site (from its `href`), resolved against `sources` and linked to the `Sources` list through a shared `anchor`. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.
 
 - Import: `import StreamingResponse from '@aziontech/webkit/streaming-response'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -14447,8 +14447,9 @@ shared with `StreamingResponse`. A private part, `parts/sources-mark.vue`, draws
 ## Sub-components
 
 _None public. Internals shared by the AI family in `src/components/ai/lib/`: `parse-markdown.ts`
-(`parseMarkdown`, `parseInline`, `safeHref`, `plainText`) and `markdown-inline.vue` (recursive inline
-renderer, also used by `ToolApproval` for backticks in its title). Exports: `"./streaming-response"`. Composed DS
+(`parseMarkdown`, `parseInline`, `safeHref`, `plainText`), `markdown-inline.ts` (recursive inline
+renderer, also used by `ToolApproval` for backticks in its title) and `markdown-list.ts` (recursive
+list renderer: nested lists render inside their item). Exports: `"./streaming-response"`. Composed DS
 components: `code-block`, `citation`._
 
 ## States
@@ -14456,7 +14457,8 @@ components: `code-block`, `citation`._
 - `data-streaming` and `aria-busy="true"` while `streaming`.
 - `data-slot="streaming-response"` on the root marks the answer text, which `ChatMessage.Actions` Read aloud speaks.
 - Caret: inside the last paragraph or heading, else after the last block; only while `streaming`.
-- Open fence while streaming: `<pre data-testid="…__pending-code">`; closed fence or stream ended: `CodeBlock`.
+- Open fence while streaming: the card `data-testid="…__pending-code"` (language header over a `<pre>`); closed fence or stream ended: `CodeBlock` with `show-label`, `:bordered="false"` and no height cap (`--code-block-max-height: none`).
+- Lists: a nested list carries `data-nested` (top margin `--spacing-xs`, an unordered one uses circles); `data-ordered` switches to decimals.
 
 ## Accessibility
 
@@ -14481,6 +14483,8 @@ components: `code-block`, `citation`._
     '',
     '1. Open Real-Time Purge from the products menu.',
     '2. Choose *URL* as the purge type.',
+    '   - `URL` removes one object.',
+    '   - `Wildcard` removes everything under a path.',
     '3. Paste the address and select Purge.',
     '',
     '| Purge type | When to use it |',
@@ -14492,7 +14496,9 @@ components: `code-block`, `citation`._
     '',
     '```bash',
     'azion purge urls --urls https://www.example.com/styles.css',
-    '```'
+    '```',
+    '',
+    '> A purge does not change the origin. Update the file there first.'
   ].join('\n')
 </script>
 
@@ -16405,7 +16411,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 # Code Block
 
-> Use CodeBlock to show code, config or JSON the person reads or copies, including read-only diffs (a tab's `original`); for code the person edits use CodeEditor, and for build, deploy or runtime log lines use LogViewer. Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** type (`type="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks. The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-syntax-*` palette:
+> Use CodeBlock to show code, config or JSON the person reads or copies, including read-only diffs (a tab's `original`); for code the person edits use CodeEditor, and for build, deploy or runtime log lines use LogViewer. Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** type (`type="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks. The **label header holds the copy control**: when it shows and the block is copyable, the CopyButton (`ghost`, `small`) sits at its end instead of floating over the code, so no line reserves a copy gutter (`data-copy-gutter` marks the root only while the copy floats). The header is `sticky` at the top of the nearest scroller (the root clips with `overflow: clip`, not `hidden`, so it never becomes the scroller itself) on the block's own fill, so a long block keeps its language and copy in view while it scrolls past. Its divider is drawn only when `bordered`: an unbordered block is one filled card, header and code on the same fill (the `StreamingResponse` look). The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-syntax-*` palette:
 
 - Import: `import CodeBlock from '@aziontech/webkit/code-block'`
 - Category: code · Surface: app · Structure: monolithic
@@ -16460,7 +16466,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 | `showLabel` | `boolean` | `false` | false | Shows a header naming the block when there is no tab strip or file name: the active tab's label, else the language's readable name (Shell, JavaScript). Docs blocks show it. |
 | `title` | `string` | `''` | false | Text of the label header; empty uses the tab label or the language name, or "Output" for an `output` block. |
 | `animateLines` | `boolean` | `false` | false | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart. |
-| `bordered` | `boolean` | `true` | false | Draw the outer card border around the block. On by default; set `:bordered="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
+| `bordered` | `boolean` | `true` | false | Draw the outer card border around the block. On by default; set `:bordered="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected; the label header's divider goes with the border. |
 | `diffView` | `'unified' \| 'split'` | `'unified'` | false | How a tab with an `original` draws the diff the block computes: `unified` (one column) or `split` (side by side). |
 | `modelValue` | `string \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
@@ -16489,6 +16495,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `data-state` on code lines: `default` | `added` | `removed` | `highlighted`; in the split view a side with no line opposite a change is `empty` (`var(--bg-canvas)`)
 - `data-split` on the panel when the active tab with an `original` draws side by side
 - `data-disabled` not used (tabs are not disabled in v2)
+- `data-copy-gutter` on the root while the copy control floats over the code (no label header); the scroll area and every line keep its width free
 - `data-type` on the root: `code` | `output`; `output` paints the shell `--bg-canvas` and every line flat in `--text-muted`
 
 #### Layout rules (derived from Figma)
@@ -16497,7 +16504,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 | --- | --- |
 | Tab header (`CodeBlockHeader`, 40 px strip: a 32 px tab over a 4 px inset) | `tabs.length > 1` |
 | Filename bar (`FileName`, 40 px) | active tab has `fileName` |
-| Label header (40 px, `az az-code` / `az az-align-left` + label) | no tab strip, no `fileName`, and `showLabel`, `title` or `type="output"` |
+| Label header (40 px, `az az-code` / `az az-align-left` + label, copy at the end, sticky) | no tab strip, no `fileName`, and `showLabel`, `title` or `type="output"` |
 | Diff gutter (`+`/`-` + 8 px spacer on unchanged lines) | active tab `lineChanges.length > 0`, or the active tab has an `original` |
 | Unified diff (removed lines from `original` before the added lines of `code` in each change, numbered on their own side) | active tab has an `original` and `diffView="unified"` |
 | Split diff (two columns, Original and Modified, rows aligned, a change paired line for line) | active tab has an `original` and `diffView="split"` |

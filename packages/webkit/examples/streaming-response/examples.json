@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "A finished response in Markdown: a heading, bold and inline code, a numbered list, a table and a fenced code block rendered as a copyable CodeBlock.",
+      "summary": "A finished response in Markdown: a heading, bold and inline code, a numbered list with a nested list, a table, a fenced code block drawn as a filled CodeBlock card with its language and copy in the header, and a quote.",
       "file": "default.vue"
     },
     {

@@ -105,6 +105,33 @@ const history: [string, string][] = [
     'Can it renew on its own?',
     'Yes. Automatic renewal is on for both domains, 30 days before expiry.'
   ],
+  [
+    'How do I check the certificate from a terminal?',
+    [
+      '### 1. Read the dates with OpenSSL',
+      '',
+      'Connect to the domain and print the validity window of `shop.example.com`:',
+      '',
+      '```bash',
+      'openssl s_client -connect shop.example.com:443 -servername shop.example.com </dev/null \\',
+      '  | openssl x509 -noout -dates',
+      '```',
+      '',
+      'The output has two lines:',
+      '',
+      '- `notBefore`: when the certificate became valid.',
+      '- `notAfter`: when it expires.',
+      '  - Renewal starts 30 days before this date.',
+      '',
+      '### 2. Check it with curl',
+      '',
+      '```bash',
+      'curl -vI https://shop.example.com 2>&1 | grep -i "expire date"',
+      '```',
+      '',
+      '**Important:** run both from outside your network, so you read the certificate the edge serves.'
+    ].join('\n')
+  ],
   ['What is the cache hit ratio today?', '**91%** over the last 24 hours, up from 87% last week.'],
   [
     'Which paths miss the cache most?',

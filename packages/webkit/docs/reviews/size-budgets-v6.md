@@ -1241,3 +1241,9 @@ Budget-raise: streaming-response 38.35 KB → 38.5 KB (measured 38.46 KB): citat
 Budget-raise: llms-full.txt 2,360,000 → 2,391,000 bytes (measured 2,367,236): the chat look proposal's spec, block and example changes in the full AI bundle.
 Budget-raise: prompt-input 14.65 KB → 15.1 KB (measured 15.08 KB): the attach control's "+" menu (chat look round 2): with `tools` it loads a menu part after mount (Camera, Photos, Files, then the tools as checkboxes, the turned-on tools as chips) and stacks the box while a chip shows; the menu, DropdownMenu and Chip stay in a lazy chunk.
 Budget-raise: prompt-input-attach-button 5.6 KB → 6.7 KB (measured 6.68 KB): the same "+" menu; the entry now holds the loader of the lazy menu part (the dynamic import wiring a standalone entry did not carry before) and the tools model.
+Budget-raise: code-block 33.85 KB → 34.0 KB (measured 33.99 KB): the label header holds the copy control at its end and sticks to the top of the scroller (chat look round 2), so a second CopyButton placement and the copy-gutter switch ship with the block.
+Budget-raise: doc-code-group 34.3 KB → 34.45 KB (measured 34.42 KB): the same CodeBlock label-header copy and sticky header, carried by the docs code group.
+Budget-raise: console-application-scene 121.95 KB → 122.15 KB (measured 122.12 KB): the same CodeBlock label-header copy, carried by the scene's code panel.
+Budget-raise: cli-terminal-section 47.15 KB → 47.3 KB (measured 47.28 KB): the same CodeBlock label-header copy, carried by the section.
+Budget-raise: feature-tabs-section 58.15 KB → 58.3 KB (measured 58.29 KB): the same CodeBlock label-header copy, carried by the section's code tab.
+Budget-raise: streaming-response 38.5 KB → 39.15 KB (measured 39.09 KB): nested lists (parser and recursive list renderer), bold headings and the filled code card with its language header, also while a fence is still open (chat look round 2).
