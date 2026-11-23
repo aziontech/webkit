@@ -399,7 +399,7 @@
                   <template v-if="isIncluded(row.values[index])">
                     <Tooltip :content="includedText">
                       <i
-                        class="az az-circle-check text-body-md text-(--success-foreground)"
+                        class="az az-circle-check text-body-md text-(--success-mark)"
                         aria-hidden="true"
                       />
                     </Tooltip>

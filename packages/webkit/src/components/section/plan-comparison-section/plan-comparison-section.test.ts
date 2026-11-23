@@ -213,9 +213,11 @@ describe('PlanComparisonSection', () => {
     )
     const included = within(rows[1]).getAllByRole('cell')[0]!
     expect(included.querySelector('.az-circle-check')).not.toBeNull()
+    expect(included.querySelector('.az-circle-check')!.classList).toContain('text-(--success-mark)')
     expect(within(included).getByTestId('tooltip')).toBeInTheDocument()
     const excluded = within(rows[3]).getAllByRole('cell')[0]!
     expect(excluded.querySelector('.az-circle-minus')).not.toBeNull()
+    expect(excluded.querySelector('.az-circle-minus')!.classList).toContain('text-(--text-muted)')
   })
 
   it('falls back to the locale labels when the cell labels are empty', () => {

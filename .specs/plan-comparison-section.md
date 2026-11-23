@@ -6,7 +6,7 @@ status: implemented
 spec_version: 11
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: 42f24cf21b5e0080e7e35eea0681708fe2992bc4f8a59b0ce3a5b13ab8fe9585
+checksum: c6e734ed939a68c435f6fb233967aefd8a24b8223e16e420e92d664aa45ed64b
 ---
 
 # PlanComparisonSection — Component Spec
@@ -135,7 +135,7 @@ _none_
 | header fill                 | `var(--bg-canvas)`                                                                    |
 | header stick offset         | `var(--layout-sticky-top)`                                                            |
 | accent bar                  | `var(--border-selected)`                                                              |
-| included mark               | `var(--success-foreground)`, `.text-body-md`                                          |
+| included mark               | `var(--success-mark)`, `.text-body-md`                                                |
 | not-included mark           | `var(--text-muted)`, `.text-body-md`                                                  |
 | picker empty status         | `.text-label-sm`, `var(--text-muted)`                                                 |
 | muted text                  | `var(--text-muted)`                                                                   |
