@@ -1,6 +1,27 @@
-import type { ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
+import type {
+  ConsoleLayoutNavGroup,
+  ConsoleLayoutNavItem
+} from '@aziontech/webkit/console-layout-root'
+import { reactive } from 'vue'
 
-export const navigation: ConsoleLayoutNavGroup[] = [
+const SOON = 'Soon'
+
+const leadsSomewhere = (item: ConsoleLayoutNavItem): boolean =>
+  Boolean(item.href) ||
+  (item.groups ?? []).some((group) => group.items.some(leadsSomewhere)) ||
+  (item.children ?? []).some(leadsSomewhere)
+
+const markPageless = (item: ConsoleLayoutNavItem): ConsoleLayoutNavItem => {
+  if (!leadsSomewhere(item))
+    return { ...item, disabled: true, tagValue: SOON, type: undefined, groups: undefined }
+  return {
+    ...item,
+    groups: item.groups?.map((group) => ({ ...group, items: group.items.map(markPageless) })),
+    children: item.children?.map(markPageless)
+  }
+}
+
+const tree: ConsoleLayoutNavGroup[] = [
   {
     items: [
       { id: 'home', label: 'Home', icon: 'az az-home', href: '/onboarding' },
@@ -30,7 +51,7 @@ export const navigation: ConsoleLayoutNavGroup[] = [
   {
     label: 'Data',
     items: [
-      { id: 'databases', label: 'Databases', icon: 'az az-database', tagValue: 'Preview' },
+      { id: 'databases', label: 'Databases', icon: 'az az-database' },
       { id: 'storage', label: 'Storage', icon: 'az az-inbox' }
     ]
   },
@@ -117,4 +138,9 @@ export const navigation: ConsoleLayoutNavGroup[] = [
   }
 ]
 
-export const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
+export const navigation: ConsoleLayoutNavGroup[] = tree.map((group) => ({
+  ...group,
+  items: group.items.map(markPageless)
+}))
+
+export const account = reactive({ name: 'Amy Chen', email: 'amy.chen@example.com' })

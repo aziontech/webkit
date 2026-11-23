@@ -55,9 +55,18 @@
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
   }
 
+  const ACCOUNT_ROUTES: Record<string, string> = {
+    settings: '/settings',
+    'ai-keys': '/settings/ai-keys',
+    upgrade: '/onboarding/plan',
+    logout: '/onboarding'
+  }
+
   const onAccountSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'theme:system' || value === 'theme:dark' || value === 'theme:light')
       theme.value = value.slice('theme:'.length) as ThemeSwitcherValue
+    const path = ACCOUNT_ROUTES[String(value)]
+    if (path) router.push(path)
   }
 </script>
 
@@ -77,6 +86,7 @@
       :navigation="navigation"
       :breadcrumbs="breadcrumbs"
       :account="account"
+      class="max-h-(--demo-viewport-height)"
       @search-select="onSearchSelect"
       @account-select="onAccountSelect"
     >
@@ -188,8 +198,8 @@
             </template>
           </DropdownMenu.Item>
           <DropdownMenu.Item
-            value="personal-tokens"
-            label="Personal tokens"
+            value="ai-keys"
+            label="AI provider keys"
           >
             <template #trailing>
               <i
@@ -244,6 +254,7 @@
           <DropdownMenu.Item
             value="docs"
             label="Docs"
+            href="https://example.com/docs"
           >
             <template #trailing>
               <i

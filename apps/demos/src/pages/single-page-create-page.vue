@@ -4,6 +4,7 @@
   import { useRouter } from 'vue-router'
 
   import CreatePage, { type CreatePageValues } from '../blocks/create-page.vue'
+  import { account } from '../lib/navigation'
   import { createResource } from '../lib/store'
 
   const router = useRouter()
@@ -23,6 +24,8 @@
 <template>
   <CreatePage
     :loading="saving"
+    :account-name="account.name"
+    @account="router.push('/settings')"
     @submit="onSubmit"
     @cancel="router.push('/resources')"
   />

@@ -29,8 +29,11 @@
       domain: found.domain,
       status: found.status,
       statusSeverity: found.status === 'Live' ? 'success' : 'neutral',
-      createdAt: found.modifiedAt,
-      createdBy: found.owner
+      createdAt: found.createdAt,
+      createdBy: found.owner,
+      ...(found.deployed
+        ? {}
+        : { deploymentId: '', environment: '', framework: '', frameworkIcon: '' })
     }
   })
 

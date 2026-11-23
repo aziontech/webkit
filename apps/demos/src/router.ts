@@ -94,7 +94,12 @@ const routes: RouteRecordRaw[] = [
       breadcrumbs: [{ label: 'Account settings' }, { label: 'AI provider keys' }]
     }
   },
-  { path: '/:path(.*)*', redirect: '/resources' }
+  {
+    path: '/:path(.*)*',
+    name: 'not-found',
+    component: () => import('./pages/not-found-page.vue'),
+    meta: { title: 'Page not found' }
+  }
 ]
 
 export const router = createRouter({
@@ -123,11 +128,7 @@ function pageTookFocus(): boolean {
   )
 }
 
-function focusPage(): boolean {
-  const target =
-    document.querySelector<HTMLElement>('main h1') ??
-    document.querySelector<HTMLElement>('h1') ??
-    document.querySelector<HTMLElement>('main')
+export function focusElement(target: HTMLElement | null): boolean {
   if (!target) return false
   if (!target.hasAttribute('tabindex')) {
     target.setAttribute('tabindex', '-1')
@@ -143,6 +144,22 @@ function focusPage(): boolean {
   }
   target.focus({ preventScroll: true })
   return true
+}
+
+function focusPage(): boolean {
+  return focusElement(
+    document.querySelector<HTMLElement>('main h1') ??
+      document.querySelector<HTMLElement>('h1') ??
+      document.querySelector<HTMLElement>('main')
+  )
+}
+
+export function focusResourceRow(id: string) {
+  globalThis.requestAnimationFrame(() => {
+    const row = id ? document.querySelector<HTMLElement>(`main a[href="/resources/${id}"]`) : null
+    if (row) row.focus({ preventScroll: false })
+    else focusPage()
+  })
 }
 
 export const announcement = ref('')

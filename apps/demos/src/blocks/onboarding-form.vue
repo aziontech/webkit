@@ -421,7 +421,7 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
+  <div class="flex h-(--demo-viewport-height) flex-col overflow-hidden bg-(--bg-canvas)">
     <AppHeader
       aria-label="Console"
       class="shrink-0"
@@ -572,14 +572,9 @@
                               <div
                                 class="flex w-full items-center justify-between gap-(--spacing-sm)"
                               >
-                                <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-                                  <span class="text-body-sm text-(--text-default)">{{
-                                    option.label
-                                  }}</span>
-                                  <span class="text-body-xs text-(--text-muted)">{{
-                                    option.description
-                                  }}</span>
-                                </div>
+                                <span class="min-w-0 text-body-sm text-(--text-default)">{{
+                                  option.label
+                                }}</span>
                                 <div class="flex shrink-0 flex-col items-end gap-(--spacing-2xs)">
                                   <Tag
                                     :label="option.name"

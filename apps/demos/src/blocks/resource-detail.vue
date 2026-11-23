@@ -7,6 +7,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
+  import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Subheader from '@aziontech/webkit/subheader'
@@ -29,7 +30,7 @@
     name: string
     /** The live address, without the scheme; Visit and both address links open it. */
     domain: string
-    /** The deployment that serves the address, linked to its page. */
+    /** The deployment that serves the address, linked to its page; empty shows No deployment yet. */
     deploymentId: string
     /** The environment of that deployment, shown as a tag. */
     environment: string
@@ -41,7 +42,7 @@
     createdAt: Date
     /** Who created it, shown with an avatar. */
     createdBy: string
-    /** The framework preset label. */
+    /** The framework preset label; empty shows Not detected. */
     framework: string
     /** The framework icon class, a colored icon such as az-color az-nextjs. */
     frameworkIcon: string
@@ -200,6 +201,14 @@ jobs:
 
 <template>
   <div class="flex min-h-0 flex-1 flex-col">
+    <div
+      class="layout-column layout-boundary-inline flex min-w-0 flex-col pt-(--layout-boundary-start)"
+    >
+      <PageHeader
+        :title="resource.name"
+        size="small"
+      />
+    </div>
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
         <Tabs.Trigger
@@ -304,7 +313,15 @@ jobs:
                     <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                       <span class="text-label-sm text-(--text-muted)">Deployment</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-                        <div class="flex min-w-0">
+                        <span
+                          v-if="!resource.deploymentId"
+                          class="truncate text-body-sm text-(--text-muted)"
+                          >No deployment yet</span
+                        >
+                        <div
+                          v-else
+                          class="flex min-w-0"
+                        >
                           <Tooltip
                             :content="`Open ${resource.deploymentId} in Deployments`"
                             class="w-full"
@@ -317,6 +334,7 @@ jobs:
                           </Tooltip>
                         </div>
                         <Tag
+                          v-if="resource.deploymentId && resource.environment"
                           :label="resource.environment"
                           severity="neutral"
                           size="small"
@@ -378,13 +396,22 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Framework</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <i
+                          v-if="resource.framework && resource.frameworkIcon"
                           :class="resource.frameworkIcon"
                           class="shrink-0 text-body-lg"
                           aria-hidden="true"
                         />
-                        <span class="truncate text-body-sm text-(--text-default)">
+                        <span
+                          v-if="resource.framework"
+                          class="truncate text-body-sm text-(--text-default)"
+                        >
                           {{ resource.framework }}
                         </span>
+                        <span
+                          v-else
+                          class="truncate text-body-sm text-(--text-muted)"
+                          >Not detected</span
+                        >
                       </div>
                     </div>
                   </div>

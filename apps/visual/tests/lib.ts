@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 import type { Page } from '@playwright/test'
 
 export const DOCS = 'http://localhost:4173'
-export const DEMOS = 'http://localhost:4174'
+export const DEMOS = process.env.VISUAL_DEMOS_URL ?? 'http://localhost:4174'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..')
 const WEBKIT = join(ROOT, 'packages/webkit')

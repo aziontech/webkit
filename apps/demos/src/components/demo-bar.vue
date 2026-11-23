@@ -85,7 +85,8 @@
 <template>
   <nav
     :aria-label="t.bar"
-    class="fixed start-(--spacing-md) bottom-[calc(var(--spacing-md)+var(--save-bar-inset,0rem))] z-40 flex max-w-[calc(100vw-2*var(--spacing-md))] items-end gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xs) shadow-(--shadow-lg)"
+    data-demo-bar
+    class="fixed inset-x-0 bottom-0 z-40 flex min-h-(--demo-bar-height) items-center gap-(--spacing-xs) border-t border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-md) py-(--spacing-xs)"
   >
     <Tooltip :content="expanded ? t.hide : t.show">
       <IconButton
