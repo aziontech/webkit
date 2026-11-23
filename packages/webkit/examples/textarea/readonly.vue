@@ -18,6 +18,8 @@
       :spellcheck="false"
       readonly
       monospace
+      auto-resize
+      :max-rows="8"
     />
     <Field.Description>Issued by Azion. Upload a new certificate to replace it.</Field.Description>
   </Field>

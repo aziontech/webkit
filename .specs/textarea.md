@@ -3,14 +3,14 @@ name: textarea
 category: input
 structure: monolithic
 status: implemented
-spec_version: 11
+spec_version: 12
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 3d508f56a6659cf44e8bd74e1944e4a4bff53efc01e9233a89d69c82e2bb1fc1
+checksum: 67a4a2b27df13cbd708b1c07c78fa71c9a93d558a508f26432944d42c883e6f3
 created: 2026-06-23
-last_updated: 2026-11-19
+last_updated: 2026-11-22
 ---
 
 # Textarea — Component Spec
@@ -83,18 +83,18 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
 
 ## Props
 
-| Prop          | Type                                             | Default      | Required | JSDoc                                                                                                                                                                                                                                                                |
-| ------------- | ------------------------------------------------ | ------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `placeholder` | `string`                                         | `''`         | false    | Placeholder shown when the field is empty.                                                                                                                                                                                                                           |
-| `disabled`    | `boolean`                                        | `false`      | false    | Disables interaction and applies disabled tokens.                                                                                                                                                                                                                    |
-| `readonly`    | `boolean`                                        | `false`      | false    | Marks the field read-only: the value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`), the same look as `Input`; distinct from the disabled field. |
-| `invalid`     | `boolean`                                        | `false`      | false    | Applies invalid styling and sets `aria-invalid`.                                                                                                                                                                                                                     |
-| `required`    | `boolean`                                        | `false`      | false    | Marks the field as required and sets `aria-required`.                                                                                                                                                                                                                |
-| `resize`      | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior.                                                                                  |
-| `monospace`   | `boolean`                                        | `false`      | false    | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`.                                                                |
-| `autoResize`  | `boolean`                                        | `false`      | false    | Grows the field with its content instead of a fixed height (`data-auto-resize`): CSS `field-sizing: content`, with a measured height where the browser lacks it. Turns the drag handle off.                                                                          |
-| `minRows`     | `number`                                         | `1`          | false    | Lines the field shows when empty while `autoResize` is on. Ignored without `autoResize`.                                                                                                                                                                             |
-| `maxRows`     | `number`                                         | `0`          | false    | Lines the field grows to before it scrolls while `autoResize` is on (`data-max-rows`); `0` sets no limit. Ignored without `autoResize`.                                                                                                                              |
+| Prop          | Type                                             | Default      | Required | JSDoc                                                                                                                                                                                                                                                                                                            |
+| ------------- | ------------------------------------------------ | ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `placeholder` | `string`                                         | `''`         | false    | Placeholder shown when the field is empty.                                                                                                                                                                                                                                                                       |
+| `disabled`    | `boolean`                                        | `false`      | false    | Disables interaction and applies disabled tokens.                                                                                                                                                                                                                                                                |
+| `readonly`    | `boolean`                                        | `false`      | false    | Marks the field read-only: the value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`), the same look as `Input`; distinct from the disabled field.                                             |
+| `invalid`     | `boolean`                                        | `false`      | false    | Applies invalid styling and sets `aria-invalid`.                                                                                                                                                                                                                                                                 |
+| `required`    | `boolean`                                        | `false`      | false    | Marks the field as required and sets `aria-required`.                                                                                                                                                                                                                                                            |
+| `resize`      | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior.                                                                                                                              |
+| `monospace`   | `boolean`                                        | `false`      | false    | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`) with `wrap="off"`: each line stays whole and the field scrolls sideways, so a record or a key never breaks across lines for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`. |
+| `autoResize`  | `boolean`                                        | `false`      | false    | Grows the field with its content instead of a fixed height (`data-auto-resize`): CSS `field-sizing: content`, with a measured height where the browser lacks it. Turns the drag handle off.                                                                                                                      |
+| `minRows`     | `number`                                         | `1`          | false    | Lines the field shows when empty while `autoResize` is on. Ignored without `autoResize`.                                                                                                                                                                                                                         |
+| `maxRows`     | `number`                                         | `0`          | false    | Lines the field grows to before it scrolls while `autoResize` is on (`data-max-rows`); `0` sets no limit. Ignored without `autoResize`.                                                                                                                                                                          |
 
 ## v-model
 
@@ -188,7 +188,7 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 ## Responsive
 
 - Container queries: none; the field is `width: 100%` of its container.
-- Narrow (≤ 640 px or a narrow container): the text wraps; with `autoResize` a narrower field grows taller, since the height follows the wrapped lines.
+- Narrow (≤ 640 px or a narrow container): the text wraps (a `monospace` field keeps each line whole and scrolls sideways); with `autoResize` a narrower field grows taller, since the height follows the wrapped lines.
 - Touch: the field is the target (≥ 32 px with `autoResize` and one row, 80 px otherwise); no hover-only affordance.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; a `resizable="horizontal"` or `"both"` field can be dragged wider by the person.
 - Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.

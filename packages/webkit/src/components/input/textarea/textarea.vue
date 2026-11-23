@@ -25,7 +25,7 @@
     required?: boolean
     /** Which axes the user can drag to resize the field, named after the CSS resize property. */
     resize?: TextareaResize
-    /** Sets the value and placeholder in the monospace code face, for pasted zone files, certificates, JSON and lists of IPs. */
+    /** Sets the value and placeholder in the monospace code face, for pasted zone files, certificates, JSON and lists of IPs; lines do not wrap and the field scrolls sideways. */
     monospace?: boolean
     /** Grows the field with its content instead of a fixed height; turns the drag handle off. */
     autoResize?: boolean
@@ -109,7 +109,7 @@
   const ROOT_CLASS =
     'relative block min-w-0 min-h-[80px] px-(--spacing-sm) py-(--spacing-sm) rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) text-body-xs ' +
     'text-(--text-default) ' +
-    'data-[monospace]:text-body-code-sm ' +
+    'data-[monospace]:text-body-code-sm data-[monospace]:whitespace-pre data-[monospace]:overflow-x-auto ' +
     'pointer-coarse:text-body-md pointer-coarse:data-[monospace]:text-label-code-lg placeholder:text-(--text-muted) ' +
     'transition-colors duration-150 ease-out motion-reduce:transition-none ' +
     '[&:not(:focus):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong) ' +
@@ -145,6 +145,7 @@
     :data-required="isRequired || null"
     :data-readonly="readonly || null"
     :data-monospace="monospace || null"
+    :wrap="monospace ? 'off' : undefined"
     :data-filled="isFilled || null"
     :data-resize="resizeAxis"
     :data-auto-resize="autoResize || null"
