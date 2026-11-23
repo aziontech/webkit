@@ -463,6 +463,7 @@ export const es: Messages = {
     open: 'Abrir calendario',
     chooseDate: 'Elegir fecha',
     apply: 'Aplicar',
+    cancel: 'Cancelar',
     previousMonth: 'Mes anterior',
     nextMonth: 'Mes siguiente',
     month: 'Mes',
@@ -646,7 +647,8 @@ export const es: Messages = {
     required: '(Obligatorio)'
   },
   fileDropzone: {
-    title: 'Suelta archivos para subirlos'
+    title: 'Suelta archivos para subirlos',
+    touchTitle: 'Elige archivos para subirlos'
   },
   audioPlayer: {
     label: 'Reproductor de audio',
@@ -919,7 +921,8 @@ export const es: Messages = {
     number: 'Número',
     lowercase: 'Letra minúscula',
     met: 'cumplido',
-    unmet: 'no cumplido'
+    unmet: 'no cumplido',
+    progress: '{met} de {total} requisitos cumplidos'
   },
   phoneInput: {
     dialCode: 'Código de marcación del país',
@@ -1005,6 +1008,7 @@ export const es: Messages = {
     minLength: 'Usa al menos {min} caracteres.',
     maxLength: 'Usa como máximo {max} caracteres.',
     pattern: 'Este valor no sigue el formato esperado.',
+    patternRule: 'Revisa el formato: {rule}',
     minimum: 'Ingresa {min} o más.',
     maximum: 'Ingresa {max} o menos.',
     number: 'Ingresa un número.',

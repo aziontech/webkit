@@ -294,6 +294,7 @@ export const datePicker = {
   open: 'Open calendar',
   chooseDate: 'Choose date',
   apply: 'Apply',
+  cancel: 'Cancel',
   previousMonth: 'Previous month',
   nextMonth: 'Next month',
   month: 'Month',
@@ -475,7 +476,8 @@ export const field = {
 } as const
 
 export const fileDropzone = {
-  title: 'Drop files to upload'
+  title: 'Drop files to upload',
+  touchTitle: 'Choose files to upload'
 } as const
 
 export const audioPlayer = {
@@ -778,7 +780,8 @@ export const passwordRequirements = {
   number: 'Number',
   lowercase: 'Lowercase letter',
   met: 'met',
-  unmet: 'not met'
+  unmet: 'not met',
+  progress: '{met} of {total} requirements met'
 } as const
 
 export const phoneInput = {
@@ -871,6 +874,7 @@ export const schemaForm = {
   minLength: 'Use at least {min} characters.',
   maxLength: 'Use at most {max} characters.',
   pattern: "This value doesn't match the expected format.",
+  patternRule: 'Check the format: {rule}',
   minimum: 'Enter {min} or more.',
   maximum: 'Enter {max} or less.',
   number: 'Enter a number.',

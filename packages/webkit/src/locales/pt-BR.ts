@@ -463,6 +463,7 @@ export const ptBR: Messages = {
     open: 'Abrir calendário',
     chooseDate: 'Escolher data',
     apply: 'Aplicar',
+    cancel: 'Cancelar',
     previousMonth: 'Mês anterior',
     nextMonth: 'Próximo mês',
     month: 'Mês',
@@ -646,7 +647,8 @@ export const ptBR: Messages = {
     required: '(Obrigatório)'
   },
   fileDropzone: {
-    title: 'Solte arquivos para enviar'
+    title: 'Solte arquivos para enviar',
+    touchTitle: 'Escolha arquivos para enviar'
   },
   audioPlayer: {
     label: 'Player de áudio',
@@ -919,7 +921,8 @@ export const ptBR: Messages = {
     number: 'Número',
     lowercase: 'Letra minúscula',
     met: 'atendido',
-    unmet: 'não atendido'
+    unmet: 'não atendido',
+    progress: '{met} de {total} requisitos atendidos'
   },
   phoneInput: {
     dialCode: 'Código de discagem do país',
@@ -1005,6 +1008,7 @@ export const ptBR: Messages = {
     minLength: 'Use pelo menos {min} caracteres.',
     maxLength: 'Use no máximo {max} caracteres.',
     pattern: 'Este valor não segue o formato esperado.',
+    patternRule: 'Confira o formato: {rule}',
     minimum: 'Informe {min} ou mais.',
     maximum: 'Informe {max} ou menos.',
     number: 'Informe um número.',

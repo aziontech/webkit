@@ -1,10 +1,11 @@
 <script setup lang="ts">
-  import { useElementSize } from '@vueuse/core'
-  import { computed, ref, useAttrs, useId } from 'vue'
+  import { useElementSize, watchDebounced } from '@vueuse/core'
+  import { computed, inject, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
 
   import { type MessageKey } from '../../../composables/use-locale'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { FieldInjectionKey } from '../field/injection-key'
   import { DEFAULT_PASSWORD_REQUIREMENTS, type PasswordRequirementsRule } from './rules'
 
   defineOptions({
@@ -31,6 +32,9 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ passwordRequirements: en.passwordRequirements })
   const titleId = `password-requirements-${useId()}`
+  const rulesId = `${titleId}-rules`
+  const field = inject(FieldInjectionKey, null)
+  if (field) onBeforeUnmount(field.register('description', rulesId))
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'password-requirements'
@@ -60,6 +64,16 @@
     })
   )
 
+  const progress = ref('')
+  watchDebounced(
+    () => props.value,
+    () => {
+      const met = evaluated.value.filter((requirement) => requirement.met).length
+      progress.value = t('passwordRequirements.progress', { met, total: evaluated.value.length })
+    },
+    { debounce: 1000 }
+  )
+
   const CHIP_CLASS =
     'inline-flex shrink-0 items-center justify-center min-h-5 p-(--spacing-2xs) rounded-(--shape-control) leading-none text-label-sm transition-colors duration-fast-02 ' +
     'ease-productive-entrance motion-reduce:transition-none bg-(--bg-placeholder) text-(--text-muted) ' +
@@ -84,6 +98,7 @@
     class="w-full overflow-hidden transition-[height] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
   >
     <div
+      :id="rulesId"
       ref="contentEl"
       class="flex w-full flex-wrap content-center items-center gap-(--spacing-xs)"
     >
@@ -117,5 +132,11 @@
         >
       </span>
     </div>
+    <span
+      role="status"
+      class="sr-only"
+      :data-testid="`${testId}__progress`"
+      >{{ progress }}</span
+    >
   </div>
 </template>
