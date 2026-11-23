@@ -14,6 +14,7 @@ import InputDefault from '../../examples/input/default.vue'
 import MultiSelectDefault from '../../examples/multi-select/default.vue'
 import NumberInputDefault from '../../examples/number-input/default.vue'
 import SelectDefault from '../../examples/select/default.vue'
+import SettingsGroupDefault from '../../examples/settings-group/default.vue'
 import TabsDefault from '../../examples/tabs/default.vue'
 import ThemeSwitcherDefault from '../../examples/theme-switcher/default.vue'
 
@@ -94,6 +95,20 @@ describe('tap targets on a coarse pointer (styled)', () => {
         expect(stepper.getBoundingClientRect().width).toBeGreaterThanOrEqual(39)
         expect(hitSpan(stepper, 'y')).toBeGreaterThanOrEqual(44)
       }
+    })
+
+    it('SettingsGroup copy-link answers its own 44px and never the Hint beside it', async () => {
+      await touch()
+      const view = await mount(SettingsGroupDefault)
+      const link = byTestId(view.container as HTMLElement, 'settings-group__copy-link')[0]!
+      const hint = link.parentElement!.querySelector<HTMLElement>('[data-testid="hint__trigger"]')!
+      expect(hitSpan(link, 'y')).toBeGreaterThanOrEqual(44)
+      expect(hitSpan(link, 'x')).toBeGreaterThanOrEqual(44)
+      const linkBox = link.getBoundingClientRect()
+      const hintBox = hint.getBoundingClientRect()
+      const linkCentre = linkBox.left + linkBox.width / 2
+      const hintCentre = hintBox.left + hintBox.width / 2
+      expect(Math.abs(linkCentre - hintCentre)).toBeGreaterThanOrEqual(44)
     })
 
     it('ThemeSwitcher segments answer a tap across 44 x 44', async () => {

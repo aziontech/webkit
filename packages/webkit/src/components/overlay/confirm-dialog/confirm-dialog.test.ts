@@ -209,6 +209,9 @@ describe('ConfirmDialog', () => {
       const field = byTestId('confirm-dialog__phrase') as HTMLInputElement
       const label = document.getElementById(field.getAttribute('aria-labelledby') ?? '')
       expect(label?.textContent?.replace(/\s+/g, ' ').trim()).toBe('Type acme-store to confirm.')
+      expect(field.getAttribute('autocapitalize')).toBe('off')
+      expect(field.getAttribute('autocorrect')).toBe('off')
+      expect(field.getAttribute('spellcheck')).toBe('false')
       await expectNoA11yViolations(document.body)
     })
 

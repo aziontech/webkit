@@ -3,10 +3,10 @@ name: confirm-dialog
 category: overlay
 structure: monolithic
 status: implemented
-checksum: 95547c59d598e70c4d83f4982255b0280057cde4b3898795504c554c1c79df4d
-spec_version: 9
+checksum: 8900f3a8b5cc22d37d68f5a36ec739505fffab6f79f1ce7c7a6caf7158446e2e
+spec_version: 10
 created: 2026-11-10
-last_updated: 2026-11-19
+last_updated: 2026-11-22
 ---
 
 # ConfirmDialog — Component Spec
@@ -131,7 +131,7 @@ _none_
 
 - Visible focus: owned by the buttons and `dialog`.
 - Keyboard map: with `confirmationPhrase`, focus lands on the phrase field (the confirm button is disabled until it matches), and `Enter` in the field confirms once the text matches. Otherwise, on open, focus lands on Cancel, the least destructive action (WAI-ARIA alert dialog pattern; Cancel carries `data-autofocus`, which the shared focus trap honours); with the `actions` slot it lands on the first focusable control, or on the slot control marked `data-autofocus`. `Esc` closes; `Tab` is trapped in the dialog and focus returns to the trigger on close (from `dialog`). There is no close button: an alert dialog is answered with Cancel, the confirm button or `Esc`. Tests: `confirm-dialog.test.ts` › opens with focus on Cancel.
-- The phrase field is labelled by its sentence (`aria-labelledby`, "Type `name` to confirm." from the locale catalog, `confirmDialog.typeToConfirm`). Tests: `confirm-dialog.test.ts` › typed confirmation.
+- The phrase field is labelled by its sentence (`aria-labelledby`, "Type `name` to confirm." from the locale catalog, `confirmDialog.typeToConfirm`). It turns off spellcheck, autocomplete, autocapitalize and autocorrect, so a phone keyboard never changes the case of a typed name the match then rejects. Tests: `confirm-dialog.test.ts` › typed confirmation.
 - ARIA: the panel is `role="alertdialog"` (it interrupts with a decision), named by its title and described by its description (`DialogTitle`, `DialogDescription`; `aria-describedby` only when a description renders).
 - Nested: opened from a `Drawer` or a `Dialog`, it is the top overlay layer, so `Esc` closes the confirm only, and while `loading` it closes nothing.
 - Contrast ≥4.5:1, owned by the composed parts.

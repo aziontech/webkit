@@ -101,6 +101,29 @@
     indicatorVisible.value = true
   }
 
+  const revealActive = () => {
+    const list = listEl.value
+    const tabEl = context.tabs.value.find((entry) => entry.value === indicatorTarget.value)?.el
+      .value
+    if (!list || !tabEl || list.scrollWidth <= list.clientWidth) return
+    const listRect = list.getBoundingClientRect()
+    const tabRect = tabEl.getBoundingClientRect()
+    const edge = Math.min(24, Math.max(0, (listRect.width - tabRect.width) / 2))
+    if (tabRect.left < listRect.left + edge) {
+      list.scrollLeft -= listRect.left + edge - tabRect.left
+    } else if (tabRect.right > listRect.right - edge) {
+      list.scrollLeft += tabRect.right - (listRect.right - edge)
+    }
+  }
+
+  const scheduleReveal = () => {
+    nextTick(() => {
+      revealActive()
+      syncIndicator()
+      updateScrollAffordance()
+    })
+  }
+
   const observeSizes = () => {
     if (!resizeObserver || !listEl.value) return
     resizeObserver.disconnect()
@@ -112,6 +135,7 @@
 
   onMounted(() => {
     scheduleIndicatorSync()
+    scheduleReveal()
     listEl.value?.addEventListener('scroll', updateScrollAffordance, { passive: true })
 
     if (typeof ResizeObserver !== 'undefined' && listEl.value) {
@@ -129,7 +153,10 @@
     resizeObserver = null
   })
 
-  watch(indicatorTarget, scheduleIndicatorSync)
+  watch(indicatorTarget, () => {
+    scheduleIndicatorSync()
+    scheduleReveal()
+  })
   watch(() => context.tabs.value, scheduleIndicatorSync, { deep: true })
 
   const INDICATOR_CLASS =

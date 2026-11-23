@@ -172,6 +172,8 @@
             :disabled="loading"
             :spellcheck="false"
             autocomplete="off"
+            autocapitalize="off"
+            autocorrect="off"
             size="large"
             class="w-full"
             data-autofocus
