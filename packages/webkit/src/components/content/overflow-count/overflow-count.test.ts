@@ -91,6 +91,35 @@ describe('OverflowCount', () => {
     expect(byTestId('overflow-count__no-match')!.textContent).toContain('“nothing”')
   })
 
+  it('gives the +N trigger a 44px hit area on a coarse pointer', () => {
+    render(OverflowCount, { props: { items: tags } })
+    const hit = byTestId('overflow-count__touch-target')!
+    expect(trigger().contains(hit)).toBe(true)
+    expect(hit.getAttribute('aria-hidden')).toBe('true')
+    expect(hit.classList.contains('pointer-coarse:block')).toBe(true)
+  })
+
+  it('focuses the panel, not the search, when a touch opens it', async () => {
+    render(OverflowCount, { props: { items: tags } })
+    const control = trigger().querySelector('button') ?? trigger()
+    control.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerType: 'touch' }))
+    await fireEvent.click(control)
+    await waitFor(() => expect(byTestId('overflow-count__search')).not.toBeNull())
+    await waitFor(() =>
+      expect(document.activeElement).toBe(byTestId('overflow-count__popover__panel'))
+    )
+  })
+
+  it('keeps focus on the search when a mouse opens it', async () => {
+    render(OverflowCount, { props: { items: tags } })
+    const control = trigger().querySelector('button') ?? trigger()
+    control.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerType: 'mouse' }))
+    await fireEvent.click(control)
+    await waitFor(() =>
+      expect(byTestId('overflow-count__search')?.contains(document.activeElement)).toBe(true)
+    )
+  })
+
   it('resets the query and paging when it closes', async () => {
     render(OverflowCount, { props: { items: tags } })
     const control = trigger().querySelector('button') ?? trigger()
