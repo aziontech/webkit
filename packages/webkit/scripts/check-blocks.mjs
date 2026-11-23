@@ -20,6 +20,19 @@ const CATALOG_PATH = resolve(SCRIPT_DIR, '../catalog.json')
 const BASELINE_PATH = resolve(SCRIPT_DIR, 'blocks-baseline.json')
 const PENDING_PATH = resolve(SCRIPT_DIR, 'guidelines-baseline.json')
 const DATA_BASELINE_PATH = resolve(SCRIPT_DIR, 'blocks-data-baseline.json')
+const DATA_MESSAGES = {
+  'variant-copy':
+    'the VARIANT variant repeats 90 % or more of the primary SFC. Import the primary and pass it other props or slots.',
+  'variant-fork':
+    'the VARIANT variant copies 60 % or more of the primary SFC and adds its own code, so it misses every later fix to the primary. ' +
+    'Import the primary and give it the prop, slot or event the state needs.',
+  'variant-sibling-copy':
+    'the VARIANT variant repeats 80 % or more of another variant of the block. Move the shared screen into a part or the primary and render it with props.',
+  'no-props':
+    'the primary SFC declares no props. Take the records, loading and error through typed props and emit the actions.',
+  'inline-records':
+    'the primary SFC holds sample records. Move them to a sample file listed in block.json "files" and pass them in as props.'
+}
 const SKILL_DIRS = [resolve(REPO_ROOT, 'skills')]
 
 export function skillExists(name, dirs = SKILL_DIRS) {
@@ -211,15 +224,7 @@ async function main() {
   } else {
     for (const key of data.introduced) {
       const [id, kind, variant] = key.split(':')
-      errors.push(
-        kind === 'variant-copy'
-          ? `blocks/${id}: the ${variant} variant repeats 90 % or more of the primary SFC. Import the primary and pass it other props or slots.`
-          : kind === 'variant-fork'
-            ? `blocks/${id}: the ${variant} variant copies 60 % or more of the primary SFC and adds its own code, so it misses every later fix to the primary. Import the primary and give it the prop, slot or event the state needs.`
-            : kind === 'no-props'
-              ? `blocks/${id}: the primary SFC declares no props. Take the records, loading and error through typed props and emit the actions.`
-              : `blocks/${id}: the primary SFC holds sample records. Move them to a sample file listed in block.json "files" and pass them in as props.`
-      )
+      errors.push(`blocks/${id}: ${DATA_MESSAGES[kind].replace('VARIANT', variant)}`)
     }
     if (data.fixed.length)
       process.stdout.write(
