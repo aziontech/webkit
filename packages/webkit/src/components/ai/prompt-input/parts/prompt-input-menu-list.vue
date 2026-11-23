@@ -51,7 +51,7 @@
 
   const OPTION_CLASS =
     'flex cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) border-y border-transparent bg-clip-padding ' +
-    'forced-colors:border-y-0 px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default) ' +
+    'forced-colors:border-y-0 px-(--spacing-xs) py-(--spacing-2xs) pointer-coarse:min-h-11 text-label-sm text-(--text-default) ' +
     'hover:bg-(--bg-hover) ' +
     'data-[active]:bg-(--bg-selected)'
 </script>

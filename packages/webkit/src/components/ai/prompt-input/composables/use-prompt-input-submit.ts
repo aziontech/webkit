@@ -1,5 +1,6 @@
 import { computed, type ComputedRef, nextTick, type Ref, watch } from 'vue'
 
+import { useMediaQuery } from '../../../../composables/use-media-query'
 import { referenceToken } from '../lib/references'
 import type { PromptInputFile, PromptInputReference, PromptInputStatus } from '../types'
 
@@ -30,6 +31,8 @@ export interface UsePromptInputSubmitReturn {
   canSubmit: ComputedRef<boolean>
   showVoice: ComputedRef<boolean>
   submit: (event: MouseEvent | KeyboardEvent) => void
+  enterKeyHint: ComputedRef<'send' | 'enter'>
+  submitOnEnter: (event: KeyboardEvent, composing: boolean) => void
 }
 
 function restoreFocus(controlEl: HTMLElement | null, focus: () => void): void {
@@ -81,5 +84,15 @@ export function usePromptInputSubmit(
     })
   }
 
-  return { overBy, busy, canSubmit, showVoice, submit }
+  const coarsePointer = useMediaQuery('(pointer: coarse)')
+  const enterKeyHint = computed<'send' | 'enter'>(() => (coarsePointer.value ? 'enter' : 'send'))
+
+  function submitOnEnter(event: KeyboardEvent, composing: boolean): void {
+    if (event.key !== 'Enter' || event.shiftKey || event.isComposing || composing) return
+    if (coarsePointer.value) return
+    event.preventDefault()
+    submit(event)
+  }
+
+  return { overBy, busy, canSubmit, showVoice, submit, enterKeyHint, submitOnEnter }
 }
