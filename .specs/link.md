@@ -4,7 +4,7 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 7
-checksum: 80f672b4121d5658de21f0fac85ebe3c195821accd05d5088352c051931f60e6
+checksum: 764e2563133588dd7cec4ad34fd94f0e0077adb2063c183ccb5a7f210be774e3
 created: 2026-05-22
 last_updated: 2026-11-21
 figma:
@@ -39,7 +39,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 - Always set `href` and a label that names the destination; an empty `href` renders `#` so the anchor stays focusable, and an empty label falls back to the locale catalog (`Learn more`).
 - Pass the label as the default slot or the `label` prop; the slot wins when both are set.
-- `target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `az az-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.
+- `target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `az az-external-link` glyph so an off-site link reads as one; a `_blank` link also carries visually hidden text from the locale catalog (`common.newTab`, `(opens in a new tab)`) after its label, so a screen reader announces the new tab the glyph shows (the glyph stays `aria-hidden`); same-tab links show no icon unless `icon` is set.
 - An icon is shown when `icon` is set.
 - Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).
 - Inside running prose set `inline`: the link inherits the font size and line height of its sentence, wraps with it and keeps a quiet underline at rest (color alone fails WCAG 1.4.1); `size` does not apply.

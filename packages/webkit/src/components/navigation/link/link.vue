@@ -51,7 +51,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ link: en.link })
+  const { t } = useTranslate({ link: en.link, common: en.common })
 
   const EXTERNAL_ICON = 'az az-external-link'
 
@@ -102,6 +102,13 @@
     :class="INLINE_CLASS"
     @click="onClick"
     ><slot>{{ label || t('link.label') }}</slot
+    ><template v-if="target === '_blank'"
+      >{{ ' '
+      }}<span
+        class="sr-only"
+        :data-testid="`${testId}__new-tab`"
+        >{{ t('common.newTab') }}</span
+      ></template
     ><i
       v-if="resolvedIcon"
       :class="[resolvedIcon, directionalIconClass(resolvedIcon)]"
@@ -126,7 +133,15 @@
         class="inline leading-none underline-offset-4 group-hover:underline group-focus-visible:underline"
         :data-testid="`${testId}__label`"
       >
-        <slot>{{ label || t('link.label') }}</slot>
+        <slot>{{ label || t('link.label') }}</slot
+        ><template v-if="target === '_blank'"
+          >{{ ' '
+          }}<span
+            class="sr-only"
+            :data-testid="`${testId}__new-tab`"
+            >{{ t('common.newTab') }}</span
+          ></template
+        >
       </span>
       <i
         v-if="resolvedIcon"
