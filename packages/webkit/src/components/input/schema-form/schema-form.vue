@@ -168,8 +168,11 @@
   const issueOf = (node: SchemaFormNode): SchemaFormIssue | null =>
     validateNode(node, valueAt(node.path), drafts.get(node.path)?.text)
 
-  const messageOf = (issue: SchemaFormIssue) => {
-    const message = t(`schemaForm.${issue.key}`, issue.params)
+  const messageOf = (issue: SchemaFormIssue, node: SchemaFormNode) => {
+    const message =
+      issue.key === 'pattern' && node.description
+        ? t('schemaForm.patternRule', { rule: node.description })
+        : t(`schemaForm.${issue.key}`, issue.params)
     return issue.line ? t('schemaForm.listItem', { line: issue.line, message }) : message
   }
 
@@ -178,7 +181,7 @@
     if (server && !dismissed.has(node.path)) return server
     if (!submitted.value && !(props.validateOn === 'blur' && touched.has(node.path))) return ''
     const issue = issueOf(node)
-    return issue ? messageOf(issue) : ''
+    return issue ? messageOf(issue, node) : ''
   }
 
   const onFocusout = (node: SchemaFormNode, event: globalThis.FocusEvent) => {
