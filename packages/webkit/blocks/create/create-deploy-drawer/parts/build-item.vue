@@ -45,9 +45,9 @@
       <span class="font-(family-name:--font-code) text-label-sm tabular-nums text-(--text-muted)">
         {{ build.elapsed }} s
       </span>
-      <div class="contents text-(--text-default)">
-        <Spinner class="shrink-0" />
-      </div>
+      <span class="flex size-4 shrink-0 text-(--text-default)">
+        <Spinner class="w-full" />
+      </span>
     </Item.Actions>
   </Item>
 </template>

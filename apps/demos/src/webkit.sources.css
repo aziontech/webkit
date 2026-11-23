@@ -440,6 +440,8 @@
 @source "../node_modules/@aziontech/webkit/src/composables/use-listbox-trigger/use-listbox-trigger.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-locale/index.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-locale/use-locale.ts";
+@source "../node_modules/@aziontech/webkit/src/composables/use-media-query/index.ts";
+@source "../node_modules/@aziontech/webkit/src/composables/use-media-query/use-media-query.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-menu-root/composables/use-menu-level.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-menu-root/index.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-menu-root/lib/menu-items.ts";
@@ -495,6 +497,7 @@
 @source "../node_modules/@aziontech/webkit/src/utils/directional-icons.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/file-accept.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/file-entries.ts";
+@source "../node_modules/@aziontech/webkit/src/utils/initials.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/lib/ai-chat-attachments.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/lib/ai-chat-interrupts.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/lib/ai-chat-parts.ts";

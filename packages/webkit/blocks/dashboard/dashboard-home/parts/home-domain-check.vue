@@ -105,9 +105,9 @@
             key="checking"
             class="flex items-center justify-center gap-(--spacing-xs) p-(--spacing-sm) text-center text-body-sm text-(--text-muted)"
           >
-            <div class="contents text-(--text-muted)">
-              <Spinner class="shrink-0" />
-            </div>
+            <span class="flex size-4 shrink-0 text-(--text-muted)">
+              <Spinner class="w-full" />
+            </span>
             Checking {{ check.name }}...
           </div>
 

@@ -1657,7 +1657,12 @@ export const ADD_ENVIRONMENT = '__create-environment__'
           class="hidden size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) md:flex"
           aria-hidden="true"
         >
-          <Spinner v-if="creating" />
+          <span
+            v-if="creating"
+            class="flex size-4"
+          >
+            <Spinner class="w-full" />
+          </span>
           <i
             v-else
             class="az az-file-pen text-body-sm text-(--text-default)"
