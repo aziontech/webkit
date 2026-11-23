@@ -9,6 +9,7 @@
   import { index } from '../lib/data'
   import { format, messages } from '../lib/i18n'
   import { CATEGORY_LEADS, componentGroups } from '../lib/nav'
+  import CategoryJump from './category-jump.vue'
   import LivePreview from './live-preview.vue'
 
   const t = messages
@@ -55,27 +56,11 @@
         </template>
       </Input>
     </div>
-    <nav
-      v-if="groups.length > 1"
-      :aria-label="t.jumpToCategory"
-      class="-mx-(--spacing-md) overflow-x-auto border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-(--spacing-xs) md:sticky md:top-14 md:z-10 md:overflow-visible lg:-mx-(--spacing-xl) lg:px-(--spacing-xl)"
-    >
-      <ul class="flex gap-(--spacing-2xs) md:flex-wrap">
-        <li
-          v-for="group in groups"
-          :key="group.id"
-          class="shrink-0"
-        >
-          <a
-            :href="`#category-${group.id}`"
-            class="inline-flex min-h-8 items-center gap-(--spacing-2xs) rounded-(--shape-button) border border-(--border-default) px-(--spacing-xs) text-label-sm whitespace-nowrap text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none motion-reduce:transition-none"
-          >
-            {{ group.label }}
-            <span class="text-body-xs text-(--text-muted)">{{ group.items.length }}</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+    <CategoryJump
+      :groups="
+        groups.map((group) => ({ id: group.id, label: group.label, count: group.items.length }))
+      "
+    />
     <section
       v-for="group in groups"
       :key="group.label"
