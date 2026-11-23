@@ -160,7 +160,7 @@
     move(index)
   }
 
-  const { listEl, tabId, panelId, rowMediaId, tabAttrs, onTabKeydown } = useMediaTabsAria({
+  const { tabId, panelId, rowMediaId, tabAttrs, onTabKeydown } = useMediaTabsAria({
     tabbed: sideBySide,
     count: () => tabs.value.length,
     isActive,

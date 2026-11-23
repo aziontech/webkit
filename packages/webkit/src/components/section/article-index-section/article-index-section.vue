@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { useMediaQuery } from '@vueuse/core'
   import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useLoadMore } from '../../../composables/use-load-more'
+  import { useMediaQuery } from '../../../composables/use-media-query'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'

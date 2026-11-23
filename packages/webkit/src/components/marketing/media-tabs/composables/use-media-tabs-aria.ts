@@ -1,4 +1,4 @@
-import { type MaybeRefOrGetter, nextTick, type Ref, ref, toValue, useId } from 'vue'
+import { type MaybeRefOrGetter, nextTick, toValue, useId, useTemplateRef } from 'vue'
 
 import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
 
@@ -10,7 +10,6 @@ export interface UseMediaTabsAriaOptions {
 }
 
 export interface UseMediaTabsAriaReturn {
-  listEl: Ref<HTMLUListElement | null>
   tabId: (index: number) => string
   panelId: (index: number) => string
   rowMediaId: (index: number) => string
@@ -20,7 +19,7 @@ export interface UseMediaTabsAriaReturn {
 
 export function useMediaTabsAria(options: UseMediaTabsAriaOptions): UseMediaTabsAriaReturn {
   const baseId = useId()
-  const listEl = ref<HTMLUListElement | null>(null)
+  const listEl = useTemplateRef<HTMLUListElement>('listEl')
   const tabId = (index: number): string => `${baseId}-tab-${index}`
   const panelId = (index: number): string => `${baseId}-panel-${index}`
   const rowMediaId = (index: number): string => `${baseId}-row-media-${index}`
@@ -58,5 +57,5 @@ export function useMediaTabsAria(options: UseMediaTabsAriaOptions): UseMediaTabs
     listEl.value?.querySelectorAll<HTMLElement>('[role="tab"]')[next]?.focus()
   }
 
-  return { listEl, tabId, panelId, rowMediaId, tabAttrs, onTabKeydown }
+  return { tabId, panelId, rowMediaId, tabAttrs, onTabKeydown }
 }
