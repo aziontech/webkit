@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <InputGroup>
+  <InputGroup dir="ltr">
     <InputGroup.Addon>https://</InputGroup.Addon>
     <InputGroup.Input
       aria-label="Domain"

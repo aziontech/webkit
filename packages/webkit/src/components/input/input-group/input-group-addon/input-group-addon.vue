@@ -18,6 +18,7 @@
 
 <template>
   <span
+    dir="auto"
     v-bind="$attrs"
     :data-testid="testId"
     :class="ROOT_CLASS"

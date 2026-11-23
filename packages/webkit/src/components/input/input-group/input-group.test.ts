@@ -340,4 +340,39 @@ describe('InputGroup', () => {
       expect((getByRole('textbox', { name: 'Domain' }) as HTMLInputElement).disabled).toBe(true)
     })
   })
+
+  describe('right-to-left', () => {
+    const charLeft = (node: Text, index: number): number => {
+      const range = document.createRange()
+      range.setStart(node, index)
+      range.setEnd(node, index + 1)
+      return range.getBoundingClientRect().left
+    }
+
+    it('keeps a punctuation-led addon in reading order inside a dir=rtl page', () => {
+      const Rtl = defineComponent({
+        setup: () => () =>
+          h('div', { dir: 'rtl' }, [
+            h(InputGroup, null, () => [
+              h(InputGroupAddon, null, () => '.com'),
+              h(InputGroupInput, { 'aria-label': 'Domain' })
+            ])
+          ])
+      })
+      const { getByTestId } = render(Rtl)
+      const addon = getByTestId('input-group-addon')
+      const text = Array.from(addon.childNodes).find(
+        (node): node is Text => node.nodeType === Node.TEXT_NODE && node.textContent === '.com'
+      ) as Text
+      expect(text).toBeTruthy()
+      expect(charLeft(text, 0)).toBeLessThan(charLeft(text, 1))
+    })
+
+    it('lays the URL examples out left to right', () => {
+      const { container } = render(WithAddons)
+      expect(container.querySelector('[data-testid="input-group"]')?.getAttribute('dir')).toBe(
+        'ltr'
+      )
+    })
+  })
 })
