@@ -212,6 +212,8 @@ Budget-raise: popover 10.35 KB → 10.6 KB (measured 10.47 KB): 6.0 B11 (compone
 - panel-content: 15.2 KB → 13.9 KB (measured 13.77 KB)
 - panel-footer: 11.65 KB → 10.65 KB (measured 10.55 KB)
 - panel-header: 11.6 KB → 10.8 KB (measured 10.70 KB)
+- tool-approval: 16.55 KB → 11.15 KB (measured 11.02 KB): chat round 2 — inline Markdown in a title no longer pulls in the citation chip
+- agent-question: 17.3 KB → 11.9 KB (measured 11.76 KB): chat round 2 — inline Markdown in a heading no longer pulls in the citation chip
   Budget-raise: card 13.75 → 13.85 KB — naming standard (slot/prop renames lengthen strings; no new logic)
   Budget-raise: site-nav 56.65 → 56.75 KB — naming standard (longer prop names; no new logic)
   Budget-raise: wizard 7.6 → 7.7 KB — naming standard (status vocabulary; no new logic)
@@ -1247,3 +1249,24 @@ Budget-raise: config-provider 12.45 KB → 12.55 KB (measured 12.51 KB): the Eng
 Budget-raise: locales-pt-BR 11.7 KB → 11.8 KB (measured 11.76 KB): the same message action keys, translated.
 Budget-raise: locales-es 11.8 KB → 11.9 KB (measured 11.88 KB): the same message action keys, translated.
 Budget-raise: artifact-canvas 12 KB → 12.05 KB (measured 12.02 KB): its ResponseBranches pager shows `2/3` with a visually hidden `Version 2 of 3` live region (chat look round 2, 2026-11-22).
+Budget-raise: prompt-input 14.65 KB → 15.1 KB (measured 15.08 KB): the attach control's "+" menu (chat look round 2): with `tools` it loads a menu part after mount (Camera, Photos, Files, then the tools as checkboxes, the turned-on tools as chips) and stacks the box while a chip shows; the menu, DropdownMenu and Chip stay in a lazy chunk.
+Budget-raise: prompt-input-attach-button 5.6 KB → 6.7 KB (measured 6.68 KB): the same "+" menu; the entry now holds the loader of the lazy menu part (the dynamic import wiring a standalone entry did not carry before) and the tools model.
+Budget-raise: code-block 33.85 KB → 34.0 KB (measured 33.99 KB): the label header holds the copy control at its end and sticks to the top of the scroller (chat look round 2), so a second CopyButton placement and the copy-gutter switch ship with the block.
+Budget-raise: doc-code-group 34.3 KB → 34.45 KB (measured 34.42 KB): the same CodeBlock label-header copy and sticky header, carried by the docs code group.
+Budget-raise: console-application-scene 121.95 KB → 122.15 KB (measured 122.12 KB): the same CodeBlock label-header copy, carried by the scene's code panel.
+Budget-raise: cli-terminal-section 47.15 KB → 47.3 KB (measured 47.28 KB): the same CodeBlock label-header copy, carried by the section.
+Budget-raise: feature-tabs-section 58.15 KB → 58.3 KB (measured 58.29 KB): the same CodeBlock label-header copy, carried by the section's code tab.
+Budget-raise: streaming-response 38.5 KB → 39.15 KB (measured 39.09 KB): nested lists (parser and recursive list renderer), bold headings and the filled code card with its language header, also while a fence is still open (chat look round 2).
+Budget-raise: citation 7.25 KB → 11.25 KB (measured 11.13 KB): chat round 2 (ChatGPT parity) — the citation chip opens a HoverCard card with the source's site, title, snippet and a pager (IconButton), and draws the site's favicon or coloured letter.
+Budget-raise: sources 3.4 KB → 4 KB (measured 3.91 KB, entry only): chat round 2 — the pill draws favicons and coloured letters; the new side panel (Drawer) is a lazy chunk loaded when the pill is hovered, focused or opened.
+Budget-raise: streaming-response 38.5 KB → 42.15 KB (measured 42.10 KB): chat round 2 — every citation is the new Citation chip and card (HoverCard, IconButton, favicon mark).
+Budget-raise: doc-markdown 40.55 KB → 40.65 KB (measured 40.58 KB): chat round 2 — the citation and sources messages (pager, Citations and More groups) in the shared English catalog.
+Budget-raise: config-provider 12.45 KB → 12.55 KB (measured 12.49 KB): chat round 2 — the citation and sources messages in the shared catalogs.
+Budget-raise: locales-pt-BR 11.7 KB → 11.8 KB (measured 11.72 KB): chat round 2 — the citation and sources messages.
+Budget-raise: locales-es 11.8 KB → 11.9 KB (measured 11.84 KB): chat round 2 — the citation and sources messages.
+Budget-raise: config-provider 12.55 KB → 12.65 KB (measured 12.59 KB): chat look round 2 merged — the message action keys (lane msg) and the citation and sources keys (lane sources) in one English catalog.
+Budget-raise: locales-pt-BR 11.8 KB → 11.9 KB (measured 11.85 KB): the same merged chat look round 2 keys, translated.
+Budget-raise: locales-es 11.9 KB → 12 KB (measured 11.96 KB): the same merged chat look round 2 keys, translated.
+Budget-raise: prompt-input-dictate-button 5.55 KB → 5.6 KB (measured 5.57 KB): chat look round 2 merged — it carries the English catalog, which gained the message action keys.
+Budget-raise: prompt-input-tools 17.7 KB → 17.75 KB (measured 17.72 KB): chat look round 2 merged — the same larger English catalog.
+Budget-raise: streaming-response 42.15 KB → 42.85 KB (measured 42.81 KB): chat look round 2 merged — the code-block header and the citation popover land together, with the larger English catalog.

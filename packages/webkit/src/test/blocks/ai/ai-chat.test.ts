@@ -100,7 +100,7 @@ describe('ai/ai-chat', () => {
     const view = render(AiChat, { props: { messages: thread } })
     expect(view.container.textContent).toContain('Acme Inc. is on the Business plan.')
     expect(view.container.textContent).toContain('Which plan am I on?')
-    expect(view.queryByText('How can I help with your Azion account?')).toBeNull()
+    expect(view.queryByText('What can I help with?')).toBeNull()
   })
 
   it('skips system and activity messages', () => {
@@ -176,12 +176,60 @@ describe('ai/ai-chat', () => {
     expect(composer.closest('[data-testid="conversation__composer"]')).not.toBeNull()
   })
 
-  it('keeps the composer mounted from the empty state to the first message', async () => {
+  it('centers the composer on the welcome page and moves it under the log after the first message', async () => {
     const view = render(AiChat)
-    const composer = view.getByRole('textbox', { name: 'Prompt' })
-    expect(view.getByRole('log').textContent).toContain('How can I help with your Azion account?')
+    expect(view.queryByRole('log')).toBeNull()
+    expect(view.getByRole('heading', { name: 'What can I help with?' })).toBeTruthy()
+    await userEvent.type(
+      view.getByRole('textbox', { name: 'Prompt' }),
+      'Which plan am I on?{Enter}'
+    )
+    await waitFor(() => expect(view.emitted('send')).toHaveLength(1))
     await view.rerender({ messages: thread })
-    expect(view.getByRole('textbox', { name: 'Prompt' })).toBe(composer)
+    const composer = view.getByRole('textbox', { name: 'Prompt' })
+    expect(composer.closest('[data-testid="conversation__composer"]')).not.toBeNull()
+    await waitFor(() => expect(document.activeElement).toBe(composer))
+  })
+
+  it('emits feedback with the value and the rated message', async () => {
+    await page.viewport(1280, 900)
+    const view = render(AiChat, { props: { messages: thread } })
+    const good = await view.findByRole('button', { name: 'Good response' })
+    await userEvent.click(good)
+    await page.viewport(414, 896)
+    const [[value, message]] = view.emitted('feedback') as [[string, AiChatMessage]]
+    expect(value).toBe('up')
+    expect(message.id).toBe('a1')
+  })
+
+  it('picks the model from the header title and reports it', async () => {
+    const view = render(AiChat, { props: { messages: thread } })
+    await userEvent.click(view.getByRole('button', { name: /AI assistant/ }))
+    await userEvent.click(await view.findByRole('menuitemradio', { name: /Thinking/ }))
+    expect(view.emitted('update:modelKey')).toEqual([['thinking']])
+  })
+
+  it('emits the conversation actions of the More menu with the open conversation', async () => {
+    const view = render(AiChat, { props: { messages: thread, activeKey: 'h2' } })
+    await userEvent.click(view.getAllByRole('button', { name: 'More conversation actions' })[0]!)
+    await userEvent.click(await view.findByRole('menuitem', { name: 'Rename' }))
+    expect((view.emitted('rename-chat') as unknown[][])[0]?.[1]).toBe('h2')
+    await userEvent.click(view.getAllByRole('button', { name: 'Share' })[0]!)
+    expect((view.emitted('share-chat') as unknown[][])[0]?.[1]).toBe('h2')
+  })
+
+  it('turns a tool on from the composer "+" menu and shows it as a chip', async () => {
+    const view = render(AiChat)
+    const plus = await waitFor(() => {
+      const button = view.getByRole('button', { name: 'Attach files' })
+      expect(button).toHaveAttribute('aria-haspopup')
+      return button
+    })
+    await userEvent.click(plus)
+    await userEvent.click(await view.findByRole('menuitemcheckbox', { name: /Web search/ }))
+    expect(view.emitted('update:toolKeys')).toEqual([[['web-search']]])
+    await userEvent.keyboard('{Escape}')
+    expect(view.getByRole('list', { name: 'Enabled tools' })).toHaveTextContent('Web search')
   })
 
   it('opens the conversation history and starts a new chat from it', async () => {
@@ -1007,7 +1055,7 @@ describe('ai/ai-chat', () => {
     const view = render(AiChat, { props: { hydrating: true } })
     expect(view.getByRole('status', { name: 'Loading the conversation' })).toBeTruthy()
     expect(view.container.querySelectorAll('[data-testid="skeleton"]').length).toBeGreaterThan(0)
-    expect(view.queryByText('How can I help with your Azion account?')).toBeNull()
+    expect(view.queryByText('What can I help with?')).toBeNull()
     expect(view.getByRole('textbox', { name: 'Prompt' })).toBeDisabled()
   })
 

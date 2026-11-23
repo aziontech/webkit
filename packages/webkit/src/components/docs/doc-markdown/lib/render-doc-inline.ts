@@ -75,7 +75,7 @@ export function renderTokens(ctx: Ctx, tokens: DocMarkdownInline[]): VNodeChild[
       case 'link':
         return renderLink(ctx, token.href, renderTokens(ctx, token.children))
       case 'citation':
-        return `[${token.index}]`
+        return `[${token.indexes.join('][')}]`
       case 'component':
         if (token.name !== 'Tooltip') return null
         return renderTooltip(ctx, token.props, renderTokens(ctx, token.children))

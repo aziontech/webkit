@@ -2,12 +2,12 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Three sources behind a response, collapsed into the `Sources` pill with the overlapping mark of each site (a letter, or the item's `icon`); pressing it lists each source with its linked title and its section or site.",
+   "summary": "Four sources behind a response, collapsed into the `Sources` pill with the overlapping marks of the first three cited sites: an icon, or a letter on a colour of its own. Pressing it opens a side panel (a bottom sheet on a phone) that lists the cited sources under Citations and the one the answer searched but did not cite under More.",
    "file": "examples/sources/default.vue"
   },
   {
    "name": "Open",
-   "summary": "The same pill opened by default, for a surface where the reader is expected to check the sources.",
+   "summary": "The same pill with its panel open by default, for a surface where the reader is expected to check the sources.",
    "file": "examples/sources/open.vue"
   }
  ]

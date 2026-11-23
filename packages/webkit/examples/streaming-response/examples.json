@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "A finished response in Markdown: a heading, bold and inline code, a numbered list, a table and a fenced code block rendered as a copyable CodeBlock.",
+      "summary": "A finished response in Markdown: a heading, bold and inline code, a numbered list with a nested list, a table, a fenced code block drawn as a filled CodeBlock card with its language and copy in the header, and a quote.",
       "file": "default.vue"
     },
     {
@@ -14,7 +14,7 @@
     },
     {
       "name": "WithCitations",
-      "summary": "Citations in the text resolve against the sources: each `[n]` becomes a chip with the source's site, names the source in a tooltip and links to item n of the Sources list under the response.",
+      "summary": "Citations in the text resolve against the sources: each `[n]` becomes a chip with the site's mark and name, and a run such as `[2][3]` one chip with `+1`. A chip opens a card with the source's title and snippet; the Sources pill under the response lists them all.",
       "file": "with-citations.vue"
     },
     {

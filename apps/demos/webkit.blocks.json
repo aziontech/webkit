@@ -48,7 +48,7 @@
           "path": "src/blocks/ai-chat-composer.vue",
           "source": "blocks/ai/ai-chat/parts/ai-chat-composer.vue",
           "variant": "Data",
-          "checksum": "sha256:af7decea8c354ce698fa935b2f398838c2560512a6a42fadae27d97fcb59d2ce"
+          "checksum": "sha256:c11c687528978080ece39874ccdd614a3c30773817416a547e15d6288f4dc157"
         },
         {
           "path": "src/blocks/ai-chat-connection-status.vue",
@@ -60,7 +60,7 @@
           "path": "src/blocks/ai-chat-header.vue",
           "source": "blocks/ai/ai-chat/parts/ai-chat-header.vue",
           "variant": "Data",
-          "checksum": "sha256:7e49f7bfb6e4ad93c4c8bb161d130fe5c9153340c956f2c48d0f6677727b4c3e"
+          "checksum": "sha256:7def3b3d9eff17c5403c23ba5b590c6526a229e928caefafc4f021ccfc95fe2d"
         },
         {
           "path": "src/blocks/ai-chat-history.vue",
@@ -78,10 +78,16 @@
           "checksum": "sha256:5120328dfb85f35de60a951c1a2e028adc0d2a36e75c0964402b48aff861123f"
         },
         {
+          "path": "src/blocks/ai-chat-skeleton.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-skeleton.vue",
+          "variant": "Data",
+          "checksum": "sha256:6b1ef422db7f4c54ad6ea0206e883cae1f29ead9037523cf9d75a579992cec68"
+        },
+        {
           "path": "src/blocks/ai-chat-start.vue",
           "source": "blocks/ai/ai-chat/parts/ai-chat-start.vue",
           "variant": "Data",
-          "checksum": "sha256:766a46b00385a6bebbefe1a1a9a34122f730c77e9866ed8a3b282ab61dc2447d"
+          "checksum": "sha256:6459f12c0220bb13f702edb04b796ac945b8f067a8bb20366cde7751fd688add"
         },
         {
           "path": "src/blocks/ai-chat-tool-segment.vue",
@@ -93,7 +99,7 @@
           "path": "src/blocks/ai-chat-turn.vue",
           "source": "blocks/ai/ai-chat/parts/ai-chat-turn.vue",
           "variant": "Data",
-          "checksum": "sha256:540ba3686d71dba548a721f96538f7af497225fd2e850aff32db092b6073a3bf"
+          "checksum": "sha256:8c5e105d958f86ac098bc2f4e5e354728f26f3b6b70426b15f5524db08161c64"
         },
         {
           "path": "src/blocks/ai-chat.ai-chat-connection-status.vue",
@@ -148,7 +154,7 @@
           "path": "src/blocks/ai-chat.sample.ts",
           "source": "blocks/ai/ai-chat/sample.ts",
           "variant": "Data",
-          "checksum": "sha256:2dd3297da99a785f89a1c3f9989bccdd0f27b179ab1f5fa183f9dc230d19f96b"
+          "checksum": "sha256:d135258860d2351db55fdacfc7a118e27a7cc06bb1b31ac0f1ce1e4fb70aed1d"
         },
         {
           "path": "src/blocks/ai-chat.vue",
@@ -159,11 +165,12 @@
             "./parts/ai-chat-connection-status.vue": "./ai-chat-connection-status.vue",
             "./parts/ai-chat-header.vue": "./ai-chat-header.vue",
             "./parts/ai-chat-history.vue": "./ai-chat-history.vue",
+            "./parts/ai-chat-skeleton.vue": "./ai-chat-skeleton.vue",
             "./parts/ai-chat-start.vue": "./ai-chat-start.vue",
             "./parts/ai-chat-turn.vue": "./ai-chat-turn.vue",
             "./sample": "./ai-chat.sample"
           },
-          "checksum": "sha256:80c4ac6db2e4113babdcd0cda3074d28e22f28016e5ad99752e7321464cd04a0"
+          "checksum": "sha256:e55208d90f3de23781294157cfa63df78df7fa276be1b5e18646cdd1f2b0206e"
         }
       ]
     },

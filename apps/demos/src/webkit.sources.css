@@ -16,6 +16,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/index.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/injection-key.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/lib/content-text.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/parts/chat-message-more.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/parts/chat-message-read-aloud.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/citation/citation.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/conversation-history.vue";
@@ -23,7 +24,10 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation/conversation.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation/injection-key.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation/lib/conversation-dom.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/feedback-reason-dialog/feedback-reason-dialog.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/lib/markdown-inline-cited.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/lib/markdown-inline.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/lib/markdown-list.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/lib/parse-inline.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/lib/parse-markdown.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/mcp-app-frame/lib/sandbox.ts";
@@ -38,6 +42,8 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/autosize.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/box-focus.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/references.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/tool-keys.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-add-menu.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-menu-list.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-references.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-send.vue";
@@ -50,8 +56,10 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/types.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-queue/prompt-queue.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/reasoning/reasoning.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/response-branches/response-branches.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/response-loading/response-loading.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/sources/parts/sources-mark.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/sources/parts/sources-panel.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/sources/sources.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/sources/types.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/streaming-response/streaming-response.vue";
@@ -373,6 +381,11 @@
 @source "../node_modules/@aziontech/webkit/src/components/overlay/drawer/drawer.vue";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/drawer/injection-key.ts";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/drawer/presets/transitions.ts";
+@source "../node_modules/@aziontech/webkit/src/components/overlay/hover-card/composables/use-hover-card-context.ts";
+@source "../node_modules/@aziontech/webkit/src/components/overlay/hover-card/hover-card-content/hover-card-content.vue";
+@source "../node_modules/@aziontech/webkit/src/components/overlay/hover-card/hover-card-trigger/hover-card-trigger.vue";
+@source "../node_modules/@aziontech/webkit/src/components/overlay/hover-card/hover-card.vue";
+@source "../node_modules/@aziontech/webkit/src/components/overlay/hover-card/injection-key.ts";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/panel/injection-key.ts";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/panel/panel-body.vue";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/panel/panel-footer.vue";
@@ -390,6 +403,10 @@
 @source "../node_modules/@aziontech/webkit/src/components/overlay/shortcuts-dialog/shortcuts-dialog.vue";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/tooltip/tooltip.vue";
 @source "../node_modules/@aziontech/webkit/src/components/provider/config-provider/config-provider.vue";
+@source "../node_modules/@aziontech/webkit/src/composables/use-ai-chat-tools/index.ts";
+@source "../node_modules/@aziontech/webkit/src/composables/use-ai-chat-tools/use-ai-chat-tools.ts";
+@source "../node_modules/@aziontech/webkit/src/composables/use-ai-chat-versions/index.ts";
+@source "../node_modules/@aziontech/webkit/src/composables/use-ai-chat-versions/use-ai-chat-versions.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-announcer/index.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-announcer/use-announcer.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-app-navigation-menu/index.ts";
@@ -446,6 +463,8 @@
 @source "../node_modules/@aziontech/webkit/src/composables/use-listbox-trigger/use-listbox-trigger.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-locale/index.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-locale/use-locale.ts";
+@source "../node_modules/@aziontech/webkit/src/composables/use-media-query/index.ts";
+@source "../node_modules/@aziontech/webkit/src/composables/use-media-query/use-media-query.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-menu-root/composables/use-menu-level.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-menu-root/index.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-menu-root/lib/menu-items.ts";

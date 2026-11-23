@@ -60,6 +60,26 @@ describe('StreamingResponse', () => {
       expect(open[0]).toMatchObject({ type: 'code', closed: false, value: 'const a = 1' })
     })
 
+    it('nests an indented list under its item', () => {
+      const [list] = parseMarkdown(
+        ['1. Install', '   - macOS', '   - Linux', '     - Debian', '2. Run'].join('\n')
+      )
+      expect(list).toMatchObject({ type: 'list', ordered: true, start: 1 })
+      if (list?.type !== 'list') throw new Error('expected a list')
+      expect(list.items).toHaveLength(2)
+      expect(list.items[0]?.list).toMatchObject({ ordered: false })
+      expect(list.items[0]?.list?.items).toHaveLength(2)
+      expect(list.items[0]?.list?.items[1]?.list?.items).toHaveLength(1)
+      expect(list.items[1]?.list).toBeUndefined()
+    })
+
+    it('keeps an indented plain line as part of the item text', () => {
+      const [list] = parseMarkdown('- item\n  continued')
+      if (list?.type !== 'list') throw new Error('expected a list')
+      expect(list.items).toHaveLength(1)
+      expect(list.items[0]?.list).toBeUndefined()
+    })
+
     it('keeps a lone asterisk literal', () => {
       expect(parseInline('5 * 3 and snake_case')).toEqual([
         { type: 'text', value: '5 * 3 and snake_case' }
@@ -136,6 +156,39 @@ describe('StreamingResponse', () => {
     expect(container.querySelector('[data-testid="code-block"], pre')).toBeTruthy()
   })
 
+  it('renders a nested list inside its parent item', () => {
+    const { container } = render(StreamingResponse, {
+      props: { content: '- Cache\n  - Purge\n  - Rules\n- Firewall' }
+    })
+    const outer = container.querySelector('ul:not([data-nested])')!
+    expect(outer.children).toHaveLength(2)
+    const nested = outer.querySelector('li > ul[data-nested]')!
+    expect(nested.children).toHaveLength(2)
+    expect(nested).toHaveTextContent('PurgeRules')
+  })
+
+  it('renders every heading bold with a step above it, # the largest', () => {
+    const { getByRole } = render(StreamingResponse, {
+      props: { content: 'Intro\n\n# Title\n\n### Step' }
+    })
+    const title = getByRole('heading', { level: 3, name: 'Title' })
+    expect(title).toHaveAttribute('data-level', '3')
+    expect(title.classList.contains('data-[level]:font-semibold')).toBe(true)
+    expect(title.classList.contains('mt-(--spacing-sm)')).toBe(true)
+    expect(getByRole('heading', { level: 5, name: 'Step' })).toHaveAttribute('data-level', '5')
+  })
+
+  it('draws a closed fence as a filled card with the language and copy in its header', () => {
+    const { getByTestId } = render(StreamingResponse, {
+      props: { content: '```bash\nazion deploy\n```' }
+    })
+    const block = getByTestId('code-block')
+    expect(block.hasAttribute('data-bordered')).toBe(false)
+    expect(block.classList.contains('rounded-(--shape-card)')).toBe(true)
+    expect(getByTestId('code-block__label-text')).toHaveTextContent('Shell')
+    expect(getByTestId('code-block__label').querySelector('button')).toBeTruthy()
+  })
+
   it('never injects model HTML and drops unsafe links', () => {
     const content =
       'Hi <script>window.pwnedFlag = true</script> <img src=x onerror="window.pwnedFlag = true"> [click](javascript:window.pwnedFlag=true) [ok](https://a.b)'
@@ -170,6 +223,7 @@ describe('StreamingResponse', () => {
     })
     expect(getByTestId('streaming-response__pending-code')).toHaveTextContent('azion purge')
     expect(getByTestId('streaming-response__pending-code')).toHaveAttribute('dir', 'ltr')
+    expect(getByTestId('streaming-response__pending-code')).toHaveTextContent('Shell')
     await rerender({ content: '```bash\nazion purge\n```', streaming: false })
     expect(queryByTestId('streaming-response__pending-code')).toBeNull()
   })
@@ -198,13 +252,12 @@ describe('StreamingResponse', () => {
     expect(codeBlockUpdates).toBe(0)
   })
 
-  it('links citations to the sources anchor', () => {
+  it('renders a citation as a chip named after its source', () => {
     const { getByRole } = render(StreamingResponse, {
-      props: { content: 'Fast [1].', sources: [{ title: 'Real-Time Purge' }], anchor: 'answer' }
+      props: { content: 'Fast [1].', sources: [{ title: 'Real-Time Purge' }] }
     })
-    expect(getByRole('link', { name: 'Source 1: Real-Time Purge' })).toHaveAttribute(
-      'href',
-      '#answer-source-1'
+    expect(getByRole('button', { name: 'Source 1: Real-Time Purge' })).toHaveTextContent(
+      'Real-Time Purge'
     )
   })
 
@@ -212,13 +265,36 @@ describe('StreamingResponse', () => {
     const { getByRole } = render(StreamingResponse, {
       props: {
         content: 'Cached [1].',
-        sources: [{ title: 'Cache settings', href: 'https://www.azion.com/en/documentation/' }],
-        anchor: 'answer'
+        sources: [{ title: 'Cache settings', href: 'https://www.azion.com/en/documentation/' }]
       }
     })
-    expect(getByRole('link', { name: 'Source 1, azion.com: Cache settings' })).toHaveTextContent(
+    expect(getByRole('button', { name: 'Source 1, azion.com: Cache settings' })).toHaveTextContent(
       'azion.com'
     )
+  })
+
+  it('folds adjacent and comma-separated markers into one chip with a count', () => {
+    const { getAllByRole } = render(StreamingResponse, {
+      props: {
+        content: 'Cached [1][2] and purged [1, 2].',
+        sources: [
+          { title: 'Cache settings', href: 'https://www.azion.com/docs', site: 'Azion' },
+          { title: 'aziontech/azion', href: 'https://github.com/aziontech/azion' }
+        ]
+      }
+    })
+    const chips = getAllByRole('button', { name: 'Azion +1, sources 1, 2' })
+    expect(chips).toHaveLength(2)
+    expect(chips[0]).toHaveTextContent('Azion+1')
+  })
+
+  it('parses citation markers into one node per run of numbers', () => {
+    expect(parseInline('a [1][2] [3] b [4, 5]')).toEqual([
+      { type: 'text', value: 'a ' },
+      { type: 'citation', indexes: [1, 2, 3] },
+      { type: 'text', value: ' b ' },
+      { type: 'citation', indexes: [4, 5] }
+    ])
   })
 
   it('puts a citation chip one space after the word and right before punctuation', () => {
@@ -232,9 +308,11 @@ describe('StreamingResponse', () => {
         sources
       }
     })
-    const text = container.querySelector('p')!.textContent
+    const paragraph = container.querySelector('p')!.cloneNode(true) as HTMLElement
+    paragraph.querySelectorAll('[data-testid="sources-mark"]').forEach((mark) => mark.remove())
+    const text = paragraph.textContent
     expect(text).toBe(
-      'Served by azion azion.com. Then (see example.com), more azion.com example.com; and azion.com: done example.com next'
+      'Served by azion azion.com. Then (see example.com), more azion.com+1; and azion.com: done example.com next'
     )
   })
 
@@ -245,7 +323,7 @@ describe('StreamingResponse', () => {
 
   it('has no axe violations', async () => {
     const { container } = render(StreamingResponse, {
-      props: { content: rich, sources: [{ title: 'Docs' }], anchor: 'a' }
+      props: { content: rich, sources: [{ title: 'Docs' }] }
     })
     await expectNoA11yViolations(container)
   })

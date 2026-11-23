@@ -1324,8 +1324,12 @@ export const chatMessage = {
 
 export const citation = {
   label: 'Source {index}: {title}',
+  labelMany: '{site} +{more}, sources {indexes}',
   labelUntitled: 'Source {index}',
-  labelWithSite: 'Source {index}, {site}: {title}'
+  labelWithSite: 'Source {index}, {site}: {title}',
+  next: 'Next source',
+  page: '{current}/{total}',
+  previous: 'Previous source'
 } as const
 
 export const conversation = {
@@ -1376,7 +1380,11 @@ export const promptInput = {
   context: 'Choose context',
   contextRemove: 'Remove context',
   tools: 'Tools',
-  toolsEnabled: 'Enabled tools'
+  toolsEnabled: 'Enabled tools',
+  addMenu: 'Add',
+  camera: 'Camera',
+  photos: 'Photos',
+  files: 'Files'
 } as const
 
 export const agentActivity = {
@@ -1414,6 +1422,8 @@ export const reasoning = {
 
 export const sources = {
   label: 'Sources',
+  cited: 'Citations',
+  more: 'More',
   count: {
     one: '{count} source',
     other: '{count} sources'

@@ -70,7 +70,11 @@ export const es: Messages = {
   citation: {
     label: 'Fuente {index}: {title}',
     labelUntitled: 'Fuente {index}',
-    labelWithSite: 'Fuente {index}, {site}: {title}'
+    labelWithSite: 'Fuente {index}, {site}: {title}',
+    labelMany: '{site} +{more}, fuentes {indexes}',
+    next: 'Fuente siguiente',
+    page: '{current}/{total}',
+    previous: 'Fuente anterior'
   },
   conversation: {
     label: 'Conversación',
@@ -119,7 +123,11 @@ export const es: Messages = {
     context: 'Elegir contexto',
     contextRemove: 'Quitar contexto',
     tools: 'Herramientas',
-    toolsEnabled: 'Herramientas activadas'
+    toolsEnabled: 'Herramientas activadas',
+    addMenu: 'Añadir',
+    camera: 'Cámara',
+    photos: 'Fotos',
+    files: 'Archivos'
   },
   agentActivity: {
     label: 'Actividad del agente',
@@ -154,6 +162,8 @@ export const es: Messages = {
   },
   sources: {
     label: 'Fuentes',
+    cited: 'Citas',
+    more: 'Más',
     count: {
       one: '{count} fuente',
       other: '{count} fuentes'

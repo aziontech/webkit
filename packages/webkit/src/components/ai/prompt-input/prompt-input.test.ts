@@ -675,6 +675,47 @@ describe('PromptInput', () => {
       expect(scope.tools!.value).toEqual(['research'])
     })
 
+    it('opens the add menu from the attach button with tools, picks photos and stacks on a tool', async () => {
+      const { getByRole, getByTestId, findByRole, scope } = composer(
+        { files: [], tools: [] },
+        (scope) => ({
+          props: { ...bind(scope, 'files', 'files'), accept: 'image/*,application/pdf' },
+          slots: {
+            actions: () =>
+              h(P.AttachButton, {
+                ...bind(scope, 'tools'),
+                tools: [
+                  { value: 'web-search', label: 'Web search', icon: 'az az-globe' },
+                  { value: 'create-image', label: 'Create image' }
+                ]
+              })
+          }
+        })
+      )
+      await expect
+        .poll(() => getByRole('button', { name: 'Attach files' }).getAttribute('aria-haspopup'))
+        .toBeTruthy()
+      await userEvent.click(await findByRole('button', { name: 'Attach files' }))
+      expect(await screen.findByRole('menuitem', { name: /Photos/ })).toBeTruthy()
+      expect(screen.getByRole('menuitem', { name: /Files/ })).toBeTruthy()
+      expect(screen.queryByRole('menuitem', { name: /Camera/ })).toBeNull()
+      await userEvent.click(screen.getByRole('menuitemcheckbox', { name: /Web search/ }))
+      expect(scope.tools!.value).toEqual(['web-search'])
+      await keys.keyboard('{Escape}')
+      expect(getByRole('list', { name: 'Enabled tools' })).toHaveTextContent('Web search')
+      expect(getByTestId('prompt-input__box')).toHaveAttribute('data-multiline')
+      const photos = getByTestId('prompt-input-attach-button__photos-input') as HTMLInputElement
+      expect(photos).toHaveAttribute('accept', 'image/*')
+      const transfer = new DataTransfer()
+      transfer.items.add(sample('photo.png', 'image/png'))
+      photos.files = transfer.files
+      photos.dispatchEvent(new Event('change', { bubbles: true }))
+      await nextTick()
+      expect(names(scope.files!.value)).toEqual(['photo.png'])
+      await userEvent.click(getByRole('button', { name: /Remove Web search/ }))
+      expect(scope.tools!.value).toEqual([])
+    })
+
     it('toggles listening with an app transcriber and announces it', async () => {
       const { getByRole, getByTestId, scope } = composer({ on: false }, (scope) => ({
         slots: {

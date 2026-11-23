@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -64,7 +64,7 @@ After the last complete response, aligned with its text.
 
 ### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
 
-The `#composer` of `Conversation`: one floating pill at the foot of the drawer, no divider, four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint. The Attach "+" at the start (`attachable`, on by default: a `PromptInputAttachButton`, and drop and paste) attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating pill at the foot of the drawer, no divider, four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions`; a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys` (pass it as `sendMessage(content, { body: { tools: toolKeys } })`). It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
 
 ### J. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 
@@ -124,6 +124,7 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 | `maxFiles`          | `number`                                  | Most files on one message; default 4.                                                                                                                                                                                          |
 | `maxFileSize`       | `number`                                  | Largest file in bytes; default 10 MB.                                                                                                                                                                                          |
 | `resolveAppUrl`     | `(resource) => string \| Promise<string>` | Gives a widget that has no inline HTML a trusted `https` address; left out, only inline widgets show.                                                                                                                          |
+| `toolOptions`       | `PromptInputMenuOption[]`                 | The tools the composer's "+" menu turns on; left out, the sample tools. The turned-on ones are `v-model:toolKeys`.                                                                                                             |
 | `v-model:open`      | `boolean`                                 | Whether the drawer is open (open by default); Agent opens it and its close button closes it.                                                                                                                                   |
 
 | Event              | Payload                     | When                                                                                                                                                                |
@@ -300,9 +301,14 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
-  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+  import { useAiChatTools } from '@aziontech/webkit/use-ai-chat-tools'
   import { useAiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import {
@@ -310,7 +316,6 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     type AiChatInterrupt,
     type AiChatInterruptError,
     type AiChatMessage,
-    type AiChatQuestion,
     type AiChatQueuedMessage,
     type AiChatSendContent,
     type AiChatTool,
@@ -320,17 +325,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     contentOf,
     hasAnswer,
     interruptErrorText,
-    isQuestion,
-    json,
-    queueItemOf,
-    resolveInterrupt,
-    toolQuestionOf
+    queueItemOf
   } from '@aziontech/webkit/utils/ai-chat'
-  import {
-    answerQuestion,
-    groupQuestions,
-    skipQuestion
-  } from '@aziontech/webkit/utils/ai-chat-questions'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
@@ -339,7 +335,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   import DrawerChatHeader from './parts/drawer-chat-header.vue'
   import DrawerChatStart from './parts/drawer-chat-start.vue'
   import WorkloadOverview from './parts/workload-overview.vue'
-  import { sampleSuggestions } from './sample'
+  import { sampleSuggestions, sampleTools } from './sample'
 
   export interface AiChatDrawerProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
@@ -382,6 +378,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
+    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    toolOptions?: PromptInputMenuOption[]
   }
 
   const props = withDefaults(defineProps<AiChatDrawerProps>(), {
@@ -404,14 +402,15 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
-    resolveAppUrl: undefined
+    resolveAppUrl: undefined,
+    toolOptions: undefined
   })
 
   const emit = defineEmits<{
     send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     stop: [event: MouseEvent]
     retry: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
-    share: [event: MouseEvent, message: AiChatMessage]
+    share: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
     branch: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
     edit: [event: MouseEvent | KeyboardEvent, message: AiChatMessage, text: string]
     'version-change': [messages: AiChatMessage[]]
@@ -437,6 +436,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 
   /** Whether the assistant drawer is open; Agent opens it and its close button closes it. */
   const open = defineModel<boolean>('open', { default: true })
+  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
   const { formatDate } = useLocale()
   const versions = useAiChatVersions(() => props.messages)
@@ -445,17 +446,23 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   const files = ref<PromptInputFile[]>([])
   const composerEl = ref<InstanceType<typeof DrawerChatComposer> | null>(null)
   const stoppedIds = ref<Set<string>>(new Set())
-  const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
-  const askedAfter = ref<Record<string, string>>({})
-  const settled = ref<Record<string, AiChatQuestion>>({})
-  const routed = ref<Record<string, boolean>>({})
-  const toolAnswers = ref<Record<string, AiChatQuestion>>({})
 
   const turns = computed(() =>
     props.messages.filter((message) => message.role === 'user' || message.role === 'assistant')
   )
+  const chatTools = useAiChatTools({
+    turns: () => turns.value,
+    interrupts: () => props.interrupts,
+    tools: () => props.tools,
+    onAnswerInterrupt: (event, interrupt, value) =>
+      emit('answer-interrupt', event, interrupt, value),
+    onAnswerTool: (event, answer) => emit('answer-tool', event, answer),
+    onApprove: (event, call, input) => emit('approve', event, call, input),
+    onDeny: (event, call) => emit('deny', event, call)
+  })
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
+  const composerTools = computed(() => props.toolOptions ?? sampleTools)
   const last = computed(() => turns.value[turns.value.length - 1])
   const failure = computed(() => {
     if (!props.error) return ''
@@ -477,49 +484,6 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   const queued = computed(() => (props.queue ?? []).map(queueItemOf))
   const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
 
-  const pendingQuestions = computed(() => props.interrupts.filter(isQuestion))
-  watch(
-    pendingQuestions,
-    (now) => {
-      for (const interrupt of now) askedAfter.value[interrupt.id!] ??= last.value?.id ?? ''
-    },
-    { immediate: true }
-  )
-
-  const questions = computed(() =>
-    groupQuestions({
-      pending: pendingQuestions.value,
-      settled: settled.value,
-      routed: routed.value,
-      askedAfter: askedAfter.value,
-      turns: turns.value,
-      lastId: last.value?.id ?? ''
-    })
-  )
-
-  function answer(event: Event, question: AiChatQuestion, value: string) {
-    const state = { pending: pendingQuestions.value, settled: settled.value, routed: routed.value }
-    const interrupt = answerQuestion(state, question, value)
-    if (interrupt) emit('answer-interrupt', event, interrupt, value)
-  }
-
-  function askOf(call: AiChatToolCallPart): AiChatQuestion {
-    return toolAnswers.value[call.id] ?? toolQuestionOf(call, toolOf(call))
-  }
-
-  function answerTool(event: Event, call: AiChatToolCallPart, value: string) {
-    toolAnswers.value[call.id] = { ...toolQuestionOf(call, toolOf(call)), status: 'running' }
-    emit('answer-tool', event, { toolCallId: call.id, tool: call.name, output: value })
-  }
-
-  function skip(question: AiChatQuestion) {
-    skipQuestion({ pending: pendingQuestions.value, settled: settled.value }, question)
-  }
-
-  function editOf(call: AiChatToolCallPart): string {
-    return edits.value[call.id] ?? json(call.input ?? call.arguments)
-  }
-
   const state = computed<PromptInputStatus>(() => {
     if (!props.loading) return 'ready'
     return last.value?.role === 'assistant' && hasAnswer(last.value) ? 'streaming' : 'pending'
@@ -538,10 +502,6 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 
   function timeOf(turn: AiChatMessage): string {
     return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
-  }
-
-  function toolOf(call: AiChatToolCallPart): AiChatTool {
-    return props.tools[call.name] ?? { title: '' }
   }
 
   watch(
@@ -587,12 +547,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     prompt.value = ''
     files.value = []
     stoppedIds.value.clear()
-    edits.value = {}
     answers.value = {}
-    askedAfter.value = {}
-    settled.value = {}
-    routed.value = {}
-    toolAnswers.value = {}
+    chatTools.reset()
     versions.clear()
     emit('new-chat', event)
   }
@@ -600,20 +556,6 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   function removeQueued(event: MouseEvent, id: string) {
     const item = props.queue?.find((entry) => entry.id === id)
     if (item) emit('remove-queued', event, item)
-  }
-
-  function approve(event: MouseEvent, call: AiChatToolCallPart, text: string) {
-    const edited =
-      toolOf(call).editable && text !== json(call.input ?? call.arguments)
-        ? (JSON.parse(text) as unknown)
-        : undefined
-    emit('approve', event, call, edited)
-    resolveInterrupt(props.interrupts, call, true, edited)
-  }
-
-  function deny(event: MouseEvent, call: AiChatToolCallPart) {
-    emit('deny', event, call)
-    resolveInterrupt(props.interrupts, call, false)
   }
 </script>
 
@@ -664,9 +606,9 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
                 :busy="loading && turn === last"
                 :ready="state === 'ready'"
                 :stopped="stopped(turn)"
-                :questions="questions[turn.id]"
-                :ask-of="askOf"
-                :edit-of="editOf"
+                :questions="chatTools.questions.value[turn.id]"
+                :ask-of="chatTools.askOf"
+                :edit-of="chatTools.editOf"
                 :resolve-app-url="resolveAppUrl"
                 :versions="versions"
                 @retry="emit('retry', $event, turn)"
@@ -675,12 +617,12 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
                 @branch="(event) => emit('branch', event, turn)"
                 @edit-prompt="(event, text) => emit('edit', event, turn, text)"
                 @version-change="(next) => emit('version-change', next)"
-                @answer-tool="answerTool"
-                @edit="(call, text) => (edits[call.id] = text)"
-                @approve="approve"
-                @deny="deny"
-                @answer="answer"
-                @skip="skip"
+                @answer-tool="chatTools.answerTool"
+                @edit="chatTools.setEdit"
+                @approve="chatTools.approve"
+                @deny="chatTools.deny"
+                @answer="chatTools.answer"
+                @skip="chatTools.skip"
                 @app-message="(message, part, reply) => emit('app-message', message, part, reply)"
               />
               <ChatMessage
@@ -722,6 +664,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
                   ref="composerEl"
                   v-model="prompt"
                   v-model:files="files"
+                  v-model:tool-keys="toolKeys"
                   :state="state"
                   :queueable="queueable"
                   :hydrating="hydrating"
@@ -729,6 +672,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
                   :max-files="maxFiles"
                   :max-file-size="maxFileSize"
                   :attachable="attachable"
+                  :tools="composerTools"
                   @submit="send"
                   @stop="stop"
                 />
@@ -745,6 +689,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 ## `sample.ts`
 
 ````ts
+import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
 import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
@@ -904,6 +849,12 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
   },
   { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'az az-bolt' },
   { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'az az-globe' }
+]
+
+export const sampleTools: PromptInputMenuOption[] = [
+  { value: 'web-search', label: 'Web search', icon: 'az az-globe' },
+  { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
+  { value: 'create-image', label: 'Create image', icon: 'az az-image' }
 ]
 ````
 
@@ -1472,7 +1423,11 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
 
 ```ts
 <script setup lang="ts">
-  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
   import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
@@ -1486,6 +1441,7 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
     maxFiles: number
     maxFileSize: number
     attachable: boolean
+    tools: PromptInputMenuOption[]
   }>()
 
   const emit = defineEmits<{
@@ -1495,6 +1451,7 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
 
   const prompt = defineModel<string>({ required: true })
   const files = defineModel<PromptInputFile[]>('files', { required: true })
+  const toolKeys = defineModel<string[]>('toolKeys', { required: true })
 
   const inputEl = ref<InstanceType<typeof PromptInput> | null>(null)
 
@@ -1521,7 +1478,10 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
       v-if="attachable"
       #actions
     >
-      <PromptInputAttachButton />
+      <PromptInputAttachButton
+        v-model="toolKeys"
+        :tools="tools"
+      />
     </template>
     <template #end>
       <PromptInputDictateButton />

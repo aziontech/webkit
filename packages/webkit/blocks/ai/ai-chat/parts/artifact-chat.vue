@@ -90,6 +90,7 @@
 <template>
   <section
     aria-labelledby="ai-chat-artifact-title"
+    data-layout-fill
     class="flex min-h-0 w-full grow basis-0 flex-col"
   >
     <header

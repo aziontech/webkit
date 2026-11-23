@@ -17,6 +17,7 @@ export interface UsePromptInputAttachOptions {
   files: Ref<PromptInputFile[]>
   dragging: Ref<boolean>
   rejection: Ref<string>
+  chips: Ref<number>
   reject: (event: Event, files: File[], reason: PromptInputRejectReason) => void
   focus: () => void
 }
@@ -28,7 +29,7 @@ export interface UsePromptInputAttachReturn {
 export function usePromptInputAttach(
   options: UsePromptInputAttachOptions
 ): UsePromptInputAttachReturn {
-  const { model, files, dragging, rejection } = options
+  const { model, files, dragging, rejection, chips } = options
   const attach = shallowRef<PromptInputAttachHandlers | null>(null)
   const onDrag = (event: DragEvent): void => attach.value?.drag(event)
   for (const type of DRAG_EVENTS) useElementListener(options.boxEl, type, onDrag)
@@ -59,6 +60,9 @@ export function usePromptInputAttach(
         if (attach.value === handlers) attach.value = null
         dragging.value = false
       }
+    },
+    setChips: (count: number) => {
+      chips.value = count
     },
     focus: options.focus
   })

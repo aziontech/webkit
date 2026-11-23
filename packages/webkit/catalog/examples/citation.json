@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Two references in a sentence, each a small chip with the source's site: the first links to the source page, the second points at item 2 of a Sources list on the same page. Both name the source in a tooltip.",
+   "summary": "Two references in a sentence, each a small chip with the site's mark and name. The second cites two sources, so it shows `+1`. Hovering or pressing a chip opens a card with the site, the linked title and a snippet, with a pager when it cites more than one source.",
    "file": "examples/citation/default.vue"
   }
  ]

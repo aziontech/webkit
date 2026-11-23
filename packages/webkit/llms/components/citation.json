@@ -8,52 +8,39 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "An inline reference in generated text (`[1]`), Cloudscape's inline citation: a small rounded chip holding the source's site (`azion.com`), or its title cut to fit, that links to item `n` of the `Sources` list or to the URL, with a tooltip naming the source and the accessible name `Source 1, azion.com: <title>`. `StreamingResponse` renders it for every `[n]`, filling `site` from the source's `href`.",
+ "purpose": "An inline reference in generated text, the inline citation of ChatGPT and Cloudscape: a small rounded chip with the mark of the source's site (its favicon, its icon, or its first letter on a colour of its own) and the site's name (`Azion`, else the host of `href` without `www.`), and `+N` when one marker cites several sources (`[1][2]`, `[1, 2]`). Hovering, focusing or pressing the chip opens a card with the site, the linked title and a snippet (`description`); with several sources a pager `‹ 1/3 ›` steps through them. `StreamingResponse` renders it for every run of `[n]` markers.",
  "setup": null,
  "useWhen": [
-  "A statement in a generated response that comes from a specific source."
+  "A statement in a generated response that comes from one or more specific sources."
  ],
  "avoidWhen": [
   "A link the reader is meant to follow as part of the prose → a normal link.",
   "Footnotes in documentation → `doc-prose` conventions."
  ],
  "related": [
-  "`sources` — the list citations point at.",
+  "`sources` — the pill and panel that list every source of the response.",
   "`streaming-response` — renders citations from `[n]` in Markdown.",
-  "`tooltip` — shows the source title."
+  "`hover-card` — the card a chip opens."
  ],
  "bestPractices": [
-  "Number in order of first use: [1], [2], [3]; the number stays in the accessible name.",
-  "Give every citation a `title` and, for a web source, its `site`; a bare number tells a reader nothing."
+  "Number in order of first use: [1], [2], [3]; the numbers stay in the accessible name.",
+  "Give each web source a `site` name (`Azion`, `GitHub`) and, when you have one, its favicon as `image`; a bare host reads as a URL.",
+  "Keep `description` to a sentence or two of the page; the card cuts it at three lines."
  ],
  "props": [
   {
-   "name": "index",
-   "type": "number",
+   "name": "indexes",
+   "type": "number[]",
    "default": "—",
    "required": "true",
-   "doc": "1-based number of the source, in the order the response first cites it."
+   "doc": "1-based numbers of the sources this reference cites, in order: `[1]` gives `[1]`, `[1][3]` and `[1, 3]` give `[1, 3]`."
   },
   {
-   "name": "title",
-   "type": "string",
-   "default": "''",
+   "name": "sources",
+   "type": "SourcesItem[]",
+   "default": "[]",
    "required": "false",
-   "doc": "Title of the source, shown in the tooltip and read in the accessible name; the chip shows it, cut to fit, when `site` is empty."
-  },
-  {
-   "name": "site",
-   "type": "string",
-   "default": "''",
-   "required": "false",
-   "doc": "Site of the source without `www.` (`example.com`), the text of the chip."
-  },
-  {
-   "name": "href",
-   "type": "string",
-   "default": "''",
-   "required": "false",
-   "doc": "Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it, or when it is unsafe (`javascript:`, `data:`), the chip is plain text."
+   "doc": "The sources of the response, in citation order; `indexes` point into it. A number with no source renders as a plain numbered note."
   }
  ],
  "events": [],

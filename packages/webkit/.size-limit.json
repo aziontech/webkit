@@ -29,7 +29,7 @@
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "40.55 KB",
+    "limit": "40.65 KB",
     "entryOnly": true
   },
   {
@@ -254,7 +254,7 @@
   {
     "name": "doc-code-group",
     "path": "src/components/docs/doc-code-group/doc-code-group.vue",
-    "limit": "34.3 KB",
+    "limit": "34.45 KB",
     "entryOnly": true
   },
   {
@@ -453,7 +453,7 @@
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "121.95 KB"
+    "limit": "122.15 KB"
   },
   {
     "name": "console-trace-scene",
@@ -675,13 +675,13 @@
   {
     "name": "cli-terminal-section",
     "path": "src/components/section/cli-terminal-section/cli-terminal-section.vue",
-    "limit": "47.15 KB",
+    "limit": "47.3 KB",
     "entryOnly": true
   },
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "58.15 KB",
+    "limit": "58.3 KB",
     "entryOnly": true
   },
   {
@@ -1087,17 +1087,17 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "12.55 KB"
+    "limit": "12.65 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "11.8 KB"
+    "limit": "11.9 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "11.9 KB"
+    "limit": "12 KB"
   },
   {
     "name": "phone-input",
@@ -1124,7 +1124,7 @@
   {
     "name": "code-block",
     "path": "src/components/code/code-block/code-block.vue",
-    "limit": "33.85 KB",
+    "limit": "34.0 KB",
     "entryOnly": true
   },
   {
@@ -1147,12 +1147,12 @@
   {
     "name": "tool-approval",
     "path": "src/components/ai/tool-approval/tool-approval.vue",
-    "limit": "16.55 KB"
+    "limit": "11.15 KB"
   },
   {
     "name": "agent-question",
     "path": "src/components/ai/agent-question/agent-question.vue",
-    "limit": "17.3 KB"
+    "limit": "11.9 KB"
   },
   {
     "name": "response-loading",
@@ -1201,7 +1201,7 @@
   {
     "name": "citation",
     "path": "src/components/ai/citation/citation.vue",
-    "limit": "7.25 KB"
+    "limit": "11.25 KB"
   },
   {
     "name": "conversation",
@@ -1211,7 +1211,7 @@
   {
     "name": "prompt-input",
     "path": "src/components/ai/prompt-input/index.ts",
-    "limit": "14.65 KB",
+    "limit": "15.1 KB",
     "entryOnly": true
   },
   {
@@ -1223,13 +1223,13 @@
   {
     "name": "prompt-input-attach-button",
     "path": "src/components/ai/prompt-input/prompt-input-attach-button/prompt-input-attach-button.vue",
-    "limit": "5.6 KB",
+    "limit": "6.7 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-dictate-button",
     "path": "src/components/ai/prompt-input/prompt-input-dictate-button/prompt-input-dictate-button.vue",
-    "limit": "5.55 KB",
+    "limit": "5.6 KB",
     "entryOnly": true
   },
   {
@@ -1247,7 +1247,7 @@
   {
     "name": "prompt-input-tools",
     "path": "src/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue",
-    "limit": "17.7 KB",
+    "limit": "17.75 KB",
     "entryOnly": true
   },
   {
@@ -1263,12 +1263,13 @@
   {
     "name": "sources",
     "path": "src/components/ai/sources/sources.vue",
-    "limit": "3.4 KB"
+    "limit": "4 KB",
+    "entryOnly": true
   },
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "38.5 KB",
+    "limit": "42.85 KB",
     "entryOnly": true
   },
   {
@@ -2631,7 +2632,12 @@
   {
     "name": "use-ai-chat-versions",
     "path": "src/composables/use-ai-chat-versions/index.ts",
-    "limit": "1 KB"
+    "limit": "0.7 KB"
+  },
+  {
+    "name": "use-ai-chat-tools",
+    "path": "src/composables/use-ai-chat-tools/index.ts",
+    "limit": "1.65 KB"
   },
   {
     "name": "shortcuts-dialog",

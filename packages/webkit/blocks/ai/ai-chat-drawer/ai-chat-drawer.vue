@@ -10,9 +10,14 @@
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
-  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+  import { useAiChatTools } from '@aziontech/webkit/use-ai-chat-tools'
   import { useAiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import {
@@ -20,7 +25,6 @@
     type AiChatInterrupt,
     type AiChatInterruptError,
     type AiChatMessage,
-    type AiChatQuestion,
     type AiChatQueuedMessage,
     type AiChatSendContent,
     type AiChatTool,
@@ -30,17 +34,8 @@
     contentOf,
     hasAnswer,
     interruptErrorText,
-    isQuestion,
-    json,
-    queueItemOf,
-    resolveInterrupt,
-    toolQuestionOf
+    queueItemOf
   } from '@aziontech/webkit/utils/ai-chat'
-  import {
-    answerQuestion,
-    groupQuestions,
-    skipQuestion
-  } from '@aziontech/webkit/utils/ai-chat-questions'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
@@ -49,7 +44,7 @@
   import DrawerChatHeader from './parts/drawer-chat-header.vue'
   import DrawerChatStart from './parts/drawer-chat-start.vue'
   import WorkloadOverview from './parts/workload-overview.vue'
-  import { sampleSuggestions } from './sample'
+  import { sampleSuggestions, sampleTools } from './sample'
 
   export interface AiChatDrawerProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
@@ -92,6 +87,8 @@
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
+    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    toolOptions?: PromptInputMenuOption[]
   }
 
   const props = withDefaults(defineProps<AiChatDrawerProps>(), {
@@ -114,14 +111,15 @@
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
-    resolveAppUrl: undefined
+    resolveAppUrl: undefined,
+    toolOptions: undefined
   })
 
   const emit = defineEmits<{
     send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     stop: [event: MouseEvent]
     retry: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
-    share: [event: MouseEvent, message: AiChatMessage]
+    share: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
     branch: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
     edit: [event: MouseEvent | KeyboardEvent, message: AiChatMessage, text: string]
     'version-change': [messages: AiChatMessage[]]
@@ -147,6 +145,8 @@
 
   /** Whether the assistant drawer is open; Agent opens it and its close button closes it. */
   const open = defineModel<boolean>('open', { default: true })
+  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
   const { formatDate } = useLocale()
   const versions = useAiChatVersions(() => props.messages)
@@ -155,17 +155,23 @@
   const files = ref<PromptInputFile[]>([])
   const composerEl = ref<InstanceType<typeof DrawerChatComposer> | null>(null)
   const stoppedIds = ref<Set<string>>(new Set())
-  const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
-  const askedAfter = ref<Record<string, string>>({})
-  const settled = ref<Record<string, AiChatQuestion>>({})
-  const routed = ref<Record<string, boolean>>({})
-  const toolAnswers = ref<Record<string, AiChatQuestion>>({})
 
   const turns = computed(() =>
     props.messages.filter((message) => message.role === 'user' || message.role === 'assistant')
   )
+  const chatTools = useAiChatTools({
+    turns: () => turns.value,
+    interrupts: () => props.interrupts,
+    tools: () => props.tools,
+    onAnswerInterrupt: (event, interrupt, value) =>
+      emit('answer-interrupt', event, interrupt, value),
+    onAnswerTool: (event, answer) => emit('answer-tool', event, answer),
+    onApprove: (event, call, input) => emit('approve', event, call, input),
+    onDeny: (event, call) => emit('deny', event, call)
+  })
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
+  const composerTools = computed(() => props.toolOptions ?? sampleTools)
   const last = computed(() => turns.value[turns.value.length - 1])
   const failure = computed(() => {
     if (!props.error) return ''
@@ -187,49 +193,6 @@
   const queued = computed(() => (props.queue ?? []).map(queueItemOf))
   const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
 
-  const pendingQuestions = computed(() => props.interrupts.filter(isQuestion))
-  watch(
-    pendingQuestions,
-    (now) => {
-      for (const interrupt of now) askedAfter.value[interrupt.id!] ??= last.value?.id ?? ''
-    },
-    { immediate: true }
-  )
-
-  const questions = computed(() =>
-    groupQuestions({
-      pending: pendingQuestions.value,
-      settled: settled.value,
-      routed: routed.value,
-      askedAfter: askedAfter.value,
-      turns: turns.value,
-      lastId: last.value?.id ?? ''
-    })
-  )
-
-  function answer(event: Event, question: AiChatQuestion, value: string) {
-    const state = { pending: pendingQuestions.value, settled: settled.value, routed: routed.value }
-    const interrupt = answerQuestion(state, question, value)
-    if (interrupt) emit('answer-interrupt', event, interrupt, value)
-  }
-
-  function askOf(call: AiChatToolCallPart): AiChatQuestion {
-    return toolAnswers.value[call.id] ?? toolQuestionOf(call, toolOf(call))
-  }
-
-  function answerTool(event: Event, call: AiChatToolCallPart, value: string) {
-    toolAnswers.value[call.id] = { ...toolQuestionOf(call, toolOf(call)), status: 'running' }
-    emit('answer-tool', event, { toolCallId: call.id, tool: call.name, output: value })
-  }
-
-  function skip(question: AiChatQuestion) {
-    skipQuestion({ pending: pendingQuestions.value, settled: settled.value }, question)
-  }
-
-  function editOf(call: AiChatToolCallPart): string {
-    return edits.value[call.id] ?? json(call.input ?? call.arguments)
-  }
-
   const state = computed<PromptInputStatus>(() => {
     if (!props.loading) return 'ready'
     return last.value?.role === 'assistant' && hasAnswer(last.value) ? 'streaming' : 'pending'
@@ -248,10 +211,6 @@
 
   function timeOf(turn: AiChatMessage): string {
     return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
-  }
-
-  function toolOf(call: AiChatToolCallPart): AiChatTool {
-    return props.tools[call.name] ?? { title: '' }
   }
 
   watch(
@@ -297,12 +256,8 @@
     prompt.value = ''
     files.value = []
     stoppedIds.value.clear()
-    edits.value = {}
     answers.value = {}
-    askedAfter.value = {}
-    settled.value = {}
-    routed.value = {}
-    toolAnswers.value = {}
+    chatTools.reset()
     versions.clear()
     emit('new-chat', event)
   }
@@ -310,20 +265,6 @@
   function removeQueued(event: MouseEvent, id: string) {
     const item = props.queue?.find((entry) => entry.id === id)
     if (item) emit('remove-queued', event, item)
-  }
-
-  function approve(event: MouseEvent, call: AiChatToolCallPart, text: string) {
-    const edited =
-      toolOf(call).editable && text !== json(call.input ?? call.arguments)
-        ? (JSON.parse(text) as unknown)
-        : undefined
-    emit('approve', event, call, edited)
-    resolveInterrupt(props.interrupts, call, true, edited)
-  }
-
-  function deny(event: MouseEvent, call: AiChatToolCallPart) {
-    emit('deny', event, call)
-    resolveInterrupt(props.interrupts, call, false)
   }
 </script>
 
@@ -374,9 +315,9 @@
                 :busy="loading && turn === last"
                 :ready="state === 'ready'"
                 :stopped="stopped(turn)"
-                :questions="questions[turn.id]"
-                :ask-of="askOf"
-                :edit-of="editOf"
+                :questions="chatTools.questions.value[turn.id]"
+                :ask-of="chatTools.askOf"
+                :edit-of="chatTools.editOf"
                 :resolve-app-url="resolveAppUrl"
                 :versions="versions"
                 @retry="emit('retry', $event, turn)"
@@ -385,12 +326,12 @@
                 @branch="(event) => emit('branch', event, turn)"
                 @edit-prompt="(event, text) => emit('edit', event, turn, text)"
                 @version-change="(next) => emit('version-change', next)"
-                @answer-tool="answerTool"
-                @edit="(call, text) => (edits[call.id] = text)"
-                @approve="approve"
-                @deny="deny"
-                @answer="answer"
-                @skip="skip"
+                @answer-tool="chatTools.answerTool"
+                @edit="chatTools.setEdit"
+                @approve="chatTools.approve"
+                @deny="chatTools.deny"
+                @answer="chatTools.answer"
+                @skip="chatTools.skip"
                 @app-message="(message, part, reply) => emit('app-message', message, part, reply)"
               />
               <ChatMessage
@@ -432,6 +373,7 @@
                   ref="composerEl"
                   v-model="prompt"
                   v-model:files="files"
+                  v-model:tool-keys="toolKeys"
                   :state="state"
                   :queueable="queueable"
                   :hydrating="hydrating"
@@ -439,6 +381,7 @@
                   :max-files="maxFiles"
                   :max-file-size="maxFileSize"
                   :attachable="attachable"
+                  :tools="composerTools"
                   @submit="send"
                   @stop="stop"
                 />

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 7bed512d35d3d899063f92394841b9e636c7a20d8171c4e4bb5e9cd542009189
+checksum: 17bed936fd2e8d714d7ecd4911760d42e8fbdf3040b6dd9d45e7791eb6e85204
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -199,6 +199,7 @@ _None._
 - Container queries: none; the thread and the composer centre at `--layout-measure-content` and fill narrower hosts with the `--spacing-md` gutter.
 - Narrow (≤ 640 px or a drawer): full width; the owner should pass `layout="start"`.
 - Touch: the scroll button and the Load earlier messages button meet 44 px on coarse pointers (both through their own `pointer-coarse` hit area).
+- Safe area: the composer row keeps at least the bottom safe-area inset (`env(safe-area-inset-bottom)`) under it, so on a phone with a home indicator the composer stays above it while the thread scrolls behind.
 - Reflow: no horizontal scroll at 320 px; wide code and tables scroll inside their own blocks; the Load earlier messages label fits at 320 px and 200 % zoom without horizontal scroll.
 
 ## Performance

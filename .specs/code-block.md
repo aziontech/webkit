@@ -3,14 +3,14 @@ name: code-block
 category: code
 structure: monolithic
 status: implemented
-spec_version: 13
+spec_version: 14
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: e1ed9e02872c7c5b673a5c0de9bdd34e954f7db4a9d6b6ad907730abe29d7ef3
+checksum: 4dea224748b4ed290af31d810ca7e606942b3cba12a51c8fc6827132a346d64f
 created: 2026-05-28
-last_updated: 2026-11-18
+last_updated: 2026-11-22
 ---
 
 # CodeBlock — Component Spec
@@ -27,6 +27,8 @@ Read-only code viewer for docs, API examples, and configuration previews. Suppor
 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar.
 
 Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** type (`type="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks.
+
+The **label header holds the copy control**: when it shows and the block is copyable, the CopyButton (`ghost`, `small`) sits at its end instead of floating over the code, so no line reserves a copy gutter (`data-copy-gutter` marks the root only while the copy floats). The header is `sticky` at the top of the nearest scroller (the root clips with `overflow: clip`, not `hidden`, so it never becomes the scroller itself) on the block's own fill, so a long block keeps its language and copy in view while it scrolls past. Its divider is drawn only when `bordered`: an unbordered block is one filled card, header and code on the same fill (the `StreamingResponse` look).
 
 The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab.
 
@@ -138,21 +140,21 @@ Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should upda
 
 ## Props
 
-| Prop              | Type                   | Default     | Required | JSDoc                                                                                                                                                                                                                            |
-| ----------------- | ---------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tabs`            | `CodeBlockTab[]`       | `[]`        | false    | Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata.                                                                                                                           |
-| `defaultValue`    | `string`               | `undefined` | false    | Initial active tab when uncontrolled.                                                                                                                                                                                            |
-| `code`            | `string`               | `''`        | false    | Code of a single snippet, used when `tabs` is empty.                                                                                                                                                                             |
-| `language`        | `string`               | `''`        | false    | Language of the single `code` snippet (highlighting and the label header).                                                                                                                                                       |
-| `showLineNumbers` | `boolean`              | `true`      | false    | Shows a fixed-width gutter with zero-padded line numbers before each code line (the same name as `code-editor`).                                                                                                                 |
-| `copyAriaLabel`   | `string`               | `''`        | false    | Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`).                                                                                                        |
-| `copyable`        | `boolean`              | `undefined` | false    | Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from.                                                                                    |
-| `type`            | `'code' \| 'output'`   | `'code'`    | false    | What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an "Output" label, without a copy control.                                                               |
-| `showLabel`       | `boolean`              | `false`     | false    | Shows a header naming the block when there is no tab strip or file name: the active tab's label, else the language's readable name (Shell, JavaScript). Docs blocks show it.                                                     |
-| `title`           | `string`               | `''`        | false    | Text of the label header; empty uses the tab label or the language name, or "Output" for an `output` block.                                                                                                                      |
-| `animateLines`    | `boolean`              | `false`     | false    | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart.                                                                                                                    |
-| `bordered`        | `boolean`              | `true`      | false    | Draw the outer card border around the block. On by default; set `:bordered="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
-| `diffView`        | `'unified' \| 'split'` | `'unified'` | false    | How a tab with an `original` draws the diff the block computes: `unified` (one column) or `split` (side by side).                                                                                                                |
+| Prop              | Type                   | Default     | Required | JSDoc                                                                                                                                                                                                                                                                             |
+| ----------------- | ---------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tabs`            | `CodeBlockTab[]`       | `[]`        | false    | Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata.                                                                                                                                                                            |
+| `defaultValue`    | `string`               | `undefined` | false    | Initial active tab when uncontrolled.                                                                                                                                                                                                                                             |
+| `code`            | `string`               | `''`        | false    | Code of a single snippet, used when `tabs` is empty.                                                                                                                                                                                                                              |
+| `language`        | `string`               | `''`        | false    | Language of the single `code` snippet (highlighting and the label header).                                                                                                                                                                                                        |
+| `showLineNumbers` | `boolean`              | `true`      | false    | Shows a fixed-width gutter with zero-padded line numbers before each code line (the same name as `code-editor`).                                                                                                                                                                  |
+| `copyAriaLabel`   | `string`               | `''`        | false    | Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`).                                                                                                                                                         |
+| `copyable`        | `boolean`              | `undefined` | false    | Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from.                                                                                                                                     |
+| `type`            | `'code' \| 'output'`   | `'code'`    | false    | What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an "Output" label, without a copy control.                                                                                                                |
+| `showLabel`       | `boolean`              | `false`     | false    | Shows a header naming the block when there is no tab strip or file name: the active tab's label, else the language's readable name (Shell, JavaScript). Docs blocks show it.                                                                                                      |
+| `title`           | `string`               | `''`        | false    | Text of the label header; empty uses the tab label or the language name, or "Output" for an `output` block.                                                                                                                                                                       |
+| `animateLines`    | `boolean`              | `false`     | false    | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart.                                                                                                                                                                     |
+| `bordered`        | `boolean`              | `true`      | false    | Draw the outer card border around the block. On by default; set `:bordered="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected; the label header's divider goes with the border. |
+| `diffView`        | `'unified' \| 'split'` | `'unified'` | false    | How a tab with an `original` draws the diff the block computes: `unified` (one column) or `split` (side by side).                                                                                                                                                                 |
 
 ## Type shapes
 
@@ -202,6 +204,7 @@ Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should upda
 - `data-state` on code lines: `default` | `added` | `removed` | `highlighted`; in the split view a side with no line opposite a change is `empty` (`var(--bg-canvas)`)
 - `data-split` on the panel when the active tab with an `original` draws side by side
 - `data-disabled` not used (tabs are not disabled in v2)
+- `data-copy-gutter` on the root while the copy control floats over the code (no label header); the scroll area and every line keep its width free
 - `data-type` on the root: `code` | `output`; `output` paints the shell `--bg-canvas` and every line flat in `--text-muted`
 
 ### Layout rules (derived from Figma)
@@ -210,7 +213,7 @@ Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should upda
 | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
 | Tab header (`CodeBlockHeader`, 40 px strip: a 32 px tab over a 4 px inset)                                               | `tabs.length > 1`                                                        |
 | Filename bar (`FileName`, 40 px)                                                                                         | active tab has `fileName`                                                |
-| Label header (40 px, `az az-code` / `az az-align-left` + label)                                                          | no tab strip, no `fileName`, and `showLabel`, `title` or `type="output"` |
+| Label header (40 px, `az az-code` / `az az-align-left` + label, copy at the end, sticky)                                 | no tab strip, no `fileName`, and `showLabel`, `title` or `type="output"` |
 | Diff gutter (`+`/`-` + 8 px spacer on unchanged lines)                                                                   | active tab `lineChanges.length > 0`, or the active tab has an `original` |
 | Unified diff (removed lines from `original` before the added lines of `code` in each change, numbered on their own side) | active tab has an `original` and `diffView="unified"`                    |
 | Split diff (two columns, Original and Modified, rows aligned, a change paired line for line)                             | active tab has an `original` and `diffView="split"`                      |
@@ -310,7 +313,7 @@ One code size across the code components (CodeBlock, CodeEditor, LogViewer, Trac
 - Icons: none mirror.
 - Keyboard: `ArrowRight`/`ArrowLeft` move between the file tabs, swapped under `dir="rtl"` (`logicalArrowKey`); the tab indicator is anchored with a physical `left: 0` and moved by `offsetLeft`.
 - Motion: the panel slide between tabs mirrors (`rtl:` flips the `translate-x` presets).
-- User data: code lines render `dir="ltr"`: code always reads left to right. The scroll area keeps the copy button's width free on its side (`pe-10` when `copyable`), so under `dir="rtl"` the button never covers the start of a line.
+- User data: code lines render `dir="ltr"`: code always reads left to right. The scroll area keeps the copy button's width free on its side (`pe-10` while the copy floats, `data-copy-gutter`; a copy in the label header needs no gutter), so under `dir="rtl"` the button never covers the start of a line.
 
 ## Responsive
 

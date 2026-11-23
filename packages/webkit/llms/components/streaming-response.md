@@ -1,6 +1,6 @@
 # Streaming Response
 
-> Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:`, `data:` and protocol-relative links are dropped (only `http(s)`, `mailto`, `tel`, relative and `#` links survive, checked by the shared `safeHref`), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists, block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Text renders at the reading size (`.text-body-lg`) with a full step (`--spacing-md`) between blocks, the plain, wide answer column of a chat. Numbered citations `[1]` become `Citation` chips holding the source's site (from its `href`), resolved against `sources` and linked to the `Sources` list through a shared `anchor`. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.
+> Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:`, `data:` and protocol-relative links are dropped (only `http(s)`, `mailto`, `tel`, relative and `#` links survive, checked by the shared `safeHref`), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists (nested by indenting an item's lines under it, to any depth), block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Text renders at the reading size (`.text-body-lg`) with a full step (`--spacing-md`) between blocks, the plain, wide answer column of a chat. Headings are bold, with an extra `--spacing-sm` above them so a section reads as a new start: `#` at `.text-heading-md`, every deeper level at the reading size. A fenced code block is one filled card (`--bg-surface-raised`, `--shape-card`, no border) whose header names the language on the start and holds the icon-only copy control on the end; the header sticks to the top of the log while a long block scrolls past, the code is never capped in height and scrolls sideways. While a fence is still open the same card shows the language header over plain text, so the block does not jump when it closes. Numbered citations become `Citation` chips resolved against `sources`: `[1]` one chip with the site's mark and name, and a run of markers (`[1][2]`, `[1] [2]`, `[1, 2]`) one chip with `+1` whose card pages through both sources. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.
 
 - Import: `import StreamingResponse from '@aziontech/webkit/streaming-response'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -16,7 +16,7 @@
 
 - Pass the accumulated text on every chunk; the parser is cheap and the output is keyed by block.
 - Keep `streaming` true until the stream closes, then false (removes the caret, highlights an open fence).
-- Give the response and its `Sources` the same `anchor` so `[n]` links to item `n`.
+- Pass the response and its `Sources` the same array, so `[n]` is item `n` in both.
 - Do not post-process model output into HTML; there is no HTML path.
 
 ## Don’t
@@ -29,7 +29,7 @@
 ## Related
 
 - [chat-message](chat-message.md) — the host of a response.
-- [citation](citation.md), `sources` — inline references and the list they point at.
+- [citation](citation.md), `sources` — inline references and the panel that lists every source.
 - [code-block](code-block.md) — what fenced code renders as.
 - [response-loading](response-loading.md) — the loading text before the first token, or a bar where a table is coming.
 
@@ -39,14 +39,15 @@
 | --- | --- | --- | --- | --- |
 | `content` | `string` | `''` | false | The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, tel, relative and hash links survive. |
 | `streaming` | `boolean` | `false` | false | Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes. |
-| `sources` | `SourcesItem[]` | `[]` | false | Sources the `[n]` citations in the content resolve against (site in the chip, title in the tooltip and the accessible name). |
-| `anchor` | `string` | `''` | false | The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers. |
+| `sources` | `SourcesItem[]` | `[]` | false | Sources the `[n]`, `[n][m]` and `[n, m]` citations in the content resolve against: each becomes a chip with the site's favicon and name that opens a card of the sources it cites. |
 
 ## Sub-components
 
 _None public. Internals shared by the AI family in `src/components/ai/lib/`: `parse-markdown.ts`
-(`parseMarkdown`, `parseInline`, `safeHref`, `plainText`) and `markdown-inline.vue` (recursive inline
-renderer, also used by `ToolApproval` for backticks in its title). Exports: `"./streaming-response"`. Composed DS
+(`parseMarkdown`, `parseInline`, `safeHref`, `plainText`), `markdown-inline.ts` (recursive inline
+renderer, also used by `ToolApproval` and `AgentQuestion`, where a citation marker stays plain `[n]` text),
+`markdown-inline-cited.ts` (the same renderer with `Citation` chips, used here) and `markdown-list.ts`
+(recursive list renderer: nested lists render inside their item). Exports: `"./streaming-response"`. Composed DS
 components: `code-block`, `citation`._
 
 ## States
@@ -54,7 +55,8 @@ components: `code-block`, `citation`._
 - `data-streaming` and `aria-busy="true"` while `streaming`.
 - `data-slot="streaming-response"` on the root marks the answer text, which `ChatMessage.Actions` Read aloud speaks.
 - Caret: inside the last paragraph or heading, else after the last block; only while `streaming`.
-- Open fence while streaming: `<pre data-testid="…__pending-code">`; closed fence or stream ended: `CodeBlock`.
+- Open fence while streaming: the card `data-testid="…__pending-code"` (language header over a `<pre>`); closed fence or stream ended: `CodeBlock` with `show-label`, `:bordered="false"` and no height cap (`--code-block-max-height: none`).
+- Lists: a nested list carries `data-nested` (top margin `--spacing-xs`, an unordered one uses circles); `data-ordered` switches to decimals.
 
 ## Accessibility
 
@@ -99,6 +101,8 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
     '',
     '1. Open Real-Time Purge from the products menu.',
     '2. Choose *URL* as the purge type.',
+    '   - `URL` removes one object.',
+    '   - `Wildcard` removes everything under a path.',
     '3. Paste the address and select Purge.',
     '',
     '| Purge type | When to use it |',
@@ -110,7 +114,9 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
     '',
     '```bash',
     'azion purge urls --urls https://www.example.com/styles.css',
-    '```'
+    '```',
+    '',
+    '> A purge does not change the origin. Update the file there first.'
   ].join('\n')
 </script>
 
@@ -193,16 +199,26 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
     {
       title: 'Real-Time Purge',
       href: 'https://www.azion.com/en/documentation/products/cache/real-time-purge/',
-      description: 'Azion documentation · Cache'
+      description: 'Removes a cached object from every data center in a few seconds.',
+      site: 'Azion',
+      icon: 'az az-azion'
     },
     {
       title: 'HTTP Caching (RFC 9111)',
-      href: 'https://www.w3.org/Protocols/'
+      href: 'https://www.w3.org/Protocols/',
+      description: 'How caches store responses and when they must ask the origin again.'
+    },
+    {
+      title: 'Cache settings',
+      href: 'https://www.azion.com/en/documentation/',
+      description: 'Set the TTL of each path and how query strings build the cache key.',
+      site: 'Azion',
+      icon: 'az az-azion'
     }
   ]
 
   const content =
-    'A purge reaches every data center in a few seconds [1]. The next request for that object goes to the origin, and the response is cached again with the TTL from your cache settings [2].'
+    'A purge reaches every data center in a few seconds [1]. The next request for that object goes to the origin, and the response is cached again with the TTL from your cache settings [2][3].'
 </script>
 
 <template>
@@ -210,12 +226,8 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
     <StreamingResponse
       :content="content"
       :sources="sources"
-      anchor="purge-citations"
     />
-    <Sources
-      :items="sources"
-      anchor="purge-citations"
-    />
+    <Sources :items="sources" />
   </div>
 </template>
 ```

@@ -70,7 +70,11 @@ export const ptBR: Messages = {
   citation: {
     label: 'Fonte {index}: {title}',
     labelUntitled: 'Fonte {index}',
-    labelWithSite: 'Fonte {index}, {site}: {title}'
+    labelWithSite: 'Fonte {index}, {site}: {title}',
+    labelMany: '{site} +{more}, fontes {indexes}',
+    next: 'Próxima fonte',
+    page: '{current}/{total}',
+    previous: 'Fonte anterior'
   },
   conversation: {
     label: 'Conversa',
@@ -119,7 +123,11 @@ export const ptBR: Messages = {
     context: 'Escolher contexto',
     contextRemove: 'Remover contexto',
     tools: 'Ferramentas',
-    toolsEnabled: 'Ferramentas ativadas'
+    toolsEnabled: 'Ferramentas ativadas',
+    addMenu: 'Adicionar',
+    camera: 'Câmera',
+    photos: 'Fotos',
+    files: 'Arquivos'
   },
   agentActivity: {
     label: 'Atividade do agente',
@@ -154,6 +162,8 @@ export const ptBR: Messages = {
   },
   sources: {
     label: 'Fontes',
+    cited: 'Citações',
+    more: 'Mais',
     count: {
       one: '{count} fonte',
       other: '{count} fontes'
