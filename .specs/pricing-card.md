@@ -3,7 +3,7 @@ name: pricing-card
 category: content
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 checksum: ce0563b86f271ef486dc0daadb08ad841726ec6d86d159bd52d28ce904bd9615
 created: 2026-05-22
 last_updated: 2026-11-18

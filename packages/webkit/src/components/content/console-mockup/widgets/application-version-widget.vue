@@ -47,7 +47,8 @@
   })
 
   const TAB_CLASS =
-    'inline-flex h-8 shrink-0 items-center whitespace-nowrap rounded-(--shape-control) px-3 text-body-sm font-semibold text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'inline-flex h-8 shrink-0 items-center whitespace-nowrap rounded-(--shape-control) px-3 text-body-sm font-semibold text-(--text-muted) ' +
+    'transition-colors duration-fast-02 ease-productive-entrance ' +
     'data-active:bg-(--bg-contrast) data-active:font-bold data-active:text-(--text-contrast) ' +
     'motion-reduce:transition-none'
 </script>

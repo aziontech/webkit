@@ -66,7 +66,7 @@
     animated: false
   })
 
-  defineSlots<{
+  const slots = defineSlots<{
     actions?: () => unknown
     default?: () => unknown
   }>()
@@ -203,7 +203,7 @@
     </div>
 
     <div
-      v-if="!isMiddle && $slots.default"
+      v-if="!isMiddle && slots.default"
       class="w-full shrink-0"
       :data-testid="`${testId}__slot`"
     >

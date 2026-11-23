@@ -1453,6 +1453,11 @@ hand edit.
 | `gauge-chart`         | threshold `color`, `GaugeChartThreshold`, `data-status`                                 | threshold `severity`, `ChartThreshold`, `data-severity`                                        |
 | `chart-reference`     | `ChartReferenceSeverity`                                                                | `ChartThresholdSeverity` (now also takes the findings levels)                                  |
 
+`PricingCard`'s default `suffix` is now `/ month` (it was `/ mon`, which read as Monday). A card
+that relied on the default reads `/ month`; set `suffix` to keep another period. The card that shows
+its tag (`showTag`) now draws its built-in action as `primary`, and a `bottom` card with an empty
+default slot no longer reserves a 160px band under its action.
+
 `Badge` is for counts only (`12`, `99+`): a status word goes to `StatusIndicator` (the state of a
 resource) or `Tag` (a category or outcome word). `CodeEditor`'s plain diff mode now marks added and
 removed lines in its gutters with the same line diff `CodeBlock` draws. `LogViewer.Steps`
