@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The band as the site places it: six customer quotes in a framed carousel, each with its client mark and signature, and one call to action under the tabs. Edit the props in the Controls panel — a band with no items renders nothing at all.",
+      "summary": "The band as the site places it: six customer quotes in a framed carousel, each with its client mark and signature, and one call to action under the tabs. A band with no items renders nothing at all.",
       "file": "default.vue"
     },
     {

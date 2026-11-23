@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The band as the home page places it: two customer stories in the framed grid, the first one spanning two columns and two rows, followed by six client marks on mixed fills. Edit the props in the Controls panel — a band with no stories and no logos renders nothing at all.",
+      "summary": "The band as the home page places it: two customer stories in the framed grid, the first one spanning two columns and two rows, followed by six client marks on mixed fills. A band with no stories and no logos renders nothing at all.",
       "file": "default.vue"
     },
     {
