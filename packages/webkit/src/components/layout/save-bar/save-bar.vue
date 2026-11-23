@@ -68,10 +68,10 @@
     if (!documentRoot) return
     if (height) {
       if (floating) documentRoot.style.setProperty('--save-bar-inset', `${height}px`)
-      documentRoot.style.setProperty('--toast-offset-bottom', `${height}px`)
+      documentRoot.style.setProperty('--save-bar-height', `${height}px`)
     } else {
       documentRoot.style.removeProperty('--save-bar-inset')
-      documentRoot.style.removeProperty('--toast-offset-bottom')
+      documentRoot.style.removeProperty('--save-bar-height')
     }
   }
 
