@@ -372,10 +372,13 @@ test('status-fill-as-text fires on a status fill used as text or icon colour', (
   for (const content of [
     'class="az az-circle-x text-(--danger)"',
     'class="data-[type=ok]:text-(--success)"',
-    "class=\"text-(color:--warning)\"",
+    'class="text-(color:--warning)"',
     "'text-(--info)'"
   ]) {
-    assert.ok(ids(content).includes('status-fill-as-text'), `expected status-fill-as-text for: ${content}`)
+    assert.ok(
+      ids(content).includes('status-fill-as-text'),
+      `expected status-fill-as-text for: ${content}`
+    )
   }
 })
 

@@ -55,10 +55,6 @@
   })
   const { error: codeError, checking: verifying, unreachable, check: verify } = codeCheck
 
-  const APP_LINK_CLASS =
-    'inline-flex min-h-10 items-center rounded-(--shape-control) text-body-sm text-(--text-link) underline-offset-2 hover:text-(--text-link-hover) ' +
-    'hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) forced-colors:text-[LinkText]'
-
   const SETUP_KEY_CLASS =
     'flex items-center justify-between gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-2xs) ' +
     'py-(--spacing-2xs)'
@@ -117,7 +113,7 @@
           />
           <a
             :href="otpauthUri"
-            :class="APP_LINK_CLASS"
+            class="text-link inline-flex min-h-10 items-center text-body-sm"
             >Open in authenticator app</a
           >
         </div>

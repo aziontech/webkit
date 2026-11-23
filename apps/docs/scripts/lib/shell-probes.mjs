@@ -1,4 +1,4 @@
-export function landmarks() {
+function landmarks() {
   const ROLES = {
     HEADER: 'banner',
     NAV: 'navigation',
@@ -30,7 +30,7 @@ export function landmarks() {
     }))
 }
 
-export function breaksOnlyAtHyphens(el) {
+function breaksOnlyAtHyphens(el) {
   const node = [...el.childNodes].find((child) => child.nodeType === 3)
   if (!node) return true
   const text = node.textContent ?? ''

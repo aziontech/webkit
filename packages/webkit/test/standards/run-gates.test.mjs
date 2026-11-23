@@ -55,6 +55,8 @@ const CI_ONLY = {
     'builds the icon font the styled browser tests load; build:docs builds it too',
   'pnpm build:docs': 'a full docs build',
   'pnpm check:docs:links': 'needs the docs build',
+  'pnpm test:docs:shell':
+    'needs the docs build and Chromium; pnpm test:docs:shell after pnpm build:docs',
   'pnpm test:docs:smoke':
     'needs the docs build and Chromium; pnpm test:docs:smoke after pnpm build:docs',
   'pnpm check:docs:editor-chunks': 'needs the docs build; pnpm test:docs covers its logic',

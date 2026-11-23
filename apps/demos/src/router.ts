@@ -128,7 +128,7 @@ function pageTookFocus(): boolean {
   )
 }
 
-export function focusElement(target: HTMLElement | null): boolean {
+function focusElement(target: HTMLElement | null): boolean {
   if (!target) return false
   if (!target.hasAttribute('tabindex')) {
     target.setAttribute('tabindex', '-1')

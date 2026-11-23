@@ -5,7 +5,10 @@
 
   export interface TeamLeaveDialogProps {
     /** The guard whose leave dialog this renders. */
-    guard: UseUnsavedChangesReturn<unknown>
+    guard: Pick<
+      UseUnsavedChangesReturn<unknown>,
+      'dialogProps' | 'labels' | 'keepEditing' | 'discardAndLeave'
+    >
   }
 
   defineProps<TeamLeaveDialogProps>()

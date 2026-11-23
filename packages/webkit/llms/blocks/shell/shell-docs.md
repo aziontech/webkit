@@ -213,7 +213,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
 
   const slots = defineSlots<{
     /** The page body: the route's article; the sample guide stands in for RouterView. */
-    default(): unknown
+    default?(): unknown
   }>()
 
   const crumbs = [{ label: 'Functions', href: '/docs/functions' }, { label: 'Getting started' }]

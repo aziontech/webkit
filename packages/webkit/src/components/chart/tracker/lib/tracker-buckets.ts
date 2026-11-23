@@ -11,8 +11,8 @@ const RANK: Record<string, number> = { danger: 4, warning: 3, info: 2, success: 
 const rankOf = (severity: ChartSemanticSeverity | undefined): number =>
   severity ? (RANK[severity] ?? 0) : 0
 
-export const TRACKER_MIN_BLOCK = 6
-export const TRACKER_GAP = 2
+const TRACKER_MIN_BLOCK = 6
+const TRACKER_GAP = 2
 
 export function bucketCapacity(width: number): number {
   return Math.max(1, Math.floor((width + TRACKER_GAP) / (TRACKER_MIN_BLOCK + TRACKER_GAP)))

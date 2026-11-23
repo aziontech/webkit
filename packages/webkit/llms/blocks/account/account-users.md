@@ -356,10 +356,10 @@ Each variant is the same screen in another state: `get_block("account/account-us
     const before = [...user.teams]
     changeTeams(user.id, next)
     toast.success(`Teams updated for ${displayName(user)}.`, {
-      id: `teams-${user.id}`,
       description: next.length
         ? `${teamsLabel(next)}. Access changes on their next request.`
         : 'They keep their seat but lose every permission until a team is added.',
+      id: `teams-${user.id}`,
       actions: [
         {
           label: 'Undo',

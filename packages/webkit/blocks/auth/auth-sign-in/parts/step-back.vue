@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
   import Tooltip from '@aziontech/webkit/tooltip'
 
   export interface StepBackProps {
@@ -30,16 +31,20 @@
       />
     </Tooltip>
     <span class="truncate text-label-sm text-(--text-default)">{{ text }}</span>
-    <input
+    <div
       v-if="username"
-      type="email"
-      name="email"
       class="sr-only"
-      autocomplete="username"
-      :value="text"
-      readonly
-      tabindex="-1"
       aria-hidden="true"
-    />
+    >
+      <Input
+        type="email"
+        name="email"
+        autocomplete="username"
+        :model-value="text"
+        readonly
+        tabindex="-1"
+        aria-hidden="true"
+      />
+    </div>
   </div>
 </template>

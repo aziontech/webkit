@@ -1,4 +1,4 @@
-export const illustrationDefaultFrame = { width: 592, height: 300 } as const
+const illustrationDefaultFrame = { width: 592, height: 300 } as const
 
 const frames: Record<string, readonly [number, number]> = {
   'ai-gateway': [272, 295],
