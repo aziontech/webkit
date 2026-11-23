@@ -103,6 +103,18 @@ describe('state state-async-submit and state-form-validation', () => {
     expect(view.getAllByTestId('field-error')).toHaveLength(2)
   })
 
+  it('form-validation: no required text field carries a placeholder that reads as a value', async () => {
+    for (const block of [FormValidation, SectionRejected]) {
+      const view = render(block)
+      const fields = view.container.querySelectorAll<HTMLInputElement>(
+        'input[aria-required="true"], input[required]'
+      )
+      expect(fields.length).toBeGreaterThan(0)
+      for (const field of fields) expect(field.getAttribute('placeholder') ?? '').toBe('')
+      view.unmount()
+    }
+  })
+
   it('state-form-validation SectionRejected: Reload origins emits, and a reloaded list flags the origin', async () => {
     const view = render(SectionRejected)
     expect(view.queryByRole('complementary', { name: 'Scenario simulation' })).toBeNull()

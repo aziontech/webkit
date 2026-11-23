@@ -226,7 +226,6 @@
               :id="fieldIds.key"
               v-model="form.key"
               name="key"
-              placeholder="API_TOKEN"
             />
             <Field.Description
               >Uppercase letters, digits and underscores, for example API_TOKEN.</Field.Description
