@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
 
   /**
@@ -38,6 +40,7 @@
   })
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ common: en.common })
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-card')
 
@@ -87,7 +90,14 @@
       class="text-overline-sm text-(--text-muted)"
       >{{ eyebrow }}</span
     >
-    <span class="text-heading-xs text-(--text-default)">{{ title }}</span>
+    <span class="text-heading-xs text-(--text-default)"
+      >{{ title
+      }}<span
+        v-if="isLink && target === '_blank'"
+        class="sr-only"
+        >{{ ` ${t('common.newTab')}` }}</span
+      ></span
+    >
     <span
       v-if="$slots['default'] || label"
       class="mt-(--spacing-2xs) text-pretty text-body-sm text-(--text-muted) [&>*:first-child]:pt-0! [&_p]:text-body-sm!"

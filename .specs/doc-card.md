@@ -4,9 +4,9 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 1d27fecec1d3f8c24f039e8324a7f5a9d8cdfd8e4973738b4a315fdde55b5897
+checksum: 6db7cd2695d34dd446ae1bb9170e130f5337663ca351dc19ee53a4f3ac87088c
 created: 2026-08-22
-last_updated: 2026-11-15
+last_updated: 2026-11-22
 ---
 
 # DocCard — Component Spec
@@ -124,6 +124,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 - A card that leaves the documentation (absolute URL, `mailto:`, or explicit `target="_blank"`) carries `rel="noreferrer"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the whole tile is the hit area, comfortably over 40×40 px.
+- A link that opens a new tab (`target="_blank"`) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
 ## Right-to-left
 

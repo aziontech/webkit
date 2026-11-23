@@ -4,9 +4,9 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 9c4e8d6f0182799281e684ad906863258f8ad1c0a86e8bd91962050f8de82268
+checksum: e2c93495b519b4661a42e32005349cbe7c851308e5d20c921631af5891baf550
 created: 2026-08-22
-last_updated: 2026-11-18
+last_updated: 2026-11-22
 ---
 
 # DocItem — Component Spec
@@ -135,6 +135,7 @@ One row of the documentation's related-content list: a leading glyph in a framed
 - A row that leaves the documentation carries `rel="noreferrer"` on `target="_blank"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the full row is the hit area, comfortably over 40×40 px.
+- A link that opens a new tab (`target="_blank"`) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
 ## Right-to-left
 

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: b451918f3fc9c3aecb1da532cfa106c7e77cab012ee42b86db3067660cf2f779
+checksum: e68e65c0fc032748eb0514db540c114f6ce4abf0318de9404c2c0011ae518207
 created: 2026-05-22
-last_updated: 2026-11-21
+last_updated: 2026-11-22
 ---
 
 # Button — Component Spec
@@ -158,6 +158,7 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 - Touch target ≥40×40 px where the control is interactive.
 - Forced colors: the filled variants (primary, secondary, danger) have no border of their own, so under `forced-colors: active` every button draws a 1px `ButtonBorder` edge (`GrayText` when disabled); outside forced colors nothing changes.
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button (with `download`, `blob:` and `data:` are kept).
+- A link that opens a new tab (`target="_blank"`) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
 ## Right-to-left
 

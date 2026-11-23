@@ -3,6 +3,8 @@
 
   import { useAnnouncer } from '../../../composables/use-announcer'
   import { useButtonRoot } from '../../../composables/use-button-root'
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
   import { directionalIconClass } from '../../../utils/directional-icons'
   import Spinner from '../../feedback/spinner/spinner.vue'
 
@@ -74,6 +76,7 @@
 
   const { announce } = useAnnouncer()
   const attrs = useAttrs()
+  const { t } = useTranslate({ common: en.common })
   const { Root, rootAttrs, onClick } = useButtonRoot(props, 'button', (event) =>
     emit('click', event)
   )
@@ -176,6 +179,10 @@
           class="min-w-0 overflow-x-clip text-ellipsis"
           >{{ label }}</span
         ></slot
+      ><span
+        v-if="rootAttrs['target'] === '_blank'"
+        class="sr-only"
+        >{{ ` ${t('common.newTab')}` }}</span
       >
     </span>
     <span
