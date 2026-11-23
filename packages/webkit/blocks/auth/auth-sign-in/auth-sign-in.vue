@@ -64,6 +64,8 @@
     termsHref?: string
     /** The privacy policy page. */
     privacyHref?: string
+    /** Focus the step's field when the screen mounts; turn off when the screen is embedded in a longer page. */
+    autofocus?: boolean
   }
 
   const props = withDefaults(defineProps<SignInProps>(), {
@@ -77,7 +79,8 @@
     docsHref: '/docs',
     signUpHref: '/signup',
     termsHref: 'https://example.com/terms',
-    privacyHref: 'https://example.com/privacy'
+    privacyHref: 'https://example.com/privacy',
+    autofocus: true
   })
 
   const emit = defineEmits<{
@@ -150,6 +153,7 @@
   }
 
   onMounted(() => {
+    if (!props.autofocus) return
     if (step.value === 'email' || step.value === 'password') focusField(`login-${step.value}`)
   })
 

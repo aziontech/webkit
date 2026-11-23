@@ -44,7 +44,12 @@
   async function revealActive() {
     await nextTick()
     const root = rootEl.value?.$el as HTMLElement | undefined
-    root?.querySelector('[aria-current="page"]')?.scrollIntoView({ block: 'nearest' })
+    const item = root?.querySelector<HTMLElement>('[aria-current="page"]')
+    let box = item?.parentElement ?? null
+    while (box && box.scrollHeight <= box.clientHeight) box = box.parentElement
+    if (!item || !box) return
+    const top = item.getBoundingClientRect().top - box.getBoundingClientRect().top
+    if (top < 0 || top + item.offsetHeight > box.clientHeight) box.scrollTop += top - box.clientHeight / 2
   }
 
   onMounted(() => {

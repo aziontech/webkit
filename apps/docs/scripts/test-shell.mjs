@@ -119,7 +119,10 @@ await check('block cards carry a short purpose', DESKTOP, async (page, open) => 
 await check('the sidebar shows the page you are on', DESKTOP, async (page, open) => {
   await open('/components/hero-section')
   await page.waitForTimeout(500)
-  const box = await page.locator('aside [aria-current="page"]').first().boundingBox()
+  const box = await page
+    .locator('[data-testid="sidebar"] [aria-current="page"]')
+    .first()
+    .boundingBox()
   if (!box || box.y < 0 || box.y + box.height > DESKTOP.height) return `active item at y=${box?.y}`
 })
 

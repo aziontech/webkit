@@ -1,5 +1,5 @@
 import { nextTick, readonly, type Ref, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 function focusTarget(hash: string): HTMLElement | null {
   const main = document.getElementById('main')
@@ -10,12 +10,15 @@ function focusTarget(hash: string): HTMLElement | null {
 
 export function useRouteFocus(): Readonly<Ref<string>> {
   const route = useRoute()
+  const router = useRouter()
   const announcement = ref('')
+  let ready = false
+  if (!import.meta.env.SSR) void router.isReady().then(() => (ready = true))
 
   watch(
     () => route.path,
     async () => {
-      if (import.meta.env.SSR) return
+      if (import.meta.env.SSR || !ready) return
       announcement.value = ''
       await nextTick()
       requestAnimationFrame(() => {
