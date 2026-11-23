@@ -37,6 +37,7 @@ describe('MediaSplit', () => {
 
     expect(buttons.length).toBeGreaterThan(0)
     buttons.forEach((button) => expect(button).toHaveAttribute('data-size', 'large'))
+    expect(container.querySelector('a[target="_blank"]')).toBeNull()
   })
 
   it('renders the band under the default testid', () => {

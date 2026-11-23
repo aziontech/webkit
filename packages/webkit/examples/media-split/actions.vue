@@ -45,7 +45,6 @@
           variant="outline"
           icon="az az-github"
           href="https://github.com/aziontech"
-          target="_blank"
         />
       </template>
     </MediaSplit>
