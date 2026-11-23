@@ -20,16 +20,20 @@ component, block and doc first.
 
 **1. Stabilize the 6.0 branch (before launch)**
 
-| #   | Item                                                                                                                                                                                                                                                                                                                                                                                                     | Status (2026-11-19)          |
-| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| 1.1 | Full audit and fixes                                                                                                                                                                                                                                                                                                                                                                                     | In progress                  |
-| 1.2 | Logos of every integration Azion supports: web frameworks, AI models, observability platforms (Datadog, Splunk, …). Includes M2.10 row 58                                                                                                                                                                                                                                                                | In progress (its own lane)   |
-| 1.3 | Decide whether components also ship as Markdown and JSON besides Vue now, then build it. Content components already have all three (DECISIONS RV-K2-1); the open question is the rest                                                                                                                                                                                                                    | Needs owner                  |
-| 1.4 | Final full audit and fixes                                                                                                                                                                                                                                                                                                                                                                               | Not started                  |
-| 1.5 | Full visual review of every component and block, and the fixes it finds                                                                                                                                                                                                                                                                                                                                  | Not started                  |
-| 1.6 | The docs site uses WebKit exactly as an app does: its own doc components and a consumer setup. Detail below (owner, 2026-11-20). Runs before 1.5, so the visual review sees the result                                                                                                                                                                                                                   | Not started                  |
-| 1.7 | Code quality, maintainability and extension of every component and block, by one technical spec: [`.claude/docs/CODE_QUALITY.md`](./.claude/docs/CODE_QUALITY.md). Detail below (owner, 2026-11-20). Runs after 1.6 and before 1.4 and 1.5, so the final audit and the visual review see the result                                                                                                      | Not started                  |
-| 1.8 | Every component and block tested on every browser engine and on real devices, automated in CI: first on our own server with Playwright (Chromium, real Edge, Firefox, the Safari engine, phone and tablet sizes with touch), then on real devices through an external service. Detail below (owner, 2026-11-20). Phase A runs before 1.4 and 1.5, so the final audit and the visual review see its fixes | Not started (trial run done) |
+| #    | Item                                                                                                                                                                                                                                                                                                                                                                                                     | Status (2026-11-19)          |
+| ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| 1.1  | Full audit and fixes                                                                                                                                                                                                                                                                                                                                                                                     | In progress                  |
+| 1.2  | Logos of every integration Azion supports: web frameworks, AI models, observability platforms (Datadog, Splunk, …). Includes M2.10 row 58                                                                                                                                                                                                                                                                | In progress (its own lane)   |
+| 1.3  | Decide whether components also ship as Markdown and JSON besides Vue now, then build it. Content components already have all three (DECISIONS RV-K2-1); the open question is the rest                                                                                                                                                                                                                    | Needs owner                  |
+| 1.4  | Final full audit and fixes                                                                                                                                                                                                                                                                                                                                                                               | Not started                  |
+| 1.5  | Full visual review of every component and block, and the fixes it finds                                                                                                                                                                                                                                                                                                                                  | Not started                  |
+| 1.6  | The docs site uses WebKit exactly as an app does: its own doc components and a consumer setup. Detail below (owner, 2026-11-20). Runs before 1.5, so the visual review sees the result                                                                                                                                                                                                                   | Not started                  |
+| 1.7  | Code quality, maintainability and extension of every component and block, by one technical spec: [`.claude/docs/CODE_QUALITY.md`](./.claude/docs/CODE_QUALITY.md). Detail below (owner, 2026-11-20). Runs after 1.6 and before 1.4 and 1.5, so the final audit and the visual review see the result                                                                                                      | Not started                  |
+| 1.8  | Every component and block tested on every browser engine and on real devices, automated in CI: first on our own server with Playwright (Chromium, real Edge, Firefox, the Safari engine, phone and tablet sizes with touch), then on real devices through an external service. Detail below (owner, 2026-11-20). Phase A runs before 1.4 and 1.5, so the final audit and the visual review see its fixes | Not started (trial run done) |
+| 1.10 | UI SDK as a behavior benchmark: Vercel Labs' UI SDK (`@ui-sdk/core`) becomes a third reference, next to Cloudscape and shadcn, for keyboard maps, typeahead, focus return and dismissal; every interactive component is compared once and its gaps fixed. Reference only, no dependency. Detail below (owner, 2026-11-22). Independent; runs before 1.4 and 1.5                                          | Not started                  |
+| 1.11 | A WAI-ARIA pattern check in the test suite: one shared check per pattern (listbox, menu, dialog, tabs, tree, grid, combobox, …) that drives a rendered component by keyboard and fails when it does not behave as the pattern says, in left-to-right, right-to-left and after a server render. Detail below (owner, 2026-11-22). Independent; runs before 1.4 and 1.5                                    | Not started                  |
+| 1.12 | Agents that operate a finished page: an accessibility-tree snapshot and a small set of actions (click, type, press, select by role and name) that an agent uses to check a built page, used by the usage check and the demos. Detail below (owner, 2026-11-22). Independent; runs before 2.4                                                                                                             | Not started                  |
+| 1.13 | Missing components found in UI SDK's list: map its 49 components to WebKit's catalog, and for each real gap a side-by-side proposal the owner approves before it is built through `/component-new`. Detail below (owner, 2026-11-22). Independent; approved components land before 1.5                                                                                                                   | Not started                  |
 
 **1.7 in detail — code quality before `main` (owner, 2026-11-20).** A comparison of Button, Select
 and Table with shadcn and Cloudscape found WebKit the lightest of the three and ahead of shadcn on
@@ -121,6 +125,89 @@ bar safe areas, the collapsing address bar, real touch, and Samsung's browser.
    covered by the Chromium and Edge runs; one manual pass on BrowserStack Live before the launch.
 6. **Done** means the nightly run is green on every device above for a week, and the release PR
    shows the device run as a check.
+
+**1.10 to 1.13 — what UI SDK teaches WebKit (owner, 2026-11-22).** UI SDK
+([github.com/vercel-labs/ui](https://github.com/vercel-labs/ui), [ui-sdk.dev](https://ui-sdk.dev),
+Apache-2.0) is a library of behaviors, not components: keyboard navigation, focus, selection,
+dismissal, popups, drag and drop and their ARIA, with a Vue adapter. Checked on 2026-11-22 it is at
+`0.1.0-beta.14` (created 2026-10-26), so WebKit does **not** take it as a dependency before 6.0: it
+is a beta, `dependencies.md` forbids an outside library for popups and positioning without an
+approved exception, and WebKit already has these behaviors, tested in a real browser. What it gives
+is four ideas. Each item below stands alone: its own branch, its own lane, no item waits for
+another, and each one's done line is checked on its own. Look at UI SDK again as an engine after
+its 1.0 (a new row then, not part of these four).
+
+_1.10 — UI SDK as a behavior benchmark._
+
+1. **Add it to the research step.** `/component-new` step 2 and `/block-new` name UI SDK as a third
+   benchmark: read its component page and source (`packages/core/src/components/<x>`) for the
+   keyboard map, typeahead, focus return, dismissal and the ARIA it sets. Cloudscape and shadcn stay
+   the references for anatomy and props; UI SDK is the reference for behavior. Its code is read,
+   never copied (`migration.md`).
+2. **Compare every interactive component once.** For each WebKit component that UI SDK also has
+   (dialog, drawer, popover, hover-card, tooltip, menu, dropdown, select, combobox, command, listbox,
+   tabs, accordion, tree, calendar, date picker, slider, radio, checkbox, switch, toggle group,
+   number input, OTP input, toast, carousel, resizable, scroll area, pagination, navigation menu), a
+   table in `packages/webkit/docs/reviews/ui-sdk-behavior.md`: each key and focus rule of theirs,
+   whether WebKit does the same, and the gap.
+3. **Fix the gaps** through the component's spec (its keyboard map in the a11y section), its code
+   and its test. A behavior WebKit chooses not to copy is recorded with its reason as a `UI-<n>`
+   row in `DECISIONS.md`.
+4. **Done** means every component in the list has its row, every gap is fixed or recorded, and the
+   gates and browser suite are green.
+
+_1.11 — A WAI-ARIA pattern check in the test suite._
+
+1. **One check per pattern**, in `packages/webkit/src/test/patterns/` (for example
+   `expectListboxPattern(el)`), written from the WAI-ARIA Authoring Practices: the roles and states
+   each part needs, and the keyboard contract (arrows, Home and End, typeahead, Enter and Space,
+   Esc, Tab out, focus return). It drives the real component in the browser suite, like axe, and
+   reports each rule it breaks. UI SDK's `@ui-sdk/core/testing` (`check-pattern`) shows the shape;
+   ours is our own code.
+2. **Three runs of each check:** left-to-right, right-to-left (arrows swap where the pattern says),
+   and on markup hydrated from a server render.
+3. **Every component that follows a pattern calls it** from its own `<name>.test.ts`; the patterns
+   it follows are listed in its spec's a11y section and in the catalog, so the MCP can say which
+   pattern a component implements.
+4. **A new component cannot skip it.** `check-tests.mjs` fails a component whose spec names a
+   pattern when its test does not call that pattern's check.
+5. **Done** means every pattern component passes all three runs in CI; a finding is fixed or listed
+   with its reason in `.claude/docs/KNOWN_FAILURES.md`.
+
+_1.12 — Agents that operate a finished page._
+
+1. **Snapshot and act.** A small module (in `packages/webkit-mcp` or the CLI, decided by the run and
+   recorded) that opens a built page with Playwright, returns its accessibility tree as text (role,
+   name, state, the visible text), and runs actions by role and name: click, type, press a key,
+   pick an option, open and close an overlay. UI SDK's `@ui-sdk/core/agent` (`snapshot`, `act`)
+   shows the idea; WebKit's version works on any WebKit page and needs nothing added to the
+   components.
+2. **Used by the usage check.** `check-usage.mjs` (AGENTS.md step 8) no longer stops at "the
+   agent picked the right piece": the agent also uses the page it built through snapshot and act
+   (fill the form, submit, see the success state) and fails when it cannot.
+3. **Used on the demos.** One scripted task per demo flow in `apps/demos` (create a workload, open
+   the chat, filter a table) runs through snapshot and act in CI, so a flow an agent cannot finish
+   fails like a broken test.
+4. **Documented for apps.** A consumer skill section (`webkit-usage` or a new `webkit-agent-check`)
+   tells an app's agent how to check its own pages the same way.
+5. **Done** means the module, the usage check and the demo tasks run green in CI.
+
+_1.13 — Missing components found in UI SDK's list._
+
+1. **Map first.** UI SDK's 49 components against WebKit's catalog (`catalog.json`, its aliases and
+   the MCP search), in `packages/webkit/docs/reviews/ui-sdk-components.md`: same component, same job
+   under another name (for example `segmented-control` against `toggle-group`, `file-input` against
+   an upload field), or a real gap. Checked on 2026-11-22, the names WebKit does not export are
+   color-picker, image-cropper, rating, token-input, waterfall, timeline, date-input, file-input,
+   segmented-control, meter, menubar, toolbar, autocomplete and trigger-menu; the map settles which
+   of them are really missing.
+2. **Propose, do not build.** Each real gap that an Azion product, the console or the site would use
+   gets a side-by-side proposal page (what it is, where Azion needs it, Cloudscape, shadcn and UI SDK
+   next to each other). A gap no Azion screen needs is listed as "not needed" with its reason.
+3. **The owner approves each one.** Only approved components are built, each through
+   `/component-new` (spec, second-agent review, test, examples, `ui-craft`), one lane each.
+4. **Done** means the map is complete, every gap has a decision row (`UI-<n>`), and every approved
+   component is built and green before 1.5, so the visual review sees it.
 
 **2. Close the open leftovers (before launch).** Each row stays in its table; this is what is left,
 checked against the code on 2026-11-19:
