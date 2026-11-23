@@ -24373,7 +24373,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 # Date Picker
 
-> DatePicker picks **one date**, optionally with a time, in a form field. A trigger button opens a popover that holds a month grid, a typed date field (and a time field with `showTime`), an optional footer and an Apply action. The selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false). Date math uses the native `Date` API only — no date library; the trigger formats the value with `Intl` in `v-model:time-zone` (the local zone when empty). Before 6.0 this component was `Calendar` and also picked ranges, periods and presets; every range — relative or absolute, with or without times — now belongs to `date-range-picker`, which reuses this component's month grid and fields as internal parts. The name follows Cloudscape DatePicker and the shadcn "Date Picker".
+> DatePicker picks **one date**, optionally with a time, in a form field. A trigger button opens a popover that holds a month grid, a typed date field (and a time field with `showTime`), an optional footer and a Cancel / Apply pair. The selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); Cancel closes the popover, discards the draft and returns focus to the trigger. The pair matches `date-range-picker`'s footer: a ghost Cancel and a primary Apply, so both pickers commit the same way. Date math uses the native `Date` API only — no date library; the trigger formats the value with `Intl` in `v-model:time-zone` (the local zone when empty). Before 6.0 this component was `Calendar` and also picked ranges, periods and presets; every range — relative or absolute, with or without times — now belongs to `date-range-picker`, which reuses this component's month grid and fields as internal parts. The name follows Cloudscape DatePicker and the shadcn "Date Picker".
 
 - Import: `import DatePickerRoot from '@aziontech/webkit/date-picker-root'`
 - Compound import (dot notation, not tree-shakeable): `import DatePicker from '@aziontech/webkit/date-picker'`
@@ -24423,7 +24423,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 | `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` | false | Places the fields and Apply column below the calendar (vertical) or beside it (horizontal). |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the trigger; the current value is appended (`Due date: Nov 15, 2026`). Empty leaves the name to the Field label or the trigger text. |
 | `clearable` | `boolean` | `false` | false | Shows a clear control on the trigger that empties the committed selection. |
-| `showApply` | `boolean` | `true` | false | Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately. |
+| `showApply` | `boolean` | `true` | false | Stages edits in a draft and shows Cancel and Apply; when false, every edit commits immediately and neither button renders. |
 | `split` | `boolean` | `false` | false | Renders the trigger as a split control with a separate chevron affordance. |
 | `modelValue` | `DatePickerValue` | `null` | false | Two-way value (`v-model`). |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
@@ -24482,7 +24482,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger and `focus-visible:ring-offset-(--bg-surface-raised)` inside the popover. The date and time fields reuse `input`, whose ring offset resolves `var(--input-ring-offset, var(--bg-canvas))`; the fields container declares `--input-ring-offset: var(--bg-surface-raised)` once and it inherits to every field.
 - Field labels: the visible Date label is a `<label for>` bound to its date field through `useId()`; the time field beside it carries its own `aria-label` (`Time`), so every field has a programmatic accessible name.
-- Keyboard map: the trigger toggles the popover with `Enter`/`Space` and exposes `aria-haspopup`/`aria-expanded`; `Escape` and click-outside close it and return focus to the trigger; focus is trapped in the open popover. In the grid, `Tab` enters at the focused day, `Arrow` keys move focus (paging the visible month when crossing its first/last day), `Enter`/`Space` selects, `Home`/`End` move to the first/last day of the week (the grid starts on Sunday; logical, so the same under `dir="rtl"`), `PageUp`/`PageDown` change month, `Shift+PageUp`/`Shift+PageDown` change year. The caption's Month and Year selects keep the `select` keyboard map (`Enter`/`Space`/`ArrowDown` open the list, the arrows move, typing jumps to an option, `Escape` closes only the list and leaves the popover open). Tests: `date-picker.test.ts` › Home and End, Shift+PageDown and Shift+PageUp; jumps to the month and year picked in the caption selects; bounds the year list by min and max. Apply, Clear and the fields are all reachable by `Tab`.
+- Keyboard map: the trigger toggles the popover with `Enter`/`Space` and exposes `aria-haspopup`/`aria-expanded`; `Escape` and click-outside close it and return focus to the trigger; focus is trapped in the open popover. Opening moves focus to the selected day (else today, else the first enabled day of the month), as in the WAI-ARIA date picker dialog pattern; `Shift+Tab` reaches the month controls. Tests: `date-picker.test.ts` › opening moves focus to the selected day. In the grid, `Tab` enters at the focused day, `Arrow` keys move focus (paging the visible month when crossing its first/last day), `Enter`/`Space` selects, `Home`/`End` move to the first/last day of the week (the grid starts on Sunday; logical, so the same under `dir="rtl"`), `PageUp`/`PageDown` change month, `Shift+PageUp`/`Shift+PageDown` change year. The caption's Month and Year selects keep the `select` keyboard map (`Enter`/`Space`/`ArrowDown` open the list, the arrows move, typing jumps to an option, `Escape` closes only the list and leaves the popover open). Tests: `date-picker.test.ts` › Home and End, Shift+PageDown and Shift+PageUp; jumps to the month and year picked in the caption selects; bounds the year list by min and max. Cancel, Apply, Clear and the fields are all reachable by `Tab`.
 - ARIA: the month grid uses `role="grid"` with `role="row"` and `role="gridcell"` descendants; the selected cell sets `aria-selected="true"`; the current date sets `aria-current="date"`; navigation buttons carry `aria-label`; the caption's Month and Year selects are `combobox` buttons named `Month` and `Year` from the catalog, showing the visible month and year; the popover is a `dialog` named by the catalog (`Choose date`); decorative icons are `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:animate-none` on the popover and `motion-reduce:transition-none` on animated states.
@@ -24828,7 +24828,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `variant` | `'inline' \| 'overlay'` | `'inline'` | false | Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor. |
-| `title` | `string` | `''` | false | Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`). |
+| `title` | `string` | `''` | false | Instruction shown under the icon. Empty uses the locale catalog: `Drop files to upload` (`fileDropzone.title`), or `Choose files to upload` (`fileDropzone.touchTitle`) for an inline region on a coarse pointer. |
 | `description` | `string` | `''` | false | Secondary line under the title, typically the accepted types and limits. Not rendered when empty. |
 | `accept` | `string` | `''` | false | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file. |
 | `multiple` | `boolean` | `true` | false | When false, only the first accepted file of a drop is accepted and the rest are rejected. `true` by default (recorded exception to the default-false rule; inverting it would break consumers). |
@@ -25065,7 +25065,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 ## Do
 
 - One sentence, ending in a period. If it needs two, it belongs in `field-description` or a `popover`.
-- Never hide required information behind a hint — hover is not discoverable on touch, so treat it as an enhancement.
+- Never hide required information behind a hint — on touch it opens only when tapped, so treat it as an enhancement.
 - The `content` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.
 - Place it immediately after the thing it explains, not at the end of a row.
 
@@ -25085,7 +25085,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `content` | `string` | `''` | true | Guidance text revealed on hover or focus; also the trigger's accessible name. |
+| `content` | `string` | `''` | true | Guidance text revealed on hover or focus, or by a tap on touch; also the trigger's accessible name. |
 | `side` | `'top' \| 'bottom' \| 'start' \| 'end' \| 'auto'` | `'top'` | false | Side of the glyph the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room. `start` and `end` follow the text direction. |
 
 ## States
@@ -25096,7 +25096,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 ## Accessibility
 
-- The trigger is a native `<button type="button">`, so it is in the tab order and the tooltip opens on `focus` as well as hover (`Tooltip` opens on `focusin`).
+- The trigger is a native `<button type="button">`, so it is in the tab order and the tooltip opens on `focus` as well as hover (`Tooltip` opens on `focusin`). On touch the glyph is a toggletip: a tap shows the text and keeps it shown; a second tap, a tap outside, `Escape` or moving focus away closes it. Tests: `hint.test.ts` › touch.
 - The glyph is decorative (`aria-hidden="true"`); the button's accessible name is the `content` prop, so the hint is reachable by screen readers that never see the tooltip.
 - Keyboard map: `Tab` moves focus to the glyph and opens the tooltip; `Escape` closes it (owned by `Tooltip`); the button has no activation behaviour.
 - The button's default action is prevented on click, so a `Hint` rendered inside a `<label>` never toggles the labelled control.
@@ -25164,7 +25164,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 | `type` | `'text' \| 'email' \| 'number'` | `'text'` | false | Native input type. Restricted to single-line variants the field treats identically. |
 | `maxLength` | `number \| undefined` | `undefined` | false | Native `maxlength` — maximum number of characters allowed. |
 | `autocomplete` | `string \| undefined` | `undefined` | false | Native `autocomplete` token on the `<input>` (e.g. `email`, `username`, `off`). Omitted when unset. |
-| `spellcheck` | `boolean \| undefined` | `undefined` | false | Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck="false"` on every field. |
+| `spellcheck` | `boolean \| undefined` | `undefined` | false | Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains; `false` also sets `autocapitalize="none"` and `autocorrect="off"`, so a phone does not capitalize a case-sensitive key (a passed attribute wins). Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck="false"` on every field. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `readonly` | `boolean` | `false` | false | Marks the field read-only: value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`); distinct from the disabled field. |
@@ -25216,6 +25216,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import { ref } from 'vue'
 
@@ -25223,10 +25224,13 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 </script>
 
 <template>
-  <Input
-    v-model="value"
-    placeholder="Type something"
-  />
+  <Field class="w-full max-w-(--container-xs)">
+    <Field.Label>Project name</Field.Label>
+    <Input
+      v-model="value"
+      placeholder="my-project"
+    />
+  </Field>
 </template>
 ```
 
@@ -25760,6 +25764,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import NumberInput from '@aziontech/webkit/number-input'
   import { ref } from 'vue'
 
@@ -25767,15 +25772,16 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 </script>
 
 <template>
-  <div class="w-full max-w-80">
+  <Field class="w-full max-w-(--container-xs)">
+    <Field.Label>Quantity</Field.Label>
     <NumberInput
       v-model="value"
       :min="0"
       :max="100"
       :step="1"
-      placeholder="Quantity"
     />
-  </div>
+    <Field.Description>From 0 to 100.</Field.Description>
+  </Field>
 </template>
 ```
 
@@ -25990,6 +25996,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import PasswordInput from '@aziontech/webkit/password-input'
   import { ref } from 'vue'
 
@@ -25997,11 +26004,13 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 </script>
 
 <template>
-  <PasswordInput
-    v-model="password"
-    placeholder="Enter your password"
-    autocomplete="current-password"
-  />
+  <Field class="w-full max-w-(--container-xs)">
+    <Field.Label>Password</Field.Label>
+    <PasswordInput
+      v-model="password"
+      autocomplete="current-password"
+    />
+  </Field>
 </template>
 ```
 
@@ -26373,7 +26382,7 @@ packages/webkit/src/components/input/radio-group/
 ## Do
 
 - Give every property a `title` and a one-sentence `description`; the key is only the fallback label.
-- Put limits in the schema (`minimum`, `maxLength`, `pattern`, `enum`) so the form checks them; say the rule in the `description` when it is a `pattern`, since the built-in message cannot name it.
+- Put limits in the schema (`minimum`, `maxLength`, `pattern`, `enum`) so the form checks them; say the rule in the `description` when it is a `pattern`: the pattern message repeats it (`Check the format: …`), since the built-in message cannot name the rule on its own.
 - Keep the default `validate-on="blur"` for short forms; use `submit` when the form sits in a drawer or dialog with one Save.
 - Call `validate()` on submit and stop when it returns `valid: false`; it shows every message and focuses the first invalid field.
 - Pass server rejections in `errors` keyed by path (`origin.host`): the field turns invalid with that message until the user edits it (the form-validation rule). Put a section-level failure in an `Alert` above the form, not in `errors`.
@@ -26767,6 +26776,7 @@ packages/webkit/src/components/input/radio-group/
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import Slider from '@aziontech/webkit/slider'
   import { ref } from 'vue'
 
@@ -26774,15 +26784,24 @@ packages/webkit/src/components/input/radio-group/
 </script>
 
 <template>
-  <div class="w-full max-w-(--container-xs)">
+  <Field class="w-full max-w-(--container-xs)">
+    <div class="flex items-center justify-between gap-(--spacing-xs)">
+      <Field.Label>Alert threshold</Field.Label>
+      <span
+        class="text-body-sm text-(--text-default) tabular-nums"
+        aria-hidden="true"
+        >{{ value }}%</span
+      >
+    </div>
     <Slider
       v-model="value"
       :min="0"
       :max="100"
       :step="1"
-      aria-label="Alert threshold"
+      unit="%"
     />
-  </div>
+    <Field.Description>Alert when CPU use passes this level.</Field.Description>
+  </Field>
 </template>
 ```
 
@@ -27034,7 +27053,7 @@ packages/webkit/src/components/input/radio-group/
 | `invalid` | `boolean` | `false` | false | Applies invalid styling and sets `aria-invalid`. |
 | `required` | `boolean` | `false` | false | Marks the field as required and sets `aria-required`. |
 | `resize` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false | Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior. |
-| `monospace` | `boolean` | `false` | false | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`. |
+| `monospace` | `boolean` | `false` | false | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`) with `wrap="off"`: each line stays whole and the field scrolls sideways, so a record or a key never breaks across lines for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`. |
 | `autoResize` | `boolean` | `false` | false | Grows the field with its content instead of a fixed height (`data-auto-resize`): CSS `field-sizing: content`, with a measured height where the browser lacks it. Turns the drag handle off. |
 | `minRows` | `number` | `1` | false | Lines the field shows when empty while `autoResize` is on. Ignored without `autoResize`. |
 | `maxRows` | `number` | `0` | false | Lines the field grows to before it scrolls while `autoResize` is on (`data-max-rows`); `0` sets no limit. Ignored without `autoResize`. |
@@ -27076,6 +27095,7 @@ packages/webkit/src/components/input/radio-group/
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import Textarea from '@aziontech/webkit/textarea'
   import { ref } from 'vue'
 
@@ -27083,10 +27103,13 @@ packages/webkit/src/components/input/radio-group/
 </script>
 
 <template>
-  <Textarea
-    v-model="value"
-    placeholder="Write your message"
-  />
+  <Field class="w-full max-w-(--container-xs)">
+    <Field.Label>Message</Field.Label>
+    <Textarea
+      v-model="value"
+      placeholder="Write your message"
+    />
+  </Field>
 </template>
 ```
 
@@ -27157,7 +27180,7 @@ packages/webkit/src/components/input/radio-group/
 - Each segment is wrapped in `@aziontech/webkit/tooltip` (`side="bottom"`) surfacing its mode label (`System` / `Dark` / `Light`) on hover and keyboard focus; the tooltip owns its own `aria-describedby` wiring.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state.
 - `motion-reduce:transition-none` on animated states.
-- Touch target: segments are drawn 24 / 28 / 36 px wide by `size` on every pointer; on a coarse pointer each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44×44 px, as `toggle-group` does.
+- Touch target: segments are drawn 24 / 28 / 36 px wide by `size` on a fine pointer; on a coarse pointer each segment is drawn at least 44 px wide (`pointer-coarse:min-w-11`) and carries an invisible `aria-hidden` child (`data-slot="touch-target"`) that extends its hit area to 44 px tall only, so a segment's hit area never covers its neighbour.
 
 ## Examples
 

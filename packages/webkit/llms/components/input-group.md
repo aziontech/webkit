@@ -138,7 +138,10 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 <template>
   <div class="flex flex-col gap-4">
-    <InputGroup size="small">
+    <InputGroup
+      dir="ltr"
+      size="small"
+    >
       <InputGroup.Addon>https://</InputGroup.Addon>
       <InputGroup.Input
         aria-label="Domain"
@@ -146,7 +149,10 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
       />
       <InputGroup.Addon>.com</InputGroup.Addon>
     </InputGroup>
-    <InputGroup size="medium">
+    <InputGroup
+      dir="ltr"
+      size="medium"
+    >
       <InputGroup.Addon>https://</InputGroup.Addon>
       <InputGroup.Input
         aria-label="Domain"
@@ -154,7 +160,10 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
       />
       <InputGroup.Addon>.com</InputGroup.Addon>
     </InputGroup>
-    <InputGroup size="large">
+    <InputGroup
+      dir="ltr"
+      size="large"
+    >
       <InputGroup.Addon>https://</InputGroup.Addon>
       <InputGroup.Input
         aria-label="Domain"
@@ -174,7 +183,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 </script>
 
 <template>
-  <InputGroup>
+  <InputGroup dir="ltr">
     <InputGroup.Addon>https://</InputGroup.Addon>
     <InputGroup.Input
       aria-label="Domain"

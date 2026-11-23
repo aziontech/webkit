@@ -12,7 +12,7 @@
   },
   {
    "name": "Icons",
-   "summary": "The `prefix` slot, the `suffix` slot, and both combined.",
+   "summary": "The `leading` slot, the `trailing` slot, and both combined, each in a labelled `Field`.",
    "file": "examples/input/icons.vue"
   }
  ]

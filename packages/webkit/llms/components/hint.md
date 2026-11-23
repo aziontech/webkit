@@ -16,7 +16,7 @@
 ## Do
 
 - One sentence, ending in a period. If it needs two, it belongs in `field-description` or a `popover`.
-- Never hide required information behind a hint — hover is not discoverable on touch, so treat it as an enhancement.
+- Never hide required information behind a hint — on touch it opens only when tapped, so treat it as an enhancement.
 - The `content` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.
 - Place it immediately after the thing it explains, not at the end of a row.
 
@@ -37,7 +37,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `content` | `string` | `''` | true | Guidance text revealed on hover or focus; also the trigger's accessible name. |
+| `content` | `string` | `''` | true | Guidance text revealed on hover or focus, or by a tap on touch; also the trigger's accessible name. |
 | `side` | `'top' \| 'bottom' \| 'start' \| 'end' \| 'auto'` | `'top'` | false | Side of the glyph the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room. `start` and `end` follow the text direction. |
 
 ## States
@@ -48,7 +48,7 @@
 
 ## Accessibility
 
-- The trigger is a native `<button type="button">`, so it is in the tab order and the tooltip opens on `focus` as well as hover (`Tooltip` opens on `focusin`).
+- The trigger is a native `<button type="button">`, so it is in the tab order and the tooltip opens on `focus` as well as hover (`Tooltip` opens on `focusin`). On touch the glyph is a toggletip: a tap shows the text and keeps it shown; a second tap, a tap outside, `Escape` or moving focus away closes it. Tests: `hint.test.ts` › touch.
 - The glyph is decorative (`aria-hidden="true"`); the button's accessible name is the `content` prop, so the hint is reachable by screen readers that never see the tooltip.
 - Keyboard map: `Tab` moves focus to the glyph and opens the tooltip; `Escape` closes it (owned by `Tooltip`); the button has no activation behaviour.
 - The button's default action is prevented on click, so a `Hint` rendered inside a `<label>` never toggles the labelled control.

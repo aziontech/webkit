@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Single thumb over 0–100 in steps of 1, bound with `v-model` and named with `aria-label`.",
+   "summary": "Single thumb over 0–100 in steps of 1, bound with `v-model` and composed in a `Field`: the label names the slider and the current value sits at the end of the label row.",
    "file": "examples/slider/default.vue"
   },
   {

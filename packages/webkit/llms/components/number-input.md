@@ -98,6 +98,7 @@
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import NumberInput from '@aziontech/webkit/number-input'
   import { ref } from 'vue'
 
@@ -105,15 +106,16 @@
 </script>
 
 <template>
-  <div class="w-full max-w-80">
+  <Field class="w-full max-w-(--container-xs)">
+    <Field.Label>Quantity</Field.Label>
     <NumberInput
       v-model="value"
       :min="0"
       :max="100"
       :step="1"
-      placeholder="Quantity"
     />
-  </div>
+    <Field.Description>From 0 to 100.</Field.Description>
+  </Field>
 </template>
 ```
 

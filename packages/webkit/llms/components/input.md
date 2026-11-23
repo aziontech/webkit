@@ -41,7 +41,7 @@
 | `type` | `'text' \| 'email' \| 'number'` | `'text'` | false | Native input type. Restricted to single-line variants the field treats identically. |
 | `maxLength` | `number \| undefined` | `undefined` | false | Native `maxlength` — maximum number of characters allowed. |
 | `autocomplete` | `string \| undefined` | `undefined` | false | Native `autocomplete` token on the `<input>` (e.g. `email`, `username`, `off`). Omitted when unset. |
-| `spellcheck` | `boolean \| undefined` | `undefined` | false | Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck="false"` on every field. |
+| `spellcheck` | `boolean \| undefined` | `undefined` | false | Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains; `false` also sets `autocapitalize="none"` and `autocorrect="off"`, so a phone does not capitalize a case-sensitive key (a passed attribute wins). Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck="false"` on every field. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `readonly` | `boolean` | `false` | false | Marks the field read-only: value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`); distinct from the disabled field. |
@@ -104,6 +104,7 @@
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import { ref } from 'vue'
 
@@ -111,10 +112,13 @@
 </script>
 
 <template>
-  <Input
-    v-model="value"
-    placeholder="Type something"
-  />
+  <Field class="w-full max-w-(--container-xs)">
+    <Field.Label>Project name</Field.Label>
+    <Input
+      v-model="value"
+      placeholder="my-project"
+    />
+  </Field>
 </template>
 ```
 
@@ -122,6 +126,7 @@
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import { ref } from 'vue'
 
@@ -131,22 +136,28 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-stretch gap-4 w-[280px]">
-    <Input
-      v-model="small"
-      size="small"
-      placeholder="Small (28px)"
-    />
-    <Input
-      v-model="medium"
-      size="medium"
-      placeholder="Medium (32px)"
-    />
-    <Input
-      v-model="large"
-      size="large"
-      placeholder="Large (40px)"
-    />
+  <div class="flex w-full max-w-(--container-xs) flex-col items-stretch gap-(--spacing-md)">
+    <Field>
+      <Field.Label>Small (28px)</Field.Label>
+      <Input
+        v-model="small"
+        size="small"
+      />
+    </Field>
+    <Field>
+      <Field.Label>Medium (32px)</Field.Label>
+      <Input
+        v-model="medium"
+        size="medium"
+      />
+    </Field>
+    <Field>
+      <Field.Label>Large (40px)</Field.Label>
+      <Input
+        v-model="large"
+        size="large"
+      />
+    </Field>
   </div>
 </template>
 ```
@@ -155,6 +166,7 @@
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import { ref } from 'vue'
 
@@ -164,34 +176,44 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-stretch gap-4 w-[280px]">
-    <Input
-      v-model="leading"
-      placeholder="Leading icon"
-    >
-      <template #leading>
-        <i class="az az-globe" />
-      </template>
-    </Input>
-    <Input
-      v-model="trailing"
-      placeholder="Trailing icon"
-    >
-      <template #trailing>
-        <i class="az az-search" />
-      </template>
-    </Input>
-    <Input
-      v-model="both"
-      placeholder="Both icons"
-    >
-      <template #leading>
-        <i class="az az-globe" />
-      </template>
-      <template #trailing>
-        <i class="az az-search" />
-      </template>
-    </Input>
+  <div class="flex w-full max-w-(--container-xs) flex-col items-stretch gap-(--spacing-md)">
+    <Field>
+      <Field.Label>Domain</Field.Label>
+      <Input
+        v-model="leading"
+        placeholder="example.com"
+      >
+        <template #leading>
+          <i class="az az-globe" />
+        </template>
+      </Input>
+    </Field>
+    <Field>
+      <Field.Label>Search</Field.Label>
+      <Input
+        v-model="trailing"
+        type="search"
+      >
+        <template #trailing>
+          <i class="az az-search" />
+        </template>
+      </Input>
+    </Field>
+    <Field>
+      <Field.Label>Find a domain</Field.Label>
+      <Input
+        v-model="both"
+        type="search"
+        placeholder="example.com"
+      >
+        <template #leading>
+          <i class="az az-globe" />
+        </template>
+        <template #trailing>
+          <i class="az az-search" />
+        </template>
+      </Input>
+    </Field>
   </div>
 </template>
 ```
