@@ -127,7 +127,9 @@
     'data-[checked]:border-(--primary) data-[checked]:bg-(--primary) data-[checked]:text-(--primary-foreground) data-[checked]:before:hidden data-[checked]:after:hidden ' +
     'data-[indeterminate]:border-(--primary) data-[indeterminate]:bg-(--primary) data-[indeterminate]:text-(--primary-foreground) data-[indeterminate]:before:hidden ' +
     'data-[indeterminate]:after:hidden ' +
-    'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) data-[disabled]:opacity-50 ' +
+    'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) ' +
+    'data-[disabled]:not-data-[checked]:not-data-[indeterminate]:opacity-50 data-[disabled]:data-[checked]:border-(--border-input) ' +
+    'data-[disabled]:data-[checked]:bg-(--bg-disabled) data-[disabled]:data-[indeterminate]:border-(--border-input) data-[disabled]:data-[indeterminate]:bg-(--bg-disabled) ' +
     'data-[disabled]:before:hidden data-[disabled]:after:hidden ' +
     'data-[readonly]:pointer-events-none data-[readonly]:cursor-not-allowed data-[readonly]:before:hidden data-[readonly]:after:hidden'
 </script>
@@ -164,7 +166,7 @@
     />
     <svg
       v-if="indeterminate"
-      class="size-2.5 shrink-0 stroke-[1.5] group-data-[disabled]:stroke-(--text-disabled)"
+      class="size-2.5 shrink-0 stroke-[1.5] group-data-[disabled]:stroke-(--text-muted)"
       viewBox="0 0 12 12"
       fill="none"
       aria-hidden="true"
@@ -179,7 +181,7 @@
     </svg>
     <svg
       v-else-if="isChecked"
-      class="size-2.5 shrink-0 stroke-[1.5] group-data-[disabled]:stroke-(--text-disabled)"
+      class="size-2.5 shrink-0 stroke-[1.5] group-data-[disabled]:stroke-(--text-muted)"
       viewBox="0 0 12 12"
       fill="none"
       aria-hidden="true"

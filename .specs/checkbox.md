@@ -4,7 +4,7 @@ category: input
 structure: monolithic
 status: implemented
 spec_version: 8
-checksum: a9d8288fc607277512ca31f51c52ed4451d8e5734d835fdbdcb5088debf425e2
+checksum: 99e3d7150c0569ceac0fc0e3348e84d243cc3e6f1a6072f8db69c9152bcdf070
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -116,7 +116,7 @@ The checkbox is a leaf primitive — no slots. Label/description live in the enc
 | surface (indeterminate)        | `var(--primary)`            |
 | surface (disabled)             | `var(--bg-disabled)`        |
 | icon (checked / indeterminate) | `var(--primary-foreground)` |
-| icon (disabled)                | `var(--text-disabled)`      |
+| icon (disabled)                | `var(--text-muted)`         |
 | border (default)               | `var(--border-default)`     |
 | border (checked)               | `var(--primary)`            |
 | ring (focus)                   | `var(--ring-color)`         |
