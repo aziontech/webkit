@@ -60,6 +60,26 @@ describe('StreamingResponse', () => {
       expect(open[0]).toMatchObject({ type: 'code', closed: false, value: 'const a = 1' })
     })
 
+    it('nests an indented list under its item', () => {
+      const [list] = parseMarkdown(
+        ['1. Install', '   - macOS', '   - Linux', '     - Debian', '2. Run'].join('\n')
+      )
+      expect(list).toMatchObject({ type: 'list', ordered: true, start: 1 })
+      if (list?.type !== 'list') throw new Error('expected a list')
+      expect(list.items).toHaveLength(2)
+      expect(list.items[0]?.list).toMatchObject({ ordered: false })
+      expect(list.items[0]?.list?.items).toHaveLength(2)
+      expect(list.items[0]?.list?.items[1]?.list?.items).toHaveLength(1)
+      expect(list.items[1]?.list).toBeUndefined()
+    })
+
+    it('keeps an indented plain line as part of the item text', () => {
+      const [list] = parseMarkdown('- item\n  continued')
+      if (list?.type !== 'list') throw new Error('expected a list')
+      expect(list.items).toHaveLength(1)
+      expect(list.items[0]?.list).toBeUndefined()
+    })
+
     it('keeps a lone asterisk literal', () => {
       expect(parseInline('5 * 3 and snake_case')).toEqual([
         { type: 'text', value: '5 * 3 and snake_case' }
@@ -136,6 +156,39 @@ describe('StreamingResponse', () => {
     expect(container.querySelector('[data-testid="code-block"], pre')).toBeTruthy()
   })
 
+  it('renders a nested list inside its parent item', () => {
+    const { container } = render(StreamingResponse, {
+      props: { content: '- Cache\n  - Purge\n  - Rules\n- Firewall' }
+    })
+    const outer = container.querySelector('ul:not([data-nested])')!
+    expect(outer.children).toHaveLength(2)
+    const nested = outer.querySelector('li > ul[data-nested]')!
+    expect(nested.children).toHaveLength(2)
+    expect(nested).toHaveTextContent('PurgeRules')
+  })
+
+  it('renders every heading bold with a step above it, # the largest', () => {
+    const { getByRole } = render(StreamingResponse, {
+      props: { content: 'Intro\n\n# Title\n\n### Step' }
+    })
+    const title = getByRole('heading', { level: 3, name: 'Title' })
+    expect(title).toHaveAttribute('data-level', '3')
+    expect(title.classList.contains('data-[level]:font-semibold')).toBe(true)
+    expect(title.classList.contains('mt-(--spacing-sm)')).toBe(true)
+    expect(getByRole('heading', { level: 5, name: 'Step' })).toHaveAttribute('data-level', '5')
+  })
+
+  it('draws a closed fence as a filled card with the language and copy in its header', () => {
+    const { getByTestId } = render(StreamingResponse, {
+      props: { content: '```bash\nazion deploy\n```' }
+    })
+    const block = getByTestId('code-block')
+    expect(block.hasAttribute('data-bordered')).toBe(false)
+    expect(block.classList.contains('rounded-(--shape-card)')).toBe(true)
+    expect(getByTestId('code-block__label-text')).toHaveTextContent('Shell')
+    expect(getByTestId('code-block__label').querySelector('button')).toBeTruthy()
+  })
+
   it('never injects model HTML and drops unsafe links', () => {
     const content =
       'Hi <script>window.pwnedFlag = true</script> <img src=x onerror="window.pwnedFlag = true"> [click](javascript:window.pwnedFlag=true) [ok](https://a.b)'
@@ -170,6 +223,7 @@ describe('StreamingResponse', () => {
     })
     expect(getByTestId('streaming-response__pending-code')).toHaveTextContent('azion purge')
     expect(getByTestId('streaming-response__pending-code')).toHaveAttribute('dir', 'ltr')
+    expect(getByTestId('streaming-response__pending-code')).toHaveTextContent('Shell')
     await rerender({ content: '```bash\nazion purge\n```', streaming: false })
     expect(queryByTestId('streaming-response__pending-code')).toBeNull()
   })

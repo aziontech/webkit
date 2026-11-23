@@ -153,7 +153,7 @@
             >{{ changeLabel(line.state) }}</span
           >
           <code
-            class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pe-(--spacing-sm) group-data-[copyable]/code-block:pe-11"
+            class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pe-(--spacing-sm) group-data-[copy-gutter]/code-block:pe-11"
             :data-testid="`${testId}__line-content`"
           >
             <span

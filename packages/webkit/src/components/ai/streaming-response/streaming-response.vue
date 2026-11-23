@@ -2,8 +2,10 @@
   import { computed, useAttrs } from 'vue'
 
   import CodeBlock from '../../code/code-block/code-block.vue'
+  import { languageName } from '../../code/code-block/lib/language-name'
   import Separator from '../../layout/separator/separator.vue'
   import MarkdownInline from '../lib/markdown-inline'
+  import MarkdownList from '../lib/markdown-list'
   import {
     type MarkdownBlock,
     type MarkdownParse,
@@ -85,7 +87,7 @@
         :is="`h${block.level}`"
         v-else-if="block.type === 'heading'"
         :data-level="block.level"
-        class="m-0 text-(--text-default) data-[level='3']:text-heading-sm data-[level='4']:text-heading-xs data-[level='5']:text-heading-2xs data-[level='6']:text-label-md"
+        class="m-0 mt-(--spacing-sm) text-body-lg text-(--text-default) first:mt-0 data-[level]:font-semibold data-[level='3']:text-heading-md"
       >
         <MarkdownInline
           :nodes="block.children"
@@ -98,37 +100,43 @@
           class="ms-0.5 inline-block h-[1em] w-[0.5ch] translate-y-[0.15em] bg-(--text-default) animate-blink motion-reduce:animate-none"
         />
       </component>
-      <component
-        :is="block.ordered ? 'ol' : 'ul'"
+      <MarkdownList
         v-else-if="block.type === 'list'"
-        :start="block.ordered && block.start !== 1 ? block.start : undefined"
-        :data-ordered="block.ordered || null"
-        class="m-0 flex list-disc flex-col gap-(--spacing-xs) ps-(--spacing-lg) data-[ordered]:list-decimal"
-      >
-        <li
-          v-for="(item, j) in block.items"
-          :key="j"
-        >
-          <MarkdownInline
-            :nodes="item"
-            :sources="sources"
-            :anchor="anchor"
-          />
-        </li>
-      </component>
+        :list="block"
+        :sources="sources"
+        :anchor="anchor"
+      />
       <CodeBlock
         v-else-if="block.type === 'code' && (block.closed || !streaming)"
         :code="block.value"
         :language="block.language"
         :show-line-numbers="false"
+        :bordered="false"
+        show-label
         dir="ltr"
+        class="rounded-(--shape-card) bg-(--bg-surface-raised) [--code-block-max-height:none]"
       />
-      <pre
+      <div
         v-else-if="block.type === 'code'"
         dir="ltr"
         :data-testid="`${testId}__pending-code`"
-        class="m-0 overflow-x-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) text-body-code text-(--text-default)"
-        >{{ block.value }}</pre>
+        class="flex flex-col overflow-clip rounded-(--shape-card) bg-(--bg-surface-raised)"
+      >
+        <div
+          class="flex h-10 shrink-0 items-center gap-(--spacing-xs) ps-(--spacing-lg) pe-(--spacing-sm) text-(--text-muted)"
+        >
+          <i
+            class="az az-code text-label-code-sm shrink-0"
+            aria-hidden="true"
+          />
+          <span class="text-label-code-sm min-w-0 flex-1 truncate">{{
+            languageName(block.language)
+          }}</span>
+        </div>
+        <pre
+          class="m-0 overflow-x-auto px-(--spacing-lg) pb-(--spacing-sm) text-label-code-sm text-(--text-default)"
+          >{{ block.value }}</pre>
+      </div>
       <blockquote
         v-else-if="block.type === 'quote'"
         class="m-0 border-s-2 border-(--border-strong) ps-(--spacing-sm) text-(--text-muted)"
