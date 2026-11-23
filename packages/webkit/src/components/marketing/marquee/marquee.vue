@@ -119,6 +119,10 @@
     ready
   )
 
+  const setDefsEl = (el: unknown) => {
+    defsEl.value = el instanceof SVGSVGElement ? el : null
+  }
+
   const ROOT_CLASS =
     'group/strip relative flex flex-col items-center gap-(--spacing-xl) ' +
     'data-[variant=band]:w-full data-[variant=band]:bg-(--bg-canvas) data-[variant=band]:py-(--spacing-xl) ' +
@@ -166,7 +170,7 @@
 
     <svg
       v-if="drawn.length"
-      ref="defsEl"
+      :ref="setDefsEl"
       data-slot="marquee-symbols"
       width="0"
       height="0"
