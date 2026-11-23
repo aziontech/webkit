@@ -77,15 +77,15 @@ The block takes its records through props and emits every action; it fetches not
 | `defaultInviteOpen` | `boolean`     | Opens the invite drawer on mount.                                                                                   |
 | `defaultEditRoleId` | `string`      | Opens the Edit role dialog for the user with this id on mount.                                                      |
 
-| Event               | Payload                     | When                                                                                    |
-| ------------------- | --------------------------- | --------------------------------------------------------------------------------------- |
+| Event               | Payload                           | When                                                                                    |
+| ------------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
 | `invite`            | `(event, { email, role, teams })` | Send invitation passed validation; the person is already in the list as Invited.        |
-| `refresh`           | `(event)`                   | Refresh.                                                                                |
-| `retry`             | `(event)`                   | Retry in the error alert.                                                               |
-| `role-change`       | `(event, { user, role })`   | Save role, or Undo in its toast; the row already shows the new role.                    |
-| `teams-change`      | `({ user, teams })`         | A row's Teams picker closed with a different set of teams, or Undo in its toast.        |
-| `resend-invitation` | `(event, user)`             | Resend invitation in the row menu.                                                      |
-| `remove`            | `(event, user)`             | Remove user or Cancel invitation was confirmed; the row is already gone from the table. |
+| `refresh`           | `(event)`                         | Refresh.                                                                                |
+| `retry`             | `(event)`                         | Retry in the error alert.                                                               |
+| `role-change`       | `(event, { user, role })`         | Save role, or Undo in its toast; the row already shows the new role.                    |
+| `teams-change`      | `({ user, teams })`               | A row's Teams picker closed with a different set of teams, or Undo in its toast.        |
+| `resend-invitation` | `(event, user)`                   | Resend invitation in the row menu.                                                      |
+| `remove`            | `(event, user)`                   | Remove user or Cancel invitation was confirmed; the row is already gone from the table. |
 
 To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -772,7 +772,9 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
     role: 'Developer',
     teams: ['developers']
   })
-  const roleHint = computed(() => USERS_ROLES.find((role) => role.value === invite.role)?.hint ?? '')
+  const roleHint = computed(
+    () => USERS_ROLES.find((role) => role.value === invite.role)?.hint ?? ''
+  )
   const submitted = ref(false)
   const formEl = ref<HTMLFormElement | null>(null)
   const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -830,8 +832,8 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
           <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
             <legend class="sr-only">Invite User</legend>
             <DrawerDescription>
-              They get an email with a link to join this account. Their role decides what they can do
-              on the account; their teams decide which resources they reach.
+              They get an email with a link to join this account. Their role decides what they can
+              do on the account; their teams decide which resources they reach.
             </DrawerDescription>
             <Field
               required

@@ -341,7 +341,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     groupQuestions,
     skipQuestion
   } from '@aziontech/webkit/utils/ai-chat-questions'
-  import { computed, onMounted, ref, watch } from 'vue'
+  import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
   import AiChatHeader from './parts/ai-chat-header.vue'
@@ -549,7 +549,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     return props.tools[call.name] ?? { title: '' }
   }
 
-  onMounted(() => composerEl.value?.focus())
+  const footerEl = ref<HTMLElement | null>(null)
+  onMounted(() => nextTick(() => footerEl.value?.querySelector('textarea')?.focus()))
 
   watch(
     () => props.loading,
@@ -688,6 +689,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
       </Conversation>
     </div>
     <footer
+      ref="footerEl"
       class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-xs) pb-(--spacing-md)"
     >
       <AiChatConnectionStatus

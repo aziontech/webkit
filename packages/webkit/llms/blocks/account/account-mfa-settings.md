@@ -66,13 +66,13 @@ The block takes its people through props and emits every action; it fetches noth
 | `error`    | `string`              | Why the load failed, shown in the danger `Alert` with Retry that replaces the controls and the table; the Switch disables.                  |
 | `required` | `boolean`             | `v-model:required`: whether the account requires MFA; on hides the password-only warning.                                                   |
 
-| Event             | Payload           | When                                                                 |
-| ----------------- | ----------------- | -------------------------------------------------------------------- |
+| Event             | Payload           | When                                                                                   |
+| ----------------- | ----------------- | -------------------------------------------------------------------------------------- |
 | `update:required` | `boolean`         | The require dialog was confirmed (`true`), or the stop dialog was confirmed (`false`). |
-| `refresh`         | `(event)`         | Refresh.                                                             |
-| `retry`           | `(event)`         | Retry in the error alert.                                            |
-| `remind`          | `(event, member)` | Send setup reminder in the row menu.                                 |
-| `reset`           | `(event, member)` | The reset dialog was confirmed; the row already reads Not set up.    |
+| `refresh`         | `(event)`         | Refresh.                                                                               |
+| `retry`           | `(event)`         | Retry in the error alert.                                                              |
+| `remind`          | `(event, member)` | Send setup reminder in the row menu.                                                   |
+| `reset`           | `(event, member)` | The reset dialog was confirmed; the row already reads Not set up.                      |
 
 To go live, render the block from a page that owns the requests and pass what they return:
 

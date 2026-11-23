@@ -1141,7 +1141,7 @@ export const SIGN_IN_COPY = {
     home: 'Azion home',
     documentation: 'Documentation',
     badCredentials: 'Incorrect email or password. Check both and try again.',
-    serviceUnavailable: 
+    serviceUnavailable:
       'Sign-in is unavailable right now. What you entered is kept; retry in a few minutes.',
     serverError: 'Sign-in failed on our side. You are still signed out. Error 500.',
     timeout: 'The server did not answer in time. Your session may already be open.',
@@ -1200,7 +1200,7 @@ export const SIGN_IN_COPY = {
     home: 'Página inicial da Azion',
     documentation: 'Documentação',
     badCredentials: 'E-mail ou senha incorretos. Confira os dois e tente de novo.',
-    serviceUnavailable: 
+    serviceUnavailable:
       'O login está indisponível no momento. O que você digitou foi mantido; tente de novo em alguns minutos.',
     serverError: 'O login falhou do nosso lado. Você continua desconectado. Erro 500.',
     timeout: 'O servidor não respondeu a tempo. Sua sessão pode já estar aberta.',
