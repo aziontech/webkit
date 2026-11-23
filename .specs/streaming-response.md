@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: d83762855d7345ae7c871ec2210f6259f4e15181f6a3c2d0b7ae2122d4777b6d
+checksum: e71598b8bdb0c3e0d98d902b702e697489710bb3f6ffb81e37e77b20d61e117f
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -118,7 +118,7 @@ _No slots — the content is the `content` string._
 | Region      | Token                                                                                              |
 | ----------- | -------------------------------------------------------------------------------------------------- |
 | body        | `.text-body-md`, `var(--text-default)`                                                             |
-| headings    | `.text-heading-sm` (`#`), `.text-heading-xs`, `.text-heading-2xs`, `.text-label-md`                |
+| headings    | `.text-title-md` rising to `.text-title-lg` from `md` (`#`), `.text-title-md`, `.text-title-sm`, `.text-title-sm`; a space step above a heading that follows a block |
 | inline code | `.text-label-code-sm`, `var(--bg-surface-raised)`, `var(--shape-control)`                          |
 | links       | `var(--text-link)`                                                                                 |
 | quote       | `var(--border-strong)`, `var(--text-muted)`                                                        |
@@ -134,7 +134,7 @@ _None._
 - Visible focus: links and the table scroller carry `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Keyboard map: `Tab` reaches links, citations, the copy control of each code block and a wide table's scroller.
 - ARIA: `aria-busy` while streaming (screen readers wait); the caret is `aria-hidden`; headings start at `h3` (`#` → `h3`) so a response never outranks the page; tables use `th scope="col"`. Announcing the finished text is the `Conversation`'s job.
-- External links open in a new tab with `rel="noopener noreferrer"`.
+- External links open in a new tab with `rel="noopener noreferrer"`, followed by an `aria-hidden` `az-external-link` glyph and the sr-only `common.newTab` text, so the new tab is seen and heard.
 - Contrast ≥4.5:1 for body, muted quote and link text.
 
 ## Internationalization

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: d0c58884a7730e3b91a8e0fd5e3185cc75f1069ffaaa9a6ab88ad4f89a49be97
+checksum: 62db7648e16a9b74a49322258e9b1161021b38de6eabb47fb54b3d84a9885d0a
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -117,8 +117,8 @@ _No events._
 | Region        | Token                                                               |
 | ------------- | ------------------------------------------------------------------- |
 | frame         | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`   |
-| title         | `.text-label-sm`, `var(--text-default)`                             |
-| name          | `.text-label-code-sm`, `var(--bg-surface-raised)`, `var(--text-muted)` |
+| title         | `.text-title-sm`, `var(--text-default)`                             |
+| name          | `.text-body-code-sm`, `var(--bg-surface-raised)`, `var(--text-muted)` |
 | section label | `.text-label-sm`, `var(--text-muted)`                               |
 | padding       | `var(--spacing-sm)`, `var(--spacing-xs)`                            |
 

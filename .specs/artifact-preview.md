@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 3a51d3eb569315db390af7bf8aa5d759057b861bae197c4cded2b65a5ec9a4bf
+checksum: e0b11fc152a62794d71956232be0859607e196ff6151e0a7ef2a8c2667d19bcf
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -145,7 +145,7 @@ _None._
 ## Right-to-left
 
 - Layout: logical utilities; actions at the inline end.
-- Icons: external-link and download are not mirrored.
+- Icons: maximize (Open, which opens the in-page canvas, not a new tab) and download are not mirrored.
 - Keyboard: none.
 - User data: the title is `dir="auto"` (file names).
 

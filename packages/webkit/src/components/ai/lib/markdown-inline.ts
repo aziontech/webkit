@@ -1,5 +1,7 @@
 import { defineComponent, h, type PropType, type VNodeChild } from 'vue'
 
+import { useTranslate } from '../../../composables/use-translate'
+import * as en from '../../../locales/en'
 import Citation from '../citation/citation.vue'
 import type { SourcesItem } from '../sources/types'
 import { sourceAnchor } from '../sources/types'
@@ -9,34 +11,43 @@ const EXTERNAL = /^https?:/i
 
 const CODE_CLASS =
   'rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px text-label-code-sm text-(--text-default)'
+const EXTERNAL_ICON_CLASS =
+  'az az-external-link ms-0.5 inline-block text-body-xs leading-none no-underline'
 const LINK_CLASS =
   'text-(--text-link) underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 
 type ContainerNode = Extract<MarkdownInlineNode, { children: MarkdownInlineNode[] }>
 type LeafNode = Exclude<MarkdownInlineNode, ContainerNode>
 
-function renderContainer(node: ContainerNode, sources: SourcesItem[], anchor: string): VNodeChild {
-  const children = renderNodes(node.children, sources, anchor)
+interface RenderContext {
+  sources: SourcesItem[]
+  anchor: string
+  newTab: string
+}
+
+function renderLink(href: string, children: VNodeChild[], newTab: string): VNodeChild {
+  if (!EXTERNAL.test(href)) return h('a', { href, class: LINK_CLASS }, children)
+  return h('a', { href, target: '_blank', rel: 'noopener noreferrer', class: LINK_CLASS }, [
+    ...children,
+    ' ',
+    h('span', { class: 'sr-only' }, newTab),
+    h('i', { class: EXTERNAL_ICON_CLASS, 'aria-hidden': 'true' })
+  ])
+}
+
+function renderContainer(node: ContainerNode, context: RenderContext): VNodeChild {
+  const children = renderNodes(node.children, context)
   switch (node.type) {
     case 'strong':
       return h('strong', { class: 'font-semibold' }, children)
     case 'em':
       return h('em', children)
     case 'link':
-      return h(
-        'a',
-        {
-          href: node.href,
-          target: EXTERNAL.test(node.href) ? '_blank' : undefined,
-          rel: EXTERNAL.test(node.href) ? 'noopener noreferrer' : undefined,
-          class: LINK_CLASS
-        },
-        children
-      )
+      return renderLink(node.href, children, context.newTab)
   }
 }
 
-function renderLeaf(node: LeafNode, sources: SourcesItem[], anchor: string): VNodeChild {
+function renderLeaf(node: LeafNode, { sources, anchor }: RenderContext): VNodeChild {
   switch (node.type) {
     case 'text':
       return node.value
@@ -55,13 +66,9 @@ function renderLeaf(node: LeafNode, sources: SourcesItem[], anchor: string): VNo
   }
 }
 
-function renderNodes(
-  nodes: MarkdownInlineNode[],
-  sources: SourcesItem[],
-  anchor: string
-): VNodeChild[] {
+function renderNodes(nodes: MarkdownInlineNode[], context: RenderContext): VNodeChild[] {
   return nodes.map((node) =>
-    'children' in node ? renderContainer(node, sources, anchor) : renderLeaf(node, sources, anchor)
+    'children' in node ? renderContainer(node, context) : renderLeaf(node, context)
   )
 }
 
@@ -73,6 +80,12 @@ export default defineComponent({
     anchor: { type: String, default: '' }
   },
   setup(props) {
-    return () => renderNodes(props.nodes, props.sources, props.anchor)
+    const { t } = useTranslate({ common: en.common })
+    return () =>
+      renderNodes(props.nodes, {
+        sources: props.sources,
+        anchor: props.anchor,
+        newTab: t('common.newTab')
+      })
   }
 })

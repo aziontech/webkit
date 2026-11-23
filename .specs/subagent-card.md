@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: d422970e362d8547327ae71b07e560d94afd9013653428d98fe70360d65e0961
+checksum: 8ef0469417cbaf66afe0e65288343fbdb71b9570e8e78f708ab724fef49911bd
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
@@ -132,8 +132,8 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 | Region        | Token                                                                  |
 | ------------- | ---------------------------------------------------------------------- |
 | frame         | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`      |
-| title         | `.text-label-sm`, `var(--text-default)`                                |
-| name          | `.text-label-code-sm`, `var(--bg-surface-raised)`, `var(--text-muted)` |
+| title         | `.text-title-sm`, `var(--text-default)`                                |
+| name          | `.text-body-code-sm`, `var(--bg-surface-raised)`, `var(--text-muted)` |
 | description   | `.text-body-sm`, `var(--text-muted)`                                   |
 | elapsed       | `.text-label-sm`, `tabular-nums`, `var(--text-muted)`                  |
 | section label | `.text-label-sm`, `var(--text-muted)`                                  |
