@@ -201,7 +201,7 @@ describe('screen-reader smoke · form blocks', () => {
               - text: Name
               - paragraph: Give a unique and descriptive name to identify the service.
               - textbox "Name":
-                - /placeholder: My Service
+                - /placeholder: ""
                 - text: checkout-web
           - heading "Delivery settings" [level=2]
           - list:
@@ -291,12 +291,12 @@ describe('screen-reader smoke · form blocks', () => {
           - 'button "The two fields this endpoint requires: what the domain is called here, and the hostname it answers for."'
           - list:
             - listitem:
-              - text: Name
+              - text: Name (Required)
               - paragraph: Identifies the domain in this list. It is not the hostname.
               - textbox "Name":
                 - /placeholder: My domain
             - listitem:
-              - text: Domain name
+              - text: Domain name (Required)
               - paragraph: The root hostname this domain answers for, without a subdomain.
               - textbox "Domain name":
                 - /placeholder: example.com

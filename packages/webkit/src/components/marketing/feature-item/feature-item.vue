@@ -47,8 +47,9 @@
   const ROOT_CLASS =
     'group flex flex-col gap-(--spacing-sm) text-(--text-default) no-underline transition-colors duration-150 ease-out ' +
     'motion-reduce:transition-none ' +
-    'data-[linked]:relative data-[linked]:hover:text-(--text-brand) data-[linked]:after:absolute data-[linked]:after:-inset-(--spacing-xs) ' +
-    'data-[linked]:after:rounded-(--shape-control) data-[linked]:focus-visible:outline-none data-[linked]:focus-visible:after:ring-2 data-[linked]:focus-visible:after:ring-(--ring-color)'
+    'data-[linked]:relative data-[linked]:rounded-(--shape-control) data-[linked]:hover:text-(--text-brand) data-[linked]:after:absolute ' +
+    'data-[linked]:after:inset-x-0 data-[linked]:after:-inset-y-(--spacing-xs) data-[linked]:focus-visible:outline-2 ' +
+    'data-[linked]:focus-visible:outline-offset-(--spacing-xs) data-[linked]:focus-visible:outline-(--ring-color)'
 
   const LINK_ARROW_CLASS =
     'az az-arrow-up-right ms-(--spacing-2xs) text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance ' +

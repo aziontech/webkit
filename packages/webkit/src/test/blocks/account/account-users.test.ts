@@ -53,9 +53,11 @@ describe('account/account-users', () => {
     await waitFor(() => expect(view.emitted('teams-change')).toHaveLength(1))
     const [[payload]] = view.emitted('teams-change') as [[{ teams: string[] }]]
     expect(payload.teams).toEqual(['developers', 'security', 'finance', 'support'])
-    await waitFor(() =>
-      expect(document.body.textContent?.match(/Teams updated for Priya Nair/g)).toHaveLength(1)
-    )
+    const shown = () =>
+      Array.from(document.querySelectorAll('[data-testid="toast-title"]')).filter((title) =>
+        title.textContent?.includes('Teams updated for Priya Nair')
+      )
+    await waitFor(() => expect(shown()).toHaveLength(1))
   })
 
   it('asks for the role in the invite form and shows its hint', async () => {

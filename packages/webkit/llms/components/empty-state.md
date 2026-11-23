@@ -88,7 +88,7 @@
     icon="az az-inbox"
   >
     <template #actions>
-      <div class="flex gap-(--spacing-3)">
+      <div class="flex flex-wrap justify-center gap-(--spacing-xs)">
         <Button
           variant="primary"
           label="Create application"
@@ -129,7 +129,7 @@
       icon="az az-inbox"
     >
       <template #actions>
-        <div class="flex gap-(--spacing-3)">
+        <div class="flex flex-wrap justify-center gap-(--spacing-xs)">
           <Button
             variant="primary"
             label="Create application"
@@ -167,7 +167,7 @@
     icon="az az-inbox"
   >
     <template #actions>
-      <div class="flex gap-(--spacing-3)">
+      <div class="flex flex-wrap justify-center gap-(--spacing-xs)">
         <Button
           variant="primary"
           label="Create application"
