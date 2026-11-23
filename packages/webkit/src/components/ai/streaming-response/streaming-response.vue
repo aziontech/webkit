@@ -50,6 +50,10 @@
     const last = blocks.value[lastIndex.value]
     return Boolean(last && (last.type === 'paragraph' || last.type === 'heading'))
   })
+
+  const HEADING_CLASS =
+    "m-0 text-(--text-default) not-first:mt-(--spacing-xs) data-[level='3']:text-title-md md:data-[level='3']:text-title-lg " +
+    "data-[level='4']:text-title-md data-[level='5']:text-title-sm data-[level='6']:text-title-sm"
 </script>
 
 <template>
@@ -84,7 +88,7 @@
         :is="`h${block.level}`"
         v-else-if="block.type === 'heading'"
         :data-level="block.level"
-        class="m-0 text-(--text-default) not-first:mt-(--spacing-xs) data-[level='3']:text-title-md md:data-[level='3']:text-title-lg data-[level='4']:text-title-md data-[level='5']:text-title-sm data-[level='6']:text-title-sm"
+        :class="HEADING_CLASS"
       >
         <MarkdownInline
           :nodes="block.children"
