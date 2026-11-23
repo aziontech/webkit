@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-events-explorer/view-events-explorer.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-events-explorer")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [Checkbox](../../components/checkbox.md), [Chip](../../components/chip.md), [CodeBlock](../../components/code-block.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTableLoadMore`, `DataTablePagination`, [DateRangePicker](../../components/date-range-picker.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FilterMenu](../../components/filter-menu.md), [FilterMenu](../../components/filter-menu.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelHeader`, [Popover](../../components/popover.md), [PropertyFilter](../../components/property-filter.md), [Resizable](../../components/resizable.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-collection`, `use-locale`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [Checkbox](../../components/checkbox.md), [Chip](../../components/chip.md), [CodeBlock](../../components/code-block.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTableLoadMore`, `DataTablePagination`, [DateRangePicker](../../components/date-range-picker.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FilterMenu](../../components/filter-menu.md), [FilterMenu](../../components/filter-menu.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelHeader`, [Popover](../../components/popover.md), [PropertyFilter](../../components/property-filter.md), [Resizable](../../components/resizable.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-collection`, `use-locale`, `use-shortcuts`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -545,6 +545,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
                 :categories="eventFieldCategories"
                 :events="matchedEvents"
                 :shown-columns="shownColumns"
+                :count-state="loading ? 'loading' : error ? 'unknown' : 'ready'"
                 @toggle-column="toggleColumn"
               />
             </div>
@@ -672,7 +673,11 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
         <PanelHeader class="w-full">
           <DrawerTitle>Event</DrawerTitle>
         </PanelHeader>
-        <div class="min-h-0 flex-1 overflow-auto">
+        <div
+          class="min-h-0 flex-1 overflow-auto outline-none"
+          tabindex="-1"
+          data-autofocus
+        >
           <EventDocument
             v-if="documentEvent"
             v-model:trace-view="traceView"
@@ -3369,6 +3374,9 @@ export const tokensForFilters = (
 
   const tableEl = ref<TableExposed<EventRow> | null>(null)
 
+  const OPEN_ROW_CLASS =
+    'flex min-h-0 flex-1 [&_[role=row]:has([data-open-event])]:[--table-row-bg:var(--bg-selected)]!'
+
   const STATUS_CELL_CLASS =
     'min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) ' +
     'data-[severity=danger]:text-(--danger-foreground) data-[severity=warning]:text-(--warning-foreground)'
@@ -3381,7 +3389,7 @@ export const tokensForFilters = (
 
 <template>
   <section class="flex min-h-0 min-w-0 flex-1 flex-col">
-    <div class="flex min-h-0 flex-1">
+    <div :class="OPEN_ROW_CLASS">
       <DataTable
         ref="tableEl"
         :data="events"
@@ -3406,6 +3414,7 @@ export const tokensForFilters = (
             size="small"
             :aria-label="`Open event ${row.id}`"
             :aria-expanded="row.id === selectedKey"
+            :data-open-event="row.id === selectedKey || undefined"
             @click.stop="emit('open', $event, row)"
           />
         </template>
@@ -3531,6 +3540,8 @@ export const tokensForFilters = (
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import { ref } from 'vue'
 
   import type { EventsExplorerFilters } from '../view-events-explorer.vue'
 
@@ -3554,6 +3565,13 @@ export const tokensForFilters = (
 
   const filters = defineModel<EventsExplorerFilters>('filters', { required: true })
   const search = defineModel<string>('search', { required: true })
+  const searchEl = ref<InstanceType<typeof Input> | null>(null)
+  useShortcuts({
+    keys: '/',
+    label: 'Focus search',
+    element: () => (searchEl.value?.$el as HTMLElement | null | undefined) ?? null,
+    handler: () => searchEl.value?.focus()
+  })
 </script>
 
 <template>
@@ -3567,9 +3585,11 @@ export const tokensForFilters = (
       />
       <div class="flex min-w-36 grow basis-(--container-2xs)">
         <Input
+          ref="searchEl"
           v-model="search"
           size="medium"
           placeholder="Search events, hosts, paths or addresses"
+          aria-keyshortcuts="/"
           aria-label="Search events"
           class="w-full"
         >
@@ -3635,6 +3655,7 @@ export const tokensForFilters = (
   import type { FilterMenuValue } from '@aziontech/webkit/filter-menu'
   import Item from '@aziontech/webkit/item-root'
   import Popover from '@aziontech/webkit/popover'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import { useLocale } from '@aziontech/webkit/use-locale'
 
   import {
@@ -3658,9 +3679,11 @@ export const tokensForFilters = (
     events: EventRow[]
     /** The values of the field applied as filters. */
     applied: FilterMenuValue[]
+    /** Whether the count is known: the events are loading, or failed to load. */
+    countState?: 'ready' | 'loading' | 'unknown'
   }
 
-  const props = defineProps<FieldRowProps>()
+  const props = withDefaults(defineProps<FieldRowProps>(), { countState: 'ready' })
 
   const emit = defineEmits<{
     'toggle-column': []
@@ -3704,8 +3727,27 @@ export const tokensForFilters = (
       </Field>
     </div>
 
+    <span
+      v-if="countState === 'loading'"
+      class="shrink-0 px-(--spacing-2xs)"
+      data-testid="field-row__count-loading"
+    >
+      <Skeleton
+        width="1.5rem"
+        height="0.75rem"
+      />
+    </span>
+
+    <span
+      v-else-if="countState === 'unknown'"
+      class="shrink-0 px-(--spacing-2xs) text-label-code-sm text-(--text-muted)"
+      :aria-label="`${field.label} values unknown`"
+    >
+      –
+    </span>
+
     <Popover
-      v-if="filterable && count"
+      v-else-if="filterable && count"
       side="end"
       align="start"
     >
@@ -3798,9 +3840,11 @@ export const tokensForFilters = (
     events: EventRow[]
     /** Ids of the optional fields shown as columns. */
     shownColumns: string[]
+    /** Whether the value counts are known: the events are loading, or failed to load. */
+    countState?: 'ready' | 'loading' | 'unknown'
   }
 
-  const props = defineProps<FieldsPanelProps>()
+  const props = withDefaults(defineProps<FieldsPanelProps>(), { countState: 'ready' })
 
   const emit = defineEmits<{
     'toggle-column': [id: string]
@@ -3934,6 +3978,7 @@ export const tokensForFilters = (
         :filterable="canFilterField(field)"
         :events="events"
         :applied="filters[field.id] ?? []"
+        :count-state="countState"
         @toggle-column="emit('toggle-column', field.id)"
         @toggle-value="(value) => toggleFieldValue(field.id, value)"
       />
@@ -3977,6 +4022,7 @@ export const tokensForFilters = (
                 :filterable="canFilterField(field)"
                 :events="events"
                 :applied="filters[field.id] ?? []"
+                :count-state="countState"
                 @toggle-column="emit('toggle-column', field.id)"
                 @toggle-value="(value) => toggleFieldValue(field.id, value)"
               />
@@ -4333,11 +4379,15 @@ export const tokensForFilters = (
   const setTimeZone = (zone: string | undefined) => {
     if (zone) timeZone.value = zone
   }
+
+  const QUERY_CLASS =
+    'order-last flex min-w-0 basis-full @3xl/query-toolbar:order-none @3xl/query-toolbar:min-w-36 ' +
+    '@3xl/query-toolbar:flex-1 @3xl/query-toolbar:basis-(--container-xs)'
 </script>
 
 <template>
-  <header class="flex items-center gap-(--layout-group-gap)">
-    <div class="flex min-w-0 grow flex-wrap items-center gap-(--spacing-xs)">
+  <header class="@container/query-toolbar">
+    <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
       <div class="flex shrink-0 items-center">
         <DateRangePicker
           v-model="range"
@@ -4382,7 +4432,7 @@ export const tokensForFilters = (
           </Select.Content>
         </Select>
       </div>
-      <div class="flex min-w-36 grow basis-(--container-xs)">
+      <div :class="QUERY_CLASS">
         <PropertyFilter
           v-model:text="queryText"
           mode="query"
@@ -4394,52 +4444,52 @@ export const tokensForFilters = (
           @submit="submitQuery"
         />
       </div>
-    </div>
-    <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-      <SavedQueries
-        v-model:open="savedOpen"
-        v-model:name="saveName"
-        :entries="savedEntries"
-        :status="savedStatus"
-        :can-save="canSave"
-        @apply="applySavedQuery"
-        @delete="deleteSavedQuery"
-        @save="saveQuery"
-      />
-      <RecentQueries
-        v-model:open="recentOpen"
-        :entries="recentQueries"
-        @apply="applyRecentQuery"
-        @clear="clearRecentQueries"
-      />
-      <Tooltip
-        content="Refresh"
-        class="shrink-0"
-      >
-        <IconButton
-          icon="az az-refresh"
-          variant="outline"
-          size="medium"
-          :loading="loading"
-          aria-label="Refresh"
-          data-testid="refresh-button"
-          @click="emit('refresh')"
+      <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
+        <SavedQueries
+          v-model:open="savedOpen"
+          v-model:name="saveName"
+          :entries="savedEntries"
+          :status="savedStatus"
+          :can-save="canSave"
+          @apply="applySavedQuery"
+          @delete="deleteSavedQuery"
+          @save="saveQuery"
         />
-      </Tooltip>
-      <Tooltip
-        content="Download CSV"
-        class="shrink-0"
-      >
-        <IconButton
-          icon="az az-download"
-          variant="outline"
-          size="medium"
-          :disabled="exportDisabled"
-          aria-label="Download CSV"
-          data-testid="export-button"
-          @click="emit('export')"
+        <RecentQueries
+          v-model:open="recentOpen"
+          :entries="recentQueries"
+          @apply="applyRecentQuery"
+          @clear="clearRecentQueries"
         />
-      </Tooltip>
+        <Tooltip
+          content="Refresh"
+          class="shrink-0"
+        >
+          <IconButton
+            icon="az az-refresh"
+            variant="outline"
+            size="medium"
+            :loading="loading"
+            aria-label="Refresh"
+            data-testid="refresh-button"
+            @click="emit('refresh')"
+          />
+        </Tooltip>
+        <Tooltip
+          content="Download CSV"
+          class="shrink-0"
+        >
+          <IconButton
+            icon="az az-download"
+            variant="outline"
+            size="medium"
+            :disabled="exportDisabled"
+            aria-label="Download CSV"
+            data-testid="export-button"
+            @click="emit('export')"
+          />
+        </Tooltip>
+      </div>
     </div>
   </header>
 

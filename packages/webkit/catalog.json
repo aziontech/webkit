@@ -38425,7 +38425,8 @@
     "Tooltip",
     "Trace",
     "use-collection",
-    "use-locale"
+    "use-locale",
+    "use-shortcuts"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
@@ -38464,7 +38465,8 @@
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/trace",
     "@aziontech/webkit/use-collection",
-    "@aziontech/webkit/use-locale"
+    "@aziontech/webkit/use-locale",
+    "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "Default",
    "guidelinesSummary": "The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`. The explorer is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the fields panel, the log and the event document each scroll on their own at every width (`h-dvh` only sizes a standalone preview).",
@@ -38974,7 +38976,8 @@
     "Switch",
     "Tag",
     "toast",
-    "Tooltip"
+    "Tooltip",
+    "use-shortcuts"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
@@ -39011,7 +39014,8 @@
     "@aziontech/webkit/switch",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "Application",
    "guidelinesSummary": "An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only). Order is behavior here, so the list is built to change the order safely: drag, keys, a typed position or Move up and Move down move a rule, every move is announced, and nothing runs in the new order until the user reviews the changes and saves. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`.",
@@ -39312,7 +39316,8 @@
     "toast",
     "Tooltip",
     "use-collection",
-    "use-locale"
+    "use-locale",
+    "use-shortcuts"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -39337,7 +39342,8 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-collection",
-    "@aziontech/webkit/use-locale"
+    "@aziontech/webkit/use-locale",
+    "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "Default",
    "guidelinesSummary": "The Tuning tab of a WAF rule set. It shows the requests the rule set matched, grouped by the rule that matched them, with enough context (hits, top addresses, countries and paths) for the user to tell an attack from a false positive, and turns the legitimate ones into allowed rules with a recorded reason. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`.",

@@ -53,6 +53,7 @@
 ## Accessibility
 
 - The trigger is a button named `Show all <count> <noun>` (the visible `+N` alone does not say what it counts); `aria-expanded` and `aria-controls` come from `Popover`.
+- On a coarse pointer the trigger answers a tap across 44px (an invisible `data-slot="touch-target"` layer, as `Button` has), while the chip keeps its drawn size.
 - Keyboard: `Enter`/`Space` opens, `Esc` closes and returns focus to the chip, `Tab` moves through the search box, the links and Load more.
 - A polite `role="status"` region announces the summary after a search or Load more.
 - A link that opens a new tab carries a visually hidden `(opens in a new tab)`.

@@ -110,7 +110,7 @@
 | Key                         | English source                                                                               | Override prop |
 | --------------------------- | -------------------------------------------------------------------------------------------- | ------------- |
 | `dataGrid.selectAll`        | `Select all rows`                                                                            | —             |
-| `dataGrid.selectRow`        | `Select row`                                                                                 | —             |
+| `dataGrid.selectRow`        | `Select row {row}`                                                                           | —             |
 | `dataGrid.resize`           | `Resize {column}`                                                                            | —             |
 | `dataGrid.invalidNumber`    | `Enter a number`                                                                             | —             |
 | `dataGrid.emptyTitle`       | `No rows yet`                                                                                | `empty` slot  |

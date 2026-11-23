@@ -9980,7 +9980,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-card.md](
 - Surface: app
 - Source: `blocks/view/view-events-explorer/view-events-explorer.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-events-explorer")`
-- Components: Accordion, Alert, Button, Chart, Checkbox, Chip, CodeBlock, CopyButton, DataTable, `DataTableLoadMore`, `DataTablePagination`, DateRangePicker, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, FilterMenu, FilterMenu, IconButton, Input, Item, `PanelHeader`, Popover, PropertyFilter, Resizable, Select, Sidebar, Skeleton, Tabs, Tag, Toast, Tooltip, Trace, `use-collection`, `use-locale`
+- Components: Accordion, Alert, Button, Chart, Checkbox, Chip, CodeBlock, CopyButton, DataTable, `DataTableLoadMore`, `DataTablePagination`, DateRangePicker, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, FilterMenu, FilterMenu, IconButton, Input, Item, `PanelHeader`, Popover, PropertyFilter, Resizable, Select, Sidebar, Skeleton, Tabs, Tag, Toast, Tooltip, Trace, `use-collection`, `use-locale`, `use-shortcuts`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -10536,7 +10536,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-query-edi
 - Surface: app
 - Source: `blocks/view/view-rule-list/view-rule-list.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-rule-list")`
-- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, Item, Kbd, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Toast, Tooltip
+- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, Item, Kbd, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Toast, Tooltip, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -10634,7 +10634,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-rule-list
 - Empty: `subject="firewall"` and `rules` `[]`: the Request phase shows its `EmptyState`.
 - Loading: `loading`: skeleton rows in each phase, the search and Add Rule disabled.
 - LoadError: `error` set: a danger `Alert` with Retry replaces the phases.
-- EditRule: the list composed with `edit/edit-rule-builder`. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
+- EditRule: the list composed with `edit/edit-rule-builder`, opening on the builder for Docs rewrite. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
 
 ## Related
 
@@ -10741,7 +10741,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-table.md]
 - **Filter:** placeholder and `aria-label` name what is filtered, e.g. "Filter resources".
 - **Properties:** the column header's words, e.g. "Name", "Author", "Status", "Domain".
 - **Icon buttons:** a verb or noun in sentence case, e.g. "Refresh", "Download CSV", "Row actions". Preferences title: "Table preferences".
-- **Column headers:** one or two words without punctuation, e.g. "Name", "ID", "Domains", "Status", "Last modified".
+- **Column headers:** one or two words without punctuation, e.g. "Name", "Status", "ID", "Domains", "Last modified".
 - **No match:** "No matching resources", then "No resource matches these filters.", and the action "Clear filters".
 - **Empty:** title states the fact, e.g. "No resources yet"; description is one sentence with what to do, e.g. "Create a resource to start serving traffic on your domains."
 - **Copy buttons:** name what they copy, e.g. "Copy resource ID", "Copy domain name".
@@ -10918,7 +10918,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-template-
 - Surface: app
 - Source: `blocks/view/view-waf-tuning/view-waf-tuning.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-waf-tuning")`
-- Components: Alert, Button, Card, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, EmptyState, Field, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`, `use-locale`
+- Components: Alert, Button, Card, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, EmptyState, Field, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`, `use-locale`, `use-shortcuts`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -10955,7 +10955,7 @@ What each part takes: [blocks/view/view-waf-tuning.md](blocks/view/view-waf-tuni
 
 The block takes its matches through props and emits every action; it fetches nothing. `WafTuningMatch`, `WafTuningAllowPayload` and `WafTuningProps` are exported from `view-waf-tuning.vue`, and `sample.ts` holds the sample matches the block renders when `matches` is left out (and never while `loading` or `error` is set). The allow dialog is the private part `parts/allow-dialog.vue`; it keeps the reason and its validation, and the page keeps the outcome.
 
-Prop: `matches`, `v-model:range`, `loading`, `error`, `defaultSelectedKeys`, `defaultOpen`, `allowing`, `allowError`.
+Prop: `matches`, `v-model:range`, `loading`, `error`, `defaultSelectedKeys`, `defaultOpen`, `defaultReason`, `allowing`, `allowError`.
 
 Event: `refresh`, `retry`, `allow`, `update:range`.
 
@@ -11001,7 +11001,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-waf-tunin
 
 - Default: the matches passed in `matches` (the sample when it is left out), minimum 100 hits.
 - Allow: `defaultSelectedKeys` checks two rules and `defaultOpen` opens the dialog.
-- AllowError: the same dialog with `allowError` set: the failure `Alert` and Try again.
+- AllowError: the same dialog with `allowError` set and the submitted reason kept (`defaultReason`): the failure `Alert` and Try again.
 - Empty: `matches` is `[]`: no match yet, no settings.
 - Loading: `loading`: settings disabled, skeleton rows.
 - LoadError: `error` set: a danger `Alert` with Retry takes the table's place and Export to CSV is disabled.
@@ -19456,6 +19456,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ## Accessibility
 
 - The trigger is a button named `Show all <count> <noun>` (the visible `+N` alone does not say what it counts); `aria-expanded` and `aria-controls` come from `Popover`.
+- On a coarse pointer the trigger answers a tap across 44px (an invisible `data-slot="touch-target"` layer, as `Button` has), while the chip keeps its drawn size.
 - Keyboard: `Enter`/`Space` opens, `Esc` closes and returns focus to the chip, `Tab` moves through the search box, the links and Load more.
 - A polite `role="status"` region announces the summary after a search or Load more.
 - A link that opens a new tab carries a visually hidden `(opens in a new tab)`.
@@ -21287,6 +21288,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 - Reorderable rows: each grip is a button named `Reorder <row name>, position <n> of <total>` and described by a visually hidden hint (`Drag, or press Arrow Up or Arrow Down to move.`, or the lock reason). Arrow Up / Arrow Down / Home / End move the row and keep focus on its grip; `Esc` cancels a drag. A polite `role="status"` region announces `Moved <name> to position <n> of <total>.` (keyboard) or `Dropped …` (pointer). Dragging is never the only way to reorder (WCAG 2.5.7).
 - Tree rows follow the APG treegrid row-focus pattern: `Tab` enters the grid on one row (the last one focused, else the first); `Arrow Down` / `Arrow Up` move between visible rows; `Home` / `End` go to the first / last row; `Arrow Right` (inline end, mirrored in RTL) opens a closed row or moves to the first child of an open one; `Arrow Left` closes an open row or moves to the parent; `Enter` toggles the row; `Space` toggles its selection when `selectable` allows it. Interactive content inside the row (checkbox, menus) stays reachable with `Tab`. The pointer toggle is `aria-hidden` (the row's `aria-expanded` is the accessible state), and when a row collapses while one of its descendants holds focus, focus moves to that row.
 - Stacked layout: the select-all is a visible checkbox with a `<label>`, not a screen-reader-only header cell (WCAG 2.5.3, label in name).
+- Row checkboxes are named after the row: `table.selectRow` (`Select row {row}`) filled with the principal column's value, else the row key.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including muted header text.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px on the sort button and row action controls.
