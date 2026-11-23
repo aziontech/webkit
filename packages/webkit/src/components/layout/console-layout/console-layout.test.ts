@@ -431,7 +431,7 @@ describe('ConsoleLayout', () => {
       expect(within(getByRole('banner')).getByRole('button', { name: 'Create' })).toBeTruthy()
     })
 
-    it('swaps the breadcrumbs for the hamburger and the brand on a narrow layout', async () => {
+    it('adds the hamburger and the brand on a narrow layout, the trail marked compact', async () => {
       const { getByRole } = mount(
         { breadcrumbs: [{ label: 'Workloads' }] },
         { width: 480 },
@@ -445,7 +445,9 @@ describe('ConsoleLayout', () => {
         expect(header.getByRole('button', { name: 'Open navigation' })).toBeTruthy()
       )
       expect(header.getByRole('link', { name: 'Azion home' })).toBeTruthy()
-      expect(header.queryByText('Workloads')).toBeNull()
+      expect(
+        header.getByText('Workloads').closest('[data-compact]')?.hasAttribute('data-compact')
+      ).toBe(true)
       expect(header.getByRole('button', { name: 'New' })).toBeTruthy()
     })
 
@@ -888,8 +890,8 @@ describe('ConsoleLayout', () => {
       expect(within(trail).getAllByRole('listitem')).toHaveLength(1)
     })
 
-    it('hides a trail without a control crumb while compact', async () => {
-      const { getByRole } = mount(
+    it('keeps a trail without a control crumb while compact, marked to hide in a narrow header', async () => {
+      const { getByRole, getByTestId } = mount(
         {},
         { width: 480 },
         { default: () => h(ConsoleLayoutBreadcrumb, { items: [{ label: 'Page crumb' }] }) }
@@ -898,7 +900,9 @@ describe('ConsoleLayout', () => {
       await waitFor(() =>
         expect(header.getByRole('button', { name: 'Open navigation' })).toBeTruthy()
       )
-      expect(header.queryByRole('navigation', { name: 'Breadcrumb' })).toBeNull()
+      const trail = getByTestId('console-layout__breadcrumbs')
+      expect(trail.hasAttribute('data-compact')).toBe(true)
+      expect(within(trail).getByText('Page crumb')).toBeTruthy()
     })
 
     it('gives each top-level control its own crumb', async () => {
