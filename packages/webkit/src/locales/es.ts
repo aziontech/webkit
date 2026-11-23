@@ -9,7 +9,8 @@ export const es: Messages = {
     expired: 'Solicitud vencida',
     confirmLabel: 'Escribe {phrase} para confirmar',
     arguments: 'Argumentos',
-    invalidArguments: 'Estos argumentos no son válidos. Corrígelos para aprobar.'
+    invalidArguments: 'Estos argumentos no son válidos. Corrígelos para aprobar.',
+    phraseMismatch: 'El texto no coincide con {phrase}. Escríbelo exactamente para confirmar.'
   },
   agentQuestion: {
     submit: 'Enviar',

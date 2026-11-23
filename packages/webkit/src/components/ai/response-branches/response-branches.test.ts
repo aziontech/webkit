@@ -52,6 +52,22 @@ describe('ResponseBranches', () => {
     expect(group.closest('[data-testid="response-branches"]')).toHaveAttribute('data-index', '1')
   })
 
+  it('moves focus to the other arrow when the focused one reaches an end', async () => {
+    const view = render(Harness, { props: { start: 1 } })
+    const previous = view.getByRole('button', { name: 'Previous version' })
+    const next = view.getByRole('button', { name: 'Next version' })
+    previous.focus()
+    await fireEvent.click(previous)
+    await nextTick()
+    expect(previous).toBeDisabled()
+    expect(document.activeElement).toBe(next)
+    await fireEvent.click(next)
+    await fireEvent.click(next)
+    await nextTick()
+    expect(next).toBeDisabled()
+    expect(document.activeElement).toBe(previous)
+  })
+
   it('clamps an out-of-range index and hides the pager for one version', async () => {
     const view = render(Harness, { props: { start: 9 } })
     expect(view.getByText('Third')).toBeTruthy()
