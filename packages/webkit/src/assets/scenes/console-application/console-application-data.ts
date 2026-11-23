@@ -137,7 +137,7 @@ export const CONSOLE_APPLICATION_STEPS: ConsoleApplicationStep[] = [
           ]
         },
         {
-          title: 'Edge Cache',
+          title: 'Cache',
           fields: [
             { kind: 'select', label: 'Behavior', value: 'Override cache settings' },
             { kind: 'text', label: 'Maximum TTL (seconds)', value: '2592000' }

@@ -8,7 +8,7 @@
   <RegistrationFrame class="w-full bg-(--bg-surface)">
     <ItemList>
       <DocItem
-        title="Edge Functions"
+        title="Functions"
         icon="az az-code"
         href="#edge-functions"
       >
@@ -16,7 +16,7 @@
         natively, through a binding.
       </DocItem>
       <DocItem
-        title="Edge SQL"
+        title="SQL Database"
         icon="az az-database"
         href="#edge-sql"
       >
@@ -24,7 +24,7 @@
         the request.
       </DocItem>
       <DocItem
-        title="Edge Cache"
+        title="Cache"
         icon="az az-bolt"
         href="#edge-cache"
       >

@@ -4,7 +4,7 @@
 
   const model = ref([
     [
-      { id: 1, label: 'Edge Functions' },
+      { id: 1, label: 'Functions' },
       { id: 2, label: 'WAF' },
       { id: 3, label: 'Image Processor' }
     ],

@@ -79,3 +79,41 @@ test('exampleDataApplies skips tests, translated catalogs and the country list',
     !exampleDataApplies('packages/webkit/src/components/input/phone-input/lib/country-data.ts')
   )
 })
+
+test('retired-product-name fires on a retired Azion product name', () => {
+  for (const content of [
+    'title="Edge Functions"',
+    ":tags=\"['Console', 'Edge SQL']\"",
+    '<Footer.Link>Edge Application</Footer.Link>'
+  ]) {
+    assert.ok(ids(content).includes('retired-product-name'), `expected retired name for: ${content}`)
+  }
+})
+
+test('retired-product-name stays silent on the official names and Edge DNS', () => {
+  for (const content of [
+    'title="Functions"',
+    'title="SQL Database"',
+    'label="Applications"',
+    'label="Edge DNS"',
+    'label="Edge Nodes"'
+  ]) {
+    assert.ok(!ids(content).includes('retired-product-name'), `unexpected for: ${content}`)
+  }
+})
+
+test('the retired names match deprecatedNames in the product list', async () => {
+  const { readFile } = await import('node:fs/promises')
+  const { RETIRED_PRODUCT_NAMES } = await import('../../src/eslint-plugin/lib/example-data.js')
+  const products = JSON.parse(
+    await readFile(new URL('../catalog/azion-products.json', import.meta.url), 'utf8')
+  )
+  assert.deepEqual(
+    [...RETIRED_PRODUCT_NAMES].sort(),
+    products.deprecatedNames.map((entry) => entry.deprecated).sort()
+  )
+})
+
+test('the microcopy skill may name the retired products it bans', () => {
+  assert.equal(exampleDataApplies('skills/webkit-microcopy/SKILL.md'), false)
+})

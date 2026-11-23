@@ -115,7 +115,7 @@
               />
               <SidebarMenuSub default-open>
                 <SidebarMenuSubTrigger
-                  label="Edge Functions"
+                  label="Functions"
                   type="inline"
                 />
                 <SidebarMenuSubContent>

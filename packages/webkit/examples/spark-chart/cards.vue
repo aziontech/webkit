@@ -11,7 +11,7 @@
     >
       <div class="flex min-w-0 flex-1 flex-col">
         <span class="truncate text-label-md text-(--text-default)">Requests</span>
-        <span class="truncate text-label-sm text-(--text-muted)">Edge Application</span>
+        <span class="truncate text-label-sm text-(--text-muted)">Applications</span>
       </div>
       <div class="w-24 shrink-0">
         <SparkChart
@@ -32,7 +32,7 @@
     >
       <div class="flex min-w-0 flex-1 flex-col">
         <span class="truncate text-label-md text-(--text-default)">Blocked threats</span>
-        <span class="truncate text-label-sm text-(--text-muted)">Edge Firewall</span>
+        <span class="truncate text-label-sm text-(--text-muted)">Firewall</span>
       </div>
       <div class="w-24 shrink-0">
         <SparkChart
@@ -53,7 +53,7 @@
     >
       <div class="flex min-w-0 flex-1 flex-col">
         <span class="truncate text-label-md text-(--text-default)">Cache hit ratio</span>
-        <span class="truncate text-label-sm text-(--text-muted)">Edge Cache</span>
+        <span class="truncate text-label-sm text-(--text-muted)">Cache</span>
       </div>
       <div class="w-24 shrink-0">
         <SparkChart

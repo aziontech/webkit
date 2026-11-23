@@ -48,6 +48,7 @@ export function exampleDataApplies(rel) {
   if (/\/locales\/(pt-BR|es)\b/.test(rel)) return false
   if (rel.endsWith('/eslint-plugin/lib/example-data.js')) return false
   if (rel === 'rules/webkit-example-data.md') return false
+  if (rel === 'skills/webkit-microcopy/SKILL.md') return false
   if (rel.endsWith('/phone-input/lib/country-data.ts')) return false
   return !rel.endsWith('/assets/logos/SOURCES.md')
 }
@@ -68,7 +69,31 @@ const REGIONAL = [
 
 const INVENTED_BRAND = /\b(?:edgeflow|contoso|globex|initech|hooli)\b/gi
 
+export const RETIRED_PRODUCT_NAMES = [
+  'Edge Application',
+  'Edge Firewall',
+  'Edge Connector',
+  'Real-Time Manager',
+  'Edge AI',
+  'Application Acceleration',
+  'Edge Cache',
+  'Edge Functions',
+  'Image Processing',
+  'Edge Orchestrator',
+  'Edge KV',
+  'Edge Storage',
+  'Edge SQL',
+  'Network Layer Protection',
+  'Data Streaming'
+]
+
+const RETIRED_PRODUCT = new RegExp(`\\b(?:${RETIRED_PRODUCT_NAMES.join('|')})\\b`, 'g')
+
 export const EXAMPLE_DATA_MESSAGES = {
+  'retired-product-name':
+    'Retired Azion product name in sample data. Use the official name (Functions, SQL Database, ' +
+    'Cache, Applications, Firewall, Object Storage, KV Store...): the map is deprecatedNames in ' +
+    'test/catalog/azion-products.json (rules/webkit-example-data.md).',
   'invented-brand':
     "Invented company brand in sample data. The one sample company is Acme (shadcn's " +
     'placeholder), on example.com domains; resources are named for what they are (production, ' +
@@ -90,6 +115,7 @@ export function scanExampleData(content) {
     if (!allowedHost(host)) found.push('domain')
   }
   for (const _ of content.matchAll(INVENTED_BRAND)) found.push('invented-brand')
+  for (const _ of content.matchAll(RETIRED_PRODUCT)) found.push('retired-product-name')
   for (const re of REGIONAL) for (const _ of content.matchAll(re)) found.push('regional-format')
   return found
 }
