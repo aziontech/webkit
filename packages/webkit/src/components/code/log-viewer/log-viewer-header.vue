@@ -43,7 +43,7 @@
 
   const LEVEL_DOT_CLASS =
     'size-2 shrink-0 rounded-full bg-(--text-muted) ' +
-    'data-[level=error]:bg-(--danger-foreground) data-[level=info]:bg-(--info-foreground) data-[level=warn]:bg-(--warning-foreground) ' +
+    'data-[level=error]:bg-(--danger-mark) data-[level=info]:bg-(--info-mark) data-[level=warn]:bg-(--warning-mark) ' +
     'forced-colors:bg-[CanvasText]'
 </script>
 

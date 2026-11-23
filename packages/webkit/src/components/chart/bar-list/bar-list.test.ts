@@ -179,4 +179,12 @@ describe('BarList', () => {
       view.unmount()
     }
   })
+
+  it('ends every bar on a solid cap in the full hue, so the length reads in both themes', () => {
+    const view = mount()
+    for (const bar of view.getAllByTestId('bar-list__bar')) {
+      expect(bar.classList.contains('border-e-2')).toBe(true)
+      expect(bar.classList.contains('border-(--bar-list-fill)')).toBe(true)
+    }
+  })
 })

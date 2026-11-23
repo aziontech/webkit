@@ -161,11 +161,11 @@
             >
               <i
                 v-if="step.status === 'success'"
-                class="az az-circle-check text-(--success-foreground)"
+                class="az az-circle-check text-(--success-mark)"
               />
               <i
                 v-else-if="step.status === 'error'"
-                class="az az-circle-x text-(--danger-foreground)"
+                class="az az-circle-x text-(--danger-mark)"
               />
               <i
                 v-else-if="step.status === 'skipped'"
