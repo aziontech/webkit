@@ -7,7 +7,7 @@ spec_version: 7
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 1363c7a2df3d15a38bb8591e7593bc23d7fc7f301a50a521a21eda8937e92ac8
+checksum: aaa3d70533a74c035eb199fd7980b267f43ea6b9afda238a3de1cd46efbb0dbc
 ---
 
 # StoryIndexSection — Component Spec
@@ -109,7 +109,7 @@ Every success story of a company as one filterable library. A left-aligned title
 
 - Visual states: `default`, `hover` (a card lifts to the raised surface, the read cue brightens and its arrow nudges), `focus-visible` (inset ring)
 - Filtered: the search matches the client name and the description; each facet keeps the stories whose `facets[id]` holds the selected value; all filters combine
-- Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize`; changing the search or a facet returns to the first page
+- Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize` and moves keyboard focus to the link of the first revealed item, so focus never drops to the page when the button leaves and a screen reader reads the new item; changing the search or a facet returns to the first page
 - Clearing one facet: every select starts with an option labelled by its `allLabel` that clears that facet
 - Folded toolbar (below `lg`): a filter button (`aria-expanded`, `aria-controls`) beside the search field shows or hides the selects, stacked (the panel carries `data-state="open|closed"`); its label carries the number of applied facets; every facet set to a value renders a removable `chip` (`<facet label>: <option label>`) whose remove clears it; the field shows `searchShortPlaceholder` when set. From `lg` the selects sit on the toolbar row and the button and chips are hidden (CSS only for the layout; the placeholder switches after mount, so server and client markup match)
 - Option search: a select with more than seven options renders a search field above its options and a `status` line when nothing matches

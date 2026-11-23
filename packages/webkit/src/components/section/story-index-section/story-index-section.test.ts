@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { render, screen, waitFor, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import StoryIndexSection from './story-index-section.vue'
@@ -194,6 +194,16 @@ describe('StoryIndexSection', () => {
     await userEvent.click(getByRole('button', { name: 'Load more' }))
     expect(cardNames(getByRole)).toHaveLength(items.length)
     expect(queryByRole('button', { name: 'Load more' })).toBeNull()
+  })
+
+  it('moves focus to the first revealed card instead of dropping it to the page', async () => {
+    const { getByRole } = band({ pageSize: 2 })
+
+    getByRole('button', { name: 'Load more' }).focus()
+    await userEvent.keyboard('{Enter}')
+    await vi.waitFor(() => {
+      expect(document.activeElement?.getAttribute('aria-label')).toBe(cardNames(getByRole)[2])
+    })
   })
 
   it('returns to the first page when the filters change', async () => {

@@ -36,4 +36,21 @@ describe('useLoadMore', () => {
     expect(list.visible.value).toEqual([9])
     expect(list.hasMore.value).toBe(false)
   })
+
+  it('moves focus to the first link of the first revealed item', async () => {
+    const listEl = document.createElement('ul')
+    document.body.append(listEl)
+    const list = useLoadMore(() => ITEMS, 2, listEl)
+    const draw = () => {
+      listEl.innerHTML = list.visible.value
+        .map((item) => `<li><a href="#${item}">Item ${item}</a></li>`)
+        .join('')
+    }
+    draw()
+    const pending = list.loadMore()
+    draw()
+    await pending
+    expect(document.activeElement?.textContent).toBe('Item 3')
+    listEl.remove()
+  })
 })
