@@ -151,7 +151,7 @@
 
   const formEl = ref<HTMLFormElement | null>(null)
 
-  const { guard, submitting, submitButton, leave, submit } = useCreateForm({
+  const { guard, failure, submitting, submitButton, leave, submit } = useCreateForm({
     source: () => form,
     formEl,
     shortcutLabel: 'Create organization',
@@ -159,8 +159,7 @@
     onCreated: () =>
       toast.success(`${form.name.trim()} created.`, {
         description: `You are now in it, as its owner. ${form.workspace.trim()} is ready for your first deploy.`
-      }),
-    failureTitle: 'Could not create the organization.'
+      })
   })
 
   onMounted(() => nameEl.value?.focus())
@@ -180,6 +179,8 @@
     title-id="create-organization-title"
     submit-label="Create Organization"
     :submitting="submitting"
+    :failure="failure"
+    failure-title="Could not create the organization."
     lock-cancel
     :submit-button="submitButton"
     :guard="guard"
@@ -195,6 +196,7 @@
         <template #default>
           <Item.List>
             <SettingsRow
+              required
               stackable
               title="Name"
               description="Usually your company's name. Everyone you invite sees it."
@@ -325,6 +327,7 @@
         <template #default>
           <Item.List>
             <SettingsRow
+              required
               stackable
               title="Name"
               description="Where the organization's first workloads and resources live. You can add more workspaces once the organization exists."

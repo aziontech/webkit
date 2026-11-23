@@ -6,6 +6,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
   import { ref } from 'vue'
 
   import SubmitButton from './submit-button.vue'
@@ -58,6 +59,11 @@
 
   const formEl = ref<HTMLFormElement | null>(null)
 
+  const onSubmit = (event: Event) => {
+    emit('submit', event)
+    focusFirstInvalid(formEl.value)
+  }
+
   useShortcuts({
     keys: 'meta+enter',
     label: () => props.shortcutLabel,
@@ -82,7 +88,7 @@
         class="flex min-h-0 flex-1 flex-col"
         :aria-label="title"
         novalidate
-        @submit.prevent="(event: Event) => emit('submit', event)"
+        @submit.prevent="onSubmit"
       >
         <PanelHeader class="w-full">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">

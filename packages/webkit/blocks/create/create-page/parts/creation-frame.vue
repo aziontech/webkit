@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import type { BreadcrumbItemData } from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Kbd from '@aziontech/webkit/kbd'
@@ -26,6 +27,10 @@
     submitLabel: string
     /** The request is in flight: the fieldset locks. */
     submitting: boolean
+    /** Why the last request failed, shown inline with Retry above the save bar. */
+    failure?: string
+    /** The title of that inline error. */
+    failureTitle?: string
     /** Cancel is disabled while the request runs. */
     lockCancel?: boolean
     /** The submit binding from useCreateForm. */
@@ -41,6 +46,8 @@
 
   withDefaults(defineProps<CreationFrameProps>(), {
     accountLabel: 'name@example.com',
+    failure: '',
+    failureTitle: '',
     lockCancel: false
   })
 
@@ -92,6 +99,16 @@
               <legend class="sr-only">{{ title }}</legend>
               <slot />
             </fieldset>
+
+            <Alert
+              v-if="failure"
+              class="mt-(--layout-section-gap)"
+              severity="danger"
+              :title="failureTitle"
+              :label="failure"
+              action-label="Retry"
+              @action="(event: MouseEvent) => emit('submit', event)"
+            />
           </div>
           <SaveBar variant="centered">
             <template

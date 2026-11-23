@@ -1,6 +1,6 @@
 # CreateReleaseImpact (`create/create-release-impact`)
 
-> The Review and deploy page of a release that carries several resources at once. The left column holds one `Card` per resource: its type and icon, a Required or Read-only `Tag` or an include `Switch` named by a `Tooltip`, the resource and a version `Select` that tracks the latest Ready version or pins one (each with a Current `Tag` and its age), an invalid line and Build a version when nothing is Ready, and a Dependencies box whose `Accordion` groups modules and integrations with counts, a Shared `Tag` with the resources that also reference it and one info `Alert` saying a shared dependency deploys at one version. The right column is the sticky Impact `Card`: a `ToggleGroup` switches a Tree (Deployment Settings, their environments and the projects they publish to, with rails and counts) and a Flow (the same as left-to-right cards), and its footer sums up what the release reaches. A sticky footer holds the hint, Cancel and Deploy release, which asks in a `ConfirmDialog` and then runs as an async action: one toast turns from Deploying release… into the outcome and dismisses itself, and the page shows the outcome `Alert` with Edit and Redeploy. A ChooseSettings step before it picks the Deployment Settings the release deploys with, as grouped `Field` checkbox choice cards with search, Select all and Clear. Built from `Card`, `Tag`, `Switch`, `Tooltip`, `Field`, `Select`, `Checkbox`, `Input`, `Badge`, `Accordion`, `Alert`, `ToggleGroup`, `Skeleton`, `Spinner`, `Button`, `ConfirmDialog`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.
+> The Review and deploy page of a release that carries several resources at once. The left column holds one `Card` per resource: its type and icon, a Required or Read-only `Tag` or an include `Switch` named by a `Tooltip`, the resource and a version `Select` that tracks the latest Ready version or pins one (each with a Current `Tag` and its age), an invalid line and Build a version when nothing is Ready, and a Dependencies box whose `Accordion` groups modules and integrations with counts, a Shared `Tag` with the resources that also reference it and one info `Alert` saying a shared dependency deploys at one version. The right column is the sticky Impact `Card`: a `ToggleGroup` switches a Tree (Deployment Settings, their environments and the projects they publish to, with rails and counts) and a Flow (the same as left-to-right cards), and its footer sums up what the release reaches. A sticky footer holds the hint, Cancel and Deploy release, which asks in a `ConfirmDialog` and then runs as an async action: a Deploying release… toast follows the run and is dismissed when it ends, and the page shows the outcome `Alert` with Edit and Redeploy, so no toast covers the bar. On a phone the hint hides and Cancel and Deploy release share one row. A ChooseSettings step before it picks the Deployment Settings the release deploys with, as grouped `Field` checkbox choice cards with search, Select all and Clear. Built from `Card`, `Tag`, `Switch`, `Tooltip`, `Field`, `Select`, `Checkbox`, `Input`, `Badge`, `Accordion`, `Alert`, `ToggleGroup`, `Skeleton`, `Spinner`, `Button`, `ConfirmDialog`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.
 
 - Surface: app
 - Source: `blocks/create/create-release-impact/create-release-impact.vue` in `@aziontech/webkit`
@@ -35,7 +35,7 @@ The page opens with a large `PageHeader` (its `h1` reads Review and deploy) and 
 
 ### B. Outcome — `Alert`, `Button` (required after a run)
 
-When a run ends, one `Alert` above the columns says how it ended: `severity="danger"` with what was refused and that nothing changed in traffic, or `severity="success"` with what serves now. Both carry **Edit** and **Redeploy** in the `action` slot. The page `Alert` is the persistent outcome; the run's toast auto-dismisses and carries no actions, so the user never meets the same pair twice.
+When a run ends, one `Alert` above the columns says how it ended: `severity="danger"` with what was refused and that nothing changed in traffic, or `severity="success"` with what serves now. Both carry **Edit** and **Redeploy** in the `action` slot. The page `Alert` is the outcome; when the run ends the loading toast is dismissed and no outcome toast is raised, so nothing covers the docked bar and the user never meets the same message twice.
 
 ### C. Resource cards — `Card`, `Switch`, `Tag`, `Tooltip` (required)
 
@@ -63,7 +63,7 @@ The `Card` footer sums the reach in one sentence: projects, environments and Dep
 
 ### G. Footer and commit — `SaveBar`, `Button`, `ConfirmDialog` (required)
 
-`SaveBar variant="docked"` at the bottom of the page: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`variant="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and emits `deploy`; the parent sets `deploying`, then `deployed` or `deployError`, and the block shows the run as an async action (`state/state-async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+`SaveBar variant="docked"` at the bottom of the page: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`variant="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and emits `deploy`; the parent sets `deploying`, then `deployed` or `deployError`, and the block shows the run as an async action (`state/state-async-submit`): one `toast.loading` ("Deploying release…", with "It keeps running if you leave.") follows the run, and when it ends that toast is dismissed and the page `Alert` takes over with **Edit** and **Redeploy**. Never View deployments. On a phone the hint is hidden and Cancel and Deploy release share one row, so the bar stays short. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ### Before the review: choosing the Deployment Settings
 
@@ -85,8 +85,8 @@ The block takes the release and its impact through props and emits every action;
 | `error`       | `string`                  | Why the impact could not be read, shown in the warning alert with Retry. The release can still deploy.  |
 | `truncated`   | `boolean`                 | The projects list came back truncated; a warning sits above the tree.                                   |
 | `deploying`   | `boolean`                 | The run is in flight: Deploy release spins, the switches lock and the loading toast shows.              |
-| `deployed`    | `boolean`                 | The last run deployed: the success toast and `Alert` with Edit and Redeploy.                            |
-| `deployError` | `string`                  | Why the last run failed, shown in the danger `Alert` and the error toast.                               |
+| `deployed`    | `boolean`                 | The last run deployed: the success `Alert` with Edit and Redeploy.                                      |
+| `deployError` | `string`                  | Why the last run failed, shown in the danger `Alert` with Edit and Redeploy.                            |
 
 | Event    | Payload              | When                                                                          |
 | -------- | -------------------- | ----------------------------------------------------------------------------- |
@@ -131,7 +131,7 @@ Then delete `sample.ts` and its import.
 - Say what tracking the latest Ready version resolves to now.
 - Block Deploy release only for something the user can fix here, and say what it is in the footer.
 - Keep Deploy possible when the impact cannot be computed; say the impact is unknown.
-- Report the outcome in the page `Alert` with Edit and Redeploy; the toast only announces it and dismisses itself.
+- Report the outcome in the page `Alert` with Edit and Redeploy; dismiss the loading toast when the run ends and raise no outcome toast over the docked bar.
 
 ## Don't
 
@@ -168,7 +168,7 @@ Then delete `sample.ts` and its import.
 - Loading: `loading` is set while the impact is computed.
 - Unavailable: `error` says the impact could not be read; Retry emits `retry`, and a truncated answer sets `truncated`.
 - MissingVersion: a resource in `resources` has no `versions`, which blocks the deploy.
-- Error: `deployError` says the last run was refused; an error toast announces it, and Edit and Redeploy sit on the page `Alert`.
+- Error: `deployError` says the last run was refused; the danger page `Alert` announces it with Edit and Redeploy, and no toast covers the bar.
 
 ## Related
 
@@ -184,7 +184,7 @@ Then delete `sample.ts` and its import.
 - `Loading` — The impact is being computed: the Impact card shows Computing impact… with a `Spinner` and three `Skeleton` lines, is `aria-busy`, announces it through a status line, hides the view switch and the summary, and the footer says Computing impact… beside Deploy release.
 - `Unavailable` — The projects behind the Deployment Settings could not be read: a warning `Alert` says the impact is unknown and that the release can still deploy, the count of settings selected and Retry. Retry emits `retry`; a list that comes back truncated (`truncated`) shows its own warning above the tree.
 - `MissingVersion` — edge-policy has no Ready version: its version `Select` is disabled and invalid with the reason under it, Build a version links to its versions, and Deploy release stays disabled with the reason in the footer. Switching edge-policy off the release clears the blocker.
-- `Error` — The last run failed: an error toast announces it and the danger `Alert` at the top says edge-policy was refused and nothing changed in traffic, with Edit (back to the resources) and Redeploy. Redeploy emits `deploy` again; the parent sets `deploying` and the toast follows the run.
+- `Error` — The last run failed: no toast covers the bar; the danger `Alert` at the top says edge-policy was refused and nothing changed in traffic, with Edit (back to the resources) and Redeploy. Redeploy emits `deploy` again; the parent sets `deploying` and the toast follows the run.
 
 Each variant is the same screen in another state: `get_block("create/create-release-impact", { variant })`, or the file under `blocks/create/create-release-impact/variants/`.
 
@@ -235,7 +235,7 @@ Each variant is the same screen in another state: `get_block("create/create-rele
     deploying?: boolean
     /** The last run deployed the release. */
     deployed?: boolean
-    /** Why the last run failed, shown in the danger alert and the error toast. */
+    /** Why the last run failed, shown in the danger alert with Edit and Redeploy. */
     deployError?: string
   }
 
@@ -396,15 +396,7 @@ Each variant is the same screen in another state: `get_block("create/create-rele
   watch(
     outcome,
     (next) => {
-      if (next === 'failed')
-        toast.error("The release wasn't deployed.", runToast(props.deployError))
-      else if (next === 'succeeded')
-        toast.success(
-          'Release deployed.',
-          runToast(
-            `${releaseLine.value} serve ${plural(projects.value.length, 'project', 'projects')} now.`
-          )
-        )
+      if (next === 'failed' || next === 'succeeded') toast.dismiss(RUN_TOAST)
     },
     { immediate: true }
   )
@@ -494,7 +486,7 @@ Each variant is the same screen in another state: `get_block("create/create-rele
 
       <SaveBar variant="docked">
         <template #leading>
-          <p class="text-body-sm text-(--text-muted)">
+          <p class="text-body-sm text-(--text-muted) max-md:hidden">
             Deploying puts every included resource into traffic at the version shown.
           </p>
         </template>
@@ -509,53 +501,57 @@ Each variant is the same screen in another state: `get_block("create/create-rele
             />
             {{ blocker }}
           </p>
-          <div class="w-full md:w-fit">
-            <Button
-              class="w-full"
-              label="Cancel"
-              variant="outline"
-              size="medium"
-              href="/services/web-app"
-              :disabled="deploying"
-            />
-          </div>
-          <ConfirmDialog
-            v-model:open="confirmOpen"
-            title="Deploy this release?"
-            :description="confirmBody"
-            confirm-label="Deploy release"
-            variant="primary"
-            size="small"
-            :disabled="!canDeploy"
-            @confirm="confirmDeploy"
+          <div
+            class="flex w-full gap-(--spacing-xs) @xl/save-bar:w-fit @xl/save-bar:gap-(--spacing-sm)"
           >
-            <template #trigger>
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  variant="primary"
-                  size="medium"
-                  icon="az az-cloud-upload"
-                  :disabled="!canDeploy"
-                  :loading="deploying"
-                  :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
-                >
-                  {{ deploying ? 'Deploying…' : 'Deploy release' }}
-                  <span
-                    v-if="!deploying"
-                    class="max-lg:hidden"
-                    aria-hidden="true"
+            <div class="min-w-0 flex-1 @xl/save-bar:flex-none">
+              <Button
+                class="w-full"
+                label="Cancel"
+                variant="outline"
+                size="medium"
+                href="/services/web-app"
+                :disabled="deploying"
+              />
+            </div>
+            <ConfirmDialog
+              v-model:open="confirmOpen"
+              title="Deploy this release?"
+              :description="confirmBody"
+              confirm-label="Deploy release"
+              variant="primary"
+              size="small"
+              :disabled="!canDeploy"
+              @confirm="confirmDeploy"
+            >
+              <template #trigger>
+                <div class="min-w-0 flex-1 @xl/save-bar:flex-none">
+                  <Button
+                    class="w-full"
+                    variant="primary"
+                    size="medium"
+                    icon="az az-cloud-upload"
+                    :disabled="!canDeploy"
+                    :loading="deploying"
+                    :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
                   >
-                    <Kbd
-                      meta
-                      key-name="enter"
-                      size="small"
-                    />
-                  </span>
-                </Button>
-              </div>
-            </template>
-          </ConfirmDialog>
+                    {{ deploying ? 'Deploying…' : 'Deploy release' }}
+                    <span
+                      v-if="!deploying"
+                      class="max-lg:hidden"
+                      aria-hidden="true"
+                    >
+                      <Kbd
+                        meta
+                        key-name="enter"
+                        size="small"
+                      />
+                    </span>
+                  </Button>
+                </div>
+              </template>
+            </ConfirmDialog>
+          </div>
         </template>
       </SaveBar>
     </main>

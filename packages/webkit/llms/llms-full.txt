@@ -111,7 +111,7 @@ use it, so you can check a choice against a real one.
 | Second action | `--secondary`, `--secondary-foreground` | `Button variant="secondary"`, `IconButton`, `Badge variant="secondary"` |
 | Brand tint | `--primary-mask`, `--primary-selected` | `Tag variant="highlight"` surface, `RadioGroup` selected card |
 | Accent: a live state or connection, never an action | `--accent`, `--accent-foreground` | `Switch` on, `Slider` fill, `Tag variant="accent"`, resize handles in `Sidebar` and `Resizable`, a dragged `Table` row, `FlowDiagram` edges and ports |
-| Brand text and marks: the logo colours | `--text-brand`, `--brand-blue`, `--brand-blue-foreground` | every brand-coloured text in the logo orange (`--text-brand`, `#F3652B` in light and dark, an owner-accepted contrast exception below): `Eyebrow`, the `Quote` name, `LinkDirectory` column headings, the `HeroTitle` highlight, `Stats` prefixes, the required asterisk in `FieldLabel`, `Tag variant="highlight"` text; the `Eyebrow` cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
+| Brand text and marks: the logo colours | `--text-brand`, `--brand-blue`, `--brand-blue-foreground` | every brand-coloured text in the logo orange (`--text-brand`, `#F3652B` in light and dark, an owner-accepted contrast exception below): `Eyebrow`, the `Quote` name, `LinkDirectory` column headings, the `HeroTitle` highlight, `Stats` prefixes, the required asterisk in `FieldLabel` and `SettingsRow`, `Tag variant="highlight"` text; the `Eyebrow` cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
 | Selected item | `--bg-selected`, `--border-selected` | selected rows and options in `Table`, `MenuItem`, `DropdownMenu`, `ToggleGroup`, `Select`, `Combobox`, `Trace`; `RadioGroup` card and `Chip` borders |
 | Selected tab | `--secondary-mask` | the sliding indicator in `Tabs` |
 | Hover and press | `--bg-hover`, `--bg-active`, `--bg-mask` | every interactive component (`--bg-mask` is the hover layer on `Button variant="outline"` and `variant="ghost"`) |
@@ -153,7 +153,7 @@ Exceptions (the one list; `accepted` means the owner chose the look, `open` wait
 | `--border-default` on the surfaces | dark | 0 | accepted | Dark dividers keep the original `#2B2B2B` look (2026-11-16). Form outlines stay `--border-input` `#535353`. |
 | `--border-muted` on the surfaces | dark | 0 | accepted | Dark muted dividers keep the original `#242424` look (2026-11-16). |
 | `--text-brand` on the surfaces | dark | 43.5–44.3 | accepted | Brand text stays the logo orange `#F3652B` in dark. WCAG 5.5:1 passes. |
-| `--text-brand` on the surfaces | light | 51.5–57.5 | accepted | brand: brand text is the logo orange; owner decisions 2026-11-16 (Eyebrow) and 2026-11-18 (every brand text). Fails both APCA (Lc 60) and WCAG 2 AA (2.9–3.1:1, needs 4.5:1). axe skips `color-contrast` only on the brand-text parts listed in `packages/webkit/src/test/a11y-accepted.json` (Eyebrow label, Quote name, LinkDirectory column title, HeroTitle highlight, CompetitorComparisonSection group title, FieldLabel asterisk, highlight Tag, linked FeatureItem on hover). |
+| `--text-brand` on the surfaces | light | 51.5–57.5 | accepted | brand: brand text is the logo orange; owner decisions 2026-11-16 (Eyebrow) and 2026-11-18 (every brand text). Fails both APCA (Lc 60) and WCAG 2 AA (2.9–3.1:1, needs 4.5:1). axe skips `color-contrast` only on the brand-text parts listed in `packages/webkit/src/test/a11y-accepted.json` (Eyebrow label, Quote name, LinkDirectory column title, HeroTitle highlight, CompetitorComparisonSection group title, FieldLabel and SettingsRow asterisks, highlight Tag, linked FeatureItem on hover). |
 | `--border-muted` on `--bg-canvas` | light | 13.3 | accepted | Light muted divider on the page canvas, target Lc 15: kept as is (owner decision 2026-11-16). |
 | `--text-muted` on `--bg-surface-raised` | dark | 59.9 | accepted | Dark muted text in menus and popovers, target Lc 60: kept as is (owner decision 2026-11-16). |
 | `--border-input` on `--bg-surface-raised` | dark | 14.6 | accepted | Dark field outline inside a raised panel, target Lc 15: kept as is (owner decision 2026-11-16). |
@@ -4245,7 +4245,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 ## Copy
 
 - **Drop:** "New production deployment", "Dropped files", "Deploy to Production".
-- **Title:** "Deploying 2 of 5…", "Deployed 5 Deployment Settings", "Deployed 4 of 5 Deployment Settings".
+- **Title:** "Deploying… 2 of 5 done", "Deployed 5 Deployment Settings", "Deployed 4 of 5 Deployment Settings".
 - **Tally:** "4 succeeded, 1 failed. Each Deployment Setting deploys on its own, and the ones that succeeded stay live."
 - **Tags:** Queued, Deploying, Done, Failed. **Actions:** Retry failed, Hide (while running), Close.
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, the progressive verb with `…`.
@@ -4395,7 +4395,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-deploy-template/create-deploy-template.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-template")`
-- Components: Accordion, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Kbd, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-escape-to-cancel`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`
+- Components: Accordion, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Kbd, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-escape-to-cancel`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4483,7 +4483,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - The repository name has a visible `Field.Label` tied to its input by its `Field`; the privacy switch is labelled Public repository and announces its on or off state.
 - Settings use `Field` labels and descriptions, so each input announces its name and constraint.
 - Required fields carry the Required marker; a failed Deploy puts each error in a `Field.Error` (`role="alert"`) tied to its input.
-- Each `Accordion` trigger is a button that announces its expanded state; the Value input is labelled by its Value label, the Key row by its Key label, and the show control is a toggle with `aria-pressed`.
+- Each `Accordion` trigger is a button that announces its expanded state; the Value input is labelled by its Value label, the Key row by its Key label (on a phone the key is a read-only line above a full-width Value field), and the show control is a toggle with `aria-pressed`.
 - The uploaded files list is a `ul` named by the folder, inside a focusable scroll region (`role="region"`, `tabindex="0"`) so it scrolls from the keyboard; while settings load the region is `aria-busy` with one status line.
 - The page enter animation stops under reduced motion.
 
@@ -4527,7 +4527,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-drawer/create-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-drawer")`
-- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, InputGroup, Item, Kbd, KeyValueList, Link, NumberInput, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SchemaForm, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Textarea, Toast, ToggleGroup, Tooltip, `use-file-picker`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`
+- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, InputGroup, Item, Kbd, KeyValueList, Link, NumberInput, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SchemaForm, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Textarea, Toast, ToggleGroup, Tooltip, `use-file-picker`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`
 - Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4779,7 +4779,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-hub.m
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: Alert, AppHeader, `AppHeaderAccount`, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast, `use-escape-to-cancel`, `use-file-picker`, `use-shortcuts`, `use-unsaved-changes`
+- Components: Alert, AppHeader, `AppHeaderAccount`, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast, `use-escape-to-cancel`, `use-file-picker`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -4812,14 +4812,15 @@ The page a first-level resource is created on when everything it needs fits on o
 - D. Field rows — `SettingsRow`, `Input`, `FieldError` (required)
 - E. Switch rows — `Switch` (optional)
 - F. Commit bar — `SaveBar`, `Button` (required)
-- G. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
-- H. Shortcut keycap — `Kbd` (optional)
+- G. Failed request — `Alert` (required)
+- H. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
+- I. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/create/create-page.md](blocks/create/create-page.md).
 
 ## Data
 
-The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in an error toast with Retry; on success the page shows the toast and opens the new domain.
+The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in a danger `Alert` with Retry above the commit bar; on success the page shows the toast and opens the new domain.
 
 Prop: `defaultValues`, `loading`, `error`.
 
@@ -4956,7 +4957,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-relea
 - Say what tracking the latest Ready version resolves to now.
 - Block Deploy release only for something the user can fix here, and say what it is in the footer.
 - Keep Deploy possible when the impact cannot be computed; say the impact is unknown.
-- Report the outcome in the page `Alert` with Edit and Redeploy; the toast only announces it and dismisses itself.
+- Report the outcome in the page `Alert` with Edit and Redeploy; dismiss the loading toast when the run ends and raise no outcome toast over the docked bar.
 
 ## Don't
 
@@ -4993,7 +4994,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-relea
 - Loading: `loading` is set while the impact is computed.
 - Unavailable: `error` says the impact could not be read; Retry emits `retry`, and a truncated answer sets `truncated`.
 - MissingVersion: a resource in `resources` has no `versions`, which blocks the deploy.
-- Error: `deployError` says the last run was refused; an error toast announces it, and Edit and Redeploy sit on the page `Alert`.
+- Error: `deployError` says the last run was refused; the danger page `Alert` announces it with Edit and Redeploy, and no toast covers the bar.
 
 ## Related
 
@@ -5067,7 +5068,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 ## Do
 
 - Default to Existing when anything exists, and drop the toggle entirely when nothing does.
-- Mark the chosen row three ways: background, trailing check and `aria-pressed`.
+- Mark the chosen row three ways: background, filled trailing radio circle and `aria-checked`.
 - Keep the required message above the rows, under the search, so it is read before the list is scanned.
 - Offer the other mode in the no-match line, so an empty search leads to creating one.
 - Keep the chosen value when the user switches to New and back.
@@ -5099,7 +5100,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 ## Accessibility
 
 - The `ToggleGroup` has an `aria-label` that states the question, e.g. "Where the project comes from".
-- Each row is a native `button` with `aria-pressed` reflecting the selection; the check icon is `aria-hidden`.
+- Each row is a native `button` with `role="radio"` and `aria-checked` reflecting the selection, inside a `radiogroup` named for the list; the radio circle is `aria-hidden`.
 - Search has an `aria-label` that matches its placeholder.
 - A `role="status"` region announces the count after every search, load and no-match, e.g. "5 of 19 projects".
 - Skeleton rows are `aria-hidden`; the Load more `Button` carries `:loading` so its busy state is announced.
@@ -5229,7 +5230,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-wizar
 - **⌘ Enter runs the Wizard's primary button (`Ctrl Enter` off Apple):** Next with the same step check, Create Access List or Create and deploy on the last step. It fires from any field, a textarea included, stays inert while the create request is in flight and is listed in the `?` dialog as Next step or the create action.
 - The `Wizard` takes an `aria-label` naming the flow; locked rail steps cannot be focused or activated, and focus moves to the new step's heading on every step change.
 - The page has one `h1` (the `PageHeader`); each step heading is an `h2` drawn by the Wizard.
-- Host rows are native `button`s with `aria-pressed`; the chooser's search has an `aria-label` and Enter selects the first match.
+- Host rows are native `button`s with `role="radio"` and `aria-checked` inside one named `radiogroup`, so a screen reader hears "radio, 1 of 5, checked"; the chooser's search has an `aria-label` and Enter selects the first match.
 - Choice cards are a `RadioGroup` named with `aria-label`; each `RadioGroup.Item` is labelled by its card.
 - Required messages are tied to their control with `aria-describedby`; focus stays on the step after a failed Next.
 - Step transitions honour reduced motion.
@@ -19009,10 +19010,10 @@ name.
 ## States
 
 - Visual states on Item shell: `default` only, **except with `href` or `clickable`**, where the root is the whole-row anchor or button and gains row-level `hover`, `active`, and `focus-visible`
-- With `href` or `clickable`, the row paints `var(--bg-selected)` while it carries `aria-pressed="true"` or `aria-selected="true"`, whatever its `variant`: a pressed chooser row binds `:aria-pressed` on the Item and adds no fill class of its own
+- With `href` or `clickable`, the row paints `var(--bg-selected)` while it carries `aria-pressed="true"`, `aria-selected="true"` or `aria-checked="true"` (a row with `role="radio"` in a one-of-many pick list), whatever its `variant`: a pressed chooser row binds `:aria-pressed` on the Item and adds no fill class of its own
 - Without `href` or `clickable`, the root is a `div` and slotted controls (`Button`, `a`, etc.) own hover, active, and `focus-visible`
 - `data-variant` on Item root: `default` | `outline` | `muted` | `inline` | `option` (an Item inside `ItemGroup` is forced to `inline`; inside `ItemList` to `default`)
-- `variant="option"`: `--spacing-xs` block padding, `--spacing-sm` inline padding and gap whatever the `size`, `Item.Title` at `text-body-md`, and `var(--bg-selected)` on the row while it carries `aria-pressed="true"` or `aria-selected="true"`
+- `variant="option"`: `--spacing-xs` block padding, `--spacing-sm` inline padding and gap whatever the `size`, `Item.Title` at `text-body-md`, and `var(--bg-selected)` on the row while it carries `aria-pressed="true"`, `aria-selected="true"` or `aria-checked="true"`
 - `data-size` on Item root: `small` | `medium`
 - `data-type` on ItemMedia: `default` | `icon` | `image`
 
@@ -29143,6 +29144,7 @@ context, so a consumer never wires one part to the other.
 | `depth` | `0 \| 1 \| 2` | `0` | false | Indent depth under a rule, for a setting that only applies when its parent is on. |
 | `stackable` | `boolean` | `false` | false | Stack a field control under the copy below the lg container of the row instead of md, for a value that needs the full measure. |
 | `hint` | `string` | `''` | false | Extra guidance in a Hint glyph beside the title; empty renders no glyph. |
+| `required` | `boolean` | `false` | false | Marks the setting as required after its title, as a required field label does. |
 
 ## Slots
 
@@ -29154,7 +29156,7 @@ context, so a consumer never wires one part to the other.
 
 ## States
 
-- Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set)
+- Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set), `required` (after the title, the same marker a required `Field.Label` renders: a brand `*` hidden from assistive tech, then the `field.required` string, "(Required)" in English)
 - `data-row-variant` mirrors `variant` and `data-depth` mirrors `depth` on the root; `data-stackable` is set when `stackable` is on
 - Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
 - Responsive: the row is the `@container/settings-row`. The description wraps in full at every width; it is never clamped or cut with an ellipsis. From `@md` of the row up, a `field` control keeps the end cell, capped at the 3xs container; below `@md` (a phone) it moves under the copy at full width. With `stackable` the move happens below `@lg` instead. A `compact` control stays at the end side at every width; a `stacked` control is always under the copy.
@@ -29165,7 +29167,7 @@ context, so a consumer never wires one part to the other.
 - Keyboard map: `Tab` reaches the control; the row is not interactive.
 - ARIA: the row is an `Item` (a `listitem` inside `Item.List`); the control carries `aria-label` equal to the title, and a message is linked with `aria-describedby`.
 - No truncation: the description shows its full text to every user at every width (WCAG 1.4.10 Reflow). `hint` holds the longer explanation: its glyph is a focusable button whose accessible name and tooltip are the hint text, reachable with `Tab` and revealed on hover or focus.
-- Contrast ≥4.5:1 for the title and the muted description.
+- Contrast ≥4.5:1 for the title and the muted description. The required `*` is brand text in the logo orange, the owner-accepted exception the `Field.Label` asterisk carries; it is `aria-hidden`, and the "(Required)" text after it is what a screen reader reads. The control in the slot still sets its own `required`.
 
 ## Examples
 
@@ -29813,7 +29815,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 #### Responsive contract
 
 - The trail is always a **single row**. A segment wider than the space available shrinks and ellipsizes its label; a trail that still does not fit scrolls horizontally. It never wraps to a second line and never extends past its container.
-- **`items` mode** additionally collapses when the `nav`'s own width is below 768px (a `ResizeObserver` on the landmark, so a breadcrumb in a narrow panel or drawer collapses on a wide screen too): first segment, an overflow menu holding the middle segments, then the current segment. The overflow entries are links (`href`) inside the menu, so they navigate natively, open in a new tab, and still emit `navigate`. The breakpoint is owned by the component's own `use-breadcrumb-collapse` composable.
+- **`items` mode** additionally collapses when the `nav`'s own width is below 768px (a `ResizeObserver` on the landmark, so a breadcrumb in a narrow panel or drawer collapses on a wide screen too): first segment, an overflow menu holding the middle segments, then the current segment. Below 360px of its own width (the trail beside a brand and an avatar in a phone header) the first segment folds into that menu too, even when there is no middle segment, so the current segment gets the row: an overflow menu holding every ancestor, then the current segment. The overflow entries are links (`href`) inside the menu, so they navigate natively, open in a new tab, and still emit `navigate`. The breakpoint is owned by the component's own `use-breadcrumb-collapse` composable.
 - **Slot (hand-composed) mode** keeps every segment it was given, since the root cannot know which of the consumer's children are middle segments, so on a narrow screen it degrades through the single-row rules above rather than through a collapse.
 - Server render and hydration: the collapse measures the `nav` only after mount (`use-breadcrumb-collapse` reads its width in `onMounted`, then follows a `ResizeObserver`), so the server HTML and the first client render are the full trail and match; in a narrow box the collapse applies in the same tick as mount, before paint.
 

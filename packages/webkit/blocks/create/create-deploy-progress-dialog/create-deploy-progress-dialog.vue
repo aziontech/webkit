@@ -104,14 +104,14 @@
 
   const filterOptions = computed(() => [
     { value: 'all', label: 'All' },
-    { value: 'deploying', label: `Deploying ${counts.value.total - counts.value.settled}` },
+    { value: 'remaining', label: `Remaining ${counts.value.total - counts.value.settled}` },
     { value: 'failed', label: `Failed ${counts.value.failed}` },
     { value: 'done', label: `Done ${counts.value.done}` }
   ])
 
   const visibleItems = computed(() => {
     if (filter.value === 'all') return items.value
-    if (filter.value === 'deploying')
+    if (filter.value === 'remaining')
       return items.value.filter((item) => item.status === 'deploying' || item.status === 'queued')
     return items.value.filter((item) => item.status === filter.value)
   })
@@ -120,7 +120,7 @@
 
   const title = computed(() => {
     const { total, done, failed, settled } = counts.value
-    if (running.value) return `Deploying ${settled} of ${total}…`
+    if (running.value) return `Deploying… ${settled} of ${total} done`
     if (failed) return `Deployed ${done} of ${total} ${noun(total)}`
     return `Deployed ${total} ${noun(total)}`
   })

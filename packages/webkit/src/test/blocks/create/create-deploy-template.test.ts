@@ -73,7 +73,7 @@ describe('create-deploy-template#WhereItRuns', () => {
     await fireEvent.update(screen.getByRole('textbox', { name: 'Search services' }), 'zzz')
     expect(screen.getByText('No service matches “zzz”.')).toBeTruthy()
     await fireEvent.update(screen.getByRole('textbox', { name: 'Search services' }), 'web-prod')
-    await fireEvent.click(screen.getByRole('button', { name: /web-prod/ }))
+    await fireEvent.click(screen.getByRole('radio', { name: /web-prod/ }))
     expect(await screen.findByText('Connect a Git provider')).toBeTruthy()
     expect(screen.getByText(/deployed to web-prod on every push/)).toBeTruthy()
   })
@@ -192,6 +192,26 @@ describe('create-deploy-template#Form keyboard', () => {
     expect(screen.queryByText('NUXT_STORE_ACCESS_TOKEN is required.')).toBeNull()
     pressSubmitShortcut(screen.getByRole('textbox', { name: /repository name/i }))
     expect(await screen.findByText('NUXT_STORE_ACCESS_TOKEN is required.')).toBeTruthy()
+  })
+})
+
+describe('create-deploy-template#Form validation and phone layout', () => {
+  it('moves focus to the first missing value when Deploy finds one', async () => {
+    render(DeployTemplateForm)
+    await userEvent.click(screen.getByRole('button', { name: 'Deploy' }))
+    await waitFor(() => {
+      const focused = document.activeElement as HTMLElement
+      expect(focused.getAttribute('aria-invalid')).toBe('true')
+    })
+  })
+
+  it('stacks each variable as a key line over a labelled value on a phone', () => {
+    const { container } = render(DeployTemplateForm)
+    const line = container.querySelector<HTMLElement>('[data-testid$="-key-line"]')
+    expect(line?.classList.contains('sm:hidden')).toBe(true)
+    expect(line?.textContent).toContain('NUXT_STORE_ACCESS_TOKEN')
+    const keyInput = container.querySelector<HTMLInputElement>('input[id$="-key"]')
+    expect(keyInput?.closest('.max-sm\\:hidden')).not.toBeNull()
   })
 })
 

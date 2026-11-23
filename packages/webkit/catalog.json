@@ -19396,6 +19396,13 @@
      "default": "''",
      "required": "false",
      "doc": "Extra guidance in a Hint glyph beside the title; empty renders no glyph."
+    },
+    {
+     "name": "required",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the setting as required after its title, as a required field label does."
     }
    ],
    "slots": [
@@ -29770,6 +29777,12 @@
    "kind": "util",
    "treeShakeableImport": "@aziontech/webkit/utils/csv"
   },
+  "utils/focus-invalid": {
+   "import": "@aziontech/webkit/utils/focus-invalid",
+   "target": "./src/utils/focus-invalid.ts",
+   "kind": "util",
+   "treeShakeableImport": "@aziontech/webkit/utils/focus-invalid"
+  },
   "styles/country-flags": {
    "import": "@aziontech/webkit/styles/country-flags",
    "target": "./src/styles/country-flags.css",
@@ -33591,7 +33604,7 @@
    "title": "Blocks/Create/CreateDeployProgressDialog",
    "source": "blocks/create/create-deploy-progress-dialog/create-deploy-progress-dialog.vue",
    "surface": "app",
-   "summary": "The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, can be hidden at any time (Hide while running, Close once settled; the toast keeps reporting and Show progress reopens it); under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Deploying <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeIcon` once it settles. When the run settles the header gains a large `OutcomeIcon` and the outcome reports through one toast with Edit and Redeploy, as every async action does, raised only while the dialog is hidden so it never covers the dialog's footer; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeIcon`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.",
+   "summary": "The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying… 2 of 5 done while it runs, can be hidden at any time (Hide while running, Close once settled; the toast keeps reporting and Show progress reopens it); under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Deploying <name> track the run, a `ToggleGroup` filters All, Remaining, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeIcon` once it settles. When the run settles the header gains a large `OutcomeIcon` and the outcome reports through one toast with Edit and Redeploy, as every async action does, raised only while the dialog is hidden so it never covers the dialog's footer; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeIcon`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.",
    "intents": [
     "deploy progress",
     "deploy progress dialog",
@@ -33785,7 +33798,8 @@
     "use-escape-to-cancel",
     "use-locale",
     "use-shortcuts",
-    "use-unsaved-changes"
+    "use-unsaved-changes",
+    "utils/focus-invalid"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
@@ -33815,7 +33829,8 @@
     "@aziontech/webkit/use-escape-to-cancel",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/use-shortcuts",
-    "@aziontech/webkit/use-unsaved-changes"
+    "@aziontech/webkit/use-unsaved-changes",
+    "@aziontech/webkit/utils/focus-invalid"
    ],
    "primary": "ConnectGit",
    "guidelinesSummary": "A focused page, outside the console shell, where the user turns a template into a running project. They chose a template in the Creation Center and now need to see what it clones, connect a Git provider if they have none, name the repository it creates, fill the settings the template requires and deploy. The same column then shows the build and the outcome, so the user never leaves the page.",
@@ -33970,7 +33985,8 @@
     "use-file-picker",
     "use-locale",
     "use-shortcuts",
-    "use-unsaved-changes"
+    "use-unsaved-changes",
+    "utils/focus-invalid"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -34016,7 +34032,8 @@
     "@aziontech/webkit/use-file-picker",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/use-shortcuts",
-    "@aziontech/webkit/use-unsaved-changes"
+    "@aziontech/webkit/use-unsaved-changes",
+    "@aziontech/webkit/utils/focus-invalid"
    ],
    "primary": "Default",
    "guidelinesSummary": "The right-side drawer that adds or edits something that only exists inside another resource: a domain, a DNS record, an environment, a variable, a rule. The user is working on the resource behind it and must keep it in view, so the form slides over the page instead of replacing it. They fill a few sections, press the one commit button and land back where they were, with the new item in the list. The drawer opens over a console page: ItemRows and NestedDrawer draw that page as a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`).",
@@ -34215,7 +34232,8 @@
     "use-escape-to-cancel",
     "use-file-picker",
     "use-shortcuts",
-    "use-unsaved-changes"
+    "use-unsaved-changes",
+    "utils/focus-invalid"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -34249,7 +34267,8 @@
     "@aziontech/webkit/use-escape-to-cancel",
     "@aziontech/webkit/use-file-picker",
     "@aziontech/webkit/use-shortcuts",
-    "@aziontech/webkit/use-unsaved-changes"
+    "@aziontech/webkit/use-unsaved-changes",
+    "@aziontech/webkit/utils/focus-invalid"
    ],
    "primary": "Default",
    "guidelinesSummary": "The page a first-level resource is created on when everything it needs fits on one screen. The user arrives from the module's `Create <Object>` button, answers the required fields at the top, leaves the defaulted ones folded under Advanced, and commits from a bar that never scrolls away. The page has its own URL, its own creation header and no sidebar, so it survives a reload and the back button, and leaving it returns to the list.",
@@ -34277,7 +34296,7 @@
    "title": "Blocks/Create/CreateReleaseImpact",
    "source": "blocks/create/create-release-impact/create-release-impact.vue",
    "surface": "app",
-   "summary": "The Review and deploy page of a release that carries several resources at once. The left column holds one `Card` per resource: its type and icon, a Required or Read-only `Tag` or an include `Switch` named by a `Tooltip`, the resource and a version `Select` that tracks the latest Ready version or pins one (each with a Current `Tag` and its age), an invalid line and Build a version when nothing is Ready, and a Dependencies box whose `Accordion` groups modules and integrations with counts, a Shared `Tag` with the resources that also reference it and one info `Alert` saying a shared dependency deploys at one version. The right column is the sticky Impact `Card`: a `ToggleGroup` switches a Tree (Deployment Settings, their environments and the projects they publish to, with rails and counts) and a Flow (the same as left-to-right cards), and its footer sums up what the release reaches. A sticky footer holds the hint, Cancel and Deploy release, which asks in a `ConfirmDialog` and then runs as an async action: one toast turns from Deploying release… into the outcome and dismisses itself, and the page shows the outcome `Alert` with Edit and Redeploy. A ChooseSettings step before it picks the Deployment Settings the release deploys with, as grouped `Field` checkbox choice cards with search, Select all and Clear. Built from `Card`, `Tag`, `Switch`, `Tooltip`, `Field`, `Select`, `Checkbox`, `Input`, `Badge`, `Accordion`, `Alert`, `ToggleGroup`, `Skeleton`, `Spinner`, `Button`, `ConfirmDialog`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.",
+   "summary": "The Review and deploy page of a release that carries several resources at once. The left column holds one `Card` per resource: its type and icon, a Required or Read-only `Tag` or an include `Switch` named by a `Tooltip`, the resource and a version `Select` that tracks the latest Ready version or pins one (each with a Current `Tag` and its age), an invalid line and Build a version when nothing is Ready, and a Dependencies box whose `Accordion` groups modules and integrations with counts, a Shared `Tag` with the resources that also reference it and one info `Alert` saying a shared dependency deploys at one version. The right column is the sticky Impact `Card`: a `ToggleGroup` switches a Tree (Deployment Settings, their environments and the projects they publish to, with rails and counts) and a Flow (the same as left-to-right cards), and its footer sums up what the release reaches. A sticky footer holds the hint, Cancel and Deploy release, which asks in a `ConfirmDialog` and then runs as an async action: a Deploying release… toast follows the run and is dismissed when it ends, and the page shows the outcome `Alert` with Edit and Redeploy, so no toast covers the bar. On a phone the hint hides and Cancel and Deploy release share one row. A ChooseSettings step before it picks the Deployment Settings the release deploys with, as grouped `Field` checkbox choice cards with search, Select all and Clear. Built from `Card`, `Tag`, `Switch`, `Tooltip`, `Field`, `Select`, `Checkbox`, `Input`, `Badge`, `Accordion`, `Alert`, `ToggleGroup`, `Skeleton`, `Spinner`, `Button`, `ConfirmDialog`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.",
    "intents": [
     "release impact",
     "review and deploy",

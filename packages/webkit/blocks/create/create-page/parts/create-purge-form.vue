@@ -114,7 +114,7 @@
 
   const formEl = ref<HTMLFormElement | null>(null)
 
-  const { guard, submitting, submitButton, leave, submit } = useCreateForm({
+  const { guard, failure, submitting, submitButton, leave, submit } = useCreateForm({
     source: () => form,
     formEl,
     shortcutLabel: 'Purge',
@@ -122,8 +122,7 @@
     onCreated: () =>
       toast.success(
         `Purge started for ${entries.value.length} ${entries.value.length === 1 ? 'entry' : 'entries'}.`
-      ),
-    failureTitle: 'Could not start the purge.'
+      )
   })
 
   onMounted(() =>
@@ -140,6 +139,8 @@
     title-id="create-purge-title"
     submit-label="Purge"
     :submitting="submitting"
+    :failure="failure"
+    failure-title="Could not start the purge."
     :submit-button="submitButton"
     :guard="guard"
     :bind-form="(element) => (formEl = element)"
@@ -213,6 +214,7 @@
         <template #default>
           <Item.List>
             <SettingsRow
+              required
               title="List"
               :description="selectedType.description"
               variant="stacked"

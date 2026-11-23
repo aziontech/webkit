@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import AppHeader from '@aziontech/webkit/app-header'
   import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
@@ -16,10 +17,10 @@
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
-  import { toast } from '@aziontech/webkit/toast'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
   import { onMounted, reactive, ref, watch } from 'vue'
 
   import { type CreatePageDomainErrors, validateDomainForm } from './domain-validation'
@@ -41,7 +42,7 @@
     defaultValues?: Partial<CreatePageValues>
     /** The create request is in flight; the form locks and Save spins. */
     loading?: boolean
-    /** Why the create request failed, shown in an error toast with Retry. */
+    /** Why the create request failed, shown in an inline error with Retry above the save bar. */
     error?: string
   }
 
@@ -108,20 +109,21 @@
   onMounted(() => nameEl.value?.focus())
 
   const submit = (event: Event) => {
-    if (props.loading || !validate()) return
+    if (props.loading) return
+    if (!validate()) {
+      focusFirstInvalid(formEl.value)
+      return
+    }
     emit('submit', event, values())
   }
 
+  const attempt = ref(0)
+
   watch(
-    () => props.error,
-    (message) => {
-      if (!message) return
-      toast.error('Could not create the domain.', {
-        description: message,
-        action: { label: 'Retry', onClick: (event: MouseEvent) => submit(event) }
-      })
-    },
-    { immediate: true }
+    () => props.loading,
+    (now, before) => {
+      if (before && !now) attempt.value += 1
+    }
   )
 
   const DNSSEC_DESCRIPTION =
@@ -192,6 +194,7 @@
                   <template #default>
                     <Item.List>
                       <SettingsRow
+                        required
                         stackable
                         title="Name"
                         description="Identifies the domain in this list. It is not the hostname."
@@ -216,6 +219,7 @@
                         >
                       </SettingsRow>
                       <SettingsRow
+                        required
                         stackable
                         title="Domain name"
                         description="The root hostname this domain answers for, without a subdomain."
@@ -279,6 +283,17 @@
                 </Card>
               </SettingsGroup>
             </fieldset>
+
+            <Alert
+              v-if="error"
+              :key="attempt"
+              class="mt-(--layout-section-gap)"
+              severity="danger"
+              title="Could not create the domain."
+              :label="error"
+              action-label="Retry"
+              @action="submit"
+            />
           </div>
           <SaveBar variant="centered">
             <template #actions>

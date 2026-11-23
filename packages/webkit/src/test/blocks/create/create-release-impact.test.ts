@@ -78,6 +78,9 @@ describe('create-release-impact', () => {
       }
     })
     expect(screen.getByText(/The release wasn't deployed\. edge-policy was refused\./)).toBeTruthy()
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    const toasts = Array.from(document.querySelectorAll('[data-toast-id]'))
+    expect(toasts.some((toast) => toast.textContent?.includes("wasn't deployed"))).toBe(false)
     await fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
     expect(view.emitted('retry')).toHaveLength(1)
   })

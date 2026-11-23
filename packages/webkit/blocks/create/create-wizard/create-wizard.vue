@@ -318,6 +318,7 @@
             <template #default>
               <Item.List>
                 <SettingsRow
+                  required
                   title="Name"
                   description="Give a unique and descriptive name to identify the access list."
                 >
@@ -377,6 +378,7 @@
                   </RadioGroup>
                 </SettingsRow>
                 <SettingsRow
+                  required
                   :title="listField.label"
                   :description="listField.helper"
                   variant="stacked"

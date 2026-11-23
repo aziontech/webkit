@@ -23,7 +23,7 @@ The page opens with a large `PageHeader` (its `h1` reads Review and deploy) and 
 
 ### B. Outcome — `Alert`, `Button` (required after a run)
 
-When a run ends, one `Alert` above the columns says how it ended: `severity="danger"` with what was refused and that nothing changed in traffic, or `severity="success"` with what serves now. Both carry **Edit** and **Redeploy** in the `action` slot. The page `Alert` is the persistent outcome; the run's toast auto-dismisses and carries no actions, so the user never meets the same pair twice.
+When a run ends, one `Alert` above the columns says how it ended: `severity="danger"` with what was refused and that nothing changed in traffic, or `severity="success"` with what serves now. Both carry **Edit** and **Redeploy** in the `action` slot. The page `Alert` is the outcome; when the run ends the loading toast is dismissed and no outcome toast is raised, so nothing covers the docked bar and the user never meets the same message twice.
 
 ### C. Resource cards — `Card`, `Switch`, `Tag`, `Tooltip` (required)
 
@@ -51,7 +51,7 @@ The `Card` footer sums the reach in one sentence: projects, environments and Dep
 
 ### G. Footer and commit — `SaveBar`, `Button`, `ConfirmDialog` (required)
 
-`SaveBar variant="docked"` at the bottom of the page: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`variant="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and emits `deploy`; the parent sets `deploying`, then `deployed` or `deployError`, and the block shows the run as an async action (`state/state-async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+`SaveBar variant="docked"` at the bottom of the page: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`variant="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and emits `deploy`; the parent sets `deploying`, then `deployed` or `deployError`, and the block shows the run as an async action (`state/state-async-submit`): one `toast.loading` ("Deploying release…", with "It keeps running if you leave.") follows the run, and when it ends that toast is dismissed and the page `Alert` takes over with **Edit** and **Redeploy**. Never View deployments. On a phone the hint is hidden and Cancel and Deploy release share one row, so the bar stays short. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ### Before the review: choosing the Deployment Settings
 
@@ -73,8 +73,8 @@ The block takes the release and its impact through props and emits every action;
 | `error`       | `string`                  | Why the impact could not be read, shown in the warning alert with Retry. The release can still deploy.  |
 | `truncated`   | `boolean`                 | The projects list came back truncated; a warning sits above the tree.                                   |
 | `deploying`   | `boolean`                 | The run is in flight: Deploy release spins, the switches lock and the loading toast shows.              |
-| `deployed`    | `boolean`                 | The last run deployed: the success toast and `Alert` with Edit and Redeploy.                            |
-| `deployError` | `string`                  | Why the last run failed, shown in the danger `Alert` and the error toast.                               |
+| `deployed`    | `boolean`                 | The last run deployed: the success `Alert` with Edit and Redeploy.                                      |
+| `deployError` | `string`                  | Why the last run failed, shown in the danger `Alert` with Edit and Redeploy.                            |
 
 | Event    | Payload              | When                                                                          |
 | -------- | -------------------- | ----------------------------------------------------------------------------- |
@@ -119,7 +119,7 @@ Then delete `sample.ts` and its import.
 - Say what tracking the latest Ready version resolves to now.
 - Block Deploy release only for something the user can fix here, and say what it is in the footer.
 - Keep Deploy possible when the impact cannot be computed; say the impact is unknown.
-- Report the outcome in the page `Alert` with Edit and Redeploy; the toast only announces it and dismisses itself.
+- Report the outcome in the page `Alert` with Edit and Redeploy; dismiss the loading toast when the run ends and raise no outcome toast over the docked bar.
 
 ## Don't
 
@@ -156,7 +156,7 @@ Then delete `sample.ts` and its import.
 - Loading: `loading` is set while the impact is computed.
 - Unavailable: `error` says the impact could not be read; Retry emits `retry`, and a truncated answer sets `truncated`.
 - MissingVersion: a resource in `resources` has no `versions`, which blocks the deploy.
-- Error: `deployError` says the last run was refused; an error toast announces it, and Edit and Redeploy sit on the page `Alert`.
+- Error: `deployError` says the last run was refused; the danger page `Alert` announces it with Edit and Redeploy, and no toast covers the bar.
 
 ## Related
 
