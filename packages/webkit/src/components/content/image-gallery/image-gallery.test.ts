@@ -189,7 +189,8 @@ describe('ImageGallery', () => {
     expect(view.queryByRole('list')).toBeNull()
     const alert = view.getByRole('alert')
     expect(alert.textContent).toContain('The images could not load')
-    expect(alert.textContent).toContain('The image model is busy.')
+    expect(alert.textContent).toContain('The image model was busy')
+    expect(alert.textContent).not.toMatch(/try again/i)
     await expectNoA11yViolations(view.container)
   })
 
