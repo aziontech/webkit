@@ -154,7 +154,7 @@ describe('tap targets on a coarse pointer (styled)', () => {
     ])('%s answers a tap across 44 x 44', async (_name, component, id) => {
       await touch()
       const view = await mount(component)
-      const control = byTestId(view.container as HTMLElement, id)[0]!
+      const control = view.container.querySelector<HTMLElement>(`[data-testid="${id}"]`)!
       expect(hitSpan(control, 'y')).toBeGreaterThanOrEqual(44)
       expect(hitSpan(control, 'x')).toBeGreaterThanOrEqual(44)
     })
@@ -162,7 +162,9 @@ describe('tap targets on a coarse pointer (styled)', () => {
     it('the AppLayout split-panel separator takes a finger drag across 44px', async () => {
       await touch()
       const view = await mount(AppLayoutDefault)
-      const separator = byTestId(view.container as HTMLElement, 'app-layout__split-separator')[0]!
+      const separator = view.container.querySelector<HTMLElement>(
+        '[data-testid="app-layout__split-separator"]'
+      )!
       expect(getComputedStyle(separator).touchAction).toBe('none')
       expect(hitSpan(separator, 'y')).toBeGreaterThanOrEqual(40)
     })

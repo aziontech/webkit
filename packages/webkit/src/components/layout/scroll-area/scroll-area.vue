@@ -38,9 +38,11 @@
 
   const tabIndex = computed(() => (attrs['tabindex'] as string | number | undefined) ?? 0)
 
-  const role = computed(
-    () => (attrs['role'] as string | undefined) ?? (props.ariaLabel ? 'region' : undefined)
-  )
+  const role = computed(() => {
+    const own = attrs['role']
+    if (typeof own === 'string') return own
+    return props.ariaLabel ? 'region' : undefined
+  })
 
   const ROOT_CLASS =
     'relative min-h-0 min-w-0 [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] ' +

@@ -122,13 +122,18 @@ function barSequence({ triggers, links }: NavigationMenuKeyboardRoot): BarEntry[
     )
 }
 
-function moveBetweenTriggers(root: NavigationMenuKeyboardRoot, event: KeyboardEvent) {
-  const { value, orientation, isRtl, setValue } = root
+function barStep({ orientation, isRtl }: NavigationMenuKeyboardRoot, key: string): number {
   const isHorizontal = orientation.value === 'horizontal'
   const flipped = isHorizontal && isRtl()
   const nextKey = isHorizontal ? (flipped ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown'
   const prevKey = isHorizontal ? (flipped ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp'
-  if (event.key !== nextKey && event.key !== prevKey) return
+  return key === nextKey ? 1 : key === prevKey ? -1 : 0
+}
+
+function moveBetweenTriggers(root: NavigationMenuKeyboardRoot, event: KeyboardEvent) {
+  const { value, setValue } = root
+  const step = barStep(root, event.key)
+  if (!step) return
   event.preventDefault()
   const sequence = barSequence(root)
   const count = sequence.length
@@ -136,7 +141,7 @@ function moveBetweenTriggers(root: NavigationMenuKeyboardRoot, event: KeyboardEv
   const focused = sequence.findIndex((entry) => entry.el === document.activeElement)
   const baseIndex =
     focused !== -1 ? focused : sequence.findIndex((entry) => entry.value === value.value)
-  const entry = sequence[(baseIndex + (event.key === nextKey ? 1 : -1) + count) % count]
+  const entry = sequence[(baseIndex + step + count) % count]
   entry.el.focus()
   if (entry.value != null || value.value != null)
     setValue(entry.value, createChangeEventDetails('list-navigation', event, entry.el))

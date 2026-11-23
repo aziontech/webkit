@@ -32,36 +32,21 @@
 
   const isOpen = computed(() => sub.isOpen.value && parent.isOpen.value)
 
-  const SIDE_GAP = 4
+  const SIDE_ROOM = 260
   const inline = ref(false)
 
   const sideFits = () => {
-    if (typeof globalThis.getComputedStyle !== 'function') return true
-    const root = globalThis.document.documentElement
-    const token = globalThis.getComputedStyle(root).getPropertyValue('--container-3xs').trim()
-    const rem = parseFloat(globalThis.getComputedStyle(root).fontSize) || 16
-    const need = (parseFloat(token) || 256) * (token.endsWith('rem') ? rem : 1) + SIDE_GAP
-    const trigger = sub.triggerEl.value
-    const box = trigger?.isConnected ? trigger.getBoundingClientRect() : null
-    if (!box || box.width === 0) return root.clientWidth >= 2 * need
-    return root.clientWidth - box.right >= need || box.left >= need
+    const width = globalThis.document?.documentElement.clientWidth ?? Infinity
+    const box = sub.triggerEl.value?.getBoundingClientRect()
+    if (!box?.width) return width >= 2 * SIDE_ROOM
+    return width - box.right >= SIDE_ROOM || box.left >= SIDE_ROOM
   }
 
-  watch(
-    isOpen,
-    (open) => {
-      if (open) inline.value = !sideFits()
-    },
-    { flush: 'sync', immediate: true }
-  )
-
-  watch(
-    isOpen,
-    (open) => {
-      if (open) inline.value = !sideFits()
-    },
-    { flush: 'post', immediate: true }
-  )
+  const syncInline = (open: boolean) => {
+    if (open) inline.value = !sideFits()
+  }
+  watch(isOpen, syncInline, { flush: 'sync', immediate: true })
+  watch(isOpen, syncInline, { flush: 'post', immediate: true })
 
   const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
     triggerRef: sub.triggerEl,

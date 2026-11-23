@@ -74,7 +74,7 @@ describe('focus rings are not clipped by a scrolling container (styled)', () => 
     first.focus()
     await userEvent.keyboard('{ArrowRight}')
     await settle()
-    const focused = document.activeElement as HTMLElement
+    const focused = view.container.querySelector<HTMLElement>('[role="tab"]:focus')!
     expect(focused.getAttribute('role')).toBe('tab')
     expect(focused.matches(':focus-visible')).toBe(true)
     expect(getComputedStyle(focused).boxShadow).not.toBe('none')
