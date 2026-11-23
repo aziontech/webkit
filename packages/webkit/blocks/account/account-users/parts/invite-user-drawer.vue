@@ -10,10 +10,11 @@
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
+  import Select from '@aziontech/webkit/select'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  import type { UsersInvitation, UsersTeam } from '../account-users.vue'
-  import { teamsLabelOf } from '../account-users-format'
+  import type { UsersInvitation, UsersRole, UsersTeam } from '../account-users.vue'
+  import { teamsLabelOf, USERS_ROLES } from '../account-users-format'
 
   const props = defineProps<{ teamOptions: UsersTeam[]; emails: string[] }>()
 
@@ -21,7 +22,14 @@
 
   const open = defineModel<boolean>('open', { required: true })
 
-  const invite = reactive({ email: '', teams: ['developers'] })
+  const invite = reactive<{ email: string; role: Exclude<UsersRole, 'Owner'>; teams: string[] }>({
+    email: '',
+    role: 'Developer',
+    teams: ['developers']
+  })
+  const roleHint = computed(
+    () => USERS_ROLES.find((role) => role.value === invite.role)?.hint ?? ''
+  )
   const submitted = ref(false)
   const formEl = ref<HTMLFormElement | null>(null)
   const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -39,6 +47,7 @@
   watch(open, (now) => {
     if (!now) return
     invite.email = ''
+    invite.role = 'Developer'
     invite.teams = ['developers']
     submitted.value = false
   })
@@ -49,7 +58,11 @@
       nextTick(() => formEl.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
       return
     }
-    emit('send', event, { email: invite.email.trim().toLowerCase(), teams: [...invite.teams] })
+    emit('send', event, {
+      email: invite.email.trim().toLowerCase(),
+      role: invite.role,
+      teams: [...invite.teams]
+    })
   }
 </script>
 
@@ -74,8 +87,8 @@
           <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
             <legend class="sr-only">Invite User</legend>
             <DrawerDescription>
-              They get an email with a link to join this account. Their teams decide what they can
-              see and change.
+              They get an email with a link to join this account. Their role decides what they can
+              do on the account; their teams decide which resources they reach.
             </DrawerDescription>
             <Field
               required
@@ -91,6 +104,26 @@
                 placeholder="name@example.com"
               />
               <Field.Error v-if="errors.email">{{ errors.email }}</Field.Error>
+            </Field>
+            <Field required>
+              <Field.Label for="invite-role">Role</Field.Label>
+              <Select
+                v-model="invite.role"
+                size="large"
+                class="w-full"
+              >
+                <Select.Trigger id="invite-role" />
+                <Select.Content>
+                  <Select.Item
+                    v-for="role in USERS_ROLES"
+                    :key="role.value"
+                    :value="role.value"
+                  >
+                    {{ role.value }}
+                  </Select.Item>
+                </Select.Content>
+              </Select>
+              <Field.Description>{{ roleHint }}</Field.Description>
             </Field>
             <Field
               required

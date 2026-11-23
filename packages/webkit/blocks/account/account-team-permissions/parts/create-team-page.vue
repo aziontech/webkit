@@ -12,8 +12,10 @@
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { onMounted, reactive, ref } from 'vue'
 
+  import { useTeamLeaveGuard } from '../composables/use-team-leave-guard'
   import { validateTeam } from '../lib/team-form'
   import TeamFormHeader from './team-form-header.vue'
+  import TeamLeaveDialog from './team-leave-dialog.vue'
   import TeamPermissionsField from './team-permissions-field.vue'
   import TeamStatusGroup from './team-status-group.vue'
 
@@ -21,6 +23,12 @@
   const selected = ref<string[]>(['applications.view', 'domains.view', 'metrics.view'])
   const errors = reactive({ name: '', permissions: '' })
   const submitting = ref(false)
+  const pageEl = ref<HTMLElement | null>(null)
+  const guard = useTeamLeaveGuard(
+    pageEl,
+    () => ({ form, selected: selected.value }),
+    () => !submitting.value
+  )
 
   const submit = () => {
     if (submitting.value) return
@@ -28,6 +36,7 @@
     submitting.value = true
     setTimeout(() => {
       submitting.value = false
+      guard.commit()
       toast.success(`Team "${form.name.trim()}" created with ${selected.value.length} permissions.`)
     }, 700)
   }
@@ -48,7 +57,10 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
+  <div
+    ref="pageEl"
+    class="flex h-dvh flex-col bg-(--bg-canvas)"
+  >
     <TeamFormHeader page="Create Team" />
 
     <main
@@ -153,5 +165,6 @@
         </div>
       </form>
     </main>
+    <TeamLeaveDialog :guard="guard" />
   </div>
 </template>

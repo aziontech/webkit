@@ -26,6 +26,22 @@ describe('account/account-mfa-settings', () => {
     expect(view.emitted<unknown[]>('update:required')).toEqual([[true]])
   })
 
+  it('confirms before it stops requiring MFA, and changes nothing on Cancel', async () => {
+    const view = render(MfaManagement, { props: { required: true } })
+    const toggle = view.getByRole('switch', { name: 'Require MFA' })
+    await fireEvent.click(toggle)
+    await waitFor(() => expect(dialog()).not.toBeNull())
+    expect(dialog()!.textContent).toContain('2 people without MFA can sign in again')
+    await fireEvent.click(button(dialog()!, 'Cancel'))
+    await waitFor(() => expect(dialog()).toBeNull())
+    expect(view.emitted('update:required')).toBeUndefined()
+    expect(toggle.getAttribute('aria-checked')).toBe('true')
+    await fireEvent.click(toggle)
+    await waitFor(() => expect(dialog()).not.toBeNull())
+    await fireEvent.click(button(dialog()!, 'Stop requiring MFA'))
+    await waitFor(() => expect(view.emitted<unknown[]>('update:required')).toEqual([[false]]))
+  })
+
   it('renders the people it is given instead of the sample and emits the row actions', async () => {
     const view = render(MfaManagement, {
       props: {

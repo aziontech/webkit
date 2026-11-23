@@ -78,3 +78,11 @@ export const settingRows = (
       services: bound
     }
   })
+
+export const rewrittenNames = (
+  settings: { name: string; system: boolean; bindingPolicy: unknown }[],
+  policy: unknown
+): string[] =>
+  settings
+    .filter((setting) => !setting.system && setting.bindingPolicy !== policy)
+    .map((setting) => setting.name)

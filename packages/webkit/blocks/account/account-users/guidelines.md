@@ -18,7 +18,7 @@ Who can sign in to the account, with which role and through which teams. An admi
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-Title `Users` and one sentence that says access comes from teams. Actions: Documentation and the primary `Invite User` at `size="medium"`, which opens the invite drawer.
+Title `Users` and one sentence that names both sources of access: the role decides what a person can do on the account, their teams which resources they reach. Actions: Documentation and the primary `Invite User` at `size="medium"`, which opens the invite drawer.
 
 ### B. Controls row — `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences` (required)
 
@@ -30,7 +30,7 @@ The view-table controls row (`view/view-table`): a `PropertyFilter` bound with `
 
 ### D. Teams per person — `MultiSelect`, `Tooltip` (required)
 
-The Teams cell is a small `MultiSelect` named `Teams of <person>` whose value reads the team names. A change applies at once and raises a toast that names the new teams with Undo; clearing every team keeps the seat but removes all access, and the toast says so. The owner's teams are locked, with a `Tooltip` saying why; an inactive person's teams are disabled.
+The Teams cell is a small `MultiSelect` named `Teams of <person>` whose value reads the team names. Ticking teams edits a draft while the menu is open; the change applies once, when the menu closes, and raises one toast (one per person, a later change replaces it) that names the new teams with Undo, so a person's access never changes on every click; clearing every team keeps the seat but removes all access, and the toast says so. The owner's teams are locked, with a `Tooltip` saying why; an inactive person's teams are disabled.
 
 ### E. Row actions — `DataTable`, `DropdownMenu`, `ConfirmDialog` (required)
 
@@ -42,7 +42,7 @@ View profile opens a medium `Dialog` titled with the person's name and `Avatar`:
 
 ### G. Invite drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `DrawerDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `MultiSelect`, `Button` (required)
 
-A large right `Drawer` around a `form`: a description of what the invitation does, a required Email `Field` and a required Teams `Field` with Developers preselected and a description saying permissions add up. Footer: Cancel and the primary `Send invitation`, which shows its loading state; the drawer cannot be dismissed while it sends. Errors follow `state/state-form-validation` (SectionRejected): nothing is red before the first Send; after it each field shows its own `Field.Error` and focus moves to the first invalid one.
+A large right `Drawer` around a `form`: a description of what the invitation does, a required Email `Field`, a required Role `Select` (Admin, Developer or Viewer, Developer preselected, its hint under it, so the role is always chosen and seen before sending) and a required Teams `Field` with Developers preselected and a description saying permissions add up. Footer: Cancel and the primary `Send invitation`, which shows its loading state; the drawer cannot be dismissed while it sends. Errors follow `state/state-form-validation` (SectionRejected): nothing is red before the first Send; after it each field shows its own `Field.Error` and focus moves to the first invalid one.
 
 ### H. Only the owner, no match and load failure — `EmptyState`, `Alert` (conditional)
 
@@ -65,15 +65,15 @@ The block takes its records through props and emits every action; it fetches not
 | `defaultInviteOpen` | `boolean`     | Opens the invite drawer on mount.                                                                                   |
 | `defaultEditRoleId` | `string`      | Opens the Edit role dialog for the user with this id on mount.                                                      |
 
-| Event               | Payload                     | When                                                                                    |
-| ------------------- | --------------------------- | --------------------------------------------------------------------------------------- |
-| `invite`            | `(event, { email, teams })` | Send invitation passed validation; the person is already in the list as Invited.        |
-| `refresh`           | `(event)`                   | Refresh.                                                                                |
-| `retry`             | `(event)`                   | Retry in the error alert.                                                               |
-| `role-change`       | `(event, { user, role })`   | Save role, or Undo in its toast; the row already shows the new role.                    |
-| `teams-change`      | `({ user, teams })`         | A row's Teams picker changed, or Undo in its toast.                                     |
-| `resend-invitation` | `(event, user)`             | Resend invitation in the row menu.                                                      |
-| `remove`            | `(event, user)`             | Remove user or Cancel invitation was confirmed; the row is already gone from the table. |
+| Event               | Payload                           | When                                                                                    |
+| ------------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
+| `invite`            | `(event, { email, role, teams })` | Send invitation passed validation; the person is already in the list as Invited.        |
+| `refresh`           | `(event)`                         | Refresh.                                                                                |
+| `retry`             | `(event)`                         | Retry in the error alert.                                                               |
+| `role-change`       | `(event, { user, role })`         | Save role, or Undo in its toast; the row already shows the new role.                    |
+| `teams-change`      | `({ user, teams })`               | A row's Teams picker closed with a different set of teams, or Undo in its toast.        |
+| `resend-invitation` | `(event, user)`                   | Resend invitation in the row menu.                                                      |
+| `remove`            | `(event, user)`                   | Remove user or Cancel invitation was confirmed; the row is already gone from the table. |
 
 To go live, render the block from a page that owns the request and pass what it returns:
 

@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 7b01c0ba32ac2a4c4cb914e4b8f896ed5060ecabf55034b12987b14c0b6d3988
+checksum: 6980fc0a67f2e1863ec8b17c79f526ad58409f83a7e7472345789bd4a9515d6f
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -113,6 +113,7 @@ _none_ — the amount's `-0.08em` letter-spacing, previously shipped without, is
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Right-to-left: the prefix and the value sit in one group with `dir="auto"`, so `$184.20` keeps its order on a right-to-left page; the suffix follows the page direction.
 
 ## Examples
 

@@ -391,7 +391,11 @@
           <DrawerTitle>Upgrade to Pro</DrawerTitle>
         </PanelHeader>
         <PanelBody>
-          <div class="@container w-full">
+          <div
+            class="@container w-full outline-none"
+            tabindex="-1"
+            data-autofocus
+          >
             <div
               class="grid grid-cols-1 gap-(--spacing-lg) @3xl:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] @3xl:gap-(--spacing-xl)"
             >

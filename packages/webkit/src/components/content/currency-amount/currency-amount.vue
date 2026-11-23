@@ -53,6 +53,8 @@
     :class="ROOT_CLASS"
   >
     <span
+      dir="auto"
+      :data-testid="`${testId}__amount`"
       class="inline-flex items-center gap-(--spacing-2xs) group-data-[size=large]/currency-amount:gap-0"
     >
       <span

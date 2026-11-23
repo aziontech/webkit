@@ -17,7 +17,7 @@
     CollectionPaginationProps,
     CollectionTableProps
   } from '@aziontech/webkit/use-collection'
-  import { ref } from 'vue'
+  import { reactive, ref } from 'vue'
 
   import type { UsersTeam, UsersUser } from '../account-users.vue'
   import {
@@ -44,6 +44,17 @@
   }>()
 
   const usersTableEl = ref<TableExposed<UsersUser> | null>(null)
+
+  const drafts = reactive<Record<string, string[]>>({})
+  const teamsOf = (row: UsersUser): string[] => drafts[row.id] ?? row.teams
+  const sameTeams = (a: string[], b: string[]) =>
+    a.length === b.length && a.every((team) => b.includes(team))
+
+  const commitTeams = (row: UsersUser) => {
+    const draft = drafts[row.id]
+    delete drafts[row.id]
+    if (draft && !sameTeams(draft, row.teams)) emit('teams', row, draft)
+  }
 
   defineExpose({ exportCsv: () => usersTableEl.value?.exportCsv({ filename: 'users.csv' }) })
 </script>
@@ -72,6 +83,22 @@
               <span class="truncate text-body-sm text-(--text-default)">{{
                 displayName(row)
               }}</span>
+              <div
+                aria-hidden="true"
+                data-slot="narrow-summary"
+                class="mt-(--spacing-2xs) flex flex-wrap items-center gap-(--spacing-xs) sm:hidden"
+              >
+                <Tag
+                  :label="row.role"
+                  :variant="roleVariant(row.role)"
+                  :severity="roleSeverity(row.role)"
+                  size="small"
+                />
+                <TableCellStatus
+                  :label="row.status"
+                  :severity="statusSeverity(row.status)"
+                />
+              </div>
             </div>
           </div>
         </template>
@@ -97,13 +124,14 @@
             class="w-full"
           >
             <MultiSelect
-              :model-value="row.teams"
+              :model-value="teamsOf(row)"
               size="small"
               class="w-full"
               placeholder="No team"
               :disabled="row.owner || row.status === 'Inactive'"
-              :display-value="() => teamsLabelOf(teamOptions, row.teams)"
-              @update:model-value="(next) => emit('teams', row, next)"
+              :display-value="() => teamsLabelOf(teamOptions, teamsOf(row))"
+              @update:model-value="(next) => (drafts[row.id] = next.map(String))"
+              @update:open="(now) => now || commitTeams(row)"
             >
               <MultiSelect.Trigger :aria-label="`Teams of ${displayName(row)}`" />
               <MultiSelect.Content>

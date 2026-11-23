@@ -2,7 +2,9 @@ import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { type Component, defineComponent, h, ref } from 'vue'
 
+import CurrencyAmount from '../components/content/currency-amount/currency-amount.vue'
 import Pagination from '../components/data/pagination/pagination.vue'
+import TableCellTime from '../components/data/table/table-cell-time/table-cell-time.vue'
 import PhoneInput from '../components/input/phone-input/phone-input.vue'
 import SelectRoot from '../components/input/select/select.vue'
 import SelectContent from '../components/input/select/select-content/select-content.vue'
@@ -236,5 +238,22 @@ describe('values keep their own direction inside an rtl trigger', () => {
     const isolate = getByTestId('select-trigger__value').querySelector('bdi')
     expect(isolate?.textContent).toBe('Alpha')
     expect(isolate?.hasAttribute('dir')).toBe(false)
+  })
+
+  it('CurrencyAmount and TableCellTime isolate their text, so 184.20 and 2 weeks ago keep their order', () => {
+    const amount = render(CurrencyAmount, {
+      props: { value: '184.20' },
+      container: rtlContainer('rtl')
+    })
+    const group = amount.getByTestId('currency-amount__amount')
+    expect(group.getAttribute('dir')).toBe('auto')
+    expect(getComputedStyle(group).direction).toBe('ltr')
+    const time = render(TableCellTime, {
+      props: { value: new Date(Date.now() - 14 * 86_400_000) },
+      container: rtlContainer('rtl')
+    })
+    const text = time.getByTestId('table-cell-time__time')
+    expect(text.getAttribute('dir')).toBe('auto')
+    expect(getComputedStyle(text).direction).toBe('ltr')
   })
 })
