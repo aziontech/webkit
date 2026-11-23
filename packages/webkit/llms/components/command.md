@@ -42,7 +42,7 @@
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
 | `dismissible` | `boolean` | `true` | false | When true, backdrop click and Escape close the palette. |
 | `shortcut` | `string` | `'meta+k'` | false | Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 | `pageKey` | `string` | `''` | false | Two-way value (`v-model:pageKey`). |
 
 ## Events

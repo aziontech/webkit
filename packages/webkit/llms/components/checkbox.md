@@ -45,7 +45,7 @@
 | `readonly` | `boolean` | `false` | false | Marks the field read-only; value is visible but cannot change via interaction. |
 | `invalid` | `boolean` | `false` | false | Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too. |
 | `name` | `string` | `''` | false | HTML name for form submission. |
-| `modelValue` | `TModel` | `undefined as never` | false | Two-way value (`v-model`). |
+| `modelValue` | `TModel` | `undefined` | false | Two-way value (`v-model`). |
 
 ## v-model
 

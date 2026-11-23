@@ -44,7 +44,7 @@
 | `closeDelay` | `number` | `300` | false | Milliseconds after the pointer or focus leaves the trigger and the card before the card closes. |
 | `disabled` | `boolean` | `false` | false | Never opens the card. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state while `v-model:open` is unbound. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 

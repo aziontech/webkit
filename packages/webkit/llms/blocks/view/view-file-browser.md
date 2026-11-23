@@ -278,9 +278,10 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
 
   import {
     addToFilesActions,
+    destinationOptionsOf,
     fileColumns,
     type FileRow,
-    folderName,
+    folderPathsIn,
     listRows,
     sortRows,
     UPLOAD_LIMIT
@@ -477,19 +478,14 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
     emit('delete', event, entry)
   }
 
-  const destinationPaths = computed(
-    () =>
+  const destinationOptions = computed(() =>
+    destinationOptionsOf(
       props.destinations ??
-      (props.entries
-        ? props.entries
-            .filter((entry) => entry.kind === 'folder')
-            .map((entry) => path.value + folderName(entry.name))
-        : Object.keys(sampleFolders).filter(Boolean))
+        (props.entries
+          ? folderPathsIn(props.entries, path.value)
+          : Object.keys(sampleFolders).filter(Boolean))
+    )
   )
-  const destinationOptions = computed(() => [
-    { value: '/', label: '/', description: 'Storage root' },
-    ...destinationPaths.value.map((value) => ({ value }))
-  ])
 
   const moveOpen = ref(false)
   const moving = ref<FileRow[]>([])
@@ -1023,6 +1019,14 @@ export const destinationProblem = (raw: string, path: string) => {
   if (target === path) return 'The files are already in this folder. Pick another one.'
   return ''
 }
+
+export const folderPathsIn = (entries: FileBrowserEntry[], path: string): string[] =>
+  entries.filter((entry) => entry.kind === 'folder').map((entry) => path + folderName(entry.name))
+
+export const destinationOptionsOf = (paths: string[]) => [
+  { value: '/', label: '/', description: 'Storage root' },
+  ...paths.map((value) => ({ value }))
+]
 ```
 
 ## `parts/delete-entry-dialog.vue`

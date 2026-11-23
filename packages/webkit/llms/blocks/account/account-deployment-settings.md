@@ -194,9 +194,11 @@ Each variant is the same screen in another state: `get_block("account/account-de
     bindingLabel,
     reachLabel,
     rewrittenNames,
+    savedDefaultsDescription,
     servicesBoundTo,
     settingNameIn,
-    type SettingsRowData
+    type SettingsRowData,
+    withBindingPolicy
   } from './deployment-policies'
   import DeploymentDefaultsGroup from './parts/deployment-defaults-group.vue'
   import DeploymentSaveBar from './parts/deployment-save-bar.vue'
@@ -411,24 +413,12 @@ Each variant is the same screen in another state: `get_block("account/account-de
         return
       }
       const apply = form.applyToExisting
-      if (apply) {
-        settingList.value = settingList.value.map((setting) =>
-          setting.system
-            ? setting
-            : {
-                ...setting,
-                bindingPolicy: form.bindingPolicy,
-                updatedAt: new Date(),
-                updatedBy: author.value
-              }
-        )
-      }
+      if (apply)
+        settingList.value = withBindingPolicy(settingList.value, form.bindingPolicy, author.value)
       Object.assign(saved, { ...form, applyToExisting: false })
       form.applyToExisting = false
       toast.success('Deployment defaults saved.', {
-        description: apply
-          ? `${settingList.value.filter((setting) => !setting.system).length} settings now use the ${bindingLabel(form.bindingPolicy)} binding policy. Default is never changed.`
-          : 'The next service is created with them. Existing settings keep theirs.',
+        description: savedDefaultsDescription(settingList.value, form.bindingPolicy, apply),
         id: SAVE_TOAST
       })
     }
@@ -869,6 +859,24 @@ export const rewrittenNames = (
   settings
     .filter((setting) => !setting.system && setting.bindingPolicy !== policy)
     .map((setting) => setting.name)
+
+export const withBindingPolicy = (
+  settings: DeploymentSettingsSetting[],
+  bindingPolicy: DeploymentSettingsBindingPolicy,
+  updatedBy: string
+): DeploymentSettingsSetting[] =>
+  settings.map((setting) =>
+    setting.system ? setting : { ...setting, bindingPolicy, updatedAt: new Date(), updatedBy }
+  )
+
+export const savedDefaultsDescription = (
+  settings: DeploymentSettingsSetting[],
+  bindingPolicy: DeploymentSettingsBindingPolicy,
+  applied: boolean
+): string =>
+  applied
+    ? `${settings.filter((setting) => !setting.system).length} settings now use the ${bindingLabel(bindingPolicy)} binding policy. Default is never changed.`
+    : 'The next service is created with them. Existing settings keep theirs.'
 ```
 
 ## `parts/deployment-defaults-group.vue`

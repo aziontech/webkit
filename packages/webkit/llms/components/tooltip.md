@@ -48,7 +48,7 @@
 | `delay` | `number` | `200` | false | Hover-open delay in milliseconds. |
 | `disabled` | `boolean` | `false` | false | Disables tooltip activation. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 

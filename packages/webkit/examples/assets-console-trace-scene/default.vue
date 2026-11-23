@@ -24,18 +24,19 @@
 </script>
 
 <template>
-  <MediaTabs
-    :items="documents"
-    size="small"
-    :autoplay-interval="5200"
-    class="[--media-tabs-media-min:20rem]"
-  >
-    <template #media="{ index, active }">
-      <ConsoleTraceScene
-        :tab="documents[index].value"
-        :active="active"
-        class="size-full"
-      />
-    </template>
-  </MediaTabs>
+  <div class="[--media-tabs-media-min:20rem]">
+    <MediaTabs
+      :items="documents"
+      size="small"
+      :autoplay-interval="5200"
+    >
+      <template #media="{ index, active }">
+        <ConsoleTraceScene
+          :tab="documents[index].value"
+          :active="active"
+          class="size-full"
+        />
+      </template>
+    </MediaTabs>
+  </div>
 </template>

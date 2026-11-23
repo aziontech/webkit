@@ -38,7 +38,7 @@
 | `duration` | `number` | `undefined` | false | Seconds the reasoning took, when the server reports it. Without it the component measures from `streaming` turning on to turning off. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; collapsed is the default in a chat, where the response is the main content. |
 | `skippable` | `boolean` | `false` | false | Offers `Skip thinking` while streaming, for a model that can answer before it finishes reasoning. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 

@@ -1437,7 +1437,6 @@ export function filterOptions(
       <div
         class="flex flex-col"
         role="radiogroup"
-        @keydown="onRadioListKeydown"
         aria-label="Policies"
       >
         <Item
@@ -1446,6 +1445,7 @@ export function filterOptions(
           size="small"
           clickable
           role="radio"
+          @keydown="onRadioListKeydown"
           :aria-checked="choice === option.value"
           :tabindex="
             radioListTabIndex(

@@ -359,7 +359,6 @@ Each variant is the same screen in another state: `get_block("create/create-reso
           <div
             class="border-t border-(--border-default)"
             role="radiogroup"
-            @keydown="onRadioListKeydown"
             aria-label="Projects"
           >
             <Item.List>
@@ -369,6 +368,7 @@ Each variant is the same screen in another state: `get_block("create/create-reso
                 size="small"
                 clickable
                 role="radio"
+                @keydown="onRadioListKeydown"
                 :aria-checked="option.value === projectPicker.chosen"
                 :tabindex="
                   radioListTabIndex(

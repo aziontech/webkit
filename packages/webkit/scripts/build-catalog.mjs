@@ -223,6 +223,7 @@ export function modelProps(target) {
     const opens = (fallback.match(/[([{]/g) ?? []).length
     const closes = (fallback.match(/[)\]}]/g) ?? []).length
     if (opens !== closes) fallback = '—'
+    if (fallback === 'undefined as never') fallback = 'undefined'
     models.push({
       name,
       type: match[1].replace(/\s+/g, ' ').trim(),

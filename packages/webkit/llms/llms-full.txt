@@ -2182,8 +2182,6 @@ Prop: `events`, `now`, `range`, `loading`, `error`.
 
 Event: `refresh`, `retry`, `update:range`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/account/account-activity-history.md](blocks/account/account-activity-history.md).
 
 ## Do
@@ -2287,8 +2285,6 @@ The block takes its records through props and emits every action; it fetches not
 Prop: `invoices`, `paymentMethods`, `subscription`, `paymentInformation`, `updatedAt`, `defaultQuery`, `tab`, `loading`, `error`.
 
 Event: `refresh`, `retry`, `set-default`, `remove`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/account/account-billing.md](blocks/account/account-billing.md).
 
@@ -2408,8 +2404,6 @@ Prop: `plans`, `upgradeFeatures`, `charges`, `accountAddress`, `cardLast4`, `ope
 
 Event: `plan-select`, `upgrade`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/account/account-change-plan-drawer.md](blocks/account/account-change-plan-drawer.md).
 
 ## Do
@@ -2511,8 +2505,6 @@ The block takes its records through props and emits every action; it fetches not
 Prop: `settings`, `services`, `defaults`, `defaultDraft`, `currentUser`, `loading`, `saving`, `error`.
 
 Event: `save`, `discard`, `refresh`, `bind`, `create`, `update`, `clone`, `delete`.
-
-Then delete `sample.ts` and its import, and persist `bind`, `create`, `update`, `clone` and `delete` the same way.
 
 What each prop and event does, and the go-live code: [blocks/account/account-deployment-settings.md](blocks/account/account-deployment-settings.md).
 
@@ -2622,8 +2614,6 @@ Prop: `resources`, `currentId`, `roleBindings`, `selectedKeys`, `loading`, `erro
 
 Event: `refresh`, `retry`, `move`, `labels`, `delete`, `undo`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/account/account-hierarchy.md](blocks/account/account-hierarchy.md).
 
 ## Do
@@ -2728,8 +2718,6 @@ Prop: `members`, `loading`, `error`, `required`.
 
 Event: `update:required`, `refresh`, `retry`, `remind`, `reset`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/account/account-mfa-settings.md](blocks/account/account-mfa-settings.md).
 
 ## Do
@@ -2833,8 +2821,6 @@ Prop: `account`, `plans`, `defaultValues`, `step`, `loading`, `error`.
 
 Event: `submit`, `cancel`, `update:step`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/account/account-onboarding-form.md](blocks/account/account-onboarding-form.md).
 
 ## Do
@@ -2937,8 +2923,6 @@ Prop: `card`, `editing`, `disabled`, `loading`, `error`.
 
 Event: `submit`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/account/account-payment-method-card.md](blocks/account/account-payment-method-card.md).
 
 ## Do
@@ -3034,8 +3018,6 @@ The block takes its tokens through props and emits every action; it fetches noth
 Prop: `tokens`, `loading`, `error`, `creating`, `now`, `secret`.
 
 Event: `refresh`, `retry`, `create`, `revoke`, `delete`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/account/account-personal-tokens.md](blocks/account/account-personal-tokens.md).
 
@@ -3143,8 +3125,6 @@ The list takes its teams through props and emits every action; it fetches nothin
 Prop: `teams`, `loading`, `error`.
 
 Event: `refresh`, `retry`, `row-action`, `delete`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/account/account-team-permissions.md](blocks/account/account-team-permissions.md).
 
@@ -3262,8 +3242,6 @@ The block takes its records through props and emits every action; it fetches not
 Prop: `users`, `teams`, `loading`, `error`, `defaultInviteOpen`, `defaultEditRoleId`.
 
 Event: `invite`, `refresh`, `retry`, `role-change`, `teams-change`, `resend-invitation`, `remove`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/account/account-users.md](blocks/account/account-users.md).
 
@@ -4083,8 +4061,6 @@ Event: `submit`, `retry`.
 
 The `environment-alerts` slot renders under the environment choices with `{ environment, project }`, for alerts about what the chosen environment changes. A dependency with `sharedWith` carries a Shared `Tag` in a `Tooltip` naming the other services, and one info `Alert` above the list says it deploys at one version; Projects impacted shows only when there are projects, with an environment heading and a count per group once they span more than one environment.
 
-Then delete `sample.ts` and its import. The page reports the run through the toast (`state/state-async-submit`).
-
 What each prop and event does, and the go-live code: [blocks/create/create-deploy-drawer.md](blocks/create/create-deploy-drawer.md).
 
 ## Do
@@ -4231,8 +4207,6 @@ Slot: `actions`.
 
 A run whose rows are all queued has not started: the block raises no toast for it. Drop renders the block with its two Deployment Settings queued, opens its own confirm beside it, and on Deploy to Production opens the progress dialog and moves the rows through the run.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/create/create-deploy-progress-dialog.md](blocks/create/create-deploy-progress-dialog.md).
 
 ## Do
@@ -4333,8 +4307,6 @@ The block takes what the flow made through props and emits its actions; it fetch
 Prop: `title`, `description`, `deployment`, `resources`, `nextSteps`, `getStarted`.
 
 Event: `next-step`, `manage`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/create/create-deploy-success.md](blocks/create/create-deploy-success.md).
 
@@ -4441,8 +4413,6 @@ Prop: `template`, `account`, `providersHref`, `crumb`, `service`.
 Slot: `default`, `details`.
 
 Event: `back`, `account`, `connect`, `skip-git`, `browse`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/create/create-deploy-template.md](blocks/create/create-deploy-template.md).
 
@@ -4587,8 +4557,6 @@ Event: `submit`, `update:open`, `update:environmentOpen`.
 
 The `trigger` slot replaces the Add button (an environment menu, a row menu) and receives `open` to call.
 
-Then delete the `sample.ts` import of `create-drawer.vue`.
-
 What each prop and event does, and the go-live code: [blocks/create/create-drawer.md](blocks/create/create-drawer.md).
 
 ## Do
@@ -4713,8 +4681,6 @@ The block takes its accounts, repositories and templates through props and emits
 Prop: `accounts`, `repositories`, `templates`, `connecting`, `connectError`, `loading`, `error`, `v-model:scope`.
 
 Event: `connect`, `update:scope`, `retry`, `import`, `upload`.
-
-Then delete the sample imports. Pass `templates` from the template catalog, or keep the sample sections as the shipped list.
 
 What each prop and event does, and the go-live code: [blocks/create/create-hub.md](blocks/create/create-hub.md).
 
@@ -4953,8 +4919,6 @@ Prop: `resources`, `impact`, `loading`, `error`, `truncated`, `deploying`, `depl
 
 Event: `deploy`, `retry`, `edit`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/create/create-release-impact.md](blocks/create/create-release-impact.md).
 
 ## Do
@@ -5066,8 +5030,6 @@ The block takes its resources through props, keeps the answer in `v-model`s and 
 Prop / model: `projects`, `loading`, `error`, `v-model`, `v-model:mode`, `v-model:name`.
 
 Event: `load-more`.
-
-Then delete `sample.ts` and its import. Set `error` when Next is pressed with nothing chosen and clear it once the user answers.
 
 What each prop and event does, and the go-live code: [blocks/create/create-resource-picker.md](blocks/create/create-resource-picker.md).
 
@@ -5193,8 +5155,6 @@ The block keeps the form as a local draft, validates each step and emits `submit
 Prop: `policies`, `defaultStep`, `defaultPolicy`, `defaultValues`, `loading`, `error`.
 
 Event: `submit`, `cancel`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/create/create-wizard.md](blocks/create/create-wizard.md).
 
@@ -5348,8 +5308,6 @@ Prop: `kpis`, `labels`, `series`, `openByLevel`, `types`, `entities`, `alerts`, 
 
 Event: `retry`, `update:period`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-alerts.md](blocks/dashboard/dashboard-alerts.md).
 
 ## Do
@@ -5483,8 +5441,6 @@ Card: Requests over time, Status codes, Requests by country, Top hosts.
 - `resample: { function: sum, points: 96 }` returns a fixed number of points for a time series, so a long period does not come back as thousands of rows.
 - One query returns at most 10,000 rows (`limit: 10000`).
 - Data transferred is `aggregate: { sum: bytesSent }`; the Functions product reads `functionsMetrics` (`sum: invocations`) and Edge DNS reads `idnsQueriesMetrics`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-analytics.md](blocks/dashboard/dashboard-analytics.md).
 
@@ -5626,8 +5582,6 @@ Prop: `kpis`, `labels`, `series`, `split`, `contributors`, `loading`, `error`, `
 
 Event: `retry`, `export`, `update:period`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-breakdown.md](blocks/dashboard/dashboard-breakdown.md).
 
 ## Do
@@ -5743,8 +5697,6 @@ The block takes its series through props and emits every change; it fetches noth
 Prop: `labels`, `series`, `sources`, `loading`, `error`, `v-model:layout`, `v-model:editing`.
 
 Event: `retry`, `update:layout`, `update:editing`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-configurable.md](blocks/dashboard/dashboard-configurable.md).
 
@@ -5869,8 +5821,6 @@ Prop: `kpis`, `goals`, `labels`, `trends`, `notes`, `loading`, `error`, `v-model
 
 Event: `retry`, `export`, `update:quarter`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-executive-summary.md](blocks/dashboard/dashboard-executive-summary.md).
 
 ## Do
@@ -5987,8 +5937,6 @@ Prop / model: `overall`, `applications`, `locations`, `hourly`, `incidents`, `lo
 
 Event: `retry`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-health-score.md](blocks/dashboard/dashboard-health-score.md).
 
 ## Do
@@ -6104,8 +6052,6 @@ Prop: `userName`, `greeting`, `metrics`, `projects`, `resources`, `domains`, `re
 Pass `[]` for all four lists on an account that owns nothing: the page becomes the first-access screen.
 
 Event: `retry`, `update:agentSetup`, `create-project`, `check-domain`, `register-domain`, `copy-prompt`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-home.md](blocks/dashboard/dashboard-home.md).
 
@@ -6232,8 +6178,6 @@ Prop: `summary`, `verdictSplit`, `sources`, `submissions`, `loading`, `error`.
 
 Event: `refresh`, `retry`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-scan-results.md](blocks/dashboard/dashboard-scan-results.md).
 
 ## Do
@@ -6355,8 +6299,6 @@ Every region empty (`[]` lists and no series) is the no-rule-set state: one `Emp
 
 Event: `retry`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-security.md](blocks/dashboard/dashboard-security.md).
 
 ## Do
@@ -6473,8 +6415,6 @@ The block takes its records through props and emits every action; it fetches not
 Prop / model: `services`, `latency`, `errorRate`, `alerts`, `loading`, `error`, `v-model:window`.
 
 Event: `retry`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-service-monitoring.md](blocks/dashboard/dashboard-service-monitoring.md).
 
@@ -6600,8 +6540,6 @@ Prop / model: `views`, `data`, `loading`, `error`, `v-model:view`, `v-model:peri
 
 Event: `refresh`, `retry`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-switcher.md](blocks/dashboard/dashboard-switcher.md).
 
 ## Do
@@ -6706,8 +6644,6 @@ A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger 
 The block takes the run through props; it fetches nothing and has no actions of its own. `DeploymentLogsStep` and `DeploymentLogsProps` are exported from `detail-deployment-logs.vue`, and `sample.ts` holds the sample runs (running, succeeded, failed) the block renders when `steps` is left out. Running or settled, the outcome, the counts, the open step and the step tags all follow from the step statuses.
 
 Prop / model: `steps`, `duration`, `v-model:view`, `v-model:open-step`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/detail/detail-deployment-logs.md](blocks/detail/detail-deployment-logs.md).
 
@@ -6831,8 +6767,6 @@ Prop: `zone`, `records`, `loading`, `error`, `saving`, `importable`, `v-model:ta
 
 Event: `submit`, `discard`, `create`, `import`, `refresh`, `retry`, `row-action`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/detail/detail-dns-zone.md](blocks/detail/detail-dns-zone.md).
 
 ## Do
@@ -6953,8 +6887,6 @@ Prop: `domains`, `loading`, `error`.
 
 Event: `create`, `retry`, `row-action`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/detail/detail-domains-card.md](blocks/detail/detail-domains-card.md).
 
 ## Do
@@ -7056,8 +6988,6 @@ The block fetches nothing; the steps are its copy. `GetStartedProps` and `GetSta
 Prop: `resourceName`, `v-model`.
 
 Event: `update:modelValue`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/detail/detail-get-started.md](blocks/detail/detail-get-started.md).
 
@@ -7161,8 +7091,6 @@ Prop / model: `edgeFunction`, `invocations`, `v-model:invocation`, `v-model:span
 
 Event: `replay`, `invocation-action`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/detail/detail-invocations.md](blocks/detail/detail-invocations.md).
 
 ## Do
@@ -7265,8 +7193,6 @@ The block takes its gates through props and emits every action; it fetches nothi
 Prop: `steps`, `defaultOpen`.
 
 Event: `step-action`, `done`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/detail/detail-production-checklist.md](blocks/detail/detail-production-checklist.md).
 
@@ -7387,8 +7313,6 @@ The primary (ResourceOverview) takes the resource through a prop, owns the open 
 Prop / model: `resource`, `v-model:tab`.
 
 Event: `resource-action`, `connect-repository`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/detail/detail-resource.md](blocks/detail/detail-resource.md).
 
@@ -7538,8 +7462,6 @@ Prop / model: `resource`, `versions`, `settings`, `revertDiff`, `environments`, 
 
 Event: `save`, `save-description`, `add-version`, `add-environment`, `redeploy`, `revert`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/detail/detail-version.md](blocks/detail/detail-version.md).
 
 ## Do
@@ -7673,8 +7595,6 @@ Prop: `name`, `loading`, `error`, `defaultOpen`, `v-model:open`.
 
 Event: `delete`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/edit/edit-delete-dialog.md](blocks/edit/edit-delete-dialog.md).
 
 ## Do
@@ -7792,8 +7712,6 @@ Prop: `service`, `fields`, `defaultDraft`, `v-model:tab`, `v-model:document`, `d
 Event: `submit`, `discard`, `editor-ready`.
 
 Slot: `editor-actions`, `code-panel`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/edit/edit-function.md](blocks/edit/edit-function.md).
 
@@ -7928,8 +7846,6 @@ Prop: `resource`, `defaultDraft`, `stale`, `loading`, `error`, `v-model:tab`.
 Event: `submit`, `discard`.
 
 Slot: `sections`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/edit/edit-resource.md](blocks/edit/edit-resource.md).
 
@@ -8201,8 +8117,6 @@ Prop: `tables`, `database`, `loading`, `error`, `v-model:dialog`, `v-model:table
 
 Event: `create-table`, `add-column`, `insert-row`, `change-type`, `truncate`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/edit/edit-schema.md](blocks/edit/edit-schema.md).
 
 ## Do
@@ -8326,8 +8240,6 @@ The block is a folder. `edit-variables.vue` is the wiring: the props, the list r
 Prop: `variables`, `loading`, `saving`, `saveError`, `defaultOpen`.
 
 Event: `refresh`, `save`, `clone`, `delete`.
-
-Then delete the sample variables from `sample.ts` and their import. With no `saving` set during the `save` handler the block treats the save as done at once, which is how it runs on its sample.
 
 What each prop and event does, and the go-live code: [blocks/edit/edit-variables.md](blocks/edit/edit-variables.md).
 
@@ -8458,8 +8370,6 @@ The SaveAll form takes the saved profile and the save request's state through pr
 Prop: `profile`, `defaultDraft`, `loading`, `error`.
 
 Event: `submit`, `discard`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/settings/settings-form.md](blocks/settings/settings-form.md).
 
@@ -8901,8 +8811,6 @@ Prop: `loading`, `error`, `errorSummary`, `deployment`, `steps`.
 With none of them set the block is Idle. `loading` wins over `error`, and `error` over `deployment`, so a redeploy after a failure reads Deploying.
 
 Event: `deploy`, `redeploy`, `edit`, `open-service`.
-
-Then delete `sample.ts`; the variants are the only files that import it.
 
 What each prop and event does, and the go-live code: [blocks/state/state-async-submit.md](blocks/state/state-async-submit.md).
 
@@ -9386,8 +9294,6 @@ Event: `submit`.
 
 The Section form takes `origins`, `originError`, `reloading` and `submitting`, and emits `submit` `(event, values)`, `cancel` `(event)` and `reload-origins` `(event)`. A chosen origin missing from a new `origins` list is cleared and flagged with Select an origin to continue.
 
-Then delete `sample.ts` and its imports in the variants.
-
 What each prop and event does, and the go-live code: [blocks/state/state-form-validation.md](blocks/state/state-form-validation.md).
 
 ## Do
@@ -9805,8 +9711,6 @@ Prop: `account`, `backHref`, `backLabel`, `homeHref`, `breadcrumb`.
 
 Event: `account-select`, `navigate`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/top-bar/top-bar-creation.md](blocks/top-bar/top-bar-creation.md).
 
 ## Do
@@ -9908,8 +9812,6 @@ The block takes its records through props and emits every action; it fetches not
 Prop: `applications`, `loading`, `error`.
 
 Event: `create`, `retry`, `delete`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/view/view-card.md](blocks/view/view-card.md).
 
@@ -10041,8 +9943,6 @@ Prop / model: `events`, `fields`, `categories`, `buckets`, `summary`, `total`, `
 Slot: `toolbar`, `document-fields`.
 
 Event: `refresh`, `retry`, `select`, `load-more`.
-
-Then delete `sample.ts` and its import, and give `fields` its own list. A log that streams instead of paging passes `moreRows` and appends the next events on `load-more`.
 
 What each prop and event does, and the go-live code: [blocks/view/view-events-explorer.md](blocks/view/view-events-explorer.md).
 
@@ -10324,8 +10224,6 @@ Prop: `integrations`, `applications`, `loading`, `installing`, `error`, `install
 
 Event: `select`, `install`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/view/view-marketplace.md](blocks/view/view-marketplace.md).
 
 ## Do
@@ -10460,8 +10358,6 @@ Prop: `tables`, `history`, `result`, `loading`, `running`, `error`, `defaultTabl
 
 Event: `run`, `refresh-tables`, `create-table`, `delete-table`, `refresh`, `retry`, `insert-row`, `import-csv`, `add-column`, `delete-rows`, `delete-query`, `download-results`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/view/view-query-editor.md](blocks/view/view-query-editor.md).
 
 ## Do
@@ -10591,8 +10487,6 @@ Prop: `subject`, `rules`, `loading`, `error`, `saving`, `saveError`, `defaultEdi
 
 Event: `edit`, `create`, `retry`, `save`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/view/view-rule-list.md](blocks/view/view-rule-list.md).
 
 ## Do
@@ -10719,8 +10613,6 @@ The block takes its records through props and emits every action; it fetches not
 Prop: `resources`, `loading`, `error`.
 
 Event: `create`, `refresh`, `retry`, `row-action`, `delete`.
-
-Then delete `sampleResources` and its import (keep `sample.ts` only if you copied the Deployments state, which reads `sampleDeployments` from it). A list too large for the browser moves to `useCollection` server mode (`fetch`), which pages and filters on the server.
 
 What each prop and event does, and the go-live code: [blocks/view/view-table.md](blocks/view/view-table.md).
 
@@ -10853,8 +10745,6 @@ Prop: `templates`, `loading`, `error`, `defaultText`, `defaultPreview`.
 
 Event: `select`, `retry`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/view/view-template-browser.md](blocks/view/view-template-browser.md).
 
 ## Do
@@ -10969,8 +10859,6 @@ The block takes its matches through props and emits every action; it fetches not
 Prop: `matches`, `v-model:range`, `loading`, `error`, `defaultSelectedKeys`, `defaultOpen`, `defaultReason`, `allowing`, `allowError`.
 
 Event: `refresh`, `retry`, `allow`, `update:range`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/view/view-waf-tuning.md](blocks/view/view-waf-tuning.md).
 
@@ -12090,7 +11978,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | `steps` | `AgentActivityStep[]` | `[]` | false | The steps of the work, in order: each has a `key`, a `title`, a `status` from the shared status set and an optional `description`. The current step is the first running one, else the first failed one, else the last canceled one of a stopped run, else the last one that is not pending. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state of the step list when uncontrolled; collapsed shows only the current step. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the activity. Empty uses the locale catalog (`Agent activity`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## v-model
 
@@ -13316,7 +13204,7 @@ never read as new.
 | `loading` | `boolean` | `false` | false | The feedback is being sent: Send feedback shows a spinner and the form is locked. |
 | `title` | `string` | `''` | false | Dialog title. Empty uses the locale catalog (`What went wrong?`). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -14064,7 +13952,7 @@ _None. Data-driven. `PromptQueueItem`: `{ id: string; text: string; attachmentCo
 | `duration` | `number` | `undefined` | false | Seconds the reasoning took, when the server reports it. Without it the component measures from `streaming` turning on to turning off. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; collapsed is the default in a chat, where the response is the main content. |
 | `skippable` | `boolean` | `false` | false | Offers `Skip thinking` while streaming, for a model that can answer before it finishes reasoning. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -14377,7 +14265,7 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 | `items` | `SourcesItem[]` | `[]` | false | The sources behind the response, in citation order; item `n` is what `[n]` points at. |
 | `title` | `string` | `''` | false | Label of the pill that opens the panel. Empty shows `Sources` and names the pill with the count (`3 sources`). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Sub-components
 
@@ -14619,7 +14507,7 @@ components: `code-block`, `citation`._
 | `duration` | `number` | `undefined` | false | Seconds the helper has worked, when the host knows it. Without it the card counts its own running time, held while `pending`, frozen once the run ends. |
 | `stoppable` | `boolean` | `false` | false | Offers `Stop` while the status is `running` or `pending`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; the helper's messages start collapsed. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -14998,7 +14886,7 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 | `title` | `string` | `''` | false | What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. |
 | `status` | `'pending' \| 'streaming' \| 'running' \| 'success' \| 'error' \| 'canceled' \| 'denied'` | `'running'` | false | `pending` waits for authorization, `streaming` receives its arguments, `running` is in flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the reader refused it). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; details start collapsed. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -21103,7 +20991,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 | `title` | `string` | `''` | false | Panel title and trigger label. Empty uses the locale catalog. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 | `preferences` | `CollectionPreferencesValue` | `—` | false | Two-way value (`v-model:preferences`). |
 
 ## Events
@@ -21691,7 +21579,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 | `disabled` | `boolean` | `false` | false | Disables the trigger: the menu does not open. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `modelValue` | `FilterMenuModel` | `—` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Sub-component imports
 
@@ -23940,7 +23828,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | `title` | `string` | `''` | false | Overrides the header text. Empty builds it from the operation and the counts. |
 | `floating` | `boolean` | `true` | false | Fixes the card to the inline-end bottom corner of the viewport; false renders it in the flow. |
 | `cancelable` | `boolean` | `true` | false | Shows Cancel on running and waiting files and Cancel all in the header. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -24257,7 +24145,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | `readonly` | `boolean` | `false` | false | Marks the field read-only; value is visible but cannot change via interaction. |
 | `invalid` | `boolean` | `false` | false | Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too. |
 | `name` | `string` | `''` | false | HTML name for form submission. |
-| `modelValue` | `TModel` | `undefined as never` | false | Two-way value (`v-model`). |
+| `modelValue` | `TModel` | `undefined` | false | Two-way value (`v-model`). |
 
 ## v-model
 
@@ -24489,7 +24377,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | `invalid` | `boolean` | `false` | false | Marks the field invalid (`aria-invalid`, danger border). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -24636,7 +24524,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 | `showApply` | `boolean` | `true` | false | Stages edits in a draft and shows Cancel and Apply; when false, every edit commits immediately and neither button renders. |
 | `split` | `boolean` | `false` | false | Renders the trigger as a split control with a separate chevron affordance. |
 | `modelValue` | `DatePickerValue` | `null` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 | `timeZone` | `string` | `''` | false | Two-way value (`v-model:timeZone`). |
 
 ## Events
@@ -24787,7 +24675,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token of the trigger and the panel controls. |
 | `modelValue` | `DateRangeValue \| null` | `null` | false | Two-way value (`v-model`). |
 | `timeZone` | `string` | `''` | false | Two-way value (`v-model:timeZone`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 | `refreshInterval` | `number` | `300` | false | Two-way value (`v-model:refreshInterval`). |
 
 ## Events
@@ -25771,7 +25659,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `error` | `string` | `''` | false | Message shown in place of the options when they failed to load; empty shows the options. |
 | `emptyTitle` | `string` | `''` | false | Text of the list when no option is visible. Empty uses the locale catalog. |
 | `modelValue` | `TValue[]` | `() => []` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -26787,8 +26675,8 @@ packages/webkit/src/components/input/radio-group/
 | `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger. |
 | `displayValue` | `(value: TValue) => string` | `undefined` | false | Custom formatter used by the trigger to render the selection; receives the current `modelValue`, typed as the bound model. Unset, the trigger shows the selected options' labels. |
 | `name` | `string` | `''` | false | Form field name. Set, the root renders one hidden input per selected value (`String(value)`, objects as JSON) so a native `form` and `FormData` submit the selection; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the value out, as a native control does. |
-| `modelValue` | `TValue` | `undefined as never` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `modelValue` | `TValue` | `undefined` | false | Two-way value (`v-model`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -30228,7 +30116,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 | --- | --- | --- | --- | --- |
 | `disabled` | `boolean` | `false` | false | Leaves the area to the browser's native context menu and never opens the panel. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the menu panel; when empty the panel has no name of its own. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -30416,7 +30304,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 | `sideOffset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
 | `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -32208,7 +32096,7 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
 | `dismissible` | `boolean` | `true` | false | When true, backdrop click and Escape close the palette. |
 | `shortcut` | `string` | `'meta+k'` | false | Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 | `pageKey` | `string` | `''` | false | Two-way value (`v-model:pageKey`). |
 
 ## Events
@@ -32428,7 +32316,7 @@ packages/webkit/src/components/overlay/command/
 | `disabled` | `boolean` | `false` | false | Disables the confirm button, for a confirmation that needs input first. |
 | `confirmationPhrase` | `string` | `''` | false | A phrase the reader must type, exactly and with the same case, before confirm enables; usually the resource name. Empty asks for no typing. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -32539,7 +32427,7 @@ packages/webkit/src/components/overlay/command/
 | `closable` | `boolean` | `true` | false | Shows the close (X) button at the end of the dialog header. False removes it; Escape and overlay click still follow `dismissible`. |
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when true, overlay click and Escape close the dialog. It does not govern the close button; see `closable`. |
 | `size` | `DialogSize` | `'medium'` | false | Panel max-width preset passed to the inner Panel. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -32706,7 +32594,7 @@ packages/webkit/src/components/overlay/command/
 | `modal` | `boolean` | `true` | false | Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, `aria-modal` false; Escape, the close button and focus restore still work. |
 | `side` | `DrawerSide` | `'end'` | false | Edge the drawer panel slides from, in reading direction (`start` or `end`). |
 | `size` | `DrawerSize` | `'large'` | false | Panel width preset: `small` `--container-sm`, `medium` 30% of the screen (at least `--container-md`), `large` 40% of the screen (at least `--container-lg`), the widest and the default. Height is always 100% viewport. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -32866,7 +32754,7 @@ packages/webkit/src/components/overlay/command/
 | `closeDelay` | `number` | `300` | false | Milliseconds after the pointer or focus leaves the trigger and the card before the card closes. |
 | `disabled` | `boolean` | `false` | false | Never opens the card. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state while `v-model:open` is unbound. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -33129,7 +33017,7 @@ packages/webkit/src/components/overlay/command/
 | `size` | ``PopoverSize` (`'small' \| 'medium' \| 'large'`)` | `undefined` | false | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -33299,7 +33187,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `title` | `string` | `''` | false | Dialog title. Empty uses the locale catalog (`Keyboard shortcuts`). |
 | `shortcut` | `string` | `'?'` | false | Keys that open the list, in the `useShortcuts` syntax; listed under the general group. Empty binds no key. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -33448,7 +33336,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `delay` | `number` | `200` | false | Hover-open delay in milliseconds. |
 | `disabled` | `boolean` | `false` | false | Disables tooltip activation. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
