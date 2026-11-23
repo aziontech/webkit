@@ -161,7 +161,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
-  import { computed, provide, ref } from 'vue'
+  import { provide, ref } from 'vue'
 
   import { ShellDocsInjectionKey } from './injection-key'
   import {
@@ -220,9 +220,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
 
   const pageId = ref('')
   provide(ShellDocsInjectionKey, pageId)
-  const activeId = computed(
-    () => pageId.value || (slots.default ? '' : 'functions-getting-started')
-  )
+  const activeId = () => pageId.value || (slots.default ? '' : 'functions-getting-started')
 
   const { mode: theme } = useColorMode()
 
@@ -232,7 +230,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
 <template>
   <DocLayout
     :navigation="navigation"
-    :active-id="activeId"
+    :active-id="activeId()"
     :sections="sections"
     home="/docs"
     :outline-groups="outlineGroups"

@@ -387,7 +387,7 @@ test('add copies the sibling variant a variant imports and points the import at 
     for (const part of [
       'general-group-card.vue',
       'notifications-group-card.vue',
-      'settings-form-save.ts'
+      'use-card-save.ts'
     ])
       assert.ok(existsSync(join(dir, `src/views/settings-form.${part}`)), part)
     assert.deepEqual(files.find((f) => f.variant === 'SavingOneGroup').imports, {
