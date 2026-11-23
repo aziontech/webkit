@@ -39,7 +39,7 @@
     groupQuestions,
     skipQuestion
   } from '@aziontech/webkit/utils/ai-chat-questions'
-  import { computed, ref, watch } from 'vue'
+  import { computed, onMounted, ref, watch } from 'vue'
 
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
   import AiChatHeader from './parts/ai-chat-header.vue'
@@ -246,6 +246,8 @@
   function toolOf(call: AiChatToolCallPart): AiChatTool {
     return props.tools[call.name] ?? { title: '' }
   }
+
+  onMounted(() => composerEl.value?.focus())
 
   watch(
     () => props.loading,

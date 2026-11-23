@@ -242,7 +242,7 @@
             :alt="nameOf(tile.alt, tile.position)"
             loading="lazy"
             decoding="async"
-            class="block size-full object-cover in-data-[layout=single]:h-auto"
+            class="block size-full object-contain in-data-[layout=single]:h-auto"
             @error="markBroken(tile.source)"
           />
         </button>

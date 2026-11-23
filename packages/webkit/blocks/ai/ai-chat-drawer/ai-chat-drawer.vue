@@ -330,7 +330,10 @@
 </script>
 
 <template>
-  <div class="w-full">
+  <div
+    :data-drawer-open="open || null"
+    class="w-full lg:data-drawer-open:pe-[max(30vw,var(--container-md))]"
+  >
     <WorkloadOverview
       :open="open"
       @open="open = true"
@@ -419,7 +422,6 @@
               :loading="loading"
             />
             <Alert
-              key="alert-2"
               v-if="interruptErrors.length"
               severity="danger"
               size="small"

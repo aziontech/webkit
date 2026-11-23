@@ -103,6 +103,11 @@ describe('ai/ai-chat', () => {
     expect(view.queryByText('How can I help with your Azion account?')).toBeNull()
   })
 
+  it('focuses the composer when the chat opens', async () => {
+    const view = render(AiChat)
+    await waitFor(() => expect(document.activeElement).toBe(view.getByRole('textbox')))
+  })
+
   it('skips system and activity messages', () => {
     const view = render(AiChat, {
       props: {

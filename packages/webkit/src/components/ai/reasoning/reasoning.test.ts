@@ -76,6 +76,14 @@ describe('Reasoning', () => {
     expect(queryByRole('button', { name: 'Skip thinking' })).toBeNull()
   })
 
+  it('gives the toggle a 44px touch target under a coarse pointer', () => {
+    const trigger = render(Reasoning, { slots }).getByTestId('reasoning__trigger')
+    const target = trigger.querySelector('[data-slot="touch-target"]')
+    expect(target?.getAttribute('aria-hidden')).toBe('true')
+    expect(target?.classList.contains('pointer-coarse:block')).toBe(true)
+    expect(trigger.classList.contains('relative')).toBe(true)
+  })
+
   it('pairs the pulsing glyph with a reduced-motion escape', () => {
     const { container } = render(Reasoning, { props: { streaming: true }, slots })
     const glyph = container.querySelector('.az-sparkles') as HTMLElement

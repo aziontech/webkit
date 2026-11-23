@@ -53,7 +53,7 @@
     },
     {
       "name": "Error",
-      "summary": "The approved deployment fails: the deployment call reads failed, and the assistant says what failed and that production still serves the previous version, with Retry beside Copy.",
+      "summary": "The approved deployment fails: the deployment call reads failed, and the assistant says what failed and that production still serves the previous version, with Deploy again (the action named, never a bare Retry) beside Copy.",
       "file": "variants/error.vue"
     }
   ]

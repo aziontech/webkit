@@ -13,12 +13,13 @@ import type { AiChatInterrupt, AiChatMessage, AiChatToolCallPart } from '../../u
 
 afterEach(() => cleanup())
 describe('ai', () => {
-  it('ai-action-approval Error: says what failed and emits retry from Retry', async () => {
+  it('ai-action-approval Error: says what failed and names the action it re-runs', async () => {
     const view = render(AiActionApproval, {
       props: { messages: sampleFailedMessages, tools: sampleTools }
     })
     expect(view.container.textContent).toContain('still serves the previous version')
-    await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
+    expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
+    await fireEvent.click(view.getByRole('button', { name: 'Deploy again' }))
     const [[event, message]] = view.emitted('retry') as [[Event, AiChatMessage]]
     expect(event).toBeInstanceOf(Event)
     expect(message.id).toBe('m2')
@@ -155,6 +156,11 @@ describe('ai', () => {
     await fireEvent.click(view.getByRole('button', { name: 'Agent' }))
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
     expect(document.querySelector('[data-testid$="__backdrop"]')).toBeNull()
+    const page = view.container.firstElementChild as HTMLElement
+    expect(page.hasAttribute('data-drawer-open')).toBe(true)
+    expect(page.classList.contains('lg:data-drawer-open:pe-[max(30vw,var(--container-md))]')).toBe(
+      true
+    )
   })
 
   it('ai-action-approval passes the edited arguments of an editable tool', async () => {
