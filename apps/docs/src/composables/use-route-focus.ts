@@ -24,7 +24,8 @@ export function useRouteFocus(): Readonly<Ref<string>> {
           if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1')
           target.focus({ preventScroll: true })
         }
-        announcement.value = document.title
+        const heading = document.querySelector('#main h1')?.textContent?.trim()
+        announcement.value = heading || document.title
       })
     }
   )
