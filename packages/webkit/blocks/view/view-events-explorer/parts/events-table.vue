@@ -60,7 +60,7 @@
   const tableEl = ref<TableExposed<EventRow> | null>(null)
 
   const OPEN_ROW_CLASS =
-    'w-full [&_[role=row]:has([data-open-event])]:[--table-row-bg:var(--bg-selected)]!'
+    'flex min-h-0 flex-1 [&_[role=row]:has([data-open-event])]:[--table-row-bg:var(--bg-selected)]!'
 
   const STATUS_CELL_CLASS =
     'min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) ' +
