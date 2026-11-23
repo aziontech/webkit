@@ -122,7 +122,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: none mirror.
 - Keyboard: no horizontal arrow-key logic.
-- Isolation: the log body is `dir="ltr"` in every UI direction (log output reads left to right, so a long line starts at the left edge and scrolls from there); timestamps and level labels render `dir="ltr"`; each message renders `dir="auto"`, so a log line in another script keeps its own direction; the header's line count is isolated in a `bdi`.
+- Isolation: the log body renders `dir="ltr"` (log output is code, so a line opens at its start and scrolls the same way in a right-to-left page); timestamps and level labels render `dir="ltr"`; each message and each step summary renders `dir="auto"`, so a line in another script keeps its own direction and an English summary keeps its start and number order.
 
 ## Internationalization
 

@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: b4effaec80db73d6703b1be58874d30f5f50f2bd380f4c3b78516abaaac565d8
+checksum: 3f56428c487a0a58a495f0d5fecf1b54bbcd72dc6bda1fcd2e590386b4eaa165
 created: 2026-11-15
 last_updated: 2026-11-22
 ---
@@ -386,7 +386,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 
 ## Examples
 
-This component has no `type`/`size`, so the canonical Types/Sizes stories do not apply. Instead there is one story per scenario (the component's value is the behaviors, not root variants) plus a Full reference; each wires its events to the Actions panel.
+This component has no `type`/`size`, so the canonical Types/Sizes examples do not apply. Instead there is one example per scenario (the component's value is the behaviors, not root variants) plus a Full reference; each handles its own events.
 
 Every example passes `data` + `columns` with per-column `cell-<id>` slots and a shared row-action menu (the hand-composed form and the cell presets are documented under `table`).
 

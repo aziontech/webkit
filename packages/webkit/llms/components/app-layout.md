@@ -127,6 +127,7 @@ Unbound, each one keeps its own local state.
 ## Responsive
 
 - Container queries: the root is `@container/app-layout`; a `ResizeObserver` on the root switches to compact when its own width is under `compactBelow` (768 px by default), so the layout also goes compact inside a narrow host, not only on a narrow viewport.
+- First paint: with the default `compactBelow` (768 px) the navigation rail and the tools region also carry a container query (`@max-3xl/app-layout:hidden`), so a server-rendered page never paints the rail on a phone before the script measures the root.
 - Narrow (compact): navigation renders in a `Drawer` from the inline end (the design sample's phone menu), the tools in a `Drawer`, the split panel is forced to the bottom and its position toggle hides; the split panel's maximum is 70 % of the layout height.
 - Touch: region buttons are `IconButton`; the separator has a 16 px hit area and pointer drag works with touch (pointer events).
 - Reflow: the content scrolls on its own; no horizontal scroll at 320 px.
