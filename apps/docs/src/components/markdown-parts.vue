@@ -2,6 +2,7 @@
   import DocProse from '@aziontech/webkit/doc-prose'
 
   import type { DocPart } from '../lib/types'
+  import CodeView from './code-view.vue'
   import DoDont from './do-dont.vue'
   import RawHtml from './raw-html.vue'
 
@@ -23,7 +24,16 @@
         :do-html="part.pair.do"
         :dont-html="part.pair.dont"
       />
-      <DocProse v-else>
+      <CodeView
+        v-else-if="'code' in part"
+        :source="part.code"
+        :label="part.code.lang"
+        data-docs-code
+      />
+      <DocProse
+        v-else
+        class="[&_:is(p,ul,ol,blockquote,h2,h3,h4)]:max-w-[68ch]"
+      >
         <RawHtml :html="part.html" />
       </DocProse>
     </template>
