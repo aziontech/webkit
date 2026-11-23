@@ -318,6 +318,7 @@
                     :data-disabled="day.disabled || null"
                     data-testid="date-picker__day"
                     :tabindex="!day.outside && day.time === activeTime ? 0 : -1"
+                    :data-autofocus="(!day.outside && day.time === activeTime) || null"
                     :class="DAY_CLASS"
                     @click="selectDay(day)"
                     @keydown="onDayKeydown($event, day)"
