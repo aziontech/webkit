@@ -38,7 +38,7 @@
     trend?: (number | null)[]
     /** Renders Skeleton lines in place of the figure, delta and sparkline. */
     loading?: boolean
-    /** Why the value failed to load. When set, the tile shows a dash and a danger band that says it could not load, never No data. */
+    /** Why the value failed to load. When set, the tile shows a dash and a neutral band that says it could not load, never No data. */
     error?: string
   }
 
@@ -158,6 +158,7 @@
       >
         <span
           aria-hidden="true"
+          dir="ltr"
           class="inline-flex shrink-0 items-baseline gap-(--spacing-2xs) whitespace-nowrap"
         >
           <span
@@ -189,7 +190,7 @@
             :data-testid="`${testId}__delta-tag`"
             class="shrink-0 tabular-nums"
           >
-            {{ deltaText }}
+            <span dir="ltr">{{ deltaText }}</span>
             <span class="sr-only">{{ deltaMeaning }}</span>
           </Tag>
           <span
@@ -216,7 +217,7 @@
     >
       <Separator class="absolute inset-x-0 top-0" />
       <Tag
-        :severity="failed ? 'danger' : 'neutral'"
+        severity="neutral"
         size="small"
         rounded
         :label="failed ? t('statTile.loadError') : t('statTile.noData')"
