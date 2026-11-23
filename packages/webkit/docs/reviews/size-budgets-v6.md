@@ -1220,3 +1220,54 @@ Budget-raise: drawer-content 18.3 KB → 18.35 KB (measured 18.31 KB): after eve
 Budget-raise: popover 11.3 KB → 11.35 KB (measured 11.31 KB): after every step-6 lane merged, it carries the split cost of more than one shared piece at once (placement, listbox, combobox, navigation menu, sidebar, table parts); each lane measured its own share alone (decision CQ-E8).
 Budget-raise: shortcuts-dialog 27.2 KB → 27.25 KB (measured 27.22 KB): after every step-6 lane merged, it carries the split cost of more than one shared piece at once (placement, listbox, combobox, navigation menu, sidebar, table parts); each lane measured its own share alone (decision CQ-E8).
 Budget-raise: package packedBytes 8,500,000 → 8,550,000 bytes (measured 8,502,714): the DataTable companion parts, the block parts, lib and composable files of step 6 and their llms pages are many more small files in the tarball once every lane is merged.
+
+### Audit-5 input lane (F02), 2026-11-22
+
+Budget-raise: console-layout-root 82.6 KB → 82.65 KB (measured 82.60 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: doc-layout 72.9 KB → 72.95 KB (measured 72.93 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: input 2.4 KB → 2.5 KB (measured 2.45 KB): spellcheck false also turns off phone autocapitalize and autocorrect (A5-213).
+Budget-raise: date-picker-root 44 KB → 44.35 KB (measured 44.31 KB): Cancel button beside Apply and focus on the selected day at open (A5-014, A5-067).
+Budget-raise: date-range-picker 56.35 KB → 56.6 KB (measured 56.58 KB): shares the date-picker grid focus change and the larger datePicker locale group (A5-014).
+Budget-raise: property-filter 36.5 KB → 36.55 KB (measured 36.53 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: password-requirements 3.9 KB → 4.1 KB (measured 4.05 KB): ties the rules to the Field description and adds a debounced polite progress line (A5-013).
+Budget-raise: password-requirements-root 3.8 KB → 4.05 KB (measured 4.01 KB): same as password-requirements (A5-013).
+Budget-raise: console-application-scene 121.95 KB → 122.2 KB (measured 122.19 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: console-trace-scene 84.65 KB → 84.75 KB (measured 84.70 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: article-index-section 36.6 KB → 36.95 KB (measured 36.92 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: story-index-section 35.75 KB → 36.1 KB (measured 36.08 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: hero-form-section 52.55 KB → 53.15 KB (measured 53.10 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: plan-comparison-section 39.25 KB → 39.6 KB (measured 39.56 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: job-posting-section 58.95 KB → 59.55 KB (measured 59.51 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: listing-index-section 42.1 KB → 42.45 KB (measured 42.42 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: newsletter-section 13.75 KB → 13.8 KB (measured 13.79 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: timestamp 20.25 KB → 20.35 KB (measured 20.30 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: file-dropzone 4.85 KB → 5 KB (measured 4.96 KB): touch screens read Choose files to upload (A5-209).
+Budget-raise: field 9 KB → 9.2 KB (measured 9.18 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: field-label 7.45 KB → 7.6 KB (measured 7.59 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: settings-group 8.3 KB → 8.5 KB (measured 8.45 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: settings-row 17.85 KB → 18.1 KB (measured 18.05 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: config-provider 12.4 KB → 12.45 KB (measured 12.42 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: phone-input 34.75 KB → 35.1 KB (measured 35.06 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: language-select 28.75 KB → 29.05 KB (measured 29.00 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: select 23 KB → 23.3 KB (measured 23.29 KB): Tab moves through the panel controls before closing (A5-015).
+Budget-raise: multi-select 30.95 KB → 31.25 KB (measured 31.23 KB): panel Tab handling and the search field autocapitalize hints (A5-015, A5-213).
+Budget-raise: trace 39 KB → 39.05 KB (measured 39.03 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: tool-approval 16.15 KB → 16.2 KB (measured 16.18 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: agent-question 16.85 KB → 16.9 KB (measured 16.88 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: feedback-reason-dialog 34.35 KB → 34.45 KB (measured 34.42 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: attribute-editor 20.55 KB → 20.85 KB (measured 20.80 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: combobox 13.95 KB → 14 KB (measured 13.97 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: tag-editor 22.4 KB → 22.65 KB (measured 22.63 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: schema-form 63.7 KB → 64.4 KB (measured 64.35 KB): pattern errors restate the field description, plus the Input, Hint and Field growth (A5-178).
+Budget-raise: overflow-count 15.5 KB → 15.55 KB (measured 15.51 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: table-cell-link 20.4 KB → 20.45 KB (measured 20.42 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: table-cell-tags 16.55 KB → 16.6 KB (measured 16.56 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: table-search 5.15 KB → 5.2 KB (measured 5.17 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: date-picker 44.15 KB → 44.5 KB (measured 44.45 KB): Cancel button beside Apply and focus on the selected day at open (A5-014, A5-067).
+Budget-raise: hint 6.15 KB → 6.35 KB (measured 6.33 KB): tap-to-toggle on touch screens (A5-210, A5-216).
+Budget-raise: theme-switcher 18.25 KB → 18.3 KB (measured 18.26 KB): segments widen on touch so hit areas never overlap (A5-211).
+Budget-raise: textarea 2 KB → 2.05 KB (measured 2.01 KB): monospace keeps lines whole with wrap off (A5-212).
+Budget-raise: multi-select-content 21.55 KB → 21.85 KB (measured 21.81 KB): Tab moves through the panel controls before closing (A5-015).
+Budget-raise: select-content 19.35 KB → 19.65 KB (measured 19.63 KB): Tab moves through the panel controls before closing (A5-015).
+Budget-raise: console-layout 83.9 KB → 83.95 KB (measured 83.91 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
+Budget-raise: command-input 7.55 KB → 7.6 KB (measured 7.57 KB): carries the Input autocapitalize hints, the Hint tap toggle or the new locale strings of the input lane (A5-210, A5-213).
