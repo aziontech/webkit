@@ -1,7 +1,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import ChatMessage from '@aziontech/webkit/chat-message'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import { onBeforeUnmount, onMounted, ref } from 'vue'
 
@@ -45,12 +44,10 @@
         :streaming="status === 'streaming'"
       />
       <template #actions>
-        <ChatMessage.Actions>
-          <CopyButton
-            size="large"
-            :value="full"
-          />
-        </ChatMessage.Actions>
+        <ChatMessage.Actions
+          copyable
+          :copy-text="full"
+        />
       </template>
     </ChatMessage>
     <Button

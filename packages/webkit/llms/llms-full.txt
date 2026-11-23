@@ -3333,7 +3333,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-use
 - Surface: app
 - Source: `blocks/ai/ai-action-approval/ai-action-approval.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-action-approval")`
-- Components: AgentQuestion, Alert, Button, ChatMessage, CodeBlock, Conversation, CopyButton, ImageGallery, `PromptInputAttachButton`, `PromptInputDictateButton`, PromptInput, StreamingResponse, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`
+- Components: AgentQuestion, Alert, Button, ChatMessage, CodeBlock, Conversation, ImageGallery, `PromptInputAttachButton`, `PromptInputDictateButton`, PromptInput, StreamingResponse, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -3363,7 +3363,7 @@ The moment an assistant needs permission. The reader asked for something that ch
 - C. What the assistant checked — `ToolCall`, `StreamingResponse`
 - D. Authorization card — `ToolApproval`, `CodeBlock`
 - E. The action running — `ToolCall`, `ImageGallery`
-- F. Outcome — `ChatMessage`, `CopyButton`, `Button`
+- F. Outcome — `ChatMessage`, `Button`
 - G. Questions and failed decisions — `AgentQuestion`, `Alert`
 - H. Structured answers — `CodeBlock`, `Alert`
 
@@ -3566,7 +3566,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-api-key.md](b
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, ChatMessage, CodeBlock, Conversation, ConversationHistory, CopyButton, `DrawerBody`, `DrawerContent`, `DrawerHeader`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, McpAppFrame, `PromptInputAttachButton`, `PromptInputDictateButton`, PromptInput, PromptQueue, Reasoning, Resizable, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, VideoPlayer
+- Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, ChatMessage, CodeBlock, Conversation, ConversationHistory, `DrawerBody`, `DrawerContent`, `DrawerHeader`, Drawer, `DrawerTitle`, EmptyState, FeedbackReasonDialog, FilePreview, IconButton, ImageGallery, McpAppFrame, `PromptInputAttachButton`, `PromptInputDictateButton`, PromptInput, PromptQueue, Reasoning, Resizable, ResponseBranches, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, Toast, ToolApproval, ToolCall, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3598,7 +3598,7 @@ A full page where a person talks with the generative AI assistant about their ac
 - D. Prompt — `ChatMessage`, `ImageGallery`, `FilePreview`
 - E. Response — `ChatMessage`, `Reasoning`, `StreamingResponse`
 - F. Sources — `Sources`
-- G. Response actions — `ChatMessage`, `CopyButton`, `IconButton`
+- G. Response actions — `ChatMessage`, `ResponseBranches`, `FeedbackReasonDialog`
 - H. Follow-up questions — `SuggestionGroup`
 - I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
 - J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
@@ -3624,7 +3624,7 @@ Prop: `messages`, `suggestions`, `followUps`, `loading`, `error`, `tools`, `inte
 
 The open conversation of the history is `v-model:activeKey` (`string | null`): picking a row sets it, New chat clears it; load that conversation's messages when it changes.
 
-Event: `send`, `stop`, `voice-start`, `retry`, `new-chat`, `feedback`, `approve`, `remove-queued`, `app-message`, `load-more`, `deny`, `answer-tool`, `answer-interrupt`, `retry-interrupts`.
+Event: `send`, `stop`, `voice-start`, `retry`, `edit`, `version-change`, `share`, `branch`, `new-chat`, `feedback`, `approve`, `remove-queued`, `app-message`, `load-more`, `deny`, `answer-tool`, `answer-interrupt`, `retry-interrupts`.
 
 A tool that needs approval is declared once with `toolDefinition({ name, inputSchema, needsApproval: true })`, run on the server with `.server(...)` and passed to `useChat({ tools: [definition] })` too, so the client can match the approval request to the call. Then delete `sample.ts` and its import. `apps/demos` runs this block on `useChat` with TanStack AI's `fakeText` model (`src/lib/assistant-model.ts`), no server and no key.
 
@@ -3658,7 +3658,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - **Loading:** `Generating a response` (built in); `Loading <what>` when fetching data.
 - **Error:** what happened, in one sentence, e.g. "The connection was interrupted before the response finished.", with Try again.
 - **Stopped:** "You stopped this response."
-- **Feedback:** Helpful, Not helpful, Feedback submitted (built in).
+- **Feedback:** Good response, Bad response (built in); the toast says Thanks for your feedback.
 - Follow `skills/webkit-microcopy`: sentence case, "select" not "click", "response" not "answer", no "please".
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 - **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.
@@ -3669,7 +3669,8 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Each message is an `article` named by author and time; the author and time are visually hidden, never removed.
 - Responses are `aria-busy` while loading or streaming; the caret is hidden.
 - The composer is named Prompt, described by its counter and disclaimer; Enter submits and an IME composition never does.
-- Feedback thumbs are toggle buttons with `aria-pressed`, and the submitted state is a status message.
+- Feedback thumbs are toggle buttons with `aria-pressed`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
+- A prompt's Copy and Edit are transparent until hover or focus, never removed from the tab order; the editor's field is named Edit your message, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
 - Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer.
 - The phone history is a `Drawer` named Conversation history that returns focus to the menu button; the desktop toggle names what it does and carries `aria-expanded`.
 - Alignment never carries meaning alone: every message's accessible name says who wrote it.
@@ -3713,7 +3714,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: AgentActivity, AgentQuestion, Alert, AudioPlayer, Button, Card, ChatMessage, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, KeyValueList, McpAppFrame, PageHeader, `PanelHeader`, `PromptInputAttachButton`, `PromptInputDictateButton`, PromptInput, PromptQueue, Reasoning, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, VideoPlayer
+- Components: AgentActivity, AgentQuestion, Alert, AudioPlayer, Button, Card, ChatMessage, ChatMessage, CodeBlock, Conversation, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FeedbackReasonDialog, FilePreview, IconButton, ImageGallery, KeyValueList, McpAppFrame, PageHeader, `PanelHeader`, `PromptInputAttachButton`, `PromptInputDictateButton`, PromptInput, PromptQueue, Reasoning, ResponseBranches, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, Toast, ToolApproval, ToolCall, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3744,7 +3745,7 @@ The generative AI assistant beside the work: the reader is on a resource page �
 - D. Header — `PanelHeader`, `DrawerTitle`, `Tag`, `IconButton`
 - E. Empty state — `EmptyState`, `SuggestionGroup`
 - F. Message log — `Conversation`
-- G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `CopyButton`
+- G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `ResponseBranches`, `FeedbackReasonDialog`
 - H. Follow-up questions — `SuggestionGroup`
 - I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
 - J. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
@@ -3767,7 +3768,7 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 
 Prop: `messages`, `suggestions`, `followUps`, `loading`, `error`, `tools`, `interrupts`, `interruptErrors`, `queue`, `moreMessages`, `loadingMore`, `connection`, `resuming`, `hydrating`, `sessionGenerating`, `attachable`, `accept`, `maxFiles`, `maxFileSize`, `resolveAppUrl`, `v-model:open`.
 
-Event: `send`, `stop`, `retry`, `new-chat`, `feedback`, `approve`, `remove-queued`, `app-message`, `load-more`, `deny`, `answer-tool`, `answer-interrupt`, `retry-interrupts`.
+Event: `send`, `stop`, `retry`, `edit`, `version-change`, `share`, `branch`, `new-chat`, `feedback`, `approve`, `remove-queued`, `app-message`, `load-more`, `deny`, `answer-tool`, `answer-interrupt`, `retry-interrupts`.
 
 A tool that needs approval is declared once with `toolDefinition({ name, inputSchema, needsApproval: true })`, run on the server with `.server(...)` and passed to `useChat({ tools: [definition] })` too, so the client can match the approval request to the call. Then delete `sample.ts` and its import. `apps/demos` runs this block on `useChat` with TanStack AI's `fakeText` model (`src/lib/assistant-model.ts`), no server and no key.
 
@@ -12616,7 +12617,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 
 # Chat Message
 
-> One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the helpful / not helpful thumbs, regenerate, read aloud, the sources). It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). Assistant messages are plain text across the reading column (`.text-body-lg`): no avatar, name, time or bubble. User messages are a filled bubble at the inline end, at most 80 % wide; system messages a muted centered line. Author and time live in the accessible name (the time also shows on hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
+> One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the good / bad response thumbs, read aloud, share, try again, branch in new chat, the sources), and on the reader's own prompt Copy and Edit. It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). Assistant messages are plain text across the reading column (`.text-body-lg`): no avatar, name, time or bubble. User messages are a filled bubble at the inline end, at most 80 % wide; system messages a muted centered line. A user message opens for editing (`v-model:editing`): the bubble turns into a field with Cancel and Send, and Send emits `edit` with the new text, which the app hands to TanStack AI (`setMessages` up to the message, then `sendMessage`). Author and time live in the accessible name (the time also shows on hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
 
 - Import: `import ChatMessageRoot from '@aziontech/webkit/chat-message-root'`
 - Compound import (dot notation, not tree-shakeable): `import ChatMessage from '@aziontech/webkit/chat-message'`
@@ -12630,7 +12631,9 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 ## Do
 
 - Pass `status` from your request: `pending` until the first token, `streaming` while tokens arrive, then `success` or `error`.
-- Keep the action row always visible: Copy, the thumbs, Regenerate, app actions (Share), Read aloud, then the `Sources` pill in `#trailing`; give `CopyButton` and `IconButton` `size="large"` (40 px targets).
+- Turn on the built-in actions with props instead of composing buttons: `copyable`, `show-feedback`, `show-read-aloud`, `shareable`, `retryable`, `branchable` on a response; `copyable`, `editable` on a prompt. The row keeps one order and moves the thumbs and Try again into More when it is narrow.
+- Put the `Sources` pill in `#trailing` (it stays on the same line) and a `ResponseBranches` pager in `#leading` once a response or prompt has versions.
+- Raise a toast after a rating, and open `FeedbackReasonDialog` after Bad response; the row itself shows no confirmation text.
 - Use `grouped` for a second message by the same author so stacked messages read as one turn.
 - Never put the feedback thumbs on non-AI content.
 
@@ -12659,12 +12662,14 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 | `grouped` | `boolean` | `false` | false | Follows a message by the same author: tightens the gap above it so stacked messages read as one turn. |
 | `errorMessage` | `string` | `''` | false | Error text shown while `status` is `error`. Empty uses the locale catalog. |
 | `loadingLabel` | `string` | `''` | false | Loading text shown while `status` is `pending`. Empty uses `ResponseLoading`'s own (`Generating a response`). |
+| `editing` | `boolean` | `false` | false | Two-way value (`v-model:editing`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `retry` | `(event: MouseEvent)` |  |
+| `edit` | `(event: MouseEvent \| KeyboardEvent, text: string)` |  |
 
 ## Slots
 
@@ -12684,18 +12689,24 @@ Compound API through `index.ts` (`ChatMessage.Actions`, `ChatMessage.Feedback`);
 `chat-message-root`, `chat-message-actions`, `chat-message-feedback`. The root provides
 `{ from, status, contentText }` (`injection-key.ts`; `contentText()` reads the `StreamingResponse` text, `lib/content-text.ts`); `useChatMessageContext()` throws outside a `ChatMessage`.
 
-- `chat-message-actions/chat-message-actions.vue` — `role="group"` row of actions, wrapping when narrow; renders nothing unless `status` is `success`.
-  - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`); `showReadAloud?: boolean` (default `false` — shows Read aloud); `readAloudText?: string` (default `''` — the text Read aloud speaks; empty reads `contentText()`).
-  - Slots: `default` — the icon actions; `trailing` — the `Sources` pill.
+- `chat-message-actions/chat-message-actions.vue` — `role="group"` row of actions on one line (it never wraps); renders nothing unless `status` is `success`.
+  - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`); `copyable?: boolean` (default `false` — shows Copy, a `CopyButton`); `copyText?: string` (default `''` — what Copy copies; empty copies `contentText()`); `editable?: boolean` (default `false` — shows Edit on a user message, which opens the root's editor); `showFeedback?: boolean` (default `false` — shows the thumbs, a `ChatMessage.Feedback` bound to `v-model:feedback`); `showReadAloud?: boolean` (default `false` — shows Read aloud); `readAloudText?: string` (default `''` — the text Read aloud speaks; empty reads `contentText()`); `shareable?: boolean` (default `false` — shows Share); `retryable?: boolean` (default `false` — shows Try again); `branchable?: boolean` (default `false` — adds Branch in new chat to More); `disabled?: boolean` (default `false` — locks Edit, Try again and Branch in new chat).
+  - v-model: `v-model:feedback` — `'up' | 'down' | null` through `defineModel('feedback')` (default `null`; emits `update:feedback`). Choosing the chosen thumb again clears it, in the row and in More.
+  - Events: `share` — `(event: MouseEvent)`, Share pressed; `retry` — `(event: MouseEvent | KeyboardEvent)`, Try again pressed or chosen in More; `branch` — `(event: MouseEvent | KeyboardEvent)`, Branch in new chat chosen.
+  - Slots: `leading` — before Copy, a `ResponseBranches` pager; `default` — app actions after the built-in ones; `trailing` — the `Sources` pill, at the end of the same line (`__trailing`, which may shrink and clips past its end rather than widen the row; it keeps 4 px around the pill for its focus ring).
+  - Test ids: `__copy`, `__edit`, `__feedback`, `__read-aloud`, `__share`, `__retry`, `__more`, `__trailing`.
   - Read aloud (private part `parts/chat-message-read-aloud.vue`, test id `chat-message-actions__read-aloud`): a 40 px ghost `IconButton` that speaks the text with `speechSynthesis` in the active locale; while speaking it is `Stop reading` (`data-speaking`). Pressing it again, another message's Read aloud or unmounting stops it. Rendered after mount, only where the browser has speech synthesis.
   - `data-testid` fallback: `chat-message-actions`.
-- `chat-message-feedback/chat-message-feedback.vue` — thumbs up / down (`aria-pressed`, large ghost `IconButton`s), each with a tooltip (`Helpful`, `Not helpful`); after a choice the other thumb disables and a `role="st…
+- `chat-message-feedback/chat-message-feedback.vue` — thumbs up / down (`aria-pressed`, large ghost `IconButton`s), each with a tooltip (`Good response`, `Bad response`).
   - Props: `loading?: boolean` (default `false`).
   - v-model: `'up' | 'down' | null` through `defineModel` (default `null`; emits `update:modelValue`).
   - `data-testid` fallback: `chat-message-feedback`.
 
+The context also carries `editing` and `edit()`, which Edit calls to open a user message.
+
 Exported types: `ChatMessageFrom`, `ChatMessageStatus`, `ChatMessageFeedbackValue`. Composed DS
-components: `button`, `response-loading`, `icon-button`, `tooltip`.
+components: `button`, `response-loading`, `textarea`, `icon-button`, `copy-button`, `tooltip`,
+`dropdown-menu`.
 
 ```
 packages/webkit/src/components/ai/chat-message/
@@ -12710,6 +12721,12 @@ packages/webkit/src/components/ai/chat-message/
 └── chat-message-feedback/chat-message-feedback.vue
 ```
 
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model:editing` | `boolean` | `false` | `update:editing` | A user message is open for editing. Edit in `ChatMessage.Actions` sets it; Cancel, `Escape` and Send clear it. Ignored on other messages. |
+
 ## States
 
 - `data-from` (`user` | `assistant` | `system`), `data-status` (mirrors `status`), `data-alignment` (from the conversation), `data-grouped`.
@@ -12717,13 +12734,15 @@ packages/webkit/src/components/ai/chat-message/
 - `aria-busy="true"` while `pending` or `streaming`.
 - `pending`: `ResponseLoading` (inline, no delay — the owner decides when a message exists) in place of the content.
 - `error`: the content (whatever streamed) stays; an error line with a danger glyph and a Try again `Button` follows.
-- `success`: the `actions` slot renders.
+- `success`: the `actions` slot renders (`__actions`, `data-from`).
+- Editing (`v-model:editing` on a user message): the column takes the full width (`data-editing`) and the bubble becomes `__editor` — a filled `--shape-card` panel holding an auto-growing `Textarea` (`__field`, 1 to 12 rows, `Edit your message`) with Cancel (`__cancel`) and Send (`__send`, disabled while the text is empty). The actions are hidden meanwhile; closing returns focus to the control that opened it.
 
 ## Accessibility
 
 - Visible focus: the composed controls carry their own `focus-visible` rings.
-- Keyboard map: `Tab` through links in the content, then the actions in order; Enter / Space activate. The message adds no key handling.
-- ARIA: `<article aria-label="<author> at <time>">` so each message has a unique name (Cloudscape), repeated in a visually hidden line at its start for browse mode; `aria-busy` while loading or streaming; actions are a `role="group"` named `Message actions`; feedback thumbs use `aria-pressed`, the feedback status is `role="status"`.
+- Keyboard map: `Tab` through links in the content, then the actions in order; Enter / Space activate; More opens its menu (arrows move, `Esc` closes). In the editor, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
+- The user message's actions are transparent, never hidden from the tab order: focusing one shows the row.
+- ARIA: `<article aria-label="<author> at <time>">` so each message has a unique name (Cloudscape), repeated in a visually hidden line at its start for browse mode; `aria-busy` while loading or streaming; actions are a `role="group"` named `Message actions`; feedback thumbs use `aria-pressed`, the feedback status is a visually hidden `role="status"`; the editor field is named `Edit your message`.
 - Announcement: when an assistant or system message turns `success` or `error` (or mounts finished after the conversation is ready), its text is read once through the `Conversation` live region.
 - Never rely on alignment alone: every message names its author in its accessible name and hidden line (or is `grouped` after one that does).
 - Contrast ≥4.5:1 on the muted time and system text.
@@ -14072,7 +14091,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 # Response Branches
 
-> Pages through alternative versions of one assistant response: after Regenerate, or when the model returned several candidates, the message shows one version at a time with a `‹ 2 of 3 ›` pager under it. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.
+> Pages through alternative versions of one assistant response or one edited prompt: after Try again, after the reader edits a prompt, or when the model returned several candidates, the message shows one version at a time with a `‹ 2/3 ›` pager under it, or alone in the message's action row when no slot is given. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.
 
 - Import: `import ResponseBranches from '@aziontech/webkit/response-branches'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -14113,7 +14132,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | { index: number } | The active version. Rendered once; the owner switches its content by `index`. |
+| `default` | { index: number } | Optional. The active version. Rendered once; the owner switches its content by `index`. Left out, only the pager renders, as in `ChatMessage.Actions`' `#leading` slot. |
 
 ## v-model
 
@@ -14131,7 +14150,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 ## Accessibility
 
 - The pager is `role="group"` named by `ariaLabel` (`Response versions`); Previous and Next are `IconButton`s named `Previous version` / `Next version`.
-- The counter (`2 of 3`) is a polite live region, so moving announces the new position once; the slot is not live.
+- The visible counter (`2/3`, `__position`) is `aria-hidden`; a visually hidden polite live region (`__status`, `Version 2 of 3`) announces the new position once; the slot is not live.
 - Keyboard: `Tab` reaches Previous and Next; `Enter`/`Space` move; a disabled end button leaves the tab order.
 
 ## Examples
@@ -33489,6 +33508,40 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```
 
 2 more example(s) in [components/config-provider.md](components/config-provider.md).
+
+---
+
+<!-- composables/use-ai-chat-versions.md -->
+
+# useAiChatVersions
+
+Composable `@aziontech/webkit/use-ai-chat-versions`. The signatures and option tables below are read from its typed source, [`src/composables/use-ai-chat-versions/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-ai-chat-versions/index.ts).
+
+```ts
+import { useAiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
+import type { UseAiChatVersionsReturn, AiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
+```
+
+## `useAiChatVersions`
+
+```ts
+function useAiChatVersions(messages: MaybeRefOrGetter<ReadonlyArray<AiChatMessage>>): UseAiChatVersionsReturn
+```
+
+## `UseAiChatVersionsReturn`
+
+What `useAiChatVersions` returns.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `versionsOf` | `(message: AiChatMessage) => AiChatVersions \| null` | yes | The versions of a message, or `null` while it has only one. |
+| `fork` | `(message: AiChatMessage) => void` | yes | Keeps the conversation from `message` on as a version before an edit or Try again replaces it. |
+| `select` | `(message: AiChatMessage, index: number) => AiChatMessage[] \| null` | yes | Shows another version of `message`; returns the whole conversation to hand to `setMessages`, or `null` when nothing changes. |
+| `clear` | `() => void` | yes | Forgets every version, for a new chat. |
+
+## Other exports
+
+`AiChatVersions`. Signatures and fields: [composables/use-ai-chat-versions.md](composables/use-ai-chat-versions.md).
 
 ---
 

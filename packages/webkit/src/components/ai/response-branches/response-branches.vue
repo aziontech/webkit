@@ -27,8 +27,8 @@
   const model = defineModel<number>({ default: 0 })
 
   defineSlots<{
-    /** The active version. Rendered once; the owner switches its content by `index`. */
-    default(scope: { index: number }): unknown
+    /** The active version. Rendered once; the owner switches its content by `index`. Left out, only the pager renders, as in a message's action row. */
+    default?(scope: { index: number }): unknown
   }>()
 
   const attrs = useAttrs()
@@ -77,11 +77,17 @@
         @click="go(-1)"
       />
       <span
-        aria-live="polite"
-        dir="auto"
+        aria-hidden="true"
+        dir="ltr"
         :data-testid="`${testId}__position`"
-        class="min-w-10 text-center text-label-sm text-(--text-muted) tabular-nums group-data-[disabled]:text-(--text-disabled)"
+        class="min-w-8 text-center text-label-sm text-(--text-muted) tabular-nums group-data-[disabled]:text-(--text-disabled)"
         >{{ t('responseBranches.position', { current: index + 1, total: count }) }}</span
+      >
+      <span
+        aria-live="polite"
+        :data-testid="`${testId}__status`"
+        class="sr-only"
+        >{{ t('responseBranches.positionLabel', { current: index + 1, total: count }) }}</span
       >
       <IconButton
         icon="az az-chevron-right"

@@ -1,7 +1,6 @@
 <script setup>
   import ChatMessage from '@aziontech/webkit/chat-message'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import ResponseBranches from '@aziontech/webkit/response-branches'
   import Sources from '@aziontech/webkit/sources'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import { ref } from 'vue'
@@ -14,12 +13,12 @@
   const answer =
     'Set **Cache by query string** to *Allowlist* and keep only `page` and `lang` [1]. Campaign parameters such as `utm_source` stop creating new cache keys [3].'
   const feedback = ref(null)
-  const sending = ref(false)
+  const versions = ref(['first'])
+  const version = ref(0)
 
-  function send(value) {
-    feedback.value = value
-    sending.value = true
-    setTimeout(() => (sending.value = false), 800)
+  function retry() {
+    versions.value = [...versions.value, 'next']
+    version.value = versions.value.length - 1
   }
 </script>
 
@@ -29,30 +28,29 @@
       <StreamingResponse
         :content="answer"
         :sources="sources"
-        anchor="cache-answer"
       />
       <template #actions>
-        <ChatMessage.Actions show-read-aloud>
-          <CopyButton
-            size="large"
-            :value="answer"
-          />
-          <ChatMessage.Feedback
-            :model-value="feedback"
-            :loading="sending"
-            @update:model-value="send"
-          />
-          <IconButton
-            icon="az az-refresh"
-            aria-label="Regenerate response"
-            variant="ghost"
-            size="large"
-          />
-          <template #trailing>
-            <Sources
-              :items="sources"
-              anchor="cache-answer"
+        <ChatMessage.Actions
+          v-model:feedback="feedback"
+          copyable
+          show-feedback
+          show-read-aloud
+          shareable
+          retryable
+          branchable
+          @retry="retry"
+        >
+          <template
+            v-if="versions.length > 1"
+            #leading
+          >
+            <ResponseBranches
+              v-model="version"
+              :count="versions.length"
             />
+          </template>
+          <template #trailing>
+            <Sources :items="sources" />
           </template>
         </ChatMessage.Actions>
       </template>

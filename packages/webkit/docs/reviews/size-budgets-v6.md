@@ -1239,3 +1239,11 @@ Budget-raise: prompt-input 14.5 KB → 14.65 KB (measured 14.60 KB): the counter
 Budget-raise: prompt-input-root 11.35 KB → 11.55 KB (measured 11.49 KB): the same near-limit counter and width-change re-measure as prompt-input.
 Budget-raise: streaming-response 38.35 KB → 38.5 KB (measured 38.46 KB): citation chips take one normal space from the word before them, none before the punctuation after them, and one between two chips.
 Budget-raise: llms-full.txt 2,360,000 → 2,391,000 bytes (measured 2,367,236): the chat look proposal's spec, block and example changes in the full AI bundle.
+Budget-raise: chat-message 14 KB → 20.35 KB (measured 20.28 KB, entry only): the action row builds in Copy (CopyButton) instead of taking it from the slot, and a user message opens as an inline editor (Textarea, Cancel, Send) for ChatGPT's Edit; the More menu (DropdownMenu, 8.5 KB) is a lazy chunk loaded on mount, so it is not counted (chat look round 2, 2026-11-22).
+Budget-raise: chat-message-root 7.1 KB → 8.95 KB (measured 8.89 KB): the inline prompt editor (Textarea with auto-resize, Cancel and Send, Escape and Ctrl+Enter, focus return) of ChatGPT's Edit (chat look round 2, 2026-11-22).
+Budget-raise: chat-message-actions 9.7 KB → 14.25 KB (measured 14.20 KB, entry only): the row builds in Copy, Edit, the thumbs, Share and Try again in one order and measures its width to move the thumbs and Try again into More on a phone; More itself (DropdownMenu) is a lazy chunk (chat look round 2, 2026-11-22).
+Budget-raise: chat-message-feedback 9.45 KB → 9.5 KB (measured 9.47 KB): a chosen thumb hides the other and clears on a second press, and the status line is visually hidden (chat look round 2, 2026-11-22).
+Budget-raise: config-provider 12.45 KB → 12.55 KB (measured 12.51 KB): the English catalog gained the message action keys (Share, More actions, Branch in new chat, Edit message, the editor, the response versions label) of chat look round 2.
+Budget-raise: locales-pt-BR 11.7 KB → 11.8 KB (measured 11.76 KB): the same message action keys, translated.
+Budget-raise: locales-es 11.8 KB → 11.9 KB (measured 11.88 KB): the same message action keys, translated.
+Budget-raise: artifact-canvas 12 KB → 12.05 KB (measured 12.02 KB): its ResponseBranches pager shows `2/3` with a visually hidden `Version 2 of 3` live region (chat look round 2, 2026-11-22).

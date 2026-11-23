@@ -4962,6 +4962,9 @@
     "@aziontech/webkit/chat-message-actions",
     "@aziontech/webkit/chat-message-feedback"
    ],
+   "models": [
+    "editing"
+   ],
    "category": "ai",
    "structure": "composition",
    "props": [
@@ -5013,12 +5016,24 @@
      "default": "''",
      "required": "false",
      "doc": "Loading text shown while `status` is `pending`. Empty uses `ResponseLoading`'s own (`Generating a response`)."
+    },
+    {
+     "name": "editing",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:editing`)."
     }
    ],
    "events": [
     {
      "name": "retry",
      "payload": "(event: MouseEvent)",
+     "notes": ""
+    },
+    {
+     "name": "edit",
+     "payload": "(event: MouseEvent | KeyboardEvent, text: string)",
      "notes": ""
     }
    ],
@@ -5044,6 +5059,9 @@
    "kind": "root",
    "rootOf": "chat-message",
    "treeShakeableImport": "@aziontech/webkit/chat-message-root",
+   "models": [
+    "editing"
+   ],
    "category": "ai",
    "structure": "composition",
    "props": [
@@ -5095,12 +5113,24 @@
      "default": "''",
      "required": "false",
      "doc": "Loading text shown while `status` is `pending`. Empty uses `ResponseLoading`'s own (`Generating a response`)."
+    },
+    {
+     "name": "editing",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:editing`)."
     }
    ],
    "events": [
     {
      "name": "retry",
      "payload": "(event: MouseEvent)",
+     "notes": ""
+    },
+    {
+     "name": "edit",
+     "payload": "(event: MouseEvent | KeyboardEvent, text: string)",
      "notes": ""
     }
    ],
@@ -5125,6 +5155,9 @@
    "kind": "subcomponent",
    "parent": "chat-message",
    "treeShakeableImport": "@aziontech/webkit/chat-message-actions",
+   "models": [
+    "feedback"
+   ],
    "surface": "app"
   },
   "chat-message-feedback": {
@@ -5946,7 +5979,7 @@
     {
      "name": "default",
      "scope": "{ index: number }",
-     "notes": "The active version. Rendered once; the owner switches its content by `index`."
+     "notes": "Optional. The active version. Rendered once; the owner switches its content by `index`. Left out, only the pager renders, as in `ChatMessage.Actions`' `#leading` slot."
     }
    ],
    "surface": "app",
@@ -30421,6 +30454,12 @@
    "kind": "composable",
    "treeShakeableImport": "@aziontech/webkit/use-shortcuts"
   },
+  "use-ai-chat-versions": {
+   "import": "@aziontech/webkit/use-ai-chat-versions",
+   "target": "./src/composables/use-ai-chat-versions/index.ts",
+   "kind": "composable",
+   "treeShakeableImport": "@aziontech/webkit/use-ai-chat-versions"
+  },
   "shortcuts-dialog": {
    "import": "@aziontech/webkit/shortcuts-dialog",
    "target": "./src/components/overlay/shortcuts-dialog/shortcuts-dialog.vue",
@@ -32845,7 +32884,7 @@
    "title": "Blocks/Ai/AiActionApproval",
    "source": "blocks/ai/ai-action-approval/ai-action-approval.vue",
    "surface": "app",
-   "summary": "A user-authorized action inside a generative AI conversation, from the messages of TanStack AI's `useChat`: the read-only call shows as a completed `ToolCall`, the explanation in `StreamingResponse`, and the call that needs approval as a `ToolApproval` card with its input in a `CodeBlock`. Deploy or Deny resolves the `useChat` interrupt; approved, the call runs under the card and the assistant reports what changed, with Copy and Retry after a failure. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `CopyButton`, `Button` and `PromptInput`. A page body for ConsoleLayout that fills its content region.",
+   "summary": "A user-authorized action inside a generative AI conversation, from the messages of TanStack AI's `useChat`: the read-only call shows as a completed `ToolCall`, the explanation in `StreamingResponse`, and the call that needs approval as a `ToolApproval` card with its input in a `CodeBlock`. Deploy or Deny resolves the `useChat` interrupt; approved, the call runs under the card and the assistant reports what changed, with Copy and Retry after a failure. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `Button` and `PromptInput`. A page body for ConsoleLayout that fills its content region.",
    "intents": [
     "ai action approval",
     "approve ai action",
@@ -32874,7 +32913,6 @@
     "ChatMessage",
     "CodeBlock",
     "Conversation",
-    "CopyButton",
     "ImageGallery",
     "PromptInputAttachButton",
     "PromptInputDictateButton",
@@ -32892,7 +32930,6 @@
     "@aziontech/webkit/chat-message",
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/conversation",
-    "@aziontech/webkit/copy-button",
     "@aziontech/webkit/image-gallery",
     "@aziontech/webkit/prompt-input-attach-button",
     "@aziontech/webkit/prompt-input-dictate-button",
@@ -33003,7 +33040,7 @@
    "title": "Blocks/Ai/AiChat",
    "source": "blocks/ai/ai-chat/ai-chat.vue",
    "surface": "app",
-   "summary": "The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a round menu button on a phone; no header bar, only round floating buttons on a phone and a quiet row on desktop; before the first message an `EmptyState` over vertical support prompts from `SuggestionGroup`, inside the log; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, the feedback thumbs, Regenerate, Read aloud and a `Sources` pill in the action row), followed by follow-up questions; a `PromptInput` pill floating at the foot of the column with the Attach \"+\" at the start, Dictate before the round button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout that fills its content region.",
+   "summary": "The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a round menu button on a phone; no header bar, only round floating buttons on a phone and a quiet row on desktop; before the first message an `EmptyState` over vertical support prompts from `SuggestionGroup`, inside the log; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pill floating at the foot of the column with the Attach \"+\" at the start, Dictate before the round button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout that fills its content region.",
    "intents": [
     "ai chat",
     "ai assistant",
@@ -33057,13 +33094,13 @@
     "CodeBlock",
     "Conversation",
     "ConversationHistory",
-    "CopyButton",
     "DrawerBody",
     "DrawerContent",
     "DrawerHeader",
     "Drawer",
     "DrawerTitle",
     "EmptyState",
+    "FeedbackReasonDialog",
     "FilePreview",
     "IconButton",
     "ImageGallery",
@@ -33074,6 +33111,7 @@
     "PromptQueue",
     "Reasoning",
     "Resizable",
+    "ResponseBranches",
     "Skeleton",
     "Sources",
     "StatusIndicator",
@@ -33081,8 +33119,10 @@
     "SubagentCard",
     "SuggestionGroup",
     "Tag",
+    "toast",
     "ToolApproval",
     "ToolCall",
+    "use-ai-chat-versions",
     "use-locale",
     "utils/ai-chat",
     "utils/ai-chat-questions",
@@ -33104,13 +33144,13 @@
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/conversation",
     "@aziontech/webkit/conversation-history",
-    "@aziontech/webkit/copy-button",
     "@aziontech/webkit/drawer-body",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-header",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/feedback-reason-dialog",
     "@aziontech/webkit/file-preview",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/image-gallery",
@@ -33121,6 +33161,7 @@
     "@aziontech/webkit/prompt-queue",
     "@aziontech/webkit/reasoning",
     "@aziontech/webkit/resizable",
+    "@aziontech/webkit/response-branches",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/sources",
     "@aziontech/webkit/status-indicator",
@@ -33128,8 +33169,10 @@
     "@aziontech/webkit/subagent-card",
     "@aziontech/webkit/suggestion-group",
     "@aziontech/webkit/tag",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/tool-approval",
     "@aziontech/webkit/tool-call",
+    "@aziontech/webkit/use-ai-chat-versions",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/ai-chat",
     "@aziontech/webkit/utils/ai-chat-questions",
@@ -33164,7 +33207,7 @@
    "title": "Blocks/Ai/AiChatDrawer",
    "source": "blocks/ai/ai-chat-drawer/ai-chat-drawer.vue",
    "surface": "app",
-   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with the reader's prompts in bubbles at the inline end and plain-text responses that think (`Reasoning`), stream (`StreamingResponse` with site-name citation chips) and carry Copy, feedback, Regenerate, Read aloud and a `Sources` pill, and a `PromptInput` pill floating at the foot with the disclaimer, the thread on the canvas. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
+   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with the reader's prompts in bubbles at the inline end and plain-text responses that think (`Reasoning`), stream (`StreamingResponse` with site-name citation chips) and carry Copy, Read aloud, Share and More (with the feedback thumbs, Try again and Branch in new chat) and a `Sources` pill on the same line, prompts with Copy and Edit, and `ResponseBranches` over their versions, and a `PromptInput` pill floating at the foot with the disclaimer, the thread on the canvas. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
    "intents": [
     "ai assistant drawer",
     "ask ai about this page",
@@ -33199,11 +33242,11 @@
     "ChatMessage",
     "CodeBlock",
     "Conversation",
-    "CopyButton",
     "DrawerContent",
     "Drawer",
     "DrawerTitle",
     "EmptyState",
+    "FeedbackReasonDialog",
     "FilePreview",
     "IconButton",
     "ImageGallery",
@@ -33216,6 +33259,7 @@
     "PromptInput",
     "PromptQueue",
     "Reasoning",
+    "ResponseBranches",
     "Skeleton",
     "Sources",
     "StatusIndicator",
@@ -33223,8 +33267,10 @@
     "SubagentCard",
     "SuggestionGroup",
     "Tag",
+    "toast",
     "ToolApproval",
     "ToolCall",
+    "use-ai-chat-versions",
     "use-locale",
     "utils/ai-chat",
     "utils/ai-chat-questions",
@@ -33241,11 +33287,11 @@
     "@aziontech/webkit/chat-message-root",
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/conversation",
-    "@aziontech/webkit/copy-button",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/feedback-reason-dialog",
     "@aziontech/webkit/file-preview",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/image-gallery",
@@ -33258,6 +33304,7 @@
     "@aziontech/webkit/prompt-input-root",
     "@aziontech/webkit/prompt-queue",
     "@aziontech/webkit/reasoning",
+    "@aziontech/webkit/response-branches",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/sources",
     "@aziontech/webkit/status-indicator",
@@ -33265,8 +33312,10 @@
     "@aziontech/webkit/subagent-card",
     "@aziontech/webkit/suggestion-group",
     "@aziontech/webkit/tag",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/tool-approval",
     "@aziontech/webkit/tool-call",
+    "@aziontech/webkit/use-ai-chat-versions",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/ai-chat",
     "@aziontech/webkit/utils/ai-chat-questions",

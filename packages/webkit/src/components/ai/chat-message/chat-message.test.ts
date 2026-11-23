@@ -143,10 +143,10 @@ describe('ChatMessage', () => {
     expect(() => render(ChatMessageActions)).toThrow(/within a ChatMessage/)
   })
 
-  it('records feedback once, disabling the other thumb and confirming', async () => {
+  it('fills the chosen thumb, hides the other, confirms only to screen readers, and clears on a second press', async () => {
     const value = ref<'up' | 'down' | null>(null)
     const loading = ref(false)
-    const { getByRole, getByTestId } = render(
+    const { getByRole, getByTestId, queryByRole } = render(
       defineComponent({
         setup: () => () =>
           h(ChatMessageFeedback, {
@@ -154,22 +154,29 @@ describe('ChatMessage', () => {
             loading: loading.value,
             'onUpdate:modelValue': (next: 'up' | 'down' | null) => {
               value.value = next
-              loading.value = true
+              loading.value = next !== null
             }
           })
       })
     )
-    const up = getByRole('button', { name: 'Helpful' })
-    const down = getByRole('button', { name: 'Not helpful' })
-    expect(up).toHaveAttribute('aria-pressed', 'false')
-    await userEvent.click(down)
+    expect(getByRole('button', { name: 'Good response' })).toHaveAttribute('aria-pressed', 'false')
+    await userEvent.click(getByRole('button', { name: 'Bad response' }))
     expect(value.value).toBe('down')
     expect(getByTestId('chat-message-feedback__status')).toHaveTextContent('Submitting feedback')
     loading.value = false
     await nextTick()
-    expect(getByRole('button', { name: 'Not helpful' })).toHaveAttribute('aria-pressed', 'true')
-    expect(getByRole('button', { name: 'Helpful' })).toBeDisabled()
-    expect(getByTestId('chat-message-feedback__status')).toHaveTextContent('Feedback submitted')
+    const down = getByRole('button', { name: 'Bad response' })
+    expect(down).toHaveAttribute('aria-pressed', 'true')
+    expect(down.querySelector('.az-thumbs-down-fill')).not.toBeNull()
+    expect(queryByRole('button', { name: 'Good response' })).toBeNull()
+    expect(getByTestId('chat-message-feedback__status')).toHaveTextContent(
+      'Thanks for your feedback'
+    )
+    expect(getByTestId('chat-message-feedback__status')).toHaveClass('sr-only')
+    await userEvent.click(down)
+    expect(value.value).toBeNull()
+    expect(getByRole('button', { name: 'Good response' })).toBeTruthy()
+    expect(getByTestId('chat-message-feedback__status')).toHaveTextContent('')
   })
 
   it('reads author names from the provider locale', () => {
@@ -238,7 +245,7 @@ describe('ChatMessage', () => {
                     ChatMessageActions,
                     { showReadAloud: true, ...props },
                     {
-                      default: () => h('button', { type: 'button' }, 'Copy'),
+                      default: () => h('button', { type: 'button' }, 'Export'),
                       trailing: () => h('button', { type: 'button' }, 'Sources')
                     }
                   )
@@ -248,14 +255,14 @@ describe('ChatMessage', () => {
       )
     }
 
-    it('places Read aloud after the actions and before the trailing slot', async () => {
+    it('places Read aloud before the app actions and the trailing slot', async () => {
       spySpeech()
       const { getByRole } = renderRow()
       await nextTick()
       const names = Array.from(
         getByRole('group', { name: 'Message actions' }).querySelectorAll('button')
       ).map((button) => button.getAttribute('aria-label') ?? button.textContent)
-      expect(names).toEqual(['Copy', 'Read aloud', 'Sources'])
+      expect(names).toEqual(['Read aloud', 'Export', 'Sources'])
     })
 
     it('speaks the given text, turns into Stop reading, and stops when pressed again', async () => {
@@ -287,8 +294,7 @@ describe('ChatMessage', () => {
       const { getByRole } = renderRow({}, () =>
         h(StreamingResponse, {
           content: 'Purge **now** [1].',
-          sources: [{ title: 'Purge', href: 'https://www.azion.com/' }],
-          anchor: 'a'
+          sources: [{ title: 'Purge', href: 'https://www.azion.com/' }]
         })
       )
       await nextTick()
@@ -317,6 +323,240 @@ describe('ChatMessage', () => {
       spySpeech()
       const { container } = renderRow()
       await nextTick()
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('built-in actions', () => {
+    afterEach(() => {
+      vi.restoreAllMocks()
+    })
+
+    function renderBuiltIn(width: number, props: Record<string, unknown> = {}) {
+      const feedback = ref<'up' | 'down' | null>(null)
+      const events: Array<[string, unknown]> = []
+      const view = render(
+        defineComponent({
+          setup: () => () =>
+            h('div', { style: `width: ${width}px` }, [
+              h(
+                ChatMessage,
+                { status: 'success' },
+                {
+                  default: () => 'Open Real-Time Purge.',
+                  actions: () =>
+                    h(
+                      ChatMessageActions,
+                      {
+                        copyable: true,
+                        showFeedback: true,
+                        shareable: true,
+                        retryable: true,
+                        branchable: true,
+                        feedback: feedback.value,
+                        'onUpdate:feedback': (next: 'up' | 'down' | null) =>
+                          (feedback.value = next),
+                        onShare: (event: MouseEvent) => events.push(['share', event]),
+                        onRetry: (event: Event) => events.push(['retry', event]),
+                        onBranch: (event: Event) => events.push(['branch', event]),
+                        ...props
+                      },
+                      { trailing: () => h('button', { type: 'button' }, 'Sources') }
+                    )
+                }
+              )
+            ])
+        })
+      )
+      return { ...view, feedback, events }
+    }
+
+    async function openMore(getByRole: (role: string, options: { name: string }) => HTMLElement) {
+      await vi.waitFor(() =>
+        expect(getByRole('button', { name: 'More actions' })).not.toBeDisabled()
+      )
+      await userEvent.click(getByRole('button', { name: 'More actions' }))
+    }
+
+    const namesIn = (root: HTMLElement) =>
+      Array.from(root.querySelectorAll('button')).map(
+        (button) => button.getAttribute('aria-label') ?? button.textContent?.trim()
+      )
+
+    it('lays the wide row out in order, on one line, with Branch in new chat in More', async () => {
+      const { getByRole, getByTestId } = renderBuiltIn(800)
+      const row = getByRole('group', { name: 'Message actions' })
+      await vi.waitFor(() => expect(row).not.toHaveAttribute('data-compact'))
+      expect(namesIn(row)).toEqual([
+        'Copy',
+        'Good response',
+        'Bad response',
+        'Share',
+        'Try again',
+        'More actions',
+        'Sources'
+      ])
+      expect(row).toHaveClass('flex-nowrap')
+      expect(getByTestId('chat-message-actions__trailing')).toContainElement(
+        getByRole('button', { name: 'Sources' })
+      )
+      await openMore(getByRole)
+      const items = await vi.waitFor(() => {
+        const found = Array.from(document.body.querySelectorAll('[role="menuitem"]'))
+        expect(found.length).toBeGreaterThan(0)
+        return found
+      })
+      expect(items.map((item) => item.textContent?.trim())).toEqual(['Branch in new chat'])
+    })
+
+    it('moves the thumbs and Try again into More when the row is narrow', async () => {
+      const { getByRole, feedback, events } = renderBuiltIn(360)
+      const row = getByRole('group', { name: 'Message actions' })
+      await vi.waitFor(() => expect(row).toHaveAttribute('data-compact'))
+      expect(namesIn(row)).toEqual(['Copy', 'Share', 'More actions', 'Sources'])
+      await openMore(getByRole)
+      const bad = await vi.waitFor(() => {
+        const item = Array.from(document.body.querySelectorAll('[role^="menuitem"]')).find((node) =>
+          node.textContent?.includes('Bad response')
+        )
+        expect(item).toBeTruthy()
+        return item as HTMLElement
+      })
+      const labels = Array.from(document.body.querySelectorAll('[role^="menuitem"]')).map((node) =>
+        node.textContent?.trim()
+      )
+      expect(labels).toEqual(['Good response', 'Bad response', 'Try again', 'Branch in new chat'])
+      await userEvent.click(bad)
+      expect(feedback.value).toBe('down')
+      await openMore(getByRole)
+      const retry = await vi.waitFor(() => {
+        const item = Array.from(document.body.querySelectorAll('[role^="menuitem"]')).find((node) =>
+          node.textContent?.includes('Try again')
+        )
+        expect(item).toBeTruthy()
+        return item as HTMLElement
+      })
+      await userEvent.click(retry)
+      expect(events.map(([name]) => name)).toEqual(['retry'])
+      expect(events[0]?.[1]).toBeInstanceOf(Event)
+    })
+
+    it('emits share and retry with the click, and locks Try again while disabled', async () => {
+      const view = renderBuiltIn(800)
+      await vi.waitFor(() =>
+        expect(view.getByRole('group', { name: 'Message actions' })).not.toHaveAttribute(
+          'data-compact'
+        )
+      )
+      await userEvent.click(view.getByRole('button', { name: 'Share' }))
+      await userEvent.click(view.getByRole('button', { name: 'Try again' }))
+      expect(view.events.map(([name]) => name)).toEqual(['share', 'retry'])
+      expect(view.events[0]?.[1]).toBeInstanceOf(MouseEvent)
+      view.unmount()
+      const locked = renderBuiltIn(800, { disabled: true })
+      await vi.waitFor(() =>
+        expect(locked.getByRole('group', { name: 'Message actions' })).not.toHaveAttribute(
+          'data-compact'
+        )
+      )
+      expect(locked.getByRole('button', { name: 'Try again' })).toBeDisabled()
+    })
+
+    it('copies the text of the message when given no copy text', async () => {
+      const write = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue(undefined)
+      const { getByRole } = renderBuiltIn(800)
+      await userEvent.click(getByRole('button', { name: 'Copy' }))
+      expect(write).toHaveBeenCalledWith('Open Real-Time Purge.')
+    })
+
+    it('rates from the row and clears on a second press', async () => {
+      const { getByRole, queryByRole, feedback } = renderBuiltIn(800)
+      await vi.waitFor(() => expect(getByRole('button', { name: 'Good response' })).toBeTruthy())
+      await userEvent.click(getByRole('button', { name: 'Good response' }))
+      expect(feedback.value).toBe('up')
+      expect(queryByRole('button', { name: 'Bad response' })).toBeNull()
+      await userEvent.click(getByRole('button', { name: 'Good response' }))
+      expect(feedback.value).toBeNull()
+    })
+
+    it('has no axe violations with every built-in action', async () => {
+      const { container, getByRole } = renderBuiltIn(800)
+      await vi.waitFor(() => expect(getByRole('button', { name: 'Share' })).toBeTruthy())
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('editing a prompt', () => {
+    function renderPrompt() {
+      const edits: Array<[Event, string]> = []
+      const view = render(
+        defineComponent({
+          setup: () => () =>
+            h(
+              ChatMessage,
+              {
+                from: 'user',
+                onEdit: (event: Event, text: string) => edits.push([event, text])
+              },
+              {
+                default: () => 'How do I purge one URL?',
+                actions: () => h(ChatMessageActions, { copyable: true, editable: true })
+              }
+            )
+        })
+      )
+      return { ...view, edits }
+    }
+
+    it('shows Copy and Edit under the bubble, transparent until hover or focus', () => {
+      const { getByRole, getByTestId } = renderPrompt()
+      const row = getByRole('group', { name: 'Message actions' })
+      expect(
+        Array.from(row.querySelectorAll('button')).map((b) => b.getAttribute('aria-label'))
+      ).toEqual(['Copy', 'Edit message'])
+      const actions = getByTestId('chat-message__actions')
+      expect(actions).toHaveAttribute('data-from', 'user')
+      expect(actions).toHaveClass('data-[from=user]:pointer-coarse:opacity-100')
+    })
+
+    it('opens the bubble as a field, sends the trimmed text and returns focus to Edit', async () => {
+      const { getByRole, getByTestId, edits, queryByTestId } = renderPrompt()
+      const editButton = getByRole('button', { name: 'Edit message' })
+      await userEvent.click(editButton)
+      const field = getByRole('textbox', { name: 'Edit your message' }) as HTMLTextAreaElement
+      expect(field.value).toBe('How do I purge one URL?')
+      await vi.waitFor(() => expect(document.activeElement).toBe(field))
+      expect(getByTestId('chat-message__actions')).not.toBeVisible()
+      await userEvent.clear(field)
+      expect(getByRole('button', { name: 'Send' })).toBeDisabled()
+      await userEvent.type(field, '  Purge a wildcard  ')
+      await userEvent.click(getByRole('button', { name: 'Send' }))
+      expect(edits).toHaveLength(1)
+      expect(edits[0]?.[0]).toBeInstanceOf(MouseEvent)
+      expect(edits[0]?.[1]).toBe('Purge a wildcard')
+      expect(queryByTestId('chat-message__editor')).toBeNull()
+      await vi.waitFor(() =>
+        expect(document.activeElement).toBe(getByRole('button', { name: 'Edit message' }))
+      )
+    })
+
+    it('cancels on Escape and sends on Ctrl+Enter', async () => {
+      const { getByRole, queryByTestId, edits } = renderPrompt()
+      await userEvent.click(getByRole('button', { name: 'Edit message' }))
+      await userEvent.keyboard('{Escape}')
+      expect(queryByTestId('chat-message__editor')).toBeNull()
+      expect(edits).toHaveLength(0)
+      await userEvent.click(getByRole('button', { name: 'Edit message' }))
+      const field = getByRole('textbox', { name: 'Edit your message' })
+      await userEvent.type(field, ' now')
+      await userEvent.keyboard('{Control>}{Enter}{/Control}')
+      expect(edits[0]?.[0]).toBeInstanceOf(KeyboardEvent)
+      expect(edits[0]?.[1]).toBe('How do I purge one URL? now')
+    })
+
+    it('has no axe violations while editing', async () => {
+      const { container, getByRole } = renderPrompt()
+      await userEvent.click(getByRole('button', { name: 'Edit message' }))
       await expectNoA11yViolations(container)
     })
   })

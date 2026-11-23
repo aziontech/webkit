@@ -5,15 +5,19 @@
     type ChatMessageFeedbackValue,
     type ChatMessageStatus
   } from '@aziontech/webkit/chat-message'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import FeedbackReasonDialog, {
+    type FeedbackReasonDialogPayload
+  } from '@aziontech/webkit/feedback-reason-dialog'
   import McpAppFrame, {
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
   import Reasoning from '@aziontech/webkit/reasoning'
+  import ResponseBranches from '@aziontech/webkit/response-branches'
   import Sources from '@aziontech/webkit/sources'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import { toast } from '@aziontech/webkit/toast'
+  import type { UseAiChatVersionsReturn } from '@aziontech/webkit/use-ai-chat-versions'
   import {
     activitiesBefore,
     type AiChatMessage,
@@ -25,6 +29,7 @@
     segmentsOf,
     textOf
   } from '@aziontech/webkit/utils/ai-chat'
+  import { computed, ref } from 'vue'
 
   import AiChatMediaSegment from './ai-chat-media-segment.vue'
   import AiChatToolSegment from './ai-chat-tool-segment.vue'
@@ -39,7 +44,7 @@
     busy: boolean
     ready: boolean
     stopped: boolean
-    rating: ChatMessageFeedbackValue | null
+    versions: UseAiChatVersionsReturn
     questions?: AiChatQuestion[]
     askOf: (call: AiChatToolCallPart) => AiChatQuestion
     editOf: (call: AiChatToolCallPart) => string
@@ -47,8 +52,12 @@
   }>()
 
   const emit = defineEmits<{
-    retry: [event: MouseEvent]
-    rate: [value: ChatMessageFeedbackValue | null]
+    retry: [event: MouseEvent | KeyboardEvent]
+    rate: [value: ChatMessageFeedbackValue | null, reason?: FeedbackReasonDialogPayload]
+    share: [event: MouseEvent]
+    branch: [event: MouseEvent | KeyboardEvent]
+    'edit-prompt': [event: MouseEvent | KeyboardEvent, text: string]
+    'version-change': [messages: AiChatMessage[]]
     'answer-tool': [event: Event, call: AiChatToolCallPart, value: string]
     edit: [call: AiChatToolCallPart, text: string]
     approve: [event: MouseEvent, call: AiChatToolCallPart, text: string]
@@ -63,6 +72,38 @@
   }>()
 
   const answers = defineModel<Record<string, string>>('answers', { required: true })
+
+  const reasonOpen = ref(false)
+  const rating = ref<ChatMessageFeedbackValue | null>(null)
+  const versionsOfTurn = computed(() => props.versions.versionsOf(props.turn))
+
+  function regenerate(event: MouseEvent | KeyboardEvent) {
+    props.versions.fork(props.turn)
+    emit('retry', event)
+  }
+
+  function editPrompt(event: MouseEvent | KeyboardEvent, text: string) {
+    props.versions.fork(props.turn)
+    emit('edit-prompt', event, text)
+  }
+
+  function page(index: number) {
+    const next = props.versions.select(props.turn, index)
+    if (next) emit('version-change', next)
+  }
+
+  function rate(value: ChatMessageFeedbackValue | null) {
+    rating.value = value
+    emit('rate', value)
+    if (value === 'up') toast('Thanks for your feedback')
+    if (value === 'down') reasonOpen.value = true
+  }
+
+  function sendReason(reason: FeedbackReasonDialogPayload) {
+    reasonOpen.value = false
+    emit('rate', 'down', reason)
+    toast('Thanks for your feedback')
+  }
 
   const MEDIA_TYPES = new Set(['gallery', 'audio', 'video', 'document', 'subagent', 'structured'])
   const isMedia = (segment: AiChatSegment) => MEDIA_TYPES.has(segment.type)
@@ -90,6 +131,7 @@
     :timestamp="time"
     :error-message="status === 'error' ? failure : undefined"
     @retry="emit('retry', $event)"
+    @edit="editPrompt"
   >
     <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
     <template
@@ -116,7 +158,6 @@
         :content="segment.content"
         :streaming="status === 'streaming'"
         :sources="turn.metadata?.sources ?? []"
-        :anchor="`answer-${turn.id}`"
       />
       <AiChatToolSegment
         v-else-if="segment.type === 'tool'"
@@ -154,37 +195,65 @@
       </p>
     </template>
     <template
-      v-if="turn.role === 'assistant'"
+      v-if="turn.role === 'user'"
       #actions
     >
       <ChatMessage.Actions
-        show-read-aloud
-        :read-aloud-text="textOf(turn)"
+        copyable
+        editable
+        :copy-text="textOf(turn, '\n')"
+        :disabled="!ready"
       >
-        <CopyButton
-          size="large"
-          :value="textOf(turn)"
-        />
-        <ChatMessage.Feedback
-          :model-value="rating"
-          @update:model-value="(value) => emit('rate', value)"
-        />
-        <IconButton
-          icon="az az-refresh"
-          aria-label="Regenerate response"
-          variant="ghost"
-          size="large"
-          :disabled="!ready"
-          @click="emit('retry', $event)"
-        />
+        <template
+          v-if="versionsOfTurn"
+          #leading
+        >
+          <ResponseBranches
+            :model-value="versionsOfTurn.index"
+            :count="versionsOfTurn.count"
+            aria-label="Prompt versions"
+            :disabled="!ready"
+            @update:model-value="page"
+          />
+        </template>
+      </ChatMessage.Actions>
+    </template>
+    <template
+      v-else
+      #actions
+    >
+      <ChatMessage.Actions
+        copyable
+        show-feedback
+        show-read-aloud
+        shareable
+        retryable
+        branchable
+        :copy-text="textOf(turn)"
+        :read-aloud-text="textOf(turn)"
+        :feedback="rating"
+        :disabled="!ready"
+        @update:feedback="rate"
+        @share="emit('share', $event)"
+        @retry="regenerate"
+        @branch="emit('branch', $event)"
+      >
+        <template
+          v-if="versionsOfTurn"
+          #leading
+        >
+          <ResponseBranches
+            :model-value="versionsOfTurn.index"
+            :count="versionsOfTurn.count"
+            :disabled="!ready"
+            @update:model-value="page"
+          />
+        </template>
         <template
           v-if="!stopped && turn.metadata?.sources?.length"
           #trailing
         >
-          <Sources
-            :items="turn.metadata.sources"
-            :anchor="`answer-${turn.id}`"
-          />
+          <Sources :items="turn.metadata.sources" />
         </template>
       </ChatMessage.Actions>
     </template>
@@ -207,4 +276,9 @@
       @skip="emit('skip', question)"
     />
   </ChatMessage>
+  <FeedbackReasonDialog
+    v-if="turn.role === 'assistant'"
+    v-model:open="reasonOpen"
+    @submit="(_event, reason) => sendReason(reason)"
+  />
 </template>

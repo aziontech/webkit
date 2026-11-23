@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import { computed, inject, onMounted, provide, ref, useAttrs, watch } from 'vue'
+  import { computed, inject, nextTick, onMounted, provide, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
+  import Textarea from '../../input/textarea/textarea.vue'
   import { ConversationInjectionKey } from '../conversation/injection-key'
   import ResponseLoading from '../response-loading/response-loading.vue'
   import type { ChatMessageFrom, ChatMessageStatus } from './injection-key'
@@ -47,7 +48,12 @@
   const emit = defineEmits<{
     /** The reader asked to generate the failed response again (Try again). */
     retry: [event: MouseEvent]
+    /** The reader sent an edited prompt: `text` is the new prompt, trimmed. Hand it to `setMessages` and `sendMessage`. */
+    edit: [event: MouseEvent | KeyboardEvent, text: string]
   }>()
+
+  /** A user message is open for editing: the bubble turns into a field with Cancel and Send. Supports v-model:editing. */
+  const editing = defineModel<boolean>('editing', { default: false })
 
   const slots = defineSlots<{
     /** The message content: text, a `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`. */
@@ -74,6 +80,10 @@
   const showActions = () => props.status === 'success' && Boolean(slots.actions)
 
   const bodyEl = ref<HTMLElement | null>(null)
+  const editorEl = ref<InstanceType<typeof Textarea> | null>(null)
+  const draft = ref<string>('')
+  const isEditing = computed<boolean>(() => editing.value && props.from === 'user')
+  let returnFocus: HTMLElement | null = null
 
   function announce(): void {
     if (!conversation || props.from === 'user') return
@@ -97,15 +107,63 @@
       announce()
   })
 
+  watch(
+    isEditing,
+    async (now) => {
+      if (!now) return
+      draft.value = contentText(bodyEl.value)
+      const active = globalThis.document?.activeElement
+      returnFocus = active instanceof HTMLElement ? active : null
+      await nextTick()
+      editorEl.value?.focus()
+    },
+    { flush: 'pre' }
+  )
+
+  async function closeEditor(): Promise<void> {
+    editing.value = false
+    await nextTick()
+    if (returnFocus?.isConnected) returnFocus.focus()
+    returnFocus = null
+  }
+
+  function send(event: MouseEvent | KeyboardEvent): void {
+    const text = draft.value.trim()
+    if (!text) return
+    emit('edit', event, text)
+    void closeEditor()
+  }
+
+  function onEditorKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      event.preventDefault()
+      void closeEditor()
+    } else if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault()
+      send(event)
+    }
+  }
+
   provide(ChatMessageInjectionKey, {
     from: computed(() => props.from),
     status: computed(() => props.status),
+    editing: isEditing,
+    edit: () => {
+      if (props.from === 'user') editing.value = true
+    },
     contentText: () => contentText(bodyEl.value)
   })
 
   const COLUMN_CLASS =
     'flex min-w-0 flex-col gap-(--spacing-xs) ' +
-    'data-[from=assistant]:flex-1 data-[from=user]:max-w-[80%] data-[from=user]:data-[alignment=split]:items-end data-[from=system]:max-w-full data-[from=system]:items-center'
+    'data-[from=assistant]:flex-1 data-[from=user]:max-w-[80%] data-[from=user]:data-[alignment=split]:items-end data-[from=system]:max-w-full data-[from=system]:items-center ' +
+    'data-[editing]:w-full data-[from=user]:data-[editing]:max-w-full'
+
+  const ACTIONS_CLASS =
+    'flex min-w-0 items-center data-[from=assistant]:-ms-(--spacing-sm) ' +
+    'data-[from=user]:opacity-0 data-[from=user]:transition-opacity data-[from=user]:duration-fast-02 data-[from=user]:ease-productive-entrance ' +
+    'data-[from=user]:motion-reduce:transition-none data-[from=user]:group-hover/message:opacity-100 data-[from=user]:group-focus-within/message:opacity-100 ' +
+    'data-[from=user]:pointer-coarse:opacity-100'
 
   const CONTENT_CLASS =
     'flex min-w-0 flex-col gap-(--spacing-md) text-body-lg text-(--text-default) break-words ' +
@@ -129,6 +187,7 @@
     <div
       :data-from="from"
       :data-alignment="alignment"
+      :data-editing="isEditing || null"
       :class="COLUMN_CLASS"
     >
       <p
@@ -144,6 +203,39 @@
         :delay="0"
         :data-testid="`${testId}__loading`"
       />
+      <div
+        v-else-if="isEditing"
+        :data-testid="`${testId}__editor`"
+        class="flex w-full min-w-0 flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-selected) p-(--spacing-sm)"
+      >
+        <Textarea
+          ref="editorEl"
+          v-model="draft"
+          auto-resize
+          :min-rows="1"
+          :max-rows="12"
+          :aria-label="t('chatMessage.editField')"
+          :data-testid="`${testId}__field`"
+          @keydown="onEditorKeydown"
+        />
+        <div class="flex items-center justify-end gap-(--spacing-xs)">
+          <Button
+            :label="t('chatMessage.cancel')"
+            variant="outline"
+            size="medium"
+            :data-testid="`${testId}__cancel`"
+            @click="closeEditor"
+          />
+          <Button
+            :label="t('chatMessage.send')"
+            variant="primary"
+            size="medium"
+            :disabled="!draft.trim()"
+            :data-testid="`${testId}__send`"
+            @click="send"
+          />
+        </div>
+      </div>
       <div
         v-else
         ref="bodyEl"
@@ -177,8 +269,10 @@
       </div>
       <div
         v-if="showActions()"
+        v-show="!isEditing"
         :data-testid="`${testId}__actions`"
-        class="-ms-(--spacing-sm) flex min-w-0 items-center"
+        :data-from="from"
+        :class="ACTIONS_CLASS"
       >
         <slot name="actions" />
       </div>

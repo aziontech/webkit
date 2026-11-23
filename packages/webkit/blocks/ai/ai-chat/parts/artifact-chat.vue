@@ -5,7 +5,6 @@
   import ChatMessage, { type ChatMessageFeedbackValue } from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
@@ -154,15 +153,13 @@
                   #actions
                 >
                   <ChatMessage.Actions
+                    v-model:feedback="ratings[turn.id]"
+                    copyable
+                    show-feedback
                     show-read-aloud
+                    :copy-text="textOf(turn)"
                     :read-aloud-text="textOf(turn)"
-                  >
-                    <CopyButton
-                      size="large"
-                      :value="textOf(turn)"
-                    />
-                    <ChatMessage.Feedback v-model="ratings[turn.id]" />
-                  </ChatMessage.Actions>
+                  />
                 </template>
               </ChatMessage>
               <SuggestionGroup

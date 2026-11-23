@@ -1,11 +1,11 @@
 # AiChat (`ai/ai-chat`)
 
-> The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a round menu button on a phone; no header bar, only round floating buttons on a phone and a quiet row on desktop; before the first message an `EmptyState` over vertical support prompts from `SuggestionGroup`, inside the log; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, the feedback thumbs, Regenerate, Read aloud and a `Sources` pill in the action row), followed by follow-up questions; a `PromptInput` pill floating at the foot of the column with the Attach "+" at the start, Dictate before the round button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout that fills its content region.
+> The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a round menu button on a phone; no header bar, only round floating buttons on a phone and a quiet row on desktop; before the first message an `EmptyState` over vertical support prompts from `SuggestionGroup`, inside the log; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pill floating at the foot of the column with the Attach "+" at the start, Dictate before the round button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout that fills its content region.
 
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), [CopyButton](../../components/copy-button.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [McpAppFrame](../../components/mcp-app-frame.md), `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [McpAppFrame](../../components/mcp-app-frame.md), `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -48,7 +48,7 @@ Fills the page and is the only part that scrolls, in a centered reading column; 
 
 ### D. Prompt — `ChatMessage`, `ImageGallery`, `FilePreview`
 
-The reader's prompt at the inline end in a filled bubble with the stacked composer's radius, no avatar, no visible name or time (both stay in its accessible name; the time is its tooltip). The files they attached draw under the text the way media draws in a response (section L): images in an `ImageGallery`, a document in a `FilePreview`, audio and video in their players.
+The reader's prompt at the inline end in a filled bubble with the stacked composer's radius, no avatar, no visible name or time (both stay in its accessible name; the time is its tooltip). Under it, Copy and Edit show on hover or focus (always on a touch screen). Edit turns the bubble into a field with Cancel and Send; Send emits `edit`, and once the app has sent the new prompt the bubble carries a `ResponseBranches` pager (`‹ 2/2 ›`) to page back to the earlier prompt and its answers. The files they attached draw under the text the way media draws in a response (section L): images in an `ImageGallery`, a document in a `FilePreview`, audio and video in their players.
 
 ### E. Response — `ChatMessage`, `Reasoning`, `StreamingResponse`
 
@@ -58,9 +58,9 @@ The assistant's response as plain text across the reading column, in the larger 
 
 At the end of the action row of a complete response that used documents: a pill with up to three overlapping site marks, named by the count, that opens the list under the row; a citation opens it too. Item n is citation [n].
 
-### G. Response actions — `ChatMessage`, `CopyButton`, `IconButton`
+### G. Response actions — `ChatMessage`, `ResponseBranches`, `FeedbackReasonDialog`
 
-`ChatMessage.Actions` under a complete response, always visible: Copy (`CopyButton`), `ChatMessage.Feedback` with Helpful and Not helpful, Regenerate (`IconButton`, disabled while another response is generating), Read aloud (`show-read-aloud`, hidden where the browser has no speech synthesis), then the Sources pill in `#trailing`. Icons draw at 16px inside a 40px target.
+`ChatMessage.Actions` under a complete response, always visible and always one line, with its built-in actions in ChatGPT's order: Copy, Good response, Bad response, Read aloud (hidden where the browser has no speech synthesis), Share, Try again (disabled while another response is generating), More (Branch in new chat), then the Sources pill in `#trailing`. When the row is narrower than 480px (a phone, the drawer) it keeps Copy, Read aloud, Share and More, and More also holds Good response, Bad response and Try again. A rating fills its thumb and hides the other; pressing it again clears it. Good response raises the toast Thanks for your feedback; Bad response opens `FeedbackReasonDialog`, and sending it emits `feedback` again with the reason, then the toast. After Try again the row starts with a `ResponseBranches` pager (`‹ 2/2 ›`) over the versions of that response. Icons draw at 16px inside a 40px target.
 
 ### H. Follow-up questions — `SuggestionGroup`
 
@@ -138,22 +138,26 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 
 The open conversation of the history is `v-model:activeKey` (`string | null`): picking a row sets it, New chat clears it; load that conversation's messages when it changes.
 
-| Event              | Payload                     | When                                                                                                                                              |
-| ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `send`             | `(event, content)`          | The composer, a starter prompt or a follow-up: call `sendMessage(content)`. `content` is the text, or with attachments `{ content: parts }`.      |
-| `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
-| `voice-start`      | `(event)`                   | Start voice conversation on an empty composer: open the app's audio session (set `voice` to `false` when there is none).                          |
-| `retry`            | `(event, message)`          | Try again or Regenerate response: call `reload()`.                                                                                                |
-| `new-chat`         | `(event)`                   | New chat: call `clear()`.                                                                                                                         |
-| `feedback`         | `({ message, value })`      | The reader rated a response.                                                                                                                      |
-| `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
-| `remove-queued`    | `(event, item)`             | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                         |
-| `app-message`      | `(message, part, reply)`    | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                       |
-| `load-more`        | `(event)`                   | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                 |
-| `deny`             | `(event, call)`             | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
-| `answer-tool`      | `(event, answer)`           | The reader answered an `answerable` tool: call `addToolResult(answer)` (`{ toolCallId, tool, output }`).                                          |
-| `answer-interrupt` | `(event, interrupt, value)` | The reader answered an unbound interrupt: send `value` to whatever owns it.                                                                       |
-| `retry-interrupts` | `(event)`                   | Retry on the alert of `interruptErrors`: call `retryInterrupts()`.                                                                                |
+| Event              | Payload                     | When                                                                                                                                                                |
+| ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `send`             | `(event, content)`          | The composer, a starter prompt or a follow-up: call `sendMessage(content)`. `content` is the text, or with attachments `{ content: parts }`.                        |
+| `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                                               |
+| `voice-start`      | `(event)`                   | Start voice conversation on an empty composer: open the app's audio session (set `voice` to `false` when there is none).                                            |
+| `retry`            | `(event, message)`          | Try again: call `reload()`. The block keeps the earlier answer as a version.                                                                                        |
+| `edit`             | `(event, message, text)`    | The reader sent an edited prompt: call `setMessages` with the messages before `message`, then `sendMessage(text)`. The block keeps the earlier prompt as a version. |
+| `version-change`   | `(messages)`                | The reader paged to another version of a prompt or an answer: call `setMessages(messages)`.                                                                         |
+| `share`            | `(event, message)`          | Share on a response: make a link to it.                                                                                                                             |
+| `branch`           | `(event, message)`          | Branch in new chat: start a new chat with the messages up to `message`.                                                                                             |
+| `new-chat`         | `(event)`                   | New chat: call `clear()`.                                                                                                                                           |
+| `feedback`         | `(value, message, reason?)` | The reader rated a response (`value` is `null` when cleared); after Bad response a second `feedback` carries `reason` (`{ reason, details }`) from the dialog.      |
+| `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt.                   |
+| `remove-queued`    | `(event, item)`             | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                                           |
+| `app-message`      | `(message, part, reply)`    | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                                         |
+| `load-more`        | `(event)`                   | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                                   |
+| `deny`             | `(event, call)`             | Deny on an approval card; the block already resolved the matching interrupt.                                                                                        |
+| `answer-tool`      | `(event, answer)`           | The reader answered an `answerable` tool: call `addToolResult(answer)` (`{ toolCallId, tool, output }`).                                                            |
+| `answer-interrupt` | `(event, interrupt, value)` | The reader answered an unbound interrupt: send `value` to whatever owns it.                                                                                         |
+| `retry-interrupts` | `(event)`                   | Retry on the alert of `interruptErrors`: call `retryInterrupts()`.                                                                                                  |
 
 To go live, install `@tanstack/ai`, `@tanstack/ai-vue` and the adapter of your model (`@tanstack/ai-anthropic`, `@tanstack/ai-openai`…), add a server route that streams the model, and bind `useChat` to the block:
 
@@ -190,6 +194,7 @@ export async function POST(request: Request) {
     retryInterrupts,
     stop,
     reload,
+    setMessages,
     clear,
     cancelQueued,
     loadOlderMessages
@@ -197,6 +202,11 @@ export async function POST(request: Request) {
     connection: fetchServerSentEvents('/api/chat'),
     threadId: 'assistant'
   })
+
+  function edit(message, text) {
+    setMessages(messages.value.slice(0, messages.value.findIndex((entry) => entry.id === message.id)))
+    sendMessage(text)
+  }
 </script>
 
 <template>
@@ -220,6 +230,8 @@ export async function POST(request: Request) {
     @load-more="loadOlderMessages()"
     @stop="stop()"
     @retry="reload()"
+    @edit="(_event, message, text) => edit(message, text)"
+    @version-change="(next) => setMessages(next)"
     @new-chat="clear()"
   />
 </template>
@@ -255,7 +267,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - **Loading:** `Generating a response` (built in); `Loading <what>` when fetching data.
 - **Error:** what happened, in one sentence, e.g. "The connection was interrupted before the response finished.", with Try again.
 - **Stopped:** "You stopped this response."
-- **Feedback:** Helpful, Not helpful, Feedback submitted (built in).
+- **Feedback:** Good response, Bad response (built in); the toast says Thanks for your feedback.
 - Follow `skills/webkit-microcopy`: sentence case, "select" not "click", "response" not "answer", no "please".
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 - **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.
@@ -266,7 +278,8 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - Each message is an `article` named by author and time; the author and time are visually hidden, never removed.
 - Responses are `aria-busy` while loading or streaming; the caret is hidden.
 - The composer is named Prompt, described by its counter and disclaimer; Enter submits and an IME composition never does.
-- Feedback thumbs are toggle buttons with `aria-pressed`, and the submitted state is a status message.
+- Feedback thumbs are toggle buttons with `aria-pressed`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
+- A prompt's Copy and Edit are transparent until hover or focus, never removed from the tab order; the editor's field is named Edit your message, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
 - Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer.
 - The phone history is a `Drawer` named Conversation history that returns focus to the menu button; the desktop toggle names what it does and carries `aria-expanded`.
 - Alignment never carries meaning alone: every message's accessible name says who wrote it.
@@ -315,6 +328,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   import type { ChatMessageFeedbackValue, ChatMessageStatus } from '@aziontech/webkit/chat-message'
   import ChatMessage from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
+  import type { FeedbackReasonDialogPayload } from '@aziontech/webkit/feedback-reason-dialog'
   import {
     type McpAppFrameMessage,
     type McpAppFrameResource
@@ -322,6 +336,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+  import { useAiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import {
     type AiChatConnection,
@@ -358,14 +373,6 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   import AiChatStart from './parts/ai-chat-start.vue'
   import AiChatTurn from './parts/ai-chat-turn.vue'
   import { sampleSuggestions } from './sample'
-
-  /** A rating the reader gave a response. */
-  export interface AiChatFeedback {
-    /** The rated response. */
-    message: AiChatMessage
-    /** Helpful, not helpful, or cleared. */
-    value: ChatMessageFeedbackValue | null
-  }
 
   export interface AiChatProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
@@ -440,9 +447,17 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     stop: [event: MouseEvent]
     'voice-start': [event: MouseEvent]
-    retry: [event: MouseEvent, message: AiChatMessage]
+    retry: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    share: [event: MouseEvent, message: AiChatMessage]
+    branch: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    edit: [event: MouseEvent | KeyboardEvent, message: AiChatMessage, text: string]
+    'version-change': [messages: AiChatMessage[]]
     'new-chat': [event: MouseEvent]
-    feedback: [feedback: AiChatFeedback]
+    feedback: [
+      value: ChatMessageFeedbackValue | null,
+      message: AiChatMessage,
+      reason?: FeedbackReasonDialogPayload
+    ]
     approve: [event: MouseEvent, call: AiChatToolCallPart, input?: unknown]
     deny: [event: MouseEvent, call: AiChatToolCallPart]
     'remove-queued': [event: MouseEvent, item: AiChatQueuedMessage]
@@ -460,11 +475,11 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   const activeKey = defineModel<string | null>('activeKey', { default: null })
 
   const { formatDate } = useLocale()
+  const versions = useAiChatVersions(() => props.messages)
 
   const prompt = ref('')
   const files = ref<PromptInputFile[]>([])
   const composerEl = ref<InstanceType<typeof AiChatComposer> | null>(null)
-  const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
   const stoppedIds = ref<Set<string>>(new Set())
   const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
@@ -606,13 +621,9 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     settled.value = {}
     routed.value = {}
     toolAnswers.value = {}
+    versions.clear()
     activeKey.value = null
     emit('new-chat', event)
-  }
-
-  function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null) {
-    ratings.value[message.id] = value
-    emit('feedback', { message, value })
   }
 
   function removeQueued(event: MouseEvent, id: string) {
@@ -683,13 +694,17 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
           :busy="loading && turn === last"
           :ready="state === 'ready'"
           :stopped="stopped(turn)"
-          :rating="ratings[turn.id] ?? null"
           :questions="questions[turn.id]"
           :ask-of="askOf"
           :edit-of="editOf"
           :resolve-app-url="resolveAppUrl"
+          :versions="versions"
           @retry="emit('retry', $event, turn)"
-          @rate="(value) => rate(turn, value)"
+          @rate="(value, reason) => emit('feedback', value, turn, reason)"
+          @share="(event) => emit('share', event, turn)"
+          @branch="(event) => emit('branch', event, turn)"
+          @edit-prompt="(event, text) => emit('edit', event, turn, text)"
+          @version-change="(next) => emit('version-change', next)"
           @answer-tool="answerTool"
           @edit="(call, text) => (edits[call.id] = text)"
           @approve="approve"
@@ -1601,15 +1616,19 @@ export const sampleHistory: ConversationHistoryItem[] = [
     type ChatMessageFeedbackValue,
     type ChatMessageStatus
   } from '@aziontech/webkit/chat-message'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import FeedbackReasonDialog, {
+    type FeedbackReasonDialogPayload
+  } from '@aziontech/webkit/feedback-reason-dialog'
   import McpAppFrame, {
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
   import Reasoning from '@aziontech/webkit/reasoning'
+  import ResponseBranches from '@aziontech/webkit/response-branches'
   import Sources from '@aziontech/webkit/sources'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import { toast } from '@aziontech/webkit/toast'
+  import type { UseAiChatVersionsReturn } from '@aziontech/webkit/use-ai-chat-versions'
   import {
     activitiesBefore,
     type AiChatMessage,
@@ -1621,6 +1640,7 @@ export const sampleHistory: ConversationHistoryItem[] = [
     segmentsOf,
     textOf
   } from '@aziontech/webkit/utils/ai-chat'
+  import { computed, ref } from 'vue'
 
   import AiChatMediaSegment from './ai-chat-media-segment.vue'
   import AiChatToolSegment from './ai-chat-tool-segment.vue'
@@ -1635,7 +1655,7 @@ export const sampleHistory: ConversationHistoryItem[] = [
     busy: boolean
     ready: boolean
     stopped: boolean
-    rating: ChatMessageFeedbackValue | null
+    versions: UseAiChatVersionsReturn
     questions?: AiChatQuestion[]
     askOf: (call: AiChatToolCallPart) => AiChatQuestion
     editOf: (call: AiChatToolCallPart) => string
@@ -1643,8 +1663,12 @@ export const sampleHistory: ConversationHistoryItem[] = [
   }>()
 
   const emit = defineEmits<{
-    retry: [event: MouseEvent]
-    rate: [value: ChatMessageFeedbackValue | null]
+    retry: [event: MouseEvent | KeyboardEvent]
+    rate: [value: ChatMessageFeedbackValue | null, reason?: FeedbackReasonDialogPayload]
+    share: [event: MouseEvent]
+    branch: [event: MouseEvent | KeyboardEvent]
+    'edit-prompt': [event: MouseEvent | KeyboardEvent, text: string]
+    'version-change': [messages: AiChatMessage[]]
     'answer-tool': [event: Event, call: AiChatToolCallPart, value: string]
     edit: [call: AiChatToolCallPart, text: string]
     approve: [event: MouseEvent, call: AiChatToolCallPart, text: string]
@@ -1659,6 +1683,38 @@ export const sampleHistory: ConversationHistoryItem[] = [
   }>()
 
   const answers = defineModel<Record<string, string>>('answers', { required: true })
+
+  const reasonOpen = ref(false)
+  const rating = ref<ChatMessageFeedbackValue | null>(null)
+  const versionsOfTurn = computed(() => props.versions.versionsOf(props.turn))
+
+  function regenerate(event: MouseEvent | KeyboardEvent) {
+    props.versions.fork(props.turn)
+    emit('retry', event)
+  }
+
+  function editPrompt(event: MouseEvent | KeyboardEvent, text: string) {
+    props.versions.fork(props.turn)
+    emit('edit-prompt', event, text)
+  }
+
+  function page(index: number) {
+    const next = props.versions.select(props.turn, index)
+    if (next) emit('version-change', next)
+  }
+
+  function rate(value: ChatMessageFeedbackValue | null) {
+    rating.value = value
+    emit('rate', value)
+    if (value === 'up') toast('Thanks for your feedback')
+    if (value === 'down') reasonOpen.value = true
+  }
+
+  function sendReason(reason: FeedbackReasonDialogPayload) {
+    reasonOpen.value = false
+    emit('rate', 'down', reason)
+    toast('Thanks for your feedback')
+  }
 
   const MEDIA_TYPES = new Set(['gallery', 'audio', 'video', 'document', 'subagent', 'structured'])
   const isMedia = (segment: AiChatSegment) => MEDIA_TYPES.has(segment.type)
@@ -1686,6 +1742,7 @@ export const sampleHistory: ConversationHistoryItem[] = [
     :timestamp="time"
     :error-message="status === 'error' ? failure : undefined"
     @retry="emit('retry', $event)"
+    @edit="editPrompt"
   >
     <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
     <template
@@ -1712,7 +1769,6 @@ export const sampleHistory: ConversationHistoryItem[] = [
         :content="segment.content"
         :streaming="status === 'streaming'"
         :sources="turn.metadata?.sources ?? []"
-        :anchor="`answer-${turn.id}`"
       />
       <AiChatToolSegment
         v-else-if="segment.type === 'tool'"
@@ -1750,37 +1806,65 @@ export const sampleHistory: ConversationHistoryItem[] = [
       </p>
     </template>
     <template
-      v-if="turn.role === 'assistant'"
+      v-if="turn.role === 'user'"
       #actions
     >
       <ChatMessage.Actions
-        show-read-aloud
-        :read-aloud-text="textOf(turn)"
+        copyable
+        editable
+        :copy-text="textOf(turn, '\n')"
+        :disabled="!ready"
       >
-        <CopyButton
-          size="large"
-          :value="textOf(turn)"
-        />
-        <ChatMessage.Feedback
-          :model-value="rating"
-          @update:model-value="(value) => emit('rate', value)"
-        />
-        <IconButton
-          icon="az az-refresh"
-          aria-label="Regenerate response"
-          variant="ghost"
-          size="large"
-          :disabled="!ready"
-          @click="emit('retry', $event)"
-        />
+        <template
+          v-if="versionsOfTurn"
+          #leading
+        >
+          <ResponseBranches
+            :model-value="versionsOfTurn.index"
+            :count="versionsOfTurn.count"
+            aria-label="Prompt versions"
+            :disabled="!ready"
+            @update:model-value="page"
+          />
+        </template>
+      </ChatMessage.Actions>
+    </template>
+    <template
+      v-else
+      #actions
+    >
+      <ChatMessage.Actions
+        copyable
+        show-feedback
+        show-read-aloud
+        shareable
+        retryable
+        branchable
+        :copy-text="textOf(turn)"
+        :read-aloud-text="textOf(turn)"
+        :feedback="rating"
+        :disabled="!ready"
+        @update:feedback="rate"
+        @share="emit('share', $event)"
+        @retry="regenerate"
+        @branch="emit('branch', $event)"
+      >
+        <template
+          v-if="versionsOfTurn"
+          #leading
+        >
+          <ResponseBranches
+            :model-value="versionsOfTurn.index"
+            :count="versionsOfTurn.count"
+            :disabled="!ready"
+            @update:model-value="page"
+          />
+        </template>
         <template
           v-if="!stopped && turn.metadata?.sources?.length"
           #trailing
         >
-          <Sources
-            :items="turn.metadata.sources"
-            :anchor="`answer-${turn.id}`"
-          />
+          <Sources :items="turn.metadata.sources" />
         </template>
       </ChatMessage.Actions>
     </template>
@@ -1803,5 +1887,10 @@ export const sampleHistory: ConversationHistoryItem[] = [
       @skip="emit('skip', question)"
     />
   </ChatMessage>
+  <FeedbackReasonDialog
+    v-if="turn.role === 'assistant'"
+    v-model:open="reasonOpen"
+    @submit="(_event, reason) => sendReason(reason)"
+  />
 </template>
 ```

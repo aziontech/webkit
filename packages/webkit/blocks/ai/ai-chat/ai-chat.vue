@@ -3,6 +3,7 @@
   import type { ChatMessageFeedbackValue, ChatMessageStatus } from '@aziontech/webkit/chat-message'
   import ChatMessage from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
+  import type { FeedbackReasonDialogPayload } from '@aziontech/webkit/feedback-reason-dialog'
   import {
     type McpAppFrameMessage,
     type McpAppFrameResource
@@ -10,6 +11,7 @@
   import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+  import { useAiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import {
     type AiChatConnection,
@@ -46,14 +48,6 @@
   import AiChatStart from './parts/ai-chat-start.vue'
   import AiChatTurn from './parts/ai-chat-turn.vue'
   import { sampleSuggestions } from './sample'
-
-  /** A rating the reader gave a response. */
-  export interface AiChatFeedback {
-    /** The rated response. */
-    message: AiChatMessage
-    /** Helpful, not helpful, or cleared. */
-    value: ChatMessageFeedbackValue | null
-  }
 
   export interface AiChatProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
@@ -128,9 +122,17 @@
     send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     stop: [event: MouseEvent]
     'voice-start': [event: MouseEvent]
-    retry: [event: MouseEvent, message: AiChatMessage]
+    retry: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    share: [event: MouseEvent, message: AiChatMessage]
+    branch: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    edit: [event: MouseEvent | KeyboardEvent, message: AiChatMessage, text: string]
+    'version-change': [messages: AiChatMessage[]]
     'new-chat': [event: MouseEvent]
-    feedback: [feedback: AiChatFeedback]
+    feedback: [
+      value: ChatMessageFeedbackValue | null,
+      message: AiChatMessage,
+      reason?: FeedbackReasonDialogPayload
+    ]
     approve: [event: MouseEvent, call: AiChatToolCallPart, input?: unknown]
     deny: [event: MouseEvent, call: AiChatToolCallPart]
     'remove-queued': [event: MouseEvent, item: AiChatQueuedMessage]
@@ -148,11 +150,11 @@
   const activeKey = defineModel<string | null>('activeKey', { default: null })
 
   const { formatDate } = useLocale()
+  const versions = useAiChatVersions(() => props.messages)
 
   const prompt = ref('')
   const files = ref<PromptInputFile[]>([])
   const composerEl = ref<InstanceType<typeof AiChatComposer> | null>(null)
-  const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
   const stoppedIds = ref<Set<string>>(new Set())
   const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
@@ -294,13 +296,9 @@
     settled.value = {}
     routed.value = {}
     toolAnswers.value = {}
+    versions.clear()
     activeKey.value = null
     emit('new-chat', event)
-  }
-
-  function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null) {
-    ratings.value[message.id] = value
-    emit('feedback', { message, value })
   }
 
   function removeQueued(event: MouseEvent, id: string) {
@@ -371,13 +369,17 @@
           :busy="loading && turn === last"
           :ready="state === 'ready'"
           :stopped="stopped(turn)"
-          :rating="ratings[turn.id] ?? null"
           :questions="questions[turn.id]"
           :ask-of="askOf"
           :edit-of="editOf"
           :resolve-app-url="resolveAppUrl"
+          :versions="versions"
           @retry="emit('retry', $event, turn)"
-          @rate="(value) => rate(turn, value)"
+          @rate="(value, reason) => emit('feedback', value, turn, reason)"
+          @share="(event) => emit('share', event, turn)"
+          @branch="(event) => emit('branch', event, turn)"
+          @edit-prompt="(event, text) => emit('edit', event, turn, text)"
+          @version-change="(next) => emit('version-change', next)"
           @answer-tool="answerTool"
           @edit="(call, text) => (edits[call.id] = text)"
           @approve="approve"

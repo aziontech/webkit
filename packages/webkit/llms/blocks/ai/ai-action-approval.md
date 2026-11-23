@@ -1,11 +1,11 @@
 # AiActionApproval (`ai/ai-action-approval`)
 
-> A user-authorized action inside a generative AI conversation, from the messages of TanStack AI's `useChat`: the read-only call shows as a completed `ToolCall`, the explanation in `StreamingResponse`, and the call that needs approval as a `ToolApproval` card with its input in a `CodeBlock`. Deploy or Deny resolves the `useChat` interrupt; approved, the call runs under the card and the assistant reports what changed, with Copy and Retry after a failure. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `CopyButton`, `Button` and `PromptInput`. A page body for ConsoleLayout that fills its content region.
+> A user-authorized action inside a generative AI conversation, from the messages of TanStack AI's `useChat`: the read-only call shows as a completed `ToolCall`, the explanation in `StreamingResponse`, and the call that needs approval as a `ToolApproval` card with its input in a `CodeBlock`. Deploy or Deny resolves the `useChat` interrupt; approved, the call runs under the card and the assistant reports what changed, with Copy and Retry after a failure. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `Button` and `PromptInput`. A page body for ConsoleLayout that fills its content region.
 
 - Surface: app
 - Source: `blocks/ai/ai-action-approval/ai-action-approval.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-action-approval")`
-- Components: [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), [ImageGallery](../../components/image-gallery.md), `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [StreamingResponse](../../components/streaming-response.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, `utils/ai-chat`
+- Components: [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ImageGallery](../../components/image-gallery.md), `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [StreamingResponse](../../components/streaming-response.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, `utils/ai-chat`
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -50,7 +50,7 @@ The question names the action and its target, with the command or tool in code. 
 
 After approval, the call appears as a running `ToolCall` under the card and completes or fails in place; a denial records it as denied. A `tool-result` whose `content` is a list of text and image parts draws as text and an `ImageGallery` in the output, not as JSON.
 
-### F. Outcome — `ChatMessage`, `CopyButton`, `Button`
+### F. Outcome — `ChatMessage`, `Button`
 
 A new response that says what changed (or that nothing ran), with Copy and Read aloud in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined Retry `Button` beside Copy runs the action again; an action never ends in silence.
 
@@ -213,7 +213,6 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
   import ChatMessage, { type ChatMessageStatus } from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import ImageGallery from '@aziontech/webkit/image-gallery'
   import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
@@ -549,13 +548,11 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
           #actions
         >
           <ChatMessage.Actions
+            copyable
             show-read-aloud
+            :copy-text="textOf(turn)"
             :read-aloud-text="textOf(turn)"
           >
-            <CopyButton
-              size="large"
-              :value="textOf(turn)"
-            />
             <Button
               v-if="turn === last && failed(turn)"
               label="Retry"

@@ -9,8 +9,13 @@
     },
     {
       "name": "Actions",
-      "summary": "A complete response with its action row always visible: Copy, the Helpful / Not helpful thumbs (a choice is final and confirms Feedback submitted), Regenerate, Read aloud, and the Sources pill with the mark of each site, which opens the source list under the row.",
+      "summary": "A complete response with its action row on one line: Copy, Good response and Bad response (the chosen thumb fills and the other hides; pressing it again clears it), Read aloud, Share, Try again (each press adds a version paged by `ResponseBranches` at the start of the row) and More with Branch in new chat, then the Sources pill. In a row narrower than 480 px the thumbs and Try again move into More.",
       "file": "actions.vue"
+    },
+    {
+      "name": "Edit",
+      "summary": "The reader's prompt with Copy and Edit under the bubble (shown on hover or focus, always on touch screens). Edit turns the bubble into a field with Cancel and Send; Send emits `edit` with the new text, and each sent edit is kept as a version paged by `ResponseBranches`.",
+      "file": "edit.vue"
     },
     {
       "name": "Lifecycle",

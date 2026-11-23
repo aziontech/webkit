@@ -1087,17 +1087,17 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "12.45 KB"
+    "limit": "12.55 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "11.7 KB"
+    "limit": "11.8 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "11.8 KB"
+    "limit": "11.9 KB"
   },
   {
     "name": "phone-input",
@@ -1162,7 +1162,7 @@
   {
     "name": "artifact-canvas",
     "path": "src/components/ai/artifact-canvas/artifact-canvas.vue",
-    "limit": "12 KB",
+    "limit": "12.05 KB",
     "entryOnly": true
   },
   {
@@ -1179,22 +1179,24 @@
   {
     "name": "chat-message",
     "path": "src/components/ai/chat-message/index.ts",
-    "limit": "14 KB"
+    "limit": "20.35 KB",
+    "entryOnly": true
   },
   {
     "name": "chat-message-root",
     "path": "src/components/ai/chat-message/chat-message.vue",
-    "limit": "7.1 KB"
+    "limit": "8.95 KB"
   },
   {
     "name": "chat-message-actions",
     "path": "src/components/ai/chat-message/chat-message-actions/chat-message-actions.vue",
-    "limit": "9.7 KB"
+    "limit": "14.25 KB",
+    "entryOnly": true
   },
   {
     "name": "chat-message-feedback",
     "path": "src/components/ai/chat-message/chat-message-feedback/chat-message-feedback.vue",
-    "limit": "9.45 KB"
+    "limit": "9.5 KB"
   },
   {
     "name": "citation",
@@ -2625,6 +2627,11 @@
     "name": "use-shortcuts",
     "path": "src/composables/use-shortcuts/index.ts",
     "limit": "2.5 KB"
+  },
+  {
+    "name": "use-ai-chat-versions",
+    "path": "src/composables/use-ai-chat-versions/index.ts",
+    "limit": "1 KB"
   },
   {
     "name": "shortcuts-dialog",

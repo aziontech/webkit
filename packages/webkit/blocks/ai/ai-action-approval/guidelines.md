@@ -38,7 +38,7 @@ The question names the action and its target, with the command or tool in code. 
 
 After approval, the call appears as a running `ToolCall` under the card and completes or fails in place; a denial records it as denied. A `tool-result` whose `content` is a list of text and image parts draws as text and an `ImageGallery` in the output, not as JSON.
 
-### F. Outcome — `ChatMessage`, `CopyButton`, `Button`
+### F. Outcome — `ChatMessage`, `Button`
 
 A new response that says what changed (or that nothing ran), with Copy and Read aloud in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined Retry `Button` beside Copy runs the action again; an action never ends in silence.
 

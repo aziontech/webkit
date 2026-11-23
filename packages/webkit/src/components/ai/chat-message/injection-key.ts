@@ -14,6 +14,10 @@ export interface ChatMessageContext {
   from: ComputedRef<ChatMessageFrom>
   /** Lifecycle of the message; actions render only when it is `success`. */
   status: ComputedRef<ChatMessageStatus>
+  /** A user message is open for editing; its actions are hidden meanwhile. */
+  editing: ComputedRef<boolean>
+  /** Opens a user message for editing; does nothing on other messages. */
+  edit: () => void
   /** Reads the text of the rendered content, what Read aloud speaks when it is given no text. */
   contentText: () => string
 }

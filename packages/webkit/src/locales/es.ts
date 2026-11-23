@@ -52,13 +52,20 @@ export const es: Messages = {
     actions: 'Acciones del mensaje',
     error: 'No se pudo generar la respuesta.',
     retry: 'Intentar de nuevo',
-    helpful: 'Útil',
-    notHelpful: 'No fue útil',
+    goodResponse: 'Buena respuesta',
+    badResponse: 'Mala respuesta',
     feedback: 'Valoración de la respuesta',
     feedbackSubmitting: 'Enviando valoración',
-    feedbackSubmitted: 'Valoración enviada',
+    feedbackThanks: 'Gracias por tu valoración',
     readAloud: 'Leer en voz alta',
-    stopReading: 'Detener la lectura'
+    stopReading: 'Detener la lectura',
+    share: 'Compartir',
+    more: 'Más acciones',
+    branch: 'Ramificar en un chat nuevo',
+    edit: 'Editar mensaje',
+    editField: 'Edita tu mensaje',
+    cancel: 'Cancelar',
+    send: 'Enviar'
   },
   citation: {
     label: 'Fuente {index}: {title}',
@@ -430,7 +437,8 @@ export const es: Messages = {
     label: 'Versiones de la respuesta',
     previous: 'Versión anterior',
     next: 'Versión siguiente',
-    position: '{current} de {total}'
+    position: '{current}/{total}',
+    positionLabel: 'Versión {current} de {total}'
   },
   feedbackReasonDialog: {
     title: '¿Qué salió mal?',

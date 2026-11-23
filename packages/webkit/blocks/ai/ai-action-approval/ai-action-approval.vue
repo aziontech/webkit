@@ -5,7 +5,6 @@
   import ChatMessage, { type ChatMessageStatus } from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import ImageGallery from '@aziontech/webkit/image-gallery'
   import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
@@ -341,13 +340,11 @@
           #actions
         >
           <ChatMessage.Actions
+            copyable
             show-read-aloud
+            :copy-text="textOf(turn)"
             :read-aloud-text="textOf(turn)"
           >
-            <CopyButton
-              size="large"
-              :value="textOf(turn)"
-            />
             <Button
               v-if="turn === last && failed(turn)"
               label="Retry"

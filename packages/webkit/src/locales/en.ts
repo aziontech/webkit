@@ -254,7 +254,8 @@ export const responseBranches = {
   label: 'Response versions',
   previous: 'Previous version',
   next: 'Next version',
-  position: '{current} of {total}'
+  position: '{current}/{total}',
+  positionLabel: 'Version {current} of {total}'
 } as const
 
 export const feedbackReasonDialog = {
@@ -1305,13 +1306,20 @@ export const chatMessage = {
   actions: 'Message actions',
   error: 'The response could not be generated.',
   retry: 'Try again',
-  helpful: 'Helpful',
-  notHelpful: 'Not helpful',
+  goodResponse: 'Good response',
+  badResponse: 'Bad response',
   feedback: 'Response feedback',
   feedbackSubmitting: 'Submitting feedback',
-  feedbackSubmitted: 'Feedback submitted',
+  feedbackThanks: 'Thanks for your feedback',
   readAloud: 'Read aloud',
-  stopReading: 'Stop reading'
+  stopReading: 'Stop reading',
+  share: 'Share',
+  more: 'More actions',
+  branch: 'Branch in new chat',
+  edit: 'Edit message',
+  editField: 'Edit your message',
+  cancel: 'Cancel',
+  send: 'Send'
 } as const
 
 export const citation = {

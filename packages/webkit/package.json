@@ -2625,6 +2625,10 @@
       "types": "./types/composables/use-shortcuts/index.d.ts",
       "default": "./src/composables/use-shortcuts/index.ts"
     },
+    "./use-ai-chat-versions": {
+      "types": "./types/composables/use-ai-chat-versions/index.d.ts",
+      "default": "./src/composables/use-ai-chat-versions/index.ts"
+    },
     "./shortcuts-dialog": {
       "types": "./types/components/overlay/shortcuts-dialog/shortcuts-dialog.vue.d.ts",
       "default": "./src/components/overlay/shortcuts-dialog/shortcuts-dialog.vue"
@@ -4251,6 +4255,9 @@
       ],
       "use-shortcuts": [
         "./types/composables/use-shortcuts/index.d.ts"
+      ],
+      "use-ai-chat-versions": [
+        "./types/composables/use-ai-chat-versions/index.d.ts"
       ],
       "shortcuts-dialog": [
         "./types/components/overlay/shortcuts-dialog/shortcuts-dialog.vue.d.ts"

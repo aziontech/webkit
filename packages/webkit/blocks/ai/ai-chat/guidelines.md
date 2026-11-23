@@ -36,7 +36,7 @@ Fills the page and is the only part that scrolls, in a centered reading column; 
 
 ### D. Prompt — `ChatMessage`, `ImageGallery`, `FilePreview`
 
-The reader's prompt at the inline end in a filled bubble with the stacked composer's radius, no avatar, no visible name or time (both stay in its accessible name; the time is its tooltip). The files they attached draw under the text the way media draws in a response (section L): images in an `ImageGallery`, a document in a `FilePreview`, audio and video in their players.
+The reader's prompt at the inline end in a filled bubble with the stacked composer's radius, no avatar, no visible name or time (both stay in its accessible name; the time is its tooltip). Under it, Copy and Edit show on hover or focus (always on a touch screen). Edit turns the bubble into a field with Cancel and Send; Send emits `edit`, and once the app has sent the new prompt the bubble carries a `ResponseBranches` pager (`‹ 2/2 ›`) to page back to the earlier prompt and its answers. The files they attached draw under the text the way media draws in a response (section L): images in an `ImageGallery`, a document in a `FilePreview`, audio and video in their players.
 
 ### E. Response — `ChatMessage`, `Reasoning`, `StreamingResponse`
 
@@ -46,9 +46,9 @@ The assistant's response as plain text across the reading column, in the larger 
 
 At the end of the action row of a complete response that used documents: a pill with up to three overlapping site marks, named by the count, that opens the list under the row; a citation opens it too. Item n is citation [n].
 
-### G. Response actions — `ChatMessage`, `CopyButton`, `IconButton`
+### G. Response actions — `ChatMessage`, `ResponseBranches`, `FeedbackReasonDialog`
 
-`ChatMessage.Actions` under a complete response, always visible: Copy (`CopyButton`), `ChatMessage.Feedback` with Helpful and Not helpful, Regenerate (`IconButton`, disabled while another response is generating), Read aloud (`show-read-aloud`, hidden where the browser has no speech synthesis), then the Sources pill in `#trailing`. Icons draw at 16px inside a 40px target.
+`ChatMessage.Actions` under a complete response, always visible and always one line, with its built-in actions in ChatGPT's order: Copy, Good response, Bad response, Read aloud (hidden where the browser has no speech synthesis), Share, Try again (disabled while another response is generating), More (Branch in new chat), then the Sources pill in `#trailing`. When the row is narrower than 480px (a phone, the drawer) it keeps Copy, Read aloud, Share and More, and More also holds Good response, Bad response and Try again. A rating fills its thumb and hides the other; pressing it again clears it. Good response raises the toast Thanks for your feedback; Bad response opens `FeedbackReasonDialog`, and sending it emits `feedback` again with the reason, then the toast. After Try again the row starts with a `ResponseBranches` pager (`‹ 2/2 ›`) over the versions of that response. Icons draw at 16px inside a 40px target.
 
 ### H. Follow-up questions — `SuggestionGroup`
 
@@ -126,22 +126,26 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 
 The open conversation of the history is `v-model:activeKey` (`string | null`): picking a row sets it, New chat clears it; load that conversation's messages when it changes.
 
-| Event              | Payload                     | When                                                                                                                                              |
-| ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `send`             | `(event, content)`          | The composer, a starter prompt or a follow-up: call `sendMessage(content)`. `content` is the text, or with attachments `{ content: parts }`.      |
-| `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
-| `voice-start`      | `(event)`                   | Start voice conversation on an empty composer: open the app's audio session (set `voice` to `false` when there is none).                          |
-| `retry`            | `(event, message)`          | Try again or Regenerate response: call `reload()`.                                                                                                |
-| `new-chat`         | `(event)`                   | New chat: call `clear()`.                                                                                                                         |
-| `feedback`         | `({ message, value })`      | The reader rated a response.                                                                                                                      |
-| `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
-| `remove-queued`    | `(event, item)`             | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                         |
-| `app-message`      | `(message, part, reply)`    | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                       |
-| `load-more`        | `(event)`                   | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                 |
-| `deny`             | `(event, call)`             | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
-| `answer-tool`      | `(event, answer)`           | The reader answered an `answerable` tool: call `addToolResult(answer)` (`{ toolCallId, tool, output }`).                                          |
-| `answer-interrupt` | `(event, interrupt, value)` | The reader answered an unbound interrupt: send `value` to whatever owns it.                                                                       |
-| `retry-interrupts` | `(event)`                   | Retry on the alert of `interruptErrors`: call `retryInterrupts()`.                                                                                |
+| Event              | Payload                     | When                                                                                                                                                                |
+| ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `send`             | `(event, content)`          | The composer, a starter prompt or a follow-up: call `sendMessage(content)`. `content` is the text, or with attachments `{ content: parts }`.                        |
+| `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                                               |
+| `voice-start`      | `(event)`                   | Start voice conversation on an empty composer: open the app's audio session (set `voice` to `false` when there is none).                                            |
+| `retry`            | `(event, message)`          | Try again: call `reload()`. The block keeps the earlier answer as a version.                                                                                        |
+| `edit`             | `(event, message, text)`    | The reader sent an edited prompt: call `setMessages` with the messages before `message`, then `sendMessage(text)`. The block keeps the earlier prompt as a version. |
+| `version-change`   | `(messages)`                | The reader paged to another version of a prompt or an answer: call `setMessages(messages)`.                                                                         |
+| `share`            | `(event, message)`          | Share on a response: make a link to it.                                                                                                                             |
+| `branch`           | `(event, message)`          | Branch in new chat: start a new chat with the messages up to `message`.                                                                                             |
+| `new-chat`         | `(event)`                   | New chat: call `clear()`.                                                                                                                                           |
+| `feedback`         | `(value, message, reason?)` | The reader rated a response (`value` is `null` when cleared); after Bad response a second `feedback` carries `reason` (`{ reason, details }`) from the dialog.      |
+| `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt.                   |
+| `remove-queued`    | `(event, item)`             | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                                           |
+| `app-message`      | `(message, part, reply)`    | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                                         |
+| `load-more`        | `(event)`                   | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                                   |
+| `deny`             | `(event, call)`             | Deny on an approval card; the block already resolved the matching interrupt.                                                                                        |
+| `answer-tool`      | `(event, answer)`           | The reader answered an `answerable` tool: call `addToolResult(answer)` (`{ toolCallId, tool, output }`).                                                            |
+| `answer-interrupt` | `(event, interrupt, value)` | The reader answered an unbound interrupt: send `value` to whatever owns it.                                                                                         |
+| `retry-interrupts` | `(event)`                   | Retry on the alert of `interruptErrors`: call `retryInterrupts()`.                                                                                                  |
 
 To go live, install `@tanstack/ai`, `@tanstack/ai-vue` and the adapter of your model (`@tanstack/ai-anthropic`, `@tanstack/ai-openai`…), add a server route that streams the model, and bind `useChat` to the block:
 
@@ -178,6 +182,7 @@ export async function POST(request: Request) {
     retryInterrupts,
     stop,
     reload,
+    setMessages,
     clear,
     cancelQueued,
     loadOlderMessages
@@ -185,6 +190,11 @@ export async function POST(request: Request) {
     connection: fetchServerSentEvents('/api/chat'),
     threadId: 'assistant'
   })
+
+  function edit(message, text) {
+    setMessages(messages.value.slice(0, messages.value.findIndex((entry) => entry.id === message.id)))
+    sendMessage(text)
+  }
 </script>
 
 <template>
@@ -208,6 +218,8 @@ export async function POST(request: Request) {
     @load-more="loadOlderMessages()"
     @stop="stop()"
     @retry="reload()"
+    @edit="(_event, message, text) => edit(message, text)"
+    @version-change="(next) => setMessages(next)"
     @new-chat="clear()"
   />
 </template>
@@ -243,7 +255,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - **Loading:** `Generating a response` (built in); `Loading <what>` when fetching data.
 - **Error:** what happened, in one sentence, e.g. "The connection was interrupted before the response finished.", with Try again.
 - **Stopped:** "You stopped this response."
-- **Feedback:** Helpful, Not helpful, Feedback submitted (built in).
+- **Feedback:** Good response, Bad response (built in); the toast says Thanks for your feedback.
 - Follow `skills/webkit-microcopy`: sentence case, "select" not "click", "response" not "answer", no "please".
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 - **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.
@@ -254,7 +266,8 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - Each message is an `article` named by author and time; the author and time are visually hidden, never removed.
 - Responses are `aria-busy` while loading or streaming; the caret is hidden.
 - The composer is named Prompt, described by its counter and disclaimer; Enter submits and an IME composition never does.
-- Feedback thumbs are toggle buttons with `aria-pressed`, and the submitted state is a status message.
+- Feedback thumbs are toggle buttons with `aria-pressed`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
+- A prompt's Copy and Edit are transparent until hover or focus, never removed from the tab order; the editor's field is named Edit your message, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
 - Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer.
 - The phone history is a `Drawer` named Conversation history that returns focus to the menu button; the desktop toggle names what it does and carries `aria-expanded`.
 - Alignment never carries meaning alone: every message's accessible name says who wrote it.

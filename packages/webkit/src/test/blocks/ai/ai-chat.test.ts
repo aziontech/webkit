@@ -216,6 +216,101 @@ describe('ai/ai-chat', () => {
     )
   })
 
+  describe('message actions', () => {
+    beforeEach(async () => {
+      await page.viewport(1280, 900)
+    })
+    afterEach(async () => {
+      await page.viewport(414, 896)
+    })
+
+    const responseActions = (view: ReturnType<typeof render>) =>
+      view.getAllByRole('group', { name: 'Message actions' }).at(-1)!
+
+    it('emits share and branch with the response', async () => {
+      const view = render(AiChat, { props: { messages: thread } })
+      const row = responseActions(view)
+      await waitFor(() => expect(row).not.toHaveAttribute('data-compact'))
+      await userEvent.click(within(row).getByRole('button', { name: 'Share' }))
+      const [[shareEvent, shared]] = view.emitted('share') as [[Event, AiChatMessage]]
+      expect(shareEvent).toBeInstanceOf(MouseEvent)
+      expect(shared.id).toBe('a1')
+      await waitFor(() =>
+        expect(within(row).getByRole('button', { name: 'More actions' })).not.toBeDisabled()
+      )
+      await userEvent.click(within(row).getByRole('button', { name: 'More actions' }))
+      await userEvent.click(await view.findByRole('menuitem', { name: 'Branch in new chat' }))
+      const [[, branched]] = view.emitted('branch') as [[Event, AiChatMessage]]
+      expect(branched.id).toBe('a1')
+    })
+
+    it('asks why after Bad response and sends the reason in a second feedback', async () => {
+      const view = render(AiChat, { props: { messages: thread } })
+      const row = responseActions(view)
+      await waitFor(() => expect(row).not.toHaveAttribute('data-compact'))
+      await userEvent.click(within(row).getByRole('button', { name: 'Bad response' }))
+      expect(view.emitted('feedback')![0]).toEqual([
+        'down',
+        expect.objectContaining({ id: 'a1' }),
+        undefined
+      ])
+      const dialog = await view.findByRole('dialog', { name: 'What went wrong?' })
+      expect(within(row).queryByRole('button', { name: 'Good response' })).toBeNull()
+      expect(within(row).getByTestId('chat-message-actions__feedback__status')).toHaveClass(
+        'sr-only'
+      )
+      await userEvent.click(within(dialog).getByRole('radio', { name: 'Inaccurate or made up' }))
+      await userEvent.click(within(dialog).getByRole('button', { name: 'Send feedback' }))
+      expect(view.emitted('feedback')![1]).toEqual([
+        'down',
+        expect.objectContaining({ id: 'a1' }),
+        { reason: 'inaccurate', details: '' }
+      ])
+    })
+
+    it('edits a prompt, then pages back to the earlier version', async () => {
+      const view = render(AiChat, { props: { messages: thread } })
+      const [promptRow] = view.getAllByRole('group', { name: 'Message actions' })
+      await userEvent.click(within(promptRow!).getByRole('button', { name: 'Edit message' }))
+      const field = view.getByRole('textbox', { name: 'Edit your message' })
+      await userEvent.clear(field)
+      await userEvent.type(field, 'Which plan is Acme on?')
+      await userEvent.click(view.getByRole('button', { name: 'Send' }))
+      const [[, edited, text]] = view.emitted('edit') as [[Event, AiChatMessage, string]]
+      expect(edited.id).toBe('u1')
+      expect(text).toBe('Which plan is Acme on?')
+      const next: AiChatMessage[] = [
+        { id: 'u2', role: 'user', parts: [{ type: 'text', content: text }] },
+        { id: 'a2', role: 'assistant', parts: [{ type: 'text', content: 'Acme is on Business.' }] }
+      ]
+      await view.rerender({ messages: next })
+      const pager = await view.findByRole('group', { name: 'Prompt versions' })
+      expect(pager.textContent).toContain('Version 2 of 2')
+      await userEvent.click(within(pager).getByRole('button', { name: 'Previous version' }))
+      const [[versions]] = view.emitted('version-change') as [[AiChatMessage[]]]
+      expect(versions.map((message) => message.id)).toEqual(['u1', 'a1'])
+    })
+
+    it('keeps a regenerated answer as a version paged from the action row', async () => {
+      const view = render(AiChat, { props: { messages: thread } })
+      const row = responseActions(view)
+      await waitFor(() => expect(row).not.toHaveAttribute('data-compact'))
+      await userEvent.click(within(row).getByRole('button', { name: 'Try again' }))
+      expect((view.emitted('retry') as [[Event, AiChatMessage]])[0][1].id).toBe('a1')
+      await view.rerender({
+        messages: [
+          thread[0]!,
+          { id: 'a2', role: 'assistant', parts: [{ type: 'text', content: 'Business plan.' }] }
+        ]
+      })
+      const pager = await view.findByRole('group', { name: 'Response versions' })
+      expect(responseActions(view)).toContainElement(pager)
+      await userEvent.click(within(pager).getByRole('button', { name: 'Previous version' }))
+      const [[versions]] = view.emitted('version-change') as [[AiChatMessage[]]]
+      expect(versions.map((message) => message.id)).toEqual(['u1', 'a1'])
+    })
+  })
+
   it('reads sources from the message metadata', () => {
     const view = render(AiChat, {
       props: {
@@ -230,7 +325,7 @@ describe('ai/ai-chat', () => {
         ]
       }
     })
-    const actions = view.getByRole('group', { name: 'Message actions' })
+    const actions = view.getAllByRole('group', { name: 'Message actions' }).at(-1)!
     expect(within(actions).getByRole('button', { name: '1 source' })).toBeTruthy()
   })
 

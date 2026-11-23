@@ -121,7 +121,7 @@ describe('FeedbackReasonDialog', () => {
 
   it('opens from a thumbs-down in the example and closes after sending', async () => {
     const view = render(Default)
-    await fireEvent.click(view.getByRole('button', { name: 'Not helpful' }))
+    await fireEvent.click(view.getByRole('button', { name: 'Bad response' }))
     await waitFor(() => expect(dialog()).toBeTruthy())
     await fireEvent.click(view.getByLabelText('Not helpful', { selector: 'input' }))
     await fireEvent.click(view.getByRole('button', { name: 'Send feedback' }))

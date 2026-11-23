@@ -42,9 +42,9 @@ A small `EmptyState` titled with the resource ("Ask about storefront") and three
 
 The same layout as the full page: the reader's prompts in a bubble at the inline end, responses as plain text across the panel, no avatars. It is the only part of the drawer that scrolls, and it sits on the drawer's own surface: the body sets `--conversation-composer-fade` to `--bg-surface` so the fade under the composer matches it, and the prompt bubbles (`--bg-selected`) stand apart from it in both themes; the composer floats over its foot.
 
-### G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `CopyButton`
+### G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `ResponseBranches`, `FeedbackReasonDialog`
 
-The same prompt and response anatomy as the full page: loading, thinking, streaming with site-name citation chips, and `ChatMessage.Actions` with `CopyButton`, feedback, Regenerate, Read aloud and the Sources pill at its end. The files a reader attached draw under their prompt as media does in a response (section K).
+The same prompt and response anatomy as the full page: loading, thinking, streaming with site-name citation chips, and `ChatMessage.Actions` with Copy, Good response, Bad response, Read aloud, Share, Try again and More (in the drawer's narrow column the thumbs and Try again sit in More), the Sources pill at its end on the same line, a `ResponseBranches` pager after Try again, and Copy and Edit under each prompt. The files a reader attached draw under their prompt as media does in a response (section K).
 
 ### H. Follow-up questions — `SuggestionGroup`
 
@@ -114,21 +114,25 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 | `resolveAppUrl`     | `(resource) => string \| Promise<string>` | Gives a widget that has no inline HTML a trusted `https` address; left out, only inline widgets show.                                                                                                                          |
 | `v-model:open`      | `boolean`                                 | Whether the drawer is open (open by default); Agent opens it and its close button closes it.                                                                                                                                   |
 
-| Event              | Payload                     | When                                                                                                                                              |
-| ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `send`             | `(event, content)`          | The composer, a starter prompt or a follow-up: call `sendMessage(content)`. `content` is the text, or with attachments `{ content: parts }`.      |
-| `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
-| `retry`            | `(event, message)`          | Try again or Regenerate response: call `reload()`.                                                                                                |
-| `new-chat`         | `(event)`                   | New chat: call `clear()`.                                                                                                                         |
-| `feedback`         | `({ message, value })`      | The reader rated a response.                                                                                                                      |
-| `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
-| `remove-queued`    | `(event, item)`             | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                         |
-| `app-message`      | `(message, part, reply)`    | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                       |
-| `load-more`        | `(event)`                   | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                 |
-| `deny`             | `(event, call)`             | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
-| `answer-tool`      | `(event, answer)`           | The reader answered an `answerable` tool: call `addToolResult(answer)` (`{ toolCallId, tool, output }`).                                          |
-| `answer-interrupt` | `(event, interrupt, value)` | The reader answered an unbound interrupt: send `value` to whatever owns it.                                                                       |
-| `retry-interrupts` | `(event)`                   | Retry on the alert of `interruptErrors`: call `retryInterrupts()`.                                                                                |
+| Event              | Payload                     | When                                                                                                                                                                |
+| ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `send`             | `(event, content)`          | The composer, a starter prompt or a follow-up: call `sendMessage(content)`. `content` is the text, or with attachments `{ content: parts }`.                        |
+| `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                                               |
+| `retry`            | `(event, message)`          | Try again: call `reload()`. The block keeps the earlier answer as a version.                                                                                        |
+| `edit`             | `(event, message, text)`    | The reader sent an edited prompt: call `setMessages` with the messages before `message`, then `sendMessage(text)`. The block keeps the earlier prompt as a version. |
+| `version-change`   | `(messages)`                | The reader paged to another version of a prompt or an answer: call `setMessages(messages)`.                                                                         |
+| `share`            | `(event, message)`          | Share on a response: make a link to it.                                                                                                                             |
+| `branch`           | `(event, message)`          | Branch in new chat: start a new chat with the messages up to `message`.                                                                                             |
+| `new-chat`         | `(event)`                   | New chat: call `clear()`.                                                                                                                                           |
+| `feedback`         | `(value, message, reason?)` | The reader rated a response (`value` is `null` when cleared); after Bad response a second `feedback` carries `reason` (`{ reason, details }`) from the dialog.      |
+| `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt.                   |
+| `remove-queued`    | `(event, item)`             | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                                           |
+| `app-message`      | `(message, part, reply)`    | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                                         |
+| `load-more`        | `(event)`                   | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                                   |
+| `deny`             | `(event, call)`             | Deny on an approval card; the block already resolved the matching interrupt.                                                                                        |
+| `answer-tool`      | `(event, answer)`           | The reader answered an `answerable` tool: call `addToolResult(answer)` (`{ toolCallId, tool, output }`).                                                            |
+| `answer-interrupt` | `(event, interrupt, value)` | The reader answered an unbound interrupt: send `value` to whatever owns it.                                                                                         |
+| `retry-interrupts` | `(event)`                   | Retry on the alert of `interruptErrors`: call `retryInterrupts()`.                                                                                                  |
 
 To go live, install `@tanstack/ai`, `@tanstack/ai-vue` and the adapter of your model (`@tanstack/ai-anthropic`, `@tanstack/ai-openai`…), add a server route that streams the model, and bind `useChat` to the block:
 
@@ -165,6 +169,7 @@ export async function POST(request: Request) {
     retryInterrupts,
     stop,
     reload,
+    setMessages,
     clear,
     cancelQueued,
     loadOlderMessages
@@ -172,6 +177,11 @@ export async function POST(request: Request) {
     connection: fetchServerSentEvents('/api/chat'),
     threadId: 'assistant'
   })
+
+  function edit(message, text) {
+    setMessages(messages.value.slice(0, messages.value.findIndex((entry) => entry.id === message.id)))
+    sendMessage(text)
+  }
 </script>
 
 <template>
@@ -195,6 +205,8 @@ export async function POST(request: Request) {
     @load-more="loadOlderMessages()"
     @stop="stop()"
     @retry="reload()"
+    @edit="(_event, message, text) => edit(message, text)"
+    @version-change="(next) => setMessages(next)"
     @new-chat="clear()"
   />
 </template>

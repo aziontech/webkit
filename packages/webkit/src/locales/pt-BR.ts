@@ -52,13 +52,20 @@ export const ptBR: Messages = {
     actions: 'Ações da mensagem',
     error: 'Não foi possível gerar a resposta.',
     retry: 'Tentar novamente',
-    helpful: 'Útil',
-    notHelpful: 'Não foi útil',
+    goodResponse: 'Boa resposta',
+    badResponse: 'Resposta ruim',
     feedback: 'Avaliação da resposta',
     feedbackSubmitting: 'Enviando avaliação',
-    feedbackSubmitted: 'Avaliação enviada',
+    feedbackThanks: 'Obrigado pela sua avaliação',
     readAloud: 'Ler em voz alta',
-    stopReading: 'Parar a leitura'
+    stopReading: 'Parar a leitura',
+    share: 'Compartilhar',
+    more: 'Mais ações',
+    branch: 'Ramificar em novo chat',
+    edit: 'Editar mensagem',
+    editField: 'Edite sua mensagem',
+    cancel: 'Cancelar',
+    send: 'Enviar'
   },
   citation: {
     label: 'Fonte {index}: {title}',
@@ -430,7 +437,8 @@ export const ptBR: Messages = {
     label: 'Versões da resposta',
     previous: 'Versão anterior',
     next: 'Próxima versão',
-    position: '{current} de {total}'
+    position: '{current}/{total}',
+    positionLabel: 'Versão {current} de {total}'
   },
   feedbackReasonDialog: {
     title: 'O que deu errado?',
