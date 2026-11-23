@@ -38,6 +38,12 @@
 
   const tabIndex = computed(() => (attrs['tabindex'] as string | number | undefined) ?? 0)
 
+  const role = computed(() => {
+    const own = attrs['role']
+    if (typeof own === 'string') return own
+    return props.ariaLabel ? 'region' : undefined
+  })
+
   const ROOT_CLASS =
     'relative min-h-0 min-w-0 [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] ' +
     'data-[orientation=vertical]:overflow-y-auto data-[orientation=vertical]:overflow-x-hidden data-[orientation=horizontal]:overflow-x-auto ' +
@@ -98,6 +104,7 @@
     :data-fade="fading || null"
     :style="fadeStyle"
     :data-testid="testId"
+    :role="role"
     :aria-label="ariaLabel || undefined"
     :tabindex="tabIndex"
   >

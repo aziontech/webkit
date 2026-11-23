@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: a079d98c3a1ed31538a59322afe0d8ce14adea4e81fe60d72b0d2c52e7a4164a
+checksum: 9067c5007367918e5c9e93b217dcbd60ba65ed2a5f59401afaba385b19c42dd2
 created: 2026-05-22
 last_updated: 2026-11-21
 ---
@@ -558,6 +558,7 @@ canvas the tokens fall back to.
 
 ## Accessibility (WCAG 2.1 AA)
 
+- Landmarks: the `<nav>` region is the sidebar's one landmark, named by `ariaLabel` (default `Sidebar`); the root is a plain `div`, so the sidebar never adds an unnamed or duplicate `complementary` landmark beside it.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
   The **scroll viewport is not a tab stop** (`tabindex="-1"` on the built-in `ScrollArea`): a scroll

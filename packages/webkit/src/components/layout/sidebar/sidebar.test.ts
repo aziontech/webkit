@@ -89,20 +89,25 @@ describe('Sidebar', () => {
     })
   })
   describe('rendering (structure grounded in the template)', () => {
-    it('renders an <aside> root carrying the default data-testid and its nav/scroll regions', () => {
+    it('renders a root carrying the default data-testid and its nav/scroll regions', () => {
       const { getByTestId } = render(Sidebar)
 
       const root = getByTestId('sidebar')
-      expect(root.tagName).toBe('ASIDE')
+      expect(root.tagName).toBe('DIV')
 
       const nav = getByTestId('sidebar__nav')
       expect(nav.tagName).toBe('NAV')
       expect(getByTestId('sidebar__scroll')).toBeTruthy()
     })
 
-    it('exposes a navigation landmark', () => {
+    it('exposes a navigation landmark named like the sidebar', () => {
       const { getByRole } = render(Sidebar)
-      expect(getByRole('navigation')).toBeTruthy()
+      expect(getByRole('navigation', { name: 'Sidebar' })).toBeTruthy()
+    })
+
+    it('names the navigation landmark from ariaLabel', () => {
+      const { getByRole } = render(Sidebar, { props: { ariaLabel: 'Console' } })
+      expect(getByRole('navigation', { name: 'Console' })).toBeTruthy()
     })
 
     it('does not render the header region when no header slot is provided', () => {
@@ -116,16 +121,18 @@ describe('Sidebar', () => {
     })
   })
 
-  describe('ariaLabel prop -> aria-label on the <aside> landmark', () => {
+  describe('ariaLabel prop -> aria-label on the nav landmark, the only landmark', () => {
     it('defaults the aria-label to "Sidebar"', () => {
       const { getByTestId } = render(Sidebar)
-      expect(getByTestId('sidebar').getAttribute('aria-label')).toBe('Sidebar')
+      expect(getByTestId('sidebar__nav').getAttribute('aria-label')).toBe('Sidebar')
     })
 
-    it('applies a custom ariaLabel to the root', () => {
-      const { getByTestId, getByRole } = render(Sidebar, { props: { ariaLabel: 'Application' } })
-      expect(getByTestId('sidebar').getAttribute('aria-label')).toBe('Application')
-      expect(getByRole('complementary', { name: 'Application' })).toBe(getByTestId('sidebar'))
+    it('applies a custom ariaLabel to the nav and adds no second landmark', () => {
+      const { getByTestId, getByRole, queryByRole } = render(Sidebar, {
+        props: { ariaLabel: 'Application' }
+      })
+      expect(getByRole('navigation', { name: 'Application' })).toBe(getByTestId('sidebar__nav'))
+      expect(queryByRole('complementary')).toBeNull()
     })
   })
 
@@ -139,7 +146,7 @@ describe('Sidebar', () => {
         }
       })
 
-      expect(getByTestId('my-sidebar').tagName).toBe('ASIDE')
+      expect(getByTestId('my-sidebar').tagName).toBe('DIV')
       expect(getByTestId('my-sidebar__header')).toBeTruthy()
       expect(getByTestId('my-sidebar__nav')).toBeTruthy()
       expect(getByTestId('my-sidebar__scroll')).toBeTruthy()
@@ -223,7 +230,7 @@ describe('Sidebar', () => {
   describe('documented example (the story fixtures run in-test)', () => {
     it('Default story renders the console rail: header, nav and footer regions', () => {
       const { getByTestId } = render(Default)
-      expect(getByTestId('sidebar').tagName).toBe('ASIDE')
+      expect(getByTestId('sidebar').tagName).toBe('DIV')
       expect(getByTestId('sidebar__header')).toBeTruthy()
       expect(getByTestId('sidebar__nav')).toBeTruthy()
       expect(getByTestId('sidebar__footer')).toBeTruthy()
@@ -231,7 +238,7 @@ describe('Sidebar', () => {
 
     it('Default story labels the landmark from its args (aria-label="Console")', () => {
       const { getByRole } = render(Default)
-      expect(getByRole('complementary', { name: 'Console' })).toBeTruthy()
+      expect(getByRole('navigation', { name: 'Console' })).toBeTruthy()
     })
 
     it('the navigation is a SidebarMenu that gives up the landmark to the sidebar', () => {

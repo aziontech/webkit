@@ -69,7 +69,7 @@
   const showsPhoto = (item: AvatarGroupItem) =>
     Boolean(item.src) && !failedSources.value.includes(item.src as string)
 
-  const initialsOf = (item: AvatarGroupItem) =>
+  const itemInitials = (item: AvatarGroupItem) =>
     initials(item.label || item.name).slice(0, props.size === 'small' ? 1 : 2)
 
   function onImageError(src: string | undefined) {
@@ -135,7 +135,7 @@
         aria-hidden="true"
         class="leading-none"
       >
-        {{ initialsOf(item) }}
+        {{ itemInitials(item) }}
       </span>
     </span>
     <button

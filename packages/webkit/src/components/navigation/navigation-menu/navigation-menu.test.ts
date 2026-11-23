@@ -447,6 +447,29 @@ describe('NavigationMenu', () => {
         expect(document.activeElement).toBe(products)
         expect(solutions).toHaveAttribute('aria-expanded', 'false')
       })
+
+      it('arrows reach the plain links of the bar in document order and wrap', async () => {
+        const { getByRole } = render(Default)
+        const solutions = getByRole('button', { name: /Solutions/ })
+        const products = getByRole('button', { name: /Products/ })
+        const pricing = getByRole('link', { name: /Pricing/ })
+        const contact = getByRole('link', { name: /Contact/ })
+
+        solutions.focus()
+        await userEvent.keyboard('{ArrowRight}')
+        expect(document.activeElement).toBe(products)
+        await userEvent.keyboard('{ArrowRight}')
+        expect(document.activeElement).toBe(pricing)
+        await waitFor(() => expect(products).toHaveAttribute('aria-expanded', 'false'), {
+          timeout: OPEN_TIMEOUT
+        })
+        await userEvent.keyboard('{ArrowRight}')
+        expect(document.activeElement).toBe(contact)
+        await userEvent.keyboard('{ArrowRight}')
+        expect(document.activeElement).toBe(solutions)
+        await userEvent.keyboard('{ArrowLeft}')
+        expect(document.activeElement).toBe(contact)
+      })
     })
 
     describe('events on real user actions (navigation-menu.vue emits)', () => {
@@ -651,14 +674,17 @@ describe('NavigationMenu', () => {
       await expanded(solutions, 'false')
     })
 
-    it('ArrowRight and ArrowLeft move between triggers and wrap', async () => {
+    it('ArrowRight and ArrowLeft move between triggers, the Pricing link included, and wrap', async () => {
       const { solutions, products } = await setup()
+      const pricing = document.body.querySelector<HTMLElement>('a[href*="pricing"]')!
       await keyboardUser.keyboard('{ArrowRight}')
       expect(document.activeElement).toBe(products)
+      await keyboardUser.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(pricing)
       await keyboardUser.keyboard('{ArrowRight}')
       expect(document.activeElement).toBe(solutions)
       await keyboardUser.keyboard('{ArrowLeft}')
-      expect(document.activeElement).toBe(products)
+      expect(document.activeElement).toBe(pricing)
     })
 
     it('ArrowDown on a trigger opens its panel and focuses the first entry', async () => {

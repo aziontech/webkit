@@ -39,7 +39,7 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'page-tabs')
 
   const ROW_CLASS =
-    'layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm) ' +
+    'layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm) @max-xl/page-tabs:flex-wrap ' +
     'group-data-[column=data]/page-tabs:layout-column group-data-[column=focused]/page-tabs:layout-column-focused group-data-[column=form]/page-tabs:layout-column-form'
 </script>
 
@@ -48,13 +48,13 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-column="column"
-    class="group/page-tabs border-b border-(--border-default)"
+    class="group/page-tabs @container/page-tabs border-b border-(--border-default)"
   >
     <div
       :data-testid="`${testId}__row`"
       :class="ROW_CLASS"
     >
-      <div class="flex -ms-(--spacing-xs) min-w-0 flex-1">
+      <div class="flex -ms-(--spacing-xs) min-w-0 flex-1 @max-xl/page-tabs:basis-full">
         <TabsRoot
           v-model="value"
           :data-testid="`${testId}__tabs`"
@@ -68,7 +68,7 @@
       <div
         v-if="$slots['actions']"
         :data-testid="`${testId}__actions`"
-        class="flex min-h-8 shrink-0 items-center gap-(--spacing-xs)"
+        class="flex min-h-8 shrink-0 items-center gap-(--spacing-xs) @max-xl/page-tabs:ms-auto"
       >
         <slot name="actions" />
       </div>

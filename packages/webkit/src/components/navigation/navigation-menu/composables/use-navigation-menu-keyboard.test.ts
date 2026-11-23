@@ -7,13 +7,21 @@ import {
   useNavigationMenuKeyboard
 } from './use-navigation-menu-keyboard'
 
-const setup = (dir: 'ltr' | 'rtl' = 'ltr') => {
+const setup = (dir: 'ltr' | 'rtl' = 'ltr', withLink = false) => {
   const buttons = ['a', 'b', 'c'].map((value) => {
     const el = document.createElement('button')
     el.textContent = value
     document.body.append(el)
     return { value, el }
   })
+  const links: HTMLElement[] = []
+  if (withLink) {
+    const link = document.createElement('a')
+    link.href = 'https://example.com/pricing/'
+    link.textContent = 'Pricing'
+    buttons[0]!.el.after(link)
+    links.push(link)
+  }
   const current = ref<string | number | null>(null)
   const calls: Array<[string | number | null, NavigationMenuChangeEventDetails]> = []
   const keyboard = effectScope().run(() =>
@@ -22,6 +30,7 @@ const setup = (dir: 'ltr' | 'rtl' = 'ltr') => {
       orientation: computed(() => 'horizontal'),
       isRtl: () => dir === 'rtl',
       triggers: shallowRef<NavigationMenuTriggerEntry[]>(buttons),
+      links: shallowRef<HTMLElement[]>(links),
       popupEl: shallowRef(null),
       activeTriggerEl: shallowRef(null),
       setValue: (next, details) => {
@@ -30,7 +39,7 @@ const setup = (dir: 'ltr' | 'rtl' = 'ltr') => {
       }
     })
   )!
-  return { buttons, calls, keyboard }
+  return { buttons, links, calls, keyboard }
 }
 
 const keydown = (key: string, target: HTMLElement) => {
@@ -74,5 +83,19 @@ describe('useNavigationMenuKeyboard', () => {
     keyboard.onTriggerKeydown(keydown('x', buttons[0].el))
     keyboard.onPopupKeydown(keydown('ArrowDown', buttons[0].el))
     expect(calls).toHaveLength(0)
+  })
+
+  it('stops on a plain link between triggers, in document order, and closes the open panel', () => {
+    const { buttons, links, calls, keyboard } = setup('ltr', true)
+    buttons[0]!.el.focus()
+    keyboard.onTriggerKeydown(keydown('Enter', buttons[0]!.el))
+    keyboard.onTriggerKeydown(keydown('ArrowRight', buttons[0]!.el))
+    expect(document.activeElement).toBe(links[0])
+    expect(calls.at(-1)?.[0]).toBeNull()
+    keyboard.onLinkKeydown(keydown('ArrowRight', links[0]!))
+    expect(document.activeElement).toBe(buttons[1]!.el)
+    expect(calls.at(-1)?.[0]).toBe('b')
+    keyboard.onTriggerKeydown(keydown('ArrowLeft', buttons[1]!.el))
+    expect(document.activeElement).toBe(links[0])
   })
 })

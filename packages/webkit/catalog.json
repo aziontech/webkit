@@ -18444,7 +18444,7 @@
      "type": "BreadcrumbItemData[]",
      "default": "[]",
      "required": "false",
-     "doc": "The trail shown in the header on wide layouts (hidden while compact); each is `{ label, href? }` and the last one is the current page."
+     "doc": "The trail shown in the header (while compact, hidden below a 28rem header); each is `{ label, href? }` and the last one is the current page."
     },
     {
      "name": "home",
@@ -18544,7 +18544,7 @@
     {
      "name": "breadcrumbs",
      "scope": "—",
-     "notes": "An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumb` replaces both; hidden while compact."
+     "notes": "An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumb` replaces both; while compact, hidden below a 28rem header."
     },
     {
      "name": "notifications",
@@ -18604,7 +18604,7 @@
      "type": "BreadcrumbItemData[]",
      "default": "[]",
      "required": "false",
-     "doc": "The trail shown in the header on wide layouts (hidden while compact); each is `{ label, href? }` and the last one is the current page."
+     "doc": "The trail shown in the header (while compact, hidden below a 28rem header); each is `{ label, href? }` and the last one is the current page."
     },
     {
      "name": "home",
@@ -18704,7 +18704,7 @@
     {
      "name": "breadcrumbs",
      "scope": "—",
-     "notes": "An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumb` replaces both; hidden while compact."
+     "notes": "An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumb` replaces both; while compact, hidden below a 28rem header."
     },
     {
      "name": "notifications",

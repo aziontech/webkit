@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 7f48941db1163dc6e2cb1e8273fc422da830a14ddd1cb4889e246ae3870aa7ab
+checksum: 0f94613b6dfd131a6ab7210e5d95ddceb357282203e63a6a520aa8a4de8c4237
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -186,7 +186,7 @@ The only events are the `update:*` of the models above.
 | separator hover               | `var(--border-strong)`                   |
 | separator focus / drag        | `var(--accent)`                          |
 | region header title           | `.text-heading-2xs`                      |
-| region header height          | `var(--spacing-2xl)`                     |
+| region header height          | `h-14` (56px, the rail header and `PanelHeader` row; never a spacing gap token, which grows with the window) |
 | region header padding         | `var(--spacing-md)`                      |
 | notifications gap and padding | `var(--spacing-xs)`, `var(--spacing-md)` |
 | ring                          | `var(--ring-color)`                      |

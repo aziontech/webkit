@@ -32,6 +32,22 @@
 
   const isOpen = computed(() => sub.isOpen.value && parent.isOpen.value)
 
+  const SIDE_ROOM = 260
+  const inline = ref(false)
+
+  const sideFits = () => {
+    const width = globalThis.document?.documentElement.clientWidth ?? Infinity
+    const box = sub.triggerEl.value?.getBoundingClientRect()
+    if (!box?.width) return width >= 2 * SIDE_ROOM
+    return width - box.right >= SIDE_ROOM || box.left >= SIDE_ROOM
+  }
+
+  const syncInline = (open: boolean) => {
+    if (open) inline.value = !sideFits()
+  }
+  watch(isOpen, syncInline, { flush: 'sync', immediate: true })
+  watch(isOpen, syncInline, { flush: 'post', immediate: true })
+
   const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
     triggerRef: sub.triggerEl,
     panelRef: panelEl,
@@ -51,6 +67,7 @@
   }
 
   function onKeydown(event: globalThis.KeyboardEvent) {
+    if (inline.value) event.stopPropagation()
     const back = resolveDirection(panelEl.value) === 'rtl' ? 'ArrowRight' : 'ArrowLeft'
     if (event.key === 'ArrowDown') {
       event.preventDefault()
@@ -113,11 +130,16 @@
 
   const PANEL_CLASS =
     'flex min-w-(--container-3xs) max-w-[min(var(--container-2xs),calc(100vw-2*var(--spacing-xs)))] flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) ' +
-    'bg-(--bg-surface) py-(--spacing-xs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]'
+    'bg-(--bg-surface) py-(--spacing-xs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] ' +
+    'data-[inline]:min-w-0 data-[inline]:max-w-none data-[inline]:rounded-none data-[inline]:border-0 data-[inline]:py-0 ' +
+    'data-[inline]:ps-(--spacing-md) data-[inline]:shadow-none'
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport
+    to="body"
+    :disabled="inline"
+  >
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
       leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
@@ -133,7 +155,8 @@
         :data-state="isOpen ? 'open' : 'closed'"
         :data-side="resolvedSide"
         :data-align="resolvedAlign"
-        :style="panelStyle"
+        :data-inline="inline || null"
+        :style="inline ? undefined : panelStyle"
         :class="PANEL_CLASS"
         @keydown="onKeydown"
         @pointerenter="onPointerenter"
@@ -141,7 +164,7 @@
         <div
           :id="sub.contentId"
           ref="bodyEl"
-          role="menu"
+          :role="inline ? 'group' : 'menu'"
           tabindex="-1"
           :aria-labelledby="sub.triggerId"
           :data-testid="`${testId}__body`"

@@ -81,7 +81,7 @@ describe('DocLayout', () => {
     const mains = getAllByRole('main')
     expect(mains).toHaveLength(1)
     expect(within(mains[0]!).getByRole('heading', { name: /First deploy/ })).toBeTruthy()
-    expect(getByRole('complementary', { name: 'Documentation' })).toBeTruthy()
+    expect(getByRole('navigation', { name: 'Documentation' })).toBeTruthy()
     expect(
       within(await findByTestId('doc-layout__aside')).getByText('Deploy with Azion CLI')
     ).toBeTruthy()

@@ -194,10 +194,11 @@
   )
 
   const accountTriggerLabel = computed(() => {
-    const short = initials(props.account?.name ?? '')
+    const name = props.account?.name.trim() ?? ''
+    const short = initials(name)
     return props.account?.src || !short
       ? t('consoleLayout.accountMenu')
-      : t('consoleLayout.accountMenuFor', { initials: short })
+      : t('consoleLayout.accountMenuFor', { initials: short, name })
   })
 
   const pageTrail = computed(() => trails.value[trails.value.length - 1] ?? null)
@@ -240,6 +241,7 @@
   >
     <AppLayout
       v-model:tools-open="toolsOpen"
+      :compact-below="1024"
       :navigation-aria-label="ariaLabel || t('consoleLayout.navigation')"
       :tools-label="toolsLabel"
     >

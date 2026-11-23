@@ -156,14 +156,17 @@
       </Breadcrumb>
     </div>
     <div
-      v-else-if="!compact && !trail && $slots['breadcrumbs']"
-      class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink *:ms-0"
+      v-else-if="!trail && $slots['breadcrumbs']"
+      :data-compact="compact || null"
+      class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink *:ms-0 data-compact:@max-md:hidden"
     >
       <slot name="breadcrumbs" />
     </div>
     <div
-      v-else-if="!compact && crumbItems.length"
-      class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
+      v-else-if="crumbItems.length"
+      :data-compact="compact || null"
+      :data-testid="`${layoutTestId}__breadcrumbs`"
+      class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink data-compact:@max-md:hidden"
     >
       <Breadcrumb
         :items="crumbItems"

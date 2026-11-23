@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: 93aa5f24a8c34a55cccf951c61951d3bd5597171a8ee9801f9cf38ca0b2b7004
+checksum: a1efcacd1160248ebe9a38a55405a7f9a3d07550dd8c17c779b2670e3226e01d
 created: 2026-05-25
 last_updated: 2026-11-22
 ---
@@ -117,7 +117,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 ### Responsive contract
 
-- The trail is always a **single row**. A segment wider than the space available shrinks and ellipsizes its label; a trail that still does not fit scrolls horizontally. It never wraps to a second line and never extends past its container.
+- The trail is always a **single row**. A segment wider than the space available shrinks and ellipsizes its label; the current (last) segment gives way first, down to a 2.5rem floor, so the parent link stays readable (the current page is also the page title); a trail that still does not fit scrolls horizontally. It never wraps to a second line and never extends past its container.
 - **`items` mode** additionally collapses when the `nav`'s own width is below 768px (a `ResizeObserver` on the landmark, so a breadcrumb in a narrow panel or drawer collapses on a wide screen too): first segment, an overflow menu holding the middle segments, then the current segment. Below 360px of its own width (the trail beside a brand and an avatar in a phone header) the first segment folds into that menu too, even when there is no middle segment, so the current segment gets the row: an overflow menu holding every ancestor, then the current segment. The overflow entries are links (`href`) inside the menu, so they navigate natively, open in a new tab, and still emit `navigate`. The breakpoint is owned by the component's own `use-breadcrumb-collapse` composable.
 - **Slot (hand-composed) mode** keeps every segment it was given, since the root cannot know which of the consumer's children are middle segments, so on a narrow screen it degrades through the single-row rules above rather than through a collapse.
 - Server render and hydration: the collapse measures the `nav` only after mount (`use-breadcrumb-collapse` reads its width in `onMounted`, then follows a `ResizeObserver`), so the server HTML and the first client render are the full trail and match; in a narrow box the collapse applies in the same tick as mount, before paint.

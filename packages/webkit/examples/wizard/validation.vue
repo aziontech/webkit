@@ -1,16 +1,16 @@
 <script setup>
-  import Alert from '@aziontech/webkit/alert'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import Select from '@aziontech/webkit/select'
   import Wizard from '@aziontech/webkit/wizard'
-  import { ref } from 'vue'
+  import { nextTick, ref } from 'vue'
 
   const step = ref(0)
   const name = ref('')
   const region = ref('south-america')
   const environment = ref('production')
   const nameMissing = ref(false)
+  const nameEl = ref(null)
 
   const regions = [
     { value: 'north-america', label: 'North America' },
@@ -25,9 +25,12 @@
   const labelOf = (options, value) =>
     options.find((option) => option.value === value)?.label ?? 'Not set'
 
-  const onNext = (event, current) => {
+  const onNext = async (event, current) => {
     nameMissing.value = current === 0 && !name.value.trim()
-    if (nameMissing.value) event.preventDefault()
+    if (!nameMissing.value) return
+    event.preventDefault()
+    await nextTick()
+    nameEl.value?.focus()
   }
 </script>
 
@@ -44,17 +47,16 @@
       :invalid="nameMissing && !name.trim()"
     >
       <div class="flex flex-col gap-(--spacing-md)">
-        <Alert
-          v-if="nameMissing"
-          severity="danger"
-          label="Enter a name to continue."
-        />
         <Field
           required
-          :invalid="nameMissing"
+          :invalid="nameMissing && !name.trim()"
         >
           <Field.Label> Name </Field.Label>
-          <Input v-model="name" />
+          <Input
+            ref="nameEl"
+            v-model="name"
+          />
+          <Field.Error v-if="nameMissing && !name.trim()"> Enter a name to continue. </Field.Error>
         </Field>
         <Field>
           <Field.Label> Region </Field.Label>

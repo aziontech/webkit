@@ -11,7 +11,7 @@
   })
 
   export interface AppHeaderAccountProps {
-    /** Name of the signed-in account; the avatar draws its first two characters as initials. */
+    /** Name of the signed-in account; the avatar draws the first letters of its first and last words as initials. */
     name?: string
     /** Photo URL of the account; replaces the initials. */
     src?: string
@@ -37,7 +37,7 @@
   )
 
   const ROOT_CLASS =
-    'rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'relative inline-flex rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance ' +
     'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
     'motion-reduce:transition-none'
 </script>
@@ -56,6 +56,11 @@
       :label="name"
       size="medium"
       variant="square"
+    />
+    <span
+      aria-hidden="true"
+      data-slot="touch-target"
+      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
     />
   </button>
 </template>

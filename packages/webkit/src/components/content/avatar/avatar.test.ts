@@ -59,7 +59,6 @@ describe('Avatar', () => {
     const { getByTestId, queryByTestId } = render(Avatar, { props: { label: 'herbert' } })
 
     const labelEl = getByTestId('avatar__label')
-    // slice(0,2).toUpperCase() => 'HE'
     expect(labelEl).toHaveTextContent('HE')
 
     // no image, no icon

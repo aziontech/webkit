@@ -417,7 +417,7 @@ export const es: Messages = {
     home: 'Inicio de Azion',
     openNavigation: 'Abrir navegación',
     accountMenu: 'Menú de la cuenta',
-    accountMenuFor: '{initials}, menú de la cuenta',
+    accountMenuFor: '{initials}, {name}, menú de la cuenta',
     searchPlaceholder: 'Buscar páginas y comandos',
     noMatch: 'Ninguna página o comando coincide con la búsqueda.',
     pages: 'Páginas',

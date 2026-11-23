@@ -21,7 +21,7 @@
     src?: string
     /** Accessible name: the image's alt with `src`, and the name of the initials or icon fallback without it. */
     alt?: string
-    /** Initials shown when no image (normalized to two uppercase characters). */
+    /** Initials shown when no image: a full name becomes the first letters of its first and last words, one word its first two characters, uppercased. */
     label?: string
     /** Icon class for the fallback when no image or label (Azion icon class). */
     icon?: string

@@ -70,7 +70,7 @@
   })
 
   const HOME_LINK_CLASS =
-    'inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'relative z-1 inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance ' +
     'hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
     'focus-visible:ring-offset-(--bg-canvas)'
 
@@ -140,6 +140,11 @@
                 :class="HOME_LINK_CLASS"
               >
                 <slot name="brand" />
+                <span
+                  aria-hidden="true"
+                  data-slot="touch-target"
+                  class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+                />
               </a>
               <slot
                 v-else

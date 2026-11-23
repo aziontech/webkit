@@ -238,7 +238,7 @@
       :data-testid="`${testId}__panel`"
       class="md:items-start md:pt-[15dvh]"
     >
-      <PanelHeader class="min-h-(--spacing-2xl) py-(--spacing-xs) sm:hidden">
+      <PanelHeader class="py-(--spacing-xs) sm:hidden">
         <DialogTitle
           :data-testid="`${testId}__title`"
           class="sr-only"

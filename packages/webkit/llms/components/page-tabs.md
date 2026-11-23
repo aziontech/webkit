@@ -78,8 +78,8 @@ No built-in strings: the tab labels and the actions come from the consumer's slo
 
 ## Responsive
 
-- Container queries: none; the column utilities cap the tab row at the page column's measure and fall back to the full width below it.
-- Narrow (≤ 640 px or a narrow container): the tablist scrolls inline inside its own region (owned by `tabs`); the actions keep their size at the inline end.
+- Container queries: the root is `@container/page-tabs`; the column utilities cap the tab row at the page column's measure and fall back to the full width below it.
+- Narrow (the strip below 36rem, `@max-xl/page-tabs`): the row wraps, the tablist takes the full width and scrolls inline inside its own region (owned by `tabs`), and the actions move to their own line at the inline end, after the tabs in reading and focus order.
 - Touch: tab targets are owned by `tabs`; no hover-only affordance.
 - Reflow: no page-level horizontal scroll at 320 px and 200 % zoom; only the tablist scrolls.
 

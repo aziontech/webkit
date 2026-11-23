@@ -15,6 +15,7 @@ export interface NavigationMenuKeyboardRoot {
   orientation: ComputedRef<'horizontal' | 'vertical'>
   isRtl: () => boolean
   triggers: Readonly<Ref<NavigationMenuTriggerEntry[]>>
+  links: Readonly<Ref<HTMLElement[]>>
   popupEl: Readonly<Ref<HTMLElement | null>>
   activeTriggerEl: Readonly<Ref<HTMLElement | null>>
   setValue: (next: string | number | null, details: NavigationMenuChangeEventDetails) => void
@@ -22,6 +23,7 @@ export interface NavigationMenuKeyboardRoot {
 
 export interface UseNavigationMenuKeyboardReturn {
   onTriggerKeydown: (event: KeyboardEvent) => void
+  onLinkKeydown: (event: KeyboardEvent) => void
   onPopupKeydown: (event: KeyboardEvent) => void
 }
 
@@ -109,31 +111,44 @@ function enterPanel(
   return true
 }
 
-function moveBetweenTriggers(
-  { triggers, orientation, isRtl, setValue }: NavigationMenuKeyboardRoot,
-  event: KeyboardEvent,
-  baseIndex: number
-) {
+type BarEntry = { value: string | number | null; el: HTMLElement }
+
+function barSequence({ triggers, links }: NavigationMenuKeyboardRoot): BarEntry[] {
+  const entries: BarEntry[] = [...triggers.value, ...links.value.map((el) => ({ value: null, el }))]
+  return entries
+    .filter(({ el }) => el.isConnected && el.getClientRects().length > 0)
+    .sort((a, b) =>
+      a.el.compareDocumentPosition(b.el) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+    )
+}
+
+function barStep({ orientation, isRtl }: NavigationMenuKeyboardRoot, key: string): number {
   const isHorizontal = orientation.value === 'horizontal'
   const flipped = isHorizontal && isRtl()
   const nextKey = isHorizontal ? (flipped ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown'
   const prevKey = isHorizontal ? (flipped ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp'
-  const count = triggers.value.length
-  if (event.key !== nextKey && event.key !== prevKey) return
+  return key === nextKey ? 1 : key === prevKey ? -1 : 0
+}
+
+function moveBetweenTriggers(root: NavigationMenuKeyboardRoot, event: KeyboardEvent) {
+  const { value, setValue } = root
+  const step = barStep(root, event.key)
+  if (!step) return
   event.preventDefault()
+  const sequence = barSequence(root)
+  const count = sequence.length
   if (!count) return
-  const entry = triggers.value[(baseIndex + (event.key === nextKey ? 1 : -1) + count) % count]
+  const focused = sequence.findIndex((entry) => entry.el === document.activeElement)
+  const baseIndex =
+    focused !== -1 ? focused : sequence.findIndex((entry) => entry.value === value.value)
+  const entry = sequence[(baseIndex + step + count) % count]
   entry.el.focus()
-  setValue(entry.value, createChangeEventDetails('list-navigation', event, entry.el))
+  if (entry.value != null || value.value != null)
+    setValue(entry.value, createChangeEventDetails('list-navigation', event, entry.el))
 }
 
 function onTriggerKeydown(root: NavigationMenuKeyboardRoot, event: KeyboardEvent, scope: Scope) {
   const { triggers, value, setValue } = root
-  const focusedIndex = triggers.value.findIndex((entry) => entry.el === document.activeElement)
-  const baseIndex =
-    focusedIndex !== -1
-      ? focusedIndex
-      : triggers.value.findIndex((entry) => entry.value === value.value)
   const ownTrigger = event.currentTarget as HTMLElement
   const ownValue = triggers.value.find((entry) => entry.el === ownTrigger)?.value
   const toggle = event.key === 'Enter' || event.key === ' '
@@ -147,8 +162,7 @@ function onTriggerKeydown(root: NavigationMenuKeyboardRoot, event: KeyboardEvent
       )
     return
   }
-  if (!enterPanel(root, event, ownTrigger, ownValue, scope))
-    moveBetweenTriggers(root, event, baseIndex)
+  if (!enterPanel(root, event, ownTrigger, ownValue, scope)) moveBetweenTriggers(root, event)
 }
 
 export function useNavigationMenuKeyboard(
@@ -160,6 +174,7 @@ export function useNavigationMenuKeyboard(
   })
   return {
     onTriggerKeydown: (event) => onTriggerKeydown(root, event, scope),
+    onLinkKeydown: (event) => moveBetweenTriggers(root, event),
     onPopupKeydown: (event) => onPopupKeydown(root, event)
   }
 }
