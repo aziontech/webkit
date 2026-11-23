@@ -38,3 +38,24 @@ describe('field examples name every control without the placeholder', () => {
     }
   })
 })
+
+const identifierExamples = import.meta.glob<{ default: Component }>(
+  [
+    '../../examples/tag-editor/*.vue',
+    '../../examples/attribute-editor/*.vue',
+    '../../examples/combobox/*.vue',
+    '../../examples/multi-select/searchable.vue'
+  ],
+  { eager: true }
+)
+
+describe('identifier fields turn off phone autocapitalize and autocorrect', () => {
+  it.each(Object.keys(identifierExamples))('%s', (path) => {
+    const { container } = render(identifierExamples[path]!.default)
+    const fields = Array.from(container.querySelectorAll<HTMLElement>('input[spellcheck="false"]'))
+    for (const field of fields) {
+      expect(field.getAttribute('autocapitalize'), field.outerHTML).toBe('none')
+      expect(field.getAttribute('autocorrect'), field.outerHTML).toBe('off')
+    }
+  })
+})

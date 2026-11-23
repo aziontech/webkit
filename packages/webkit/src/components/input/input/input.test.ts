@@ -354,6 +354,20 @@ describe('Input', () => {
       expect(getByTestId('input').getAttribute('spellcheck')).toBe('false')
     })
 
+    it('turns off phone autocapitalize and autocorrect when spellcheck is false', () => {
+      const { getByTestId } = render(Input, { props: { spellcheck: false } })
+      expect(getByTestId('input').getAttribute('autocapitalize')).toBe('none')
+      expect(getByTestId('input').getAttribute('autocorrect')).toBe('off')
+    })
+
+    it('lets a passed autocapitalize win over the identifier default', () => {
+      const { getByTestId } = render(Input, {
+        props: { spellcheck: false },
+        attrs: { autocapitalize: 'characters' }
+      })
+      expect(getByTestId('input').getAttribute('autocapitalize')).toBe('characters')
+    })
+
     it('omits autocomplete and spellcheck when they are not set', () => {
       const { getByTestId } = render(Input)
       const input = getByTestId('input')
