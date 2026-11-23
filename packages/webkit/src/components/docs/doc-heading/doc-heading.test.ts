@@ -2,12 +2,22 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h } from 'vue'
 
+import Default from '../../../../examples/doc-heading/default.vue'
 import Levels from '../../../../examples/doc-heading/levels.vue'
 import { provideHeadingNavigation } from '../../../composables/use-heading-navigation'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocHeading from './doc-heading.vue'
 
 describe('DocHeading', () => {
+  it.each([
+    ['Default', Default],
+    ['Levels', Levels]
+  ])('renders the %s example inside DocProse, which owns the heading scale', (_, example) => {
+    const { getByTestId, getAllByRole } = render(example)
+    const prose = getByTestId('doc-prose')
+    for (const heading of getAllByRole('heading')) expect(prose.contains(heading)).toBe(true)
+  })
+
   it('renders the heading tag for its level with the id', () => {
     const { getByRole } = render(DocHeading, { props: { level: 3, anchor: 'keys', label: 'Keys' } })
     const heading = getByRole('heading', { level: 3, name: 'Keys' })

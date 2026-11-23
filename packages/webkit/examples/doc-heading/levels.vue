@@ -1,9 +1,10 @@
 <script setup>
   import DocHeading from '@aziontech/webkit/doc-heading'
+  import DocProse from '@aziontech/webkit/doc-prose'
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-sm)">
+  <DocProse>
     <DocHeading
       anchor="cache"
       :level="1"
@@ -24,5 +25,5 @@
       :level="4"
       label="Query strings"
     />
-  </div>
+  </DocProse>
 </template>
