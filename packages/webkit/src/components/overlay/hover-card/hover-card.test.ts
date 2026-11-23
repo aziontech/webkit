@@ -1,5 +1,5 @@
 import { render, waitFor } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, type PropType } from 'vue'
 
@@ -14,6 +14,28 @@ const card = () => document.body.querySelector<HTMLElement>('[data-testid="hover
 const trigger = () => document.body.querySelector<HTMLElement>('[data-testid="hover-card-trigger"]')
 
 const link = () => trigger()?.querySelector('a') as HTMLElement
+
+const OPENS = { timeout: 3000 }
+
+const pointer = (el: HTMLElement | null | undefined, type: 'pointerenter' | 'pointerleave') =>
+  el?.dispatchEvent(new PointerEvent(type, { pointerType: 'mouse' }))
+
+async function advance(ms: number) {
+  vi.advanceTimersByTime(ms)
+  await nextTick()
+}
+
+function fakeTimers() {
+  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+}
+
+async function parkPointer() {
+  const parking = document.createElement('div')
+  parking.style.cssText = 'position:fixed;right:0;bottom:0;width:4px;height:4px'
+  document.body.append(parking)
+  await userEvent.hover(parking)
+  parking.remove()
+}
 
 const Host = defineComponent({
   props: {
@@ -71,6 +93,11 @@ const EdgeHost = (dir: 'ltr' | 'rtl', edge: 'left' | 'right') =>
   })
 
 describe('HoverCard', () => {
+  afterEach(async () => {
+    vi.useRealTimers()
+    await parkPointer()
+  })
+
   it('resolves side=start to the right under rtl, so a trigger on the right edge flips to end', async () => {
     render(EdgeHost('rtl', 'right'))
     await waitFor(() => expect(card()?.dataset['side']).toBe('end'))
@@ -105,26 +132,36 @@ describe('HoverCard', () => {
     render(Host, {
       props: { openDelay: 150, closeDelay: 150, 'onUpdate:open': (v: boolean) => updates.push(v) }
     })
-    await userEvent.hover(link())
+    fakeTimers()
+    pointer(trigger(), 'pointerenter')
+    await advance(149)
     expect(card()).toBeNull()
-    await waitFor(() => expect(card()).not.toBeNull())
-    expect(trigger()?.dataset['state']).toBe('open')
-    await userEvent.unhover(link())
+    await advance(1)
     expect(card()).not.toBeNull()
-    await waitFor(() => expect(card()).toBeNull())
+    expect(trigger()?.dataset['state']).toBe('open')
+    pointer(trigger(), 'pointerleave')
+    await advance(149)
+    expect(card()).not.toBeNull()
+    await advance(1)
+    expect(card()).toBeNull()
     expect(updates).toEqual([true, false])
   })
 
   it('the pointer can move from the trigger onto the card without closing it', async () => {
     render(Host, { props: { closeDelay: 200 } })
-    await userEvent.hover(link())
-    await waitFor(() => expect(card()).not.toBeNull())
-    trigger()?.dispatchEvent(new PointerEvent('pointerleave', { pointerType: 'mouse' }))
-    card()?.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'mouse' }))
-    await new Promise((resolve) => setTimeout(resolve, 300))
+    fakeTimers()
+    pointer(trigger(), 'pointerenter')
+    await advance(0)
     expect(card()).not.toBeNull()
-    card()?.dispatchEvent(new PointerEvent('pointerleave', { pointerType: 'mouse' }))
-    await waitFor(() => expect(card()).toBeNull())
+    pointer(trigger(), 'pointerleave')
+    pointer(card(), 'pointerenter')
+    await advance(300)
+    expect(card()).not.toBeNull()
+    pointer(card(), 'pointerleave')
+    await advance(199)
+    expect(card()).not.toBeNull()
+    await advance(1)
+    expect(card()).toBeNull()
   })
 
   it('a touch pointer does not open the card', async () => {
@@ -132,8 +169,9 @@ describe('HoverCard', () => {
       setup: () => () => h('div', { style: 'padding-top: 60vh' }, [h(Host)])
     })
     render(Offset)
+    fakeTimers()
     trigger()?.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'touch' }))
-    await new Promise((resolve) => setTimeout(resolve, 50))
+    await advance(1000)
     expect(card()).toBeNull()
   })
 
@@ -141,20 +179,20 @@ describe('HoverCard', () => {
     render(Host)
     await userEvent.keyboard('{Tab}')
     expect(document.activeElement).toBe(link())
-    await waitFor(() => expect(card()).not.toBeNull())
+    await waitFor(() => expect(card()).not.toBeNull(), OPENS)
     expect(link().getAttribute('aria-describedby')).toBe(card()?.id)
     expect(card()?.hasAttribute('role')).toBe(false)
     await userEvent.keyboard('{Tab}')
-    await waitFor(() => expect(card()).toBeNull())
+    await waitFor(() => expect(card()).toBeNull(), OPENS)
     expect(link().hasAttribute('aria-describedby')).toBe(false)
   })
 
   it('Escape closes the card without moving focus', async () => {
     render(Host)
     link().focus()
-    await waitFor(() => expect(card()).not.toBeNull())
+    await waitFor(() => expect(card()).not.toBeNull(), OPENS)
     await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(card()).toBeNull())
+    await waitFor(() => expect(card()).toBeNull(), OPENS)
     expect(document.activeElement).toBe(link())
   })
 
@@ -162,7 +200,7 @@ describe('HoverCard', () => {
     render(LinkHost)
     await userEvent.keyboard('{Tab}')
     expect(document.activeElement).toBe(link())
-    await waitFor(() => expect(card()).not.toBeNull())
+    await waitFor(() => expect(card()).not.toBeNull(), OPENS)
     await userEvent.keyboard('{Tab}')
     expect(document.activeElement).toBe(inCard('profile'))
     expect(card()).not.toBeNull()
@@ -170,13 +208,13 @@ describe('HoverCard', () => {
     expect(document.activeElement).toBe(inCard('activity'))
     await userEvent.keyboard('{Tab}')
     expect(document.activeElement?.getAttribute('data-testid')).toBe('after')
-    await waitFor(() => expect(card()).toBeNull())
+    await waitFor(() => expect(card()).toBeNull(), OPENS)
   })
 
   it('Shift+Tab from the first card link returns to the trigger and keeps the card open', async () => {
     render(LinkHost)
     link().focus()
-    await waitFor(() => expect(card()).not.toBeNull())
+    await waitFor(() => expect(card()).not.toBeNull(), OPENS)
     await userEvent.keyboard('{Tab}')
     expect(document.activeElement).toBe(inCard('profile'))
     await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
@@ -188,11 +226,11 @@ describe('HoverCard', () => {
   it('Escape inside the card closes it and returns focus to the trigger', async () => {
     render(LinkHost)
     link().focus()
-    await waitFor(() => expect(card()).not.toBeNull())
+    await waitFor(() => expect(card()).not.toBeNull(), OPENS)
     await userEvent.keyboard('{Tab}')
     expect(document.activeElement).toBe(inCard('profile'))
     await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(card()).toBeNull())
+    await waitFor(() => expect(card()).toBeNull(), OPENS)
     expect(document.activeElement).toBe(link())
   })
 
@@ -201,8 +239,10 @@ describe('HoverCard', () => {
     expect(
       container.querySelector('[data-testid="hover-card"]')?.hasAttribute('data-disabled')
     ).toBe(true)
-    await userEvent.hover(link())
-    await new Promise((resolve) => setTimeout(resolve, 650))
+    fakeTimers()
+    pointer(trigger(), 'pointerenter')
+    link().focus()
+    await advance(5000)
     expect(card()).toBeNull()
   })
 
@@ -211,7 +251,7 @@ describe('HoverCard', () => {
     await nextTick()
     expect(card()).toBeNull()
     await userEvent.hover(link())
-    await waitFor(() => expect(card()).not.toBeNull(), { timeout: 2000 })
+    await waitFor(() => expect(card()).not.toBeNull(), OPENS)
     expect(container.contains(card())).toBe(false)
     expect(card()?.dataset['side']).toMatch(/^(top|bottom)$/)
     expect(card()?.dataset['align']).toBe('start')
