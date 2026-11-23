@@ -95,6 +95,10 @@
     'z-1 mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5 ' +
     'rtl:group-hover/template:[&_[data-animated]]:-translate-x-0.5'
 
+  const SCROLL_AREA_CLASS =
+    '@min-[60rem]/template-gallery:absolute @min-[60rem]/template-gallery:inset-0 ' +
+    '@min-[60rem]/template-gallery:mask-t-from-[calc(100%_-_2rem)] @min-[60rem]/template-gallery:mask-b-from-[calc(100%_-_6rem)]'
+
   const CARD_LINK_CLASS =
     'absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
 </script>
@@ -122,12 +126,10 @@
         :description="description"
       >
         <template #media>
-          <div
-            class="relative min-h-[36rem] w-full self-stretch @min-[60rem]/template-gallery:min-h-[44rem]"
-          >
+          <div class="relative w-full self-stretch @min-[60rem]/template-gallery:min-h-[44rem]">
             <ScrollArea
               :aria-label="templatesAriaLabel || undefined"
-              class="absolute inset-0 mask-t-from-[calc(100%_-_2rem)] mask-b-from-[calc(100%_-_6rem)]"
+              :class="SCROLL_AREA_CLASS"
             >
               <CardGrid
                 flush

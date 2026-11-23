@@ -494,13 +494,13 @@
   {
     "name": "article-index-section",
     "path": "src/components/section/article-index-section/article-index-section.vue",
-    "limit": "36.6 KB",
+    "limit": "36.65 KB",
     "entryOnly": true
   },
   {
     "name": "story-index-section",
     "path": "src/components/section/story-index-section/story-index-section.vue",
-    "limit": "35.75 KB",
+    "limit": "35.8 KB",
     "entryOnly": true
   },
   {
@@ -533,7 +533,7 @@
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "52.6 KB",
+    "limit": "53.25 KB",
     "entryOnly": true
   },
   {
@@ -653,7 +653,7 @@
   {
     "name": "subject-grid-section",
     "path": "src/components/section/subject-grid-section/subject-grid-section.vue",
-    "limit": "8.6 KB"
+    "limit": "8.65 KB"
   },
   {
     "name": "template-gallery-section",

@@ -4,6 +4,7 @@
   import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import Alert from '../../feedback/alert/alert.vue'
+  import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Field from '../../input/field/field.vue'
   import FieldDescription from '../../input/field/field-description/field-description.vue'
   import FieldLabel from '../../input/field/field-label/field-label.vue'
@@ -47,6 +48,8 @@
     country?: string
     /** Keeps the label as the control's accessible name without drawing it, for a field the page labels by its placeholder. */
     visuallyHiddenLabel?: boolean
+    /** Autocomplete hint of a text control, such as given-name, family-name or organization. */
+    autocomplete?: string
   }
 
   /** One highlight under the description. */
@@ -65,8 +68,10 @@
     missing: string
     /** Message under an email field holding a malformed address. */
     invalidEmail: string
-    /** Alert shown in place of the form once the site reports the values were sent. */
+    /** Title of the confirmation shown in place of the form once the site reports the values were sent. */
     success: string
+    /** One sentence under the confirmation title, such as when the team will reply. */
+    successDescription?: string
     /** Alert shown under the form when the site reports the values could not be sent. */
     error: string
   }
@@ -80,7 +85,7 @@
   }
 
   export interface HeroFormSectionProps {
-    /** Copy of the form outcomes: `{ missing, invalidEmail, success, error }`. */
+    /** Copy of the form outcomes: `{ missing, invalidEmail, success, successDescription?, error }`. */
     messages: HeroFormSectionMessages
     /** Short overline above the headline. */
     eyebrow?: string
@@ -106,8 +111,8 @@
     formAriaLabel?: string
     /**
      * The form fields in order; each is `{ name, type, label, placeholder?, required?, half?,
-     * options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the
-     * accessible name but does not draw it.
+     * options?, country?, visuallyHiddenLabel?, autocomplete? }`; `visuallyHiddenLabel` keeps the
+     * label as the accessible name but does not draw it.
      */
     fields?: HeroFormSectionField[]
     /** Label of the submit button. */
@@ -118,7 +123,7 @@
     marqueeMarks?: string[]
     /** The site is sending the values: the button shows its loading state and a submit is ignored. */
     loading?: boolean
-    /** The site sent the values: the form gives way to `messages.success`. */
+    /** The site sent the values: the form gives way to a confirmation of `messages.success`, in the form's footprint. */
     submitted?: boolean
     /** The site could not send the values: `messages.error` shows under the form. */
     failed?: boolean
@@ -209,11 +214,14 @@
   }
 
   const outcomeEl = ref<HTMLElement | null>(null)
+  const formHeight = ref(0)
 
   watch(
     () => props.submitted,
     (submitted) => {
-      if (!submitted || !outcomeEl.value?.contains(document.activeElement)) return
+      if (!submitted) return
+      formHeight.value = outcomeEl.value?.offsetHeight ?? 0
+      if (!outcomeEl.value?.contains(document.activeElement)) return
       nextTick(() => document.getElementById(`${baseId}-success`)?.focus())
     }
   )
@@ -301,34 +309,21 @@
           </template>
         </HeroTitle>
 
-        <ul
-          v-if="items.length > 0"
-          class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-lg) self-start p-0 lg:col-start-1 lg:row-start-2"
-        >
-          <li
-            v-for="item in items"
-            :key="item.title"
-          >
-            <FeatureItem
-              :heading-level="2"
-              :icon="item.icon"
-              :title="item.title"
-              :description="item.description"
-            />
-          </li>
-        </ul>
-
         <div
           ref="outcomeEl"
-          class="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1"
+          :style="submitted && formHeight ? { minHeight: `${formHeight}px` } : undefined"
+          class="flex min-w-0 flex-col lg:col-start-2 lg:row-span-2 lg:row-start-1"
         >
-          <Alert
+          <EmptyState
             v-if="submitted"
             :id="`${baseId}-success`"
             tabindex="-1"
-            class="outline-none"
-            severity="success"
-            :label="messages.success"
+            :data-testid="`${testId}__success`"
+            class="grow outline-none"
+            icon="az az-circle-check"
+            bordered
+            :title="messages.success"
+            :description="messages.successDescription ?? ''"
           />
           <form
             v-else
@@ -397,7 +392,7 @@
                   :name="field.name"
                   :placeholder="field.placeholder"
                   :type="field.type === 'email' ? 'email' : 'text'"
-                  :autocomplete="field.type === 'email' ? 'email' : undefined"
+                  :autocomplete="field.type === 'email' ? 'email' : field.autocomplete"
                   :spellcheck="field.type === 'email' ? false : undefined"
                   size="large"
                   @update:model-value="setValue(field, $event)"
@@ -425,6 +420,23 @@
             />
           </form>
         </div>
+
+        <ul
+          v-if="items.length > 0"
+          class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-lg) self-start p-0 lg:col-start-1 lg:row-start-2"
+        >
+          <li
+            v-for="item in items"
+            :key="item.title"
+          >
+            <FeatureItem
+              :heading-level="2"
+              :icon="item.icon"
+              :title="item.title"
+              :description="item.description"
+            />
+          </li>
+        </ul>
       </div>
     </Hero>
   </div>

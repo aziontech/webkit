@@ -115,6 +115,7 @@
   const { t } = useTranslate({ storyIndexSection: en.storyIndexSection, common: en.common })
 
   const query = ref('')
+  const listEl = ref<HTMLElement | null>(null)
 
   const selection = ref<Record<string, string | undefined>>({})
 
@@ -145,8 +146,10 @@
     })
   })
 
-  const { visible, hasMore, loadMore, resetPages } = useLoadMore(matches, () =>
-    props.moreLabel ? props.pageSize : 0
+  const { visible, hasMore, loadMore, resetPages } = useLoadMore(
+    matches,
+    () => (props.moreLabel ? props.pageSize : 0),
+    listEl
   )
 
   const hasSearch = computed(() => Boolean(props.searchPlaceholder || props.searchAriaLabel))
@@ -287,6 +290,7 @@
           marks="bottom"
         >
           <ul
+            ref="listEl"
             class="m-0 grid list-none grid-cols-1 p-0 sm:grid-cols-2 lg:grid-cols-3"
             :aria-label="ariaLabel || undefined"
           >

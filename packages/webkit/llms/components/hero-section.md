@@ -118,6 +118,7 @@
 ## Responsive
 
 - Container queries: the `bottom` scene window reads its container (`@max-2xl` fades its inline edges); the layouts switch at viewport breakpoints.
+- Topology: in a scene window narrower than 42rem the `levels` topology draws as a vertical rail (columns top to bottom), so no card is cut by the screen edge; from 42rem it is the row, 40rem wide, and `var(--container-3xl)` from 56rem. Both layouts are in the server HTML and a container query shows one, so nothing shifts on load.
 - Narrow (below `md`): in `copy-beside-art` the copy centres and stacks over the art, which takes the column width with no bleed or trim; a portrait image takes half the width, centered.
 - Touch: the large buttons meet 40 px; nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the art bleed applies from `md` only and is clipped by the hero.

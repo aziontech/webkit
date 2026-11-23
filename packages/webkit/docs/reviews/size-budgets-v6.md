@@ -1233,3 +1233,7 @@ Budget-raise: client-story-columns-section 8.7 KB → 8.8 KB (measured 8.76 KB):
 Budget-raise: logo-wall-section 24.5 KB → 24.6 KB (measured 24.55 KB): it carries the LogoWall dark-theme file (A5-038).
 Budget-raise: subject-grid-section 8.55 KB → 8.6 KB (measured 8.56 KB): it carries the CallToAction panel layout (A5-183).
 Budget-raise: template-gallery-section 29.9 KB → 29.95 KB (measured 29.91 KB): the Marquee symbol drawing (A5-149), remeasured with every lane fix in.
+Budget-raise: article-index-section 36.6 KB → 36.65 KB (measured 36.64 KB): "Load more" moves keyboard focus to the first revealed item (audit round 5, A5-043, lane F09).
+Budget-raise: story-index-section 35.75 KB → 35.8 KB (measured 35.79 KB): "Load more" moves keyboard focus to the first revealed item (audit round 5, A5-043, lane F09).
+Budget-raise: hero-form-section 52.55 KB → 53.25 KB (measured 53.23 KB): the sent state is an EmptyState confirmation in the form's footprint instead of a one-line Alert (audit round 5, A5-086, lane F09).
+Budget-raise: subject-grid-section 8.55 KB → 8.65 KB (measured 8.62 KB): the closing cell spans the cells left in the last row for any subject count (audit round 5, A5-090, lane F09).

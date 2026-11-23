@@ -6,7 +6,7 @@ status: implemented
 spec_version: 14
 created: 2026-11-05
 last_updated: 2026-11-19
-checksum: 5d4c093843a88f06a469187d49b6068fa2e0d2eb35dc81b4ea6e6e445467557a
+checksum: 70cea8cbf36ad2e51d8ef353e618ab670ea6ed69424e92ee305b13ffde591499
 template: 2
 ---
 
@@ -165,6 +165,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 ## Responsive
 
 - Container queries: the `bottom` scene window reads its container (`@max-2xl` fades its inline edges); the layouts switch at viewport breakpoints.
+- Topology: in a scene window narrower than 42rem the `levels` topology draws as a vertical rail (columns top to bottom), so no card is cut by the screen edge; from 42rem it is the row, 40rem wide, and `var(--container-3xl)` from 56rem. Both layouts are in the server HTML and a container query shows one, so nothing shifts on load.
 - Narrow (below `md`): in `copy-beside-art` the copy centres and stacks over the art, which takes the column width with no bleed or trim; a portrait image takes half the width, centered.
 - Touch: the large buttons meet 40 px; nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the art bleed applies from `md` only and is clipped by the hero.

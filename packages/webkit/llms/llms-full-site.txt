@@ -5231,7 +5231,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | --- | --- | --- |
 | `default` | — | Quotation body; replaces the `text` prop when provided. |
 | `mark` | — | The company mark; replaces the image built from `logo`, for a mark that owns its own theming. |
-| `actions` | — | A trailing control under the attribution, floored so a row of quotes aligns on it. |
+| `actions` | — | A trailing control under the attribution, floored so a row of quotes aligns on it; several controls sit in a row that wraps, `var(--spacing-sm)` apart. |
 
 ## States
 
@@ -6319,7 +6319,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Filtered (`category-search`): the selected category keeps the entries whose `categories` hold it, the show-all segment keeps every one; the search matches the title and the description; both combine
 - Filtered (`facets`): each facet keeps the entries whose `facets[id]` holds the selected value; its `allLabel` option keeps every one; the facets combine
 - Option search (`facets`): a dropdown whose `options` number more than seven renders a search field above its options; shorter lists render none
-- Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize`; changing a filter returns to the first page
+- Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize` and moves keyboard focus to the link of the first revealed item, so focus never drops to the page when the button leaves and a screen reader reads the new item; changing a filter returns to the first page
 - Leading: until a filter applies, the first `leading` entries are skipped
 - Empty: when no entry matches, the list and the load-more button are not rendered; with `emptyTitle` set, an `EmptyState` (search icon) renders `emptyTitle` and `emptyDescription`, and an `emptyActionLabel` button clears every filter
 - `data-variant` on the list mirrors the row layout: `byline` spreads the copy so the byline sits at the foot, `center` centres it
@@ -8656,13 +8656,14 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Related
 
 - `newsletter-section` — the other form section; same `submit` and state contract.
-- `alert` — renders the success and failure messages.
+- `alert` — renders the failure message.
+- `empty-state` — renders the confirmation that replaces the form once the values are sent.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `messages` | `HeroFormSectionMessages` | `—` | true | Copy of the form outcomes: `{ missing, invalidEmail, success, error }`. |
+| `messages` | `HeroFormSectionMessages` | `—` | true | Copy of the form outcomes: `{ missing, invalidEmail, success, successDescription?, error }`. |
 | `eyebrow` | `string` | `''` | false | Short overline above the headline. |
 | `titleHighlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent. |
 | `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. |
@@ -8674,12 +8675,12 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `items` | `HeroFormSectionItem[]` | `[]` | false | The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items. |
 | `formAriaLabel` | `string` | `''` | false | Accessible name of the field group, read as its legend. |
-| `fields` | `HeroFormSectionField[]` | `[]` | false | The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. |
+| `fields` | `HeroFormSectionField[]` | `[]` | false | The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel?, autocomplete? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it, `autocomplete` is the autofill hint of a text control. |
 | `submitLabel` | `string` | `''` | false | Label of the submit button. |
 | `marqueeLabel` | `string` | `''` | false | Eyebrow above the client marquee. |
 | `marqueeMarks` | `string[]` | `[]` | false | Registry names of the client marks, in order; the marquee renders only when there are marks. |
 | `loading` | `boolean` | `false` | false | The site is sending the values: the button shows its loading state and a submit is ignored. |
-| `submitted` | `boolean` | `false` | false | The site sent the values: the form gives way to `messages.success`. |
+| `submitted` | `boolean` | `false` | false | The site sent the values: the form gives way to a confirmation of `messages.success`, in the form's footprint. |
 | `failed` | `boolean` | `false` | false | The site could not send the values: `messages.error` shows under the form. |
 
 ## Events
@@ -8697,7 +8698,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Visual states: `default`, `invalid`, `loading`, `submitted`, `failed`
 - `invalid`: on submit, an empty required field shows `messages.missing` and a malformed email `messages.invalidEmail` under the field; focus moves to the first field in error; editing the field clears it; nothing is emitted
 - `loading` (prop): the button shows its loading state, every field is disabled (the scope locks off the one flag) and a submit emits nothing; `data-loading` on the root
-- `submitted` (prop): the form is replaced by a success `Alert` with `messages.success`, which takes focus when focus was in the form; `data-submitted` on the root
+- `submitted` (prop): the form is replaced by a bordered `EmptyState` (success icon, `messages.success` as its title, `messages.successDescription` under it) that keeps at least the height the form had, so the band does not collapse; it takes focus when focus was in the form; `data-submitted` on the root
 - `failed` (prop): a danger `Alert` with `messages.error` shows under the button; the form stays editable; `data-failed` on the root
 - A field with `visuallyHiddenLabel` renders its `Field.Label` visually hidden (`sr-only`), so the control keeps its accessible name and the page shows only the placeholder
 - The headline caps at `--container-md` while the description and highlights keep the `lg` column
@@ -8710,7 +8711,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visible focus: owned by the field controls and `button`.
 - Keyboard map: `Tab` reaches the inline description link and the actions under the copy, then walks the fields in order and the button; `Enter` in a text field or on the button submits.
-- ARIA: the band is the `hero` `<section>` named by the title (`aria-label`); the root is a plain `div`. The fields sit in a `fieldset` whose visually hidden `legend` is `formAriaLabel`; each control is labelled through its own `Field.Label` with an id from `useId`; each label is a `Field.Label` rendered by the band, carrying the persistent Required tag of a `required` field from first render. An `email` field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`. Validation runs on submit only: a required field carries `required` and `aria-required` from the first render, and a submit that finds it empty or malformed sets the red `invalid` state (`aria-invalid`); the message is the field's helper text, and editing the field clears it. The success message is a `status` region and the failure message an `alert`.
+- ARIA: the band is the `hero` `<section>` named by the title (`aria-label`); the root is a plain `div`. The fields sit in a `fieldset` whose visually hidden `legend` is `formAriaLabel`; each control is labelled through its own `Field.Label` with an id from `useId`; each label is a `Field.Label` rendered by the band, carrying the persistent Required tag of a `required` field from first render. An `email` field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`; a text field takes its `autocomplete` hint (`given-name`, `family-name`, `organization`, `url`) so phone autofill fills the form. Validation runs on submit only: a required field carries `required` and `aria-required` from the first render, and a submit that finds it empty or malformed sets the red `invalid` state (`aria-invalid`); the message is the field's helper text, and editing the field clears it. The success message is a `status` region and the failure message an `alert`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the inline description link's colour transition; the composed components carry their own fallback.
 - Touch target ≥40×40 px — the text fields and the button are large.
@@ -8749,6 +8750,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   const fields = [
     {
       name: 'firstname',
+      autocomplete: 'given-name',
       type: 'text',
       label: 'First name',
       half: true,
@@ -8756,6 +8758,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     },
     {
       name: 'lastname',
+      autocomplete: 'family-name',
       type: 'text',
       label: 'Last name',
       half: true,
@@ -8820,6 +8823,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     },
     {
       name: 'company',
+      autocomplete: 'organization',
       type: 'text',
       label: 'Company',
       half: true,
@@ -8845,7 +8849,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   const messages = {
     missing: 'This field is required.',
     invalidEmail: 'Enter a valid email address.',
-    success: 'We will be in touch.',
+    success: 'Thanks, we received your request.',
+    successDescription: 'A specialist will reply by email within one business day.',
     error: 'We could not send your message. Try again.'
   }
 
@@ -9173,7 +9178,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `failed` (prop): a danger `Alert` with `messages.error` shows under the submit button; the form stays editable; `data-failed` on the root
 - File field: an inline `file-dropzone` with a browse button takes one file; once picked, the file shows in a `file-token-group` whose remove button clears it and brings the dropzone back
 - Description: each section row after the first draws a rule above it (`data-ruled`); a `list` block is a bulleted list
-- Rail: shown from the large breakpoint up, sticky under the site header while the description scrolls; the apply button renders only when `applyLabel` is set
+- Rail: beside the description and sticky under the site header from the large breakpoint up, a block above the description below it; the apply button renders only when `applyLabel` is set
 - Disabled, readonly: not states of the band; `loading` is the only lock
 - Empty: when `title` is empty the band renders nothing but its root; with no `sections` the description column is empty and the rail still renders; with no `facets` the facet list is left out
 
@@ -9869,7 +9874,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - With exactly one action the band is a link to that action's `href` (unless `linked` is `false`), and that lone action renders as an outlined button closed by the trailing chevron; with two the first is secondary, the second outlined, and the band is not a link
 - `size="medium"` aligns the copy to the top of the media, `size="large"` centres it
 - `orientation` and `texture` are forwarded to the media split
-- Media precedence: `scene`, `widget`, `illustration`. A widget is inset from the cell's edges (`media-split`'s `mediaPadded`); a scene and an illustration run flush
+- Media precedence: `scene`, `widget`, `illustration`. A widget and an illustration are inset from the cell's edges (`media-split`'s `mediaPadded`), so a drawn window never lies on the band's frame and scales inside the cell on a phone; a scene runs flush
 - A widget plays its beat while the pointer is over the band, and shows its finished state on touch and under reduced motion (owned by `console-mockup`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
 - Scenes and the widget load on demand (`defineAsyncComponent`)
 - An action's `variant` (`secondary`, `outline`, `ghost`) wins over the drawn default; an action's `icon` is drawn before the label when it has no trailing chevron
@@ -10950,7 +10955,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Renders nothing without a title or steps.
 - Cards are `data-theme="dark"` in both themes (the sample's design).
-- `data-pinned` on the root mirrors `pinned`. From `lg` with motion allowed, the band is `sticky` under `headerOffset` and one screen tall, the root (the runway) grows by the row's overflow, and the row's `translate` follows the page scroll (mirrored in right-to-left); below `lg` or under `prefers-reduced-motion` the band does not pin and the row scrolls inside itself. The runway is measured on mount and on scroll/resize, so the server HTML is the unpinned band.
+- `data-pinned` on the root mirrors `pinned`. From `lg` with motion allowed, the band is `sticky` under `headerOffset` and one screen tall, the root (the runway) grows by the row's overflow, and the row's `translate` follows the page scroll (mirrored in right-to-left); below `lg` the band does not pin and the row scrolls inside itself; from `lg` under `prefers-reduced-motion` the band does not pin and every card shares one row in equal columns, as the unpinned band does, so no card sits off-screen without a scrollbar. The runway is measured on mount and on scroll/resize, so the server HTML is the unpinned band.
 
 ## Accessibility
 
@@ -11842,7 +11847,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visual states: `default`, `hover` (a card lifts to the raised surface, the read cue brightens and its arrow nudges), `focus-visible` (inset ring)
 - Filtered: the search matches the client name and the description; each facet keeps the stories whose `facets[id]` holds the selected value; all filters combine
-- Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize`; changing the search or a facet returns to the first page
+- Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize` and moves keyboard focus to the link of the first revealed item, so focus never drops to the page when the button leaves and a screen reader reads the new item; changing the search or a facet returns to the first page
 - Clearing one facet: every select starts with an option labelled by its `allLabel` that clears that facet
 - Folded toolbar (below `lg`): a filter button (`aria-expanded`, `aria-controls`) beside the search field shows or hides the selects, stacked (the panel carries `data-state="open|closed"`); its label carries the number of applied facets; every facet set to a value renders a removable `chip` (`<facet label>: <option label>`) whose remove clears it; the field shows `searchShortPlaceholder` when set. From `lg` the selects sit on the toolbar row and the button and chips are hidden (CSS only for the layout; the placeholder switches after mount, so server and client markup match)
 - Option search: a select with more than seven options renders a search field above its options and a `status` line when nothing matches
@@ -11947,7 +11952,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Subject Grid Section
 
-> A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-grid-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `registration-frame`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.
+> A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans every cell left in the grid's last row so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-grid-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `registration-frame`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.
 
 - Import: `import SubjectGridSection from '@aziontech/webkit/subject-grid-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -11960,7 +11965,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Do
 
 - Give every subject a unique `slug`; it is the card's `id`, so a `#slug` link lands on it.
-- Keep the subject count at a multiple of three plus one when `closing` is set, so the closing cell fills the last row exactly.
+- Keep the subject count at a multiple of three plus one when `closing` is set, so the closing cell takes two thirds of the last row on desktop; any other count still ends flush, with the closing cell across one cell or a full row.
 - Keep each subject's articles to a handful; the card grows with its list.
 
 ## Don’t
@@ -11980,13 +11985,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page `id` of the band, the target of a `#hash` link. |
 | `subjects` | `SubjectGridSectionSubject[]` | `[]` | false | The subject cards, in order; each is `{ slug, title, description, articles }` where every article is `{ label, href }`. Subjects without a title or a linked article are skipped. |
-| `closing` | `SubjectGridSectionClosing` | `undefined` | false | Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `closing` | `SubjectGridSectionClosing` | `undefined` | false | Call to action across the cells left in the grid's last row; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the band; empty leaves the section unnamed. Set it so the band is a named region landmark. |
 
 ## States
 
 - Visual states: `default`
-- Three columns from the large breakpoint, one below the small one, on `card-grid`'s `fixed` layout (equal tracks whatever the count), so the closing cell really spans two columns from the small breakpoint up and takes two thirds of the last row on desktop, as on azion.com's learning page
+- Three columns from the large breakpoint, one below the small one, on `card-grid`'s `fixed` layout (equal tracks whatever the count), so the closing cell spans the cells the subjects leave in the last row (`3 - count % 3` from the large breakpoint, `2 - count % 2` from the small one), never leaving a divider-coloured empty cell; with a count of three times n plus one it takes two thirds of the last row on desktop, as on azion.com's learning page
 - Empty: when no subject carries a title and a linked article the band renders nothing — not the grid, not the closing cell
 
 ## Accessibility
@@ -12059,7 +12064,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Template Gallery Section
 
-> The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a marquee of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `media-split`, `scroll-area`, `card-grid`, `button`, `registration-frame` and `marquee` rather than owning any anatomy of its own. With `closing` set it is the page's closing band: the hatched closing frame follows it, with no rules of its own, because the site footer under it opens with one (`hatch` turns that frame off when another closing band stacks directly below and draws the shared one).
+> The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a two-column wall, scrolling once the band splits, of deployable template cards, closed by a marquee of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `media-split`, `scroll-area`, `card-grid`, `button`, `registration-frame` and `marquee` rather than owning any anatomy of its own. With `closing` set it is the page's closing band: the hatched closing frame follows it, with no rules of its own, because the site footer under it opens with one (`hatch` turns that frame off when another closing band stacks directly below and draws the shared one).
 
 - Import: `import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'`
 - Category: section · Surface: site · Structure: monolithic

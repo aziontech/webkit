@@ -111,7 +111,7 @@
   {
    "name": "actions",
    "scope": "—",
-   "notes": "A trailing control under the attribution, floored so a row of quotes aligns on it."
+   "notes": "A trailing control under the attribution, floored so a row of quotes aligns on it; several controls sit in a row that wraps, `var(--spacing-sm)` apart."
   }
  ],
  "styleSeam": false,

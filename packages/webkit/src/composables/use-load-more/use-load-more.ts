@@ -1,15 +1,16 @@
-import { computed, type ComputedRef, type MaybeRefOrGetter, ref, toValue } from 'vue'
+import { computed, type ComputedRef, type MaybeRefOrGetter, nextTick, ref, toValue } from 'vue'
 
 export interface UseLoadMoreReturn<T> {
   visible: ComputedRef<T[]>
   hasMore: ComputedRef<boolean>
-  loadMore: () => void
+  loadMore: () => Promise<void>
   resetPages: () => void
 }
 
 export function useLoadMore<T>(
   items: MaybeRefOrGetter<T[]>,
-  pageSize: MaybeRefOrGetter<number>
+  pageSize: MaybeRefOrGetter<number>,
+  listEl: MaybeRefOrGetter<HTMLElement | null> = null
 ): UseLoadMoreReturn<T> {
   const pages = ref(1)
 
@@ -20,8 +21,12 @@ export function useLoadMore<T>(
 
   const hasMore = computed(() => visible.value.length < toValue(items).length)
 
-  const loadMore = () => {
+  const loadMore = async () => {
+    const from = visible.value.length
     pages.value += 1
+    await nextTick()
+    const revealed = toValue(listEl)?.children.item(from)
+    revealed?.querySelector<HTMLElement>('a[href], button:not([disabled])')?.focus()
   }
 
   const resetPages = () => {

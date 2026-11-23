@@ -98,7 +98,7 @@
 
   const TRACK_CLASS =
     'm-0 grid h-full min-h-56 w-max list-none auto-cols-[min(22rem,80vw)] grid-flow-col grid-rows-[1fr_auto_auto] p-0 ' +
-    'lg:min-h-96 lg:w-full lg:auto-cols-fr lg:group-data-[pinned]/process:w-max lg:group-data-[pinned]/process:auto-cols-[26rem]'
+    'lg:min-h-96 lg:w-full lg:auto-cols-fr lg:motion-safe:group-data-[pinned]/process:w-max lg:motion-safe:group-data-[pinned]/process:auto-cols-[26rem]'
 
   const STEP_CLASS =
     'relative row-span-3 grid min-w-0 snap-start grid-rows-subgrid gap-y-(--spacing-sm) overflow-hidden border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) ' +

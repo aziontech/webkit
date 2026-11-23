@@ -457,7 +457,7 @@
               {{ messages.successDescription }}
             </DialogDescription>
           </PanelBody>
-          <PanelFooter class="flex-col md:flex-row md:justify-end">
+          <PanelFooter class="flex-col items-stretch md:flex-row md:items-center md:justify-end">
             <Button
               v-if="secondaryAction"
               class="w-full md:w-auto"

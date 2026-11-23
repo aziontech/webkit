@@ -12,6 +12,12 @@
     nodes: HeroSectionNode[][]
   }>()
 
+  const ORIENTATIONS = ['horizontal', 'vertical'] as const
+
+  const DIAGRAM_CLASS =
+    'shrink-0 data-[layout=horizontal]:w-[40rem] data-[layout=horizontal]:@max-2xl:hidden data-[layout=horizontal]:@4xl:w-(--container-3xl) ' +
+    'data-[layout=vertical]:w-full data-[layout=vertical]:max-w-(--container-xs) data-[layout=vertical]:@2xl:hidden [&>div]:w-full'
+
   const NODE_CLASS =
     'flex w-full flex-col rounded-(--shape-card) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) ' +
     'transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none ' +
@@ -22,9 +28,12 @@
 
 <template>
   <FlowDiagram
-    orientation="horizontal"
+    v-for="orientation in ORIENTATIONS"
+    :key="orientation"
+    :orientation="orientation"
     align="center"
-    class="w-[40rem] shrink-0 @4xl:w-(--container-3xl) [&>div]:w-full"
+    :data-layout="orientation"
+    :class="DIAGRAM_CLASS"
   >
     <FlowDiagramGroup
       v-for="(column, index) in nodes"

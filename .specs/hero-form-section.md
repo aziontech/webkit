@@ -6,7 +6,7 @@ status: implemented
 spec_version: 9
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: dd24b508e5967edfc689994cf74da795b818346d433774aa59c2abcb1531c6f3
+checksum: 73e67948a4bea4c076bce4b5201e2339dc674406f956bae2ffee4fc4de43d6e3
 template: 2
 ---
 
@@ -29,7 +29,8 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 ## Related
 
 - `newsletter-section` — the other form section; same `submit` and state contract.
-- `alert` — renders the success and failure messages.
+- `alert` — renders the failure message.
+- `empty-state` — renders the confirmation that replaces the form once the values are sent.
 
 ## Best practices
 
@@ -84,7 +85,8 @@ The opening band of a lead-capture page, where the form is the reason for the pa
     :messages="{
       missing: 'This field is required.',
       invalidEmail: 'Enter a valid email address.',
-      success: 'We will be in touch.',
+      success: 'Thanks, we received your request.',
+      successDescription: 'A specialist will reply by email within one business day.',
       error: 'We could not send your message. Try again.'
     }"
     :loading="loading"
@@ -99,7 +101,7 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 
 | Prop               | Type                      | Default     | Required | JSDoc                                                                                                                                                                                                                   |
 | ------------------ | ------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `messages`         | `HeroFormSectionMessages` | `—`         | true     | Copy of the form outcomes: `{ missing, invalidEmail, success, error }`.                                                                                                                                                 |
+| `messages`         | `HeroFormSectionMessages` | `—`         | true     | Copy of the form outcomes: `{ missing, invalidEmail, success, successDescription?, error }`. |
 | `eyebrow`          | `string`                  | `''`        | false    | Short overline above the headline.                                                                                                                                                                                      |
 | `titleHighlight`   | `string`                  | `''`        | false    | Opening words of the headline, painted in the brand accent.                                                                                                                                                             |
 | `title`            | `string`                  | `''`        | false    | Page headline, rendered as the page `h1`; the band renders nothing when empty.                                                                                                                                          |
@@ -111,12 +113,12 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 | `anchor`           | `string`                  | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                          |
 | `items`            | `HeroFormSectionItem[]`   | `[]`        | false    | The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items.                                                                                     |
 | `formAriaLabel`    | `string`                  | `''`        | false    | Accessible name of the field group, read as its legend.                                                                                                                                                                 |
-| `fields`           | `HeroFormSectionField[]`  | `[]`        | false    | The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. |
+| `fields`           | `HeroFormSectionField[]`  | `[]`        | false    | The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel?, autocomplete? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it, `autocomplete` is the autofill hint of a text control. |
 | `submitLabel`      | `string`                  | `''`        | false    | Label of the submit button.                                                                                                                                                                                             |
 | `marqueeLabel`     | `string`                  | `''`        | false    | Eyebrow above the client marquee.                                                                                                                                                                                       |
 | `marqueeMarks`     | `string[]`                | `[]`        | false    | Registry names of the client marks, in order; the marquee renders only when there are marks.                                                                                                                            |
 | `loading`          | `boolean`                 | `false`     | false    | The site is sending the values: the button shows its loading state and a submit is ignored.                                                                                                                             |
-| `submitted`        | `boolean`                 | `false`     | false    | The site sent the values: the form gives way to `messages.success`.                                                                                                                                                     |
+| `submitted`        | `boolean`                 | `false`     | false    | The site sent the values: the form gives way to a confirmation of `messages.success`, in the form's footprint. |
 | `failed`           | `boolean`                 | `false`     | false    | The site could not send the values: `messages.error` shows under the form.                                                                                                                                              |
 
 ## Events
@@ -134,7 +136,7 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 - Visual states: `default`, `invalid`, `loading`, `submitted`, `failed`
 - `invalid`: on submit, an empty required field shows `messages.missing` and a malformed email `messages.invalidEmail` under the field; focus moves to the first field in error; editing the field clears it; nothing is emitted
 - `loading` (prop): the button shows its loading state, every field is disabled (the scope locks off the one flag) and a submit emits nothing; `data-loading` on the root
-- `submitted` (prop): the form is replaced by a success `Alert` with `messages.success`, which takes focus when focus was in the form; `data-submitted` on the root
+- `submitted` (prop): the form is replaced by a bordered `EmptyState` (success icon, `messages.success` as its title, `messages.successDescription` under it) that keeps at least the height the form had, so the band does not collapse; it takes focus when focus was in the form; `data-submitted` on the root
 - `failed` (prop): a danger `Alert` with `messages.error` shows under the button; the form stays editable; `data-failed` on the root
 - A field with `visuallyHiddenLabel` renders its `Field.Label` visually hidden (`sr-only`), so the control keeps its accessible name and the page shows only the placeholder
 - The headline caps at `--container-md` while the description and highlights keep the `lg` column
@@ -168,7 +170,7 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 
 - Visible focus: owned by the field controls and `button`.
 - Keyboard map: `Tab` reaches the inline description link and the actions under the copy, then walks the fields in order and the button; `Enter` in a text field or on the button submits.
-- ARIA: the band is the `hero` `<section>` named by the title (`aria-label`); the root is a plain `div`. The fields sit in a `fieldset` whose visually hidden `legend` is `formAriaLabel`; each control is labelled through its own `Field.Label` with an id from `useId`; each label is a `Field.Label` rendered by the band, carrying the persistent Required tag of a `required` field from first render. An `email` field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`. Validation runs on submit only: a required field carries `required` and `aria-required` from the first render, and a submit that finds it empty or malformed sets the red `invalid` state (`aria-invalid`); the message is the field's helper text, and editing the field clears it. The success message is a `status` region and the failure message an `alert`.
+- ARIA: the band is the `hero` `<section>` named by the title (`aria-label`); the root is a plain `div`. The fields sit in a `fieldset` whose visually hidden `legend` is `formAriaLabel`; each control is labelled through its own `Field.Label` with an id from `useId`; each label is a `Field.Label` rendered by the band, carrying the persistent Required tag of a `required` field from first render. An `email` field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`; a text field takes its `autocomplete` hint (`given-name`, `family-name`, `organization`, `url`) so phone autofill fills the form. Validation runs on submit only: a required field carries `required` and `aria-required` from the first render, and a submit that finds it empty or malformed sets the red `invalid` state (`aria-invalid`); the message is the field's helper text, and editing the field clears it. The success message is a `status` region and the failure message an `alert`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the inline description link's colour transition; the composed components carry their own fallback.
 - Touch target ≥40×40 px — the text fields and the button are large.
@@ -189,7 +191,7 @@ No built-in strings: every label, placeholder, message and action is a prop from
 ## Responsive
 
 - Container queries: none; the copy and the form sit side by side from `lg` and stack below it.
-- Narrow (below `lg`): the copy, the highlights and the form stack; below `sm` every field takes the full row (`half` fields stop pairing).
+- Narrow (below `lg`): the copy, the form and then the highlights stack, so the form starts right under the headline on a phone and the highlights read as proof under the submit button; below `sm` every field takes the full row (`half` fields stop pairing).
 - Touch: the fields and the buttons are large; nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 

@@ -151,6 +151,7 @@
   const category = ref<string | undefined>(props.allLabel)
 
   const query = ref('')
+  const listEl = ref<HTMLElement | null>(null)
 
   const selection = ref<Record<string, string>>({})
 
@@ -207,8 +208,10 @@
     (filtering.value ? props.items : props.items.slice(props.leading)).filter(keeps)
   )
 
-  const { visible, hasMore, loadMore, resetPages } = useLoadMore(matches, () =>
-    props.moreLabel ? props.pageSize : 0
+  const { visible, hasMore, loadMore, resetPages } = useLoadMore(
+    matches,
+    () => (props.moreLabel ? props.pageSize : 0),
+    listEl
   )
 
   watch([category, query, selection], resetPages)
@@ -345,6 +348,7 @@
           marks="bottom"
         >
           <ul
+            ref="listEl"
             :aria-label="ariaLabel || undefined"
             :data-variant="layout"
             :data-filters="filters"
