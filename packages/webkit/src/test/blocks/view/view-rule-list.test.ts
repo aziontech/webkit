@@ -16,6 +16,18 @@ const namesIn = (root: HTMLElement, phase: string) =>
 
 const requestNames = (root: HTMLElement) =>
   Array.from(root.querySelectorAll('[data-rule-name]')).map((a) => a.textContent?.trim())
+
+const renderEditRuleClosed = async () => {
+  const view = render(EditRule)
+  const drawer = await waitFor(() => document.querySelector<HTMLElement>('[role="dialog"]')!)
+  const close = drawer.querySelector<HTMLButtonElement>('[data-testid="drawer__close"]')!
+  await fireEvent.click(close)
+  await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull(), {
+    timeout: 3000
+  })
+  return view
+}
+
 describe('view/view-rule-list block', () => {
   beforeEach(async () => {
     await page.viewport(1280, 900)
@@ -266,8 +278,15 @@ describe('view/view-rule-list block', () => {
     expect(view.getByTestId('rule-list__count-response').textContent?.trim()).toBe('1 of 3')
   })
 
+  it('opens on the rule builder with a rule loaded (EditRule)', async () => {
+    render(EditRule)
+    const drawer = await waitFor(() => document.querySelector<HTMLElement>('[role="dialog"]')!)
+    expect(drawer.textContent).toContain('Edit Rule')
+    expect(drawer.querySelector<HTMLInputElement>('#rule-name')!.value).toBe('Docs rewrite')
+  })
+
   it('opens the rule builder as Edit Rule from a name and as Add Rule from the header (EditRule)', async () => {
-    const view = render(EditRule)
+    const view = await renderEditRuleClosed()
     await fireEvent.click(view.getByRole('button', { name: 'Edit Docs rewrite' }))
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
     const drawer = document.querySelector('[role="dialog"]') as HTMLElement
@@ -293,7 +312,7 @@ describe('view/view-rule-list block', () => {
   })
 
   it('keeps an unsaved move when a rule is edited, and lands a new rule last in its phase (EditRule)', async () => {
-    const view = render(EditRule)
+    const view = await renderEditRuleClosed()
     await fireEvent.click(view.getByRole('button', { name: 'Move Maintenance page down' }))
     await fireEvent.click(view.getByRole('button', { name: 'Edit Docs rewrite' }))
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
@@ -340,10 +359,19 @@ describe('view/view-rule-list block', () => {
 
   it('folds the position controls into a Move menu on a phone in EditRule too', async () => {
     await page.viewport(390, 844)
-    const view = render(EditRule)
+    const view = await renderEditRuleClosed()
     await waitFor(() =>
       expect(view.getByRole('button', { name: 'Move Docs rewrite, position 5 of 5' })).toBeTruthy()
     )
+  })
+
+  it('focuses Search rules on / with nothing focused', async () => {
+    const view = render(RulesList)
+    const field = await waitFor(() => view.getByRole('textbox', { name: 'Search rules' }))
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    await fireEvent.keyDown(document.body, { key: '/' })
+    await waitFor(() => expect(document.activeElement).toBe(field))
+    expect(field.getAttribute('aria-keyshortcuts')).toBe('/')
   })
 
   it('names each rule with a link button that emits edit with the event and the rule', async () => {

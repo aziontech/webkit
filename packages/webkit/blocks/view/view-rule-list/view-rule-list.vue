@@ -9,6 +9,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import { toast } from '@aziontech/webkit/toast'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, reactive, ref, watch } from 'vue'
 
   import { useNarrowViewport } from './composables/use-narrow-viewport'
@@ -133,6 +134,14 @@
   const loading = computed(() => props.loading)
   const saving = computed(() => props.saving)
   const search = ref(props.defaultSearch)
+  const searchEl = ref<InstanceType<typeof Input> | null>(null)
+  useShortcuts({
+    keys: '/',
+    label: 'Focus search',
+    element: () => (searchEl.value?.$el as HTMLElement | null | undefined) ?? null,
+    when: () => !props.loading && !loadFailed.value,
+    handler: () => searchEl.value?.focus()
+  })
   const searching = computed(() => search.value.trim().length > 0)
   const matches = (item: RuleListRule) => matchesSearch(item, search.value)
 
@@ -261,9 +270,11 @@
         <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-sm)">
           <div class="min-w-36 grow basis-(--container-2xs)">
             <Input
+              ref="searchEl"
               v-model="search"
               size="medium"
               placeholder="Search rules"
+              aria-keyshortcuts="/"
               aria-label="Search rules"
               class="w-full"
               :disabled="loading || loadFailed"
