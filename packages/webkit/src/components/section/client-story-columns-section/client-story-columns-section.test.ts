@@ -104,6 +104,14 @@ describe('ClientStoryColumnsSection', () => {
     expect(anchor?.getAttribute('href')).toBe(cells[0].href)
   })
 
+  it('names the one focusable link per column by the client and its story', () => {
+    const { getAllByRole } = columns()
+
+    const links = getAllByRole('link')
+    expect(links).toHaveLength(cells.length)
+    expect(links[0]).toHaveAccessibleName(`${LINK_LABEL}, Magalu: ${cells[0].story}`)
+  })
+
   it('paints the mark face with the brand base colour', () => {
     const { getByAltText } = columns()
 
@@ -185,6 +193,17 @@ describe('ClientStoryColumnsSection', () => {
       expect(getByRole('list', { name: ARIA_LABEL })).toBeInTheDocument()
       expect(getByRole('link').getAttribute('aria-label')).toMatch(/^Read it, Magalu/)
       for (const img of container.querySelectorAll('img')) expect(img).toHaveAttribute('alt', '')
+    })
+
+    it('shows a hidden link cue on every card at rest, so a closed card says it holds a story', () => {
+      const { container } = render(RevealHover)
+      const cues = container.querySelectorAll('[data-slot="rest-cue"]')
+      expect(cues).toHaveLength(3)
+      cues.forEach((cue) => {
+        expect(cue).toHaveAttribute('aria-hidden', 'true')
+        expect(cue.textContent?.trim()).toBe('Read story')
+        expect(cue.className).toContain('lg:group-data-[state=open]/spot:opacity-0')
+      })
     })
 
     it('opens the card under focus and closes it when focus leaves', async () => {
