@@ -1,10 +1,19 @@
 <script setup lang="ts">
   import ConfigProvider, { type ConfigProviderProps } from '@aziontech/webkit/config-provider'
-  import { getCurrentInstance, onMounted, shallowRef, useSSRContext, watch } from 'vue'
+  import {
+    defineAsyncComponent,
+    getCurrentInstance,
+    onMounted,
+    shallowRef,
+    useSSRContext,
+    watch
+  } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import DocsShell from './components/docs-shell.vue'
+  import { loadDocsShell } from './lib/docs-shell-loader'
   import { persistSettings, restoreSettings, settings } from './lib/settings'
+
+  const DocsShell = defineAsyncComponent(loadDocsShell)
 
   type Catalog = NonNullable<ConfigProviderProps['catalogs']>[string]
 

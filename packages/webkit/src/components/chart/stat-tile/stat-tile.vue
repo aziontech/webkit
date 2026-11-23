@@ -89,6 +89,9 @@
   const figure = computed(() =>
     failed.value || display.value === null ? '–' : valueText(display.value)
   )
+  const sizeFigure = computed(() =>
+    !failed.value && isFiniteNumber(props.value) ? valueText(props.value) : figure.value
+  )
   const finalFigure = computed(() => {
     if (failed.value) return `${t('statTile.loadError')}. ${props.error}`
     return isFiniteNumber(props.value)
@@ -166,10 +169,14 @@
           class="inline-flex shrink-0 items-baseline gap-(--spacing-2xs) whitespace-nowrap"
         >
           <span
-            :data-testid="`${testId}__value`"
-            class="text-(--text-default) group-data-[variant=mono]/stat-tile:text-big-number-sm group-data-[variant=sans]/stat-tile:text-heading-lg"
+            class="relative text-(--text-default) group-data-[variant=mono]/stat-tile:text-big-number-sm group-data-[variant=sans]/stat-tile:text-heading-lg"
           >
-            {{ figure }}
+            <span class="invisible">{{ sizeFigure }}</span>
+            <span
+              :data-testid="`${testId}__value`"
+              class="absolute inset-y-0 start-0"
+              >{{ figure }}</span
+            >
           </span>
           <span
             v-if="unit && hasValue"

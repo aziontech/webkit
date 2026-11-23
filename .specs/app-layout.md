@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 0d81a45dca49d6833979e0e68e52f997f70c80d51d644cbeb4ed28b9a557092b
+checksum: 7f48941db1163dc6e2cb1e8273fc422da830a14ddd1cb4889e246ae3870aa7ab
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -232,6 +232,7 @@ The only events are the `update:*` of the models above.
 ## Responsive
 
 - Container queries: the root is `@container/app-layout`; a `ResizeObserver` on the root switches to compact when its own width is under `compactBelow` (768 px by default), so the layout also goes compact inside a narrow host, not only on a narrow viewport.
+- First paint: with the default `compactBelow` (768 px) the navigation rail and the tools region also carry a container query (`@max-3xl/app-layout:hidden`), so a server-rendered page never paints the rail on a phone before the script measures the root.
 - Narrow (compact): navigation renders in a `Drawer` from the inline end (the design sample's phone menu), the tools in a `Drawer`, the split panel is forced to the bottom and its position toggle hides; the split panel's maximum is 70 % of the layout height.
 - Touch: region buttons are `IconButton`; the separator has a 16 px hit area and pointer drag works with touch (pointer events).
 - Reflow: the content scrolls on its own; no horizontal scroll at 320 px.

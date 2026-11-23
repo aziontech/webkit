@@ -273,7 +273,8 @@
     <div
       v-if="showNavigation()"
       :data-testid="`${testId}__navigation`"
-      class="flex h-full min-h-0 shrink-0"
+      :data-compact-below="compactBelow"
+      class="flex h-full min-h-0 shrink-0 data-[compact-below=768]:@max-3xl/app-layout:hidden"
     >
       <slot
         name="navigation"
@@ -350,7 +351,8 @@
           v-if="showTools()"
           :aria-labelledby="toolsTitleId"
           :data-testid="`${testId}__tools`"
-          class="flex h-full min-h-0 shrink-0 flex-col border-s border-(--border-default) bg-(--bg-surface)"
+          :data-compact-below="compactBelow"
+          class="flex h-full min-h-0 shrink-0 flex-col border-s border-(--border-default) bg-(--bg-surface) data-[compact-below=768]:@max-3xl/app-layout:hidden"
           :style="{ width: `${toolsWidth}px` }"
         >
           <div

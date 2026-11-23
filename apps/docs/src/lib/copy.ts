@@ -1,6 +1,6 @@
 import { copyText as writeClipboard } from '@aziontech/webkit/utils/clipboard'
 
-import { cached, keys } from './data'
+import { cached, keys } from './route-data'
 import type { BlockIndexItem, ComponentDoc, ComponentIndexItem, Highlighted, Row } from './types'
 
 function text(html: string): string {

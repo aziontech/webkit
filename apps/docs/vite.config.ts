@@ -76,8 +76,7 @@ export default defineConfig({
     assetsDir: '_app',
     chunkSizeWarningLimit: 2000,
     modulePreload: {
-      resolveDependencies: (_file, deps, { hostType }) =>
-        hostType === 'html' ? [] : deps.filter((dep) => dep.endsWith('.css'))
+      resolveDependencies: (_file, deps, { hostType }) => (hostType === 'html' ? [] : deps)
     },
     rollupOptions: {
       experimental: {

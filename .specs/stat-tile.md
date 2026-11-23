@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: f25da8466204ad950ebf4a85d5c39e497488212ef81c65373f12715829886658
+checksum: 9e93be505d50a1d60fb9fa601f7e0f39fc63fb367e06f7c1c778a48fe05002ad
 spec_version: 8
 created: 2026-10-20
 last_updated: 2026-11-19
@@ -117,7 +117,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 - `data-carded` is set when the tile sits in a `ChartCard` and not in a group (injected, no prop): the card owns the only frame, so the tile drops its border, radius and surface; use an unpadded `ChartCard.Content`
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
-- Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value.
+- Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value. The figure box keeps the final figure's width (an invisible copy of it sizes the box), so the count-up never rewraps the row or moves the sparkline.
 
 - Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 

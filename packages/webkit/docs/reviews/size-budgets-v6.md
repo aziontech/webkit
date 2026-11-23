@@ -1343,3 +1343,6 @@ Budget-raise: table-cell-time 19 KB → 19.05 KB (measured 19.03 KB): its Avatar
 Budget-raise: filter-menu-chip-group 21.95 KB → 22 KB (measured 21.97 KB): its Avatar draws initials from the first and last word (decision A5-F08-2).
 Budget-raise: console-layout 83.9 KB → 83.95 KB (measured 83.92 KB): the account trigger name uses the shared initials helper (decision A5-F08-2).
 Budget-raise: app-header-account 13.7 KB → 13.75 KB (measured 13.74 KB): its Avatar draws initials from the first and last word (decision A5-F08-2).
+Budget-raise: app-layout 24.4 KB → 24.45 KB (measured 24.44 KB): the navigation rail and the tools region carry a container query so a server-rendered page paints compact on a phone before the script measures the root (audit 5, A5-154).
+Budget-raise: console-layout-root 82.6 KB → 82.65 KB (measured 82.62 KB): it renders AppLayout, which now paints compact on a phone from the server HTML (A5-154).
+Budget-raise: console-layout 83.9 KB → 83.95 KB (measured 83.92 KB): it renders AppLayout, which now paints compact on a phone from the server HTML (A5-154).
