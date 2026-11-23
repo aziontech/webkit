@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { useElementSize } from '@vueuse/core'
-  import { computed, onMounted, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, onMounted, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -164,7 +163,16 @@
     resolveFileIcon(activeTab.value?.language, activeTab.value?.fileIcon)
   )
 
-  const { width: contentWidth } = useElementSize(contentEl)
+  const contentWidth = ref(0)
+  let sizeObserver: ResizeObserver | null = null
+  onMounted(() => {
+    if (!contentEl.value || typeof ResizeObserver === 'undefined') return
+    sizeObserver = new ResizeObserver(([entry]) => {
+      contentWidth.value = entry?.contentRect.width ?? 0
+    })
+    sizeObserver.observe(contentEl.value)
+  })
+  onScopeDispose(() => sizeObserver?.disconnect())
   const SPLIT_MIN_WIDTH = 640
   const { isSplit, showDiffGutter, displayLines, splitRows } = useCodeBlockLines(
     activeTab,

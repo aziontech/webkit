@@ -92,13 +92,14 @@ describe('ChartCard', () => {
     expect(root.style.getPropertyValue('--chart-card-height')).toBe('552px')
   })
 
-  it('renders the handles only when enabled', () => {
+  it('renders the handles only when enabled', async () => {
     const plain = render(card())
     expect(plain.queryByTestId('chart-card-drag-handle')).toBeNull()
     expect(plain.queryByTestId('chart-card-resize-handle')).toBeNull()
     plain.unmount()
 
     const both = render(card({ draggable: true, resizable: true }))
+    await nextTick()
     const handle = both.getByTestId('chart-card-drag-handle')
     expect(handle).toHaveAccessibleName('Move Threats vs requests')
     expect(handle).toHaveAccessibleDescription('Use the arrow keys to move the card.')

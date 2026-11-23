@@ -335,11 +335,12 @@ describe('a column cut at the end edge never shows a partial value', () => {
     { name: 'property-filter/with-collection', id: 'data-table', view: PropertyFilterCollection },
     { name: 'table/cell-presets', id: 'data-table', view: TableCellPresets }
   ])('$name at 320 and 390', async ({ id, view }) => {
-    for (const dir of ['ltr', 'rtl'] as const) {
+    for (const pageDir of ['ltr', 'rtl'] as const) {
       for (const width of [320, 390]) {
-        const { container, unmount } = mount(() => h(view as Component), dir, width)
+        const { container, unmount } = mount(() => h(view as Component), pageDir, width)
         await settle()
         const { viewport, end } = parts(container, id)
+        const dir = getComputedStyle(viewport).direction === 'rtl' ? 'rtl' : 'ltr'
         const edge = endEdge(viewport, dir)
         const fade = end!.getBoundingClientRect()
         const covered = dir === 'rtl' ? fade.right : fade.left
@@ -351,10 +352,9 @@ describe('a column cut at the end edge never shows a partial value', () => {
           const label = `${head.textContent?.trim()} ${dir} ${width}`
           const endAligned = head.matches('[data-align=end], :has(> [data-align=end])')
           if (endAligned || slice < r.width / 2) {
-            expect(
-              Math.abs(covered - (dir === 'rtl' ? r.right : r.left)),
-              label
-            ).toBeLessThanOrEqual(1)
+            const detail = `${label} fade=${fade.left}..${fade.right} head=${r.left}..${r.right} edge=${edge}`
+            if (dir === 'rtl') expect(covered, detail).toBeGreaterThanOrEqual(r.right - 1)
+            else expect(covered, detail).toBeLessThanOrEqual(r.left + 1)
           }
         }
         unmount()

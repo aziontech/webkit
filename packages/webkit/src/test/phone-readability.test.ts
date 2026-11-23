@@ -147,7 +147,7 @@ describe('content stays readable at phone and desktop widths', () => {
     )
     await settle()
     await settle()
-    const body = container.querySelector<HTMLElement>('[data-testid="log-viewer__body"]')!
+    const body = container.querySelector<HTMLElement>('[data-testid$="__body"]')!
     const frame = body.getBoundingClientRect()
     const lines = Array.from(
       container.querySelectorAll<HTMLElement>('[data-testid="log-viewer__line"]')

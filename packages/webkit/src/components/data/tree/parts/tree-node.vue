@@ -222,7 +222,7 @@
               <span
                 aria-hidden="true"
                 data-slot="touch-target"
-                class="absolute inset-y-0 -inset-x-3.5 hidden pointer-coarse:block"
+                class="absolute -inset-y-px -inset-x-3.5 hidden pointer-coarse:block"
               />
             </button>
           </span>
