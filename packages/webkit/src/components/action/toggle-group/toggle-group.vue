@@ -248,8 +248,8 @@
 
 <script lang="ts">
   const ROOT_CLASS =
-    'group relative inline-flex w-fit max-w-full min-w-0 items-stretch gap-(--spacing-2xs) rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-2xs) ' +
-    'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 ' +
+    'group/toggle-group relative inline-flex w-fit max-w-full min-w-0 flex-wrap items-stretch gap-(--spacing-2xs) rounded-(--shape-button) border border-(--border-muted) ' +
+    'bg-(--bg-surface) p-(--spacing-2xs) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 ' +
     'data-[fluid]:flex data-[fluid]:w-full'
 
   const resolveOptionElement = (element: unknown): HTMLElement | null => {
@@ -271,15 +271,15 @@
     'motion-reduce:transition-none'
 
   const OPTION_CLASS =
-    'relative z-1 inline-flex min-w-0 items-center justify-center gap-(--spacing-xs) whitespace-nowrap ' +
-    'group-data-[fluid]:min-w-0 group-data-[fluid]:flex-1 ' +
+    'relative z-1 inline-flex items-center justify-center gap-(--spacing-xs) text-center ' +
+    'group-data-[size=small]/toggle-group:min-h-4.5 group-data-[size=medium]/toggle-group:min-h-5.5 group-data-[size=large]/toggle-group:min-h-7.5 pointer-coarse:min-h-11! group-data-[fluid]/toggle-group:flex-[1_1_auto] ' +
     'rounded-(--shape-button) border border-transparent bg-transparent ' +
-    'group-data-[size=small]:px-(--spacing-xs) group-data-[size=medium]:px-(--spacing-sm) group-data-[size=large]:px-(--spacing-md) group-data-[size=small]:text-label-sm ' +
-    'group-data-[size=medium]:text-label-sm group-data-[size=large]:text-label-md ' +
+    'group-data-[size=small]/toggle-group:px-(--spacing-xs) group-data-[size=medium]/toggle-group:px-(--spacing-sm) group-data-[size=large]/toggle-group:px-(--spacing-md) ' +
+    'group-data-[size=small]/toggle-group:text-label-sm group-data-[size=medium]/toggle-group:text-label-sm group-data-[size=large]/toggle-group:text-label-md ' +
     'data-[state=active]:text-(--text-default) data-[state=inactive]:text-(--text-muted) ' +
     'data-[locked]:pe-(--spacing-xs) ' +
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
-    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-(--bg-disabled) disabled:text-(--text-disabled)'
+    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 
   /**
    * One segment; type a list as ToggleGroupOption of the model's union so each value is one of it. A
@@ -338,7 +338,7 @@
         data-slot="touch-target"
         class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
       />
-      <span class="min-w-0 truncate">{{ option.label }}</span>
+      <span class="min-w-0 wrap-anywhere">{{ option.label }}</span>
       <i
         v-if="option.locked"
         class="az az-lock shrink-0 text-(--text-disabled)"

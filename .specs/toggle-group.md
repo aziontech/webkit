@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: 74eda628dd1b89852de8ed0b4aecf8da6f94dc4c559e26a65457fdfeba1892aa
+checksum: 5a887d823ce85ec2db22c495a5fb5e722e9ba76e25a9635ce71ff9cbbcbb0795
 created: 2026-11-09
-last_updated: 2026-11-15
+last_updated: 2026-11-22
 ---
 
 # ToggleGroup — Component Spec
@@ -45,7 +45,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 ## Best practices
 
-- Keep labels to one or two words: segments never wrap (`whitespace-nowrap`) and long labels truncate.
+- Keep labels to one or two words. When the options do not fit their container they flow onto another row, and a label breaks across lines only when one option alone is wider than the group; a label is never cut off.
 - Give every option a unique `value`; values are coerced to strings and used as the list key and the selection identity, so duplicates collide.
 - Pass `ariaLabel` whenever no visible label names the group.
 - Use `fluid` to make the group fill a narrow container and share its width across segments, instead of styling the width at the call site.
@@ -117,7 +117,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 - Indicator: an `aria-hidden` span positioned under the selected segment from its measured size and offset; hidden when nothing is selected or the selected segment is not rendered. It re-measures on option, selection and size changes (`ResizeObserver`).
 - Option normalization: a missing `label` falls back to `value`, then to `Option <n>`; a missing `value` falls back to `label`, then to the index.
 - Test ids: root `toggle-group` (consumer `data-testid` wins), `<testId>__indicator`, `<testId>__option`, `<testId>__option-lock`.
-- Reflow: the root is capped at the width of its container (`max-w-full`, `min-w-0`) and the options shrink, truncating their labels, instead of overflowing a narrow box.
+- Reflow: the root is capped at the width of its container (`max-w-full`, `min-w-0`) and wraps (`flex-wrap`): options that do not fit move to another row, the selected-option indicator follows them, and a label wraps inside its option only when that option alone is wider than the group. Heights are minimums (28 / 32 / 40 px for one row), so a wrapped group grows instead of clipping.
 
 ## Motion & Animations
 
@@ -132,7 +132,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 | --------------------------------- | ---------------------------------------------------------------------------------------- |
 | typography (small, medium)        | `.text-label-sm`                                                                         |
 | typography (large)                | `.text-label-md`                                                                         |
-| height                            | `h-7` (small) · `h-8` (medium) · `h-10` (large)                                          |
+| height                            | `min-h-7` (small) · `min-h-8` (medium) · `min-h-10` (large): one row; a wrapped group grows |
 | group surface                     | `var(--bg-surface)`                                                                      |
 | group border                      | `var(--border-muted)`                                                                    |
 | group padding / gap               | `var(--spacing-2xs)`                                                                     |
@@ -142,7 +142,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 | indicator surface                 | `var(--bg-selected)`                                                                     |
 | text (selected)                   | `var(--text-default)`                                                                    |
 | text (unselected)                 | `var(--text-muted)`                                                                      |
-| disabled segment                  | `var(--bg-disabled)` / `var(--text-disabled)`                                            |
+| disabled segment                  | transparent / `var(--text-disabled)` (no fill, so it never reads as a second selected option) |
 | ring                              | `var(--ring-color)`                                                                      |
 
 ## Theme gaps
@@ -179,8 +179,8 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 ## Responsive
 
-- The root is capped at its container (`max-w-full`, `min-w-0`) and options shrink and truncate instead of overflowing; `fluid` makes the options share the full width.
-- Touch: a touch-target span grows each segment to 44px under `pointer-coarse`; prefer `size="large"` on touch-first surfaces.
+- The root is capped at its container (`max-w-full`, `min-w-0`); options that do not fit flow onto another row instead of truncating, and `fluid` makes the options in each row share its full width.
+- Touch: under `pointer-coarse` each segment is drawn at least 44px tall, so a group that wraps its options onto several rows still gives every option a full 44px target; a touch-target span also widens each segment's hit area.
 - No hover-only affordance: selection, focus and disabled states are all visible without hover.
 
 ## Performance
