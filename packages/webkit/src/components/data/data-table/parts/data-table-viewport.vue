@@ -29,6 +29,7 @@
     viewportHeight,
     overflowStart,
     overflowEnd,
+    overflowEndInset,
     onViewportScroll,
     treeActive,
     rowFocusActive,
@@ -112,7 +113,7 @@
     <span
       aria-hidden="true"
       :data-testid="`${testId}__fade-end`"
-      :style="{ width: `${overflowEnd}px` }"
+      :style="{ insetInlineEnd: `${overflowEndInset}px`, width: `${overflowEnd}px` }"
       :class="FADE_END_CLASS"
     />
   </div>

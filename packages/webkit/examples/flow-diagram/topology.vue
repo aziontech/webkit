@@ -1,4 +1,5 @@
 <script setup>
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import FlowDiagramBind from '@aziontech/webkit/flow-diagram-bind'
   import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -101,9 +102,21 @@
     bound[id] = value
     note.value = `${value} bound to ${id}.`
   }
+  const removing = ref('')
+  const confirmingRemove = computed({
+    get: () => removing.value !== '',
+    set: (open) => {
+      if (!open) removing.value = ''
+    }
+  })
   const onRemove = (id) => {
+    removing.value = id
+  }
+  const confirmRemove = () => {
+    const id = removing.value
     bound[id] = ''
     note.value = `Removed the ${id} binding.`
+    removing.value = ''
   }
 </script>
 
@@ -140,6 +153,13 @@
         />
       </template>
     </FlowDiagram>
+    <ConfirmDialog
+      v-model:open="confirmingRemove"
+      :title="`Unbind ${bound[removing] || 'this resource'}`"
+      :description="`The ${removing} step stops using it as soon as you confirm. You can bind it again later.`"
+      confirm-label="Unbind"
+      @confirm="confirmRemove"
+    />
     <p
       role="status"
       class="text-body-sm text-(--text-muted)"

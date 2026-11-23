@@ -236,6 +236,10 @@
     editor
   })
 
+  const AREA_CLASS =
+    'relative flex h-(--code-editor-height) min-h-0 min-w-0 flex-col data-[fill]:h-auto data-[fill]:flex-1 @lg/code-editor:flex-row ' +
+    'data-[diff]:h-[calc(var(--code-editor-height)*2)] @lg/code-editor:data-[diff]:h-(--code-editor-height)'
+
   const ROOT_CLASS =
     '@container/code-editor flex w-full min-w-0 flex-col overflow-hidden border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out ' +
     'focus-within:ring-2 focus-within:ring-(--ring-color) ' +
@@ -273,7 +277,8 @@
     <div
       :style="fill ? undefined : { '--code-editor-height': height }"
       :data-fill="fill || null"
-      class="relative flex h-(--code-editor-height) min-h-0 min-w-0 flex-col data-[fill]:h-auto data-[fill]:flex-1 @lg/code-editor:flex-row"
+      :data-diff="(diff && !fill) || null"
+      :class="AREA_CLASS"
       :data-testid="`${testId}__area`"
     >
       <div

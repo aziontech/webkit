@@ -137,7 +137,7 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 
 ## Responsive
 
-- Container queries: `@container/code-editor` on the root; in diff mode the two panes sit side by side from `@lg` and stack below.
+- Container queries: `@container/code-editor` on the root; in diff mode the two panes sit side by side from `@lg` and stack below; stacked, the area is twice `height` tall, so each pane keeps the full `height` instead of half (without `fill`).
 - Narrow: the editing area keeps its height and scrolls in both axes; long lines never wrap in code.
 - Touch: problem buttons are 32 px high (44 px on `pointer: coarse`).
 - Reflow: the page never scrolls horizontally; the editor scrolls inside its frame.

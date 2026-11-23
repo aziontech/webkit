@@ -3,7 +3,7 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: 42daa8ca106a97af478dce62437d0af85af6a279901d0d78cc938bb3a899ae03
+checksum: 1106611d45261eb62adf61cce3bbaa6bc5f420de29dea3a7e56a014219e7d8c8
 spec_version: 14
 template: 2
 created: 2026-11-10
@@ -229,7 +229,7 @@ Layout: each row is the height of its `size` (24 / 32 / 40px), full width of its
 - Double-click is never the only way: `item-double-click` duplicates an action the app also offers through `item-click`, `Enter` or the row actions.
 - Contrast ≥4.5:1 for label and description on the canvas, the hover fill and `var(--bg-selected)` in both themes; disabled text follows the disabled-token exemption.
 - `motion-reduce:transition-none` on the chevron and selection transitions; `motion-reduce:before:transition-none` on the hover layer.
-- Touch target: rows are 24 / 32 / 40px tall by `size` and full width (the same deviation as `bar-list` below 40px), justified by row density in file trees; prefer `large` where touch is the main input. The whole row is the activation target and the chevron box extends to the row height.
+- Touch target: rows are 24 / 32 / 40px tall by `size` and full width on a fine pointer, justified by row density in file trees; on a coarse pointer (`pointer-coarse:`) every row grows to 44px, and the chevron carries an invisible, `aria-hidden` hit area 44px wide (`data-slot="touch-target"`), so a folder opens from a 44 x 44 target. The whole row is the activation target, and in a tree without selection a row tap on a parent also toggles it.
 
 ## Right-to-left
 
@@ -254,7 +254,7 @@ Layout: each row is the height of its `size` (24 / 32 / 40px), full width of its
 
 Decisions taken in this draft that a reviewer should confirm before approval:
 
-1. **Row click on a parent does not toggle it.** Activation (click, Enter, Space) selects and emits `item-click`; expansion is the chevron and ArrowRight / ArrowLeft. File-explorer trees (VS Code) toggle folders on row click — confirm the Cloudscape-style split is wanted, or add a toggle-on-activate rule for parents when not `selectable`.
+1. **Row click on a parent** — resolved 2026-11-22 (A5-F04-3): in a tree without selection a click or tap on a parent row also opens or closes it (the file-explorer behavior, VS Code), and `item-click` still fires; in a `selectable` tree a row click selects and only the chevron and ArrowRight / ArrowLeft expand. Enter and Space never toggle.
 2. **No children reveal animation in v1.** The group appears instantly; a height reveal would need the JS-driven `<Transition>` pattern `accordion` uses. Confirm instant is acceptable.
 3. **Indent guide lines are on**, as a `var(--border-muted)` hairline per nested group. Drop them if the design wants a cleaner Vercel-style tree.
 4. **Row actions use the `treegrid` pattern** (resolved in 6.0): with the `actions` slot the tree is a treegrid, the controls are reached with the arrow keys inside the row, and they stay always visible (no hover reveal, so touch users see them).

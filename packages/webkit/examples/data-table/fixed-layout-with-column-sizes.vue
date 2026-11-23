@@ -47,9 +47,9 @@
   ]
 
   const columns = [
-    { accessorKey: 'name', header: 'Name', width: 280 },
-    { accessorKey: 'id', header: 'ID', sortable: false, width: 160 },
+    { accessorKey: 'name', header: 'Name', width: 180 },
     { accessorKey: 'status', header: 'Status', width: 130 },
+    { accessorKey: 'id', header: 'ID', sortable: false, width: 160 },
     { accessorKey: 'editor', header: 'Last Editor', sortable: false, width: 300 },
     { accessorKey: 'modified', header: 'Last Modified', width: 220 },
     { id: 'actions', header: '', type: 'action', sortable: false }
@@ -100,7 +100,7 @@
         <DropdownMenuTrigger>
           <IconButton
             icon="az az-ellipsis-vertical"
-            aria-label="Row actions"
+            :aria-label="`Actions for ${row.name}`"
             variant="ghost"
             size="small"
           />

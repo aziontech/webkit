@@ -903,4 +903,18 @@ describe('Tree', () => {
       await expectNoA11yViolations(view.container)
     })
   })
+
+  it('opens a folder from a row click only when the tree has no selection', async () => {
+    const plain = mount()
+    await userEvent.click(rowOf(plain.container, 'assets'))
+    expect(node(plain.container, 'assets').getAttribute('aria-expanded')).toBe('true')
+    expect(plain.emitted('item-click')).toHaveLength(1)
+    await userEvent.click(rowOf(plain.container, 'assets'))
+    expect(node(plain.container, 'assets').getAttribute('aria-expanded')).toBe('false')
+    plain.unmount()
+
+    const picking = mount({ selectable: true })
+    await userEvent.click(rowOf(picking.container, 'assets'))
+    expect(node(picking.container, 'assets').getAttribute('aria-expanded')).toBe('false')
+  })
 })

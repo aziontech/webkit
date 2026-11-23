@@ -143,6 +143,7 @@ describe('Tracker', () => {
     expect(blocks).toHaveLength(1)
     expect(blocks[0]?.getAttribute('data-severity')).toBe('none')
     expect(view.getByTestId('tracker__live').textContent?.trim()).toBe('No data')
+    expect(blocks[0]?.textContent?.trim()).toBe('No data')
 
     await fireEvent.keyDown(view.getByTestId('tracker'), { key: 'ArrowRight' })
     expect(blocks[0]?.hasAttribute('data-active')).toBe(false)

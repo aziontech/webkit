@@ -46,9 +46,9 @@
   ]
 
   const columns = [
-    { accessorKey: 'name', header: 'Name', frozen: 'start', width: 260 },
-    { accessorKey: 'id', header: 'ID', sortable: false, width: 170 },
+    { accessorKey: 'name', header: 'Name', frozen: 'start', width: 160 },
     { accessorKey: 'status', header: 'Status', width: 140 },
+    { accessorKey: 'id', header: 'ID', sortable: false, width: 170 },
     { accessorKey: 'protocol', header: 'Protocol', sortable: false, width: 170 },
     { accessorKey: 'domains', header: 'Domains', align: 'end', width: 130 },
     { accessorKey: 'origins', header: 'Origins', align: 'end', width: 130 },
@@ -104,7 +104,7 @@
         <DropdownMenuTrigger>
           <IconButton
             icon="az az-ellipsis-vertical"
-            aria-label="Row actions"
+            :aria-label="`Actions for ${row.name}`"
             variant="ghost"
             size="small"
           />

@@ -18,6 +18,7 @@ export interface TreeEventActions {
   tree: () => HTMLElement | null
   grid: () => boolean
   multiple: () => boolean
+  selectable: () => boolean
   editable: () => boolean
   isExpanded: (id: string) => boolean
   setExpanded: (id: string, open: boolean) => void
@@ -111,6 +112,16 @@ function commandKey(a: TreeEventActions, event: KeyboardEvent, key: string, id: 
   return true
 }
 
+function clickRow(a: TreeEventActions, event: MouseEvent): void {
+  const id = clickedRowId(event.target)
+  if (!id) return
+  a.focusItem(id)
+  a.activate(event, id)
+  const entry = a.navigation.entry(id)
+  if (a.selectable() || !entry || entry.item.disabled) return
+  if (a.navigation.isParent(id)) a.setExpanded(id, !a.isExpanded(id))
+}
+
 export function useTreeEvents(actions: TreeEventActions): UseTreeEventsReturn {
   let typed = ''
   let typedAt = 0
@@ -160,12 +171,7 @@ export function useTreeEvents(actions: TreeEventActions): UseTreeEventsReturn {
         (actions.grid() ? (rowOf(event.target)?.dataset['itemId'] ?? '') : '')
       if (id) actions.navigation.setFocused(id)
     },
-    onClick: (event) => {
-      const id = clickedRowId(event.target)
-      if (!id) return
-      actions.focusItem(id)
-      actions.activate(event, id)
-    },
+    onClick: (event) => clickRow(actions, event),
     onMousedown: (event) => {
       if (!keepsTextSelection(event)) event.preventDefault()
     },

@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 9a23099f42ef6b0d25c6f6a2665e75a56e4e50e862d1da2a2b6ede7f24165813
+checksum: 877845ccc37fa2558f6a8637f5935a3fbfff1625b4ebf7060285c70cf9473511
 created: 2026-05-26
 last_updated: 2026-11-18
 ---
@@ -297,7 +297,7 @@ the height of a single row the moment the root stopped stretching.
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: none mirror.
 - Keyboard: no horizontal arrow-key logic.
-- Isolation: timestamps and level labels render `dir="ltr"`; each message renders `dir="auto"`, so a log line in another script keeps its own direction.
+- Isolation: the log body is `dir="ltr"` in every UI direction (log output reads left to right, so a long line starts at the left edge and scrolls from there); timestamps and level labels render `dir="ltr"`; each message renders `dir="auto"`, so a log line in another script keeps its own direction; the header's line count is isolated in a `bdi`.
 
 ## Responsive
 

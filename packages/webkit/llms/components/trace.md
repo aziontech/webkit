@@ -94,7 +94,8 @@
 - Layout: logical utilities only; bars sit at `inset-inline-start` with an inline size, so the waterfall runs from the inline start and mirrors; indentation is `padding-inline-start`.
 - Icons: the collapsed chevron is mirrored (`rtl:-scale-x-100`); span icons are not.
 - Keyboard: `ArrowRight` and `ArrowLeft` swap under `dir="rtl"` (expand is the inline-end arrow).
-- User data: span names, services, attribute values and event names sit in `<bdi>`.
+- User data: services, attribute values and event names sit in `<bdi>`; a span name in a waterfall or tree row is `dir="ltr"` with `text-align: start`, so a long name keeps its beginning and its ellipsis falls at its end in any UI direction.
+- Quantities: durations, start offsets, axis ticks and detail values sit in `<bdi>`, so `412 ms` never reads `ms 412` under `dir="rtl"`.
 - Timeline bars sit at `inset-inline-start` with an inline size, so the lanes run from the inline start and mirror.
 - Critical path lines sit at `inset-inline-start` with an inline size, like the bars, so they mirror with them.
 - Minimap: the run clock starts at the inline start, so the track mirrors; the pointer position is read from the inline start and the slider arrows swap with `logicalArrowKey`.
@@ -133,7 +134,7 @@
 
 ## Responsive
 
-- Container queries: `@container/trace`; the name column grows from 9 rem to 20 rem with the container, the service column and the grid lines appear from `@xl`/`@3xl`.
+- Container queries: `@container/trace`; below `@xl` a waterfall row takes two lines, the span name above its bar (axis, bars and minimap span the full width; the Span header hides); from `@xl` the name column sits beside the bars and grows from 13 rem to 20 rem with the container; the service column and the grid lines appear from `@xl`/`@3xl`.
 - Toolbar: the search and the view switch wrap onto two lines when the trace is narrower than both.
 - Narrow: the timeline view needs no name column and reads best in a narrow panel; names truncate, the duration labels stay on the bars, the details facts take two columns.
 - Touch: rows and timeline lanes are 44 px high on `pointer: coarse`; a timeline bar narrower than a touch target is still reached from the keyboard and through the Waterfall and Tree views, which show the same span; nothing depends on hover. The minimap track sets `touch-action: none` so a drag zooms instead of scrolling, and its thumbs widen to 24 px on `pointer: coarse`.

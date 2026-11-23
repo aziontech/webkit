@@ -28,7 +28,6 @@
       :value="70"
       unit="%"
       :delta="-1.5"
-      inverse
     />
   </StatTileGroup>
 </template>

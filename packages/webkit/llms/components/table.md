@@ -236,9 +236,9 @@
 
   const columns = [
     { accessorKey: 'name', header: 'Name', principal: true },
+    { accessorKey: 'status', header: 'Status', minWidth: 96 },
     { accessorKey: 'id', header: 'ID', minWidth: 140 },
     { accessorKey: 'repository', header: 'Repository', grow: 2 },
-    { accessorKey: 'status', header: 'Status', minWidth: 96 },
     { accessorKey: 'domains', header: 'Domain', grow: 2 },
     { accessorKey: 'tags', header: 'Tags', grow: 2 },
     { accessorKey: 'updatedAt', header: 'Last modified', minWidth: 160 },

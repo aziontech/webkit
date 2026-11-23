@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onMounted, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, onMounted, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -163,10 +163,23 @@
     resolveFileIcon(activeTab.value?.language, activeTab.value?.fileIcon)
   )
 
+  const contentWidth = ref(0)
+  let sizeObserver: ResizeObserver | null = null
+  onMounted(() => {
+    if (!contentEl.value || typeof ResizeObserver === 'undefined') return
+    sizeObserver = new ResizeObserver(([entry]) => {
+      contentWidth.value = entry?.contentRect.width ?? 0
+    })
+    sizeObserver.observe(contentEl.value)
+  })
+  onScopeDispose(() => sizeObserver?.disconnect())
+  const SPLIT_MIN_WIDTH = 640
   const { isSplit, showDiffGutter, displayLines, splitRows } = useCodeBlockLines(
     activeTab,
     isOutput,
-    () => props.diffView === 'split'
+    () =>
+      props.diffView === 'split' &&
+      (contentWidth.value === 0 || contentWidth.value >= SPLIT_MIN_WIDTH)
   )
 
   const isSingleLine = computed(() => displayLines.value.length === 1)

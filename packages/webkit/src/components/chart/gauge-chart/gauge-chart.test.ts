@@ -103,4 +103,14 @@ describe('GaugeChart', () => {
       view.unmount()
     }
   })
+
+  it('sets a unit word in the sans text face, not the display figure face', async () => {
+    const Sizes = (await import('../../../../examples/gauge-chart/sizes.vue')).default
+    const view = render(Sizes)
+    const figures = view.getAllByTestId('gauge-chart__figure').map((el) => el.textContent?.trim())
+    const units = view.getAllByTestId('gauge-chart__unit').map((el) => el.textContent?.trim())
+    expect(figures.every((figure) => /^[\d.,]+$/.test(figure ?? ''))).toBe(true)
+    expect(units.length).toBe(figures.length)
+    expect(new Set(units)).toEqual(new Set(['ms']))
+  })
 })

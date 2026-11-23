@@ -62,7 +62,10 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ tableHeadCell: en.tableHeadCell })
+  const { t } = useTranslate({
+    tableHeadCell: en.tableHeadCell,
+    tableSortButton: en.tableSortButton
+  })
   const group = inject(TableRowGroupInjectionKey, { hoverable: false })
   const compact = computed<boolean>(() => group.compact === true)
 
@@ -72,6 +75,7 @@
 
   const labelId = useId()
   const sortById = useId()
+  const sortStateId = useId()
   const rootEl = ref<HTMLElement | null>(null)
 
   const growAttr = computed<number | null>(() =>
@@ -83,6 +87,13 @@
   const ariaSort = computed<TableSortDirection | undefined>(() =>
     props.sortable ? props.sortDirection : undefined
   )
+
+  const sortState = computed<string>(() => {
+    if (!props.sortable) return ''
+    if (props.sortDirection === 'ascending') return t('tableSortButton.ascending')
+    if (props.sortDirection === 'descending') return t('tableSortButton.descending')
+    return ''
+  })
 
   const onSort = (direction: 'ascending' | 'descending') => {
     emit('sort', direction)
@@ -158,6 +169,12 @@
         >{{ t('tableHeadCell.sortBy') }}</span
       >
       <span
+        v-if="sortState"
+        :id="sortStateId"
+        hidden
+        >{{ sortState }}</span
+      >
+      <span
         v-if="sortable"
         :class="SORT_CLASS"
         @click.stop
@@ -166,6 +183,7 @@
         <TableSortButton
           :sort-direction="sortDirection"
           :aria-labelledby="`${sortById} ${labelId}`"
+          :aria-describedby="sortState ? sortStateId : undefined"
           @sort="onSort"
         />
       </span>

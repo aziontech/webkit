@@ -37,7 +37,7 @@
       v-for="panel in panels"
       :key="panel.id"
     >
-      <ChartCard.Content>
+      <ChartCard.Content :padded="false">
         <StatTile
           :label="panel.title"
           :value="panel.value"

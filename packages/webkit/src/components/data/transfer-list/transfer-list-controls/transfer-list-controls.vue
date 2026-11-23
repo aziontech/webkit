@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, inject, nextTick, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
@@ -22,6 +22,8 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'transfer-list-controls'
   )
+
+  const rootEl = ref<HTMLElement | null>(null)
 
   const locked = computed(() => ctx.disabled.value || ctx.anyLoading.value)
 
@@ -69,17 +71,37 @@
     }
   ])
 
-  function onClick(event: MouseEvent, all: boolean, direction: TransferListMoveDirection) {
-    if (all) {
-      ctx?.moveAll(event, direction)
-      return
-    }
-    ctx?.move(event, direction)
+  const COUNTERPART: Record<string, string> = {
+    'move-to-target': 'move-to-source',
+    'move-all-to-target': 'move-all-to-source',
+    'move-to-source': 'move-to-target',
+    'move-all-to-source': 'move-all-to-target'
+  }
+
+  const controlEl = (key: string): HTMLButtonElement | null =>
+    rootEl.value?.querySelector<HTMLButtonElement>(`[data-testid="${testId.value}__${key}"]`) ??
+    null
+
+  async function keepFocus(key: string): Promise<void> {
+    await nextTick()
+    const clicked = controlEl(key)
+    if (!clicked?.disabled || document.activeElement !== document.body) return
+    const counterpart = controlEl(COUNTERPART[key] ?? '')
+    const next = counterpart && !counterpart.disabled ? counterpart : null
+    const fallback = rootEl.value?.querySelector<HTMLButtonElement>('button:not(:disabled)')
+    ;(next ?? fallback)?.focus()
+  }
+
+  function onClick(event: MouseEvent, control: MoveControl) {
+    if (control.all) ctx?.moveAll(event, control.direction)
+    else ctx?.move(event, control.direction)
+    void keepFocus(control.key)
   }
 </script>
 
 <template>
   <div
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     class="flex flex-row items-center justify-center gap-(--spacing-xs) md:flex-col"
@@ -94,7 +116,7 @@
       :disabled="control.disabled"
       icon-class="max-md:rotate-90 max-md:rtl:-rotate-90"
       :data-testid="`${testId}__${control.key}`"
-      @click="onClick($event, control.all, control.direction)"
+      @click="onClick($event, control)"
     />
   </div>
 </template>

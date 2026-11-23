@@ -315,6 +315,9 @@ export const es: Messages = {
   chartCard: {
     resize: 'Redimensionar tarjeta',
     move: 'Mover tarjeta',
+    moveVerb: 'Mover',
+    moveHint: 'Usa las flechas para mover la tarjeta.',
+    moved: 'Movida a la posición {position} de {total}',
     columns: '{span} de {max} columnas',
     columnsAndHeight: '{columns}, {height} píxeles de alto'
   },

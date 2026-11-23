@@ -156,7 +156,8 @@
     'focus-visible:outline-none focus-visible:after:opacity-100 [:focus-visible>&]:after:opacity-100 ' +
     '[:focus-visible>[data-tree-indent]_&]:after:opacity-100 ' +
     'group-data-[size=small]/tree:min-h-6 group-data-[size=small]/tree:gap-(--spacing-2xs) group-data-[size=small]/tree:px-(--spacing-2xs) group-data-[size=small]/tree:text-label-md ' +
-    'group-data-[size=large]/tree:min-h-10 group-data-[size=large]/tree:px-(--spacing-sm)'
+    'group-data-[size=large]/tree:min-h-10 group-data-[size=large]/tree:px-(--spacing-sm) ' +
+    'pointer-coarse:min-h-11 group-data-[size=small]/tree:pointer-coarse:min-h-11'
 
   const CELL_CLASS =
     'flex min-w-0 flex-1 items-center gap-(--spacing-xs) self-stretch rounded-(--shape-control) ' +
@@ -210,13 +211,18 @@
               data-slot="tree-toggle"
               :data-testid="`${ctx.testId.value}__toggle`"
               :data-state="state"
-              class="flex h-full w-full cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-(--text-muted) group-data-[disabled]/tree-row:text-(--text-disabled)"
+              class="relative flex h-full w-full cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-(--text-muted) group-data-[disabled]/tree-row:text-(--text-disabled)"
               @mousedown.prevent
               @click="onToggle"
             >
               <i
                 :data-state="state"
                 :class="CHEVRON_CLASS"
+              />
+              <span
+                aria-hidden="true"
+                data-slot="touch-target"
+                class="absolute -inset-y-px -inset-x-3.5 hidden pointer-coarse:block"
               />
             </button>
           </span>

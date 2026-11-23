@@ -981,4 +981,31 @@ describe('LogViewer', () => {
       expect(view.queryByTestId('log-viewer__line-level')).toBeNull()
     })
   })
+
+  describe('LogViewer level chips', () => {
+    it('paints each level dot in the mark colour meant for a mark on a surface', () => {
+      const view = render(Levels)
+      const probe = document.createElement('span')
+      document.body.appendChild(probe)
+      const colourOf = (token: string): string => {
+        probe.style.backgroundColor = `var(${token})`
+        return getComputedStyle(probe).backgroundColor
+      }
+      const marks: Record<string, string> = {
+        error: '--danger-mark',
+        warn: '--warning-mark',
+        info: '--info-mark'
+      }
+      let checked = 0
+      for (const chip of view.getAllByTestId('log-viewer-header__level')) {
+        const dot = chip.querySelector<HTMLElement>('[data-level]')!
+        const token = marks[dot.dataset['level'] ?? '']
+        if (!token) continue
+        expect(getComputedStyle(dot).backgroundColor, dot.dataset['level']).toBe(colourOf(token))
+        checked += 1
+      }
+      probe.remove()
+      expect(checked).toBeGreaterThan(0)
+    })
+  })
 })

@@ -275,7 +275,7 @@
     <template #loading>
       <div
         :style="{ aspectRatio: `${box.width} / ${box.height}` }"
-        class="w-full"
+        class="max-h-[60dvh] w-full"
       >
         <Skeleton
           width="100%"
@@ -304,7 +304,7 @@
       :aria-describedby="describedBy"
       :data-testid="`${testId}__plot`"
       :style="{ aspectRatio: `${box.width} / ${box.height}` }"
-      class="relative w-full min-w-0 rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+      class="relative max-h-[60dvh] w-full min-w-0 rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
     >
       <svg
         :viewBox="viewBox"

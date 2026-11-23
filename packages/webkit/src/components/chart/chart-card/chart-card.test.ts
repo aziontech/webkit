@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
-import { h, nextTick, ref } from 'vue'
+import { describe, expect, it, vi } from 'vitest'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import Chart, { ChartLine } from '../chart/index'
@@ -92,14 +92,17 @@ describe('ChartCard', () => {
     expect(root.style.getPropertyValue('--chart-card-height')).toBe('552px')
   })
 
-  it('renders the handles only when enabled', () => {
+  it('renders the handles only when enabled', async () => {
     const plain = render(card())
     expect(plain.queryByTestId('chart-card-drag-handle')).toBeNull()
     expect(plain.queryByTestId('chart-card-resize-handle')).toBeNull()
     plain.unmount()
 
     const both = render(card({ draggable: true, resizable: true }))
-    expect(both.getByTestId('chart-card-drag-handle').getAttribute('aria-label')).toBe('Move card')
+    await nextTick()
+    const handle = both.getByTestId('chart-card-drag-handle')
+    expect(handle).toHaveAccessibleName('Move Threats vs requests')
+    expect(handle).toHaveAccessibleDescription('Use the arrow keys to move the card.')
     expect(both.getByTestId('chart-card-resize-handle').getAttribute('role')).toBe('separator')
   })
 
@@ -112,6 +115,43 @@ describe('ChartCard', () => {
     await fireEvent.keyDown(handle, { key: 'Enter' })
     expect(moves.map((args) => args[1])).toEqual(['right', 'up'])
     expect(moves[0]?.[0]).toBeInstanceOf(KeyboardEvent)
+  })
+
+  it('announces the new position after a keyboard move', async () => {
+    const order = ref(['a', 'b', 'c'])
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            'div',
+            order.value.map((id) =>
+              h(
+                ChartCard,
+                {
+                  key: id,
+                  draggable: true,
+                  'data-testid': `card-${id}`,
+                  onMove: () => {
+                    order.value = [...order.value.filter((item) => item !== id), id]
+                  }
+                },
+                {
+                  default: () => [
+                    h(ChartCardHeader, null, { default: () => h(ChartCardDragHandle) })
+                  ]
+                }
+              )
+            )
+          )
+      })
+    )
+    const handle = view.getByTestId('card-a').querySelector<HTMLElement>('button')!
+    await fireEvent.keyDown(handle, { key: 'ArrowRight' })
+    await vi.waitFor(() =>
+      expect(document.querySelector('[data-webkit-announcer]')?.textContent).toBe(
+        'Moved to position 3 of 3'
+      )
+    )
   })
 
   it('arms native drag only while the handle is pressed', async () => {

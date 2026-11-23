@@ -158,10 +158,11 @@
   const MINIMAP_CLASS =
     '[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
     'grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) ' +
-    'group-data-[view=timeline]/trace:grid-cols-1'
+    'group-data-[view=timeline]/trace:grid-cols-1 @max-xl/trace:group-data-[view=waterfall]/trace:grid-cols-1'
   const MINIMAP_LABEL_CLASS =
     'flex min-w-0 items-center gap-(--spacing-xs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-2xs) ' +
-    'group-data-[view=timeline]/trace:border-e-0 group-data-[view=timeline]/trace:border-b'
+    'group-data-[view=timeline]/trace:border-e-0 group-data-[view=timeline]/trace:border-b ' +
+    '@max-xl/trace:group-data-[view=waterfall]/trace:border-e-0 @max-xl/trace:group-data-[view=waterfall]/trace:border-b'
   const MINIMAP_LINE_CLASS =
     'pointer-events-none absolute start-[calc(var(--trace-line-offset)*100%)] top-[calc(var(--trace-line-top)*100%)] h-[max(1px,calc(var(--trace-line-height)*100%))] ' +
     'w-[max(1px,calc(var(--trace-line-width)*100%))] rounded-full ' +

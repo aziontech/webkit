@@ -6,6 +6,7 @@
   import Tag, { type TagSeverity } from '../../content/tag/tag.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Separator from '../../layout/separator/separator.vue'
+  import { ChartCardInjectionKey } from '../chart-card/injection-key'
   import { formatCompact, formatSignedPercent, isFiniteNumber } from '../lib'
   import SparkChart from '../spark-chart/spark-chart.vue'
   import { StatTileGroupInjectionKey } from '../stat-tile-group/injection-key'
@@ -65,6 +66,7 @@
 
   const attrs = useAttrs()
   const group = inject(StatTileGroupInjectionKey, null)
+  const card = inject(ChartCardInjectionKey, null)
   const { t, locale } = useTranslate({ statTile: en.statTile })
   const valueText = (value: number): string =>
     props.formatValue === formatCompact
@@ -116,7 +118,8 @@
 
   const ROOT_CLASS =
     'group/stat-tile @container/stat-tile flex min-w-0 flex-col overflow-hidden border-(--border-default) ' +
-    'not-data-[grouped]:rounded-(--shape-card) not-data-[grouped]:border not-data-[grouped]:bg-(--bg-surface) data-[grouped]:border-e data-[grouped]:border-b'
+    'not-data-[grouped]:not-data-[carded]:rounded-(--shape-card) not-data-[grouped]:not-data-[carded]:border not-data-[grouped]:not-data-[carded]:bg-(--bg-surface) ' +
+    'data-[grouped]:border-e data-[grouped]:border-b'
 </script>
 
 <template>
@@ -129,6 +132,7 @@
     :data-error="failed || null"
     :data-variant="variant"
     :data-grouped="group ? '' : null"
+    :data-carded="card && !group ? '' : null"
     :aria-labelledby="labelId"
     :aria-busy="loading || undefined"
     :class="ROOT_CLASS"

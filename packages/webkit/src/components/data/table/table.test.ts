@@ -214,6 +214,8 @@ describe('Table', () => {
 
         // The parent's @sort handler received 'ascending' and aria-sort updated.
         expect(sortableHead.getAttribute('aria-sort')).toBe('ascending')
+        const sorted = within(sortableHead).getByRole('button', { name: 'Sort by Name' })
+        expect(sorted).toHaveAccessibleDescription('Sorted ascending')
       })
     })
 

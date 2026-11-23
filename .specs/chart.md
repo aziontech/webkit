@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: ab3e604e44d65e94ff4cda6993c7a889e85ccf321e7a5bed299e1f020cdce5ed
+checksum: b5031a4401b6b23e4ea86e1d036e80488ec274f097dfa3d4a507e1554c62a00b
 spec_version: 14
 template: 2
 created: 2026-10-20
@@ -169,7 +169,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: _none_.
   - Events: _none_.
   - Slots: _none_.
-- `chart-tooltip/chart-tooltip.vue` — the readout for the active index, inside the figure (never teleported): a header with the label, divided edge to edge from the rows, then every visible series with a 2px line key, its name, and its value at the end of the row in tabular figures. Raised surface `var(--chart-tooltip-bg)` with a `var(--chart-tooltip-border)` edge; flips to the other side past the middle of the plot. With `total`, a Total row under a hairline in `var(--chart-tooltip-border)` sums the visible series at the active index (empty values count as zero) in the same value format; the `footer` slot adds a hint line under the rows, also divided edge to edge, such as what a click on the plot does.
+- `chart-tooltip/chart-tooltip.vue` — the readout for the active index, inside the figure (never teleported): a header with the label, divided edge to edge from the rows, then every visible series with a 2px line key, its name, and its value at the end of the row in tabular figures. Raised surface `var(--chart-tooltip-bg)` with a `var(--chart-tooltip-border)` edge; flips to the other side past the middle of the plot, and is shifted in when that side lacks room, so the box never runs past the chart's edges (on a phone the label and the keys stay whole). With `total`, a Total row under a hairline in `var(--chart-tooltip-border)` sums the visible series at the active index (empty values count as zero) in the same value format; the `footer` slot adds a hint line under the rows, also divided edge to edge, such as what a click on the plot does.
   - Props: `total?: boolean` (default `false` — a Total row summing the visible series under the rows).
   - Events: _none_.
   - Slots: `footer` (a hint line under the rows, in `.text-body-sm` / `var(--chart-tooltip-muted)`; the tooltip is `aria-hidden`, so the same hint must also be reachable elsewhere, such as the chart `ariaLabel`).

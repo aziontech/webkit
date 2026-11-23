@@ -1,5 +1,6 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
 import Default from '../../../../examples/transfer-list/default.vue'
@@ -278,6 +279,20 @@ describe('TransferList', () => {
         expect(
           (getByTestId('transfer-list-controls__move-all-to-target') as HTMLButtonElement).disabled
         ).toBe(true)
+      })
+
+      it('keeps keyboard focus on the controls when a move disables the pressed button', async () => {
+        const { getByTestId } = render(Harness())
+        const moveAll = getByTestId(
+          'transfer-list-controls__move-all-to-target'
+        ) as HTMLButtonElement
+        moveAll.focus()
+        await userEvent.keyboard('{Enter}')
+        await vi.waitFor(() =>
+          expect(document.activeElement).toBe(
+            getByTestId('transfer-list-controls__move-all-to-source')
+          )
+        )
       })
 
       it('move-all-to-source pulls every target item back', async () => {

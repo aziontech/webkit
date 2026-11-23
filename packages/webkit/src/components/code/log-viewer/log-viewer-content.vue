@@ -186,6 +186,7 @@
       v-else
       orientation="both"
       fade
+      dir="ltr"
       :data-testid="`${testId}__body`"
       class="h-full min-h-0 bg-(--bg-canvas) sm:data-[orientation=both]:overflow-x-hidden"
     >

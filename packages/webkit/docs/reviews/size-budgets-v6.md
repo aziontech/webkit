@@ -1257,3 +1257,32 @@ Budget-raise: pricing-card 5.3 KB → 5.35 KB (measured 5.33 KB): no empty slot 
 Budget-raise: link 2.45 KB → 2.7 KB (measured 2.68 KB): a `_blank` link carries visually hidden "(opens in a new tab)" text from the shared `common` catalog (A5-016).
 Budget-raise: dialog-content 18.15 KB → 18.2 KB (measured 18.19 KB): the parts take their own test id with a consumer override, and the close button the root adds keeps the root's test id through a small render function (audit A5-161, decision A5-F19-1).
 Budget-raise: command 28.7 KB → 28.75 KB (measured 28.72 KB): Command renders DialogContent, so it carries the same own-test-id change, plus the ids it now passes to the parts so its own test ids stay the same (audit A5-161, decision A5-F19-1).
+
+Budget-raise: table-root 2.6 KB → 3.2 KB (measured 3.18 KB): the end fade covers a column cut at the edge (A5-008): the scroll-edge composable now reads the column headers once per frame.
+Budget-raise: data-table 57.7 KB → 58.25 KB (measured 58.24 KB): same column cover (A5-008) through the shared scroll-edge composable.
+Budget-raise: data-grid 13.25 KB → 13.8 KB (measured 13.79 KB): same column cover (A5-008), and a range paints only when it spans two cells (A5-070).
+Budget-raise: table 8.3 KB → 9 KB (measured 8.96 KB): same column cover (A5-008) and the sort-state description on sortable heads (A5-018).
+Budget-raise: listing-table-section 25.75 KB → 26.45 KB (measured 26.41 KB): renders a DataTable, so it carries the column cover (A5-008).
+Budget-raise: table-head-cell 5.4 KB → 5.45 KB (measured 5.45 KB): describes the sort state (A5-018).
+Budget-raise: chart-card 5.25 KB → 5.85 KB (measured 5.81 KB): the drag handle names itself after the card and announces keyboard moves through the shared announcer (A5-021).
+Budget-raise: chart-card-drag-handle 2.15 KB → 2.7 KB (measured 2.70 KB): same (A5-021).
+Budget-raise: chart-card-resize-handle 2.8 KB → 2.85 KB (measured 2.81 KB): shares the ChartCard context and locale strings that grew with A5-021.
+Budget-raise: chart 27 KB → 27.25 KB (measured 27.21 KB): the tooltip measures itself and stays inside the chart on a phone (A5-220).
+Budget-raise: chart-tooltip 2.9 KB → 3.1 KB (measured 3.09 KB): same (A5-220).
+Budget-raise: gauge-chart 11.2 KB → 11.25 KB (measured 11.21 KB): sets a unit word apart from the display figure (A5-074).
+Budget-raise: bar-list 5.8 KB → 5.85 KB (measured 5.80 KB): the 2px end cap in the full hue (A5-023).
+Budget-raise: tracker 6 KB → 6.4 KB (measured 6.39 KB): merges periods into worst-state buckets on a narrow strip and shows a visible No data (A5-222).
+Budget-raise: tree 10.9 KB → 11 KB (measured 11.00 KB): row tap opens a folder without selection, and the 44px chevron hit area (A5-218).
+Budget-raise: config-provider 12.4 KB → 12.45 KB (measured 12.41 KB): carries the locale catalogs, which gained the three ChartCard move strings (A5-021).
+Budget-raise: code-block 33.85 KB → 33.95 KB (measured 33.93 KB): draws a split diff unified below 640px, measured with one ResizeObserver (A5-223).
+Budget-raise: doc-code-group 34.3 KB → 34.35 KB (measured 34.34 KB): renders CodeBlock (A5-223).
+Budget-raise: cli-terminal-section 47.15 KB → 47.25 KB (measured 47.23 KB): renders CodeBlock (A5-223).
+Budget-raise: streaming-response 38.1 KB → 38.2 KB (measured 38.19 KB): renders CodeBlock (A5-223).
+Budget-raise: listing-index-section 42.1 KB → 42.8 KB (measured 42.76 KB): renders CodeBlock and a table with the column cover (A5-223, A5-008).
+Budget-raise: feature-tabs-section 58.15 KB → 58.25 KB (measured 58.24 KB): renders CodeBlock and CodeEditor (A5-223, A5-224).
+Budget-raise: code-editor 11.55 KB → 11.6 KB (measured 11.58 KB): a stacked diff gives each pane the full height (A5-224).
+Budget-raise: trace 39 KB → 39.1 KB (measured 39.10 KB): two-line rows on a phone and isolated quantities in right-to-left (A5-225, A5-169).
+Budget-raise: console-trace-scene 84.65 KB → 84.75 KB (measured 84.75 KB): renders Trace (A5-225, A5-169).
+Budget-raise: console-application-scene 121.95 KB → 122.6 KB (measured 122.57 KB): renders tables and charts that carry the column cover and the tooltip clamp (A5-008, A5-220).
+Budget-raise: transfer-list 7.9 KB → 8.05 KB (measured 8.04 KB): keeps keyboard focus on the controls after a move disables the pressed button (A5-020).
+Budget-raise: transfer-list-controls 4.15 KB → 4.35 KB (measured 4.33 KB): same (A5-020).

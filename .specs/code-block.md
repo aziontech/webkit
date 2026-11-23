@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: e1ed9e02872c7c5b673a5c0de9bdd34e954f7db4a9d6b6ad907730abe29d7ef3
+checksum: 88a87f9222fee5677e3a53293c6c40dbfe877cdd9d34ade34f3b60dcbc52f403
 created: 2026-05-28
 last_updated: 2026-11-18
 ---
@@ -200,7 +200,7 @@ Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should upda
 - Visual states: `default`, `hover`, `focus-visible` on tabs and copy control
 - `data-state` on tabs: `active` | `inactive`; the active tab's text colour switches on `data-[state=active]:` in the tab's flat class, never a `:class` ternary
 - `data-state` on code lines: `default` | `added` | `removed` | `highlighted`; in the split view a side with no line opposite a change is `empty` (`var(--bg-canvas)`)
-- `data-split` on the panel when the active tab with an `original` draws side by side
+- `data-split` on the panel when the active tab with an `original` draws side by side. A `split` diff draws unified while the content is narrower than 640px (an unmeasured block, as in the server render, draws split)
 - `data-disabled` not used (tabs are not disabled in v2)
 - `data-type` on the root: `code` | `output`; `output` paints the shell `--bg-canvas` and every line flat in `--text-muted`
 
