@@ -12,7 +12,7 @@
  "setup": null,
  "useWhen": [
   "Any monetary amount in the product: a price in a table row or list cell (`small`), an amount stated on a card (`medium`), the headline figure of a pricing card (`large`).",
-  "An amount followed by a period or unit (`/ mon`, `/ GB`) that should read as secondary to the figure."
+  "An amount followed by a period or unit (`/ month`, `/ GB`) that should read as secondary to the figure."
  ],
  "avoidWhen": [
   "You need a full pricing tier with plan name, caveat and action → use `pricing-card`.",

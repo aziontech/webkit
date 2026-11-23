@@ -4,7 +4,7 @@ Composable `@aziontech/webkit/use-locale`. The signatures and option tables belo
 
 ```ts
 import { useLocale, usePortalLocale, createTranslator, directionOf, mergeMessages, pickCatalog, provideLocale, BUILT_IN_CATALOGS } from '@aziontech/webkit/use-locale'
-import type { UseLocaleReturn, Direction, MessageKey, MessageParams, Messages, PartialMessages, PluralMessage, PortalLocaleAttrs, DirectionSetting, FileSizeUnit, PluralForms, ProvideLocaleOptions } from '@aziontech/webkit/use-locale'
+import type { UseLocaleReturn, Direction, MessageKey, MessageParams, Messages, PartialMessages, PluralMessage, PortalLocaleAttrs, DirectionSetting, FileSizeUnit, PluralForms, ProvidedLocale, ProvideLocaleOptions } from '@aziontech/webkit/use-locale'
 ```
 
 ## `useLocale`
@@ -62,7 +62,7 @@ function pickCatalog(locale: string, catalogs: Record<string, Messages>): Messag
 ## `provideLocale`
 
 ```ts
-function provideLocale(options: ProvideLocaleOptions): LocaleContext
+function provideLocale(options: ProvideLocaleOptions): ProvidedLocale
 ```
 
 ## `BUILT_IN_CATALOGS`
@@ -156,6 +156,16 @@ Plural forms passed to `plural`; `{count}` in a form is replaced by the formatte
 ```ts
 type PluralForms = PluralMessage
 ```
+
+## `ProvidedLocale`
+
+What `provideLocale` returns: the provided context, plus the direction the provider sets itself.
+
+Extends `LocaleContext`.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `ownDir` | `ComputedRef<Direction \| undefined>` | yes | Direction from an explicit `dir` or `locale`; undefined when the provider inherits the direction around it. |
 
 ## `ProvideLocaleOptions`
 

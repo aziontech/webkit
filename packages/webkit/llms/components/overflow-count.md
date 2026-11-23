@@ -85,7 +85,7 @@
 
 - Container queries: none; the popover is `width="small"` (`--container-xs`).
 - Narrow: the popover keeps its width and flips to fit (from `Popover`).
-- Touch: the chip sits in a 24 px row; the popover entries are 28 px tall with their own padding.
+- Touch: the chip sits in a 24 px row, and a hidden hit area (`data-slot="touch-target"`) grows its target to 44 px on a coarse pointer without changing its drawn size; the popover entries are 28 px tall with their own padding. A touch that opens the popover moves focus to the panel, not the search box, so the on-screen keyboard does not rise over the list; a keyboard or mouse open still focuses the search box.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Examples

@@ -449,7 +449,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [useFilePicker](composables/use-file-picker.md): `useFilePicker` and 2 more exports (options, return, helpers and types).
 - [useFocusTrap](composables/use-focus-trap.md): `useFocusTrap` and 1 more exports (options, return, helpers and types).
 - [useHeadingNavigation](composables/use-heading-navigation.md): `useHeadingNavigation` and 7 more exports (options, return, helpers and types).
-- [useLocale](composables/use-locale.md): `useLocale` and 19 more exports (options, return, helpers and types).
+- [useLocale](composables/use-locale.md): `useLocale` and 20 more exports (options, return, helpers and types).
 - [usePinnedRow](composables/use-pinned-row.md): `usePinnedRow` and 2 more exports (options, return, helpers and types).
 - [usePlacement](composables/use-placement.md): `usePlacement` and 12 more exports (options, return, helpers and types).
 - [useShortcuts](composables/use-shortcuts.md): `useShortcuts` and 17 more exports (options, return, helpers and types).

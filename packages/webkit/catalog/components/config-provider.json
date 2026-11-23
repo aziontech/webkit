@@ -20,7 +20,7 @@
   "Register every language the app offers in `catalogs` (`{ 'pt-BR': ptBR, es }`), imported from `@aziontech/webkit/locales/<tag>`; a `pt-BR` or `es` locale with no registered catalog falls back to English and warns once in development.",
   "Use a full BCP 47 tag (`pt-BR`, not `pt`); a tag with no registered catalog falls back to the same language, then to English.",
   "Override built-in strings through `messages` (partial, deep-merged), not by forking components.",
-  "Leave `dir` on `auto`: Arabic, Hebrew, Persian and Urdu locales turn the subtree right-to-left (a device locale does so only when its catalog is registered, so English text never reads right-to-left).",
+  "Leave `dir` on `auto`: Arabic, Hebrew, Persian and Urdu locales turn the subtree right-to-left (a device locale does so only when its catalog is registered, so English text never reads right-to-left). With no `locale` and `dir` on `auto` the provider sets no direction of its own: its root carries no `dir`, so a provider placed only for `now` or `timeZone` keeps the direction of the page or the provider around it, and its components read that provider's direction.",
   "Leave `now` unset in an app: relative times then read the real clock and `TableCellTime` re-renders every minute. Set it to a fixed moment where the text must not depend on when it renders: an example or a test (`const NOW = Date.UTC(2026, 10, 10, 12)`, sample dates counted back from it), or a server render whose markup the browser hydrates. Never compute that moment from `Date.now()` / `new Date()` in setup: the server and the browser read different clocks."
  ]
 }

@@ -9373,7 +9373,7 @@
     {
      "name": "suffix",
      "type": "string",
-     "default": "'/ mon'",
+     "default": "'/ month'",
      "required": "false",
      "doc": "Text after the amount, usually the billing period."
     },
@@ -23725,7 +23725,7 @@
      "type": "'ltr' | 'rtl' | 'auto'",
      "default": "'auto'",
      "required": "false",
-     "doc": "Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left)."
+     "doc": "Text direction of the subtree; `auto` derives it from `locale` (`ar`, `he`, `fa`, `ur` are right-to-left), and with no `locale` inherits the direction around the provider."
     },
     {
      "name": "now",
