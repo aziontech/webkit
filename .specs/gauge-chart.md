@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 040d4aca4dbec7bc7bd1def1f84c757526dd5ed3c61f2df33a3ba932d9525857
+checksum: 259c69e755a8701e92e861507ce987de74c064683d4a1b1b4b204e0496fa2ef5
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -43,7 +43,7 @@ One reading against a known range, drawn as a half-circle dial with the value un
 - Add bands only when the range has agreed limits (a quota, an SLO, a CPU ceiling); without them the arc draws in `--chart-series-1`, the default chart color, and the reading carries no judgment.
 - Name every band (`label`) so the value is read with its meaning, not only with a color.
 - Use status severities for bands (`success`, `warning`, `danger`) and the findings levels (`severity-critical` … `severity-info`) only when the reading is a severity.
-- Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`.
+- Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`. A unit word after a space (`92 ms`) is set apart in the muted sans text face, so the display figure face never turns it into capitals.
 
 ## Usage
 
@@ -155,7 +155,7 @@ _No events — the gauge is a read-out; wrap it in a link or button to make it i
 | arc, no band     | `var(--chart-series-1)`                                                                 |
 | arc in a band    | `var(--chart-status-*)`, `var(--severity-*)`                                            |
 | band marks       | `var(--bg-surface)`                                                                     |
-| reading          | `.text-big-number-md`, `.text-big-number-sm`, `.text-heading-sm`, `var(--text-default)` |
+| reading          | `.text-big-number-md`, `.text-big-number-sm`, `.text-heading-sm`, `var(--text-default)`; a trailing unit word `.text-body-sm`, `var(--text-muted)` |
 | caption and ends | `.text-body-sm`, `.text-label-sm`, `var(--text-muted)`                                  |
 
 ## Theme gaps

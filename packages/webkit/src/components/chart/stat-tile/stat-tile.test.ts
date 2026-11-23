@@ -175,3 +175,15 @@ describe('StatTile', () => {
     })
   })
 })
+
+describe('StatTile inside a ChartCard', () => {
+  it('lets the card own the only frame', async () => {
+    const MetricPanel = (await import('../../../../examples/chart-card/metric-panel.vue')).default
+    const view = render(MetricPanel)
+    const tiles = view.getAllByTestId('stat-tile')
+    expect(tiles.length).toBeGreaterThan(0)
+    for (const tile of tiles) expect(tile.hasAttribute('data-carded')).toBe(true)
+    const alone = render(StatTile, { props: { label: 'Requests', value: 1 } })
+    expect(alone.getAllByTestId('stat-tile').at(-1)?.hasAttribute('data-carded')).toBe(false)
+  })
+})

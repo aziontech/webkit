@@ -130,6 +130,12 @@
   )
 
   const text = computed(() => valueText(reading.value))
+  const textParts = computed<{ figure: string; unit: string }>(() => {
+    const match = /^(.*\d)\s+(\p{L}[\p{L}/]*)$/u.exec(text.value)
+    return match
+      ? { figure: match[1] ?? '', unit: match[2] ?? '' }
+      : { figure: text.value, unit: '' }
+  })
   const status = computed(() => band.value?.label ?? '')
   const valueLabel = computed(() =>
     status.value
@@ -307,11 +313,20 @@
           :text="text"
           :status="status"
         >
-          <span
-            :data-size="size"
-            class="tabular-nums text-(--text-default) data-[size=large]:text-big-number-md data-[size=medium]:text-big-number-sm data-[size=small]:text-heading-sm"
-            >{{ text }}</span
-          >
+          <span class="flex items-baseline gap-(--spacing-2xs)">
+            <span
+              :data-size="size"
+              :data-testid="`${testId}__figure`"
+              class="tabular-nums text-(--text-default) data-[size=large]:text-big-number-md data-[size=medium]:text-big-number-sm data-[size=small]:text-heading-sm"
+              >{{ textParts.figure }}</span
+            >
+            <span
+              v-if="textParts.unit"
+              :data-testid="`${testId}__unit`"
+              class="text-body-sm text-(--text-muted)"
+              >{{ textParts.unit }}</span
+            >
+          </span>
           <span
             v-if="label || status"
             class="line-clamp-2 text-body-sm text-(--text-muted)"

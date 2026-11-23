@@ -64,24 +64,10 @@
         values: [150, 160, 155, 170, 180, 175, 190, 200, 210, 205, 220, 230]
       },
       {
-        id: 'status.example.com',
-        name: 'status.example.com',
-        values: [90, 95, 100, 110, 105, 115, 120, 125, 130, 128, 135, 140]
-      },
-      {
-        id: 'cdn.example.com',
-        name: 'cdn.example.com',
-        values: [60, 65, 62, 70, 72, 75, 80, 78, 85, 88, 90, 92]
-      },
-      {
-        id: 'blog.example.com',
-        name: 'blog.example.com',
-        values: [30, 32, 35, 33, 36, 38, 40, 42, 41, 44, 46, 48]
-      },
-      {
-        id: 'auth.example.com',
-        name: 'auth.example.com',
-        values: [20, 22, 21, 24, 25, 23, 26, 28, 27, 29, 30, 31]
+        id: 'other',
+        name: 'Other hosts',
+        color: 'other',
+        values: [200, 214, 218, 237, 238, 251, 266, 273, 283, 289, 301, 311]
       }
     ]
   }
@@ -133,8 +119,13 @@
         >
           <Chart.Grid />
           <Chart.Axis type="y" />
+          <Chart.Axis
+            type="x"
+            :ticks="4"
+          />
           <Chart.Line />
           <Chart.Tooltip />
+          <Chart.Legend />
         </Chart>
       </ChartCard.Content>
     </ChartCard>
