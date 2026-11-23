@@ -76,8 +76,8 @@
 
   const ROOT_CLASS =
     'relative z-1 inline-flex h-(--size-8) pointer-coarse:min-h-11 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) ' +
-    'text-label-md transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
-    'focus-visible:ring-offset-(--bg-canvas) bg-transparent text-(--text-muted) ' +
+    'text-label-md transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'focus-visible:ring-inset bg-transparent text-(--text-muted) ' +
     'hover:bg-(--bg-hover) hover:text-(--text-default) ' +
     'not-data-[disabled]:data-[mode=tab]:data-[state=active]:text-(--text-default) not-data-[disabled]:data-[mode=tab]:data-[state=active]:hover:bg-transparent ' +
     'not-data-[disabled]:data-[mode=toggle]:data-[state=active]:border-(length:--border-width-default) not-data-[disabled]:data-[mode=toggle]:data-[state=active]:border-(--border-muted) ' +
