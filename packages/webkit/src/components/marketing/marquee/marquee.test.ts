@@ -121,7 +121,7 @@ describe('Marquee', () => {
     await waitFor(() =>
       expect(container.querySelector('.animate-brand-marquee')).not.toHaveAttribute('data-loading')
     )
-    const drawn = container.querySelectorAll('[data-slot="marquee-symbols"] svg *').length
+    const drawn = container.querySelectorAll('[data-slot="marquee-symbols"] *').length
     const total = container.querySelectorAll('svg *').length
     const references = container.querySelectorAll('svg[data-mark]').length
 

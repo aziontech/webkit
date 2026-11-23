@@ -1,4 +1,5 @@
 import {
+  computed,
   type MaybeRefOrGetter,
   nextTick,
   readonly,
@@ -47,6 +48,11 @@ export function useMarqueeMarkSymbols(
     async ([isReady]) => {
       measured.value = false
       if (!isReady) return
+      if (!toValue(names).length) {
+        viewBoxes.value = new Map()
+        measured.value = true
+        return
+      }
       await nextTick()
       if (!toValue(ready)) return
       viewBoxes.value = defsEl.value ? measure(defsEl.value) : new Map()
@@ -57,7 +63,7 @@ export function useMarqueeMarkSymbols(
 
   return {
     defsEl,
-    viewBoxes: readonly(viewBoxes) as Readonly<Ref<ReadonlyMap<string, string>>>,
+    viewBoxes: computed(() => viewBoxes.value),
     measured: readonly(measured),
     symbolId
   }

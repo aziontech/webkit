@@ -56,7 +56,7 @@
     mediaAlign?: HeroMediaAlign
     /** Height of the fixed chrome above the band, subtracted from the viewport when `variant` is `screen`; any CSS length. */
     offset?: string
-    /** Height of the window under the content, where the brand strip and the floor texture stand; a CSS length such as clamp(8rem, 22dvh, 16rem), never a percentage, which resolves against the band's own auto height and collapses the window. */
+    /** Height of the window under the content, where the brand strip and the floor texture stand; a CSS length, never a percentage, which collapses the window. */
     bottomHeight?: string
     /** Stand the brand marquee on the band's floor, under the `bottom` window. */
     marquee?: boolean

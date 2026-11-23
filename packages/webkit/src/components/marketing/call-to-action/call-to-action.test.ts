@@ -13,11 +13,11 @@ const EYEBROW = 'Get started'
 
 describe('CallToAction', () => {
   it('keeps the panel actions right after the copy, never pushed to the far edge of a wide band', () => {
-    const { getByTestId } = render(CallToAction, {
+    const { getByRole } = render(CallToAction, {
       props: { title: TITLE, description: DESCRIPTION },
       slots: { actions: '<button type="button">Start for free</button>' }
     })
-    const row = getByTestId(`${TESTID}__row`)
+    const row = getByRole('button', { name: 'Start for free' }).parentElement!.parentElement!
 
     expect(row.classList.contains('md:justify-start')).toBe(true)
     expect(row.className).not.toContain('justify-between')
