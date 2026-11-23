@@ -16,6 +16,6 @@ export const FADE_START_CLASS =
   'rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'
 
 export const FADE_END_CLASS =
-  'pointer-events-none absolute inset-y-0 end-0 z-5 hidden bg-gradient-to-r from-transparent to-(--bg-surface) ' +
+  'pointer-events-none absolute inset-y-0 end-0 z-5 hidden bg-gradient-to-r from-transparent to-(--bg-surface) to-[min(1.5rem,100%)] ' +
   'group-data-[overflow-end]/scroll:block ' +
   'rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'

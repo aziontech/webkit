@@ -75,8 +75,9 @@
   const {
     start: overflowStart,
     end: overflowEnd,
+    endInset: overflowEndInset,
     measure: measureEdges
-  } = useScrollEdges(viewportEl)
+  } = useScrollEdges(viewportEl, { columns: '[role=columnheader]' })
 
   const ROOT_CLASS =
     '@container/table ' +
@@ -100,7 +101,7 @@
     'rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'
 
   const FADE_END_CLASS =
-    'pointer-events-none absolute inset-y-0 end-0 z-5 hidden bg-gradient-to-r from-transparent to-(--bg-surface) ' +
+    'pointer-events-none absolute inset-y-0 end-0 z-5 hidden bg-gradient-to-r from-transparent to-(--bg-surface) to-[min(1.5rem,100%)] ' +
     'group-data-[overflow-end]/scroll:block ' +
     'rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'
 </script>
@@ -155,7 +156,7 @@
       <span
         aria-hidden="true"
         :data-testid="`${testId}__fade-end`"
-        :style="{ width: `${overflowEnd}px` }"
+        :style="{ insetInlineEnd: `${overflowEndInset}px`, width: `${overflowEnd}px` }"
         :class="FADE_END_CLASS"
       />
     </div>

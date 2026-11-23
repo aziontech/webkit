@@ -42,6 +42,7 @@ export interface UseDataTableWindowReturn {
   virtualPadding: ComputedRef<Record<string, string> | undefined>
   overflowStart: Ref<number>
   overflowEnd: Ref<number>
+  overflowEndInset: Readonly<Ref<number>>
   onViewportScroll: (event: Event) => void
 }
 
@@ -105,11 +106,15 @@ const useScroll = (
   o: DataTableWindowOptions,
   scrollTop: Ref<number>,
   clientHeight: Ref<number>
-): Pick<UseDataTableWindowReturn, 'overflowStart' | 'overflowEnd' | 'onViewportScroll'> => {
-  const edges = useScrollEdges(() => o.viewport() ?? null)
+): Pick<
+  UseDataTableWindowReturn,
+  'overflowStart' | 'overflowEnd' | 'overflowEndInset' | 'onViewportScroll'
+> => {
+  const edges = useScrollEdges(() => o.viewport() ?? null, { columns: '[role=columnheader]' })
   return {
     overflowStart: edges.start,
     overflowEnd: edges.end,
+    overflowEndInset: edges.endInset,
     onViewportScroll: (event) => {
       edges.measure()
       if (!o.virtual()) return

@@ -48,8 +48,8 @@
 
   const columns = [
     { accessorKey: 'name', header: 'Name', resizable: true },
-    { accessorKey: 'id', header: 'ID', sortable: false, resizable: true },
     { accessorKey: 'status', header: 'Status', resizable: true },
+    { accessorKey: 'id', header: 'ID', sortable: false, resizable: true },
     {
       accessorKey: 'editor',
       header: 'Last Editor',
@@ -106,7 +106,7 @@
         <DropdownMenuTrigger>
           <IconButton
             icon="az az-ellipsis-vertical"
-            aria-label="Row actions"
+            :aria-label="`Actions for ${row.name}`"
             variant="ghost"
             size="small"
           />

@@ -187,8 +187,9 @@
   const {
     start: overflowStart,
     end: overflowEnd,
+    endInset: overflowEndInset,
     measure: measureEdges
-  } = useScrollEdges(viewportEl)
+  } = useScrollEdges(viewportEl, { columns: '[role=columnheader]' })
 
   const { announcement, copyRange, onCopy, onPaste } = useDataGridClipboard(cells, {
     editing: () => Boolean(editing.value),
@@ -391,7 +392,7 @@
       <span
         aria-hidden="true"
         :data-testid="`${testId}__fade-end`"
-        :style="{ width: `${overflowEnd}px` }"
+        :style="{ insetInlineEnd: `${overflowEndInset}px`, width: `${overflowEnd}px` }"
         :class="FADE_END_CLASS"
       />
     </div>
