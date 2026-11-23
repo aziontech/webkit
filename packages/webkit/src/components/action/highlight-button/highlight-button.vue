@@ -46,7 +46,7 @@
   )
 
   const ROOT_CLASS =
-    'group/highlight relative inline-flex items-center justify-center isolate overflow-hidden whitespace-nowrap p-px ' +
+    'group/highlight relative inline-flex items-center justify-center isolate whitespace-nowrap p-px ' +
     'rounded-(--shape-button) ' +
     'border border-(length:--border-width-default) border-(--secondary-mask) ' +
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none ' +
@@ -101,17 +101,15 @@
   >
     <span
       aria-hidden="true"
-      data-theme="dark"
-      :class="GLOW_CLASS"
-    />
-    <span
-      aria-hidden="true"
-      :class="BASE_CLASS"
-    />
-    <span
-      aria-hidden="true"
-      :class="SCRIM_CLASS"
-    />
+      class="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]"
+    >
+      <span
+        data-theme="dark"
+        :class="GLOW_CLASS"
+      />
+      <span :class="BASE_CLASS" />
+      <span :class="SCRIM_CLASS" />
+    </span>
     <span
       data-theme="dark"
       :class="CONTENT_CLASS"
@@ -130,5 +128,10 @@
       />
       {{ label }}
     </span>
+    <span
+      aria-hidden="true"
+      data-slot="touch-target"
+      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+    />
   </Root>
 </template>
