@@ -33,7 +33,10 @@
 <template>
   <Item size="small">
     <div class="flex w-full flex-col items-stretch">
-      <div class="flex w-full min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md)">
+      <div
+        class="flex w-full min-w-0 flex-wrap items-center gap-(--spacing-xs) px-(--spacing-md)"
+        data-slot="field-header"
+      >
         <div
           class="flex shrink-0 items-center"
           role="group"
@@ -58,7 +61,7 @@
             @click="fields.move(index, 1)"
           />
         </div>
-        <Item.Content>
+        <Item.Content class="min-w-32">
           <div class="flex min-w-0 flex-row items-baseline gap-(--spacing-xs)">
             <Item.Title class="min-w-0">
               <span
@@ -68,14 +71,14 @@
                 {{ field.key || 'Unnamed field' }}
               </span>
             </Item.Title>
-            <div class="hidden min-w-0 sm:block">
+            <div class="hidden min-w-0 md:block">
               <Item.Description>
                 <span class="block truncate">{{ summary(field) }}</span>
               </Item.Description>
             </div>
           </div>
         </Item.Content>
-        <Item.Actions class="shrink-0">
+        <Item.Actions class="ms-auto shrink-0">
           <Tag
             v-if="field.required"
             key="required"

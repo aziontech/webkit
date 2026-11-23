@@ -281,7 +281,7 @@ Each variant is the same screen in another state: `get_block("state/state-first-
                   height="2rem"
                 />
               </Item.Media>
-              <Item.Content>
+              <Item.Content class="gap-(--spacing-2xs)">
                 <Skeleton
                   width="8rem"
                   height="0.875rem"

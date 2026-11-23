@@ -39,7 +39,7 @@
     />
 
     <Item variant="outline">
-      <Item.Content>
+      <Item.Content class="[&>[data-slot=item-description]]:line-clamp-none">
         <Item.Title>Delete resource</Item.Title>
         <Item.Description>
           Permanently removes

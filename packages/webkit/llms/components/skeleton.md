@@ -38,7 +38,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `variant` | `'rectangle' \| 'circle'` | `'rectangle'` | false | Geometry: a rounded rectangular block (`rectangle`) or a circle. |
-| `width` | `string` | `'100%'` | false | CSS width (any length). |
+| `width` | `string` | `'100%'` | false | CSS width (any length); a rectangle never grows past its container. |
 | `height` | `string` | `'1rem'` | false | CSS height (any length); for a circle, set equal to `width`. |
 | `animated` | `boolean` | `true` | false | Shimmer while loading; suppressed under reduced motion. |
 
