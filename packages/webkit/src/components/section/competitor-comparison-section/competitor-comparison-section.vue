@@ -259,7 +259,7 @@
               >
                 <span
                   :data-testid="`${testId}__group-title`"
-                  class="text-overline-md text-(--text-brand)"
+                  class="border-s-2 border-(--primary) ps-(--spacing-xs) text-overline-md text-(--text-default)"
                   >{{ group.title }}</span
                 >
               </th>

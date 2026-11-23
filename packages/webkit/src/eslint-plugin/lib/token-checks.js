@@ -113,12 +113,14 @@ const TOKEN_CHECKS = [
     id: 'off-brand-orange',
     wide: true,
     regex:
-      /(?<!\w)(?:--text-primary(?![\w-])|(?:--color-)?(?:alpha-orange|brand-primary|orange)-(?!500(?![\w-]))\d{2,3}(?![\w-]))/g,
+      /(?<!\w)(?:--text-(?:primary|brand)(?![\w-])|(?:--color-)?(?:alpha-orange|brand-primary|orange)-(?!500(?![\w-]))\d{2,3}(?![\w-]))/g,
     message:
-      'An orange that is not the logo orange. Content uses one orange, the logo orange ' +
-      '#F3652B: var(--text-brand) for text, var(--primary) for fills, glyphs and glows. ' +
-      '--text-primary was removed in 6.0 (use --text-brand), and the lighter and darker steps ' +
-      'of the orange scale stay inside the theme (rules/webkit-tokens.md).'
+      'An orange text colour or an orange that is not the logo orange. Content uses one orange, ' +
+      'the logo orange #F3652B as var(--primary): a fill behind --primary-foreground text, or a ' +
+      'bar, underline, glyph or glow beside text in --text-default. It is never the colour of text, ' +
+      'which misses WCAG AA on light surfaces. --text-primary and --text-brand were removed in 6.0 ' +
+      '(use --text-default), and the other steps of the orange scale stay inside the theme ' +
+      '(rules/webkit-tokens.md).'
   },
   {
     id: 'class-in-defineprops',

@@ -73,7 +73,7 @@
     'data-[variant=accent]:bg-(--accent) data-[variant=accent]:text-(--accent-foreground) data-[variant=contrast]:bg-(--bg-contrast) data-[variant=contrast]:text-(--text-contrast) ' +
     'data-[severity=success]:bg-(--success) data-[severity=success]:text-(--success-foreground) data-[severity=info]:bg-(--info) data-[severity=info]:text-(--info-foreground) ' +
     'data-[severity=warning]:bg-(--warning) data-[severity=warning]:text-(--warning-foreground) data-[severity=danger]:bg-(--danger) data-[severity=danger]:text-(--danger-foreground) ' +
-    'data-[variant=highlight]:bg-(--primary-mask) data-[variant=highlight]:text-(--text-brand)'
+    'data-[variant=highlight]:bg-(--primary) data-[variant=highlight]:text-(--primary-foreground)'
 </script>
 
 <template>

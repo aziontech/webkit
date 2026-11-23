@@ -649,7 +649,6 @@
    "--text-body-xs-font-weight",
    "--text-body-xs-line-height",
    "--text-body-xs-text-wrap-style",
-   "--text-brand",
    "--text-button-lg-font-family",
    "--text-button-lg-font-size",
    "--text-button-lg-font-weight",
@@ -1528,7 +1527,6 @@
     "--text-body-xs-font-weight",
     "--text-body-xs-line-height",
     "--text-body-xs-text-wrap-style",
-    "--text-brand",
     "--text-button-lg-font-family",
     "--text-button-lg-font-size",
     "--text-button-lg-font-weight",
@@ -2102,13 +2100,6 @@
     "light": "#999999",
     "dark": "#4D4D4D",
     "purpose": "Text of a disabled control."
-   },
-   "--text-brand": {
-    "group": "text",
-    "type": "color",
-    "light": "#F3652B",
-    "dark": "#F3652B",
-    "purpose": "The logo orange, the one orange for brand text such as eyebrows and quote names; an accepted contrast exception."
    },
    "--text-link": {
     "group": "text",

@@ -285,22 +285,19 @@ Shipped in the table scroll cue until 2026-11-20 (the 10k-row virtual DataTable 
 
 ## One orange: the logo orange
 
-Content uses one orange, the logo orange `#F3652B` (owner decision 2026-11-18). Text that carries the brand colour (an eyebrow, a quote name, a column heading, a headline highlight, a figure prefix, the required asterisk) is `text-(--text-brand)`; a fill, a glyph, a glow or a gradient is `--primary`, fading to transparent, never to a lighter or darker orange.
+Content uses one orange, the logo orange `#F3652B` (owner decisions 2026-11-18 and 2026-11-22), and it is never the colour of text: as text it misses WCAG AA on light surfaces (about 3:1). It is `--primary`, in two shapes: a **fill** behind `--primary-foreground` text (the button, `Tag variant="highlight"`, the `HeroTitle` highlight), or a **mark** beside text in `--text-default`: a bar (the `Eyebrow`, the `Quote` name, a comparison group title), an underline (a `LinkDirectory` column title, a hovered linked `FeatureItem`), a glyph or a glow fading to transparent. A mark is decoration, so it carries no contrast requirement; the text beside it does, and passes.
 
 ```html
-<!-- ❌ a second orange: peach in dark, brown in light -->
-<span class="text-(--text-primary)">Jane Doe</span>
+<!-- ❌ the orange as text: 3:1 on white, and a second orange -->
+<span class="text-(--text-brand)">Jane Doe</span>
 <span class="text-(--color-orange-300)">Compute</span>
 
-<!-- ✅ the logo orange -->
-<span class="text-(--text-brand)">Jane Doe</span>
-<span
-  class="text-(--text-brand) [text-shadow:0_0_2rem_color-mix(in_srgb,var(--primary)_30%,transparent)]"
-  >Build and run</span
->
+<!-- ✅ a mark beside default text, or a fill behind its foreground -->
+<span class="border-s-2 border-(--primary) ps-(--spacing-xs) text-(--text-default)">Jane Doe</span>
+<span class="rounded-(--shape-control) bg-(--primary) px-(--spacing-xs) text-(--primary-foreground)">Build and run</span>
 ```
 
-`--text-primary` was removed in 6.0 (`webkit migrate` rewrites it to `--text-brand`). The other steps of the orange scale stay inside the theme, where the chart and severity scales use them as data colours. In light, the logo orange on white is about 3:1, an owner-accepted brand exception: each part that carries it is listed in `packages/webkit/src/test/a11y-accepted.json` with its row in `rules/webkit-tokens.md`. The **`off-brand-orange`** token check blocks `--text-primary` and any orange step but `500` at write time and in the CI ratchet, over components, examples, blocks and the docs and demos apps.
+`--text-primary` and `--text-brand` were removed in 6.0 (`webkit migrate` rewrites `--text-primary` to `--text-default`). The other steps of the orange scale stay inside the theme, where the chart and severity scales use them as data colours. No part needs a contrast exception for brand colour: `packages/webkit/src/test/a11y-accepted.json` is empty. The **`off-brand-orange`** token check blocks `--text-primary`, `--text-brand` and any orange step but `500` at write time and in the CI ratchet, over components, examples, blocks and the docs and demos apps.
 
 ## Never double a line
 

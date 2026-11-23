@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 2c5cca0907517f78281aa0d7258f753989c5cabc677d71f313cf4862a2aebf15
+checksum: da53d36e5fa6d36426774ad0256ded795e811e300260181a80b3ede2b4715872
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -24,7 +24,7 @@ A compact, read-only word on an item, colored by its brand look `variant` or its
 
 - Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.
 - Show a status with its colour via `severity` (`neutral`, `info`, `success`, `warning`, `danger`), or a category with a brand look via `variant` (`primary`, `accent`, `contrast`, `highlight`); `severity` wins when both are set.
-- Mark the one value a list highlights (the Owner role in a users table) with `variant="highlight"`: the brand orange as a tint, orange text on `--primary-mask`, like the success, info and warning tints.
+- Mark the one value a list highlights (the Owner role in a users table) with `variant="highlight"`: the logo orange as a fill with `--primary-foreground` text, like the success, info and warning tags.
 
 ## When NOT to use
 
@@ -91,18 +91,18 @@ _none_
 
 ## Tokens
 
-| Region                 | Token (DESIGN.md)                                                                                                    |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| typography (medium)    | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px)                                                      |
-| typography (small)     | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px)                                                      |
-| spacing (medium)       | `var(--spacing-xs)` horizontal padding and icon gap                                                                  |
-| spacing (small)        | `var(--spacing-2xs)` horizontal padding and icon gap                                                                 |
-| shape (all severities) | `var(--shape-control)`                                                                                               |
-| surface (primary)      | `var(--primary)` / `var(--primary-foreground)`, WCAG AA in both themes                                               |
-| surface (contrast)     | `var(--bg-contrast)` / `var(--text-contrast)`                                                                        |
-| surface (highlight)    | `var(--primary-mask)` / `var(--text-brand)`, the logo orange: AA in dark, an owner-accepted brand exception in light |
-| shape (pill)           | `rounded-full`                                                                                                       |
-| ring                   | `var(--ring-color)`                                                                                                  |
+| Region                 | Token (DESIGN.md)                                                                       |
+| ---------------------- | --------------------------------------------------------------------------------------- |
+| typography (medium)    | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px)                         |
+| typography (small)     | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px)                         |
+| spacing (medium)       | `var(--spacing-xs)` horizontal padding and icon gap                                     |
+| spacing (small)        | `var(--spacing-2xs)` horizontal padding and icon gap                                    |
+| shape (all severities) | `var(--shape-control)`                                                                  |
+| surface (primary)      | `var(--primary)` / `var(--primary-foreground)`, WCAG AA in both themes                  |
+| surface (contrast)     | `var(--bg-contrast)` / `var(--text-contrast)`                                           |
+| surface (highlight)    | `var(--primary)` / `var(--primary-foreground)`, the logo orange with black text (6.7:1) |
+| shape (pill)           | `rounded-full`                                                                          |
+| ring                   | `var(--ring-color)`                                                                     |
 
 ## Theme gaps
 
@@ -113,7 +113,7 @@ _none_
 - Visible focus: none; the tag is not focusable. A focusable control that holds a tag draws its own ring.
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `highlight` label is the logo orange `#F3652B`, an owner-accepted brand exception in light (about 3:1, `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2").
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `highlight` label is `--primary-foreground` on the logo orange fill (6.7:1).
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 

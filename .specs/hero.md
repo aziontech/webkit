@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 9
-checksum: 718c84d447bb3c3c54ae46dcdab172c301218cc69b0c4881b70322c8a3633b1b
+checksum: efcb0542a0841907051bb31cee7cf17c34458add24a61dde1649e8fa9cd509bc
 created: 2026-09-22
 last_updated: 2026-11-19
 ---
@@ -162,27 +162,27 @@ _none_
 
 ## Tokens
 
-| Region                             | Token (DESIGN.md)                                                                                |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------ |
-| band fill                          | `var(--bg-canvas)`                                                                               |
-| band floor ground                  | `var(--hero-banner-floor-bg, transparent)` — set by the consumer                                 |
-| floor strip ground                 | `var(--hero-banner-floor-bg, var(--bg-canvas))`                                                  |
-| floor strip rhythm                 | `var(--spacing-xl)`                                                                              |
-| floor texture ink                  | `var(--hero-banner-floor-ink, 0.6)`                                                              |
-| band rule                          | `var(--border-default)`                                                                          |
-| band inset                         | `var(--spacing-xl)`, the inset of every framed band                                              |
-| band rhythm (`size` medium)        | `var(--spacing-2xl)`                                                                             |
-| band rhythm (`size` large)         | `calc(var(--spacing-2xl) * 2)`                                                                   |
-| media column gap                   | `var(--spacing-xl)` from `md` up, `var(--spacing-2xl)` stacked                                   |
-| media end bleed (`mediaAlign` end) | `var(--spacing-xl)`                                                                              |
-| copy block rhythm                  | `var(--spacing-md)`                                                                              |
-| headline                           | `.text-heading-2xl` (`size` large) or `.text-heading-xl` (`size` medium), `var(--text-default)`  |
-| accent phrase                      | `var(--text-brand)` with a `var(--primary)` glow (the logo orange only; `hero-title__highlight`) |
-| description                        | `.text-body-lg`, `var(--text-muted)`                                                             |
-| headline to description            | `var(--spacing-md)` gap plus `var(--spacing-md)` margin                                          |
-| asset window clip                  | — (geometry, set by the consumer's `--hero-banner-*` properties)                                 |
-| width cap                          | `var(--container-3xl)` … `var(--container-7xl)`                                                  |
-| content column (`maxWidth` site)   | `.layout-column-site`, the box `Container` draws at the same width                               |
+| Region                             | Token (DESIGN.md)                                                                                                                                    |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| band fill                          | `var(--bg-canvas)`                                                                                                                                   |
+| band floor ground                  | `var(--hero-banner-floor-bg, transparent)` — set by the consumer                                                                                     |
+| floor strip ground                 | `var(--hero-banner-floor-bg, var(--bg-canvas))`                                                                                                      |
+| floor strip rhythm                 | `var(--spacing-xl)`                                                                                                                                  |
+| floor texture ink                  | `var(--hero-banner-floor-ink, 0.6)`                                                                                                                  |
+| band rule                          | `var(--border-default)`                                                                                                                              |
+| band inset                         | `var(--spacing-xl)`, the inset of every framed band                                                                                                  |
+| band rhythm (`size` medium)        | `var(--spacing-2xl)`                                                                                                                                 |
+| band rhythm (`size` large)         | `calc(var(--spacing-2xl) * 2)`                                                                                                                       |
+| media column gap                   | `var(--spacing-xl)` from `md` up, `var(--spacing-2xl)` stacked                                                                                       |
+| media end bleed (`mediaAlign` end) | `var(--spacing-xl)`                                                                                                                                  |
+| copy block rhythm                  | `var(--spacing-md)`                                                                                                                                  |
+| headline                           | `.text-heading-2xl` (`size` large) or `.text-heading-xl` (`size` medium), `var(--text-default)`                                                      |
+| accent phrase                      | `var(--primary-foreground)` on a `var(--primary)` fill, `--shape-control` corners (the logo orange as a highlighter, 6.7:1; `hero-title__highlight`) |
+| description                        | `.text-body-lg`, `var(--text-muted)`                                                                                                                 |
+| headline to description            | `var(--spacing-md)` gap plus `var(--spacing-md)` margin                                                                                              |
+| asset window clip                  | — (geometry, set by the consumer's `--hero-banner-*` properties)                                                                                     |
+| width cap                          | `var(--container-3xl)` … `var(--container-7xl)`                                                                                                      |
+| content column (`maxWidth` site)   | `.layout-column-site`, the box `Container` draws at the same width                                                                                   |
 
 ## Theme gaps
 

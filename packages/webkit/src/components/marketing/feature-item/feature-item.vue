@@ -47,7 +47,7 @@
   const ROOT_CLASS =
     'group flex flex-col gap-(--spacing-sm) text-(--text-default) no-underline transition-colors duration-150 ease-out ' +
     'motion-reduce:transition-none ' +
-    'data-[linked]:hover:text-(--text-brand) data-[linked]:after:absolute data-[linked]:after:inset-0 data-[linked]:focus-visible:outline-none data-[linked]:focus-visible:after:ring-2 ' +
+    'data-[linked]:after:absolute data-[linked]:after:inset-0 data-[linked]:focus-visible:outline-none data-[linked]:focus-visible:after:ring-2 ' +
     'data-[linked]:focus-visible:after:ring-inset data-[linked]:focus-visible:after:ring-(--ring-color)'
 
   const LINK_ARROW_CLASS =
@@ -78,7 +78,7 @@
       </span>
       <component
         :is="`h${headingLevel}`"
-        class="m-0 text-balance text-heading-xs"
+        class="m-0 text-balance text-heading-xs decoration-(color:--primary) decoration-2 underline-offset-4 group-data-[linked]:group-hover:underline"
       >
         {{ title }}
         <i

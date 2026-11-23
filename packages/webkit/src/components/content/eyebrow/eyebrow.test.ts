@@ -15,10 +15,9 @@ describe('Eyebrow', () => {
 
   it('does not render a prefix span when prefix is the empty default', () => {
     const { container, queryByText } = render(Eyebrow, { slots: { default: 'NO PREFIX' } })
-    // Two spans max: the (absent) prefix and the (present) content span.
-    // With the default empty prefix, only the content span is rendered.
     const spans = container.querySelectorAll('span')
-    expect(spans).toHaveLength(1)
+    expect(spans).toHaveLength(2)
+    expect(spans[0]?.getAttribute('aria-hidden')).toBe('true')
     expect(queryByText('//')).not.toBeInTheDocument()
   })
 
@@ -169,7 +168,9 @@ describe('Eyebrow', () => {
     it('paints the label and the prefix through real token utilities', () => {
       const view = render(Eyebrow, { props: { prefix: '//' }, slots: { default: 'LABEL' } })
 
-      expect(view.getByText('LABEL').className).toContain('text-(--text-brand)')
+      expect(view.getByText('LABEL').className).toContain('text-(--text-default)')
+      expect(view.getByTestId('eyebrow__mark').className).toContain('bg-(--primary)')
+      expect(view.getByTestId('eyebrow__mark').getAttribute('aria-hidden')).toBe('true')
       expect(view.getByText('LABEL').className).not.toContain('text-(--primary)')
       expect(view.getByText('//').className).toContain('text-(--text-default)')
       expect(view.getByText('LABEL').className).not.toMatch(/(^|\s)text-primary(\s|$)/)

@@ -7,7 +7,7 @@ spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: 28d6f2d0539f588fec7f92dd0d9e6997955169fb51db6bc0316c07fac6321a86
+checksum: 265d434ab7a715db6d33b562b1022e55224edf1152d27f979bd13272dbc0c518
 ---
 
 # CompetitorComparisonSection — Component Spec
@@ -120,18 +120,18 @@ _none_
 
 ## Tokens
 
-| Region                                    | Token (DESIGN.md)                                                                                             |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| typography (column heads, category heads) | `.text-overline-md`                                                                                           |
-| typography (row heads)                    | `.text-label-md`                                                                                              |
-| category head text                        | `var(--text-brand)` — the logo orange `#F3652B` in both themes (`competitor-comparison-section__group-title`) |
-| column head text (aligned to the start)   | `var(--text-muted)`                                                                                           |
-| row head text                             | `var(--text-default)`                                                                                         |
-| full / partial / none glyph               | `var(--success-mark)` / `var(--text-muted)` / `var(--text-muted)`                                             |
-| header fill                               | `var(--bg-canvas)`                                                                                            |
-| category fill                             | `var(--bg-surface)`                                                                                           |
-| rules                                     | `var(--border-default)`                                                                                       |
-| cell padding                              | `var(--spacing-xs)` / `var(--spacing-md)` / `var(--spacing-xl)`                                               |
+| Region                                    | Token (DESIGN.md)                                                                                              |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| typography (column heads, category heads) | `.text-overline-md`                                                                                            |
+| typography (row heads)                    | `.text-label-md`                                                                                               |
+| category head text                        | `var(--text-default)` after a 2px start bar in `var(--primary)` (`competitor-comparison-section__group-title`) |
+| column head text (aligned to the start)   | `var(--text-muted)`                                                                                            |
+| row head text                             | `var(--text-default)`                                                                                          |
+| full / partial / none glyph               | `var(--success-mark)` / `var(--text-muted)` / `var(--text-muted)`                                              |
+| header fill                               | `var(--bg-canvas)`                                                                                             |
+| category fill                             | `var(--bg-surface)`                                                                                            |
+| rules                                     | `var(--border-default)`                                                                                        |
+| cell padding                              | `var(--spacing-xs)` / `var(--spacing-md)` / `var(--spacing-xl)`                                                |
 
 ## Theme gaps
 
@@ -144,7 +144,7 @@ _none_
 - Visible focus: owned by the composed `icon-button` and `tooltip` triggers.
 - Keyboard map: `Tab` reaches each definition's info button; `Enter` / `Space` opens its popover and `Esc` closes it (owned by `popover`).
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `ThirdPartyLogo` named by the platform, inside a head cell that carries the same name.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above. The glyphs on `--bg-canvas`: `--success-mark` Lc 67.0 / 4.43:1 (light) and Lc 49.6 / 7.69:1 (dark); `--text-muted` Lc 80.8 / 7.06:1 (light) and Lc 60.7 / 9.90:1 (dark). The category heads on `--bg-surface` are `--text-brand`, the logo orange in both themes: Lc 44.1 / 6.32:1 in dark, and about 3:1 in light, the accepted `--text-brand` pairs of `rules/webkit-tokens.md` (owner decision 2026-11-18, superseding the darker light-theme orange).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above. The glyphs on `--bg-canvas`: `--success-mark` Lc 67.0 / 4.43:1 (light) and Lc 49.6 / 7.69:1 (dark); `--text-muted` Lc 80.8 / 7.06:1 (light) and Lc 60.7 / 9.90:1 (dark). The category heads are `--text-default` with a decorative bar in the logo orange (`--primary`); every part passes WCAG 2 AA with no exception (owner decision 2026-11-22).
 - Never colour alone: each level has its own glyph and its label as tooltip and `sr-only` text.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the popover and tooltip carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the info button is a small `icon-button`, a secondary affordance next to the capability name.
