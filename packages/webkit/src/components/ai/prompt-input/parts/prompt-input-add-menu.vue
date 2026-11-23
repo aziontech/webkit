@@ -77,7 +77,8 @@
   }
 
   function onChange(event: Event): void {
-    const input = event.target as HTMLInputElement
+    const input = event.target
+    if (!(input instanceof HTMLInputElement)) return
     emit('files', event, Array.from(input.files ?? []))
     input.value = ''
   }

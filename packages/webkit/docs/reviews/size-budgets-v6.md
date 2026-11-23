@@ -1270,3 +1270,7 @@ Budget-raise: locales-es 11.9 KB → 12 KB (measured 11.96 KB): the same merged 
 Budget-raise: prompt-input-dictate-button 5.55 KB → 5.6 KB (measured 5.57 KB): chat look round 2 merged — it carries the English catalog, which gained the message action keys.
 Budget-raise: prompt-input-tools 17.7 KB → 17.75 KB (measured 17.72 KB): chat look round 2 merged — the same larger English catalog.
 Budget-raise: streaming-response 42.15 KB → 42.85 KB (measured 42.81 KB): chat look round 2 merged — the code-block header and the citation popover land together, with the larger English catalog.
+Budget-raise: catalog/ 1,405,000 → 1,410,000 bytes (measured 1,406,841): chat look round 2 — the message actions, prompt editing, versions, site citations, the sources panel and the code-card header are new public API, documented in the catalog; the longest new spec passages were already shortened.
+Budget-raise: package unpacked 34,500,000 → 34,650,000 bytes and packed 8,550,000 → 8,600,000 bytes (measured 34,570,732 and 8,567,348 before the trims): chat look round 2 — the same new chat components and their llms and catalog pages.
+Budget-raise: prompt-input 15.1 KB → 15.15 KB (measured 15.10 KB): chat look round 2 — the file inputs are checked with `instanceof` instead of a type assertion, to keep the assertion count at its limit.
+Budget-raise: streaming-response 42.85 KB → 42.9 KB (measured 42.86 KB): chat look round 2 — the citation reads the pointer type and the event target without type assertions, for the same reason.

@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 4dea224748b4ed290af31d810ca7e606942b3cba12a51c8fc6827132a346d64f
+checksum: b9c06e40b66879606f943b33481071bbb1b4f115154e20f31b01332bf4189f47
 created: 2026-05-28
 last_updated: 2026-11-22
 ---
@@ -28,7 +28,7 @@ Read-only code viewer for docs, API examples, and configuration previews. Suppor
 
 Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** type (`type="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks.
 
-The **label header holds the copy control**: when it shows and the block is copyable, the CopyButton (`ghost`, `small`) sits at its end instead of floating over the code, so no line reserves a copy gutter (`data-copy-gutter` marks the root only while the copy floats). The header is `sticky` at the top of the nearest scroller (the root clips with `overflow: clip`, not `hidden`, so it never becomes the scroller itself) on the block's own fill, so a long block keeps its language and copy in view while it scrolls past. Its divider is drawn only when `bordered`: an unbordered block is one filled card, header and code on the same fill (the `StreamingResponse` look).
+The **label header holds the copy control** at its end (`data-copy-gutter` marks the root only while the copy floats over the code instead) and is `sticky` at the top of the nearest scroller, so a long block keeps its language and copy in view. Its divider shows only when `bordered`; unbordered, header and code share one fill (the `StreamingResponse` look).
 
 The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab.
 

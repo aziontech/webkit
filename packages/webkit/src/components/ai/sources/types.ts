@@ -22,7 +22,7 @@ const HUES = [1, 2, 3, 5, 6, 7, 8] as const
 
 export type SourcesHue = (typeof HUES)[number]
 
-export function sourceHost(item?: SourcesItem): string {
+function sourceHost(item?: SourcesItem): string {
   if (!item?.href || !/^https?:\/\//i.test(item.href)) return ''
   try {
     return new URL(item.href).hostname.replace(/^www\./i, '')
@@ -47,7 +47,7 @@ export function sourceHue(item: SourcesItem): SourcesHue {
   const key = (sourceHost(item) || sourceName(item)).toLowerCase()
   let hash = 0
   for (const char of key) hash = (hash * 31 + (char.codePointAt(0) ?? 0)) >>> 0
-  return HUES[hash % HUES.length] as SourcesHue
+  return HUES[hash % HUES.length] ?? HUES[0]
 }
 
 export function sourceImage(item: SourcesItem): string {

@@ -1906,5 +1906,26 @@
     "align": {
       "removed": "FlowDiagram.Group stacks its nodes full width; drop align (MIGRATION_V6.md, FlowDiagram)."
     }
+  },
+  "citation": {
+    "href": {
+      "removed": "pass the source numbers as :indexes and the response's sources as :sources; the chip shows the site name and opens a card with the title and link."
+    },
+    "index": {
+      "removed": "pass the source numbers as :indexes and the response's sources as :sources; the chip shows the site name and opens a card with the title and link."
+    },
+    "title": {
+      "removed": "pass the source numbers as :indexes and the response's sources as :sources; the chip shows the site name and opens a card with the title and link."
+    }
+  },
+  "sources": {
+    "anchor": {
+      "removed": "the Sources pill now opens a panel listing every source, so no in-page anchor is needed; drop the prop."
+    }
+  },
+  "streaming-response": {
+    "anchor": {
+      "removed": "citations open a card over the source and the Sources pill opens a panel, so no in-page anchor is needed; drop the prop."
+    }
   }
 }

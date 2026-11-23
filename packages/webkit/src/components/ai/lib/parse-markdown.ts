@@ -148,9 +148,9 @@ interface ListMarker {
 function listMarker(line: string): ListMarker | null {
   const trimmed = line.trimStart()
   const bullet = BULLET.exec(trimmed)
-  if (bullet) return { ordered: false, start: 1, text: bullet[1] as string }
+  if (bullet) return { ordered: false, start: 1, text: bullet[1] ?? '' }
   const ordered = ORDERED.exec(trimmed)
-  return ordered ? { ordered: true, start: Number(ordered[1]), text: ordered[2] as string } : null
+  return ordered ? { ordered: true, start: Number(ordered[1]), text: ordered[2] ?? '' } : null
 }
 
 interface ListDraft {
@@ -158,13 +158,17 @@ interface ListDraft {
   nested: string[]
 }
 
+function lineAt(source: string[], at: number): string {
+  return source[at] ?? ''
+}
+
 function buildList(source: string[], from: number): { list: MarkdownList; end: number } {
-  const first = listMarker(source[from] as string) as ListMarker
-  const base = indentOf(source[from] as string)
+  const first = listMarker(lineAt(source, from)) ?? { ordered: false, start: 1, text: '' }
+  const base = indentOf(lineAt(source, from))
   const drafts: ListDraft[] = []
   let at = from
   while (at < source.length) {
-    const current = source[at] as string
+    const current = lineAt(source, at)
     const indent = indentOf(current)
     const marker = listMarker(current)
     const last = drafts[drafts.length - 1]
@@ -179,7 +183,7 @@ function buildList(source: string[], from: number): { list: MarkdownList; end: n
   }
   const items = drafts.map<MarkdownListItem>((draft) => {
     const item: MarkdownListItem = { children: parseInline(draft.text) }
-    if (draft.nested.length && listMarker(draft.nested[0] as string))
+    if (draft.nested.length && listMarker(lineAt(draft.nested, 0)))
       item.list = buildList(draft.nested, 0).list
     return item
   })

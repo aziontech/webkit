@@ -77,13 +77,13 @@
   const external = computed<boolean>(() => /^https?:\/\//i.test(currentHref.value ?? ''))
 
   function onClick(event: globalThis.MouseEvent): void {
-    const pointer = (event as globalThis.PointerEvent).pointerType
+    const pointer = 'pointerType' in event ? event.pointerType : ''
     open.value = pointer === 'mouse' ? true : !open.value
   }
 
   function onDocumentPointerdown(event: globalThis.PointerEvent): void {
-    const target = event.target as globalThis.Node | null
-    if (!target || chipEl.value?.contains(target)) return
+    const target = event.target
+    if (!(target instanceof globalThis.Node) || chipEl.value?.contains(target)) return
     if (globalThis.document.getElementById(cardId)?.contains(target)) return
     open.value = false
   }

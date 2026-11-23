@@ -1,6 +1,6 @@
 # Citation
 
-> An inline reference in generated text, the inline citation of ChatGPT and Cloudscape: a small rounded chip with the mark of the source's site (its favicon, its icon, or its first letter on a colour of its own) and the site's name (`Azion`, else the host of `href` without `www.`), and `+N` when one marker cites several sources (`[1][2]`, `[1, 2]`). Hovering, focusing or pressing the chip opens a card with the site, the linked title and a snippet (`description`); with several sources a pager `‹ 1/3 ›` steps through them. `StreamingResponse` renders it for every run of `[n]` markers.
+> An inline reference in generated text: a small rounded chip with the mark of the source's site (its favicon, its icon, or its first letter on a colour of its own) and the site's name (`Azion`, else the host of `href` without `www.`), and `+N` when one marker cites several sources (`[1][2]`, `[1, 2]`). Hovering, focusing or pressing the chip opens a card with the site, the linked title and a snippet (`description`); with several sources a pager `‹ 1/3 ›` steps through them. `StreamingResponse` renders it for every run of `[n]` markers.
 
 - Import: `import Citation from '@aziontech/webkit/citation'`
 - Category: ai · Surface: app · Structure: monolithic

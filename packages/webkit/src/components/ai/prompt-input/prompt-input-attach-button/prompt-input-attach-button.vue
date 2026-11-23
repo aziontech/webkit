@@ -60,7 +60,7 @@
   watchEffect(() => {
     if (!mounted.value || !props.tools.length || menuReady.value) return
     void import('../parts/prompt-input-add-menu.vue').then((loaded) => {
-      addMenu = loaded.default as Component
+      addMenu = loaded.default
       menuReady.value = true
     })
   })
@@ -132,7 +132,8 @@
   }
 
   function onChange(event: Event): void {
-    const input = event.target as HTMLInputElement
+    const input = event.target
+    if (!(input instanceof HTMLInputElement)) return
     attach(event, Array.from(input.files ?? []))
     input.value = ''
   }

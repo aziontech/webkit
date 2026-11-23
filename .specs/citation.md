@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 42219edbc59448fef2b95f781456d08a0cf39efdc90ca99344caeaa1cf7a41e3
+checksum: 168e10b734eca6299081ef48b803b1dcaf2b5a0ffe0ab9d2b9edb30ccc162892
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-22
 
 ## Purpose
 
-An inline reference in generated text, the inline citation of ChatGPT and Cloudscape: a small
+An inline reference in generated text: a small
 rounded chip with the mark of the source's site (its favicon, its icon, or its first letter on a
 colour of its own) and the site's name (`Azion`, else the host of `href` without `www.`), and `+N`
 when one marker cites several sources (`[1][2]`, `[1, 2]`). Hovering, focusing or pressing the chip

@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 5
 template: 2
-checksum: e14fb0bfa0980fa57329c60ad241dddcaea1890980aaeb7daa0dbe88540288cf
+checksum: d23998d19ac8a4af15f71c62cdb13bdc45225eaba820b61a072c940245390231
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -24,9 +24,8 @@ actions), `success` (actions shown; announced once to screen readers through the
 
 Assistant messages are plain text across the reading column (`.text-body-lg`): no avatar, name,
 time or bubble. User messages are a filled bubble at the inline end, at most 80 % wide; system
-messages a muted centered line. A user message opens for editing (`v-model:editing`): the bubble
-turns into a field with Cancel and Send, and Send emits `edit` with the new text, which the app
-hands to TanStack AI (`setMessages` up to the message, then `sendMessage`). Author and time live in the accessible name (the time also shows on
+messages a muted centered line. A user message opens for editing (`v-model:editing`)
+and Send emits `edit` with the new text for the app's `setMessages` and `sendMessage`. Author and time live in the accessible name (the time also shows on
 hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
 
 ## When to use

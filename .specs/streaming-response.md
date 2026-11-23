@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 79780ad121e5b72be6a18221c321930c46f8f0f6332ae2c916b64845a7fb57a3
+checksum: 18955db8dc271812de64849c1d138791c373aad913e7e5f4578568161242b726
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -27,11 +27,8 @@ until it closes (no highlighting churn), and a half-written link shows its text 
 Text renders at the reading size (`.text-body-lg`) with a full step (`--spacing-md`) between blocks,
 the plain, wide answer column of a chat. Headings are bold, with an extra `--spacing-sm` above them so
 a section reads as a new start: `#` at `.text-heading-md`, every deeper level at the reading size. A
-fenced code block is one filled card (`--bg-surface-raised`, `--shape-card`, no border) whose header
-names the language on the start and holds the icon-only copy control on the end; the header sticks to
-the top of the log while a long block scrolls past, the code is never capped in height and scrolls
-sideways. While a fence is still open the same card shows the language header over plain text, so the
-block does not jump when it closes. Numbered citations become `Citation` chips resolved
+fenced code block is a filled `CodeBlock` card with the language and copy in a sticky header, the
+same while the fence is still open. Numbered citations become `Citation` chips resolved
 against `sources`: `[1]` one chip with the site's mark and name, and a run of markers (`[1][2]`,
 `[1] [2]`, `[1, 2]`) one chip with `+1` whose card pages through both sources. A blinking caret marks the end while
 `streaming`; the region is `aria-busy` until the stream ends.

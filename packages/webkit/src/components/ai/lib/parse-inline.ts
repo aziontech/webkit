@@ -108,7 +108,7 @@ function scanBracket(char: string): boolean {
   if (char === '[') {
     const citation = CITATION.exec(text.slice(at))
     if (citation) {
-      pushCitation((citation[1] as string).split(',').map((value) => Number(value.trim())))
+      pushCitation((citation[1] ?? '').split(',').map((value) => Number(value.trim())))
       at += citation[0].length
       return true
     }
