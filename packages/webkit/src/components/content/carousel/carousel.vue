@@ -151,6 +151,7 @@
     '[--carousel-fade-end:0%] [--carousel-fade-start:0%] ' +
     'data-[can-scroll-next]:[--carousel-fade-end:12%] ' +
     'data-[can-scroll-prev]:[--carousel-fade-start:12%] ' +
+    'max-sm:data-[can-scroll-next]:[--carousel-fade-end:8%] max-sm:data-[can-scroll-prev]:[--carousel-fade-start:0%] ' +
     'data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_right,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] ' +
     'rtl:data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_left,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] ' +
     'flex snap-x snap-mandatory overflow-x-auto scroll-smooth scrollbar-none ' +
