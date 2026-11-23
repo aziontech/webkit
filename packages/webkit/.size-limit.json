@@ -276,7 +276,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/docs/doc-page-header/doc-page-header.vue",
-    "limit": "32.4 KB"
+    "limit": "32.45 KB"
   },
   {
     "name": "doc-table-of-contents",

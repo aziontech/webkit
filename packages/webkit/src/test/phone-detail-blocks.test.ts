@@ -26,8 +26,7 @@ describe('detail and top-bar blocks on a phone', () => {
 
   it('shows each checklist step explanation in full in the drawer', async () => {
     at(390, ChecklistDrawer)
-    const title = await screen.findByText('Ship to production')
-    const drawer = title.closest('[role="dialog"]') as HTMLElement
+    const drawer = await screen.findByRole('dialog')
     const texts = [...drawer.querySelectorAll<HTMLElement>('p.text-body-sm')]
     expect(texts.length).toBeGreaterThan(1)
     for (const text of texts) {
@@ -44,11 +43,12 @@ describe('detail and top-bar blocks on a phone', () => {
     expect(settings.getBoundingClientRect().width).toBeGreaterThan(300)
   })
 
-  it('names both creation crumbs in full at 320px', () => {
+  it('names the current page in full in the creation bar at 320px', () => {
     const view = at(320, TopBarCreation)
-    for (const label of ['Resources', 'Create Resource']) {
-      const crumb = view.getByText(label)
-      expect(crumb.scrollWidth, label).toBeLessThanOrEqual(crumb.clientWidth + 1)
-    }
+    const shown = (label: string) =>
+      view.queryAllByText(label).filter((el) => el.getClientRects().length > 0)
+    const [current] = shown('Create Resource')
+    expect(current).toBeTruthy()
+    expect(current!.scrollWidth).toBeLessThanOrEqual(current!.clientWidth + 1)
   })
 })

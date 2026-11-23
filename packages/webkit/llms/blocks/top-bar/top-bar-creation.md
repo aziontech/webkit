@@ -38,7 +38,7 @@ Small, outlined, chevron icon, a link (`href`) to the list the flow started from
 
 ### C. Brand — `Brand` (required)
 
-Inside `AppHeader.Brand`, linked to the home route through its `href` with `aria-label="Azion home"`. Below `sm` it is the reduced "A" glyph (`variant="reduced"`), so the breadcrumb keeps the room to name both pages on a 320px phone.
+Inside `AppHeader.Brand`, linked to the home route through its `href` with `aria-label="Azion home"`. Below `sm` it is the reduced "A" glyph (`variant="reduced"`) and the breadcrumb shows only the current page, which the back button already pairs with its parent, so a 320px phone reads it in full.
 
 ### D. Breadcrumb — `Breadcrumb` (required until the flow is terminal)
 
@@ -227,11 +227,24 @@ Each variant is the same screen in another state: `get_block("top-bar/top-bar-cr
             />
           </span>
         </AppHeader.Brand>
-        <Breadcrumb
+        <div
           v-if="breadcrumb.length > 0"
-          :items="breadcrumb"
-          @navigate="(event, href) => emit('navigate', event, href)"
-        />
+          class="min-w-0 max-sm:hidden"
+        >
+          <Breadcrumb
+            :items="breadcrumb"
+            @navigate="(event, href) => emit('navigate', event, href)"
+          />
+        </div>
+        <div
+          v-if="breadcrumb.length > 0"
+          class="min-w-0 sm:hidden"
+        >
+          <Breadcrumb
+            :items="breadcrumb.slice(-1)"
+            @navigate="(event, href) => emit('navigate', event, href)"
+          />
+        </div>
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>

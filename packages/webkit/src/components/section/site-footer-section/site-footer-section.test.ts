@@ -122,7 +122,7 @@ describe('SiteFooterSection', () => {
     const { getByRole } = footer()
 
     socials.forEach((social) => {
-      const button = getByRole('link', { name: social.label })
+      const button = getByRole('link', { name: `${social.label} (opens in a new tab)` })
       expect(button.getAttribute('href')).toBe(social.href)
       expect(button.getAttribute('target')).toBe('_blank')
     })

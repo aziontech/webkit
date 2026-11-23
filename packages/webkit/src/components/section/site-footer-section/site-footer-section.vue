@@ -160,7 +160,7 @@
           variant="ghost"
           size="small"
           :icon="social.icon"
-          :ariaLabel="social.label"
+          :aria-label="`${social.label} ${t('common.newTab')}`"
           :href="social.href"
           target="_blank"
         />

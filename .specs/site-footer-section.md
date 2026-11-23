@@ -7,7 +7,7 @@ spec_version: 9
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-20
-checksum: 7c85b9057465e6f1a81528ebb40c582ce6bc4a6bf2bf12213d74df8361cec9fd
+checksum: 44e3b090adf90ed7814df1663ad737423fece195cc69ae0fdd2decc5dda5fac2
 ---
 
 # SiteFooterSection — Component Spec
@@ -71,7 +71,7 @@ The footer under every marketing page: the link columns, then the social row bes
 | `home`              | `string`                    | `''`     | false    | Destination of the Azion mark; the mark is not rendered when empty.                                                                                                              |
 | `homeAriaLabel`     | `string`                    | `''`     | false    | Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`).                                                                                            |
 | `columns`           | `SiteFooterSectionColumn[]` | `[]`     | false    | The link columns, in order; each is `{ title, links }` where every link is `{ label, href, target? }`; a `_blank` link opens in a new tab and closes on the external-link glyph. |
-| `socials`           | `SiteFooterSectionSocial[]` | `[]`     | false    | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab.                                   |
+| `socials`           | `SiteFooterSectionSocial[]` | `[]`     | false    | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab, and each name ends with the `common.newTab` notice.                                   |
 | `statusLabel`       | `string`                    | `''`     | false    | Line of the system status indicator; the indicator is not rendered when empty.                                                                                                   |
 | `languages`         | `string[]`                  | `[]`     | false    | BCP 47 tags of the languages offered (`EN`, `PT-BR`, `ES`); each shows its round flag and its name in its own language, and the first one is selected until `v-model:language` holds another. The language select is not rendered when empty. |
 | `languageAriaLabel` | `string`                    | `''`     | false    | Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`).                                                                        |

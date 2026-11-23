@@ -23,7 +23,7 @@ describe('top-bar/top-bar-creation', () => {
     expect(view.getByRole('link', { name: 'Back to Domains' }).getAttribute('href')).toBe(
       '/domains'
     )
-    expect(view.getByText('Create Domain')).toBeTruthy()
+    expect(view.getAllByText('Create Domain').length).toBeGreaterThan(0)
     expect(view.container.textContent).not.toContain('Create Resource')
   })
 

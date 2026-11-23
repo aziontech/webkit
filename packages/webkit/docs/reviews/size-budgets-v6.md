@@ -1227,3 +1227,4 @@ Budget-raise: feature-tabs-section 58.15 KB → 58.25 KB (measured 58.23 KB): Li
 Budget-raise: doc-markdown 40.55 KB → 40.65 KB (measured 40.61 KB): Link's new-tab text and the prose rule that keeps the inline-code chip off CodeBlock lines (A5-054, A5-105).
 Budget-raise: trace 39 KB → 39.05 KB (measured 39.02 KB): each span name carries its full name as a `title`, and the name column takes 55% of a narrow trace (A5-282).
 Budget-raise: console-trace-scene 84.65 KB → 84.7 KB (measured 84.68 KB): it renders Trace (A5-282).
+Budget-raise: doc-page-header 32.4 KB → 32.45 KB (measured 32.41 KB): the Breadcrumb root spans its own start margin, so a shrink-wrapped trail no longer clips its last crumb by 8px (A5-286).
