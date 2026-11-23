@@ -267,14 +267,13 @@ describe('PlanComparisonSection', () => {
         sections: [{ ...sections[0], [key]: { label: 'See rates', href: '/pricing/rates' } }]
       })
     const withAction = closed('action')
-    expect(withAction.getByRole('link', { name: 'See rates' })).toHaveAttribute(
-      'href',
-      '/pricing/rates'
-    )
+    expect(
+      withAction.getByRole('link', { name: 'See rates (opens in a new tab)' })
+    ).toHaveAttribute('href', '/pricing/rates')
     expect(withAction.container.querySelectorAll('[data-closing]')).toHaveLength(0)
     withAction.unmount()
     const withLink = closed('link')
-    expect(withLink.queryByRole('link', { name: 'See rates' })).toBeNull()
+    expect(withLink.queryByRole('link', { name: 'See rates (opens in a new tab)' })).toBeNull()
     withLink.unmount()
   })
 
@@ -322,13 +321,13 @@ describe('PlanComparisonSection', () => {
   it('renders the closing link in a new tab, and nothing when it is absent', () => {
     const { getByRole, unmount } = band()
 
-    const link = getByRole('link', { name: 'See on-demand pricing' })
+    const link = getByRole('link', { name: 'See on-demand pricing (opens in a new tab)' })
     expect(link).toHaveAttribute('href', '/docs/pricing')
     expect(link).toHaveAttribute('target', '_blank')
     unmount()
 
     const { queryByRole } = band({ primaryAction: undefined })
-    expect(queryByRole('link', { name: 'See on-demand pricing' })).toBeNull()
+    expect(queryByRole('link', { name: 'See on-demand pricing (opens in a new tab)' })).toBeNull()
   })
 
   it('renders only the section when plans is empty', () => {

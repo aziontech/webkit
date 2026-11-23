@@ -90,8 +90,9 @@ describe('MediaSplitSection', () => {
     const { findByTestId } = band({ illustrationAriaLabel: ILLUSTRATION_LABEL })
 
     const scene = await findByTestId('illustration')
+    await waitFor(() => expect(scene).toHaveAttribute('aria-label', ILLUSTRATION_LABEL))
+    expect(scene).toHaveAttribute('role', 'img')
     expect(scene.getAttribute('data-placeholder')).toBeNull()
-    expect(scene).toHaveAttribute('aria-label', ILLUSTRATION_LABEL)
   })
 
   it('draws the scene instead of the illustration when both are set', async () => {
@@ -271,10 +272,13 @@ describe('MediaSplitSection', () => {
     expect(warn).not.toHaveBeenCalled()
   })
 
-  it('lets an illustration run flush', () => {
-    const { getByTestId } = band()
+  it('insets an illustration like a widget, and lets a scene run flush', () => {
+    const { getByTestId, unmount } = band()
+    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(true)
+    unmount()
 
-    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(false)
+    const scene = band({ scene: { component: 'BrandGlobeScene' } })
+    expect(scene.getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(false)
   })
 
   it('has no a11y violations with a widget and with an illustration', async () => {
