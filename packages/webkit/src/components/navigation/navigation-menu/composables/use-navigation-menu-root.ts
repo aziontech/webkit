@@ -76,8 +76,11 @@ export interface UseNavigationMenuRootReturn {
   cancelTimers: () => void
   registerTrigger: (itemValue: NavigationMenuItemValue, el: HTMLElement) => void
   unregisterTrigger: (itemValue: NavigationMenuItemValue) => void
+  registerLink: (el: HTMLElement) => void
+  unregisterLink: (el: HTMLElement) => void
   isItemOpen: (itemValue: NavigationMenuItemValue) => boolean
   onTriggerKeydown: (event: KeyboardEvent) => void
+  onLinkKeydown: (event: KeyboardEvent) => void
   onPopupKeydown: (event: KeyboardEvent) => void
   close: () => void
   unmount: () => void
@@ -107,7 +110,23 @@ function createTriggerRegistry() {
   const findTriggerEl = (itemValue: ItemValue) =>
     triggers.value.find((entry) => entry.value === itemValue)?.el
 
-  return { triggers, registerTrigger, unregisterTrigger, findTriggerEl }
+  const links = shallowRef<HTMLElement[]>([])
+  const registerLink = (el: HTMLElement) => {
+    if (!links.value.includes(el)) links.value = [...links.value, el]
+  }
+  const unregisterLink = (el: HTMLElement) => {
+    links.value = links.value.filter((entry) => entry !== el)
+  }
+
+  return {
+    triggers,
+    registerTrigger,
+    unregisterTrigger,
+    findTriggerEl,
+    links,
+    registerLink,
+    unregisterLink
+  }
 }
 
 function createElementSlots() {
@@ -292,7 +311,7 @@ export function useNavigationMenuRoot(
     ...registry,
     ...state,
     ...timers,
-    ...useNavigationMenuKeyboard(state),
+    ...useNavigationMenuKeyboard({ ...state, links: registry.links }),
     open,
     popupMounted: popup.mounted,
     popupTransitionStatus: popup.transitionStatus,

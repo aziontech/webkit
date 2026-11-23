@@ -72,14 +72,26 @@
     }
   }
 
+  const registeredLinkEl = ref<HTMLElement | null>(null)
+
+  const syncLinkRegistration = (element: HTMLElement | null) => {
+    if (registeredLinkEl.value && registeredLinkEl.value !== element)
+      root.unregisterLink(registeredLinkEl.value)
+    registeredLinkEl.value = element
+    if (element) root.registerLink(element)
+  }
+
   const syncTriggerRegistration = () => {
-    if (isLink.value || !itemContext) {
+    const element = resolveElement()
+
+    if (isLink.value) {
+      syncLinkRegistration(element)
       return
     }
 
-    const element = resolveElement()
+    syncLinkRegistration(null)
 
-    if (!element) {
+    if (!itemContext || !element) {
       return
     }
 
@@ -123,6 +135,7 @@
 
   const onKeydown = (event: globalThis.KeyboardEvent) => {
     if (isLink.value) {
+      root.onLinkKeydown(event)
       return
     }
 
@@ -170,6 +183,7 @@
   })
 
   onUnmounted(() => {
+    syncLinkRegistration(null)
     if (!isLink.value && itemContext) {
       root.unregisterTrigger(itemValueResolved.value)
     }
