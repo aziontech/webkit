@@ -20,7 +20,7 @@ export interface LinkedCellAttrs {
   class: string
 }
 
-export const LINKED_CELL_CLASS =
+const LINKED_CELL_CLASS =
   'relative isolate before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 ' +
   'before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance hover:before:opacity-100 focus-visible:before:opacity-100 ' +
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:before:transition-none'
