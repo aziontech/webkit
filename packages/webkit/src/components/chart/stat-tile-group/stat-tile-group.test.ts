@@ -88,4 +88,15 @@ describe('StatTileGroup', () => {
     expect(view.getAllByTestId('stat-tile')).toHaveLength(4)
     await expectNoA11yViolations(view.container)
   })
+
+  it.each([
+    ['default', DefaultExample],
+    ['beside-card', BesideCardExample]
+  ])('reads a falling Data offload as worse in the %s example', (_name, example) => {
+    const view = render(example)
+    const tile = view
+      .getAllByTestId('stat-tile')
+      .find((el) => el.textContent?.includes('Data offload'))!
+    expect(tile.querySelector('[data-trend]')?.getAttribute('data-trend')).toBe('bad')
+  })
 })

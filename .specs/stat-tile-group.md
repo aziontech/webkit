@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 414c381e97f399a3c4becf65cf653cea71225fd5a77817da5b70f587d2ea9823
+checksum: 49c5586e3def387af067b67514cb9e03dbbe50a5214d740c46f5d7a4c25cef68
 created: 2026-11-12
 last_updated: 2026-11-18
 ---
@@ -76,7 +76,6 @@ One card split into cells, one `StatTile` per cell: the KPI strip at the top of 
       :value="70"
       unit="%"
       :delta="-1.5"
-      inverse
     />
   </StatTileGroup>
 </template>
