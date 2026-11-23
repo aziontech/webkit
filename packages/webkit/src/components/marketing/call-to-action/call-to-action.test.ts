@@ -12,6 +12,17 @@ const DESCRIPTION = 'Deploy to every edge location in seconds. No credit card re
 const EYEBROW = 'Get started'
 
 describe('CallToAction', () => {
+  it('keeps the panel actions right after the copy, never pushed to the far edge of a wide band', () => {
+    const { getByTestId } = render(CallToAction, {
+      props: { title: TITLE, description: DESCRIPTION },
+      slots: { actions: '<button type="button">Start for free</button>' }
+    })
+    const row = getByTestId(`${TESTID}__row`)
+
+    expect(row.classList.contains('md:justify-start')).toBe(true)
+    expect(row.className).not.toContain('justify-between')
+  })
+
   it('renders the panel under the default testid', () => {
     const { getByTestId } = render(CallToAction, { props: { title: TITLE } })
 
