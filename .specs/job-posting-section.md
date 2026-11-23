@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 08c10d02d27786c6a76fdebe74242bdb5491c00ea791b058635a8143c725cb80
+checksum: b5718b8f5ad721ec65e2c1116f5425a6d5adfab1309a231d0edcdee9e25c20df
 created: 2026-11-14
 last_updated: 2026-11-18
 ---
@@ -140,7 +140,7 @@ The body of a careers posting page, under the posting's title band: the descript
 - `failed` (prop): a danger `Alert` with `messages.error` shows under the submit button; the form stays editable; `data-failed` on the root
 - File field: an inline `file-dropzone` with a browse button takes one file; once picked, the file shows in a `file-token-group` whose remove button clears it and brings the dropzone back
 - Description: each section row after the first draws a rule above it (`data-ruled`); a `list` block is a bulleted list
-- Rail: shown from the large breakpoint up, sticky under the site header while the description scrolls; the apply button renders only when `applyLabel` is set
+- Rail: beside the description and sticky under the site header from the large breakpoint up, a block above the description below it; the apply button renders only when `applyLabel` is set
 - Disabled, readonly: not states of the band; `loading` is the only lock
 - Empty: when `title` is empty the band renders nothing but its root; with no `sections` the description column is empty and the rail still renders; with no `facets` the facet list is left out
 
@@ -198,7 +198,7 @@ No built-in strings: every visible string and accessible name comes from the pro
 ## Responsive
 
 - Container queries: none; the band follows the page breakpoints.
-- Narrow (below `lg`): the rail is hidden and the description takes the full width; the title band's apply link and the form remain. Below `sm` the form's fields stack in one column; from `sm` they sit two to a row, the file field across both.
+- Narrow (below `lg`): the rail is a block above the description, ruled below instead of beside it and not sticky, so a phone still shows the area, the title, the facets and the apply link first; the description takes the full width under it. Below `sm` the form's fields stack in one column; from `sm` they sit two to a row, the file field across both.
 - Touch: targets ≥ 40 px; no hover-only affordance.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the description holds a reading measure and wraps.
 

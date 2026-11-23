@@ -18,9 +18,9 @@
 <template>
   <div
     :data-testid="`${testId}__rail`"
-    class="hidden border-(--border-default) lg:col-start-2 lg:row-start-1 lg:block lg:border-s"
+    class="border-b border-(--border-default) lg:col-start-2 lg:row-start-1 lg:border-s lg:border-b-0"
   >
-    <div class="sticky top-14 flex flex-col gap-(--spacing-lg) p-(--spacing-xl)">
+    <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-xl) lg:sticky lg:top-14">
       <div class="flex flex-col gap-(--spacing-xs)">
         <Eyebrow v-if="area">{{ area }}</Eyebrow>
         <p class="m-0 text-pretty text-heading-sm text-(--text-default)">
