@@ -6,7 +6,7 @@ status: implemented
 spec_version: 7
 created: 2026-11-04
 last_updated: 2026-11-18
-checksum: 508fc81368ab96c8c66db3fa104f5fd15f67c574aacece193baa770e9472bf02
+checksum: cc2ff74fa036dedb71d658b30d80998abd1289836a1872b4d446e8765efc4ef3
 ---
 
 # FeatureScrollSection — Component Spec
@@ -89,6 +89,7 @@ The walkthrough band of a product page: a large section title over one screen pe
 
 - Visual states: `default`
 - Below the large breakpoint the features render as a three-column grid of media tiles; from it up they render as a `MediaScroll` whose active step is `media-scroll`'s own
+- The server renders both layouts (CSS shows the right one); once mounted only the layout that matches the width stays in the document, so the band never carries two copies of every scene and illustration
 - Empty: when `items` is empty the band renders nothing — not the header, not the frames
 - Media: an item's `scene` wins over its `code`, which wins over its `illustration`; a `code` sample is a one-file `code-block` with line numbers, typed in once in the stack and loaded on demand; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. A scene name that is not registered draws nothing.
 

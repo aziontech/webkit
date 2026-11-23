@@ -174,6 +174,26 @@ describe('Illustration', () => {
     expect(masks).not.toContain('rgb(7, 8, 9)')
   })
 
+  it('draws a run of same-colour square dots as one path, keeping every dot', async () => {
+    const dots = Array.from(
+      { length: 10 },
+      (_, index) => `<path d="M${index * 2} 0V1h1v-1z" fill="#666666"/>`
+    ).join('')
+    const host = await drawnFixture('', `${dots}<path d="M0 3h1v1h-1z" fill="#F3652B"/>`)
+    const paths = [...host.querySelectorAll('path')]
+
+    expect(paths).toHaveLength(2)
+    expect(paths[0].getAttribute('d')?.match(/M/g)).toHaveLength(10)
+    expect(paths[0].getAttribute('d')).toContain('M18 0h1v1h-1z')
+  })
+
+  it.each(['dns-protection', 'global-network', 'preview'])(
+    'keeps the dotted scene %s under 400 drawn nodes',
+    async (name) => {
+      expect(await sceneOf(name)).toBeLessThan(400)
+    }
+  )
+
   it('scopes every internal id to its own instance', async () => {
     const view = render({
       components: { Illustration },
