@@ -74,7 +74,7 @@
 
 <template>
   <section class="flex min-h-0 min-w-0 flex-1 flex-col">
-    <div class="flex min-h-0 flex-1">
+    <div :class="OPEN_ROW_CLASS">
       <DataTable
         ref="tableEl"
         :data="events"
@@ -84,7 +84,7 @@
         :bordered="false"
         density="compact"
         max-height="100%"
-        :class="OPEN_ROW_CLASS"
+        class="w-full"
         :loading="loading"
         @row-click="(event: MouseEvent | KeyboardEvent, row: EventRow) => emit('open', event, row)"
       >
