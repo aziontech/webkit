@@ -341,7 +341,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     groupQuestions,
     skipQuestion
   } from '@aziontech/webkit/utils/ai-chat-questions'
-  import { computed, ref, watch } from 'vue'
+  import { computed, onMounted, ref, watch } from 'vue'
 
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
   import AiChatHeader from './parts/ai-chat-header.vue'
@@ -548,6 +548,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   function toolOf(call: AiChatToolCallPart): AiChatTool {
     return props.tools[call.name] ?? { title: '' }
   }
+
+  onMounted(() => composerEl.value?.focus())
 
   watch(
     () => props.loading,

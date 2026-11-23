@@ -1,6 +1,6 @@
 # AuthSignIn (`auth/auth-sign-in`)
 
-> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses the PersonalToken variant (`token-sign-in.vue`): one masked `PasswordInput` for the token, a link to where tokens are created, a Remember for this tab option, and a `sign-in` event that hands the token to the app, which answers with `loading` and `error`. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant="link"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout. The sign-in card's copy ships in English, Portuguese (Brazil) and Spanish and follows the app's WebKit locale (`useLocale`), so the screen translates with WebKit's own strings.
+> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses the PersonalToken variant (`token-sign-in.vue`): one masked `PasswordInput` for the token, a link to where tokens are created, a Remember for this tab option, and a `sign-in` event that hands the token to the app, which answers with `loading` and `error`. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); and on sign-up a 409 (address already registered) answers exactly like a new address, so the screen never reveals which addresses have an account. In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant="link"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout. The sign-in card's copy ships in English, Portuguese (Brazil) and Spanish and follows the app's WebKit locale (`useLocale`), so the screen translates with WebKit's own strings.
 
 - Surface: app
 - Source: `blocks/auth/auth-sign-in/auth-sign-in.vue` in `@aziontech/webkit`
@@ -61,7 +61,7 @@ The one place every outcome lands. It sits under the card heading and above **bo
 - **401** (`IncorrectCredentials`): `danger`, no action. The fields under it are the recovery. The password is cleared and takes focus.
 - **503** (`ServiceUnavailable`) and **no response** (`Timeout`): `warning`, with **Retry** in the `#actions` slot. Severity follows certainty: a timeout is an unknown.
 - **500** (`ServerError`): `danger`, with **Retry**. Tied to no field, so where the console would toast, the card keeps it.
-- **409** (`EmailAlreadyRegistered`): `danger`, carrying the two exits as links in the default slot: Sign in or reset your password. The address stays in the field.
+- **409** (`EmailAlreadyRegistered`): no error on screen. The card answers with the same `success` Check your inbox notice as a new sign-up, so the form never tells anyone which addresses have an account (account enumeration); the server emails the owner how to sign in or reset the password.
 - **Success** (signed in, account created, password updated, link resent): `success`, no action. Sign up reads `Account created. We sent a verification link to jane.doe@example.com.`
 
 Put the copy in the default slot when it carries links; animate the entrance on a wrapper, not on the `Alert` itself.
@@ -272,10 +272,10 @@ To go live, render the block from the route that owns the session and pass what 
 - **Links:** sentence case: `Forgot your password?`, `Resend email`.
 - **Field errors:** what is wrong, with a period: `This field is required.`, `Enter a valid email address.`, `Passwords don't match.`
 - **401 notice:** `Incorrect email or password. Check both and try again.`
-- **503 notice:** says what is down and what is not lost: `Sign-in is unavailable right now. Your credentials are fine.`
+- **503 notice:** says what is down and what is not lost, never a claim the server did not check (it never read the credentials): `Sign-in is unavailable right now. What you entered is kept; retry in a few minutes.`
 - **500 notice:** says what failed and what state the user is in, code last: `Sign-in failed on our side. You are still signed out. Error 500.`
 - **Timeout notice:** names the unknown, never a failure: `The server did not answer in time. Your session may already be open.`
-- **409 notice:** the fact plus the two exits as links: `This email is already registered. Sign in or reset your password.`
+- **409 on sign-up:** never said on screen, because it tells anyone which addresses have an account. The card answers exactly as for a new address, and the email sent to the owner explains how to sign in: `Check your inbox at jane.doe@example.com to finish. If this address already has an account, the email explains how to sign in instead.`
 - **Session expired:** `Your session expired. Sign in again to pick up where you left off.`
 - **Providers loading:** the status name says what is happening, no ellipsis: `Preparing sign-in providers`.
 - **Action in a notice:** `Retry`, never "Try again" (the console and assistant blocks use the same word).
@@ -315,7 +315,7 @@ To go live, render the block from the route that owns the session and pass what 
 - ServiceUnavailable: `error="service-unavailable"`; 503 on Sign in; a warning notice with Retry, credentials kept.
 - ServerError: `error="server-error"`; 500 on the request; a danger notice with Retry in the card instead of a toast.
 - Timeout: `error="timeout"`; no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
-- EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
+- EmailAlreadyRegistered: 409 on Sign up; the same Check your inbox notice as a new address, so the screen reveals nothing.
 - MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice, then the recovery codes the API issues once: eight 8-character codes in a monospace list with Download and Copy, and an `I saved these codes` checkbox that Continue to Console waits for, so the recovery path MfaCode offers always has codes behind it.
 - MfaCode: the sign-in challenge after the password: a 6-digit `OtpInput`, focused when the challenge opens (not with `autofocus`), that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
 - OauthConsent: the authorize screen. The app (square `Avatar` with its initials, name, publisher, site), the signed-in account in an outlined `Item` with Switch account, the scopes in an `Item.List`, the redirect URL and where to revoke, then Deny / Allow. The pressed answer shows its loading state and locks the other; the outcome lands in the notice slot (`success` for Allow, `info` for Deny) and both stay locked.
@@ -353,7 +353,7 @@ To go live, render the block from the route that owns the session and pass what 
 - `ServiceUnavailable` — 503 on Sign in, on the password step: a warning message that keeps the credentials and carries Retry, the only move left.
 - `ServerError` — 500 on Sign in, on the password step: tied to no field, so where the console would toast, the card keeps a danger message with Retry.
 - `Timeout` — No response to Sign in, on the password step: the same message as the 500 but warning, because the request may still have gone through, with Retry.
-- `EmailAlreadyRegistered` — 409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field.
+- `EmailAlreadyRegistered` — 409 on Sign up (the address already has an account): the card answers exactly as for a new address, Check your inbox, so nobody can test which addresses are registered; the email to the owner explains how to sign in.
 - `MfaSetup` — Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry; on success, recovery codes to download or copy, confirmed saved before Continue.
 - `MfaCode` — The sign-in MFA challenge: a 6-digit OtpInput, focused when the challenge opens, that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account.
 - `OauthConsent` — The OAuth authorize screen: the requesting app with its publisher and site, the signed-in account with Switch account, the scopes it asks for as a list, where Allow sends you, and Deny / Allow, each settling in the card's notice.
@@ -373,7 +373,7 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
   import Card from '@aziontech/webkit/card'
   import PageHeader from '@aziontech/webkit/page-header'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, nextTick, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import { useCardHeight } from './composables/use-card-height'
   import { fillEmail, resolveSignInCopy, type SignInCopy } from './lib/sign-in-copy'
@@ -518,6 +518,10 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
     }
   }
 
+  onMounted(() => {
+    if (step.value === 'email' || step.value === 'password') focusField(`login-${step.value}`)
+  })
+
   watch([() => props.error, () => props.notice], showOutcome)
   watch(
     () => props.loading,
@@ -579,6 +583,7 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
     else {
       emit('continue', event, email.value.trim())
       step.value = 'password'
+      focusField('login-password')
     }
   }
 
@@ -708,6 +713,7 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
                   <StepBack
                     :label="copy.changeEmail"
                     :text="email"
+                    username
                     @back="backToEmail"
                   />
 
@@ -992,9 +998,7 @@ export const recoveryCodes = [
 
   const clearsEntry = (error: string) => error === 'rejected' || error === 'no-access'
 
-  onMounted(() => {
-    if (clearsEntry(props.error)) focusToken()
-  })
+  onMounted(focusToken)
 
   watch(
     () => [props.error, props.loading] as const,
@@ -1137,7 +1141,8 @@ export const SIGN_IN_COPY = {
     home: 'Azion home',
     documentation: 'Documentation',
     badCredentials: 'Incorrect email or password. Check both and try again.',
-    serviceUnavailable: 'Sign-in is unavailable right now. Your credentials are fine.',
+    serviceUnavailable: 
+      'Sign-in is unavailable right now. What you entered is kept; retry in a few minutes.',
     serverError: 'Sign-in failed on our side. You are still signed out. Error 500.',
     timeout: 'The server did not answer in time. Your session may already be open.',
     sessionExpired: 'Your session expired. Sign in again to pick up where you left off.',
@@ -1195,7 +1200,8 @@ export const SIGN_IN_COPY = {
     home: 'Página inicial da Azion',
     documentation: 'Documentação',
     badCredentials: 'E-mail ou senha incorretos. Confira os dois e tente de novo.',
-    serviceUnavailable: 'O login está indisponível no momento. Suas credenciais estão corretas.',
+    serviceUnavailable: 
+      'O login está indisponível no momento. O que você digitou foi mantido; tente de novo em alguns minutos.',
     serverError: 'O login falhou do nosso lado. Você continua desconectado. Erro 500.',
     timeout: 'O servidor não respondeu a tempo. Sua sessão pode já estar aberta.',
     sessionExpired: 'Sua sessão expirou. Entre de novo para continuar de onde parou.',
@@ -1254,7 +1260,7 @@ export const SIGN_IN_COPY = {
     documentation: 'Documentación',
     badCredentials: 'Correo o contraseña incorrectos. Revisa ambos y vuelve a intentarlo.',
     serviceUnavailable:
-      'El inicio de sesión no está disponible ahora. Tus credenciales son correctas.',
+      'El inicio de sesión no está disponible ahora. Lo que escribiste se conserva; vuelve a intentarlo en unos minutos.',
     serverError: 'El inicio de sesión falló de nuestro lado. Sigues sin sesión. Error 500.',
     timeout: 'El servidor no respondió a tiempo. Puede que tu sesión ya esté abierta.',
     sessionExpired: 'Tu sesión caducó. Inicia sesión de nuevo para seguir donde lo dejaste.',
@@ -1848,9 +1854,11 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
     label: string
     /** The text beside the control. */
     text: string
+    /** The text is the account email: keep it in the form as the username password managers pair. */
+    username?: boolean
   }
 
-  defineProps<StepBackProps>()
+  withDefaults(defineProps<StepBackProps>(), { username: false })
 
   const emit = defineEmits<{
     back: [event: MouseEvent]
@@ -1869,6 +1877,17 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
       />
     </Tooltip>
     <span class="truncate text-label-sm text-(--text-default)">{{ text }}</span>
+    <input
+      v-if="username"
+      type="email"
+      name="email"
+      class="sr-only"
+      autocomplete="username"
+      :value="text"
+      readonly
+      tabindex="-1"
+      aria-hidden="true"
+    />
   </div>
 </template>
 ```
@@ -2123,7 +2142,6 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
   import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import Separator from '@aziontech/webkit/separator'
   import { nextTick, onScopeDispose, reactive, ref } from 'vue'
@@ -2134,20 +2152,19 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
   import EmailField from './email-field.vue'
   import PasswordField from './password-field.vue'
 
-  /** A sign-up failure with its own copy and exits. */
+  /** A sign-up the server refused; the card answers it like a new address. */
   export type SignUpFailure = 'email-taken'
 
   export interface SignUpCardProps {
     /** The email the form opens on, such as the address a failed sign-up kept. */
     defaultEmail?: string
-    /** Why sign-up fails: the notice opens with it, and every submit answers with it. */
+    /** The address is already registered: the card answers exactly as for a new one, so nobody can test which addresses have an account. */
     error?: SignUpFailure | ''
   }
 
   interface SignUpNotice {
     severity: AlertSeverity
     label: string
-    exits?: boolean
   }
 
   const props = withDefaults(defineProps<SignUpCardProps>(), {
@@ -2159,16 +2176,19 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
     'provider-click': [event: MouseEvent, provider: SignInProvider]
   }>()
 
-  const takenNotice: SignUpNotice = {
-    severity: 'danger',
-    label: 'This email is already registered.',
-    exits: true
-  }
-
   const email = ref(props.defaultEmail)
   const password = ref('')
   const errors = reactive({ email: '', password: '' })
-  const cardNotice = ref<SignUpNotice | null>(props.error === 'email-taken' ? takenNotice : null)
+  const sentNotice = (address: string): SignUpNotice => ({
+    severity: 'success',
+    label:
+      `Check your inbox at ${address} to finish. ` +
+      'If this address already has an account, the email explains how to sign in instead.'
+  })
+
+  const cardNotice = ref<SignUpNotice | null>(
+    props.error === 'email-taken' ? sentNotice(props.defaultEmail) : null
+  )
   const verifying = ref(false)
   let requestTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -2176,18 +2196,12 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
   const onEmailInput = () => {
     errors.email = ''
-    if (cardNotice.value?.exits) cardNotice.value = null
+    cardNotice.value = null
   }
 
   const answer = () => {
     verifying.value = false
-    cardNotice.value =
-      props.error === 'email-taken'
-        ? takenNotice
-        : {
-            severity: 'success',
-            label: `Account created. We sent a verification link to ${email.value.trim()}.`
-          }
+    cardNotice.value = sentNotice(email.value.trim())
   }
 
   const signUp = () => {
@@ -2236,19 +2250,6 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
           size="small"
         >
           {{ cardNotice.label }}
-          <template v-if="cardNotice.exits">
-            <Link
-              inline
-              href="/login"
-              >Sign in</Link
-            >
-            or
-            <Link
-              inline
-              href="/login?reset=1"
-              >reset your password</Link
-            >.
-          </template>
         </Alert>
 
         <div class="flex flex-col gap-(--spacing-sm)">
@@ -2476,7 +2477,7 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
   import OtpInput from '@aziontech/webkit/otp-input'
   import PageHeader from '@aziontech/webkit/page-header'
   import QrCode from '@aziontech/webkit/qr-code'
-  import { computed, nextTick, ref } from 'vue'
+  import { computed, nextTick, onMounted, ref } from 'vue'
 
   import { useCodeCheck } from '../composables/use-code-check'
   import { mfaAccount as account, mfaSetupKey as setupKey, recoveryCodes } from '../sample'
@@ -2504,6 +2505,10 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
   const focusCode = () => nextTick(() => document.getElementById('mfa-setup-code')?.focus())
 
+  onMounted(() => {
+    if (window.matchMedia('(pointer: fine)').matches) focusCode()
+  })
+
   const codeCheck = useCodeCheck({
     code,
     length: 6,
@@ -2519,6 +2524,10 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
     }
   })
   const { error: codeError, checking: verifying, unreachable, check: verify } = codeCheck
+
+  const APP_LINK_CLASS =
+    'inline-flex min-h-10 items-center rounded-(--shape-control) text-body-sm text-(--text-link) underline-offset-2 hover:text-(--text-link-hover) ' +
+    'hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) forced-colors:text-[LinkText]'
 
   const SETUP_KEY_CLASS =
     'flex items-center justify-between gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-2xs) ' +
@@ -2565,7 +2574,10 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
         >
           <li>Install an authenticator app, such as Google Authenticator, on your phone.</li>
           <li>In the app, add an account and choose to scan a QR code.</li>
-          <li>Scan this code, then enter the 6-digit code the app shows.</li>
+          <li>
+            Scan this code, or open it in the app on this phone, then enter the 6-digit code the app
+            shows.
+          </li>
         </ol>
 
         <div class="flex flex-col items-center gap-(--spacing-sm)">
@@ -2573,6 +2585,11 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
             :value="otpauthUri"
             :aria-label="`QR code to add ${account} to an authenticator app`"
           />
+          <a
+            :href="otpauthUri"
+            :class="APP_LINK_CLASS"
+            >Open in authenticator app</a
+          >
         </div>
 
         <div class="flex flex-col gap-(--spacing-2xs)">

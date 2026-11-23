@@ -33,7 +33,7 @@ Title `Multi-factor authentication` and one sentence on what the page holds. Act
 
 ### B. Require MFA — `Card`, `Item`, `SettingsRow`, `Switch`, `ConfirmDialog` (required)
 
-One compact `SettingsRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`variant="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once. Either way the block updates `v-model:required` and the page saves it. While data loads or failed, the switch is disabled.
+One compact `SettingsRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`variant="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off weakens a security policy, the riskier direction, so it asks too: a `ConfirmDialog` (`variant="danger"`, `Stop requiring MFA`) that says how many people without a factor can sign in again and that new people may sign in with a password only. Nothing changes until it is confirmed. Either way the block updates `v-model:required` and the page saves it. While data loads or failed, the switch is disabled.
 
 ### C. Password-only warning — `Alert` (conditional)
 
@@ -68,7 +68,7 @@ The block takes its people through props and emits every action; it fetches noth
 
 | Event             | Payload           | When                                                                 |
 | ----------------- | ----------------- | -------------------------------------------------------------------- |
-| `update:required` | `boolean`         | The require dialog was confirmed (`true`), or the Switch turned off. |
+| `update:required` | `boolean`         | The require dialog was confirmed (`true`), or the stop dialog was confirmed (`false`). |
 | `refresh`         | `(event)`         | Refresh.                                                             |
 | `retry`           | `(event)`         | Retry in the error alert.                                            |
 | `remind`          | `(event, member)` | Send setup reminder in the row menu.                                 |
@@ -238,6 +238,13 @@ Each variant is the same screen in another state: `get_block("account/account-mf
 
   const withoutMfa = computed(() => items.value.filter((member) => !member.enabled))
 
+  const relaxDescription = computed(() => {
+    const count = withoutMfa.value.length
+    const after = 'New people and anyone whose MFA is reset can then sign in with a password only.'
+    if (!count) return `Everyone keeps the MFA they set up. ${after}`
+    return `${count} ${count === 1 ? 'person' : 'people'} without MFA can sign in again. ${after}`
+  })
+
   const requireDescription = computed(() => {
     const count = withoutMfa.value.length
     if (!count)
@@ -295,12 +302,14 @@ Each variant is the same screen in another state: `get_block("account/account-mf
   const refreshing = computed(() => props.loading && items.value.length > 0)
 
   const requireOpen = ref(false)
+  const relaxOpen = ref(false)
   const onRequire = (value: boolean) => {
-    if (value) {
-      requireOpen.value = true
-      return
-    }
+    if (value) requireOpen.value = true
+    else relaxOpen.value = true
+  }
+  const confirmRelax = () => {
     required.value = false
+    relaxOpen.value = false
   }
   const confirmRequire = () => {
     required.value = true
@@ -557,6 +566,16 @@ Each variant is the same screen in another state: `get_block("account/account-mf
       confirm-label="Require MFA"
       size="small"
       @confirm="confirmRequire"
+    />
+
+    <ConfirmDialog
+      v-model:open="relaxOpen"
+      variant="danger"
+      title="Stop requiring MFA"
+      :description="relaxDescription"
+      confirm-label="Stop requiring MFA"
+      size="small"
+      @confirm="confirmRelax"
     />
 
     <ConfirmDialog

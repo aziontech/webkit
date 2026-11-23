@@ -671,7 +671,6 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
   const actionColumn: TableColumn = { id: 'actions', type: 'action', hideable: false }
 
   const columns: TableColumn[] = [
-    { accessorKey: 'number', header: 'No.', label: 'Number', sortable: true, minWidth: 72 },
     {
       accessorKey: 'id',
       header: 'Invoice ID',
@@ -680,13 +679,14 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
       hideable: false,
       minWidth: 140
     },
+    { accessorKey: 'amount', header: 'Amount', sortable: true, minWidth: 110 },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
     { accessorKey: 'plan', header: 'Plan', sortable: true, minWidth: 96 },
     { accessorKey: 'cycle', header: 'Cycle', minWidth: 100 },
     { accessorKey: 'seats', header: 'Seats', sortable: true, minWidth: 80 },
     { accessorKey: 'billedAt', header: 'Billing date', sortable: true, minWidth: 130 },
-    { accessorKey: 'amount', header: 'Amount', sortable: true, minWidth: 110 },
     { accessorKey: 'paymentMethod', header: 'Payment method', grow: 2, minWidth: 200 },
-    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
+    { accessorKey: 'number', header: 'No.', label: 'Number', sortable: true, minWidth: 72 },
     actionColumn
   ]
 
