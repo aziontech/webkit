@@ -95,6 +95,14 @@
 
   const hasClosing = computed(() => Boolean(props.closing?.title))
 
+  const closingColumns = computed(() => {
+    const count = library.value.length
+    return {
+      '--subject-grid-section-closing-columns-sm': 2 - (count % 2),
+      '--subject-grid-section-closing-columns-lg': 3 - (count % 3)
+    }
+  })
+
   const ARTICLE_LINK_CLASS =
     'text-body-sm text-(--text-muted) underline underline-offset-2 transition-colors duration-150 ease-out ' +
     'hover:text-(--text-default) focus-visible:rounded-(--shape-flat) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) ' +
@@ -168,7 +176,8 @@
             v-if="closing && hasClosing"
             borders="none"
             marks="all"
-            class="min-w-0 bg-(--bg-surface-raised) sm:col-span-2"
+            :style="closingColumns"
+            class="min-w-0 bg-(--bg-surface-raised) sm:col-span-(--subject-grid-section-closing-columns-sm) lg:col-span-(--subject-grid-section-closing-columns-lg)"
           >
             <CallToAction
               variant="lead"
