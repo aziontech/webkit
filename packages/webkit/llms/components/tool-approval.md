@@ -81,17 +81,17 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 ## States
 
 - `data-status` mirrors `status`; `data-variant`.
-- `pending`: phrase field (when `confirmationPhrase`), Deny (outlined) and Approve (primary, or danger with `variant="danger"`); Approve disabled until the phrase matches.
+- `pending`: phrase field (when `confirmationPhrase`; the phrase in its label is inline code), Deny (outlined) and Approve (primary, or danger with `variant="danger"`); Approve disabled until the phrase matches. Once the typed text is as long as the phrase and still differs, the field is `aria-invalid` with a `FieldError` (`toolApproval.phraseMismatch`).
 - `editable` + `pending`: a monospace `Textarea` labelled `Arguments` under the body, growing to 12 lines, then scrolling; disabled while `loading`.
 - `invalid` (with `editable` + `pending`): the field is `aria-invalid` with its `FieldError`; Approve is disabled (with `confirmationPhrase`, it also needs the phrase).
 - `editable` once resolved: the field stays `readonly` as the record of the arguments that ran.
-- `approved` (success), `denied` (warning), `expired` (neutral): a `StatusIndicator` with the outcome; the typed phrase resets when the card returns to `pending`.
+- `approved` (success), `denied` (warning), `expired` (neutral): a `StatusIndicator` with the outcome; the typed phrase resets when the card returns to `pending`. When the status leaves `pending` while focus was inside the card (or on the page body), focus moves to the heading so it never falls to the page.
 
 ## Accessibility
 
 - Visible focus: buttons and the phrase input show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`; the heading shows a ring when `focus()` moves focus to it.
 - Keyboard map: `Tab` through the body, the arguments field (with `editable`), the phrase field, Deny, Approve; in the arguments field `Enter` adds a line and `Tab` leaves it; `Enter` / `Space` activate Deny and Approve. No focus trap, no initial focus (Cloudscape: the one-time decision card is not a dialog).
-- ARIA: `role="group"` labelled by its `h3` title and described by the description; both fields have visible `<label>`s; the invalid arguments field is `aria-invalid` and described by its `FieldError` (`role="alert"`); a polite live region announces the outcome; outcomes are text, never color alone.
+- ARIA: `role="group"` labelled by its `h3` title and described by the description; both fields have visible `<label>`s; the invalid arguments field and a mismatched phrase field are `aria-invalid` and described by their `FieldError` (`role="alert"`); the phrase field sets `autocapitalize="off"`; a polite live region announces the outcome; outcomes are text, never color alone.
 
 ## Right-to-left
 
@@ -112,6 +112,7 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 | `toolApproval.confirmLabel`     | `Type {phrase} to confirm`                                | —              |
 | `toolApproval.arguments`        | `Arguments`                                               | —              |
 | `toolApproval.invalidArguments` | `These arguments are not valid. Correct them to approve.` | —              |
+| `toolApproval.phraseMismatch`   | `This does not match {phrase}. Type it exactly to confirm.` | —            |
 
 - Formatting: none.
 
@@ -120,7 +121,7 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 - Container queries: none.
 - Narrow: buttons wrap; the title wraps anywhere, inline code included, so the whole command in it stays readable. What will run must be readable without scrolling sideways before Approve: prefer a `KeyValueList` (or a `CodeBlock` whose lines are short, such as pretty-printed JSON) in the body, since a `CodeBlock` scrolls a long line inside itself.
 - Touch: medium buttons (44 px on coarse pointers).
-- Reflow: no horizontal scroll at 320 px; the arguments field wraps its lines, grows to 12 lines, then scrolls inside itself.
+- Reflow: no page-level horizontal scroll at 320 px; the arguments field keeps each line of code whole (`wrap="off"`), grows to 12 lines, then scrolls inside itself, sideways for a long line.
 - Touch: on coarse pointers (`pointer-coarse:`) the confirmation-phrase field and the arguments field (a `Textarea`) type at 16 px (`text-body-md`), so iOS Safari does not zoom the page on focus.
 
 ## Examples

@@ -60,7 +60,7 @@ shared with `StreamingResponse`._
 - Visible focus: trigger, links and the targeted item show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Keyboard map: `Tab` to the trigger, `Enter` / `Space` toggles; `Tab` through the links.
 - ARIA: `button` with `aria-expanded` / `aria-controls`; the list is an `<ol aria-label="Sources">` so numbers are announced by position; the visual number chip is `aria-hidden`.
-- External links open in a new tab with `rel="noopener noreferrer"`.
+- External links open in a new tab with `rel="noopener noreferrer"`, followed by an `aria-hidden` `az-external-link` glyph and the sr-only `common.newTab` text.
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the title as plain text.
 
 ## Right-to-left
@@ -83,7 +83,7 @@ shared with `StreamingResponse`._
 
 - Container queries: none.
 - Narrow: titles and descriptions truncate with an ellipsis.
-- Touch: links are text-sized inside 24 px rows.
+- Touch: the trigger is at least 24 px tall, 44 px on coarse pointers; links are text-sized inside 24 px rows.
 - Reflow: no horizontal scroll.
 
 ## Examples

@@ -96,7 +96,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 - Container queries: none.
 - Narrow: the trigger and Skip wrap.
-- Touch: the trigger is text-sized; Skip is a small `Button` (44 px on coarse pointers).
+- Touch: the trigger is at least 24 px tall, 44 px on coarse pointers; Skip is a small `Button` (44 px on coarse pointers).
 - Reflow: no horizontal scroll.
 
 ## Examples

@@ -60,7 +60,7 @@ components: `code-block`, `citation`._
 - Visible focus: links and the table scroller carry `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Keyboard map: `Tab` reaches links, citations, the copy control of each code block and a wide table's scroller.
 - ARIA: `aria-busy` while streaming (screen readers wait); the caret is `aria-hidden`; headings start at `h3` (`#` → `h3`) so a response never outranks the page; tables use `th scope="col"`. Announcing the finished text is the `Conversation`'s job.
-- External links open in a new tab with `rel="noopener noreferrer"`.
+- External links open in a new tab with `rel="noopener noreferrer"`, followed by an `aria-hidden` `az-external-link` glyph and the sr-only `common.newTab` text, so the new tab is seen and heard.
 - Contrast ≥4.5:1 for body, muted quote and link text.
 
 ## Right-to-left
