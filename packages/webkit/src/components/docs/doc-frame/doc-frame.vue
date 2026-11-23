@@ -217,6 +217,9 @@
     'pointer-events-none relative block max-h-full max-w-full rounded-(--shape-control) object-contain ' +
     'data-[flip=armed]:transition-[transform] data-[flip=armed]:duration-moderate-02 data-[flip=armed]:ease-expressive-entrance ' +
     'motion-reduce:transition-none!'
+
+  const CAPTION_CLASS =
+    'pt-(--spacing-xs) text-center text-body-xs text-(--text-muted) [&_a]:text-link [&_a]:motion-reduce:transition-none [&_a]:forced-colors:text-[LinkText]'
 </script>
 
 <template>
@@ -298,7 +301,7 @@
     <figcaption
       v-if="$slots['caption'] || caption"
       :data-testid="`${testId}__caption`"
-      class="pt-(--spacing-xs) text-center text-body-xs text-(--text-muted)"
+      :class="CAPTION_CLASS"
     >
       <slot name="caption">{{ caption }}</slot>
     </figcaption>
