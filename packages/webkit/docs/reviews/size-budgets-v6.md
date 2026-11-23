@@ -1523,3 +1523,4 @@ Budget-raise: pricing-card 5.3 KB → 5.4 KB (measured 5.35 KB, rounded up): the
 Budget-raise: checkbox 2.3 KB → 2.35 KB (measured 2.30 KB, rounded up): the audit-5 lanes that each raised this entry landed together (see the lane lines above).
 Budget-raise: dropdown-menu-sub-content 5.05 KB → 5.3 KB (measured 5.25 KB, rounded up): the audit-5 lanes that each raised this entry landed together (see the lane lines above).
 Budget-raise: navigation-menu-root 15.8 KB → 16.05 KB (measured 16.00 KB, rounded up): the audit-5 lanes that each raised this entry landed together (see the lane lines above).
+Budget-raise: customer-use-cases-section 7.85 KB → 7.9 KB (measured 7.86 KB): it renders Link and FeatureItem, which grew in the audit-5 lanes (new-tab text, linked click area).
