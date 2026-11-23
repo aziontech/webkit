@@ -4,16 +4,16 @@
 
 <template>
   <ul
-    class="flex w-full max-w-(--container-md) flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+    class="@container/cards flex w-full max-w-(--container-md) flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
   >
     <li
-      class="flex items-center gap-(--spacing-md) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+      class="flex flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-2xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
     >
-      <div class="flex min-w-0 flex-1 flex-col">
+      <div class="flex min-w-0 basis-full flex-col @md/cards:basis-0 @md/cards:flex-1">
         <span class="truncate text-label-md text-(--text-default)">Requests</span>
         <span class="truncate text-label-sm text-(--text-muted)">Edge Application</span>
       </div>
-      <div class="w-24 shrink-0">
+      <div class="me-auto w-24 shrink-0 @md/cards:me-0">
         <SparkChart
           size="small"
           color="success"
@@ -28,13 +28,13 @@
       >
     </li>
     <li
-      class="flex items-center gap-(--spacing-md) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+      class="flex flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-2xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
     >
-      <div class="flex min-w-0 flex-1 flex-col">
+      <div class="flex min-w-0 basis-full flex-col @md/cards:basis-0 @md/cards:flex-1">
         <span class="truncate text-label-md text-(--text-default)">Blocked threats</span>
         <span class="truncate text-label-sm text-(--text-muted)">Edge Firewall</span>
       </div>
-      <div class="w-24 shrink-0">
+      <div class="me-auto w-24 shrink-0 @md/cards:me-0">
         <SparkChart
           size="small"
           color="success"
@@ -49,13 +49,13 @@
       >
     </li>
     <li
-      class="flex items-center gap-(--spacing-md) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+      class="flex flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-2xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
     >
-      <div class="flex min-w-0 flex-1 flex-col">
+      <div class="flex min-w-0 basis-full flex-col @md/cards:basis-0 @md/cards:flex-1">
         <span class="truncate text-label-md text-(--text-default)">Cache hit ratio</span>
         <span class="truncate text-label-sm text-(--text-muted)">Edge Cache</span>
       </div>
-      <div class="w-24 shrink-0">
+      <div class="me-auto w-24 shrink-0 @md/cards:me-0">
         <SparkChart
           size="small"
           color="success"
@@ -69,12 +69,14 @@
         >+1.6%</span
       >
     </li>
-    <li class="flex items-center gap-(--spacing-md) px-(--spacing-md) py-(--spacing-sm)">
-      <div class="flex min-w-0 flex-1 flex-col">
+    <li
+      class="flex flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-2xs) px-(--spacing-md) py-(--spacing-sm)"
+    >
+      <div class="flex min-w-0 basis-full flex-col @md/cards:basis-0 @md/cards:flex-1">
         <span class="truncate text-label-md text-(--text-default)">Origin latency</span>
         <span class="truncate text-label-sm text-(--text-muted)">p95, origin fetch</span>
       </div>
-      <div class="w-24 shrink-0">
+      <div class="me-auto w-24 shrink-0 @md/cards:me-0">
         <SparkChart
           size="small"
           color="success"
