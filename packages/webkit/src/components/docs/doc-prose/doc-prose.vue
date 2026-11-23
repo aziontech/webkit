@@ -57,6 +57,7 @@
     '[&_code:not(pre_*,[data-doc-chrome],[data-doc-chrome]_*)]:bg-(--bg-hover) [&_code:not(pre_*,[data-doc-chrome],[data-doc-chrome]_*)]:px-(--spacing-2xs) ' +
     '[&_code:not(pre_*,[data-doc-chrome],[data-doc-chrome]_*)]:text-label-code-sm [&_code:not(pre_*,[data-doc-chrome],[data-doc-chrome]_*)]:text-(--text-default) ' +
     '[&_code:not(pre_*,[data-doc-chrome],[data-doc-chrome]_*)]:wrap-anywhere [&_code:not(pre_*,[data-doc-chrome],[data-doc-chrome]_*)]:box-decoration-clone ' +
+    '[&_:is(th,td)_code:not(pre_*,[data-doc-chrome],[data-doc-chrome]_*)]:wrap-normal ' +
     '[&_:not(a,pre)>code:not([data-testid])]:cursor-pointer [&_:not(a,pre)>code:not([data-testid])]:hover:ring-1 [&_:not(a,pre)>code:not([data-testid])]:hover:ring-(--border-default) ' +
     '[&_code[data-command]]:outline-none [&_code[data-command]:focus-visible]:ring-2 [&_code[data-command]:focus-visible]:ring-(--ring-color) ' +
     '[&_ul:not([data-doc-chrome],[data-doc-chrome]_*)]:pt-(--spacing-md) [&_ol:not([data-doc-chrome],[data-doc-chrome]_*)]:pt-(--spacing-md) ' +
