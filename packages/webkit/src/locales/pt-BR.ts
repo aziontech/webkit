@@ -314,6 +314,9 @@ export const ptBR: Messages = {
   chartCard: {
     resize: 'Redimensionar cartão',
     move: 'Mover cartão',
+    moveVerb: 'Mover',
+    moveHint: 'Use as setas para mover o cartão.',
+    moved: 'Movido para a posição {position} de {total}',
     columns: '{span} de {max} colunas',
     columnsAndHeight: '{columns}, {height} pixels de altura'
   },

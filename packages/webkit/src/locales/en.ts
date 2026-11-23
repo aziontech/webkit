@@ -140,6 +140,9 @@ export const chart = {
 export const chartCard = {
   resize: 'Resize card',
   move: 'Move card',
+  moveVerb: 'Move',
+  moveHint: 'Use the arrow keys to move the card.',
+  moved: 'Moved to position {position} of {total}',
   columns: '{span} of {max} columns',
   columnsAndHeight: '{columns}, {height} pixels tall'
 } as const

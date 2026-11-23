@@ -3,7 +3,7 @@ name: chart-card
 category: chart
 structure: composition
 status: implemented
-checksum: 77081930d9689e34baa4d9f29c2af5612f065952d26fea1b90fa24eab98f4cbd
+checksum: 82321ae74090c7172ec26cb3dd4a8881425a8fb528295e756ed3ce46817ff41e
 spec_version: 6
 created: 2026-10-20
 last_updated: 2026-11-15
@@ -110,7 +110,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
   - Events: _none_.
   - Slots: `default` — the consumer's tags, buttons and dropdown.
 - `chart-card-drag-handle/chart-card-drag-handle.vue` — a grip button that arms native drag on the card while pressed; arrow keys emit the root's `move`. Renders nothing unless the root is `draggable`.
-  - Props: `ariaLabel?: string` (default `''`; empty uses the locale catalog, `Move card` in English).
+  - Props: `ariaLabel?: string` (default `''`; empty reads `Move` plus the card title, or the locale catalog's `Move card` when the card has no title). The handle is described by the key hint (`Use the arrow keys to move the card.`) and shows the move glyph (`az az-move`).
   - Events: _none_ (flows through the root's `move`, `drag-start`, `drag-end`).
   - Slots: _none_.
 - `chart-card-content/chart-card-content.vue` — the body; fills the remaining height.
@@ -216,7 +216,7 @@ A pointer resize follows the pointer 1:1 with no transition; it is direct manipu
 
 - The card is a `role="group"` named by its title (`aria-labelledby`) or by `ariaLabel`; it is not a region landmark, so ten cards on a dashboard add no landmarks.
 - The drag and resize handles draw 24 px but take pointer input over 40 px (a transparent `before:` hit area 8 px around them).
-- Drag handle: a real `<button>` named "Move card". Keyboard map: arrow keys emit `move` with the direction; the page reorders and keeps focus on the handle. Dragging never requires a pointer.
+- Drag handle: a real `<button>` named "Move" plus the card title ("Move card" without a title), described by the arrow-key hint. Keyboard map: arrow keys emit `move` with the direction; the page reorders and keeps focus on the handle, and the handle announces "Moved to position 2 of 3" through the shared polite live region. Dragging never requires a pointer.
 - Resize handle: `role="separator"`, one tab stop, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` such as "6 of 12 columns, 552 pixels tall". Keyboard map: Left / Right change the span by one column, Up / Down change the height by 24 pixels, Home / End jump to the smallest and largest span, Escape cancels a pointer resize in progress.
 - Both handles are at least 24px with a visible focus ring `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - `motion-reduce:transition-none` on every transition.
