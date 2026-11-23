@@ -1220,3 +1220,9 @@ Budget-raise: drawer-content 18.3 KB → 18.35 KB (measured 18.31 KB): after eve
 Budget-raise: popover 11.3 KB → 11.35 KB (measured 11.31 KB): after every step-6 lane merged, it carries the split cost of more than one shared piece at once (placement, listbox, combobox, navigation menu, sidebar, table parts); each lane measured its own share alone (decision CQ-E8).
 Budget-raise: shortcuts-dialog 27.2 KB → 27.25 KB (measured 27.22 KB): after every step-6 lane merged, it carries the split cost of more than one shared piece at once (placement, listbox, combobox, navigation menu, sidebar, table parts); each lane measured its own share alone (decision CQ-E8).
 Budget-raise: package packedBytes 8,500,000 → 8,550,000 bytes (measured 8,502,714): the DataTable companion parts, the block parts, lib and composable files of step 6 and their llms pages are many more small files in the tarball once every lane is merged.
+Budget-raise: marquee 8 KB → 8.65 KB (measured 8.60 KB): audit 5 (A5-149) draws each brand mark once as an SVG symbol and points every copy at it, which cuts a 13-mark strip from about 3,600 DOM nodes to a few hundred; the measuring composable is the cost.
+Budget-raise: template-gallery-section 29.55 KB → 29.9 KB (measured 29.88 KB): it carries the Marquee symbol drawing (A5-149).
+Budget-raise: logo-wall 4.9 KB → 4.95 KB (measured 4.92 KB): audit 5 (A5-038) adds the optional dark-theme file (`srcDark`) so a colour mark stays legible on a dark cell.
+Budget-raise: hero 5.05 KB → 5.1 KB (measured 5.05 KB): audit 5 (A5-241) shortens the floor below `md` when the brand strip follows it.
+Budget-raise: hero-section 13.4 KB → 13.45 KB (measured 13.42 KB): it carries the Hero floor change (A5-241).
+Budget-raise: hero-form-section 52.55 KB → 52.6 KB (measured 52.58 KB): it carries the Hero floor change (A5-241).
