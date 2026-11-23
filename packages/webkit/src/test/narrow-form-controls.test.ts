@@ -8,6 +8,7 @@ import { defineComponent, h } from 'vue'
 import Profile from '../../blocks/account/account-onboarding-form/variants/profile.vue'
 import CreateAndDeploy from '../../blocks/create/create-wizard/variants/create-and-deploy.vue'
 import EditSchema from '../../blocks/edit/edit-schema/edit-schema.vue'
+import RadioGroupCard from '../../examples/radio-group/card.vue'
 import AttributeEditorRoot from '../components/input/attribute-editor/attribute-editor.vue'
 import { hostable } from './hostable'
 import { useToastRegion } from './toast-region'
@@ -166,4 +167,18 @@ describe('edit/edit-schema column Type picker', () => {
       expect(rect.right).toBeLessThanOrEqual(width + 1)
     }
   )
+})
+
+describe('RadioGroup card tags', () => {
+  it.each([390, 1280])('keep the slotted Tag at its content width at %i px', async (width) => {
+    await atWidth(width)
+    const { getAllByTestId } = render(RadioGroupCard)
+    await frame()
+    for (const description of getAllByTestId('radio-group-item__description')) {
+      const tag = description.nextElementSibling as HTMLElement
+      const column = description.parentElement as HTMLElement
+      expect(tag.getBoundingClientRect().width).toBeLessThan(column.getBoundingClientRect().width)
+      expect(tag.getBoundingClientRect().width).toBeLessThan(140)
+    }
+  })
 })
