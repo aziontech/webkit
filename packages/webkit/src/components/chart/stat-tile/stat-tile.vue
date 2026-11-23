@@ -88,7 +88,7 @@
     failed.value || display.value === null ? '–' : valueText(display.value)
   )
   const sizeFigure = computed(() =>
-    hasValue.value ? valueText(props.value as number) : figure.value
+    !failed.value && isFiniteNumber(props.value) ? valueText(props.value) : figure.value
   )
   const finalFigure = computed(() => {
     if (failed.value) return `${t('statTile.loadError')}. ${props.error}`
