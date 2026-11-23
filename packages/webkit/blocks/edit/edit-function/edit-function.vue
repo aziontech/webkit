@@ -7,6 +7,7 @@
   import Tabs from '@aziontech/webkit/tabs'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, toRaw, useId, watch } from 'vue'
 
   import { useFunctionFields } from './composables/use-function-fields'
@@ -131,6 +132,9 @@
   const savedFields = computed<SchemaField[]>(() => props.fields ?? sampleFields)
 
   const split = () => Boolean(slots['code-panel'])
+  const SPLIT_CLASS =
+    'flex min-h-0 w-full flex-1 flex-col max-md:overflow-y-auto! max-md:*:h-auto! max-md:*:shrink-0! max-md:*:basis-auto! ' +
+    'max-md:*:first:h-[60dvh]! max-md:[&>[role=separator]]:hidden'
   const form = reactive<FunctionEditorService>({ ...savedService.value })
   const draftFields = ref<SchemaField[]>(structuredClone(toRaw(savedFields.value)))
   const nameError = ref('')
@@ -141,10 +145,9 @@
   const fieldList = useFunctionFields(draftFields, formId, props.defaultOpenKeys)
   const { moveStatus } = fieldList
 
-  const snapshot = () => JSON.stringify({ form, fields: draftFields.value })
-  const baseline = ref(snapshot())
+  const guard = useUnsavedChanges(() => ({ form: { ...form }, fields: draftFields.value }))
   Object.assign(form, props.defaultDraft)
-  const dirty = computed(() => snapshot() !== baseline.value)
+  const dirty = guard.isDirty
   const saving = computed(() => props.loading)
   const saveError = computed(() => props.error)
 
@@ -153,7 +156,7 @@
     () => {
       Object.assign(form, savedService.value)
       draftFields.value = structuredClone(toRaw(savedFields.value))
-      baseline.value = snapshot()
+      guard.commit()
     }
   )
 
@@ -161,13 +164,13 @@
     () => props.loading,
     (now, before) => {
       if (!before || now || props.error) return
-      baseline.value = snapshot()
+      guard.commit()
       toast.success(`${form.name} saved.`)
     }
   )
 
   const discard = (event: MouseEvent) => {
-    const saved: { form: FunctionEditorService; fields: SchemaField[] } = JSON.parse(baseline.value)
+    const saved = structuredClone(toRaw(guard.baseline.value))
     Object.assign(form, saved.form)
     draftFields.value = saved.fields
     emit('discard', event)
@@ -252,7 +255,7 @@
                     :is="split() ? ResizableRoot : 'div'"
                     :orientation="split() ? 'vertical' : undefined"
                     :aria-label="split() ? 'Code and test run' : undefined"
-                    class="flex min-h-0 w-full flex-1 flex-col"
+                    :class="split() ? SPLIT_CLASS : 'flex min-h-0 w-full flex-1 flex-col'"
                   >
                     <component
                       :is="split() ? ResizablePane : 'div'"

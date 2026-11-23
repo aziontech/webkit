@@ -3,7 +3,9 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Tabs from '@aziontech/webkit/tabs'
+  import { computed } from 'vue'
 
+  import type { SettingsLeaveDialogProps } from './settings-leave-dialog.vue'
   import SettingsSaveBar from './settings-save-bar.vue'
 
   export interface SettingsTabPageProps {
@@ -21,12 +23,15 @@
     saving?: boolean
     /** The tab that carries the unsaved-changes dot while the form holds edits. */
     dirtyTab?: string
+    /** The leave guard; set, a tab change while dirty asks first and the leave dialog renders. */
+    guard?: SettingsLeaveDialogProps['guard'] & { confirmLeave: () => Promise<boolean> }
   }
 
-  withDefaults(defineProps<SettingsTabPageProps>(), {
+  const props = withDefaults(defineProps<SettingsTabPageProps>(), {
     dirty: false,
     saving: false,
-    dirtyTab: ''
+    dirtyTab: '',
+    guard: undefined
   })
 
   const emit = defineEmits<{
@@ -44,12 +49,21 @@
     /** Dialogs the page opens, after the save bar. */
     dialogs(): unknown
   }>()
+
+  const shownTab = computed({
+    get: () => activeTab.value,
+    set: async (value: string) => {
+      if (!value || value === activeTab.value) return
+      if (props.guard && !(await props.guard.confirmLeave())) return
+      activeTab.value = value
+    }
+  })
 </script>
 
 <template>
   <div class="flex min-h-0 flex-1 flex-col">
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
-      <PageTabs v-model="activeTab">
+      <PageTabs v-model="shownTab">
         <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
@@ -90,6 +104,7 @@
 
           <SettingsSaveBar
             :visible="dirty || saving"
+            :guard="guard"
             :saving="saving"
             @save="(event) => emit('save', event)"
             @discard="(event) => emit('discard', event)"

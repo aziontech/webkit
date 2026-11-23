@@ -70,7 +70,7 @@
     return Object.keys(errors).length === 0
   }
 
-  const { form, saving, dirty, save, discard } = useSettingsDraft(record, { validate })
+  const { form, saving, dirty, save, discard, leave } = useSettingsDraft(record, { validate })
 </script>
 
 <template>
@@ -251,6 +251,7 @@
 
     <SettingsSaveBar
       :visible="dirty || saving"
+      :guard="leave"
       :saving="saving"
       @save="save"
       @discard="discard"

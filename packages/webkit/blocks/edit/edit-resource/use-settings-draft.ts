@@ -1,4 +1,8 @@
-import { computed, type ComputedRef, onScopeDispose, reactive, readonly, type Ref, ref } from 'vue'
+import {
+  useUnsavedChanges,
+  type UseUnsavedChangesReturn
+} from '@aziontech/webkit/use-unsaved-changes'
+import { type ComputedRef, onScopeDispose, reactive, readonly, type Ref, ref, watch } from 'vue'
 
 export interface UseSettingsDraftOptions<T> {
   /** Unsaved edits the form opens with on top of the record, so it starts dirty. */
@@ -28,6 +32,8 @@ export interface UseSettingsDraftReturn<T> {
   commit: () => void
   /** Puts the last saved record back. */
   discard: () => void
+  /** The leave guard: warns on reload and drives the leave dialog while the form is dirty. */
+  leave: UseUnsavedChangesReturn<T>
 }
 
 export function useSettingsDraft<T extends object>(
@@ -35,31 +41,50 @@ export function useSettingsDraft<T extends object>(
   options: UseSettingsDraftOptions<T> = {}
 ): UseSettingsDraftReturn<T> {
   const form = reactive(structuredClone(record)) as T
-  const baseline = ref(JSON.stringify(record))
-  Object.assign(form, options.draft)
   const saving = ref(options.saving ?? false)
-  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
   let timer: ReturnType<typeof setTimeout> | undefined
+
+  const settled = () =>
+    new Promise<void>((resolve) => {
+      if (!saving.value) return resolve()
+      const stop = watch(saving, (next) => {
+        if (next) return
+        stop()
+        resolve()
+      })
+    })
+
+  const leave = useUnsavedChanges(() => form as T, {
+    onDiscard: (baseline) => Object.assign(form, baseline),
+    onSave: () => {
+      save()
+      return settled()
+    }
+  })
+  leave.commit(structuredClone(record))
+  Object.assign(form, options.draft)
 
   const commit = () => {
     options.onStart?.()
     clearTimeout(timer)
     timer = setTimeout(() => {
-      baseline.value = JSON.stringify(form)
+      leave.commit()
       saving.value = false
       options.onSaved?.()
     }, options.delay ?? 900)
   }
 
-  const save = () => {
+  function save() {
     if (options.validate && !options.validate()) return
     saving.value = true
     commit()
   }
 
-  const discard = () => Object.assign(form, JSON.parse(baseline.value) as T)
+  const discard = () => {
+    leave.discard()
+  }
 
   onScopeDispose(() => clearTimeout(timer))
 
-  return { form, saving: readonly(saving), dirty, save, commit, discard }
+  return { form, saving: readonly(saving), dirty: leave.isDirty, save, commit, discard, leave }
 }

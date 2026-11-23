@@ -1,7 +1,7 @@
 import { toast } from '@aziontech/webkit/toast'
 import { type ComputedRef, nextTick, onScopeDispose, reactive, type Ref } from 'vue'
 
-import { useSettingsDraft } from './use-settings-draft'
+import { useSettingsDraft, type UseSettingsDraftReturn } from './use-settings-draft'
 
 /** What is wrong with one field, shown under it. */
 export interface FieldProblem {
@@ -52,6 +52,8 @@ export interface UseDeployOnSaveReturn<T> {
   save: () => void
   /** Puts the deployed record back and drops every problem. */
   discard: () => void
+  /** The leave guard of the form. */
+  leave: UseSettingsDraftReturn<T>['leave']
 }
 
 export function useDeployOnSave<T extends object>(
@@ -116,6 +118,7 @@ export function useDeployOnSave<T extends object>(
     errors,
     clear,
     save: draft.save,
-    discard
+    discard,
+    leave: draft.leave
   }
 }

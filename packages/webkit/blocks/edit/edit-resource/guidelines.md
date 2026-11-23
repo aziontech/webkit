@@ -29,7 +29,7 @@ A small `PageHeader` titled Settings with one sentence about what these settings
 
 ### C. Settings sections — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `FieldError`, `Switch` (required)
 
-One `form` with a disabled-while-saving `fieldset` and a visually hidden legend. Each `SettingsGroup` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. See `skills/webkit-form`.
+One `form` with a disabled-while-saving `fieldset` and a visually hidden legend. Each `SettingsGroup` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. Every state with a save bar runs through it (`useSettingsDraft` builds on `useUnsavedChanges`), and `SettingsSaveBar` renders the leave dialog when it is handed the guard, so no copy hand-rolls its own dirty check. See `skills/webkit-form`.
 
 ### D. Locked settings — `Tooltip`, `Switch`, `Link` (optional)
 
@@ -41,7 +41,7 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 
 ### F. Conditional fields — `SettingsRow`, `Input`, `FieldError` (optional)
 
-When one choice decides which fields apply (a connector, a scope, a template), the choice (a `Select` or `RadioGroup` choice cards (`variant="card"`)) comes first and the rows it unlocks follow it inside the same `Card`, entering with `animate-content-enter`. Hidden rows keep no value that Save sends. Credentials are `PasswordInput`s that cannot be read back after Save, and the row says so. In DataStream the workload scope is `RadioGroup` choice cards (`variant="card"`); the Sampling band appears only when the stream collects from every workload, and Sampling rate is a `NumberInput` with a `%` suffix.
+When one choice decides which fields apply (a connector, a scope, a template), the choice (a `Select` or `RadioGroup` choice cards (`variant="card"`)) comes first and the rows it unlocks follow it inside the same `Card`, entering with `animate-content-enter`. Hidden rows keep no value that Save sends. Credentials are `PasswordInput`s that cannot be read back after Save, and the row says so. A free-text field that may carry a credential (Custom headers) never ships one in its sample or default: the sample is a plain header (`X-Stream-Source:acme-edge`), and a copy that needs a token sends it through its own `PasswordInput` row, never through text anyone looking at the screen can read. In DataStream the workload scope is `RadioGroup` choice cards (`variant="card"`); the Sampling band appears only when the stream collects from every workload, and Sampling rate is a `NumberInput` with a `%` suffix.
 
 ### G. Template editor — `SettingsRow`, `FieldError` (optional)
 

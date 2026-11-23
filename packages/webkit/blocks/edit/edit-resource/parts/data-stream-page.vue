@@ -14,7 +14,7 @@
   import DataStreamTemplateGroup from './data-stream-template-group.vue'
   import SettingsSaveBar from './settings-save-bar.vue'
 
-  const { form, saving, dirty, save, discard } = provideDataStream()
+  const { form, saving, dirty, save, discard, leave } = provideDataStream()
 </script>
 
 <template>
@@ -86,6 +86,7 @@
 
     <SettingsSaveBar
       :visible="dirty || saving"
+      :guard="leave"
       :saving="saving"
       @save="save"
       @discard="discard"

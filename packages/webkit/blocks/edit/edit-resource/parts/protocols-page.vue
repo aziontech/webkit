@@ -28,7 +28,7 @@
     options.find((option) => option.value === value)?.label ?? String(value)
   const portsLabel = (values: unknown[] | undefined) => (values ?? []).join(', ')
 
-  const { form, saving, dirty, errors, clear, save, discard, setHttps, setHttp3, addCa } =
+  const { form, saving, dirty, errors, clear, save, discard, setHttps, setHttp3, addCa, leave } =
     provideProtocolsSettings()
 
   const uploadOpen = ref(false)
@@ -274,6 +274,7 @@
 
       <SettingsSaveBar
         :visible="dirty || saving"
+        :guard="leave"
         :saving="saving"
         @save="save"
         @discard="discard"
