@@ -421,13 +421,30 @@ describe('HeroSection', () => {
     describe('levels topology', () => {
       const topology = (props: Record<string, unknown> = {}) =>
         band({ variant: 'copy-on-top-art', levels, ...props })
+      const rowNodes = async (view: ReturnType<typeof topology>) => {
+        await view.findAllByTestId(NODE_TESTID)
+        const row = view.container.querySelector<HTMLElement>('[data-layout="horizontal"]')!
+        return {
+          row,
+          nodes: [...row.querySelectorAll<HTMLElement>(`[data-testid="${NODE_TESTID}"]`)]
+        }
+      }
+
+      it('ships the row and the vertical rail with the same cards, one shown per width', async () => {
+        const view = topology()
+        await view.findAllByTestId(NODE_TESTID)
+        const rail = view.container.querySelector('[data-layout="vertical"]')
+        const row = view.container.querySelector('[data-layout="horizontal"]')
+        expect(rail?.className).toContain('@2xl:hidden')
+        expect(row?.className).toContain('@max-2xl:hidden')
+        expect(rail?.textContent).toBe(row?.textContent)
+      })
 
       it('draws one column per level and one card per node, in order', async () => {
-        const { container, findAllByTestId } = topology()
-        const nodes = await findAllByTestId(NODE_TESTID)
+        const { row, nodes } = await rowNodes(topology())
 
         expect(
-          container.querySelectorAll('[role="listitem"][data-slot="flow-diagram-group"]')
+          row.querySelectorAll('[role="listitem"][data-slot="flow-diagram-group"]')
         ).toHaveLength(levels.length)
         expect(nodes.map((node) => node.textContent?.includes('shop-prod'))).toEqual([
           false,
@@ -438,31 +455,33 @@ describe('HeroSection', () => {
       })
 
       it('renders each card with its eyebrow, title and status, and marks only the lit card', async () => {
-        const { findAllByTestId, container } = topology()
+        const { row, nodes } = await rowNodes(topology())
 
-        const first = (await findAllByTestId(NODE_TESTID))[0]
+        const first = nodes[0]
         expect(first?.textContent).toContain('Domain')
         expect(first?.textContent).toContain('shop.example.com')
         expect(first?.textContent).toContain('Public')
-        const lit = container.querySelectorAll('[data-lit]')
+        const lit = row.querySelectorAll('[data-lit]')
         expect(lit).toHaveLength(1)
         expect(lit[0]?.textContent?.trim()).toBe('shop-prod')
       })
 
       it('skips a card without a title and a level left empty', async () => {
-        const { container, findAllByTestId } = topology({
-          levels: [
-            ...levels,
-            {
-              nodes: [{ eyebrow: 'Firewall', icon: '', title: '', label: '', severity: 'success' }]
-            }
-          ]
-        })
-
-        expect(await findAllByTestId(NODE_TESTID)).toHaveLength(4)
-        expect(container.querySelectorAll('[data-slot="flow-diagram-group"]')).toHaveLength(
-          levels.length
+        const { row, nodes } = await rowNodes(
+          topology({
+            levels: [
+              ...levels,
+              {
+                nodes: [
+                  { eyebrow: 'Firewall', icon: '', title: '', label: '', severity: 'success' }
+                ]
+              }
+            ]
+          })
         )
+
+        expect(nodes).toHaveLength(4)
+        expect(row.querySelectorAll('[data-slot="flow-diagram-group"]')).toHaveLength(levels.length)
       })
 
       it('draws nothing in other layouts or when a scene slot is given', () => {
