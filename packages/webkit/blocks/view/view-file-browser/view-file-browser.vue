@@ -11,6 +11,7 @@
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import { toast } from '@aziontech/webkit/toast'
   import type { UploadProgressItem } from '@aziontech/webkit/upload-progress'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import {
@@ -129,6 +130,8 @@
   const path = defineModel<string>('path', { default: '' })
   const selectedKeys = defineModel<string[]>('selectedKeys', { default: () => [] })
 
+  const { formatFileSize } = useLocale()
+
   const rootName = computed(() => props.storageName ?? sampleStorageName)
   const folderPath = computed(() => path.value.match(/[^/]+\//g) ?? [])
 
@@ -144,7 +147,9 @@
     { immediate: true }
   )
 
-  const rows = computed<FileRow[]>(() => listRows(items.value, folderPath.value.length > 0))
+  const rows = computed<FileRow[]>(() =>
+    listRows(items.value, folderPath.value.length > 0, formatFileSize)
+  )
 
   const sorting = ref<{ desc: boolean; id: string }[]>([])
   const sortedRows = computed<FileRow[]>(() => sortRows(rows.value, sorting.value[0]))

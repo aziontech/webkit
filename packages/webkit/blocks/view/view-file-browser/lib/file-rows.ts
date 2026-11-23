@@ -63,24 +63,20 @@ export const addToFilesActions = [
 
 export const UPLOAD_LIMIT = 300 * 1024 * 1024
 
-export const formatBytes = (bytes: number) => {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${Number((bytes / 1024).toFixed(2))} KB`
-  return `${Number((bytes / 1024 / 1024).toFixed(2))} MB`
-}
+type FormatSize = (bytes: number) => string
 
 const extensionOf = (name: string) => name.split('.').pop()?.toLowerCase() ?? ''
 
 export const folderName = (name: string) => (name.endsWith('/') ? name : `${name}/`)
 
-const fileRow = (name: string, entry?: FileBrowserEntry): FileRow => {
+const fileRow = (name: string, formatSize: FormatSize, entry?: FileBrowserEntry): FileRow => {
   const bytes = entry?.bytes ?? 0
   return {
     name,
     id: name,
     kind: 'file',
     icon: GLYPHS[extensionOf(name)] ?? 'az az-file',
-    size: formatBytes(bytes),
+    size: formatSize(bytes),
     bytes,
     modifiedAt: entry?.modifiedAt,
     author: entry?.editor,
@@ -88,8 +84,13 @@ const fileRow = (name: string, entry?: FileBrowserEntry): FileRow => {
   }
 }
 
-const toRow = (kind: FileRowKind, name: string, entry?: FileBrowserEntry): FileRow => {
-  if (kind === 'file') return fileRow(name, entry)
+const toRow = (
+  kind: FileRowKind,
+  name: string,
+  formatSize: FormatSize,
+  entry?: FileBrowserEntry
+): FileRow => {
+  if (kind === 'file') return fileRow(name, formatSize, entry)
   return {
     name,
     id: name,
@@ -103,14 +104,20 @@ const toRow = (kind: FileRowKind, name: string, entry?: FileBrowserEntry): FileR
   }
 }
 
-export const listRows = (entries: FileBrowserEntry[], nested: boolean): FileRow[] => {
+export const listRows = (
+  entries: FileBrowserEntry[],
+  nested: boolean,
+  formatSize: FormatSize
+): FileRow[] => {
   const ofKind = (kind: FileBrowserEntryKind) =>
     entries
       .filter((entry) => entry.kind === kind)
-      .map((entry) => toRow(kind, kind === 'folder' ? folderName(entry.name) : entry.name, entry))
+      .map((entry) =>
+        toRow(kind, kind === 'folder' ? folderName(entry.name) : entry.name, formatSize, entry)
+      )
       .sort((a, b) => a.name.localeCompare(b.name))
   const list: FileRow[] = [...ofKind('folder'), ...ofKind('file')]
-  if (nested && list.length) list.unshift(toRow('parent', '..'))
+  if (nested && list.length) list.unshift(toRow('parent', '..', formatSize))
   return list
 }
 
