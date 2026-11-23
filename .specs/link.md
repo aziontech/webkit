@@ -4,7 +4,7 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 7
-checksum: 065d73755683a2203fabd74c253b57579fc74fd42e2d3f2e1c9aa7233495376d
+checksum: 80f672b4121d5658de21f0fac85ebe3c195821accd05d5088352c051931f60e6
 created: 2026-05-22
 last_updated: 2026-11-21
 figma:
@@ -39,7 +39,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 - Always set `href` and a label that names the destination; an empty `href` renders `#` so the anchor stays focusable, and an empty label falls back to the locale catalog (`Learn more`).
 - Pass the label as the default slot or the `label` prop; the slot wins when both are set.
-- `target="_blank"` adds `rel="noopener noreferrer"`, visually hidden text from the shared catalog (`common.newTab`, `(opens in a new tab)`) so a screen reader hears it too, and, when `icon` is empty, the `az az-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.
+- `target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `az az-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.
 - An icon is shown when `icon` is set.
 - Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).
 - Inside running prose set `inline`: the link inherits the font size and line height of its sentence, wraps with it and keeps a quiet underline at rest (color alone fails WCAG 1.4.1); `size` does not apply.
@@ -135,7 +135,6 @@ Helps users move between views or sections. Migrated from the existing implement
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter` activates.
 - ARIA: `aria-disabled` and `tabindex="-1"` when disabled.
-- New tab: with `target="_blank"` the glyph is `aria-hidden`, and a visually hidden ` (opens in a new tab)` (`common.newTab`) follows the label, so the accessible name says it (`Learn more (opens in a new tab)`).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
