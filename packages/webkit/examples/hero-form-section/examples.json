@@ -24,7 +24,7 @@
     },
     {
       "name": "Submitted",
-      "summary": "The site reported the values as sent: the form gives way to `messages.success`.",
+      "summary": "The site reported the values as sent: the form gives way to a bordered confirmation of `messages.success` and `messages.successDescription` in the form's footprint.",
       "file": "submitted.vue"
     },
     {
