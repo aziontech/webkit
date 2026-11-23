@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: f34b222970ab83f8b98d9afe3fcbeeb029372839bc45c722e00c8ed41784b75c
+checksum: 2387476ea1ce53a1744a9c49f84efbd17c18006cdeceb0db9943e37be569e7f0
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -182,7 +182,7 @@ The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and th
 
 ## Responsive
 
-- Container queries: none: the map takes the container width at the framed region's aspect ratio, up to 60% of the viewport height (`max-h-[60dvh]`); a tall region (South America in a wide card) is fitted inside that stage with `preserveAspectRatio="xMidYMid meet"`, so the colour scale stays directly under the visible map.
+- Container queries: none: the map takes the container width at the framed region's aspect ratio, up to `60dvh` tall; a tall region is fitted inside (`xMidYMid meet`), so the colour scale stays under the map.
 - Narrow (≤ 640 px or a narrow container): the map scales down; the tooltip caps at `--container-3xs`.
 - Touch: tapping a country or bubble activates it; every value is in the table twin and reachable from the keyboard.
 - Reflow: no horizontal scroll at 320 px.

@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: d0ef0f3ca5043f799012165a4f427e289ea5587a18161eece5c4cb03699a25b8
+checksum: 345ae571147d58aceb8b4cd781e69acd50ae3117a6b01ff2cddc50db3104b7c0
 spec_version: 8
 created: 2026-10-20
 last_updated: 2026-11-19
@@ -114,7 +114,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
-- `data-carded` is set when the tile sits in a `ChartCard` and not in a group (injected, no prop): the card owns the only frame, so the tile drops its own border, radius and surface; put it in an unpadded `ChartCard.Content` (`:padded="false"`), since the tile keeps its own padding
+- `data-carded` is set when the tile sits in a `ChartCard` and not in a group (injected, no prop): the card owns the only frame, so the tile drops its border, radius and surface; use an unpadded `ChartCard.Content`
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
 - Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value.

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 7debc7bcce75e570dca3c81f6a668ef4f2b1ce238f00f755a06ecc80ad3482a2
+checksum: 55be49b1df12cee1ec5a49bb86009f653ef67b77aea1f2911d507662e6ebe97d
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -212,7 +212,7 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 
 ## Responsive
 
-- Container queries: `@container/trace`; below `@xl` a waterfall row takes two lines, the span name on its own full-width line above its bar (the axis, the bars and the zoom minimap span the full width, and the Span header hides), so names are not cut to a few characters on a phone; from `@xl` the name column sits beside the bars and grows from 13 rem to 20 rem with the container; the service column and the grid lines appear from `@xl`/`@3xl`.
+- Container queries: `@container/trace`; below `@xl` a waterfall row takes two lines, the span name above its bar (axis, bars and minimap span the full width; the Span header hides); from `@xl` the name column sits beside the bars and grows from 13 rem to 20 rem with the container; the service column and the grid lines appear from `@xl`/`@3xl`.
 - Toolbar: the search and the view switch wrap onto two lines when the trace is narrower than both.
 - Narrow: the timeline view needs no name column and reads best in a narrow panel; names truncate, the duration labels stay on the bars, the details facts take two columns.
 - Touch: rows and timeline lanes are 44 px high on `pointer: coarse`; a timeline bar narrower than a touch target is still reached from the keyboard and through the Waterfall and Tree views, which show the same span; nothing depends on hover. The minimap track sets `touch-action: none` so a drag zooms instead of scrolling, and its thumbs widen to 24 px on `pointer: coarse`.

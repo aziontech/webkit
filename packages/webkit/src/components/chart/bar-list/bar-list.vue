@@ -137,7 +137,8 @@
     'data-[interactive]:cursor-pointer data-[interactive]:hover:bg-(--bg-hover)'
 
   const BAR_CLASS =
-    'absolute inset-y-0 start-0 rounded-(--shape-control) bg-[color-mix(in_srgb,var(--bar-list-fill)_24%,transparent)] border-e-2 border-solid border-(--bar-list-fill) forced-color-adjust-none transition-[width] duration-slow-01 ' +
+    'absolute inset-y-0 start-0 rounded-(--shape-control) bg-[color-mix(in_srgb,var(--bar-list-fill)_24%,transparent)] ' +
+    'border-e-2 border-solid border-(--bar-list-fill) forced-color-adjust-none transition-[width] duration-slow-01 ' +
     'ease-productive-entrance motion-reduce:transition-none'
 </script>
 

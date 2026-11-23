@@ -16017,7 +16017,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
-- `data-carded` is set when the tile sits in a `ChartCard` and not in a group (injected, no prop): the card owns the only frame, so the tile drops its own border, radius and surface; put it in an unpadded `ChartCard.Content` (`:padded="false"`), since the tile keeps its own padding
+- `data-carded` is set when the tile sits in a `ChartCard` and not in a group (injected, no prop): the card owns the only frame, so the tile drops its border, radius and surface; use an unpadded `ChartCard.Content`
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
 - Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value.
@@ -16221,7 +16221,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 - Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
-- Narrow strips: every block keeps at least 6px; when the strip is too narrow for one block per period, consecutive periods merge into one block per bucket (the same number of periods each, the last bucket shorter), coloured by the worst state in it (danger, then warning, then info, then success). The readout and the live region read the bucket as `{count} periods. Worst: {label}`; pointer and arrow keys move by block, and `v-model:activeIndex` carries the worst period of the active block. A strip measured as zero wide (the server render) draws one block per period.
+- Narrow strips: blocks keep at least 6px; when the strip is too narrow, consecutive periods merge into one block coloured by their worst state (danger, warning, info, success), read as `{count} periods. Worst: {label}`. Pointer and arrows move by block; `v-model:activeIndex` carries the block's worst period. An unmeasured strip (server render) draws one block per period.
 
 ## Accessibility
 
@@ -16371,7 +16371,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - Visual states: `default`, `hover`, `focus-visible` on tabs and copy control
 - `data-state` on tabs: `active` | `inactive`; the active tab's text colour switches on `data-[state=active]:` in the tab's flat class, never a `:class` ternary
 - `data-state` on code lines: `default` | `added` | `removed` | `highlighted`; in the split view a side with no line opposite a change is `empty` (`var(--bg-canvas)`)
-- `data-split` on the panel when the active tab with an `original` draws side by side. A `split` diff draws unified while the block's content is narrower than 640px (40rem, measured with a size observer; a block not measured yet, as in the server render, draws split), so on a phone the changed values are never cut in two 150px columns
+- `data-split` on the panel when the active tab with an `original` draws side by side. A `split` diff draws unified while the content is narrower than 640px (an unmeasured block, as in the server render, draws split)
 - `data-disabled` not used (tabs are not disabled in v2)
 - `data-type` on the root: `code` | `output`; `output` paints the shell `--bg-canvas` and every line flat in `--text-muted`
 

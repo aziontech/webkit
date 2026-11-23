@@ -1717,21 +1717,21 @@ describe('DataTable', () => {
       )
     })
   })
-})
 
-describe('DataTable examples name each row control after its row', () => {
-  it.each([
-    ['default', Default],
-    ['with-checkboxes', WithCheckboxes]
-  ])('%s gives every row actions button its own name', (_name, example) => {
-    const { getAllByRole } = render(example)
-    const names = getAllByRole('button')
-      .map((button) => button.getAttribute('aria-label') ?? '')
-      .filter((name) => name.startsWith('Actions for'))
-    expect(names).toEqual([
-      'Actions for Workload Alpha',
-      'Actions for Workload Bravo',
-      'Actions for Workload Charlie'
-    ])
+  describe('DataTable examples name each row control after its row', () => {
+    it.each([
+      ['default', Default],
+      ['with-checkboxes', WithCheckboxes]
+    ])('%s gives every row actions button its own name', (_name, example) => {
+      const { getAllByRole } = render(example)
+      const names = getAllByRole('button')
+        .map((button) => button.getAttribute('aria-label') ?? '')
+        .filter((name) => name.startsWith('Actions for'))
+      expect(names).toEqual([
+        'Actions for Workload Alpha',
+        'Actions for Workload Bravo',
+        'Actions for Workload Charlie'
+      ])
+    })
   })
 })

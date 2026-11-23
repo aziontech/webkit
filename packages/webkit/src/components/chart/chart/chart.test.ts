@@ -684,19 +684,25 @@ describe('Chart', () => {
       })
     })
   })
-})
 
-describe('Chart examples with several series name them in a legend', () => {
-  it.each([
-    ['chart/tooltip-total', () => import('../../../../examples/chart/tooltip-total.vue'), [4]],
-    ['chart/brush', () => import('../../../../examples/chart/brush.vue'), [3]],
-    ['chart-card/draggable', () => import('../../../../examples/chart-card/draggable.vue'), [3, 5]]
-  ])('%s', async (_name, load, counts) => {
-    const view = render((await load()).default)
-    await nextTick()
-    const legends = view.getAllByTestId('chart-legend')
-    expect(
-      legends.map((legend) => legend.querySelectorAll('[data-testid="chart-legend__item"]').length)
-    ).toEqual(counts)
+  describe('Chart examples with several series name them in a legend', () => {
+    it.each([
+      ['chart/tooltip-total', () => import('../../../../examples/chart/tooltip-total.vue'), [4]],
+      ['chart/brush', () => import('../../../../examples/chart/brush.vue'), [3]],
+      [
+        'chart-card/draggable',
+        () => import('../../../../examples/chart-card/draggable.vue'),
+        [3, 5]
+      ]
+    ])('%s', async (_name, load, counts) => {
+      const view = render((await load()).default)
+      await nextTick()
+      const legends = view.getAllByTestId('chart-legend')
+      expect(
+        legends.map(
+          (legend) => legend.querySelectorAll('[data-testid="chart-legend__item"]').length
+        )
+      ).toEqual(counts)
+    })
   })
 })

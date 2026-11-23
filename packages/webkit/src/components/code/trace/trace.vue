@@ -193,6 +193,10 @@
     'grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) ' +
     'data-[view=timeline]:grid-cols-1 data-[view=tree]:grid-cols-[minmax(0,1fr)_auto] @max-xl/trace:data-[view=waterfall]:grid-cols-1'
 
+  const SPAN_HEAD_CLASS =
+    'flex items-center border-e border-(--border-muted) py-(--spacing-xs) ps-[calc(var(--spacing-xs)+1.25rem+var(--spacing-2xs))] pe-(--spacing-sm) ' +
+    '@max-xl/trace:data-[view=waterfall]:hidden'
+
   const TICK_CLASS =
     'absolute inset-y-0 start-(--trace-tick-at) flex w-0 items-center justify-center ' +
     'data-[edge=end]:justify-end data-[edge=start]:justify-start ' +
@@ -256,7 +260,7 @@
       <div
         v-if="layout !== 'timeline'"
         :data-view="layout"
-        class="flex items-center @max-xl/trace:data-[view=waterfall]:hidden border-e border-(--border-muted) py-(--spacing-xs) ps-[calc(var(--spacing-xs)+1.25rem+var(--spacing-2xs))] pe-(--spacing-sm)"
+        :class="SPAN_HEAD_CLASS"
       >
         <span class="text-label-sm text-(--text-muted)">{{ t('trace.span') }}</span>
       </div>

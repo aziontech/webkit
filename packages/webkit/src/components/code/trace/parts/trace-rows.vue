@@ -41,7 +41,8 @@
     'data-selected:bg-(--bg-selected) ' +
     'motion-reduce:transition-none pointer-coarse:min-h-11'
   const NAME_CELL_CLASS =
-    'flex min-w-0 items-center gap-(--spacing-2xs) border-e border-(--border-muted) @max-xl/trace:data-[view=waterfall]:border-e-0 py-(--spacing-xs) ps-[calc(var(--spacing-xs)+var(--trace-span-depth)*var(--spacing-md))] ' +
+    'flex min-w-0 items-center gap-(--spacing-2xs) border-e border-(--border-muted) @max-xl/trace:data-[view=waterfall]:border-e-0 ' +
+    'py-(--spacing-xs) ps-[calc(var(--spacing-xs)+var(--trace-span-depth)*var(--spacing-md))] ' +
     'pe-(--spacing-sm)'
   const BAR_CLASS =
     'absolute inset-y-0 start-[calc(var(--trace-span-offset)*100%)] w-[calc(var(--trace-span-width)*100%)] rounded-(--shape-button) border ' +

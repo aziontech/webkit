@@ -58,7 +58,7 @@
 
 - Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
-- Narrow strips: every block keeps at least 6px; when the strip is too narrow for one block per period, consecutive periods merge into one block per bucket (the same number of periods each, the last bucket shorter), coloured by the worst state in it (danger, then warning, then info, then success). The readout and the live region read the bucket as `{count} periods. Worst: {label}`; pointer and arrow keys move by block, and `v-model:activeIndex` carries the worst period of the active block. A strip measured as zero wide (the server render) draws one block per period.
+- Narrow strips: blocks keep at least 6px; when the strip is too narrow, consecutive periods merge into one block coloured by their worst state (danger, warning, info, success), read as `{count} periods. Worst: {label}`. Pointer and arrows move by block; `v-model:activeIndex` carries the block's worst period. An unmeasured strip (server render) draws one block per period.
 
 ## Accessibility
 
