@@ -278,7 +278,7 @@
 
   const SCENE_CLASS =
     'flex animate-content-enter justify-center pb-(--spacing-2xl) [--content-enter-delay:120ms] ' +
-    'motion-reduce:animate-none @max-2xl:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]'
+    'motion-reduce:animate-none'
 </script>
 
 <template>
