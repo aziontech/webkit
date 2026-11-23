@@ -99,6 +99,35 @@ describe('Marquee', () => {
     }
   })
 
+  it('draws each mark once and points every copy of the row at it, so a long strip stays light', async () => {
+    const { container } = render(Marquee, { props: { marks: MARKS } })
+    await waitFor(() =>
+      expect(container.querySelector('.animate-brand-marquee')).not.toHaveAttribute('data-loading')
+    )
+    const symbols = container.querySelectorAll('[data-slot="marquee-symbols"] symbol')
+    const copies = container.querySelectorAll('svg[data-mark="itau"]')
+
+    expect(symbols).toHaveLength(MARKS.length)
+    expect(copies.length).toBeGreaterThan(1)
+    for (const copy of copies) {
+      expect(copy.querySelector('path')).toBeNull()
+      expect(copy.querySelector('use')?.getAttribute('href')).toBe(`#${symbols[0].id}`)
+      expect(copy.getAttribute('viewBox')).toBe('0 0 600 600')
+    }
+  })
+
+  it('keeps the rendered artwork size flat as the row repeats', async () => {
+    const { container } = render(Marquee, { props: { marks: MARKS } })
+    await waitFor(() =>
+      expect(container.querySelector('.animate-brand-marquee')).not.toHaveAttribute('data-loading')
+    )
+    const drawn = container.querySelectorAll('[data-slot="marquee-symbols"] svg *').length
+    const total = container.querySelectorAll('svg *').length
+    const references = container.querySelectorAll('svg[data-mark]').length
+
+    expect(total).toBe(drawn + references)
+  })
+
   it('holds the loop until every mark has resolved, so the row starts complete', async () => {
     const { container } = render(Marquee, { props: { marks: MARKS } })
     const track = container.querySelector('.animate-brand-marquee')
