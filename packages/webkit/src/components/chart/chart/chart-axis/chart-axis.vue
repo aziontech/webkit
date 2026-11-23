@@ -71,6 +71,33 @@
     })
   }
 
+  type CategoryTick = { key: number; at: number; anchor: 'start' | 'middle' | 'end'; text: string }
+
+  const extent = (tick: CategoryTick): [number, number] => {
+    const width = tick.text.length * LABEL_CHAR_WIDTH
+    if (tick.anchor === 'middle') return [tick.at - width / 2, tick.at + width / 2]
+    const center = plot.value.left + plot.value.width / 2
+    return tick.at <= center ? [tick.at, tick.at + width] : [tick.at - width, tick.at]
+  }
+
+  const separate = (ticks: CategoryTick[]) => {
+    if (ticks.length < 2) return ticks
+    const sorted = [...ticks].sort((a, b) => a.at - b.at)
+    const first = sorted[0]!
+    const last = sorted[sorted.length - 1]!
+    const lastStart = extent(last)[0]
+    const kept = [first]
+    let edge = extent(first)[1]
+    for (const tick of sorted.slice(1, -1)) {
+      const [start, end] = extent(tick)
+      if (start < edge + LABEL_SPACING || end > lastStart - LABEL_SPACING) continue
+      kept.push(tick)
+      edge = end
+    }
+    if (lastStart >= extent(first)[1] + LABEL_SPACING) kept.push(last)
+    return kept
+  }
+
   const categoryTicks = computed(() => {
     const layout = ctx.category.value
     const total = ctx.labels.value.length
@@ -82,16 +109,17 @@
           fitEvery(total, plot.value.width, texts)
         )
       : 1
-    return texts.flatMap((text, index) => {
+    const ticks = texts.flatMap((text, index): CategoryTick[] => {
       if (index % every !== 0) return []
       const at = layout.position(index)
-      let anchor: 'start' | 'middle' | 'end' = 'middle'
+      let anchor: CategoryTick['anchor'] = 'middle'
       if (vertical.value && !layout.banded && total > 1) {
         if (index === 0) anchor = rtl.value ? 'end' : 'start'
         else if (index === total - 1) anchor = rtl.value ? 'start' : 'end'
       }
       return [{ key: index, at, anchor, text }]
     })
+    return vertical.value ? separate(ticks) : ticks
   })
 
   const valueTicks = computed(() => {
