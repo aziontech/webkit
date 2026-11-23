@@ -400,7 +400,7 @@
   {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
-    "limit": "1.25 KB",
+    "limit": "1.5 KB",
     "entryOnly": true
   },
   {

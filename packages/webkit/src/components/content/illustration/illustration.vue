@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, shallowRef, useAttrs, useId, useTemplateRef, watch } from 'vue'
 
+  import { illustrationFrame } from '../../../assets/illustrations/frames'
   import type { IllustrationAssetLoader } from '../../../assets/illustrations/registry'
   import type { IllustrationScene } from '../../../assets/illustrations/scene'
 
@@ -71,16 +72,15 @@
     { flush: 'post' }
   )
 
-  const viewBox = computed(() => scene.value?.viewBox || '0 0 592 300')
+  const frame = computed(() => illustrationFrame(props.name))
 
-  const frame = computed(() => {
-    const [, , width, height] = viewBox.value.split(/[\s,]+/).map(Number)
-    return showPlaceholder.value || !(width > 0 && height > 0)
-      ? { width: 592, height: 300 }
-      : { width, height }
-  })
+  const viewBox = computed(
+    () => scene.value?.viewBox || `0 0 ${frame.value.width} ${frame.value.height}`
+  )
 
-  const decorative = computed(() => showPlaceholder.value || props.ariaLabel.length === 0)
+  const decorative = computed(
+    () => !scene.value || showPlaceholder.value || props.ariaLabel.length === 0
+  )
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'illustration')
 
@@ -93,7 +93,6 @@
 
 <template>
   <svg
-    v-if="scene"
     ref="rootEl"
     :viewBox="viewBox"
     :role="decorative ? undefined : 'img'"
