@@ -692,6 +692,47 @@ describe('Command', () => {
       expect(prefix).toBeGreaterThan(inner)
       expect(inner).toBeGreaterThan(0)
       expect(matchCommand('set', 'Settings Domains').score).toBeGreaterThan(exact)
+      expect(matchCommand('set', 'Reset').score).toBeGreaterThan(exact)
+      expect(exact).toBeGreaterThan(matchCommand('dpl', 'Deploy Project').score)
+    })
+
+    it('shows at most three keyword-only matches per group while a label matches, so a later group title match is not buried', async () => {
+      const Hints = defineComponent({
+        components: { Command, CommandInput, CommandList, CommandGroup, CommandItem },
+        setup: () => ({ open: ref(true) }),
+        template: `
+        <Command v-model:open="open" shortcut="">
+          <CommandInput placeholder="Search" />
+          <CommandList>
+            <CommandGroup label="Components">
+              <CommandItem value="table">Table</CommandItem>
+              <CommandItem value="canvas" :keywords="['tables']">Canvas</CommandItem>
+              <CommandItem value="frame" :keywords="['tables']">Frame</CommandItem>
+              <CommandItem value="card" :keywords="['tables']">Card</CommandItem>
+              <CommandItem value="chart" :keywords="['tables']">Chart</CommandItem>
+              <CommandItem value="grid" :keywords="['tables']">Grid</CommandItem>
+            </CommandGroup>
+            <CommandGroup label="Blocks">
+              <CommandItem value="view-table">View Table</CommandItem>
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      `
+      })
+      render(Hints)
+      await settle()
+      const shown = () =>
+        [...document.body.querySelectorAll<HTMLElement>('[role="option"]')]
+          .filter((node) => node.style.display !== 'none')
+          .map((node) => node.textContent?.trim())
+
+      await fireEvent.update(input(), 'table')
+      await settle()
+      expect(shown()).toEqual(['Table', 'Canvas', 'Frame', 'Card', 'View Table'])
+
+      await fireEvent.update(input(), 'tables')
+      await settle()
+      expect(shown()).toEqual(['Canvas', 'Frame', 'Card', 'Chart', 'Grid'])
     })
 
     it('keyboard order follows the rank: the best group and item lead', async () => {

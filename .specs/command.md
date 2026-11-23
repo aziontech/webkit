@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 13
 template: 2
-checksum: b7eac18e7982a091d51d6d707d01fa05751ba8057941b049d6ac31bb6d908ec5
+checksum: c64c18ba358627be9d1dde3a95851db3b1b466cb2e9eccdd4fd8319a3c275254
 created: 2026-07-23
 last_updated: 2026-11-19
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-19
 
 ## Purpose
 
-Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the `Dialog` primitive for its panel, backdrop, focus trap, scroll-lock, and Escape handling, and adds the palette chrome on top — a search `Input`, a scrollable `List` of `Item`s organized into optional `Group`s, an `Empty` state, and `Separator`s. The root owns open/closed state (controlled or uncontrolled), a global open shortcut (⌘K / Ctrl+K), the ranked filter, nested pages, and roving active-item navigation. The filter is fuzzy and ranked: an item matches on its label (prefix, then word start, then anywhere, then an in-order abbreviation such as `dpl` for "Deploy"), its `value`, or its extra `keywords` (a keyword equal to the query, then one that starts with it, then one that contains it, all below a label prefix or word-start match); better matches rise to the top of their group, groups rise by their best item, and the matched characters of a plain-text label are emphasized. An item can open a `Page` — a nested list such as "Switch project" — with a back control in the search bar. It differs from `dropdown` (a small trigger-anchored menu) and `select` (a form value picker): Command Menu is a full-screen search-first launcher for actions, not a positioned menu or an input control.
+Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the `Dialog` primitive for its panel, backdrop, focus trap, scroll-lock, and Escape handling, and adds the palette chrome on top — a search `Input`, a scrollable `List` of `Item`s organized into optional `Group`s, an `Empty` state, and `Separator`s. The root owns open/closed state (controlled or uncontrolled), a global open shortcut (⌘K / Ctrl+K), the ranked filter, nested pages, and roving active-item navigation. The filter is fuzzy and ranked: an item matches on its label (prefix, then word start, then anywhere, then an in-order abbreviation such as `dpl` for "Deploy"), its `value`, or its extra `keywords` (a keyword equal to the query, then one that starts with it, then one that contains it, all below any match in the label and above an abbreviation, since the reader cannot see why a keyword matched); better matches rise to the top of their group, groups rise by their best item, and while any label matches the query a group shows at most three matches that come only from its values or keywords (its best three), so a strong label match in a later group is not pushed under a run of hidden-keyword matches, and the matched characters of a plain-text label are emphasized. An item can open a `Page` — a nested list such as "Switch project" — with a back control in the search bar. It differs from `dropdown` (a small trigger-anchored menu) and `select` (a form value picker): Command Menu is a full-screen search-first launcher for actions, not a positioned menu or an input control.
 
 ## When to use
 

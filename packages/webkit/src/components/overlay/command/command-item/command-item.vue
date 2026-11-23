@@ -71,7 +71,11 @@
     matchCommand(ctx.query.value, itemText.value, [String(props.value), ...props.keywords])
   )
 
-  const isVisible = computed(() => ctx.page.value === itemPage && match.value.score > 0)
+  const matched = computed(() => ctx.page.value === itemPage && match.value.score > 0)
+
+  const hint = computed(() => ctx.ranking.value && matched.value && match.value.ranges.length === 0)
+
+  const isVisible = computed(() => matched.value && !ctx.isCapped(itemId))
 
   const order = computed(() => (ctx.ranking.value ? Math.round((1 - match.value.score) * 1000) : 0))
 
@@ -147,6 +151,8 @@
       groupId,
       disabled: disabledRef,
       isVisible,
+      matched,
+      hint,
       order,
       el: rootEl,
       activate
