@@ -1226,3 +1226,10 @@ Budget-raise: logo-wall 4.9 KB → 4.95 KB (measured 4.92 KB): audit 5 (A5-038) 
 Budget-raise: hero 5.05 KB → 5.1 KB (measured 5.05 KB): audit 5 (A5-241) shortens the floor below `md` when the brand strip follows it.
 Budget-raise: hero-section 13.4 KB → 13.45 KB (measured 13.42 KB): it carries the Hero floor change (A5-241).
 Budget-raise: hero-form-section 52.55 KB → 52.6 KB (measured 52.58 KB): it carries the Hero floor change (A5-241).
+Budget-raise: capability-grid-section 8.15 KB → 8.2 KB (measured 8.16 KB): it carries the FeatureItem fixes of audit 5 (A5-123 self-positioned link, A5-184 description measure).
+Budget-raise: network-section 27.1 KB → 27.15 KB (measured 27.10 KB): it carries the FeatureItem fixes of audit 5 (A5-123, A5-184).
+Budget-raise: stats-section 4.7 KB → 4.75 KB (measured 4.72 KB): it carries the Stats left-to-right figure run (A5-170).
+Budget-raise: client-story-columns-section 8.7 KB → 8.8 KB (measured 8.76 KB): it carries the LogoWall dark-theme file (A5-038).
+Budget-raise: logo-wall-section 24.5 KB → 24.6 KB (measured 24.55 KB): it carries the LogoWall dark-theme file (A5-038).
+Budget-raise: subject-grid-section 8.55 KB → 8.6 KB (measured 8.56 KB): it carries the CallToAction panel layout (A5-183).
+Budget-raise: template-gallery-section 29.9 KB → 29.95 KB (measured 29.91 KB): the Marquee symbol drawing (A5-149), remeasured with every lane fix in.
