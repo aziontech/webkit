@@ -67,6 +67,12 @@ describe('Avatar', () => {
     expect(queryByTestId('avatar__icon')).toBeNull()
   })
 
+  it('draws the initials of a full name from its first and last word', () => {
+    const { getByTestId } = render(Avatar, { props: { label: 'Jane Doe' } })
+
+    expect(getByTestId('avatar__label')).toHaveTextContent('JD')
+  })
+
   it('exposes role="img" and an aria-label equal to the initials on the root when showing a label', () => {
     const { getByTestId } = render(Avatar, { props: { label: 'AB' } })
 

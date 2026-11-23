@@ -4,6 +4,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
+  import { initials } from '../../../utils/initials'
 
   defineOptions({
     name: 'Avatar',
@@ -55,11 +56,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'avatar')
 
-  const normalizedLabel = computed(() => {
-    const value = props.label.trim()
-    if (!value) return ''
-    return value.slice(0, 2).toUpperCase()
-  })
+  const normalizedLabel = computed(() => initials(props.label))
 
   const content = computed(() => {
     if (props.src && !imageFailed.value) return 'image'

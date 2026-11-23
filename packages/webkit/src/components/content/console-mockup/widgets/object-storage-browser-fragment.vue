@@ -25,7 +25,7 @@
 
   const BUCKET = 'site-assets'
   const MODIFIED = '4 months ago'
-  const AUTHORS = ['JA', 'SR', 'AM', 'CL']
+  const AUTHORS = ['JD', 'JS', 'AM', 'SL']
 
   const COLUMNS = [
     { accessorKey: 'name', header: 'Name', principal: true, grow: 3 as const },
