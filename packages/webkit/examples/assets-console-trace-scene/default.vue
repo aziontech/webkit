@@ -28,6 +28,7 @@
     :items="documents"
     size="small"
     :autoplay-interval="5200"
+    class="[--media-tabs-media-min:20rem]"
   >
     <template #media="{ index, active }">
       <ConsoleTraceScene

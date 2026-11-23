@@ -102,7 +102,10 @@
 </script>
 
 <template>
-  <section class="flex min-w-0 flex-col gap-(--spacing-sm)">
+  <section
+    :style="{ '--token-table-row-count': tokens.length + groups.length }"
+    class="flex min-w-0 flex-col gap-(--spacing-sm) [content-visibility:auto] [contain-intrinsic-block-size:auto_calc(var(--token-table-row-count)*8.5rem)] md:[contain-intrinsic-block-size:auto_calc(var(--token-table-row-count)*5.25rem)]"
+  >
     <div
       v-if="title"
       class="flex flex-col gap-(--spacing-2xs)"

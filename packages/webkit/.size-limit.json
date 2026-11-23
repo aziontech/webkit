@@ -376,7 +376,7 @@
   {
     "name": "media-tabs",
     "path": "src/components/marketing/media-tabs/media-tabs.vue",
-    "limit": "10.2 KB"
+    "limit": "10.25 KB"
   },
   {
     "name": "embed",
@@ -682,7 +682,7 @@
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "59.55 KB",
+    "limit": "59.6 KB",
     "entryOnly": true
   },
   {

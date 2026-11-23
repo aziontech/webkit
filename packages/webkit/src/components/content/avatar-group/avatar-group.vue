@@ -70,7 +70,9 @@
     Boolean(item.src) && !failedSources.value.includes(item.src as string)
 
   const itemInitials = (item: AvatarGroupItem) =>
-    initials(item.label || item.name).slice(0, props.size === 'small' ? 1 : 2)
+    Array.from(initials(item.label || item.name))
+      .slice(0, props.size === 'small' ? 1 : 2)
+      .join('')
 
   function onImageError(src: string | undefined) {
     if (src && !failedSources.value.includes(src)) failedSources.value.push(src)

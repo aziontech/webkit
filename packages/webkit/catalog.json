@@ -3543,7 +3543,7 @@
     "group": "typography",
     "type": "typography",
     "value": {
-     "font-family": "Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif",
+     "font-family": "Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif",
      "font-size": "0.875rem",
      "font-weight": "400",
      "line-height": "1.25",
@@ -3555,7 +3555,7 @@
     "group": "typography",
     "type": "typography",
     "value": {
-     "font-family": "Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif",
+     "font-family": "Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif",
      "font-size": "0.75rem",
      "font-weight": "400",
      "line-height": "1.25",

@@ -153,18 +153,29 @@ describe('FeatureTabsSection', () => {
     expect(getByTestId(TESTID).querySelector('[data-code]')).toBeNull()
   })
 
-  it('draws the band scene as the media of every tab', async () => {
-    const { findAllByTestId } = band({
+  it('draws the band scene as the media of every tab from lg, and of the open tab only below it', async () => {
+    const sceneBand = {
       scene: { component: 'ConsoleMockup', props: { name: 'functions-start' } },
       tabs: [
         { title: 'Agents', description: 'Ask an agent.', value: 'agents' },
         { title: 'Console', description: 'Click through.', value: 'console' }
       ]
-    })
+    }
+    await page.viewport(1280, 800)
+    await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(true))
+    const wide = band(sceneBand)
 
-    const widgets = await findAllByTestId('console-mockup')
-    expect(widgets.length).toBeGreaterThanOrEqual(2)
+    const widgets = await wide.findAllByTestId('console-mockup')
+    await vi.waitFor(() => expect(wide.getAllByTestId('console-mockup')).toHaveLength(2))
     widgets.forEach((widget) => expect(widget).toHaveAttribute('data-name', 'functions-start'))
+    wide.unmount()
+
+    await page.viewport(390, 844)
+    await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(false))
+    const narrow = band(sceneBand)
+
+    await narrow.findAllByTestId('console-mockup')
+    await vi.waitFor(() => expect(narrow.getAllByTestId('console-mockup')).toHaveLength(1))
   })
 
   it('renders no link when no action is set', () => {

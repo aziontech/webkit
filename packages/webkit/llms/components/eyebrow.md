@@ -54,7 +54,7 @@
 
 - Static: no hover, focus, active or disabled states; the root is a non-interactive `div`.
 - Prefix: a `span` before the label is rendered only when `prefix` is not empty; it carries `aria-hidden="true"`.
-- Cursor: a decorative, `aria-hidden` `span` after the label is rendered only when `cursor` is set; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
+- Cursor: a decorative, `aria-hidden` `span` (`${testId}__cursor`) is rendered only when `cursor` is set, inline at the end of the label, so a wrapped label keeps it after its last word; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
 - Wrapping: with `singleLine` (default) the root carries `data-single-line` and the prefix turns `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
 - Test ids: root `eyebrow` (consumer `data-testid` wins); the bar `<root>__mark`; the label `<root>__label`.

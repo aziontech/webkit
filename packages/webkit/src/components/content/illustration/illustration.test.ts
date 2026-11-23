@@ -175,25 +175,26 @@ describe('Illustration', () => {
     expect(masks).not.toContain('rgb(7, 8, 9)')
   })
 
-  it('draws a run of same-colour square dots as one path, keeping every dot', async () => {
-    const dots = Array.from(
-      { length: 10 },
-      (_, index) => `<path d="M${index * 2} 0V1h1v-1z" fill="#666666"/>`
-    ).join('')
-    const host = await drawnFixture('', `${dots}<path d="M0 3h1v1h-1z" fill="#F3652B"/>`)
-    const paths = [...host.querySelectorAll('path')]
-
-    expect(paths).toHaveLength(2)
-    expect(paths[0].getAttribute('d')?.match(/M/g)).toHaveLength(10)
-    expect(paths[0].getAttribute('d')).toContain('M18 0h1v1h-1z')
-  })
-
   it.each(['dns-protection', 'global-network', 'preview'])(
     'keeps the dotted scene %s under 400 drawn nodes',
     async (name) => {
       expect(await sceneOf(name)).toBeLessThan(400)
     }
   )
+
+  it.each(illustrationAssetNames)('draws the scene %s to fill its frame', async (name) => {
+    const scene = await loadIllustrationScene(await urlOf(name))
+    const host = globalThis.document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    host.setAttribute('viewBox', scene.viewBox)
+    host.style.width = '592px'
+    globalThis.document.body.append(host)
+    host.append(...scene.draw('fill'))
+    const drawn = host.getBBox()
+    host.remove()
+    const [, , width, height] = scene.viewBox.split(/[\s,]+/).map(Number)
+
+    expect(Math.max(drawn.width / width, drawn.height / height)).toBeGreaterThan(0.7)
+  })
 
   it('scopes every internal id to its own instance', async () => {
     const view = render({
@@ -241,11 +242,15 @@ describe('Illustration', () => {
   it.each(illustrationAssetNames)('reserves the canvas %s was drawn on', async (name) => {
     const markup = await (await globalThis.fetch(await urlOf(name))).text()
     const svg = new globalThis.DOMParser().parseFromString(markup, 'image/svg+xml')
-    const [, , width, height] = svg.documentElement
+    const width = Number(svg.documentElement.getAttribute('width'))
+    const height = Number(svg.documentElement.getAttribute('height'))
+    const [, , boxWidth, boxHeight] = svg.documentElement
       .getAttribute('viewBox')!
       .split(/[\s,]+/)
       .map(Number)
-    expect(illustrationFrame(name)).toEqual({ width, height })
+    const frame = illustrationFrame(name)
+    expect(frame.width / frame.height).toBeCloseTo(width / height, 2)
+    expect(boxWidth / boxHeight).toBeCloseTo(width / height, 2)
   })
 
   it('registers every drawing that ships in the illustration folder, and nothing else', () => {

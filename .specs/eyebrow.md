@@ -7,9 +7,9 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: 3bdb79fbeca8ef462b8a2f51c25595d83464edafb3fd98dd90616c203d50098b
+checksum: a56e7c2ab337423ee348f22d36f205eff3394df92c2fea5503e4802a7c20dbaa
 created: 2026-11-10
-last_updated: 2026-11-16
+last_updated: 2026-11-23
 ---
 
 # Eyebrow — Component Spec
@@ -85,7 +85,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 
 - Static: no hover, focus, active or disabled states; the root is a non-interactive `div`.
 - Prefix: a `span` before the label is rendered only when `prefix` is not empty; it carries `aria-hidden="true"`.
-- Cursor: a decorative, `aria-hidden` `span` after the label is rendered only when `cursor` is set; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
+- Cursor: a decorative, `aria-hidden` `span` (`${testId}__cursor`) is rendered only when `cursor` is set, inline at the end of the label, so a wrapped label keeps it after its last word; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
 - Wrapping: with `singleLine` (default) the root carries `data-single-line` and the prefix turns `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
 - Test ids: root `eyebrow` (consumer `data-testid` wins); the bar `<root>__mark`; the label `<root>__label`.

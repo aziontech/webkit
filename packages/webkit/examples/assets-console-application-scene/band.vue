@@ -27,6 +27,7 @@
     tabs-side="end"
     size="large"
     :autoplay-interval="4600"
+    class="[--media-tabs-media-min:20rem]"
   >
     <template #media="{ index, active }">
       <ConsoleApplicationScene
