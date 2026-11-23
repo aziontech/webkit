@@ -27,7 +27,17 @@
     type CommandItemValue,
     type CommandRegisteredItem
   } from './injection-key'
-  import { groupStatsOf, matchesShortcut, sortVisibleItems } from './lib/command-order'
+  import {
+    arrangeRankedDom,
+    cappedHints,
+    type CommandDomSnapshot,
+    type CommandHomeOrder,
+    groupStatsOf,
+    homeOrderOf,
+    matchesShortcut,
+    restoreDomOrder,
+    sortVisibleItems
+  } from './lib/command-order'
   import { claimShortcut } from './shortcut-registry'
 
   defineOptions({
@@ -99,17 +109,38 @@
       /mac/i.test(navigator.platform || navigator.userAgent || '')
   )
 
+  let homeOrder: CommandHomeOrder = new Map()
+
+  const capped = computed(() => cappedHints(items.value, ranking.value, homeOrder))
+
   const groupStats = computed(() => groupStatsOf(items.value))
 
   const visibleItems = computed(() =>
     sortVisibleItems(
       items.value.filter((item) => item.isVisible.value),
       ranking.value,
-      groupStats.value
+      groupStats.value,
+      homeOrder
     )
   )
 
   const navigableItems = computed(() => visibleItems.value.filter((item) => !item.disabled.value))
+
+  const domSnapshot: CommandDomSnapshot = new Map()
+
+  watch(
+    [visibleItems, ranking],
+    ([visible, ranked]) => {
+      if (ranked) {
+        if (!domSnapshot.size) homeOrder = homeOrderOf(items.value)
+        arrangeRankedDom(visible, domSnapshot)
+      } else {
+        restoreDomOrder(domSnapshot)
+        homeOrder = homeOrderOf(items.value)
+      }
+    },
+    { flush: 'post' }
+  )
 
   const pages = useCommandPages(pageModel, (name) => {
     pageModel.value = name
@@ -215,6 +246,7 @@
     activeId,
     hasVisibleItems: computed(() => visibleItems.value.length > 0),
     groupHasVisibleItems: (groupId: string) => groupStats.value.get(groupId)?.visible ?? false,
+    isCapped: (itemId: string) => capped.value.has(itemId),
     ranking,
     groupOrder: (groupId: string) => {
       const order = groupStats.value.get(groupId)?.order ?? 0

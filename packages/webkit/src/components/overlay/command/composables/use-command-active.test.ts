@@ -10,6 +10,8 @@ const item = (value: string, activated: string[]): CommandRegisteredItem => ({
   groupId: null,
   disabled: ref(false),
   isVisible: ref(true),
+  matched: ref(true),
+  hint: ref(false),
   el: ref(null),
   order: ref(0),
   activate: () => activated.push(value)

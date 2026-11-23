@@ -451,6 +451,28 @@ describe('ConsoleLayout', () => {
       expect(header.getByRole('button', { name: 'New' })).toBeTruthy()
     })
 
+    it.each([768, 1023])(
+      'puts the navigation in a drawer at %ipx, the tablet widths',
+      async (width) => {
+        const { getByRole, container } = mount({}, { width })
+        await waitFor(() =>
+          expect(
+            within(getByRole('banner')).getByRole('button', { name: 'Open navigation' })
+          ).toBeTruthy()
+        )
+        expect(container.querySelector('[data-compact]')).not.toBeNull()
+      }
+    )
+
+    it('keeps the rail at 1024px', async () => {
+      const { getByRole, container } = mount({}, { width: 1024 })
+      await waitFor(() => expect(container.querySelector('[data-compact-below]')).not.toBeNull())
+      expect(container.querySelector('[data-compact]')).toBeNull()
+      expect(
+        within(getByRole('banner')).queryByRole('button', { name: 'Open navigation' })
+      ).toBeNull()
+    })
+
     it('renders a header-leading switcher and a composed breadcrumb trail', () => {
       const { getByRole } = mount(
         { breadcrumbs: [{ label: 'Ignored' }] },

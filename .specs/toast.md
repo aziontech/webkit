@@ -9,7 +9,7 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 98557c15518beb1801a5695483e2e4ca4cac9df0298eb8b28ca0d65fbd49fd61
+checksum: 0e8d77317d00d6ff8487c2f20bc39e5efc109cd5f8ebb821cc462ca1e05c70f2
 created: 2026-06-23
 last_updated: 2026-11-19
 ---
@@ -227,6 +227,7 @@ The imperative API is backed by a small reactive store composable, declared here
 - `data-removing` on a `Toaster` item while its exit transition runs (switches the transition to the exit token).
 - Progress: an entry with `progress` (set by `toast.progress(message, value, options?)`, which defaults `duration` to `0`) renders `__progress` under the copy: a rounded `Progress` bar named by the toast message (`role="progressbar"`, `aria-valuenow` clamped to 0–100) and the percentage formatted with `Intl.NumberFormat` (`style: 'percent'`) in the provider's locale, `aria-hidden` so the region does not announce every step. A later call with the same `id` replaces the entry in place; a typed toast with that `id` drops the bar.
 - `data-position` on the `Toaster` container: one of the six `position` values; drives the fixed anchoring (`top`/`bottom` × `start`/`center`/`end`, where `start` is the left edge under `ltr` and the right edge under `rtl`) and the enter/leave translate direction.
+- Bottom offset: a `bottom-*` region sits `var(--spacing-md)` above the viewport bottom plus `--toast-offset-bottom` (set by the app for its own bottom chrome) plus `--save-bar-height` (published by a mounted `SaveBar`), so a toast never covers either. Test: `src/test/save-bar-toast.test.ts`.
 - `data-state="open|closed"` on each `Toaster` region: `open` while the stack is laid out expanded (the `expand` prop, hover or focus), `closed` while it overlaps into a peek.
 - The dismiss control (`ToastClose`) renders, and is **always visible**, only when `closable` is set — the per-toast `closable` option, or the Toaster's `closable` default (the per-toast option overrides). When unset, no close control is shown.
 - Announcements go through the two hidden live regions: `danger` to `__live-assertive`, every other severity to `__live-polite`; items inside a Toaster carry no role of their own and the visible regions are not live, so each toast is announced once and never twice. A `ToastItem` rendered outside a Toaster keeps `role="status"` (or `role="alert"` for `danger`). Focus is never stolen (the region is not focused on mount). Tests: `toast.test.ts` › live region (spec), Escape dismisses the focused toast.
