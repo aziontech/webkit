@@ -6,13 +6,17 @@
   import Input from '@aziontech/webkit/input'
   import { computed, ref } from 'vue'
 
+  import { BLOCK_THUMBNAIL } from '../lib/block-thumbnails'
   import { messages } from '../lib/i18n'
   import CategoryJump from './category-jump.vue'
 
   const props = defineProps<{
     title: string
     description: string
-    groups: { label: string; items: { title: string; to: string; text: string }[] }[]
+    groups: {
+      label: string
+      items: { title: string; to: string; text: string; image?: { light: string; dark: string } }[]
+    }[]
   }>()
 
   const t = messages
@@ -84,6 +88,30 @@
           :title="item.title"
           :href="item.to"
         >
+          <span
+            v-if="item.image"
+            data-docs-thumbnail
+            class="mb-(--spacing-sm) block overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface)"
+          >
+            <img
+              :src="item.image.light"
+              alt=""
+              :width="BLOCK_THUMBNAIL.width"
+              :height="BLOCK_THUMBNAIL.height"
+              loading="lazy"
+              decoding="async"
+              class="block aspect-[8/5] h-auto w-full dark:hidden"
+            />
+            <img
+              :src="item.image.dark"
+              alt=""
+              :width="BLOCK_THUMBNAIL.width"
+              :height="BLOCK_THUMBNAIL.height"
+              loading="lazy"
+              decoding="async"
+              class="hidden aspect-[8/5] h-auto w-full dark:block"
+            />
+          </span>
           <span class="line-clamp-2">{{ item.text }}</span>
         </DocCard>
       </DocCardGroup>
