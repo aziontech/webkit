@@ -167,7 +167,9 @@
     v-else
     class="flex w-full gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-lg) lg:px-(--spacing-xl)"
   >
-    <article class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl)">
+    <article
+      class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl) xl:max-w-[calc(100%-var(--container-3xs)-var(--spacing-xl))]"
+    >
       <DocPageHeader
         :title="block.title"
         :description="guidelines?.lead || block.summary"
