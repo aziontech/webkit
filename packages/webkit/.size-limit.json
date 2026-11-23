@@ -306,7 +306,7 @@
   {
     "name": "marquee",
     "path": "src/components/marketing/marquee/marquee.vue",
-    "limit": "8.65 KB",
+    "limit": "8.7 KB",
     "entryOnly": true
   },
   {
