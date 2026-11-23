@@ -143,7 +143,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 - ResourceOverview: the Overview tab of a resource made from the CLI (`resource`, `tab` is `overview`), the summary card followed by Get started; any other `tab` shows the Open link to its own route.
 - Resource: the summary card alone, in its resource shape.
-- NoDeployment (`deploymentId: ''`): the same page for a resource never deployed: the summary reads Not deployed yet in place of the address, with None, None and Not deployed as muted values and no Visit.
+- NoDeployment: the same page for a resource never deployed (`deploymentId: ''`): the summary reads Not deployed yet in place of the address, with None, None and Not deployed as muted values and no Visit.
 - FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
 - ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
 - ResourceBuild: the Build tab, the Git repository, Build configuration and Deployment bands, with a save bar once a command changes.

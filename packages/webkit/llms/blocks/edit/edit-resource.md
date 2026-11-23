@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-resource")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-unsaved-changes`
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-unsaved-changes`, `utils/focus-invalid`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -194,7 +194,7 @@ Then delete `sample.ts` and its import.
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
 - Saving: while the request is in flight; the fieldset is disabled, so no field can change under the save, Save is loading and Discard is disabled.
-- DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the state-form-validation rule.
+- DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Custom headers are `AttributeEditor` rows of Name and Value (up to 5) whose value turns into a masked `PasswordInput` when the name reads as a credential (Authorization, Cookie, a token, key, secret or password), Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the state-form-validation rule.
 - StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
 - DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
 - CacheSettings: one cache setting of an application; General, Browser cache, Edge cache and the collapsed Advanced cache key. Rows that only apply under a switch or an override sit one level in (`SettingsRow` `level`). An edge TTL under 60 seconds and an empty allowlist or denylist are field errors with their reason, focused on Save. Save deploys and reports through the state-async-submit toast with Edit and Redeploy.
@@ -1175,7 +1175,10 @@ export const sampleDataStream = {
   url: 'https://collector.example.com/ingest',
   payloadFormat: '$dataset',
   lineSeparator: '\\n',
-  headers: 'X-Stream-Source:acme-edge',
+  headers: [
+    { name: 'X-Stream-Source', value: 'acme-edge' },
+    { name: 'Authorization', value: 'Bearer example-token' }
+  ],
   bootstrapServers: '',
   topic: '',
   bucket: '',
@@ -1591,6 +1594,7 @@ export function useDeployOnSave<T extends object>(
               <template #actions>
                 <Button
                   label="Documentation"
+                  aria-label="Documentation (opens in a new tab)"
                   icon="az az-book"
                   variant="outline"
                   :href="docsHref"
@@ -1911,7 +1915,19 @@ type Need = (id: keyof DataStreamRecord) => boolean
 type Check = (form: DataStreamRecord, errors: FieldProblems, need: Need) => void
 
 const URL_PATTERN = /^https?:\/\/[^\s/$.?#][^\s]*$/
-const HEADERS_PATTERN = /^[^:\n]+:[^\n]*\S[^\n]*(\n[^:\n]+:[^\n]*\S[^\n]*){0,4}$/
+const HEADER_NAME_PATTERN = /^[A-Za-z0-9!#$%&'*+.^_`|~-]+$/
+const CREDENTIAL_HEADER_PATTERN =
+  /^(authorization|proxy-authorization|cookie)$|token|key|secret|password/i
+
+export const isCredentialHeader = (name: string) => CREDENTIAL_HEADER_PATTERN.test(name.trim())
+
+export function headerProblem(header: { name: string; value: string }) {
+  const name = HEADER_NAME_PATTERN.test(header.name.trim())
+    ? undefined
+    : 'Enter a header name of letters, numbers and hyphens.'
+  const value = header.value.trim() ? undefined : 'Enter a value.'
+  return name || value ? { name, value } : undefined
+}
 const SERVERS_PATTERN = /^[^\s,]+(,[^\s,]+)*$/
 const WORKLOADS_PATTERN = /^[^\n]*\S[^\n]*(\n[^\n]*\S[^\n]*)*$/
 
@@ -1959,8 +1975,8 @@ const checkStandard: Check = (form, errors, need) => {
     errors.url = invalid('Enter a valid URL. Example: https://collector.example.com/ingest.')
   need('payloadFormat')
   need('lineSeparator')
-  if (form.headers.trim() && !HEADERS_PATTERN.test(form.headers.trim()))
-    errors.headers = invalid('Write up to 5 headers, one per line, in the Key:Value format.')
+  if (form.headers.some(headerProblem))
+    errors.headers = invalid('Give every header a name and a value.')
 }
 
 const checkKafka: Check = (form, errors, need) => {
@@ -2508,15 +2524,20 @@ export const optionLabel =
 ```ts
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
+  import AttributeEditor, { type AttributeEditorColumn } from '@aziontech/webkit/attribute-editor'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import FieldError from '@aziontech/webkit/field-error'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import PasswordInput from '@aziontech/webkit/password-input'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Textarea from '@aziontech/webkit/textarea'
+  import { computed } from 'vue'
 
+  import { headerProblem, isCredentialHeader } from '../lib/data-stream-checks'
   import { sampleDataStreamConnectors as connectorOptions } from '../sample'
   import { useDataStreamContext } from '../use-data-stream'
   import DataStreamInputRow from './data-stream-input-row.vue'
@@ -2527,6 +2548,15 @@ export const optionLabel =
   const labelOf = (options: SelectOptionItem[]) => (value: string) =>
     options.find((option) => option.value === value)?.label ?? ''
   const connectorLabel = labelOf(connectorOptions)
+
+  const HEADER_COLUMNS: AttributeEditorColumn[] = [
+    { key: 'name', label: 'Name', placeholder: 'X-Header-Name' },
+    { key: 'value', label: 'Value', placeholder: 'value' }
+  ]
+  const newHeader = () => ({ name: '', value: '' })
+  const headerErrors = computed(() =>
+    errors.headers ? form.headers.map((header) => headerProblem(header)) : []
+  )
 </script>
 
 <template>
@@ -2629,29 +2659,41 @@ export const optionLabel =
               v-if="form.connector === 'standard'"
               key="headers"
               title="Custom headers"
-              description="Sent with every request. One per line, up to 5, in the Key:Value format."
+              description="Sent with every request, up to 5. A credential such as Authorization or an API key stays masked."
               variant="stacked"
             >
-              <div class="flex w-full font-code">
-                <Textarea
-                  id="data-stream-headers"
-                  v-model="form.headers"
-                  class="w-full"
-                  :rows="3"
-                  aria-label="Custom headers"
-                  placeholder="header-name:value"
-                  required
-                  :invalid="!!errors.headers"
-                  :aria-describedby="errors.headers ? 'data-stream-headers-message' : undefined"
-                  :disabled="saving"
-                  @update:model-value="onDestinationChange('headers')"
-                />
-              </div>
-              <FieldError
-                v-if="errors.headers"
-                id="data-stream-headers-message"
-                >{{ errors.headers.message }}</FieldError
+              <AttributeEditor
+                id="data-stream-headers"
+                v-model:items="form.headers"
+                :definition="HEADER_COLUMNS"
+                :new-item="newHeader"
+                :limit="5"
+                :disabled="saving"
+                add-button-label="Add header"
+                remove-button-label="Remove header"
+                aria-label="Custom headers"
+                :errors="headerErrors"
+                @update:items="onDestinationChange('headers')"
               >
+                <template #cell-value="{ item, value, update, invalid }">
+                  <PasswordInput
+                    v-if="isCredentialHeader(item.name)"
+                    :model-value="value"
+                    autocomplete="off"
+                    monospace
+                    :invalid="invalid"
+                    @update:model-value="update"
+                  />
+                  <Input
+                    v-else
+                    :model-value="value"
+                    autocomplete="off"
+                    :spellcheck="false"
+                    :invalid="invalid"
+                    @update:model-value="update"
+                  />
+                </template>
+              </AttributeEditor>
             </SettingsRow>
             <SettingsRow
               v-if="form.connector === 'kafka'"
@@ -5566,6 +5608,7 @@ import {
   useUnsavedChanges,
   type UseUnsavedChangesReturn
 } from '@aziontech/webkit/use-unsaved-changes'
+import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
 import {
   type ComputedRef,
   inject,
@@ -5621,7 +5664,9 @@ const unreachable = (value: string) => {
 const focusFirstError = (errors: FieldProblems) =>
   nextTick(() => {
     const id = Object.keys(errors)[0]
-    if (id) document.getElementById(`data-stream-${id}`)?.focus()
+    const field = id ? document.getElementById(`data-stream-${id}`) : null
+    if (field?.matches('input, textarea, select, button')) field.focus()
+    else void focusFirstInvalid(field)
   })
 
 const settled = (saving: Ref<boolean>) =>

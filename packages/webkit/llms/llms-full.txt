@@ -3100,7 +3100,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-per
 - Surface: app
 - Source: `blocks/account/account-team-permissions/account-team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-team-permissions")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DataTablePagination`, DropdownMenu, EmptyState, Field, IconButton, Input, Kbd, PageHeader, PropertyFilter, SaveBar, SettingsGroup, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`, `use-shortcuts`, `use-unsaved-changes`
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DataTablePagination`, DropdownMenu, EmptyState, Field, IconButton, Input, Kbd, PageHeader, PropertyFilter, SaveBar, SettingsGroup, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`, `use-shortcuts`, `use-unsaved-changes`, `utils/leave-link`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -4401,7 +4401,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-deploy-template/create-deploy-template.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-template")`
-- Components: Accordion, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Kbd, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-escape-to-cancel`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`
+- Components: Accordion, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Kbd, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-escape-to-cancel`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`, `utils/radio-list`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -5024,7 +5024,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-relea
 - Surface: app
 - Source: `blocks/create/create-resource-picker/create-resource-picker.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-resource-picker")`
-- Components: Button, Card, Field, `FieldError`, Input, Item, SettingsRow, Skeleton, Switch, ToggleGroup
+- Components: Button, Card, Field, `FieldError`, Input, Item, SettingsRow, Skeleton, Switch, ToggleGroup, `utils/radio-list`
 - Skills: `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -5145,7 +5145,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: Alert, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, ConfirmDialog, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, Wizard, Wizard
+- Components: Alert, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, ConfirmDialog, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, `utils/radio-list`, Wizard, Wizard
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -7440,7 +7440,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 - ResourceOverview: the Overview tab of a resource made from the CLI (`resource`, `tab` is `overview`), the summary card followed by Get started; any other `tab` shows the Open link to its own route.
 - Resource: the summary card alone, in its resource shape.
-- Default with `deploymentId: ''`: the same page for a resource never deployed: the summary reads Not deployed yet in place of the address, with None, None and Not deployed as muted values and no Visit.
+- NoDeployment: the same page for a resource never deployed (`deploymentId: ''`): the summary reads Not deployed yet in place of the address, with None, None and Not deployed as muted values and no Visit.
 - FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
 - ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
 - ResourceBuild: the Build tab, the Git repository, Build configuration and Deployment bands, with a save bar once a command changes.
@@ -7475,7 +7475,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 ## Variants
 
-`ResourceOverview` (primary) · `Resource` · `Service` · `Policy` · `ResourceVersions` · `ResourceBuild` · `ServiceOverview` · `Application` · `FirstDeploy` · `ResourceBuildConnected` · `ApplicationBuild`. Code: [blocks/detail/detail-resource.md](blocks/detail/detail-resource.md), `get_block("detail/detail-resource", { variant })`.
+`ResourceOverview` (primary) · `Resource` · `Service` · `Policy` · `ResourceVersions` · `ResourceBuild` · `ServiceOverview` · `Application` · `NoDeployment` · `FirstDeploy` · `ResourceBuildConnected` · `ApplicationBuild`. Code: [blocks/detail/detail-resource.md](blocks/detail/detail-resource.md), `get_block("detail/detail-resource", { variant })`.
 
 ---
 
@@ -7743,7 +7743,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-delete-di
 - Surface: app
 - Source: `blocks/edit/edit-function/edit-function.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-function")`
-- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, CopyButton, EmptyState, `FieldError`, IconButton, Input, Item, Kbd, KeyValueList, Link, `LogViewerContent`, LogViewer, PageTabs, RadioGroup, `ResizableHandle`, `ResizablePane`, `ResizableRoot`, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Tabs, Tag, Textarea, Toast, ToggleGroup, Tooltip, Trace, `use-shortcuts`, `use-unsaved-changes`
+- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, CopyButton, EmptyState, `FieldError`, IconButton, Input, Item, Kbd, KeyValueList, Link, `LogViewerContent`, LogViewer, PageTabs, RadioGroup, `ResizableHandle`, `ResizablePane`, `ResizableRoot`, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Tabs, Tag, Textarea, Toast, ToggleGroup, Tooltip, Trace, `use-shortcuts`, `use-unsaved-changes`, `utils/leave-link`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -7878,7 +7878,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-function.
 - Surface: app
 - Source: `blocks/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-resource")`
-- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
+- Components: Alert, AttributeEditor, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`, `utils/focus-invalid`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -8002,7 +8002,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-resource.
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
 - Saving: while the request is in flight; the fieldset is disabled, so no field can change under the save, Save is loading and Discard is disabled.
-- DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the state-form-validation rule.
+- DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Custom headers are `AttributeEditor` rows of Name and Value (up to 5) whose value turns into a masked `PasswordInput` when the name reads as a credential (Authorization, Cookie, a token, key, secret or password), Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the state-form-validation rule.
 - StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
 - DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
 - CacheSettings: one cache setting of an application; General, Browser cache, Edge cache and the collapsed Advanced cache key. Rows that only apply under a switch or an override sit one level in (`SettingsRow` `level`). An edge TTL under 60 seconds and an empty allowlist or denylist are field errors with their reason, focused on Save. Save deploys and reports through the state-async-submit toast with Edit and Redeploy.
@@ -10131,7 +10131,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-events-ex
 - Surface: app
 - Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-file-browser")`
-- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress, `use-file-picker`
+- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress, `use-file-picker`, `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as

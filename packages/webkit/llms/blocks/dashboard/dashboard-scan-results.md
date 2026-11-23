@@ -93,7 +93,8 @@ an `aria-label`.
 ### M. Submissions — `DataTable` (required)
 
 Paginated: name, verdict, category, score, type, size, source, first submitter and last seen. Score,
-size and dates in tabular figures.
+size and dates in tabular figures. The table sets `stackable`: on a phone each submission becomes a
+card of label and value lines, so the verdict is never cut off.
 
 ### N. Empty regions — `EmptyState` (required)
 
@@ -921,6 +922,7 @@ export const sampleSubmissions: ScanResultsSubmission[] = [
       row-key="id"
       sortable
       density="compact"
+      stackable
       bordered
       :loading="loading"
     >
