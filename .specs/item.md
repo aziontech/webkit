@@ -5,8 +5,8 @@ structure: composition
 status: implemented
 spec_version: 6
 created: 2026-05-24
-last_updated: 2026-11-16
-checksum: c0edea5818a15ca46a1e7176d0099ff71887cd368a3edc2576a5a0cabf141191
+last_updated: 2026-11-22
+checksum: 8ca9414e2e325bb0dec9567d84ea79df8efa450d36cda484210932e9465eb2cb
 ---
 
 # Item — Component Spec
@@ -141,10 +141,10 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 ## States
 
 - Visual states on Item shell: `default` only, **except with `href` or `clickable`**, where the root is the whole-row anchor or button and gains row-level `hover`, `active`, and `focus-visible`
-- With `href` or `clickable`, the row paints `var(--bg-selected)` while it carries `aria-pressed="true"` or `aria-selected="true"`, whatever its `variant`: a pressed chooser row binds `:aria-pressed` on the Item and adds no fill class of its own
+- With `href` or `clickable`, the row paints `var(--bg-selected)` while it carries `aria-pressed="true"`, `aria-selected="true"` or `aria-checked="true"` (a row with `role="radio"` in a one-of-many pick list), whatever its `variant`: a pressed chooser row binds `:aria-pressed` on the Item and adds no fill class of its own
 - Without `href` or `clickable`, the root is a `div` and slotted controls (`Button`, `a`, etc.) own hover, active, and `focus-visible`
 - `data-variant` on Item root: `default` | `outline` | `muted` | `inline` | `option` (an Item inside `ItemGroup` is forced to `inline`; inside `ItemList` to `default`)
-- `variant="option"`: `--spacing-xs` block padding, `--spacing-sm` inline padding and gap whatever the `size`, `Item.Title` at `text-body-md`, and `var(--bg-selected)` on the row while it carries `aria-pressed="true"` or `aria-selected="true"`
+- `variant="option"`: `--spacing-xs` block padding, `--spacing-sm` inline padding and gap whatever the `size`, `Item.Title` at `text-body-md`, and `var(--bg-selected)` on the row while it carries `aria-pressed="true"`, `aria-selected="true"` or `aria-checked="true"`
 - `data-size` on Item root: `small` | `medium`
 - `data-type` on ItemMedia: `default` | `icon` | `image`
 

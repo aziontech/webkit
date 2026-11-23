@@ -220,6 +220,16 @@ describe('Item', () => {
         expect(root.hasAttribute('data-selected')).toBe(false)
       })
 
+      it('reads as a checked radio and fills like a pressed row when role is radio', () => {
+        const { getByRole } = render(Item, {
+          props: { clickable: true, size: 'small' },
+          attrs: { role: 'radio', 'aria-checked': 'true' },
+          slots: { default: 'Chosen' }
+        })
+        const root = getByRole('radio', { name: 'Chosen', checked: true })
+        expect(root.classList.contains('aria-checked:bg-(--bg-selected)')).toBe(true)
+      })
+
       it('prefers the anchor when both href and clickable are set', () => {
         const { getByTestId } = render(Item, {
           props: { href: '#one', clickable: true },

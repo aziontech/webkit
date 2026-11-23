@@ -82,9 +82,10 @@
         'data-[variant=option]:py-(--spacing-xs)',
         'data-[variant=option]:aria-pressed:bg-(--bg-selected)',
         'data-[variant=option]:aria-selected:bg-(--bg-selected)',
+        'data-[variant=option]:aria-checked:bg-(--bg-selected)',
         interactive.value && [
           'cursor-pointer text-start no-underline',
-          'aria-pressed:bg-(--bg-selected) aria-selected:bg-(--bg-selected)',
+          'aria-pressed:bg-(--bg-selected) aria-selected:bg-(--bg-selected) aria-checked:bg-(--bg-selected)',
           'focus-visible:outline-none',
           'focus-visible:ring-2 focus-visible:ring-(--ring-color)',
           'focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)',
