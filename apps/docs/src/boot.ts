@@ -7,6 +7,7 @@ function start() {
 }
 
 function afterFirstPaint() {
+  if (location.pathname.startsWith('/frame/example/')) return start()
   if (performance.getEntriesByName('first-contentful-paint').length) return start()
   try {
     const observer = new PerformanceObserver(() => {
