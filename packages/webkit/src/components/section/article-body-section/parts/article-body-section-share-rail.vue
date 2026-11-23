@@ -29,6 +29,9 @@
 
   const { t } = useTranslate({ articleBodySection: en.articleBodySection })
 
+  const RAIL_CLASS =
+    'flex flex-col gap-(--spacing-xl) lg:sticky lg:top-[calc(3.5rem+var(--spacing-xl))] lg:max-h-[calc(100dvh-3.5rem-var(--spacing-xl))] lg:overflow-y-auto lg:pb-(--spacing-lg)'
+
   const shareX = computed(
     () => `https://x.com/intent/tweet?url=${props.article.href}&via=aziontech`
   )
@@ -101,11 +104,10 @@
 <template>
   <aside
     :aria-label="share?.title || community?.title || copyPage?.label"
-    class="hidden lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:block"
+    data-slot="share-rail"
+    class="min-w-0 max-lg:border-t max-lg:border-(--border-default) max-lg:pt-(--spacing-xl) lg:col-start-1 lg:row-span-3 lg:row-start-1"
   >
-    <div
-      class="sticky top-[calc(3.5rem+var(--spacing-xl))] flex max-h-[calc(100dvh-3.5rem-var(--spacing-xl))] flex-col gap-(--spacing-xl) overflow-y-auto pb-(--spacing-lg)"
-    >
+    <div :class="RAIL_CLASS">
       <section
         v-if="share"
         class="flex flex-col gap-(--spacing-sm)"
