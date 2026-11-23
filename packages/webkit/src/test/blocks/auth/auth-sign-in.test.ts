@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import Login from '../../../../blocks/auth/auth-sign-in/auth-sign-in.vue'
@@ -21,7 +21,10 @@ import Submitting from '../../../../blocks/auth/auth-sign-in/variants/submitting
 import { expectNoA11yViolations } from '../../axe'
 import { useToastRegion } from '../../toast-region'
 
-afterEach(() => cleanup())
+afterEach(() => {
+  cleanup()
+  vi.restoreAllMocks()
+})
 
 useToastRegion()
 
@@ -93,7 +96,13 @@ describe('auth/auth-sign-in focus and password managers', () => {
     await expectNoA11yViolations(view.container)
   })
 
-  it('focuses the token field and the MFA setup code on entry', async () => {
+  it('focuses the token field and the MFA setup code on entry, on a fine pointer', async () => {
+    const realMatchMedia = window.matchMedia.bind(window)
+    const fine = (query: string) =>
+      query === '(pointer: fine)'
+        ? { ...realMatchMedia(query), matches: true }
+        : realMatchMedia(query)
+    vi.spyOn(window, 'matchMedia').mockImplementation(fine)
     render(PersonalToken)
     await waitFor(() => expect(document.activeElement?.id).toBe('personal-token'))
     cleanup()
@@ -446,7 +455,9 @@ describe('auth/auth-sign-in#PersonalToken', () => {
     expect(input.getAttribute('autocomplete')).toBe('off')
     await fireEvent.click(view.getByRole('button', { name: 'Show password' }))
     expect(input.type).toBe('text')
-    const link = view.getByRole('link', { name: 'How to create a personal token' })
+    const link = view.getByRole('link', {
+      name: 'How to create a personal token (opens in a new tab)'
+    })
     expect(link.getAttribute('href')).toContain('azion.com')
     await expectNoA11yViolations(view.container)
   })
