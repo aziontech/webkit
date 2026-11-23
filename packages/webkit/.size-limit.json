@@ -2374,7 +2374,7 @@
   {
     "name": "command",
     "path": "src/components/overlay/command/index.ts",
-    "limit": "28.7 KB"
+    "limit": "28.75 KB"
   },
   {
     "name": "command-root",
@@ -2434,7 +2434,7 @@
   {
     "name": "dialog-content",
     "path": "src/components/overlay/dialog/dialog-content.vue",
-    "limit": "18.15 KB"
+    "limit": "18.2 KB"
   },
   {
     "name": "dialog-description",

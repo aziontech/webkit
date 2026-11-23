@@ -32,7 +32,7 @@
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'class'))
   )
 
-  const AutoClose = () => h(DialogClose, { 'data-testid': `${ctx?.testId ?? 'dialog'}__close` })
+  const AutoClose = () => h(DialogClose, { 'data-testid': `${ctx?.testId}__close` })
 
   provide(PanelHeaderEndInjectionKey, {
     panelTestId: `${testId.value}__panel-shell`,
