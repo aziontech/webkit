@@ -2,6 +2,12 @@ import { nextTick, type Ref } from 'vue'
 
 import type { ToastEntry } from '../composables/use-toast-store'
 
+const sentence = (parts: (string | undefined)[]) =>
+  parts
+    .filter((part): part is string => !!part)
+    .map((part, index, all) => (index < all.length - 1 && !/[.!?]$/.test(part) ? `${part}.` : part))
+    .join(' ')
+
 const speak = (channel: Ref<string>, texts: string[]) => {
   if (!texts.length) return
   channel.value = ''
@@ -19,7 +25,7 @@ export const announceToasts = (
   const ids = new Set<string>()
   next.forEach((entry) => {
     ids.add(entry.id)
-    const text = [entry.message, entry.description].filter(Boolean).join('. ')
+    const text = sentence([entry.message, entry.description])
     const key = `${entry.severity}|${text}`
     if (spoken.get(entry.id) === key) return
     spoken.set(entry.id, key)

@@ -483,6 +483,16 @@ describe('Toast', () => {
       expect(liveRegion('polite')!.textContent?.trim()).toBe('')
     })
 
+    it('does not double the stop when the title already ends a sentence', async () => {
+      await mountToaster({ position: 'bottom-end', duration: 0 })
+      toast.success('Teams updated.', { description: 'Access changes on their next request.' })
+      await vi.waitFor(() => {
+        expect(liveRegion('polite')!.textContent).toBe(
+          'Teams updated. Access changes on their next request.'
+        )
+      })
+    })
+
     it.each(['success', 'info', 'warning', 'loading'] as const)(
       'a %s toast waits its turn: it is announced in the polite region only',
       async (fn) => {
