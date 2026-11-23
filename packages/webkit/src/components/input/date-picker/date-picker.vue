@@ -284,7 +284,11 @@
             :show-placeholder="!hasCommitted"
             :show-chevron="!split && !(clearable && hasCommitted)"
             :aria-label="ariaLabel ? `${ariaLabel}: ${triggerText}` : undefined"
-            :aria-describedby="field.describedBy.value"
+            :aria-describedby="
+              [field.describedBy.value, field.required.value && field.field?.requiredId]
+                .filter(Boolean)
+                .join(' ') || undefined
+            "
             :aria-invalid="field.invalid.value || undefined"
             class="focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
             @click="toggleOpen"

@@ -84,12 +84,12 @@
   {
     "name": "date-picker-root",
     "path": "src/components/input/date-picker/date-picker.vue",
-    "limit": "44.35 KB"
+    "limit": "44.4 KB"
   },
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "56.7 KB"
+    "limit": "56.75 KB"
   },
   {
     "name": "table-root",
@@ -533,7 +533,7 @@
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "54.2 KB",
+    "limit": "54.25 KB",
     "entryOnly": true
   },
   {
@@ -626,7 +626,7 @@
   {
     "name": "job-posting-section",
     "path": "src/components/section/job-posting-section/job-posting-section.vue",
-    "limit": "59.8 KB",
+    "limit": "59.9 KB",
     "entryOnly": true
   },
   {
@@ -720,7 +720,7 @@
   {
     "name": "newsletter-section",
     "path": "src/components/section/newsletter-section/newsletter-section.vue",
-    "limit": "13.95 KB"
+    "limit": "14 KB"
   },
   {
     "name": "stepper",
@@ -1001,7 +1001,7 @@
   {
     "name": "field-label",
     "path": "src/components/input/field/field-label/field-label.vue",
-    "limit": "7.6 KB"
+    "limit": "7.65 KB"
   },
   {
     "name": "field-description",
@@ -1280,7 +1280,7 @@
   {
     "name": "feedback-reason-dialog",
     "path": "src/components/ai/feedback-reason-dialog/feedback-reason-dialog.vue",
-    "limit": "34.55 KB"
+    "limit": "34.6 KB"
   },
   {
     "name": "response-branches",
@@ -1310,7 +1310,7 @@
   {
     "name": "attribute-editor",
     "path": "src/components/input/attribute-editor/attribute-editor.vue",
-    "limit": "20.8 KB"
+    "limit": "20.85 KB"
   },
   {
     "name": "code-editor",
@@ -1330,12 +1330,12 @@
   {
     "name": "tag-editor",
     "path": "src/components/input/tag-editor/tag-editor.vue",
-    "limit": "22.65 KB"
+    "limit": "22.75 KB"
   },
   {
     "name": "schema-form",
     "path": "src/components/input/schema-form/schema-form.vue",
-    "limit": "64.45 KB"
+    "limit": "64.5 KB"
   },
   {
     "name": "use-unsaved-changes",
@@ -1922,7 +1922,7 @@
   {
     "name": "date-picker",
     "path": "src/components/input/date-picker/index.ts",
-    "limit": "44.5 KB"
+    "limit": "44.55 KB"
   },
   {
     "name": "date-picker-clear",

@@ -483,7 +483,7 @@ export const errorBoundary = {
 } as const
 
 export const field = {
-  required: '(Required)'
+  required: 'Required'
 } as const
 
 export const fileDropzone = {

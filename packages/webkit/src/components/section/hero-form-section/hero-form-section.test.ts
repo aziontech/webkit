@@ -266,9 +266,11 @@ describe('HeroFormSection', () => {
   })
 
   it('marks required fields from the first render but holds the invalid state until a submit', () => {
-    const { getByLabelText, getAllByText } = band()
+    const { getByLabelText, getAllByTestId } = band()
 
-    expect(getAllByText('(Required)')).toHaveLength(2)
+    expect(
+      getAllByTestId('field-label__required').map((marker) => marker.textContent?.trim())
+    ).toEqual(['*', '*'])
     const firstName = getByLabelText(/First name/, { selector: 'input' })
     expect(firstName.getAttribute('aria-required')).toBe('true')
     expect(firstName.getAttribute('aria-invalid')).toBeNull()
