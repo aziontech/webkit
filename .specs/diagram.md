@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 7bf18fd33bc0f8752b02d5be0c15936f0c7d17f8d4b8acb8c2f6ddf49563856a
+checksum: 013c937c617c31d92f1740e5777ead59c64f5b294163f6704935dce90d35782d
 created: 2026-10-21
 last_updated: 2026-11-18
 ---
@@ -133,7 +133,7 @@ _None — every node is drawn from `spec`._
 - **Active.** An `active` edge, its ports and its label chip are drawn in the accent colour and painted above the rest; an `active` node is part of the highlighted path.
 - **Lit.** A `lit` card, item or pill gets a primary edge and a primary-and-accent glow; a `lit` tile gets a primary edge.
 - **Groups.** A `group` draws its content inside a registration frame with a small label above it; `variant: 'dashed'` dashes its edge and `fill` tints it with the primary or secondary mask.
-- **Node types.** `card` — header row (mark, logo or icon, eyebrow, status tag) over the title, clamped to two lines. `item` — a leading mark, logo or icon, the title with the eyebrow in a mono line under it, and an optional trailing status tag. `pill` — a rounded chip with an optional icon. `tile` — an icon-only cell inside a registration frame, its title shown in a tooltip. `app` — a quiet window placeholder (three dots, the title, placeholder bars) that fades out at the bottom.
+- **Node types.** `card` — header row (mark, logo or icon, eyebrow, status tag) over the title, clamped to two lines. `item` — a leading mark, logo or icon, the title with the eyebrow in a mono line under it, and an optional trailing status tag. `pill` — a rounded chip with an optional icon. `tile` — an icon cell inside a registration frame, its title written as a caption under it (never hover-only, so touch and keyboard readers see the name). `app` — a quiet window placeholder (three dots, the title, placeholder bars) that fades out at the bottom.
 - **Test ids.** Root fallback `diagram` (consumer override wins); `${testId}__canvas` on the measured canvas.
 
 ## Motion & Animations

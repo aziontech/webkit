@@ -79,7 +79,7 @@
 - ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an illustration is named by `illustrationAriaLabel`, and is decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the scenes stop under reduced motion on their own.
-- Touch target ≥40×40 px — the medium buttons meet it.
+- Touch target ≥40×40 px — the actions are `large` (40 px) buttons.
 
 ## Right-to-left
 

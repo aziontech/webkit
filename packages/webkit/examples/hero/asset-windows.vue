@@ -11,7 +11,7 @@
       texture="dots"
       texture-size="small"
       texture-fade="bottom"
-      bottom-height="22%"
+      bottom-height="clamp(8rem, 22dvh, 16rem)"
     >
       <template #top>
         <div class="flex h-full items-start justify-center pt-(--spacing-xl)">

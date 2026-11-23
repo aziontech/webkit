@@ -8,6 +8,41 @@ import HeroTitle from './hero-title/hero-title.vue'
 const TESTID = 'hero'
 
 describe('Hero', () => {
+  it('teaches a length, never a percentage, for the bottom window in every example and section', () => {
+    const sources = {
+      ...import.meta.glob('../../../../examples/hero/*.vue', {
+        query: '?raw',
+        import: 'default',
+        eager: true
+      }),
+      ...import.meta.glob('../../section/**/*.vue', {
+        query: '?raw',
+        import: 'default',
+        eager: true
+      })
+    } as Record<string, string>
+
+    for (const [file, source] of Object.entries(sources)) {
+      expect(source, file).not.toMatch(/bottom-?[hH]eight[=:]\s*["'][^"']*%/)
+    }
+  })
+
+  it('shortens the floor on phones when the brand strip follows it', () => {
+    const { getByTestId } = render(Hero, {
+      props: { floorTexture: 'pixelate', marquee: true, marqueeMarks: ['nzn'] }
+    })
+    const window = getByTestId(TESTID).querySelector(
+      '[data-slot="hero-bottom-window"]'
+    ) as HTMLElement
+
+    expect(window).toHaveAttribute('data-strip')
+    expect(
+      window.classList.contains(
+        'max-md:data-[floor]:data-[strip]:[height:var(--hero-banner-bottom-height,clamp(4rem,12dvh,8rem))]'
+      )
+    ).toBe(true)
+  })
+
   it('renders with the default testid and the default band configuration', () => {
     const { getByTestId } = render(Hero)
     const root = getByTestId(TESTID)

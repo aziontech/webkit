@@ -40,6 +40,18 @@ describe('ToggleGroup', () => {
     expect(getByTestId('toggle-group').getAttribute('data-size')).toBe(expected)
   })
 
+  it('gives every segment a 44px hit area on coarse pointers, so a 30px segment still meets the touch floor', () => {
+    const { getAllByRole } = render(ToggleGroup, {
+      props: { options: OPTIONS, ariaLabel: 'Choose one' }
+    })
+
+    for (const option of getAllByRole('radio')) {
+      const target = option.querySelector('[data-slot="touch-target"]')
+      expect(target?.className).toContain('pointer-coarse:block')
+      expect(target?.className).toContain('inset-[min(0rem,calc(50%-22px))]')
+    }
+  })
+
   it('defaults data-size to large', () => {
     const { getByTestId } = render(ToggleGroup, { props: { options: OPTIONS } })
 

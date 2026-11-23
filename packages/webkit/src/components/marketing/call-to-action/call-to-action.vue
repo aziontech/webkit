@@ -249,7 +249,7 @@
 
       <div
         v-else
-        class="flex flex-col gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-2xl) md:flex-row md:items-center md:justify-between"
+        class="flex flex-col gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-2xl) md:flex-row md:items-center md:justify-start md:gap-(--spacing-2xl)"
       >
         <ModuleHeader
           :framed="false"

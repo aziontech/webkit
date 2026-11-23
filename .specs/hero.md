@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 9
-checksum: 718c84d447bb3c3c54ae46dcdab172c301218cc69b0c4881b70322c8a3633b1b
+checksum: 9181cbb7a93287c070199105af53b4f599093a1de0b83d33793242f1f0817964
 created: 2026-09-22
 last_updated: 2026-11-19
 ---
@@ -107,7 +107,7 @@ The standalone imports stay available and are the tree-shaking path — `@aziont
 | `align`            | `HeroAlign`      | `'center'` | false    | Where the content column sits vertically when the band fills a screen (`start` is the top, `end` the bottom).                                                          |
 | `mediaAlign`       | `HeroMediaAlign` | `'center'` | false    | Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up. |
 | `offset`           | `string`         | `''`       | false    | Height of the fixed chrome above the band, subtracted from the viewport when `variant` is `screen`; any CSS length.                                                    |
-| `bottomHeight`     | `string`         | `''`       | false    | Height of the window under the content, where the brand strip and the floor texture stand; any CSS length.                                                             |
+| `bottomHeight`     | `string`         | `''`       | false    | Height of the window under the content, where the brand strip and the floor texture stand; a CSS length, never a percentage (it collapses the window).                                                             |
 | `marquee`          | `boolean`        | `false`    | false    | Stand the brand marquee on the band's floor, under the `bottom` window.                                                                                                |
 | `marqueeMarks`     | `string[]`       | `[]`       | false    | Registry names of the marks the marquee shows, in order.                                                                                                               |
 | `marqueeLabel`     | `string`         | `''`       | false    | Eyebrow above the brand marquee, stating the claim the marks make.                                                                                                     |
@@ -150,7 +150,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - Each asset window clips its slotted child, so an asset larger than the band shows only the part the window frames. Custom properties place it: `--hero-banner-top-height` / `--hero-banner-bottom-height` size the window, and `--hero-banner-top-x` / `-y`, `--hero-banner-bottom-x` / `-y`, `--hero-banner-background-x` / `-y` move the asset inside it
 - Texture behind text only: the backdrop (`data-slot="hero-backdrop"`, under the `texture` prop and the `background` slot) spans the content and the floor by default, so dots run under a console window or a command in the `bottom` window. When a window holds content marked `data-plain-ground` (a chart, `FlowDiagram`, `StatTile`, `Tracker` or a page-JSON content scene) outside an opaque `data-opaque` ground, the backdrop keeps clear of it: with the mark in the `bottom` window (`data-slot="hero-bottom"`) it stops at that window's top edge, so the dots stay behind the copy and end above the diagram; with the mark in the `top` window (`data-slot="hero-top"`) or the `media` cell (`data-slot="hero-media"`), which share the content's area, the band draws no backdrop at all. The floor texture drops itself beside the same mark (see `texture`)
 - The backdrop sets `--texture-fade-lead: transparent`, so a `top` / `bottom` fade on the `texture` layer — or on a `texture` in the `background` slot — ramps in from zero at its leading edge as well as fading out: the opening band sits under the site header, and the texture must clear it. Outside a hero the same fades stay single
-- `data-floor` present when `floorTexture` paints the floor window. The window then takes a fluid default height (`clamp(9rem, 30dvh, 34rem)`) so a `screen` band still measures one screen on a laptop and caps at the design's field where there is room; with no floor texture it stays `auto` and is sized by its slotted child. `--hero-banner-bottom-height` overrides either, and `--hero-banner-floor-ink` (0.6) sets how strongly the texture reads
+- `data-floor` present when `floorTexture` paints the floor window. The window then takes a fluid default height (`clamp(9rem, 30dvh, 34rem)`) so a `screen` band still measures one screen on a laptop and caps at the design's field where there is room; with no floor texture it stays `auto` and is sized by its slotted child. Below `md`, when the brand `marquee` stands under the floor, the default drops to `clamp(4rem, 12dvh, 8rem)` so the customer proof is not pushed below the first screen of a phone. `--hero-banner-bottom-height` (or `bottomHeight`) overrides either; it is a length (`clamp(8rem, 22dvh, 16rem)`), never a percentage, which resolves against the band's own auto height and collapses the window onto its content, and `--hero-banner-floor-ink` (0.6) sets how strongly the texture reads
 - The floor holds the `bottom` window and the `marquee` strip in one block, so a single ground covers both: `--hero-banner-floor-bg` (transparent by default) paints it, which is how a design plinths the floor a shade off the band's own canvas
 - The `marquee` strip stands on `--bg-canvas` edge to edge, so a `texture` backdrop or `background` slot never shows through the marks; a `--hero-banner-floor-bg` plinth replaces that ground so the floor still reads as one block
 - `marquee` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry
@@ -176,7 +176,7 @@ _none_
 | media column gap                   | `var(--spacing-xl)` from `md` up, `var(--spacing-2xl)` stacked                                   |
 | media end bleed (`mediaAlign` end) | `var(--spacing-xl)`                                                                              |
 | copy block rhythm                  | `var(--spacing-md)`                                                                              |
-| headline                           | `.text-heading-2xl` (`size` large) or `.text-heading-xl` (`size` medium), `var(--text-default)`  |
+| headline                           | `.text-heading-3xl` (`size` large) or `.text-heading-2xl` (`size` medium, about 30px on a phone), `var(--text-default)` |
 | accent phrase                      | `var(--text-brand)` with a `var(--primary)` glow (the logo orange only; `hero-title__highlight`) |
 | description                        | `.text-body-lg`, `var(--text-muted)`                                                             |
 | headline to description            | `var(--spacing-md)` gap plus `var(--spacing-md)` margin                                          |

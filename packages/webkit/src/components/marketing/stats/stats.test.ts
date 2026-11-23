@@ -45,6 +45,22 @@ async function renderAt(width: number, count: number, size: 'small' | 'medium' |
 }
 
 describe('Stats', () => {
+  it('keeps a figure in left-to-right order in a right-to-left page, so "< 15 ms" never reads "15 ms >"', () => {
+    const host = document.createElement('div')
+    host.dir = 'rtl'
+    document.body.appendChild(host)
+    const { getAllByTestId } = render(Stats, { container: host, props: { items } })
+    const run = getAllByTestId(`${TESTID}__value`)[2]
+    const [prefix, value, suffix] = [...run.children].map(
+      (part) => part.getBoundingClientRect().left
+    )
+
+    expect(run).toHaveAttribute('dir', 'ltr')
+    expect(prefix).toBeLessThan(value)
+    expect(value).toBeLessThan(suffix)
+    host.remove()
+  })
+
   it('renders the band under the default testid', () => {
     const { getByTestId } = render(Stats, { props: { items } })
 
@@ -89,11 +105,11 @@ describe('Stats', () => {
     const { container } = render(Stats, { props: { items } })
     const latency = container.querySelectorAll('figure')[2]
 
-    expect([...latency.querySelectorAll('span')].map((el) => el.textContent)).toEqual([
-      '<',
-      '15',
-      'ms'
-    ])
+    expect(
+      [...latency.querySelectorAll('[data-testid="stats__value"] > span')].map(
+        (el) => el.textContent
+      )
+    ).toEqual(['<', '15', 'ms'])
   })
 
   it('omits the prefix and the suffix when the item carries neither', () => {
@@ -101,9 +117,11 @@ describe('Stats', () => {
       props: { items: [{ value: '42', label: 'Regions' }] }
     })
 
-    expect([...container.querySelectorAll('figure span')].map((el) => el.textContent)).toEqual([
-      '42'
-    ])
+    expect(
+      [...container.querySelectorAll('[data-testid="stats__value"] > span')].map(
+        (el) => el.textContent
+      )
+    ).toEqual(['42'])
     expect(container.querySelector('figcaption')).toHaveTextContent('Regions')
   })
 

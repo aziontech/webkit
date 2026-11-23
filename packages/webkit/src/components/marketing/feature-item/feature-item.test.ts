@@ -94,6 +94,20 @@ describe('FeatureItem', () => {
     expect(getByRole('heading', { level: 2, name: TITLE })).toBeInTheDocument()
   })
 
+  it('positions a linked claim itself, so its stretched link never covers the band or page around it', () => {
+    const { getByTestId } = render(FeatureItem, {
+      props: { title: TITLE, href: '/products/cache' }
+    })
+
+    expect(getByTestId(TESTID).classList.contains('data-[linked]:relative')).toBe(true)
+  })
+
+  it('caps the description at a readable measure', () => {
+    const { getByText } = render(FeatureItem, { props: { title: TITLE, description: DESCRIPTION } })
+
+    expect(getByText(DESCRIPTION).classList.contains('max-w-(--container-2xl)')).toBe(true)
+  })
+
   it('closes a linked headline on a decorative arrow', () => {
     const { container } = render(FeatureItem, { props: { title: TITLE, href: '/products/cache' } })
     const arrow = container.querySelector('.az-arrow-up-right')

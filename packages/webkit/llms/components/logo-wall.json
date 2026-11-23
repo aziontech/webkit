@@ -54,7 +54,7 @@
    "type": "LogoWallItem[]",
    "default": "[]",
    "required": "false",
-   "doc": "The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark."
+   "doc": "The marks rendered in the grid, in order; each item is `{ src, srcDark?, alt, href?, shape? }` where `src` is the mark's URL, `srcDark` its dark-theme file, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark."
   },
   {
    "name": "ariaLabel",

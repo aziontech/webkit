@@ -3,6 +3,7 @@
 
   import { brandMarkLabel, resolveBrandMark } from '../../../assets/brands/registry'
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
+  import { useMarqueeMarkSymbols } from './composables/use-marquee-mark-symbols'
   import MarqueeLoop from './marquee-loop.vue'
 
   defineOptions({ name: 'Marquee', inheritAttrs: false })
@@ -111,8 +112,19 @@
     { immediate: true }
   )
 
+  const drawn = computed(() => resolved.value.filter((mark) => mark.art))
+
+  const { defsEl, viewBoxes, measured, symbolId } = useMarqueeMarkSymbols(
+    () => drawn.value.map((mark) => mark.name),
+    ready
+  )
+
+  const setDefsEl = (el: unknown) => {
+    defsEl.value = el instanceof SVGSVGElement ? el : null
+  }
+
   const ROOT_CLASS =
-    'group/strip flex flex-col items-center gap-(--spacing-xl) ' +
+    'group/strip relative flex flex-col items-center gap-(--spacing-xl) ' +
     'data-[variant=band]:w-full data-[variant=band]:bg-(--bg-canvas) data-[variant=band]:py-(--spacing-xl) ' +
     'data-[size=medium]:[--marquee-brand-cell:150px] data-[size=medium]:[--marquee-brand-mark:32px] data-[size=small]:[--marquee-brand-cell:120px] ' +
     'data-[size=small]:[--marquee-brand-mark:24px] ' +
@@ -125,7 +137,8 @@
     'md:data-[size=medium]:gap-(--spacing-8) md:data-[size=medium]:pe-(--spacing-8) ' +
     'data-[content=items]:data-[size]:gap-[max(var(--spacing-2xl),calc(var(--spacing-xl)*2))] data-[content=items]:data-[size]:pe-[max(var(--spacing-2xl),calc(var(--spacing-xl)*2))] ' +
     'motion-reduce:data-[content=items]:data-[size]:gap-(--spacing-md) motion-reduce:data-[content=items]:data-[size]:pe-0 motion-reduce:w-full motion-reduce:flex-wrap ' +
-    'motion-reduce:justify-center motion-reduce:gap-(--spacing-md) motion-reduce:data-[duplicate]:hidden'
+    'motion-reduce:justify-center motion-reduce:gap-(--spacing-md) motion-reduce:data-[duplicate]:hidden ' +
+    'max-sm:motion-reduce:data-[content=marks]:grid max-sm:motion-reduce:data-[content=marks]:grid-cols-2 max-sm:motion-reduce:data-[content=marks]:justify-items-center'
 
   const ITEM_CLASS =
     'flex shrink-0 items-center gap-(--spacing-xs) whitespace-nowrap text-body-md text-(--text-default) ' +
@@ -155,11 +168,34 @@
       >{{ label }}</Eyebrow
     >
 
+    <svg
+      v-if="drawn.length"
+      :ref="setDefsEl"
+      data-slot="marquee-symbols"
+      width="0"
+      height="0"
+      aria-hidden="true"
+      focusable="false"
+      class="absolute overflow-hidden"
+    >
+      <symbol
+        v-for="mark in drawn"
+        :id="symbolId(mark.name)"
+        :key="mark.name"
+      >
+        <component
+          :is="mark.art"
+          width="100%"
+          height="100%"
+        />
+      </symbol>
+    </svg>
+
     <MarqueeLoop
       v-if="resolved.length || isItems"
       v-slot="{ copy, duplicate }"
       :duration="passDuration"
-      :loading="!ready"
+      :loading="!ready || !measured"
       fill
       faded
       reduced="wrap"
@@ -190,14 +226,19 @@
           :title="mark.label"
           :class="MARK_CLASS"
         >
-          <component
-            :is="mark.art"
-            v-if="mark.art"
+          <svg
+            v-if="mark.art && viewBoxes.has(mark.name)"
             :data-mark="mark.name"
-            class="h-(--marquee-brand-mark) w-auto max-w-(--marquee-brand-cell) object-contain"
-          />
+            :viewBox="viewBoxes.get(mark.name)"
+            fill="currentColor"
+            aria-hidden="true"
+            focusable="false"
+            class="h-(--marquee-brand-mark) w-auto max-w-(--marquee-brand-cell)"
+          >
+            <use :href="`#${symbolId(mark.name)}`" />
+          </svg>
           <span
-            v-else
+            v-else-if="!mark.art"
             class="whitespace-nowrap text-heading-2xs"
             >{{ mark.label }}</span
           >

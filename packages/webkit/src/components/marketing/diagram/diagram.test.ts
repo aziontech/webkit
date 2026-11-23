@@ -158,6 +158,19 @@ describe('Diagram', () => {
       expect(container.querySelector('[data-diagram-node="backend"]')).toBeInTheDocument()
       expect(canvas.querySelectorAll('svg path')).toHaveLength(1)
     })
+
+    it('writes every tile name as visible text, never only in a hover tooltip', () => {
+      const { container } = render(Groups)
+
+      const labels = [...container.querySelectorAll('[data-testid="diagram-node__label"]')]
+      expect(labels.map((label) => label.textContent?.trim())).toEqual([
+        'Functions',
+        'Cache',
+        'Firewall',
+        'Object Storage'
+      ])
+      expect(document.querySelector('[role="tooltip"]')).toBeNull()
+    })
   })
 
   describe('accessibility', () => {

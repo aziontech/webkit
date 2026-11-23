@@ -118,9 +118,9 @@
     '20.58C10.36 21.45 9.34 21.89 8.16 21.89Z'
 
   const TEXT_CLASS =
-    'm-0 text-(--text-default) ' +
+    'm-0 max-w-(--container-2xl) text-(--text-default) ' +
     'data-[highlighted]:text-(--text-muted) ' +
-    'group-data-[variant=inline]:text-heading-xs group-data-[variant=signed]:text-body-lg group-data-[variant=highlight]:max-w-(--container-2xl) ' +
+    'group-data-[variant=inline]:text-heading-xs group-data-[variant=signed]:text-body-lg ' +
     'group-data-[variant=highlight]:text-heading-lg'
 </script>
 

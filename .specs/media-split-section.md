@@ -7,7 +7,7 @@ spec_version: 11
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-17
-checksum: d8c417ca3f76183da5b26f671561fd177b6fd87a7297a4f809a9b4d0ac0dbdb8
+checksum: e4791b29ab49677de03c4ad51175754402300b19176af6bef8d40af0b84ca878
 ---
 
 # MediaSplitSection — Component Spec
@@ -127,7 +127,7 @@ _none_
 - ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an illustration is named by `illustrationAriaLabel`, and is decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the scenes stop under reduced motion on their own.
-- Touch target ≥40×40 px — the medium buttons meet it.
+- Touch target ≥40×40 px — the actions are `large` (40 px) buttons.
 
 ## Internationalization
 

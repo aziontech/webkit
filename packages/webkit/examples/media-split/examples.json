@@ -34,7 +34,7 @@
     },
     {
       "name": "Actions",
-      "summary": "The band's action pattern, which is fixed rather than per-page: the action itself is a `small` `secondary` button, and a band that carries a second one puts it beside the first as `outlined` at the same size. The size is deliberate — these bands repeat down a page, so a full-height action on each one would compete with the section's own call to action. The slot takes the controls bare; the band floors them under the copy so consecutive bands align on the same line.",
+      "summary": "The band's action pattern, which is fixed rather than per-page: the action itself is a `secondary` button at the default 40px size (the touch floor), and a band that carries a second one puts it beside the first as `outline` at the same size. The quieter variants, not a smaller size, keep these repeated bands from competing with the page's own `primary` call to action. The slot takes the controls bare; the band floors them under the copy so consecutive bands align on the same line.",
       "file": "actions.vue"
     },
     {

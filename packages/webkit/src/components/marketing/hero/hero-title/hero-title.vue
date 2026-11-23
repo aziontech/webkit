@@ -98,7 +98,7 @@
     >
     <h1
       :data-size="size"
-      class="m-0 text-balance text-(--text-default) data-[size=large]:text-heading-2xl data-[size=medium]:text-heading-xl"
+      class="m-0 text-balance text-(--text-default) data-[size=large]:text-heading-3xl data-[size=medium]:text-heading-2xl"
     >
       <span
         v-if="titleHighlight"

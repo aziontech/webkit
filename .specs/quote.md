@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: d1b18b23d1c6808b9ea1ef8287ca3c3ee1bf2e30e9da847bc0d18e90ab15983d
+checksum: 7202d5f1232da0fca0210a00a58ed408a6bb6f052fd7f0c29a1315e5fa576f7e
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -127,7 +127,7 @@ _none_
 | quotation glyph                                  | `var(--text-muted)`                                             |
 | attribution name                                 | `var(--text-brand)`                                             |
 | attribution role                                 | `var(--text-muted)`                                             |
-| quotation measure (`highlight`)                  | `var(--container-2xl)`                                          |
+| quotation measure (every variant)                | `var(--container-2xl)`                                          |
 | spacing (mark to quotation, `inline`)            | `var(--spacing-lg)`                                             |
 | spacing (mark to quotation, `signed`)            | `var(--spacing-sm)` + `var(--spacing-md)`                       |
 | spacing (glyph to quotation, `signed`)           | `var(--spacing-xs)`                                             |

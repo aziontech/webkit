@@ -296,7 +296,7 @@
   {
     "name": "logo-wall",
     "path": "src/components/marketing/logo-wall/logo-wall.vue",
-    "limit": "4.9 KB"
+    "limit": "4.95 KB"
   },
   {
     "name": "media-split",
@@ -306,7 +306,7 @@
   {
     "name": "marquee",
     "path": "src/components/marketing/marquee/marquee.vue",
-    "limit": "8 KB",
+    "limit": "8.7 KB",
     "entryOnly": true
   },
   {
@@ -327,7 +327,7 @@
   {
     "name": "hero",
     "path": "src/components/marketing/hero/index.ts",
-    "limit": "5.05 KB",
+    "limit": "5.1 KB",
     "entryOnly": true
   },
   {
@@ -506,13 +506,13 @@
   {
     "name": "hero-section",
     "path": "src/components/section/hero-section/hero-section.vue",
-    "limit": "13.4 KB",
+    "limit": "13.45 KB",
     "entryOnly": true
   },
   {
     "name": "capability-grid-section",
     "path": "src/components/section/capability-grid-section/capability-grid-section.vue",
-    "limit": "8.15 KB"
+    "limit": "8.2 KB"
   },
   {
     "name": "console-showcase-section",
@@ -533,7 +533,7 @@
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "52.55 KB",
+    "limit": "52.6 KB",
     "entryOnly": true
   },
   {
@@ -584,13 +584,13 @@
   {
     "name": "network-section",
     "path": "src/components/section/network-section/network-section.vue",
-    "limit": "27.1 KB",
+    "limit": "27.15 KB",
     "entryOnly": true
   },
   {
     "name": "stats-section",
     "path": "src/components/section/stats-section/stats-section.vue",
-    "limit": "4.7 KB"
+    "limit": "4.75 KB"
   },
   {
     "name": "card-carousel-section",
@@ -605,7 +605,7 @@
   {
     "name": "client-story-columns-section",
     "path": "src/components/section/client-story-columns-section/client-story-columns-section.vue",
-    "limit": "8.7 KB"
+    "limit": "8.8 KB"
   },
   {
     "name": "client-quotes-section",
@@ -632,7 +632,7 @@
   {
     "name": "logo-wall-section",
     "path": "src/components/section/logo-wall-section/logo-wall-section.vue",
-    "limit": "24.5 KB"
+    "limit": "24.6 KB"
   },
   {
     "name": "photo-marquee-section",
@@ -653,12 +653,12 @@
   {
     "name": "subject-grid-section",
     "path": "src/components/section/subject-grid-section/subject-grid-section.vue",
-    "limit": "8.55 KB"
+    "limit": "8.6 KB"
   },
   {
     "name": "template-gallery-section",
     "path": "src/components/section/template-gallery-section/template-gallery-section.vue",
-    "limit": "29.55 KB",
+    "limit": "29.95 KB",
     "entryOnly": true
   },
   {

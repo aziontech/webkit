@@ -3,7 +3,6 @@
 
   import Tag from '../../../content/tag/tag.vue'
   import RegistrationFrame from '../../../layout/registration-frame/registration-frame.vue'
-  import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import type { DiagramNode } from '../types'
 
   defineOptions({ name: 'DiagramNode', inheritAttrs: false })
@@ -72,9 +71,9 @@
     </span>
   </div>
 
-  <Tooltip
+  <span
     v-else-if="node.type === 'tile'"
-    :content="node.title"
+    class="flex w-(--size-20) flex-col items-center gap-(--spacing-2xs)"
   >
     <RegistrationFrame
       borders="none"
@@ -93,7 +92,12 @@
         />
       </span>
     </RegistrationFrame>
-  </Tooltip>
+    <span
+      :data-testid="`${testId}__label`"
+      class="text-center text-label-sm text-balance text-(--text-muted)"
+      >{{ node.title }}</span
+    >
+  </span>
 
   <div
     v-else-if="node.type === 'app'"
