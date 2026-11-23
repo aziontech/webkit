@@ -62,6 +62,7 @@
   const hoverTimer = ref<ReturnType<typeof setTimeout> | null>(null)
   const closeTimer = ref<ReturnType<typeof setTimeout> | null>(null)
   const pressTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+  let escaped = false
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tooltip')
 
@@ -123,7 +124,7 @@
 
   function scheduleOpen() {
     clearCloseTimer()
-    if (props.disabled || !props.content) return
+    if (props.disabled || !props.content || escaped) return
     if (isOpen.value) return
     clearHoverTimer()
     hoverTimer.value = setTimeout(() => setOpen(true), props.delay)
@@ -159,6 +160,7 @@
     if (!isOpen.value || !isTop.value || event.defaultPrevented) return
     if (event.key === 'Escape') {
       event.preventDefault()
+      escaped = true
       closeTooltip()
     }
   }
@@ -167,6 +169,7 @@
     const trigger = triggerEl.value
     const next = event.relatedTarget as Node | null
     if (trigger?.contains(next)) return
+    escaped = false
     closeTooltip()
   }
 
@@ -203,7 +206,10 @@
   )
 
   useElementListener(triggerEl, 'mouseenter', () => scheduleOpen())
-  useElementListener(triggerEl, 'mouseleave', () => scheduleClose())
+  useElementListener(triggerEl, 'mouseleave', () => {
+    escaped = false
+    scheduleClose()
+  })
   useElementListener(triggerEl, 'pointerdown', onPointerdown)
   useElementListener(triggerEl, 'pointerup', onPointerup)
   useElementListener(triggerEl, 'pointercancel', onPointerup)
