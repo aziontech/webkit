@@ -1,14 +1,21 @@
 <script setup lang="ts">
   import tokens from 'virtual:docs-tokens'
-  import { computed } from 'vue'
+  import { computed, defineAsyncComponent, hydrateOnVisible } from 'vue'
 
   import { messages } from '../lib/i18n'
   import { titleCase } from '../lib/nav'
   import { typeGroups, usageSections } from '../lib/tokens'
   import ArchitectureIntro from './tokens/architecture-intro.vue'
   import ColorPlayground from './tokens/color-playground.vue'
-  import PaletteStrips from './tokens/palette-strips.vue'
-  import TokenTable from './tokens/token-table.vue'
+
+  const TokenTable = defineAsyncComponent({
+    loader: () => import('./tokens/token-table.vue'),
+    hydrate: hydrateOnVisible({ rootMargin: '600px 0px' })
+  })
+  const PaletteStrips = defineAsyncComponent({
+    loader: () => import('./tokens/palette-strips.vue'),
+    hydrate: hydrateOnVisible({ rootMargin: '600px 0px' })
+  })
 
   defineProps<{
     kind: 'color' | 'spacing' | 'typography' | 'radius' | 'shadows' | 'motion' | 'z-index'
