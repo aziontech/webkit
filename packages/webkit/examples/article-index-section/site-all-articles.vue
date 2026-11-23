@@ -13,10 +13,10 @@
       title: 'How I Shipped My Portfolio in Just Two Commands',
       description:
         "See how a portfolio site went from template to live URL with just azion init and azion deploy, running free on Azion's Hobby plan.",
-      byline: 'Patrick Menoti · 9 min read',
+      byline: 'Jane Doe · 9 min read',
       authors: [
         {
-          name: 'Patrick Menoti'
+          name: 'Jane Doe'
         }
       ],
       categories: ['Developers']
@@ -29,10 +29,10 @@
       title: 'How Do You Reduce AI Agent Latency?',
       description:
         'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state with distributed architecture, caching, and observability.',
-      byline: 'Marilia Bafutto Costa · 8 min read',
+      byline: 'Priya Patel · 8 min read',
       authors: [
         {
-          name: 'Marilia Bafutto Costa'
+          name: 'Priya Patel'
         }
       ],
       categories: ['Serverless']
@@ -45,10 +45,10 @@
       title: 'Best Cloudflare Alternatives and Competitors',
       description:
         'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting. Assess trade-offs, operating costs, and migration paths with Azion.',
-      byline: 'Vitor Eltz · 13 min read',
+      byline: 'Alex Morgan · 13 min read',
       authors: [
         {
-          name: 'Vitor Eltz'
+          name: 'Alex Morgan'
         }
       ],
       categories: ['Security']
@@ -61,10 +61,10 @@
       title: 'Which Azion Plan Is Right for Your Project?',
       description:
         'Compare Azion’s Hobby, Pro, and Enterprise plans for personal projects, production applications, and operations that need customized terms.',
-      byline: 'Marilia Bafutto Costa · 7 min read',
+      byline: 'Priya Patel · 7 min read',
       authors: [
         {
-          name: 'Marilia Bafutto Costa'
+          name: 'Priya Patel'
         }
       ],
       categories: ['Company news']
