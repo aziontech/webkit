@@ -2,7 +2,7 @@ import '../../../test/reflow.css'
 
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
-import { commands } from 'vitest/browser'
+import { commands, page } from 'vitest/browser'
 import { nextTick } from 'vue'
 
 import DialogDefault from '../../../../examples/dialog/default.vue'
@@ -72,6 +72,26 @@ describe('Dialog', () => {
       const panel = byTestId('popover__panel')
       expect(panel).not.toBeNull()
       expect(longMotion(panel!)).toEqual([])
+    })
+  })
+
+  describe('on a phone (styled)', () => {
+    afterEach(async () => {
+      await commands.emulateMedia({ reducedMotion: null })
+      await page.viewport(414, 896)
+    })
+
+    it('stays a bottom sheet sized to its content below sm', async () => {
+      await commands.emulateMedia({ reducedMotion: 'reduce' })
+      await page.viewport(390, 844)
+      render(DialogDefault)
+      await settle()
+      await fireEvent.click(byTestId('dialog__trigger')!)
+      await settle()
+      const shell = byTestId('dialog__panel-shell')!.getBoundingClientRect()
+      expect(shell.height).toBeLessThan(844 * 0.9 + 1)
+      expect(shell.top).toBeGreaterThan(0)
+      expect(Math.round(shell.bottom)).toBe(844)
     })
   })
 })

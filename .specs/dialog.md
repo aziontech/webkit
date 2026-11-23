@@ -7,9 +7,9 @@ spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 790acbb521efc1d807ccbda7e739bcba92ad4a2f4d52430bdfc8fde7783cb639
+checksum: c42d9f04d9fb15de8fdbaf8ae85103bd565369303afc62cb4257db50cf881327
 created: 2026-05-22
-last_updated: 2026-11-20
+last_updated: 2026-11-22
 ---
 
 # Dialog — Component Spec
@@ -139,7 +139,7 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 - Below `md` the dialog is a bottom sheet, capped at 80% of the **visible** viewport (`dvh`, not `vh`: on mobile browsers `vh` is the largest viewport with the toolbars retracted, so a `vh` sheet can extend under the URL bar with its footer off-screen).
 - Exactly one element caps the sheet (the panel) and exactly one element scrolls (`panel-body`), so the title and footer actions stay reachable while the body scrolls. The motion wrapper only positions and animates; it declares no cap and no scroll of its own.
 - The page behind the overlay is scroll-locked while the dialog is open, and the lock is released on close.
-- Phones: below `md` the panel is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content, its direct children stretch to equal widths and it keeps `env(safe-area-inset-bottom)` clear.
+- Phones: below `md` the panel is a bottom sheet: full width, as tall as its content (`h-fit`), rounded top corners, capped at 80 dvh and at 90 dvh below `sm`, where its body scrolls. It never grows to the full screen, so a short confirmation stays a compact sheet and the page it is about stays in view above it. The `PanelFooter` stays pinned under the scrolling content, its direct children stretch to equal widths and it keeps `env(safe-area-inset-bottom)` clear.
 - Server render and hydration: the phone layout and its motion timing are CSS breakpoints (`max-md:` / `md:` utilities), so the server HTML and the hydrated DOM are identical at every width.
 
 ## Motion & Animations

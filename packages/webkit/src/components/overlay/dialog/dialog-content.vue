@@ -94,7 +94,7 @@
           <Panel
             :size="ctx?.size ?? 'medium'"
             size-at-md
-            class="max-md:rounded-b-(--shape-flat) max-md:rounded-t-(--shape-card) max-md:w-full max-md:h-fit max-h-[80dvh] max-sm:h-dvh max-sm:max-h-dvh max-sm:rounded-none max-sm:border-0"
+            class="max-md:rounded-b-(--shape-flat) max-md:rounded-t-(--shape-card) max-md:w-full max-md:h-fit max-h-[80dvh] max-sm:max-h-[90dvh]"
             :data-testid="`${testId}__panel-shell`"
           >
             <slot />
