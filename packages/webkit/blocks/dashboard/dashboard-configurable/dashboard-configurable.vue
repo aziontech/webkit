@@ -229,22 +229,22 @@
         >
           <ChartCard>
             <ChartCard.Header>
-              <ChartCard.DragHandle
-                class="@max-3xl/dashboard-grid:hidden"
-                :aria-label="'Move ' + cardOf(card.id).title"
-              />
+              <span class="contents @max-3xl/dashboard-grid:hidden">
+                <ChartCard.DragHandle :aria-label="'Move ' + cardOf(card.id).title" />
+              </span>
               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ cardOf(card.id).title }}</ChartCard.Title>
                 <Hint :content="cardOf(card.id).hint" />
               </span>
               <ChartCard.Action v-if="editing">
-                <Tag
-                  class="@max-3xl/dashboard-grid:hidden"
-                  :label="card.span + '/12'"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-move-horizontal"
-                />
+                <span class="contents @max-3xl/dashboard-grid:hidden">
+                  <Tag
+                    :label="card.span + '/12'"
+                    severity="neutral"
+                    size="small"
+                    icon="az az-move-horizontal"
+                  />
+                </span>
                 <span class="flex items-center gap-(--spacing-2xs) @3xl/dashboard-grid:hidden">
                   <IconButton
                     icon="az az-arrow-up"

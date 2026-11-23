@@ -68,9 +68,23 @@ export function useCardSave<T extends object>(
     options.onSubmit(event, { ...values })
   }
 
+  watchSaveOutcome(options, submitting, submit, () => {
+    commit()
+    toast.success(options.savedMessage, { id: toastId })
+  })
+
+  return { dirty, baseline, discard, submitting, submit }
+}
+
+function watchSaveOutcome<T extends object>(
+  options: UseCardSaveOptions<T>,
+  submitting: ComputedRef<boolean>,
+  submit: (event: Event) => void,
+  onSaved: () => void
+): void {
   const showFailure = () => {
     toast.error(options.failedMessage, {
-      id: toastId,
+      id: `${options.id}-save`,
       description: toValue(options.error),
       action: { label: 'Retry', onClick: (event: MouseEvent) => submit(event) }
     })
@@ -89,13 +103,7 @@ export function useCardSave<T extends object>(
 
   watch(submitting, (now, before) => {
     if (!before || now) return
-    if (toValue(options.error)) {
-      showFailure()
-      return
-    }
-    commit()
-    toast.success(options.savedMessage, { id: toastId })
+    if (toValue(options.error)) showFailure()
+    else onSaved()
   })
-
-  return { dirty, baseline, discard, submitting, submit }
 }

@@ -5725,6 +5725,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - H. Ranked cards — `BarList` (optional)
 - I. Time series cards — `Chart` (optional)
 - J. Load failure — `Alert` (required)
+- K. Move up and Move down — `IconButton` (required in edit mode on one column)
 
 What each part takes: [blocks/dashboard/dashboard-configurable.md](blocks/dashboard/dashboard-configurable.md).
 
@@ -6454,6 +6455,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - J. Alert rail — `Item` (required)
 - K. Empty regions — `EmptyState` (required)
 - L. Load failure — `Alert` (required)
+- M. Jump to the open alerts — `Link` (required below `xl`)
 
 What each part takes: [blocks/dashboard/dashboard-service-monitoring.md](blocks/dashboard/dashboard-service-monitoring.md).
 

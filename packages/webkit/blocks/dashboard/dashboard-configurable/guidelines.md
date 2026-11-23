@@ -80,6 +80,12 @@ crosshair on every card. A legend with totals appears only when a card has more 
 
 When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
+### K. Move up and Move down — `IconButton` (required in edit mode on one column)
+
+Below `@3xl` of the grid the board is one column, so the span tags and the resize handle hide, and
+each card offers ghost Move up and Move down buttons in place of the drag handle: native drag and
+drop does not work with touch. Each move is announced in the live region.
+
 ## Data
 
 The block takes its series through props and emits every change; it fetches nothing. `ConfigurableDashboardProps` and `ConfigurableDashboardSeries` are exported from `dashboard-configurable.vue`, and `sample.ts` holds the sample period the block renders when a data prop is left out (and never while `loading` or `error` is set). The layout is a model, so the page can save it per user.

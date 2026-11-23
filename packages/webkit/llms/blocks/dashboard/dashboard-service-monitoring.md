@@ -94,6 +94,11 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 
 When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
+### M. Jump to the open alerts — `Link` (required below `xl`)
+
+Below `xl` the Open alerts rail follows the tiles and the charts, so a `Link` under the page heading
+(`3 open alerts`) jumps to it; at `xl` the rail sits beside the content and the link hides.
+
 ## Data
 
 The block takes its records through props and emits every action; it fetches nothing. `ServiceMonitoringService`, `ServiceMonitoringSeriesData`, `ServiceMonitoringAlert`, `ServiceMonitoringWindow` and `ServiceMonitoringDashboardProps` are exported from `dashboard-service-monitoring.vue`, and `sample.ts` holds the sample services, series and alerts the block renders when a data prop is left out (and never while `loading` or `error` is set).
@@ -348,14 +353,17 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           data-testid="dashboard-service-monitoring__error"
           @action="(event: MouseEvent) => emit('retry', event)"
         />
-        <Link
+        <div
           v-if="!loading && !error && alerts.length"
           class="self-start xl:hidden"
-          href="#open-alerts"
-          icon="az az-arrow-down"
-          size="medium"
-          :label="`${alerts.length} open ${alerts.length === 1 ? 'alert' : 'alerts'}`"
-        />
+        >
+          <Link
+            href="#open-alerts"
+            icon="az az-arrow-down"
+            size="medium"
+            :label="`${alerts.length} open ${alerts.length === 1 ? 'alert' : 'alerts'}`"
+          />
+        </div>
         <ul
           class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 lg:grid-cols-2 2xl:grid-cols-3"
         >

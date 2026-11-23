@@ -148,14 +148,17 @@
           data-testid="dashboard-service-monitoring__error"
           @action="(event: MouseEvent) => emit('retry', event)"
         />
-        <Link
+        <div
           v-if="!loading && !error && alerts.length"
           class="self-start xl:hidden"
-          href="#open-alerts"
-          icon="az az-arrow-down"
-          size="medium"
-          :label="`${alerts.length} open ${alerts.length === 1 ? 'alert' : 'alerts'}`"
-        />
+        >
+          <Link
+            href="#open-alerts"
+            icon="az az-arrow-down"
+            size="medium"
+            :label="`${alerts.length} open ${alerts.length === 1 ? 'alert' : 'alerts'}`"
+          />
+        </div>
         <ul
           class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 lg:grid-cols-2 2xl:grid-cols-3"
         >
