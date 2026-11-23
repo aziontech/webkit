@@ -8,6 +8,7 @@ import { h, nextTick } from 'vue'
 import AccordionDefault from '../../examples/accordion/default.vue'
 import AppHeaderWithAccount from '../../examples/app-header/with-account.vue'
 import AppLayoutDefault from '../../examples/app-layout/default.vue'
+import ButtonGroupDefault from '../../examples/button-group/default.vue'
 import CitationDefault from '../../examples/citation/default.vue'
 import CodeBlockUnevenTabs from '../../examples/code-block/uneven-tabs.vue'
 import ConsoleShowcaseDefault from '../../examples/console-showcase-section/default.vue'
@@ -27,8 +28,10 @@ import SelectDefault from '../../examples/select/default.vue'
 import SettingsGroupCollapsible from '../../examples/settings-group/collapsible.vue'
 import SettingsGroupDefault from '../../examples/settings-group/default.vue'
 import SourcesDefault from '../../examples/sources/default.vue'
+import SplitButtonSizes from '../../examples/split-button/sizes.vue'
 import TabsDefault from '../../examples/tabs/default.vue'
 import ThemeSwitcherDefault from '../../examples/theme-switcher/default.vue'
+import ToggleGroupSizes from '../../examples/toggle-group/sizes.vue'
 import TreeDefault from '../../examples/tree/default.vue'
 import ConversationHistory from '../components/ai/conversation-history/conversation-history.vue'
 
@@ -186,6 +189,29 @@ describe('tap targets on a coarse pointer (styled)', () => {
         expect(hitSpan(segment, 'x')).toBeLessThanOrEqual(Math.round(width) + 1)
       }
     })
+
+    it.each([
+      ['ToggleGroup', ToggleGroupSizes, '[data-testid="toggle-group__option"]'],
+      ['ButtonGroup', ButtonGroupDefault, '[data-slot="button-group-item"]'],
+      [
+        'SplitButton',
+        SplitButtonSizes,
+        '[data-testid="split-button__primary"], [data-testid="split-button__toggle-button"]'
+      ]
+    ])(
+      '%s controls side by side never take a tap meant for a neighbour',
+      async (_name, component, selector) => {
+        await touch()
+        const view = await mount(component)
+        const controls = Array.from(view.container.querySelectorAll<HTMLElement>(selector))
+        expect(controls.length).toBeGreaterThanOrEqual(2)
+        for (const control of controls) {
+          const width = control.getBoundingClientRect().width
+          expect(hitSpan(control, 'x')).toBeLessThanOrEqual(Math.ceil(width) + 1)
+          expect(hitSpan(control, 'y')).toBeGreaterThanOrEqual(44)
+        }
+      }
+    )
 
     it.each([
       ['Tabs', TabsDefault, '[role="tab"]'],
