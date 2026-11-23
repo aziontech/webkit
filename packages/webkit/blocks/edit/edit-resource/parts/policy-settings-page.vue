@@ -28,7 +28,7 @@
     return false
   }
 
-  const { form, saving, dirty, save, discard } = useSettingsDraft(samplePolicy, {
+  const { form, saving, dirty, save, discard, leave } = useSettingsDraft(samplePolicy, {
     draft: props.defaultDraft,
     saving: props.defaultSaving,
     validate
@@ -51,6 +51,7 @@
     docs-href="https://example.com/docs/security-policies"
     :dirty="dirty"
     :saving="saving"
+    :guard="leave"
     @save="save"
     @discard="discard"
   >

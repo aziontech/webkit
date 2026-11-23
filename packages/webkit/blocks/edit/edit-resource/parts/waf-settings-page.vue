@@ -126,7 +126,7 @@
     return false
   }
 
-  const { form, saving, dirty, save, discard } = useSettingsDraft(record, {
+  const { form, saving, dirty, save, discard, leave } = useSettingsDraft(record, {
     validate,
     onSaved: () =>
       toast.success('Rule set saved.', {
@@ -152,6 +152,7 @@
     docs-href="https://example.com/docs/waf-rule-sets"
     :dirty="dirty"
     :saving="saving"
+    :guard="leave"
     @save="save"
     @discard="discard"
   >

@@ -1,7 +1,7 @@
 import './reflow.css'
 
 import { fireEvent, render } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { commands, page } from 'vitest/browser'
 import { h, nextTick } from 'vue'
 
@@ -22,6 +22,7 @@ import OverflowCountDefault from '../../examples/overflow-count/default.vue'
 import PromptInputShortcutMenus from '../../examples/prompt-input/shortcut-menus.vue'
 import ReasoningDefault from '../../examples/reasoning/default.vue'
 import SelectDefault from '../../examples/select/default.vue'
+import SettingsGroupDefault from '../../examples/settings-group/default.vue'
 import SourcesDefault from '../../examples/sources/default.vue'
 import TabsDefault from '../../examples/tabs/default.vue'
 import ThemeSwitcherDefault from '../../examples/theme-switcher/default.vue'
@@ -134,6 +135,24 @@ describe('tap targets on a coarse pointer (styled)', () => {
         expect(hitSpan(toggle, 'x')).toBeGreaterThanOrEqual(44)
         expect(hitSpan(toggle, 'y')).toBeGreaterThanOrEqual(44)
       }
+    })
+
+    it('SettingsGroup copy-link answers its own 44px and never the Hint beside it', async () => {
+      await touch()
+      const view = await mount(SettingsGroupDefault)
+      const link = byTestId(view.container as HTMLElement, 'settings-group__copy-link')[0]!
+      const hint = link.parentElement!.querySelector<HTMLElement>('[data-testid="hint__trigger"]')!
+      const target = link.querySelector<HTMLElement>('[data-slot="touch-target"]')!
+      await vi.waitFor(() => {
+        const box = target.getBoundingClientRect()
+        expect(box.height).toBeGreaterThanOrEqual(44)
+        expect(box.width).toBeGreaterThanOrEqual(44)
+      })
+      const linkBox = link.getBoundingClientRect()
+      const hintBox = hint.getBoundingClientRect()
+      const linkCentre = linkBox.left + linkBox.width / 2
+      const hintCentre = hintBox.left + hintBox.width / 2
+      expect(Math.abs(linkCentre - hintCentre)).toBeGreaterThanOrEqual(44)
     })
 
     it('ThemeSwitcher segments answer a tap across 44 x 44', async () => {

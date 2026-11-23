@@ -41,7 +41,7 @@ A small `PageHeader` titled Settings with one sentence about what these settings
 
 ### C. Settings sections — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `FieldError`, `Switch` (required)
 
-One `form` with a disabled-while-saving `fieldset` and a visually hidden legend. Each `SettingsGroup` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. See `skills/webkit-form`.
+One `form` with a disabled-while-saving `fieldset` and a visually hidden legend. Each `SettingsGroup` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. Every state with a save bar runs through it (`useSettingsDraft` builds on `useUnsavedChanges`), and `SettingsSaveBar` renders the leave dialog when it is handed the guard, so no copy hand-rolls its own dirty check. See `skills/webkit-form`.
 
 ### D. Locked settings — `Tooltip`, `Switch`, `Link` (optional)
 
@@ -53,7 +53,7 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 
 ### F. Conditional fields — `SettingsRow`, `Input`, `FieldError` (optional)
 
-When one choice decides which fields apply (a connector, a scope, a template), the choice (a `Select` or `RadioGroup` choice cards (`variant="card"`)) comes first and the rows it unlocks follow it inside the same `Card`, entering with `animate-content-enter`. Hidden rows keep no value that Save sends. Credentials are `PasswordInput`s that cannot be read back after Save, and the row says so. In DataStream the workload scope is `RadioGroup` choice cards (`variant="card"`); the Sampling band appears only when the stream collects from every workload, and Sampling rate is a `NumberInput` with a `%` suffix.
+When one choice decides which fields apply (a connector, a scope, a template), the choice (a `Select` or `RadioGroup` choice cards (`variant="card"`)) comes first and the rows it unlocks follow it inside the same `Card`, entering with `animate-content-enter`. Hidden rows keep no value that Save sends. Credentials are `PasswordInput`s that cannot be read back after Save, and the row says so. A free-text field that may carry a credential (Custom headers) never ships one in its sample or default: the sample is a plain header (`X-Stream-Source:acme-edge`), and a copy that needs a token sends it through its own `PasswordInput` row, never through text anyone looking at the screen can read. In DataStream the workload scope is `RadioGroup` choice cards (`variant="card"`); the Sampling band appears only when the stream collects from every workload, and Sampling rate is a `NumberInput` with a `%` suffix.
 
 ### G. Template editor — `SettingsRow`, `FieldError` (optional)
 
@@ -1175,7 +1175,7 @@ export const sampleDataStream = {
   url: 'https://collector.example.com/ingest',
   payloadFormat: '$dataset',
   lineSeparator: '\\n',
-  headers: 'Authorization:Bearer example-token',
+  headers: 'X-Stream-Source:acme-edge',
   bootstrapServers: '',
   topic: '',
   bucket: '',
@@ -1190,7 +1190,11 @@ export const sampleDataStream = {
 ## `use-settings-draft.ts`
 
 ```ts
-import { computed, type ComputedRef, onScopeDispose, reactive, readonly, type Ref, ref } from 'vue'
+import {
+  useUnsavedChanges,
+  type UseUnsavedChangesReturn
+} from '@aziontech/webkit/use-unsaved-changes'
+import { type ComputedRef, onScopeDispose, reactive, readonly, type Ref, ref, watch } from 'vue'
 
 export interface UseSettingsDraftOptions<T> {
   /** Unsaved edits the form opens with on top of the record, so it starts dirty. */
@@ -1220,6 +1224,8 @@ export interface UseSettingsDraftReturn<T> {
   commit: () => void
   /** Puts the last saved record back. */
   discard: () => void
+  /** The leave guard: warns on reload and drives the leave dialog while the form is dirty. */
+  leave: UseUnsavedChangesReturn<T>
 }
 
 export function useSettingsDraft<T extends object>(
@@ -1227,33 +1233,52 @@ export function useSettingsDraft<T extends object>(
   options: UseSettingsDraftOptions<T> = {}
 ): UseSettingsDraftReturn<T> {
   const form = reactive(structuredClone(record)) as T
-  const baseline = ref(JSON.stringify(record))
-  Object.assign(form, options.draft)
   const saving = ref(options.saving ?? false)
-  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
   let timer: ReturnType<typeof setTimeout> | undefined
+
+  const settled = () =>
+    new Promise<void>((resolve) => {
+      if (!saving.value) return resolve()
+      const stop = watch(saving, (next) => {
+        if (next) return
+        stop()
+        resolve()
+      })
+    })
+
+  const leave = useUnsavedChanges(() => form as T, {
+    onDiscard: (baseline) => Object.assign(form, baseline),
+    onSave: () => {
+      save()
+      return settled()
+    }
+  })
+  leave.commit(structuredClone(record))
+  Object.assign(form, options.draft)
 
   const commit = () => {
     options.onStart?.()
     clearTimeout(timer)
     timer = setTimeout(() => {
-      baseline.value = JSON.stringify(form)
+      leave.commit()
       saving.value = false
       options.onSaved?.()
     }, options.delay ?? 900)
   }
 
-  const save = () => {
+  function save() {
     if (options.validate && !options.validate()) return
     saving.value = true
     commit()
   }
 
-  const discard = () => Object.assign(form, JSON.parse(baseline.value) as T)
+  const discard = () => {
+    leave.discard()
+  }
 
   onScopeDispose(() => clearTimeout(timer))
 
-  return { form, saving: readonly(saving), dirty, save, commit, discard }
+  return { form, saving: readonly(saving), dirty: leave.isDirty, save, commit, discard, leave }
 }
 ```
 
@@ -1263,7 +1288,7 @@ export function useSettingsDraft<T extends object>(
 import { toast } from '@aziontech/webkit/toast'
 import { type ComputedRef, nextTick, onScopeDispose, reactive, type Ref } from 'vue'
 
-import { useSettingsDraft } from './use-settings-draft'
+import { useSettingsDraft, type UseSettingsDraftReturn } from './use-settings-draft'
 
 /** What is wrong with one field, shown under it. */
 export interface FieldProblem {
@@ -1314,6 +1339,8 @@ export interface UseDeployOnSaveReturn<T> {
   save: () => void
   /** Puts the deployed record back and drops every problem. */
   discard: () => void
+  /** The leave guard of the form. */
+  leave: UseSettingsDraftReturn<T>['leave']
 }
 
 export function useDeployOnSave<T extends object>(
@@ -1378,7 +1405,8 @@ export function useDeployOnSave<T extends object>(
     errors,
     clear,
     save: draft.save,
-    discard
+    discard,
+    leave: draft.leave
   }
 }
 ```
@@ -1391,6 +1419,8 @@ export function useDeployOnSave<T extends object>(
   import Kbd from '@aziontech/webkit/kbd'
   import SaveBar from '@aziontech/webkit/save-bar'
 
+  import SettingsLeaveDialog, { type SettingsLeaveDialogProps } from './settings-leave-dialog.vue'
+
   export interface SettingsSaveBarProps {
     /** Whether the bar is up: the form holds edits or a save is in flight. */
     visible?: boolean
@@ -1398,12 +1428,15 @@ export function useDeployOnSave<T extends object>(
     saving?: boolean
     /** Label of the Discard button. */
     discardLabel?: string
+    /** The leave guard; set, the leave dialog renders with the bar. */
+    guard?: SettingsLeaveDialogProps['guard']
   }
 
   const props = withDefaults(defineProps<SettingsSaveBarProps>(), {
     visible: false,
     saving: false,
-    discardLabel: 'Discard'
+    discardLabel: 'Discard',
+    guard: undefined
   })
 
   const emit = defineEmits<{
@@ -1422,6 +1455,10 @@ export function useDeployOnSave<T extends object>(
 </script>
 
 <template>
+  <SettingsLeaveDialog
+    v-if="guard"
+    :guard="guard"
+  />
   <Transition
     enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
     enter-from-class="translate-y-2 opacity-0"
@@ -1471,7 +1508,9 @@ export function useDeployOnSave<T extends object>(
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Tabs from '@aziontech/webkit/tabs'
+  import { computed } from 'vue'
 
+  import type { SettingsLeaveDialogProps } from './settings-leave-dialog.vue'
   import SettingsSaveBar from './settings-save-bar.vue'
 
   export interface SettingsTabPageProps {
@@ -1489,12 +1528,15 @@ export function useDeployOnSave<T extends object>(
     saving?: boolean
     /** The tab that carries the unsaved-changes dot while the form holds edits. */
     dirtyTab?: string
+    /** The leave guard; set, a tab change while dirty asks first and the leave dialog renders. */
+    guard?: SettingsLeaveDialogProps['guard'] & { confirmLeave: () => Promise<boolean> }
   }
 
-  withDefaults(defineProps<SettingsTabPageProps>(), {
+  const props = withDefaults(defineProps<SettingsTabPageProps>(), {
     dirty: false,
     saving: false,
-    dirtyTab: ''
+    dirtyTab: '',
+    guard: undefined
   })
 
   const emit = defineEmits<{
@@ -1512,12 +1554,21 @@ export function useDeployOnSave<T extends object>(
     /** Dialogs the page opens, after the save bar. */
     dialogs(): unknown
   }>()
+
+  const shownTab = computed({
+    get: () => activeTab.value,
+    set: async (value: string) => {
+      if (!value || value === activeTab.value) return
+      if (props.guard && !(await props.guard.confirmLeave())) return
+      activeTab.value = value
+    }
+  })
 </script>
 
 <template>
   <div class="flex min-h-0 flex-1 flex-col">
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
-      <PageTabs v-model="activeTab">
+      <PageTabs v-model="shownTab">
         <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
@@ -1558,6 +1609,7 @@ export function useDeployOnSave<T extends object>(
 
           <SettingsSaveBar
             :visible="dirty || saving"
+            :guard="guard"
             :saving="saving"
             @save="(event) => emit('save', event)"
             @discard="(event) => emit('discard', event)"
@@ -1791,7 +1843,7 @@ export function useDeployOnSave<T extends object>(
     return false
   }
 
-  const { form, saving, dirty, save, discard } = useSettingsDraft(samplePolicy, {
+  const { form, saving, dirty, save, discard, leave } = useSettingsDraft(samplePolicy, {
     draft: props.defaultDraft,
     saving: props.defaultSaving,
     validate
@@ -1814,6 +1866,7 @@ export function useDeployOnSave<T extends object>(
     docs-href="https://example.com/docs/security-policies"
     :dirty="dirty"
     :saving="saving"
+    :guard="leave"
     @save="save"
     @discard="discard"
   >
@@ -2161,7 +2214,7 @@ export const optionLabel =
   const labelOf = (options: SelectOptionItem[]) => (value: string) =>
     options.find((option) => option.value === value)?.label ?? value
 
-  const { form, saving, dirty, errors, clear, save, discard } = provideCacheSettings()
+  const { form, saving, dirty, errors, clear, save, discard, leave } = provideCacheSettings()
 </script>
 
 <template>
@@ -2437,6 +2490,7 @@ export const optionLabel =
 
       <SettingsSaveBar
         :visible="dirty || saving"
+        :guard="leave"
         :saving="saving"
         @save="save"
         @discard="discard"
@@ -2820,7 +2874,7 @@ export const optionLabel =
   import DataStreamTemplateGroup from './data-stream-template-group.vue'
   import SettingsSaveBar from './settings-save-bar.vue'
 
-  const { form, saving, dirty, save, discard } = provideDataStream()
+  const { form, saving, dirty, save, discard, leave } = provideDataStream()
 </script>
 
 <template>
@@ -2892,6 +2946,7 @@ export const optionLabel =
 
     <SettingsSaveBar
       :visible="dirty || saving"
+      :guard="leave"
       :saving="saving"
       @save="save"
       @discard="discard"
@@ -3993,7 +4048,7 @@ export const optionLabel =
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import { toast } from '@aziontech/webkit/toast'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   import {
     type DeployableDomainRow,
@@ -4008,8 +4063,17 @@ export const optionLabel =
 
   const activeTab = ref('settings')
 
-  const { form, saving, dirty, save, discard, nameError, removeDomain } =
+  const { form, saving, dirty, save, discard, nameError, removeDomain, leave } =
     provideDeployableSettings()
+
+  const shownTab = computed({
+    get: () => activeTab.value,
+    set: async (value: string) => {
+      if (!value || value === activeTab.value) return
+      if (!(await leave.confirmLeave())) return
+      activeTab.value = value
+    }
+  })
 
   const deleteOpen = ref(false)
   const deleting = ref(false)
@@ -4044,7 +4108,7 @@ export const optionLabel =
   <div class="flex min-h-0 flex-1 flex-col">
     <DeployableEnvironmentSwitcher />
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
-      <PageTabs v-model="activeTab">
+      <PageTabs v-model="shownTab">
         <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
@@ -4190,6 +4254,7 @@ export const optionLabel =
 
     <SettingsSaveBar
       :visible="dirty || saving"
+      :guard="leave"
       :saving="saving"
       @save="save"
       @discard="discard"
@@ -4458,7 +4523,7 @@ export const optionLabel =
     options.find((option) => option.value === value)?.label ?? String(value)
   const portsLabel = (values: unknown[] | undefined) => (values ?? []).join(', ')
 
-  const { form, saving, dirty, errors, clear, save, discard, setHttps, setHttp3, addCa } =
+  const { form, saving, dirty, errors, clear, save, discard, setHttps, setHttp3, addCa, leave } =
     provideProtocolsSettings()
 
   const uploadOpen = ref(false)
@@ -4704,6 +4769,7 @@ export const optionLabel =
 
       <SettingsSaveBar
         :visible="dirty || saving"
+        :guard="leave"
         :saving="saving"
         @save="save"
         @discard="discard"
@@ -4935,7 +5001,7 @@ export const optionLabel =
     return Object.keys(errors).length === 0
   }
 
-  const { form, saving, dirty, save, discard } = useSettingsDraft(record, { validate })
+  const { form, saving, dirty, save, discard, leave } = useSettingsDraft(record, { validate })
 </script>
 
 <template>
@@ -5116,6 +5182,7 @@ export const optionLabel =
 
     <SettingsSaveBar
       :visible="dirty || saving"
+      :guard="leave"
       :saving="saving"
       @save="save"
       @discard="discard"
@@ -5257,7 +5324,7 @@ export const optionLabel =
     return false
   }
 
-  const { form, saving, dirty, save, discard } = useSettingsDraft(record, {
+  const { form, saving, dirty, save, discard, leave } = useSettingsDraft(record, {
     validate,
     onSaved: () =>
       toast.success('Rule set saved.', {
@@ -5283,6 +5350,7 @@ export const optionLabel =
     docs-href="https://example.com/docs/waf-rule-sets"
     :dirty="dirty"
     :saving="saving"
+    :guard="leave"
     @save="save"
     @discard="discard"
   >
@@ -5495,7 +5563,10 @@ export function useCacheSettingsContext(): CacheSettingsContext {
 
 ```ts
 import {
-  computed,
+  useUnsavedChanges,
+  type UseUnsavedChangesReturn
+} from '@aziontech/webkit/use-unsaved-changes'
+import {
   type ComputedRef,
   inject,
   type InjectionKey,
@@ -5504,7 +5575,8 @@ import {
   reactive,
   readonly,
   type Ref,
-  ref
+  ref,
+  watch
 } from 'vue'
 
 import { checkDataStream } from './lib/data-stream-checks'
@@ -5532,6 +5604,8 @@ export interface DataStreamContext {
   save: () => void
   /** Puts the saved stream back and drops every problem. */
   discard: () => void
+  /** The leave guard: warns on reload and drives the leave dialog while the form is dirty. */
+  leave: UseUnsavedChangesReturn<DataStreamRecord>
 }
 
 const DataStreamInjectionKey: InjectionKey<DataStreamContext> = Symbol('DataStream')
@@ -5550,11 +5624,29 @@ const focusFirstError = (errors: FieldProblems) =>
     if (id) document.getElementById(`data-stream-${id}`)?.focus()
   })
 
+const settled = (saving: Ref<boolean>) =>
+  new Promise<void>((resolve) => {
+    if (!saving.value) return resolve()
+    const stop = watch(saving, (next) => {
+      if (next) return
+      stop()
+      resolve()
+    })
+  })
+
+const guardDataStream = (form: DataStreamRecord, saving: Ref<boolean>, save: () => void) =>
+  useUnsavedChanges(() => form, {
+    onDiscard: (baseline) => Object.assign(form, baseline),
+    onSave: () => {
+      save()
+      return settled(saving)
+    }
+  })
+
 export function provideDataStream(): DataStreamContext {
   const form = reactive(structuredClone(sampleDataStream))
   const saving = ref(false)
-  const baseline = ref(JSON.stringify(sampleDataStream))
-  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
+  const leave = guardDataStream(form, saving, () => save())
   const errors = reactive<FieldProblems>({})
   const destinationError = ref('')
 
@@ -5581,10 +5673,10 @@ export function provideDataStream(): DataStreamContext {
       focusFirstError(errors)
       return
     }
-    baseline.value = JSON.stringify(form)
+    leave.commit()
   }
 
-  const save = () => {
+  function save() {
     destinationError.value = ''
     if (!checkDataStream(form, errors)) {
       focusFirstError(errors)
@@ -5595,7 +5687,7 @@ export function provideDataStream(): DataStreamContext {
   }
 
   const discard = () => {
-    Object.assign(form, JSON.parse(baseline.value) as DataStreamRecord)
+    leave.discard()
     Object.keys(errors).forEach((key) => delete errors[key])
     destinationError.value = ''
   }
@@ -5603,13 +5695,14 @@ export function provideDataStream(): DataStreamContext {
   const context: DataStreamContext = {
     form,
     saving: readonly(saving),
-    dirty,
+    dirty: leave.isDirty,
     errors,
     destinationError: readonly(destinationError),
     clear,
     onDestinationChange,
     save,
-    discard
+    discard,
+    leave
   }
   provide(DataStreamInjectionKey, context)
   return context

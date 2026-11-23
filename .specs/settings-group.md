@@ -3,10 +3,10 @@ name: settings-group
 category: layout
 structure: monolithic
 status: implemented
-checksum: dee1aca817a2ed758adce5ed1dcb37d614562be1cbd057b32355c2e52b2b10d4
-spec_version: 7
+checksum: 711dd9df4efcb57147a3774f43d545728617c5b050bbd5859f072e1ed40fde2c
+spec_version: 8
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-22
 ---
 
 # SettingsGroup — Component Spec
@@ -114,7 +114,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
 - `data-state` on the body: `open` | `closed`, mirroring whether it is unfolded
 - Only a collapsible band folds along the `0fr`/`1fr` grid track (`data-collapsible` on the body); a band that is not collapsible lays its body out in normal flow, so it has no track that can resolve to zero height.
 - Responsive: the body is the `@container/settings-group`, so rows and fields inside lay out for the section, not the window.
-- Hover-free devices: the copy-link button is shown inline after the title where the pointer cannot hover (`@media (hover: none)`), instead of floating outside the start edge on hover.
+- Hover-free devices: the copy-link button is shown inline after the title where the pointer cannot hover (`@media (hover: none)`), instead of floating outside the start edge on hover. There it sits `--spacing-xl` past the Hint and carries its own invisible 44px hit area on a coarse pointer (`data-slot="touch-target"`), so a tap on one never lands on the other. Tests: `src/test/touch-targets.test.ts`.
 
 ## Motion & Animations
 

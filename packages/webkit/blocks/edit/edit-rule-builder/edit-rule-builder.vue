@@ -107,6 +107,7 @@
   )
 
   const title = computed(() => (editing.value ? 'Edit Rule' : 'Add Rule'))
+  const lockedPhase = computed(() => PHASES.find((phase) => phase.value === form.phase))
 
   watch(
     () => form.phase,
@@ -278,12 +279,22 @@
                 <template #default>
                   <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
                     <div class="flex flex-col gap-(--spacing-xs)">
+                      <Item
+                        v-if="editing"
+                        data-testid="edit-rule-builder__phase"
+                      >
+                        <Item.Content>
+                          <Item.Title>{{ lockedPhase?.label }}</Item.Title>
+                          <Item.Description>{{ lockedPhase?.description }}</Item.Description>
+                        </Item.Content>
+                      </Item>
                       <RadioGroup
+                        v-else
                         v-model="form.phase"
                         variant="card"
                         name="rule-phase"
                         aria-label="Phase"
-                        :disabled="submitting || editing"
+                        :disabled="submitting"
                       >
                         <RadioGroup.Item
                           v-for="phase in PHASES"

@@ -72,7 +72,8 @@
   const COPY_LINK_CLASS =
     'absolute -start-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ' +
     'ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
-    'group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 [@media(hover:none)]:static [@media(hover:none)]:order-last [@media(hover:none)]:opacity-100 ' +
+    'group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 [@media(hover:none)]:relative [@media(hover:none)]:order-last [@media(hover:none)]:opacity-100 ' +
+    '[@media(hover:none)]:start-0 [@media(hover:none)]:z-1 [@media(hover:none)]:ms-(--spacing-xl) ' +
     'motion-reduce:transition-none'
 
   const TRIGGER_CLASS =
@@ -115,6 +116,11 @@
         :class="COPY_LINK_CLASS"
         @click="copyLink"
       >
+        <span
+          aria-hidden="true"
+          data-slot="touch-target"
+          class="absolute inset-[min(0rem,calc(50%-12px))] pointer-coarse:inset-[min(0rem,calc(50%-22px))]"
+        />
         <i
           :class="copied ? 'az az-check' : 'az az-link'"
           class="text-body-xs"

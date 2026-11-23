@@ -12,13 +12,13 @@
 
 async submit; long running action; background job status; deploy in progress; async deploy result; operation status; envio assíncrono; ação demorada; status da operação; result reaches me later
 
-The async-action pattern, and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure.
+The async-action pattern, and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress travels with the user as a toast, and its outcome comes back as a toast when the user is not looking at this page, on success and on failure.
 
 This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`.
 
 The run toast rides the app's one toast region, never the page's: the app installs `ToastPlugin` (`app.use(ToastPlugin, { position: 'bottom-end' })`) or mounts one `Toaster` near its root, beside `ConsoleLayout`, and this page body only imports `toast` from `@aziontech/webkit/toast`. A `Toaster` inside a page body is a second region for the whole app: only the first `Toaster` to mount is active, and it gives that up when it unmounts, so a page's copy is either inert or, when it mounted first, stops every toast once the user leaves the page, the opposite of a run toast that follows the user. The docs preview mounts one region around the block the way an app root does, so its frames show the toasts; a copy of the page shows them wherever the app has mounted the region.
 
-The toasts are raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the app's `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast, Error the permanent failure toast and Success the success toast; leaving the page dismisses the toast so the next story starts clean.
+The toasts are raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the app's `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast. When the run ends while this page is on screen, the outcome `Alert` is the outcome and the progress toast is dismissed: a toast repeating the Alert would cover the failed step on a phone. When the page is out of view (`document.visibilityState === 'hidden'`), Error raises the permanent failure toast and Success the success toast; in an app, the run store raises them the same way when the user has moved to another page. Leaving the page dismisses the toast so the next story starts clean.
 
 ## When to use
 
@@ -109,10 +109,10 @@ Then delete `sample.ts`; the variants are the only files that import it.
 
 - Keep the run and its outcome outside the page component (a small module-scope store) and pass its state in, so leaving the page never cancels it or loses the result.
 - Show progress as a `loading` toast (no duration, not closable) that follows the user through the app while the run lasts.
-- Report the end wherever the user is, on success and on failure. A failure toast is permanent (`duration: 0`) and `closable`; a success toast is `closable` with the default 6 second duration.
+- Report the end wherever the user is, on success and on failure: inline when they are on the page that started the run, as a toast when they are not. A failure toast is permanent (`duration: 0`) and `closable`; a success toast is `closable` with the default 6 second duration.
 - Raise the toasts through `toast` only; the app mounts the region once (`ToastPlugin` or one `Toaster` at its root), so the page body never renders a `Toaster`.
 - Give both toasts the same two actions through `toast()`'s `actions` option: **Edit** for the item that was deployed, and **Redeploy**. Don't rebuild the toast body in the `Toaster` slot to get two actions.
-- On the page that started the run, show the outcome inline as well, with the same two actions as the toast: a danger `Alert` with the reason, **Edit** and **Redeploy** over the stopped logs, or a success `Alert` naming the new address with **Edit**, **Redeploy** and **Open service**.
+- On the page that started the run, show the outcome inline instead of a toast, with the same two actions the toast would carry: a danger `Alert` with the reason, **Edit** and **Redeploy** over the stopped logs, or a success `Alert` naming the new address with **Edit**, **Redeploy** and **Open service**.
 - Disable Deploy and the controls that would change the run while it is in progress, with Deploy in `loading`.
 - Use one toast id per run, so the progress toast turns into the outcome toast in place, and a Redeploy turns it back into progress.
 - Apply this to every build and deploy screen (deploy drawers, deployment flows, redeploys from a list, imports): the run lives outside the page, the page shows the status `Tag` and the outcome `Alert`, and the toast reports wherever the user is.
@@ -163,8 +163,8 @@ Then delete `sample.ts`; the variants are the only files that import it.
 
 - `Idle` — primary (the code below)
 - `Running` — Mid-run: the progress toast reads Deploying web-app…, the heading reads Deploying, and the logs card streams under the Building status.
-- `Error` — The routing rules were refused: the heading reads Failed, the danger Alert carries the reason with Edit and Redeploy, the permanent failure toast carries the same two actions, and the logs card stays open on the failed step with the Phased or Complete switch.
-- `Success` — The run is live: the heading reads Deployed and the success Alert names the new address with Edit, Redeploy and Open service, the success toast carries Edit and Redeploy, and the logs card is gone.
+- `Error` — The routing rules were refused: the heading reads Failed, the danger Alert carries the reason with Edit and Redeploy, no toast repeats it while the page is on screen (a hidden page gets the permanent failure toast), and the logs card stays open on the failed step with the Phased or Complete switch.
+- `Success` — The run is live: the heading reads Deployed and the success Alert names the new address with Edit, Redeploy and Open service, no toast repeats it while the page is on screen, and the logs card is gone.
 
 Each variant is the same screen in another state: `get_block("state/state-async-submit", { variant })`, or the file under `blocks/state/state-async-submit/variants/`.
 
@@ -319,10 +319,14 @@ Each variant is the same screen in another state: `get_block("state/state-async-
       ]
     })
 
+  const pageInView = () => globalThis.document?.visibilityState !== 'hidden'
+
   const report = (next: AsyncSubmitStatus) => {
-    if (next === 'running') reportRunning()
-    else if (next === 'error') reportFailure()
-    else if (next === 'success' && props.deployment) reportSuccess(props.deployment)
+    if (next === 'running') return reportRunning()
+    if (next === 'idle') return
+    if (pageInView()) return toast.dismiss(RUN_TOAST)
+    if (next === 'error') reportFailure()
+    else if (props.deployment) reportSuccess(props.deployment)
   }
 
   onMounted(() => report(status.value))

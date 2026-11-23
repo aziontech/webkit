@@ -13,7 +13,7 @@
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import { toast } from '@aziontech/webkit/toast'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   import {
     type DeployableDomainRow,
@@ -28,8 +28,17 @@
 
   const activeTab = ref('settings')
 
-  const { form, saving, dirty, save, discard, nameError, removeDomain } =
+  const { form, saving, dirty, save, discard, nameError, removeDomain, leave } =
     provideDeployableSettings()
+
+  const shownTab = computed({
+    get: () => activeTab.value,
+    set: async (value: string) => {
+      if (!value || value === activeTab.value) return
+      if (!(await leave.confirmLeave())) return
+      activeTab.value = value
+    }
+  })
 
   const deleteOpen = ref(false)
   const deleting = ref(false)
@@ -64,7 +73,7 @@
   <div class="flex min-h-0 flex-1 flex-col">
     <DeployableEnvironmentSwitcher />
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
-      <PageTabs v-model="activeTab">
+      <PageTabs v-model="shownTab">
         <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
@@ -210,6 +219,7 @@
 
     <SettingsSaveBar
       :visible="dirty || saving"
+      :guard="leave"
       :saving="saving"
       @save="save"
       @discard="discard"

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/edit-function/edit-function.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-function")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageTabs](../../components/page-tabs.md), [RadioGroup](../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-shortcuts`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageTabs](../../components/page-tabs.md), [RadioGroup](../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -47,7 +47,7 @@ A `CodeEditor` with `fill` and `pad-line-numbers` takes the pane: zero-padded li
 
 Variant TestRun only: it renders the block and fills its `editor-actions` and `code-panel` slots, adding `StatusIndicator`, `CopyButton`, `KeyValueList`, `Trace`, `LogViewer` and `LogViewerContent` to the page.
 
-In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is the flexible pane, and the Test run pane under it has a `basis`, a minimum and a maximum height and collapses past its minimum, so the editor can take the whole height back. The pane scrolls on its own and reads top to bottom like the invocation page of the design sample:
+In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is the flexible pane, and the Test run pane under it has a `basis`, a minimum and a maximum height and collapses past its minimum, so the editor can take the whole height back. The pane scrolls on its own and reads top to bottom like the invocation page of the design sample. Below `md` the split is dropped: the handle hides, the editor keeps 60% of the screen height and the pane takes its full content height, so the editor and the whole result read in one scroll instead of a pane the user must find a scroll in:
 
 1. The heading Test run, a `StatusIndicator` (Completed, or Running with its loading dot), the run ID in code type with a `CopyButton`.
 2. The request that triggered the run and one line on its outcome (the status code and what happened).
@@ -77,7 +77,7 @@ The form column with four `SettingsGroup`s: General (Name, required on Save), Ru
 
 ### J. Save bar — `SaveBar`, `Button`, `Alert` (required)
 
-A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. Save emits `submit` with the values and the page sets `loading`. While the save runs, Save shows its loading state, Discard, the field list and the Settings fields are disabled, and both editors turn read-only; when `loading` ends with no `error`, a success toast says "image-optimizer saved." and the bar leaves. A failed save (`error` set) keeps the bar and every change, and puts a small danger `Alert` with the message in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries, and Discard emits `discard` so the page clears the error.
+A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. Save emits `submit` with the values and the page sets `loading`. While the save runs, Save shows its loading state, Discard, the field list and the Settings fields are disabled, and both editors turn read-only; when `loading` ends with no `error`, a success toast says "image-optimizer saved." and the bar leaves. A failed save (`error` set) keeps the bar and every change, and puts a small danger `Alert` with the message in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries, and Discard emits `discard` so the page clears the error. The dirty state comes from `useUnsavedChanges`, which also asks the browser to confirm a reload or a tab close while code, arguments or settings hold unsaved edits; an app that routes away from the editor adds `onBeforeRouteLeave(() => guard.confirmLeave())` and binds the guard's `ConfirmDialog` (`v-bind="dialogProps"`) as `edit/edit-resource` does.
 
 ### K. Shortcut keycap — `Kbd` (optional)
 
@@ -222,6 +222,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
   import Tabs from '@aziontech/webkit/tabs'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, toRaw, useId, watch } from 'vue'
 
   import { useFunctionFields } from './composables/use-function-fields'
@@ -346,6 +347,9 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
   const savedFields = computed<SchemaField[]>(() => props.fields ?? sampleFields)
 
   const split = () => Boolean(slots['code-panel'])
+  const SPLIT_CLASS =
+    'flex min-h-0 w-full flex-1 flex-col max-md:overflow-y-auto! max-md:*:h-auto! max-md:*:shrink-0! max-md:*:basis-auto! ' +
+    'max-md:*:first:h-[60dvh]! max-md:[&>[role=separator]]:hidden'
   const form = reactive<FunctionEditorService>({ ...savedService.value })
   const draftFields = ref<SchemaField[]>(structuredClone(toRaw(savedFields.value)))
   const nameError = ref('')
@@ -356,10 +360,9 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
   const fieldList = useFunctionFields(draftFields, formId, props.defaultOpenKeys)
   const { moveStatus } = fieldList
 
-  const snapshot = () => JSON.stringify({ form, fields: draftFields.value })
-  const baseline = ref(snapshot())
+  const guard = useUnsavedChanges(() => ({ form: { ...form }, fields: draftFields.value }))
   Object.assign(form, props.defaultDraft)
-  const dirty = computed(() => snapshot() !== baseline.value)
+  const dirty = guard.isDirty
   const saving = computed(() => props.loading)
   const saveError = computed(() => props.error)
 
@@ -368,7 +371,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
     () => {
       Object.assign(form, savedService.value)
       draftFields.value = structuredClone(toRaw(savedFields.value))
-      baseline.value = snapshot()
+      guard.commit()
     }
   )
 
@@ -376,13 +379,13 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
     () => props.loading,
     (now, before) => {
       if (!before || now || props.error) return
-      baseline.value = snapshot()
+      guard.commit()
       toast.success(`${form.name} saved.`)
     }
   )
 
   const discard = (event: MouseEvent) => {
-    const saved: { form: FunctionEditorService; fields: SchemaField[] } = JSON.parse(baseline.value)
+    const saved = structuredClone(toRaw(guard.baseline.value))
     Object.assign(form, saved.form)
     draftFields.value = saved.fields
     emit('discard', event)
@@ -467,7 +470,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
                     :is="split() ? ResizableRoot : 'div'"
                     :orientation="split() ? 'vertical' : undefined"
                     :aria-label="split() ? 'Code and test run' : undefined"
-                    class="flex min-h-0 w-full flex-1 flex-col"
+                    :class="split() ? SPLIT_CLASS : 'flex min-h-0 w-full flex-1 flex-col'"
                   >
                     <component
                       :is="split() ? ResizablePane : 'div'"
@@ -1308,7 +1311,10 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
 <template>
   <Item size="small">
     <div class="flex w-full flex-col items-stretch">
-      <div class="flex w-full min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md)">
+      <div
+        class="flex w-full min-w-0 flex-wrap items-center gap-(--spacing-xs) px-(--spacing-md)"
+        data-slot="field-header"
+      >
         <div
           class="flex shrink-0 items-center"
           role="group"
@@ -1333,7 +1339,7 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
             @click="fields.move(index, 1)"
           />
         </div>
-        <Item.Content>
+        <Item.Content class="min-w-32">
           <div class="flex min-w-0 flex-row items-baseline gap-(--spacing-xs)">
             <Item.Title class="min-w-0">
               <span
@@ -1343,14 +1349,14 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
                 {{ field.key || 'Unnamed field' }}
               </span>
             </Item.Title>
-            <div class="hidden min-w-0 sm:block">
+            <div class="hidden min-w-0 md:block">
               <Item.Description>
                 <span class="block truncate">{{ summary(field) }}</span>
               </Item.Description>
             </div>
           </div>
         </Item.Content>
-        <Item.Actions class="shrink-0">
+        <Item.Actions class="ms-auto shrink-0">
           <Tag
             v-if="field.required"
             key="required"

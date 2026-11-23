@@ -1,5 +1,8 @@
 import {
-  computed,
+  useUnsavedChanges,
+  type UseUnsavedChangesReturn
+} from '@aziontech/webkit/use-unsaved-changes'
+import {
   type ComputedRef,
   inject,
   type InjectionKey,
@@ -8,7 +11,8 @@ import {
   reactive,
   readonly,
   type Ref,
-  ref
+  ref,
+  watch
 } from 'vue'
 
 import { checkDataStream } from './lib/data-stream-checks'
@@ -36,6 +40,8 @@ export interface DataStreamContext {
   save: () => void
   /** Puts the saved stream back and drops every problem. */
   discard: () => void
+  /** The leave guard: warns on reload and drives the leave dialog while the form is dirty. */
+  leave: UseUnsavedChangesReturn<DataStreamRecord>
 }
 
 const DataStreamInjectionKey: InjectionKey<DataStreamContext> = Symbol('DataStream')
@@ -54,11 +60,29 @@ const focusFirstError = (errors: FieldProblems) =>
     if (id) document.getElementById(`data-stream-${id}`)?.focus()
   })
 
+const settled = (saving: Ref<boolean>) =>
+  new Promise<void>((resolve) => {
+    if (!saving.value) return resolve()
+    const stop = watch(saving, (next) => {
+      if (next) return
+      stop()
+      resolve()
+    })
+  })
+
+const guardDataStream = (form: DataStreamRecord, saving: Ref<boolean>, save: () => void) =>
+  useUnsavedChanges(() => form, {
+    onDiscard: (baseline) => Object.assign(form, baseline),
+    onSave: () => {
+      save()
+      return settled(saving)
+    }
+  })
+
 export function provideDataStream(): DataStreamContext {
   const form = reactive(structuredClone(sampleDataStream))
   const saving = ref(false)
-  const baseline = ref(JSON.stringify(sampleDataStream))
-  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
+  const leave = guardDataStream(form, saving, () => save())
   const errors = reactive<FieldProblems>({})
   const destinationError = ref('')
 
@@ -85,10 +109,10 @@ export function provideDataStream(): DataStreamContext {
       focusFirstError(errors)
       return
     }
-    baseline.value = JSON.stringify(form)
+    leave.commit()
   }
 
-  const save = () => {
+  function save() {
     destinationError.value = ''
     if (!checkDataStream(form, errors)) {
       focusFirstError(errors)
@@ -99,7 +123,7 @@ export function provideDataStream(): DataStreamContext {
   }
 
   const discard = () => {
-    Object.assign(form, JSON.parse(baseline.value) as DataStreamRecord)
+    leave.discard()
     Object.keys(errors).forEach((key) => delete errors[key])
     destinationError.value = ''
   }
@@ -107,13 +131,14 @@ export function provideDataStream(): DataStreamContext {
   const context: DataStreamContext = {
     form,
     saving: readonly(saving),
-    dirty,
+    dirty: leave.isDirty,
     errors,
     destinationError: readonly(destinationError),
     clear,
     onDestinationChange,
     save,
-    discard
+    discard,
+    leave
   }
   provide(DataStreamInjectionKey, context)
   return context

@@ -164,7 +164,6 @@
                             size="large"
                             class="w-full"
                             aria-label="Name"
-                            placeholder="My Service"
                             required
                             :invalid="!!errors.name"
                             :aria-describedby="errors.name ? 'ev-name-error' : undefined"

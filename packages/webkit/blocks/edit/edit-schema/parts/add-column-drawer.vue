@@ -160,7 +160,11 @@
                 <Field orientation="horizontal">
                   <Field.Content>
                     <Field.Title>Not null</Field.Title>
-                    <Field.Description>Require a value in every row.</Field.Description>
+                    <Field.Description>{{
+                      columnForm.primaryKey
+                        ? 'Always on for a primary key.'
+                        : 'Require a value in every row.'
+                    }}</Field.Description>
                   </Field.Content>
                   <Switch
                     :model-value="columnForm.notNull || columnForm.primaryKey"

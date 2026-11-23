@@ -57,7 +57,7 @@ Each control sits in a `Field` with `Field.Label` (bound by `for`), `Field.Descr
 
 ### D. Text value — `Input` (required)
 
-Key and Value. A placeholder may show the expected shape (`API_TOKEN`); the rule itself lives in the description.
+Key and Value. A required text field carries no placeholder: an example value in it reads as filled once the field is empty and in error. The expected shape and the rule live in the description (`for example API_TOKEN`).
 
 ### E. Choice — `Select` (required)
 
@@ -438,7 +438,6 @@ Each variant is the same screen in another state: `get_block("state/state-form-v
               :id="fieldIds.key"
               v-model="form.key"
               name="key"
-              placeholder="API_TOKEN"
             />
             <Field.Description
               >Uppercase letters, digits and underscores, for example API_TOKEN.</Field.Description

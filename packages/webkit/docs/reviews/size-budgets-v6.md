@@ -1346,3 +1346,6 @@ Budget-raise: app-header-account 13.7 KB → 13.75 KB (measured 13.74 KB): its A
 Budget-raise: app-layout 24.4 KB → 24.45 KB (measured 24.44 KB): the navigation rail and the tools region carry a container query so a server-rendered page paints compact on a phone before the script measures the root (audit 5, A5-154).
 Budget-raise: console-layout-root 82.6 KB → 82.65 KB (measured 82.62 KB): it renders AppLayout, which now paints compact on a phone from the server HTML (A5-154).
 Budget-raise: console-layout 83.9 KB → 83.95 KB (measured 83.92 KB): it renders AppLayout, which now paints compact on a phone from the server HTML (A5-154).
+Budget-raise: console-application-scene 121.95 KB → 122.1 KB (measured 122.09 KB): lane F11 (audit round 5, A5-266) makes Tabs.List scroll the active tab into view on mount and on change; the scene renders a Tabs strip.
+Budget-raise: console-trace-scene 84.65 KB → 84.8 KB (measured 84.78 KB): the same Tabs.List active-tab reveal (lane F11, A5-266).
+Budget-raise: conversation-history 6.7 KB → 6.75 KB (measured 6.71 KB): lane F11 (A5-095) caps a Skeleton rectangle at its container width (`data-[variant=rectangle]:max-w-full`).

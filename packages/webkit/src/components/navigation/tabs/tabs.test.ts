@@ -786,6 +786,40 @@ describe('Tabs', () => {
       expectIndicatorOnTab(container, 'Request path through every service')
     })
 
+    it('scrolls the active tab into the strip on mount and when the value changes', async () => {
+      const value = ref('t7')
+      const { container } = render(
+        defineComponent({
+          components: { Tabs, TabsList, TabsTrigger },
+          setup: () => ({ value, keys: Array.from({ length: 8 }, (_, index) => index) }),
+          template: `
+            <div style="width: 240px">
+              <Tabs v-model="value">
+                <TabsList>
+                  <TabsTrigger v-for="key in keys" :key="key" :value="'t' + key" :label="'Settings ' + key" />
+                </TabsList>
+              </Tabs>
+            </div>
+          `
+        })
+      )
+      const list = container.querySelector<HTMLElement>('[role="tablist"]')!
+      const inView = (label: string) => {
+        const tab = Array.from(list.querySelectorAll<HTMLElement>('[role="tab"]')).find((el) =>
+          el.textContent?.includes(label)
+        )!
+        const box = tab.getBoundingClientRect()
+        const strip = list.getBoundingClientRect()
+        return box.left >= strip.left - 1 && box.right <= strip.right + 1
+      }
+      await settle()
+      expect(list.scrollWidth).toBeGreaterThan(list.clientWidth)
+      expect(inView('Settings 7')).toBe(true)
+      value.value = 't0'
+      await settle()
+      expect(inView('Settings 0')).toBe(true)
+    })
+
     it('sits on the active tab of a scrolled right-to-left list', async () => {
       const value = ref('t0')
       const { container } = render(

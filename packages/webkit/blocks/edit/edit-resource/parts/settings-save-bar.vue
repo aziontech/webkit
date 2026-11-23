@@ -3,6 +3,8 @@
   import Kbd from '@aziontech/webkit/kbd'
   import SaveBar from '@aziontech/webkit/save-bar'
 
+  import SettingsLeaveDialog, { type SettingsLeaveDialogProps } from './settings-leave-dialog.vue'
+
   export interface SettingsSaveBarProps {
     /** Whether the bar is up: the form holds edits or a save is in flight. */
     visible?: boolean
@@ -10,12 +12,15 @@
     saving?: boolean
     /** Label of the Discard button. */
     discardLabel?: string
+    /** The leave guard; set, the leave dialog renders with the bar. */
+    guard?: SettingsLeaveDialogProps['guard']
   }
 
   const props = withDefaults(defineProps<SettingsSaveBarProps>(), {
     visible: false,
     saving: false,
-    discardLabel: 'Discard'
+    discardLabel: 'Discard',
+    guard: undefined
   })
 
   const emit = defineEmits<{
@@ -34,6 +39,10 @@
 </script>
 
 <template>
+  <SettingsLeaveDialog
+    v-if="guard"
+    :guard="guard"
+  />
   <Transition
     enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
     enter-from-class="translate-y-2 opacity-0"

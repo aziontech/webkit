@@ -64,7 +64,6 @@
             v-model:type="columns[index].type"
             v-model:query="query"
             searchable
-            :display-value="(value: string) => value"
           />
         </template>
         <template #cell-defaultValue="{ index }">

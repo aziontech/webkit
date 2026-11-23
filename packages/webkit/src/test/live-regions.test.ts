@@ -46,14 +46,14 @@ describe('live regions', () => {
     expect(regionsSaying('Deployed')).toEqual([])
   })
 
-  it('async-submit announces the result once, through the app Toaster region', async () => {
+  it('async-submit announces the result once, through the success Alert on the page', async () => {
     render(
       defineComponent({
         setup: () => () => [h(Toaster, { position: 'bottom-end' }), h(AsyncSubmitSucceeded)]
       })
     )
-    await waitFor(() => expect(regionsSaying('is live.').length).toBeGreaterThan(0))
-    const regions = regionsSaying('is live.')
+    await waitFor(() => expect(regionsSaying('is live').length).toBeGreaterThan(0))
+    const regions = regionsSaying('is live')
     expect(regions).toHaveLength(1)
     expect(politeness(regions[0]!)).toBe('polite')
     expect(nested()).toEqual([])

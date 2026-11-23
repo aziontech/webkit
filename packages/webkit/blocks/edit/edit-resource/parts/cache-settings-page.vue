@@ -22,7 +22,7 @@
   const labelOf = (options: SelectOptionItem[]) => (value: string) =>
     options.find((option) => option.value === value)?.label ?? value
 
-  const { form, saving, dirty, errors, clear, save, discard } = provideCacheSettings()
+  const { form, saving, dirty, errors, clear, save, discard, leave } = provideCacheSettings()
 </script>
 
 <template>
@@ -298,6 +298,7 @@
 
       <SettingsSaveBar
         :visible="dirty || saving"
+        :guard="leave"
         :saving="saving"
         @save="save"
         @discard="discard"

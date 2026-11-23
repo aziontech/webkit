@@ -3,13 +3,13 @@ name: switch
 category: input
 structure: monolithic
 status: implemented
-spec_version: 17
+spec_version: 18
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 58cf0918311a773be19baf2ac0fac3de248113f1c4e7763258334e1c1694afe3
+checksum: 98b1912f5968226c8fe8f35626d7bde839e33c3a8e712ca1691ec49d229c8364
 created: 2026-05-22
-last_updated: 2026-11-20
+last_updated: 2026-11-22
 ---
 
 # Switch — Component Spec
@@ -93,7 +93,7 @@ _none_
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`, `disabled`
 - `data-checked` mirrors the `modelValue` prop (toggled-on state)
 - `data-variant` mirrors the `variant` prop (`default` | `privacy`)
-- `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions. The treatment keys on the native `:disabled` state, so a switch inside a disabled `fieldset` reads disabled too.
+- `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions. The treatment keys on the native `:disabled` state, so a switch inside a disabled `fieldset` reads disabled too. Locked on keeps a muted accent track (`--accent-mask`) under the disabled handle, so a switch that is on and cannot be turned off never reads as an off one; locked off keeps the `--bg-disabled` track.
 - `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`); with `aria-invalid` on the control, it paints the danger border while unchecked
 - Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`disabled:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows
 - Touch: an invisible `::after` extends the hit area of the 36 × 20 px track to 24 px tall, and to 44 × 44 px on a coarse pointer.
@@ -119,7 +119,7 @@ The handle slides toward the inline end when checked: `translate-x-3.5` in LTR, 
 | lock icon (off)               | `var(--bg-surface)`                                                                                  |
 | lock icon (on)                | `var(--color-base-black)` (theme-independent black on the white knob; both stay fixed across themes) |
 | track (hover) — overlay       | `var(--bg-hover)` (applies to both off and on tracks)                                                |
-| track (disabled) — background | `var(--bg-disabled)` (over the checked `--accent`, so on/off read the same when locked)              |
+| track (disabled) — background | `var(--bg-disabled)` off; `var(--accent-mask)` on, so a locked-on switch keeps its on reading         |
 | track (disabled) — border     | `var(--border-default)`                                                                              |
 | handle (disabled) — fill      | `var(--text-disabled)`                                                                               |
 | disabled — cursor             | `cursor-not-allowed`                                                                                 |
@@ -148,7 +148,7 @@ The handle slides toward the inline end when checked: `translate-x-3.5` in LTR, 
 
 - Default
 - Types — composite story rendering `type='default'` and `type='privacy'` side-by-side, each in both off and on states.
-- Disabled — the mutually-exclusive `disabled` state, rendered in both the off and on positions (the locked visual must not depend on `modelValue`).
+- Disabled — the mutually-exclusive `disabled` state, rendered in both the off and on positions (locked on keeps a muted accent track, so on and off stay apart).
 
 <!-- Sizes is omitted: the component has no `size` prop (Figma documents a single 36×20 size). -->
 <!-- `disabled` was added in spec_version 9. It was previously omitted on the grounds that "the v5 field wrapper owns the disabled visual", but a switch is also used bare wherever the label lives outside it (an ItemGroup row, where `Item.Title` is the label) — there the consumer had no wrapper to own the visual, so `:disabled` blocked interaction natively while the control still looked live. Owning `disabled` here is what makes the lock visible at every call site instead of only inside a wrapper. -->

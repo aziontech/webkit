@@ -502,7 +502,7 @@ export const sampleDataStream = {
   url: 'https://collector.example.com/ingest',
   payloadFormat: '$dataset',
   lineSeparator: '\\n',
-  headers: 'Authorization:Bearer example-token',
+  headers: 'X-Stream-Source:acme-edge',
   bootstrapServers: '',
   topic: '',
   bucket: '',

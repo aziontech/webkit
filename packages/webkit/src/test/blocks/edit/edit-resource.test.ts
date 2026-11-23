@@ -4,7 +4,11 @@ import { afterEach, describe, expect, it } from 'vitest'
 import EditResource from '../../../../blocks/edit/edit-resource/edit-resource.vue'
 import CacheSettings from '../../../../blocks/edit/edit-resource/variants/cache-settings.vue'
 import DangerZone from '../../../../blocks/edit/edit-resource/variants/danger-zone.vue'
+import DataStream from '../../../../blocks/edit/edit-resource/variants/data-stream.vue'
+import DeployableSettings from '../../../../blocks/edit/edit-resource/variants/deployable-settings.vue'
+import PolicySettings from '../../../../blocks/edit/edit-resource/variants/policy-settings.vue'
 import Protocols from '../../../../blocks/edit/edit-resource/variants/protocols.vue'
+import ResourceSettings from '../../../../blocks/edit/edit-resource/variants/resource-settings.vue'
 import Saving from '../../../../blocks/edit/edit-resource/variants/saving.vue'
 import StaleRecord from '../../../../blocks/edit/edit-resource/variants/stale-record.vue'
 import WafSettings from '../../../../blocks/edit/edit-resource/variants/waf-settings.vue'
@@ -273,5 +277,65 @@ describe('edit-resource save shortcut', () => {
     expect(submits).toHaveLength(1)
     expect(submits[0]![0]).toBe(event)
     expect(submits[0]![1].name).toBe('acme-shop')
+  })
+})
+
+describe('edit/edit-resource DataStream', () => {
+  it('shows no credential in clear text in Custom headers', async () => {
+    render(DataStream)
+    const headers = await waitFor(() => {
+      const field = document.querySelector<HTMLTextAreaElement>('#data-stream-headers')
+      expect(field).not.toBeNull()
+      return field!
+    })
+    expect(headers.value).not.toBe('')
+    expect(headers.value).not.toMatch(/authorization|bearer|token|secret|api-key|password/i)
+  })
+})
+
+describe('edit/edit-resource leave guard', () => {
+  const reloadBlocked = () => {
+    const event = new Event('beforeunload', { cancelable: true })
+    window.dispatchEvent(event)
+    return event.defaultPrevented
+  }
+
+  it.each([
+    ['DeployableSettings', DeployableSettings],
+    ['PolicySettings', PolicySettings],
+    ['WafSettings', WafSettings],
+    ['ResourceSettings', ResourceSettings],
+    ['DataStream', DataStream],
+    ['CacheSettings', CacheSettings],
+    ['Protocols', Protocols]
+  ])('%s warns on reload once the form holds edits', async (_name, variant) => {
+    const view = render(variant)
+    const control = await waitFor(() => {
+      const found = view.container.querySelector<HTMLElement>(
+        'input:not([type]):not([disabled]), input[type="text"]:not([disabled]), [role="switch"]:not([disabled])'
+      )
+      expect(found).not.toBeNull()
+      return found!
+    })
+    expect(reloadBlocked()).toBe(false)
+    if (control instanceof HTMLInputElement) await fireEvent.update(control, `${control.value}x`)
+    else await fireEvent.click(control)
+    await waitFor(() => expect(reloadBlocked()).toBe(true))
+    view.unmount()
+  })
+
+  it('asks before a tab change drops the edits', async () => {
+    const view = render(PolicySettings)
+    const field = await waitFor(() =>
+      view.container.querySelector<HTMLInputElement>('#resource-name')!
+    )
+    await fireEvent.update(field, `${field.value}x`)
+    const other = Array.from(view.container.querySelectorAll<HTMLElement>('[role="tab"]')).find(
+      (tab) => tab.getAttribute('aria-selected') !== 'true'
+    )!
+    await fireEvent.click(other)
+    await waitFor(() =>
+      expect(document.querySelector('[data-testid="unsaved-changes-dialog"]')).not.toBeNull()
+    )
   })
 })

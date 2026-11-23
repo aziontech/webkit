@@ -5,13 +5,12 @@
 
   import { filterTypes, glyphOf, TYPES } from '../lib/column-types'
 
-  const props = withDefaults(
-    defineProps<{ searchable?: boolean; displayValue?: (value: string) => string }>(),
-    { searchable: false, displayValue: undefined }
-  )
+  const props = withDefaults(defineProps<{ searchable?: boolean }>(), { searchable: false })
 
   const type = defineModel<string>('type', { required: true })
   const query = defineModel<string>('query', { default: '' })
+
+  const typeName = (value: string) => value
 
   const types = computed(() => (props.searchable ? filterTypes(query.value) : TYPES))
 </script>
@@ -21,7 +20,7 @@
     v-model="type"
     size="large"
     class="w-full"
-    :display-value="displayValue"
+    :display-value="typeName"
   >
     <Select.Trigger>
       <template #leading>
@@ -43,7 +42,8 @@
           class="w-full"
           placeholder="Search types"
           aria-label="Search types"
-          @keydown.stop
+          @keydown.home.stop
+          @keydown.end.stop
         />
       </template>
       <Select.Group label="Data types">
