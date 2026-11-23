@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 13
 template: 2
-checksum: b93fa28a84d1db006597df5c4d204e0afa6bdd1d90b6c8d10b2b429b2e9c7971
+checksum: 1b4ee4c4fddc73863ee031e7c0d332a170a6f9f769c2b5b1b43f6fa536fa15a2
 created: 2026-11-12
 last_updated: 2026-11-20
 ---
@@ -259,7 +259,7 @@ packages/webkit/src/components/layout/console-layout/
 
 ## Responsive
 
-- Container queries: `AppLayout` measures its own width; below its `compactBelow` the rail is a drawer and the header shows the hamburger and the brand before the breadcrumbs, and drops the breadcrumbs only below a 28rem header, so a tablet still says where the page is; a page's control crumbs (the environment `Select`) stay, in place of the brand. The header bar is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on narrow headers.
+- Container queries: `AppLayout` measures its own width; below 1024px (the layout passes `compactBelow` 1024, so a 768px tablet does not lose a third of its width to an open rail) the rail is a drawer and the header shows the hamburger and the brand before the breadcrumbs, and drops the breadcrumbs only below a 28rem header, so a tablet still says where the page is; a page's control crumbs (the environment `Select`) stay, in place of the brand. The header bar is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on narrow headers.
 - Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates only when the header runs out of room (its wrapper alone pulls the trail to the start edge, and the `Breadcrumb` inside drops its own negative start margin, so a trail that fits is never cut short); while compact the crumbs are hidden and the page's control crumbs stay, so the environment is never lost on a phone. Below the header's `@xs` (a 320 px phone) the header drops the brand mark and keeps the hamburger, so `header-leading` and the actions fit; the brand stays in the navigation drawer.
 - Rail header: `sidebar-header` sits under the wordmark at the rail's width; it is hidden with the rest of the rail content when the rail collapses, and in the compact drawer it renders with `compact: true`.
 - Touch: hamburger and avatar keep the 32 px controls of `IconButton` / `Avatar` and grow on coarse pointers through those components.

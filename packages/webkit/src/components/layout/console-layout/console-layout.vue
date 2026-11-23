@@ -241,6 +241,7 @@
   >
     <AppLayout
       v-model:tools-open="toolsOpen"
+      :compact-below="1024"
       :navigation-aria-label="ariaLabel || t('consoleLayout.navigation')"
       :tools-label="toolsLabel"
     >
