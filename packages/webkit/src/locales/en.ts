@@ -1316,8 +1316,12 @@ export const chatMessage = {
 
 export const citation = {
   label: 'Source {index}: {title}',
+  labelMany: '{site} +{more}, sources {indexes}',
   labelUntitled: 'Source {index}',
-  labelWithSite: 'Source {index}, {site}: {title}'
+  labelWithSite: 'Source {index}, {site}: {title}',
+  next: 'Next source',
+  page: '{current}/{total}',
+  previous: 'Previous source'
 } as const
 
 export const conversation = {
@@ -1406,6 +1410,8 @@ export const reasoning = {
 
 export const sources = {
   label: 'Sources',
+  cited: 'Citations',
+  more: 'More',
   count: {
     one: '{count} source',
     other: '{count} sources'

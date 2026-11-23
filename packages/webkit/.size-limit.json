@@ -29,7 +29,7 @@
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "40.55 KB",
+    "limit": "40.65 KB",
     "entryOnly": true
   },
   {
@@ -1087,17 +1087,17 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "12.45 KB"
+    "limit": "12.55 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "11.7 KB"
+    "limit": "11.8 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "11.8 KB"
+    "limit": "11.9 KB"
   },
   {
     "name": "phone-input",
@@ -1147,12 +1147,12 @@
   {
     "name": "tool-approval",
     "path": "src/components/ai/tool-approval/tool-approval.vue",
-    "limit": "16.55 KB"
+    "limit": "11.15 KB"
   },
   {
     "name": "agent-question",
     "path": "src/components/ai/agent-question/agent-question.vue",
-    "limit": "17.3 KB"
+    "limit": "11.9 KB"
   },
   {
     "name": "response-loading",
@@ -1199,7 +1199,7 @@
   {
     "name": "citation",
     "path": "src/components/ai/citation/citation.vue",
-    "limit": "7.25 KB"
+    "limit": "11.25 KB"
   },
   {
     "name": "conversation",
@@ -1261,12 +1261,13 @@
   {
     "name": "sources",
     "path": "src/components/ai/sources/sources.vue",
-    "limit": "3.4 KB"
+    "limit": "4 KB",
+    "entryOnly": true
   },
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "38.5 KB",
+    "limit": "42.15 KB",
     "entryOnly": true
   },
   {

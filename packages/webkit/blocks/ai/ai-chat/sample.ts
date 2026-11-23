@@ -63,7 +63,9 @@ export const sampleStreamingMessages: AiChatMessage[] = [
       {
         title: 'Troubleshooting 502 responses',
         href: 'https://www.azion.com/en/documentation/',
-        description: 'Azion documentation · Observe'
+        description: 'A 502 means the edge reached the origin but got no valid answer back.',
+        site: 'Azion',
+        icon: 'az az-azion'
       }
     ]
   })
@@ -79,12 +81,16 @@ export const sampleInterruptedMessages: AiChatMessage[] = [
       {
         title: 'Real-Time Purge',
         href: 'https://www.azion.com/en/documentation/',
-        description: 'Azion documentation · Cache'
+        description: 'Removes a cached object from every data center in a few seconds.',
+        site: 'Azion',
+        icon: 'az az-azion'
       },
       {
-        title: 'Azion CLI: purge',
-        href: 'https://www.azion.com/en/documentation/',
-        description: 'Azion documentation · CLI'
+        title: 'aziontech/azion: purge',
+        href: 'https://github.com/aziontech/azion',
+        description: 'Purge URLs, wildcards and cache keys from a terminal.',
+        site: 'GitHub',
+        image: 'https://github.com/favicon.ico'
       }
     ]
   })
@@ -111,7 +117,7 @@ const history: [string, string][] = [
   ],
   [
     'How do I fix that?',
-    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page` [1]. Campaign parameters such as `utm_source` then stop creating new cache keys [3].'
+    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page` [1]. Campaign parameters such as `utm_source` then stop creating new cache keys [2][3].'
   ]
 ]
 
@@ -119,18 +125,29 @@ const cacheKeySources: SourcesItem[] = [
   {
     title: 'Cache settings',
     href: 'https://www.azion.com/en/documentation/',
-    description: 'Azion documentation · Cache'
+    description: 'Choose which query string parameters build the cache key of each path.',
+    site: 'Azion',
+    icon: 'az az-azion'
   },
   {
     title: 'aziontech/azion',
     href: 'https://github.com/aziontech/azion',
-    description: 'Azion CLI on GitHub',
-    icon: 'az az-github'
+    description: 'Change the cache settings of an application from a terminal.',
+    site: 'GitHub',
+    image: 'https://github.com/favicon.ico'
   },
   {
-    title: 'HTTP Caching',
+    title: 'HTTP Caching (RFC 9111)',
     href: 'https://www.w3.org/Protocols/',
-    description: 'W3C · HTTP'
+    description: 'Every distinct URL, query string included, is a separate entry in a cache.',
+    site: 'W3C',
+    image: 'https://www.w3.org/favicon.ico'
+  },
+  {
+    title: 'cache-control',
+    href: 'https://www.npmjs.com/package/cache-control',
+    description: 'Writes Cache-Control headers from a route table.',
+    cited: false
   }
 ]
 

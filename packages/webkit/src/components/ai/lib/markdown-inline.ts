@@ -1,8 +1,6 @@
-import { defineComponent, h, type PropType, type VNodeChild } from 'vue'
+import { type Component, defineComponent, h, type PropType, type VNodeChild } from 'vue'
 
-import Citation from '../citation/citation.vue'
 import type { SourcesItem } from '../sources/types'
-import { sourceAnchor, sourceSite } from '../sources/types'
 import type { MarkdownInline as MarkdownInlineNode } from './parse-markdown'
 
 const EXTERNAL = /^https?:/i
@@ -15,8 +13,12 @@ const LINK_CLASS =
 type ContainerNode = Extract<MarkdownInlineNode, { children: MarkdownInlineNode[] }>
 type LeafNode = Exclude<MarkdownInlineNode, ContainerNode>
 
-function renderContainer(node: ContainerNode, sources: SourcesItem[], anchor: string): VNodeChild {
-  const children = renderNodes(node.children, sources, anchor)
+function renderContainer(
+  node: ContainerNode,
+  sources: SourcesItem[],
+  citation?: Component
+): VNodeChild {
+  const children = renderNodes(node.children, sources, citation)
   switch (node.type) {
     case 'strong':
       return h('strong', { class: 'font-semibold' }, children)
@@ -36,7 +38,7 @@ function renderContainer(node: ContainerNode, sources: SourcesItem[], anchor: st
   }
 }
 
-function renderLeaf(node: LeafNode, sources: SourcesItem[], anchor: string): VNodeChild {
+function renderLeaf(node: LeafNode, sources: SourcesItem[], citation?: Component): VNodeChild {
   switch (node.type) {
     case 'text':
       return node.value
@@ -44,15 +46,10 @@ function renderLeaf(node: LeafNode, sources: SourcesItem[], anchor: string): VNo
       return h('br')
     case 'code':
       return h('code', { dir: 'ltr', class: CODE_CLASS }, node.value)
-    case 'citation': {
-      const source = sources[node.index - 1]
-      return h(Citation, {
-        index: node.index,
-        title: source?.title ?? '',
-        site: sourceSite(source),
-        href: anchor && source ? `#${sourceAnchor(anchor, node.index)}` : ''
-      })
-    }
+    case 'citation':
+      return citation
+        ? h(citation, { indexes: node.indexes, sources })
+        : `[${node.indexes.join('][')}]`
   }
 }
 
@@ -89,21 +86,26 @@ function citationSpacing(nodes: MarkdownInlineNode[]): MarkdownInlineNode[] {
 function renderNodes(
   nodes: MarkdownInlineNode[],
   sources: SourcesItem[],
-  anchor: string
+  citation?: Component
 ): VNodeChild[] {
   return citationSpacing(nodes).map((node) =>
-    'children' in node ? renderContainer(node, sources, anchor) : renderLeaf(node, sources, anchor)
+    'children' in node
+      ? renderContainer(node, sources, citation)
+      : renderLeaf(node, sources, citation)
   )
 }
 
-export default defineComponent({
-  name: 'MarkdownInline',
-  props: {
-    nodes: { type: Array as PropType<MarkdownInlineNode[]>, required: true },
-    sources: { type: Array as PropType<SourcesItem[]>, default: () => [] },
-    anchor: { type: String, default: '' }
-  },
-  setup(props) {
-    return () => renderNodes(props.nodes, props.sources, props.anchor)
-  }
-})
+export function createMarkdownInline(citation?: Component) {
+  return defineComponent({
+    name: 'MarkdownInline',
+    props: {
+      nodes: { type: Array as PropType<MarkdownInlineNode[]>, required: true },
+      sources: { type: Array as PropType<SourcesItem[]>, default: () => [] }
+    },
+    setup(props) {
+      return () => renderNodes(props.nodes, props.sources, citation)
+    }
+  })
+}
+
+export default createMarkdownInline()

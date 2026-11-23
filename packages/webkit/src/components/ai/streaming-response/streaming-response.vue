@@ -3,7 +3,7 @@
 
   import CodeBlock from '../../code/code-block/code-block.vue'
   import Separator from '../../layout/separator/separator.vue'
-  import MarkdownInline from '../lib/markdown-inline'
+  import MarkdownInline from '../lib/markdown-inline-cited'
   import {
     type MarkdownBlock,
     type MarkdownParse,
@@ -21,17 +21,14 @@
     content?: string
     /** Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes. */
     streaming?: boolean
-    /** Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name). */
+    /** Sources the `[n]`, `[n][m]` and `[n, m]` citations in the content resolve against: each becomes a chip with the site's favicon and name that opens a card of the sources it cites. */
     sources?: SourcesItem[]
-    /** The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers. */
-    anchor?: string
   }
 
   const props = withDefaults(defineProps<StreamingResponseProps>(), {
     content: '',
     streaming: false,
-    sources: () => [],
-    anchor: ''
+    sources: () => []
   })
 
   const attrs = useAttrs()
@@ -64,7 +61,7 @@
     <template
       v-for="(block, i) in blocks"
       :key="i"
-      v-memo="[block, streaming, i === lastIndex, sources, anchor, testId]"
+      v-memo="[block, streaming, i === lastIndex, sources, testId]"
     >
       <p
         v-if="block.type === 'paragraph'"
@@ -73,7 +70,6 @@
         <MarkdownInline
           :nodes="block.children"
           :sources="sources"
-          :anchor="anchor"
         /><span
           v-if="streaming && i === lastIndex"
           aria-hidden="true"
@@ -90,7 +86,6 @@
         <MarkdownInline
           :nodes="block.children"
           :sources="sources"
-          :anchor="anchor"
         /><span
           v-if="streaming && i === lastIndex"
           aria-hidden="true"
@@ -112,7 +107,6 @@
           <MarkdownInline
             :nodes="item"
             :sources="sources"
-            :anchor="anchor"
           />
         </li>
       </component>
@@ -136,7 +130,6 @@
         <MarkdownInline
           :nodes="block.children"
           :sources="sources"
-          :anchor="anchor"
         />
       </blockquote>
       <div
@@ -156,7 +149,6 @@
                 <MarkdownInline
                   :nodes="cell"
                   :sources="sources"
-                  :anchor="anchor"
                 />
               </th>
             </tr>
@@ -175,7 +167,6 @@
                 <MarkdownInline
                   :nodes="cell"
                   :sources="sources"
-                  :anchor="anchor"
                 />
               </td>
             </tr>
