@@ -40,7 +40,7 @@ After approval, the call appears as a running `ToolCall` under the card and comp
 
 ### F. Outcome — `ChatMessage`, `CopyButton`, `Button`
 
-A new response that says what changed (or that nothing ran), with Copy in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined Retry `Button` beside Copy runs the action again; an action never ends in silence.
+A new response that says what changed (or that nothing ran), with Copy in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined `Button` beside Copy runs the action again, named for it: the tool's `approveLabel` plus `again` (`Deploy again`), `Retry` only for a tool with no verb, so one tap never re-runs an approved production change behind a bare word; an action never ends in silence. The retried call should come back as a new approval card: the earlier approval covered one run.
 
 ### G. Questions and failed decisions — `AgentQuestion`, `Alert`
 
@@ -170,7 +170,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - Approved: the call `complete` with its output, and the assistant's report after it.
 - Denied: `approval.approved: false` and a `tool-result` with `outcome: 'denied'`; the card reads Denied, the call is recorded as denied and the assistant says nothing ran.
 - Questions and failed decisions: a generic or unbound interrupt asks its `AgentQuestion` after the conversation; `interruptErrors` shows the alert with Retry.
-- Error: the approved call in `error` with its `tool-result` error, and a report that says what failed and that `b-4790` still serves, with Retry.
+- Error: the approved call in `error` with its `tool-result` error, and a report that says what failed and that `b-4790` still serves, with Deploy again.
 
 ## Related
 

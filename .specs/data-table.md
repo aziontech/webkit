@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 49cb66480a8e4d17d54cf994b0eedda2fc604570cef3131f1780d11fdf5148a4
+checksum: b4effaec80db73d6703b1be58874d30f5f50f2bd380f4c3b78516abaaac565d8
 created: 2026-11-15
 last_updated: 2026-11-22
 ---
@@ -369,7 +369,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 - Layout: logical utilities only (`start-` / `end-`, `ps-` / `pe-`, `text-start`); frozen columns pin to the inline start and end edges, so `frozen: 'start'` pins to the right under `dir="rtl"`, and the edge fades follow. Sticky offsets of stacked frozen columns are written as `inset-inline-start` / `inset-inline-end`, so two end columns keep their places in both directions; the viewport scroll cue sits on the inline edges too.
 - Icons: the tree chevron mirrors (it points to the inline end when closed); the sort glyph and the reorder grip do not mirror.
 - Keyboard: tree rows read `Arrow Right` / `Arrow Left` as inline end / inline start (`logicalArrowKey`), so `Arrow Left` opens a row under `rtl`; reorder keys are vertical and do not change.
-- User data: cells render the app's content; `TableCellId` wraps identifiers in `dir="ltr"`.
+- User data: cells render the app's content; `TableCellId` wraps identifiers in `dir="ltr"`, and `TableCellTime` gives its relative time `dir="auto"`, so `2 weeks ago` keeps its order on a right-to-left page.
 
 ## Responsive
 

@@ -55,6 +55,21 @@ describe('account/account-deployment-settings', () => {
     await waitFor(() => expect(document.body.textContent).toContain('Deployment defaults saved.'))
   })
 
+  it('names and confirms the settings that Apply to existing rewrites before it saves', async () => {
+    const view = render(BuildDeployment, {
+      props: { defaultDraft: { bindingPolicy: 'FLEXIBLE', applyToExisting: true } }
+    })
+    expect(view.container.textContent).toMatch(
+      /Saving moves \d+ settings? to the .+ binding policy\./
+    )
+    await fireEvent.click(buttonByText('Save', view.container as HTMLElement)!)
+    expect(view.emitted('save')).toBeUndefined()
+    await waitFor(() => expect(dialog()).not.toBeNull())
+    expect(dialog()!.textContent).toMatch(/Change \d+ Deployment Settings?/)
+    await fireEvent.click(buttonByText('Save', dialog()!)!)
+    await waitFor(() => expect(view.emitted('save')).toHaveLength(1))
+  })
+
   it('keeps the edits and toasts the error when the save fails', async () => {
     const view = render(BuildDeployment, {
       props: { defaultDraft: { bindingPolicy: 'FLEXIBLE' }, saving: true }

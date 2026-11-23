@@ -59,12 +59,13 @@
             aria-label="Billing period"
           />
           <div
-            class="flex w-full min-w-0 flex-col items-stretch justify-center gap-(--spacing-md) @4xl:flex-row"
+            data-slot="plan-grid"
+            class="grid w-full min-w-0 grid-cols-1 items-stretch gap-(--spacing-md) @md:grid-cols-2 @4xl:grid-cols-3"
           >
             <div
               v-for="plan in pricedPlans"
               :key="plan.id"
-              class="flex max-w-none min-w-0 flex-1"
+              class="flex min-w-0"
             >
               <PricingCard
                 equal-height

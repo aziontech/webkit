@@ -17,6 +17,13 @@ import type {
   AiChatToolCallPart
 } from '../../../utils/ai-chat'
 
+describe('ai/ai-chat entry', () => {
+  it('focuses the composer when the chat opens', async () => {
+    const view = render(AiChat)
+    await waitFor(() => expect(document.activeElement).toBe(view.getByRole('textbox')))
+  })
+})
+
 describe('ai/ai-chat Artifact', () => {
   describe('wide', () => {
     beforeEach(async () => {

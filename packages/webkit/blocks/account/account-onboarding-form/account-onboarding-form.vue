@@ -344,30 +344,18 @@
                             aria-label="Plan"
                             @update:model-value="selectPlan"
                           >
-                            <template #option="{ option }">
-                              <div
-                                class="flex w-full items-center justify-between gap-(--spacing-sm)"
-                              >
-                                <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-                                  <span class="text-body-sm text-(--text-default)">{{
-                                    option.label
-                                  }}</span>
-                                  <span class="text-body-xs text-(--text-muted)">{{
-                                    option.description
-                                  }}</span>
-                                </div>
-                                <div class="flex shrink-0 flex-col items-end gap-(--spacing-2xs)">
-                                  <Tag
-                                    :label="option.name"
-                                    :variant="option.variant"
-                                    :severity="option.severity"
-                                    size="small"
-                                    rounded
-                                  />
-                                  <span class="text-label-sm text-(--text-muted)">
-                                    {{ option.price }}
-                                  </span>
-                                </div>
+                            <template #tag="{ option }">
+                              <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                                <Tag
+                                  :label="option.name"
+                                  :variant="option.variant"
+                                  :severity="option.severity"
+                                  size="small"
+                                  rounded
+                                />
+                                <span class="text-label-sm text-(--text-muted)">
+                                  {{ option.price }}
+                                </span>
                               </div>
                             </template>
                           </RadioGroup>

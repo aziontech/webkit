@@ -51,6 +51,7 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Right-to-left: the prefix and the value sit in one group with `dir="auto"`, so `$184.20` keeps its order on a right-to-left page; the suffix follows the page direction.
 
 ## Right-to-left
 

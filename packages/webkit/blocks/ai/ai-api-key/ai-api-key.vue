@@ -115,6 +115,11 @@
     return { severity: 'info', label: 'Saved', loading: false }
   })
 
+  const keyPlaceholder = computed(() =>
+    saved.value ? `Paste a new key to replace ${saved.value.masked}` : ''
+  )
+  const replacing = computed(() => Boolean(saved.value))
+
   const focusKey = () => nextTick(() => keyInputEl.value?.focus())
 
   watch(
@@ -218,6 +223,7 @@
                     autocomplete="off"
                     aria-label="API key"
                     required
+                    :placeholder="keyPlaceholder"
                     :aria-describedby="submitted && draftEmpty ? `${noteId} ${errorId}` : noteId"
                     :invalid="submitted && draftEmpty"
                     :disabled="saving"
@@ -276,8 +282,8 @@
               </template>
               <Button
                 type="submit"
-                label="Save key"
-                variant="primary"
+                :label="replacing ? 'Replace key' : 'Save key'"
+                :variant="replacing && draftEmpty ? 'outline' : 'primary'"
                 size="medium"
                 :loading="saving"
               />

@@ -142,6 +142,8 @@ describe('account/account-onboarding-form', () => {
     })
     expect(await view.findByRole('radio', { name: /Starter plan/ })).toBeTruthy()
     expect(view.queryByRole('radio', { name: /Pro plan/ })).toBeNull()
+    expect(view.getAllByText('A plan given by the page')).toHaveLength(1)
+    expect(view.getByText('$5/mo')).toBeTruthy()
     expect(view.container.textContent).toContain('jane.doe@example.com')
     expect(view.container.textContent).not.toContain('myemail@example.com')
   })

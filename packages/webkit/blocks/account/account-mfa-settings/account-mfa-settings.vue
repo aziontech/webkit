@@ -83,6 +83,13 @@
 
   const withoutMfa = computed(() => items.value.filter((member) => !member.enabled))
 
+  const relaxDescription = computed(() => {
+    const count = withoutMfa.value.length
+    const after = 'New people and anyone whose MFA is reset can then sign in with a password only.'
+    if (!count) return `Everyone keeps the MFA they set up. ${after}`
+    return `${count} ${count === 1 ? 'person' : 'people'} without MFA can sign in again. ${after}`
+  })
+
   const requireDescription = computed(() => {
     const count = withoutMfa.value.length
     if (!count)
@@ -140,12 +147,14 @@
   const refreshing = computed(() => props.loading && items.value.length > 0)
 
   const requireOpen = ref(false)
+  const relaxOpen = ref(false)
   const onRequire = (value: boolean) => {
-    if (value) {
-      requireOpen.value = true
-      return
-    }
+    if (value) requireOpen.value = true
+    else relaxOpen.value = true
+  }
+  const confirmRelax = () => {
     required.value = false
+    relaxOpen.value = false
   }
   const confirmRequire = () => {
     required.value = true
@@ -402,6 +411,16 @@
       confirm-label="Require MFA"
       size="small"
       @confirm="confirmRequire"
+    />
+
+    <ConfirmDialog
+      v-model:open="relaxOpen"
+      variant="danger"
+      title="Stop requiring MFA"
+      :description="relaxDescription"
+      confirm-label="Stop requiring MFA"
+      size="small"
+      @confirm="confirmRelax"
     />
 
     <ConfirmDialog

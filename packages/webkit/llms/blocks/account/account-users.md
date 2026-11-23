@@ -30,7 +30,7 @@ Who can sign in to the account, with which role and through which teams. An admi
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-Title `Users` and one sentence that says access comes from teams. Actions: Documentation and the primary `Invite User` at `size="medium"`, which opens the invite drawer.
+Title `Users` and one sentence that names both sources of access: the role decides what a person can do on the account, their teams which resources they reach. Actions: Documentation and the primary `Invite User` at `size="medium"`, which opens the invite drawer.
 
 ### B. Controls row — `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences` (required)
 
@@ -42,7 +42,7 @@ The view-table controls row (`view/view-table`): a `PropertyFilter` bound with `
 
 ### D. Teams per person — `MultiSelect`, `Tooltip` (required)
 
-The Teams cell is a small `MultiSelect` named `Teams of <person>` whose value reads the team names. A change applies at once and raises a toast that names the new teams with Undo; clearing every team keeps the seat but removes all access, and the toast says so. The owner's teams are locked, with a `Tooltip` saying why; an inactive person's teams are disabled.
+The Teams cell is a small `MultiSelect` named `Teams of <person>` whose value reads the team names. Ticking teams edits a draft while the menu is open; the change applies once, when the menu closes, and raises one toast (one per person, a later change replaces it) that names the new teams with Undo, so a person's access never changes on every click; clearing every team keeps the seat but removes all access, and the toast says so. The owner's teams are locked, with a `Tooltip` saying why; an inactive person's teams are disabled.
 
 ### E. Row actions — `DataTable`, `DropdownMenu`, `ConfirmDialog` (required)
 
@@ -54,7 +54,7 @@ View profile opens a medium `Dialog` titled with the person's name and `Avatar`:
 
 ### G. Invite drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `DrawerDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `MultiSelect`, `Button` (required)
 
-A large right `Drawer` around a `form`: a description of what the invitation does, a required Email `Field` and a required Teams `Field` with Developers preselected and a description saying permissions add up. Footer: Cancel and the primary `Send invitation`, which shows its loading state; the drawer cannot be dismissed while it sends. Errors follow `state/state-form-validation` (SectionRejected): nothing is red before the first Send; after it each field shows its own `Field.Error` and focus moves to the first invalid one.
+A large right `Drawer` around a `form`: a description of what the invitation does, a required Email `Field`, a required Role `Select` (Admin, Developer or Viewer, Developer preselected, its hint under it, so the role is always chosen and seen before sending) and a required Teams `Field` with Developers preselected and a description saying permissions add up. Footer: Cancel and the primary `Send invitation`, which shows its loading state; the drawer cannot be dismissed while it sends. Errors follow `state/state-form-validation` (SectionRejected): nothing is red before the first Send; after it each field shows its own `Field.Error` and focus moves to the first invalid one.
 
 ### H. Only the owner, no match and load failure — `EmptyState`, `Alert` (conditional)
 
@@ -77,15 +77,15 @@ The block takes its records through props and emits every action; it fetches not
 | `defaultInviteOpen` | `boolean`     | Opens the invite drawer on mount.                                                                                   |
 | `defaultEditRoleId` | `string`      | Opens the Edit role dialog for the user with this id on mount.                                                      |
 
-| Event               | Payload                     | When                                                                                    |
-| ------------------- | --------------------------- | --------------------------------------------------------------------------------------- |
-| `invite`            | `(event, { email, teams })` | Send invitation passed validation; the person is already in the list as Invited.        |
-| `refresh`           | `(event)`                   | Refresh.                                                                                |
-| `retry`             | `(event)`                   | Retry in the error alert.                                                               |
-| `role-change`       | `(event, { user, role })`   | Save role, or Undo in its toast; the row already shows the new role.                    |
-| `teams-change`      | `({ user, teams })`         | A row's Teams picker changed, or Undo in its toast.                                     |
-| `resend-invitation` | `(event, user)`             | Resend invitation in the row menu.                                                      |
-| `remove`            | `(event, user)`             | Remove user or Cancel invitation was confirmed; the row is already gone from the table. |
+| Event               | Payload                           | When                                                                                    |
+| ------------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
+| `invite`            | `(event, { email, role, teams })` | Send invitation passed validation; the person is already in the list as Invited.        |
+| `refresh`           | `(event)`                         | Refresh.                                                                                |
+| `retry`             | `(event)`                         | Retry in the error alert.                                                               |
+| `role-change`       | `(event, { user, role })`         | Save role, or Undo in its toast; the row already shows the new role.                    |
+| `teams-change`      | `({ user, teams })`               | A row's Teams picker closed with a different set of teams, or Undo in its toast.        |
+| `resend-invitation` | `(event, user)`                   | Resend invitation in the row menu.                                                      |
+| `remove`            | `(event, user)`                   | Remove user or Cancel invitation was confirmed; the row is already gone from the table. |
 
 To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -240,6 +240,8 @@ Each variant is the same screen in another state: `get_block("account/account-us
   export interface UsersInvitation {
     /** The address to invite, trimmed and lowercased. */
     email: string
+    /** What they can do on the account, chosen in the form. */
+    role: Exclude<UsersRole, 'Owner'>
     /** Values of the teams they join. */
     teams: string[]
   }
@@ -354,6 +356,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
     const before = [...user.teams]
     changeTeams(user.id, next)
     toast.success(`Teams updated for ${displayName(user)}.`, {
+      id: `teams-${user.id}`,
       description: next.length
         ? `${teamsLabel(next)}. Access changes on their next request.`
         : 'They keep their seat but lose every permission until a team is added.',
@@ -445,7 +448,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
   const openInvite = () => {
     inviteOpen.value = true
   }
-  const sendInvite = (event: Event, { email, teams }: UsersInvitation) => {
+  const sendInvite = (event: Event, { email, role, teams }: UsersInvitation) => {
     items.value = [
       ...items.value,
       {
@@ -453,16 +456,16 @@ Each variant is the same screen in another state: `get_block("account/account-us
         name: '',
         email,
         owner: false,
-        role: 'Developer',
+        role,
         teams,
         status: 'Invited',
         lastActive: null
       }
     ]
     inviteOpen.value = false
-    emit('invite', event, { email, teams })
+    emit('invite', event, { email, role, teams })
     toast.success(`Invitation sent to ${email}.`, {
-      description: `They join ${teamsLabel(teams)} when they accept. The link expires in 7 days.`
+      description: `They join as ${role} in ${teamsLabel(teams)} when they accept. The link expires in 7 days.`
     })
   }
 </script>
@@ -472,7 +475,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
     <div class="layout-column flex flex-col">
       <PageHeader
         title="Users"
-        description="The people who can sign in to this account. What each one can do comes from their teams."
+        description="The people who can sign in to this account. Their role decides what they can do on the account; their teams decide which resources they reach."
       >
         <template #actions>
           <Button
@@ -752,10 +755,11 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
+  import Select from '@aziontech/webkit/select'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  import type { UsersInvitation, UsersTeam } from '../account-users.vue'
-  import { teamsLabelOf } from '../account-users-format'
+  import type { UsersInvitation, UsersRole, UsersTeam } from '../account-users.vue'
+  import { teamsLabelOf, USERS_ROLES } from '../account-users-format'
 
   const props = defineProps<{ teamOptions: UsersTeam[]; emails: string[] }>()
 
@@ -763,7 +767,14 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
 
   const open = defineModel<boolean>('open', { required: true })
 
-  const invite = reactive({ email: '', teams: ['developers'] })
+  const invite = reactive<{ email: string; role: Exclude<UsersRole, 'Owner'>; teams: string[] }>({
+    email: '',
+    role: 'Developer',
+    teams: ['developers']
+  })
+  const roleHint = computed(
+    () => USERS_ROLES.find((role) => role.value === invite.role)?.hint ?? ''
+  )
   const submitted = ref(false)
   const formEl = ref<HTMLFormElement | null>(null)
   const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -781,6 +792,7 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
   watch(open, (now) => {
     if (!now) return
     invite.email = ''
+    invite.role = 'Developer'
     invite.teams = ['developers']
     submitted.value = false
   })
@@ -791,7 +803,11 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
       nextTick(() => formEl.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
       return
     }
-    emit('send', event, { email: invite.email.trim().toLowerCase(), teams: [...invite.teams] })
+    emit('send', event, {
+      email: invite.email.trim().toLowerCase(),
+      role: invite.role,
+      teams: [...invite.teams]
+    })
   }
 </script>
 
@@ -816,8 +832,8 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
           <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
             <legend class="sr-only">Invite User</legend>
             <DrawerDescription>
-              They get an email with a link to join this account. Their teams decide what they can
-              see and change.
+              They get an email with a link to join this account. Their role decides what they can
+              do on the account; their teams decide which resources they reach.
             </DrawerDescription>
             <Field
               required
@@ -833,6 +849,26 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
                 placeholder="name@example.com"
               />
               <Field.Error v-if="errors.email">{{ errors.email }}</Field.Error>
+            </Field>
+            <Field required>
+              <Field.Label for="invite-role">Role</Field.Label>
+              <Select
+                v-model="invite.role"
+                size="large"
+                class="w-full"
+              >
+                <Select.Trigger id="invite-role" />
+                <Select.Content>
+                  <Select.Item
+                    v-for="role in USERS_ROLES"
+                    :key="role.value"
+                    :value="role.value"
+                  >
+                    {{ role.value }}
+                  </Select.Item>
+                </Select.Content>
+              </Select>
+              <Field.Description>{{ roleHint }}</Field.Description>
             </Field>
             <Field
               required
@@ -1109,7 +1145,7 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
     CollectionPaginationProps,
     CollectionTableProps
   } from '@aziontech/webkit/use-collection'
-  import { ref } from 'vue'
+  import { reactive, ref } from 'vue'
 
   import type { UsersTeam, UsersUser } from '../account-users.vue'
   import {
@@ -1136,6 +1172,17 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
   }>()
 
   const usersTableEl = ref<TableExposed<UsersUser> | null>(null)
+
+  const drafts = reactive<Record<string, string[]>>({})
+  const teamsOf = (row: UsersUser): string[] => drafts[row.id] ?? row.teams
+  const sameTeams = (a: string[], b: string[]) =>
+    a.length === b.length && a.every((team) => b.includes(team))
+
+  const commitTeams = (row: UsersUser) => {
+    const draft = drafts[row.id]
+    delete drafts[row.id]
+    if (draft && !sameTeams(draft, row.teams)) emit('teams', row, draft)
+  }
 
   defineExpose({ exportCsv: () => usersTableEl.value?.exportCsv({ filename: 'users.csv' }) })
 </script>
@@ -1164,6 +1211,22 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
               <span class="truncate text-body-sm text-(--text-default)">{{
                 displayName(row)
               }}</span>
+              <div
+                aria-hidden="true"
+                data-slot="narrow-summary"
+                class="mt-(--spacing-2xs) flex flex-wrap items-center gap-(--spacing-xs) sm:hidden"
+              >
+                <Tag
+                  :label="row.role"
+                  :variant="roleVariant(row.role)"
+                  :severity="roleSeverity(row.role)"
+                  size="small"
+                />
+                <TableCellStatus
+                  :label="row.status"
+                  :severity="statusSeverity(row.status)"
+                />
+              </div>
             </div>
           </div>
         </template>
@@ -1189,13 +1252,14 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
             class="w-full"
           >
             <MultiSelect
-              :model-value="row.teams"
+              :model-value="teamsOf(row)"
               size="small"
               class="w-full"
               placeholder="No team"
               :disabled="row.owner || row.status === 'Inactive'"
-              :display-value="() => teamsLabelOf(teamOptions, row.teams)"
-              @update:model-value="(next) => emit('teams', row, next)"
+              :display-value="() => teamsLabelOf(teamOptions, teamsOf(row))"
+              @update:model-value="(next) => (drafts[row.id] = next.map(String))"
+              @update:open="(now) => now || commitTeams(row)"
             >
               <MultiSelect.Trigger :aria-label="`Teams of ${displayName(row)}`" />
               <MultiSelect.Content>

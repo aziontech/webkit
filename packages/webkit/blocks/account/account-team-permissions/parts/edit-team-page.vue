@@ -15,8 +15,10 @@
   import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref } from 'vue'
 
+  import { useTeamLeaveGuard } from '../composables/use-team-leave-guard'
   import { focusById, validateTeam } from '../lib/team-form'
   import TeamFormHeader from './team-form-header.vue'
+  import TeamLeaveDialog from './team-leave-dialog.vue'
   import TeamPermissionsField from './team-permissions-field.vue'
   import TeamStatusGroup from './team-status-group.vue'
 
@@ -65,6 +67,12 @@
       members: members.value
     })
   const dirty = computed(() => snapshot() !== baseline.value)
+  const pageEl = ref<HTMLElement | null>(null)
+  const guard = useTeamLeaveGuard(
+    pageEl,
+    () => dirty.value,
+    () => !submitting.value
+  )
 
   const candidate = ref('')
   const candidateOptions = computed(() =>
@@ -129,7 +137,10 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
+  <div
+    ref="pageEl"
+    class="flex h-dvh flex-col bg-(--bg-canvas)"
+  >
     <TeamFormHeader page="Edit Team" />
 
     <main
@@ -368,5 +379,6 @@
       size="small"
       @confirm="deleteTeam"
     />
+    <TeamLeaveDialog :guard="guard" />
   </div>
 </template>

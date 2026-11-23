@@ -7,7 +7,7 @@
   import OtpInput from '@aziontech/webkit/otp-input'
   import PageHeader from '@aziontech/webkit/page-header'
   import QrCode from '@aziontech/webkit/qr-code'
-  import { computed, nextTick, ref } from 'vue'
+  import { computed, nextTick, onMounted, ref } from 'vue'
 
   import { useCodeCheck } from '../composables/use-code-check'
   import { mfaAccount as account, mfaSetupKey as setupKey, recoveryCodes } from '../sample'
@@ -35,6 +35,10 @@
 
   const focusCode = () => nextTick(() => document.getElementById('mfa-setup-code')?.focus())
 
+  onMounted(() => {
+    if (window.matchMedia('(pointer: fine)').matches) focusCode()
+  })
+
   const codeCheck = useCodeCheck({
     code,
     length: 6,
@@ -50,6 +54,10 @@
     }
   })
   const { error: codeError, checking: verifying, unreachable, check: verify } = codeCheck
+
+  const APP_LINK_CLASS =
+    'inline-flex min-h-10 items-center rounded-(--shape-control) text-body-sm text-(--text-link) underline-offset-2 hover:text-(--text-link-hover) ' +
+    'hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) forced-colors:text-[LinkText]'
 
   const SETUP_KEY_CLASS =
     'flex items-center justify-between gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-2xs) ' +
@@ -96,7 +104,10 @@
         >
           <li>Install an authenticator app, such as Google Authenticator, on your phone.</li>
           <li>In the app, add an account and choose to scan a QR code.</li>
-          <li>Scan this code, then enter the 6-digit code the app shows.</li>
+          <li>
+            Scan this code, or open it in the app on this phone, then enter the 6-digit code the app
+            shows.
+          </li>
         </ol>
 
         <div class="flex flex-col items-center gap-(--spacing-sm)">
@@ -104,6 +115,11 @@
             :value="otpauthUri"
             :aria-label="`QR code to add ${account} to an authenticator app`"
           />
+          <a
+            :href="otpauthUri"
+            :class="APP_LINK_CLASS"
+            >Open in authenticator app</a
+          >
         </div>
 
         <div class="flex flex-col gap-(--spacing-2xs)">

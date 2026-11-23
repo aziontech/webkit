@@ -134,7 +134,9 @@ describe('account/tokens', () => {
     })
     expect(confirm.textContent).toContain('stop working right away')
     await fireEvent.click(buttonByText('Revoke token', confirm))
-    await waitFor(() => expect(view.getAllByText('Revoked').length).toBe(2))
+    const shown = () =>
+      view.getAllByText('Revoked').filter((node) => !node.closest('[data-slot="narrow-summary"]'))
+    await waitFor(() => expect(shown().length).toBe(2))
     expect(view.emitted<unknown[]>('revoke')![0][1]).toMatchObject({
       id: 'tok-7c1e',
       name: 'Local CLI'

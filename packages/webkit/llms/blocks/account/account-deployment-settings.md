@@ -38,7 +38,7 @@ A small info `Alert`, closable, that explains the binding policy, the deployment
 
 ### C. New service defaults — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Select`, `Switch`, `SaveBar` (required)
 
-A `SettingsGroup` with an anchor around a flush `Card` and an `Item.List` of `SettingsRow`s: Binding policy and Deployment policy as large `Select`s whose value reads the policy label, then `Apply to existing Deployment Settings` as a compact `Switch`. Changing any of them raises a `SaveBar` (entering and leaving with a short translate and fade, none under reduced motion) that says `You have unsaved changes.` with Discard and Save. Save emits `save` with the values and spins while `saving` is set; when the save ends without `error` the values are kept, Apply turns off again and a toast says what changed: with Apply on, how many settings now use the binding policy (Default is never changed).
+A `SettingsGroup` with an anchor around a flush `Card` and an `Item.List` of `SettingsRow`s: Binding policy and Deployment policy as large `Select`s whose value reads the policy label, then `Apply to existing Deployment Settings` as a compact `Switch`. Changing any of them raises a `SaveBar` (entering and leaving with a short translate and fade, none under reduced motion) that says `You have unsaved changes.` with Discard and Save. With Apply on, the SaveBar names the rewrite instead (`Saving moves 3 settings to the Strict binding policy.`) and Save (or `⌘ S`) first opens a `ConfirmDialog` that lists the settings it changes; only its Save emits `save`. Save emits `save` with the values and spins while `saving` is set; when the save ends without `error` the values are kept, Apply turns off again and a toast says what changed: with Apply on, how many settings now use the binding policy (Default is never changed).
 
 ### D. All services — `Accordion`, `Input`, `Tag`, `Select`, `Pagination`, `TableCellLink` (required)
 
@@ -193,6 +193,7 @@ Each variant is the same screen in another state: `get_block("account/account-de
   import {
     bindingLabel,
     reachLabel,
+    rewrittenNames,
     servicesBoundTo,
     settingNameIn,
     type SettingsRowData
@@ -623,6 +624,8 @@ Each variant is the same screen in another state: `get_block("account/account-de
       <DeploymentSaveBar
         :dirty="dirty"
         :saving="saving"
+        :rewritten="form.applyToExisting ? rewrittenNames(settingList, form.bindingPolicy) : []"
+        :binding-label="bindingLabel(form.bindingPolicy)"
         @save-shortcut="onSaveShortcut"
         @discard="discard"
         @save="save"
@@ -857,6 +860,14 @@ export const settingRows = (
       services: bound
     }
   })
+
+export const rewrittenNames = (
+  settings: { name: string; system: boolean; bindingPolicy: unknown }[],
+  policy: unknown
+): string[] =>
+  settings
+    .filter((setting) => !setting.system && setting.bindingPolicy !== policy)
+    .map((setting) => setting.name)
 ```
 
 ## `parts/deployment-defaults-group.vue`
@@ -979,17 +990,23 @@ export const settingRows = (
 ```ts
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Kbd from '@aziontech/webkit/kbd'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import { computed, ref } from 'vue'
 
   export interface DeploymentSaveBarProps {
     /** The defaults differ from the saved ones. */
     dirty: boolean
     /** The defaults save is in flight. */
     saving: boolean
+    /** Names of the settings the save rewrites with Apply to existing; empty rewrites none. */
+    rewritten: string[]
+    /** The binding policy those settings take. */
+    bindingLabel: string
   }
 
-  defineProps<DeploymentSaveBarProps>()
+  const props = defineProps<DeploymentSaveBarProps>()
 
   const emit = defineEmits<{
     'save-shortcut': [event: KeyboardEvent]
@@ -997,9 +1014,32 @@ export const settingRows = (
     save: [event: MouseEvent]
   }>()
 
-  const onSaveShortcut = (event: KeyboardEvent) => emit('save-shortcut', event)
+  const confirmOpen = ref(false)
+  const count = computed(() => props.rewritten.length)
+  const message = computed(() =>
+    count.value
+      ? `Saving moves ${count.value} ${count.value === 1 ? 'setting' : 'settings'} to the ${props.bindingLabel} binding policy.`
+      : 'You have unsaved changes.'
+  )
+  const confirmDescription = computed(
+    () =>
+      `${props.rewritten.join(', ')} ${count.value === 1 ? 'takes' : 'take'} the ${props.bindingLabel} binding policy. ` +
+      'Their other values and Default stay as they are.'
+  )
+
+  const onSaveShortcut = (event: KeyboardEvent) => {
+    if (count.value) confirmOpen.value = true
+    else emit('save-shortcut', event)
+  }
   const discard = (event: MouseEvent) => emit('discard', event)
-  const save = (event: MouseEvent) => emit('save', event)
+  const save = (event: MouseEvent) => {
+    if (count.value) confirmOpen.value = true
+    else emit('save', event)
+  }
+  const confirmSave = (event: MouseEvent) => {
+    confirmOpen.value = false
+    emit('save', event)
+  }
 </script>
 
 <template>
@@ -1013,7 +1053,7 @@ export const settingRows = (
       v-if="dirty || saving"
       @save="onSaveShortcut"
     >
-      You have unsaved changes.
+      {{ message }}
       <template #actions>
         <Button
           type="button"
@@ -1041,6 +1081,15 @@ export const settingRows = (
       </template>
     </SaveBar>
   </Transition>
+  <ConfirmDialog
+    v-model:open="confirmOpen"
+    variant="primary"
+    :title="`Change ${count} Deployment ${count === 1 ? 'Setting' : 'Settings'}`"
+    :description="confirmDescription"
+    confirm-label="Save"
+    size="small"
+    @confirm="confirmSave"
+  />
 </template>
 ```
 

@@ -10,6 +10,7 @@
   import {
     bindingLabel,
     reachLabel,
+    rewrittenNames,
     servicesBoundTo,
     settingNameIn,
     type SettingsRowData
@@ -440,6 +441,8 @@
       <DeploymentSaveBar
         :dirty="dirty"
         :saving="saving"
+        :rewritten="form.applyToExisting ? rewrittenNames(settingList, form.bindingPolicy) : []"
+        :binding-label="bindingLabel(form.bindingPolicy)"
         @save-shortcut="onSaveShortcut"
         @discard="discard"
         @save="save"

@@ -49,7 +49,7 @@ Names the task: `Change plan`, `Upgrade to Pro`. It labels the drawer for assist
 
 ### F. Body — `PanelBody` (required)
 
-The scrolling body of each drawer, between header and footer. Its layout follows the drawer's own width (`@container` on the body, `@md` / `@3xl` / `@4xl` variants), never the viewport: a large drawer is about 550px wide on a 1280px screen, so the plan cards stack in one column, the upgrade body keeps What's included above the charge, and the two-field form rows start at `@md`. A wider surface gets the plan row at `@4xl` and the side column at `@3xl`.
+The scrolling body of each drawer, between header and footer. Its layout follows the drawer's own width (`@container` on the body, `@md` / `@3xl` / `@4xl` variants), never the viewport: a large drawer is about 550px wide on a 1280px screen, so the plan cards sit two to a row from the `@md` container width (Free beside Pro, the tiers people compare most) and three to a row at `@4xl`, the upgrade body keeps What's included above the charge, and the two-field form rows start at `@md`. A wider surface gets the side column at `@3xl`; below `@md` the cards stack.
 
 ### G. Description — `DrawerDescription` (plan drawer)
 
@@ -189,7 +189,7 @@ Then delete `sample.ts` and its import.
 
 ## Accessibility
 
-- Each drawer is a dialog labelled by its title; focus moves into it on open and returns to the trigger on close, including when the stacked drawer closes.
+- Each drawer is a dialog labelled by its title; focus moves into it on open and returns to the trigger on close, including when the stacked drawer closes. The upgrade drawer puts focus on the top of its body (`data-autofocus`), not on its first field, so it opens at the order summary with the price in view instead of scrolled down to the payment form.
 - Each fieldset has a visually hidden legend (`Payment method`, `Address information`).
 - After a failed Update or Upgrade, focus moves to the first field in error; after a decline, to the card number.
 - The billing period toggle is labelled; a price change is visible text, not color only.
@@ -608,7 +608,11 @@ Each variant is the same screen in another state: `get_block("account/account-ch
           <DrawerTitle>Upgrade to Pro</DrawerTitle>
         </PanelHeader>
         <PanelBody>
-          <div class="@container w-full">
+          <div
+            class="@container w-full outline-none"
+            tabindex="-1"
+            data-autofocus
+          >
             <div
               class="grid grid-cols-1 gap-(--spacing-lg) @3xl:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] @3xl:gap-(--spacing-xl)"
             >
@@ -971,12 +975,13 @@ export const cardErrorsOf = (card: ChangePlanDrawerCard): Record<CardField, stri
             aria-label="Billing period"
           />
           <div
-            class="flex w-full min-w-0 flex-col items-stretch justify-center gap-(--spacing-md) @4xl:flex-row"
+            data-slot="plan-grid"
+            class="grid w-full min-w-0 grid-cols-1 items-stretch gap-(--spacing-md) @md:grid-cols-2 @4xl:grid-cols-3"
           >
             <div
               v-for="plan in pricedPlans"
               :key="plan.id"
-              class="flex max-w-none min-w-0 flex-1"
+              class="flex min-w-0"
             >
               <PricingCard
                 equal-height

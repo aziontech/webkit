@@ -7,7 +7,7 @@ spec_version: 1
 template: 2
 created: 2026-11-19
 last_updated: 2026-11-19
-checksum: e048c7acb6c728680f163bb0a944445978a4f629191a2f8d035872154343b26a
+checksum: 6e2cd6bdd8fc493a23ec1a728fd1901a043a0c565a011480b1d1682dd5d0cfcc
 ---
 
 # ImageGallery — Component Spec
@@ -179,7 +179,7 @@ _No slots: the images come from `items`._
 ## Responsive
 
 - Container queries: the root is the `image-gallery` container; from the `md` container width a grid of three or more tiles shows three columns, below it two. One tile is capped at `--container-xs` wide; two tiles share two columns.
-- Narrow container (below the `md` container width): two columns of square thumbnails. The viewer is the `Dialog` sheet on small viewports (bottom sheet below `md`, full screen below `sm`), and the image scales to fit its body.
+- Narrow container (below the `md` container width): two columns of square thumbnails. A thumbnail shows the whole image (`object-contain`, letterboxed on the tile surface), never a crop: a chart or a screenshot keeps its labels. The viewer is the `Dialog` sheet on small viewports (bottom sheet below `md`, full screen below `sm`), and the image scales to fit its body.
 - Touch: every thumbnail is a whole-tile button at least 44 × 44 px (the narrowest two-column tile in a 320 px column is far larger), so it clears 24 px and 44 px under `pointer: coarse`; Previous, Next, Download and Close keep the `IconButton` / `Button` / `Dialog` targets (≥ 40 px, 44 px under `pointer: coarse`). Nothing depends on hover or swipe: Previous and Next are buttons as well as arrow keys.
 - Reflow: no horizontal page scroll at 320 px and at 200 % zoom (WCAG 1.4.10, 1.4.12); thumbnails shrink with the column, text wraps, and the viewer image fits its body (`object-contain`).
 

@@ -978,8 +978,20 @@ export const sampleTokens: PersonalTokensToken[] = [
         aria-label="Personal tokens"
         @row-remove="(_event, row) => emit('action', removalOf(row), row)"
       >
-        <template #cell-name="{ value }">
-          <span class="truncate text-label-sm text-(--text-default)">{{ value }}</span>
+        <template #cell-name="{ row, value }">
+          <div class="flex min-w-0 flex-col">
+            <span class="truncate text-label-sm text-(--text-default)">{{ value }}</span>
+            <div
+              aria-hidden="true"
+              data-slot="narrow-summary"
+              class="mt-(--spacing-2xs) w-fit sm:hidden"
+            >
+              <TableCellStatus
+                :label="row.status"
+                :severity="statusOf(row).severity"
+              />
+            </div>
+          </div>
         </template>
         <template #cell-description="{ value }">
           <span

@@ -37,7 +37,7 @@ Names the task: `Change plan`, `Upgrade to Pro`. It labels the drawer for assist
 
 ### F. Body — `PanelBody` (required)
 
-The scrolling body of each drawer, between header and footer. Its layout follows the drawer's own width (`@container` on the body, `@md` / `@3xl` / `@4xl` variants), never the viewport: a large drawer is about 550px wide on a 1280px screen, so the plan cards stack in one column, the upgrade body keeps What's included above the charge, and the two-field form rows start at `@md`. A wider surface gets the plan row at `@4xl` and the side column at `@3xl`.
+The scrolling body of each drawer, between header and footer. Its layout follows the drawer's own width (`@container` on the body, `@md` / `@3xl` / `@4xl` variants), never the viewport: a large drawer is about 550px wide on a 1280px screen, so the plan cards sit two to a row from the `@md` container width (Free beside Pro, the tiers people compare most) and three to a row at `@4xl`, the upgrade body keeps What's included above the charge, and the two-field form rows start at `@md`. A wider surface gets the side column at `@3xl`; below `@md` the cards stack.
 
 ### G. Description — `DrawerDescription` (plan drawer)
 
@@ -177,7 +177,7 @@ Then delete `sample.ts` and its import.
 
 ## Accessibility
 
-- Each drawer is a dialog labelled by its title; focus moves into it on open and returns to the trigger on close, including when the stacked drawer closes.
+- Each drawer is a dialog labelled by its title; focus moves into it on open and returns to the trigger on close, including when the stacked drawer closes. The upgrade drawer puts focus on the top of its body (`data-autofocus`), not on its first field, so it opens at the order summary with the price in view instead of scrolled down to the payment form.
 - Each fieldset has a visually hidden legend (`Payment method`, `Address information`).
 - After a failed Update or Upgrade, focus moves to the first field in error; after a decline, to the card number.
 - The billing period toggle is labelled; a price change is visible text, not color only.

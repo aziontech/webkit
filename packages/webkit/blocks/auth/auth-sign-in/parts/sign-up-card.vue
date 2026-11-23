@@ -2,7 +2,6 @@
   import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import Separator from '@aziontech/webkit/separator'
   import { nextTick, onScopeDispose, reactive, ref } from 'vue'
@@ -13,20 +12,19 @@
   import EmailField from './email-field.vue'
   import PasswordField from './password-field.vue'
 
-  /** A sign-up failure with its own copy and exits. */
+  /** A sign-up the server refused; the card answers it like a new address. */
   export type SignUpFailure = 'email-taken'
 
   export interface SignUpCardProps {
     /** The email the form opens on, such as the address a failed sign-up kept. */
     defaultEmail?: string
-    /** Why sign-up fails: the notice opens with it, and every submit answers with it. */
+    /** The address is already registered: the card answers exactly as for a new one, so nobody can test which addresses have an account. */
     error?: SignUpFailure | ''
   }
 
   interface SignUpNotice {
     severity: AlertSeverity
     label: string
-    exits?: boolean
   }
 
   const props = withDefaults(defineProps<SignUpCardProps>(), {
@@ -38,16 +36,19 @@
     'provider-click': [event: MouseEvent, provider: SignInProvider]
   }>()
 
-  const takenNotice: SignUpNotice = {
-    severity: 'danger',
-    label: 'This email is already registered.',
-    exits: true
-  }
-
   const email = ref(props.defaultEmail)
   const password = ref('')
   const errors = reactive({ email: '', password: '' })
-  const cardNotice = ref<SignUpNotice | null>(props.error === 'email-taken' ? takenNotice : null)
+  const sentNotice = (address: string): SignUpNotice => ({
+    severity: 'success',
+    label:
+      `Check your inbox at ${address} to finish. ` +
+      'If this address already has an account, the email explains how to sign in instead.'
+  })
+
+  const cardNotice = ref<SignUpNotice | null>(
+    props.error === 'email-taken' ? sentNotice(props.defaultEmail) : null
+  )
   const verifying = ref(false)
   let requestTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -55,18 +56,12 @@
 
   const onEmailInput = () => {
     errors.email = ''
-    if (cardNotice.value?.exits) cardNotice.value = null
+    cardNotice.value = null
   }
 
   const answer = () => {
     verifying.value = false
-    cardNotice.value =
-      props.error === 'email-taken'
-        ? takenNotice
-        : {
-            severity: 'success',
-            label: `Account created. We sent a verification link to ${email.value.trim()}.`
-          }
+    cardNotice.value = sentNotice(email.value.trim())
   }
 
   const signUp = () => {
@@ -115,19 +110,6 @@
           size="small"
         >
           {{ cardNotice.label }}
-          <template v-if="cardNotice.exits">
-            <Link
-              inline
-              href="/login"
-              >Sign in</Link
-            >
-            or
-            <Link
-              inline
-              href="/login?reset=1"
-              >reset your password</Link
-            >.
-          </template>
         </Alert>
 
         <div class="flex flex-col gap-(--spacing-sm)">

@@ -1,16 +1,22 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Kbd from '@aziontech/webkit/kbd'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import { computed, ref } from 'vue'
 
   export interface DeploymentSaveBarProps {
     /** The defaults differ from the saved ones. */
     dirty: boolean
     /** The defaults save is in flight. */
     saving: boolean
+    /** Names of the settings the save rewrites with Apply to existing; empty rewrites none. */
+    rewritten: string[]
+    /** The binding policy those settings take. */
+    bindingLabel: string
   }
 
-  defineProps<DeploymentSaveBarProps>()
+  const props = defineProps<DeploymentSaveBarProps>()
 
   const emit = defineEmits<{
     'save-shortcut': [event: KeyboardEvent]
@@ -18,9 +24,32 @@
     save: [event: MouseEvent]
   }>()
 
-  const onSaveShortcut = (event: KeyboardEvent) => emit('save-shortcut', event)
+  const confirmOpen = ref(false)
+  const count = computed(() => props.rewritten.length)
+  const message = computed(() =>
+    count.value
+      ? `Saving moves ${count.value} ${count.value === 1 ? 'setting' : 'settings'} to the ${props.bindingLabel} binding policy.`
+      : 'You have unsaved changes.'
+  )
+  const confirmDescription = computed(
+    () =>
+      `${props.rewritten.join(', ')} ${count.value === 1 ? 'takes' : 'take'} the ${props.bindingLabel} binding policy. ` +
+      'Their other values and Default stay as they are.'
+  )
+
+  const onSaveShortcut = (event: KeyboardEvent) => {
+    if (count.value) confirmOpen.value = true
+    else emit('save-shortcut', event)
+  }
   const discard = (event: MouseEvent) => emit('discard', event)
-  const save = (event: MouseEvent) => emit('save', event)
+  const save = (event: MouseEvent) => {
+    if (count.value) confirmOpen.value = true
+    else emit('save', event)
+  }
+  const confirmSave = (event: MouseEvent) => {
+    confirmOpen.value = false
+    emit('save', event)
+  }
 </script>
 
 <template>
@@ -34,7 +63,7 @@
       v-if="dirty || saving"
       @save="onSaveShortcut"
     >
-      You have unsaved changes.
+      {{ message }}
       <template #actions>
         <Button
           type="button"
@@ -62,4 +91,13 @@
       </template>
     </SaveBar>
   </Transition>
+  <ConfirmDialog
+    v-model:open="confirmOpen"
+    variant="primary"
+    :title="`Change ${count} Deployment ${count === 1 ? 'Setting' : 'Settings'}`"
+    :description="confirmDescription"
+    confirm-label="Save"
+    size="small"
+    @confirm="confirmSave"
+  />
 </template>

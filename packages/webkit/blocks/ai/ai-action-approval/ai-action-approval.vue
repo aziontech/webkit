@@ -115,16 +115,22 @@
     )
   }
 
-  function failed(turn: AiChatMessage): boolean {
+  function failedCall(turn: AiChatMessage): AiChatToolCallPart | undefined {
     const results = turn.parts.filter(isToolResultPart)
-    return turn.parts.some(
-      (part) =>
+    return turn.parts.find(
+      (part): part is AiChatToolCallPart =>
         isToolCallPart(part) &&
         toolStatusOf(
           part,
           results.find((result) => result.toolCallId === part.id)
         ) === 'error'
     )
+  }
+
+  function retryLabelOf(turn: AiChatMessage): string {
+    const call = failedCall(turn)
+    const verb = call ? toolOf(call).approveLabel : ''
+    return verb ? `${verb} again` : 'Retry'
   }
 
   const state = computed<PromptInputStatus>(() => {
@@ -349,8 +355,8 @@
               :value="textOf(turn)"
             />
             <Button
-              v-if="turn === last && failed(turn)"
-              label="Retry"
+              v-if="turn === last && failedCall(turn)"
+              :label="retryLabelOf(turn)"
               variant="outline"
               size="small"
               icon="az az-refresh"

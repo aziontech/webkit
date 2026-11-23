@@ -52,7 +52,7 @@ After approval, the call appears as a running `ToolCall` under the card and comp
 
 ### F. Outcome — `ChatMessage`, `CopyButton`, `Button`
 
-A new response that says what changed (or that nothing ran), with Copy in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined Retry `Button` beside Copy runs the action again; an action never ends in silence.
+A new response that says what changed (or that nothing ran), with Copy in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined `Button` beside Copy runs the action again, named for it: the tool's `approveLabel` plus `again` (`Deploy again`), `Retry` only for a tool with no verb, so one tap never re-runs an approved production change behind a bare word; an action never ends in silence. The retried call should come back as a new approval card: the earlier approval covered one run.
 
 ### G. Questions and failed decisions — `AgentQuestion`, `Alert`
 
@@ -182,7 +182,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - Approved: the call `complete` with its output, and the assistant's report after it.
 - Denied: `approval.approved: false` and a `tool-result` with `outcome: 'denied'`; the card reads Denied, the call is recorded as denied and the assistant says nothing ran.
 - Questions and failed decisions: a generic or unbound interrupt asks its `AgentQuestion` after the conversation; `interruptErrors` shows the alert with Retry.
-- Error: the approved call in `error` with its `tool-result` error, and a report that says what failed and that `b-4790` still serves, with Retry.
+- Error: the approved call in `error` with its `tool-result` error, and a report that says what failed and that `b-4790` still serves, with Deploy again.
 
 ## Related
 
@@ -198,7 +198,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - `Approved` — After Deploy: the card reads Approved, the deployment call completed, and the assistant reports the new build is live with the previous one kept for rollback.
 - `Denied` — After Deny: the card reads Denied, the deployment call is recorded as denied, and the assistant acknowledges that nothing was deployed.
 - `Running` — After Deploy: the card reads Approved, the deployment call runs under it and the composer shows Stop until it finishes.
-- `Error` — The approved deployment fails: the deployment call reads failed, and the assistant says what failed and that production still serves the previous version, with Retry beside Copy.
+- `Error` — The approved deployment fails: the deployment call reads failed, and the assistant says what failed and that production still serves the previous version, with Deploy again (the action named, never a bare Retry) beside Copy.
 
 Each variant is the same screen in another state: `get_block("ai/ai-action-approval", { variant })`, or the file under `blocks/ai/ai-action-approval/variants/`.
 
@@ -322,16 +322,22 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     )
   }
 
-  function failed(turn: AiChatMessage): boolean {
+  function failedCall(turn: AiChatMessage): AiChatToolCallPart | undefined {
     const results = turn.parts.filter(isToolResultPart)
-    return turn.parts.some(
-      (part) =>
+    return turn.parts.find(
+      (part): part is AiChatToolCallPart =>
         isToolCallPart(part) &&
         toolStatusOf(
           part,
           results.find((result) => result.toolCallId === part.id)
         ) === 'error'
     )
+  }
+
+  function retryLabelOf(turn: AiChatMessage): string {
+    const call = failedCall(turn)
+    const verb = call ? toolOf(call).approveLabel : ''
+    return verb ? `${verb} again` : 'Retry'
   }
 
   const state = computed<PromptInputStatus>(() => {
@@ -556,8 +562,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
               :value="textOf(turn)"
             />
             <Button
-              v-if="turn === last && failed(turn)"
-              label="Retry"
+              v-if="turn === last && failedCall(turn)"
+              :label="retryLabelOf(turn)"
               variant="outline"
               size="small"
               icon="az az-refresh"

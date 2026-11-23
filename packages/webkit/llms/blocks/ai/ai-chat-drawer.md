@@ -40,7 +40,7 @@ An outlined Agent `Button` with the assistant mark in the page header actions, `
 
 ### C. Drawer frame — `Drawer`, `DrawerContent`
 
-A medium right-side `Drawer` with no so the resource page beside it stays undimmed and readable while the reader asks about it. Escape and the close button dismiss it. Inside `ConsoleLayout` on a wide screen, put the same conversation in the layout's tools region (`v-model:tools-open`, as the console Notifications do) and keep the drawer for narrow screens; the conversation survives closing and reopening during the visit.
+A medium end-side `Drawer` with no backdrop (`:modal="false"`), so the resource page beside it stays undimmed and readable while the reader asks about it. From the `lg` breakpoint the page reserves the drawer's width while it is open (`data-drawer-open` on the block root sets `padding-inline-end` to the medium drawer width), so nothing on the page sits under the conversation; below `lg` the drawer overlays the page. Escape and the close button dismiss it. Inside `ConsoleLayout` on a wide screen, put the same conversation in the layout's tools region (`v-model:tools-open`, as the console Notifications do) and keep the drawer for narrow screens; the conversation survives closing and reopening during the visit.
 
 ### D. Header — `PanelHeader`, `DrawerTitle`, `Tag`, `IconButton`
 
@@ -608,7 +608,10 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 </script>
 
 <template>
-  <div class="w-full">
+  <div
+    :data-drawer-open="open || null"
+    class="w-full lg:data-drawer-open:pe-[max(30vw,var(--container-md))]"
+  >
     <WorkloadOverview
       :open="open"
       @open="open = true"
@@ -697,7 +700,6 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
               :loading="loading"
             />
             <Alert
-              key="alert-2"
               v-if="interruptErrors.length"
               severity="danger"
               size="small"

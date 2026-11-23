@@ -482,6 +482,18 @@ Each variant is the same screen in another state: `get_block("account/account-ac
                   size="small"
                 />
               </template>
+              <template #cell-event="{ row, value }">
+                <div class="flex min-w-0 flex-col">
+                  <span class="truncate">{{ value }}</span>
+                  <div
+                    aria-hidden="true"
+                    data-slot="narrow-summary"
+                    class="mt-(--spacing-2xs) sm:hidden"
+                  >
+                    <TableCellTime :value="row.at" />
+                  </div>
+                </div>
+              </template>
               <template #cell-user="{ value }">
                 <span
                   class="truncate"

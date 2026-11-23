@@ -2438,7 +2438,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-cha
 
 ## Accessibility
 
-- Each drawer is a dialog labelled by its title; focus moves into it on open and returns to the trigger on close, including when the stacked drawer closes.
+- Each drawer is a dialog labelled by its title; focus moves into it on open and returns to the trigger on close, including when the stacked drawer closes. The upgrade drawer puts focus on the top of its body (`data-autofocus`), not on its first field, so it opens at the order summary with the price in view instead of scrolled down to the payment form.
 - Each fieldset has a visually hidden legend (`Payment method`, `Address information`).
 - After a failed Update or Upgrade, focus moves to the first field in error; after a decline, to the card number.
 - The billing period toggle is labelled; a price change is visible text, not color only.
@@ -3101,7 +3101,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-per
 - Surface: app
 - Source: `blocks/account/account-team-permissions/account-team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-team-permissions")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DataTablePagination`, DropdownMenu, EmptyState, Field, IconButton, Input, Kbd, PageHeader, PropertyFilter, SaveBar, SettingsGroup, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`, `use-shortcuts`
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DataTablePagination`, DropdownMenu, EmptyState, Field, IconButton, Input, Kbd, PageHeader, PropertyFilter, SaveBar, SettingsGroup, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`, `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3428,7 +3428,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-action-approv
 - Approved: the call `complete` with its output, and the assistant's report after it.
 - Denied: `approval.approved: false` and a `tool-result` with `outcome: 'denied'`; the card reads Denied, the call is recorded as denied and the assistant says nothing ran.
 - Questions and failed decisions: a generic or unbound interrupt asks its `AgentQuestion` after the conversation; `interruptErrors` shows the alert with Retry.
-- Error: the approved call in `error` with its `tool-result` error, and a report that says what failed and that `b-4790` still serves, with Retry.
+- Error: the approved call in `error` with its `tool-result` error, and a report that says what failed and that `b-4790` still serves, with Deploy again.
 
 ## Related
 
@@ -3519,7 +3519,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-api-key.md](b
 - **Title:** `Model provider keys`; description: `Run the AI features on your own model provider account.`
 - **Card heading:** `Connection`. **Rows:** `Provider` — `The model provider the key belongs to.`; `API key` — the storage note, by default `Saved in this browser only and sent with your own requests to the provider.`; `Status` — `Whether a key is saved for this provider and if it works.`
 - **Status:** `No key saved`, `Saved`, `Testing`, `Connected`, `Connection failed`; the masked tail as given, e.g. `••••3f9a`.
-- **Actions:** `Save key`, `Test connection`, `Remove key`; in the `Alert`, `Test again`.
+- **Actions:** `Save key` (`Replace key` once a key is saved), `Test connection`, `Remove key`; in the `Alert`, `Test again`.
 - **Field error:** `Enter an API key.`
 - **Failure:** title `The key didn't work.` with the provider's message and the action `Test again` (test); title `The key wasn't saved.` with the message and no action (save).
 - **Remove:** title `Remove the <provider> key?`; description `AI features that use <provider> stop working until you save a new key.`; confirm `Remove key`.
@@ -3945,10 +3945,10 @@ What each prop and event does, and the go-live code: [blocks/auth/auth-sign-in.m
 - **Links:** sentence case: `Forgot your password?`, `Resend email`.
 - **Field errors:** what is wrong, with a period: `This field is required.`, `Enter a valid email address.`, `Passwords don't match.`
 - **401 notice:** `Incorrect email or password. Check both and try again.`
-- **503 notice:** says what is down and what is not lost: `Sign-in is unavailable right now. Your credentials are fine.`
+- **503 notice:** says what is down and what is not lost, never a claim the server did not check (it never read the credentials): `Sign-in is unavailable right now. What you entered is kept; retry in a few minutes.`
 - **500 notice:** says what failed and what state the user is in, code last: `Sign-in failed on our side. You are still signed out. Error 500.`
 - **Timeout notice:** names the unknown, never a failure: `The server did not answer in time. Your session may already be open.`
-- **409 notice:** the fact plus the two exits as links: `This email is already registered. Sign in or reset your password.`
+- **409 on sign-up:** never said on screen, because it tells anyone which addresses have an account. The card answers exactly as for a new address, and the email sent to the owner explains how to sign in: `Check your inbox at jane.doe@example.com to finish. If this address already has an account, the email explains how to sign in instead.`
 - **Session expired:** `Your session expired. Sign in again to pick up where you left off.`
 - **Providers loading:** the status name says what is happening, no ellipsis: `Preparing sign-in providers`.
 - **Action in a notice:** `Retry`, never "Try again" (the console and assistant blocks use the same word).
@@ -3988,7 +3988,7 @@ What each prop and event does, and the go-live code: [blocks/auth/auth-sign-in.m
 - ServiceUnavailable: `error="service-unavailable"`; 503 on Sign in; a warning notice with Retry, credentials kept.
 - ServerError: `error="server-error"`; 500 on the request; a danger notice with Retry in the card instead of a toast.
 - Timeout: `error="timeout"`; no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
-- EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
+- EmailAlreadyRegistered: 409 on Sign up; the same Check your inbox notice as a new address, so the screen reveals nothing.
 - MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice, then the recovery codes the API issues once: eight 8-character codes in a monospace list with Download and Copy, and an `I saved these codes` checkbox that Continue to Console waits for, so the recovery path MfaCode offers always has codes behind it.
 - MfaCode: the sign-in challenge after the password: a 6-digit `OtpInput`, focused when the challenge opens (not with `autofocus`), that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
 - OauthConsent: the authorize screen. The app (square `Avatar` with its initials, name, publisher, site), the signed-in account in an outlined `Item` with Switch account, the scopes in an `Item.List`, the redirect URL and where to revoke, then Deny / Allow. The pressed answer shows its loading state and locks the other; the outcome lands in the notice slot (`success` for Allow, `info` for Deny) and both stay locked.
@@ -18197,6 +18197,7 @@ The frame is static apart from its resize handles.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Right-to-left: the prefix and the value sit in one group with `dir="auto"`, so `$184.20` keeps its order on a right-to-left page; the suffix follows the page direction.
 
 ## Examples
 

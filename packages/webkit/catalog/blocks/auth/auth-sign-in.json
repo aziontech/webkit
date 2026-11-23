@@ -47,7 +47,7 @@
   },
   {
    "name": "EmailAlreadyRegistered",
-   "summary": "409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field.",
+   "summary": "409 on Sign up (the address already has an account): the card answers exactly as for a new address, Check your inbox, so nobody can test which addresses are registered; the email to the owner explains how to sign in.",
    "file": "blocks/auth/auth-sign-in/variants/email-already-registered.vue"
   },
   {

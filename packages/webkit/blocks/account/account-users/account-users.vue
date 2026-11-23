@@ -58,6 +58,8 @@
   export interface UsersInvitation {
     /** The address to invite, trimmed and lowercased. */
     email: string
+    /** What they can do on the account, chosen in the form. */
+    role: Exclude<UsersRole, 'Owner'>
     /** Values of the teams they join. */
     teams: string[]
   }
@@ -172,6 +174,7 @@
     const before = [...user.teams]
     changeTeams(user.id, next)
     toast.success(`Teams updated for ${displayName(user)}.`, {
+      id: `teams-${user.id}`,
       description: next.length
         ? `${teamsLabel(next)}. Access changes on their next request.`
         : 'They keep their seat but lose every permission until a team is added.',
@@ -263,7 +266,7 @@
   const openInvite = () => {
     inviteOpen.value = true
   }
-  const sendInvite = (event: Event, { email, teams }: UsersInvitation) => {
+  const sendInvite = (event: Event, { email, role, teams }: UsersInvitation) => {
     items.value = [
       ...items.value,
       {
@@ -271,16 +274,16 @@
         name: '',
         email,
         owner: false,
-        role: 'Developer',
+        role,
         teams,
         status: 'Invited',
         lastActive: null
       }
     ]
     inviteOpen.value = false
-    emit('invite', event, { email, teams })
+    emit('invite', event, { email, role, teams })
     toast.success(`Invitation sent to ${email}.`, {
-      description: `They join ${teamsLabel(teams)} when they accept. The link expires in 7 days.`
+      description: `They join as ${role} in ${teamsLabel(teams)} when they accept. The link expires in 7 days.`
     })
   }
 </script>
@@ -290,7 +293,7 @@
     <div class="layout-column flex flex-col">
       <PageHeader
         title="Users"
-        description="The people who can sign in to this account. What each one can do comes from their teams."
+        description="The people who can sign in to this account. Their role decides what they can do on the account; their teams decide which resources they reach."
       >
         <template #actions>
           <Button
