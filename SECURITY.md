@@ -19,6 +19,9 @@ Report it privately through GitHub. Do not open a public issue, pull request or 
 3. Describe the problem: the affected package and version, how to reproduce it, and what an
    attacker could do with it. A minimal reproduction helps most.
 
+If the **Report a vulnerability** button is not there, open a new issue titled "Security contact
+request" with no details of the problem, and a maintainer will reach out to you privately.
+
 Only the maintainers and you can see the report. We aim to acknowledge it within three business
 days, agree a fix and a disclosure date with you, and publish a GitHub security advisory (with a
 CVE where it applies) when the fixed version is on npm. We credit you in the advisory unless you

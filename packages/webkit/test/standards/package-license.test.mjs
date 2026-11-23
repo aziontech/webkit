@@ -25,7 +25,13 @@ for (const name of PUBLISHED) {
     const dir = join(PACKAGES, name)
     const manifest = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf-8'))
     assert.equal(manifest.license, 'MIT')
-    assert.match(readFileSync(join(dir, 'LICENSE'), 'utf-8'), /MIT License[\s\S]*Azion Technologies/)
-    assert.ok(packedFiles(dir).includes('LICENSE'), `npm pack of @aziontech/${name} lists no LICENSE`)
+    assert.match(
+      readFileSync(join(dir, 'LICENSE'), 'utf-8'),
+      /MIT License[\s\S]*Azion Technologies/
+    )
+    assert.ok(
+      packedFiles(dir).includes('LICENSE'),
+      `npm pack of @aziontech/${name} lists no LICENSE`
+    )
   })
 }
