@@ -20,7 +20,7 @@
     name: string
     /** The live address, without the scheme; Visit and both address links open it. */
     domain: string
-    /** The deployment that serves the address, linked to its page. */
+    /** The deployment that serves the address, linked to its page; empty when it was never deployed, which shows the Not deployed yet state. */
     deploymentId: string
     /** The environment of that deployment, shown as a tag. */
     environment: string
@@ -71,6 +71,7 @@
 
 <template>
   <div class="flex min-h-0 flex-1 flex-col">
+    <h1 class="sr-only">{{ resource.name }}</h1>
     <ResourceTabBar
       v-model="activeTab"
       :tabs="resourceTabs"
