@@ -23,9 +23,11 @@
     events: EventRow[]
     /** Ids of the optional fields shown as columns. */
     shownColumns: string[]
+    /** Whether the value counts are known: the events are loading, or failed to load. */
+    countState?: 'ready' | 'loading' | 'unknown'
   }
 
-  const props = defineProps<FieldsPanelProps>()
+  const props = withDefaults(defineProps<FieldsPanelProps>(), { countState: 'ready' })
 
   const emit = defineEmits<{
     'toggle-column': [id: string]
@@ -159,6 +161,7 @@
         :filterable="canFilterField(field)"
         :events="events"
         :applied="filters[field.id] ?? []"
+        :count-state="countState"
         @toggle-column="emit('toggle-column', field.id)"
         @toggle-value="(value) => toggleFieldValue(field.id, value)"
       />
@@ -202,6 +205,7 @@
                 :filterable="canFilterField(field)"
                 :events="events"
                 :applied="filters[field.id] ?? []"
+                :count-state="countState"
                 @toggle-column="emit('toggle-column', field.id)"
                 @toggle-value="(value) => toggleFieldValue(field.id, value)"
               />

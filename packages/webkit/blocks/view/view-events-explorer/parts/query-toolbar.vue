@@ -57,11 +57,15 @@
   const setTimeZone = (zone: string | undefined) => {
     if (zone) timeZone.value = zone
   }
+
+  const QUERY_CLASS =
+    'order-last flex min-w-0 basis-full @3xl/query-toolbar:order-none @3xl/query-toolbar:min-w-36 ' +
+    '@3xl/query-toolbar:flex-1 @3xl/query-toolbar:basis-(--container-xs)'
 </script>
 
 <template>
-  <header class="flex items-center gap-(--layout-group-gap)">
-    <div class="flex min-w-0 grow flex-wrap items-center gap-(--spacing-xs)">
+  <header class="@container/query-toolbar">
+    <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
       <div class="flex shrink-0 items-center">
         <DateRangePicker
           v-model="range"
@@ -106,7 +110,7 @@
           </Select.Content>
         </Select>
       </div>
-      <div class="flex min-w-36 grow basis-(--container-xs)">
+      <div :class="QUERY_CLASS">
         <PropertyFilter
           v-model:text="queryText"
           mode="query"
@@ -118,52 +122,52 @@
           @submit="submitQuery"
         />
       </div>
-    </div>
-    <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-      <SavedQueries
-        v-model:open="savedOpen"
-        v-model:name="saveName"
-        :entries="savedEntries"
-        :status="savedStatus"
-        :can-save="canSave"
-        @apply="applySavedQuery"
-        @delete="deleteSavedQuery"
-        @save="saveQuery"
-      />
-      <RecentQueries
-        v-model:open="recentOpen"
-        :entries="recentQueries"
-        @apply="applyRecentQuery"
-        @clear="clearRecentQueries"
-      />
-      <Tooltip
-        content="Refresh"
-        class="shrink-0"
-      >
-        <IconButton
-          icon="az az-refresh"
-          variant="outline"
-          size="medium"
-          :loading="loading"
-          aria-label="Refresh"
-          data-testid="refresh-button"
-          @click="emit('refresh')"
+      <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
+        <SavedQueries
+          v-model:open="savedOpen"
+          v-model:name="saveName"
+          :entries="savedEntries"
+          :status="savedStatus"
+          :can-save="canSave"
+          @apply="applySavedQuery"
+          @delete="deleteSavedQuery"
+          @save="saveQuery"
         />
-      </Tooltip>
-      <Tooltip
-        content="Download CSV"
-        class="shrink-0"
-      >
-        <IconButton
-          icon="az az-download"
-          variant="outline"
-          size="medium"
-          :disabled="exportDisabled"
-          aria-label="Download CSV"
-          data-testid="export-button"
-          @click="emit('export')"
+        <RecentQueries
+          v-model:open="recentOpen"
+          :entries="recentQueries"
+          @apply="applyRecentQuery"
+          @clear="clearRecentQueries"
         />
-      </Tooltip>
+        <Tooltip
+          content="Refresh"
+          class="shrink-0"
+        >
+          <IconButton
+            icon="az az-refresh"
+            variant="outline"
+            size="medium"
+            :loading="loading"
+            aria-label="Refresh"
+            data-testid="refresh-button"
+            @click="emit('refresh')"
+          />
+        </Tooltip>
+        <Tooltip
+          content="Download CSV"
+          class="shrink-0"
+        >
+          <IconButton
+            icon="az az-download"
+            variant="outline"
+            size="medium"
+            :disabled="exportDisabled"
+            aria-label="Download CSV"
+            data-testid="export-button"
+            @click="emit('export')"
+          />
+        </Tooltip>
+      </div>
     </div>
   </header>
 

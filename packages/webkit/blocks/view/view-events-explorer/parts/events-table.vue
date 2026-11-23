@@ -59,6 +59,9 @@
 
   const tableEl = ref<TableExposed<EventRow> | null>(null)
 
+  const OPEN_ROW_CLASS =
+    'w-full [&_[role=row]:has([data-open-event])]:[--table-row-bg:var(--bg-selected)]!'
+
   const STATUS_CELL_CLASS =
     'min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) ' +
     'data-[severity=danger]:text-(--danger-foreground) data-[severity=warning]:text-(--warning-foreground)'
@@ -81,7 +84,7 @@
         :bordered="false"
         density="compact"
         max-height="100%"
-        class="w-full"
+        :class="OPEN_ROW_CLASS"
         :loading="loading"
         @row-click="(event: MouseEvent | KeyboardEvent, row: EventRow) => emit('open', event, row)"
       >
@@ -96,6 +99,7 @@
             size="small"
             :aria-label="`Open event ${row.id}`"
             :aria-expanded="row.id === selectedKey"
+            :data-open-event="row.id === selectedKey || undefined"
             @click.stop="emit('open', $event, row)"
           />
         </template>
