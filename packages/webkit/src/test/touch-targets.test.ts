@@ -9,6 +9,7 @@ import AccordionDefault from '../../examples/accordion/default.vue'
 import ConsoleShowcaseDefault from '../../examples/console-showcase-section/default.vue'
 import DatePickerDefault from '../../examples/date-picker/default.vue'
 import DropdownMenuStates from '../../examples/dropdown-menu/states.vue'
+import FileDropzoneDefault from '../../examples/file-dropzone/default.vue'
 import FooterDefault from '../../examples/footer/default.vue'
 import InputDefault from '../../examples/input/default.vue'
 import MultiSelectDefault from '../../examples/multi-select/default.vue'
@@ -102,6 +103,26 @@ describe('tap targets on a coarse pointer (styled)', () => {
       const segment = view.container.querySelector<HTMLElement>('[role="radio"]')!
       expect(segment.getBoundingClientRect().height).toBeLessThan(40)
       expect(hitSpan(segment, 'y')).toBeGreaterThanOrEqual(44)
+    })
+
+    it('FileDropzone leads with choosing files, not dropping them', async () => {
+      await touch()
+      const view = await mount(FileDropzoneDefault)
+      await settle()
+      expect(view.getByText('Choose files to upload')).toBeTruthy()
+      expect(view.queryByText('Drop files to upload')).toBeNull()
+    })
+
+    it('ThemeSwitcher segments are wide enough to tap and never cover a neighbour', async () => {
+      await touch()
+      const view = await mount(ThemeSwitcherDefault)
+      const segments = Array.from(view.container.querySelectorAll<HTMLElement>('[role="radio"]'))
+      expect(segments).toHaveLength(3)
+      for (const segment of segments) {
+        const width = segment.getBoundingClientRect().width
+        expect(width).toBeGreaterThanOrEqual(40)
+        expect(hitSpan(segment, 'x')).toBeLessThanOrEqual(Math.round(width) + 1)
+      }
     })
 
     it.each([

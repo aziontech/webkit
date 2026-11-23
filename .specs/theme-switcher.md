@@ -3,13 +3,13 @@ name: theme-switcher
 category: input
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: 551a50b399d827bc4e1074ccf979c60836d84b3269fd366c899293fb43d0659c
+checksum: 2893b740974e84a38acd893537936c0a838071b298fb7db36b52d496c22a027a
 created: 2026-07-13
-last_updated: 2026-11-20
+last_updated: 2026-11-22
 ---
 
 # Theme Switcher — Component Spec
@@ -124,7 +124,7 @@ A compact segmented control drawn like `toggle-group` (same radius, surface and 
 - Each segment is wrapped in `@aziontech/webkit/tooltip` (`side="bottom"`) surfacing its mode label (`System` / `Dark` / `Light`) on hover and keyboard focus; the tooltip owns its own `aria-describedby` wiring.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state.
 - `motion-reduce:transition-none` on animated states.
-- Touch target: segments are drawn 24 / 28 / 36 px wide by `size` on every pointer; on a coarse pointer each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44×44 px, as `toggle-group` does.
+- Touch target: segments are drawn 24 / 28 / 36 px wide by `size` on a fine pointer; on a coarse pointer each segment is drawn at least 44 px wide (`pointer-coarse:min-w-11`) and carries an invisible `aria-hidden` child (`data-slot="touch-target"`) that extends its hit area to 44 px tall only, so a segment's hit area never covers its neighbour.
 
 ## Right-to-left
 

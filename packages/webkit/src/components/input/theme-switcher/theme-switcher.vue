@@ -150,7 +150,7 @@
 
   const SEGMENT_CLASS =
     'relative z-(--z-control) inline-flex shrink-0 items-center justify-center rounded-(--shape-button) cursor-pointer ' +
-    'group-data-[size=small]:w-6 group-data-[size=medium]:w-7 group-data-[size=large]:w-9 ' +
+    'group-data-[size=small]:w-6 group-data-[size=medium]:w-7 group-data-[size=large]:w-9 pointer-coarse:min-w-11 ' +
     'text-label-sm ' +
     'group-data-[size=large]:text-label-md ' +
     'data-[state=active]:text-(--text-default) data-[state=inactive]:text-(--text-muted) ' +
@@ -200,7 +200,7 @@
         <span
           aria-hidden="true"
           data-slot="touch-target"
-          class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+          class="absolute hidden inset-x-0 inset-y-[min(0rem,calc(50%-22px))] pointer-coarse:block"
         />
         <i
           :class="mode.icon"
