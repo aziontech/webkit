@@ -44,6 +44,24 @@
       return { ...panel, values, latest: values.at(-1) ?? null }
     })
   )
+
+  const median = (values: number[]) => {
+    const sorted = [...values].sort((a, b) => a - b)
+    const middle = Math.floor(sorted.length / 2)
+    return sorted.length % 2 ? sorted[middle]! : (sorted[middle - 1]! + sorted[middle]!) / 2
+  }
+
+  const figures = computed(() =>
+    sampleVitals.map((vital) => {
+      const values = trends.value.find((panel) => panel.id === vital.id)?.values ?? []
+      if (!values.length) return { ...vital, value: null }
+      const total = values.reduce((sum, value) => sum + value, 0)
+      return { ...vital, value: vital.id === 'sessions' ? total : median(values) }
+    })
+  )
+
+  const trendTitle = (panel: { id: string; label: string }) =>
+    panel.id === 'sessions' ? `${panel.label} per hour` : `${panel.label}, hourly median`
 </script>
 
 <template>
@@ -80,7 +98,7 @@
       >
         <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-4">
           <li
-            v-for="vital in sampleVitals"
+            v-for="vital in figures"
             :key="vital.id"
             class="flex min-w-0 flex-col"
           >
@@ -106,14 +124,14 @@
           >
             <StatTile
               variant="sans"
-              :label="panel.label"
+              :label="trendTitle(panel)"
               :value="panel.latest"
               :unit="panel.unit"
               :format-value="formatLatest"
               :trend="panel.values"
             >
               <template #aside>
-                <span class="shrink-0 text-body-sm text-(--text-muted)">{{ windowLabel }}</span>
+                <span class="shrink-0 text-body-sm text-(--text-muted)">Last hour</span>
               </template>
             </StatTile>
           </li>

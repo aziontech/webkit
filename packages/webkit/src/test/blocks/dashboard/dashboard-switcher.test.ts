@@ -46,12 +46,12 @@ describe('dashboard/dashboard-switcher', () => {
     expect(view.getByRole('radiogroup', { name: 'Quarter' })).toBeTruthy()
   })
 
-  it('shows a Retry alert in each card when the body fails', () => {
+  it('shows one Retry alert for the page when the body fails', () => {
     const view = render(SwitcherFailed)
     const retries = Array.from(view.container.querySelectorAll('button')).filter(
       (button) => button.textContent?.trim() === 'Retry'
     )
-    expect(retries.length).toBe(2)
+    expect(retries.length).toBe(1)
     expect(view.container.textContent).toContain("Couldn't load")
   })
 
@@ -101,7 +101,7 @@ describe('dashboard/dashboard-switcher', () => {
     await fireEvent.click(buttonByText('Retry', view.container as HTMLElement)!)
     expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
     expect(view.container.textContent).toContain(
-      "Couldn't load requests over time. Check your connection and retry."
+      "Couldn't load the dashboard. Check your connection and retry."
     )
   })
 

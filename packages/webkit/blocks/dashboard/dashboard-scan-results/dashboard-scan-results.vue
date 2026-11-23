@@ -129,6 +129,14 @@
           />
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the scan results. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-scan-results__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <section aria-label="Summary">
         <ul
@@ -165,13 +173,12 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load verdicts. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <DonutChart
               v-else
               :series="verdictSplit"
@@ -196,13 +203,12 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load sources. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <BarList
               v-else
               :items="sourceItems"
@@ -219,7 +225,6 @@
           :loading="loading"
           :error="error"
           :format-count="formatCount"
-          @retry="(event) => emit('retry', event)"
         />
 
         <ChartCard :span="12">
@@ -232,13 +237,12 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load submissions. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <SubmissionsTable
               v-else-if="loading || submissions.length"
               :submissions="submissions"

@@ -72,8 +72,7 @@ for Recents).
 
 ### F. Failure — `Alert` (required)
 
-When Home's data cannot load, the usage band and each panel show a danger `Alert` with Retry in place
-of their content; the greeting and the agent card stay.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ### G. Classic summary — `StatTile`, `Card`, `IconButton`, `Tooltip` (optional)
 
@@ -114,25 +113,25 @@ is an outlined `Copy prompt` `Button`.
 
 The block takes its figures and rows through props and emits every action; it fetches nothing. `HomeDashboardProps` and the record types (`HomeDashboardMetrics`, `HomeDashboardResource`, `HomeDashboardDomainAvailability`) are exported from `dashboard-home.vue`, and `sample.ts` holds the sample name, figures and rows the block renders when a prop is left out (the figures and rows never while `loading` or `error` is set). The tile labels, units and hints and the panel headings stay in the SFC.
 
-| Prop                  | Type                              | What it does                                                                                                 |
-| --------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `userName`            | `string`                          | The first name in the greeting.                                                                              |
-| `greeting`            | `string`                          | The time-of-day greeting before it; defaults to `Good morning`.                                              |
-| `metrics`             | `HomeDashboardMetrics`            | The value and delta of each usage tile, keyed by tile id; a tile left out reads as a dash.                   |
-| `projects`            | `HomeDashboardResource[]`         | The Projects panel rows, each with its `href` and preset icon.                                               |
-| `resources`           | `HomeDashboardResource[]`         | The Resources panel rows.                                                                                    |
-| `domains`             | `HomeDashboardResource[]`         | The Domains panel rows.                                                                                      |
-| `recents`             | `HomeDashboardResource[]`         | The Recents panel rows, most recent first, each with its `typeLabel`.                                        |
-| `domainAvailability`  | `HomeDashboardDomainAvailability` | The answer to the last `check-domain`; the popover shows `Checking` until its `name` matches the field.      |
-| `v-model:agent-setup` | `boolean`                         | Whether the agent card shows; Dismiss sets it to `false`, so persist it to dismiss the card for good.        |
-| `loading`             | `boolean`                         | Home's data is loading: the tiles and the panels hold a `Skeleton`.                                          |
-| `error`               | `string`                          | Why Home's data could not load, shown after `Couldn't load <thing>.` in the band's and each panel's `Alert`. |
+| Prop                  | Type                              | What it does                                                                                                                   |
+| --------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `userName`            | `string`                          | The first name in the greeting.                                                                                                |
+| `greeting`            | `string`                          | The time-of-day greeting before it; defaults to `Good morning`.                                                                |
+| `metrics`             | `HomeDashboardMetrics`            | The value and delta of each usage tile, keyed by tile id; a tile left out reads as a dash.                                     |
+| `projects`            | `HomeDashboardResource[]`         | The Projects panel rows, each with its `href` and preset icon.                                                                 |
+| `resources`           | `HomeDashboardResource[]`         | The Resources panel rows.                                                                                                      |
+| `domains`             | `HomeDashboardResource[]`         | The Domains panel rows.                                                                                                        |
+| `recents`             | `HomeDashboardResource[]`         | The Recents panel rows, most recent first, each with its `typeLabel`.                                                          |
+| `domainAvailability`  | `HomeDashboardDomainAvailability` | The answer to the last `check-domain`; the popover shows `Checking` until its `name` matches the field.                        |
+| `v-model:agent-setup` | `boolean`                         | Whether the agent card shows; Dismiss sets it to `false`, so persist it to dismiss the card for good.                          |
+| `loading`             | `boolean`                         | Home's data is loading: the tiles and the panels hold a `Skeleton`.                                                            |
+| `error`               | `string`                          | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.` |
 
 Pass `[]` for all four lists on an account that owns nothing: the page becomes the first-access screen.
 
 | Event               | Payload         | When                                                                             |
 | ------------------- | --------------- | -------------------------------------------------------------------------------- |
-| `retry`             | `(event)`       | Retry in the usage band's or a panel's error alert.                              |
+| `retry`             | `(event)`       | Retry in the page's error alert.                                                 |
 | `update:agentSetup` | `(value)`       | Dismiss on the agent card.                                                       |
 | `create-project`    | `(event)`       | Create Project on the first-access screen.                                       |
 | `check-domain`      | `(name)`        | A valid domain stayed in the field for 900 ms; answer with `domainAvailability`. |
@@ -214,7 +213,7 @@ Then delete `sample.ts` and its import.
 ## States
 
 - Default: populated Home for an account that owns resources (`metrics`, `projects`, `resources`, `domains`, `recents`): usage band, agent card, resource panels.
-- Error: `error` holds the message; Home's data could not load, and the usage band and every panel show a danger `Alert` with Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 - Empty: `projects`, `resources`, `domains` and `recents` are all `[]`; a brand-new account gets the first-access screen with the greeting, the command prompt that opens the palette, and the three doors (create a project, add a domain with an availability check, set up an agent).
 - Summary: the classic overview; metric tiles with the window caption, the resources and recent activity tables, and the aside with monthly usage and a featured marketplace template.
 
@@ -229,7 +228,7 @@ Then delete `sample.ts` and its import.
 
 - `Default` — primary (the code below)
 - `Empty` — Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or acme.example.com (available) into the second door to run the availability check.
-- `Error` — Populated Home whose data could not load: the usage band and every resource panel show a danger `Alert` with Retry in place of their content; the greeting and the agent card stay.
+- `Error` — Populated Home whose data could not load: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 - `Summary` — The classic overview: four metric StatTiles with a Hint on each label and the window they cover in a caption, a resources DataTable card and a Recent activity DataTable card, each with a View all footer Link, beside an aside of a Monthly usage list card and a Marketplace trends card that pages through featured templates with Previous and Next.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-home", { variant })`, or the file under `blocks/dashboard/dashboard-home/variants/`.
@@ -238,6 +237,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import { computed } from 'vue'
 
   import { homeMetricDefinitions } from './home-metrics'
@@ -299,6 +299,8 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
     greeting?: string
     /** The usage band figures. Left out, the sample renders. */
     metrics?: HomeDashboardMetrics
+    /** What every usage delta compares against, read beside it. */
+    comparison?: string
     /** Rows of the Projects panel. */
     projects?: HomeDashboardResource[]
     /** Rows of the Resources panel. */
@@ -319,6 +321,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
     userName: undefined,
     greeting: 'Good morning',
     metrics: undefined,
+    comparison: 'vs previous 24 hours',
     projects: undefined,
     resources: undefined,
     domains: undefined,
@@ -396,6 +399,14 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         <span class="text-(--text-default)">{{ name }}</span>
       </h1>
     </header>
+    <Alert
+      v-if="error"
+      severity="danger"
+      :label="`Couldn't load your usage and resources. ${error}`"
+      action-label="Retry"
+      data-testid="dashboard-home__error"
+      @action="(event: MouseEvent) => emit('retry', event)"
+    />
 
     <div
       class="layout-section-start flex flex-col gap-(--layout-boundary-start) xl:min-h-0 xl:flex-1"
@@ -403,15 +414,14 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
       <HomeUsageBand
         v-model:agent-setup="agentSetup"
         :tiles="tiles"
+        :comparison="comparison"
         :loading="loading"
         :error="error"
-        @retry="(event) => emit('retry', event)"
       />
       <HomePanels
         :panels="panels"
         :loading="loading"
         :error="error"
-        @retry="(event) => emit('retry', event)"
       />
     </div>
   </div>
@@ -1026,7 +1036,6 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
@@ -1060,8 +1069,6 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
   }
 
   defineProps<HomePanelsProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 
   const CARD_GRID_CLASS =
     'animate-content-enter motion-reduce:animate-none mt-(--spacing-lg) grid w-full min-w-0 grid-cols-1 gap-(--layout-group-gap) ' +
@@ -1099,13 +1106,12 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
       </h2>
 
       <div class="min-w-0 xl:min-h-0 xl:flex-1 xl:overflow-y-auto xl:overscroll-contain">
-        <Alert
+        <p
           v-if="error"
-          severity="danger"
-          :label="`Couldn't load ${panel.label.toLowerCase()}. ${error}`"
-          action-label="Retry"
-          @action="(event) => emit('retry', event)"
-        />
+          class="text-body-sm text-(--text-muted)"
+        >
+          Not available.
+        </p>
         <div
           v-else-if="loading"
           key="panel-loading"
@@ -1153,7 +1159,10 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
                     :title="resource.presetLabel"
                   />
                 </span>
-                <span class="min-w-0 truncate text-label-md text-(--text-default)">
+                <span
+                  class="min-w-0 truncate text-label-md text-(--text-default)"
+                  dir="auto"
+                >
                   {{ resource.name }}
                 </span>
               </Item.Title>
@@ -1188,7 +1197,6 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import claudeMark from '@aziontech/webkit/assets/claude-symbol-color.svg'
   import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
   import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
@@ -1215,6 +1223,8 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
   export interface HomeUsageBandProps {
     /** The usage tiles, in the order they render. */
     tiles: HomeUsageTile[]
+    /** What every delta compares against. */
+    comparison: string
     /** The figures are loading. */
     loading: boolean
     /** Why the figures could not load; empty shows the tiles. */
@@ -1222,8 +1232,6 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
   }
 
   defineProps<HomeUsageBandProps>()
-
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 
   const agentSetup = defineModel<boolean>('agentSetup', { required: true })
 
@@ -1249,13 +1257,12 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
     aria-label="Usage"
   >
     <div class="min-w-0 xl:flex-1">
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load usage. ${error}`"
-        action-label="Retry"
-        @action="(event) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <StatTileGroup v-else>
         <StatTile
           v-for="metric in tiles"
@@ -1264,6 +1271,7 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
           :value="metric.value"
           :unit="metric.unit"
           :delta="metric.delta"
+          :delta-label="comparison"
           :loading="loading"
           :error="error"
         >

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import { computed } from 'vue'
 
   import { homeMetricDefinitions } from './home-metrics'
@@ -60,6 +61,8 @@
     greeting?: string
     /** The usage band figures. Left out, the sample renders. */
     metrics?: HomeDashboardMetrics
+    /** What every usage delta compares against, read beside it. */
+    comparison?: string
     /** Rows of the Projects panel. */
     projects?: HomeDashboardResource[]
     /** Rows of the Resources panel. */
@@ -80,6 +83,7 @@
     userName: undefined,
     greeting: 'Good morning',
     metrics: undefined,
+    comparison: 'vs previous 24 hours',
     projects: undefined,
     resources: undefined,
     domains: undefined,
@@ -157,6 +161,14 @@
         <span class="text-(--text-default)">{{ name }}</span>
       </h1>
     </header>
+    <Alert
+      v-if="error"
+      severity="danger"
+      :label="`Couldn't load your usage and resources. ${error}`"
+      action-label="Retry"
+      data-testid="dashboard-home__error"
+      @action="(event: MouseEvent) => emit('retry', event)"
+    />
 
     <div
       class="layout-section-start flex flex-col gap-(--layout-boundary-start) xl:min-h-0 xl:flex-1"
@@ -164,15 +176,14 @@
       <HomeUsageBand
         v-model:agent-setup="agentSetup"
         :tiles="tiles"
+        :comparison="comparison"
         :loading="loading"
         :error="error"
-        @retry="(event) => emit('retry', event)"
       />
       <HomePanels
         :panels="panels"
         :loading="loading"
         :error="error"
-        @retry="(event) => emit('retry', event)"
       />
     </div>
   </div>

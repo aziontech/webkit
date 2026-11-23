@@ -72,6 +72,7 @@ export const sampleStatusSeries: ChartSeries[] = [
   {
     id: '2xx',
     name: 'Status 2xx',
+    color: 1,
     values: [
       1970768, 2045431, 2207447, 2043392, 1792162, 1894493, 1522523, 1327714, 1397824, 1400013,
       1662309, 1853957
@@ -80,6 +81,7 @@ export const sampleStatusSeries: ChartSeries[] = [
   {
     id: '3xx',
     name: 'Status 3xx',
+    color: 2,
     values: [
       262040, 267609, 285424, 281518, 253458, 243622, 188475, 157518, 160801, 163438, 201094, 240161
     ]
@@ -87,11 +89,13 @@ export const sampleStatusSeries: ChartSeries[] = [
   {
     id: '4xx',
     name: 'Status 4xx',
+    color: 'warning',
     values: [41015, 49733, 50969, 54872, 61252, 68657, 75390, 80334, 73837, 63741, 63809, 45030]
   },
   {
     id: '5xx',
     name: 'Status 5xx',
+    color: 'danger',
     values: [4785, 5447, 4587, 5964, 5280, 7973, 8616, 9609, 8368, 7191, 6381, 5146]
   }
 ]

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-configurable/dashboard-configurable.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-configurable")`
-- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DashboardGrid](../../components/dashboard-grid.md), [DonutChart](../../components/donut-chart.md), [Hint](../../components/hint.md), [PageHeader](../../components/page-header.md), [Tag](../../components/tag.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DashboardGrid](../../components/dashboard-grid.md), [DonutChart](../../components/donut-chart.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [Tag](../../components/tag.md), `use-locale`
 - Skills: `webkit-data-viz`, `webkit-layout`, `webkit-ui-states`
 
 ## Asked as
@@ -90,7 +90,7 @@ crosshair on every card. A legend with totals appears only when a card has more 
 
 ### J. Load failure — `Alert` (required)
 
-When `error` is set, every card keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <card>.` followed by the message, with Retry, which emits `retry`.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ## Data
 
@@ -102,13 +102,13 @@ The block takes its series through props and emits every change; it fetches noth
 | `series`          | `ConfigurableDashboardSeries` | The series of each chart card, by card (`requests`, `regions`, `transfer`, `errors`, `latency`). A card left out shows its empty state. |
 | `sources`         | `BarListItem[]`               | The services ranked in Top sources. `[]` shows its empty state.                                                                         |
 | `loading`         | `boolean`                     | The period is loading; every card shows its skeleton.                                                                                   |
-| `error`           | `string`                      | Why the period could not load; each card shows `Couldn't load <card>.` and this message in a danger `Alert` with Retry.                 |
+| `error`           | `string`                      | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.`          |
 | `v-model:layout`  | `DashboardGridLayoutItem[]`   | The order, span and height of the cards; defaults to the built-in layout, which Reset layout restores.                                  |
 | `v-model:editing` | `boolean`                     | Edit mode (handles, resize corners, span tags and the help line); default `false`.                                                      |
 
 | Event            | Payload   | When                                                               |
 | ---------------- | --------- | ------------------------------------------------------------------ |
-| `retry`          | `(event)` | Retry in any card's error alert.                                   |
+| `retry`          | `(event)` | Retry in the page's error alert.                                   |
 | `update:layout`  | `(value)` | A card was moved or resized, or Reset layout restored the default. |
 | `update:editing` | `(value)` | Edit layout or Done.                                               |
 
@@ -179,7 +179,7 @@ Then delete `sample.ts` and its import.
 - Editing: `v-model:editing` is `true`; handles and resize corners on every card, span tags in the headers, help line visible.
 - Loading: `loading` is set; every chart renders its own `Skeleton` inside its card; the layout holds its shape.
 - Empty: nothing recorded yet (`series` is `{}`, `sources` is `[]`); each card keeps its place and size and shows its empty state.
-- Error: the request failed (`error` is set); every card keeps its place, size and header with a danger `Alert` that names what did not load, carries the message and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -194,7 +194,7 @@ Then delete `sample.ts` and its import.
 - `Editing` — Edit mode. Drag a card by its handle onto another to swap their order, or drag its corner to change the span and the height. Focus the handle and use the arrow keys to move a card, or focus the corner and use Left and Right for the span, Up and Down for the height.
 - `Loading` — While the data loads, every chart renders its own Skeleton inside its card, so the layout holds its shape.
 - `Empty` — Nothing recorded yet. Each card keeps its place and size and shows its empty state, so the reader can still arrange the dashboard before any data arrives.
-- `Error` — The request for the cards failed: every card keeps its place, size and header, with a danger Alert that names the card that did not load and offers Retry.
+- `Error` — The request for the cards failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-configurable", { variant })`, or the file under `blocks/dashboard/dashboard-configurable/variants/`.
 
@@ -210,6 +210,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   import DashboardGrid, { type DashboardGridLayoutItem } from '@aziontech/webkit/dashboard-grid'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import Hint from '@aziontech/webkit/hint'
+  import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import Tag from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
@@ -332,7 +333,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const sources = computed(() => props.sources ?? (blocked.value ? [] : sampleSources))
   const cardOf = (id: string) => cards[id as ConfigurableDashboardCardId]
   const seriesOf = (id: string) => chartSeries.value[id as ConfigurableDashboardChartId] ?? []
-  const failed = (card: string) => `Couldn't load ${card}. ${props.error}`
 
   const { formatNumber } = useLocale()
 
@@ -360,6 +360,16 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
     layout.value = defaultLayout.map((card) => ({ ...card }))
     announcement.value = 'Layout reset to the default.'
   }
+
+  const moveCard = (id: string, step: -1 | 1) => {
+    const from = layout.value.findIndex((card) => card.id === id)
+    const to = from + step
+    if (from < 0 || to < 0 || to >= layout.value.length) return
+    const next = [...layout.value]
+    ;[next[from], next[to]] = [next[to]!, next[from]!]
+    layout.value = next
+    announcement.value = `${cardOf(id).title} moved to position ${to + 1} of ${next.length}.`
+  }
 </script>
 
 <template>
@@ -369,13 +379,21 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         title="Traffic overview"
         description="Requests, regions, errors and response time for the period, in the layout you set."
       />
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the traffic overview. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-configurable__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
       <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
         <p
           v-if="editing"
           class="m-0 min-w-0 grow text-body-sm text-(--text-muted)"
         >
           Drag a card by its handle to move it, or by its corner to resize it. Focus a handle to use
-          the arrow keys.
+          the arrow keys. On a narrow screen, use Move up and Move down.
         </p>
         <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
@@ -407,35 +425,56 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         :max-height="720"
       >
         <DashboardGrid.Item
-          v-for="card in layout"
+          v-for="(card, index) in layout"
           :key="card.id"
           :item-id="card.id"
           :label="cardOf(card.id).title"
         >
           <ChartCard>
             <ChartCard.Header>
-              <ChartCard.DragHandle :aria-label="'Move ' + cardOf(card.id).title" />
+              <ChartCard.DragHandle
+                class="@max-3xl/dashboard-grid:hidden"
+                :aria-label="'Move ' + cardOf(card.id).title"
+              />
               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ cardOf(card.id).title }}</ChartCard.Title>
                 <Hint :content="cardOf(card.id).hint" />
               </span>
               <ChartCard.Action v-if="editing">
                 <Tag
+                  class="@max-3xl/dashboard-grid:hidden"
                   :label="card.span + '/12'"
                   severity="neutral"
                   size="small"
                   icon="az az-move-horizontal"
                 />
+                <span class="flex items-center gap-(--spacing-2xs) @3xl/dashboard-grid:hidden">
+                  <IconButton
+                    icon="az az-arrow-up"
+                    variant="ghost"
+                    size="medium"
+                    :aria-label="'Move ' + cardOf(card.id).title + ' up'"
+                    :disabled="index === 0"
+                    @click="moveCard(card.id, -1)"
+                  />
+                  <IconButton
+                    icon="az az-arrow-down"
+                    variant="ghost"
+                    size="medium"
+                    :aria-label="'Move ' + cardOf(card.id).title + ' down'"
+                    :disabled="index === layout.length - 1"
+                    @click="moveCard(card.id, 1)"
+                  />
+                </span>
               </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
-              <Alert
+              <p
                 v-if="error"
-                severity="danger"
-                :label="failed(cardOf(card.id).title.toLowerCase())"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
+                class="text-body-sm text-(--text-muted)"
+              >
+                Not available.
+              </p>
               <DonutChart
                 v-else-if="cardOf(card.id).kind === 'donut'"
                 :series="seriesOf(card.id)"
@@ -579,11 +618,13 @@ export const sampleSeries: ConfigurableDashboardSeries = {
     {
       id: '4xx',
       name: '4xx',
+      color: 'warning',
       values: [13707, 15864, 14544, 16239, 19681, 24625, 22235, 22216, 22808, 17486, 16275, 15501]
     },
     {
       id: '5xx',
       name: '5xx',
+      color: 'danger',
       values: [8144, 8724, 9890, 8837, 7067, 7731, 5015, 3592, 4017, 3975, 5911, 7275]
     }
   ],

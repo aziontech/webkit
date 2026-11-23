@@ -108,7 +108,7 @@ resource (`web-app share of total`). The bar is a visual aid; the number is the 
 
 ### P. Load failure — `Alert` (required)
 
-When `error` is set, every card keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <card>.` followed by the message, with Retry, which emits `retry`.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ## Data
 
@@ -122,12 +122,12 @@ The block takes its figures and records through props and emits every action; it
 | `split`          | `ChartSeries[]`                   | This month's spend by category, one value per series, for the donut.                                                                   |
 | `contributors`   | `BreakdownDashboardContributor[]` | The Top contributors rows. `[]` shows No spend in this range.                                                                          |
 | `loading`        | `boolean`                         | The period is loading; every tile, both charts and the table show their skeleton, and the exports disable.                             |
-| `error`          | `string`                          | Why the period could not load; each card shows `Couldn't load <card>.` and this message in a danger `Alert` with Retry.                |
+| `error`          | `string`                          | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.`         |
 | `v-model:period` | `string`                          | The selected period (`12m`, `6m`, `ytd`); default `12m`. Refetch when it changes.                                                      |
 
 | Event           | Payload         | When                                                                                                             |
 | --------------- | --------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `retry`         | `(event)`       | Retry in any card's error alert.                                                                                 |
+| `retry`         | `(event)`       | Retry in the page's error alert.                                                                                 |
 | `export`        | `(event, card)` | Export CSV in the header (`spend-by-category`) or a card menu; the block downloads the CSV of the data it shows. |
 | `update:period` | `(value)`       | The reader picked another period.                                                                                |
 
@@ -193,7 +193,7 @@ Then delete `sample.ts` and its import.
 - Default: the populated breakdown for the period (`v-model:period`).
 - Loading: `loading` is set; every tile, both charts and the table hold their place with a `Skeleton`.
 - Empty: nothing billed in the period (`kpis` is `{}` and every list is `[]`); tiles show a dash with no delta or trend, the exports disable, and the stacked chart, donut and table each keep their box with an `EmptyState` that names the reason.
-- Error: the request for the period failed (`error` is set); tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load, carries the message and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -207,7 +207,7 @@ Then delete `sample.ts` and its import.
 - `Default` — primary (the code below)
 - `Loading` — While the first response loads, every tile, both charts and the table hold their place with a Skeleton, so the grid does not reflow when data arrives.
 - `Empty` — Nothing was billed in the selected period. The tiles show a dash with no delta or trend, and the stacked chart, the donut and the table each keep their box with an EmptyState that names the reason.
-- `Error` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `Error` — The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-breakdown", { variant })`, or the file under `blocks/dashboard/dashboard-breakdown/variants/`.
 
@@ -215,6 +215,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import DonutChart from '@aziontech/webkit/donut-chart'
@@ -488,6 +489,14 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           />
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the cost breakdown. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-breakdown__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
         <li
@@ -525,7 +534,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           :exportable="exportable"
           :error="error"
           @select="(event, value) => onCardOption(event, 'spend-by-category', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <Chart
             :series="series"
@@ -559,7 +567,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           :exportable="exportable"
           :error="error"
           @select="(event, value) => onCardOption(event, 'current-split', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <DonutChart
             :series="split"
@@ -579,7 +586,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           :exportable="exportable"
           :error="error"
           @select="(event, value) => onCardOption(event, 'top-contributors', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <ContributorsTable
             :contributors="contributors"
@@ -884,6 +890,7 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
     row-key="id"
     sortable
     density="compact"
+    stackable
     bordered
     :loading="loading"
   >
@@ -958,7 +965,6 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import Hint from '@aziontech/webkit/hint'
@@ -984,7 +990,6 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
 
   const emit = defineEmits<{
     select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
-    retry: [event: MouseEvent]
   }>()
 
   const form = defineModel<string>('form', { default: '' })
@@ -1031,13 +1036,12 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
       </ChartCard.Action>
     </ChartCard.Header>
     <ChartCard.Content>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load ${title.toLowerCase()}. ${error}`"
-        action-label="Retry"
-        @action="(event: MouseEvent) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <slot v-else />
     </ChartCard.Content>
   </ChartCard>

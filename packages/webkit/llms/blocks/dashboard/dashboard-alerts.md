@@ -108,7 +108,7 @@ so it is a `TableCellStatus` (one semantic `Tag`), separate from severity. The a
 
 ### N. Load failure — `Alert` (required)
 
-When `error` is set, every region keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <region>.` followed by the message, with Retry, which emits `retry`.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ## Data
 
@@ -124,13 +124,13 @@ The block takes its figures and records through props and emits every action; it
 | `entities`       | `AlertsDashboardEntity[]`     | The Highest risk rows. `[]` shows No entities at risk yet.                                                                                     |
 | `alerts`         | `AlertsDashboardAlert[]`      | The Open alerts rows. `[]` shows No open alerts.                                                                                               |
 | `loading`        | `boolean`                     | The period is loading; every region shows its skeleton.                                                                                        |
-| `error`          | `string`                      | Why the period could not load; each region shows `Couldn't load <region>.` and this message in a danger `Alert` with Retry.                    |
+| `error`          | `string`                      | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.`                 |
 | `v-model:period` | `string`                      | The selected period (`7d`, `30d`, `90d`); default `30d`. Refetch when it changes.                                                              |
 
-| Event           | Payload   | When                               |
-| --------------- | --------- | ---------------------------------- |
-| `retry`         | `(event)` | Retry in any region's error alert. |
-| `update:period` | `(value)` | The reader picked another period.  |
+| Event           | Payload   | When                              |
+| --------------- | --------- | --------------------------------- |
+| `retry`         | `(event)` | Retry in the page's error alert.  |
+| `update:period` | `(value)` | The reader picked another period. |
 
 To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -196,7 +196,7 @@ Then delete `sample.ts` and its import.
 - Default: the populated page for the selected period (`v-model:period`).
 - Loading: `loading` is set; tiles, chart, bar list and both tables render their own `Skeleton`; Open by severity holds Skeleton rows.
 - Empty: a period with no alerts (`kpis` is `{}` and every list is `[]`); tiles show a dash with no delta, and every region keeps its box with an `EmptyState` that says why and what to do next.
-- Error: the request for the period failed (`error` is set); tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load, carries the message and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -210,7 +210,7 @@ Then delete `sample.ts` and its import.
 - `Default` — primary (the code below)
 - `Loading` — While the period loads, the tiles, the chart, the bar list and both tables render their own Skeleton, and Open by severity holds Skeleton rows, so nothing reflows when data arrives.
 - `Empty` — A period with no alerts. The tiles show a dash with no delta, and every region keeps its box with an EmptyState that says why it is empty and what to do next.
-- `Error` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `Error` — The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-alerts", { variant })`, or the file under `blocks/dashboard/dashboard-alerts/variants/`.
 
@@ -218,6 +218,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import type { BarListItem } from '@aziontech/webkit/bar-list'
   import BarList from '@aziontech/webkit/bar-list'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
@@ -451,6 +452,14 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           </div>
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the alerts. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-alerts__error"
+        @action="retry"
+      />
 
       <section aria-label="Summary">
         <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
@@ -486,7 +495,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           hint="Alerts raised each day, stacked by severity level."
           region="alerts per day"
           :error="error"
-          @retry="retry"
         >
           <Chart
             v-model:active-index="activeIndex"
@@ -515,7 +523,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           :levels="openByLevel"
           :loading="loading"
           :error="error"
-          @retry="retry"
         />
 
         <AlertsCard
@@ -524,7 +531,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           hint="Alerts raised in the period, by the kind of behavior that raised them."
           region="alerts by type"
           :error="error"
-          @retry="retry"
         >
           <BarList
             :items="types"
@@ -541,7 +547,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           hint="The entities with the highest risk score, from the severity and number of their open alerts."
           region="highest risk"
           :error="error"
-          @retry="retry"
         >
           <EntityTable
             :entities="entities"
@@ -555,7 +560,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           hint="Every open alert, most severe first."
           region="open alerts"
           :error="error"
-          @retry="retry"
         >
           <OpenAlertTable
             :alerts="alerts"
@@ -900,7 +904,6 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import Hint from '@aziontech/webkit/hint'
 
@@ -919,8 +922,6 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
 
   withDefaults(defineProps<AlertsCardProps>(), { error: '' })
 
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
-
   defineSlots<{ default(): unknown }>()
 </script>
 
@@ -933,13 +934,12 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
       </span>
     </ChartCard.Header>
     <ChartCard.Content>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load ${region}. ${error}`"
-        action-label="Retry"
-        @action="(event: MouseEvent) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <slot v-else />
     </ChartCard.Content>
   </ChartCard>
@@ -1005,6 +1005,7 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
     row-key="id"
     sortable
     density="compact"
+    stackable
     bordered
     :loading="loading"
   >
@@ -1146,7 +1147,6 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import Card from '@aziontech/webkit/card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import SeverityTag from '@aziontech/webkit/severity-tag'
@@ -1166,8 +1166,6 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
 
   const props = withDefaults(defineProps<OpenBySeverityProps>(), { loading: false, error: '' })
 
-  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
-
   const openTotal = computed(() => props.levels.reduce((sum, level) => sum + level.count, 0))
 </script>
 
@@ -1175,13 +1173,12 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
   <div class="lg:col-span-4">
     <Card title="Open by severity">
       <template #default>
-        <Alert
+        <p
           v-if="error"
-          severity="danger"
-          :label="`Couldn't load open alerts by severity. ${error}`"
-          action-label="Retry"
-          @action="(event: MouseEvent) => emit('retry', event)"
-        />
+          class="text-body-sm text-(--text-muted)"
+        >
+          Not available.
+        </p>
         <ul
           v-else-if="loading"
           aria-busy="true"

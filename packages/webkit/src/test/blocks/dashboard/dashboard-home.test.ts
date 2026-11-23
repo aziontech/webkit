@@ -3,12 +3,28 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import Home from '../../../../blocks/dashboard/dashboard-home/dashboard-home.vue'
 import HomeFailed from '../../../../blocks/dashboard/dashboard-home/variants/error.vue'
+import HomeSummary from '../../../../blocks/dashboard/dashboard-home/variants/summary.vue'
 import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
 
 afterEach(() => cleanup())
 describe('dashboard/dashboard-home', () => {
+  it('tags every Recent activity operation, Edited included', () => {
+    const view = render(HomeSummary)
+    const tags = Array.from(view.container.querySelectorAll('[data-testid="tag"]')).map((tag) =>
+      tag.textContent?.trim()
+    )
+    for (const operation of ['Created', 'Deleted', 'Edited']) expect(tags).toContain(operation)
+  })
+
+  it('says what every usage delta compares against', () => {
+    const view = render(Home, {
+      props: { metrics: { 'data-transferred': { value: 110, delta: 12.4 } } }
+    })
+    expect(view.container.textContent).toContain('vs previous 24 hours')
+  })
+
   it('links every resource row and panel heading to a real destination', () => {
     const view = render(Home)
     const rows = view.getAllByRole('link', { name: /marketing-site/ })
@@ -25,12 +41,12 @@ describe('dashboard/dashboard-home', () => {
     expect(usage.querySelectorAll('button').length).toBeGreaterThanOrEqual(4)
   })
 
-  it('shows a Retry alert in the usage band and in every panel when Home fails', () => {
+  it('shows one Retry alert for the page when Home fails', () => {
     const view = render(HomeFailed)
     const retries = Array.from(view.container.querySelectorAll('button')).filter(
       (button) => button.textContent?.trim() === 'Retry'
     )
-    expect(retries.length).toBe(5)
+    expect(retries.length).toBe(1)
     expect(view.queryByRole('link', { name: /marketing-site/ })).toBeNull()
   })
 })
@@ -99,7 +115,9 @@ describe('dashboard/dashboard-home data', () => {
     expect(loading.container.textContent).not.toContain("Let's build something new.")
     loading.unmount()
     const view = render(Home, { props: { error: 'The API answered 503.' } })
-    expect(view.container.textContent).toContain("Couldn't load usage. The API answered 503.")
+    expect(view.container.textContent).toContain(
+      "Couldn't load your usage and resources. The API answered 503."
+    )
     await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])
     expect(view.emitted('retry')).toHaveLength(1)
     await fireEvent.click(view.getByRole('button', { name: 'Dismiss agent setup' }))

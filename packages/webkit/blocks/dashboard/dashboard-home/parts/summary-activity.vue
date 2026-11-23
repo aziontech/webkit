@@ -12,14 +12,14 @@
     { id: 'date', accessorKey: 'date', header: 'Date', principal: true, hideable: false },
     { id: 'operation', accessorKey: 'operation', header: 'Operation', minWidth: 120 },
     { id: 'type', accessorKey: 'type', header: 'Type' },
-    { id: 'resource', accessorKey: 'resource', header: 'Resource', grow: 2 },
-    { id: 'email', accessorKey: 'email', header: 'Author email', minWidth: 184 }
+    { id: 'resource', accessorKey: 'resource', header: 'Resource' },
+    { id: 'email', accessorKey: 'email', header: 'Author email' }
   ]
 
-  const operationSeverity: Record<SummaryOperation, TagSeverity | null> = {
+  const operationSeverity: Record<SummaryOperation, TagSeverity> = {
     Created: 'success',
     Deleted: 'danger',
-    Edited: null
+    Edited: 'neutral'
   }
 </script>
 
@@ -42,6 +42,7 @@
           :columns="activityColumns"
           row-key="id"
           density="compact"
+          stackable
           :bordered="false"
         >
           <template #cell-date="{ value }">
@@ -49,15 +50,19 @@
           </template>
           <template #cell-operation="{ row }">
             <Tag
-              v-if="operationSeverity[row.operation]"
               :label="row.operation"
-              :severity="operationSeverity[row.operation] ?? undefined"
+              :severity="operationSeverity[row.operation]"
               size="small"
             />
+          </template>
+          <template #cell-resource="{ value }">
+            <span class="min-w-0 truncate">{{ value }}</span>
+          </template>
+          <template #cell-email="{ value }">
             <span
-              v-else
-              class="text-(--text-default)"
-              >{{ row.operation }}</span
+              class="min-w-0 truncate"
+              dir="ltr"
+              >{{ value }}</span
             >
           </template>
         </DataTable>

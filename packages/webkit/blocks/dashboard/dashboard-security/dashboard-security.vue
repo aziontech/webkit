@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Button from '@aziontech/webkit/button'
   import type { ChartLabel, ChartSeries } from '@aziontech/webkit/chart'
@@ -289,6 +290,14 @@
           </Select>
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load security data. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-security__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
       <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-3">
         <li class="flex min-w-0 flex-col">
           <StatTile
@@ -371,7 +380,6 @@
           :forms="forms"
           @expand="openExpanded('matched')"
           @select="(_event, value) => onCardOption('matched', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <MatchedChart
             v-model:active-index="activeIndex"
@@ -386,7 +394,6 @@
           :blocked="blocked"
           :loading="loading"
           :error="error"
-          @retry="(event) => emit('retry', event)"
         />
         <SecurityCard
           v-for="id in barCards"
@@ -395,7 +402,6 @@
           v-bind="card(id)"
           @expand="openExpanded(id)"
           @select="(_event, value) => onCardOption(id, value)"
-          @retry="(event) => emit('retry', event)"
         >
           <BarList
             :items="id === 'categories' ? categories : countries"
@@ -411,7 +417,6 @@
           wide
           @expand="openExpanded('ips')"
           @select="(_event, value) => onCardOption('ips', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <SourceIpSearch
             v-model:search="search"

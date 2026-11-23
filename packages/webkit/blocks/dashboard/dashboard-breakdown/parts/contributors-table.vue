@@ -79,6 +79,7 @@
     row-key="id"
     sortable
     density="compact"
+    stackable
     bordered
     :loading="loading"
   >

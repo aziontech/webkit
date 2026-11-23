@@ -128,9 +128,7 @@ destination, method and the rule that decided it; outcome and severity are two d
 
 ### R. Load failure — `Alert` (required)
 
-With `error` set, a danger `Alert` with Retry takes the place of each card's content, naming what
-did not load (`Couldn't load matched requests over time.`); the card actions disable and the tiles
-read as a dash.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners. Expand and Export CSV disable.
 
 ### S. Loading placeholders — `Skeleton` (required)
 
@@ -144,25 +142,25 @@ The primary action of the empty state, linking to the rules page.
 
 The block takes its records through props and emits every action; it fetches nothing. `SecuritySummary`, `SecurityMetric`, `SecurityMatchedRequests`, `SecuritySourceIp`, `SecurityAttentionEntry`, `SecurityCardChanges`, `SecurityPeriodRange`, `SecurityPeriod`, `SecurityCardId` and `SecurityDashboardProps` are exported from `dashboard-security.vue`, and `sample.ts` holds the sample figures, series, breakdowns, IPs and attention entries the block renders when a data prop is left out (and never while `loading` or `error` is set). Export CSV and Copy query run in the browser on the data the block holds. The ByActor variant is a separate page and keeps its own sample log.
 
-| Prop / model      | Type                       | What it does                                                                                                |
-| ----------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `summary`         | `SecuritySummary`          | The three tiles: value, change and sparkline. A `null` value shows a dash.                                  |
-| `matchedRequests` | `SecurityMatchedRequests`  | The Blocked and Logged series with their labels.                                                            |
-| `categories`      | `BarListItem[]`            | Blocked requests by attack category.                                                                        |
-| `countries`       | `BarListItem[]`            | Blocked requests by country.                                                                                |
-| `sourceIps`       | `SecuritySourceIp[]`       | The Top source IPs rows; the search runs on them in the browser.                                            |
-| `attention`       | `SecurityAttentionEntry[]` | The Needs attention list, each with the link that resolves it.                                              |
-| `changes`         | `SecurityCardChanges`      | Each card's change against the previous period, in percent; a rise is danger, a fall success.               |
-| `range`           | `SecurityPeriodRange`      | The start and end of the period, written into the copied query.                                             |
-| `loading`         | `boolean`                  | The period is loading: tiles, charts and the table show Skeletons, the card actions disable.                |
-| `error`           | `string`                   | Why the request failed, shown after `Couldn't load matched requests over time.` (…) in each danger `Alert`. |
-| `v-model:period`  | `SecurityPeriod`           | The period the tiles compare against; refetch when it changes. Defaults to `24h`.                           |
+| Prop / model      | Type                       | What it does                                                                                                                   |
+| ----------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `summary`         | `SecuritySummary`          | The three tiles: value, change and sparkline. A `null` value shows a dash.                                                     |
+| `matchedRequests` | `SecurityMatchedRequests`  | The Blocked and Logged series with their labels.                                                                               |
+| `categories`      | `BarListItem[]`            | Blocked requests by attack category.                                                                                           |
+| `countries`       | `BarListItem[]`            | Blocked requests by country.                                                                                                   |
+| `sourceIps`       | `SecuritySourceIp[]`       | The Top source IPs rows; the search runs on them in the browser.                                                               |
+| `attention`       | `SecurityAttentionEntry[]` | The Needs attention list, each with the link that resolves it.                                                                 |
+| `changes`         | `SecurityCardChanges`      | Each card's change against the previous period, in percent; a rise is danger, a fall success.                                  |
+| `range`           | `SecurityPeriodRange`      | The start and end of the period, written into the copied query.                                                                |
+| `loading`         | `boolean`                  | The period is loading: tiles, charts and the table show Skeletons, the card actions disable.                                   |
+| `error`           | `string`                   | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.` |
+| `v-model:period`  | `SecurityPeriod`           | The period the tiles compare against; refetch when it changes. Defaults to `24h`.                                              |
 
 Every region empty (`[]` lists and no series) is the no-rule-set state: one `EmptyState` with `Add rule set` replaces the grid.
 
-| Event   | Payload   | When                              |
-| ------- | --------- | --------------------------------- |
-| `retry` | `(event)` | Retry in any of the error alerts. |
+| Event   | Payload   | When                             |
+| ------- | --------- | -------------------------------- |
+| `retry` | `(event)` | Retry in the page's error alert. |
 
 To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -232,7 +230,7 @@ Then delete `sample.ts` and its import.
 - Loading: `loading`; every tile, chart and the table hold a `Skeleton`; Needs attention shows three placeholder rows.
 - Empty: no rule set yet (every list `[]`, tiles with `null` values); tiles read as dashes and one bordered `EmptyState` offers `Add rule set` instead of a grid of empty charts.
 - ByActor: request activity per actor with the rule that decided each request; NoMatch is a state of it.
-- Error: `error`; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 

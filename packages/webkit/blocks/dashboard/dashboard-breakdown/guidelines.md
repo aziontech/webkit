@@ -96,7 +96,7 @@ resource (`web-app share of total`). The bar is a visual aid; the number is the 
 
 ### P. Load failure — `Alert` (required)
 
-When `error` is set, every card keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <card>.` followed by the message, with Retry, which emits `retry`.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ## Data
 
@@ -110,12 +110,12 @@ The block takes its figures and records through props and emits every action; it
 | `split`          | `ChartSeries[]`                   | This month's spend by category, one value per series, for the donut.                                                                   |
 | `contributors`   | `BreakdownDashboardContributor[]` | The Top contributors rows. `[]` shows No spend in this range.                                                                          |
 | `loading`        | `boolean`                         | The period is loading; every tile, both charts and the table show their skeleton, and the exports disable.                             |
-| `error`          | `string`                          | Why the period could not load; each card shows `Couldn't load <card>.` and this message in a danger `Alert` with Retry.                |
+| `error`          | `string`                          | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.`         |
 | `v-model:period` | `string`                          | The selected period (`12m`, `6m`, `ytd`); default `12m`. Refetch when it changes.                                                      |
 
 | Event           | Payload         | When                                                                                                             |
 | --------------- | --------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `retry`         | `(event)`       | Retry in any card's error alert.                                                                                 |
+| `retry`         | `(event)`       | Retry in the page's error alert.                                                                                 |
 | `export`        | `(event, card)` | Export CSV in the header (`spend-by-category`) or a card menu; the block downloads the CSV of the data it shows. |
 | `update:period` | `(value)`       | The reader picked another period.                                                                                |
 
@@ -181,7 +181,7 @@ Then delete `sample.ts` and its import.
 - Default: the populated breakdown for the period (`v-model:period`).
 - Loading: `loading` is set; every tile, both charts and the table hold their place with a `Skeleton`.
 - Empty: nothing billed in the period (`kpis` is `{}` and every list is `[]`); tiles show a dash with no delta or trend, the exports disable, and the stacked chart, donut and table each keep their box with an `EmptyState` that names the reason.
-- Error: the request for the period failed (`error` is set); tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load, carries the message and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 

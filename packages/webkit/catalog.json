@@ -8243,7 +8243,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Why the value failed to load. When set, the tile shows a dash and a danger band that says it could not load, never No data."
+     "doc": "Why the value failed to load. When set, the tile shows a dash and a neutral band that says it could not load, never No data."
     }
    ],
    "slots": [
@@ -34726,6 +34726,7 @@
     "PanelBody",
     "PanelHeader",
     "Select",
+    "Spinner",
     "StatTile",
     "StatTileGroup",
     "Tabs",
@@ -34759,6 +34760,7 @@
     "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/select",
+    "@aziontech/webkit/spinner",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/stat-tile-group",
     "@aziontech/webkit/tabs",
@@ -34918,6 +34920,7 @@
     "DashboardGrid",
     "DonutChart",
     "Hint",
+    "IconButton",
     "PageHeader",
     "Tag",
     "use-locale"
@@ -34931,6 +34934,7 @@
     "@aziontech/webkit/dashboard-grid",
     "@aziontech/webkit/donut-chart",
     "@aziontech/webkit/hint",
+    "@aziontech/webkit/icon-button",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/use-locale"
@@ -35469,6 +35473,7 @@
     "EmptyState",
     "Hint",
     "Item",
+    "Link",
     "PageHeader",
     "Skeleton",
     "StatTile",
@@ -35483,6 +35488,7 @@
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/hint",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/stat-tile",

@@ -7,7 +7,7 @@
   },
   {
    "name": "Error",
-   "summary": "Populated Home whose data could not load: the usage band and every resource panel show a danger `Alert` with Retry in place of their content; the greeting and the agent card stay.",
+   "summary": "Populated Home whose data could not load: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.",
    "file": "blocks/dashboard/dashboard-home/variants/error.vue"
   },
   {

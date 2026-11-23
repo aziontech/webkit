@@ -34,6 +34,13 @@ describe('dashboard/dashboard-security#ByActor', () => {
     await waitFor(() => expect(table()?.textContent).toContain('api.example.com'))
   })
 
+  it('labels the destination filter visibly and hints with its placeholder', () => {
+    const view = render(SecurityByActor)
+    const input = view.getByRole('textbox', { name: 'Destination host' }) as HTMLInputElement
+    expect(input.placeholder).toBe('Filter by host')
+    expect(input.closest('[data-testid="input"]')?.textContent).toContain('Destination')
+  })
+
   it('moves the time range to the header and the closed-set filters into FilterMenu', async () => {
     const view = render(SecurityByActor)
     expect(byTestId('filter-menu', view.container as HTMLElement)).not.toBeNull()
@@ -89,7 +96,7 @@ describe('dashboard/dashboard-security', () => {
   it('names what failed in each card and emits retry', async () => {
     const view = render(Security, { props: { error: 'Check your connection and retry.' } })
     expect(view.container.textContent).toContain(
-      "Couldn't load top source IPs by blocked requests. Check your connection and retry."
+      "Couldn't load security data. Check your connection and retry."
     )
     await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])
     expect(view.emitted<unknown[]>('retry')).toHaveLength(1)

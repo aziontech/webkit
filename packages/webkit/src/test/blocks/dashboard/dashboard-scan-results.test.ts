@@ -48,7 +48,7 @@ describe('dashboard/dashboard-scan-results', () => {
   it('names what failed in each card and emits retry', async () => {
     const view = render(ScanResults, { props: { error: 'Check your connection and retry.' } })
     expect(view.container.textContent).toContain(
-      "Couldn't load submissions. Check your connection and retry."
+      "Couldn't load the scan results. Check your connection and retry."
     )
     expect(view.container.textContent).not.toContain('quarterly-report.pdf')
     await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])

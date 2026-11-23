@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-analytics/dashboard-analytics.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-analytics")`
-- Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `utils/clipboard`, `utils/csv`
+- Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [Spinner](../../components/spinner.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `utils/clipboard`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -166,9 +166,7 @@ transferred per project. The empty copy is `No usage yet` /
 
 ### R. Failure — `Alert` (required)
 
-When the period cannot load (`error`), every card keeps its header and shows a danger `Alert` with
-Retry in place of its chart or table, naming what did not load
-(`Couldn't load top hosts. Check your connection and retry.`); Expand and Export CSV disable.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners. Expand and Export CSV disable.
 
 ## Data
 
@@ -187,13 +185,13 @@ The block takes its figures through props and emits its actions; it fetches noth
 | `range`           | `AnalyticsDashboardRange`        | The period's window as ISO timestamps, written into the query each card menu copies.                                                                   |
 | `defaultExpanded` | `AnalyticsDashboardCardId \| ''` | The card whose expanded dialog is open on first render.                                                                                                |
 | `loading`         | `boolean`                        | The period is loading: every tile, chart and the table hold a `Skeleton`, Expand and Export CSV disable.                                               |
-| `error`           | `string`                         | Why the period could not load; each card shows `Couldn't load <card>.` and the message in a danger `Alert`.                                            |
+| `error`           | `string`                         | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.`                         |
 | `refetching`      | `boolean`                        | The period is reloading over figures already shown: the data stays and every chart holds its previous render at reduced opacity.                       |
 
 | Event           | Payload   | When                             |
 | --------------- | --------- | -------------------------------- |
 | `update:period` | `(value)` | The Period `Select` changed.     |
-| `retry`         | `(event)` | Retry in any card's error alert. |
+| `retry`         | `(event)` | Retry in the page's error alert. |
 
 The queries the card menus copy run as-is against the Azion Real-Time Metrics API
 (`POST /v4/metrics/graphql`). What the API expects, so a live page asks for the right shapes:
@@ -297,7 +295,7 @@ Then delete `sample.ts` and its import.
 - Expanded: `defaultExpanded="requests"`; the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
 - MetricsOverview: six cross-product tiles and six highlight cards, each with a footer link to its product dashboard.
 - Usage: the Data usage page, consumption per meter and per project against the previous period.
-- Error: `error` holds the message; the request for the period failed, tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -316,7 +314,7 @@ Then delete `sample.ts` and its import.
 - `Loading` — While the first response loads, every tile, chart and the table hold their place with a Skeleton, so the grid does not reflow when data arrives.
 - `Refetching` — The period reloads over figures already shown (a new period, a Refresh): the tiles, charts and table keep their data and every chart holds its previous render at reduced opacity, so nothing jumps to a Skeleton.
 - `Empty` — No traffic in the period. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that says nothing was recorded.
-- `Error` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `Error` — The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 - `Metrics` — Real-time metrics per product: a PageTabs strip switches between Applications, Functions, Firewall, DNS and Data stream, and a Period Select in the page header (Last hour, Last 24 hours, Last 7 days, Last 30 days) drives every region. Each product shows its own four StatTiles with sparkline and change against the previous period, over four ChartCards of area, line or stacked bar Charts that share one crosshair. Products with more than one dashboard add a ToggleGroup under the tabs: Applications switches between Overview, Status codes (the status card over a status and upstream status table with search and an All, 2xx, 3xx, 4xx, 5xx status-class filter) and Request breakdown (an IP address table with search); Firewall adds Denied sources. Every card menu copies its GraphQL query and exports its rows as CSV.
 - `Expanded` — The Requests over time card opened from its Expand button: a large Dialog with the card title and its description, the Line or Bar ToggleGroup shared with the card, and the chart at a 420px plot (the table card opens with ten rows per page). Closing it returns focus to Expand. Every card's menu works: Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast.
 - `MetricsOverview` — The real-time metrics landing page across products: a Period Select and a Refresh button in the page header, six StatTiles (requests, data transferred, cache offload, status 5xx, requests denied, function invocations) with sparkline and change, and six highlight ChartCards from Applications, Firewall and Functions. Each card keeps the full header (Sum Tag, Line or Bar ToggleGroup, Expand into a large Dialog, Copy query and Export CSV) and ends in a footer Link to its product dashboard (Open Applications dashboard).
@@ -328,6 +326,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import type { ChartLabel, ChartSeries } from '@aziontech/webkit/chart'
   import Hint from '@aziontech/webkit/hint'
   import StatTile from '@aziontech/webkit/stat-tile'
@@ -596,8 +595,20 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         title="Analytics"
         description="Requests, data transferred and errors your services handled in the period."
         :options="comparedPeriods"
+        :refetching="refetching"
       />
-      <StatTileGroup aria-label="Key figures">
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load analytics. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-analytics__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
+      <StatTileGroup
+        aria-label="Key figures"
+        :aria-busy="refetching || undefined"
+      >
         <StatTile
           v-for="figure in figures"
           :key="figure.id"
@@ -629,7 +640,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           wide
           @expand="openExpanded('requests')"
           @select="(_event, value) => onCardOption('requests', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <SeriesChart
             v-model:active-index="activeIndex"
@@ -652,7 +662,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           :forms="chartForms"
           @expand="openExpanded('status-codes')"
           @select="(_event, value) => onCardOption('status-codes', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <SeriesChart
             v-model:active-index="activeIndex"
@@ -672,7 +681,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           v-bind="card('countries')"
           @expand="openExpanded('countries')"
           @select="(_event, value) => onCardOption('countries', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <SeriesChart
             ranking
@@ -692,7 +700,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           wide
           @expand="openExpanded('hosts')"
           @select="(_event, value) => onCardOption('hosts', value)"
-          @retry="(event) => emit('retry', event)"
         >
           <SearchTable
             v-model:search="search"
@@ -701,6 +708,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             search-label="Search hosts or services"
             :format-count="formatters.count"
             :loading="loading"
+            :aria-busy="refetching || undefined"
             v-bind="empty"
           />
         </MetricCard>
@@ -840,6 +848,7 @@ export const sampleStatusSeries: ChartSeries[] = [
   {
     id: '2xx',
     name: 'Status 2xx',
+    color: 1,
     values: [
       1970768, 2045431, 2207447, 2043392, 1792162, 1894493, 1522523, 1327714, 1397824, 1400013,
       1662309, 1853957
@@ -848,6 +857,7 @@ export const sampleStatusSeries: ChartSeries[] = [
   {
     id: '3xx',
     name: 'Status 3xx',
+    color: 2,
     values: [
       262040, 267609, 285424, 281518, 253458, 243622, 188475, 157518, 160801, 163438, 201094, 240161
     ]
@@ -855,11 +865,13 @@ export const sampleStatusSeries: ChartSeries[] = [
   {
     id: '4xx',
     name: 'Status 4xx',
+    color: 'warning',
     values: [41015, 49733, 50969, 54872, 61252, 68657, 75390, 80334, 73837, 63741, 63809, 45030]
   },
   {
     id: '5xx',
     name: 'Status 5xx',
+    color: 'danger',
     values: [4785, 5447, 4587, 5964, 5280, 7973, 8616, 9609, 8368, 7191, 6381, 5146]
   }
 ]
@@ -1522,7 +1534,6 @@ export const chartForms = [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import Hint from '@aziontech/webkit/hint'
@@ -1593,7 +1604,6 @@ export const chartForms = [
   const emit = defineEmits<{
     expand: [event: MouseEvent]
     select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
-    retry: [event: MouseEvent]
   }>()
 
   const form = defineModel<string>('form', { default: '' })
@@ -1676,13 +1686,12 @@ export const chartForms = [
       </ChartCard.Action>
     </ChartCard.Header>
     <ChartCard.Content>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load ${title.toLowerCase()}. ${error}`"
-        action-label="Retry"
-        @action="(event: MouseEvent) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <slot v-else />
     </ChartCard.Content>
     <ChartCard.Footer v-if="footerLabel">
@@ -1703,6 +1712,7 @@ export const chartForms = [
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
+  import Spinner from '@aziontech/webkit/spinner'
   import Tooltip from '@aziontech/webkit/tooltip'
 
   /** One entry of the Period Select. */
@@ -1745,6 +1755,15 @@ export const chartForms = [
     :description="description"
   >
     <template #actions>
+      <span
+        v-if="refetching && !refreshable"
+        class="inline-flex items-center gap-(--spacing-2xs) text-body-sm text-(--text-muted)"
+        role="status"
+        data-testid="period-header__updating"
+      >
+        <Spinner />
+        Updating
+      </span>
       <Select
         variant="ghost"
         v-model="period"
@@ -1875,6 +1894,7 @@ export const chartForms = [
       row-key="id"
       sortable
       density="compact"
+      stackable
       bordered
       :loading="loading"
     >

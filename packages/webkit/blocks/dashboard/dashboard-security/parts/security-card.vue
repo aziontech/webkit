@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import Hint from '@aziontech/webkit/hint'
@@ -44,7 +43,6 @@
   const emit = defineEmits<{
     expand: [event: MouseEvent]
     select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
-    retry: [event: MouseEvent]
   }>()
 
   const form = defineModel<string>('form', { default: '' })
@@ -126,13 +124,12 @@
       </ChartCard.Action>
     </ChartCard.Header>
     <ChartCard.Content>
-      <Alert
+      <p
         v-if="error"
-        severity="danger"
-        :label="`Couldn't load ${subject}. ${error}`"
-        action-label="Retry"
-        @action="(event: MouseEvent) => emit('retry', event)"
-      />
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
       <slot v-else />
     </ChartCard.Content>
   </ChartCard>

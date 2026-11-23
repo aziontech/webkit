@@ -77,11 +77,13 @@ export const sampleSeries: ConfigurableDashboardSeries = {
     {
       id: '4xx',
       name: '4xx',
+      color: 'warning',
       values: [13707, 15864, 14544, 16239, 19681, 24625, 22235, 22216, 22808, 17486, 16275, 15501]
     },
     {
       id: '5xx',
       name: '5xx',
+      color: 'danger',
       values: [8144, 8724, 9890, 8837, 7067, 7731, 5015, 3592, 4017, 3975, 5911, 7275]
     }
   ],
