@@ -7,7 +7,7 @@ afterEach(() => {
   document.body.innerHTML = ''
 })
 
-function mount(dir = 'ltr') {
+function mount(dir = 'ltr', on: 'group' | 'radios' = 'group') {
   document.body.innerHTML =
     `<div role="radiogroup" aria-label="Projects" dir="${dir}">` +
     '<button role="radio" aria-checked="true" tabindex="0">acme-store</button>' +
@@ -15,12 +15,13 @@ function mount(dir = 'ltr') {
     '<button role="radio" aria-checked="false" tabindex="-1">docs-site</button>' +
     '</div>'
   const group = document.querySelector<HTMLElement>('[role="radiogroup"]')!
-  group.addEventListener('keydown', onRadioListKeydown)
+  const radios = Array.from(group.querySelectorAll<HTMLElement>('[role="radio"]'))
+  if (on === 'group') group.addEventListener('keydown', onRadioListKeydown)
+  else radios.forEach((radio) => radio.addEventListener('keydown', onRadioListKeydown))
   const clicked: string[] = []
   group.addEventListener('click', (event) =>
     clicked.push((event.target as HTMLElement).textContent ?? '')
   )
-  const radios = Array.from(group.querySelectorAll<HTMLElement>('[role="radio"]'))
   return { radios, clicked }
 }
 
@@ -41,6 +42,16 @@ describe('radio list keyboard', () => {
     await userEvent.keyboard('{ArrowUp}')
     expect(document.activeElement).toBe(radios[2])
     expect(clicked).toEqual(['docs-site', 'acme-store', 'docs-site'])
+  })
+
+  it('moves from radio to radio when each radio carries the handler and the group none', async () => {
+    const { radios, clicked } = mount('ltr', 'radios')
+    radios[0]!.focus()
+    await userEvent.keyboard('{ArrowDown}')
+    expect(document.activeElement).toBe(radios[2])
+    await userEvent.keyboard('{ArrowDown}')
+    expect(document.activeElement).toBe(radios[0])
+    expect(clicked).toEqual(['docs-site', 'acme-store'])
   })
 
   it('follows the text direction for the left and right arrows', async () => {

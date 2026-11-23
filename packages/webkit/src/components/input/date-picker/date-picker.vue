@@ -1,10 +1,11 @@
 <script setup lang="ts">
-  import { type Component, computed, provide, ref, shallowRef, useAttrs, watch } from 'vue'
+  import { computed, provide, ref, useAttrs, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
+  import { useDatePickerPanel } from './composables/use-date-picker-panel'
   import { asSingle, formatValueLabel, withTime } from './format'
   import {
     DatePickerInjectionKey,
@@ -117,21 +118,7 @@
 
   const toggleOpen = () => setOpen(!isOpen.value)
 
-  const panel = shallowRef<{ grid: Component; fields: Component } | null>(null)
-  const panelOpen = computed(() => isOpen.value && panel.value !== null)
-
-  watch(
-    isOpen,
-    async (open) => {
-      if (!open || panel.value) return
-      const [grid, fields] = await Promise.all([
-        import('./parts/date-picker-grid.vue'),
-        import('./parts/date-picker-fields.vue')
-      ])
-      panel.value = { grid: grid.default, fields: fields.default }
-    },
-    { immediate: true }
-  )
+  const { panel, panelOpen } = useDatePickerPanel(isOpen)
 
   const cloneValue = (value: DatePickerValue): DatePickerValue => {
     const date = asSingle(value)

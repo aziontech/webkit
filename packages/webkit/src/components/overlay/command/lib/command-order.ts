@@ -74,7 +74,7 @@ export function sortVisibleItems(
     .map((entry) => entry.item)
 }
 
-export const COMMAND_HINT_LIMIT = 3
+const COMMAND_HINT_LIMIT = 3
 
 export function cappedHints(
   items: CommandRegisteredItem[],

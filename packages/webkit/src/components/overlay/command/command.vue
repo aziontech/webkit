@@ -21,23 +21,14 @@
   import DialogTitle from '../dialog/dialog-title.vue'
   import PanelHeader from '../panel/panel-header.vue'
   import { useCommandActive } from './composables/use-command-active'
+  import { useCommandOrder } from './composables/use-command-order'
   import { useCommandPages } from './composables/use-command-pages'
   import {
     CommandInjectionKey,
     type CommandItemValue,
     type CommandRegisteredItem
   } from './injection-key'
-  import {
-    arrangeRankedDom,
-    cappedHints,
-    type CommandDomSnapshot,
-    type CommandHomeOrder,
-    groupStatsOf,
-    homeOrderOf,
-    matchesShortcut,
-    restoreDomOrder,
-    sortVisibleItems
-  } from './lib/command-order'
+  import { matchesShortcut } from './lib/command-order'
   import { claimShortcut } from './shortcut-registry'
 
   defineOptions({
@@ -101,45 +92,15 @@
   const previousActiveEl = ref<HTMLElement | null>(null)
   let pageChangedWhileClosed = false
 
-  const ranking = computed(() => query.value.trim().length > 0)
-
   const isMac = computed(
     () =>
       typeof navigator !== 'undefined' &&
       /mac/i.test(navigator.platform || navigator.userAgent || '')
   )
 
-  let homeOrder: CommandHomeOrder = new Map()
-
-  const capped = computed(() => cappedHints(items.value, ranking.value, homeOrder))
-
-  const groupStats = computed(() => groupStatsOf(items.value))
-
-  const visibleItems = computed(() =>
-    sortVisibleItems(
-      items.value.filter((item) => item.isVisible.value),
-      ranking.value,
-      groupStats.value,
-      homeOrder
-    )
-  )
-
-  const navigableItems = computed(() => visibleItems.value.filter((item) => !item.disabled.value))
-
-  const domSnapshot: CommandDomSnapshot = new Map()
-
-  watch(
-    [visibleItems, ranking],
-    ([visible, ranked]) => {
-      if (ranked) {
-        if (!domSnapshot.size) homeOrder = homeOrderOf(items.value)
-        arrangeRankedDom(visible, domSnapshot)
-      } else {
-        restoreDomOrder(domSnapshot)
-        homeOrder = homeOrderOf(items.value)
-      }
-    },
-    { flush: 'post' }
+  const { ranking, capped, groupStats, visibleItems, navigableItems } = useCommandOrder(
+    items,
+    query
   )
 
   const pages = useCommandPages(pageModel, (name) => {

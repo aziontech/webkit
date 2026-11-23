@@ -175,7 +175,6 @@
                 <div
                   class="border-t border-(--border-default)"
                   role="radiogroup"
-                  @keydown="onRadioListKeydown"
                   aria-label="Firewalls"
                 >
                   <Item.List>
@@ -185,6 +184,7 @@
                       size="small"
                       clickable
                       role="radio"
+                      @keydown="onRadioListKeydown"
                       :aria-checked="option.value === firewallPicker.chosen"
                       :tabindex="
                         radioListTabIndex(

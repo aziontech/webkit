@@ -16,9 +16,10 @@
 
   import {
     addToFilesActions,
+    destinationOptionsOf,
     fileColumns,
     type FileRow,
-    folderName,
+    folderPathsIn,
     listRows,
     sortRows,
     UPLOAD_LIMIT
@@ -215,19 +216,14 @@
     emit('delete', event, entry)
   }
 
-  const destinationPaths = computed(
-    () =>
+  const destinationOptions = computed(() =>
+    destinationOptionsOf(
       props.destinations ??
-      (props.entries
-        ? props.entries
-            .filter((entry) => entry.kind === 'folder')
-            .map((entry) => path.value + folderName(entry.name))
-        : Object.keys(sampleFolders).filter(Boolean))
+        (props.entries
+          ? folderPathsIn(props.entries, path.value)
+          : Object.keys(sampleFolders).filter(Boolean))
+    )
   )
-  const destinationOptions = computed(() => [
-    { value: '/', label: '/', description: 'Storage root' },
-    ...destinationPaths.value.map((value) => ({ value }))
-  ])
 
   const moveOpen = ref(false)
   const moving = ref<FileRow[]>([])

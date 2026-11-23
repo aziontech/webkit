@@ -182,7 +182,6 @@
           <div
             class="border-t border-(--border-default)"
             role="radiogroup"
-            @keydown="onRadioListKeydown"
             aria-label="Projects"
           >
             <Item.List>
@@ -192,6 +191,7 @@
                 size="small"
                 clickable
                 role="radio"
+                @keydown="onRadioListKeydown"
                 :aria-checked="option.value === projectPicker.chosen"
                 :tabindex="
                   radioListTabIndex(

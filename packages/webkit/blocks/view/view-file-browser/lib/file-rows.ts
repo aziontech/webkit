@@ -152,3 +152,11 @@ export const destinationProblem = (raw: string, path: string) => {
   if (target === path) return 'The files are already in this folder. Pick another one.'
   return ''
 }
+
+export const folderPathsIn = (entries: FileBrowserEntry[], path: string): string[] =>
+  entries.filter((entry) => entry.kind === 'folder').map((entry) => path + folderName(entry.name))
+
+export const destinationOptionsOf = (paths: string[]) => [
+  { value: '/', label: '/', description: 'Storage root' },
+  ...paths.map((value) => ({ value }))
+]

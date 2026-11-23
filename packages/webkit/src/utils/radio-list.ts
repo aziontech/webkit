@@ -11,10 +11,11 @@ export function radioListTabIndex(
 }
 
 export function onRadioListKeydown(event: KeyboardEvent): void {
-  const group = event.currentTarget
-  if (!(group instanceof HTMLElement)) return
   const step = STEP[event.key]
-  if (!step) return
+  const host = event.currentTarget
+  if (!step || !(host instanceof HTMLElement)) return
+  const group = host.closest<HTMLElement>('[role="radiogroup"]')
+  if (!group) return
   const radios = Array.from(group.querySelectorAll<HTMLElement>(RADIO))
   const index = radios.findIndex((radio) => radio.contains(document.activeElement))
   if (index < 0) return

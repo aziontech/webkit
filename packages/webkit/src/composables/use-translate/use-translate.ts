@@ -32,8 +32,8 @@ export interface LocaleContext {
   timeZone?: ComputedRef<string | undefined>
   /** Every catalog the provider picks from, inherited ones included, so a nested provider can switch locale. */
   catalogs?: ComputedRef<Record<string, Messages>>
-  /** The partial overrides in effect, inherited ones included, merged over whichever catalog a nested provider picks. */
-  overrides?: ComputedRef<PartialMessages | undefined>
+  /** The partial overrides in effect, outermost first, merged in order over whichever catalog a nested provider picks. */
+  overrides?: ComputedRef<PartialMessages[]>
 }
 
 /** What `useTranslate()` returns. */

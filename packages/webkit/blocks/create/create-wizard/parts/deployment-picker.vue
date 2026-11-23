@@ -111,7 +111,6 @@
           <div
             class="border-t border-(--border-default)"
             role="radiogroup"
-            @keydown="onRadioListKeydown"
             aria-label="Deployments"
           >
             <Item.List>
@@ -121,6 +120,7 @@
                 size="small"
                 clickable
                 role="radio"
+                @keydown="onRadioListKeydown"
                 :aria-checked="option.value === deploymentPicker.chosen"
                 :tabindex="
                   radioListTabIndex(

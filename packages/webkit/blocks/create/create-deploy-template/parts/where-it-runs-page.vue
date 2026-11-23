@@ -159,7 +159,6 @@
                   v-else
                   class="flex flex-col"
                   role="radiogroup"
-                  @keydown="onRadioListKeydown"
                   aria-label="Services"
                 >
                   <Item
@@ -168,6 +167,7 @@
                     size="small"
                     clickable
                     role="radio"
+                    @keydown="onRadioListKeydown"
                     :aria-checked="service === option.value"
                     :tabindex="
                       radioListTabIndex(

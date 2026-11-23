@@ -69,7 +69,6 @@
       <div
         class="flex flex-col"
         role="radiogroup"
-        @keydown="onRadioListKeydown"
         aria-label="Policies"
       >
         <Item
@@ -78,6 +77,7 @@
           size="small"
           clickable
           role="radio"
+          @keydown="onRadioListKeydown"
           :aria-checked="choice === option.value"
           :tabindex="
             radioListTabIndex(
