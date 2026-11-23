@@ -178,14 +178,19 @@
             <FieldError v-if="projectPicker.message">{{ projectPicker.message }}</FieldError>
           </div>
 
-          <div class="border-t border-(--border-default)">
+          <div
+            class="border-t border-(--border-default)"
+            role="radiogroup"
+            aria-label="Projects"
+          >
             <Item.List>
               <Item
                 v-for="option in projectPicker.visible"
                 :key="option.value"
                 size="small"
                 clickable
-                :aria-pressed="option.value === projectPicker.chosen"
+                role="radio"
+                :aria-checked="option.value === projectPicker.chosen"
                 @click="projectPicker.chosen = option.value"
               >
                 <Item.Media>
@@ -205,7 +210,12 @@
                 <Item.Actions>
                   <i
                     v-if="option.value === projectPicker.chosen"
-                    class="az az-check shrink-0 text-(--text-default)"
+                    class="az az-circle-on shrink-0 text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                  <i
+                    v-else
+                    class="az az-circle shrink-0 text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Actions>

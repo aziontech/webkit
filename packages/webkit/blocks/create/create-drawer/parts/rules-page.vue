@@ -159,6 +159,7 @@
           <template #default>
             <Item.List>
               <SettingsRow
+                required
                 title="Name"
                 description="Give a unique and descriptive name to identify the rule."
               >
@@ -195,6 +196,7 @@
           <template #default>
             <Item.List>
               <SettingsRow
+                required
                 title="Origin"
                 description="Select the origin matching requests go to, or create one."
               >
@@ -280,6 +282,7 @@
           <template #default>
             <Item.List>
               <SettingsRow
+                required
                 title="Name"
                 description="A unique name for the origin."
               >
@@ -306,6 +309,7 @@
                 </div>
               </SettingsRow>
               <SettingsRow
+                required
                 title="Address"
                 description="The host this resource fetches content from."
                 stackable

@@ -42,7 +42,7 @@
     deploying?: boolean
     /** The last run deployed the release. */
     deployed?: boolean
-    /** Why the last run failed, shown in the danger alert and the error toast. */
+    /** Why the last run failed, shown in the danger alert with Edit and Redeploy. */
     deployError?: string
   }
 
@@ -203,15 +203,7 @@
   watch(
     outcome,
     (next) => {
-      if (next === 'failed')
-        toast.error("The release wasn't deployed.", runToast(props.deployError))
-      else if (next === 'succeeded')
-        toast.success(
-          'Release deployed.',
-          runToast(
-            `${releaseLine.value} serve ${plural(projects.value.length, 'project', 'projects')} now.`
-          )
-        )
+      if (next === 'failed' || next === 'succeeded') toast.dismiss(RUN_TOAST)
     },
     { immediate: true }
   )
@@ -301,7 +293,7 @@
 
       <SaveBar variant="docked">
         <template #leading>
-          <p class="text-body-sm text-(--text-muted)">
+          <p class="text-body-sm text-(--text-muted) max-md:hidden">
             Deploying puts every included resource into traffic at the version shown.
           </p>
         </template>
@@ -316,53 +308,57 @@
             />
             {{ blocker }}
           </p>
-          <div class="w-full md:w-fit">
-            <Button
-              class="w-full"
-              label="Cancel"
-              variant="outline"
-              size="medium"
-              href="/services/web-app"
-              :disabled="deploying"
-            />
-          </div>
-          <ConfirmDialog
-            v-model:open="confirmOpen"
-            title="Deploy this release?"
-            :description="confirmBody"
-            confirm-label="Deploy release"
-            variant="primary"
-            size="small"
-            :disabled="!canDeploy"
-            @confirm="confirmDeploy"
+          <div
+            class="flex w-full gap-(--spacing-xs) @xl/save-bar:w-fit @xl/save-bar:gap-(--spacing-sm)"
           >
-            <template #trigger>
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  variant="primary"
-                  size="medium"
-                  icon="az az-cloud-upload"
-                  :disabled="!canDeploy"
-                  :loading="deploying"
-                  :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
-                >
-                  {{ deploying ? 'Deploying…' : 'Deploy release' }}
-                  <span
-                    v-if="!deploying"
-                    class="max-lg:hidden"
-                    aria-hidden="true"
+            <div class="min-w-0 flex-1 @xl/save-bar:flex-none">
+              <Button
+                class="w-full"
+                label="Cancel"
+                variant="outline"
+                size="medium"
+                href="/services/web-app"
+                :disabled="deploying"
+              />
+            </div>
+            <ConfirmDialog
+              v-model:open="confirmOpen"
+              title="Deploy this release?"
+              :description="confirmBody"
+              confirm-label="Deploy release"
+              variant="primary"
+              size="small"
+              :disabled="!canDeploy"
+              @confirm="confirmDeploy"
+            >
+              <template #trigger>
+                <div class="min-w-0 flex-1 @xl/save-bar:flex-none">
+                  <Button
+                    class="w-full"
+                    variant="primary"
+                    size="medium"
+                    icon="az az-cloud-upload"
+                    :disabled="!canDeploy"
+                    :loading="deploying"
+                    :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
                   >
-                    <Kbd
-                      meta
-                      key-name="enter"
-                      size="small"
-                    />
-                  </span>
-                </Button>
-              </div>
-            </template>
-          </ConfirmDialog>
+                    {{ deploying ? 'Deploying…' : 'Deploy release' }}
+                    <span
+                      v-if="!deploying"
+                      class="max-lg:hidden"
+                      aria-hidden="true"
+                    >
+                      <Kbd
+                        meta
+                        key-name="enter"
+                        size="small"
+                      />
+                    </span>
+                  </Button>
+                </div>
+              </template>
+            </ConfirmDialog>
+          </div>
         </template>
       </SaveBar>
     </main>

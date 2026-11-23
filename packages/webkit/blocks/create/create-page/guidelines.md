@@ -44,23 +44,27 @@ On/off settings use `SettingsRow variant="compact"` with a `Switch` hard right a
 
 `SaveBar variant="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. On a phone the muted line hides, so Import keeps its label beside Cancel and Save; the Domain name description already says a paste imports. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
 
-### G. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
+### G. Failed request — `Alert` (required)
+
+When the request fails, a danger `Alert` under the last section, above the commit bar, names what failed ("Could not create the domain."), says why, and carries Retry. It stays until the next request ends, and it is mounted again after each one, so a second identical failure is announced again. Nothing is reported only in a toast.
+
+### H. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
 
 Cancel and the header Back both leave the page, so both ask first once the form differs from what it opened with: `useUnsavedChanges(() => form)` tracks it, Cancel and Back `await guard.confirmLeave()` before the page emits `cancel`, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. A clean form leaves at once, with no dialog, and the browser's own prompt covers a reload or a tab close while dirty. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())` so a link or the browser Back asks too. Escape runs the same Cancel path through `useEscapeToCancel(onCancel)`.
 
-### H. Shortcut keycap — `Kbd` (optional)
+### I. Shortcut keycap — `Kbd` (optional)
 
-A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`. `Kbd` hides itself inside a button on a touch screen and greys with a disabled button.
 
 ## Data
 
-The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in an error toast with Retry; on success the page shows the toast and opens the new domain.
+The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in a danger `Alert` with Retry above the commit bar; on success the page shows the toast and opens the new domain.
 
-| Prop            | Type                        | What it does                                                                        |
-| --------------- | --------------------------- | ----------------------------------------------------------------------------------- |
-| `defaultValues` | `Partial<CreatePageValues>` | The values the form starts from: Name and Domain name empty, DNSSEC off, Active on. |
-| `loading`       | `boolean`                   | The create request is in flight; the `fieldset` locks and Save spins.               |
-| `error`         | `string`                    | Why the request failed, the description of the error toast with Retry.              |
+| Prop            | Type                        | What it does                                                                         |
+| --------------- | --------------------------- | ------------------------------------------------------------------------------------ |
+| `defaultValues` | `Partial<CreatePageValues>` | The values the form starts from: Name and Domain name empty, DNSSEC off, Active on.  |
+| `loading`       | `boolean`                   | The create request is in flight; the `fieldset` locks and Save spins.                |
+| `error`         | `string`                    | Why the request failed, shown in the danger `Alert` with Retry above the commit bar. |
 
 | Event    | Payload           | When                                                                               |
 | -------- | ----------------- | ---------------------------------------------------------------------------------- |

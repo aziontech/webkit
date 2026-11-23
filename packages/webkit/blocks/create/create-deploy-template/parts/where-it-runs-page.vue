@@ -157,13 +157,16 @@
                 <div
                   v-else
                   class="flex flex-col"
+                  role="radiogroup"
+                  aria-label="Services"
                 >
                   <Item
                     v-for="option in visible"
                     :key="option.value"
                     size="small"
                     clickable
-                    :aria-pressed="service === option.value"
+                    role="radio"
+                    :aria-checked="service === option.value"
                     @click="choose(option.value)"
                   >
                     <Item.Media>
@@ -179,7 +182,12 @@
                     <Item.Actions>
                       <i
                         v-if="service === option.value"
-                        class="az az-check text-body-sm leading-none text-(--text-default)"
+                        class="az az-circle-on text-body-sm leading-none text-(--text-default)"
+                        aria-hidden="true"
+                      />
+                      <i
+                        v-else
+                        class="az az-circle text-body-sm leading-none text-(--text-muted)"
                         aria-hidden="true"
                       />
                     </Item.Actions>

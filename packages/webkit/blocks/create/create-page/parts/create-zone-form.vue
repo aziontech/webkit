@@ -170,13 +170,12 @@
 
   const formEl = ref<HTMLFormElement | null>(null)
 
-  const { guard, submitting, submitButton, leave, submit } = useCreateForm({
+  const { guard, failure, submitting, submitButton, leave, submit } = useCreateForm({
     source: () => ({ form, records: records.value }),
     formEl,
     shortcutLabel: 'Create zone',
     validate: () => validateDomainForm(form, errors),
-    onCreated: () => toast.success(`${form.domain.trim()} zone created.`),
-    failureTitle: 'Could not create the zone.'
+    onCreated: () => toast.success(`${form.domain.trim()} zone created.`)
   })
 
   onMounted(() => nameEl.value?.focus())
@@ -194,6 +193,8 @@
     title-id="create-zone-title"
     submit-label="Save"
     :submitting="submitting"
+    :failure="failure"
+    failure-title="Could not create the zone."
     :submit-button="submitButton"
     :guard="guard"
     :bind-form="(element) => (formEl = element)"
@@ -208,6 +209,7 @@
         <template #default>
           <Item.List>
             <SettingsRow
+              required
               stackable
               title="Name"
               description="Identifies the zone in this list. It is not the domain."
@@ -232,6 +234,7 @@
               >
             </SettingsRow>
             <SettingsRow
+              required
               stackable
               title="Domain name"
               description="The root domain, without a subdomain. Paste a zone file to import it."

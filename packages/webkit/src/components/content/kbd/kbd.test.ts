@@ -37,6 +37,13 @@ describe('Kbd', () => {
     expect(getByTestId('kbd')).toHaveAttribute('data-size', 'small')
   })
 
+  it('hides inside a button on a coarse pointer and greys with a disabled button', () => {
+    const { getByTestId } = render(Kbd, { slots: { default: () => 'K' } })
+    const classes = getByTestId('kbd').classList
+    expect(classes.contains('pointer-coarse:in-[button]:hidden')).toBe(true)
+    expect(classes.contains('in-[button:disabled]:text-(--text-disabled)')).toBe(true)
+  })
+
   it('renders the shift modifier glyph before the key', () => {
     const { getByTestId } = render(Kbd, {
       props: { shift: true },

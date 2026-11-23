@@ -51,7 +51,7 @@ A large `Input` with a search icon, placeholder and matching `aria-label`, shown
 
 ### E. Resource list — `Item`, `Skeleton` (required in Existing)
 
-`Item.List` of small `clickable` `Item`s (native `button`s), one per resource: an icon in `Item.Media`, name in `Item.Title`, a secondary fact in `Item.Description`, and a check in `Item.Actions` on the chosen row. The chosen row takes `aria-pressed`, which fills it. While a batch loads, `Skeleton` rows in the same shape follow the visible ones, `aria-hidden`, with staggered widths. A value chosen beyond the first batch is revealed on open, never hidden behind Load more.
+`Item.List` of small `clickable` `Item`s (native `button`s), one per resource: an icon in `Item.Media`, name in `Item.Title`, a secondary fact in `Item.Description`, and a radio circle in `Item.Actions`, filled on the chosen row. The rows are one named `radiogroup`; each row takes `role="radio"` and `aria-checked`, which fills the chosen one. While a batch loads, `Skeleton` rows in the same shape follow the visible ones, `aria-hidden`, with staggered widths. A value chosen beyond the first batch is revealed on open, never hidden behind Load more.
 
 ### F. Load more — `Button` (optional)
 
@@ -105,7 +105,7 @@ Then delete `sample.ts` and its import. Set `error` when Next is pressed with no
 ## Do
 
 - Default to Existing when anything exists, and drop the toggle entirely when nothing does.
-- Mark the chosen row three ways: background, trailing check and `aria-pressed`.
+- Mark the chosen row three ways: background, filled trailing radio circle and `aria-checked`.
 - Keep the required message above the rows, under the search, so it is read before the list is scanned.
 - Offer the other mode in the no-match line, so an empty search leads to creating one.
 - Keep the chosen value when the user switches to New and back.
@@ -137,7 +137,7 @@ Then delete `sample.ts` and its import. Set `error` when Next is pressed with no
 ## Accessibility
 
 - The `ToggleGroup` has an `aria-label` that states the question, e.g. "Where the project comes from".
-- Each row is a native `button` with `aria-pressed` reflecting the selection; the check icon is `aria-hidden`.
+- Each row is a native `button` with `role="radio"` and `aria-checked` reflecting the selection, inside a `radiogroup` named for the list; the radio circle is `aria-hidden`.
 - Search has an `aria-label` that matches its placeholder.
 - A `role="status"` region announces the count after every search, load and no-match, e.g. "5 of 19 projects".
 - Skeleton rows are `aria-hidden`; the Load more `Button` carries `:loading` so its busy state is announced.
@@ -355,14 +355,19 @@ Each variant is the same screen in another state: `get_block("create/create-reso
             <FieldError v-if="projectPicker.message">{{ projectPicker.message }}</FieldError>
           </div>
 
-          <div class="border-t border-(--border-default)">
+          <div
+            class="border-t border-(--border-default)"
+            role="radiogroup"
+            aria-label="Projects"
+          >
             <Item.List>
               <Item
                 v-for="option in projectPicker.visible"
                 :key="option.value"
                 size="small"
                 clickable
-                :aria-pressed="option.value === projectPicker.chosen"
+                role="radio"
+                :aria-checked="option.value === projectPicker.chosen"
                 @click="projectPicker.chosen = option.value"
               >
                 <Item.Media>
@@ -382,7 +387,12 @@ Each variant is the same screen in another state: `get_block("create/create-reso
                 <Item.Actions>
                   <i
                     v-if="option.value === projectPicker.chosen"
-                    class="az az-check shrink-0 text-(--text-default)"
+                    class="az az-circle-on shrink-0 text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                  <i
+                    v-else
+                    class="az az-circle shrink-0 text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Actions>

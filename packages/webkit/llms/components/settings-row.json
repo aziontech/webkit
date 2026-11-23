@@ -78,6 +78,13 @@
    "default": "''",
    "required": "false",
    "doc": "Extra guidance in a Hint glyph beside the title; empty renders no glyph."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the setting as required after its title, as a required field label does."
   }
  ],
  "events": [],

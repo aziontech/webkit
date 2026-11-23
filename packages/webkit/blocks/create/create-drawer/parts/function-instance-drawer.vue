@@ -6,6 +6,7 @@
     type CodeEditorMonacoModule
   } from '@aziontech/webkit/code-editor'
   import Field from '@aziontech/webkit/field'
+  import FieldDescription from '@aziontech/webkit/field-description'
   import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -236,12 +237,12 @@
               </Select.Item>
             </Select.Content>
           </Select>
-          <FieldError id="instance-function-helper">{{
+          <Field.Description id="instance-function-helper">{{
             errors.functionId ||
             (selected
               ? `${selected.runtime}. Changing the function clears the arguments.`
               : 'Its arguments appear below once a function is chosen.')
-          }}</FieldError>
+          }}</Field.Description>
         </Field>
         <Field
           required
@@ -310,11 +311,10 @@
             aria-label="Arguments JSON"
             @update:model-value="onJson"
           />
-          <FieldError>{{
-            jsonMarkers.length
-              ? 'Fix the JSON to keep these arguments. The fields keep the last valid value.'
-              : 'Edits here update the fields.'
-          }}</FieldError>
+          <FieldError v-if="jsonMarkers.length"
+            >Fix the JSON to keep these arguments. The fields keep the last valid value.</FieldError
+          >
+          <FieldDescription v-else>Edits here update the fields.</FieldDescription>
         </div>
       </div>
     </SettingsGroup>

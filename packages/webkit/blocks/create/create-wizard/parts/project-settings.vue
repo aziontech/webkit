@@ -2,7 +2,6 @@
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
   import FieldDescription from '@aziontech/webkit/field-description'
-  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import RadioGroup from '@aziontech/webkit/radio-group-root'
@@ -187,9 +186,9 @@
                       </Select.Item>
                     </Select.Content>
                   </Select>
-                  <FieldError :id="'origin-' + field.name + '-helper'">
+                  <FieldDescription :id="'origin-' + field.name + '-helper'">
                     {{ errors['origin.' + field.name] || field.description }}
-                  </FieldError>
+                  </FieldDescription>
                 </Field>
                 <Field
                   key="field-2"

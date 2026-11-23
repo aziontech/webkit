@@ -1,6 +1,6 @@
 # CreateDeployProgressDialog (`create/create-deploy-progress-dialog`)
 
-> The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, can be hidden at any time (Hide while running, Close once settled; the toast keeps reporting and Show progress reopens it); under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Deploying <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeIcon` once it settles. When the run settles the header gains a large `OutcomeIcon` and the outcome reports through one toast with Edit and Redeploy, as every async action does, raised only while the dialog is hidden so it never covers the dialog's footer; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeIcon`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.
+> The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying… 2 of 5 done while it runs, can be hidden at any time (Hide while running, Close once settled; the toast keeps reporting and Show progress reopens it); under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Deploying <name> track the run, a `ToggleGroup` filters All, Remaining, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeIcon` once it settles. When the run settles the header gains a large `OutcomeIcon` and the outcome reports through one toast with Edit and Redeploy, as every async action does, raised only while the dialog is hidden so it never covers the dialog's footer; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeIcon`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/create/create-deploy-progress-dialog/create-deploy-progress-dialog.vue` in `@aziontech/webkit`
@@ -35,7 +35,7 @@ Titled "New production deployment" (the environment in lower case), with the dia
 
 ### B. Progress frame — `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `OutcomeIcon` (required)
 
-`size="medium"` and always `dismissible`: the run keeps going in the background, and the toast reports it once the dialog is hidden. The title counts: "Deploying 2 of 5…" while running, "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and the rule that the ones that succeeded stay live. Once settled a large `OutcomeIcon` stands before the title: success when all deployed, warning when some failed.
+`size="medium"` and always `dismissible`: the run keeps going in the background, and the toast reports it once the dialog is hidden. The title counts: "Deploying… 2 of 5 done" while running (the settled count, never the position of the one in progress), "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and the rule that the ones that succeeded stay live. Once settled a large `OutcomeIcon` stands before the title: success when all deployed, warning when some failed.
 
 ### C. Progress — `PanelBody`, `Progress` (required)
 
@@ -43,7 +43,7 @@ The share of settled settings, named "Deploy progress", with "Deploying <name>" 
 
 ### D. Filter — `ToggleGroup` (required)
 
-Small, named "Filter deploys by status": All, Deploying n (running and queued), Failed n, Done n. An empty filter shows a small `EmptyState` ("Nothing failed.").
+Small, named "Filter deploys by status": All, Remaining n (deploying and queued), Failed n, Done n. An empty filter shows a small `EmptyState` ("Nothing failed.").
 
 ### E. Rows — `Item`, `OutcomeIcon`, `Spinner`, `Tag`, `EmptyState` (required)
 
@@ -115,7 +115,7 @@ Then delete `sample.ts` and its import.
 ## Copy
 
 - **Drop:** "New production deployment", "Dropped files", "Deploy to Production".
-- **Title:** "Deploying 2 of 5…", "Deployed 5 Deployment Settings", "Deployed 4 of 5 Deployment Settings".
+- **Title:** "Deploying… 2 of 5 done", "Deployed 5 Deployment Settings", "Deployed 4 of 5 Deployment Settings".
 - **Tally:** "4 succeeded, 1 failed. Each Deployment Setting deploys on its own, and the ones that succeeded stay live."
 - **Tags:** Queued, Deploying, Done, Failed. **Actions:** Retry failed, Hide (while running), Close.
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, the progressive verb with `…`.
@@ -260,14 +260,14 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
   const filterOptions = computed(() => [
     { value: 'all', label: 'All' },
-    { value: 'deploying', label: `Deploying ${counts.value.total - counts.value.settled}` },
+    { value: 'remaining', label: `Remaining ${counts.value.total - counts.value.settled}` },
     { value: 'failed', label: `Failed ${counts.value.failed}` },
     { value: 'done', label: `Done ${counts.value.done}` }
   ])
 
   const visibleItems = computed(() => {
     if (filter.value === 'all') return items.value
-    if (filter.value === 'deploying')
+    if (filter.value === 'remaining')
       return items.value.filter((item) => item.status === 'deploying' || item.status === 'queued')
     return items.value.filter((item) => item.status === filter.value)
   })
@@ -276,7 +276,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
   const title = computed(() => {
     const { total, done, failed, settled } = counts.value
-    if (running.value) return `Deploying ${settled} of ${total}…`
+    if (running.value) return `Deploying… ${settled} of ${total} done`
     if (failed) return `Deployed ${done} of ${total} ${noun(total)}`
     return `Deployed ${total} ${noun(total)}`
   })

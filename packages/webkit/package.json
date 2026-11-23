@@ -2513,6 +2513,10 @@
       "types": "./types/utils/csv.d.ts",
       "default": "./src/utils/csv.ts"
     },
+    "./utils/focus-invalid": {
+      "types": "./types/utils/focus-invalid.d.ts",
+      "default": "./src/utils/focus-invalid.ts"
+    },
     "./styles/country-flags": {
       "types": "./types/css.d.ts",
       "default": "./src/styles/country-flags.css"
@@ -4167,6 +4171,9 @@
       ],
       "utils/csv": [
         "./types/utils/csv.d.ts"
+      ],
+      "utils/focus-invalid": [
+        "./types/utils/focus-invalid.d.ts"
       ],
       "styles/country-flags": [
         "./types/css.d.ts"

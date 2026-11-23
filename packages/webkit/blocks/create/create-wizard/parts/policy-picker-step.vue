@@ -24,7 +24,7 @@
     answer: [value: string]
   }>()
 
-  const VISIBLE = 6
+  const VISIBLE = 5
 
   const query = ref('')
 
@@ -53,7 +53,7 @@
 </script>
 
 <template>
-  <section class="mx-auto flex w-full max-w-(--container-md) flex-col gap-(--spacing-lg)">
+  <section class="flex w-full max-w-(--container-md) flex-col gap-(--spacing-lg)">
     <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
       <Input
         v-model="query"
@@ -65,13 +65,18 @@
         @keydown.enter.prevent="onSearchEnter"
       />
 
-      <div class="flex flex-col">
+      <div
+        class="flex flex-col"
+        role="radiogroup"
+        aria-label="Policies"
+      >
         <Item
           v-for="option in visible"
           :key="option.value"
           size="small"
           clickable
-          :aria-pressed="choice === option.value"
+          role="radio"
+          :aria-checked="choice === option.value"
           @click="choose(option)"
         >
           <Item.Media>
@@ -92,7 +97,12 @@
             />
             <i
               v-if="choice === option.value"
-              class="az az-check text-body-sm leading-none text-(--text-default)"
+              class="az az-circle-on text-body-sm leading-none text-(--text-default)"
+              aria-hidden="true"
+            />
+            <i
+              v-else
+              class="az az-circle text-body-sm leading-none text-(--text-muted)"
               aria-hidden="true"
             />
           </Item.Actions>
@@ -114,7 +124,7 @@
       <FieldError v-if="missing">Select a policy, or continue without one.</FieldError>
     </div>
 
-    <div class="flex flex-col items-center gap-(--spacing-2xs)">
+    <div class="flex flex-col items-start gap-(--spacing-2xs)">
       <Button
         type="button"
         label="Create a policy"

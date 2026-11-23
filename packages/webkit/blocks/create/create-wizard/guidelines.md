@@ -34,7 +34,7 @@ One `Wizard` labelled with the create label, `v-model` bound to the step index, 
 
 ### D. Where it runs — `Input`, `Item`, `Tag`, `FieldError`, `Button` (required)
 
-The first step: a large search `Input` and up to six host rows. Each row is a small `clickable` `Item` (a native `button`) with `aria-pressed`, which fills the chosen row; a host missing the module the resource needs carries a small warning `Tag`. Picking a row answers the step and moves on. A chosen host past the first six is kept visible. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one. Next with no answer stays and shows a `FieldDescription` asking for one.
+The first step: a large search `Input` and up to five host rows. The rows are one `radiogroup` named Policies; each row is a small `clickable` `Item` (a native `button`) with `role="radio"` and `aria-checked`, which fills the chosen row, and an empty or filled radio circle at its end at rest; a host missing the module the resource needs carries a small warning `Tag`. Picking a row answers the step and moves on. A chosen host past the first five is kept visible. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one. Next with no answer stays and shows a `FieldDescription` asking for one.
 
 ### E. Module step — `Card`, `Alert`, `Field`, `Switch` (conditional)
 
@@ -153,7 +153,7 @@ Then delete `sample.ts` and its import.
 - **⌘ Enter runs the Wizard's primary button (`Ctrl Enter` off Apple):** Next with the same step check, Create Access List or Create and deploy on the last step. It fires from any field, a textarea included, stays inert while the create request is in flight and is listed in the `?` dialog as Next step or the create action.
 - The `Wizard` takes an `aria-label` naming the flow; locked rail steps cannot be focused or activated, and focus moves to the new step's heading on every step change.
 - The page has one `h1` (the `PageHeader`); each step heading is an `h2` drawn by the Wizard.
-- Host rows are native `button`s with `aria-pressed`; the chooser's search has an `aria-label` and Enter selects the first match.
+- Host rows are native `button`s with `role="radio"` and `aria-checked` inside one named `radiogroup`, so a screen reader hears "radio, 1 of 5, checked"; the chooser's search has an `aria-label` and Enter selects the first match.
 - Choice cards are a `RadioGroup` named with `aria-label`; each `RadioGroup.Item` is labelled by its card.
 - Required messages are tied to their control with `aria-describedby`; focus stays on the step after a failed Next.
 - Step transitions honour reduced motion.

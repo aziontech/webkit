@@ -11,10 +11,18 @@ import {
 } from 'vue'
 
 const breadcrumbCollapseWidth = 768
+const breadcrumbCompactWidth = 360
+
+export interface UseBreadcrumbCollapseReturn {
+  /** The box is narrower than 768px: the middle segments fold into the overflow menu. */
+  collapsed: Readonly<Ref<boolean>>
+  /** The box is narrower than 360px: every ancestor folds into the overflow menu. */
+  compact: Readonly<Ref<boolean>>
+}
 
 export function useBreadcrumbCollapse(
   target: MaybeRefOrGetter<globalThis.HTMLElement | null>
-): Readonly<Ref<boolean>> {
+): UseBreadcrumbCollapseReturn {
   const width = ref<number | null>(null)
   let frame = 0
 
@@ -40,5 +48,8 @@ export function useBreadcrumbCollapse(
     }
   })
 
-  return readonly(computed(() => width.value !== null && width.value < breadcrumbCollapseWidth))
+  const below = (limit: number) =>
+    readonly(computed(() => width.value !== null && width.value < limit))
+
+  return { collapsed: below(breadcrumbCollapseWidth), compact: below(breadcrumbCompactWidth) }
 }

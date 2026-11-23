@@ -46,7 +46,7 @@ One `Wizard` labelled with the create label, `v-model` bound to the step index, 
 
 ### D. Where it runs — `Input`, `Item`, `Tag`, `FieldError`, `Button` (required)
 
-The first step: a large search `Input` and up to six host rows. Each row is a small `clickable` `Item` (a native `button`) with `aria-pressed`, which fills the chosen row; a host missing the module the resource needs carries a small warning `Tag`. Picking a row answers the step and moves on. A chosen host past the first six is kept visible. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one. Next with no answer stays and shows a `FieldDescription` asking for one.
+The first step: a large search `Input` and up to five host rows. The rows are one `radiogroup` named Policies; each row is a small `clickable` `Item` (a native `button`) with `role="radio"` and `aria-checked`, which fills the chosen row, and an empty or filled radio circle at its end at rest; a host missing the module the resource needs carries a small warning `Tag`. Picking a row answers the step and moves on. A chosen host past the first five is kept visible. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one. Next with no answer stays and shows a `FieldDescription` asking for one.
 
 ### E. Module step — `Card`, `Alert`, `Field`, `Switch` (conditional)
 
@@ -165,7 +165,7 @@ Then delete `sample.ts` and its import.
 - **⌘ Enter runs the Wizard's primary button (`Ctrl Enter` off Apple):** Next with the same step check, Create Access List or Create and deploy on the last step. It fires from any field, a textarea included, stays inert while the create request is in flight and is listed in the `?` dialog as Next step or the create action.
 - The `Wizard` takes an `aria-label` naming the flow; locked rail steps cannot be focused or activated, and focus moves to the new step's heading on every step change.
 - The page has one `h1` (the `PageHeader`); each step heading is an `h2` drawn by the Wizard.
-- Host rows are native `button`s with `aria-pressed`; the chooser's search has an `aria-label` and Enter selects the first match.
+- Host rows are native `button`s with `role="radio"` and `aria-checked` inside one named `radiogroup`, so a screen reader hears "radio, 1 of 5, checked"; the chooser's search has an `aria-label` and Enter selects the first match.
 - Choice cards are a `RadioGroup` named with `aria-label`; each `RadioGroup.Item` is labelled by its card.
 - Required messages are tied to their control with `aria-describedby`; focus stays on the step after a failed Next.
 - Step transitions honour reduced motion.
@@ -537,6 +537,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
             <template #default>
               <Item.List>
                 <SettingsRow
+                  required
                   title="Name"
                   description="Give a unique and descriptive name to identify the access list."
                 >
@@ -596,6 +597,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                   </RadioGroup>
                 </SettingsRow>
                 <SettingsRow
+                  required
                   :title="listField.label"
                   :description="listField.helper"
                   variant="stacked"
@@ -1390,7 +1392,7 @@ export function filterOptions(
     answer: [value: string]
   }>()
 
-  const VISIBLE = 6
+  const VISIBLE = 5
 
   const query = ref('')
 
@@ -1419,7 +1421,7 @@ export function filterOptions(
 </script>
 
 <template>
-  <section class="mx-auto flex w-full max-w-(--container-md) flex-col gap-(--spacing-lg)">
+  <section class="flex w-full max-w-(--container-md) flex-col gap-(--spacing-lg)">
     <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
       <Input
         v-model="query"
@@ -1431,13 +1433,18 @@ export function filterOptions(
         @keydown.enter.prevent="onSearchEnter"
       />
 
-      <div class="flex flex-col">
+      <div
+        class="flex flex-col"
+        role="radiogroup"
+        aria-label="Policies"
+      >
         <Item
           v-for="option in visible"
           :key="option.value"
           size="small"
           clickable
-          :aria-pressed="choice === option.value"
+          role="radio"
+          :aria-checked="choice === option.value"
           @click="choose(option)"
         >
           <Item.Media>
@@ -1458,7 +1465,12 @@ export function filterOptions(
             />
             <i
               v-if="choice === option.value"
-              class="az az-check text-body-sm leading-none text-(--text-default)"
+              class="az az-circle-on text-body-sm leading-none text-(--text-default)"
+              aria-hidden="true"
+            />
+            <i
+              v-else
+              class="az az-circle text-body-sm leading-none text-(--text-muted)"
               aria-hidden="true"
             />
           </Item.Actions>
@@ -1480,7 +1492,7 @@ export function filterOptions(
       <FieldError v-if="missing">Select a policy, or continue without one.</FieldError>
     </div>
 
-    <div class="flex flex-col items-center gap-(--spacing-2xs)">
+    <div class="flex flex-col items-start gap-(--spacing-2xs)">
       <Button
         type="button"
         label="Create a policy"

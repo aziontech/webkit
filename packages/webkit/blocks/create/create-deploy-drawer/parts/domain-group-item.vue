@@ -48,7 +48,12 @@
       size="small"
     >
       <Popover.Trigger :aria-label="`${group.total - 1} more domains`">
-        <div class="shrink-0 cursor-pointer">
+        <div class="relative shrink-0 cursor-pointer">
+          <span
+            aria-hidden="true"
+            data-slot="touch-target"
+            class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+          />
           <Tag
             :label="`+${group.total - 1}`"
             severity="neutral"

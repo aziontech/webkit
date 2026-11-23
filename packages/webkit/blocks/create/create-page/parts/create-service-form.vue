@@ -1,14 +1,12 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Alert from '@aziontech/webkit/alert'
   import Card from '@aziontech/webkit/card'
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
@@ -24,6 +22,7 @@
   import CreationHeader from './creation-header.vue'
   import DiscardDialog from './discard-dialog.vue'
   import ServiceCacheSection from './service-cache-section.vue'
+  import ServiceSaveBar from './service-save-bar.vue'
 
   export interface CreateServiceProps {
     /** Starts as the form looks after Save was pressed: each empty required field is flagged. */
@@ -74,13 +73,12 @@
 
   const formEl = ref<HTMLFormElement | null>(null)
 
-  const { guard, submitting, submitButton, leave, submit } = useCreateForm({
+  const { guard, failure, submitting, submitButton, leave, submit } = useCreateForm({
     source: () => form,
     formEl,
     shortcutLabel: 'Create service',
     validate,
-    onCreated: () => toast.success(`${form.name.trim()} created.`),
-    failureTitle: 'Could not create the service.'
+    onCreated: () => toast.success(`${form.name.trim()} created.`)
   })
 
   onMounted(() => nameEl.value?.focus())
@@ -119,6 +117,7 @@
                 <template #default>
                   <Item.List>
                     <SettingsRow
+                      required
                       stackable
                       title="Name"
                       description="Give a unique and descriptive name to identify the service."
@@ -158,7 +157,7 @@
                 <template #default>
                   <Item.List>
                     <SettingsRow
-                      stackable
+                      variant="stacked"
                       title="Protocol usage"
                     >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
@@ -180,6 +179,7 @@
                       </div>
                     </SettingsRow>
                     <SettingsRow
+                      required
                       stackable
                       title="HTTP ports"
                     >
@@ -273,7 +273,7 @@
                       </div>
                     </SettingsRow>
                     <SettingsRow
-                      stackable
+                      variant="stacked"
                       title="Protocol policy"
                       description="Select the protocol used between the cache servers and the origin."
                     >
@@ -295,6 +295,7 @@
                       </div>
                     </SettingsRow>
                     <SettingsRow
+                      required
                       stackable
                       title="Address"
                       description="Define an origin for the content in FQDN format or an IPv4/IPv6 address."
@@ -321,6 +322,7 @@
                       </div>
                     </SettingsRow>
                     <SettingsRow
+                      required
                       stackable
                       title="Host header"
                       description="Identify a virtualhost sent in the Host header to the origin."
@@ -379,35 +381,24 @@
               </Card>
             </section>
           </fieldset>
+
+          <Alert
+            v-if="failure"
+            class="mt-(--layout-section-gap)"
+            severity="danger"
+            title="Could not create the service."
+            :label="failure"
+            action-label="Retry"
+            @action="submit"
+          />
         </div>
 
-        <SaveBar variant="centered">
-          <template #actions>
-            <Button
-              type="button"
-              label="Cancel"
-              variant="outline"
-              size="medium"
-              :disabled="submitting"
-              @click="leave"
-            />
-            <Button
-              variant="primary"
-              size="medium"
-              v-bind="submitButton"
-              type="button"
-              @click="submit"
-            >
-              Save
-              <Kbd
-                meta
-                key-name="enter"
-                size="small"
-                aria-hidden="true"
-              />
-            </Button>
-          </template>
-        </SaveBar>
+        <ServiceSaveBar
+          :submitting="submitting"
+          :submit-button="submitButton"
+          @leave="leave"
+          @submit="submit"
+        />
       </form>
     </main>
     <DiscardDialog :guard="guard" />

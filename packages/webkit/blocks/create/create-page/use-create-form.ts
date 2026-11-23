@@ -1,10 +1,10 @@
-import { toast } from '@aziontech/webkit/toast'
 import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
 import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
 import {
   useUnsavedChanges,
   type UseUnsavedChangesReturn
 } from '@aziontech/webkit/use-unsaved-changes'
+import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
 import { computed, type ComputedRef, readonly, type Ref, ref } from 'vue'
 
 /** Options of `useCreateForm`. */
@@ -19,21 +19,21 @@ export interface UseCreateFormOptions<T> {
   validate: () => boolean
   /** Runs once the request succeeds, to confirm it in a toast. */
   onCreated: () => void
-  /** The title of the error toast raised when the request fails. */
-  failureTitle: string
 }
 
 /** What `useCreateForm` returns. */
 export interface UseCreateFormReturn<T> {
   /** The unsaved-changes guard, for the discard dialog. */
   guard: UseUnsavedChangesReturn<T>
+  /** Why the last request failed, shown inline above the save bar; empty when it did not. */
+  failure: Readonly<Ref<string>>
   /** True while the request runs. */
   submitting: Readonly<Ref<boolean>>
   /** What makes a Button this form's submit: its type, its loading state and the shortcut it answers to. Bind it with `v-bind`. */
   submitButton: ComputedRef<{ type: 'submit'; loading: boolean; 'aria-keyshortcuts': string }>
   /** Asks before leaving a changed draft; Cancel, Back and Escape run it. */
   leave: () => Promise<boolean>
-  /** Validates the draft, sends the request and confirms or reports it in a toast. */
+  /** Validates the draft, sends the request, and confirms it in a toast or reports it inline. */
   submit: () => Promise<void>
 }
 
@@ -42,6 +42,7 @@ const SUBMIT_KEYS = 'meta+enter'
 
 export function useCreateForm<T>(options: UseCreateFormOptions<T>): UseCreateFormReturn<T> {
   const submitting = ref(false)
+  const failure = ref('')
   let failuresLeft = SAVE_FAILURES
 
   const guard = useUnsavedChanges(options.source, {
@@ -80,20 +81,29 @@ export function useCreateForm<T>(options: UseCreateFormOptions<T>): UseCreateFor
     })
 
   const submit = async () => {
-    if (submitting.value || !options.validate()) return
+    if (submitting.value) return
+    if (!options.validate()) {
+      await focusFirstInvalid(options.formEl.value)
+      return
+    }
     submitting.value = true
+    failure.value = ''
     try {
       await sendRequest()
       options.onCreated()
     } catch (error) {
-      toast.error(options.failureTitle, {
-        description: error instanceof Error ? error.message : 'Try again.',
-        action: { label: 'Retry', onClick: () => submit() }
-      })
+      failure.value = error instanceof Error ? error.message : 'Try again.'
     } finally {
       submitting.value = false
     }
   }
 
-  return { guard, submitting: readonly(submitting), submitButton, leave, submit }
+  return {
+    guard,
+    failure: readonly(failure),
+    submitting: readonly(submitting),
+    submitButton,
+    leave,
+    submit
+  }
 }

@@ -26,7 +26,7 @@
       <template #default>
         <Item.List>
           <SettingsRow
-            stackable
+            variant="stacked"
             title="Browser cache settings"
           >
             <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
@@ -63,7 +63,7 @@
             </div>
           </SettingsRow>
           <SettingsRow
-            stackable
+            variant="stacked"
             title="Cache Settings"
           >
             <div class="flex w-full items-center justify-end gap-(--spacing-xs)">

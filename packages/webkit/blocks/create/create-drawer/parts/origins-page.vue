@@ -137,6 +137,7 @@
           <template #default>
             <Item.List>
               <SettingsRow
+                required
                 title="Name"
                 description="A unique identifier. Lower-case letters, numbers, and hyphen."
               >
@@ -190,6 +191,7 @@
           <template #default>
             <Item.List>
               <SettingsRow
+                required
                 title="Protocol"
                 description="How storefront connects to the origin."
               >

@@ -83,10 +83,10 @@
 ## States
 
 - Visual states on Item shell: `default` only, **except with `href` or `clickable`**, where the root is the whole-row anchor or button and gains row-level `hover`, `active`, and `focus-visible`
-- With `href` or `clickable`, the row paints `var(--bg-selected)` while it carries `aria-pressed="true"` or `aria-selected="true"`, whatever its `variant`: a pressed chooser row binds `:aria-pressed` on the Item and adds no fill class of its own
+- With `href` or `clickable`, the row paints `var(--bg-selected)` while it carries `aria-pressed="true"`, `aria-selected="true"` or `aria-checked="true"` (a row with `role="radio"` in a one-of-many pick list), whatever its `variant`: a pressed chooser row binds `:aria-pressed` on the Item and adds no fill class of its own
 - Without `href` or `clickable`, the root is a `div` and slotted controls (`Button`, `a`, etc.) own hover, active, and `focus-visible`
 - `data-variant` on Item root: `default` | `outline` | `muted` | `inline` | `option` (an Item inside `ItemGroup` is forced to `inline`; inside `ItemList` to `default`)
-- `variant="option"`: `--spacing-xs` block padding, `--spacing-sm` inline padding and gap whatever the `size`, `Item.Title` at `text-body-md`, and `var(--bg-selected)` on the row while it carries `aria-pressed="true"` or `aria-selected="true"`
+- `variant="option"`: `--spacing-xs` block padding, `--spacing-sm` inline padding and gap whatever the `size`, `Item.Title` at `text-body-md`, and `var(--bg-selected)` on the row while it carries `aria-pressed="true"`, `aria-selected="true"` or `aria-checked="true"`
 - `data-size` on Item root: `small` | `medium`
 - `data-type` on ItemMedia: `default` | `icon` | `image`
 

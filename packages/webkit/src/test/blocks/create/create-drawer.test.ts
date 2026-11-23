@@ -104,6 +104,11 @@ describe('create-drawer', () => {
     const alerts = await within(dialog).findAllByRole('alert')
     expect(alerts.length).toBe(2)
     expect(domain.getAttribute('aria-invalid')).toBe('true')
+    await waitFor(() => {
+      const focused = document.activeElement as HTMLElement
+      expect(dialog.contains(focused)).toBe(true)
+      expect(focused.getAttribute('aria-invalid')).toBe('true')
+    }, wait)
   })
 
   it('emits the values on a valid save and closes when the page sets open', async () => {
@@ -304,6 +309,23 @@ describe('create-drawer#FunctionInstance', () => {
     await fireEvent.click(panel.getByRole('button', { name: 'Add Function Instance' }))
     await waitFor(() => expect(panel.getByText('This field is required.')).toBeTruthy())
     await expectNoA11yViolations(drawer)
+  })
+
+  it('opens with the function helper as plain guidance, not an error', async () => {
+    render(FunctionInstance)
+    await fireEvent.click(screen.getByRole('button', { name: 'Add Function Instance' }))
+    const drawer = await waitFor(() => {
+      expect(dialogs()).toHaveLength(1)
+      return lastDialog()
+    })
+    const panel = within(drawer)
+    expect(panel.getByText('Its arguments appear below once a function is chosen.')).toBeTruthy()
+    expect(panel.queryAllByRole('alert')).toHaveLength(0)
+    const trigger = panel.getByRole('combobox', { name: /^Function\b/ })
+    expect(trigger.getAttribute('aria-invalid')).not.toBe('true')
+    await fireEvent.click(panel.getByRole('button', { name: 'Add Function Instance' }))
+    await waitFor(() => expect(panel.getByText('Select a function.')).toBeTruthy())
+    expect(trigger.getAttribute('aria-invalid')).toBe('true')
   })
 
   it('opens an instance to edit with its saved arguments', async () => {

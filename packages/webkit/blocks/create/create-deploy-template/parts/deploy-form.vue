@@ -14,6 +14,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
   import { computed, onMounted, reactive, ref } from 'vue'
 
   import CreateDeployTemplate, { type DeployTemplateTemplate } from '../create-deploy-template.vue'
@@ -107,6 +108,8 @@
     variable?: string
   }) => (submitted.value && isMissing(field) ? `${field.label ?? field.variable} is required.` : '')
 
+  const panelEl = ref<HTMLElement | null>(null)
+
   const repoNameError = computed(() =>
     submitted.value && !repoName.value.trim() ? 'Repository name is required.' : ''
   )
@@ -115,9 +118,8 @@
     submitted.value = true
     if (sampleBuildSettings.some(isMissing)) buildOpen.value = 'build'
     if (variables.value.some(isMissing)) variablesOpen.value = 'variables'
+    focusFirstInvalid(panelEl.value)
   }
-
-  const panelEl = ref<HTMLElement | null>(null)
 
   useShortcuts({
     keys: 'meta+enter',

@@ -30,31 +30,48 @@
     :invalid="Boolean(error)"
   >
     <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+      <p
+        class="flex min-w-0 flex-col gap-(--spacing-2xs) sm:hidden"
+        :data-testid="`${field.name}-key-line`"
+      >
+        <span class="text-label-sm text-(--text-muted)">Key</span>
+        <span class="break-all text-body-sm text-(--text-default)">{{ field.variable }}</span>
+      </p>
+      <div class="sm:hidden">
+        <Field.Label>Value</Field.Label>
+      </div>
+      <div class="max-sm:hidden">
+        <InputGroupRoot
+          size="large"
+          disabled
+        >
+          <InputGroupAddon>
+            <label
+              :for="`${field.name}-key`"
+              class="w-20"
+            >
+              Key
+            </label>
+          </InputGroupAddon>
+          <InputGroupInput
+            :id="`${field.name}-key`"
+            :model-value="field.variable"
+            readonly
+            disabled
+          />
+        </InputGroupRoot>
+      </div>
       <InputGroupRoot
         size="large"
-        disabled
+        :invalid="Boolean(error)"
       >
-        <InputGroupAddon>
-          <label
-            :for="`${field.name}-key`"
-            class="w-20"
-          >
-            Key
-          </label>
-        </InputGroupAddon>
-        <InputGroupInput
-          :id="`${field.name}-key`"
-          :model-value="field.variable"
-          readonly
-          disabled
-        />
-      </InputGroupRoot>
-      <InputGroupRoot size="large">
-        <InputGroupAddon>
-          <span class="w-20">
-            <Field.Label>Value</Field.Label>
-          </span>
-        </InputGroupAddon>
+        <div class="hidden self-stretch sm:flex">
+          <InputGroupAddon>
+            <span class="w-20">
+              <Field.Label>Value</Field.Label>
+            </span>
+          </InputGroupAddon>
+        </div>
         <InputGroupInput
           v-model="value"
           :type="field.secret && !revealed ? 'password' : 'text'"
