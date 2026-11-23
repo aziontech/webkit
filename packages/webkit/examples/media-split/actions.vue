@@ -9,7 +9,7 @@
     <MediaSplit
       eyebrow="Deployment"
       title="One action closes the band."
-      description="A band that ends on a single next step carries one small secondary button, floored under the copy so consecutive bands line up on it."
+      description="A band that ends on a single next step carries one secondary button, floored under the copy so consecutive bands line up on it."
     >
       <template #media>
         <Illustration name="quick-start-with-templates" />
@@ -18,7 +18,6 @@
         <Button
           label="Read the guide"
           variant="secondary"
-          size="small"
           icon="az az-chevron-right"
           icon-position="trailing"
           animated
@@ -39,13 +38,11 @@
         <Button
           label="Read the guide"
           variant="secondary"
-          size="small"
           href="/site/docs"
         />
         <Button
           label="See GitHub"
           variant="outline"
-          size="small"
           icon="az az-github"
           href="https://github.com/aziontech"
           target="_blank"

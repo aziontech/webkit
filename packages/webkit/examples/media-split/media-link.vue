@@ -28,7 +28,6 @@
         <Button
           label="Read the guide"
           variant="outline"
-          size="small"
           icon="az az-chevron-right"
           icon-position="trailing"
           animated

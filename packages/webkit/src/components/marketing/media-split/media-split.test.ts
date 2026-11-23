@@ -2,6 +2,8 @@ import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h, nextTick, ref } from 'vue'
 
+import Actions from '../../../../examples/media-split/actions.vue'
+import MediaLink from '../../../../examples/media-split/media-link.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SplitStack from '../../layout/split-stack/split-stack.vue'
 import MediaSplit from './media-split.vue'
@@ -26,6 +28,17 @@ function columnsOf(container: HTMLElement): globalThis.Element[] {
 }
 
 describe('MediaSplit', () => {
+  it.each([
+    ['actions', Actions],
+    ['media-link', MediaLink]
+  ])('teaches band actions at the 40px touch floor in the %s example', (_name, example) => {
+    const { container } = render(example)
+    const buttons = [...container.querySelectorAll('[data-testid="button"]')]
+
+    expect(buttons.length).toBeGreaterThan(0)
+    buttons.forEach((button) => expect(button).toHaveAttribute('data-size', 'large'))
+  })
+
   it('renders the band under the default testid', () => {
     const { getByTestId } = render(MediaSplit, { props: { title: TITLE } })
 

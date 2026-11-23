@@ -69,6 +69,17 @@ describe('MediaSplitSection', () => {
     expect(getByTestId(SPLIT_TESTID).getAttribute('data-size')).toBe(size)
   })
 
+  it('sets every band action at the 40px touch floor', () => {
+    const { container } = band({
+      primaryAction,
+      secondaryAction: { label: 'Read more', href: '/about' }
+    })
+    const buttons = [...container.querySelectorAll('[data-testid="button"]')]
+
+    expect(buttons).toHaveLength(2)
+    buttons.forEach((button) => expect(button).toHaveAttribute('data-size', 'large'))
+  })
+
   it('defaults to the medium size', () => {
     const { getByTestId } = band()
 
