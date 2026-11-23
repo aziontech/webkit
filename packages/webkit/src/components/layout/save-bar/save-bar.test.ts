@@ -272,18 +272,17 @@ describe('SaveBar', () => {
     })
 
     it.each(['docked', 'plain', 'fade', 'centered'] as const)(
-      'publishes nothing for variant=%s',
+      'lifts the toasts above variant=%s but reserves no inset',
       async (variant) => {
         const view = render(SaveBar, {
           props: { variant: variant },
           slots: { default: 'You have unsaved changes.' }
         })
-        await nextTick()
-        await nextTick()
 
+        await vi.waitFor(() => expect(toastOffset()).toMatch(/^[1-9]\d*px$/))
         expect(inset()).toBe('')
-        expect(toastOffset()).toBe('')
         view.unmount()
+        expect(toastOffset()).toBe('')
       }
     )
 
@@ -295,7 +294,7 @@ describe('SaveBar', () => {
       await nextTick()
 
       expect(inset()).toBe('')
-      expect(toastOffset()).toBe('')
+      await vi.waitFor(() => expect(toastOffset()).toMatch(/^[1-9]\d*px$/))
       view.unmount()
     })
 

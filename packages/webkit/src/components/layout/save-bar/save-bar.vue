@@ -63,11 +63,11 @@
 
   const rootStyle = computed(() => (reserved.value ? { height: `${reserved.value}px` } : undefined))
 
-  function publish(height: number) {
+  function publish(height: number, floating: boolean) {
     const documentRoot = globalThis.document?.documentElement
     if (!documentRoot) return
     if (height) {
-      documentRoot.style.setProperty('--save-bar-inset', `${height}px`)
+      if (floating) documentRoot.style.setProperty('--save-bar-inset', `${height}px`)
       documentRoot.style.setProperty('--toast-offset-bottom', `${height}px`)
     } else {
       documentRoot.style.removeProperty('--save-bar-inset')
@@ -102,11 +102,12 @@
     return total
   }
 
-  async function measure(element: HTMLElement | null) {
+  async function measure(element: HTMLElement | null, floating: boolean) {
     const height = element ? element.offsetHeight : 0
     if (height === measured) return
     measured = height
-    publish(height)
+    publish(height, floating)
+    if (!floating) return
     if (reserved.value) {
       reserved.value = 0
       await nextTick()
@@ -123,17 +124,18 @@
     observer = null
     measured = -1
     reserved.value = 0
-    publish(0)
+    publish(0, false)
   }
 
   watch(
     [shellEl, () => props.variant],
     ([element, variant]) => {
       release()
-      if (!element || variant !== 'floating' || typeof ResizeObserver === 'undefined') return
-      observer = new ResizeObserver(() => measure(element))
+      if (!element || typeof ResizeObserver === 'undefined') return
+      const floating = variant === 'floating'
+      observer = new ResizeObserver(() => measure(element, floating))
       observer.observe(element)
-      measure(element)
+      measure(element, floating)
     },
     { flush: 'post' }
   )
