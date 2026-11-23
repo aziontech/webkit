@@ -1952,7 +1952,7 @@
   {
     "name": "hint",
     "path": "src/components/input/hint/hint.vue",
-    "limit": "6.35 KB"
+    "limit": "6.4 KB"
   },
   {
     "name": "password-input",
@@ -2377,12 +2377,12 @@
   {
     "name": "command",
     "path": "src/components/overlay/command/index.ts",
-    "limit": "28.8 KB"
+    "limit": "29.3 KB"
   },
   {
     "name": "command-root",
     "path": "src/components/overlay/command/command.vue",
-    "limit": "21.65 KB"
+    "limit": "22.15 KB"
   },
   {
     "name": "command-input",
@@ -2402,7 +2402,7 @@
   {
     "name": "command-item",
     "path": "src/components/overlay/command/command-item/command-item.vue",
-    "limit": "4.85 KB"
+    "limit": "4.95 KB"
   },
   {
     "name": "command-empty",

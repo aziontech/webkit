@@ -1646,3 +1646,7 @@ Budget-raise: prompt-input-root 11.55 KB → 11.85 KB (measured 11.82 KB): the m
 Budget-raise: sources 4 KB → 4.05 KB (measured 4.01 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
 Budget-raise: streaming-response 42.9 KB → 43.35 KB (measured 43.32 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
 Budget-raise: conversation-history 9 KB → 9.05 KB (measured 9.01 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: hint 6.35 KB → 6.4 KB (measured 6.35 KB, base 6.33 KB): the Tooltip it wraps now stays closed after Escape until the pointer leaves the trigger, so a stray mouseenter does not reopen it and swallow the next Escape (A5 follow-ups, lane B1).
+Budget-raise: command 28.8 KB → 29.3 KB (measured 29.27 KB): ranked results move into the ranked order in the DOM so a screen reader reads them as seen (A5-299), and keyword-only matches are capped per group while a label matches.
+Budget-raise: command-root 21.65 KB → 22.15 KB (measured 22.12 KB): same as command (A5-299).
+Budget-raise: command-item 4.85 KB → 4.95 KB (measured 4.90 KB): the item reports whether it matched only through a keyword, for the per-group cap (A5-299).

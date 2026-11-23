@@ -138,6 +138,7 @@
   }
 
   function scheduleClose(wait: number = CLOSE_GRACE_MS) {
+    escaped = false
     clearHoverTimer()
     clearCloseTimer()
     closeTimer.value = setTimeout(closeTooltip, wait)
@@ -169,7 +170,6 @@
     const trigger = triggerEl.value
     const next = event.relatedTarget as Node | null
     if (trigger?.contains(next)) return
-    escaped = false
     closeTooltip()
   }
 
@@ -206,10 +206,7 @@
   )
 
   useElementListener(triggerEl, 'mouseenter', () => scheduleOpen())
-  useElementListener(triggerEl, 'mouseleave', () => {
-    escaped = false
-    scheduleClose()
-  })
+  useElementListener(triggerEl, 'mouseleave', () => scheduleClose())
   useElementListener(triggerEl, 'pointerdown', onPointerdown)
   useElementListener(triggerEl, 'pointerup', onPointerup)
   useElementListener(triggerEl, 'pointercancel', onPointerup)
