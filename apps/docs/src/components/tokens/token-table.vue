@@ -59,7 +59,10 @@
 
   const sampleColumn = computed<Column>(() => ({
     id: 'sample',
-    header: paired.value ? `${t.value.light} · ${t.value.dark}` : t.value.sample,
+    header:
+      paired.value || props.sample === 'shadow'
+        ? `${t.value.light} · ${t.value.dark}`
+        : t.value.sample,
     ...(props.sample === 'bar'
       ? { width: 'flex-[0_0_26.5rem]! @max-xl/table:basis-full!' }
       : wide.value

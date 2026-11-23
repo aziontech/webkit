@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The Magalu success story. Edit the `body` markdown in the Controls panel — its headings re-feed the outline; drop `share`, `community` and `copyPage` and the left rail goes away. WebKit ships no editorial media, so the banner here is the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
+   "summary": "The Magalu success story. The headings of the `body` markdown feed the outline; drop `share`, `community` and `copyPage` and the left rail goes away. WebKit ships no editorial media, so the banner here is the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
    "file": "examples/article-body-section/default.vue"
   }
  ]

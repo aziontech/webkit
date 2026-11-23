@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The band as the AI Gateway page places it: five routing architectures with the tabs at the bottom, each drawing its diagram and holding for eight seconds (`autoplayInterval`); the failover tab names its diagram with `diagramAriaLabel`. Edit the props in the Controls panel — move the tabs with `tabsSide`, or empty `tabs` to see the band render nothing.",
+      "summary": "The band as the AI Gateway page places it: five routing architectures with the tabs at the bottom, each drawing its diagram and holding for eight seconds (`autoplayInterval`); the failover tab names its diagram with `diagramAriaLabel`. Move the tabs with `tabsSide`, or empty `tabs` to see the band render nothing.",
       "file": "default.vue"
     }
   ],

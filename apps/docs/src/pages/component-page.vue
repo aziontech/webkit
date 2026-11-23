@@ -157,6 +157,11 @@
         />
       </div>
 
+      <TableOfContents
+        :items="toc"
+        compact
+      />
+
       <ExampleCard
         v-if="firstExample && doc.exampleDir"
         :dir="doc.exampleDir"

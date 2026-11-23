@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Four measured facts at the default `medium` scale. The unit rides in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in each cell. Edit `items` in the Controls panel to see the band grow or shrink — a band with no items renders nothing at all.",
+      "summary": "Four measured facts at the default `medium` scale. The unit rides in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in each cell. A band with no items renders nothing at all.",
       "file": "default.vue"
     },
     {

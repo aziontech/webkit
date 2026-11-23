@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Three `MediaSplit` bands at `size=\"large\"`, not pinned, so the frames and the shared hairlines are the only thing on show. Each band is two frames, left and right, with a registration mark in every corner of both halves. Every band after the first pulls up one pixel, so neighbouring rules overlap into a single hairline. Turn on `sticky` or `flush` in the Controls panel to see the pinned run or the first band without its top rule.",
+      "summary": "Three `MediaSplit` bands at `size=\"large\"`, not pinned, so the frames and the shared hairlines are the only thing on show. Each band is two frames, left and right, with a registration mark in every corner of both halves. Every band after the first pulls up one pixel, so neighbouring rules overlap into a single hairline. Set `sticky` or `flush` to see the pinned run or the first band without its top rule.",
       "file": "default.vue"
     },
     {

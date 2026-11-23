@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The band as the home page places it: the `artwork` layout with the overline, headline and lead over two picture tiles in the four-column frame. Edit the props in the Controls panel — a band with no tiles renders nothing at all, and one with no title drops its header.",
+      "summary": "The band as the home page places it: the `artwork` layout with the overline, headline and lead over two picture tiles in the four-column frame. A band with no tiles renders nothing at all, and one with no title drops its header.",
       "file": "default.vue"
     },
     {

@@ -15,6 +15,7 @@
     "check:lighthouse": "node scripts/check-lighthouse.mjs",
     "test": "node --test \"test/**/*.test.ts\"",
     "test:smoke": "node scripts/test-smoke.mjs",
+    "test:shell": "node scripts/test-shell.mjs",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "vue-tsc --noEmit",
     "format": "prettier --write \"**/*.{js,mjs,ts,vue,css,json,md}\"",

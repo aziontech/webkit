@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Default switch. Use the Controls panel to flip modelValue, variant, and focused.",
+   "summary": "Default switch.",
    "file": "examples/switch/default.vue"
   },
   {

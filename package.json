@@ -29,6 +29,7 @@
     "check:docs:editor-chunks": "pnpm --filter @aziontech/webkit-docs run check:editor-chunks",
     "test:docs": "pnpm --filter @aziontech/webkit-docs test",
     "test:docs:smoke": "pnpm --filter @aziontech/webkit-docs run test:smoke",
+    "test:docs:shell": "pnpm --filter @aziontech/webkit-docs run test:shell",
     "lint:docs": "pnpm --filter @aziontech/webkit-docs run lint",
     "typecheck:docs": "pnpm --filter @aziontech/webkit-docs run typecheck",
     "dev:demos": "pnpm build:icons && pnpm --filter @aziontech/webkit-demos run dev",

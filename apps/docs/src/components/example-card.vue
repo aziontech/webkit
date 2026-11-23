@@ -69,11 +69,17 @@
       <component
         :is="`h${headingLevel}`"
         :id="`${anchor}-title`"
-        class="text-heading-sm"
+        :data-level="headingLevel"
+        class="text-heading-sm data-[level=2]:text-heading-md"
+        data-docs-example-title
       >
         {{ title }}
       </component>
-      <DocProse v-if="example.summary">
+      <DocProse
+        v-if="example.summary"
+        class="[&_p]:text-body-sm!"
+        data-docs-example-summary
+      >
         <RawHtml
           tag="p"
           :html="example.summary"
@@ -98,7 +104,8 @@
         :source="source"
         :label="`examples/${dir}/${example.file}`"
       />
-      <CodeView key="code-view-2"
+      <CodeView
+        key="code-view-2"
         v-if="data && example.json"
         :source="data"
         :label="`examples/${dir}/${example.json}`"

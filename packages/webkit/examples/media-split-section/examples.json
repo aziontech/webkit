@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The Careers values band: a large, centred copy cell with no actions beside the turning brand globe. Edit the props in the Controls panel — give it one action and the whole band becomes a link, two and it stays unlinked.",
+      "summary": "The Careers values band: a large, centred copy cell with no actions beside the turning brand globe. Give it one action and the whole band becomes a link, two and it stays unlinked.",
       "file": "default.vue"
     },
     {

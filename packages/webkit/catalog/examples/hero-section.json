@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The band as a product page opens with it: the large `title-band` with the overline, headline, sentence and both actions centered. Edit the props in the Controls panel — a band with no title renders nothing, and one with no marks has no client strip.",
+   "summary": "The band as a product page opens with it: the large `title-band` with the overline, headline, sentence and both actions centered. A band with no title renders nothing, and one with no marks has no client strip.",
    "file": "examples/hero-section/default.vue"
   },
   {

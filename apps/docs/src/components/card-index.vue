@@ -2,10 +2,12 @@
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
   import { computed, ref } from 'vue'
 
   import { messages } from '../lib/i18n'
+  import CategoryJump from './category-jump.vue'
 
   const props = defineProps<{
     title: string
@@ -26,6 +28,16 @@
       }))
       .filter((group) => group.items.length)
   })
+
+  const groupId = (label: string) => label.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+
+  const jumps = computed(() =>
+    filtered.value.map((group) => ({
+      id: groupId(group.label),
+      label: group.label,
+      count: group.items.length
+    }))
+  )
 </script>
 
 <template>
@@ -51,12 +63,17 @@
         </template>
       </Input>
     </div>
+    <CategoryJump :groups="jumps" />
     <section
       v-for="group in filtered"
       :key="group.label"
-      class="flex flex-col gap-(--spacing-sm)"
+      class="flex scroll-mt-20 flex-col gap-(--spacing-sm) md:scroll-mt-40"
+      :aria-labelledby="`category-${groupId(group.label)}`"
     >
-      <h2 class="text-heading-sm">
+      <h2
+        :id="`category-${groupId(group.label)}`"
+        class="text-heading-sm"
+      >
         {{ group.label }}
         <span class="text-body-sm text-(--text-muted)">{{ group.items.length }}</span>
       </h2>
@@ -67,9 +84,16 @@
           :title="item.title"
           :href="item.to"
         >
-          {{ item.text }}
+          <span class="line-clamp-2">{{ item.text }}</span>
         </DocCard>
       </DocCardGroup>
     </section>
+    <EmptyState
+      v-if="!filtered.length"
+      :title="t.noResults"
+      icon="az az-filter"
+      bordered
+      data-docs-empty
+    />
   </div>
 </template>

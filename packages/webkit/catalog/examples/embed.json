@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "One frame at the default `video` ratio. The source is the reserved `example.com` page standing in for a real demo. Only an `http` or `https` URL is framed: a `javascript:`, `data:` or relative `src` renders the title as plain text instead, and the frame is always sandboxed (scripts, forms, popups and presentation only, no top-level navigation). Change `ratio` in the Controls panel and the frame changes shape without the page shifting, because the ratio is reserved before the document loads. `title` has no default on purpose — an `iframe` without one is announced as an unnamed frame, and a screen-reader user meets that name before any content.",
+   "summary": "One frame at the default `video` ratio. The source is the reserved `example.com` page standing in for a real demo. Only an `http` or `https` URL is framed: a `javascript:`, `data:` or relative `src` renders the title as plain text instead, and the frame is always sandboxed (scripts, forms, popups and presentation only, no top-level navigation). Change `ratio` and the frame changes shape without the page shifting, because the ratio is reserved before the document loads. `title` has no default on purpose — an `iframe` without one is announced as an unnamed frame, and a screen-reader user meets that name before any content.",
    "file": "examples/embed/default.vue"
   },
   {

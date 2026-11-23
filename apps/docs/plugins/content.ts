@@ -5,6 +5,7 @@ import MarkdownIt from 'markdown-it'
 import { createHighlighter, type Highlighter } from 'shiki'
 
 import { previewPair } from '../../../packages/theme/src/tokens/contrast-pairs.js'
+import { tokenPurpose } from '../../../packages/theme/src/tokens/token-purpose.js'
 import { FOUNDATIONS } from '../src/lib/foundations.ts'
 import {
   type Catalog,
@@ -142,7 +143,28 @@ function dropTaskMarkers(state: CoreState): void {
   })
 }
 
-export async function markdown(file = ''): Promise<InstanceType<typeof MarkdownIt>> {
+const headingSlug = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/[`*_]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+
+function addHeadingIds(state: CoreState): void {
+  const seen = new Map<string, number>()
+  state.tokens.forEach((token, at) => {
+    if (token.type !== 'heading_open' || !['h2', 'h3'].includes(token.tag)) return
+    const base = headingSlug(state.tokens[at + 1]?.content ?? '') || 'section'
+    const count = seen.get(base) ?? 0
+    seen.set(base, count + 1)
+    token.attrSet('id', count ? `${base}-${count + 1}` : base)
+  })
+}
+
+export async function markdown(
+  file = '',
+  { headingIds = false } = {}
+): Promise<InstanceType<typeof MarkdownIt>> {
   const hl = await highlighter()
   const md = new MarkdownIt({
     html: false,
@@ -151,6 +173,7 @@ export async function markdown(file = ''): Promise<InstanceType<typeof MarkdownI
   })
   md.core.ruler.after('inline', 'drop-html-comments', dropHtmlComments)
   md.core.ruler.after('drop-html-comments', 'drop-task-markers', dropTaskMarkers)
+  if (headingIds) md.core.ruler.after('drop-task-markers', 'heading-ids', addHeadingIds)
   if (file) {
     const render = md.renderer.rules.link_open
     md.renderer.rules.link_open = (tokens, index, options, env, self) => {
@@ -178,7 +201,9 @@ function stripFrontMatter(source: string): string {
 
 export type PairType = 'usage' | 'guidance'
 export type DocPair = { type: PairType; level: number; do: string; dont: string }
-export type DocPart = { html: string } | { pair: DocPair }
+export type DocCode = { code: string; html: string; lang: string }
+export type DocPart = { html: string } | { pair: DocPair } | { code: DocCode }
+export type DocHeading = { id: string; text: string; depth: number }
 
 const PAIR_WORDS: { type: PairType; side: 'do' | 'dont'; pattern: RegExp }[] = [
   { type: 'usage', side: 'do', pattern: /^when to use$/i },
@@ -257,6 +282,13 @@ export function markdownParts(md: InstanceType<typeof MarkdownIt>, source: strin
   let at = 0
   while (at < tokens.length) {
     const token = tokens[at]
+    if (token.type === 'fence' && token.level === 0) {
+      flush()
+      const lang = token.info.trim().split(/\s+/)[0] || 'txt'
+      parts.push({ code: { code: token.content, html: render([token]), lang } })
+      at++
+      continue
+    }
     if (token.type === 'heading_open') {
       const word = pairWord(tokens[at + 1]?.content ?? '')
       const own = headingLevel(token)
@@ -317,14 +349,29 @@ export function markdownParts(md: InstanceType<typeof MarkdownIt>, source: strin
   return parts
 }
 
+const HEADING_HTML = /<h([23]) id="([^"]+)">([\s\S]*?)<\/h\1>/g
+
+function headingsOf(parts: DocPart[]): DocHeading[] {
+  const html = parts.map((part) => ('html' in part ? part.html : '')).join('')
+  return [...html.matchAll(HEADING_HTML)].map(([, depth, id, inner]) => ({
+    id: id ?? '',
+    depth: Number(depth),
+    text: (inner ?? '')
+      .replace(/<[^>]+>/g, '')
+      .replace(/&amp;/g, '&')
+      .replace(/&#39;/g, "'")
+  }))
+}
+
 export async function renderMarkdownFile(
   file: string
-): Promise<{ parts: DocPart[]; title: string }> {
-  const md = await markdown(file)
+): Promise<{ parts: DocPart[]; title: string; toc: DocHeading[] }> {
+  const md = await markdown(file, { headingIds: true })
   const source = stripFrontMatter(readFileSync(file, 'utf8'))
   const title = /^#\s+(.+)$/m.exec(source)?.[1]?.trim() ?? basename(file, '.md')
   const body = source.replace(/^#\s+.+\n/m, '')
-  return { parts: markdownParts(md, body), title }
+  const parts = markdownParts(md, body)
+  return { parts, title, toc: headingsOf(parts) }
 }
 
 const DONT_PRACTICE = /^\*\*(don['’]t|do not|never|avoid)\*\*\s*/i
@@ -813,9 +860,12 @@ export function buildTokens(catalog: Catalog = readCatalog()) {
   const global = new Map([...theme, ...light])
   const prefixed = (prefix: string, source = global) =>
     pick(source, (name) => name.startsWith(prefix))
-  const uniq = <T extends { name: string }>(list: T[]) => [
-    ...new Map(list.map((token) => [token.name, token])).values()
-  ]
+  const purposes = tokenPurpose as Record<string, string | undefined>
+  const uniq = <T extends { name: string; usage?: TokenUsage }>(list: T[]) =>
+    [...new Map(list.map((token) => [token.name, token])).values()].map((token) => {
+      const job = purposes[token.name]
+      return token.usage || !job ? token : { ...token, usage: { job, usedBy: '' } }
+    })
   return {
     semantic,
     palette: [...paletteGroups.entries()].map(([id, vars]) => ({ id, vars })),
@@ -838,11 +888,11 @@ export function buildTokens(catalog: Catalog = readCatalog()) {
     ),
     fonts: uniq([...prefixed('--font'), ...prefixed('--tracking'), ...prefixed('--leading')]),
     motion: {
-      ease: prefixed('--ease'),
-      duration: [
+      ease: uniq(prefixed('--ease')),
+      duration: uniq([
         ...prefixed('--transition'),
         ...pick(theme, (name) => name.startsWith('--duration'))
-      ],
+      ]),
       animations: Object.entries(catalog.tokens.animationGuide).map(([name, info]) => ({
         name: `animate-${name}`,
         value: info.value,
@@ -850,7 +900,7 @@ export function buildTokens(catalog: Catalog = readCatalog()) {
       }))
     },
     zIndex: uniq([...prefixed('--z'), ...pick(light, (name) => name.startsWith('--z'))]),
-    breakpoints: prefixed('--breakpoint'),
+    breakpoints: uniq(prefixed('--breakpoint')),
     containers: uniq([
       ...prefixed('--container'),
       ...pick(light, (name) => name.startsWith('--layout'))

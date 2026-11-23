@@ -295,6 +295,9 @@ jobs:
       - name: Docs smoke test — every route loads without a console error, axe in light and dark finds no violation
         run: pnpm test:docs:smoke
 
+      - name: Docs shell test — landmarks, focus on navigation, drawer, outline, touch sizes, phone search
+        run: pnpm test:docs:shell
+
       - name: Check that every docs link resolves
         run: pnpm check:docs:links
 

@@ -77,7 +77,7 @@
     @select="onSelect"
   >
     <CommandInput :placeholder="t.searchPlaceholder" />
-    <CommandList>
+    <CommandList class="max-sm:max-h-[calc(100dvh-8rem)]">
       <CommandEmpty>{{ t.noResults }}</CommandEmpty>
       <CommandGroup
         v-for="group in groups"
