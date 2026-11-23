@@ -168,7 +168,8 @@ describe('VideoPlayer', () => {
 
     expect(failed.getAttribute('data-status')).toBe('error')
     expect(failed.hasAttribute('aria-busy')).toBe(false)
-    expect(failed.textContent).toContain('The model stopped before the video was done.')
+    expect(failed.textContent).toContain('The model stopped before the video was done')
+    expect(failed.textContent).not.toMatch(/try again/i)
 
     for (const root of [pending, running, failed]) {
       expect(root.querySelector('video')).toBeNull()

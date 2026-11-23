@@ -14,6 +14,7 @@ export type {
   FileSizeUnit,
   LocaleContext,
   PluralForms,
+  ProvidedLocale,
   ProvideLocaleOptions,
   UseLocaleReturn
 } from './use-locale'

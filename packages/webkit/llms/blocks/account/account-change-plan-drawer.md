@@ -745,7 +745,7 @@ export const samplePlans: ChangePlanDrawerPlan[] = [
       monthly: {
         value: '25',
         prefix: '$',
-        suffix: '/ mon',
+        suffix: '/ month',
         showPrefix: true,
         showSuffix: true,
         details: 'Billed monthly, cancel anytime'
@@ -753,7 +753,7 @@ export const samplePlans: ChangePlanDrawerPlan[] = [
       yearly: {
         value: '20',
         prefix: '$',
-        suffix: '/ mon',
+        suffix: '/ month',
         showPrefix: true,
         showSuffix: true,
         details: 'Billed annually, save 20%'

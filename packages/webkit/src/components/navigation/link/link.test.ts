@@ -82,6 +82,26 @@ describe('Link', () => {
     expect(getByTestId('link__icon').classList.contains('az-external-link')).toBe(true)
   })
 
+  it.each([false, true])(
+    'tells a screen reader that a _blank link opens a new tab (inline: %s)',
+    (inline) => {
+      const { getByRole } = render(Link, {
+        props: { href: 'https://example.com', target: '_blank', inline, label: 'Docs' }
+      })
+
+      expect(getByRole('link', { name: 'Docs (opens in a new tab)' })).toBeTruthy()
+    }
+  )
+
+  it('says nothing about a new tab for a same-tab link', () => {
+    const { getByRole, queryByTestId } = render(Link, {
+      props: { href: 'https://example.com', label: 'Docs' }
+    })
+
+    expect(getByRole('link', { name: 'Docs' })).toBeTruthy()
+    expect(queryByTestId('link__new-tab')).toBeNull()
+  })
+
   it('ignores a removed showIcon attribute', () => {
     const { queryByTestId, getByTestId } = render(Link, { attrs: { showIcon: true } })
 

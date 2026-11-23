@@ -44,7 +44,7 @@ describe('account-change-plan-drawer', () => {
               monthly: {
                 value: '40',
                 prefix: '$',
-                suffix: '/ mon',
+                suffix: '/ month',
                 showPrefix: true,
                 showSuffix: true,
                 details: 'Billed monthly'
@@ -52,7 +52,7 @@ describe('account-change-plan-drawer', () => {
               yearly: {
                 value: '32',
                 prefix: '$',
-                suffix: '/ mon',
+                suffix: '/ month',
                 showPrefix: true,
                 showSuffix: true,
                 details: 'Billed annually'

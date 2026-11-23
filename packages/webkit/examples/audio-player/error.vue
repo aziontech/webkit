@@ -6,6 +6,6 @@
   <AudioPlayer
     src="https://example.com/audio/deployment-summary.mp3"
     title="Deployment summary"
-    error="The speech service did not answer. Try again in a moment."
+    error="The speech service did not answer, so this summary has no audio yet."
   />
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, watch } from 'vue'
+  import { computed, nextTick, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -107,6 +107,26 @@
     shown.value = BATCH
   })
 
+  let openedByTouch = false
+
+  const onTriggerPointerdown = (event: PointerEvent): void => {
+    openedByTouch = event.pointerType === 'touch'
+  }
+
+  watch(
+    open,
+    async (isOpen) => {
+      if (!isOpen || !openedByTouch) return
+      openedByTouch = false
+      await nextTick()
+      const panel = globalThis.document?.querySelector<HTMLElement>(
+        `[data-testid="${testId.value}__popover__panel"]`
+      )
+      panel?.focus({ preventScroll: true })
+    },
+    { flush: 'post' }
+  )
+
   const ENTRY_LINK_CLASS =
     'flex min-h-7 items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-default) no-underline transition-colors ' +
     'duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
@@ -132,6 +152,7 @@
         :data-testid="`${testId}__trigger`"
         class="relative rounded-(--shape-control)"
         @click.stop
+        @pointerdown="onTriggerPointerdown"
       >
         <Tag
           :label="`+${total}`"
@@ -142,6 +163,7 @@
         <span
           aria-hidden="true"
           data-slot="touch-target"
+          :data-testid="`${testId}__touch-target`"
           class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
         />
       </PopoverTrigger>

@@ -53,7 +53,9 @@
     :class="ROOT_CLASS"
   >
     <span
+      dir="ltr"
       class="inline-flex items-center gap-(--spacing-2xs) group-data-[size=large]/currency-amount:gap-0"
+      :data-testid="`${testId}__amount`"
     >
       <span
         v-if="prefix"

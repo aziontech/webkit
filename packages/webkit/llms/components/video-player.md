@@ -144,7 +144,7 @@
     />
     <VideoPlayer
       status="error"
-      error="The model stopped before the video was done. Try again."
+      error="The model stopped before the video was done, so nothing was saved."
       aria-label="Product tour, failed"
     />
   </div>

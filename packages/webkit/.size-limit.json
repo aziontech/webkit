@@ -29,7 +29,7 @@
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "40.55 KB",
+    "limit": "40.7 KB",
     "entryOnly": true
   },
   {
@@ -400,7 +400,7 @@
   {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
-    "limit": "1.25 KB",
+    "limit": "1.5 KB",
     "entryOnly": true
   },
   {
@@ -506,7 +506,7 @@
   {
     "name": "hero-section",
     "path": "src/components/section/hero-section/hero-section.vue",
-    "limit": "13.45 KB",
+    "limit": "13.75 KB",
     "entryOnly": true
   },
   {
@@ -539,7 +539,7 @@
   {
     "name": "media-split-section",
     "path": "src/components/section/media-split-section/media-split-section.vue",
-    "limit": "16.95 KB",
+    "limit": "17.2 KB",
     "entryOnly": true
   },
   {
@@ -556,29 +556,29 @@
   {
     "name": "plan-comparison-section",
     "path": "src/components/section/plan-comparison-section/plan-comparison-section.vue",
-    "limit": "39.25 KB"
+    "limit": "39.5 KB"
   },
   {
     "name": "pricing-plans-section",
     "path": "src/components/section/pricing-plans-section/pricing-plans-section.vue",
-    "limit": "22.1 KB"
+    "limit": "22.15 KB"
   },
   {
     "name": "feature-scroll-section",
     "path": "src/components/section/feature-scroll-section/feature-scroll-section.vue",
-    "limit": "20.1 KB",
+    "limit": "20.45 KB",
     "entryOnly": true
   },
   {
     "name": "feature-tiles-section",
     "path": "src/components/section/feature-tiles-section/feature-tiles-section.vue",
-    "limit": "5.9 KB",
+    "limit": "6.3 KB",
     "entryOnly": true
   },
   {
     "name": "feature-widgets-section",
     "path": "src/components/section/feature-widgets-section/feature-widgets-section.vue",
-    "limit": "19.8 KB",
+    "limit": "19.95 KB",
     "entryOnly": true
   },
   {
@@ -600,7 +600,7 @@
   {
     "name": "client-mosaic-section",
     "path": "src/components/section/client-mosaic-section/client-mosaic-section.vue",
-    "limit": "7.65 KB"
+    "limit": "7.9 KB"
   },
   {
     "name": "client-story-columns-section",
@@ -681,13 +681,13 @@
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "58.15 KB",
+    "limit": "58.65 KB",
     "entryOnly": true
   },
   {
     "name": "media-split-stack-section",
     "path": "src/components/section/media-split-stack-section/media-split-stack-section.vue",
-    "limit": "17.3 KB",
+    "limit": "17.55 KB",
     "entryOnly": true
   },
   {
@@ -1087,7 +1087,7 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "12.4 KB"
+    "limit": "12.45 KB"
   },
   {
     "name": "locales-pt-BR",
@@ -1382,7 +1382,7 @@
   {
     "name": "overflow-count",
     "path": "src/components/content/overflow-count/overflow-count.vue",
-    "limit": "15.5 KB"
+    "limit": "15.7 KB"
   },
   {
     "name": "payment-brand",
@@ -1407,7 +1407,7 @@
   {
     "name": "table-cell-link",
     "path": "src/components/data/table/table-cell-link/table-cell-link.vue",
-    "limit": "20.4 KB",
+    "limit": "20.55 KB",
     "entryOnly": true
   },
   {
@@ -1425,7 +1425,7 @@
   {
     "name": "table-cell-tags",
     "path": "src/components/data/table/table-cell-tags/table-cell-tags.vue",
-    "limit": "16.55 KB"
+    "limit": "16.7 KB"
   },
   {
     "name": "table-cell-actions",
@@ -1576,7 +1576,7 @@
   {
     "name": "pricing-card",
     "path": "src/components/content/pricing-card/pricing-card.vue",
-    "limit": "5.3 KB"
+    "limit": "5.35 KB"
   },
   {
     "name": "item",
@@ -2254,7 +2254,7 @@
   {
     "name": "link",
     "path": "src/components/navigation/link/link.vue",
-    "limit": "2.45 KB"
+    "limit": "2.7 KB"
   },
   {
     "name": "skip-link",

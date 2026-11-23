@@ -69,11 +69,12 @@
     Boolean(item.src) && !failedSources.value.includes(item.src as string)
 
   const initialsOf = (item: AvatarGroupItem) => {
-    if (item.label) return item.label.trim().slice(0, 2).toUpperCase()
+    const length = props.size === 'small' ? 1 : 2
+    if (item.label) return item.label.trim().slice(0, length).toUpperCase()
     const words = item.name.trim().split(/\s+/).filter(Boolean)
     const first = words[0]?.charAt(0) ?? ''
     const last = words.length > 1 ? (words[words.length - 1]?.charAt(0) ?? '') : ''
-    return `${first}${last}`.toUpperCase()
+    return `${first}${last}`.slice(0, length).toUpperCase()
   }
 
   function onImageError(src: string | undefined) {
@@ -155,6 +156,12 @@
       :class="OVERFLOW_CLASS"
     >
       +{{ hidden.length }}
+      <span
+        aria-hidden="true"
+        data-slot="touch-target"
+        :data-testid="`${testId}__touch-target`"
+        class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+      />
     </button>
     <div
       v-if="hidden.length"

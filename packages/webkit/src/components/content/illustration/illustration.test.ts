@@ -5,6 +5,7 @@ import Assets from '../../../../examples/illustration/assets.vue'
 import Default from '../../../../examples/illustration/default.vue'
 import Labeled from '../../../../examples/illustration/labeled.vue'
 import Placeholder from '../../../../examples/illustration/placeholder.vue'
+import { illustrationFrame } from '../../../assets/illustrations/frames'
 import {
   illustrationPalette,
   normalizeIllustrationColor
@@ -200,10 +201,31 @@ describe('Illustration', () => {
     }
   })
 
-  it('reserves the canvas aspect ratio before the SVG loads', async () => {
-    const el = await root(render(Illustration, { props: { name: 'runtime' } }))
-    expect(el.getAttribute('width')).toBe('592')
-    expect(el.getAttribute('height')).toBe('300')
+  it.each(['runtime', 'usage-chart', 'ai-gateway'])(
+    'gives %s its final box before the scene loads, so nothing below it moves',
+    async (name) => {
+      const view = render({
+        components: { Illustration },
+        template: `<div style="width: 400px"><Illustration name="${name}" /></div>`
+      })
+      const el = view.container.querySelector('[data-testid="illustration"]')!
+      expect(el).toBeTruthy()
+      expect(drawnCount(el)).toBe(0)
+      const before = el.getBoundingClientRect().height
+      expect(before).toBeGreaterThan(0)
+      await drawsScene(view, await sceneOf(name))
+      expect(el.getBoundingClientRect().height).toBeCloseTo(before, 1)
+    }
+  )
+
+  it.each(illustrationAssetNames)('reserves the canvas %s was drawn on', async (name) => {
+    const markup = await (await globalThis.fetch(await urlOf(name))).text()
+    const svg = new globalThis.DOMParser().parseFromString(markup, 'image/svg+xml')
+    const [, , width, height] = svg.documentElement
+      .getAttribute('viewBox')!
+      .split(/[\s,]+/)
+      .map(Number)
+    expect(illustrationFrame(name)).toEqual({ width, height })
   })
 
   it('registers every drawing that ships in the illustration folder, and nothing else', () => {
@@ -306,8 +328,10 @@ describe('Illustration', () => {
   })
 
   it('carries the ariaLabel as the accessible name of an image when one is given', async () => {
-    const el = await root(render(Labeled))
-    expect(el.getAttribute('role')).toBe('img')
+    const view = render(Labeled)
+    const el = await root(view)
+    expect(el.getAttribute('aria-hidden')).toBe('true')
+    await waitFor(() => expect(el.getAttribute('role')).toBe('img'))
     expect(el.getAttribute('aria-label')).toBe('An MCP server deployed behind the edge firewall')
     expect(el.getAttribute('aria-hidden')).toBeNull()
   })

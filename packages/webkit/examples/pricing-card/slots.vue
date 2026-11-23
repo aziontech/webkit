@@ -13,7 +13,7 @@
     tag-label="Popular"
     value="20"
     prefix="$"
-    suffix="/ mon"
+    suffix="/ month"
   >
     <ul class="m-0 flex list-none flex-col gap-2 p-0 text-body-sm text-(--text-default)">
       <li class="flex items-center gap-2">

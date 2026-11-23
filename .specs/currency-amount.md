@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 7b01c0ba32ac2a4c4cb914e4b8f896ed5060ecabf55034b12987b14c0b6d3988
+checksum: 73b532805b708896f2fe87baa813941d852c4bedcb32d92fda1fb2d71f675f92
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -22,7 +22,7 @@ The size ladder is the house one (`small` / `medium` / `large`) and each step is
 ## When to use
 
 - Any monetary amount in the product: a price in a table row or list cell (`small`), an amount stated on a card (`medium`), the headline figure of a pricing card (`large`).
-- An amount followed by a period or unit (`/ mon`, `/ GB`) that should read as secondary to the figure.
+- An amount followed by a period or unit (`/ month`, `/ GB`) that should read as secondary to the figure.
 
 ## When NOT to use
 
@@ -53,7 +53,7 @@ The size ladder is the house one (`small` / `medium` / `large`) and each step is
   <CurrencyAmount
     value="20"
     prefix="$"
-    suffix="/ mon"
+    suffix="/ month"
     size="medium"
   />
 </template>
@@ -113,6 +113,10 @@ _none_ — the amount's `-0.08em` letter-spacing, previously shipped without, is
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+
+## Right-to-left
+
+- The symbol and the figure sit in one `dir="ltr"` group (`currency-amount__amount`), so `$20` never flips to `20$` in a right-to-left page. The suffix stays outside the group and follows the amount in the page's reading order.
 
 ## Examples
 

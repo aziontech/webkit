@@ -114,6 +114,19 @@ describe('CurrencyAmount', () => {
     values.forEach((v) => expect(v.textContent?.trim()).toBe('20'))
   })
 
+  it('keeps the symbol and figure in left-to-right order inside a right-to-left page', () => {
+    const { getByTestId } = render({
+      components: { CurrencyAmount },
+      template: '<div dir="rtl"><CurrencyAmount value="20" prefix="$" suffix="/ month" /></div>'
+    })
+    const amount = getByTestId('currency-amount__amount')
+
+    expect(amount.getAttribute('dir')).toBe('ltr')
+    expect(amount).toContainElement(getByTestId('currency-amount__prefix'))
+    expect(amount).toContainElement(getByTestId('currency-amount__value'))
+    expect(amount).not.toContainElement(getByTestId('currency-amount__suffix'))
+  })
+
   it('mirrors the size prop onto the root as data-size, for every step', () => {
     // The three text parts read the variant off the root through a named group, so
     // data-size on the root is the whole switch — if it stops being written, every

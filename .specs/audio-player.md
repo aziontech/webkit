@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: e4fd5938d02390681d8e8db1f6cfd69c21d9d5f55f684123e4bc9900756e8f89
+checksum: 6449f4ae01e3c6783a285792b47d8c066a6926db014075f73b556a769370fd76
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
@@ -178,9 +178,9 @@ _none_
 
 ## Right-to-left
 
-- Layout: logical utilities only (`gap`, `ps-`/`pe-`, `text-start`); the row mirrors, so the current time sits at the start and the duration at the end.
+- Layout: logical utilities only (`gap`, `ps-`/`pe-`, `text-start`); the control row mirrors. The timeline row (current time, seek bar, duration) does not: it is one `dir="ltr"` box, so the current time stays on the left at the start of the bar and the duration on the right at its end, as VideoPlayer and the browsers' own players do. The error line that replaces it keeps the page direction.
 - Icons: none mirrored; play, pause, volume and download glyphs keep their shape (media glyphs do not flip).
-- Seek bar: media time does not mirror. The seek slider sits in a `dir="ltr"` box, so it fills from the left and `ArrowRight` moves forward in every direction, as Material's media progress and the browsers' own players do (spec_version 2).
+- Seek bar: media time does not mirror. The seek slider sits in that `dir="ltr"` row, so it fills from the left and `ArrowRight` moves forward in every direction, as Material's media progress and the browsers' own players do (spec_version 2).
 - Keyboard: the volume slider follows `Slider`'s right-to-left map (`ArrowLeft` raises it in right-to-left).
 - User data: the times and the speed label are wrapped in `bdi` so `0:42` and `1.5×` keep their order; the title and the transcript are `dir="auto"`.
 
