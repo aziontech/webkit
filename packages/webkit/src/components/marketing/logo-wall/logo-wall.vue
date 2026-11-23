@@ -22,8 +22,10 @@
 
   /** One company mark in the wall, optionally linked. */
   export type LogoWallItem = {
-    /** URL of the mark rendered in the cell. */
+    /** URL of the mark rendered in the cell; the light-theme file when `srcDark` is set. */
     src: string
+    /** URL of the mark on the dark theme, such as the brand's reversed file, for a mark whose colours fade on a dark cell. */
+    srcDark?: string
     /** Alternative text naming the company the mark belongs to. */
     alt: string
     /** Destination the mark links to, such as that customer's success case. */
@@ -36,8 +38,8 @@
     /** The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`. */
     variant?: LogoWallVariant
     /**
-     * The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is
-     * the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape`
+     * The marks rendered in the grid, in order; each item is `{ src, srcDark?, alt, href?, shape? }` where `src` is
+     * the mark's URL, `srcDark` its dark-theme file, `alt` names the company, `href` links the cell to that customer's story, and `shape`
      * sets a near-square mark taller than a wordmark.
      */
     items?: LogoWallItem[]

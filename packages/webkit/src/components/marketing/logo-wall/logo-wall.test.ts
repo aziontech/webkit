@@ -29,6 +29,35 @@ describe('LogoWall', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
+  it('swaps a mark for its dark-theme file when srcDark is set, so a full-colour mark stays legible on a dark cell', () => {
+    document.documentElement.dataset.theme = 'dark'
+    try {
+      const { container } = render(LogoWall, {
+        props: {
+          items: [
+            { src: '/logos/purple.svg', srcDark: '/logos/purple-reversed.svg', alt: 'Purple' }
+          ]
+        }
+      })
+      const light = container.querySelector<HTMLImageElement>('img[data-theme-file="light"]')
+      const dark = container.querySelector<HTMLImageElement>('img[data-theme-file="dark"]')
+
+      expect(light?.getAttribute('src')).toBe('/logos/purple.svg')
+      expect(dark?.getAttribute('src')).toBe('/logos/purple-reversed.svg')
+      expect(light?.className).toContain('[[data-theme=dark]_&]:hidden')
+      expect(dark?.className).toContain('[[data-theme=dark]_&]:block')
+    } finally {
+      delete document.documentElement.dataset.theme
+    }
+  })
+
+  it('renders one image per mark when no dark file is set', () => {
+    const { container } = render(LogoWall, { props: { items } })
+
+    expect(container.querySelectorAll('img')).toHaveLength(items.length)
+    expect(container.querySelector('[data-theme-file]')).toBeNull()
+  })
+
   it('renders one list item per mark', () => {
     const { getByRole, getAllByRole } = render(LogoWall, { props: { items } })
 
