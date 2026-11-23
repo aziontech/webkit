@@ -1,5 +1,6 @@
-import { render, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { render, waitFor, within } from '@testing-library/vue'
+import { afterEach, describe, expect, it } from 'vitest'
+import { page } from 'vitest/browser'
 
 import Code from '../../../../examples/feature-scroll-section/code.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -42,6 +43,28 @@ const band = (props: Record<string, unknown> = {}) =>
   })
 
 describe('FeatureScrollSection', () => {
+  afterEach(async () => {
+    await page.viewport(414, 896)
+  })
+
+  it('keeps only the small layout in the document below lg once mounted', async () => {
+    await page.viewport(390, 844)
+    const { getByTestId } = band()
+    const root = getByTestId(TESTID)
+
+    await waitFor(() => expect(root.querySelector('[data-testid="media-scroll"]')).toBeNull())
+    expect(root.querySelectorAll('[data-testid="media-tile"]')).toHaveLength(items.length)
+  })
+
+  it('keeps only the large layout in the document from lg once mounted', async () => {
+    await page.viewport(1280, 800)
+    const { getByTestId } = band()
+    const root = getByTestId(TESTID)
+
+    await waitFor(() => expect(root.querySelector('[data-testid="media-tile"]')).toBeNull())
+    expect(root.querySelector('[data-testid="media-scroll"]')).not.toBeNull()
+  })
+
   it('renders the band under the default testid', () => {
     const { getByTestId } = band()
 
@@ -149,7 +172,7 @@ describe('FeatureScrollSection', () => {
     expect(getByTestId(TESTID).hasAttribute('id')).toBe(false)
   })
 
-  it('draws an item scene in place of its illustration, in the grid and in the stack', async () => {
+  it('draws an item scene in place of its illustration', async () => {
     const sceneItems: FeatureScrollSectionItem[] = [
       {
         title: 'Keys at the edge',
@@ -164,7 +187,7 @@ describe('FeatureScrollSection', () => {
     })
 
     const widgets = await findAllByTestId('console-mockup')
-    expect(widgets.length).toBeGreaterThanOrEqual(2)
+    expect(widgets.length).toBeGreaterThanOrEqual(1)
     widgets.forEach((widget) => expect(widget).toHaveAttribute('data-name', 'kv-store-key'))
     expect(getByTestId(TESTID).querySelectorAll('[data-name="kv-store-key"]').length).toBe(
       widgets.length
@@ -196,7 +219,7 @@ describe('FeatureScrollSection', () => {
     await expectNoA11yViolations(container)
   })
 
-  it('pins an item code sample under its file name, in the grid and in the stack', async () => {
+  it('pins an item code sample under its file name', async () => {
     const codeItems = [
       {
         title: 'Automated deployment via Git or CLI',
@@ -224,7 +247,7 @@ describe('FeatureScrollSection', () => {
       { name: 'Copy the deploy.sh sample' },
       { timeout: 5000 }
     )
-    expect(copies.length).toBeGreaterThanOrEqual(2)
+    expect(copies.length).toBeGreaterThanOrEqual(1)
     expect((await findAllByText('main.tf', {}, { timeout: 5000 })).length).toBeGreaterThanOrEqual(1)
     expect(queryByTestId('illustration')).toBeNull()
   })

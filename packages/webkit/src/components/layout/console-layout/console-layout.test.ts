@@ -337,7 +337,7 @@ describe('ConsoleLayout', () => {
         { 'account-menu': () => h('p', 'Account settings') }
       )
       expect(getByText('Ana Souza')).toBeTruthy()
-      const trigger = within(getByRole('banner')).getByRole('button', { name: 'AN, account menu' })
+      const trigger = within(getByRole('banner')).getByRole('button', { name: 'AS, account menu' })
       await userEvent.click(trigger)
       await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
       expect(within(document.body).getAllByText('Account settings').length).toBeGreaterThan(0)
@@ -357,7 +357,7 @@ describe('ConsoleLayout', () => {
         { 'account-menu': accountMenu }
       )
       const trigger = within(getByRole('banner')).getByRole('button', {
-        name: 'JA, account menu'
+        name: 'JD, account menu'
       })
       await userEvent.click(trigger)
       const option = await waitFor(() =>
@@ -397,9 +397,9 @@ describe('ConsoleLayout', () => {
         { 'account-menu': accountMenu }
       )
       const trigger = within(getByRole('banner')).getByRole('button', {
-        name: 'JA, account menu'
+        name: 'JD, account menu'
       })
-      expect(trigger.textContent?.trim()).toBe('JA')
+      expect(trigger.textContent?.trim()).toBe('JD')
       const results = await axe.run(container, {
         runOnly: { type: 'rule', values: ['label-content-name-mismatch'] }
       })

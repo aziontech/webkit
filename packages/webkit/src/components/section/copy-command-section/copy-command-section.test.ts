@@ -39,9 +39,14 @@ describe('CopyCommandSection', () => {
     expect(getByRole('button', { name: 'Copy command' })).toBeInTheDocument()
   })
 
-  it('drops the shell prompt and renames the field for an agent prompt', () => {
-    const { getByRole, queryByText } = render(Prompt)
-    expect(getByRole('textbox', { name: 'Prompt' })).toBeInTheDocument()
+  it('drops the shell prompt and shows an agent prompt in full as wrapping text', () => {
+    const { getByRole, getByTestId, queryByText, queryByRole } = render(Prompt)
+    const group = getByRole('group', { name: 'Prompt' })
+    const text = getByTestId('copy-command-section__text')
+    expect(group).toContainElement(text)
+    expect(text.textContent?.trim()).toBe('Deploy this repository to Azion and give me the URL')
+    expect(text.className).toContain('whitespace-pre-wrap')
+    expect(queryByRole('textbox')).toBeNull()
     expect(getByRole('button', { name: 'Copy prompt' })).toBeInTheDocument()
     expect(queryByText('$')).toBeNull()
   })
@@ -61,6 +66,11 @@ describe('CopyCommandSection', () => {
 
   it('has no axe violations', async () => {
     const { container } = render(Default)
+    await expectNoA11yViolations(container)
+  })
+
+  it('has no axe violations for an agent prompt', async () => {
+    const { container } = render(Prompt)
     await expectNoA11yViolations(container)
   })
 })

@@ -11,6 +11,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
+  import { initials } from '../../../utils/initials'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import SearchTrigger from '../../action/search-trigger/search-trigger.vue'
   import Avatar from '../../content/avatar/avatar.vue'
@@ -193,10 +194,10 @@
   )
 
   const accountTriggerLabel = computed(() => {
-    const initials = props.account?.name.trim().slice(0, 2).toUpperCase() ?? ''
-    return props.account?.src || !initials
+    const short = initials(props.account?.name ?? '')
+    return props.account?.src || !short
       ? t('consoleLayout.accountMenu')
-      : t('consoleLayout.accountMenuFor', { initials })
+      : t('consoleLayout.accountMenuFor', { initials: short })
   })
 
   const pageTrail = computed(() => trails.value[trails.value.length - 1] ?? null)

@@ -106,6 +106,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ consoleShowcaseSection: en.consoleShowcaseSection })
   const roomy = useMediaQuery('(min-width: 40rem)', true)
+  const cramped = useMediaQuery('(max-width: 22.49rem)', false)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'console-showcase-section'
@@ -182,8 +183,8 @@
               v-if="tabs.length"
               v-model="current"
               :options="options"
-              :fluid="!roomy"
-              size="large"
+              :fluid="!roomy && !cramped"
+              :size="cramped ? 'medium' : 'large'"
               :aria-label="tabsAriaLabel || t('consoleShowcaseSection.views')"
             />
           </template>

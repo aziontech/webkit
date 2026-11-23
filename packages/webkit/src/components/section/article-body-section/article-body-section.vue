@@ -14,6 +14,7 @@
   import type { BreadcrumbItemData } from '../../navigation/breadcrumb/breadcrumb.vue'
   import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'
   import { parseArticleBody } from './lib/parse-article-body'
+  import ArticleBodySectionOutline from './parts/article-body-section-outline.vue'
   import ArticleBodySectionShareRail from './parts/article-body-section-share-rail.vue'
 
   defineOptions({
@@ -291,6 +292,13 @@
             </header>
 
             <Separator class="lg:col-start-2" />
+
+            <ArticleBodySectionOutline
+              v-if="headings.length > 0"
+              :items="headings"
+              :active-id="activeId"
+              @select="goToHeading"
+            />
 
             <article
               ref="proseEl"

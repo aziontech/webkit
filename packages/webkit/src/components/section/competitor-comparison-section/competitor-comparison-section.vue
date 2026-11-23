@@ -69,11 +69,11 @@
     caption?: string
     /** Heading of the capability column. */
     columnLabel?: string
-    /** Tooltip and screen-reader text of a full-support cell. */
+    /** Legend entry, tooltip and screen-reader text of a full-support cell. */
     fullLabel?: string
-    /** Tooltip and screen-reader text of a partial-support cell. */
+    /** Legend entry, tooltip and screen-reader text of a partial-support cell. */
     partialLabel?: string
-    /** Tooltip and screen-reader text of an unsupported cell. */
+    /** Legend entry, tooltip and screen-reader text of an unsupported cell. */
     noneLabel?: string
     /**
      * The platform compared with Azion; `{ name, logo?, logoLight?, artwork? }` where `logo` is the
@@ -145,6 +145,14 @@
   const iconOf = (level: CompetitorComparisonSectionSupport | undefined) =>
     supportIcon[level ?? 'none']
 
+  const legend = computed(() =>
+    (['full', 'partial', 'none'] as const).filter((level) => labelOf(level))
+  )
+
+  const LEGEND_CLASS =
+    'm-0 flex list-none flex-wrap gap-x-(--spacing-lg) gap-y-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm) ' +
+    'text-body-sm text-(--text-muted) sm:px-(--spacing-xl)'
+
   const isLast = (groupIndex: number, rowIndex: number) =>
     groupIndex === props.groups.length - 1 && rowIndex === props.groups[groupIndex].rows.length - 1
 
@@ -195,6 +203,25 @@
         borders="y"
         marks="all"
       >
+        <ul
+          v-if="legend.length > 0"
+          :data-testid="`${testId}__legend`"
+          :class="LEGEND_CLASS"
+        >
+          <li
+            v-for="level in legend"
+            :key="level"
+            class="flex items-center gap-(--spacing-xs)"
+          >
+            <i
+              :data-level="level"
+              :class="supportIcon[level]"
+              class="text-body-md text-(--text-muted) data-[level=full]:text-(--success-mark)"
+              aria-hidden="true"
+            />
+            {{ labelOf(level) }}
+          </li>
+        </ul>
         <table
           class="w-full table-fixed border-separate border-spacing-0 text-start [--competitor-comparison-section-head:3.5rem] sm:[--competitor-comparison-section-head:5rem]"
         >

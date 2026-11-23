@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { computed, defineAsyncComponent, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, onMounted, ref, useAttrs } from 'vue'
 
   import type { SceneRef } from '../../../assets/scene-registry'
+  import { useMediaQuery } from '../../../composables/use-media-query'
   import { resolveItemScenes } from '../../../utils/item-scenes'
   import Button from '../../action/button/button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
@@ -103,6 +104,14 @@
 
   const scenes = computed(() => resolveItemScenes(props.items))
 
+  const wide = useMediaQuery('(min-width: 64rem)')
+  const hydrated = ref(false)
+  onMounted(() => {
+    hydrated.value = true
+  })
+  const showGrid = computed(() => !hydrated.value || !wide.value)
+  const showScroll = computed(() => !hydrated.value || wide.value)
+
   const sampleTabs = (sample: FeatureScrollSectionCode) => [
     {
       label: sample.fileName,
@@ -133,6 +142,8 @@
     header-size="large"
   >
     <RegistrationFrame
+      v-if="showGrid"
+      key="grid"
       flush
       borders="y"
       marks="bottom"
@@ -185,6 +196,8 @@
     </RegistrationFrame>
 
     <RegistrationFrame
+      v-if="showScroll"
+      key="scroll"
       flush
       borders="y"
       marks="bottom"

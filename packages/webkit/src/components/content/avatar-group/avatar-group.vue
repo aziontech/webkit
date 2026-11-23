@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { initials } from '../../../utils/initials'
 
   defineOptions({
     name: 'AvatarGroup',
@@ -68,14 +69,8 @@
   const showsPhoto = (item: AvatarGroupItem) =>
     Boolean(item.src) && !failedSources.value.includes(item.src as string)
 
-  const initialsOf = (item: AvatarGroupItem) => {
-    const length = props.size === 'small' ? 1 : 2
-    if (item.label) return item.label.trim().slice(0, length).toUpperCase()
-    const words = item.name.trim().split(/\s+/).filter(Boolean)
-    const first = words[0]?.charAt(0) ?? ''
-    const last = words.length > 1 ? (words[words.length - 1]?.charAt(0) ?? '') : ''
-    return `${first}${last}`.slice(0, length).toUpperCase()
-  }
+  const initialsOf = (item: AvatarGroupItem) =>
+    initials(item.label || item.name).slice(0, props.size === 'small' ? 1 : 2)
 
   function onImageError(src: string | undefined) {
     if (src && !failedSources.value.includes(src)) failedSources.value.push(src)

@@ -1,6 +1,6 @@
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
-import { userEvent } from 'vitest/browser'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { page, userEvent } from 'vitest/browser'
 import { defineComponent, h } from 'vue'
 
 import Default from '../../../../examples/console-showcase-section/default.vue'
@@ -27,6 +27,10 @@ const panel = (props: Record<string, unknown> = {}) =>
   })
 
 describe('ConsoleShowcaseSection', () => {
+  afterEach(async () => {
+    await page.viewport(414, 896)
+  })
+
   it('sets the anchor as the band id and names the band by its title', () => {
     const { getByTestId, getByRole } = panel({ anchor: 'console' })
     expect(getByTestId('console-showcase-section')).toHaveAttribute('id', 'console')
@@ -79,6 +83,22 @@ describe('ConsoleShowcaseSection', () => {
     unmount()
     const custom = panel({ tabsAriaLabel: 'Views of the console' })
     expect(custom.getByRole('radiogroup', { name: 'Views of the console' })).toBeInTheDocument()
+  })
+
+  it('sizes the view switcher to its labels at medium on a 320px screen, fluid and large above', async () => {
+    await page.viewport(320, 640)
+    await vi.waitFor(() => expect(window.matchMedia('(max-width: 22.49rem)').matches).toBe(true))
+    const narrow = panel()
+    const cramped = narrow.getByRole('radiogroup')
+    await vi.waitFor(() => expect(cramped.getAttribute('data-size')).toBe('medium'))
+    expect(cramped.hasAttribute('data-fluid')).toBe(false)
+    narrow.unmount()
+
+    await page.viewport(390, 844)
+    await vi.waitFor(() => expect(window.matchMedia('(max-width: 22.49rem)').matches).toBe(false))
+    const phone = panel().getByRole('radiogroup')
+    await vi.waitFor(() => expect(phone.getAttribute('data-size')).toBe('large'))
+    expect(phone.hasAttribute('data-fluid')).toBe(true)
   })
 
   it('translates the built-in name', () => {

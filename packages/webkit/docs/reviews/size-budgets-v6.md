@@ -1323,3 +1323,23 @@ Budget-raise: doc-markdown 40.55 KB → 40.65 KB (measured 40.61 KB): Link's new
 Budget-raise: trace 39 KB → 39.05 KB (measured 39.02 KB): each span name carries its full name as a `title`, and the name column takes 55% of a narrow trace (A5-282).
 Budget-raise: console-trace-scene 84.65 KB → 84.7 KB (measured 84.68 KB): it renders Trace (A5-282).
 Budget-raise: doc-page-header 32.4 KB → 32.45 KB (measured 32.41 KB): the Breadcrumb root spans its own start margin, so a shrink-wrapped trail no longer clips its last crumb by 8px (A5-286).
+Budget-raise: console-layout-root 82.6 KB → 82.65 KB (measured 82.63 KB): the account trigger name uses the shared initials helper (decision A5-F08-2).
+Budget-raise: media-tabs 9.5 KB → 10.2 KB (measured 10.19 KB): the rows follow the WAI-ARIA tab pattern from lg (roving tabindex, arrow keys, tabpanels) and are disclosures below it (decision A5-F08-1).
+Budget-raise: quote-tabs 24.5 KB → 24.6 KB (measured 24.57 KB): its Carousel peeks the next card on phones and its Avatar draws word initials (A5-F08-2, A5-F08-4).
+Budget-raise: console-application-scene 121.95 KB → 122 KB (measured 121.99 KB): its Avatars draw initials from the first and last word (decision A5-F08-2).
+Budget-raise: console-trace-scene 84.65 KB → 84.75 KB (measured 84.71 KB): its Avatars draw initials from the first and last word (decision A5-F08-2).
+Budget-raise: article-index-section 36.6 KB → 37 KB (measured 36.96 KB): it announces the match count, draws large controls on a coarse pointer and fades the category strip (decision A5-F08-4).
+Budget-raise: copy-command-section 12.2 KB → 12.4 KB (measured 12.38 KB): a prompt is a wrapping read-only block shown in full beside the command line (decision A5-F08-3).
+Budget-raise: competitor-comparison-section 25.5 KB → 25.7 KB (measured 25.66 KB): a visible legend keys the support glyphs (decision A5-F08-6).
+Budget-raise: feature-scroll-section 20.1 KB → 20.55 KB (measured 20.54 KB): it keeps only the layout that matches the width mounted, halving the DOM of the band (decision A5-F08-5).
+Budget-raise: card-carousel-section 9.3 KB → 9.35 KB (measured 9.32 KB): its Carousel peeks the next card on phones with an end-only fade (decision A5-F08-4).
+Budget-raise: client-story-columns-section 8.7 KB → 8.75 KB (measured 8.74 KB): a closed hover card shows its link label at rest (decision A5-F08-6).
+Budget-raise: logo-wall-section 24.5 KB → 24.55 KB (measured 24.53 KB): its Carousel peeks the next card on phones with an end-only fade (decision A5-F08-4).
+Budget-raise: recognition-marquee-section 21.6 KB → 21.7 KB (measured 21.68 KB): its Carousel peeks the next card on phones with an end-only fade (decision A5-F08-4).
+Budget-raise: architecture-tabs-section 23 KB → 23.3 KB (measured 23.29 KB): its MediaTabs follow the WAI-ARIA tab pattern (decision A5-F08-1).
+Budget-raise: feature-tabs-section 58.15 KB → 58.75 KB (measured 58.72 KB): its MediaTabs follow the WAI-ARIA tab pattern (decision A5-F08-1).
+Budget-raise: chat-message-root 18.95 KB → 19 KB (measured 19.00 KB): its Avatar draws initials from the first and last word (decision A5-F08-2).
+Budget-raise: table-cell-time 19 KB → 19.05 KB (measured 19.03 KB): its Avatar draws initials from the first and last word (decision A5-F08-2).
+Budget-raise: filter-menu-chip-group 21.95 KB → 22 KB (measured 21.97 KB): its Avatar draws initials from the first and last word (decision A5-F08-2).
+Budget-raise: console-layout 83.9 KB → 83.95 KB (measured 83.92 KB): the account trigger name uses the shared initials helper (decision A5-F08-2).
+Budget-raise: app-header-account 13.7 KB → 13.75 KB (measured 13.74 KB): its Avatar draws initials from the first and last word (decision A5-F08-2).

@@ -1,3 +1,4 @@
+import { mergeDotRuns } from './merge-dots'
 import { illustrationPalette, normalizeIllustrationColor } from './palette'
 
 const PAINTS = ['fill', 'stroke', 'stop-color']
@@ -83,6 +84,7 @@ export function loadIllustrationScene(url: string): Promise<IllustrationScene> {
         'image/svg+xml'
       ).documentElement
       if (!(svg instanceof globalThis.SVGSVGElement)) throw new Error(`${url} is not an SVG`)
+      mergeDotRuns(svg)
       paintRoles(svg)
       pruneUnreferencedIds(svg)
       return {

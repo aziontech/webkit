@@ -411,7 +411,7 @@ describe('AppHeader', () => {
       })
       const control = getByRole('button', { name: 'Account menu' })
       expect(control.getAttribute('data-testid')).toBe('app-header-account')
-      expect(getByTestId('avatar').textContent?.trim()).toBe('JA')
+      expect(getByTestId('avatar').textContent?.trim()).toBe('JD')
       await userEvent.click(control)
       expect(onClick).toHaveBeenCalledTimes(1)
       expect(onClick.mock.calls[0]?.[0]).toBeInstanceOf(MouseEvent)

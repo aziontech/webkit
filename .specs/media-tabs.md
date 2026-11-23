@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: efe89ea48e91cd62de935081eeb6b260d3e0537d5c8e5eea5fca278b307601fc
+checksum: ebc6df267db87e8cb667992a6fe4d699735b908e22192ca06aa08377f5236222
 created: 2026-09-24
 last_updated: 2026-11-19
 ---
@@ -177,9 +177,9 @@ None. The tab shown is the `v-model` (`update:modelValue`).
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: each row's title is a real `<button>` carrying `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
-- Keyboard map: `Tab` moves between rows and `Enter` / `Space` selects one — the rows are buttons, not clickable containers, so no key handler is bolted onto a `div`.
-- ARIA: the rows are a `<ul>` of `<li>`, each holding the button; the active button carries `aria-current="true"`. Each medium carries its tab's `alt` text, and the inactive media are `aria-hidden` and `inert` so the frame announces one picture rather than all of them, and a control inside a hidden scene (a play button, a code tab, a copy button) is out of the tab order.
-- **Not `role="tablist"`.** A tab's label here is a heading and a paragraph — the copy is the content, and the media only illustrates it. Real tabs promise a roving `tabindex` and arrow-key navigation over short labels; this band is a list of claims a reader tabs through one at a time, so it is announced as the list it is rather than as a tab set whose keyboard contract it does not honour.
+- Keyboard map: from the large breakpoint `Tab` enters the tab set on the selected tab, the arrow keys move and select (wrapping), `Home` / `End` jump to the ends, and `Tab` leaves for the medium; below it `Tab` moves between the row buttons and `Enter` / `Space` opens one. The rows are buttons, not clickable containers, so no key handler is bolted onto a `div`.
+- ARIA: from the large breakpoint, where the media sit beside the rows, the rows follow the tab pattern: the `<ul>` is a `tablist` (`aria-orientation` follows the tabs side), each `<li>` and its `<h3>` are presentational, each button is a `tab` with `aria-selected`, a roving `tabindex` and `aria-controls` naming its medium, and each medium is a `tabpanel` labelled by its tab. Arrow keys move the selection (wrapping, mirrored under right-to-left), Home and End jump to the first and last tab. Below the large breakpoint, where each row holds its own medium, every button is a disclosure: `aria-expanded` and `aria-controls` naming the medium inside its row. Each medium carries its tab's `alt` text, and the inactive media are `aria-hidden` and `inert` so the frame announces one picture rather than all of them, and a control inside a hidden scene (a play button, a code tab, a copy button) is out of the tab order.
+- **A tab set beside the media, disclosures when stacked.** Each row switches the medium a sighted reader sees beside it, so a screen-reader user must learn that a medium changed and where it is: the tab pattern ties each title to its medium (`aria-controls`, `aria-labelledby`) and honours its keyboard contract. The row's description stays a paragraph next to its tab, read as the tab's neighbour. Below `lg` the medium opens inside the row, which is a disclosure, not a tab set (decision A5-F08-1).
 - **WCAG 2.2.2 (pause, stop, hide):** autoplay is moving content, so it must be stoppable. While the timer can run, a visible outlined `IconButton` at the band's top end pauses it ("Pause rotation") and resumes it ("Resume rotation"), for touch and screen-reader users alike; the rotation also pauses while the band has hover or keyboard focus, resumes when they leave, and does not start at all under `prefers-reduced-motion` or below `lg` (the pause control renders only while the timer can run). A click selects a tab and restarts the count from that tab; it does not end the rotation.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the description is `var(--text-muted)`, a known theme-level shortfall on the light canvas (see `stats`); every other text region is `var(--text-default)`.
 - Touch target ≥40×40 px — each row's button spans the whole row, well past the minimum.

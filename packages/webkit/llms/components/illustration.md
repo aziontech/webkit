@@ -56,6 +56,7 @@
 - A `name` that resolves to no scene — empty, or not in the registry — renders the **placeholder**: a tinted frame reading `PLACE DESIGN ASSET`, marked `data-placeholder`, on the 592×300 canvas. An unregistered `name` also warns in the console, naming where the valid names are listed; neither case throws, and neither collapses the layout. The placeholder is always decorative, `ariaLabel` or not: it draws no scene, so announcing a description of the missing artwork would describe something that is not on the page.
 - While a registered scene's SVG is still resolving, the frame already on screen stays — the placeholder never flashes in front of a scene that is about to arrive.
 - Theme: each colour of the export palette maps to one `--illustration-*` role (see § Tokens), resolved where the scene renders, so a scene inside a `[data-theme]` subtree follows that subtree. A translucent ground colour is a drop shadow and stays as drawn; colours that read the same in both themes (window controls, framework marks, the dot map) stay as drawn too. Masks, clip paths and filters are never repainted.
+- A run of eight or more sibling square dots of one paint (a dot map, a pixel grid) is drawn as one path holding every dot, so a dotted scene costs a few hundred nodes, not thousands; a dot that differs in paint or shape breaks the run and stays its own path.
 - Every instance scopes the SVG's internal ids, so two scenes — or two copies of one — on the same page never resolve each other's gradients, masks or filters.
 
 ## Accessibility

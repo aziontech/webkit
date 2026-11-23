@@ -164,6 +164,10 @@
     'duration-moderate-01 ease-productive-entrance group-focus-within/spot:translate-y-0 group-focus-within/spot:opacity-100 group-hover/spot:translate-y-0 group-hover/spot:opacity-100 ' +
     'motion-reduce:transition-none max-lg:translate-y-0 max-lg:opacity-100'
 
+  const REST_CUE_CLASS =
+    'pointer-events-none absolute inset-x-0 bottom-0 hidden items-center gap-(--spacing-2xs) px-[5.625cqw] py-[6cqw] text-overline-md whitespace-nowrap text-(--text-default) uppercase ' +
+    'transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none lg:flex lg:group-data-[state=open]/spot:opacity-0'
+
   const LOGO_WALL_CLASS =
     '[&_[role=list]]:grid-cols-1! [&_a]:[background:var(--client-story-columns-section-wall-face)] group-hover/card:[&_a]:before:opacity-100 ' +
     'group-hover/card:[&_a>span:first-child]:-translate-y-(--spacing-sm) group-hover/card:[&_a>span:last-child]:translate-y-0 group-hover/card:[&_a>span:last-child]:opacity-100'
@@ -257,6 +261,16 @@
                     <i class="az az-arrow-up-right leading-none rtl:-scale-x-100" />
                   </span>
                 </div>
+
+                <span
+                  aria-hidden="true"
+                  data-slot="rest-cue"
+                  :data-theme="faceTheme(cell)"
+                  :class="REST_CUE_CLASS"
+                >
+                  {{ story }}
+                  <i class="az az-arrow-up-right leading-none rtl:-scale-x-100" />
+                </span>
               </a>
             </RegistrationFrame>
           </li>
@@ -277,7 +291,7 @@
         <div
           role="list"
           :aria-label="ariaLabel || undefined"
-          class="grid gap-px bg-(--border-default) lg:grid-cols-3"
+          class="grid gap-px bg-(--border-default) md:grid-cols-3"
         >
           <RegistrationFrame
             v-for="cell in cells"
@@ -291,7 +305,7 @@
                 variant="rectangle"
                 :aria-label="cell.name"
                 :link-label="linkLabel"
-                :items="[{ src: cell.logo, alt: cell.name, href: cell.href }]"
+                :items="[{ src: cell.logo, alt: `${cell.name}: ${cell.story}`, href: cell.href }]"
                 :style="faceStyle(cell)"
                 :data-theme="faceTheme(cell)"
                 :class="LOGO_WALL_CLASS"

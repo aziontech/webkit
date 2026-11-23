@@ -25,7 +25,11 @@ export const articleBodySection = {
 export const articleIndexSection = {
   search: 'Search',
   searchFacet: 'Search {facet}',
-  noMatch: 'No results found.'
+  noMatch: 'No results found.',
+  results: {
+    one: '{count} result',
+    other: '{count} results'
+  }
 } as const
 
 export const attributeEditor = {

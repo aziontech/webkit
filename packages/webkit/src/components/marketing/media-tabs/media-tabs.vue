@@ -9,6 +9,7 @@
     type TextureVariant
   } from '../../content/texture/texture.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import { useMediaTabsAria } from './composables/use-media-tabs-aria'
 
   defineOptions({
     name: 'MediaTabs',
@@ -159,6 +160,13 @@
     move(index)
   }
 
+  const { tabId, panelId, rowMediaId, tabAttrs, onTabKeydown } = useMediaTabsAria({
+    tabbed: sideBySide,
+    count: () => tabs.value.length,
+    isActive,
+    select
+  })
+
   const ROOT_CLASS =
     'group/media-tabs relative [--media-tabs-row:calc(var(--spacing-xl)*4.5)] ' +
     'data-[size=small]:[--media-tabs-row:calc(var(--spacing-xl)*3)] data-[size=large]:[--media-tabs-row:calc(var(--spacing-xl)*6)]'
@@ -236,11 +244,17 @@
       v-if="hasItems"
       class="flex flex-col group-data-[tabs-side=start]/media-tabs:lg:flex-row group-data-[tabs-side=end]/media-tabs:lg:flex-row-reverse group-data-[tabs-side=bottom]/media-tabs:lg:flex-col-reverse"
     >
-      <ul :class="TAB_LIST_CLASS">
+      <ul
+        ref="listEl"
+        :role="sideBySide ? 'tablist' : undefined"
+        :aria-orientation="sideBySide ? orientation : undefined"
+        :class="TAB_LIST_CLASS"
+      >
         <li
           v-for="(item, index) in tabs"
           :key="`${item.title}-${index}`"
           :data-active="isActive(index) || null"
+          :role="sideBySide ? 'presentation' : undefined"
           :class="TAB_ROW_CLASS"
           @pointerenter="point(index)"
         >
@@ -251,13 +265,18 @@
             :class="TAB_FRAME_CLASS"
           >
             <div :class="TAB_COPY_CLASS">
-              <h3 :class="TAB_TITLE_CLASS">
+              <h3
+                :role="sideBySide ? 'presentation' : undefined"
+                :class="TAB_TITLE_CLASS"
+              >
                 <button
+                  :id="tabId(index)"
                   type="button"
-                  :aria-current="isActive(index) ? 'true' : undefined"
+                  v-bind="tabAttrs(index)"
                   :class="TAB_BUTTON_CLASS"
                   @click="select(index)"
                   @focus="point(index)"
+                  @keydown="onTabKeydown($event, index)"
                 >
                   {{ item.title }}
                 </button>
@@ -270,6 +289,8 @@
 
             <div
               v-if="isActive(index)"
+              :id="rowMediaId(index)"
+              :hidden="sideBySide || undefined"
               :class="TAB_MEDIA_CLASS"
             >
               <slot
@@ -322,6 +343,9 @@
           <div
             v-for="(item, index) in tabs"
             :key="`${item.title}-${index}`"
+            :id="panelId(index)"
+            role="tabpanel"
+            :aria-labelledby="tabId(index)"
             :data-active="isActive(index) || null"
             :aria-hidden="!isActive(index) || undefined"
             :inert="!isActive(index) || undefined"

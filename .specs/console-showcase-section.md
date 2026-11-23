@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 13
 template: 2
-checksum: daec6afeffb7f31d33ec2cfc85cdc68edf3437ef29b1abde92bf93894269cc92
+checksum: b31ec7670259df658c4af6d28272ac54957a8097b72e0947b0b25ed9d128795b
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -143,7 +143,7 @@ None of its own; `Texture` stops under reduced motion.
 
 - Below medium the console scene is square and uncropped; from medium it is 1.9:1 with the crop applied.
 - No horizontal scroll at 320 px.
-- The tab control is the large `ToggleGroup` at every width; below 40rem it is fluid (full width, equal segments) instead of shrinking, so each tab keeps a 30 px face and its 44 px touch hit area.
+- The tab control is the large `ToggleGroup` from 22.5rem; between 22.5rem and 40rem it is fluid (full width, equal segments) instead of shrinking, so each tab keeps a 30 px face and its 44 px touch hit area. Below 22.5rem (a 320 px phone) equal segments would cut the longer labels, so it is the medium `ToggleGroup` sized to its labels; its touch target still keeps the 44 px hit area.
 
 ## Performance
 

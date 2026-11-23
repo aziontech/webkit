@@ -136,8 +136,8 @@
         title: 'How I Shipped My Portfolio in Just Two Commands',
         description:
           'See how a portfolio site went from template to live URL with just azion init and azion deploy.',
-        authors: [{ name: 'Patrick Menoti' }],
-        byline: 'Patrick Menoti · 9 min read',
+        authors: [{ name: 'Jane Doe' }],
+        byline: 'Jane Doe · 9 min read',
         categories: ['Developers']
       },
       {
@@ -148,8 +148,8 @@
         title: 'How Do You Reduce AI Agent Latency?',
         description:
           'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state.',
-        authors: [{ name: 'Marilia Bafutto Costa' }],
-        byline: 'Marilia Bafutto Costa · 8 min read',
+        authors: [{ name: 'Priya Patel' }],
+        byline: 'Priya Patel · 8 min read',
         categories: ['Serverless']
       },
       {
@@ -160,8 +160,8 @@
         title: 'Best Cloudflare Alternatives and Competitors',
         description:
           'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting.',
-        authors: [{ name: 'Vitor Eltz' }],
-        byline: 'Vitor Eltz · 13 min read',
+        authors: [{ name: 'Alex Morgan' }],
+        byline: 'Alex Morgan · 13 min read',
         categories: ['Security']
       }
     ]"
