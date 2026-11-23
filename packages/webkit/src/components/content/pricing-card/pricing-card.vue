@@ -59,7 +59,7 @@
     variant: 'contained',
     value: '20',
     prefix: '$',
-    suffix: '/ mon',
+    suffix: '/ month',
     showPrefix: true,
     showSuffix: true,
     actionLabel: 'Label',
@@ -76,6 +76,11 @@
   const testId = computed(() => attrs['data-testid'] ?? 'pricing-card')
 
   const isMiddle = computed(() => props.actionsPosition === 'middle')
+
+  const actionVariant = computed(() => {
+    if (props.showTag) return 'primary'
+    return isMiddle.value ? 'secondary' : 'outline'
+  })
 
   const currencySize = computed(() => (isMiddle.value ? 'large' : 'medium'))
 
@@ -174,7 +179,7 @@
 
       <div
         v-if="isMiddle"
-        class="min-h-40 w-full flex-1"
+        class="w-full flex-1 group-data-[equal-height]/card:min-h-40"
         :data-testid="`${testId}__slot`"
       >
         <slot />
@@ -188,7 +193,7 @@
       <slot name="actions">
         <Button
           v-if="actionLabel"
-          :variant="isMiddle ? 'secondary' : 'outline'"
+          :variant="actionVariant"
           size="large"
           :label="actionLabel"
           class="w-full"
@@ -198,8 +203,8 @@
     </div>
 
     <div
-      v-if="!isMiddle"
-      class="min-h-40 w-full shrink-0"
+      v-if="!isMiddle && $slots.default"
+      class="w-full shrink-0"
       :data-testid="`${testId}__slot`"
     >
       <slot />

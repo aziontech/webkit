@@ -13,7 +13,7 @@
   const price = computed(() =>
     period.value === 'yearly'
       ? { value: '200', suffix: '/ year', details: 'Billed once a year. Two months free.' }
-      : { value: '20', suffix: '/ mon', details: 'Billed every month. Cancel anytime.' }
+      : { value: '20', suffix: '/ month', details: 'Billed every month. Cancel anytime.' }
   )
 </script>
 

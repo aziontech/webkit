@@ -13,7 +13,7 @@
     '  variant="contained"',
     '  value="20"',
     '  prefix="$"',
-    '  suffix="/ mon"',
+    '  suffix="/ month"',
     '  action-label="Start trial"',
     '/>'
   ].join('\n')

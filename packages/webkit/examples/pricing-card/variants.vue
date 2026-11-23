@@ -11,8 +11,8 @@
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
       prefix="$"
-      suffix="/ mon"
-      action-label="Label"
+      suffix="/ month"
+      action-label="Start with Pro"
     />
     <PricingCard
       actions-position="bottom"
@@ -21,8 +21,8 @@
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
       prefix="$"
-      suffix="/ mon"
-      action-label="Label"
+      suffix="/ month"
+      action-label="Start with Pro"
     />
     <PricingCard
       actions-position="middle"
@@ -31,8 +31,8 @@
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
       prefix="$"
-      suffix="/ mon"
-      action-label="Label"
+      suffix="/ month"
+      action-label="Start with Pro"
     />
     <PricingCard
       actions-position="middle"
@@ -41,8 +41,8 @@
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
       prefix="$"
-      suffix="/ mon"
-      action-label="Label"
+      suffix="/ month"
+      action-label="Start with Pro"
     />
   </div>
 </template>
