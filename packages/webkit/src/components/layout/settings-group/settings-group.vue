@@ -70,13 +70,14 @@
   }
 
   const COPY_LINK_CLASS =
-    'absolute -start-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ' +
+    'absolute z-1 -start-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ' +
     'ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
-    'group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 [@media(hover:none)]:static [@media(hover:none)]:order-last [@media(hover:none)]:opacity-100 ' +
+    'group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 ' +
+    '[@media(hover:none)]:relative [@media(hover:none)]:start-0 [@media(hover:none)]:order-last [@media(hover:none)]:opacity-100 ' +
     'motion-reduce:transition-none'
 
   const TRIGGER_CLASS =
-    'group/disclosure -mx-(--spacing-2xs) flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-2xs) text-start transition-colors duration-fast-02 ' +
+    'group/disclosure relative -mx-(--spacing-2xs) flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-2xs) text-start transition-colors duration-fast-02 ' +
     'ease-productive-entrance hover:text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
     'focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none'
 
@@ -120,6 +121,11 @@
           class="text-body-xs"
           aria-hidden="true"
         />
+        <span
+          aria-hidden="true"
+          data-slot="touch-target"
+          class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+        />
       </button>
       <h2
         :id="anchor || undefined"
@@ -146,6 +152,11 @@
           <i
             :class="CHEVRON_CLASS"
             aria-hidden="true"
+          />
+          <span
+            aria-hidden="true"
+            data-slot="touch-target"
+            class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
           />
         </button>
         <span

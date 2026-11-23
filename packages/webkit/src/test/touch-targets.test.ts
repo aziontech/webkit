@@ -6,6 +6,8 @@ import { commands, page } from 'vitest/browser'
 import { h, nextTick } from 'vue'
 
 import AccordionDefault from '../../examples/accordion/default.vue'
+import AppHeaderWithAccount from '../../examples/app-header/with-account.vue'
+import AppLayoutDefault from '../../examples/app-layout/default.vue'
 import ConsoleShowcaseDefault from '../../examples/console-showcase-section/default.vue'
 import DatePickerDefault from '../../examples/date-picker/default.vue'
 import DropdownMenuStates from '../../examples/dropdown-menu/states.vue'
@@ -14,6 +16,8 @@ import InputDefault from '../../examples/input/default.vue'
 import MultiSelectDefault from '../../examples/multi-select/default.vue'
 import NumberInputDefault from '../../examples/number-input/default.vue'
 import SelectDefault from '../../examples/select/default.vue'
+import SettingsGroupCollapsible from '../../examples/settings-group/collapsible.vue'
+import SettingsGroupDefault from '../../examples/settings-group/default.vue'
 import TabsDefault from '../../examples/tabs/default.vue'
 import ThemeSwitcherDefault from '../../examples/theme-switcher/default.vue'
 
@@ -140,6 +144,27 @@ describe('tap targets on a coarse pointer (styled)', () => {
       const option = group.querySelector<HTMLElement>('[role="radio"]')!
       expect(option.getBoundingClientRect().height).toBeGreaterThanOrEqual(28)
       expect(hitSpan(option, 'y')).toBeGreaterThanOrEqual(44)
+    })
+
+    it.each([
+      ['SettingsGroup disclosure', SettingsGroupCollapsible, 'settings-group__trigger'],
+      ['SettingsGroup copy link', SettingsGroupDefault, 'settings-group__copy-link'],
+      ['AppHeaderAccount', AppHeaderWithAccount, 'app-header-account'],
+      ['Footer home link', FooterDefault, 'footer__home']
+    ])('%s answers a tap across 44 x 44', async (_name, component, id) => {
+      await touch()
+      const view = await mount(component)
+      const control = byTestId(view.container as HTMLElement, id)[0]!
+      expect(hitSpan(control, 'y')).toBeGreaterThanOrEqual(44)
+      expect(hitSpan(control, 'x')).toBeGreaterThanOrEqual(44)
+    })
+
+    it('the AppLayout split-panel separator takes a finger drag across 44px', async () => {
+      await touch()
+      const view = await mount(AppLayoutDefault)
+      const separator = byTestId(view.container as HTMLElement, 'app-layout__split-separator')[0]!
+      expect(getComputedStyle(separator).touchAction).toBe('none')
+      expect(hitSpan(separator, 'y')).toBeGreaterThanOrEqual(40)
     })
   })
 })
