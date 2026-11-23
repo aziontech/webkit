@@ -19,7 +19,7 @@
     },
     {
       "name": "Accept",
-      "summary": "With `accept=\"image/*\"`, image files arrive in `drop` and every other file arrives in `reject`. Browse images opens a picker with the same filter and sorts the chosen files the same way, so keyboard and touch reach both lists.",
+      "summary": "With `accept=\"image/*\"`, images arrive in `drop` and other files in `reject`. Browse images opens a picker with the same filter and sorts picks the same way.",
       "file": "accept.vue"
     },
     {

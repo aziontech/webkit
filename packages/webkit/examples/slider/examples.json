@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Single thumb over 0–100 in steps of 1, bound with `v-model` and composed in a `Field`: the label names the slider and the current value sits at the end of the label row.",
+      "summary": "0–100 in steps of 1 in a `Field`: the label names it and the value sits at the end of the label row.",
       "file": "default.vue"
     },
     {
@@ -19,12 +19,12 @@
     },
     {
       "name": "Disabled",
-      "summary": "Disabled: skipped by Tab, ignores pointer and keys, and uses the disabled tokens; the `Field` greys its label.",
+      "summary": "Disabled: skipped by Tab, ignores pointer and keys, disabled tokens.",
       "file": "disabled.vue"
     },
     {
       "name": "Invalid",
-      "summary": "Invalid: the `Field` is `invalid`, the fill and thumb border switch to the danger tokens, aria-invalid is set and `Field.Error` says what to change.",
+      "summary": "Invalid: danger fill and thumb, `aria-invalid`, and a `Field.Error`.",
       "file": "invalid.vue"
     }
   ]

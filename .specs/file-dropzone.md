@@ -3,7 +3,7 @@ name: file-dropzone
 category: input
 structure: monolithic
 status: implemented
-checksum: 8e0e0df8776c496a9a2402d82f0cc18dff64f27912feb50a1d5a270c9b08069d
+checksum: 257fe82537e243956bad784a14bb8392636dd38e4c17c880d8eda6696265ee01
 spec_version: 9
 created: 2026-11-10
 last_updated: 2026-11-22
@@ -113,17 +113,17 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
 
 ## Props
 
-| Prop          | Type                    | Default    | Required | JSDoc                                                                                                                                                                                                             |
-| ------------- | ----------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `variant`     | `'inline' \| 'overlay'` | `'inline'` | false    | Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor.                                                  |
-| `title`       | `string`                | `''`       | false    | Instruction shown under the icon. Empty uses the locale catalog: `Drop files to upload` (`fileDropzone.title`), or `Choose files to upload` (`fileDropzone.touchTitle`) for an inline region on a coarse pointer. |
-| `description` | `string`                | `''`       | false    | Secondary line under the title, typically the accepted types and limits. Not rendered when empty.                                                                                                                 |
-| `accept`      | `string`                | `''`       | false    | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file.                                        |
-| `multiple`    | `boolean`               | `true`     | false    | When false, only the first accepted file of a drop is accepted and the rest are rejected. `true` by default (recorded exception to the default-false rule; inverting it would break consumers).                   |
-| `directories` | `boolean`               | `false`    | false    | Accepts dropped folders: walks every dropped folder and emits the files inside, each with its `webkitRelativePath` (`assets/img/logo.svg`). The events fire after the walk.                                       |
-| `disabled`    | `boolean`               | `false`    | false    | Ignores drags and drops: no active state, no events.                                                                                                                                                              |
-| `invalid`     | `boolean`               | `false`    | false    | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work.                                                                                                |
-| `icon`        | `string`                | `''`       | false    | Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph (`az az-cloud-upload`).                                                                                                        |
+| Prop          | Type                    | Default    | Required | JSDoc                                                                                                                                                                                           |
+| ------------- | ----------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`     | `'inline' \| 'overlay'` | `'inline'` | false    | Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor.                                |
+| `title`       | `string`                | `''`       | false    | Instruction shown under the icon. Empty uses the locale catalog: `Drop files to upload`, or `Choose files to upload` inline on a coarse pointer.                                                |
+| `description` | `string`                | `''`       | false    | Secondary line under the title, typically the accepted types and limits. Not rendered when empty.                                                                                               |
+| `accept`      | `string`                | `''`       | false    | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file.                      |
+| `multiple`    | `boolean`               | `true`     | false    | When false, only the first accepted file of a drop is accepted and the rest are rejected. `true` by default (recorded exception to the default-false rule; inverting it would break consumers). |
+| `directories` | `boolean`               | `false`    | false    | Accepts dropped folders: walks every dropped folder and emits the files inside, each with its `webkitRelativePath` (`assets/img/logo.svg`). The events fire after the walk.                     |
+| `disabled`    | `boolean`               | `false`    | false    | Ignores drags and drops: no active state, no events.                                                                                                                                            |
+| `invalid`     | `boolean`               | `false`    | false    | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work.                                                                              |
+| `icon`        | `string`                | `''`       | false    | Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph (`az az-cloud-upload`).                                                                                      |
 
 `multiple` defaults to `true` on purpose, against the "booleans default to `false`" habit. Most drops carry several files (a folder's contents, a batch of assets), and the positive name `multiple` matches the native `multiple` attribute of a file input and the `multiple` option of `useFilePicker`, which the consumer pairs it with. The inverse (`single`) would be a new term with no native counterpart.
 

@@ -44,7 +44,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `variant` | `'inline' \| 'overlay'` | `'inline'` | false | Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor. |
-| `title` | `string` | `''` | false | Instruction shown under the icon. Empty uses the locale catalog: `Drop files to upload` (`fileDropzone.title`), or `Choose files to upload` (`fileDropzone.touchTitle`) for an inline region on a coarse pointer. |
+| `title` | `string` | `''` | false | Instruction shown under the icon. Empty uses the locale catalog: `Drop files to upload`, or `Choose files to upload` inline on a coarse pointer. |
 | `description` | `string` | `''` | false | Secondary line under the title, typically the accepted types and limits. Not rendered when empty. |
 | `accept` | `string` | `''` | false | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file. |
 | `multiple` | `boolean` | `true` | false | When false, only the first accepted file of a drop is accepted and the rest are rejected. `true` by default (recorded exception to the default-false rule; inverting it would break consumers). |

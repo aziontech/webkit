@@ -48,7 +48,7 @@
 
 ## Accessibility
 
-- The trigger is a native `<button type="button">`, so it is in the tab order and the tooltip opens on `focus` as well as hover (`Tooltip` opens on `focusin`). On touch the glyph is a toggletip: a tap shows the text and keeps it shown; a second tap, a tap outside, `Escape` or moving focus away closes it. Tests: `hint.test.ts` › touch.
+- The trigger is a native `<button type="button">`, so it is in the tab order and the tooltip opens on `focus` as well as hover (`Tooltip` opens on `focusin`). On touch a tap toggles the text; a tap outside, `Escape` or blur closes it.
 - The glyph is decorative (`aria-hidden="true"`); the button's accessible name is the `content` prop, so the hint is reachable by screen readers that never see the tooltip.
 - Keyboard map: `Tab` moves focus to the glyph and opens the tooltip; `Escape` closes it (owned by `Tooltip`); the button has no activation behaviour.
 - The button's default action is prevented on click, so a `Hint` rendered inside a `<label>` never toggles the labelled control.

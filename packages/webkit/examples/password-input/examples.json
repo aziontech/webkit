@@ -24,12 +24,12 @@
     },
     {
       "name": "Invalid",
-      "summary": "Invalid state: the `Field` is `invalid`, the input gets the danger border and `aria-invalid`, and `Field.Error` states the rule.",
+      "summary": "Invalid: danger border, `aria-invalid`, and a `Field.Error` with the rule.",
       "file": "invalid.vue"
     },
     {
       "name": "MaxLength",
-      "summary": "A cap enforced by the native `maxlength` attribute. The ceiling is 128, so passphrases and password-manager output fit, and the rule sits in `Field.Description`.",
+      "summary": "A 128-character cap via native `maxlength`, so passphrases fit; the rule is in `Field.Description`.",
       "file": "max-length.vue"
     },
     {

@@ -14,7 +14,7 @@
     },
     {
       "name": "Icons",
-      "summary": "The `leading` slot, the `trailing` slot, and both combined, each in a labelled `Field`.",
+      "summary": "The `leading` slot, the `trailing` slot, and both.",
       "file": "icons.vue"
     },
     {
@@ -24,17 +24,17 @@
     },
     {
       "name": "Invalid",
-      "summary": "Invalid state: the `Field` is `invalid`, the input gets the danger border and `aria-invalid`, and `Field.Error` says how to fix the value.",
+      "summary": "Invalid: danger border, `aria-invalid`, and a `Field.Error` that says how to fix it.",
       "file": "invalid.vue"
     },
     {
       "name": "Email",
-      "summary": "Native `type=\"email\"` in a `Field`. Click **Submit** to validate the value: the field turns invalid with a `Field.Error` when the value is not a valid email, and clears on the next keystroke.",
+      "summary": "Native `type=\"email\"`. **Submit** validates: the field turns invalid with a `Field.Error`, cleared on the next keystroke.",
       "file": "email.vue"
     },
     {
       "name": "MaxLength",
-      "summary": "Hard character cap of 10 enforced by the native `maxlength` attribute; the rule is in `Field.Description`, so it stays visible while the person types.",
+      "summary": "A cap of 10 via native `maxlength`; the rule stays visible in `Field.Description`.",
       "file": "max-length.vue"
     },
     {
