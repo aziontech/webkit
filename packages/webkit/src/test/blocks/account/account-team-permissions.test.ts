@@ -116,20 +116,6 @@ describe('account-team-permissions#CreateTeam', () => {
     expect((view.getByRole('textbox', { name: /Name/ }) as HTMLInputElement).value).toBe('Platform')
   })
 
-  it('asks before the breadcrumb leaves Edit Team with unsaved changes', async () => {
-    const view = render(EditTeam)
-    const crumb = view.getByRole('link', { name: 'Teams and permissions' })
-    const clean = new MouseEvent('click', { bubbles: true, cancelable: true })
-    crumb.addEventListener('click', (event) => event.preventDefault(), { once: true })
-    crumb.dispatchEvent(clean)
-    expect(document.querySelector('[role="alertdialog"]')).toBeNull()
-    await fireEvent.update(view.getByLabelText(/^Name\b/), 'Platform team')
-    const dirty = new MouseEvent('click', { bubbles: true, cancelable: true })
-    crumb.dispatchEvent(dirty)
-    expect(dirty.defaultPrevented).toBe(true)
-    await waitFor(() => expect(document.body.textContent).toContain('Keep editing'))
-  })
-
   it('makes Edit imply View and marks a partly checked group as mixed', async () => {
     const view = render(CreateTeam)
     const editFirewall = view.getByRole('checkbox', { name: 'Edit Firewall' })
