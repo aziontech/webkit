@@ -1,4 +1,5 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import { ref } from 'vue'
 
@@ -8,33 +9,43 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-stretch gap-4 w-[280px]">
-    <Input
-      v-model="leading"
-      placeholder="Leading icon"
-    >
-      <template #leading>
-        <i class="az az-globe" />
-      </template>
-    </Input>
-    <Input
-      v-model="trailing"
-      placeholder="Trailing icon"
-    >
-      <template #trailing>
-        <i class="az az-search" />
-      </template>
-    </Input>
-    <Input
-      v-model="both"
-      placeholder="Both icons"
-    >
-      <template #leading>
-        <i class="az az-globe" />
-      </template>
-      <template #trailing>
-        <i class="az az-search" />
-      </template>
-    </Input>
+  <div class="flex w-full max-w-(--container-xs) flex-col items-stretch gap-(--spacing-md)">
+    <Field>
+      <Field.Label>Domain</Field.Label>
+      <Input
+        v-model="leading"
+        placeholder="example.com"
+      >
+        <template #leading>
+          <i class="az az-globe" />
+        </template>
+      </Input>
+    </Field>
+    <Field>
+      <Field.Label>Search</Field.Label>
+      <Input
+        v-model="trailing"
+        type="search"
+      >
+        <template #trailing>
+          <i class="az az-search" />
+        </template>
+      </Input>
+    </Field>
+    <Field>
+      <Field.Label>Find a domain</Field.Label>
+      <Input
+        v-model="both"
+        type="search"
+        placeholder="example.com"
+      >
+        <template #leading>
+          <i class="az az-globe" />
+        </template>
+        <template #trailing>
+          <i class="az az-search" />
+        </template>
+      </Input>
+    </Field>
   </div>
 </template>

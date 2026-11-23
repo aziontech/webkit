@@ -1,4 +1,5 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import { ref } from 'vue'
 
@@ -6,8 +7,11 @@
 </script>
 
 <template>
-  <Input
-    v-model="value"
-    placeholder="Type something"
-  />
+  <Field class="w-full max-w-(--container-xs)">
+    <Field.Label>Project name</Field.Label>
+    <Input
+      v-model="value"
+      placeholder="my-project"
+    />
+  </Field>
 </template>

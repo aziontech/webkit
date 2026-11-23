@@ -9,12 +9,12 @@
     },
     {
       "name": "Toggle",
-      "summary": "`toggleable=true` (default) renders the visibility toggle button on the trailing edge; `toggleable=false` renders a plain password field and frees the `suffix` slot.",
+      "summary": "`toggleable=true` (default) renders the visibility toggle button on the trailing edge; `toggleable=false` renders a plain password field and frees the `trailing` slot.",
       "file": "toggle.vue"
     },
     {
       "name": "IconLeading",
-      "summary": "Leading `prefix` slot \u2014 the only icon slot honored when `toggleable=true`.",
+      "summary": "The `leading` slot, the only icon slot honored when `toggleable=true`.",
       "file": "icon-leading.vue"
     },
     {
@@ -24,12 +24,12 @@
     },
     {
       "name": "Invalid",
-      "summary": "Invalid state \u2014 applies danger border/ring tokens and `aria-invalid`.",
+      "summary": "Invalid state: the `Field` is `invalid`, the input gets the danger border and `aria-invalid`, and `Field.Error` states the rule.",
       "file": "invalid.vue"
     },
     {
       "name": "MaxLength",
-      "summary": "Hard character cap of 8 enforced by the native `maxlength` attribute.",
+      "summary": "A cap enforced by the native `maxlength` attribute. The ceiling is 128, so passphrases and password-manager output fit, and the rule sits in `Field.Description`.",
       "file": "max-length.vue"
     },
     {
@@ -39,7 +39,7 @@
     },
     {
       "name": "Disabled",
-      "summary": "Disabled state \u2014 the toggle button inherits the disabled state.",
+      "summary": "Disabled state — the toggle button inherits the disabled state.",
       "file": "disabled.vue"
     }
   ]
