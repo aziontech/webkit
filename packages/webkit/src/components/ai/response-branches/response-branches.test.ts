@@ -39,12 +39,14 @@ describe('ResponseBranches', () => {
     const view = render(Harness)
     const group = view.getByRole('group', { name: 'Response versions' })
     expect(view.getByText('First')).toBeTruthy()
-    expect(view.getByText('1 of 3')).toHaveAttribute('aria-live', 'polite')
+    expect(view.getByTestId('response-branches__position')).toHaveTextContent('1/3')
+    expect(view.getByTestId('response-branches__position')).toHaveAttribute('aria-hidden', 'true')
+    expect(view.getByText('Version 1 of 3')).toHaveAttribute('aria-live', 'polite')
     expect(view.getByRole('button', { name: 'Previous version' })).toBeDisabled()
 
     await fireEvent.click(view.getByRole('button', { name: 'Next version' }))
     expect(view.getByText('Second')).toBeTruthy()
-    expect(view.getByText('2 of 3')).toBeTruthy()
+    expect(view.getByText('Version 2 of 3')).toBeTruthy()
     await fireEvent.click(view.getByRole('button', { name: 'Next version' }))
     expect(view.getByRole('button', { name: 'Next version' })).toBeDisabled()
     await fireEvent.click(view.getByRole('button', { name: 'Previous version' }))
@@ -89,7 +91,8 @@ describe('ResponseBranches', () => {
       slots: { default: () => h(Harness) }
     })
     expect(view.getByRole('group', { name: 'Versões da resposta' })).toBeTruthy()
-    expect(view.getByText('1 de 3')).toBeTruthy()
+    expect(view.getByText('Versão 1 de 3')).toBeTruthy()
+    expect(view.getByText('1/3')).toBeTruthy()
   })
 
   it('keeps the previous button at the inline start under rtl', () => {
@@ -104,12 +107,18 @@ describe('ResponseBranches', () => {
 
   it('regenerates into a new version in the example, without axe violations', async () => {
     const view = render(Default)
-    expect(view.getByText('3 of 3')).toBeTruthy()
+    expect(view.getByText('Version 3 of 3')).toBeTruthy()
     await expectNoA11yViolations(view.container)
     await fireEvent.click(view.getByRole('button', { name: 'Regenerate response' }))
     await new Promise((resolve) => setTimeout(resolve, 900))
     await nextTick()
-    expect(view.getByText('4 of 4')).toBeTruthy()
+    expect(view.getByText('Version 4 of 4')).toBeTruthy()
+  })
+
+  it('renders the pager alone when given no slot, as in an action row', () => {
+    const view = render(ResponseBranches, { props: { count: 2, modelValue: 1 } })
+    expect(view.getByRole('group', { name: 'Response versions' })).toBeTruthy()
+    expect(view.getByTestId('response-branches__position')).toHaveTextContent('2/2')
   })
 
   describe('naming and test ids', () => {

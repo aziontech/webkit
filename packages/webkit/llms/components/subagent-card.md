@@ -88,7 +88,7 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 - Status is conveyed in text, never by color alone.
 - Focus: when `Stop` leaves the DOM while it holds focus (the status becomes `canceled`), focus moves to the toggle, or to the card root (`tabindex="-1"`) when the row is static; the `role="status"` region announces `Stopped`.
 - Accessible name of the toggle: its text, the title and the helper name; the status is announced by the status region.
-- Contrast: `--text-default` and `--text-muted` on `--bg-surface`, and `--text-muted` on `--bg-surface-raised` (the name chip), pass WCAG 2.1 AA and their APCA targets; status colours come from `StatusIndicator`, and the status is always text. No disabled state.
+- Contrast: `--text-default` and `--text-muted` on the canvas (`--bg-canvas`), and `--text-muted` on `--bg-surface-raised` (the name chip), pass WCAG 2.1 AA and their APCA targets; status colours come from `StatusIndicator`, and the status is always text. No disabled state.
 
 ## Right-to-left
 

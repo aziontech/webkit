@@ -374,6 +374,7 @@ describe('SitePage', () => {
     const folders = Object.keys(import.meta.glob('../../section/*/*.vue'))
       .map((path) => path.split('/')[3])
       .filter((name, index, all) => all.indexOf(name) === index)
+      .filter((name) => name.endsWith('-section'))
       .filter((name) => name !== 'site-header-section' && name !== 'site-footer-section')
       .sort()
 

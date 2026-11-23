@@ -80,7 +80,8 @@ matches your case, switch to the block it names. Then change only the content of
 keeping to the guidelines. Only when no block fits, compose from components (below).
 
 A block takes its data through props and emits its actions; it fetches nothing. `add` copies its
-data files beside it (`<name>.sample.ts`, and an API adapter when the block ships one). To go live,
+data files beside it (`<name>.sample.ts`, and an API adapter when the block ships one) and its parts
+as kebab SFCs (`<name>-<part>.vue`). To go live,
 do not rewrite the block: render it from the routed page that owns the request and pass what the
 request returns (its `## Data` guidelines list the props and events):
 `<TableView :resources="rows" :loading="pending" :error="message" @refresh="load" @retry="load" />`.

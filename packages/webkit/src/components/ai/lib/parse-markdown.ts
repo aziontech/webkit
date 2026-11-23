@@ -3,10 +3,22 @@ import { type MarkdownInline, parseInline } from './parse-inline'
 export type { MarkdownInline } from './parse-inline'
 export { parseInline, plainText } from './parse-inline'
 
+export interface MarkdownListItem {
+  children: MarkdownInline[]
+  list?: MarkdownList
+}
+
+export interface MarkdownList {
+  type: 'list'
+  ordered: boolean
+  start: number
+  items: MarkdownListItem[]
+}
+
 export type MarkdownBlock =
   | { type: 'paragraph'; children: MarkdownInline[] }
   | { type: 'heading'; level: 3 | 4 | 5 | 6; children: MarkdownInline[] }
-  | { type: 'list'; ordered: boolean; start: number; items: MarkdownInline[][] }
+  | MarkdownList
   | { type: 'code'; language: string; value: string; closed: boolean }
   | { type: 'quote'; children: MarkdownInline[] }
   | { type: 'table'; header: MarkdownInline[][]; rows: MarkdownInline[][][] }
@@ -125,28 +137,64 @@ function parseQuote(line: string): boolean {
   return true
 }
 
-function parseList(line: string): boolean {
-  const bullet = BULLET.exec(line)
-  const ordered = ORDERED.exec(line)
-  if (!bullet && !ordered) return false
-  const isOrdered = !bullet
-  const pattern = isOrdered ? ORDERED : BULLET
-  const items: string[] = []
-  while (row < lines.length) {
-    const current = lines[row] as string
-    const match = pattern.exec(current)
-    if (match) items.push((isOrdered ? match[2] : match[1]) as string)
-    else if (current.trim() && /^\s{2,}/.test(current) && items.length)
-      items[items.length - 1] += `\n${current.trim()}`
-    else break
-    row += 1
+const indentOf = (line: string): number => line.length - line.trimStart().length
+
+interface ListMarker {
+  ordered: boolean
+  start: number
+  text: string
+}
+
+function listMarker(line: string): ListMarker | null {
+  const trimmed = line.trimStart()
+  const bullet = BULLET.exec(trimmed)
+  if (bullet) return { ordered: false, start: 1, text: bullet[1] ?? '' }
+  const ordered = ORDERED.exec(trimmed)
+  return ordered ? { ordered: true, start: Number(ordered[1]), text: ordered[2] ?? '' } : null
+}
+
+interface ListDraft {
+  text: string
+  nested: string[]
+}
+
+function lineAt(source: string[], at: number): string {
+  return source[at] ?? ''
+}
+
+function buildList(source: string[], from: number): { list: MarkdownList; end: number } {
+  const first = listMarker(lineAt(source, from)) ?? { ordered: false, start: 1, text: '' }
+  const base = indentOf(lineAt(source, from))
+  const drafts: ListDraft[] = []
+  let at = from
+  while (at < source.length) {
+    const current = lineAt(source, at)
+    const indent = indentOf(current)
+    const marker = listMarker(current)
+    const last = drafts[drafts.length - 1]
+    if (marker && indent <= base + 1) {
+      if (marker.ordered !== first.ordered) break
+      drafts.push({ text: marker.text, nested: [] })
+    } else if (current.trim() && indent > base && last) {
+      if (last.nested.length || marker) last.nested.push(current)
+      else last.text += `\n${current.trim()}`
+    } else break
+    at += 1
   }
-  blocks.push({
-    type: 'list',
-    ordered: isOrdered,
-    start: isOrdered ? Number((ordered as RegExpExecArray)[1]) : 1,
-    items: items.map(parseInline)
+  const items = drafts.map<MarkdownListItem>((draft) => {
+    const item: MarkdownListItem = { children: parseInline(draft.text) }
+    if (draft.nested.length && listMarker(lineAt(draft.nested, 0)))
+      item.list = buildList(draft.nested, 0).list
+    return item
   })
+  return { list: { type: 'list', ordered: first.ordered, start: first.start, items }, end: at }
+}
+
+function parseList(line: string): boolean {
+  if (!BULLET.test(line) && !ORDERED.test(line)) return false
+  const { list, end } = buildList(lines, row)
+  blocks.push(list)
+  row = end
   return true
 }
 

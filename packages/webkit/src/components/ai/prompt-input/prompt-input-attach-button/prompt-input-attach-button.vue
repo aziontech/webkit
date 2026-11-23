@@ -1,11 +1,20 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, useAttrs } from 'vue'
+  import {
+    type Component,
+    computed,
+    onMounted,
+    onScopeDispose,
+    ref,
+    useAttrs,
+    watchEffect
+  } from 'vue'
 
   import { useLocale } from '../../../../composables/use-locale/use-locale'
   import * as en from '../../../../locales/en'
   import { matchesAccept } from '../../../../utils/file-accept'
   import IconButton from '../../../action/icon-button/icon-button.vue'
   import { usePromptInputContext } from '../composables/use-prompt-input-context'
+  import type { PromptInputMenuOption } from '../types'
 
   defineOptions({
     name: 'PromptInputAttachButton',
@@ -17,12 +26,18 @@
     ariaLabel?: string
     /** Azion icon class of the glyph. Empty uses `az az-plus`. */
     icon?: string
+    /** Tools the reader can turn on for the next prompt, such as web search. Given, the control opens a menu of Camera (touch screens), Photos and Files, then these tools. */
+    tools?: PromptInputMenuOption[]
   }
 
-  withDefaults(defineProps<PromptInputAttachButtonProps>(), {
+  const props = withDefaults(defineProps<PromptInputAttachButtonProps>(), {
     ariaLabel: '',
-    icon: ''
+    icon: '',
+    tools: () => []
   })
+
+  /** The turned-on tools' values, in `tools` order; each shows as a removable chip in the bar. */
+  const model = defineModel<string[]>({ default: () => [] })
 
   const attrs = useAttrs()
   const { t, formatFileSize } = useLocale({ promptInput: en.promptInput })
@@ -31,6 +46,27 @@
 
   const inputEl = ref<HTMLInputElement | null>(null)
   let depth = 0
+
+  const enabled = computed<number>(
+    () => props.tools.filter((tool) => model.value.includes(tool.value)).length
+  )
+
+  let addMenu: Component | undefined
+  const menuReady = ref<boolean>(false)
+
+  const mounted = ref<boolean>(false)
+  onMounted(() => (mounted.value = true))
+
+  watchEffect(() => {
+    if (!mounted.value || !props.tools.length || menuReady.value) return
+    void import('../parts/prompt-input-add-menu.vue').then((loaded) => {
+      addMenu = loaded.default
+      menuReady.value = true
+    })
+  })
+
+  watchEffect(() => context.setChips(enabled.value))
+  onScopeDispose(() => context.setChips(0))
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'prompt-input-attach-button'
@@ -96,14 +132,39 @@
   }
 
   function onChange(event: Event): void {
-    const input = event.target as HTMLInputElement
+    const input = event.target
+    if (!(input instanceof HTMLInputElement)) return
     attach(event, Array.from(input.files ?? []))
     input.value = ''
   }
 </script>
 
 <template>
+  <component
+    :is="addMenu"
+    v-if="menuReady && tools.length"
+    v-bind="$attrs"
+    v-model="model"
+    :icon="icon || 'az az-plus'"
+    :label="ariaLabel || t('promptInput.attach')"
+    :disabled="disabled"
+    :accept="accept"
+    :multiple="maxFiles !== 1"
+    :tools="tools"
+    :labels="{
+      add: t('promptInput.addMenu'),
+      camera: t('promptInput.camera'),
+      photos: t('promptInput.photos'),
+      files: t('promptInput.files'),
+      tools: t('promptInput.tools'),
+      chips: t('promptInput.toolsEnabled')
+    }"
+    :test-id="testId"
+    @files="attach"
+    @browse="pick"
+  />
   <IconButton
+    v-else
     v-bind="$attrs"
     :icon="icon || 'az az-plus'"
     variant="ghost"

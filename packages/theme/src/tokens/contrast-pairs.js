@@ -7,8 +7,8 @@ const STATUS = ['success', 'warning', 'danger', 'info']
 
 export const CONTRAST_PAIRS = [
   ...CONTRAST_SURFACES.map((bg) => ['body', '--text-default', bg]),
-  ...['--text-muted', '--text-brand', '--text-link', '--text-link-hover', '--text-danger'].flatMap(
-    (fg) => CONTRAST_SURFACES.map((bg) => ['text', fg, bg])
+  ...['--text-muted', '--text-link', '--text-link-hover', '--text-danger'].flatMap((fg) =>
+    CONTRAST_SURFACES.map((bg) => ['text', fg, bg])
   ),
   ...FILLS.map((fill) => ['text', `--${fill}-foreground`, `--${fill}`]),
   ['text', '--brand-blue-foreground', '--brand-blue'],

@@ -3,13 +3,14 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import IconButton from '../../action/icon-button/icon-button.vue'
   import { usePromptInputAttach } from './composables/use-prompt-input-attach'
   import { usePromptInputAutosize } from './composables/use-prompt-input-autosize'
   import { type PromptInputQuery, usePromptInputMenu } from './composables/use-prompt-input-menu'
   import { usePromptInputSubmit } from './composables/use-prompt-input-submit'
+  import { focusFromBox } from './lib/box-focus'
   import { withoutReference } from './lib/references'
   import PromptInputMenuList from './parts/prompt-input-menu-list.vue'
+  import PromptInputSend from './parts/prompt-input-send.vue'
   import type {
     PromptInputFile,
     PromptInputMenu,
@@ -38,7 +39,7 @@
     placeholder?: string
     /** Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`). */
     ariaLabel?: string
-    /** Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit. */
+    /** Character limit; an `n/max` counter shows from 80% of it and submit is blocked over it. `0` means no limit. */
     maxLength?: number
     /** Rows shown while empty. */
     minRows?: number
@@ -135,9 +136,10 @@
   const composing = ref<boolean>(false)
 
   const dragging = ref<boolean>(false)
+  const chips = ref<number>(0)
   const rejection = ref<string>('')
   const controlEl = ref<HTMLElement | null>(null)
-  const { overBy, busy, canSubmit, showVoice, submit, enterKeyHint, submitOnEnter } =
+  const { overBy, nearLimit, busy, canSubmit, showVoice, submit, enterKeyHint, submitOnEnter } =
     usePromptInputSubmit({
       model,
       files,
@@ -153,16 +155,9 @@
       send: (event, payload) => emit('submit', event, payload)
     })
   const describedBy = () => {
-    const ids = [props.maxLength > 0 ? counterId : '', slots.hint ? hintId : ''].filter(Boolean)
+    const ids = [nearLimit.value ? counterId : '', slots.hint ? hintId : ''].filter(Boolean)
     return ids.join(' ') || undefined
   }
-
-  usePromptInputAutosize(
-    textareaEl,
-    model,
-    () => props.minRows,
-    () => props.maxRows
-  )
 
   const query = ref<PromptInputQuery | null>(null)
   const activeIndex = ref<number>(0)
@@ -174,6 +169,22 @@
     query,
     activeIndex
   )
+
+  const stacked = (): boolean =>
+    props.minRows > 1 ||
+    !!slots.attachments ||
+    references.value.length > 0 ||
+    files.value.length > 0 ||
+    chips.value > 0 ||
+    (menuOpen.value && !!query.value)
+  const { multiline } = usePromptInputAutosize(
+    textareaEl,
+    model,
+    () => props.minRows,
+    () => props.maxRows,
+    stacked
+  )
+  const expanded = (): boolean => stacked() || multiline.value
   const announcement = computed<string>(() => {
     if (!query.value) return ''
     return matches.value.length
@@ -204,15 +215,6 @@
     textareaEl.value?.focus()
   }
 
-  function onBoxPointerdown(event: PointerEvent): void {
-    if (props.disabled || event.button !== 0) return
-    const target = event.target as HTMLElement | null
-    if (target?.closest('textarea, button, a, input, select, label, [role="option"], [tabindex]'))
-      return
-    event.preventDefault()
-    focus()
-  }
-
   const boxEl = ref<globalThis.HTMLElement | null>(null)
   const { paste } = usePromptInputAttach({
     boxEl,
@@ -224,6 +226,7 @@
     files,
     dragging,
     rejection,
+    chips,
     reject: (event, refused, reason) => emit('reject', event, { files: refused, reason }),
     focus
   })
@@ -231,18 +234,20 @@
   defineExpose({ focus })
 
   const BOX_CLASS =
-    'relative flex w-full cursor-text flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) transition-colors ' +
+    'group/prompt-input-box relative flex w-full cursor-text flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) ' +
+    'bg-[color-mix(in_srgb,var(--bg-surface-raised)_88%,transparent)] p-(--spacing-xs) shadow-(--shadow-lg) backdrop-blur-md transition-colors ' +
     'duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--ring-color) ' +
     'data-[invalid]:border-(--danger-border) ' +
     'data-[disabled]:bg-(--bg-disabled)'
 
   const DROP_CLASS =
-    'pointer-events-none absolute inset-0 z-2 flex items-center justify-center rounded-(--shape-card) border-2 border-dashed border-(--border-selected) bg-(--bg-surface) text-label-md ' +
+    'pointer-events-none absolute inset-0 z-2 flex items-center justify-center rounded-[inherit] border-2 border-dashed border-(--border-selected) bg-(--bg-surface) text-label-md ' +
     "text-(--text-default) before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-selected) before:content-['']"
 
   const TEXTAREA_CLASS =
-    'w-full resize-none bg-transparent px-(--spacing-xs) py-(--spacing-2xs) text-body-md text-(--text-default) ' +
-    'placeholder:text-(--text-muted) outline-none disabled:cursor-not-allowed disabled:text-(--text-disabled)'
+    'min-h-10 min-w-0 flex-1 basis-0 resize-none bg-transparent px-(--spacing-xs) py-(--spacing-xs) text-body-md text-(--text-default) ' +
+    'placeholder:text-(--text-muted) outline-none disabled:cursor-not-allowed disabled:text-(--text-disabled) ' +
+    'group-data-[multiline]/prompt-input-box:order-first group-data-[multiline]/prompt-input-box:basis-full'
 </script>
 
 <template>
@@ -252,16 +257,18 @@
     :data-status="status"
     :data-disabled="disabled || null"
     :data-invalid="overBy > 0 || null"
+    :data-multiline="expanded() || null"
     class="flex w-full flex-col gap-(--spacing-xs)"
   >
     <div
       :data-invalid="overBy > 0 || null"
       :data-disabled="disabled || null"
       :data-dragging="(dragging && !disabled) || null"
+      :data-multiline="expanded() || null"
       ref="boxEl"
       :data-testid="`${testId}__box`"
       :class="BOX_CLASS"
-      @pointerdown="onBoxPointerdown"
+      @pointerdown="(event: PointerEvent) => focusFromBox(event, disabled, focus)"
     >
       <div
         v-if="dragging && !disabled"
@@ -307,40 +314,43 @@
         :test-id="testId"
         @select="(_event: Event, option: PromptInputMenuOption) => choose(option)"
       />
-      <textarea
-        ref="textareaEl"
-        :value="model"
-        :rows="minRows"
-        :placeholder="placeholder || t('promptInput.placeholder')"
-        :aria-label="ariaLabel || t('promptInput.label')"
-        :aria-describedby="describedBy()"
-        :aria-invalid="overBy > 0 || undefined"
-        :aria-autocomplete="menus.length ? 'list' : undefined"
-        :aria-controls="menuOpen ? listId : undefined"
-        :aria-activedescendant="menuOpen ? `${listId}-${activeIndex}` : undefined"
-        :aria-keyshortcuts="menus.length ? menus.map((menu) => menu.trigger).join(' ') : undefined"
-        :disabled="disabled"
-        :data-testid="`${testId}__textarea`"
-        :enterkeyhint="enterKeyHint"
-        :class="TEXTAREA_CLASS"
-        @input="onInput"
-        @keydown="onKeydown"
-        @click="readQuery"
-        @blur="query = null"
-        @paste="paste"
-        @compositionstart="composing = true"
-        @compositionend="composing = false"
-      />
-      <div class="flex items-center justify-between gap-(--spacing-xs)">
+      <div class="flex flex-wrap items-end gap-(--spacing-2xs)">
         <fieldset
+          v-if="slots.actions"
           :disabled="disabled"
-          class="m-0 flex min-w-0 flex-wrap items-center gap-(--spacing-2xs) border-0 p-0"
+          class="m-0 flex min-h-10 min-w-0 flex-wrap items-center gap-(--spacing-2xs) border-0 p-0"
         >
           <slot name="actions" />
         </fieldset>
+        <textarea
+          ref="textareaEl"
+          :value="model"
+          :rows="minRows"
+          :placeholder="placeholder || t('promptInput.placeholder')"
+          :aria-label="ariaLabel || t('promptInput.label')"
+          :aria-describedby="describedBy()"
+          :aria-invalid="overBy > 0 || undefined"
+          :aria-autocomplete="menus.length ? 'list' : undefined"
+          :aria-controls="menuOpen ? listId : undefined"
+          :aria-activedescendant="menuOpen ? `${listId}-${activeIndex}` : undefined"
+          :aria-keyshortcuts="
+            menus.length ? menus.map((menu) => menu.trigger).join(' ') : undefined
+          "
+          :disabled="disabled"
+          :data-testid="`${testId}__textarea`"
+          :enterkeyhint="enterKeyHint"
+          :class="TEXTAREA_CLASS"
+          @input="onInput"
+          @keydown="onKeydown"
+          @click="readQuery"
+          @blur="query = null"
+          @paste="paste"
+          @compositionstart="composing = true"
+          @compositionend="composing = false"
+        />
         <div
           ref="controlEl"
-          class="flex min-w-0 shrink-0 items-center gap-(--spacing-sm)"
+          class="flex min-h-10 min-w-0 shrink-0 items-center gap-(--spacing-2xs) group-data-[multiline]/prompt-input-box:ms-auto"
         >
           <fieldset
             v-if="slots.end"
@@ -350,56 +360,29 @@
             <slot name="end" />
           </fieldset>
           <span
-            v-if="maxLength > 0"
+            v-if="nearLimit"
             :id="counterId"
             :data-invalid="overBy > 0 || null"
             :data-testid="`${testId}__counter`"
-            class="text-body-xs text-(--text-muted) tabular-nums data-[invalid]:text-(--text-danger)"
+            class="px-(--spacing-2xs) text-body-xs text-(--text-muted) tabular-nums data-[invalid]:text-(--text-danger)"
           >
             {{ t('promptInput.count', { count: model.length, max: maxLength }) }}
           </span>
-          <IconButton
-            v-if="busy"
-            key="stop"
-            icon="az az-stop"
-            variant="secondary"
-            size="medium"
-            :ariaLabel="t('promptInput.stop')"
+          <PromptInputSend
+            :busy="busy"
+            :queueable="queueable"
+            :can-submit="canSubmit"
+            :show-voice="showVoice"
             :disabled="disabled"
-            :data-testid="`${testId}__stop`"
-            @click="(event: MouseEvent) => emit('stop', event)"
-          />
-          <IconButton
-            v-if="busy && queueable && canSubmit"
-            key="queue"
-            icon="az az-arrow-up"
-            variant="primary"
-            size="medium"
-            :ariaLabel="t('promptInput.submit')"
-            :data-testid="`${testId}__submit`"
-            @click="submit"
-          />
-          <IconButton
-            v-else-if="showVoice"
-            key="voice"
-            icon="az az-headphones"
-            variant="primary"
-            size="medium"
-            :ariaLabel="t('promptInput.voice')"
-            :disabled="disabled"
-            :data-testid="`${testId}__voice`"
-            @click="(event: MouseEvent) => emit('voice-start', event)"
-          />
-          <IconButton
-            v-else-if="!busy"
-            key="submit"
-            icon="az az-arrow-up"
-            variant="primary"
-            size="medium"
-            :ariaLabel="t('promptInput.submit')"
-            :disabled="!canSubmit"
-            :data-testid="`${testId}__submit`"
-            @click="submit"
+            :labels="{
+              stop: t('promptInput.stop'),
+              submit: t('promptInput.submit'),
+              voice: t('promptInput.voice')
+            }"
+            :test-id="testId"
+            @stop="(event: MouseEvent) => emit('stop', event)"
+            @submit="submit"
+            @voice-start="(event: MouseEvent) => emit('voice-start', event)"
           />
         </div>
       </div>
@@ -423,7 +406,7 @@
       v-if="slots.hint"
       :id="hintId"
       :data-testid="`${testId}__hint`"
-      class="px-(--spacing-xs) text-body-xs text-(--text-muted)"
+      class="px-(--spacing-xs) text-center text-body-xs text-(--text-muted)"
     >
       <slot name="hint" />
     </div>

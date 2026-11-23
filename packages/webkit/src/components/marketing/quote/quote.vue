@@ -200,7 +200,7 @@
           <span
             v-if="name"
             :data-testid="`${testId}__name`"
-            class="text-(--text-brand)"
+            class="border-s-2 border-(--primary) ps-(--spacing-xs) pe-(--spacing-2xs) text-(--text-default)"
             >{{ name }}</span
           >
           <span

@@ -649,7 +649,6 @@
    "--text-body-xs-font-weight",
    "--text-body-xs-line-height",
    "--text-body-xs-text-wrap-style",
-   "--text-brand",
    "--text-button-lg-font-family",
    "--text-button-lg-font-size",
    "--text-button-lg-font-weight",
@@ -1528,7 +1527,6 @@
     "--text-body-xs-font-weight",
     "--text-body-xs-line-height",
     "--text-body-xs-text-wrap-style",
-    "--text-brand",
     "--text-button-lg-font-family",
     "--text-button-lg-font-size",
     "--text-button-lg-font-weight",
@@ -2102,13 +2100,6 @@
     "light": "#999999",
     "dark": "#4D4D4D",
     "purpose": "Text of a disabled control."
-   },
-   "--text-brand": {
-    "group": "text",
-    "type": "color",
-    "light": "#F3652B",
-    "dark": "#F3652B",
-    "purpose": "The logo orange, the one orange for brand text such as eyebrows and quote names; an accepted contrast exception."
    },
    "--text-link": {
     "group": "text",
@@ -4962,6 +4953,9 @@
     "@aziontech/webkit/chat-message-actions",
     "@aziontech/webkit/chat-message-feedback"
    ],
+   "models": [
+    "editing"
+   ],
    "category": "ai",
    "structure": "composition",
    "props": [
@@ -4977,14 +4971,14 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`)."
+     "doc": "Author name read in the message's accessible name; it is not shown. Empty uses the locale catalog (`You`, `AI assistant`, `System`)."
     },
     {
      "name": "timestamp",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name."
+     "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name and shown on hover over the user's bubble."
     },
     {
      "name": "status",
@@ -4998,7 +4992,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn."
+     "doc": "Follows a message by the same author: tightens the gap above it so stacked messages read as one turn."
     },
     {
      "name": "errorMessage",
@@ -5013,12 +5007,24 @@
      "default": "''",
      "required": "false",
      "doc": "Loading text shown while `status` is `pending`. Empty uses `ResponseLoading`'s own (`Generating a response`)."
+    },
+    {
+     "name": "editing",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:editing`)."
     }
    ],
    "events": [
     {
      "name": "retry",
      "payload": "(event: MouseEvent)",
+     "notes": ""
+    },
+    {
+     "name": "edit",
+     "payload": "(event: MouseEvent | KeyboardEvent, text: string)",
      "notes": ""
     }
    ],
@@ -5029,14 +5035,9 @@
      "notes": "The content: text, `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`."
     },
     {
-     "name": "avatar",
-     "scope": "—",
-     "notes": "Replaces the default avatar (person glyph for the user, the assistant mark for the AI)."
-    },
-    {
      "name": "actions",
      "scope": "—",
-     "notes": "Inline actions, usually `ChatMessage.Actions`; shown only when `status` is `success`."
+     "notes": "The action row, usually `ChatMessage.Actions`; shown only when `status` is `success`."
     }
    ],
    "surface": "app",
@@ -5049,6 +5050,9 @@
    "kind": "root",
    "rootOf": "chat-message",
    "treeShakeableImport": "@aziontech/webkit/chat-message-root",
+   "models": [
+    "editing"
+   ],
    "category": "ai",
    "structure": "composition",
    "props": [
@@ -5064,14 +5068,14 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`)."
+     "doc": "Author name read in the message's accessible name; it is not shown. Empty uses the locale catalog (`You`, `AI assistant`, `System`)."
     },
     {
      "name": "timestamp",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name."
+     "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name and shown on hover over the user's bubble."
     },
     {
      "name": "status",
@@ -5085,7 +5089,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn."
+     "doc": "Follows a message by the same author: tightens the gap above it so stacked messages read as one turn."
     },
     {
      "name": "errorMessage",
@@ -5100,12 +5104,24 @@
      "default": "''",
      "required": "false",
      "doc": "Loading text shown while `status` is `pending`. Empty uses `ResponseLoading`'s own (`Generating a response`)."
+    },
+    {
+     "name": "editing",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:editing`)."
     }
    ],
    "events": [
     {
      "name": "retry",
      "payload": "(event: MouseEvent)",
+     "notes": ""
+    },
+    {
+     "name": "edit",
+     "payload": "(event: MouseEvent | KeyboardEvent, text: string)",
      "notes": ""
     }
    ],
@@ -5116,14 +5132,9 @@
      "notes": "The content: text, `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`."
     },
     {
-     "name": "avatar",
-     "scope": "—",
-     "notes": "Replaces the default avatar (person glyph for the user, the assistant mark for the AI)."
-    },
-    {
      "name": "actions",
      "scope": "—",
-     "notes": "Inline actions, usually `ChatMessage.Actions`; shown only when `status` is `success`."
+     "notes": "The action row, usually `ChatMessage.Actions`; shown only when `status` is `success`."
     }
    ],
    "surface": "app",
@@ -5135,6 +5146,9 @@
    "kind": "subcomponent",
    "parent": "chat-message",
    "treeShakeableImport": "@aziontech/webkit/chat-message-actions",
+   "models": [
+    "feedback"
+   ],
    "surface": "app"
   },
   "chat-message-feedback": {
@@ -5157,25 +5171,18 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "index",
-     "type": "number",
+     "name": "indexes",
+     "type": "number[]",
      "default": "—",
      "required": "true",
-     "doc": "1-based number of the source, in the order the response first cites it."
+     "doc": "1-based numbers of the sources this reference cites, in order: `[1]` gives `[1]`, `[1][3]` and `[1, 3]` give `[1, 3]`."
     },
     {
-     "name": "title",
-     "type": "string",
-     "default": "''",
+     "name": "sources",
+     "type": "SourcesItem[]",
+     "default": "[]",
      "required": "false",
-     "doc": "Title of the source, shown in the tooltip and read in the accessible name."
-    },
-    {
-     "name": "href",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it, or when it is unsafe (`javascript:`, `data:`), the number is plain text."
+     "doc": "The sources of the response, in citation order; `indexes` point into it. A number with no source renders as a plain numbered note."
     }
    ],
    "surface": "app",
@@ -5288,7 +5295,12 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card)."
+     "notes": "The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card), or the empty state before the first message."
+    },
+    {
+     "name": "composer",
+     "scope": "—",
+     "notes": "The composer floating over the bottom of the thread, in the reading column: `PromptInput`, with any status, alert or queue above it. Rendered outside the log, after it in the reading order."
     }
    ],
    "surface": "app",
@@ -5328,6 +5340,20 @@
      "doc": "Shows a Delete button on each row that emits `remove`."
     },
     {
+     "name": "creatable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a New chat row at the top that emits `create`."
+    },
+    {
+     "name": "searchable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a search field at the top that hides conversations whose title does not contain the typed text."
+    },
+    {
      "name": "loading",
      "type": "boolean",
      "default": "false",
@@ -5353,6 +5379,11 @@
     {
      "name": "remove",
      "payload": "(event: MouseEvent, id: string)",
+     "notes": ""
+    },
+    {
+     "name": "create",
+     "payload": "(event: MouseEvent)",
      "notes": ""
     }
    ],
@@ -5400,7 +5431,7 @@
      "type": "number",
      "default": "0",
      "required": "false",
-     "doc": "Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit."
+     "doc": "Character limit; an `n/max` counter shows from 80% of it and submit is blocked over it. `0` means no limit."
     },
     {
      "name": "minRows",
@@ -5525,17 +5556,17 @@
     {
      "name": "actions",
      "scope": "—",
-     "notes": "Controls at the inline start of the toolbar (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input."
+     "notes": "Controls at the inline start of the bar (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input."
     },
     {
      "name": "end",
      "scope": "—",
-     "notes": "Controls at the inline end of the toolbar, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input."
+     "notes": "Controls at the inline end of the bar, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input."
     },
     {
      "name": "footer",
      "scope": "—",
-     "notes": "The secondary row under the box (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input."
+     "notes": "A secondary row under the bar (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input. Optional: for the single-bar look, place the pickers in `actions` / `end` instead."
     },
     {
      "name": "hint",
@@ -5580,7 +5611,7 @@
      "type": "number",
      "default": "0",
      "required": "false",
-     "doc": "Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit."
+     "doc": "Character limit; an `n/max` counter shows from 80% of it and submit is blocked over it. `0` means no limit."
     },
     {
      "name": "minRows",
@@ -5705,17 +5736,17 @@
     {
      "name": "actions",
      "scope": "—",
-     "notes": "Controls at the inline start of the toolbar (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input."
+     "notes": "Controls at the inline start of the bar (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input."
     },
     {
      "name": "end",
      "scope": "—",
-     "notes": "Controls at the inline end of the toolbar, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input."
+     "notes": "Controls at the inline end of the bar, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input."
     },
     {
      "name": "footer",
      "scope": "—",
-     "notes": "The secondary row under the box (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input."
+     "notes": "A secondary row under the bar (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input. Optional: for the single-bar look, place the pickers in `actions` / `end` instead."
     },
     {
      "name": "hint",
@@ -5732,6 +5763,9 @@
    "kind": "subcomponent",
    "parent": "prompt-input",
    "treeShakeableImport": "@aziontech/webkit/prompt-input-attach-button",
+   "models": [
+    "modelValue"
+   ],
    "surface": "app"
   },
   "prompt-input-dictate-button": {
@@ -5925,7 +5959,7 @@
     {
      "name": "default",
      "scope": "{ index: number }",
-     "notes": "The active version. Rendered once; the owner switches its content by `index`."
+     "notes": "Optional. The active version. Rendered once; the owner switches its content by `index`. Left out, only the pager renders, as in `ChatMessage.Actions`' `#leading` slot."
     }
    ],
    "surface": "app",
@@ -5951,18 +5985,11 @@
      "doc": "The sources behind the response, in citation order; item `n` is what `[n]` points at."
     },
     {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here."
-    },
-    {
      "name": "title",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Heading of the disclosure. Empty uses the locale catalog (`3 sources`)."
+     "doc": "Label of the pill that opens the panel. Empty shows `Sources` and names the pill with the count (`3 sources`)."
     },
     {
      "name": "defaultOpen",
@@ -6010,14 +6037,7 @@
      "type": "SourcesItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name)."
-    },
-    {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers."
+     "doc": "Sources the `[n]`, `[n][m]` and `[n, m]` citations in the content resolve against: each becomes a chip with the site's favicon and name that opens a card of the sources it cites."
     }
    ],
    "surface": "app",
@@ -10980,7 +11000,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Draw the outer card border around the block. On by default; set `:bordered=\"false\"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected."
+     "doc": "Draw the outer card border around the block. On by default; set `:bordered=\"false\"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected; the label header's divider goes with the border."
     },
     {
      "name": "diffView",
@@ -30413,6 +30433,18 @@
    "kind": "composable",
    "treeShakeableImport": "@aziontech/webkit/use-shortcuts"
   },
+  "use-ai-chat-versions": {
+   "import": "@aziontech/webkit/use-ai-chat-versions",
+   "target": "./src/composables/use-ai-chat-versions/index.ts",
+   "kind": "composable",
+   "treeShakeableImport": "@aziontech/webkit/use-ai-chat-versions"
+  },
+  "use-ai-chat-tools": {
+   "import": "@aziontech/webkit/use-ai-chat-tools",
+   "target": "./src/composables/use-ai-chat-tools/index.ts",
+   "kind": "composable",
+   "treeShakeableImport": "@aziontech/webkit/use-ai-chat-tools"
+  },
   "shortcuts-dialog": {
    "import": "@aziontech/webkit/shortcuts-dialog",
    "target": "./src/components/overlay/shortcuts-dialog/shortcuts-dialog.vue",
@@ -32839,7 +32871,7 @@
    "title": "Blocks/Ai/AiActionApproval",
    "source": "blocks/ai/ai-action-approval/ai-action-approval.vue",
    "surface": "app",
-   "summary": "A user-authorized action inside a generative AI conversation, from the messages of TanStack AI's `useChat`: the read-only call shows as a completed `ToolCall`, the explanation in `StreamingResponse`, and the call that needs approval as a `ToolApproval` card with its input in a `CodeBlock`. Deploy or Deny resolves the `useChat` interrupt; approved, the call runs under the card and the assistant reports what changed, with Copy and Retry after a failure. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `CopyButton`, `Button` and `PromptInput`. A page body for ConsoleLayout that fills its content region.",
+   "summary": "A user-authorized action inside a generative AI conversation, from the messages of TanStack AI's `useChat`: the read-only call shows as a completed `ToolCall`, the explanation in `StreamingResponse`, and the call that needs approval as a `ToolApproval` card with its input in a `CodeBlock`. Deploy or Deny resolves the `useChat` interrupt; approved, the call runs under the card and the assistant reports what changed, with Copy and Retry after a failure. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `Button` and `PromptInput`. A page body for ConsoleLayout that fills its content region.",
    "intents": [
     "ai action approval",
     "approve ai action",
@@ -32868,8 +32900,9 @@
     "ChatMessage",
     "CodeBlock",
     "Conversation",
-    "CopyButton",
     "ImageGallery",
+    "PromptInputAttachButton",
+    "PromptInputDictateButton",
     "PromptInput",
     "StreamingResponse",
     "ToolApproval",
@@ -32884,8 +32917,9 @@
     "@aziontech/webkit/chat-message",
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/conversation",
-    "@aziontech/webkit/copy-button",
     "@aziontech/webkit/image-gallery",
+    "@aziontech/webkit/prompt-input-attach-button",
+    "@aziontech/webkit/prompt-input-dictate-button",
     "@aziontech/webkit/prompt-input-root",
     "@aziontech/webkit/streaming-response",
     "@aziontech/webkit/tool-approval",
@@ -32993,7 +33027,7 @@
    "title": "Blocks/Ai/AiChat",
    "source": "blocks/ai/ai-chat/ai-chat.vue",
    "surface": "app",
-   "summary": "The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from `SuggestionGroup`; then a `Conversation` where the reader's prompts sit at the inline end and each response is a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with numbered citations) and complete (collapsed `Sources`, Copy, Regenerate and the feedback thumbs), followed by follow-up questions; a `PromptInput` pinned under the log with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout that fills its content region.",
+   "summary": "The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with \"What can I help with?\", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the \"+\" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).",
    "intents": [
     "ai chat",
     "ai assistant",
@@ -33046,20 +33080,28 @@
     "ChatMessage",
     "CodeBlock",
     "Conversation",
-    "CopyButton",
+    "ConversationHistory",
+    "DrawerBody",
     "DrawerContent",
+    "DrawerHeader",
     "Drawer",
     "DrawerTitle",
-    "EmptyState",
+    "DropdownMenuGroup",
+    "DropdownMenuItem",
+    "DropdownMenu",
+    "DropdownMenuTrigger",
+    "FeedbackReasonDialog",
     "FilePreview",
     "IconButton",
     "ImageGallery",
     "McpAppFrame",
     "PromptInputAttachButton",
+    "PromptInputDictateButton",
     "PromptInput",
     "PromptQueue",
     "Reasoning",
     "Resizable",
+    "ResponseBranches",
     "Skeleton",
     "Sources",
     "StatusIndicator",
@@ -33067,11 +33109,13 @@
     "SubagentCard",
     "SuggestionGroup",
     "Tag",
+    "toast",
     "ToolApproval",
     "ToolCall",
+    "use-ai-chat-tools",
+    "use-ai-chat-versions",
     "use-locale",
     "utils/ai-chat",
-    "utils/ai-chat-questions",
     "VideoPlayer"
    ],
    "imports": [
@@ -33089,20 +33133,28 @@
     "@aziontech/webkit/chat-message-root",
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/conversation",
-    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/conversation-history",
+    "@aziontech/webkit/drawer-body",
     "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-header",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
-    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/dropdown-menu-group",
+    "@aziontech/webkit/dropdown-menu-item",
+    "@aziontech/webkit/dropdown-menu-root",
+    "@aziontech/webkit/dropdown-menu-trigger",
+    "@aziontech/webkit/feedback-reason-dialog",
     "@aziontech/webkit/file-preview",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/image-gallery",
     "@aziontech/webkit/mcp-app-frame",
     "@aziontech/webkit/prompt-input-attach-button",
+    "@aziontech/webkit/prompt-input-dictate-button",
     "@aziontech/webkit/prompt-input-root",
     "@aziontech/webkit/prompt-queue",
     "@aziontech/webkit/reasoning",
     "@aziontech/webkit/resizable",
+    "@aziontech/webkit/response-branches",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/sources",
     "@aziontech/webkit/status-indicator",
@@ -33110,15 +33162,17 @@
     "@aziontech/webkit/subagent-card",
     "@aziontech/webkit/suggestion-group",
     "@aziontech/webkit/tag",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/tool-approval",
     "@aziontech/webkit/tool-call",
+    "@aziontech/webkit/use-ai-chat-tools",
+    "@aziontech/webkit/use-ai-chat-versions",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/ai-chat",
-    "@aziontech/webkit/utils/ai-chat-questions",
     "@aziontech/webkit/video-player"
    ],
    "primary": "Empty",
-   "guidelinesSummary": "A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.",
+   "guidelinesSummary": "A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation: one reading column the thread scrolls in, with the header controls and the composer floating over it. Beside it, the conversation history. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: its root carries `data-layout-fill`, so it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), only the log scrolls, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Streaming"
@@ -33146,7 +33200,7 @@
    "title": "Blocks/Ai/AiChatDrawer",
    "source": "blocks/ai/ai-chat-drawer/ai-chat-drawer.vue",
    "surface": "app",
-   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
+   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with the reader's prompts in bubbles at the inline end and plain-text responses that think (`Reasoning`), stream (`StreamingResponse` with site-name citation chips) and carry Copy, Read aloud, Share and More (with the feedback thumbs, Try again and Branch in new chat) and a `Sources` pill on the same line, prompts with Copy and Edit, and `ResponseBranches` over their versions, and a `PromptInput` pill floating at the foot with the disclaimer, the thread on the canvas. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
    "intents": [
     "ai assistant drawer",
     "ask ai about this page",
@@ -33181,11 +33235,11 @@
     "ChatMessage",
     "CodeBlock",
     "Conversation",
-    "CopyButton",
     "DrawerContent",
     "Drawer",
     "DrawerTitle",
     "EmptyState",
+    "FeedbackReasonDialog",
     "FilePreview",
     "IconButton",
     "ImageGallery",
@@ -33194,9 +33248,11 @@
     "PageHeader",
     "PanelHeader",
     "PromptInputAttachButton",
+    "PromptInputDictateButton",
     "PromptInput",
     "PromptQueue",
     "Reasoning",
+    "ResponseBranches",
     "Skeleton",
     "Sources",
     "StatusIndicator",
@@ -33204,11 +33260,13 @@
     "SubagentCard",
     "SuggestionGroup",
     "Tag",
+    "toast",
     "ToolApproval",
     "ToolCall",
+    "use-ai-chat-tools",
+    "use-ai-chat-versions",
     "use-locale",
     "utils/ai-chat",
-    "utils/ai-chat-questions",
     "VideoPlayer"
    ],
    "imports": [
@@ -33222,11 +33280,11 @@
     "@aziontech/webkit/chat-message-root",
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/conversation",
-    "@aziontech/webkit/copy-button",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/feedback-reason-dialog",
     "@aziontech/webkit/file-preview",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/image-gallery",
@@ -33235,9 +33293,11 @@
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/prompt-input-attach-button",
+    "@aziontech/webkit/prompt-input-dictate-button",
     "@aziontech/webkit/prompt-input-root",
     "@aziontech/webkit/prompt-queue",
     "@aziontech/webkit/reasoning",
+    "@aziontech/webkit/response-branches",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/sources",
     "@aziontech/webkit/status-indicator",
@@ -33245,11 +33305,13 @@
     "@aziontech/webkit/subagent-card",
     "@aziontech/webkit/suggestion-group",
     "@aziontech/webkit/tag",
+    "@aziontech/webkit/toast",
     "@aziontech/webkit/tool-approval",
     "@aziontech/webkit/tool-call",
+    "@aziontech/webkit/use-ai-chat-tools",
+    "@aziontech/webkit/use-ai-chat-versions",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/ai-chat",
-    "@aziontech/webkit/utils/ai-chat-questions",
     "@aziontech/webkit/video-player"
    ],
    "primary": "Empty",

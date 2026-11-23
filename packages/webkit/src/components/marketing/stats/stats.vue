@@ -114,7 +114,7 @@
           >
             <span
               v-if="item.prefix"
-              class="text-(--text-brand)"
+              class="text-(--text-default)"
               >{{ item.prefix }}</span
             >
             <span class="text-(--text-default)">{{ item.value }}</span>

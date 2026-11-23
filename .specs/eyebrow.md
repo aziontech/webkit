@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: b2757f34cb6dca783ee50ea2179a8f0661e5945b09781f92eaf209df56deeb83
+checksum: 3bdb79fbeca8ef462b8a2f51c25595d83464edafb3fd98dd90616c203d50098b
 created: 2026-11-10
 last_updated: 2026-11-16
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-16
 
 ## Purpose
 
-Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange `#F3652B` in light and dark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`module-header`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
+Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in `--text-default` after a short bar in the logo orange (`--primary`, a decorative mark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`module-header`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
 
 ## When to use
 
@@ -88,7 +88,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 - Cursor: a decorative, `aria-hidden` `span` after the label is rendered only when `cursor` is set; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
 - Wrapping: with `singleLine` (default) the root carries `data-single-line` and the prefix turns `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
-- Test ids: root `eyebrow` (consumer `data-testid` wins); the label `<root>__label`.
+- Test ids: root `eyebrow` (consumer `data-testid` wins); the bar `<root>__mark`; the label `<root>__label`.
 - Reflow: the root is capped at the width of its container, and a label that does not fit wraps instead of overflowing at any width, at 200% zoom and with translated copy (no viewport breakpoint involved).
 
 ## Motion & Animations
@@ -99,15 +99,15 @@ Overline is the short uppercase label set above a headline to name the section, 
 
 ## Tokens
 
-| Region                      | Token (DESIGN.md)                                                                            |
-| --------------------------- | -------------------------------------------------------------------------------------------- |
-| typography (prefix, label)  | `.text-overline-md` with `font-medium`                                                       |
-| text (prefix)               | `var(--text-default)` (`text-(--text-default)`)                                              |
-| text (label)                | `var(--text-brand)` (`text-(--text-brand)`): the logo orange `primary-500` in light and dark |
-| cursor surface              | `var(--brand-blue)`, the brand blue in both themes                                           |
-| cursor size                 | `w-1` · `h-5`                                                                                |
-| gap (prefix, label, cursor) | `var(--spacing-2xs)`                                                                         |
-| padding.x                   | `var(--spacing-2xs)` start and end (`pr-0` with the cursor)                                  |
+| Region                      | Token (DESIGN.md)                                                                                                      |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| typography (prefix, label)  | `.text-overline-md` with `font-medium`                                                                                 |
+| text (prefix)               | `var(--text-default)` (`text-(--text-default)`)                                                                        |
+| text (label)                | `var(--text-default)`; the bar before it `var(--primary)` (`bg-(--primary)`), the logo orange as a mark, never as text |
+| cursor surface              | `var(--brand-blue)`, the brand blue in both themes                                                                     |
+| cursor size                 | `w-1` · `h-5`                                                                                                          |
+| gap (prefix, label, cursor) | `var(--spacing-2xs)`                                                                                                   |
+| padding.x                   | `var(--spacing-2xs)` start and end (`pr-0` with the cursor)                                                            |
 
 ## Theme gaps
 
@@ -120,7 +120,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 - Visible focus: not applicable — the component renders no focusable element.
 - Keyboard map: none; the component is not interactive.
 - ARIA: no role; the root is a plain `div` and the label is read as text. The prefix `span` is decorative and carries `aria-hidden="true"`, so only the label is announced; the cursor `span` is empty and contributes no text.
-- Contrast: the prefix uses `var(--text-default)` (≥4.5:1). The label uses `var(--text-brand)`, the logo orange `primary-500` in both themes: 5.5:1 or more on every dark surface, but about 2.9–3.1:1 on the light surfaces, under WCAG 2 AA 4.5:1 and APCA Lc 60. This is an owner-accepted brand exception (the eyebrow matches the logo orange; owner decision 2026-11-16), recorded in `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2"; the automated axe checks skip `color-contrast` on the `<root>__label` part in light only.
+- Contrast: the prefix and the label use `var(--text-default)` (≥4.5:1 on every surface). The logo orange appears only as the bar before them (`<root>__mark`, `aria-hidden`), a decorative mark with no contrast requirement; every part passes WCAG 2 AA with no exception (owner decision 2026-11-22).
 - `motion-reduce:animate-none` on the cursor's `animate-blink-settle`.
 - Pause, Stop, Hide (WCAG 2.2.2): the cursor blinks four times and stops by itself after 4 seconds, resting solid, so it needs no pause control.
 - Touch target: not applicable (non-interactive).

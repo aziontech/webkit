@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { page } from 'vitest/browser'
 import { h } from 'vue'
 
 import Default from '../../../../examples/conversation-history/default.vue'
@@ -92,6 +93,7 @@ describe('ConversationHistory', () => {
   })
 
   it('asks before it removes a row in the example and has no axe violations', async () => {
+    await page.viewport(1280, 800)
     const view = render(Default)
     await expectNoA11yViolations(view.container)
     await userEvent.click(view.getByRole('button', { name: 'Delete Edge storage pricing' }))
@@ -110,6 +112,60 @@ describe('ConversationHistory', () => {
     )
     const states = render(States)
     await expectNoA11yViolations(states.container)
+    await page.viewport(414, 896)
+  })
+
+  it('opens from a drawer on a phone and closes it once a conversation is chosen', async () => {
+    await page.viewport(390, 844)
+    const view = render(Default)
+    const menu = await view.findByRole('button', { name: 'Open conversation history' })
+    expect(view.queryByRole('navigation', { name: 'Conversation history' })).toBeNull()
+    await userEvent.click(menu)
+    const drawer = await waitFor(() => {
+      const found = document.querySelector<HTMLElement>('[role="dialog"]')
+      expect(found).toBeTruthy()
+      return found!
+    })
+    const nav = within(drawer).getByRole('navigation', { name: 'Conversation history' })
+    await userEvent.click(within(nav).getByRole('button', { name: 'Edge storage pricing' }))
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull())
+    expect(view.getByText('Edge storage pricing')).toBeInTheDocument()
+    await page.viewport(414, 896)
+  })
+
+  it('offers New chat first and emits create with the click', async () => {
+    const calls: MouseEvent[] = []
+    const view = render(ConversationHistory, {
+      props: { items, now, creatable: true, onCreate: (event: MouseEvent) => calls.push(event) }
+    })
+    const buttons = within(view.getByRole('navigation')).getAllByRole('button')
+    expect(buttons[0]).toHaveAccessibleName('New chat')
+    await userEvent.click(buttons[0]!)
+    expect(calls).toHaveLength(1)
+    expect(calls[0]).toBeInstanceOf(MouseEvent)
+  })
+
+  it('renders neither New chat nor search unless asked', () => {
+    const view = render(ConversationHistory, { props: { items, now } })
+    expect(view.queryByRole('button', { name: 'New chat' })).toBeNull()
+    expect(view.queryByRole('searchbox', { name: 'Search conversations' })).toBeNull()
+  })
+
+  it('filters titles case-insensitively and says when nothing matches', async () => {
+    const view = render(ConversationHistory, { props: { items, now, searchable: true } })
+    const search = view.getByRole('searchbox', { name: 'Search conversations' })
+    await userEvent.type(search, 'TODAY')
+    const rows = view.getAllByTestId('conversation-history__item')
+    expect(rows.map((row) => row.textContent?.trim())).toEqual(['Later today', 'Earlier today'])
+    expect(view.queryByText('Older one')).toBeNull()
+    await userEvent.clear(search)
+    await userEvent.type(search, 'zzz')
+    expect(view.getByTestId('conversation-history__no-match')).toHaveTextContent(
+      'No conversations match “zzz”.'
+    )
+    expect(view.queryAllByTestId('conversation-history__item')).toHaveLength(0)
+    await userEvent.clear(search)
+    expect(view.getAllByTestId('conversation-history__item')).toHaveLength(items.length)
   })
 
   it('moves focus to the next row after a delete', async () => {

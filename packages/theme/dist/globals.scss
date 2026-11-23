@@ -781,7 +781,6 @@
   --text-default: #141414;
   --text-muted: #535353;
   --text-disabled: #999999;
-  --text-brand: #F3652B;
   --text-link: #005FCC;
   --text-link-hover: #004799;
   --text-danger: #B71515;
@@ -911,7 +910,6 @@
   --text-default: #FAFAFA;
   --text-muted: #B2B2B2;
   --text-disabled: #4D4D4D;
-  --text-brand: #F3652B;
   --text-link: #99C9FF;
   --text-link-hover: #99C9FF;
   --text-danger: #F3A5A5;
@@ -1049,7 +1047,6 @@
     --text-default: #FAFAFA;
     --text-muted: #B2B2B2;
     --text-disabled: #4D4D4D;
-    --text-brand: #F3652B;
     --text-link: #99C9FF;
     --text-link-hover: #99C9FF;
     --text-danger: #F3A5A5;
@@ -1705,7 +1702,6 @@
 @utility text-default { color: var(--text-default); }
 @utility text-muted { color: var(--text-muted); }
 @utility text-disabled { color: var(--text-disabled); }
-@utility text-brand { color: var(--text-brand); }
 @utility text-link-hover { color: var(--text-link-hover); }
 @utility text-danger { color: var(--text-danger); }
 @utility text-contrast { color: var(--text-contrast); }

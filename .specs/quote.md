@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: d9f77efc072a1be85663fe0f51b8af7d588a27fa1fce3a9bd7e8693d2fc14770
+checksum: 2a23771fa2400b93d1dea7eef07093f011e423d845f8423f73653747287a48b5
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -125,7 +125,7 @@ _none_
 | quotation text (highlighted, outside a phrase)   | `var(--text-muted)`                                             |
 | highlighted phrase                               | `var(--text-default)`                                           |
 | quotation glyph                                  | `var(--text-muted)`                                             |
-| attribution name                                 | `var(--text-brand)`                                             |
+| attribution name                                 | `var(--text-default)` after a 2px start bar in `var(--primary)` |
 | attribution role                                 | `var(--text-muted)`                                             |
 | quotation measure (every variant)                | `var(--container-2xl)`                                          |
 | spacing (mark to quotation, `inline`)            | `var(--spacing-lg)`                                             |
@@ -149,7 +149,7 @@ _none_
 - Visible focus: not applicable — the quote is static copy and holds no interactive control.
 - Keyboard map: none of its own; the block contains no focusable element and is skipped by `Tab`.
 - ARIA: the quotation is a real `blockquote` inside a `figure`, and the attribution is its `figcaption`, so the statement and its source are announced as one unit; the mark carries `logoAlt`, falling back to `jobTitle`, and is never left with an empty accessible name while it conveys the company.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the quotation is `var(--text-default)` — or, with `highlights`, `var(--text-muted)` around phrases in `var(--text-default)`; the attribution name is `var(--text-brand)`, the logo orange `#F3652B`, an owner-accepted brand exception in light (about 3:1, `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2"); the job title uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the quotation is `var(--text-default)` — or, with `highlights`, `var(--text-muted)` around phrases in `var(--text-default)`; the attribution name is `var(--text-default)`, marked by a decorative start bar in the logo orange (`--primary`); the job title uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the block is static.
 - Touch target ≥40×40 px — not applicable, no interactive target.
 

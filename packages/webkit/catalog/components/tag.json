@@ -3,7 +3,7 @@
  "useWhen": [
   "Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.",
   "Show a status with its colour via `severity` (`neutral`, `info`, `success`, `warning`, `danger`), or a category with a brand look via `variant` (`primary`, `accent`, `contrast`, `highlight`); `severity` wins when both are set.",
-  "Mark the one value a list highlights (the Owner role in a users table) with `variant=\"highlight\"`: the brand orange as a tint, orange text on `--primary-mask`, like the success, info and warning tints."
+  "Mark the one value a list highlights (the Owner role in a users table) with `variant=\"highlight\"`: the logo orange as a fill with `--primary-foreground` text, like the success, info and warning tags."
  ],
  "avoidWhen": [
   "It is purely a count or one-glance status label → use `badge`.",

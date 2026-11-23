@@ -47,7 +47,7 @@
   const ROOT_CLASS =
     'group flex flex-col gap-(--spacing-sm) text-(--text-default) no-underline transition-colors duration-150 ease-out ' +
     'motion-reduce:transition-none ' +
-    'data-[linked]:relative data-[linked]:rounded-(--shape-control) data-[linked]:hover:text-(--text-brand) data-[linked]:after:absolute ' +
+    'data-[linked]:relative data-[linked]:rounded-(--shape-control) data-[linked]:after:absolute ' +
     'data-[linked]:after:inset-x-0 data-[linked]:after:-inset-y-(--spacing-xs) data-[linked]:focus-visible:outline-2 ' +
     'data-[linked]:focus-visible:outline-offset-(--spacing-xs) data-[linked]:focus-visible:outline-(--ring-color)'
 
@@ -79,7 +79,7 @@
       </span>
       <component
         :is="`h${headingLevel}`"
-        class="m-0 text-balance text-heading-xs"
+        class="m-0 text-balance text-heading-xs decoration-(color:--primary) decoration-2 underline-offset-4 group-data-[linked]:group-hover:underline"
       >
         {{ title }}
         <i

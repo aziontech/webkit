@@ -3,22 +3,25 @@ name: sources
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 0ce9dfa5faf3c93957dc458c3b7c122441834141433efaf0cfdf806fc4d6d9cf
+checksum: ddf8d1ab9e9197c48da2bbc27f70e17cdb8c182b1aa24ec9e444f77c222c67b2
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-22
 ---
 
 # Sources — Component Spec
 
 ## Purpose
 
-The list of sources a generative AI response drew on (Cloudscape's sources expandable section, AI
-Elements Sources): a disclosure titled `3 sources` that opens an ordered list — number, linked title,
-one-line description. Item `n` carries the id `<anchor>-source-<n>`, the target of the `[n]`
-citations `StreamingResponse` renders; following a citation opens the list and brings the item into
-view.
+The sources a generative AI response drew on (ChatGPT's Sources, Cloudscape's sources section, AI
+Elements Sources): a small `Sources` pill with the overlapping marks of up to three cited sources
+that opens a panel listing every source — mark, site name, linked title and snippet. The panel is a
+side `Drawer` from the end on wide screens (non-modal, the answer stays readable beside it) and a
+bottom sheet on a phone. Sources the answer searched but did not cite (`cited: false`) are listed
+under More, after the Citations. The pill ends the message's action row (`ChatMessage.Actions`
+`#trailing`), on the same line as the actions. Each mark is the site's favicon (`image`), its icon,
+or its first letter on a colour of its own, so three sources never look alike.
 
 ## When to use
 
@@ -27,19 +30,21 @@ view.
 ## When NOT to use
 
 - Related links that the response did not use → `help-panel` links or a plain list.
-- A single source → cite it inline with a link; a list of one is noise.
+- A single source → cite it inline with `Citation`; a list of one is noise.
 
 ## Related
 
-- `citation` — the inline `[n]` that points here.
-- `streaming-response` — renders the citations; share the `anchor`.
-- `chat-message` — sources sit inside the assistant message, under the response.
+- `citation` — the inline chip whose numbers point at these items.
+- `streaming-response` — renders the citations; pass it the same items.
+- `chat-message` — the pill goes in the `#trailing` slot of `ChatMessage.Actions`, after the icon actions.
+- `drawer` — the panel the pill opens.
 
 ## Best practices
 
-- Order items as the response first cites them, so `[1]` is item 1.
-- Use the page title, not the URL, as the title; add the site or section as the description.
-- Keep the list collapsed by default; the inline citations are the primary path.
+- Order items as the response first cites them, so `[1]` is item 1; put uncited items (`cited: false`) last so the numbers stay aligned.
+- Use the page title as the title and the site's own name as `site` (`Azion`, `GitHub`); without `site` the host of `href` shows.
+- Give `image` the site's favicon URL when the app has one (from the search tool's result); otherwise `icon` for a site in the icon set, or nothing for the lettered mark.
+- Keep the panel closed by default; the inline citations are the primary path.
 
 ## Usage
 
@@ -50,14 +55,20 @@ view.
 
 <template>
   <Sources
-    anchor="answer-1"
     :items="[
       {
         title: 'Real-Time Purge',
         href: 'https://www.azion.com/en/documentation/',
-        description: 'Azion documentation'
+        description: 'Removes a cached object from every data center in a few seconds.',
+        site: 'Azion'
       },
-      { title: 'Cache settings', href: 'https://www.azion.com/en/documentation/' }
+      {
+        title: 'aziontech/azion',
+        href: 'https://github.com/aziontech/azion',
+        site: 'GitHub',
+        image: 'https://github.com/favicon.ico'
+      },
+      { title: 'Cache-Control', href: 'https://www.w3.org/Protocols/', cited: false }
     ]"
   />
 </template>
@@ -66,23 +77,24 @@ view.
 ## Sub-components
 
 _None. Data-driven: a source list is a record set the response already holds, like table rows.
-Exports: `"./sources"`; exported type `SourcesItem` (`title`, `href?`, `description?`) from `sources/types.ts`,
-shared with `StreamingResponse`._
+Exports: `"./sources"`; exported type `SourcesItem` (`title`, `href?`, `description?`, `site?`,
+`image?`, `icon?`, `cited?`) from `sources/types.ts`, shared with `StreamingResponse` and `Citation`.
+Private parts: `parts/sources-mark.vue` draws one round mark (also used by `Citation`), and
+`parts/sources-panel.vue` holds the panel, loaded on demand. Composed DS components: `drawer`._
 
 ## Props
 
-| Prop          | Type            | Default | Required | JSDoc                                                                                                                       |
-| ------------- | --------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `items`       | `SourcesItem[]` | `[]`    | false    | The sources behind the response, in citation order; item `n` is what `[n]` points at.                                       |
-| `anchor`      | `string`        | `''`    | false    | Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here. |
-| `title`       | `string`        | `''`    | false    | Heading of the disclosure. Empty uses the locale catalog (`3 sources`).                                                     |
-| `defaultOpen` | `boolean`       | `false` | false    | Initial open state when uncontrolled.                                                                                       |
+| Prop          | Type            | Default | Required | JSDoc                                                                                                          |
+| ------------- | --------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------- |
+| `items`       | `SourcesItem[]` | `[]`    | false    | The sources behind the response, in citation order; item `n` is what `[n]` points at.                          |
+| `title`       | `string`        | `''`    | false    | Label of the pill that opens the panel. Empty shows `Sources` and names the pill with the count (`3 sources`). |
+| `defaultOpen` | `boolean`       | `false` | false    | Initial open state when uncontrolled.                                                                          |
 
 ## v-model
 
-| Model          | Type      | Default     | Emits         | Notes                                                                                                                        |
-| -------------- | --------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:open` | `boolean` | `undefined` | `update:open` | Expanded or collapsed, by the trigger or by following a citation. Unbound, the state is local and starts from `defaultOpen`. |
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                 |
+| -------------- | --------- | ----------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | The panel's open state, by the pill, the panel's close button, `Escape` or a press on the overlay (phone). Unbound, the state is local and starts from `defaultOpen`. |
 
 ## Events
 
@@ -94,24 +106,32 @@ _No slots._
 
 ## States
 
-- `data-state="open|closed"`; renders nothing when `items` is empty.
-- Following a `#<anchor>-source-<n>` link (`hashchange`) opens the list and scrolls the item into view.
+- `data-state="open|closed"` on the root and the pill (an open pill keeps the hover fill); renders nothing when `items` is empty.
+- The root is `display: contents` and the pill does not wrap (`whitespace-nowrap`, `shrink-0`), so it sits at the end of the action row.
+- The pill's marks are the first three cited items (all items when none is cited).
+- Panel: from `md` a non-modal side `Drawer` (`size="small"`, from the end); below `md` the `Drawer`'s bottom sheet, modal. Its title is the pill's label.
+- Groups: when some items have `cited: false`, the panel shows a Citations section and a More section with headings; otherwise one unheaded list.
+- Mark: favicon (`image`, a safe URL), else `icon`, else the first letter of the site on one of seven `--chart-series-*` colours picked by a stable hash of the host; a favicon that fails to load falls back to the letter.
 
 ## Motion & Animations
 
-| Trigger            | Animation / Transition                                           | Token     | Reduced-motion fallback         |
-| ------------------ | ---------------------------------------------------------------- | --------- | ------------------------------- |
-| chevron open/close | `transition-transform duration-fast-02 ease-productive-entrance` | `fast-02` | `motion-reduce:transition-none` |
-| trigger hover      | `transition-colors`                                              | `fast-02` | `motion-reduce:transition-none` |
+| Trigger    | Animation / Transition                                        | Token     | Reduced-motion fallback         |
+| ---------- | ------------------------------------------------------------- | --------- | ------------------------------- |
+| pill hover | `transition-colors duration-fast-02 ease-productive-entrance` | `fast-02` | `motion-reduce:transition-none` |
+| row hover  | `transition-colors duration-fast-02 ease-productive-entrance` | `fast-02` | `motion-reduce:transition-none` |
+
+The panel slides with the `Drawer`'s own transition and its reduced-motion fallback.
 
 ## Tokens
 
-| Region      | Token                                                                |
-| ----------- | -------------------------------------------------------------------- |
-| trigger     | `.text-label-sm`, `var(--text-muted)`                                |
-| number chip | `var(--bg-surface-raised)`, `var(--shape-control)`, `.text-label-sm` |
-| title       | `.text-body-sm`, `var(--text-link)`                                  |
-| description | `.text-body-xs`, `var(--text-muted)`                                 |
+| Region      | Token                                                                                                                                                                                                                                                          |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| pill        | `.text-label-md`, `var(--text-muted)`, hover and open `var(--bg-hover)` / `var(--text-default)`, `var(--shape-control)`, height 32 px                                                                                                                          |
+| mark        | 20 px (pill) and 24 px (rows) circles; favicon or icon on `var(--bg-surface-raised)` with `var(--border-default)`; a letter on `var(--chart-series-n)` mixed 30% into `var(--bg-surface-raised)`, ringed in the series colour; overlap ring `var(--bg-canvas)` |
+| group label | `.text-label-sm`, `var(--text-muted)`                                                                                                                                                                                                                          |
+| row         | `var(--shape-control)`, padding `var(--spacing-xs)`, hover `var(--bg-hover)`; site `.text-label-sm` `var(--text-muted)`                                                                                                                                        |
+| title       | `.text-label-md`, `var(--text-default)`, underline on hover, two lines                                                                                                                                                                                         |
+| description | `.text-body-sm`, `var(--text-muted)`, two lines                                                                                                                                                                                                                |
 
 ## Theme gaps
 
@@ -119,44 +139,48 @@ _None._
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: trigger, links and the targeted item show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
-- Keyboard map: `Tab` to the trigger, `Enter` / `Space` toggles; `Tab` through the links.
-- ARIA: `button` with `aria-expanded` / `aria-controls`; the list is an `<ol aria-label="Sources">` so numbers are announced by position; the visual number chip is `aria-hidden`.
+- Visible focus: the pill and the links show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
+- Keyboard map: `Tab` to the pill, `Enter` / `Space` opens the panel and moves focus into it; `Tab` through the links and the close button; `Escape` closes it and returns focus to the pill.
+- ARIA: the pill is a `button` with `aria-haspopup="dialog"` and `aria-expanded`, named `3 sources` (it holds the visible `Sources`, WCAG 2.5.3) or by `title`; the marks are `aria-hidden`; the panel is the `Drawer`'s `dialog`, titled by the pill's label; each group is a `section` named Citations or More (or Sources when there is one group) holding an `<ol>`.
+- Touch: the 32 px pill carries an invisible 44 px hit area on coarse pointers.
 - External links open in a new tab with `rel="noopener noreferrer"`, followed by an `aria-hidden` `az-external-link` glyph and the sr-only `common.newTab` text.
-- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the title as plain text.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the title as plain text; an unsafe `image` is dropped.
+- Contrast: the letter is `--text-default` on a 30% tint; the series ring is a solid mark (Lc 30).
 
 ## Internationalization
 
 | Key             | English source               | Override prop |
 | --------------- | ---------------------------- | ------------- |
+| `sources.cited` | `Citations`                  | —             |
 | `sources.count` | `{count} source(s)` (plural) | `title`       |
-| `sources.label` | `Sources`                    | —             |
+| `sources.label` | `Sources`                    | `title`       |
+| `sources.more`  | `More`                       | —             |
 
 - Formatting: `Intl.PluralRules` and `Intl.NumberFormat` through `t()`.
 
 ## Right-to-left
 
-- Layout: logical utilities; the number chip sits at the inline start.
-- Icons: book and chevron-down are not mirrored.
+- Layout: logical utilities; the marks overlap toward the inline end (`-ms`), the mark sits at the inline start of each row; the side panel opens from the inline end.
+- Icons: site glyphs and favicons are not mirrored.
 - Keyboard: none.
-- User data: titles render with the document direction.
+- User data: site names, titles and snippets render with the document direction.
 
 ## Responsive
 
 - Container queries: none.
-- Narrow: titles and descriptions truncate with an ellipsis.
-- Touch: the trigger is at least 24 px tall, 44 px on coarse pointers; links are text-sized inside 24 px rows.
+- Narrow: below `md` the panel is the `Drawer`'s bottom sheet (full screen below `sm`); titles and snippets cut at two lines.
+- Touch: the pill has a 44 px hit area on coarse pointers.
 - Reflow: no horizontal scroll.
 
 ## Performance
 
-- Bundle budget: see `.size-limit.json` (`sources`).
-- Runtime budget: static; one `hashchange` listener.
+- Bundle budget: see `.size-limit.json` (`sources`; the entry without the lazy panel chunk).
+- Runtime budget: static; the panel (with `Drawer`) is a separate chunk loaded when the pointer enters or focus reaches the pill, or when it opens; one media query listener while the panel is mounted; favicons load lazily.
 - Heavy parts: none.
 
 ## Examples
 
-_Examples in `packages/webkit/examples/sources/`: Default (collapsed), Open._
+_Examples in `packages/webkit/examples/sources/`: Default (the pill, closed; one source under More), Open (the panel open)._
 
 ## Constraints — DO NOT
 

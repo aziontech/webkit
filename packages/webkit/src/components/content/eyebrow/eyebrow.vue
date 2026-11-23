@@ -38,6 +38,11 @@
     class="group/eyebrow flex items-center gap-(--spacing-2xs) relative w-fit max-w-full ps-(--spacing-2xs) pe-(--spacing-2xs) data-[cursor]:pe-0"
   >
     <span
+      aria-hidden="true"
+      :data-testid="`${testId}__mark`"
+      class="h-0.5 w-3 shrink-0 bg-(--primary)"
+    />
+    <span
       v-if="prefix"
       aria-hidden="true"
       class="text-(--text-default) font-medium text-overline-md group-data-[single-line]/eyebrow:whitespace-nowrap"
@@ -46,7 +51,7 @@
     </span>
     <span
       :data-testid="`${testId}__label`"
-      class="min-w-0 text-pretty text-(--text-brand) font-medium uppercase text-overline-md"
+      class="min-w-0 text-pretty text-(--text-default) font-medium uppercase text-overline-md"
     >
       <slot />
     </span>

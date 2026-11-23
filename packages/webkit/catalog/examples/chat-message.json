@@ -2,18 +2,18 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "One turn: the reader's question in a filled bubble at the inline end, and the AI assistant's response flat beside its mark, each with an author line and time.",
+   "summary": "One turn: the reader's question in a filled bubble at the inline end, and the AI assistant's response as plain text across the column. No avatar or name is drawn; both stay in each message's accessible name, and the time shows on hover over the bubble.",
    "file": "examples/chat-message/default.vue"
   },
   {
    "name": "Actions",
-   "summary": "A complete response with its inline actions always visible: Copy, Regenerate and the Helpful / Not helpful thumbs, which disable the other thumb and confirm Feedback submitted.",
+   "summary": "A complete response with its action row on one line: Copy, Good response and Bad response (the chosen thumb fills and the other hides; pressing it again clears it), Read aloud, Share, Try again (each press adds a version paged by `ResponseBranches` at the start of the row) and More with Branch in new chat, then the Sources pill. In a row narrower than 480 px the thumbs and Try again move into More.",
    "file": "examples/chat-message/actions.vue"
   },
   {
-   "name": "Lifecycle",
-   "summary": "The same response moving through pending (Generating a response), streaming (busy, caret, no actions) and success (actions appear). Replay restarts it.",
-   "file": "examples/chat-message/lifecycle.vue"
+   "name": "Edit",
+   "summary": "The reader's prompt with Copy and Edit under the bubble (shown on hover or focus, always on touch screens). Edit turns the bubble into a field with Cancel and Send; Send emits `edit` with the new text, and each sent edit is kept as a version paged by `ResponseBranches`.",
+   "file": "examples/chat-message/edit.vue"
   }
  ]
 }

@@ -1,51 +1,36 @@
 <script setup lang="ts">
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Skeleton from '@aziontech/webkit/skeleton'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
 
-  defineProps<{ hydrating: boolean; starters: SuggestionGroupItem[] }>()
+  defineProps<{ starters: SuggestionGroupItem[] }>()
 
   const emit = defineEmits<{
     select: [event: MouseEvent | KeyboardEvent, item: SuggestionGroupItem]
   }>()
+
+  defineSlots<{ default(): unknown }>()
+
+  const START_CLASS =
+    'flex min-h-0 flex-1 flex-col overflow-y-auto px-(--spacing-md) pt-(--spacing-2xl) ' +
+    'pb-[max(var(--spacing-md),env(safe-area-inset-bottom))] md:justify-center md:pb-(--spacing-2xl)'
 </script>
 
 <template>
-  <div
-    v-if="hydrating"
-    role="status"
-    aria-label="Loading the conversation"
-    class="layout-column-content layout-boundary-inline flex flex-1 flex-col gap-(--spacing-lg) py-(--spacing-md)"
-  >
+  <div :class="START_CLASS">
     <div
-      v-for="row in 3"
-      :key="row"
-      class="flex gap-(--spacing-sm)"
+      class="mx-auto flex w-full max-w-(--layout-measure-content) flex-col gap-(--spacing-md) max-md:flex-1"
     >
-      <Skeleton
-        variant="circle"
-        width="2rem"
-        height="2rem"
-      />
-      <div class="flex flex-1 flex-col gap-(--spacing-xs)">
-        <Skeleton width="25%" />
-        <Skeleton :width="row === 2 ? '50%' : '85%'" />
+      <div class="flex items-center justify-center max-md:flex-1 md:pb-(--spacing-sm)">
+        <h2 class="text-center text-heading-lg text-(--text-default)">What can I help with?</h2>
+      </div>
+      <div class="flex md:order-last md:justify-center">
+        <SuggestionGroup
+          :items="starters"
+          @select="(event, item) => emit('select', event, item)"
+        />
+      </div>
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <slot />
       </div>
     </div>
-  </div>
-  <div
-    v-else
-    class="layout-column-content layout-boundary-inline flex flex-1 flex-col justify-center gap-(--spacing-lg) py-(--spacing-md)"
-  >
-    <EmptyState
-      title="How can I help with your Azion account?"
-      description="Ask about your workloads, cache, security rules and deployments. Answers cite the documentation they come from."
-      icon="az az-ask-azion"
-    />
-    <SuggestionGroup
-      :items="starters"
-      orientation="vertical"
-      @select="(event, item) => emit('select', event, item)"
-    />
   </div>
 </template>

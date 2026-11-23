@@ -301,9 +301,11 @@ test('rtl-double-flip covers exactly DIRECTIONAL_ICONS', async () => {
   }
 })
 
-test('off-brand-orange fires on --text-primary and on any orange step but the logo orange', () => {
+test('off-brand-orange fires on an orange text token and on any orange step but the logo orange', () => {
   for (const content of [
     'class="text-(--text-primary)"',
+    'class="text-(--text-brand)"',
+    'color: var(--text-brand);',
     "colors: ['var(--text-primary)']",
     'color: var(--color-orange-300);',
     'class="bg-(--color-brand-primary-700)"',
@@ -319,7 +321,7 @@ test('off-brand-orange fires on --text-primary and on any orange step but the lo
 
 test('off-brand-orange stays silent on the logo orange and on the primary roles', () => {
   for (const content of [
-    'class="text-(--text-brand)"',
+    'class="border-s-2 border-(--primary) text-(--text-default)"',
     'class="bg-(--primary) text-(--primary-foreground)"',
     'class="text-primary"',
     'class="text-(--text-primary-foreground)"',

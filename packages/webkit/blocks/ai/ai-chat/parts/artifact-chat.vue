@@ -5,10 +5,12 @@
   import ChatMessage, { type ChatMessageFeedbackValue } from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import type { PromptInputFile } from '@aziontech/webkit/prompt-input'
+  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
+  import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
   import Resizable from '@aziontech/webkit/resizable'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
@@ -36,8 +38,14 @@
   const paneCanvasEl = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
   const drawerCanvasEl = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
   const prompt = ref('')
+  const files = ref<PromptInputFile[]>([])
   const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
   const lines = computed(() => versions[version.value].split('\n').length)
+
+  const clearPrompt = () => {
+    prompt.value = ''
+    files.value = []
+  }
 
   const narrow = ref(false)
   let narrowQuery: MediaQueryList | null = null
@@ -82,15 +90,16 @@
 <template>
   <section
     aria-labelledby="ai-chat-artifact-title"
+    data-layout-fill
     class="flex min-h-0 w-full grow basis-0 flex-col"
   >
     <header
-      class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+      class="flex items-center justify-between gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-xs)"
     >
       <div class="flex items-center gap-(--spacing-xs)">
         <h1
           id="ai-chat-artifact-title"
-          class="text-heading-xs text-(--text-default)"
+          class="text-label-md text-(--text-default)"
         >
           AI assistant
         </h1>
@@ -144,36 +153,43 @@
                   v-if="turn.role === 'assistant'"
                   #actions
                 >
-                  <ChatMessage.Actions>
-                    <CopyButton
-                      size="small"
-                      :value="textOf(turn)"
-                    />
-                    <ChatMessage.Feedback v-model="ratings[turn.id]" />
-                  </ChatMessage.Actions>
+                  <ChatMessage.Actions
+                    v-model:feedback="ratings[turn.id]"
+                    copyable
+                    show-feedback
+                    show-read-aloud
+                    :copy-text="textOf(turn)"
+                    :read-aloud-text="textOf(turn)"
+                  />
                 </template>
               </ChatMessage>
-              <div class="ps-[calc(2rem+var(--spacing-sm))]">
-                <SuggestionGroup
-                  :items="followUps"
-                  aria-label="Follow-up questions"
-                  @select="(_event, item) => (prompt = item.label)"
-                />
-              </div>
+              <SuggestionGroup
+                :items="followUps"
+                aria-label="Follow-up questions"
+                @select="(_event, item) => (prompt = item.label)"
+              />
+              <template #composer>
+                <PromptInput
+                  v-model="prompt"
+                  v-model:files="files"
+                  :max-length="4000"
+                  placeholder="Ask for a change"
+                  accept="image/*,application/pdf"
+                  @submit="clearPrompt"
+                >
+                  <template #actions>
+                    <PromptInputAttachButton />
+                  </template>
+                  <template #end>
+                    <PromptInputDictateButton />
+                  </template>
+                  <template #hint>
+                    The AI assistant can make mistakes. Check a query before you run it.
+                  </template>
+                </PromptInput>
+              </template>
             </Conversation>
           </div>
-          <footer class="layout-boundary-inline pb-(--spacing-md)">
-            <PromptInput
-              v-model="prompt"
-              :max-length="4000"
-              placeholder="Ask for a change to the query"
-              @submit="prompt = ''"
-            >
-              <template #hint>
-                The AI assistant can make mistakes. Check a query before you run it.
-              </template>
-            </PromptInput>
-          </footer>
         </Resizable.Pane>
         <Resizable.Handle
           v-if="canvasOpen && !narrow"

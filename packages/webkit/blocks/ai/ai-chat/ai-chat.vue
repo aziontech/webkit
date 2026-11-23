@@ -3,22 +3,26 @@
   import type { ChatMessageFeedbackValue, ChatMessageStatus } from '@aziontech/webkit/chat-message'
   import ChatMessage from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
+  import type { FeedbackReasonDialogPayload } from '@aziontech/webkit/feedback-reason-dialog'
   import {
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
-  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
-  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+  import { useAiChatTools } from '@aziontech/webkit/use-ai-chat-tools'
+  import { useAiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import {
     type AiChatConnection,
     type AiChatInterrupt,
     type AiChatInterruptError,
     type AiChatMessage,
-    type AiChatQuestion,
     type AiChatQueuedMessage,
     type AiChatSendContent,
     type AiChatTool,
@@ -28,32 +32,18 @@
     contentOf,
     hasAnswer,
     interruptErrorText,
-    isQuestion,
-    json,
-    queueItemOf,
-    resolveInterrupt,
-    toolQuestionOf
+    queueItemOf
   } from '@aziontech/webkit/utils/ai-chat'
-  import {
-    answerQuestion,
-    groupQuestions,
-    skipQuestion
-  } from '@aziontech/webkit/utils/ai-chat-questions'
   import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
+  import AiChatComposer from './parts/ai-chat-composer.vue'
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
-  import AiChatHeader from './parts/ai-chat-header.vue'
+  import AiChatHeader, { type AiChatHeaderAction } from './parts/ai-chat-header.vue'
+  import AiChatHistory from './parts/ai-chat-history.vue'
+  import AiChatSkeleton from './parts/ai-chat-skeleton.vue'
   import AiChatStart from './parts/ai-chat-start.vue'
   import AiChatTurn from './parts/ai-chat-turn.vue'
-  import { sampleSuggestions } from './sample'
-
-  /** A rating the reader gave a response. */
-  export interface AiChatFeedback {
-    /** The rated response. */
-    message: AiChatMessage
-    /** Helpful, not helpful, or cleared. */
-    value: ChatMessageFeedbackValue | null
-  }
+  import { sampleModels, sampleSuggestions, sampleTools } from './sample'
 
   export interface AiChatProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
@@ -86,8 +76,10 @@
     hydrating?: boolean
     /** A response is being generated for this chat elsewhere, as `useChat` returns `sessionGenerating`. */
     sessionGenerating?: boolean
-    /** The reader may attach files; `send` then hands over the multimodal content `sendMessage` takes. */
+    /** The reader may attach files from the Attach control at the start of the composer; `send` then hands over the multimodal content `sendMessage` takes. */
     attachable?: boolean
+    /** An empty composer shows the round Start voice conversation control in place of Send; it emits `voice-start` and the app owns the audio session. */
+    voice?: boolean
     /** The files the reader may attach, in the native accept syntax. */
     accept?: string
     /** Most files attached to one message. */
@@ -96,6 +88,10 @@
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
+    /** The models the header title picks from on desktop; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
+    models?: PromptInputMenuOption[]
+    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    toolOptions?: PromptInputMenuOption[]
   }
 
   const props = withDefaults(defineProps<AiChatProps>(), {
@@ -114,19 +110,35 @@
     resuming: false,
     hydrating: false,
     sessionGenerating: false,
-    attachable: false,
+    attachable: true,
+    voice: true,
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
-    resolveAppUrl: undefined
+    resolveAppUrl: undefined,
+    models: undefined,
+    toolOptions: undefined
   })
 
   const emit = defineEmits<{
     send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     stop: [event: MouseEvent]
-    retry: [event: MouseEvent, message: AiChatMessage]
+    'voice-start': [event: MouseEvent]
+    retry: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    share: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    branch: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    edit: [event: MouseEvent | KeyboardEvent, message: AiChatMessage, text: string]
+    'version-change': [messages: AiChatMessage[]]
     'new-chat': [event: MouseEvent]
-    feedback: [feedback: AiChatFeedback]
+    feedback: [
+      value: ChatMessageFeedbackValue | null,
+      message: AiChatMessage,
+      reason?: FeedbackReasonDialogPayload
+    ]
+    'share-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
+    'rename-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
+    'archive-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
+    'remove-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
     approve: [event: MouseEvent, call: AiChatToolCallPart, input?: unknown]
     deny: [event: MouseEvent, call: AiChatToolCallPart]
     'remove-queued': [event: MouseEvent, item: AiChatQueuedMessage]
@@ -141,24 +153,41 @@
     'retry-interrupts': [event: MouseEvent]
   }>()
 
+  const activeKey = defineModel<string | null>('activeKey', { default: null })
+  /** The model chosen in the header title, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
+  const modelKey = defineModel<string>('modelKey', { default: 'auto' })
+  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
+
   const { formatDate } = useLocale()
+  const versions = useAiChatVersions(() => props.messages)
 
   const prompt = ref('')
   const files = ref<PromptInputFile[]>([])
-  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
-  const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
+  const composerEl = ref<InstanceType<typeof AiChatComposer> | null>(null)
   const stoppedIds = ref<Set<string>>(new Set())
-  const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
-  const askedAfter = ref<Record<string, string>>({})
-  const settled = ref<Record<string, AiChatQuestion>>({})
-  const routed = ref<Record<string, boolean>>({})
-  const toolAnswers = ref<Record<string, AiChatQuestion>>({})
+  const historyPanel = ref(true)
+  const historyDrawer = ref(false)
 
   const turns = computed(() =>
     props.messages.filter((message) => message.role === 'user' || message.role === 'assistant')
   )
+  const chatTools = useAiChatTools({
+    turns: () => turns.value,
+    interrupts: () => props.interrupts,
+    tools: () => props.tools,
+    onAnswerInterrupt: (event, interrupt, value) =>
+      emit('answer-interrupt', event, interrupt, value),
+    onAnswerTool: (event, answer) => emit('answer-tool', event, answer),
+    onApprove: (event, call, input) => emit('approve', event, call, input),
+    onDeny: (event, call) => emit('deny', event, call)
+  })
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
+  const modelOptions = computed(() => props.models ?? sampleModels)
+  const composerTools = computed(() => props.toolOptions ?? sampleTools)
+  const welcome = computed(() => !turns.value.length && !props.hydrating)
+  let refocus = false
   const last = computed(() => turns.value[turns.value.length - 1])
   const failure = computed(() => {
     if (!props.error) return ''
@@ -180,49 +209,6 @@
   const queued = computed(() => (props.queue ?? []).map(queueItemOf))
   const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
 
-  const pendingQuestions = computed(() => props.interrupts.filter(isQuestion))
-  watch(
-    pendingQuestions,
-    (now) => {
-      for (const interrupt of now) askedAfter.value[interrupt.id!] ??= last.value?.id ?? ''
-    },
-    { immediate: true }
-  )
-
-  const questions = computed(() =>
-    groupQuestions({
-      pending: pendingQuestions.value,
-      settled: settled.value,
-      routed: routed.value,
-      askedAfter: askedAfter.value,
-      turns: turns.value,
-      lastId: last.value?.id ?? ''
-    })
-  )
-
-  function answer(event: Event, question: AiChatQuestion, value: string) {
-    const state = { pending: pendingQuestions.value, settled: settled.value, routed: routed.value }
-    const interrupt = answerQuestion(state, question, value)
-    if (interrupt) emit('answer-interrupt', event, interrupt, value)
-  }
-
-  function askOf(call: AiChatToolCallPart): AiChatQuestion {
-    return toolAnswers.value[call.id] ?? toolQuestionOf(call, toolOf(call))
-  }
-
-  function answerTool(event: Event, call: AiChatToolCallPart, value: string) {
-    toolAnswers.value[call.id] = { ...toolQuestionOf(call, toolOf(call)), status: 'running' }
-    emit('answer-tool', event, { toolCallId: call.id, tool: call.name, output: value })
-  }
-
-  function skip(question: AiChatQuestion) {
-    skipQuestion({ pending: pendingQuestions.value, settled: settled.value }, question)
-  }
-
-  function editOf(call: AiChatToolCallPart): string {
-    return edits.value[call.id] ?? json(call.input ?? call.arguments)
-  }
-
   const state = computed<PromptInputStatus>(() => {
     if (!props.loading) return 'ready'
     return last.value?.role === 'assistant' && hasAnswer(last.value) ? 'streaming' : 'pending'
@@ -243,12 +229,7 @@
     return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
   }
 
-  function toolOf(call: AiChatToolCallPart): AiChatTool {
-    return props.tools[call.name] ?? { title: '' }
-  }
-
-  const footerEl = ref<HTMLElement | null>(null)
-  onMounted(() => nextTick(() => footerEl.value?.querySelector('textarea')?.focus()))
+  onMounted(() => nextTick(() => composerEl.value?.focus()))
 
   watch(
     () => props.loading,
@@ -257,7 +238,13 @@
     }
   )
 
-  async function send(event: MouseEvent | KeyboardEvent, text: string) {
+  watch(welcome, (now) => {
+    if (now || !refocus) return
+    refocus = false
+    void nextTick(() => composerEl.value?.focus())
+  })
+
+  async function send(event: MouseEvent | KeyboardEvent, text: string, typed = false) {
     const attached = files.value
     const picked = attached.flatMap((item) => (item.file instanceof File ? [item.file] : []))
     if ((!text.trim() && !picked.length) || (state.value !== 'ready' && !queueable.value)) return
@@ -271,6 +258,7 @@
       files.value = attached
       return
     }
+    refocus = typed
     emit('send', event, content)
   }
 
@@ -283,56 +271,79 @@
     prompt.value = ''
     files.value = []
     stoppedIds.value.clear()
-    edits.value = {}
     answers.value = {}
-    askedAfter.value = {}
-    settled.value = {}
-    routed.value = {}
-    toolAnswers.value = {}
+    chatTools.reset()
+    versions.clear()
+    activeKey.value = null
     emit('new-chat', event)
   }
 
-  function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null) {
-    ratings.value[message.id] = value
-    emit('feedback', { message, value })
+  function onChatAction(event: MouseEvent | KeyboardEvent, action: AiChatHeaderAction) {
+    if (action === 'share') emit('share-chat', event, activeKey.value)
+    else if (action === 'rename') emit('rename-chat', event, activeKey.value)
+    else if (action === 'archive') emit('archive-chat', event, activeKey.value)
+    else emit('remove-chat', event, activeKey.value)
   }
 
   function removeQueued(event: MouseEvent, id: string) {
     const item = props.queue?.find((entry) => entry.id === id)
     if (item) emit('remove-queued', event, item)
   }
-
-  function approve(event: MouseEvent, call: AiChatToolCallPart, text: string) {
-    const edited =
-      toolOf(call).editable && text !== json(call.input ?? call.arguments)
-        ? (JSON.parse(text) as unknown)
-        : undefined
-    emit('approve', event, call, edited)
-    resolveInterrupt(props.interrupts, call, true, edited)
-  }
-
-  function deny(event: MouseEvent, call: AiChatToolCallPart) {
-    emit('deny', event, call)
-    resolveInterrupt(props.interrupts, call, false)
-  }
 </script>
 
 <template>
   <section
     aria-labelledby="ai-chat-title"
-    class="flex min-h-0 w-full grow basis-0 flex-col"
+    data-layout-fill
+    class="flex min-h-0 w-full grow basis-0"
   >
-    <AiChatHeader
-      :empty="!turns.length"
-      @new-chat="newChat"
+    <AiChatHistory
+      v-model="activeKey"
+      v-model:drawer-open="historyDrawer"
+      :panel-open="historyPanel"
+      @create="newChat"
     />
-    <div class="flex min-h-0 flex-1 flex-col">
+    <div class="relative flex min-h-0 min-w-0 flex-1 flex-col">
+      <AiChatHeader
+        v-model:model-key="modelKey"
+        :empty="!turns.length"
+        :history-open="historyPanel"
+        :models="modelOptions"
+        @new-chat="newChat"
+        @open-history="historyDrawer = true"
+        @toggle-history="historyPanel = !historyPanel"
+        @action="onChatAction"
+      />
       <AiChatStart
-        v-if="!turns.length"
-        :hydrating="hydrating"
+        v-if="welcome"
         :starters="starters"
         @select="(event, item) => send(event, item.label)"
-      />
+      >
+        <AiChatConnectionStatus
+          :connection="connection"
+          :resuming="resuming"
+          :session-generating="sessionGenerating"
+          :loading="loading"
+        />
+        <AiChatComposer
+          ref="composerEl"
+          v-model="prompt"
+          v-model:files="files"
+          v-model:tool-keys="toolKeys"
+          :state="state"
+          :queueable="queueable"
+          :hydrating="hydrating"
+          :accept="accept"
+          :max-files="maxFiles"
+          :max-file-size="maxFileSize"
+          :attachable="attachable"
+          :voice="voice"
+          :tools="composerTools"
+          @submit="(event, text) => send(event, text, true)"
+          @stop="stop"
+          @voice-start="emit('voice-start', $event)"
+        />
+      </AiChatStart>
       <Conversation
         v-else
         aria-label="Conversation with the AI assistant"
@@ -340,6 +351,11 @@
         :loading-more="loadingMore"
         @load-more="emit('load-more', $event)"
       >
+        <div
+          aria-hidden="true"
+          class="h-(--spacing-lg) shrink-0"
+        />
+        <AiChatSkeleton v-if="!turns.length" />
         <AiChatTurn
           v-for="turn in turns"
           :key="turn.id"
@@ -353,19 +369,23 @@
           :busy="loading && turn === last"
           :ready="state === 'ready'"
           :stopped="stopped(turn)"
-          :rating="ratings[turn.id] ?? null"
-          :questions="questions[turn.id]"
-          :ask-of="askOf"
-          :edit-of="editOf"
+          :questions="chatTools.questions.value[turn.id]"
+          :ask-of="chatTools.askOf"
+          :edit-of="chatTools.editOf"
           :resolve-app-url="resolveAppUrl"
+          :versions="versions"
           @retry="emit('retry', $event, turn)"
-          @rate="(value) => rate(turn, value)"
-          @answer-tool="answerTool"
-          @edit="(call, text) => (edits[call.id] = text)"
-          @approve="approve"
-          @deny="deny"
-          @answer="answer"
-          @skip="skip"
+          @rate="(value, reason) => emit('feedback', value, turn, reason)"
+          @share="(event) => emit('share', event, turn)"
+          @branch="(event) => emit('branch', event, turn)"
+          @edit-prompt="(event, text) => emit('edit', event, turn, text)"
+          @version-change="(next) => emit('version-change', next)"
+          @answer-tool="chatTools.answerTool"
+          @edit="chatTools.setEdit"
+          @approve="chatTools.approve"
+          @deny="chatTools.deny"
+          @answer="chatTools.answer"
+          @skip="chatTools.skip"
           @app-message="(message, part, reply) => emit('app-message', message, part, reply)"
         />
         <ChatMessage
@@ -374,68 +394,55 @@
           :error-message="failure || undefined"
           @retry="emit('retry', $event, last)"
         />
-        <div
+        <SuggestionGroup
           v-if="lastAnswer && followUps?.length"
-          class="ps-[calc(2rem+var(--spacing-sm))]"
-        >
-          <SuggestionGroup
-            :items="followUps"
-            aria-label="Follow-up questions"
-            @select="(event, item) => send(event, item.label)"
+          :items="followUps"
+          aria-label="Follow-up questions"
+          @select="(event, item) => send(event, item.label)"
+        />
+        <template #composer>
+          <AiChatConnectionStatus
+            :connection="connection"
+            :resuming="resuming"
+            :session-generating="sessionGenerating"
+            :loading="loading"
           />
-        </div>
+          <Alert
+            key="alert-2"
+            v-if="interruptErrors.length"
+            severity="danger"
+            size="small"
+            title="Your answer was not sent"
+            :action-label="retryable ? 'Retry' : ''"
+            @action="emit('retry-interrupts', $event)"
+          >
+            {{ interruptErrorText(interruptErrors) }}
+          </Alert>
+          <PromptQueue
+            v-if="queued.length"
+            :items="queued"
+            @remove="(event, item) => removeQueued(event, item.id)"
+          />
+          <AiChatComposer
+            ref="composerEl"
+            v-model="prompt"
+            v-model:files="files"
+            v-model:tool-keys="toolKeys"
+            :state="state"
+            :queueable="queueable"
+            :hydrating="hydrating"
+            :accept="accept"
+            :max-files="maxFiles"
+            :max-file-size="maxFileSize"
+            :attachable="attachable"
+            :voice="voice"
+            :tools="composerTools"
+            @submit="(event, text) => send(event, text, true)"
+            @stop="stop"
+            @voice-start="emit('voice-start', $event)"
+          />
+        </template>
       </Conversation>
     </div>
-    <footer
-      ref="footerEl"
-      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-xs) pb-(--spacing-md)"
-    >
-      <AiChatConnectionStatus
-        :connection="connection"
-        :resuming="resuming"
-        :session-generating="sessionGenerating"
-        :loading="loading"
-      />
-      <Alert
-        key="alert-2"
-        v-if="interruptErrors.length"
-        severity="danger"
-        size="small"
-        title="Your answer was not sent"
-        :action-label="retryable ? 'Retry' : ''"
-        @action="emit('retry-interrupts', $event)"
-      >
-        {{ interruptErrorText(interruptErrors) }}
-      </Alert>
-      <PromptQueue
-        v-if="queued.length"
-        :items="queued"
-        @remove="(event, item) => removeQueued(event, item.id)"
-      />
-      <PromptInput
-        ref="composerEl"
-        v-model="prompt"
-        v-model:files="files"
-        :status="state"
-        :queueable="queueable"
-        :disabled="hydrating"
-        :accept="accept"
-        :max-files="maxFiles"
-        :max-file-size="maxFileSize"
-        :max-length="4000"
-        @submit="(event, { value }) => send(event, value)"
-        @stop="stop"
-      >
-        <template
-          v-if="attachable"
-          #actions
-        >
-          <PromptInputAttachButton />
-        </template>
-        <template #hint>
-          The AI assistant can make mistakes. Check important information before you act on it.
-        </template>
-      </PromptInput>
-    </footer>
   </section>
 </template>

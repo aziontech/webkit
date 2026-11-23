@@ -103,7 +103,7 @@
       <span
         v-if="titleHighlight"
         :data-testid="`${testId}__highlight`"
-        class="text-(--text-brand) [text-shadow:0_0_2rem_color-mix(in_srgb,var(--primary)_30%,transparent)]"
+        class="rounded-(--shape-control) bg-(--primary) px-(--spacing-xs) text-(--primary-foreground) box-decoration-clone"
         >{{ titleHighlight }}</span
       >
       {{ title }}

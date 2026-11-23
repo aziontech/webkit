@@ -149,6 +149,10 @@
       (props.showLabel || isOutput.value || Boolean(props.title))
   )
 
+  const copyInHeader = computed(() => canCopy.value && showLabelBar.value)
+
+  const copyGutter = computed(() => canCopy.value && !showLabelBar.value)
+
   const labelText = computed(() => {
     if (props.title) return props.title
     if (isOutput.value) return t('codeBlock.output')
@@ -221,8 +225,12 @@
     'relative flex max-h-[var(--code-block-max-height,320px)] min-h-0 shrink flex-col overflow-hidden transition-[height] duration-moderate-02 ease-productive-entrance ' +
     'motion-reduce:transition-none'
 
+  const LABEL_CLASS =
+    'sticky top-0 z-3 flex h-10 shrink-0 items-center gap-(--spacing-xs) overflow-hidden bg-inherit ps-(--spacing-lg) pe-(--spacing-sm) ' +
+    'in-data-[bordered]:border-b in-data-[bordered]:border-(--border-default)'
+
   const ROOT_CLASS =
-    'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) ' +
+    'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-clip rounded-(--shape-control) bg-(--bg-surface) ' +
     'data-[bordered]:border data-[bordered]:border-(--border-default) ' +
     'data-[type=output]:bg-(--bg-canvas)'
 </script>
@@ -233,12 +241,13 @@
     :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-bordered="bordered || null"
     :data-copyable="canCopy || null"
+    :data-copy-gutter="copyGutter || null"
     :data-type="type"
     :data-testid="testId"
   >
     <div
       v-if="showLabelBar"
-      class="flex h-10 shrink-0 items-center gap-(--spacing-xs) overflow-hidden border-b border-(--border-default) px-(--spacing-sm)"
+      :class="LABEL_CLASS"
       :data-testid="`${testId}__label`"
     >
       <i
@@ -256,6 +265,15 @@
       >
         {{ labelText }}
       </span>
+      <CopyButton
+        v-if="copyInHeader"
+        :value="copyValue"
+        :ariaLabel="copyAriaLabel || t('codeBlock.copy')"
+        variant="ghost"
+        size="small"
+        :data-testid="`${testId}__copy`"
+        @copy="(event: MouseEvent, code: string) => emit('copy', event, code)"
+      />
     </div>
 
     <CodeBlockTabs
@@ -308,7 +326,7 @@
       @transitionend="onContentTransitionend"
     >
       <div
-        v-if="canCopy"
+        v-if="copyGutter"
         class="absolute end-0 top-0 z-2 bg-(--bg-surface) pe-(--spacing-sm) ps-(--spacing-xs) pt-(--spacing-sm) data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2 data-[single-line]:pt-0"
         :data-single-line="isSingleLine || null"
         :data-testid="`${testId}__copy-anchor`"
@@ -327,7 +345,7 @@
         orientation="both"
         :class="
           cn(
-            'min-h-0 min-w-0 flex-1 py-(--spacing-sm) in-data-[copyable]:pe-10',
+            'min-h-0 min-w-0 flex-1 py-(--spacing-sm) in-data-[copy-gutter]:pe-10',
             'focus-visible:ring-offset-(--bg-surface)'
           )
         "

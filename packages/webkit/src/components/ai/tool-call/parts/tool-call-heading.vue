@@ -17,7 +17,7 @@
   >
     <span
       v-if="title"
-      class="line-clamp-2 min-w-0 text-title-sm break-words text-(--text-default)"
+      class="line-clamp-2 min-w-0 text-body-sm break-words"
     >
       {{ title }}
     </span>

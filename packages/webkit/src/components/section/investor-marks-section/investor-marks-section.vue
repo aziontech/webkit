@@ -1,12 +1,10 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { safeHref } from '../../../utils/safe-href'
   import BentoGrid from '../../layout/bento-grid/bento-grid.vue'
   import BentoGridCell from '../../layout/bento-grid/bento-grid-cell/bento-grid-cell.vue'
-  import Module from '../../layout/module/module.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import { linkedCell } from '../lib/linked-cell'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'InvestorMarksSection',
@@ -54,14 +52,6 @@
 
   const hasItems = computed(() => props.items.length > 0)
 
-  const hasHeading = computed(() => props.title.length > 0)
-
-  const INVESTOR_LINK_CLASS =
-    'group/investor relative isolate flex h-48 w-full items-center justify-center p-(--spacing-xl) ' +
-    'before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-moderate-01 ' +
-    'before:ease-productive-entrance hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset ' +
-    'focus-visible:before:opacity-100 motion-reduce:before:transition-none'
-
   const INVESTOR_MARK_CLASS =
     'flex items-center justify-center transition-[translate] duration-moderate-01 ease-productive-entrance ' +
     'group-hover/investor:-translate-y-(--spacing-sm) group-focus-visible/investor:-translate-y-(--spacing-sm) motion-reduce:transition-none'
@@ -74,84 +64,62 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :eyebrow="eyebrow"
+    :title="title"
+    align="center"
+    marks="bottom"
+    :filled="hasItems"
   >
-    <Module
-      v-if="hasItems"
-      :divided="false"
-      :padded="false"
+    <BentoGrid
+      flush
+      :columns="2"
     >
-      <template
-        v-if="hasHeading"
-        #header
+      <BentoGridCell
+        v-for="item in items"
+        :key="item.href + item.name"
+        :padded="false"
       >
-        <ModuleHeader
-          align="center"
-          :eyebrow="eyebrow"
-          :title="title"
-        />
-      </template>
-
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="bottom"
-      >
-        <BentoGrid
-          flush
-          :columns="2"
+        <a
+          v-bind="linkedCell({ href: item.href, target: '_blank' })"
+          :aria-label="`${linkLabel}, ${item.name} (opens in a new tab)`"
+          class="group/investor flex h-48 w-full items-center justify-center p-(--spacing-xl)"
         >
-          <BentoGridCell
-            v-for="item in items"
-            :key="item.href + item.name"
-            :padded="false"
+          <span :class="INVESTOR_MARK_CLASS">
+            <template v-if="item.logoLight">
+              <img
+                :src="item.logo"
+                :alt="item.name"
+                decoding="async"
+                class="h-8 w-auto max-w-48 object-contain hidden [[data-theme=dark]_&]:block"
+              />
+              <img
+                :src="item.logoLight"
+                :alt="item.name"
+                decoding="async"
+                class="h-8 w-auto max-w-48 object-contain block [[data-theme=dark]_&]:hidden"
+              />
+            </template>
+            <img
+              v-else
+              :src="item.logo"
+              :alt="item.name"
+              decoding="async"
+              class="h-8 w-auto max-w-48 object-contain"
+            />
+          </span>
+          <span
+            aria-hidden="true"
+            :class="INVESTOR_HINT_CLASS"
           >
-            <a
-              :href="safeHref(item.href) ?? undefined"
-              target="_blank"
-              rel="noopener noreferrer"
-              :aria-label="`${linkLabel}, ${item.name} (opens in a new tab)`"
-              :class="INVESTOR_LINK_CLASS"
-            >
-              <span :class="INVESTOR_MARK_CLASS">
-                <template v-if="item.logoLight">
-                  <img
-                    :src="item.logo"
-                    :alt="item.name"
-                    decoding="async"
-                    class="h-8 w-auto max-w-48 object-contain hidden [[data-theme=dark]_&]:block"
-                  />
-                  <img
-                    :src="item.logoLight"
-                    :alt="item.name"
-                    decoding="async"
-                    class="h-8 w-auto max-w-48 object-contain block [[data-theme=dark]_&]:hidden"
-                  />
-                </template>
-                <img
-                  v-else
-                  :src="item.logo"
-                  :alt="item.name"
-                  decoding="async"
-                  class="h-8 w-auto max-w-48 object-contain"
-                />
-              </span>
-              <span
-                aria-hidden="true"
-                :class="INVESTOR_HINT_CLASS"
-              >
-                {{ linkLabel }}
-                <i class="az az-arrow-up-right leading-none" />
-              </span>
-            </a>
-          </BentoGridCell>
-        </BentoGrid>
-      </RegistrationFrame>
-    </Module>
-  </section>
+            {{ linkLabel }}
+            <i class="az az-arrow-up-right leading-none" />
+          </span>
+        </a>
+      </BentoGridCell>
+    </BentoGrid>
+  </SectionBand>
 </template>

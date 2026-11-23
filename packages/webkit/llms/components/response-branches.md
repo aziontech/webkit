@@ -1,6 +1,6 @@
 # Response Branches
 
-> Pages through alternative versions of one assistant response: after Regenerate, or when the model returned several candidates, the message shows one version at a time with a `‹ 2 of 3 ›` pager under it. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.
+> Pages through alternative versions of one assistant response or one edited prompt: after Try again, after the reader edits a prompt, or when the model returned several candidates, the message shows one version at a time with a `‹ 2/3 ›` pager under it, or alone in the message's action row when no slot is given. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.
 
 - Import: `import ResponseBranches from '@aziontech/webkit/response-branches'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -43,7 +43,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | { index: number } | The active version. Rendered once; the owner switches its content by `index`. |
+| `default` | { index: number } | Optional. The active version. Rendered once; the owner switches its content by `index`. Left out, only the pager renders, as in `ChatMessage.Actions`' `#leading` slot. |
 
 ## v-model
 
@@ -61,7 +61,7 @@
 ## Accessibility
 
 - The pager is `role="group"` named by `ariaLabel` (`Response versions`); Previous and Next are `IconButton`s named `Previous version` / `Next version`.
-- The counter (`2 of 3`) is a polite live region, so moving announces the new position once; the slot is not live.
+- The visible counter (`2/3`, `__position`) is `aria-hidden`; a visually hidden polite live region (`__status`, `Version 2 of 3`) announces the new position once; the slot is not live.
 - Keyboard: `Tab` reaches Previous and Next; `Enter`/`Space` move; a disabled end button leaves the tab order. When the focused arrow reaches an end and turns disabled, focus moves to the other arrow instead of falling to the page.
 
 ## Right-to-left
@@ -73,19 +73,20 @@
 
 ## Internationalization
 
-| Key                         | English source         | Override prop |
-| --------------------------- | ---------------------- | ------------- |
-| `responseBranches.label`    | `Response versions`    | `ariaLabel`   |
-| `responseBranches.previous` | `Previous version`     | —             |
-| `responseBranches.next`     | `Next version`         | —             |
-| `responseBranches.position` | `{current} of {total}` | —             |
+| Key                              | English source                 | Override prop |
+| -------------------------------- | ------------------------------ | ------------- |
+| `responseBranches.label`         | `Response versions`            | `ariaLabel`   |
+| `responseBranches.previous`      | `Previous version`             | —             |
+| `responseBranches.next`          | `Next version`                 | —             |
+| `responseBranches.position`      | `{current}/{total}`            | —             |
+| `responseBranches.positionLabel` | `Version {current} of {total}` | —             |
 
 - Numbers in the counter use the locale's digits through the catalog template.
 
 ## Responsive
 
 - Container queries: none.
-- Narrow: the pager stays one row (two 28 px buttons and a short counter).
+- Narrow: the pager stays one row (two 28 px buttons and a short `2/3` counter, written left to right in every direction).
 - Touch: buttons are `IconButton` small, with the 40 px touch target from `IconButton`.
 - Reflow: no horizontal scroll at 320 px.
 

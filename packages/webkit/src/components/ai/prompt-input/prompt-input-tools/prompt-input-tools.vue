@@ -10,6 +10,7 @@
   import DropdownMenuItem from '../../../navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue'
   import DropdownMenuTrigger from '../../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
   import { usePromptInputContext } from '../composables/use-prompt-input-context'
+  import { enabledTools, toggleTool } from '../lib/tool-keys'
   import type { PromptInputMenuOption } from '../prompt-input.vue'
 
   defineOptions({
@@ -39,15 +40,10 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'prompt-input-tools'
   )
-  const enabled = computed<PromptInputMenuOption[]>(() =>
-    props.tools.filter((tool) => model.value.includes(tool.value))
-  )
+  const enabled = computed<PromptInputMenuOption[]>(() => enabledTools(props.tools, model.value))
 
   function toggle(value: string): void {
-    const next = model.value.includes(value)
-      ? model.value.filter((item) => item !== value)
-      : [...model.value, value]
-    model.value = props.tools.map((tool) => tool.value).filter((item) => next.includes(item))
+    model.value = toggleTool(props.tools, model.value, value)
   }
 
   function onSelect(_event: MouseEvent | KeyboardEvent, value: string | number): void {

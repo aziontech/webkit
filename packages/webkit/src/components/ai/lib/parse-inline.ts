@@ -6,7 +6,7 @@ export type MarkdownInline =
   | { type: 'em'; children: MarkdownInline[] }
   | { type: 'code'; value: string }
   | { type: 'link'; href: string; children: MarkdownInline[] }
-  | { type: 'citation'; index: number }
+  | { type: 'citation'; indexes: number[] }
   | { type: 'break' }
 
 function pushText(out: MarkdownInline[], value: string): void {
@@ -23,7 +23,7 @@ function findClosing(text: string, marker: string, from: number): number {
 }
 
 const ESCAPABLE = /[\\`*_[\]()#>|-]/
-const CITATION = /^\[(\d{1,3})\](?!\()/
+const CITATION = /^\[(\d{1,3}(?:\s*,\s*\d{1,3})*)\](?!\()/
 
 let text = ''
 let at = 0
@@ -93,12 +93,22 @@ function scanLink(close: number): boolean {
   return true
 }
 
+function pushCitation(indexes: number[]): void {
+  const last = out[out.length - 1]
+  if (last?.type === 'citation' && !plain.trim()) {
+    plain = ''
+    last.indexes = [...new Set([...last.indexes, ...indexes])]
+    return
+  }
+  flushPlain()
+  out.push({ type: 'citation', indexes: [...new Set(indexes)] })
+}
+
 function scanBracket(char: string): boolean {
   if (char === '[') {
     const citation = CITATION.exec(text.slice(at))
     if (citation) {
-      flushPlain()
-      out.push({ type: 'citation', index: Number(citation[1]) })
+      pushCitation((citation[1] ?? '').split(',').map((value) => Number(value.trim())))
       at += citation[0].length
       return true
     }
@@ -148,7 +158,7 @@ export function plainText(nodes: MarkdownInline[]): string {
     .map((node) => {
       if (node.type === 'text' || node.type === 'code') return node.value
       if (node.type === 'break') return ' '
-      if (node.type === 'citation') return `[${node.index}]`
+      if (node.type === 'citation') return `[${node.indexes.join('][')}]`
       return plainText(node.children)
     })
     .join('')

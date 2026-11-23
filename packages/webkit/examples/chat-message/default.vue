@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-lg)">
+  <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-xl)">
     <ChatMessageRoot
       from="user"
       author="Jane Doe"

@@ -73,6 +73,5 @@ describe('AI text styles (styled)', () => {
     const title = chip.previousElementSibling as HTMLElement
     expect(title.textContent?.trim()).toBe('Purging one URL')
     expect(px(title, 'fontSize')).toBeGreaterThanOrEqual(14)
-    expect(px(title, 'fontWeight')).toBeGreaterThanOrEqual(500)
   })
 })

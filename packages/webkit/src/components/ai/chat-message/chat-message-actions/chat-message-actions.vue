@@ -1,9 +1,25 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { useResizeObserver } from '@vueuse/core'
+  import {
+    computed,
+    defineAsyncComponent,
+    h,
+    onMounted,
+    onScopeDispose,
+    ref,
+    useAttrs,
+    watch
+  } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
+  import CopyButton from '../../../action/copy-button/copy-button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
+  import Tooltip from '../../../overlay/tooltip/tooltip.vue'
+  import ChatMessageFeedback from '../chat-message-feedback/chat-message-feedback.vue'
   import { useChatMessageContext } from '../composables/use-chat-message-context'
+  import type { ChatMessageFeedbackValue } from '../injection-key'
+  import ChatMessageReadAloud from '../parts/chat-message-read-aloud.vue'
 
   defineOptions({
     name: 'ChatMessageActions',
@@ -13,35 +29,217 @@
   export interface ChatMessageActionsProps {
     /** Accessible name of the action group. Empty uses the locale catalog (`Message actions`). */
     ariaLabel?: string
+    /** Shows Copy first in the row; it copies `copyText`, or the text of the message when that is empty. */
+    copyable?: boolean
+    /** Text Copy puts on the clipboard. Empty copies the text of the message's `StreamingResponse` content. */
+    copyText?: string
+    /** Shows Edit after Copy on a user message: it opens the bubble as a field with Cancel and Send. */
+    editable?: boolean
+    /** Shows the Good response and Bad response thumbs, bound to `v-model:feedback`; in a narrow row they move into More. */
+    showFeedback?: boolean
+    /** Shows Read aloud after the thumbs: it speaks the response with the browser's speech synthesis, turns into Stop while speaking, and is hidden where the browser has none. */
+    showReadAloud?: boolean
+    /** Text Read aloud speaks. Empty reads the text of the message's `StreamingResponse` content. */
+    readAloudText?: string
+    /** Shows Share after Read aloud; it emits `share` and the app makes the link. */
+    shareable?: boolean
+    /** Shows Try again after Share; it emits `retry`. In a narrow row it moves into More. */
+    retryable?: boolean
+    /** Adds Branch in new chat to More; it emits `branch`. */
+    branchable?: boolean
+    /** Locks the actions that start a response (Edit, Try again, Branch in new chat), for example while another response runs. */
+    disabled?: boolean
   }
 
-  withDefaults(defineProps<ChatMessageActionsProps>(), {
-    ariaLabel: ''
+  const props = withDefaults(defineProps<ChatMessageActionsProps>(), {
+    ariaLabel: '',
+    copyable: false,
+    copyText: '',
+    editable: false,
+    showFeedback: false,
+    showReadAloud: false,
+    readAloudText: '',
+    shareable: false,
+    retryable: false,
+    branchable: false,
+    disabled: false
   })
 
+  const emit = defineEmits<{
+    /** The reader pressed Share; the app makes the link to the response. */
+    share: [event: MouseEvent]
+    /** The reader pressed Try again; regenerate the response (TanStack AI `reload`). */
+    retry: [event: MouseEvent | KeyboardEvent]
+    /** The reader chose Branch in new chat; start a new chat from the conversation up to this message. */
+    branch: [event: MouseEvent | KeyboardEvent]
+  }>()
+
+  /** The thumb the reader chose: `up`, `down`, or `null` when cleared. Supports v-model:feedback. */
+  const feedback = defineModel<ChatMessageFeedbackValue | null>('feedback', { default: null })
+
   defineSlots<{
-    /** Up to five icon actions, most used first: `CopyButton`, a regenerate `IconButton`, `ChatMessage.Feedback`. */
-    default(): unknown
+    /** Before Copy: the `ResponseBranches` pager of a regenerated response or an edited prompt. */
+    leading?(): unknown
+    /** App actions after the built-in ones and before More. */
+    default?(): unknown
+    /** At the end of the same row: the `Sources` pill of the response. */
+    trailing?(): unknown
   }>()
 
   const attrs = useAttrs()
   const { t } = useTranslate({ chatMessage: en.chatMessage })
-  const { status } = useChatMessageContext()
+  const { from, status, edit, contentText } = useChatMessageContext()
+
+  const rowEl = ref<HTMLElement | null>(null)
+  const copyValue = ref<string>(props.copyText)
+  const width = ref<number>(0)
+  let frame = 0
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'chat-message-actions'
   )
+  const compact = computed<boolean>(() => width.value > 0 && width.value < 480)
+  const menuFeedback = computed<boolean>(() => compact.value && props.showFeedback)
+  const menuRetry = computed<boolean>(() => compact.value && props.retryable)
+  const showMore = computed<boolean>(
+    () => menuFeedback.value || menuRetry.value || props.branchable
+  )
+  const speech = () => props.readAloudText || contentText()
+
+  const ChatMessageMore = defineAsyncComponent({
+    loader: () => import('../parts/chat-message-more.vue'),
+    loadingComponent: {
+      inheritAttrs: false,
+      render: () =>
+        h(IconButton, {
+          icon: 'az az-ellipsis',
+          ariaLabel: t('chatMessage.more'),
+          variant: 'ghost',
+          size: 'large',
+          disabled: true
+        })
+    },
+    delay: 0
+  })
+
+  function refreshCopy(): void {
+    copyValue.value = props.copyText || contentText()
+  }
+
+  function rate(value: ChatMessageFeedbackValue): void {
+    feedback.value = feedback.value === value ? null : value
+  }
+
+  function onSelect(event: MouseEvent | KeyboardEvent, value: string | number): void {
+    if (value === 'up' || value === 'down') rate(value)
+    else if (value === 'retry') emit('retry', event)
+    else if (value === 'branch') emit('branch', event)
+  }
+
+  useResizeObserver(rowEl, (entries) => {
+    const next = entries[0]?.contentRect.width ?? 0
+    cancelAnimationFrame(frame)
+    frame = requestAnimationFrame(() => {
+      width.value = next
+    })
+  })
+
+  onScopeDispose(() => cancelAnimationFrame(frame))
+  onMounted(refreshCopy)
+  watch(() => props.copyText, refreshCopy)
 </script>
 
 <template>
   <div
     v-if="status === 'success'"
+    ref="rowEl"
     v-bind="$attrs"
     role="group"
     :aria-label="ariaLabel || t('chatMessage.actions')"
     :data-testid="testId"
-    class="flex flex-wrap items-center gap-(--spacing-2xs)"
+    :data-from="from"
+    :data-compact="compact || null"
+    class="flex w-full min-w-0 flex-nowrap items-center gap-(--spacing-2xs) data-[from=user]:w-auto data-[from=user]:justify-end"
+    @focusin="refreshCopy"
+    @pointerenter="refreshCopy"
   >
+    <slot name="leading" />
+    <CopyButton
+      v-if="copyable"
+      :value="copyValue"
+      size="large"
+      :data-testid="`${testId}__copy`"
+    />
+    <Tooltip
+      v-if="editable"
+      :content="t('chatMessage.edit')"
+    >
+      <IconButton
+        icon="az az-pencil"
+        :aria-label="t('chatMessage.edit')"
+        variant="ghost"
+        size="large"
+        :disabled="disabled"
+        :data-testid="`${testId}__edit`"
+        @click="edit"
+      />
+    </Tooltip>
+    <ChatMessageFeedback
+      v-if="showFeedback && !compact"
+      v-model="feedback"
+      :data-testid="`${testId}__feedback`"
+    />
+    <ChatMessageReadAloud
+      v-if="showReadAloud"
+      :text="speech"
+      :data-testid="`${testId}__read-aloud`"
+    />
+    <Tooltip
+      key="tooltip-2"
+      v-if="shareable"
+      :content="t('chatMessage.share')"
+    >
+      <IconButton
+        icon="az az-share"
+        :aria-label="t('chatMessage.share')"
+        variant="ghost"
+        size="large"
+        :data-testid="`${testId}__share`"
+        @click="(event: MouseEvent) => emit('share', event)"
+      />
+    </Tooltip>
+    <Tooltip
+      key="tooltip-3"
+      v-if="retryable && !compact"
+      :content="t('chatMessage.retry')"
+    >
+      <IconButton
+        icon="az az-refresh"
+        :aria-label="t('chatMessage.retry')"
+        variant="ghost"
+        size="large"
+        :disabled="disabled"
+        :data-testid="`${testId}__retry`"
+        @click="(event: MouseEvent) => emit('retry', event)"
+      />
+    </Tooltip>
     <slot />
+    <ChatMessageMore
+      v-if="showMore"
+      :show-feedback="menuFeedback"
+      :feedback="feedback"
+      :retryable="menuRetry"
+      :branchable="branchable"
+      :disabled="disabled"
+      :data-testid="`${testId}__more`"
+      @select="onSelect"
+    />
+    <div
+      v-if="$slots['trailing']"
+      :data-testid="`${testId}__trailing`"
+      class="ms-(--spacing-2xs) -my-(--spacing-2xs) flex min-w-0 shrink items-center overflow-hidden p-(--spacing-2xs)"
+    >
+      <slot name="trailing" />
+    </div>
   </div>
 </template>

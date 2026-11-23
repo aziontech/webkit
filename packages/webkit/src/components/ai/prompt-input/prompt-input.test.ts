@@ -164,6 +164,22 @@ describe('PromptInput', () => {
     expect(submitted).toEqual([])
   })
 
+  it('hides the counter until the prompt reaches 80% of the limit', async () => {
+    const { getByRole, queryByTestId, value } = harness({ initial: 'abc', maxLength: 10 })
+    const textarea = getByRole('textbox')
+    expect(queryByTestId('prompt-input__counter')).toBeNull()
+    expect(textarea).not.toHaveAttribute('aria-describedby')
+    value.value = 'abcdefgh'
+    await nextTick()
+    expect(queryByTestId('prompt-input__counter')).toHaveTextContent('8/10')
+    expect(textarea.getAttribute('aria-describedby')).toContain(
+      queryByTestId('prompt-input__counter')!.id
+    )
+    value.value = ''
+    await nextTick()
+    expect(queryByTestId('prompt-input__counter')).toBeNull()
+  })
+
   it('disables the text area, submit and the actions slot', () => {
     const { getByRole } = harness(
       { initial: 'x', disabled: true },
@@ -199,6 +215,48 @@ describe('PromptInput', () => {
     expect(textarea.style.overflowY).toBe('auto')
     await userEvent.keyboard('{Shift>}{Enter}{/Shift}f')
     expect(textarea.getBoundingClientRect().height).toBe(capped)
+  })
+
+  it('measures its height again when the text area changes width', async () => {
+    const { getByRole } = harness({
+      placeholder: 'A long hint that wraps over several lines when the text area is narrow',
+      maxRows: 6
+    })
+    const textarea = getByRole('textbox') as HTMLTextAreaElement
+    textarea.style.width = '600px'
+    await nextTick()
+    const wide = textarea.getBoundingClientRect().height
+    textarea.style.width = '40px'
+    await expect.poll(() => textarea.getBoundingClientRect().height).toBeGreaterThan(wide)
+    const narrow = textarea.getBoundingClientRect().height
+    textarea.style.width = '600px'
+    await expect.poll(() => textarea.getBoundingClientRect().height).toBeLessThan(narrow)
+  })
+
+  it('stays a single pill until the text takes a second line, then stacks until it is cleared', async () => {
+    const { getByRole, getByTestId, value } = harness()
+    const box = getByTestId('prompt-input__box')
+    expect(box).not.toHaveAttribute('data-multiline')
+    await userEvent.click(getByRole('textbox'))
+    await userEvent.keyboard('a')
+    await nextTick()
+    expect(box).not.toHaveAttribute('data-multiline')
+    await userEvent.keyboard('{Shift>}{Enter}{/Shift}b')
+    await expect.poll(() => box.hasAttribute('data-multiline')).toBe(true)
+    expect(getByTestId('prompt-input')).toHaveAttribute('data-multiline')
+    await userEvent.keyboard('{Backspace}{Backspace}')
+    await nextTick()
+    await nextTick()
+    expect(box).toHaveAttribute('data-multiline')
+    value.value = ''
+    await expect.poll(() => box.hasAttribute('data-multiline')).toBe(false)
+  })
+
+  it('stacks while files are attached', () => {
+    const { getByTestId } = harness({
+      files: [{ file: { name: 'log.txt', size: 10, type: 'text/plain' } }]
+    })
+    expect(getByTestId('prompt-input__box')).toHaveAttribute('data-multiline')
   })
 
   it('reads its strings from the provider locale', () => {
@@ -635,6 +693,47 @@ describe('PromptInput', () => {
       expect(getByRole('list', { name: 'Enabled tools' })).toHaveTextContent('Web search')
       await userEvent.click(getByRole('button', { name: /Remove Web search/ }))
       expect(scope.tools!.value).toEqual(['research'])
+    })
+
+    it('opens the add menu from the attach button with tools, picks photos and stacks on a tool', async () => {
+      const { getByRole, getByTestId, findByRole, scope } = composer(
+        { files: [], tools: [] },
+        (scope) => ({
+          props: { ...bind(scope, 'files', 'files'), accept: 'image/*,application/pdf' },
+          slots: {
+            actions: () =>
+              h(P.AttachButton, {
+                ...bind(scope, 'tools'),
+                tools: [
+                  { value: 'web-search', label: 'Web search', icon: 'az az-globe' },
+                  { value: 'create-image', label: 'Create image' }
+                ]
+              })
+          }
+        })
+      )
+      await expect
+        .poll(() => getByRole('button', { name: 'Attach files' }).getAttribute('aria-haspopup'))
+        .toBeTruthy()
+      await userEvent.click(await findByRole('button', { name: 'Attach files' }))
+      expect(await screen.findByRole('menuitem', { name: /Photos/ })).toBeTruthy()
+      expect(screen.getByRole('menuitem', { name: /Files/ })).toBeTruthy()
+      expect(screen.queryByRole('menuitem', { name: /Camera/ })).toBeNull()
+      await userEvent.click(screen.getByRole('menuitemcheckbox', { name: /Web search/ }))
+      expect(scope.tools!.value).toEqual(['web-search'])
+      await keys.keyboard('{Escape}')
+      expect(getByRole('list', { name: 'Enabled tools' })).toHaveTextContent('Web search')
+      expect(getByTestId('prompt-input__box')).toHaveAttribute('data-multiline')
+      const photos = getByTestId('prompt-input-attach-button__photos-input') as HTMLInputElement
+      expect(photos).toHaveAttribute('accept', 'image/*')
+      const transfer = new DataTransfer()
+      transfer.items.add(sample('photo.png', 'image/png'))
+      photos.files = transfer.files
+      photos.dispatchEvent(new Event('change', { bubbles: true }))
+      await nextTick()
+      expect(names(scope.files!.value)).toEqual(['photo.png'])
+      await userEvent.click(getByRole('button', { name: /Remove Web search/ }))
+      expect(scope.tools!.value).toEqual([])
     })
 
     it('toggles listening with an app transcriber and announces it', async () => {

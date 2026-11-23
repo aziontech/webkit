@@ -5,10 +5,8 @@
   import ChatMessage, { type ChatMessageStatus } from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import ImageGallery from '@aziontech/webkit/image-gallery'
   import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import ToolCall from '@aziontech/webkit/tool-call'
@@ -18,6 +16,7 @@
     type AiChatInterruptError,
     type AiChatMessage,
     type AiChatQuestion,
+    type AiChatSendContent,
     type AiChatTool,
     type AiChatToolCallPart,
     answerInterrupt,
@@ -42,6 +41,7 @@
   } from '@aziontech/webkit/utils/ai-chat'
   import { computed, ref } from 'vue'
 
+  import AiActionApprovalComposer from './parts/ai-action-approval-composer.vue'
   import { sampleMessages, sampleTools } from './sample'
 
   export interface AiActionApprovalProps {
@@ -57,6 +57,8 @@
     interrupts?: ReadonlyArray<AiChatInterrupt>
     /** Why the decisions were not sent, as `useChat` returns `interruptErrors`; a retryable one offers Retry. */
     interruptErrors?: ReadonlyArray<AiChatInterruptError>
+    /** The reader may attach images and PDFs (up to 4, 10 MB each) from the Attach control at the start of the composer; `send` then hands over the multimodal content `sendMessage` takes. */
+    attachable?: boolean
   }
 
   const props = withDefaults(defineProps<AiActionApprovalProps>(), {
@@ -65,7 +67,8 @@
     error: '',
     tools: undefined,
     interrupts: () => [],
-    interruptErrors: () => []
+    interruptErrors: () => [],
+    attachable: true
   })
 
   const emit = defineEmits<{
@@ -73,14 +76,13 @@
     deny: [event: MouseEvent, call: AiChatToolCallPart]
     stop: [event: MouseEvent]
     retry: [event: MouseEvent, message: AiChatMessage]
-    send: [event: MouseEvent | KeyboardEvent, text: string]
+    send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     'answer-interrupt': [event: Event, interrupt: AiChatInterrupt, value: string]
     'retry-interrupts': [event: MouseEvent]
   }>()
 
   const { formatDate } = useLocale()
 
-  const prompt = ref('')
   const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
   const settled = ref<Record<string, AiChatQuestion>>({})
@@ -197,12 +199,6 @@
     settled.value[question.id] = { ...question, status: 'skipped', error: '' }
     skipInterrupt(interrupt)
   }
-
-  function send(event: MouseEvent | KeyboardEvent, value: string) {
-    if (!value.trim() || state.value !== 'ready') return
-    prompt.value = ''
-    emit('send', event, value)
-  }
 </script>
 
 <template>
@@ -210,10 +206,10 @@
     aria-labelledby="ai-approval-title"
     class="flex min-h-0 w-full grow basis-0 flex-col"
   >
-    <header class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)">
+    <header class="px-(--spacing-md) py-(--spacing-sm)">
       <h1
         id="ai-approval-title"
-        class="text-heading-xs text-(--text-default)"
+        class="text-label-md text-(--text-default)"
       >
         AI assistant
       </h1>
@@ -349,11 +345,12 @@
           "
           #actions
         >
-          <ChatMessage.Actions>
-            <CopyButton
-              size="small"
-              :value="textOf(turn)"
-            />
+          <ChatMessage.Actions
+            copyable
+            show-read-aloud
+            :copy-text="textOf(turn)"
+            :read-aloud-text="textOf(turn)"
+          >
             <Button
               v-if="turn === last && failedCall(turn)"
               :label="retryLabelOf(turn)"
@@ -383,30 +380,24 @@
           @skip="skip(question)"
         />
       </ChatMessage>
+      <template #composer>
+        <Alert
+          v-if="interruptErrors.length"
+          severity="danger"
+          size="small"
+          title="Your decision was not sent"
+          :action-label="retryable ? 'Retry' : ''"
+          @action="emit('retry-interrupts', $event)"
+        >
+          {{ interruptErrorText(interruptErrors) }}
+        </Alert>
+        <AiActionApprovalComposer
+          :state="state"
+          :attachable="attachable"
+          @send="(event, content) => emit('send', event, content)"
+          @stop="emit('stop', $event)"
+        />
+      </template>
     </Conversation>
-    <footer
-      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-xs) pb-(--spacing-md)"
-    >
-      <Alert
-        v-if="interruptErrors.length"
-        severity="danger"
-        size="small"
-        title="Your decision was not sent"
-        :action-label="retryable ? 'Retry' : ''"
-        @action="emit('retry-interrupts', $event)"
-      >
-        {{ interruptErrorText(interruptErrors) }}
-      </Alert>
-      <PromptInput
-        v-model="prompt"
-        :status="state"
-        @submit="(event, { value }) => send(event, value)"
-        @stop="emit('stop', $event)"
-      >
-        <template #hint>
-          The assistant runs nothing in your account without your approval.
-        </template>
-      </PromptInput>
-    </footer>
   </section>
 </template>

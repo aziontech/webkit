@@ -53,15 +53,29 @@ export const ptBR: Messages = {
     actions: 'Ações da mensagem',
     error: 'Não foi possível gerar a resposta.',
     retry: 'Tentar novamente',
-    helpful: 'Útil',
-    notHelpful: 'Não foi útil',
+    goodResponse: 'Boa resposta',
+    badResponse: 'Resposta ruim',
     feedback: 'Avaliação da resposta',
     feedbackSubmitting: 'Enviando avaliação',
-    feedbackSubmitted: 'Avaliação enviada'
+    feedbackThanks: 'Obrigado pela sua avaliação',
+    readAloud: 'Ler em voz alta',
+    stopReading: 'Parar a leitura',
+    share: 'Compartilhar',
+    more: 'Mais ações',
+    branch: 'Ramificar em novo chat',
+    edit: 'Editar mensagem',
+    editField: 'Edite sua mensagem',
+    cancel: 'Cancelar',
+    send: 'Enviar'
   },
   citation: {
     label: 'Fonte {index}: {title}',
-    labelUntitled: 'Fonte {index}'
+    labelUntitled: 'Fonte {index}',
+    labelWithSite: 'Fonte {index}, {site}: {title}',
+    labelMany: '{site} +{more}, fontes {indexes}',
+    next: 'Próxima fonte',
+    page: '{current}/{total}',
+    previous: 'Fonte anterior'
   },
   conversation: {
     label: 'Conversa',
@@ -110,7 +124,11 @@ export const ptBR: Messages = {
     context: 'Escolher contexto',
     contextRemove: 'Remover contexto',
     tools: 'Ferramentas',
-    toolsEnabled: 'Ferramentas ativadas'
+    toolsEnabled: 'Ferramentas ativadas',
+    addMenu: 'Adicionar',
+    camera: 'Câmera',
+    photos: 'Fotos',
+    files: 'Arquivos'
   },
   agentActivity: {
     label: 'Atividade do agente',
@@ -145,6 +163,8 @@ export const ptBR: Messages = {
   },
   sources: {
     label: 'Fontes',
+    cited: 'Citações',
+    more: 'Mais',
     count: {
       one: '{count} fonte',
       other: '{count} fontes'
@@ -435,7 +455,8 @@ export const ptBR: Messages = {
     label: 'Versões da resposta',
     previous: 'Versão anterior',
     next: 'Próxima versão',
-    position: '{current} de {total}'
+    position: '{current}/{total}',
+    positionLabel: 'Versão {current} de {total}'
   },
   feedbackReasonDialog: {
     title: 'O que deu errado?',
@@ -460,7 +481,10 @@ export const ptBR: Messages = {
     previous30: 'Últimos 30 dias',
     older: 'Mais antigas',
     emptyTitle: 'Nenhuma conversa ainda.',
-    delete: 'Excluir {title}'
+    delete: 'Excluir {title}',
+    newChat: 'Novo chat',
+    search: 'Buscar conversas',
+    noMatch: 'Nenhuma conversa corresponde a “{query}”.'
   },
   qrCode: {
     label: 'Código QR'

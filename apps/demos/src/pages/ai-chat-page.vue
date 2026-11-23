@@ -24,6 +24,7 @@
     retryInterrupts,
     stop,
     reload,
+    setMessages,
     clear,
     cancelQueued,
     loadOlderMessages
@@ -34,6 +35,8 @@
   })
 
   const loadingOlder = ref(false)
+  const modelKey = ref('auto')
+  const toolKeys = ref<string[]>([])
 
   async function loadOlder() {
     if (loadingOlder.value) return
@@ -64,6 +67,12 @@
     )
   )
 
+  function edit(message: AiChatMessage, text: string) {
+    const at = messages.value.findIndex((entry) => entry.id === message.id)
+    setMessages(messages.value.slice(0, at))
+    void sendMessage(text, { body: { model: modelKey.value, tools: toolKeys.value } })
+  }
+
   const followUps = computed(() => {
     const last = withSources.value[withSources.value.length - 1]
     if (isLoading.value || last?.role !== 'assistant' || !last.metadata?.sources) return []
@@ -73,6 +82,7 @@
 
 <template>
   <AiChat
+    class="max-md:[&_span:has(>button[aria-label='Open_conversation_history'])]:hidden"
     :messages="withSources"
     :follow-ups="followUps"
     :loading="isLoading"
@@ -87,14 +97,20 @@
     :interrupt-errors="interruptErrors"
     :hydrating="isHydrating"
     :session-generating="sessionGenerating"
-    attachable
-    @send="(_event, content) => sendMessage(content)"
+    :voice="false"
+    v-model:model-key="modelKey"
+    v-model:tool-keys="toolKeys"
+    @send="
+      (_event, content) => sendMessage(content, { body: { model: modelKey, tools: toolKeys } })
+    "
     @answer-tool="(_event, answer) => addToolResult(answer)"
     @retry-interrupts="retryInterrupts()"
     @remove-queued="(_event, item) => cancelQueued(item.id)"
     @load-more="loadOlder()"
     @stop="stop()"
     @retry="reload()"
+    @edit="(_event, message, text) => edit(message, text)"
+    @version-change="(next) => setMessages(next)"
     @new-chat="clear()"
   />
 </template>

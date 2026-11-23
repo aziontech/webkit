@@ -144,13 +144,14 @@ describe('CompetitorComparisonSection', () => {
     expect(legend.nextElementSibling?.tagName).toBe('TABLE')
   })
 
-  it('aligns the capability column head to the start and draws category heads in the brand orange', () => {
+  it('aligns the capability column head to the start and marks category heads with the brand orange bar', () => {
     const { getByRole, getByText } = band()
 
     expect(getByRole('columnheader', { name: 'Capability' }).classList.contains('text-start')).toBe(
       true
     )
-    expect(getByText('Security').classList.contains('text-(--text-brand)')).toBe(true)
+    expect(getByText('Security').classList.contains('text-(--text-default)')).toBe(true)
+    expect(getByText('Security').classList.contains('border-(--primary)')).toBe(true)
   })
 
   it('renders an info button only for a capability with a definition', () => {

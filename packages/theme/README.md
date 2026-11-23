@@ -231,18 +231,18 @@ Nothing in WebKit read these, so 6.0 removes them. Replace any use in your own C
 
 Same values, new names. `npx @aziontech/webkit migrate` rewrites them in `.vue`, `.css`, `.ts` and `.js` files:
 
-| Old                                                                                | New                                                                                                             |
-| ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `--primary-contrast`, `--secondary-contrast`, `--accent-contrast`                  | `--primary-foreground`, `--secondary-foreground`, `--accent-foreground`                                         |
-| `--success-contrast`, `--warning-contrast`, `--danger-contrast`, `--info-contrast` | `--success-foreground`, `--warning-foreground`, `--danger-foreground`, `--info-foreground`                      |
-| `--spacing-xxs`, `--spacing-xxl`                                                   | `--spacing-2xs`, `--spacing-2xl`                                                                                |
-| `text-heading-xxs`, `text-body-xxs` (and their `--text-*-xxs-*` parts)             | `text-heading-2xs`, `text-body-2xs`                                                                             |
-| `--code-sintax-*`                                                                  | `--code-syntax-*`                                                                                               |
-| `--border-0` … `--border-4` (widths)                                               | `--border-width-0` … `--border-width-4`                                                                         |
-| `--shape-elements`                                                                 | `--shape-control`                                                                                               |
-| `--z-input-field`, `--z-input-overlay`                                             | `--z-control`, `--z-control-overlay`                                                                            |
-| `animate-slide-in-left` / `-out-left`, `animate-slide-in-right` / `-out-right`     | `animate-slide-in-start` / `-out-start`, `animate-slide-in-end` / `-out-end` (they flip in right-to-left pages) |
-| `--text-primary` (a lighter orange in dark, a darker one in light)                 | `--text-brand`, the logo orange `#F3652B` in both themes: the one orange for brand text                         |
+| Old                                                                                | New                                                                                                                 |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `--primary-contrast`, `--secondary-contrast`, `--accent-contrast`                  | `--primary-foreground`, `--secondary-foreground`, `--accent-foreground`                                             |
+| `--success-contrast`, `--warning-contrast`, `--danger-contrast`, `--info-contrast` | `--success-foreground`, `--warning-foreground`, `--danger-foreground`, `--info-foreground`                          |
+| `--spacing-xxs`, `--spacing-xxl`                                                   | `--spacing-2xs`, `--spacing-2xl`                                                                                    |
+| `text-heading-xxs`, `text-body-xxs` (and their `--text-*-xxs-*` parts)             | `text-heading-2xs`, `text-body-2xs`                                                                                 |
+| `--code-sintax-*`                                                                  | `--code-syntax-*`                                                                                                   |
+| `--border-0` … `--border-4` (widths)                                               | `--border-width-0` … `--border-width-4`                                                                             |
+| `--shape-elements`                                                                 | `--shape-control`                                                                                                   |
+| `--z-input-field`, `--z-input-overlay`                                             | `--z-control`, `--z-control-overlay`                                                                                |
+| `animate-slide-in-left` / `-out-left`, `animate-slide-in-right` / `-out-right`     | `animate-slide-in-start` / `-out-start`, `animate-slide-in-end` / `-out-end` (they flip in right-to-left pages)     |
+| `--text-primary` (a lighter orange in dark, a darker one in light)                 | `--text-default`: the logo orange is never a text colour; mark brand text with a `--primary` bar, underline or fill |
 
 `--bg-contrast` and `--text-contrast` keep their names: they are the inverted surface and its text, not a fill colour's text pair.
 | `surfacePrimitives` (from `@aziontech/theme/colors`) | `primitives.gray` |

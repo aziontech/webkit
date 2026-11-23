@@ -1,10 +1,8 @@
-import { defineComponent, h, type PropType, type VNodeChild } from 'vue'
+import { type Component, defineComponent, h, type PropType, type VNodeChild } from 'vue'
 
 import { useTranslate } from '../../../composables/use-translate'
 import * as en from '../../../locales/en'
-import Citation from '../citation/citation.vue'
 import type { SourcesItem } from '../sources/types'
-import { sourceAnchor } from '../sources/types'
 import type { MarkdownInline as MarkdownInlineNode } from './parse-markdown'
 
 const EXTERNAL = /^https?:/i
@@ -21,7 +19,7 @@ type LeafNode = Exclude<MarkdownInlineNode, ContainerNode>
 
 interface RenderContext {
   sources: SourcesItem[]
-  anchor: string
+  citation?: Component
   newTab: string
 }
 
@@ -47,7 +45,7 @@ function renderContainer(node: ContainerNode, context: RenderContext): VNodeChil
   }
 }
 
-function renderLeaf(node: LeafNode, { sources, anchor }: RenderContext): VNodeChild {
+function renderLeaf(node: LeafNode, { sources, citation }: RenderContext): VNodeChild {
   switch (node.type) {
     case 'text':
       return node.value
@@ -55,37 +53,66 @@ function renderLeaf(node: LeafNode, { sources, anchor }: RenderContext): VNodeCh
       return h('br')
     case 'code':
       return h('code', { dir: 'ltr', class: CODE_CLASS }, node.value)
-    case 'citation': {
-      const source = sources[node.index - 1]
-      return h(Citation, {
-        index: node.index,
-        title: source?.title ?? '',
-        href: anchor && source ? `#${sourceAnchor(anchor, node.index)}` : ''
-      })
-    }
+    case 'citation':
+      return citation
+        ? h(citation, { indexes: node.indexes, sources })
+        : `[${node.indexes.join('][')}]`
   }
 }
 
+const CLOSING = /^\s+(?=[.,;:!?)\]])/
+const WORD_START = /^[\p{L}\p{N}]/u
+const OPEN_END = /[\s([{"'“‘]$/
+
+function citationSpacing(nodes: MarkdownInlineNode[]): MarkdownInlineNode[] {
+  if (!nodes.some((node) => node.type === 'citation')) return nodes
+  const out: MarkdownInlineNode[] = []
+  nodes.forEach((node, index) => {
+    const before = nodes[index - 1]
+    const after = nodes[index + 1]
+    if (node.type === 'citation') {
+      if (before?.type === 'citation') out.push({ type: 'text', value: ' ' })
+      out.push(node)
+      return
+    }
+    if (node.type !== 'text') {
+      out.push(node)
+      return
+    }
+    let value = node.value
+    if (before?.type === 'citation') {
+      value = value.replace(CLOSING, '')
+      if (WORD_START.test(value)) value = ` ${value}`
+    }
+    if (after?.type === 'citation' && !OPEN_END.test(value)) value = `${value} `
+    out.push({ type: 'text', value })
+  })
+  return out
+}
+
 function renderNodes(nodes: MarkdownInlineNode[], context: RenderContext): VNodeChild[] {
-  return nodes.map((node) =>
+  return citationSpacing(nodes).map((node) =>
     'children' in node ? renderContainer(node, context) : renderLeaf(node, context)
   )
 }
 
-export default defineComponent({
-  name: 'MarkdownInline',
-  props: {
-    nodes: { type: Array as PropType<MarkdownInlineNode[]>, required: true },
-    sources: { type: Array as PropType<SourcesItem[]>, default: () => [] },
-    anchor: { type: String, default: '' }
-  },
-  setup(props) {
-    const { t } = useTranslate({ common: en.common })
-    return () =>
-      renderNodes(props.nodes, {
-        sources: props.sources,
-        anchor: props.anchor,
-        newTab: t('common.newTab')
-      })
-  }
-})
+export function createMarkdownInline(citation?: Component) {
+  return defineComponent({
+    name: 'MarkdownInline',
+    props: {
+      nodes: { type: Array as PropType<MarkdownInlineNode[]>, required: true },
+      sources: { type: Array as PropType<SourcesItem[]>, default: () => [] }
+    },
+    setup(props) {
+      const { t } = useTranslate({ common: en.common })
+      return () =>
+        renderNodes(props.nodes, {
+          sources: props.sources,
+          citation,
+          newTab: t('common.newTab')
+        })
+    }
+  })
+}
+
+export default createMarkdownInline()

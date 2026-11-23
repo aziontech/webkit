@@ -53,15 +53,29 @@ export const es: Messages = {
     actions: 'Acciones del mensaje',
     error: 'No se pudo generar la respuesta.',
     retry: 'Intentar de nuevo',
-    helpful: 'Útil',
-    notHelpful: 'No fue útil',
+    goodResponse: 'Buena respuesta',
+    badResponse: 'Mala respuesta',
     feedback: 'Valoración de la respuesta',
     feedbackSubmitting: 'Enviando valoración',
-    feedbackSubmitted: 'Valoración enviada'
+    feedbackThanks: 'Gracias por tu valoración',
+    readAloud: 'Leer en voz alta',
+    stopReading: 'Detener la lectura',
+    share: 'Compartir',
+    more: 'Más acciones',
+    branch: 'Ramificar en un chat nuevo',
+    edit: 'Editar mensaje',
+    editField: 'Edita tu mensaje',
+    cancel: 'Cancelar',
+    send: 'Enviar'
   },
   citation: {
     label: 'Fuente {index}: {title}',
-    labelUntitled: 'Fuente {index}'
+    labelUntitled: 'Fuente {index}',
+    labelWithSite: 'Fuente {index}, {site}: {title}',
+    labelMany: '{site} +{more}, fuentes {indexes}',
+    next: 'Fuente siguiente',
+    page: '{current}/{total}',
+    previous: 'Fuente anterior'
   },
   conversation: {
     label: 'Conversación',
@@ -110,7 +124,11 @@ export const es: Messages = {
     context: 'Elegir contexto',
     contextRemove: 'Quitar contexto',
     tools: 'Herramientas',
-    toolsEnabled: 'Herramientas activadas'
+    toolsEnabled: 'Herramientas activadas',
+    addMenu: 'Añadir',
+    camera: 'Cámara',
+    photos: 'Fotos',
+    files: 'Archivos'
   },
   agentActivity: {
     label: 'Actividad del agente',
@@ -145,6 +163,8 @@ export const es: Messages = {
   },
   sources: {
     label: 'Fuentes',
+    cited: 'Citas',
+    more: 'Más',
     count: {
       one: '{count} fuente',
       other: '{count} fuentes'
@@ -435,7 +455,8 @@ export const es: Messages = {
     label: 'Versiones de la respuesta',
     previous: 'Versión anterior',
     next: 'Versión siguiente',
-    position: '{current} de {total}'
+    position: '{current}/{total}',
+    positionLabel: 'Versión {current} de {total}'
   },
   feedbackReasonDialog: {
     title: '¿Qué salió mal?',
@@ -460,7 +481,10 @@ export const es: Messages = {
     previous30: 'Últimos 30 días',
     older: 'Más antiguas',
     emptyTitle: 'Aún no hay conversaciones.',
-    delete: 'Eliminar {title}'
+    delete: 'Eliminar {title}',
+    newChat: 'Nuevo chat',
+    search: 'Buscar conversaciones',
+    noMatch: 'Ninguna conversación coincide con «{query}».'
   },
   qrCode: {
     label: 'Código QR'

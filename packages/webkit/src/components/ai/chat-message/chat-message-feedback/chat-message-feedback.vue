@@ -15,7 +15,7 @@
   })
 
   export interface ChatMessageFeedbackProps {
-    /** The choice is being sent; both thumbs are inert and the status line reads `Submitting feedback`. */
+    /** The choice is being sent: the chosen thumb shows a spinner and the hidden status line reads `Submitting feedback`. */
     loading?: boolean
   }
 
@@ -31,16 +31,15 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'chat-message-feedback'
   )
-  const submitted = computed<boolean>(() => model.value !== null && !props.loading)
   const statusText = computed<string>(() => {
     if (props.loading) return t('chatMessage.feedbackSubmitting')
-    if (submitted.value) return t('chatMessage.feedbackSubmitted')
+    if (model.value !== null) return t('chatMessage.feedbackThanks')
     return ''
   })
 
   function choose(value: ChatMessageFeedbackValue): void {
-    if (props.loading || model.value !== null) return
-    model.value = value
+    if (props.loading) return
+    model.value = model.value === value ? null : value
   }
 </script>
 
@@ -54,28 +53,33 @@
     :data-loading="loading || null"
     class="inline-flex items-center gap-(--spacing-2xs)"
   >
-    <Tooltip :content="t('chatMessage.helpful')">
+    <Tooltip
+      v-if="model !== 'down'"
+      :content="t('chatMessage.goodResponse')"
+    >
       <IconButton
         :icon="model === 'up' ? 'az az-thumbs-up-fill' : 'az az-thumbs-up'"
-        :ariaLabel="t('chatMessage.helpful')"
+        :ariaLabel="t('chatMessage.goodResponse')"
         :aria-pressed="model === 'up' ? 'true' : 'false'"
-        :disabled="model === 'down'"
         :loading="loading && model === 'up'"
         variant="ghost"
-        size="small"
+        size="large"
         :data-testid="`${testId}__up`"
         @click="choose('up')"
       />
     </Tooltip>
-    <Tooltip :content="t('chatMessage.notHelpful')">
+    <Tooltip
+      key="tooltip-2"
+      v-if="model !== 'up'"
+      :content="t('chatMessage.badResponse')"
+    >
       <IconButton
         :icon="model === 'down' ? 'az az-thumbs-down-fill' : 'az az-thumbs-down'"
-        :ariaLabel="t('chatMessage.notHelpful')"
+        :ariaLabel="t('chatMessage.badResponse')"
         :aria-pressed="model === 'down' ? 'true' : 'false'"
-        :disabled="model === 'up'"
         :loading="loading && model === 'down'"
         variant="ghost"
-        size="small"
+        size="large"
         :data-testid="`${testId}__down`"
         @click="choose('down')"
       />
@@ -83,7 +87,7 @@
     <span
       role="status"
       :data-testid="`${testId}__status`"
-      class="ps-(--spacing-xs) text-body-xs text-(--text-muted)"
+      class="sr-only"
     >
       {{ statusText }}
     </span>

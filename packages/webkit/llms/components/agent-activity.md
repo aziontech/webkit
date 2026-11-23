@@ -81,19 +81,19 @@
 
 ## Internationalization
 
-| Key                       | English source                    | Override prop |
-| ------------------------- | --------------------------------- | ------------- |
-| `agentActivity.label`     | `Agent activity`                  | `ariaLabel`   |
-| `agentActivity.steps`     | `{count} step(s)` (plural)        | —             |
-| `agentActivity.finished`  | `Finished {count} step(s)` (plural) | —           |
-| `agentActivity.stopped`   | `Stopped after {count} step(s)` (plural) | —      |
-| `agentActivity.failed`    | `Failed: {title}`                 | —             |
-| `agentActivity.pending`   | `Pending`                         | —             |
-| `agentActivity.running`   | `Running`                         | —             |
-| `agentActivity.success`   | `Done`                            | —             |
-| `agentActivity.error`     | `Failed`                          | —             |
-| `agentActivity.canceled`  | `Canceled`                        | —             |
-| `agentActivity.skipped`   | `Skipped`                         | —             |
+| Key                      | English source                           | Override prop |
+| ------------------------ | ---------------------------------------- | ------------- |
+| `agentActivity.label`    | `Agent activity`                         | `ariaLabel`   |
+| `agentActivity.steps`    | `{count} step(s)` (plural)               | —             |
+| `agentActivity.finished` | `Finished {count} step(s)` (plural)      | —             |
+| `agentActivity.stopped`  | `Stopped after {count} step(s)` (plural) | —             |
+| `agentActivity.failed`   | `Failed: {title}`                        | —             |
+| `agentActivity.pending`  | `Pending`                                | —             |
+| `agentActivity.running`  | `Running`                                | —             |
+| `agentActivity.success`  | `Done`                                   | —             |
+| `agentActivity.error`    | `Failed`                                 | —             |
+| `agentActivity.canceled` | `Canceled`                               | —             |
+| `agentActivity.skipped`  | `Skipped`                                | —             |
 
 - Formatting: plural rules through `Intl.PluralRules` and the count through `Intl.NumberFormat`, both with the provider locale (the same locale the messages resolve from); a plural form the catalog lacks falls back to `other`. Step titles and descriptions come translated from the owner.
 

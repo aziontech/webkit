@@ -1,11 +1,11 @@
 # AiActionApproval (`ai/ai-action-approval`)
 
-> A user-authorized action inside a generative AI conversation, from the messages of TanStack AI's `useChat`: the read-only call shows as a completed `ToolCall`, the explanation in `StreamingResponse`, and the call that needs approval as a `ToolApproval` card with its input in a `CodeBlock`. Deploy or Deny resolves the `useChat` interrupt; approved, the call runs under the card and the assistant reports what changed, with Copy and Retry after a failure. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `CopyButton`, `Button` and `PromptInput`. A page body for ConsoleLayout that fills its content region.
+> A user-authorized action inside a generative AI conversation, from the messages of TanStack AI's `useChat`: the read-only call shows as a completed `ToolCall`, the explanation in `StreamingResponse`, and the call that needs approval as a `ToolApproval` card with its input in a `CodeBlock`. Deploy or Deny resolves the `useChat` interrupt; approved, the call runs under the card and the assistant reports what changed, with Copy and Retry after a failure. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `Button` and `PromptInput`. A page body for ConsoleLayout that fills its content region.
 
 - Surface: app
 - Source: `blocks/ai/ai-action-approval/ai-action-approval.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-action-approval")`
-- Components: [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), [ImageGallery](../../components/image-gallery.md), [PromptInput](../../components/prompt-input.md), [StreamingResponse](../../components/streaming-response.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, `utils/ai-chat`
+- Components: [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ImageGallery](../../components/image-gallery.md), `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [StreamingResponse](../../components/streaming-response.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, `utils/ai-chat`
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -32,7 +32,7 @@ The moment an assistant needs permission. The reader asked for something that ch
 
 ### A. Conversation frame — `Conversation`, `PromptInput`
 
-The thread and its composer, as in `ai/ai-chat`. While an approved action runs, the composer shows Stop, which emits `stop`; the page cancels the run with `stop()` of `useChat`.
+The thread and its composer, as in `ai/ai-chat`: a quiet title row with no divider, and the `PromptInput` pill floating in the `#composer` of `Conversation`, with the alert of unsent decisions above it. The pill holds the Attach "+" at the start (`attachable`, on by default: up to 4 images or PDFs of 10 MB each, sent as TanStack AI's multimodal content) and Dictate before Send. Dictate (`PromptInputDictateButton`) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. While an approved action runs, the composer shows Stop, which emits `stop`; the page cancels the run with `stop()` of `useChat`.
 
 ### B. Request — `ChatMessage`
 
@@ -50,9 +50,9 @@ The question names the action and its target, with the command or tool in code. 
 
 After approval, the call appears as a running `ToolCall` under the card and completes or fails in place; a denial records it as denied. A `tool-result` whose `content` is a list of text and image parts draws as text and an `ImageGallery` in the output, not as JSON.
 
-### F. Outcome — `ChatMessage`, `CopyButton`, `Button`
+### F. Outcome — `ChatMessage`, `Button`
 
-A new response that says what changed (or that nothing ran), with Copy in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined `Button` beside Copy runs the action again, named for it: the tool's `approveLabel` plus `again` (`Deploy again`), `Retry` only for a tool with no verb, so one tap never re-runs an approved production change behind a bare word; an action never ends in silence. The retried call should come back as a new approval card: the earlier approval covered one run.
+A new response that says what changed (or that nothing ran), with Copy and Read aloud in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined `Button` beside Copy runs the action again, named for it: the tool's `approveLabel` plus `again` (`Deploy again`), `Retry` only for a tool with no verb, so one tap never re-runs an approved production change behind a bare word; an action never ends in silence. The retried call should come back as a new approval card: the earlier approval covered one run.
 
 ### G. Questions and failed decisions — `AgentQuestion`, `Alert`
 
@@ -76,10 +76,11 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 | `tools`           | `Record<string, AiChatTool>`   | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant`, `confirmationPhrase` and `editable` for its approval card.                                    |
 | `interrupts`      | `interrupts` of `useChat`      | The pending approvals and questions; the approve button and Deny resolve the one whose `toolCallId` matches the call, a generic one asks its question, and an unbound one asks it for the app to route. |
 | `interruptErrors` | `interruptErrors` of `useChat` | Decisions that were not sent: an alert with the reason, and Retry when one is retryable.                                                                                                                |
+| `attachable`      | `boolean`                      | The Attach "+" at the start of the composer; `send` then hands over multimodal content. Default `true`.                                                                                                 |
 
 | Event              | Payload                     | When                                                                                                                                              |
 | ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `send`             | `(event, text)`             | The composer: call `sendMessage(text)`.                                                                                                           |
+| `send`             | `(event, content)`          | The composer: call `sendMessage(content)`. `content` is the text, or with attachments `{ content: parts }`.                                       |
 | `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
 | `retry`            | `(event, message)`          | Try again or Regenerate response: call `reload()`.                                                                                                |
 | `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
@@ -128,7 +129,7 @@ export async function POST(request: Request) {
     :error="error"
     :interrupts="interrupts"
     :interrupt-errors="interruptErrors"
-    @send="(_event, text) => sendMessage(text)"
+    @send="(_event, content) => sendMessage(content)"
     @retry-interrupts="retryInterrupts()"
     @stop="stop()"
     @retry="reload()"
@@ -212,10 +213,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
   import ChatMessage, { type ChatMessageStatus } from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import ImageGallery from '@aziontech/webkit/image-gallery'
   import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import ToolCall from '@aziontech/webkit/tool-call'
@@ -225,6 +224,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     type AiChatInterruptError,
     type AiChatMessage,
     type AiChatQuestion,
+    type AiChatSendContent,
     type AiChatTool,
     type AiChatToolCallPart,
     answerInterrupt,
@@ -249,6 +249,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
   } from '@aziontech/webkit/utils/ai-chat'
   import { computed, ref } from 'vue'
 
+  import AiActionApprovalComposer from './parts/ai-action-approval-composer.vue'
   import { sampleMessages, sampleTools } from './sample'
 
   export interface AiActionApprovalProps {
@@ -264,6 +265,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     interrupts?: ReadonlyArray<AiChatInterrupt>
     /** Why the decisions were not sent, as `useChat` returns `interruptErrors`; a retryable one offers Retry. */
     interruptErrors?: ReadonlyArray<AiChatInterruptError>
+    /** The reader may attach images and PDFs (up to 4, 10 MB each) from the Attach control at the start of the composer; `send` then hands over the multimodal content `sendMessage` takes. */
+    attachable?: boolean
   }
 
   const props = withDefaults(defineProps<AiActionApprovalProps>(), {
@@ -272,7 +275,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     error: '',
     tools: undefined,
     interrupts: () => [],
-    interruptErrors: () => []
+    interruptErrors: () => [],
+    attachable: true
   })
 
   const emit = defineEmits<{
@@ -280,14 +284,13 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     deny: [event: MouseEvent, call: AiChatToolCallPart]
     stop: [event: MouseEvent]
     retry: [event: MouseEvent, message: AiChatMessage]
-    send: [event: MouseEvent | KeyboardEvent, text: string]
+    send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     'answer-interrupt': [event: Event, interrupt: AiChatInterrupt, value: string]
     'retry-interrupts': [event: MouseEvent]
   }>()
 
   const { formatDate } = useLocale()
 
-  const prompt = ref('')
   const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
   const settled = ref<Record<string, AiChatQuestion>>({})
@@ -404,12 +407,6 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     settled.value[question.id] = { ...question, status: 'skipped', error: '' }
     skipInterrupt(interrupt)
   }
-
-  function send(event: MouseEvent | KeyboardEvent, value: string) {
-    if (!value.trim() || state.value !== 'ready') return
-    prompt.value = ''
-    emit('send', event, value)
-  }
 </script>
 
 <template>
@@ -417,10 +414,10 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     aria-labelledby="ai-approval-title"
     class="flex min-h-0 w-full grow basis-0 flex-col"
   >
-    <header class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)">
+    <header class="px-(--spacing-md) py-(--spacing-sm)">
       <h1
         id="ai-approval-title"
-        class="text-heading-xs text-(--text-default)"
+        class="text-label-md text-(--text-default)"
       >
         AI assistant
       </h1>
@@ -556,11 +553,12 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
           "
           #actions
         >
-          <ChatMessage.Actions>
-            <CopyButton
-              size="small"
-              :value="textOf(turn)"
-            />
+          <ChatMessage.Actions
+            copyable
+            show-read-aloud
+            :copy-text="textOf(turn)"
+            :read-aloud-text="textOf(turn)"
+          >
             <Button
               v-if="turn === last && failedCall(turn)"
               :label="retryLabelOf(turn)"
@@ -590,31 +588,25 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
           @skip="skip(question)"
         />
       </ChatMessage>
+      <template #composer>
+        <Alert
+          v-if="interruptErrors.length"
+          severity="danger"
+          size="small"
+          title="Your decision was not sent"
+          :action-label="retryable ? 'Retry' : ''"
+          @action="emit('retry-interrupts', $event)"
+        >
+          {{ interruptErrorText(interruptErrors) }}
+        </Alert>
+        <AiActionApprovalComposer
+          :state="state"
+          :attachable="attachable"
+          @send="(event, content) => emit('send', event, content)"
+          @stop="emit('stop', $event)"
+        />
+      </template>
     </Conversation>
-    <footer
-      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-xs) pb-(--spacing-md)"
-    >
-      <Alert
-        v-if="interruptErrors.length"
-        severity="danger"
-        size="small"
-        title="Your decision was not sent"
-        :action-label="retryable ? 'Retry' : ''"
-        @action="emit('retry-interrupts', $event)"
-      >
-        {{ interruptErrorText(interruptErrors) }}
-      </Alert>
-      <PromptInput
-        v-model="prompt"
-        :status="state"
-        @submit="(event, { value }) => send(event, value)"
-        @stop="emit('stop', $event)"
-      >
-        <template #hint>
-          The assistant runs nothing in your account without your approval.
-        </template>
-      </PromptInput>
-    </footer>
   </section>
 </template>
 ```
@@ -788,4 +780,68 @@ export const sampleDeleteMessages: AiChatMessage[] = [
     }
   ])
 ]
+```
+
+## `parts/ai-action-approval-composer.vue`
+
+```ts
+<script setup lang="ts">
+  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
+  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
+  import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
+  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import { type AiChatSendContent, contentOf } from '@aziontech/webkit/utils/ai-chat'
+  import { ref } from 'vue'
+
+  const props = defineProps<{
+    state: PromptInputStatus
+    attachable: boolean
+  }>()
+
+  const emit = defineEmits<{
+    send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
+    stop: [event: MouseEvent]
+  }>()
+
+  const prompt = ref('')
+  const files = ref<PromptInputFile[]>([])
+
+  async function send(event: MouseEvent | KeyboardEvent, text: string) {
+    const attached = files.value
+    const picked = attached.flatMap((item) => (item.file instanceof File ? [item.file] : []))
+    if ((!text.trim() && !picked.length) || props.state !== 'ready') return
+    prompt.value = ''
+    files.value = []
+    try {
+      emit('send', event, await contentOf(text, picked))
+    } catch {
+      prompt.value = text
+      files.value = attached
+    }
+  }
+</script>
+
+<template>
+  <PromptInput
+    v-model="prompt"
+    v-model:files="files"
+    :status="state"
+    :max-files="4"
+    :max-file-size="10485760"
+    accept="image/*,application/pdf"
+    @submit="(event, { value }) => send(event, value)"
+    @stop="emit('stop', $event)"
+  >
+    <template
+      v-if="attachable"
+      #actions
+    >
+      <PromptInputAttachButton />
+    </template>
+    <template #end>
+      <PromptInputDictateButton />
+    </template>
+    <template #hint>The assistant runs nothing in your account without your approval.</template>
+  </PromptInput>
+</template>
 ```

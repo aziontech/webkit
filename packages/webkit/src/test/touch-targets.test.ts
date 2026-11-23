@@ -11,7 +11,6 @@ import AppLayoutDefault from '../../examples/app-layout/default.vue'
 import CitationDefault from '../../examples/citation/default.vue'
 import CodeBlockUnevenTabs from '../../examples/code-block/uneven-tabs.vue'
 import ConsoleShowcaseDefault from '../../examples/console-showcase-section/default.vue'
-import ConversationHistoryDefault from '../../examples/conversation-history/default.vue'
 import DatePickerDefault from '../../examples/date-picker/default.vue'
 import DocTableOfContentsDefault from '../../examples/doc-table-of-contents/default.vue'
 import DropdownMenuStates from '../../examples/dropdown-menu/states.vue'
@@ -31,6 +30,7 @@ import SourcesDefault from '../../examples/sources/default.vue'
 import TabsDefault from '../../examples/tabs/default.vue'
 import ThemeSwitcherDefault from '../../examples/theme-switcher/default.vue'
 import TreeDefault from '../../examples/tree/default.vue'
+import ConversationHistory from '../components/ai/conversation-history/conversation-history.vue'
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
 
@@ -254,10 +254,23 @@ describe('tap targets on a coarse pointer (styled)', () => {
       expect(hitSpan(separator, 'y')).toBeGreaterThanOrEqual(40)
     })
 
+    const HistoryList = {
+      render: () =>
+        h(ConversationHistory, {
+          items: [
+            { id: 'c1', title: 'Purge the cache after a deploy', updatedAt: '2026-11-11T14:20:00' },
+            {
+              id: 'c2',
+              title: 'Why is my function returning 502?',
+              updatedAt: '2026-11-11T09:05:00'
+            }
+          ]
+        })
+    }
+
     it.each([
       ['Reasoning', ReasoningDefault, '[data-testid="reasoning__trigger"]'],
-      ['Sources', SourcesDefault, '[data-testid="sources__trigger"]'],
-      ['ConversationHistory', ConversationHistoryDefault, '[data-slot="conversation-history-item"]']
+      ['ConversationHistory', HistoryList, '[data-slot="conversation-history-item"]']
     ])('%s trigger rows are 44px tall', async (_name, component, selector) => {
       await touch()
       const view = await mount(component)
@@ -265,10 +278,17 @@ describe('tap targets on a coarse pointer (styled)', () => {
       expect(row.getBoundingClientRect().height).toBeGreaterThanOrEqual(44)
     })
 
+    it('the Sources pill answers a tap across 44px', async () => {
+      await touch()
+      const view = await mount(SourcesDefault)
+      const pill = view.container.querySelector<HTMLElement>('[data-testid="sources__trigger"]')!
+      expect(hitSpan(pill, 'y')).toBeGreaterThanOrEqual(44)
+    })
+
     it('Citation markers answer a tap across 44px', async () => {
       await touch()
       const view = await mount(CitationDefault)
-      const marker = view.container.querySelector<HTMLElement>('a[data-testid="citation"]')!
+      const marker = view.container.querySelector<HTMLElement>('[data-testid="citation__chip"]')!
       expect(marker.getBoundingClientRect().height).toBeLessThan(44)
       expect(hitSpan(marker, 'y')).toBeGreaterThanOrEqual(44)
     })

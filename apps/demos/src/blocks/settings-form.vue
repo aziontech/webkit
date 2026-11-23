@@ -188,7 +188,7 @@
                     <span class="text-label-sm text-(--text-muted)"
                       ><span
                         aria-hidden="true"
-                        class="text-(--text-brand)"
+                        class="text-(--text-default)"
                         >*</span
                       >
                       (Required)</span
@@ -224,7 +224,7 @@
                     <span class="text-label-sm text-(--text-muted)"
                       ><span
                         aria-hidden="true"
-                        class="text-(--text-brand)"
+                        class="text-(--text-default)"
                         >*</span
                       >
                       (Required)</span

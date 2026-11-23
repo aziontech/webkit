@@ -69,7 +69,7 @@
     'group-hover/card:text-(--text-default) motion-reduce:transition-none'
 
   const CARD_LINK_ARROW_CLASS =
-    'az az-arrow-right text-[length:inherit] leading-none text-(--text-brand) transition-[translate] duration-moderate-02 ease-expressive-entrance ' +
+    'az az-arrow-right text-[length:inherit] leading-none text-(--primary) transition-[translate] duration-moderate-02 ease-expressive-entrance ' +
     'group-hover/card:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover/card:-translate-x-0.5 motion-reduce:transition-none'
 </script>
 

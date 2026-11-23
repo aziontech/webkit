@@ -66,7 +66,7 @@
     >
       <span
         aria-hidden="true"
-        class="text-(--text-brand)"
+        class="text-(--text-default)"
         >*</span
       >
       {{ t('field.required') }}

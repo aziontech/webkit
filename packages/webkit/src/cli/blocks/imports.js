@@ -3,7 +3,7 @@ import { basename, dirname, extname, join, posix, resolve } from 'node:path'
 
 import { PACKAGE_NAME } from '../source.js'
 import { read } from './manifest.js'
-import { extraFile, variantFile } from './targets.js'
+import { extraFile, longExtraFile, variantFile } from './targets.js'
 
 const WEBKIT_SUBPATH = /['"`]@aziontech\/webkit\/([^'"`\s]+)['"`]/g
 
@@ -98,8 +98,9 @@ function dependencyPiece(file, block, paths, taken) {
       ? { name: pascal(basename(file, '.vue')), file }
       : null)
   const short = paths.at(sibling ? variantFile(paths.stem, sibling) : extraFile(paths.stem, file))
-  const long = paths.at(extraFile(paths.stem, file.split('/').join('.')))
-  return { path: taken.has(short) ? long : short, file, variant: declared ? declared.name : 'Data' }
+  const long = paths.at(longExtraFile(paths.stem, file))
+  const clash = taken.has(short) || (!sibling && Boolean(paths.reserved?.has(short)))
+  return { path: clash ? long : short, file, variant: declared ? declared.name : 'Data' }
 }
 
 export function dependencyPieces(block, paths, targets) {

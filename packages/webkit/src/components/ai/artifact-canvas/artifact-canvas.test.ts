@@ -64,7 +64,7 @@ describe('ArtifactCanvas', () => {
   it('pages through versions and renders the slot with the version shown', async () => {
     const view = harness()
     expect(view.getByRole('group', { name: 'Artifact versions' })).toBeTruthy()
-    expect(view.getByText('1 of 3')).toBeTruthy()
+    expect(view.getByText('Version 1 of 3')).toBeTruthy()
     await userEvent.click(view.getByRole('button', { name: 'Next version' }))
     expect(view.version.value).toBe(1)
     expect(view.container.querySelector('pre')).toHaveAttribute('data-version', '1')

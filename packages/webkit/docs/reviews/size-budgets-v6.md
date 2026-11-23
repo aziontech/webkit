@@ -212,6 +212,8 @@ Budget-raise: popover 10.35 KB → 10.6 KB (measured 10.47 KB): 6.0 B11 (compone
 - panel-content: 15.2 KB → 13.9 KB (measured 13.77 KB)
 - panel-footer: 11.65 KB → 10.65 KB (measured 10.55 KB)
 - panel-header: 11.6 KB → 10.8 KB (measured 10.70 KB)
+- tool-approval: 16.55 KB → 11.15 KB (measured 11.02 KB): chat round 2 — inline Markdown in a title no longer pulls in the citation chip
+- agent-question: 17.3 KB → 11.9 KB (measured 11.76 KB): chat round 2 — inline Markdown in a heading no longer pulls in the citation chip
   Budget-raise: card 13.75 → 13.85 KB — naming standard (slot/prop renames lengthen strings; no new logic)
   Budget-raise: site-nav 56.65 → 56.75 KB — naming standard (longer prop names; no new logic)
   Budget-raise: wizard 7.6 → 7.7 KB — naming standard (status vocabulary; no new logic)
@@ -1524,3 +1526,123 @@ Budget-raise: checkbox 2.3 KB → 2.35 KB (measured 2.30 KB, rounded up): the au
 Budget-raise: dropdown-menu-sub-content 5.05 KB → 5.3 KB (measured 5.25 KB, rounded up): the audit-5 lanes that each raised this entry landed together (see the lane lines above).
 Budget-raise: navigation-menu-root 15.8 KB → 16.05 KB (measured 16.00 KB, rounded up): the audit-5 lanes that each raised this entry landed together (see the lane lines above).
 Budget-raise: customer-use-cases-section 7.85 KB → 7.9 KB (measured 7.86 KB): it renders Link and FeatureItem, which grew in the audit-5 lanes (new-tab text, linked click area).
+Budget-raise: chat-message-actions 1.7 KB → 9.7 KB (measured 9.59 KB): the action row now holds Read aloud (speech synthesis toggle), which composes IconButton and Tooltip like ChatMessage.Feedback; the compound chat-message fell from 25.85 KB to 14 KB (measured 13.49 KB) with the avatar gone, so the AI message costs less overall (chat look proposal, 2026-11-22).
+Budget-raise: chat-message-feedback 9.4 KB → 9.45 KB (measured 9.40 KB): the thumbs are 40 px IconButtons and the empty status line drops its padding (chat look proposal, 2026-11-22).
+Budget-raise: citation 7.15 KB → 7.25 KB (measured 7.20 KB): the chip shows the source's site and names it in the accessible name (chat look proposal, 2026-11-22).
+Budget-raise: sources 2.9 KB → 3.4 KB (measured 3.33 KB): the Sources pill draws the overlapping site marks (a private SourcesMark part) and the list shows each source's site (chat look proposal, 2026-11-22).
+Budget-raise: streaming-response 38.1 KB → 38.35 KB (measured 38.27 KB): citations carry the source's site, read from its href (chat look proposal, 2026-11-22).
+Budget-raise: conversation 7.15 KB → 7.5 KB (measured 7.47 KB): the floating composer area (the `composer` slot, its fade, the ResizeObserver that pads the thread by the composer's height) and the round blurred Scroll to latest button of the chat look proposal.
+Budget-raise: prompt-input-root 10.75 KB → 11.35 KB (measured 11.32 KB): the single floating pill that stacks into a rounded rectangle on a second line (the multiline state, the send part split out of the root to keep it under the size limits, the translucent blurred surface).
+Budget-raise: prompt-input 13.9 KB → 14.5 KB (measured 14.44 KB): the same floating pill as prompt-input-root, plus round Attach and Dictate controls.
+Budget-raise: prompt-input-context-picker 15.2 KB → 15.25 KB (measured 15.20 KB): its trigger is now round to sit in the composer pill.
+Budget-raise: prompt-queue 4.7 KB → 4.75 KB (measured 4.71 KB): the queue box takes the composer's translucent surface and backdrop blur (chat look proposal), so it reads as one floating surface with the pill composer below it.
+Budget-raise: conversation-history 6.7 KB → 9 KB (measured 8.94 KB): the ChatGPT-style side list adds New chat and a search field (`creatable`, `searchable`); the search field is the package `Input` (frame, field attributes, autofill hints), which a native input may not replace (owners.json).
+Budget-raise: config-provider 12.4 KB → 12.45 KB (measured 12.43 KB): the English catalog it carries gained the chat look keys (conversation history New chat and search, Read aloud and Stop reading, the citation label with the site) when the proposal lanes merged.
+Budget-raise: locales-pt-BR 11.65 KB → 11.7 KB (measured 11.67 KB): the same chat look keys, translated.
+Budget-raise: tool-approval 16.15 KB → 16.55 KB (measured 16.48 KB): the approval card of the chat look proposal (quiet row in the assistant column, round controls) with its typed-confirmation line from the catalog, merged from the proposal lanes.
+Budget-raise: agent-question 16.85 KB → 17.3 KB (measured 17.24 KB): the question heading split into its own part renders inline Markdown with citation chips (the chat look proposal), and the chips now take one space from the word before and none before punctuation.
+Budget-raise: prompt-input 14.5 KB → 14.65 KB (measured 14.60 KB): the counter shows only from 80% of maxLength, and a native ResizeObserver (released on scope dispose) re-measures the text area when its width changes, so a composer in a pane that opens near zero width settles to one row.
+Budget-raise: prompt-input-root 11.35 KB → 11.55 KB (measured 11.49 KB): the same near-limit counter and width-change re-measure as prompt-input.
+Budget-raise: streaming-response 38.35 KB → 38.5 KB (measured 38.46 KB): citation chips take one normal space from the word before them, none before the punctuation after them, and one between two chips.
+Budget-raise: llms-full.txt 2,360,000 → 2,391,000 bytes (measured 2,367,236): the chat look proposal's spec, block and example changes in the full AI bundle.
+Budget-raise: chat-message 14 KB → 20.35 KB (measured 20.28 KB, entry only): the action row builds in Copy (CopyButton) instead of taking it from the slot, and a user message opens as an inline editor (Textarea, Cancel, Send) for ChatGPT's Edit; the More menu (DropdownMenu, 8.5 KB) is a lazy chunk loaded on mount, so it is not counted (chat look round 2, 2026-11-22).
+Budget-raise: chat-message-root 7.1 KB → 8.95 KB (measured 8.89 KB): the inline prompt editor (Textarea with auto-resize, Cancel and Send, Escape and Ctrl+Enter, focus return) of ChatGPT's Edit (chat look round 2, 2026-11-22).
+Budget-raise: chat-message-actions 9.7 KB → 14.25 KB (measured 14.20 KB, entry only): the row builds in Copy, Edit, the thumbs, Share and Try again in one order and measures its width to move the thumbs and Try again into More on a phone; More itself (DropdownMenu) is a lazy chunk (chat look round 2, 2026-11-22).
+Budget-raise: chat-message-feedback 9.45 KB → 9.5 KB (measured 9.47 KB): a chosen thumb hides the other and clears on a second press, and the status line is visually hidden (chat look round 2, 2026-11-22).
+Budget-raise: config-provider 12.45 KB → 12.55 KB (measured 12.51 KB): the English catalog gained the message action keys (Share, More actions, Branch in new chat, Edit message, the editor, the response versions label) of chat look round 2.
+Budget-raise: locales-pt-BR 11.7 KB → 11.8 KB (measured 11.76 KB): the same message action keys, translated.
+Budget-raise: locales-es 11.8 KB → 11.9 KB (measured 11.88 KB): the same message action keys, translated.
+Budget-raise: artifact-canvas 12 KB → 12.05 KB (measured 12.02 KB): its ResponseBranches pager shows `2/3` with a visually hidden `Version 2 of 3` live region (chat look round 2, 2026-11-22).
+Budget-raise: prompt-input 14.65 KB → 15.1 KB (measured 15.08 KB): the attach control's "+" menu (chat look round 2): with `tools` it loads a menu part after mount (Camera, Photos, Files, then the tools as checkboxes, the turned-on tools as chips) and stacks the box while a chip shows; the menu, DropdownMenu and Chip stay in a lazy chunk.
+Budget-raise: prompt-input-attach-button 5.6 KB → 6.7 KB (measured 6.68 KB): the same "+" menu; the entry now holds the loader of the lazy menu part (the dynamic import wiring a standalone entry did not carry before) and the tools model.
+Budget-raise: code-block 33.85 KB → 34.0 KB (measured 33.99 KB): the label header holds the copy control at its end and sticks to the top of the scroller (chat look round 2), so a second CopyButton placement and the copy-gutter switch ship with the block.
+Budget-raise: doc-code-group 34.3 KB → 34.45 KB (measured 34.42 KB): the same CodeBlock label-header copy and sticky header, carried by the docs code group.
+Budget-raise: console-application-scene 121.95 KB → 122.15 KB (measured 122.12 KB): the same CodeBlock label-header copy, carried by the scene's code panel.
+Budget-raise: cli-terminal-section 47.15 KB → 47.3 KB (measured 47.28 KB): the same CodeBlock label-header copy, carried by the section.
+Budget-raise: feature-tabs-section 58.15 KB → 58.3 KB (measured 58.29 KB): the same CodeBlock label-header copy, carried by the section's code tab.
+Budget-raise: streaming-response 38.5 KB → 39.15 KB (measured 39.09 KB): nested lists (parser and recursive list renderer), bold headings and the filled code card with its language header, also while a fence is still open (chat look round 2).
+Budget-raise: citation 7.25 KB → 11.25 KB (measured 11.13 KB): chat round 2 (ChatGPT parity) — the citation chip opens a HoverCard card with the source's site, title, snippet and a pager (IconButton), and draws the site's favicon or coloured letter.
+Budget-raise: sources 3.4 KB → 4 KB (measured 3.91 KB, entry only): chat round 2 — the pill draws favicons and coloured letters; the new side panel (Drawer) is a lazy chunk loaded when the pill is hovered, focused or opened.
+Budget-raise: streaming-response 38.5 KB → 42.15 KB (measured 42.10 KB): chat round 2 — every citation is the new Citation chip and card (HoverCard, IconButton, favicon mark).
+Budget-raise: doc-markdown 40.55 KB → 40.65 KB (measured 40.58 KB): chat round 2 — the citation and sources messages (pager, Citations and More groups) in the shared English catalog.
+Budget-raise: config-provider 12.45 KB → 12.55 KB (measured 12.49 KB): chat round 2 — the citation and sources messages in the shared catalogs.
+Budget-raise: locales-pt-BR 11.7 KB → 11.8 KB (measured 11.72 KB): chat round 2 — the citation and sources messages.
+Budget-raise: locales-es 11.8 KB → 11.9 KB (measured 11.84 KB): chat round 2 — the citation and sources messages.
+Budget-raise: config-provider 12.55 KB → 12.65 KB (measured 12.59 KB): chat look round 2 merged — the message action keys (lane msg) and the citation and sources keys (lane sources) in one English catalog.
+Budget-raise: locales-pt-BR 11.8 KB → 11.9 KB (measured 11.85 KB): the same merged chat look round 2 keys, translated.
+Budget-raise: locales-es 11.9 KB → 12 KB (measured 11.96 KB): the same merged chat look round 2 keys, translated.
+Budget-raise: prompt-input-dictate-button 5.55 KB → 5.6 KB (measured 5.57 KB): chat look round 2 merged — it carries the English catalog, which gained the message action keys.
+Budget-raise: prompt-input-tools 17.7 KB → 17.75 KB (measured 17.72 KB): chat look round 2 merged — the same larger English catalog.
+Budget-raise: streaming-response 42.15 KB → 42.85 KB (measured 42.81 KB): chat look round 2 merged — the code-block header and the citation popover land together, with the larger English catalog.
+Budget-raise: catalog/ 1,405,000 → 1,410,000 bytes (measured 1,406,841): chat look round 2 — the message actions, prompt editing, versions, site citations, the sources panel and the code-card header are new public API, documented in the catalog; the longest new spec passages were already shortened.
+Budget-raise: package unpacked 34,500,000 → 34,650,000 bytes and packed 8,550,000 → 8,600,000 bytes (measured 34,570,732 and 8,567,348 before the trims): chat look round 2 — the same new chat components and their llms and catalog pages.
+Budget-raise: prompt-input 15.1 KB → 15.15 KB (measured 15.10 KB): chat look round 2 — the file inputs are checked with `instanceof` instead of a type assertion, to keep the assertion count at its limit.
+Budget-raise: streaming-response 42.85 KB → 42.9 KB (measured 42.86 KB): chat look round 2 — the citation reads the pointer type and the event target without type assertions, for the same reason.
+Budget-raise: hero-title 1.65 KB → 1.7 KB (measured 1.68 KB): brand text (BRAND-1) — the hero highlight is an orange fill with black text and the eyebrow carries its orange bar, so no contrast exception is needed.
+Budget-raise: marquee 8 KB → 8.05 KB (measured 8.01 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: hero 5.05 KB → 5.1 KB (measured 5.06 KB): brand text (BRAND-1) — the hero highlight is an orange fill with black text and the eyebrow carries its orange bar, so no contrast exception is needed.
+Budget-raise: module 2.9 KB → 2.95 KB (measured 2.92 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: call-to-action 3.65 KB → 3.7 KB (measured 3.66 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: quote-tabs 24.5 KB → 24.55 KB (measured 24.51 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: customer-use-cases-section 7.85 KB → 7.9 KB (measured 7.87 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: article-cards-section 6.1 KB → 6.3 KB (measured 6.29 KB): look-alike fix (CQ-E4) — the section now renders the shared SectionBand frame and linkedCell, so the pair shares code and the accepted look-alike entry is gone.
+Budget-raise: hero-section 13.4 KB → 13.45 KB (measured 13.41 KB): brand text (BRAND-1) — the hero highlight is an orange fill with black text and the eyebrow carries its orange bar, so no contrast exception is needed.
+Budget-raise: capability-grid-section 8.15 KB → 8.2 KB (measured 8.19 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: hero-form-section 52.55 KB → 52.6 KB (measured 52.56 KB): brand text (BRAND-1) — the hero highlight is an orange fill with black text and the eyebrow carries its orange bar, so no contrast exception is needed.
+Budget-raise: competitor-comparison-section 25.5 KB → 25.55 KB (measured 25.51 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: plan-comparison-section 39.25 KB → 39.3 KB (measured 39.26 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: feature-scroll-section 20.1 KB → 20.15 KB (measured 20.12 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: feature-tiles-section 5.9 KB → 5.95 KB (measured 5.93 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: stats-section 4.7 KB → 4.75 KB (measured 4.71 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: card-carousel-section 9.3 KB → 9.35 KB (measured 9.33 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: client-mosaic-section 7.65 KB → 7.7 KB (measured 7.67 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: client-story-columns-section 8.7 KB → 8.75 KB (measured 8.70 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: compliance-logos-section 8.2 KB → 8.25 KB (measured 8.20 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: investor-marks-section 4.8 KB → 5 KB (measured 4.96 KB): look-alike fix (CQ-E4) — the section now renders the shared SectionBand frame and linkedCell, so the pair shares code and the accepted look-alike entry is gone.
+Budget-raise: logo-wall-section 24.5 KB → 24.55 KB (measured 24.50 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: listing-index-section 42.1 KB → 42.15 KB (measured 42.10 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: platform-directory-section 4.7 KB → 4.8 KB (measured 4.75 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: subject-grid-section 8.55 KB → 8.6 KB (measured 8.58 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: recognition-marquee-section 21.6 KB → 21.65 KB (measured 21.64 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: cli-terminal-section 47.3 KB → 47.35 KB (measured 47.32 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: feature-tabs-section 58.3 KB → 58.35 KB (measured 58.32 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: contact-hub-section 9.45 KB → 9.5 KB (measured 9.46 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: listing-table-section 25.75 KB → 25.8 KB (measured 25.78 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: newsletter-section 13.75 KB → 13.8 KB (measured 13.78 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: link-directory 1.85 KB → 1.9 KB (measured 1.85 KB): brand text (BRAND-1) — the eyebrow (or the part it marks) carries an orange bar or underline in place of orange text, so no contrast exception is needed.
+Budget-raise: doc-markdown 40.85 KB → 40.9 KB (measured 40.89 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: doc-code-group 34.45 KB → 34.6 KB (measured 34.57 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: hero 5.1 KB → 5.15 KB (measured 5.11 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: site-page 10.55 KB → 10.6 KB (measured 10.55 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: quote 15.2 KB → 15.25 KB (measured 15.22 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: console-application-scene 123.7 KB → 123.85 KB (measured 123.82 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: article-index-section 37.55 KB → 37.6 KB (measured 37.57 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: hero-section 13.75 KB → 13.8 KB (measured 13.77 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: capability-grid-section 8.2 KB → 8.25 KB (measured 8.22 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: hero-form-section 54.15 KB → 54.2 KB (measured 54.18 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: competitor-comparison-section 25.7 KB → 25.75 KB (measured 25.71 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: feature-scroll-section 20.9 KB → 20.95 KB (measured 20.93 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: feature-tiles-section 6.3 KB → 6.35 KB (measured 6.31 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: network-section 27.2 KB → 27.25 KB (measured 27.23 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: stats-section 4.75 KB → 4.8 KB (measured 4.76 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: client-mosaic-section 7.9 KB → 7.95 KB (measured 7.90 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: client-story-columns-section 8.85 KB → 8.9 KB (measured 8.88 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: logo-wall-section 24.65 KB → 24.7 KB (measured 24.67 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: listing-index-section 43.2 KB → 43.25 KB (measured 43.21 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: subject-grid-section 8.65 KB → 8.7 KB (measured 8.66 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: recognition-marquee-section 21.7 KB → 21.75 KB (measured 21.72 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: cli-terminal-section 47.35 KB → 47.5 KB (measured 47.47 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: feature-tabs-section 59.35 KB → 59.55 KB (measured 59.52 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: media-split-stack-section 17.55 KB → 17.6 KB (measured 17.56 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: listing-table-section 26.45 KB → 26.5 KB (measured 26.46 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: config-provider 12.65 KB → 12.8 KB (measured 12.77 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: locales-pt-BR 11.9 KB → 12 KB (measured 11.95 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: locales-es 12 KB → 12.1 KB (measured 12.08 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: code-block 34 KB → 34.2 KB (measured 34.15 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: artifact-canvas 12.15 KB → 12.2 KB (measured 12.16 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: citation 11.25 KB → 11.45 KB (measured 11.44 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: prompt-input 15.15 KB → 15.6 KB (measured 15.59 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: prompt-input-root 11.55 KB → 11.85 KB (measured 11.82 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: sources 4 KB → 4.05 KB (measured 4.01 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: streaming-response 42.9 KB → 43.35 KB (measured 43.32 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+Budget-raise: conversation-history 9 KB → 9.05 KB (measured 9.01 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.

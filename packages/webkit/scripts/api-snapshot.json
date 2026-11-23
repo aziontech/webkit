@@ -5,8 +5,11 @@
     "accordion-item",
     "accordion-root",
     "accordion-trigger",
+    "agent-activity",
+    "agent-question",
     "alert",
     "app-header",
+    "app-header-account",
     "app-header-root",
     "app-layout",
     "architecture-tabs-section",
@@ -383,6 +386,7 @@
     "assets/workers-cf-symbol-color.svg",
     "assets/zoop-extended-color.svg",
     "attribute-editor",
+    "audio-player",
     "avatar",
     "avatar-group",
     "backdrop",
@@ -488,6 +492,8 @@
     "dashboard-grid-root",
     "data-grid",
     "data-table",
+    "data-table-load-more",
+    "data-table-pagination",
     "date-picker",
     "date-picker-clear",
     "date-picker-root",
@@ -609,6 +615,7 @@
     "hover-card-trigger",
     "icon-button",
     "illustration",
+    "image-gallery",
     "input",
     "input-group",
     "input-group-addon",
@@ -634,6 +641,7 @@
     "key-value-list-group",
     "key-value-list-item",
     "key-value-list-root",
+    "language-select",
     "link",
     "link-directory",
     "link-directory-column",
@@ -653,6 +661,7 @@
     "logo-wall-section",
     "map-chart",
     "marquee",
+    "mcp-app-frame",
     "media-scroll",
     "media-split",
     "media-split-section",
@@ -697,6 +706,7 @@
     "panel-root",
     "password-input",
     "password-requirements",
+    "password-requirements-root",
     "payment-brand",
     "phone-input",
     "photo-marquee-section",
@@ -723,6 +733,7 @@
     "prompt-input-model-picker",
     "prompt-input-root",
     "prompt-input-tools",
+    "prompt-queue",
     "property-filter",
     "qr-code",
     "quote",
@@ -753,6 +764,7 @@
     "settings-group",
     "settings-row",
     "severity-tag",
+    "shortcuts-dialog",
     "sidebar",
     "sidebar-footer",
     "sidebar-header",
@@ -793,6 +805,7 @@
     "styles",
     "styles/all",
     "styles/country-flags",
+    "subagent-card",
     "subheader",
     "subject-grid-section",
     "suggestion-group",
@@ -859,21 +872,30 @@
     "tutorial-panel-provider",
     "tutorial-panel-root",
     "upload-progress",
+    "use-ai-chat-tools",
+    "use-ai-chat-versions",
+    "use-announcer",
     "use-collection",
     "use-color-mode",
     "use-console-layout",
     "use-controllable",
     "use-direction",
+    "use-escape-to-cancel",
+    "use-file-picker",
     "use-focus-trap",
     "use-heading-navigation",
     "use-locale",
     "use-pinned-row",
     "use-placement",
+    "use-shortcuts",
     "use-time-range",
     "use-unsaved-changes",
+    "utils/ai-chat",
+    "utils/ai-chat-questions",
     "utils/clipboard",
     "utils/cn",
     "utils/csv",
+    "video-player",
     "vite-plugin",
     "wizard",
     "wizard-root",
@@ -892,6 +914,7 @@
     "account/account-team-permissions",
     "account/account-users",
     "ai/ai-action-approval",
+    "ai/ai-api-key",
     "ai/ai-chat",
     "ai/ai-chat-drawer",
     "auth/auth-sign-in",
@@ -969,7 +992,10 @@
       "confirmationPhrase": null,
       "denyLabel": null,
       "description": null,
+      "editable": null,
+      "invalid": null,
       "loading": null,
+      "modelValue": null,
       "status": [
         "approved",
         "denied",
@@ -982,6 +1008,31 @@
         "primary"
       ]
     },
+    "agent-question": {
+      "declineLabel": null,
+      "description": null,
+      "error": null,
+      "modelValue": null,
+      "options": null,
+      "placeholder": null,
+      "skipLabel": null,
+      "skippable": null,
+      "status": [
+        "canceled",
+        "error",
+        "pending",
+        "running",
+        "skipped",
+        "success"
+      ],
+      "submitLabel": null,
+      "title": null,
+      "type": [
+        "choice",
+        "confirm",
+        "text"
+      ]
+    },
     "response-loading": {
       "delay": null,
       "label": null,
@@ -989,6 +1040,12 @@
         "bar",
         "inline"
       ]
+    },
+    "agent-activity": {
+      "ariaLabel": null,
+      "defaultOpen": null,
+      "open": null,
+      "steps": null
     },
     "artifact-canvas": {
       "copyValue": null,
@@ -1013,8 +1070,15 @@
       "openable": null,
       "title": null
     },
+    "mcp-app-frame": {
+      "maxHeight": null,
+      "resolveUrl": null,
+      "resource": null,
+      "title": null
+    },
     "chat-message": {
       "author": null,
+      "editing": null,
       "errorMessage": null,
       "from": [
         "assistant",
@@ -1033,6 +1097,7 @@
     },
     "chat-message-root": {
       "author": null,
+      "editing": null,
       "errorMessage": null,
       "from": [
         "assistant",
@@ -1050,9 +1115,8 @@
       "timestamp": null
     },
     "citation": {
-      "href": null,
-      "index": null,
-      "title": null
+      "indexes": null,
+      "sources": null
     },
     "feedback-reason-dialog": {
       "defaultOpen": null,
@@ -1066,15 +1130,19 @@
       "layout": [
         "split",
         "start"
-      ]
+      ],
+      "loadingMore": null,
+      "moreMessages": null
     },
     "conversation-history": {
       "ariaLabel": null,
+      "creatable": null,
       "items": null,
       "loading": null,
       "modelValue": null,
       "now": null,
-      "removable": null
+      "removable": null,
+      "searchable": null
     },
     "prompt-input": {
       "accept": null,
@@ -1089,6 +1157,7 @@
       "minRows": null,
       "modelValue": null,
       "placeholder": null,
+      "queueable": null,
       "references": null,
       "status": [
         "pending",
@@ -1110,6 +1179,7 @@
       "minRows": null,
       "modelValue": null,
       "placeholder": null,
+      "queueable": null,
       "references": null,
       "status": [
         "pending",
@@ -1117,6 +1187,10 @@
         "streaming"
       ],
       "voice": null
+    },
+    "prompt-queue": {
+      "ariaLabel": null,
+      "items": null
     },
     "reasoning": {
       "defaultOpen": null,
@@ -1132,14 +1206,12 @@
       "modelValue": null
     },
     "sources": {
-      "anchor": null,
       "defaultOpen": null,
       "items": null,
       "open": null,
       "title": null
     },
     "streaming-response": {
-      "anchor": null,
       "content": null,
       "sources": null,
       "streaming": null
@@ -1153,15 +1225,33 @@
         "vertical"
       ]
     },
+    "subagent-card": {
+      "defaultOpen": null,
+      "description": null,
+      "duration": null,
+      "name": null,
+      "open": null,
+      "status": [
+        "canceled",
+        "error",
+        "pending",
+        "running",
+        "success"
+      ],
+      "stoppable": null,
+      "title": null
+    },
     "tool-call": {
       "defaultOpen": null,
       "name": null,
       "open": null,
       "status": [
+        "canceled",
         "denied",
         "error",
         "pending",
         "running",
+        "streaming",
         "success"
       ],
       "title": null
@@ -1169,6 +1259,7 @@
     "button": {
       "animated": null,
       "disabled": null,
+      "disabledReason": null,
       "href": null,
       "icon": null,
       "iconPosition": [
@@ -1177,6 +1268,7 @@
       ],
       "label": null,
       "loading": null,
+      "loadingLabel": null,
       "size": [
         "large",
         "medium",
@@ -1472,6 +1564,7 @@
     "stat-tile": {
       "delta": null,
       "deltaLabel": null,
+      "error": null,
       "formatValue": null,
       "inverse": null,
       "label": null,
@@ -1681,6 +1774,7 @@
       ]
     },
     "card": {
+      "href": null,
       "padded": null,
       "title": null
     },
@@ -2147,41 +2241,24 @@
       "columns": null,
       "columnVisibility": null,
       "data": null,
-      "defaultSnapshot": null,
       "density": [
         "comfortable",
         "compact"
       ],
       "error": null,
-      "estimateRowHeight": null,
-      "exportFilename": null,
-      "exportRows": null,
-      "filterFields": null,
-      "filters": null,
       "getSubRows": null,
-      "globalFilter": null,
-      "live": null,
       "loading": null,
-      "loadingMore": null,
       "manualFiltering": null,
-      "manualPagination": null,
       "manualSorting": null,
       "maxHeight": null,
-      "moreRows": null,
       "openKeys": null,
-      "page": null,
-      "pageSize": null,
-      "pageSizeOptions": null,
-      "paginated": null,
       "reorderable": null,
-      "rowCount": null,
       "rowKey": null,
       "rowReorderable": null,
       "rowSelectable": null,
       "selectable": null,
       "selectedKeys": null,
       "selectOnRowClick": null,
-      "snapshot": null,
       "sortable": null,
       "sorting": null,
       "stackable": null,
@@ -2754,15 +2831,33 @@
       "invalid": null,
       "modelValue": null,
       "name": null,
+      "noMatch": null,
       "placeholder": null,
       "readonly": null,
       "required": null,
-      "searchEmptyLabel": null,
       "searchPlaceholder": null,
       "size": [
         "large",
         "medium",
         "small"
+      ]
+    },
+    "language-select": {
+      "ariaLabel": null,
+      "disabled": null,
+      "emptyTitle": null,
+      "modelValue": null,
+      "options": null,
+      "placeholder": null,
+      "searchPlaceholder": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "ghost",
+        "outline"
       ]
     },
     "hint": {
@@ -2857,6 +2952,11 @@
       ]
     },
     "password-requirements": {
+      "requirements": null,
+      "title": null,
+      "value": null
+    },
+    "password-requirements-root": {
       "requirements": null,
       "title": null,
       "value": null
@@ -3101,6 +3201,8 @@
     },
     "footer": {
       "ariaLabel": null,
+      "homeAriaLabel": null,
+      "homeHref": null,
       "variant": [
         "console",
         "content",
@@ -3109,6 +3211,8 @@
     },
     "footer-root": {
       "ariaLabel": null,
+      "homeAriaLabel": null,
+      "homeHref": null,
       "variant": [
         "console",
         "content",
@@ -3553,6 +3657,7 @@
       "disabled": null,
       "href": null,
       "icon": null,
+      "inline": null,
       "label": null,
       "size": [
         "large",
@@ -3699,6 +3804,7 @@
     },
     "confirm-dialog": {
       "cancelLabel": null,
+      "confirmationPhrase": null,
       "confirmLabel": null,
       "defaultOpen": null,
       "description": null,
@@ -4366,7 +4472,14 @@
       "modelValue": null,
       "showProgress": null
     },
+    "shortcuts-dialog": {
+      "defaultOpen": null,
+      "open": null,
+      "shortcut": null,
+      "title": null
+    },
     "file-preview": {
+      "base64": null,
       "bytes": null,
       "content": null,
       "error": null,
@@ -4375,6 +4488,40 @@
       "maxLength": null,
       "mimeType": null,
       "src": null
+    },
+    "audio-player": {
+      "ariaLabel": null,
+      "disabled": null,
+      "downloadable": null,
+      "duration": null,
+      "error": null,
+      "fileName": null,
+      "loading": null,
+      "playbackRates": null,
+      "src": null,
+      "title": null,
+      "transcript": null
+    },
+    "video-player": {
+      "ariaLabel": null,
+      "captions": null,
+      "error": null,
+      "mimeType": null,
+      "poster": null,
+      "progress": null,
+      "src": null,
+      "status": [
+        "error",
+        "pending",
+        "running",
+        "success"
+      ]
+    },
+    "image-gallery": {
+      "error": null,
+      "expectedCount": null,
+      "items": null,
+      "loading": null
     },
     "attribute-editor": {
       "addButtonLabel": null,

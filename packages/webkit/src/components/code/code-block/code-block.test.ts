@@ -887,6 +887,33 @@ describe('CodeBlock', () => {
         expect(getByTestId('code-block__label-text').textContent?.trim()).toBe('Terminal')
       })
 
+      it('holds the copy control at its end instead of the floating anchor', () => {
+        const { getByTestId, queryByTestId } = render(CodeBlock, {
+          props: { tabs: shell, showLabel: true }
+        })
+        const root = getByTestId('code-block')
+        expect(root.hasAttribute('data-copyable')).toBe(true)
+        expect(root.hasAttribute('data-copy-gutter')).toBe(false)
+        expect(queryByTestId('code-block__copy-anchor')).toBeNull()
+        expect(within(getByTestId('code-block__label')).getByRole('button')).toBeTruthy()
+      })
+
+      it('keeps the floating copy anchor and its gutter without a header', () => {
+        const { getByTestId } = render(CodeBlock, { props: { tabs: shell } })
+        expect(getByTestId('code-block').hasAttribute('data-copy-gutter')).toBe(true)
+        expect(getByTestId('code-block__copy-anchor')).toBeTruthy()
+      })
+
+      it('sticks to the top of the scroller and drops its divider when unbordered', () => {
+        const { getByTestId } = render(CodeBlock, {
+          props: { tabs: shell, showLabel: true, bordered: false }
+        })
+        const label = getByTestId('code-block__label')
+        expect(label.classList.contains('sticky')).toBe(true)
+        expect(label.classList.contains('in-data-[bordered]:border-b')).toBe(true)
+        expect(getByTestId('code-block').hasAttribute('data-bordered')).toBe(false)
+      })
+
       it('gives way to the tab strip and to the filename bar', () => {
         const tabs = render(CodeBlock, { props: { tabs: twoTabs, showLabel: true } })
         expect(tabs.queryByTestId('code-block__label')).toBeNull()
@@ -919,11 +946,14 @@ describe('CodeBlock', () => {
         }
       })
 
-      it('keeps a copy control when copyable is set explicitly', () => {
-        const { getByTestId } = render(CodeBlock, {
+      it('keeps a copy control, in its label header, when copyable is set explicitly', () => {
+        const { getByTestId, queryByTestId } = render(CodeBlock, {
           props: { tabs: output, type: 'output', copyable: true }
         })
-        expect(getByTestId('code-block__copy-anchor')).toBeTruthy()
+        expect(
+          within(getByTestId('code-block__label')).getByTestId('code-block__copy')
+        ).toBeTruthy()
+        expect(queryByTestId('code-block__copy-anchor')).toBeNull()
       })
 
       it('a code block stays copyable by default', () => {

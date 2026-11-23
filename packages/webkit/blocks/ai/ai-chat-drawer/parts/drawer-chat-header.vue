@@ -21,10 +21,10 @@
     </div>
     <div class="flex items-center gap-(--spacing-2xs)">
       <IconButton
-        icon="az az-plus"
+        icon="az az-square-pen"
         aria-label="New chat"
         variant="ghost"
-        size="small"
+        size="medium"
         :disabled="empty"
         @click="emit('new-chat', $event)"
       />

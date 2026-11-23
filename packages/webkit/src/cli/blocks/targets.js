@@ -92,8 +92,24 @@ export function variantFile(stem, variant) {
   return `${stem}-${basename(variant.file, '.vue')}.vue`
 }
 
+const pascalOf = (s) => s.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase())
+
+function vuePartFile(stem, part) {
+  if (/[A-Z]/.test(stem)) {
+    const name = pascalOf(part)
+    return `${name.startsWith(stem) ? name : `${stem}${name}`}.vue`
+  }
+  return `${part.startsWith(`${stem}-`) ? part : `${stem}-${part}`}.vue`
+}
+
 export function extraFile(stem, file) {
+  if (file.endsWith('.vue')) return vuePartFile(stem, basename(file, '.vue'))
   return `${stem}.${basename(file)}`
+}
+
+export function longExtraFile(stem, file) {
+  if (file.endsWith('.vue')) return vuePartFile(stem, file.slice(0, -4).split('/').join('-'))
+  return `${stem}.${file.split('/').join('.')}`
 }
 
 export function targetPaths(projectDir, block, dest) {
@@ -115,13 +131,22 @@ export function targetPaths(projectDir, block, dest) {
     toPosix(isAbsolute(dir) ? relative(projectDir, dir) : dir).replace(/\/$/, '') || '.'
   const stem = basename(primaryName, '.vue')
   const at = (file) => (relDir === '.' ? file : `${relDir}/${file}`)
+  const reserved = new Set([
+    at(primaryName),
+    ...(block.meta.variants || []).map((variant) => at(variantFile(stem, variant)))
+  ])
+  const extraPath = (file) => {
+    const short = at(extraFile(stem, file))
+    return reserved.has(short) ? at(longExtraFile(stem, file)) : short
+  }
   return {
+    reserved,
     viewsReason,
     at,
     stem,
     primary: at(primaryName),
     variant: block.variant ? at(variantFile(stem, block.variant)) : null,
-    extras: (block.meta.files || []).map((file) => ({ file, path: at(extraFile(stem, file)) })),
+    extras: (block.meta.files || []).map((file) => ({ file, path: extraPath(file) })),
     guidelines: at(`${stem}.guidelines.md`)
   }
 }

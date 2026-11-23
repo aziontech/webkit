@@ -20,17 +20,18 @@ component, block and doc first.
 
 **1. Stabilize the 6.0 branch (before launch)**
 
-| #   | Item                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Status (2026-11-19)          |
-| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| 1.1 | Full audit and fixes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | In progress                  |
-| 1.2 | Logos of every integration Azion supports: web frameworks, AI models, observability platforms (Datadog, Splunk, …). Includes M2.10 row 58                                                                                                                                                                                                                                                                                                                                                                | In progress (its own lane)   |
-| 1.3 | Decide whether components also ship as Markdown and JSON besides Vue now, then build it. Content components already have all three (DECISIONS RV-K2-1); the open question is the rest                                                                                                                                                                                                                                                                                                                    | Needs owner                  |
-| 1.4 | Final full audit and fixes                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Not started                  |
-| 1.5 | Full visual review of every component and block, and the fixes it finds                                                                                                                                                                                                                                                                                                                                                                                                                                  | Not started                  |
-| 1.6 | The docs site uses WebKit exactly as an app does: its own doc components and a consumer setup. Detail below (owner, 2026-11-20). Runs before 1.5, so the visual review sees the result                                                                                                                                                                                                                                                                                                                   | Not started                  |
-| 1.7 | Code quality, maintainability and extension of every component and block, by one technical spec: [`.claude/docs/CODE_QUALITY.md`](./.claude/docs/CODE_QUALITY.md). Detail below (owner, 2026-11-20). Runs after 1.6 and before 1.4 and 1.5, so the final audit and the visual review see the result                                                                                                                                                                                                      | Not started                  |
-| 1.8 | Every component and block tested on every browser engine and on real devices, automated in CI: first on our own server with Playwright (Chromium, real Edge, Firefox, the Safari engine, phone and tablet sizes with touch), then on real devices through an external service. Detail below (owner, 2026-11-20). Phase A runs before 1.4 and 1.5, so the final audit and the visual review see its fixes                                                                                                 | Not started (trial run done) |
-| 1.9 | The marketing site's hard-coded text gets ready for translation: 249 interface strings written straight into components, 236 of them in the console mock-ups (`ConsoleMockup` widgets and parts) of the site, move into the message catalogs (en, pt-BR, es), so the site can be shown in every language WebKit ships. Until then these strings are the one list of known violations left (`authoring-baseline.json`, `i18n:hardcoded-ui-string`); every other quality list is empty (owner, 2026-11-21) | Not started                  |
+| #    | Item                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Status (2026-11-19)                                 |
+| ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| 1.1  | Full audit and fixes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | In progress                                         |
+| 1.2  | Logos of every integration Azion supports: web frameworks, AI models, observability platforms (Datadog, Splunk, …). Includes M2.10 row 58                                                                                                                                                                                                                                                                                                                                                                | In progress (its own lane)                          |
+| 1.3  | Decide whether components also ship as Markdown and JSON besides Vue now, then build it. Content components already have all three (DECISIONS RV-K2-1); the open question is the rest                                                                                                                                                                                                                                                                                                                    | Needs owner                                         |
+| 1.4  | Final full audit and fixes                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Not started                                         |
+| 1.5  | Full visual review of every component and block, and the fixes it finds                                                                                                                                                                                                                                                                                                                                                                                                                                  | Not started                                         |
+| 1.6  | The docs site uses WebKit exactly as an app does: its own doc components and a consumer setup. Detail below (owner, 2026-11-20). Runs before 1.5, so the visual review sees the result                                                                                                                                                                                                                                                                                                                   | Not started                                         |
+| 1.7  | Code quality, maintainability and extension of every component and block, by one technical spec: [`.claude/docs/CODE_QUALITY.md`](./.claude/docs/CODE_QUALITY.md). Detail below (owner, 2026-11-20). Runs after 1.6 and before 1.4 and 1.5, so the final audit and the visual review see the result                                                                                                                                                                                                      | Not started                                         |
+| 1.8  | Every component and block tested on every browser engine and on real devices, automated in CI: first on our own server with Playwright (Chromium, real Edge, Firefox, the Safari engine, phone and tablet sizes with touch), then on real devices through an external service. Detail below (owner, 2026-11-20). Phase A runs before 1.4 and 1.5, so the final audit and the visual review see its fixes                                                                                                 | Not started (trial run done)                        |
+| 1.9  | The marketing site's hard-coded text gets ready for translation: 249 interface strings written straight into components, 236 of them in the console mock-ups (`ConsoleMockup` widgets and parts) of the site, move into the message catalogs (en, pt-BR, es), so the site can be shown in every language WebKit ships. Until then these strings are the one list of known violations left (`authoring-baseline.json`, `i18n:hardcoded-ui-string`); every other quality list is empty (owner, 2026-11-21) | Not started                                         |
+| 1.10 | The AI chat at ChatGPT quality in the Azion brand: measure ChatGPT live in every situation, compare side by side, the owner settles each clash with the brand once, one owner polishes the whole screen until the comparison closes, then real phones. Detail below (owner, 2026-11-22). Runs before 1.5, so the visual review sees the result                                                                                                                                                           | Not started (round 2 built on `proposal/chat-look`) |
 
 **1.7 in detail — code quality before `main` (owner, 2026-11-20).** A comparison of Button, Select
 and Table with shadcn and Cloudscape found WebKit the lightest of the three and ahead of shadcn on
@@ -138,6 +139,62 @@ bar safe areas, the collapsing address bar, real touch, and Samsung's browser.
    covered by the Chromium and Edge runs; one manual pass on BrowserStack Live before the launch.
 6. **Done** means the nightly run is green on every device above for a week, and the release PR
    shows the device run as a check.
+
+**1.10 in detail — the AI chat at ChatGPT quality (owner, 2026-11-22).** Two rounds on
+`proposal/chat-look` gave the `ai/ai-chat` block ChatGPT's features (pinned composer, action row,
+feedback, prompt editing and versions, site favicons on citations and sources, code cards, the
+add menu, the welcome page), driven by TanStack AI `useChat`. The owner judged the result still
+short of ChatGPT in look and feel. Three causes: the work was built from three still screenshots,
+so spacing, motion, scrolling and every unseen state were guessed; the brand rules (corners of 6
+or 8px, no pills, circles only for avatars and favicons, orange fills) keep the composer and the
+floating buttons square on purpose; and four parallel lanes each owned a part, while nobody owned
+the whole screen and the tests check behaviour, not looks. ChatGPT's code and brand are not
+copied (they are OpenAI's, and the result must read as Azion); its measurements and behaviour
+are, since patterns are not protected. The goal is ChatGPT's quality with the Azion brand on every
+screen, and a chat that works well visually and in use.
+
+Gaps seen on 2026-11-22, the first items of the comparison:
+
+1. **Text rhythm:** the body text reads larger and heavier than ChatGPT's on a phone; line
+   height, paragraph and list spacing differ.
+2. **Floating header:** solid boxes that cut off the text under them, where ChatGPT uses
+   translucent round buttons over a fade.
+3. **Foot of the thread:** no fade behind the composer; the scroll-to-latest arrow sits on the
+   text without a shadow.
+4. **Space between turns:** a large empty gap between the prompt and its answer.
+5. **Composer:** an 8px box with a heavy orange voice button, where ChatGPT has a large round
+   field with a soft shadow.
+6. **Prompt actions:** Copy and Edit always shown under the bubble on a phone; ChatGPT shows
+   them on a long press.
+7. **States never seen, so never matched:** streaming text, the thinking state, how a message
+   appears, the scroll after sending (ChatGPT moves the new prompt to the top), tables, maths,
+   images and code colours in real answers, and the phone with its keyboard open.
+
+How to get there, in order:
+
+1. **Measure ChatGPT live.** Open chatgpt.com in a browser (logged out, or in the owner's
+   session for Share and branches, owner's choice), ask neutral test questions that trigger each
+   situation (list, code, table, long answer, sources, edit, Try again, error, maths, image,
+   voice) and record, at phone and desktop widths in light and dark: font sizes, line heights,
+   spacing, radii, colours, shadows, motion timings, scroll behaviour and what each control does.
+   No personal data is sent.
+2. **Comparison page.** One page per situation, ChatGPT and our block side by side at the same
+   width, every difference listed with its numbers. It is the work list and the scorecard the
+   owner reviews.
+3. **Brand decisions, once.** Where ChatGPT's look clashes with a brand rule (the round composer,
+   round floating buttons, translucent surfaces, voice button fill), the page shows both versions
+   and the owner picks; one option is a chat exception that allows larger radii only inside the
+   chat. Colours, font and logo stay Azion's. Each choice is a `DECISIONS.md` row, and a token or
+   rule change goes through `DESIGN.md` with the owner's approval.
+4. **One owner for the whole screen.** A single lane fixes the block in rounds against the
+   comparison page, through the components' specs (spec first, tests, examples, budgets), instead
+   of parallel lanes per part. Every fix lands in the components, so `ai-chat-drawer` and any app
+   chat get it too.
+5. **Real phones.** Check on a real iPhone and Android (keyboard, safe areas, touch, scrolling)
+   with the 1.8 device run.
+6. **Done** means every situation on the comparison page is either matched or an owner-approved
+   brand difference, the owner signs off on a phone and on desktop, and the visual baselines,
+   browser suite and gates are green.
 
 **2. Close the open leftovers (before launch).** Each row stays in its table; this is what is left,
 checked against the code on 2026-11-19:

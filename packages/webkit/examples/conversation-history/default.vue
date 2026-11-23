@@ -1,7 +1,9 @@
 <script setup>
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import ConversationHistory from '@aziontech/webkit/conversation-history'
-  import { computed, ref } from 'vue'
+  import Drawer from '@aziontech/webkit/drawer'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   const now = '2026-11-11T15:00:00'
   const items = ref([
@@ -17,6 +19,32 @@
     { id: 'c6', title: 'Edge storage pricing', updatedAt: '2026-08-02T10:00:00' }
   ])
   const active = ref('c2')
+  const historyOpen = ref(false)
+  const narrow = ref(false)
+
+  let narrowQuery = null
+  const onNarrowChange = () => {
+    narrow.value = !!narrowQuery?.matches
+  }
+  onMounted(() => {
+    narrowQuery = globalThis.matchMedia?.('(max-width: 767px)') ?? null
+    onNarrowChange()
+    narrowQuery?.addEventListener('change', onNarrowChange)
+  })
+  onBeforeUnmount(() => narrowQuery?.removeEventListener('change', onNarrowChange))
+
+  watch(active, () => {
+    historyOpen.value = false
+  })
+
+  const activeTitle = computed(
+    () => items.value.find((item) => item.id === active.value)?.title ?? 'New chat'
+  )
+
+  const startChat = () => {
+    active.value = null
+    historyOpen.value = false
+  }
 
   const pendingId = ref(null)
   const confirmOpen = ref(false)
@@ -38,14 +66,60 @@
 </script>
 
 <template>
-  <div class="w-full max-w-(--container-3xs)">
-    <ConversationHistory
-      v-model="active"
-      :items="items"
-      :now="now"
-      removable
-      @remove="remove"
-    />
+  <div
+    class="flex h-96 w-full overflow-hidden rounded-(--shape-card) border border-(--border-default)"
+  >
+    <aside
+      v-if="!narrow"
+      class="flex w-(--container-3xs) shrink-0 flex-col overflow-y-auto border-e border-(--border-default) bg-(--bg-surface) p-(--spacing-xs)"
+    >
+      <ConversationHistory
+        v-model="active"
+        :items="items"
+        :now="now"
+        creatable
+        searchable
+        removable
+        @create="startChat"
+        @remove="remove"
+      />
+    </aside>
+    <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs) p-(--spacing-sm)">
+      <div class="flex items-center gap-(--spacing-xs)">
+        <IconButton
+          v-if="narrow"
+          icon="az az-menu"
+          aria-label="Open conversation history"
+          variant="ghost"
+          @click="historyOpen = true"
+        />
+        <p class="m-0 truncate text-label-md text-(--text-default)">{{ activeTitle }}</p>
+      </div>
+    </div>
+    <Drawer
+      v-if="narrow"
+      v-model:open="historyOpen"
+      side="start"
+      size="small"
+    >
+      <Drawer.Content>
+        <Drawer.Header class="w-full">
+          <Drawer.Title>Conversation history</Drawer.Title>
+        </Drawer.Header>
+        <Drawer.Body>
+          <ConversationHistory
+            v-model="active"
+            :items="items"
+            :now="now"
+            creatable
+            searchable
+            removable
+            @create="startChat"
+            @remove="remove"
+          />
+        </Drawer.Body>
+      </Drawer.Content>
+    </Drawer>
     <ConfirmDialog
       v-model:open="confirmOpen"
       title="Delete conversation"

@@ -1,3 +1,4 @@
+import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
 import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
@@ -110,8 +111,27 @@ const history: [string, string][] = [
   ],
   [
     'How do I fix that?',
-    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page`.'
+    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page` [1]. Campaign parameters such as `utm_source` then stop creating new cache keys [3].'
   ]
+]
+
+const cacheKeySources: SourcesItem[] = [
+  {
+    title: 'Cache settings',
+    href: 'https://www.azion.com/en/documentation/',
+    description: 'Azion documentation · Cache'
+  },
+  {
+    title: 'aziontech/azion',
+    href: 'https://github.com/aziontech/azion',
+    description: 'Azion CLI on GitHub',
+    icon: 'az az-github'
+  },
+  {
+    title: 'HTTP Caching',
+    href: 'https://www.w3.org/Protocols/',
+    description: 'W3C · HTTP'
+  }
 ]
 
 export const sampleLongThread: AiChatMessage[] = history.flatMap(
@@ -120,7 +140,7 @@ export const sampleLongThread: AiChatMessage[] = history.flatMap(
     assistant(`a${index}`, answer, `09:${11 + index * 4}`, {
       reasoning: 'Reading the workload settings of storefront.',
       reasoningSeconds: 2,
-      sources: []
+      sources: index === history.length - 1 ? cacheKeySources : []
     })
   ]
 )
@@ -138,4 +158,10 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
   },
   { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'az az-bolt' },
   { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'az az-globe' }
+]
+
+export const sampleTools: PromptInputMenuOption[] = [
+  { value: 'web-search', label: 'Web search', icon: 'az az-globe' },
+  { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
+  { value: 'create-image', label: 'Create image', icon: 'az az-image' }
 ]

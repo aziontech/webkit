@@ -3,7 +3,7 @@ name: webkit-usage
 description: Entry point for building UI on @aziontech/webkit. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — compose the app layout once (ConsoleLayout, SiteLayout, DocLayout) and start each screen from a block, find the right component, import it with the flat path, style with @aziontech/theme tokens, keep bundles small, and pick the focused skill for each task (forms, tables, lists, errors, states, layout, copy, polish, verification).
 scope: general
 status: active
-last_updated: 2026-11-20
+last_updated: 2026-11-22
 enforced_by:
   [
     webkit-imports,
@@ -95,7 +95,8 @@ matches your case, switch to the block it names. Then change only the content of
 keeping to the guidelines. Only when no block fits, compose from components (below).
 
 A block takes its data through props and emits its actions; it fetches nothing. `add` copies its
-data files beside it (`<name>.sample.ts`, and an API adapter when the block ships one). To go live,
+data files beside it (`<name>.sample.ts`, and an API adapter when the block ships one) and its parts
+as kebab SFCs (`<name>-<part>.vue`). To go live,
 do not rewrite the block: render it from the routed page that owns the request and pass what the
 request returns (its `## Data` guidelines list the props and events):
 `<TableView :resources="rows" :loading="pending" :error="message" @refresh="load" @retry="load" />`.

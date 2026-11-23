@@ -45,29 +45,132 @@
       "version": "5.13.0",
       "files": [
         {
-          "path": "src/blocks/ai-chat.messages.ts",
-          "source": "blocks/ai/ai-chat/messages.ts",
+          "path": "src/blocks/ai-chat-composer.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-composer.vue",
           "variant": "Data",
-          "checksum": "sha256:673e51735cfe1460b0163c8acea1be529d6dec11d21b6eea7e0e3d0702ae6fbc"
+          "checksum": "sha256:c11c687528978080ece39874ccdd614a3c30773817416a547e15d6288f4dc157"
+        },
+        {
+          "path": "src/blocks/ai-chat-connection-status.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-connection-status.vue",
+          "variant": "Data",
+          "checksum": "sha256:baa5faa8dbcf964cd98e48ad954df390b35fef6dd33d03dc49836eeada10e498"
+        },
+        {
+          "path": "src/blocks/ai-chat-header.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-header.vue",
+          "variant": "Data",
+          "checksum": "sha256:7def3b3d9eff17c5403c23ba5b590c6526a229e928caefafc4f021ccfc95fe2d"
+        },
+        {
+          "path": "src/blocks/ai-chat-history.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-history.vue",
+          "variant": "Data",
+          "imports": {
+            "../sample": "./ai-chat.sample"
+          },
+          "checksum": "sha256:7f5baa2cd576c9285131ae427f42a4f05001ccbff82eebd86e58e4b539f7e558"
+        },
+        {
+          "path": "src/blocks/ai-chat-media-segment.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-media-segment.vue",
+          "variant": "Data",
+          "checksum": "sha256:5120328dfb85f35de60a951c1a2e028adc0d2a36e75c0964402b48aff861123f"
+        },
+        {
+          "path": "src/blocks/ai-chat-skeleton.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-skeleton.vue",
+          "variant": "Data",
+          "checksum": "sha256:6b1ef422db7f4c54ad6ea0206e883cae1f29ead9037523cf9d75a579992cec68"
+        },
+        {
+          "path": "src/blocks/ai-chat-start.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-start.vue",
+          "variant": "Data",
+          "checksum": "sha256:6459f12c0220bb13f702edb04b796ac945b8f067a8bb20366cde7751fd688add"
+        },
+        {
+          "path": "src/blocks/ai-chat-tool-segment.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-tool-segment.vue",
+          "variant": "Data",
+          "checksum": "sha256:913eb45da16d0f3998df3ef681648f641b0a267b9e3fabe524f8a3c51cb66659"
+        },
+        {
+          "path": "src/blocks/ai-chat-turn.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-turn.vue",
+          "variant": "Data",
+          "checksum": "sha256:8c5e105d958f86ac098bc2f4e5e354728f26f3b6b70426b15f5524db08161c64"
+        },
+        {
+          "path": "src/blocks/ai-chat.ai-chat-connection-status.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-connection-status.vue",
+          "variant": "Data",
+          "checksum": "sha256:baa5faa8dbcf964cd98e48ad954df390b35fef6dd33d03dc49836eeada10e498"
+        },
+        {
+          "path": "src/blocks/ai-chat.ai-chat-header.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-header.vue",
+          "variant": "Data",
+          "checksum": "sha256:7e49f7bfb6e4ad93c4c8bb161d130fe5c9153340c956f2c48d0f6677727b4c3e"
+        },
+        {
+          "path": "src/blocks/ai-chat.ai-chat-history.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-history.vue",
+          "variant": "Data",
+          "imports": {
+            "../sample": "./ai-chat.sample"
+          },
+          "checksum": "sha256:7f5baa2cd576c9285131ae427f42a4f05001ccbff82eebd86e58e4b539f7e558"
+        },
+        {
+          "path": "src/blocks/ai-chat.ai-chat-media-segment.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-media-segment.vue",
+          "variant": "Data",
+          "checksum": "sha256:5120328dfb85f35de60a951c1a2e028adc0d2a36e75c0964402b48aff861123f"
+        },
+        {
+          "path": "src/blocks/ai-chat.ai-chat-start.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-start.vue",
+          "variant": "Data",
+          "checksum": "sha256:766a46b00385a6bebbefe1a1a9a34122f730c77e9866ed8a3b282ab61dc2447d"
+        },
+        {
+          "path": "src/blocks/ai-chat.ai-chat-tool-segment.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-tool-segment.vue",
+          "variant": "Data",
+          "checksum": "sha256:913eb45da16d0f3998df3ef681648f641b0a267b9e3fabe524f8a3c51cb66659"
+        },
+        {
+          "path": "src/blocks/ai-chat.ai-chat-turn.vue",
+          "source": "blocks/ai/ai-chat/parts/ai-chat-turn.vue",
+          "variant": "Data",
+          "imports": {
+            "./ai-chat-media-segment.vue": "./ai-chat.ai-chat-media-segment.vue",
+            "./ai-chat-tool-segment.vue": "./ai-chat.ai-chat-tool-segment.vue"
+          },
+          "checksum": "sha256:bb74e688ea4c29034f4b2a3deb2a093c7d76875a775f5a648c36769e20df7111"
         },
         {
           "path": "src/blocks/ai-chat.sample.ts",
           "source": "blocks/ai/ai-chat/sample.ts",
           "variant": "Data",
-          "imports": {
-            "./messages": "./ai-chat.messages"
-          },
-          "checksum": "sha256:2885de1783201465aab3c2815f3f8c211ecb40428c3e8c58d85c47eb5c2f98ce"
+          "checksum": "sha256:d135258860d2351db55fdacfc7a118e27a7cc06bb1b31ac0f1ce1e4fb70aed1d"
         },
         {
           "path": "src/blocks/ai-chat.vue",
           "source": "blocks/ai/ai-chat/ai-chat.vue",
           "variant": "Empty",
           "imports": {
-            "./messages": "./ai-chat.messages",
+            "./parts/ai-chat-composer.vue": "./ai-chat-composer.vue",
+            "./parts/ai-chat-connection-status.vue": "./ai-chat-connection-status.vue",
+            "./parts/ai-chat-header.vue": "./ai-chat-header.vue",
+            "./parts/ai-chat-history.vue": "./ai-chat-history.vue",
+            "./parts/ai-chat-skeleton.vue": "./ai-chat-skeleton.vue",
+            "./parts/ai-chat-start.vue": "./ai-chat-start.vue",
+            "./parts/ai-chat-turn.vue": "./ai-chat-turn.vue",
             "./sample": "./ai-chat.sample"
           },
-          "checksum": "sha256:2d8efa97281ff7e227c08b007cdbccf2024b251f5a36d60c94f43dddb157d47d"
+          "checksum": "sha256:e55208d90f3de23781294157cfa63df78df7fa276be1b5e18646cdd1f2b0206e"
         }
       ]
     },
