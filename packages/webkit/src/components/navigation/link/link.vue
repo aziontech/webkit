@@ -57,6 +57,8 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'link')
 
+  const newTab = computed(() => (props.target === '_blank' ? ` ${t('common.newTab')}` : ''))
+
   const resolvedIcon = computed(() => {
     if (props.icon) return props.icon
     return props.target === '_blank' ? EXTERNAL_ICON : ''
@@ -103,10 +105,9 @@
     @click="onClick"
     ><slot>{{ label || t('link.label') }}</slot
     ><span
-      v-if="target === '_blank'"
+      v-if="newTab"
       class="sr-only"
-      :data-testid="`${testId}__new-tab`"
-      >{{ ` ${t('common.newTab')}` }}</span
+      >{{ newTab }}</span
     ><i
       v-if="resolvedIcon"
       :class="[resolvedIcon, directionalIconClass(resolvedIcon)]"
@@ -134,10 +135,9 @@
         <slot>{{ label || t('link.label') }}</slot>
       </span>
       <span
-        v-if="target === '_blank'"
+        v-if="newTab"
         class="sr-only"
-        :data-testid="`${testId}__new-tab`"
-        >{{ ` ${t('common.newTab')}` }}</span
+        >{{ newTab }}</span
       >
       <i
         v-if="resolvedIcon"

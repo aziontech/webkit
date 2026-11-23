@@ -63,7 +63,7 @@ describe('Trace', () => {
 
   it('carries each full span name as the title of its name cell', () => {
     const view = render(Default)
-    const names = view.getAllByTestId('trace__name')
+    const names = [...view.container.querySelectorAll<HTMLElement>('[role="gridcell"] span[title]')]
     expect(names.length).toBeGreaterThan(2)
     for (const name of names) expect(name.getAttribute('title')).toBe(name.textContent?.trim())
   })

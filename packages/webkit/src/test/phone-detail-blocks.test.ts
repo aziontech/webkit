@@ -16,7 +16,9 @@ describe('detail and top-bar blocks on a phone', () => {
   it('gives the trace span names more than half of a 360px trace', () => {
     const view = at(360, Trace)
     const trace = view.getByTestId('trace')
-    const cell = view.getAllByTestId('trace__name')[0]!.closest('[role="gridcell"]') as HTMLElement
+    const cell = view.container
+      .querySelector('[role="gridcell"] span[title]')!
+      .closest('[role="gridcell"]') as HTMLElement
     expect(cell.getBoundingClientRect().width).toBeGreaterThan(
       trace.getBoundingClientRect().width * 0.5
     )

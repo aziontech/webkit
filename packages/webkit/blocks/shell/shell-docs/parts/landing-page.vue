@@ -217,7 +217,13 @@
               :link-label="item.link"
               :target="item.target"
               :href="item.href"
-              >{{ item.text }}</DocCard
+              >{{ item.text
+              }}<span
+                v-if="item.target === '_blank'"
+                class="sr-only"
+              >
+                (opens in a new tab)</span
+              ></DocCard
             >
             <div class="lg:col-span-2">
               <DocCard

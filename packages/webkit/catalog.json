@@ -8707,7 +8707,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Name or initials shown when no image: the first letters of the first and last words, or the first two characters of one word, uppercased."
+     "doc": "Initials shown when no image (normalized to two uppercase characters)."
     },
     {
      "name": "icon",

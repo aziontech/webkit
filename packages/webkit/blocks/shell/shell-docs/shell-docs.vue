@@ -147,7 +147,7 @@
         icon="az az-github"
         variant="outline"
         size="medium"
-        aria-label="Azion on GitHub"
+        aria-label="Azion on GitHub (opens in a new tab)"
         href="https://github.com/aziontech"
         target="_blank"
         class="shrink-0"
@@ -206,7 +206,7 @@
               variant="ghost"
               size="small"
               :icon="social.icon"
-              :aria-label="social.label"
+              :aria-label="`${social.label} (opens in a new tab)`"
               :href="social.href"
               target="_blank"
             />

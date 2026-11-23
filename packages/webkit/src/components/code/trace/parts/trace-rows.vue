@@ -121,7 +121,6 @@
         <span
           class="truncate text-body-code-sm text-(--text-default)"
           :title="row.span.name"
-          :data-testid="`${testId}__name`"
           ><bdi>{{ row.span.name }}</bdi></span
         >
         <span

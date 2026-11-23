@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: 32210c2a72335e9c9418e05257ce96447302f7d28c7b7215f5111c69af639c7b
+checksum: 4ae030401b06c3a01ad791ba76ed80c79a45a968fd935176b49f0fb854127424
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -39,7 +39,7 @@ Identifies a person, an account or an organization with a small visual mark: the
 
 ## Best practices
 
-- Pass the person's name or initials in `label` (`"Jane Doe"` or `"JD"`): a name of two or more words draws the first letter of its first and last words (`JD`) and keeps the whole name as the accessible name; a single word keeps its first two characters.
+- Pass initials in `label` (`"JD"`); it keeps the first two characters, so a full name shows its first two letters, not initials.
 - Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
 - Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `az az-user`).
 - For a generated mark, pass the full name in `label` (`"Acme Inc."`) with `pattern="marble"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.
@@ -73,7 +73,7 @@ Identifies a person, an account or an organization with a small visual mark: the
 | --------- | --------------- | ----------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
 | `src`     | `string`        | `''`                                                        | false    | Image URL. When set, renders a photo and takes precedence over label and icon.                                   |
 | `alt`     | `string`        | `''`                                                        | false    | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it.         |
-| `label`   | `string`        | `''`                                                        | false    | Name or initials shown when no image: the first letters of the first and last words, or the first two characters of one word, uppercased. |
+| `label`   | `string`        | `''`                                                        | false    | Initials shown when no image (normalized to two uppercase characters).                                           |
 | `icon`    | `string`        | `'az az-user'`                                              | false    | Icon class for the fallback when no image or label (Azion icon class).                                           |
 | `variant` | `AvatarVariant` | `'circle'`                                                  | false    | Visual shape of the avatar container.                                                                            |
 | `size`    | `AvatarSize`    | `'medium'`                                                  | false    | Size preset matching Figma sm / md / lg (24 / 32 / 48 px).                                                       |

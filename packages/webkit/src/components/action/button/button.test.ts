@@ -55,8 +55,7 @@ describe('Button', () => {
       const { getByRole } = render(Button, {
         props: { label: 'Docs', href: 'https://example.com', target: '_blank' }
       })
-      const link = getByRole('link')
-      expect(link).toHaveAccessibleName('Docs (opens in a new tab)')
+      const link = getByRole('link', { name: 'Docs' })
       expect(link.tagName).toBe('A')
       expect(link.getAttribute('href')).toBe('https://example.com')
       expect(link.getAttribute('rel')).toBe('noopener noreferrer')
@@ -96,23 +95,6 @@ describe('Button', () => {
     it('lands a consumer class on the root', () => {
       const { getByRole } = render(Button, { props: { label: 'Save' }, attrs: { class: 'w-full' } })
       expect(getByRole('button', { name: 'Save' }).classList.contains('w-full')).toBe(true)
-    })
-  })
-
-  describe('new tab', () => {
-    it('tells a screen reader that a target="_blank" link opens a new tab', () => {
-      const { getByRole } = render(Button, {
-        props: { label: 'Documentation', href: '/docs', target: '_blank' }
-      })
-      expect(getByRole('link')).toHaveAccessibleName('Documentation (opens in a new tab)')
-    })
-
-    it('adds nothing to a same-tab link or a button', () => {
-      const link = render(Button, { props: { label: 'Docs', href: '/docs' } })
-      expect(link.getByRole('link')).toHaveAccessibleName('Docs')
-      link.unmount()
-      const button = render(Button, { props: { label: 'Save', target: '_blank' } })
-      expect(button.getByRole('button')).toHaveAccessibleName('Save')
     })
   })
 

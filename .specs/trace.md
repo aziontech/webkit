@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 118cd2b3d2ae9ebcd2df9b35c11d497e908d9ea87cfbf328328ad61771c05c72
+checksum: e61f06e4b4b2197f76cf1f2d7ba3d1fb7701aae93ce3694b860a0c52e9f31a50
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -213,7 +213,7 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 
 - Container queries: `@container/trace`; the name column takes 55% of a narrow container (at most 13 rem) and grows to 20 rem with the container, the service column and the grid lines appear from `@xl`/`@3xl`.
 - Toolbar: the search and the view switch wrap onto two lines when the trace is narrower than both.
-- Narrow: the timeline view needs no name column and reads best in a narrow panel; names truncate (each name row carries the full name as its `title`, part `__name`), the duration labels stay on the bars, the details facts take two columns.
+- Narrow: the timeline view needs no name column and reads best in a narrow panel; names truncate (each name carries the full name as its `title`), the duration labels stay on the bars, the details facts take two columns.
 - Touch: rows and timeline lanes are 44 px high on `pointer: coarse`; a timeline bar narrower than a touch target is still reached from the keyboard and through the Waterfall and Tree views, which show the same span; nothing depends on hover. The minimap track sets `touch-action: none` so a drag zooms instead of scrolling, and its thumbs widen to 24 px on `pointer: coarse`.
 - Reflow: no horizontal scroll at 320 px.
 

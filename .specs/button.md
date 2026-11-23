@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: c5a1411618e0b8bbe1c80ac40d489e2f61a90c98d4c20e50b1cb122dbfb42910
+checksum: b451918f3fc9c3aecb1da532cfa106c7e77cab012ee42b86db3067660cf2f779
 created: 2026-05-22
 last_updated: 2026-11-21
 ---
@@ -150,7 +150,6 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 
 ## Accessibility (WCAG 2.1 AA)
 
-- A link with `target="_blank"` ends its accessible name with the visually hidden `common.newTab` text (`(opens in a new tab)`), part `__new-tab`; a same-tab link or a button adds nothing.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.

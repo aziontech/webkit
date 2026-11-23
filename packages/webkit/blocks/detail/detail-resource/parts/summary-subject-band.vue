@@ -83,6 +83,7 @@
       <Button
         v-if="visit"
         label="Visit"
+        aria-label="Visit (opens in a new tab)"
         :href="visit"
         target="_blank"
         variant="secondary"

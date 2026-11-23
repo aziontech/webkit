@@ -1220,3 +1220,10 @@ Budget-raise: drawer-content 18.3 KB → 18.35 KB (measured 18.31 KB): after eve
 Budget-raise: popover 11.3 KB → 11.35 KB (measured 11.31 KB): after every step-6 lane merged, it carries the split cost of more than one shared piece at once (placement, listbox, combobox, navigation menu, sidebar, table parts); each lane measured its own share alone (decision CQ-E8).
 Budget-raise: shortcuts-dialog 27.2 KB → 27.25 KB (measured 27.22 KB): after every step-6 lane merged, it carries the split cost of more than one shared piece at once (placement, listbox, combobox, navigation menu, sidebar, table parts); each lane measured its own share alone (decision CQ-E8).
 Budget-raise: package packedBytes 8,500,000 → 8,550,000 bytes (measured 8,502,714): the DataTable companion parts, the block parts, lib and composable files of step 6 and their llms pages are many more small files in the tarball once every lane is merged.
+Budget-raise: link 2.45 KB → 2.65 KB (measured 2.63 KB): a `target="_blank"` Link now tells assistive technology it opens a new tab with the visually hidden `common.newTab` text (audit 5, A5-054, decision A5-F14-1).
+Budget-raise: client-mosaic-section 7.65 KB → 7.85 KB (measured 7.82 KB): it renders Link, which now announces a new tab (A5-054).
+Budget-raise: plan-comparison-section 39.25 KB → 39.4 KB (measured 39.38 KB): it renders Link, which now announces a new tab (A5-054).
+Budget-raise: feature-tabs-section 58.15 KB → 58.25 KB (measured 58.23 KB): Link's new-tab text and the CodeBlock selector in the prose code rules (A5-054, A5-105).
+Budget-raise: doc-markdown 40.55 KB → 40.65 KB (measured 40.61 KB): Link's new-tab text and the prose rule that keeps the inline-code chip off CodeBlock lines (A5-054, A5-105).
+Budget-raise: trace 39 KB → 39.05 KB (measured 39.02 KB): each span name carries its full name as a `title`, and the name column takes 55% of a narrow trace (A5-282).
+Budget-raise: console-trace-scene 84.65 KB → 84.7 KB (measured 84.68 KB): it renders Trace (A5-282).

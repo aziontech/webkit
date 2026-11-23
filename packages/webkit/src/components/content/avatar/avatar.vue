@@ -58,11 +58,7 @@
   const normalizedLabel = computed(() => {
     const value = props.label.trim()
     if (!value) return ''
-    const words = value.split(/\s+/)
-    const first = Array.from(words[0] ?? '')
-    const last = Array.from(words[words.length - 1] ?? '')
-    const initials = words.length > 1 ? `${first[0]}${last[0]}` : first.slice(0, 2).join('')
-    return initials.toUpperCase()
+    return value.slice(0, 2).toUpperCase()
   })
 
   const content = computed(() => {
@@ -78,8 +74,7 @@
 
   const accessibleLabel = computed(() => {
     if (props.alt.trim()) return props.alt.trim()
-    if ((showPattern.value || /\s/.test(props.label.trim())) && props.label.trim())
-      return props.label.trim()
+    if (showPattern.value && props.label.trim()) return props.label.trim()
     if (normalizedLabel.value) return normalizedLabel.value
     return t('avatar.fallbackLabel')
   })

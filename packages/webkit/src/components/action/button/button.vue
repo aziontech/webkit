@@ -74,7 +74,7 @@
 
   const { announce } = useAnnouncer()
   const attrs = useAttrs()
-  const { Root, rootAttrs, onClick, newTab } = useButtonRoot(props, 'button', (event) =>
+  const { Root, rootAttrs, onClick } = useButtonRoot(props, 'button', (event) =>
     emit('click', event)
   )
   const buttonAttrs = computed(() =>
@@ -176,11 +176,6 @@
           class="min-w-0 overflow-x-clip text-ellipsis"
           >{{ label }}</span
         ></slot
-      ><span
-        v-if="newTab"
-        class="sr-only"
-        :data-testid="`${rootAttrs['data-testid']}__new-tab`"
-        >{{ ` ${newTab}` }}</span
       >
     </span>
     <span

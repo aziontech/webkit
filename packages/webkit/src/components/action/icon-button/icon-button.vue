@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, Transition } from 'vue'
+  import { Transition } from 'vue'
 
   import { useButtonRoot } from '../../../composables/use-button-root'
   import { directionalIconClass } from '../../../utils/directional-icons'
@@ -58,13 +58,8 @@
     click: [event: MouseEvent]
   }>()
 
-  const { Root, rootAttrs, onClick, newTab } = useButtonRoot(props, 'icon-button', (event) =>
+  const { Root, rootAttrs, onClick } = useButtonRoot(props, 'icon-button', (event) =>
     emit('click', event)
-  )
-  const accessibleName = computed(() =>
-    props.ariaLabel && newTab.value
-      ? `${props.ariaLabel} ${newTab.value}`
-      : props.ariaLabel || undefined
   )
 
   const ROOT_CLASS =
@@ -103,7 +98,7 @@
 <template>
   <Root
     v-bind="rootAttrs"
-    :aria-label="accessibleName"
+    :aria-label="ariaLabel || undefined"
     :data-variant="variant"
     :data-size="size"
     :class="ROOT_CLASS"

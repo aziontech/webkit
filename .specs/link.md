@@ -4,7 +4,7 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 7
-checksum: 8f652e14e831ab06644af2d13822feeb4bb7d59bbd20ef351705588f34cd98d4
+checksum: 26228ce7b8c21eb3810dbecae2ccdefaa263ba2c251c4d72ee4f0d312e4f3180
 created: 2026-05-22
 last_updated: 2026-11-21
 figma:
@@ -132,7 +132,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Accessibility (WCAG 2.1 AA)
 
-- `target="_blank"` adds the visually hidden `common.newTab` text (`(opens in a new tab)`) after the label, part `__new-tab`, so a screen reader hears what the external glyph shows.
+- `target="_blank"` adds the visually hidden `common.newTab` text (`(opens in a new tab)`) after the label, so a screen reader hears what the external glyph shows.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter` activates.
 - ARIA: `aria-disabled` and `tabindex="-1"` when disabled.

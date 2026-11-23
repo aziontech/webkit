@@ -1843,6 +1843,7 @@ jobs:
       <Button
         class="w-full"
         label="Documentation"
+        aria-label="Documentation (opens in a new tab)"
         variant="outline"
         size="medium"
         icon="az az-book"
@@ -1942,6 +1943,7 @@ jobs:
       <Button
         v-if="visit"
         label="Visit"
+        aria-label="Visit (opens in a new tab)"
         :href="visit"
         target="_blank"
         variant="secondary"

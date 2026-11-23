@@ -29,7 +29,7 @@
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "40.55 KB",
+    "limit": "40.65 KB",
     "entryOnly": true
   },
   {
@@ -458,7 +458,7 @@
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "84.65 KB"
+    "limit": "84.7 KB"
   },
   {
     "name": "runtime-api-cloud",
@@ -556,7 +556,7 @@
   {
     "name": "plan-comparison-section",
     "path": "src/components/section/plan-comparison-section/plan-comparison-section.vue",
-    "limit": "39.25 KB"
+    "limit": "39.4 KB"
   },
   {
     "name": "pricing-plans-section",
@@ -600,7 +600,7 @@
   {
     "name": "client-mosaic-section",
     "path": "src/components/section/client-mosaic-section/client-mosaic-section.vue",
-    "limit": "7.65 KB"
+    "limit": "7.85 KB"
   },
   {
     "name": "client-story-columns-section",
@@ -681,7 +681,7 @@
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "58.15 KB",
+    "limit": "58.25 KB",
     "entryOnly": true
   },
   {
@@ -1136,7 +1136,7 @@
   {
     "name": "trace",
     "path": "src/components/code/trace/trace.vue",
-    "limit": "39 KB",
+    "limit": "39.05 KB",
     "entryOnly": true
   },
   {
@@ -2254,7 +2254,7 @@
   {
     "name": "link",
     "path": "src/components/navigation/link/link.vue",
-    "limit": "2.45 KB"
+    "limit": "2.65 KB"
   },
   {
     "name": "skip-link",

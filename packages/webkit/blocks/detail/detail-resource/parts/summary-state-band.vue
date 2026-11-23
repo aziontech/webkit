@@ -23,6 +23,7 @@
       <Button
         class="w-full"
         label="Documentation"
+        aria-label="Documentation (opens in a new tab)"
         variant="outline"
         size="medium"
         icon="az az-book"

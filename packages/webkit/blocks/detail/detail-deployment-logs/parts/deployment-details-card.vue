@@ -62,7 +62,11 @@
             variant="secondary"
             size="medium"
             icon="az az-external-link"
-            v-bind="live ? { href: URL, target: '_blank' } : { disabled: true }"
+            v-bind="
+              live
+                ? { href: URL, target: '_blank', 'aria-label': 'Visit (opens in a new tab)' }
+                : { disabled: true }
+            "
           />
         </Tooltip>
 

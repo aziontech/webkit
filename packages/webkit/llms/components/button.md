@@ -93,7 +93,6 @@
 
 ## Accessibility
 
-- A link with `target="_blank"` ends its accessible name with the visually hidden `common.newTab` text (`(opens in a new tab)`), part `__new-tab`; a same-tab link or a button adds nothing.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
