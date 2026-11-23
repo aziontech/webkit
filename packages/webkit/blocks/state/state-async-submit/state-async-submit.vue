@@ -146,10 +146,14 @@
       ]
     })
 
+  const pageInView = () => globalThis.document?.visibilityState !== 'hidden'
+
   const report = (next: AsyncSubmitStatus) => {
-    if (next === 'running') reportRunning()
-    else if (next === 'error') reportFailure()
-    else if (next === 'success' && props.deployment) reportSuccess(props.deployment)
+    if (next === 'running') return reportRunning()
+    if (next === 'idle') return
+    if (pageInView()) return toast.dismiss(RUN_TOAST)
+    if (next === 'error') reportFailure()
+    else if (props.deployment) reportSuccess(props.deployment)
   }
 
   onMounted(() => report(status.value))
