@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: f40a6cb8b91132cad492b1f9ef22b85fd254ea5c430e10e00a51f3e3f41fa6dd
+checksum: 91257c5c36b9deb1e2654c6a665f0fc0220c7c7e679337076f3d547762318ea3
 created: 2026-06-25
-last_updated: 2026-11-22
+last_updated: 2026-11-23
 ---
 
 # DatePicker — Component Spec
@@ -236,7 +236,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ## Performance
 
-- Bundle budget: see `.size-limit.json` entries `date-picker` and `date-picker-root` (the date-field parser and the `select` behind the Month and Year caption selects are included).
+- Bundle budget: see `.size-limit.json` entries `date-picker` and `date-picker-root`, measured on the initial load (`entryOnly`). The calendar grid and the date fields (with the `select` behind the Month and Year caption selects and the date-field parser) load the first time the popover opens; the popover shows once they have loaded, so focus still lands on the active day.
 - Runtime: renders one month of 42 day cells.
 
 ## Examples

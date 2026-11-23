@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, ref, useAttrs, watch } from 'vue'
+  import { type Component, computed, provide, ref, shallowRef, useAttrs, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useTranslate } from '../../../composables/use-translate'
@@ -16,8 +16,6 @@
   } from './injection-key'
   import DatePickerControl from './parts/date-picker-control.vue'
   import DatePickerControlButton from './parts/date-picker-control-button.vue'
-  import DatePickerFields from './parts/date-picker-fields.vue'
-  import DatePickerGrid from './parts/date-picker-grid.vue'
   import DatePickerPopover from './parts/date-picker-popover.vue'
   import DatePickerTrigger from './parts/date-picker-trigger.vue'
 
@@ -118,6 +116,22 @@
   }
 
   const toggleOpen = () => setOpen(!isOpen.value)
+
+  const panel = shallowRef<{ grid: Component; fields: Component } | null>(null)
+  const panelOpen = computed(() => isOpen.value && panel.value !== null)
+
+  watch(
+    isOpen,
+    async (open) => {
+      if (!open || panel.value) return
+      const [grid, fields] = await Promise.all([
+        import('./parts/date-picker-grid.vue'),
+        import('./parts/date-picker-fields.vue')
+      ])
+      panel.value = { grid: grid.default, fields: fields.default }
+    },
+    { immediate: true }
+  )
 
   const cloneValue = (value: DatePickerValue): DatePickerValue => {
     const date = asSingle(value)
@@ -327,18 +341,19 @@
 
     <DatePickerPopover
       :test-id="testId"
-      :open="isOpen"
+      :open="panelOpen"
       :anchor="triggerEl"
       :aria-label="t('datePicker.chooseDate')"
       class="max-w-[min(calc(100vw-2*var(--spacing-sm)),44rem)] overflow-x-hidden overflow-y-auto overscroll-contain max-sm:items-center"
       @close="onPopoverClose"
     >
       <div
+        v-if="panel"
         class="flex flex-col items-stretch data-[horizontal]:sm:flex-row"
         :data-horizontal="isHorizontal || null"
       >
         <div class="p-(--spacing-sm)">
-          <DatePickerGrid />
+          <component :is="panel.grid" />
         </div>
 
         <div
@@ -346,7 +361,10 @@
           :data-horizontal="isHorizontal || null"
           :class="FOOTER_CLASS"
         >
-          <DatePickerFields v-if="showFields" />
+          <component
+            :is="panel.fields"
+            v-if="showFields"
+          />
 
           <span
             v-if="$slots['footer']"
