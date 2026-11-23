@@ -30,9 +30,7 @@
   const { t } = useTranslate({ docTableOfContents: en.docTableOfContents })
   const detailsEl = ref<HTMLDetailsElement | null>(null)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'doc-layout-outline-disclosure'
-  )
+  const testId = computed(() => String(attrs['data-testid'] ?? 'doc-layout-outline-disclosure'))
 
   const onSelect = (event: MouseEvent, item: DocTableOfContentsItem) => {
     if (detailsEl.value) detailsEl.value.open = false

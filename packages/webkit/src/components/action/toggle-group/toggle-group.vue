@@ -272,7 +272,8 @@
 
   const OPTION_CLASS =
     'relative z-1 inline-flex items-center justify-center gap-(--spacing-xs) text-center ' +
-    'group-data-[size=small]/toggle-group:min-h-4.5 group-data-[size=medium]/toggle-group:min-h-5.5 group-data-[size=large]/toggle-group:min-h-7.5 pointer-coarse:min-h-11! group-data-[fluid]/toggle-group:flex-[1_1_auto] ' +
+    'group-data-[size=small]/toggle-group:min-h-4.5 group-data-[size=medium]/toggle-group:min-h-5.5 group-data-[size=large]/toggle-group:min-h-7.5 ' +
+    'pointer-coarse:min-h-11! group-data-[fluid]/toggle-group:flex-[1_1_auto] ' +
     'rounded-(--shape-button) border border-transparent bg-transparent ' +
     'group-data-[size=small]/toggle-group:px-(--spacing-xs) group-data-[size=medium]/toggle-group:px-(--spacing-sm) group-data-[size=large]/toggle-group:px-(--spacing-md) ' +
     'group-data-[size=small]/toggle-group:text-label-sm group-data-[size=medium]/toggle-group:text-label-sm group-data-[size=large]/toggle-group:text-label-md ' +

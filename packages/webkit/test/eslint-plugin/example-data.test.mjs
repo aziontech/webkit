@@ -86,7 +86,10 @@ test('retired-product-name fires on a retired Azion product name', () => {
     ":tags=\"['Console', 'Edge SQL']\"",
     '<Footer.Link>Edge Application</Footer.Link>'
   ]) {
-    assert.ok(ids(content).includes('retired-product-name'), `expected retired name for: ${content}`)
+    assert.ok(
+      ids(content).includes('retired-product-name'),
+      `expected retired name for: ${content}`
+    )
   }
 })
 

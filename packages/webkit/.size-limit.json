@@ -24,12 +24,12 @@
   {
     "name": "doc-layout",
     "path": "src/components/docs/doc-layout/doc-layout.vue",
-    "limit": "72.9 KB"
+    "limit": "74.35 KB"
   },
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "40.55 KB",
+    "limit": "40.7 KB",
     "entryOnly": true
   },
   {
@@ -89,7 +89,7 @@
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "56.35 KB"
+    "limit": "56.4 KB"
   },
   {
     "name": "table-root",
@@ -119,7 +119,7 @@
   {
     "name": "property-filter",
     "path": "src/components/data/property-filter/property-filter.vue",
-    "limit": "36.5 KB"
+    "limit": "36.55 KB"
   },
   {
     "name": "collection-preferences",
@@ -194,7 +194,7 @@
   {
     "name": "doc-prose",
     "path": "src/components/docs/doc-prose/doc-prose.vue",
-    "limit": "4.55 KB"
+    "limit": "4.6 KB"
   },
   {
     "name": "doc-call-to-action",
@@ -204,12 +204,12 @@
   {
     "name": "doc-callout",
     "path": "src/components/docs/doc-callout/doc-callout.vue",
-    "limit": "9.25 KB"
+    "limit": "9.4 KB"
   },
   {
     "name": "doc-card",
     "path": "src/components/docs/doc-card/doc-card.vue",
-    "limit": "1.6 KB"
+    "limit": "2.45 KB"
   },
   {
     "name": "doc-card-group",
@@ -219,7 +219,7 @@
   {
     "name": "doc-item",
     "path": "src/components/docs/doc-item/doc-item.vue",
-    "limit": "12.9 KB"
+    "limit": "13.8 KB"
   },
   {
     "name": "doc-steps",
@@ -265,7 +265,7 @@
   {
     "name": "doc-prompt",
     "path": "src/components/docs/doc-prompt/doc-prompt.vue",
-    "limit": "13.15 KB",
+    "limit": "13.2 KB",
     "entryOnly": true
   },
   {
@@ -276,7 +276,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/docs/doc-page-header/doc-page-header.vue",
-    "limit": "32.4 KB"
+    "limit": "32.6 KB"
   },
   {
     "name": "doc-table-of-contents",
@@ -453,12 +453,12 @@
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "121.95 KB"
+    "limit": "122.05 KB"
   },
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "84.65 KB"
+    "limit": "84.9 KB"
   },
   {
     "name": "runtime-api-cloud",
@@ -494,7 +494,7 @@
   {
     "name": "article-index-section",
     "path": "src/components/section/article-index-section/article-index-section.vue",
-    "limit": "36.6 KB",
+    "limit": "36.65 KB",
     "entryOnly": true
   },
   {
@@ -533,7 +533,7 @@
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "52.55 KB",
+    "limit": "52.65 KB",
     "entryOnly": true
   },
   {
@@ -561,7 +561,7 @@
   {
     "name": "pricing-plans-section",
     "path": "src/components/section/pricing-plans-section/pricing-plans-section.vue",
-    "limit": "22.1 KB"
+    "limit": "22.15 KB"
   },
   {
     "name": "feature-scroll-section",
@@ -626,7 +626,7 @@
   {
     "name": "job-posting-section",
     "path": "src/components/section/job-posting-section/job-posting-section.vue",
-    "limit": "58.95 KB",
+    "limit": "59.05 KB",
     "entryOnly": true
   },
   {
@@ -720,7 +720,7 @@
   {
     "name": "newsletter-section",
     "path": "src/components/section/newsletter-section/newsletter-section.vue",
-    "limit": "13.75 KB"
+    "limit": "13.9 KB"
   },
   {
     "name": "stepper",
@@ -740,12 +740,12 @@
   {
     "name": "chart",
     "path": "src/components/chart/chart/index.ts",
-    "limit": "27 KB"
+    "limit": "27.1 KB"
   },
   {
     "name": "chart-root",
     "path": "src/components/chart/chart/chart.vue",
-    "limit": "18.2 KB"
+    "limit": "18.3 KB"
   },
   {
     "name": "chart-line",
@@ -810,7 +810,7 @@
   {
     "name": "map-chart",
     "path": "src/components/chart/map-chart/map-chart.vue",
-    "limit": "18.55 KB",
+    "limit": "18.65 KB",
     "entryOnly": true
   },
   {
@@ -886,7 +886,7 @@
   {
     "name": "error-boundary",
     "path": "src/components/feedback/error-boundary/error-boundary.vue",
-    "limit": "7.25 KB"
+    "limit": "7.3 KB"
   },
   {
     "name": "tutorial-panel",
@@ -1124,19 +1124,19 @@
   {
     "name": "code-block",
     "path": "src/components/code/code-block/code-block.vue",
-    "limit": "33.85 KB",
+    "limit": "33.9 KB",
     "entryOnly": true
   },
   {
     "name": "log-viewer-content",
     "path": "src/components/code/log-viewer/log-viewer-content.vue",
-    "limit": "29.45 KB",
+    "limit": "29.55 KB",
     "entryOnly": true
   },
   {
     "name": "trace",
     "path": "src/components/code/trace/trace.vue",
-    "limit": "39 KB",
+    "limit": "39.05 KB",
     "entryOnly": true
   },
   {
@@ -1174,7 +1174,7 @@
   {
     "name": "mcp-app-frame",
     "path": "src/components/ai/mcp-app-frame/mcp-app-frame.vue",
-    "limit": "10 KB"
+    "limit": "10.05 KB"
   },
   {
     "name": "chat-message",
@@ -1266,7 +1266,7 @@
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "38.1 KB",
+    "limit": "38.15 KB",
     "entryOnly": true
   },
   {
@@ -1468,7 +1468,7 @@
   {
     "name": "highlight-button",
     "path": "src/components/action/highlight-button/highlight-button.vue",
-    "limit": "2.45 KB"
+    "limit": "2.55 KB"
   },
   {
     "name": "copy-button",
@@ -1651,7 +1651,7 @@
   {
     "name": "log-viewer",
     "path": "src/components/code/log-viewer/index.ts",
-    "limit": "43.5 KB"
+    "limit": "43.6 KB"
   },
   {
     "name": "log-viewer-root",
@@ -1666,7 +1666,7 @@
   {
     "name": "log-viewer-steps",
     "path": "src/components/code/log-viewer/log-viewer-steps.vue",
-    "limit": "41.9 KB"
+    "limit": "42.05 KB"
   },
   {
     "name": "log-viewer-header",
