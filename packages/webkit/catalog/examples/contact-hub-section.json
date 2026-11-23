@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The Contact page band: Sales and Support lanes, Support with its system status link, over three self-serve channels. Edit the props in the Controls panel — a band with no lanes and no channels renders nothing.",
+   "summary": "The Contact page band: Sales and Support lanes, Support with its system status link, over three self-serve channels. A band with no lanes and no channels renders nothing.",
    "file": "examples/contact-hub-section/default.vue"
   },
   {

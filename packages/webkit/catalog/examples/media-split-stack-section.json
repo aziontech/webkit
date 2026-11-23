@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Five solution areas under a section title and description, every picture at the closing end. Each band carries its own overline; the AI band draws a live `ConsoleMockup` scene, and the performance band links as a whole to its own `href` while its button keeps its own. Under the section title each band headline is an `h3`. Edit the props in the Controls panel — clear the `title` to drop the header.",
+   "summary": "Five solution areas under a section title and description, every picture at the closing end. Each band carries its own overline; the AI band draws a live `ConsoleMockup` scene, and the performance band links as a whole to its own `href` while its button keeps its own. Under the section title each band headline is an `h3`. Clear the `title` to drop the header.",
    "file": "examples/media-split-stack-section/default.vue"
   },
   {

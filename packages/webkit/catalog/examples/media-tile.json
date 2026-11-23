@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "A framed panel with its caption under it: the lead in the page's ink, the sentence in the muted one, both on the same line. The scene is an official `Illustration`, inset from the frame by the `padded` default. Type a URL into `src` in the Controls panel and the tile swaps the scene for a plain image; clear `description` and the caption is the lead alone, with the frame holding its height either way.",
+   "summary": "A framed panel with its caption under it: the lead in the page's ink, the sentence in the muted one, both on the same line. The scene is an official `Illustration`, inset from the frame by the `padded` default. Set `src` to an image URL and the tile swaps the scene for a plain image; clear `description` and the caption is the lead alone, with the frame holding its height either way.",
    "file": "examples/media-tile/default.vue"
   },
   {
