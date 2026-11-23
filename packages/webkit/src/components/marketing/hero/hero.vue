@@ -56,7 +56,7 @@
     mediaAlign?: HeroMediaAlign
     /** Height of the fixed chrome above the band, subtracted from the viewport when `variant` is `screen`; any CSS length. */
     offset?: string
-    /** Height of the window under the content, where the brand strip and the floor texture stand; any CSS length. */
+    /** Height of the window under the content, where the brand strip and the floor texture stand; a CSS length such as clamp(8rem, 22dvh, 16rem), never a percentage, which resolves against the band's own auto height and collapses the window. */
     bottomHeight?: string
     /** Stand the brand marquee on the band's floor, under the `bottom` window. */
     marquee?: boolean
@@ -128,6 +128,11 @@
   const FLOOR_TEXTURE_CLASS =
     '[mask-image:linear-gradient(to_right,black_0%,color-mix(in_srgb,black_30%,transparent)_40%,color-mix(in_srgb,black_30%,transparent)_62%,black_100%)] [mask-mode:alpha] ' +
     '[opacity:var(--hero-banner-floor-ink,0.6)]'
+
+  const BOTTOM_WINDOW_CLASS =
+    'relative w-full overflow-hidden [height:var(--hero-banner-bottom-height,auto)] ' +
+    'data-[floor]:[height:var(--hero-banner-bottom-height,clamp(9rem,30dvh,34rem))] ' +
+    'max-md:data-[floor]:data-[strip]:[height:var(--hero-banner-bottom-height,clamp(4rem,12dvh,8rem))]'
 
   const MARQUEE_CLASS =
     'mx-auto w-full px-(--spacing-xl) py-(--spacing-xl) ' +
@@ -220,8 +225,10 @@
     >
       <div
         v-if="slots.bottom || hasFloorTexture"
+        data-slot="hero-bottom-window"
         :data-floor="hasFloorTexture || null"
-        class="relative w-full overflow-hidden [height:var(--hero-banner-bottom-height,auto)] data-[floor]:[height:var(--hero-banner-bottom-height,clamp(9rem,30dvh,34rem))]"
+        :data-strip="marquee || null"
+        :class="BOTTOM_WINDOW_CLASS"
       >
         <Texture
           v-if="hasFloorTexture"
