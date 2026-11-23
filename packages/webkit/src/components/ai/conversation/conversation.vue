@@ -288,7 +288,7 @@
       :class="COMPOSER_CLASS"
     >
       <div
-        class="pointer-events-auto mx-auto flex w-full max-w-(--layout-measure-content) flex-col gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-md)"
+        class="pointer-events-auto mx-auto flex w-full max-w-(--layout-measure-content) flex-col gap-(--spacing-xs) px-(--spacing-md) pb-[max(var(--spacing-md),env(safe-area-inset-bottom))]"
       >
         <slot name="composer" />
       </div>

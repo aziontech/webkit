@@ -98,7 +98,7 @@ Compound API through `index.ts` (`PromptInput.AttachButton`, `PromptInput.Dictat
 `prompt-input-model-picker`, `prompt-input-context-picker`, `prompt-input-tools`. The root provides
 the composer context (`injection-key.ts`): `disabled`, `accept`, `maxFiles`, `maxFileSize`,
 `fileCount`, the text (read and write), `appendFiles`, `reject`, `setRejection`, `setDragging`,
-`registerAttach(handlers)`, `focus()`. `usePromptInputContext()` throws outside a `PromptInput`.
+`registerAttach(handlers)`, `setChips(count)`, `focus()`. `usePromptInputContext()` throws outside a `PromptInput`.
 Every part disables with the composer. The compound attaches the three pickers as async
 components, so `@aziontech/webkit/prompt-input` does not carry `DropdownMenu` until a picker
 renders; their standalone paths are static.
@@ -109,8 +109,18 @@ renders; their standalone paths are static.
   it registers drag and paste handlers with the root on setup and takes them back on dispose, sorts
   every picked, dropped or pasted batch against `accept`, `maxFileSize` and `maxFiles`, appends the
   accepted files and reports the rest through the root (`reject`, the line under the box). A
-  composer that offers no way to attach does not take files silently.
-  - Props: `ariaLabel?: string` (default `''` — empty uses `Attach files`); `icon?: string` (default `''` — empty uses `az az-plus`).
+  composer that offers no way to attach does not take files silently. With `tools` the control is
+  the composer's "+" menu: after mount it loads a private part (`parts/prompt-input-add-menu.vue`,
+  a lazy chunk with `DropdownMenu` and `Chip`) whose `DropdownMenu` opens above the control with an
+  `Add` group (Camera on coarse pointers, Photos while `accept` takes images, Files) and a `Tools`
+  group of checkbox options. Camera opens a file input with `accept="image/*"` and
+  `capture="environment"`, Photos one with `accept="image/*"`, Files the control's own input; every
+  pick goes through the same sorting against `accept`, `maxFileSize` and `maxFiles`. The turned-on
+  tools follow the control as removable `Chip`s (their icon before the label) in a list named
+  `Enabled tools`, and while one shows the box stacks (the root's `setChips`), so the text keeps the
+  full width. Until the part has loaded the control is the plain attach `IconButton`.
+  - Props: `ariaLabel?: string` (default `''` — empty uses `Attach files`); `icon?: string` (default `''` — empty uses `az az-plus`); `tools?: PromptInputMenuOption[]` (default `[]` — given, the control opens the "+" menu).
+  - v-model: `v-model` `string[]` (default `[]`; emits `update:modelValue`) — the turned-on tools, in `tools` order.
   - Events: _none_ (picked files go through the root: `update:files` / `reject`).
   - Slots: _none_.
   - `data-testid` fallback: `prompt-input-attach-button`.
@@ -173,6 +183,7 @@ packages/webkit/src/components/ai/prompt-input/
 ├── injection-key.ts
 ├── composables/use-prompt-input-context.ts
 ├── parts/prompt-input-references.vue
+├── parts/prompt-input-add-menu.vue
 ├── prompt-input-attach-button/prompt-input-attach-button.vue
 ├── prompt-input-dictate-button/prompt-input-dictate-button.vue
 ├── prompt-input-model-picker/prompt-input-model-picker.vue
@@ -191,7 +202,7 @@ packages/webkit/src/components/ai/prompt-input/
 ## States
 
 - `data-status` mirrors `status`; `data-disabled`; `data-invalid` while over `maxLength`; `data-dragging` on the box while files are dragged over it (only with an `AttachButton`).
-- `data-multiline` on the root and the box while the composer is stacked (text on its own row): the prompt took a second line (kept until it is cleared), `minRows` is above 1, files, references or the `attachments` slot are shown, or a shortcut menu is open. Absent, it is the single bar.
+- `data-multiline` on the root and the box while the composer is stacked (text on its own row): the prompt took a second line (kept until it is cleared), `minRows` is above 1, files, references, the `attachments` slot or a turned-on tool chip of the `AttachButton` are shown, or a shortcut menu is open. Absent, it is the single bar.
 - `ready`: Submit (primary `IconButton`, large, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (primary `IconButton`, `az az-headphones`) takes its place.
 - `pending` / `streaming`: Stop (secondary `IconButton`, `az az-stop`) replaces Submit; Enter does nothing.
 - `pending` / `streaming` with `queueable`: Stop stays, and Submit (primary, after Stop at the inline end) shows beside it while there is something to send; Enter and Submit emit `submit` as in `ready`. With nothing to send only Stop shows, and the voice control never does.
@@ -208,6 +219,7 @@ packages/webkit/src/components/ai/prompt-input/
 - Keyboard map: `Enter` submits (while a response runs only with `queueable`); `Shift+Enter` new line; `Tab` moves through the attachments, the toolbar start controls, the toolbar end controls, Submit / Stop / voice, then the footer row. IME composition (`isComposing`, or between `compositionstart` and `compositionend`) never submits.
 - Shortcut menus (`menus`): typing a trigger at the start of a word opens a listbox above the input with up to eight options matching what follows it. Focus stays in the text area, which points at the list with `aria-controls` and at the highlighted option with `aria-activedescendant` (a `textarea` cannot take `role="combobox"`); `ArrowDown`/`ArrowUp` move, `Enter` or `Tab` choose, `Escape` closes, and Enter does not submit while the list is open. A polite status reads `3 suggestions` or `No matches`. The text area lists the triggers in `aria-keyshortcuts`. References are a list named `References` of removable `Chip`s.
 - Files: the tokens are `FileTokenGroup`'s list (named `Files`) with a named remove button each; focus moves as that component defines. The drop panel is decorative (`aria-hidden`); the attach button is the keyboard path. Rejections are announced politely and shown as text.
+- "+" menu (`AttachButton` with `tools`): a `DropdownMenu` like the pickers; Camera, Photos and Files are `menuitem`s that open the system picker, the tools `menuitemcheckbox`es that keep the menu open. The trigger keeps the name `Attach files`.
 - Pickers: each opens a `DropdownMenu` (`menu` with `menuitemradio` / `menuitemcheckbox`), so arrows, typeahead, `Escape` and focus return come from it. The model trigger's name is its visible text (model and mode). Enabled tools are a list named `Enabled tools` of removable `Chip`s.
 - Dictation: the control's name says what pressing it does (`Dictate` / `Stop dictation`), with no `aria-pressed`; the listening status is a polite live region. Where the browser has no speech recognition the control is not rendered.
 - Queue: with `queueable`, Stop and Submit are two named buttons in tab order (Stop first); the owner announces the queued prompt through `PromptQueue`'s list, so the composer adds no live region of its own.
@@ -219,7 +231,7 @@ packages/webkit/src/components/ai/prompt-input/
 ## Right-to-left
 
 - Layout: logical utilities; actions at the inline start, the end slot and Submit at the inline end (`ms-auto` when stacked); the footer row starts at the inline start.
-- Icons: the arrow-up, stop, plus, microphone, headphones, folder, wrench and chevron glyphs are not mirrored.
+- Icons: the arrow-up, stop, plus, microphone, headphones, folder, wrench, camera, image, paperclip and chevron glyphs are not mirrored.
 - Keyboard: arrows move in the shortcut menu only while it is open; vertical, so not mirrored. The pickers' arrow keys come from `DropdownMenu`.
 - User data: the text area follows the document direction; mixed prompts render with the browser's bidi. File names render in `FileTokenGroup`'s `<bdi>`.
 
@@ -254,6 +266,10 @@ packages/webkit/src/components/ai/prompt-input/
 | `promptInput.contextRemove`    | `Remove context`                                           | —                             |
 | `promptInput.tools`            | `Tools`                                                    | `label` (Tools)               |
 | `promptInput.toolsEnabled`     | `Enabled tools`                                            | —                             |
+| `promptInput.addMenu`          | `Add`                                                      | —                             |
+| `promptInput.camera`           | `Camera`                                                   | —                             |
+| `promptInput.photos`           | `Photos`                                                   | —                             |
+| `promptInput.files`            | `Files`                                                    | —                             |
 
 - Formatting: counts go through `Intl.NumberFormat` (the `t()` number formatting); the size limit through `formatFileSize` from `useLocale`.
 - Dictation listens in `lang`, else the provider locale.

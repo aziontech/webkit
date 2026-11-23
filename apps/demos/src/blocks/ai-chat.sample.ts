@@ -1,4 +1,5 @@
 import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
+import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
 import type { AiChatInterrupt, AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
@@ -276,4 +277,16 @@ export const sampleHistory: ConversationHistoryItem[] = [
   { id: 'h4', title: 'Top orders query for acme-store', updatedAt: '2026-11-16T10:20:00' },
   { id: 'h5', title: 'Move DNS records to Azion', updatedAt: '2026-11-04T14:05:00' },
   { id: 'h6', title: 'Image optimization for docs-site', updatedAt: '2026-09-28T08:30:00' }
+]
+
+export const sampleModels: PromptInputMenuOption[] = [
+  { value: 'auto', label: 'Auto', description: 'Decides how long to think' },
+  { value: 'fast', label: 'Fast', description: 'Answers right away' },
+  { value: 'thinking', label: 'Thinking', description: 'Thinks longer for harder questions' }
+]
+
+export const sampleTools: PromptInputMenuOption[] = [
+  { value: 'web-search', label: 'Web search', icon: 'az az-globe' },
+  { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
+  { value: 'create-image', label: 'Create image', icon: 'az az-image' }
 ]

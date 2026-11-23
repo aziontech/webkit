@@ -7,7 +7,11 @@
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
-  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
@@ -37,23 +41,16 @@
     groupQuestions,
     skipQuestion
   } from '@aziontech/webkit/utils/ai-chat-questions'
-  import { computed, ref, watch } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
 
-  import { sampleSuggestions } from './ai-chat.sample'
+  import { sampleModels, sampleSuggestions, sampleTools } from './ai-chat.sample'
   import AiChatComposer from './ai-chat-composer.vue'
   import AiChatConnectionStatus from './ai-chat-connection-status.vue'
-  import AiChatHeader from './ai-chat-header.vue'
+  import AiChatHeader, { type AiChatHeaderAction } from './ai-chat-header.vue'
   import AiChatHistory from './ai-chat-history.vue'
+  import AiChatSkeleton from './ai-chat-skeleton.vue'
   import AiChatStart from './ai-chat-start.vue'
   import AiChatTurn from './ai-chat-turn.vue'
-
-  /** A rating the reader gave a response. */
-  export interface AiChatFeedback {
-    /** The rated response. */
-    message: AiChatMessage
-    /** Helpful, not helpful, or cleared. */
-    value: ChatMessageFeedbackValue | null
-  }
 
   export interface AiChatProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
@@ -98,6 +95,10 @@
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
+    /** The models the header title picks from on desktop; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
+    models?: PromptInputMenuOption[]
+    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    toolOptions?: PromptInputMenuOption[]
   }
 
   const props = withDefaults(defineProps<AiChatProps>(), {
@@ -121,7 +122,9 @@
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
-    resolveAppUrl: undefined
+    resolveAppUrl: undefined,
+    models: undefined,
+    toolOptions: undefined
   })
 
   const emit = defineEmits<{
@@ -130,7 +133,14 @@
     'voice-start': [event: MouseEvent]
     retry: [event: MouseEvent, message: AiChatMessage]
     'new-chat': [event: MouseEvent]
-    feedback: [feedback: AiChatFeedback]
+    feedback: [value: ChatMessageFeedbackValue | null, message: AiChatMessage, reason?: string]
+    share: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    edit: [event: MouseEvent | KeyboardEvent, message: AiChatMessage, text: string]
+    branch: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    'share-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
+    'rename-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
+    'archive-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
+    'remove-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
     approve: [event: MouseEvent, call: AiChatToolCallPart, input?: unknown]
     deny: [event: MouseEvent, call: AiChatToolCallPart]
     'remove-queued': [event: MouseEvent, item: AiChatQueuedMessage]
@@ -146,6 +156,10 @@
   }>()
 
   const activeKey = defineModel<string | null>('activeKey', { default: null })
+  /** The model chosen in the header title, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
+  const modelKey = defineModel<string>('modelKey', { default: 'auto' })
+  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
   const { formatDate } = useLocale()
 
@@ -167,6 +181,10 @@
     props.messages.filter((message) => message.role === 'user' || message.role === 'assistant')
   )
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
+  const modelOptions = computed(() => props.models ?? sampleModels)
+  const composerTools = computed(() => props.toolOptions ?? sampleTools)
+  const welcome = computed(() => !turns.value.length && !props.hydrating)
+  let refocus = false
   const last = computed(() => turns.value[turns.value.length - 1])
   const failure = computed(() => {
     if (!props.error) return ''
@@ -262,7 +280,13 @@
     }
   )
 
-  async function send(event: MouseEvent | KeyboardEvent, text: string) {
+  watch(welcome, (now) => {
+    if (now || !refocus) return
+    refocus = false
+    void nextTick(() => composerEl.value?.focus())
+  })
+
+  async function send(event: MouseEvent | KeyboardEvent, text: string, typed = false) {
     const attached = files.value
     const picked = attached.flatMap((item) => (item.file instanceof File ? [item.file] : []))
     if ((!text.trim() && !picked.length) || (state.value !== 'ready' && !queueable.value)) return
@@ -276,6 +300,7 @@
       files.value = attached
       return
     }
+    refocus = typed
     emit('send', event, content)
   }
 
@@ -298,9 +323,16 @@
     emit('new-chat', event)
   }
 
-  function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null) {
+  function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null, reason?: string) {
     ratings.value[message.id] = value
-    emit('feedback', { message, value })
+    emit('feedback', value, message, reason)
+  }
+
+  function onChatAction(event: MouseEvent | KeyboardEvent, action: AiChatHeaderAction) {
+    if (action === 'share') emit('share-chat', event, activeKey.value)
+    else if (action === 'rename') emit('rename-chat', event, activeKey.value)
+    else if (action === 'archive') emit('archive-chat', event, activeKey.value)
+    else emit('remove-chat', event, activeKey.value)
   }
 
   function removeQueued(event: MouseEvent, id: string) {
@@ -326,6 +358,7 @@
 <template>
   <section
     aria-labelledby="ai-chat-title"
+    data-layout-fill
     class="flex min-h-0 w-full grow basis-0"
   >
     <AiChatHistory
@@ -336,13 +369,47 @@
     />
     <div class="relative flex min-h-0 min-w-0 flex-1 flex-col">
       <AiChatHeader
+        v-model:model-key="modelKey"
         :empty="!turns.length"
         :history-open="historyPanel"
+        :models="modelOptions"
         @new-chat="newChat"
         @open-history="historyDrawer = true"
         @toggle-history="historyPanel = !historyPanel"
+        @action="onChatAction"
       />
+      <AiChatStart
+        v-if="welcome"
+        :starters="starters"
+        @select="(event, item) => send(event, item.label)"
+      >
+        <AiChatConnectionStatus
+          :connection="connection"
+          :resuming="resuming"
+          :session-generating="sessionGenerating"
+          :loading="loading"
+        />
+        <AiChatComposer
+          ref="composerEl"
+          v-model="prompt"
+          v-model:files="files"
+          v-model:tool-keys="toolKeys"
+          :state="state"
+          :queueable="queueable"
+          :hydrating="hydrating"
+          :accept="accept"
+          :max-files="maxFiles"
+          :max-file-size="maxFileSize"
+          :attachable="attachable"
+          :voice="voice"
+          :tools="composerTools"
+          @submit="(event, text) => send(event, text, true)"
+          @stop="stop"
+          @voice-start="emit('voice-start', $event)"
+        />
+      </AiChatStart>
       <Conversation
+        v-else
         aria-label="Conversation with the AI assistant"
         :more-messages="moreMessages"
         :loading-more="loadingMore"
@@ -352,12 +419,7 @@
           aria-hidden="true"
           class="h-(--spacing-lg) shrink-0"
         />
-        <AiChatStart
-          v-if="!turns.length"
-          :hydrating="hydrating"
-          :starters="starters"
-          @select="(event, item) => send(event, item.label)"
-        />
+        <AiChatSkeleton v-if="!turns.length" />
         <AiChatTurn
           v-for="turn in turns"
           :key="turn.id"
@@ -377,7 +439,12 @@
           :edit-of="editOf"
           :resolve-app-url="resolveAppUrl"
           @retry="emit('retry', $event, turn)"
-          @rate="(value) => rate(turn, value)"
+          @rate="(value, reason?: string) => rate(turn, value, reason)"
+          @share="(event: MouseEvent | KeyboardEvent) => emit('share', event, turn)"
+          @branch="(event: MouseEvent | KeyboardEvent) => emit('branch', event, turn)"
+          @edit-prompt="
+            (event: MouseEvent | KeyboardEvent, text: string) => emit('edit', event, turn, text)
+          "
           @answer-tool="answerTool"
           @edit="(call, text) => (edits[call.id] = text)"
           @approve="approve"
@@ -425,6 +492,7 @@
             ref="composerEl"
             v-model="prompt"
             v-model:files="files"
+            v-model:tool-keys="toolKeys"
             :state="state"
             :queueable="queueable"
             :hydrating="hydrating"
@@ -433,7 +501,8 @@
             :max-file-size="maxFileSize"
             :attachable="attachable"
             :voice="voice"
-            @submit="send"
+            :tools="composerTools"
+            @submit="(event, text) => send(event, text, true)"
             @stop="stop"
             @voice-start="emit('voice-start', $event)"
           />

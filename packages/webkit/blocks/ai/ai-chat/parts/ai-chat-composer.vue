@@ -1,5 +1,9 @@
 <script setup lang="ts">
-  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
   import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
@@ -14,6 +18,7 @@
     maxFileSize: number
     attachable: boolean
     voice: boolean
+    tools: PromptInputMenuOption[]
   }>()
 
   const emit = defineEmits<{
@@ -24,6 +29,7 @@
 
   const prompt = defineModel<string>({ required: true })
   const files = defineModel<PromptInputFile[]>('files', { required: true })
+  const toolKeys = defineModel<string[]>('toolKeys', { required: true })
 
   const inputEl = ref<InstanceType<typeof PromptInput> | null>(null)
 
@@ -51,13 +57,18 @@
       v-if="attachable"
       #actions
     >
-      <PromptInputAttachButton />
+      <PromptInputAttachButton
+        v-model="toolKeys"
+        :tools="tools"
+      />
     </template>
     <template #end>
       <PromptInputDictateButton />
     </template>
     <template #hint>
-      The AI assistant can make mistakes. Check important information before you act on it.
+      <span class="max-md:sr-only">
+        The AI assistant can make mistakes. Check important information before you act on it.
+      </span>
     </template>
   </PromptInput>
 </template>

@@ -9,7 +9,11 @@
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
-  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
@@ -47,15 +51,7 @@
   import DrawerChatHeader from './parts/drawer-chat-header.vue'
   import DrawerChatStart from './parts/drawer-chat-start.vue'
   import WorkloadOverview from './parts/workload-overview.vue'
-  import { sampleSuggestions } from './sample'
-
-  /** A rating the reader gave a response. */
-  export interface AiChatDrawerFeedback {
-    /** The rated response. */
-    message: AiChatMessage
-    /** Helpful, not helpful, or cleared. */
-    value: ChatMessageFeedbackValue | null
-  }
+  import { sampleSuggestions, sampleTools } from './sample'
 
   export interface AiChatDrawerProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
@@ -98,6 +94,8 @@
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
+    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    toolOptions?: PromptInputMenuOption[]
   }
 
   const props = withDefaults(defineProps<AiChatDrawerProps>(), {
@@ -120,7 +118,8 @@
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
-    resolveAppUrl: undefined
+    resolveAppUrl: undefined,
+    toolOptions: undefined
   })
 
   const emit = defineEmits<{
@@ -128,7 +127,10 @@
     stop: [event: MouseEvent]
     retry: [event: MouseEvent, message: AiChatMessage]
     'new-chat': [event: MouseEvent]
-    feedback: [feedback: AiChatDrawerFeedback]
+    feedback: [value: ChatMessageFeedbackValue | null, message: AiChatMessage, reason?: string]
+    share: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    edit: [event: MouseEvent | KeyboardEvent, message: AiChatMessage, text: string]
+    branch: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
     approve: [event: MouseEvent, call: AiChatToolCallPart, input?: unknown]
     deny: [event: MouseEvent, call: AiChatToolCallPart]
     'remove-queued': [event: MouseEvent, item: AiChatQueuedMessage]
@@ -145,6 +147,8 @@
 
   /** Whether the assistant drawer is open; Agent opens it and its close button closes it. */
   const open = defineModel<boolean>('open', { default: true })
+  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
   const { formatDate } = useLocale()
 
@@ -164,6 +168,7 @@
     props.messages.filter((message) => message.role === 'user' || message.role === 'assistant')
   )
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
+  const composerTools = computed(() => props.toolOptions ?? sampleTools)
   const last = computed(() => turns.value[turns.value.length - 1])
   const failure = computed(() => {
     if (!props.error) return ''
@@ -304,9 +309,9 @@
     emit('new-chat', event)
   }
 
-  function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null) {
+  function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null, reason?: string) {
     ratings.value[message.id] = value
-    emit('feedback', { message, value })
+    emit('feedback', value, message, reason)
   }
 
   function removeQueued(event: MouseEvent, id: string) {
@@ -382,7 +387,13 @@
                 :edit-of="editOf"
                 :resolve-app-url="resolveAppUrl"
                 @retry="emit('retry', $event, turn)"
-                @rate="(value) => rate(turn, value)"
+                @rate="(value, reason?: string) => rate(turn, value, reason)"
+                @share="(event: MouseEvent | KeyboardEvent) => emit('share', event, turn)"
+                @branch="(event: MouseEvent | KeyboardEvent) => emit('branch', event, turn)"
+                @edit-prompt="
+                  (event: MouseEvent | KeyboardEvent, text: string) =>
+                    emit('edit', event, turn, text)
+                "
                 @answer-tool="answerTool"
                 @edit="(call, text) => (edits[call.id] = text)"
                 @approve="approve"
@@ -430,6 +441,7 @@
                   ref="composerEl"
                   v-model="prompt"
                   v-model:files="files"
+                  v-model:tool-keys="toolKeys"
                   :state="state"
                   :queueable="queueable"
                   :hydrating="hydrating"
@@ -437,6 +449,7 @@
                   :max-files="maxFiles"
                   :max-file-size="maxFileSize"
                   :attachable="attachable"
+                  :tools="composerTools"
                   @submit="send"
                   @stop="stop"
                 />

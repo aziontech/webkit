@@ -112,7 +112,11 @@ export const ptBR: Messages = {
     context: 'Escolher contexto',
     contextRemove: 'Remover contexto',
     tools: 'Ferramentas',
-    toolsEnabled: 'Ferramentas ativadas'
+    toolsEnabled: 'Ferramentas ativadas',
+    addMenu: 'Adicionar',
+    camera: 'Câmera',
+    photos: 'Fotos',
+    files: 'Arquivos'
   },
   agentActivity: {
     label: 'Atividade do agente',

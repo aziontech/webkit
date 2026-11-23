@@ -112,7 +112,11 @@ export const es: Messages = {
     context: 'Elegir contexto',
     contextRemove: 'Quitar contexto',
     tools: 'Herramientas',
-    toolsEnabled: 'Herramientas activadas'
+    toolsEnabled: 'Herramientas activadas',
+    addMenu: 'Añadir',
+    camera: 'Cámara',
+    photos: 'Fotos',
+    files: 'Archivos'
   },
   agentActivity: {
     label: 'Actividad del agente',

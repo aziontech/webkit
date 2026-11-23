@@ -1209,7 +1209,7 @@
   {
     "name": "prompt-input",
     "path": "src/components/ai/prompt-input/index.ts",
-    "limit": "14.65 KB",
+    "limit": "15.1 KB",
     "entryOnly": true
   },
   {
@@ -1221,7 +1221,7 @@
   {
     "name": "prompt-input-attach-button",
     "path": "src/components/ai/prompt-input/prompt-input-attach-button/prompt-input-attach-button.vue",
-    "limit": "5.6 KB",
+    "limit": "6.7 KB",
     "entryOnly": true
   },
   {

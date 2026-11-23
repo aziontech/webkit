@@ -1,18 +1,18 @@
 # AiChat (`ai/ai-chat`)
 
-> The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a round menu button on a phone; no header bar, only round floating buttons on a phone and a quiet row on desktop; before the first message an `EmptyState` over vertical support prompts from `SuggestionGroup`, inside the log; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, the feedback thumbs, Regenerate, Read aloud and a `Sources` pill in the action row), followed by follow-up questions; a `PromptInput` pill floating at the foot of the column with the Attach "+" at the start, Dictate before the round button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout that fills its content region.
+> The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with "What can I help with?", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (its action row and the `Sources` pill), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the "+" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).
 
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), [CopyButton](../../components/copy-button.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [McpAppFrame](../../components/mcp-app-frame.md), `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), [CopyButton](../../components/copy-button.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [McpAppFrame](../../components/mcp-app-frame.md), `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, `utils/ai-chat`, `utils/ai-chat-questions`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
 ai chat; ai assistant; chatbot; copilot; chat with ai; generative ai chat; assistant page; ask ai; llm chat; conversational ui; prompt and response; streaming response; chat de ia; assistente de ia; assistente virtual; conversa com ia; chat con ia; asistente de ia; artifact; artifact canvas; generated file; code canvas; canvas de artefato; artefato gerado; full page chat; tanstack ai; usechat; agent activity; subagent; agent question
 
-A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation: one reading column the thread scrolls in, with the header controls and the composer floating over it. Beside it, the conversation history. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.
+A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation: one reading column the thread scrolls in, with the header controls and the composer floating over it. Beside it, the conversation history. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: its root carries `data-layout-fill`, so it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), only the log scrolls, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -30,17 +30,17 @@ A full page where a person talks with the generative AI assistant about their ac
 
 ## Building blocks
 
-### A. Header — `IconButton`, `Tag`, `Button`
+### A. Header — `IconButton`, `Button`, `DropdownMenu`
 
-No bar and no border: the thread scrolls under it. On a phone it is two round floating `IconButton`s over the thread, blurred over a translucent raised surface: Open conversation history at the inline start and New chat at the inline end; the page heading stays for assistive tech only. From the md breakpoint it is a quiet row over a fade of the canvas: a Show or Hide conversation history toggle (`aria-expanded`), the assistant's name in a small label, a Preview `Tag` while the feature is in preview, and a transparent New chat `Button` at the inline end. New chat is disabled while the thread is empty and clears it without confirmation; the previous thread stays in the history.
+No bar and no border: the thread scrolls under it. On a phone it is round-cornered floating controls over the thread, blurred over a translucent raised surface: Open conversation history at the inline start, and at the inline end one grouped control holding New chat and More conversation actions; the page heading stays for assistive tech only. From the md breakpoint it is a quiet row over a fade of the canvas: a Show or Hide conversation history toggle (`aria-expanded`), the model picker as the title (`AI assistant` with the chosen model muted and a chevron, a `DropdownMenu` of `models` as radio items, `v-model:modelKey`), New chat while the history panel is folded away, and at the inline end Share and More conversation actions. The More menu holds Share (on a phone), Rename, Archive and Delete for the open conversation; each emits `share-chat`, `rename-chat`, `archive-chat` or `remove-chat` with `activeKey`, and the app does the work. New chat, Share and More are disabled while the thread is empty; New chat clears it without confirmation, and the previous thread stays in the history.
 
 ### A2. History — `ConversationHistory`, `Drawer`
 
 The reader's earlier conversations, grouped by date, with a New chat row and a search field (`creatable`, `searchable`). From the md breakpoint a side panel at the inline start, open by default and folded away by the header toggle; on a phone a start-side `Drawer` the round menu button opens, closed by picking a conversation or New chat. The open conversation is `v-model:activeKey`; the list comes from `sample.ts` until the app gives its own.
 
-### B. Empty state — `EmptyState`, `SuggestionGroup`
+### B. Empty state — `SuggestionGroup`, `PromptInput`
 
-Before the first message, inside the log so the composer stays mounted and keeps focus when the thread starts: an `EmptyState` with the assistant mark, one question as the title and one sentence on what the assistant can read, over a vertical `SuggestionGroup` of up to five support prompts with icons. Selecting a prompt sends it as the first message.
+Before the first message there is no log: a welcome page with one question as its heading ("What can I help with?"). On desktop the heading and the composer sit together in the middle of the page with the support prompts as chips under them; on a phone the heading sits in the middle and the prompts are one row of chips that scrolls sideways just above the composer at the foot of the screen. Selecting a prompt sends it as the first message. Once a message exists the composer moves to the foot of the log; when the reader sent from the composer, focus follows it there.
 
 ### C. Message log — `Conversation`
 
@@ -68,7 +68,7 @@ After the last complete response, two or three questions that narrow it, as wrap
 
 ### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
 
-The `#composer` of `Conversation`: one floating pill at the foot of the reading column, over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter once the prompt passes 3,200 characters, and Submit becomes Stop while a response is pending or streaming. While the composer is empty the round button at the end is Start voice conversation (`voice`, on by default), which emits `voice-start` for the app to open its audio session. The disclaimer is its hint. The Attach "+" at the start (`attachable`, on by default: a `PromptInputAttachButton`, and drop and paste) attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating box at the foot of the reading column, pinned there while the thread scrolls behind it (the log keeps room for it, and it keeps the phone's bottom safe area under it), over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter once the prompt passes 3,200 characters, and Submit becomes Stop while a response is pending or streaming. While the composer is empty the button at the end is Start voice conversation (`voice`, on by default), which emits `voice-start` for the app to open its audio session. The disclaimer is its hint, shown from the md breakpoint and kept for assistive tech on a phone. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions` (Web search, Deep research, Create image); a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys`. It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
 
 ### J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
 
@@ -135,8 +135,10 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 | `maxFiles`          | `number`                                  | Most files on one message; default 4.                                                                                                                                                                                         |
 | `maxFileSize`       | `number`                                  | Largest file in bytes; default 10 MB.                                                                                                                                                                                         |
 | `resolveAppUrl`     | `(resource) => string \| Promise<string>` | Gives a widget that has no inline HTML a trusted `https` address; left out, only inline widgets show.                                                                                                                         |
+| `models`            | `PromptInputMenuOption[]`                 | The models the header title picks from on desktop; left out, the sample models. The choice is `v-model:modelKey`.                                                                                                             |
+| `toolOptions`       | `PromptInputMenuOption[]`                 | The tools the composer's "+" menu turns on; left out, the sample tools. The turned-on ones are `v-model:toolKeys`.                                                                                                            |
 
-The open conversation of the history is `v-model:activeKey` (`string | null`): picking a row sets it, New chat clears it; load that conversation's messages when it changes.
+The open conversation of the history is `v-model:activeKey` (`string | null`): picking a row sets it, New chat clears it; load that conversation's messages when it changes. The model of the header title is `v-model:modelKey` and the tools turned on in the "+" menu are `v-model:toolKeys`: pass both with each message, `sendMessage(content, { body: { model: modelKey, tools: toolKeys } })`, and read them from `forwardedProps` on the server.
 
 | Event              | Payload                     | When                                                                                                                                              |
 | ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -145,7 +147,14 @@ The open conversation of the history is `v-model:activeKey` (`string | null`): p
 | `voice-start`      | `(event)`                   | Start voice conversation on an empty composer: open the app's audio session (set `voice` to `false` when there is none).                          |
 | `retry`            | `(event, message)`          | Try again or Regenerate response: call `reload()`.                                                                                                |
 | `new-chat`         | `(event)`                   | New chat: call `clear()`.                                                                                                                         |
-| `feedback`         | `({ message, value })`      | The reader rated a response.                                                                                                                      |
+| `feedback`         | `(value, message, reason?)` | The reader rated a response (`up`, `down`, or `null` when cleared), with the reason of a bad response when they gave one: store it.               |
+| `share`            | `(event, message)`          | Share on a response: make a link to it.                                                                                                           |
+| `edit`             | `(event, message, text)`    | Send on an edited prompt: `setMessages` with the messages before it, then `sendMessage(text)`.                                                    |
+| `branch`           | `(event, message)`          | Branch in new chat on a response: start a new thread from the messages up to it.                                                                  |
+| `share-chat`       | `(event, key)`              | Share in the header: make a link to the conversation `key` (`activeKey`).                                                                         |
+| `rename-chat`      | `(event, key)`              | Rename in the More menu: rename the conversation `key`.                                                                                           |
+| `archive-chat`     | `(event, key)`              | Archive in the More menu: archive the conversation `key`.                                                                                         |
+| `remove-chat`      | `(event, key)`              | Delete in the More menu: confirm, then delete the conversation `key`.                                                                             |
 | `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
 | `remove-queued`    | `(event, item)`             | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                         |
 | `app-message`      | `(message, part, reply)`    | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                       |
@@ -247,8 +256,8 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 
 ## Copy
 
-- **Title of the page:** `AI assistant`; the Preview tag while in preview.
-- **Empty state:** a question the reader would ask themselves, e.g. "How can I help with your Azion account?", and one sentence on what the assistant can read.
+- **Title of the page:** `AI assistant`, with the chosen model after it on desktop.
+- **Empty state:** "What can I help with?".
 - **Support prompts and follow-ups:** written as the reader would ask, under 72 characters, e.g. "How do I purge the cache of one URL?".
 - **Placeholder:** `Ask a question`, no end punctuation.
 - **Disclaimer (hint):** "The AI assistant can make mistakes. Check important information before you act on it."
@@ -267,14 +276,15 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - Responses are `aria-busy` while loading or streaming; the caret is hidden.
 - The composer is named Prompt, described by its counter and disclaimer; Enter submits and an IME composition never does.
 - Feedback thumbs are toggle buttons with `aria-pressed`, and the submitted state is a status message.
-- Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer.
+- Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer. On the welcome page: header, heading, support prompts, composer.
+- The model picker and the More and "+" menus are `DropdownMenu`s: arrows, typeahead, Escape and focus return come from it; the model trigger's name is its visible text.
 - The phone history is a `Drawer` named Conversation history that returns focus to the menu button; the desktop toggle names what it does and carries `aria-expanded`.
 - Alignment never carries meaning alone: every message's accessible name says who wrote it.
 - Reconnecting is a polite status and Connection lost an alert; the queued messages are a list named Queued messages, each with Remove from queue; a question card is a group named by its question; the placeholders while restoring are a status named Loading the conversation.
 
 ## States
 
-- Empty: `messages` left out or `[]`, with the empty state and four support prompts; selecting one emits `send`.
+- Empty: `messages` left out or `[]`, with the welcome heading, the composer and four support prompts; selecting one emits `send`.
 - Streaming: `loading` with the last assistant message part-way written: its caret, the busy region and Stop in the composer.
 - Error: `error` set: the last response keeps its partial text, with the error line and Try again; with no response yet, a pending response shows the error.
 - Tools: a `tool-call` part draws as a `ToolCall` titled from `tools`, its input and output in code; one with `approval` draws the `ToolApproval` card first (see `ai/ai-action-approval`).
@@ -319,7 +329,11 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
-  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
@@ -349,23 +363,16 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     groupQuestions,
     skipQuestion
   } from '@aziontech/webkit/utils/ai-chat-questions'
-  import { computed, ref, watch } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
 
   import AiChatComposer from './parts/ai-chat-composer.vue'
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
-  import AiChatHeader from './parts/ai-chat-header.vue'
+  import AiChatHeader, { type AiChatHeaderAction } from './parts/ai-chat-header.vue'
   import AiChatHistory from './parts/ai-chat-history.vue'
+  import AiChatSkeleton from './parts/ai-chat-skeleton.vue'
   import AiChatStart from './parts/ai-chat-start.vue'
   import AiChatTurn from './parts/ai-chat-turn.vue'
-  import { sampleSuggestions } from './sample'
-
-  /** A rating the reader gave a response. */
-  export interface AiChatFeedback {
-    /** The rated response. */
-    message: AiChatMessage
-    /** Helpful, not helpful, or cleared. */
-    value: ChatMessageFeedbackValue | null
-  }
+  import { sampleModels, sampleSuggestions, sampleTools } from './sample'
 
   export interface AiChatProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
@@ -410,6 +417,10 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
+    /** The models the header title picks from on desktop; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
+    models?: PromptInputMenuOption[]
+    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    toolOptions?: PromptInputMenuOption[]
   }
 
   const props = withDefaults(defineProps<AiChatProps>(), {
@@ -433,7 +444,9 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
-    resolveAppUrl: undefined
+    resolveAppUrl: undefined,
+    models: undefined,
+    toolOptions: undefined
   })
 
   const emit = defineEmits<{
@@ -442,7 +455,14 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     'voice-start': [event: MouseEvent]
     retry: [event: MouseEvent, message: AiChatMessage]
     'new-chat': [event: MouseEvent]
-    feedback: [feedback: AiChatFeedback]
+    feedback: [value: ChatMessageFeedbackValue | null, message: AiChatMessage, reason?: string]
+    share: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    edit: [event: MouseEvent | KeyboardEvent, message: AiChatMessage, text: string]
+    branch: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    'share-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
+    'rename-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
+    'archive-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
+    'remove-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
     approve: [event: MouseEvent, call: AiChatToolCallPart, input?: unknown]
     deny: [event: MouseEvent, call: AiChatToolCallPart]
     'remove-queued': [event: MouseEvent, item: AiChatQueuedMessage]
@@ -458,6 +478,10 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   }>()
 
   const activeKey = defineModel<string | null>('activeKey', { default: null })
+  /** The model chosen in the header title, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
+  const modelKey = defineModel<string>('modelKey', { default: 'auto' })
+  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
   const { formatDate } = useLocale()
 
@@ -479,6 +503,10 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     props.messages.filter((message) => message.role === 'user' || message.role === 'assistant')
   )
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
+  const modelOptions = computed(() => props.models ?? sampleModels)
+  const composerTools = computed(() => props.toolOptions ?? sampleTools)
+  const welcome = computed(() => !turns.value.length && !props.hydrating)
+  let refocus = false
   const last = computed(() => turns.value[turns.value.length - 1])
   const failure = computed(() => {
     if (!props.error) return ''
@@ -574,7 +602,13 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     }
   )
 
-  async function send(event: MouseEvent | KeyboardEvent, text: string) {
+  watch(welcome, (now) => {
+    if (now || !refocus) return
+    refocus = false
+    void nextTick(() => composerEl.value?.focus())
+  })
+
+  async function send(event: MouseEvent | KeyboardEvent, text: string, typed = false) {
     const attached = files.value
     const picked = attached.flatMap((item) => (item.file instanceof File ? [item.file] : []))
     if ((!text.trim() && !picked.length) || (state.value !== 'ready' && !queueable.value)) return
@@ -588,6 +622,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
       files.value = attached
       return
     }
+    refocus = typed
     emit('send', event, content)
   }
 
@@ -610,9 +645,16 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     emit('new-chat', event)
   }
 
-  function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null) {
+  function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null, reason?: string) {
     ratings.value[message.id] = value
-    emit('feedback', { message, value })
+    emit('feedback', value, message, reason)
+  }
+
+  function onChatAction(event: MouseEvent | KeyboardEvent, action: AiChatHeaderAction) {
+    if (action === 'share') emit('share-chat', event, activeKey.value)
+    else if (action === 'rename') emit('rename-chat', event, activeKey.value)
+    else if (action === 'archive') emit('archive-chat', event, activeKey.value)
+    else emit('remove-chat', event, activeKey.value)
   }
 
   function removeQueued(event: MouseEvent, id: string) {
@@ -638,6 +680,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
 <template>
   <section
     aria-labelledby="ai-chat-title"
+    data-layout-fill
     class="flex min-h-0 w-full grow basis-0"
   >
     <AiChatHistory
@@ -648,13 +691,47 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     />
     <div class="relative flex min-h-0 min-w-0 flex-1 flex-col">
       <AiChatHeader
+        v-model:model-key="modelKey"
         :empty="!turns.length"
         :history-open="historyPanel"
+        :models="modelOptions"
         @new-chat="newChat"
         @open-history="historyDrawer = true"
         @toggle-history="historyPanel = !historyPanel"
+        @action="onChatAction"
       />
+      <AiChatStart
+        v-if="welcome"
+        :starters="starters"
+        @select="(event, item) => send(event, item.label)"
+      >
+        <AiChatConnectionStatus
+          :connection="connection"
+          :resuming="resuming"
+          :session-generating="sessionGenerating"
+          :loading="loading"
+        />
+        <AiChatComposer
+          ref="composerEl"
+          v-model="prompt"
+          v-model:files="files"
+          v-model:tool-keys="toolKeys"
+          :state="state"
+          :queueable="queueable"
+          :hydrating="hydrating"
+          :accept="accept"
+          :max-files="maxFiles"
+          :max-file-size="maxFileSize"
+          :attachable="attachable"
+          :voice="voice"
+          :tools="composerTools"
+          @submit="(event, text) => send(event, text, true)"
+          @stop="stop"
+          @voice-start="emit('voice-start', $event)"
+        />
+      </AiChatStart>
       <Conversation
+        v-else
         aria-label="Conversation with the AI assistant"
         :more-messages="moreMessages"
         :loading-more="loadingMore"
@@ -664,12 +741,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
           aria-hidden="true"
           class="h-(--spacing-lg) shrink-0"
         />
-        <AiChatStart
-          v-if="!turns.length"
-          :hydrating="hydrating"
-          :starters="starters"
-          @select="(event, item) => send(event, item.label)"
-        />
+        <AiChatSkeleton v-if="!turns.length" />
         <AiChatTurn
           v-for="turn in turns"
           :key="turn.id"
@@ -689,7 +761,12 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
           :edit-of="editOf"
           :resolve-app-url="resolveAppUrl"
           @retry="emit('retry', $event, turn)"
-          @rate="(value) => rate(turn, value)"
+          @rate="(value, reason?: string) => rate(turn, value, reason)"
+          @share="(event: MouseEvent | KeyboardEvent) => emit('share', event, turn)"
+          @branch="(event: MouseEvent | KeyboardEvent) => emit('branch', event, turn)"
+          @edit-prompt="
+            (event: MouseEvent | KeyboardEvent, text: string) => emit('edit', event, turn, text)
+          "
           @answer-tool="answerTool"
           @edit="(call, text) => (edits[call.id] = text)"
           @approve="approve"
@@ -737,6 +814,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
             ref="composerEl"
             v-model="prompt"
             v-model:files="files"
+            v-model:tool-keys="toolKeys"
             :state="state"
             :queueable="queueable"
             :hydrating="hydrating"
@@ -745,7 +823,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
             :max-file-size="maxFileSize"
             :attachable="attachable"
             :voice="voice"
-            @submit="send"
+            :tools="composerTools"
+            @submit="(event, text) => send(event, text, true)"
             @stop="stop"
             @voice-start="emit('voice-start', $event)"
           />
@@ -760,6 +839,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
 
 ````ts
 import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
+import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
 import type { AiChatInterrupt, AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
@@ -1038,13 +1118,29 @@ export const sampleHistory: ConversationHistoryItem[] = [
   { id: 'h5', title: 'Move DNS records to Azion', updatedAt: '2026-11-04T14:05:00' },
   { id: 'h6', title: 'Image optimization for docs-site', updatedAt: '2026-09-28T08:30:00' }
 ]
+
+export const sampleModels: PromptInputMenuOption[] = [
+  { value: 'auto', label: 'Auto', description: 'Decides how long to think' },
+  { value: 'fast', label: 'Fast', description: 'Answers right away' },
+  { value: 'thinking', label: 'Thinking', description: 'Thinks longer for harder questions' }
+]
+
+export const sampleTools: PromptInputMenuOption[] = [
+  { value: 'web-search', label: 'Web search', icon: 'az az-globe' },
+  { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
+  { value: 'create-image', label: 'Create image', icon: 'az az-image' }
+]
 ````
 
 ## `parts/ai-chat-composer.vue`
 
 ```ts
 <script setup lang="ts">
-  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
   import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
@@ -1059,6 +1155,7 @@ export const sampleHistory: ConversationHistoryItem[] = [
     maxFileSize: number
     attachable: boolean
     voice: boolean
+    tools: PromptInputMenuOption[]
   }>()
 
   const emit = defineEmits<{
@@ -1069,6 +1166,7 @@ export const sampleHistory: ConversationHistoryItem[] = [
 
   const prompt = defineModel<string>({ required: true })
   const files = defineModel<PromptInputFile[]>('files', { required: true })
+  const toolKeys = defineModel<string[]>('toolKeys', { required: true })
 
   const inputEl = ref<InstanceType<typeof PromptInput> | null>(null)
 
@@ -1096,13 +1194,18 @@ export const sampleHistory: ConversationHistoryItem[] = [
       v-if="attachable"
       #actions
     >
-      <PromptInputAttachButton />
+      <PromptInputAttachButton
+        v-model="toolKeys"
+        :tools="tools"
+      />
     </template>
     <template #end>
       <PromptInputDictateButton />
     </template>
     <template #hint>
-      The AI assistant can make mistakes. Check important information before you act on it.
+      <span class="max-md:sr-only">
+        The AI assistant can make mistakes. Check important information before you act on it.
+      </span>
     </template>
   </PromptInput>
 </template>
@@ -1173,23 +1276,56 @@ export const sampleHistory: ConversationHistoryItem[] = [
 ```ts
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Tag from '@aziontech/webkit/tag'
+  import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
+  import { computed } from 'vue'
 
-  defineProps<{ empty: boolean; historyOpen: boolean }>()
+  export type AiChatHeaderAction = 'share' | 'rename' | 'archive' | 'remove'
+
+  const props = defineProps<{
+    empty: boolean
+    historyOpen: boolean
+    models: PromptInputMenuOption[]
+  }>()
 
   const emit = defineEmits<{
     'new-chat': [event: MouseEvent]
     'open-history': [event: MouseEvent]
     'toggle-history': [event: MouseEvent]
+    action: [event: MouseEvent | KeyboardEvent, action: AiChatHeaderAction]
   }>()
+
+  const modelKey = defineModel<string>('modelKey', { required: true })
+
+  const modelLabel = computed(
+    () => props.models.find((option) => option.value === modelKey.value)?.label ?? ''
+  )
+
+  const actions: { value: AiChatHeaderAction; label: string }[] = [
+    { value: 'share', label: 'Share' },
+    { value: 'rename', label: 'Rename' },
+    { value: 'archive', label: 'Archive' },
+    { value: 'remove', label: 'Delete' }
+  ]
+
+  function onModel(_event: MouseEvent | KeyboardEvent, value: string | number) {
+    modelKey.value = String(value)
+  }
+
+  function onAction(event: MouseEvent | KeyboardEvent, value: string | number) {
+    emit('action', event, value as AiChatHeaderAction)
+  }
 
   const HEADER_CLASS =
     'pointer-events-none absolute inset-x-0 top-0 z-2 flex items-center justify-between gap-(--spacing-sm) p-(--spacing-sm) ' +
     'md:bg-[linear-gradient(to_bottom,var(--bg-canvas)_55%,transparent)] md:px-(--spacing-md)'
 
   const FLOATING_CLASS =
-    'pointer-events-auto inline-flex overflow-hidden rounded-(--shape-button) border border-(--border-default) ' +
+    'pointer-events-auto inline-flex items-center overflow-hidden rounded-(--shape-button) border border-(--border-default) ' +
     'bg-[color-mix(in_srgb,var(--bg-surface-raised)_80%,transparent)] shadow-(--shadow-md) backdrop-blur-md md:hidden'
 </script>
 
@@ -1217,37 +1353,139 @@ export const sampleHistory: ConversationHistoryItem[] = [
       </span>
       <h1
         id="ai-chat-title"
-        class="sr-only text-label-md text-(--text-default) md:not-sr-only"
+        class="sr-only"
       >
         AI assistant
       </h1>
-      <span class="inline-flex max-md:hidden">
-        <Tag
-          label="Preview"
-          severity="info"
-          size="small"
-        />
+      <span class="pointer-events-auto inline-flex min-w-0 max-md:hidden">
+        <DropdownMenu
+          side="bottom"
+          align="start"
+          :disabled="!models.length"
+          @select="onModel"
+        >
+          <DropdownMenuTrigger>
+            <Button
+              variant="ghost"
+              size="medium"
+              icon="az az-chevron-down"
+              icon-position="trailing"
+              :disabled="!models.length"
+              class="min-w-0"
+            >
+              <span class="truncate text-label-lg">AI assistant</span>
+              <span
+                v-if="modelLabel"
+                class="truncate text-(--text-muted)"
+                >{{ modelLabel }}</span
+              >
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuGroup label="Model">
+            <DropdownMenuItem
+              v-for="option in models"
+              :key="option.value"
+              :value="option.value"
+              type="radio"
+              :selected="option.value === modelKey"
+              :label="option.label"
+            >
+              <template
+                v-if="option.description"
+                #trailing
+              >
+                <span class="max-w-48 truncate text-body-xs text-(--text-muted)">{{
+                  option.description
+                }}</span>
+              </template>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenu>
       </span>
     </div>
-    <span :class="FLOATING_CLASS">
-      <IconButton
-        icon="az az-square-pen"
-        aria-label="New chat"
-        variant="ghost"
-        :disabled="empty"
-        @click="emit('new-chat', $event)"
-      />
-    </span>
-    <span class="pointer-events-auto inline-flex max-md:hidden">
-      <Button
-        label="New chat"
-        variant="ghost"
-        size="small"
-        icon="az az-square-pen"
-        :disabled="empty"
-        @click="emit('new-chat', $event)"
-      />
-    </span>
+    <div class="flex items-center gap-(--spacing-2xs)">
+      <span class="pointer-events-auto inline-flex max-md:hidden">
+        <Button
+          label="Share"
+          variant="ghost"
+          size="small"
+          icon="az az-share"
+          :disabled="empty"
+          @click="emit('action', $event, 'share')"
+        />
+      </span>
+      <span :class="FLOATING_CLASS">
+        <IconButton
+          icon="az az-square-pen"
+          aria-label="New chat"
+          variant="ghost"
+          :disabled="empty"
+          @click="emit('new-chat', $event)"
+        />
+        <DropdownMenu
+          side="bottom"
+          align="end"
+          :disabled="empty"
+          @select="onAction"
+        >
+          <DropdownMenuTrigger>
+            <IconButton
+              icon="az az-ellipsis"
+              aria-label="More conversation actions"
+              variant="ghost"
+              :disabled="empty"
+            />
+          </DropdownMenuTrigger>
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              v-for="action in actions"
+              :key="action.value"
+              :value="action.value"
+              :label="action.label"
+            />
+          </DropdownMenuGroup>
+        </DropdownMenu>
+      </span>
+      <span
+        v-if="!historyOpen"
+        class="pointer-events-auto inline-flex max-md:hidden"
+      >
+        <IconButton
+          icon="az az-square-pen"
+          aria-label="New chat"
+          variant="ghost"
+          size="medium"
+          :disabled="empty"
+          @click="emit('new-chat', $event)"
+        />
+      </span>
+      <span class="pointer-events-auto inline-flex max-md:hidden">
+        <DropdownMenu
+          side="bottom"
+          align="end"
+          :disabled="empty"
+          @select="onAction"
+        >
+          <DropdownMenuTrigger>
+            <IconButton
+              icon="az az-ellipsis"
+              aria-label="More conversation actions"
+              variant="ghost"
+              size="medium"
+              :disabled="empty"
+            />
+          </DropdownMenuTrigger>
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              v-for="action in actions.slice(1)"
+              :key="action.value"
+              :value="action.value"
+              :label="action.label"
+            />
+          </DropdownMenuGroup>
+        </DropdownMenu>
+      </span>
+    </div>
   </header>
 </template>
 ```
@@ -1413,24 +1651,15 @@ export const sampleHistory: ConversationHistoryItem[] = [
 </template>
 ```
 
-## `parts/ai-chat-start.vue`
+## `parts/ai-chat-skeleton.vue`
 
 ```ts
 <script setup lang="ts">
-  import EmptyState from '@aziontech/webkit/empty-state'
   import Skeleton from '@aziontech/webkit/skeleton'
-  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-
-  defineProps<{ hydrating: boolean; starters: SuggestionGroupItem[] }>()
-
-  const emit = defineEmits<{
-    select: [event: MouseEvent | KeyboardEvent, item: SuggestionGroupItem]
-  }>()
 </script>
 
 <template>
   <div
-    v-if="hydrating"
     role="status"
     aria-label="Loading the conversation"
     class="flex flex-col gap-(--spacing-xl)"
@@ -1451,20 +1680,46 @@ export const sampleHistory: ConversationHistoryItem[] = [
       </div>
     </template>
   </div>
-  <div
-    v-else
-    class="my-auto flex flex-col gap-(--spacing-lg) py-(--spacing-md)"
-  >
-    <EmptyState
-      title="How can I help with your Azion account?"
-      description="Ask about your workloads, cache, security rules and deployments. Answers cite the documentation they come from."
-      icon="az az-ask-azion"
-    />
-    <SuggestionGroup
-      :items="starters"
-      orientation="vertical"
-      @select="(event, item) => emit('select', event, item)"
-    />
+</template>
+```
+
+## `parts/ai-chat-start.vue`
+
+```ts
+<script setup lang="ts">
+  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+
+  defineProps<{ starters: SuggestionGroupItem[] }>()
+
+  const emit = defineEmits<{
+    select: [event: MouseEvent | KeyboardEvent, item: SuggestionGroupItem]
+  }>()
+
+  defineSlots<{ default(): unknown }>()
+
+  const START_CLASS =
+    'flex min-h-0 flex-1 flex-col overflow-y-auto px-(--spacing-md) pt-(--spacing-2xl) ' +
+    'pb-[max(var(--spacing-md),env(safe-area-inset-bottom))] md:justify-center md:pb-(--spacing-2xl)'
+</script>
+
+<template>
+  <div :class="START_CLASS">
+    <div
+      class="mx-auto flex w-full max-w-(--layout-measure-content) flex-col gap-(--spacing-md) max-md:flex-1"
+    >
+      <div class="flex items-center justify-center max-md:flex-1 md:pb-(--spacing-sm)">
+        <h2 class="text-center text-heading-lg text-(--text-default)">What can I help with?</h2>
+      </div>
+      <div class="flex md:order-last md:justify-center">
+        <SuggestionGroup
+          :items="starters"
+          @select="(event, item) => emit('select', event, item)"
+        />
+      </div>
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <slot />
+      </div>
+    </div>
   </div>
 </template>
 ```

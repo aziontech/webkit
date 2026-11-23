@@ -46,16 +46,20 @@
   )
 
   onMounted(() => window.addEventListener('message', onMessage))
+
   onBeforeUnmount(() => window.removeEventListener('message', onMessage))
+
+  const FRAME_CLASS =
+    'min-h-screen w-full bg-(--bg-canvas) not-data-[layout=fullscreen]:p-(--spacing-lg) ' +
+    'has-[>[data-layout-fill]]:flex has-[>[data-layout-fill]]:h-dvh has-[>[data-layout-fill]]:min-h-0 has-[>[data-layout-fill]]:flex-col ' +
+    'has-[>[data-layout-fill]]:overflow-hidden [&>[data-layout-fill]]:min-h-0 [&>[data-layout-fill]]:flex-1'
 </script>
 
 <template>
   <div
     :data-source="block && state ? `blocks/${block.dir}/${state.file}` : undefined"
-    :class="[
-      'min-h-screen w-full bg-(--bg-canvas)',
-      block?.layout === 'fullscreen' ? '' : 'p-(--spacing-lg)'
-    ]"
+    :data-layout="block?.layout"
+    :class="FRAME_CLASS"
   >
     <Toaster />
     <component

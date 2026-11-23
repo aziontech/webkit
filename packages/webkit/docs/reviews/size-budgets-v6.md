@@ -1239,3 +1239,5 @@ Budget-raise: prompt-input 14.5 KB → 14.65 KB (measured 14.60 KB): the counter
 Budget-raise: prompt-input-root 11.35 KB → 11.55 KB (measured 11.49 KB): the same near-limit counter and width-change re-measure as prompt-input.
 Budget-raise: streaming-response 38.35 KB → 38.5 KB (measured 38.46 KB): citation chips take one normal space from the word before them, none before the punctuation after them, and one between two chips.
 Budget-raise: llms-full.txt 2,360,000 → 2,391,000 bytes (measured 2,367,236): the chat look proposal's spec, block and example changes in the full AI bundle.
+Budget-raise: prompt-input 14.65 KB → 15.1 KB (measured 15.08 KB): the attach control's "+" menu (chat look round 2): with `tools` it loads a menu part after mount (Camera, Photos, Files, then the tools as checkboxes, the turned-on tools as chips) and stacks the box while a chip shows; the menu, DropdownMenu and Chip stay in a lazy chunk.
+Budget-raise: prompt-input-attach-button 5.6 KB → 6.7 KB (measured 6.68 KB): the same "+" menu; the entry now holds the loader of the lazy menu part (the dynamic import wiring a standalone entry did not carry before) and the tools model.

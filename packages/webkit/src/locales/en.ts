@@ -1368,7 +1368,11 @@ export const promptInput = {
   context: 'Choose context',
   contextRemove: 'Remove context',
   tools: 'Tools',
-  toolsEnabled: 'Enabled tools'
+  toolsEnabled: 'Enabled tools',
+  addMenu: 'Add',
+  camera: 'Camera',
+  photos: 'Photos',
+  files: 'Files'
 } as const
 
 export const agentActivity = {

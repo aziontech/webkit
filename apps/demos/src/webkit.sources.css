@@ -38,6 +38,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/autosize.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/box-focus.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/references.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-add-menu.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-menu-list.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-references.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-send.vue";
@@ -446,6 +447,8 @@
 @source "../node_modules/@aziontech/webkit/src/composables/use-listbox-trigger/use-listbox-trigger.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-locale/index.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-locale/use-locale.ts";
+@source "../node_modules/@aziontech/webkit/src/composables/use-media-query/index.ts";
+@source "../node_modules/@aziontech/webkit/src/composables/use-media-query/use-media-query.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-menu-root/composables/use-menu-level.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-menu-root/index.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-menu-root/lib/menu-items.ts";

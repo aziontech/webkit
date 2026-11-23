@@ -136,6 +136,7 @@
   const composing = ref<boolean>(false)
 
   const dragging = ref<boolean>(false)
+  const chips = ref<number>(0)
   const rejection = ref<string>('')
   const controlEl = ref<HTMLElement | null>(null)
   const { overBy, nearLimit, busy, canSubmit, showVoice, submit } = usePromptInputSubmit({
@@ -173,6 +174,7 @@
     !!slots.attachments ||
     references.value.length > 0 ||
     files.value.length > 0 ||
+    chips.value > 0 ||
     (menuOpen.value && !!query.value)
   const { multiline } = usePromptInputAutosize(
     textareaEl,
@@ -226,6 +228,7 @@
     files,
     dragging,
     rejection,
+    chips,
     reject: (event, refused, reason) => emit('reject', event, { files: refused, reason }),
     focus
   })

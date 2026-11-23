@@ -1,51 +1,36 @@
 <script setup lang="ts">
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Skeleton from '@aziontech/webkit/skeleton'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
 
-  defineProps<{ hydrating: boolean; starters: SuggestionGroupItem[] }>()
+  defineProps<{ starters: SuggestionGroupItem[] }>()
 
   const emit = defineEmits<{
     select: [event: MouseEvent | KeyboardEvent, item: SuggestionGroupItem]
   }>()
+
+  defineSlots<{ default(): unknown }>()
+
+  const START_CLASS =
+    'flex min-h-0 flex-1 flex-col overflow-y-auto px-(--spacing-md) pt-(--spacing-2xl) ' +
+    'pb-[max(var(--spacing-md),env(safe-area-inset-bottom))] md:justify-center md:pb-(--spacing-2xl)'
 </script>
 
 <template>
-  <div
-    v-if="hydrating"
-    role="status"
-    aria-label="Loading the conversation"
-    class="flex flex-col gap-(--spacing-xl)"
-  >
-    <template
-      v-for="row in 2"
-      :key="row"
+  <div :class="START_CLASS">
+    <div
+      class="mx-auto flex w-full max-w-(--layout-measure-content) flex-col gap-(--spacing-md) max-md:flex-1"
     >
-      <Skeleton
-        width="45%"
-        height="2.75rem"
-        class="self-end"
-      />
-      <div class="flex flex-col gap-(--spacing-xs)">
-        <Skeleton width="90%" />
-        <Skeleton width="80%" />
-        <Skeleton :width="row === 2 ? '40%' : '60%'" />
+      <div class="flex items-center justify-center max-md:flex-1 md:pb-(--spacing-sm)">
+        <h2 class="text-center text-heading-lg text-(--text-default)">What can I help with?</h2>
       </div>
-    </template>
-  </div>
-  <div
-    v-else
-    class="my-auto flex flex-col gap-(--spacing-lg) py-(--spacing-md)"
-  >
-    <EmptyState
-      title="How can I help with your Azion account?"
-      description="Ask about your workloads, cache, security rules and deployments. Answers cite the documentation they come from."
-      icon="az az-ask-azion"
-    />
-    <SuggestionGroup
-      :items="starters"
-      orientation="vertical"
-      @select="(event, item) => emit('select', event, item)"
-    />
+      <div class="flex md:order-last md:justify-center">
+        <SuggestionGroup
+          :items="starters"
+          @select="(event, item) => emit('select', event, item)"
+        />
+      </div>
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <slot />
+      </div>
+    </div>
   </div>
 </template>

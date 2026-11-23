@@ -34,6 +34,8 @@
   })
 
   const loadingOlder = ref(false)
+  const modelKey = ref('auto')
+  const toolKeys = ref<string[]>([])
 
   async function loadOlder() {
     if (loadingOlder.value) return
@@ -89,7 +91,11 @@
     :hydrating="isHydrating"
     :session-generating="sessionGenerating"
     :voice="false"
-    @send="(_event, content) => sendMessage(content)"
+    v-model:model-key="modelKey"
+    v-model:tool-keys="toolKeys"
+    @send="
+      (_event, content) => sendMessage(content, { body: { model: modelKey, tools: toolKeys } })
+    "
     @answer-tool="(_event, answer) => addToolResult(answer)"
     @retry-interrupts="retryInterrupts()"
     @remove-queued="(_event, item) => cancelQueued(item.id)"

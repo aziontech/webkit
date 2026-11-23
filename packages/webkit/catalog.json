@@ -5753,6 +5753,9 @@
    "kind": "subcomponent",
    "parent": "prompt-input",
    "treeShakeableImport": "@aziontech/webkit/prompt-input-attach-button",
+   "models": [
+    "modelValue"
+   ],
    "surface": "app"
   },
   "prompt-input-dictate-button": {
@@ -33003,7 +33006,7 @@
    "title": "Blocks/Ai/AiChat",
    "source": "blocks/ai/ai-chat/ai-chat.vue",
    "surface": "app",
-   "summary": "The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a round menu button on a phone; no header bar, only round floating buttons on a phone and a quiet row on desktop; before the first message an `EmptyState` over vertical support prompts from `SuggestionGroup`, inside the log; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, the feedback thumbs, Regenerate, Read aloud and a `Sources` pill in the action row), followed by follow-up questions; a `PromptInput` pill floating at the foot of the column with the Attach \"+\" at the start, Dictate before the round button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout that fills its content region.",
+   "summary": "The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with \"What can I help with?\", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (its action row and the `Sources` pill), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the \"+\" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).",
    "intents": [
     "ai chat",
     "ai assistant",
@@ -33063,7 +33066,10 @@
     "DrawerHeader",
     "Drawer",
     "DrawerTitle",
-    "EmptyState",
+    "DropdownMenuGroup",
+    "DropdownMenuItem",
+    "DropdownMenu",
+    "DropdownMenuTrigger",
     "FilePreview",
     "IconButton",
     "ImageGallery",
@@ -33110,7 +33116,10 @@
     "@aziontech/webkit/drawer-header",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
-    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/dropdown-menu-group",
+    "@aziontech/webkit/dropdown-menu-item",
+    "@aziontech/webkit/dropdown-menu-root",
+    "@aziontech/webkit/dropdown-menu-trigger",
     "@aziontech/webkit/file-preview",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/image-gallery",
@@ -33136,7 +33145,7 @@
     "@aziontech/webkit/video-player"
    ],
    "primary": "Empty",
-   "guidelinesSummary": "A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation: one reading column the thread scrolls in, with the header controls and the composer floating over it. Beside it, the conversation history. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.",
+   "guidelinesSummary": "A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation: one reading column the thread scrolls in, with the header controls and the composer floating over it. Beside it, the conversation history. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: its root carries `data-layout-fill`, so it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), only the log scrolls, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Streaming"
