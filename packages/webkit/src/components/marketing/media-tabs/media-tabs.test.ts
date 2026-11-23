@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { page } from 'vitest/browser'
+import { page, userEvent } from 'vitest/browser'
 import { nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -79,11 +79,11 @@ describe('MediaTabs', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
-  it('renders one row button per item, carrying its title', () => {
+  it('renders one row tab per item, carrying its title', () => {
     const { getAllByRole } = render(MediaTabs, {
       props: { items: ITEMS, autoplay: false }
     })
-    const buttons = getAllByRole('button').filter((button) => button.closest('ul'))
+    const buttons = getAllByRole('tab').filter((button) => button.closest('ul'))
 
     expect(buttons).toHaveLength(ITEMS.length)
     expect(buttons.map((button) => button.textContent?.trim())).toEqual(
@@ -107,8 +107,54 @@ describe('MediaTabs', () => {
     })
 
     expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
-    expect(getAllByRole('button')[0].getAttribute('aria-current')).toBe('true')
-    expect(getAllByRole('button')[1].getAttribute('aria-current')).toBeNull()
+    expect(getAllByRole('tab')[0].getAttribute('aria-selected')).toBe('true')
+    expect(getAllByRole('tab')[1].getAttribute('aria-selected')).toBe('false')
+  })
+
+  it('ties each tab to the medium it shows, as a tablist of tabs over labelled tabpanels', () => {
+    const { getByRole, getAllByRole, container } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false }
+    })
+    const tabs = getAllByRole('tab')
+
+    expect(getByRole('tablist').getAttribute('aria-orientation')).toBe('vertical')
+    expect(tabs.map((tab) => tab.getAttribute('tabindex'))).toEqual(['0', '-1', '-1'])
+    tabs.forEach((tab) => {
+      const panel = container.querySelector(`#${CSS.escape(tab.getAttribute('aria-controls')!)}`)
+      expect(panel?.getAttribute('role')).toBe('tabpanel')
+      expect(panel?.getAttribute('aria-labelledby')).toBe(tab.id)
+    })
+    expect(getByRole('tabpanel')).toHaveAccessibleName(ITEMS[0].title)
+  })
+
+  it('moves between tabs with the arrow keys, Home and End', async () => {
+    const { getAllByRole } = render(MediaTabs, { props: { items: ITEMS, autoplay: false } })
+    const tabs = () => getAllByRole('tab')
+
+    tabs()[0].focus()
+    await userEvent.keyboard('{ArrowDown}')
+    await vi.waitFor(() => expect(document.activeElement).toBe(tabs()[1]))
+    expect(tabs()[1].getAttribute('aria-selected')).toBe('true')
+    await userEvent.keyboard('{End}')
+    await vi.waitFor(() => expect(document.activeElement).toBe(tabs()[2]))
+    await userEvent.keyboard('{ArrowDown}')
+    await vi.waitFor(() => expect(document.activeElement).toBe(tabs()[0]))
+  })
+
+  it('makes each stacked row a disclosure of its inline medium below lg', async () => {
+    await page.viewport(390, 844)
+    await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(false))
+    const { getAllByRole, queryByRole, container } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false }
+    })
+    await nextTick()
+    const rows = getAllByRole('button')
+
+    expect(queryByRole('tablist')).toBeNull()
+    expect(rows.map((row) => row.getAttribute('aria-expanded'))).toEqual(['true', 'false', 'false'])
+    const media = container.querySelector(`#${CSS.escape(rows[0].getAttribute('aria-controls')!)}`)
+    expect(media?.querySelector('img')).not.toBeNull()
+    await expectNoA11yViolations(container)
   })
 
   it('carries the size and selectOn tokens as data attributes', () => {
@@ -132,11 +178,11 @@ describe('MediaTabs', () => {
       props: { items: ITEMS, autoplay: false }
     })
 
-    await fireEvent.click(getAllByRole('button')[2])
+    await fireEvent.click(getAllByRole('tab')[2])
 
     expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[2].title])
-    expect(getAllByRole('button')[2].getAttribute('aria-current')).toBe('true')
-    expect(getAllByRole('button')[0].getAttribute('aria-current')).toBeNull()
+    expect(getAllByRole('tab')[2].getAttribute('aria-selected')).toBe('true')
+    expect(getAllByRole('tab')[0].getAttribute('aria-selected')).toBe('false')
   })
 
   it('emits update:modelValue with the index and no removed tab-change', async () => {
@@ -144,7 +190,7 @@ describe('MediaTabs', () => {
       props: { items: ITEMS, autoplay: false }
     })
 
-    await fireEvent.click(getAllByRole('button')[1])
+    await fireEvent.click(getAllByRole('tab')[1])
 
     const calls = emitted()['update:modelValue'] as unknown[][]
     expect(calls).toHaveLength(1)
@@ -157,7 +203,7 @@ describe('MediaTabs', () => {
       props: { items: ITEMS, autoplay: false }
     })
 
-    await fireEvent.click(getAllByRole('button')[0])
+    await fireEvent.click(getAllByRole('tab')[0])
 
     expect(emitted()['update:modelValue']).toBeUndefined()
   })
@@ -189,7 +235,7 @@ describe('MediaTabs', () => {
       props: { items: ITEMS, autoplay: false, selectOn: 'click' }
     })
 
-    await fireEvent.click(getAllByRole('button')[1])
+    await fireEvent.click(getAllByRole('tab')[1])
 
     expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[1].title])
   })
@@ -230,7 +276,7 @@ describe('MediaTabs', () => {
     await nextTick()
     expect(emitted()['update:modelValue']).toEqual([[1]])
 
-    await fireEvent.click(getAllByRole('button')[2])
+    await fireEvent.click(getAllByRole('tab')[2])
     expect(emitted()['update:modelValue']).toEqual([[1], [2]])
   })
 
@@ -293,7 +339,7 @@ describe('MediaTabs', () => {
       props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
 
-    await fireEvent.click(getAllByRole('button')[1])
+    await fireEvent.click(getAllByRole('tab')[1])
 
     expect(getByTestId(TESTID).getAttribute('data-autoplay')).not.toBeNull()
 
@@ -312,7 +358,7 @@ describe('MediaTabs', () => {
     const hairline = () => container.querySelector('[data-progress]') as HTMLElement
 
     await fireEvent.pointerEnter(root)
-    await fireEvent.click(getAllByRole('button')[1])
+    await fireEvent.click(getAllByRole('tab')[1])
     expect(root.getAttribute('data-autoplay')).not.toBeNull()
 
     vi.advanceTimersByTime(INTERVAL / 2)

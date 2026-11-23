@@ -51,6 +51,10 @@ const band = (props: Record<string, unknown> = {}) =>
 const tabButtons = (container: HTMLElement) =>
   Array.from(container.querySelectorAll<HTMLButtonElement>('li h3 button'))
 
+const isShown = (button?: Element) =>
+  button?.getAttribute('aria-selected') === 'true' ||
+  button?.getAttribute('aria-expanded') === 'true'
+
 describe('ArchitectureTabsSection', () => {
   it('renders the band under the default testid', () => {
     const { getByTestId } = band()
@@ -136,10 +140,10 @@ describe('ArchitectureTabsSection', () => {
     const { container } = band()
 
     const buttons = tabButtons(container as HTMLElement)
-    expect(buttons[0]?.getAttribute('aria-current')).toBe('true')
+    expect(isShown(buttons[0])).toBe(true)
     await fireEvent.click(buttons[1] as HTMLButtonElement)
-    expect(tabButtons(container as HTMLElement)[1]?.getAttribute('aria-current')).toBe('true')
-    expect(tabButtons(container as HTMLElement)[0]?.hasAttribute('aria-current')).toBe(false)
+    expect(isShown(tabButtons(container as HTMLElement)[1])).toBe(true)
+    expect(isShown(tabButtons(container as HTMLElement)[0])).toBe(false)
   })
 
   it('links the primary action', () => {
@@ -179,9 +183,7 @@ describe('ArchitectureTabsSection', () => {
       const { container } = band(props)
       vi.advanceTimersByTime(ms)
       await nextTick()
-      return tabButtons(container as HTMLElement).findIndex((button) =>
-        button.getAttribute('aria-current')
-      )
+      return tabButtons(container as HTMLElement).findIndex((button) => isShown(button))
     }
 
     it('holds each tab for autoplayInterval', async () => {
