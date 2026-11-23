@@ -16,6 +16,7 @@ import NumberInputDefault from '../../examples/number-input/default.vue'
 import SelectDefault from '../../examples/select/default.vue'
 import TabsDefault from '../../examples/tabs/default.vue'
 import ThemeSwitcherDefault from '../../examples/theme-switcher/default.vue'
+import TreeDefault from '../../examples/tree/default.vue'
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
 
@@ -93,6 +94,17 @@ describe('tap targets on a coarse pointer (styled)', () => {
       for (const stepper of steppers) {
         expect(stepper.getBoundingClientRect().width).toBeGreaterThanOrEqual(39)
         expect(hitSpan(stepper, 'y')).toBeGreaterThanOrEqual(44)
+      }
+    })
+
+    it('Tree folders open from a 44 x 44 chevron target', async () => {
+      await touch()
+      const view = await mount(TreeDefault)
+      const toggles = byTestId(view.container as HTMLElement, 'tree__toggle')
+      expect(toggles.length).toBeGreaterThan(0)
+      for (const toggle of toggles) {
+        expect(hitSpan(toggle, 'x')).toBeGreaterThanOrEqual(44)
+        expect(hitSpan(toggle, 'y')).toBeGreaterThanOrEqual(44)
       }
     })
 

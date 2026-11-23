@@ -18,6 +18,7 @@ export interface TreeEventActions {
   tree: () => HTMLElement | null
   grid: () => boolean
   multiple: () => boolean
+  selectable: () => boolean
   editable: () => boolean
   isExpanded: (id: string) => boolean
   setExpanded: (id: string, open: boolean) => void
@@ -165,6 +166,9 @@ export function useTreeEvents(actions: TreeEventActions): UseTreeEventsReturn {
       if (!id) return
       actions.focusItem(id)
       actions.activate(event, id)
+      const entry = actions.navigation.entry(id)
+      if (actions.selectable() || !entry || entry.item.disabled) return
+      if (actions.navigation.isParent(id)) actions.setExpanded(id, !actions.isExpanded(id))
     },
     onMousedown: (event) => {
       if (!keepsTextSelection(event)) event.preventDefault()

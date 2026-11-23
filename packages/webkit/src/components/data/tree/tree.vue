@@ -194,6 +194,7 @@
     tree: () => treeEl.value,
     grid: () => grid.value,
     multiple: () => multiple.value,
+    selectable: () => selectionOn.value,
     editable: () => props.editable,
     isExpanded,
     setExpanded,
