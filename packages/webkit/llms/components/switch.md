@@ -57,7 +57,7 @@
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`, `disabled`
 - `data-checked` mirrors the `modelValue` prop (toggled-on state)
 - `data-variant` mirrors the `variant` prop (`default` | `privacy`)
-- `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions.
+- `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. Locked on keeps a muted accent track (`--accent-mask`) under the disabled handle, so a switch that is on and cannot be turned off never reads as an off one; locked off keeps the `--bg-disabled` track.
 - `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`); with `aria-invalid` on the control, it paints the danger border while unchecked
 - Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`data-[disabled]:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows
 - Touch: an invisible `::after` extends the hit area of the 36 × 20 px track to 24 px tall, and to 44 × 44 px on a coarse pointer.

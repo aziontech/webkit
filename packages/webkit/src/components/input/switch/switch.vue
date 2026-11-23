@@ -78,6 +78,7 @@
     'data-[checked]:border-transparent data-[checked]:bg-(--accent) ' +
     'forced-colors:border-[CanvasText] forced-colors:data-[checked]:border-[Highlight] ' +
     'data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) data-[disabled]:hover:shadow-none ' +
+    'data-[disabled]:data-[checked]:border-transparent data-[disabled]:data-[checked]:bg-(--accent-mask) ' +
     'after:absolute after:inset-[min(0rem,calc(50%-12px))] pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]'
 
   const HANDLE_CLASS =

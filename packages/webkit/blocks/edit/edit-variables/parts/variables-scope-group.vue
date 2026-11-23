@@ -41,7 +41,7 @@
             v-if="scope.type === 'global'"
             class="flex h-full min-w-0 flex-1 items-center bg-(--bg-canvas) px-(--spacing-md) text-label-sm text-(--text-default)"
           >
-            The entire account
+            The entire account, while no other scope is on
           </span>
           <div
             v-else
