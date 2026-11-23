@@ -25,7 +25,7 @@
   "Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.",
   "Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.",
   "Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own \"Learn more\" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at.",
-  "A linked claim is its own positioned box: its hover and click target is the claim, grown by `var(--spacing-xs)` on every side, so it never spreads over whatever positioned ancestor holds it. For a whole cell that links, use `BentoGrid.Cell`'s own `link`."
+  "A linked claim is its own positioned box: its hover and click target is the claim, grown by `var(--spacing-xs)` above and below, so it never spreads over whatever positioned ancestor holds it and never pushes past the column it sits in. For a whole cell that links, use `BentoGrid.Cell`'s own `link`."
  ],
  "channels": [
   "app",
