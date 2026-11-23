@@ -327,7 +327,10 @@
         :data-testid="`${testId}__download`"
       />
     </div>
-    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+    <div
+      :dir="hasError ? undefined : 'ltr'"
+      class="flex min-w-0 items-center gap-(--spacing-xs)"
+    >
       <p
         v-if="hasError"
         role="alert"
@@ -351,10 +354,7 @@
           />
           <bdi v-else>{{ currentLabel }}</bdi>
         </span>
-        <div
-          dir="ltr"
-          class="min-w-24 flex-1"
-        >
+        <div class="min-w-24 flex-1">
           <Slider
             :model-value="seekValue"
             :min="0"
