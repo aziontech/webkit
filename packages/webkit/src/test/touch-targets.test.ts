@@ -13,6 +13,7 @@ import FooterDefault from '../../examples/footer/default.vue'
 import InputDefault from '../../examples/input/default.vue'
 import MultiSelectDefault from '../../examples/multi-select/default.vue'
 import NumberInputDefault from '../../examples/number-input/default.vue'
+import OverflowCountDefault from '../../examples/overflow-count/default.vue'
 import SelectDefault from '../../examples/select/default.vue'
 import TabsDefault from '../../examples/tabs/default.vue'
 import ThemeSwitcherDefault from '../../examples/theme-switcher/default.vue'
@@ -94,6 +95,14 @@ describe('tap targets on a coarse pointer (styled)', () => {
         expect(stepper.getBoundingClientRect().width).toBeGreaterThanOrEqual(39)
         expect(hitSpan(stepper, 'y')).toBeGreaterThanOrEqual(44)
       }
+    })
+
+    it('OverflowCount +N answers a tap across 44px of height', async () => {
+      await touch()
+      const view = await mount(OverflowCountDefault)
+      const trigger = byTestId(view.container as HTMLElement, 'overflow-count__trigger')[0]!
+      expect(trigger.getBoundingClientRect().height).toBeLessThan(44)
+      expect(hitSpan(trigger, 'y')).toBeGreaterThanOrEqual(44)
     })
 
     it('ThemeSwitcher segments answer a tap across 44 x 44', async () => {

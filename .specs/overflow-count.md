@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 2f63f7dfb82e16e875ac5f21f008a1ed991f619a3e85e96fb78844733ec47c9b
+checksum: 2933bf834d03926be5b1ab743e0801ef8b9611abcf01d82666f15d8324ae8b14
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -109,6 +109,7 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - The trigger is a button named `Show all <count> <noun>` (the visible `+N` alone does not say what it counts); `aria-expanded` and `aria-controls` come from `Popover`.
+- On a coarse pointer the trigger answers a tap across 44px (an invisible `data-slot="touch-target"` layer, as `Button` has), while the chip keeps its drawn size.
 - Keyboard: `Enter`/`Space` opens, `Esc` closes and returns focus to the chip, `Tab` moves through the search box, the links and Load more.
 - A polite `role="status"` region announces the summary after a search or Load more.
 - A link that opens a new tab carries a visually hidden `(opens in a new tab)`.
