@@ -243,12 +243,11 @@
 </script>
 
 <template>
-  <aside
+  <div
     :ref="setRailEl"
     v-bind="$attrs"
     :class="rootClass"
     :style="asideStyle"
-    :aria-label="labels.root"
     :data-testid="testId"
     :data-state="isCollapsed ? 'closed' : 'open'"
     :data-rail="rail ? '' : undefined"
@@ -277,6 +276,7 @@
       </div>
       <nav
         :class="NAV_CLASS"
+        :aria-label="labels.root"
         :data-testid="`${testId}__nav`"
       >
         <ScrollArea
@@ -340,7 +340,7 @@
     >
       <span :class="RESIZE_INDICATOR_CLASS" />
     </div>
-  </aside>
+  </div>
 
   <Transition
     enter-active-class="transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
