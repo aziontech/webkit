@@ -12,7 +12,7 @@
 
 ## Do
 
-- Three cells for `reveal="always"` (the grid is three columns from the large breakpoint); three or four for `reveal="hover"`, which shares the row between them.
+- Three cells for `reveal="always"` (the grid is three columns from the medium breakpoint); three or four for `reveal="hover"`, which shares the row between them.
 - With `reveal="hover"` use the client's reversed (white) logo and one sentence per story; `logoWidth` sizes the mark as a share of the card (default `35%`).
 - Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.
 - Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. A cell with neither paints a black face.
@@ -42,14 +42,14 @@
 
 - Visual states: `default`, `hover` on each column (the face reveals the link line, the story fill rises)
 - The face colours are bound as the `--wall-face` and `--wall-ink` custom properties from `brand`, or from the client registry by `name` when `brand` is left out; `data-treatment` on every mark drives its ink
-- `reveal="hover"`: each list item carries `data-state=open|closed`; one card is open at a time on large screens, every card is open below the large breakpoint
+- `reveal="hover"`: each list item carries `data-state=open|closed`; one card is open at a time on large screens, every card is open below the large breakpoint; a closed card on large screens shows the link label ("Read story") at its foot, so a visitor at rest knows each card holds a story
 - Empty: when `cells` is empty the band renders nothing
 
 ## Accessibility
 
 - Visible focus: the mark link is `logo-wall`'s, with its ring; the story panel is a duplicate link hidden from the tab order and from assistive technology.
 - Keyboard map: `Tab` moves between the three mark links; `Enter` follows.
-- ARIA: the band is a `<section>`; the grid is a list named by `ariaLabel` whose items are the columns; each mark carries the client `name` as `alt`; the story panel is `aria-hidden` with `tabindex="-1"` so the case is reachable once.
+- ARIA: the band is a `<section>`; the grid is a list named by `ariaLabel` whose items are the columns; each mark carries the client `name` as `alt`, and the one focusable link per column is named "<link label>, <client>: <story>" so the story is read with it; the story panel is `aria-hidden` with `tabindex="-1"` so the case is reachable once.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the link line ink follows `brand.ink`; the story text is `var(--text-default)` on `var(--bg-canvas)`.
 - `motion-reduce:before:transition-none` on the hover fill.
 - Touch target ≥40×40 px — each mark face spans its column.

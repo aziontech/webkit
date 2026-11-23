@@ -87,7 +87,7 @@
 
 - Below medium the console scene is square and uncropped; from medium it is 1.9:1 with the crop applied.
 - No horizontal scroll at 320 px.
-- The tab control is the large `ToggleGroup` at every width; below 40rem it is fluid (full width, equal segments) instead of shrinking, so each tab keeps a 30 px face and its 44 px touch hit area.
+- The tab control is the large `ToggleGroup` from 22.5rem; between 22.5rem and 40rem it is fluid (full width, equal segments) instead of shrinking, so each tab keeps a 30 px face and its 44 px touch hit area. Below 22.5rem (a 320 px phone) equal segments would cut the longer labels, so it is the medium `ToggleGroup` sized to its labels; its touch target still keeps the 44 px hit area.
 
 ## Examples
 

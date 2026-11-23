@@ -17272,7 +17272,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 ## Do
 
-- Pass initials in `label` (`"JD"`); it keeps the first two characters, so a full name shows its first two letters, not initials.
+- Pass initials or the full name in `label`: a name of several words shows the first letter of its first and last word (`"Jane Doe"` shows `JD`), and one word keeps its first two characters (`"JD"` stays `JD`).
 - Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
 - Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `az az-user`).
 - For a generated mark, pass the full name in `label` (`"Acme Inc."`) with `pattern="marble"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.
@@ -17296,7 +17296,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 | --- | --- | --- | --- | --- |
 | `src` | `string` | `''` | false | Image URL. When set, renders a photo and takes precedence over label and icon. |
 | `alt` | `string` | `''` | false | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it. |
-| `label` | `string` | `''` | false | Initials shown when no image (normalized to two uppercase characters). |
+| `label` | `string` | `''` | false | Initials shown when no image: the first letters of the first and last word, or the first two characters of one word, uppercased. |
 | `icon` | `string` | `'az az-user'` | false | Icon class for the fallback when no image or label (Azion icon class). |
 | `variant` | `AvatarVariant` | `'circle'` | false | Visual shape of the avatar container. |
 | `size` | `AvatarSize` | `'medium'` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
@@ -18662,6 +18662,7 @@ name.
 - A `name` that resolves to no scene — empty, or not in the registry — renders the **placeholder**: a tinted frame reading `PLACE DESIGN ASSET`, marked `data-placeholder`, on the 592×300 canvas. An unregistered `name` also warns in the console, naming where the valid names are listed; neither case throws, and neither collapses the layout. The placeholder is always decorative, `ariaLabel` or not: it draws no scene, so announcing a description of the missing artwork would describe something that is not on the page.
 - While a registered scene's SVG is still resolving, the frame already on screen stays — the placeholder never flashes in front of a scene that is about to arrive.
 - Theme: each colour of the export palette maps to one `--illustration-*` role (see § Tokens), resolved where the scene renders, so a scene inside a `[data-theme]` subtree follows that subtree. A translucent ground colour is a drop shadow and stays as drawn; colours that read the same in both themes (window controls, framework marks, the dot map) stay as drawn too. Masks, clip paths and filters are never repainted.
+- A run of eight or more sibling square dots of one paint (a dot map, a pixel grid) is drawn as one path holding every dot, so a dotted scene costs a few hundred nodes, not thousands; a dot that differs in paint or shape breaks the run and stays its own path.
 - Every instance scopes the SVG's internal ids, so two scenes — or two copies of one — on the same page never resolve each other's gradients, masks or filters.
 
 ## Accessibility

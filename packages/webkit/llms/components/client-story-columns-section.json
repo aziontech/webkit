@@ -22,7 +22,7 @@
   "`logo-wall` — the single-mark wall each column's face is rendered with."
  ],
  "bestPractices": [
-  "Three cells for `reveal=\"always\"` (the grid is three columns from the large breakpoint); three or four for `reveal=\"hover\"`, which shares the row between them.",
+  "Three cells for `reveal=\"always\"` (the grid is three columns from the medium breakpoint); three or four for `reveal=\"hover\"`, which shares the row between them.",
   "With `reveal=\"hover\"` use the client's reversed (white) logo and one sentence per story; `logoWidth` sizes the mark as a share of the card (default `35%`).",
   "Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.",
   "Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. A cell with neither paints a black face."
