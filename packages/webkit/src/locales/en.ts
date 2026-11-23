@@ -992,7 +992,7 @@ export const dataGrid = {
 
 export const table = {
   selectAll: 'Select all rows',
-  selectRow: 'Select row',
+  selectRow: 'Select row {row}',
   emptyTitle: 'No results yet',
   emptyDescription: 'Get started by creating your first resource.',
   errorTitle: 'Could not load the data'

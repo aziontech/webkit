@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 71ee07707e7e86ff895c30fe1ebe75699f4499cb9bac5c8ff49786cb44be61be
+checksum: 49cb66480a8e4d17d54cf994b0eedda2fc604570cef3131f1780d11fdf5148a4
 created: 2026-11-15
 last_updated: 2026-11-22
 ---
@@ -344,6 +344,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 - Reorderable rows: each grip is a button named `Reorder <row name>, position <n> of <total>` and described by a visually hidden hint (`Drag, or press Arrow Up or Arrow Down to move.`, or the lock reason). Arrow Up / Arrow Down / Home / End move the row and keep focus on its grip; `Esc` cancels a drag. A polite `role="status"` region announces `Moved <name> to position <n> of <total>.` (keyboard) or `Dropped …` (pointer). Dragging is never the only way to reorder (WCAG 2.5.7).
 - Tree rows follow the APG treegrid row-focus pattern: `Tab` enters the grid on one row (the last one focused, else the first); `Arrow Down` / `Arrow Up` move between visible rows; `Home` / `End` go to the first / last row; `Arrow Right` (inline end, mirrored in RTL) opens a closed row or moves to the first child of an open one; `Arrow Left` closes an open row or moves to the parent; `Enter` toggles the row; `Space` toggles its selection when `selectable` allows it. Interactive content inside the row (checkbox, menus) stays reachable with `Tab`. The pointer toggle is `aria-hidden` (the row's `aria-expanded` is the accessible state), and when a row collapses while one of its descendants holds focus, focus moves to that row.
 - Stacked layout: the select-all is a visible checkbox with a `<label>`, not a screen-reader-only header cell (WCAG 2.5.3, label in name).
+- Row checkboxes are named after the row: `table.selectRow` (`Select row {row}`) filled with the principal column's value, else the row key.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including muted header text.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px on the sort button and row action controls.
@@ -353,7 +354,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 | Key                                                                                                                                    | English source                                                               | Override prop |
 | -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------- |
 | `table.selectAll`                                                                                                                      | `Select all rows`                                                            | —             |
-| `table.selectRow`                                                                                                                      | `Select row`                                                                 | —             |
+| `table.selectRow`                                                                                                                      | `Select row {row}`                                                           | —             |
 | `table.emptyTitle`                                                                                                                     | `No results yet`                                                             | `empty` slot  |
 | `table.emptyDescription`                                                                                                               | `Get started by creating your first resource.`                               | `empty` slot  |
 | `table.errorTitle`                                                                                                                     | `Could not load the data`                                                    | `error` slot  |

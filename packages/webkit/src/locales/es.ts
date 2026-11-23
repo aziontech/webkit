@@ -1121,7 +1121,7 @@ export const es: Messages = {
   },
   table: {
     selectAll: 'Seleccionar todas las filas',
-    selectRow: 'Seleccionar fila',
+    selectRow: 'Seleccionar la fila {row}',
     emptyTitle: 'Aún no hay resultados',
     emptyDescription: 'Empieza creando tu primer recurso.',
     errorTitle: 'No se pudieron cargar los datos'

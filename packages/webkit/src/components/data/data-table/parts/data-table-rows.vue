@@ -6,6 +6,7 @@
   import TableCell from '../../table/table-cell/table-cell.vue'
   import TableRow from '../../table/table-row/table-row.vue'
   import { useDataTableContext } from '../composables/use-data-table-context'
+  import { principalIndexOf } from '../lib/column-meta'
   import { EXPAND_TOGGLE_CLASS } from '../lib/data-table-classes'
 
   defineOptions({ name: 'DataTableRows' })
@@ -73,6 +74,13 @@
     onPointerup: onHandlePointerup,
     onPointercancel: onHandlePointercancel
   } = reorder
+
+  const rowNameOf = (record: Record<string, unknown>, id: string): string => {
+    const column = props.columns[principalIndexOf(props.columns)]
+    const key = column?.accessorKey ?? column?.id
+    const value = key ? record[key] : undefined
+    return value === undefined || value === null || value === '' ? id : String(value)
+  }
 </script>
 
 <template>
@@ -174,7 +182,7 @@
           <Checkbox
             v-if="row.getCanSelect()"
             :model-value="row.getIsSelected()"
-            :aria-label="t('table.selectRow')"
+            :aria-label="t('table.selectRow', { row: rowNameOf(row.original, row.id) })"
             @update:model-value="(v) => row.toggleSelected(!!v)"
           />
         </TableCell>

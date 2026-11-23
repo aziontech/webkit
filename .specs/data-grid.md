@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 553f6a684032a963b700cd06646aaac42838c5886ca3007b9f38ed30f9c75121
+checksum: 50264c61c138b592779357496c0490b0a52fb370d77a3d61983fb27a16c11932
 created: 2026-11-15
 last_updated: 2026-11-20
 ---
@@ -228,7 +228,7 @@ Fixed sizes (no token exists for them): cell and header height `min-h-10` (40 px
 | Key                         | English source                                                                               | Override prop |
 | --------------------------- | -------------------------------------------------------------------------------------------- | ------------- |
 | `dataGrid.selectAll`        | `Select all rows`                                                                            | —             |
-| `dataGrid.selectRow`        | `Select row`                                                                                 | —             |
+| `dataGrid.selectRow`        | `Select row {row}`                                                                           | —             |
 | `dataGrid.resize`           | `Resize {column}`                                                                            | —             |
 | `dataGrid.invalidNumber`    | `Enter a number`                                                                             | —             |
 | `dataGrid.emptyTitle`       | `No rows yet`                                                                                | `empty` slot  |

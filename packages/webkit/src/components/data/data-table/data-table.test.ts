@@ -278,9 +278,9 @@ describe('DataTable', () => {
         props: { data: rows, columns, selectable: true, rowKey: 'id' }
       })
 
-      // The header checkbox is labelled "Select all rows"; each row "Select row".
       expect(getByLabelText('Select all rows')).toBeTruthy()
-      expect(getAllByLabelText('Select row')).toHaveLength(3)
+      expect(getAllByLabelText(/^Select row /)).toHaveLength(3)
+      expect(getByLabelText('Select row Charlie')).toBeTruthy()
     })
 
     it('emits update:selectedKeys keyed by rowKey when a row checkbox is toggled', async () => {
@@ -289,7 +289,7 @@ describe('DataTable', () => {
       })
 
       // Toggle the first row's checkbox (getRowId uses rowKey='id' -> '1').
-      await fireEvent.click(getAllByLabelText('Select row')[0])
+      await fireEvent.click(getAllByLabelText(/^Select row /)[0])
 
       const events = emitted()['update:selectedKeys'] as unknown[][]
       expect(events).toBeTruthy()
@@ -340,7 +340,7 @@ describe('DataTable', () => {
         }
       })
 
-      expect(getAllByLabelText('Select row')).toHaveLength(2)
+      expect(getAllByLabelText(/^Select row /)).toHaveLength(2)
       await fireEvent.click(getAllByRole('row')[1])
       expect(emitted()['update:selectedKeys']).toBeUndefined()
       expect(emitted()['row-click']).toBeTruthy()

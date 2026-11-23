@@ -1121,7 +1121,7 @@ export const ptBR: Messages = {
   },
   table: {
     selectAll: 'Selecionar todas as linhas',
-    selectRow: 'Selecionar linha',
+    selectRow: 'Selecionar a linha {row}',
     emptyTitle: 'Nenhum resultado ainda',
     emptyDescription: 'Comece criando seu primeiro recurso.',
     errorTitle: 'Não foi possível carregar os dados'
