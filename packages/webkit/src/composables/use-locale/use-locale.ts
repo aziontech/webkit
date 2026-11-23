@@ -123,6 +123,20 @@ export function mergeMessages(base: Messages, overrides?: PartialMessages): Mess
   return merged as Messages
 }
 
+function mergeOverrides(
+  outer: PartialMessages | undefined,
+  inner: PartialMessages | undefined
+): PartialMessages | undefined {
+  if (!outer) return inner
+  if (!inner) return outer
+  const merged: Record<string, unknown> = { ...outer }
+  for (const [group, values] of Object.entries(inner)) {
+    if (!values) continue
+    merged[group] = { ...(merged[group] as Record<string, unknown> | undefined), ...values }
+  }
+  return merged as PartialMessages
+}
+
 const RELATIVE_STEPS: [Intl.RelativeTimeFormatUnit, number][] = [
   ['second', 60],
   ['minute', 60],
@@ -215,7 +229,14 @@ export function provideLocale(options: ProvideLocaleOptions): ProvidedLocale {
   const parent = inject(LocaleInjectionKey, null)
   const device = useDeviceLocale()
   const explicit = computed(() => toValue(options.locale) || '')
-  const locale = computed(() => explicit.value || device.value)
+  const locale = computed(() => explicit.value || parent?.locale.value || device.value)
+  const catalogs = computed<Record<string, Messages>>(() => ({
+    ...parent?.catalogs?.value,
+    ...toValue(options.catalogs)
+  }))
+  const overrides = computed(() =>
+    mergeOverrides(parent?.overrides?.value, toValue(options.messages))
+  )
   const ownDir = computed<Direction | undefined>(() => {
     const requested = toValue(options.dir) ?? 'auto'
     if (requested !== 'auto') return requested
@@ -224,17 +245,20 @@ export function provideLocale(options: ProvideLocaleOptions): ProvidedLocale {
   const dir = computed<Direction>(() => {
     if (ownDir.value) return ownDir.value
     if (parent) return parent.dir.value
-    return findCatalog(locale.value, toValue(options.catalogs)) ? directionOf(locale.value) : 'ltr'
+    return findCatalog(locale.value, catalogs.value) ? directionOf(locale.value) : 'ltr'
   })
   const messages = computed(() => {
-    const catalogs = toValue(options.catalogs)
-    const found = findCatalog(locale.value, catalogs)
+    const found = findCatalog(locale.value, catalogs.value)
     if (!found && explicit.value) warnMissingCatalog(locale.value)
-    return mergeMessages(found ?? (catalogs[DEFAULT_LOCALE] as Messages), toValue(options.messages))
+    return mergeMessages(found ?? (catalogs.value[DEFAULT_LOCALE] as Messages), overrides.value)
   })
-  const now = computed<number | undefined>(() => epochOf(toValue(options.now)))
-  const timeZone = computed<string | undefined>(() => toValue(options.timeZone) || undefined)
-  const context: LocaleContext = { locale, dir, messages, now, timeZone }
+  const now = computed<number | undefined>(
+    () => epochOf(toValue(options.now)) ?? parent?.now?.value
+  )
+  const timeZone = computed<string | undefined>(
+    () => toValue(options.timeZone) || parent?.timeZone?.value || undefined
+  )
+  const context: LocaleContext = { locale, dir, messages, now, timeZone, catalogs, overrides }
   provide(LocaleInjectionKey, context)
   return { ...context, ownDir }
 }
