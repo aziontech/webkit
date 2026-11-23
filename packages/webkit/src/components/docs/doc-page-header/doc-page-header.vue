@@ -67,7 +67,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t, formatDate } = useLocale({ docPageHeader: en.docPageHeader })
+  const { t, formatDate } = useLocale({ docPageHeader: en.docPageHeader, common: en.common })
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-page-header')
 
@@ -161,6 +161,9 @@
             :icon="action.icon ?? ''"
             :href="action.href ?? ''"
             :target="action.target ?? '_self'"
+            :aria-label="
+              action.target === '_blank' ? `${action.label} ${t('common.newTab')}` : undefined
+            "
             @click="(event) => emit('action-click', event, action)"
           />
         </Tooltip>

@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: f52a89918937efec7c6af691a2be53f4974bbe22b8daeb04cf7367e1552de1eb
+checksum: 1a066f64f38cb2494dc8995578193d1ec06306f78223958053586ec138297a30
 created: 2026-08-22
 last_updated: 2026-11-22
 ---
@@ -138,7 +138,7 @@ _none_
 - The ISO date is parsed and rendered in **UTC** on purpose: read as local time, a bare `2026-06-30` becomes the 29th for every reader west of Greenwich.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: each meta-line entry is a standard `small` button (28px) with its own hover surface; nothing else is interactive.
-- An action with `target: '_blank'` renders through `Button`, which adds a visually hidden ` (opens in a new tab)` (`common.newTab`) to its accessible name.
+- An action with `target: '_blank'` gets an `aria-label` of its label plus ` (opens in a new tab)` (`common.newTab`), so it announces that it opens a new tab.
 
 ## Examples
 

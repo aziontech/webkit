@@ -116,7 +116,7 @@ describe('DocPageHeader', () => {
       const { getByRole } = render(DocPageHeader, {
         props: { title: 'T', lastUpdated: '2026-06-30', metaActions: META_ACTIONS }
       })
-      const edit = getByRole('link', { name: /^Edit this page ?\(opens in a new tab\)$/ })
+      const edit = getByRole('link', { name: 'Edit this page (opens in a new tab)' })
       expect(edit.getAttribute('target')).toBe('_blank')
     })
 
@@ -126,7 +126,7 @@ describe('DocPageHeader', () => {
       })
       const labels = [
         ...getByTestId('doc-page-header').querySelectorAll('[data-testid="button"]')
-      ].map((control) => control.querySelector('[data-slot="label"]')?.textContent?.trim())
+      ].map((control) => control.textContent?.trim())
       expect(labels).toEqual(['Copy as Markdown', 'Agent setup', 'Edit this page'])
     })
 

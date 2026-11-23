@@ -28,19 +28,6 @@ describe('Button', () => {
   })
 
   describe('rendering & polymorphism', () => {
-    it('says a target="_blank" link opens in a new tab, and only then', () => {
-      const blank = render(Button, {
-        props: { label: 'Docs', href: 'https://example.com/docs', target: '_blank' }
-      })
-      expect(
-        blank.getByRole('link', { name: /^Docs ?\(opens in a new tab\)$/ })
-      ).toBeInTheDocument()
-      blank.unmount()
-
-      const same = render(Button, { props: { label: 'Docs', href: 'https://example.com/docs' } })
-      expect(same.getByRole('link', { name: 'Docs' })).toBeInTheDocument()
-    })
-
     it('renders default slot content as the label, and label when the slot is empty', () => {
       const slotted = render(Button, { slots: { default: 'Deploy now' } })
       expect(slotted.getByRole('button', { name: 'Deploy now' })).toBeTruthy()
@@ -68,7 +55,7 @@ describe('Button', () => {
       const { getByRole } = render(Button, {
         props: { label: 'Docs', href: 'https://example.com', target: '_blank' }
       })
-      const link = getByRole('link', { name: /^Docs/ })
+      const link = getByRole('link', { name: 'Docs' })
       expect(link.tagName).toBe('A')
       expect(link.getAttribute('href')).toBe('https://example.com')
       expect(link.getAttribute('rel')).toBe('noopener noreferrer')
