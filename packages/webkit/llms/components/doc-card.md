@@ -67,6 +67,7 @@
 - A card that leaves the documentation (absolute URL, `mailto:`, or explicit `target="_blank"`) carries `rel="noreferrer"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the whole tile is the hit area, comfortably over 40×40 px.
+- A link that opens a new tab (`target="_blank"`) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
 ## Right-to-left
 
@@ -86,7 +87,7 @@
 
 <template>
   <DocCard
-    title="Edge Application"
+    title="Applications"
     icon="az az-server"
     href="/docs/edge-application"
     link-label="Read the guide"
@@ -106,7 +107,7 @@
 <template>
   <div class="grid gap-(--spacing-md) sm:grid-cols-2">
     <DocCard
-      title="Edge Application"
+      title="Applications"
       icon="az az-server"
       href="/docs/edge-application"
       link-label="Read the guide"

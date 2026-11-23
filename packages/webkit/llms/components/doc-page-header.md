@@ -73,6 +73,7 @@
 - The ISO date is parsed and rendered in **UTC** on purpose: read as local time, a bare `2026-06-30` becomes the 29th for every reader west of Greenwich.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: each meta-line entry is a standard `small` button (28px) with its own hover surface; nothing else is interactive.
+- An action with `target: '_blank'` renders through `Button`, which adds a visually hidden ` (opens in a new tab)` (`common.newTab`) to its accessible name.
 
 ## Examples
 

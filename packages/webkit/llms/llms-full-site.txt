@@ -827,6 +827,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - A card that leaves the documentation (absolute URL, `mailto:`, or explicit `target="_blank"`) carries `rel="noreferrer"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the whole tile is the hit area, comfortably over 40×40 px.
+- A link that opens a new tab (`target="_blank"`) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
 ## Examples
 
@@ -839,7 +840,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 <template>
   <DocCard
-    title="Edge Application"
+    title="Applications"
     icon="az az-server"
     href="/docs/edge-application"
     link-label="Read the guide"
@@ -1029,7 +1030,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
     <DocChangelogEntry
       label="August 19, 2026"
       description="v2.4.0"
-      :tags="['Console', 'Edge Functions']"
+      :tags="['Console', 'Functions']"
     >
       <p>
         Rules Engine conditions now match on request headers, so a rule can branch on anything the
@@ -1280,15 +1281,19 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ```vue
 <script setup>
   import DocHeading from '@aziontech/webkit/doc-heading'
+  import DocProse from '@aziontech/webkit/doc-prose'
 </script>
 
 <template>
-  <DocHeading
-    anchor="purge-by-url"
-    :level="2"
-  >
-    Purge by URL
-  </DocHeading>
+  <DocProse>
+    <DocHeading
+      anchor="purge-by-url"
+      :level="2"
+    >
+      Purge by URL
+    </DocHeading>
+    <p>Remove one cached object by its full URL, query string included.</p>
+  </DocProse>
 </template>
 ```
 
@@ -1461,6 +1466,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - A row that leaves the documentation carries `rel="noreferrer"` on `target="_blank"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the full row is the hit area, comfortably over 40×40 px.
+- A link that opens a new tab (`target="_blank"`) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
 ## Examples
 
@@ -1477,7 +1483,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
   <RegistrationFrame class="w-full bg-(--bg-surface)">
     <ItemList>
       <DocItem
-        title="Edge Functions"
+        title="Functions"
         icon="az az-code"
         href="#edge-functions"
       >
@@ -1485,7 +1491,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
         natively, through a binding.
       </DocItem>
       <DocItem
-        title="Edge SQL"
+        title="SQL Database"
         icon="az az-database"
         href="#edge-sql"
       >
@@ -1493,7 +1499,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
         the request.
       </DocItem>
       <DocItem
-        title="Edge Cache"
+        title="Cache"
         icon="az az-bolt"
         href="#edge-cache"
       >
@@ -1591,7 +1597,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## States
 
-- Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when the page registered at least one heading (the `aside` slot renders under the outline, never on its own); the palette `open` / `closed`.
+- Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when the page registered at least one heading (the `aside` slot renders under the outline, never on its own); below `xl` the same outline is a collapsed "On this page" disclosure (a native `details`, `open` / closed) above the article that closes when an entry is chosen, and the `aside` content renders under the article; the palette `open` / `closed`.
 - Outline: built from the headings the page registers, in document order, updated as a page mounts, changes or leaves (a route change swaps the entries); no heading registers on the server, so the server render and the first client render carry no outline rail and it appears once the page mounts. The entry of the heading nearest the top of the viewport (under the header) carries `aria-current="location"`; choosing an entry or a heading anchor scrolls the heading under the header and updates the address hash.
 - Unsafe `href` on a navigation row, crumb, section or palette page (`javascript:`, `data:`, any non-web scheme, `//host`): the row renders with no link and choosing it, by pointer or keyboard, follows nothing; `navigate` still fires, so the handler decides.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the article owns its states).
@@ -1930,6 +1936,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - The ISO date is parsed and rendered in **UTC** on purpose: read as local time, a bare `2026-06-30` becomes the 29th for every reader west of Greenwich.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: each meta-line entry is a standard `small` button (28px) with its own hover surface; nothing else is interactive.
+- An action with `target: '_blank'` renders through `Button`, which adds a visually hidden ` (opens in a new tab)` (`common.newTab`) to its accessible name.
 
 ## Examples
 
@@ -2173,7 +2180,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Don’t
 
-- To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-content` (`--layout-measure-content`, 876px).
+- To cap the whole column — `DocProse` caps only running text (see the reading measure under Tokens). The consumer sets the column width with `.layout-column-content` (`--layout-measure-content`, 876px).
 - To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.
 - For a single run of body copy in an application screen — use the `text-body-*` tokens directly.
 
@@ -2310,7 +2317,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - Visible focus: the column is not focusable; `Tab` reaches only interactive content nested inside a step's body.
 - Keyboard map: none of its own.
-- ARIA: the column is a plain block. The circled indices and the rail are decorative (`aria-hidden`, owned by `DocSteps.Step`), so assistive tech reads the step headings and bodies in document order — the same order the numbers claim.
+- ARIA: the column is an ordered list (`ol`, its markers removed) and each `DocSteps.Step` a list item (`li`), so assistive tech announces the step count and each step's position ("2 of 5"). The circled indices and the rail are decorative (`aria-hidden`, owned by `DocSteps.Step`): the list position already says the number, so it is not read twice. The step title stays text, not a heading: a heading level would need a new prop.
 - Contrast: inherited from `DocSteps.Step`; the column paints nothing.
 - Touch target: not applicable; the component is not interactive.
 
@@ -2399,6 +2406,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - The marker is never the only signal: the active entry also changes ink and carries `aria-current`, so the state does not depend on seeing the dash.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: entries are padded rows; the rail itself is not interactive.
+- A link that opens a new tab (every external `href` in a link group) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
 ## Examples
 

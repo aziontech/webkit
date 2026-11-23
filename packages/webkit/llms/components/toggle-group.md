@@ -15,7 +15,7 @@
 
 ## Do
 
-- Keep labels to one or two words: segments never wrap (`whitespace-nowrap`) and long labels truncate.
+- Keep labels to one or two words. When the options do not fit their container they flow onto another row, and a label breaks across lines only when one option alone is wider than the group; a label is never cut off.
 - Give every option a unique `value`; values are coerced to strings and used as the list key and the selection identity, so duplicates collide.
 - Pass `ariaLabel` whenever no visible label names the group.
 - Use `fluid` to make the group fill a narrow container and share its width across segments, instead of styling the width at the call site.
@@ -68,7 +68,7 @@
 - Indicator: an `aria-hidden` span positioned under the selected segment from its measured size and offset; hidden when nothing is selected or the selected segment is not rendered. It re-measures on option, selection and size changes (`ResizeObserver`).
 - Option normalization: a missing `label` falls back to `value`, then to `Option <n>`; a missing `value` falls back to `label`, then to the index.
 - Test ids: root `toggle-group` (consumer `data-testid` wins), `<testId>__indicator`, `<testId>__option`, `<testId>__option-lock`.
-- Reflow: the root is capped at the width of its container (`max-w-full`, `min-w-0`) and the options shrink, truncating their labels, instead of overflowing a narrow box.
+- Reflow: the root is capped at the width of its container (`max-w-full`, `min-w-0`) and wraps (`flex-wrap`): options that do not fit move to another row, the selected-option indicator follows them, and a label wraps inside its option only when that option alone is wider than the group. Heights are minimums (28 / 32 / 40 px for one row), so a wrapped group grows instead of clipping.
 
 ## Accessibility
 
@@ -98,7 +98,7 @@
 
 ## Responsive
 
-- The root is capped at its container (`max-w-full`, `min-w-0`) and options shrink and truncate instead of overflowing; `fluid` makes the options share the full width.
+- The root is capped at its container (`max-w-full`, `min-w-0`); options that do not fit flow onto another row instead of truncating, and `fluid` makes the options in each row share its full width.
 - Touch: a touch-target span grows each segment to 44px under `pointer-coarse`; prefer `size="large"` on touch-first surfaces.
 - No hover-only affordance: selection, focus and disabled states are all visible without hover.
 
