@@ -8,6 +8,7 @@ import {
   watch
 } from 'vue'
 
+import { tabbableIn } from '../../utils/tabbable'
 import { useOverlayLayer } from '../use-overlay-layer'
 import {
   activeElement,
@@ -48,14 +49,35 @@ export interface UseListboxContentReturn {
   navigate: (key: string) => void
 }
 
+function tabStaysInPanel(event: globalThis.KeyboardEvent, root: globalThis.HTMLElement | null) {
+  const from = event.target as globalThis.Node | null
+  if (!root || !from) return false
+  const side = event.shiftKey
+    ? globalThis.Node.DOCUMENT_POSITION_PRECEDING
+    : globalThis.Node.DOCUMENT_POSITION_FOLLOWING
+  const stops = tabbableIn(root).filter(
+    (el) =>
+      el !== from &&
+      !el.closest('[role="listbox"]') &&
+      Boolean(from.compareDocumentPosition(el) & side)
+  )
+  const next = event.shiftKey ? stops.at(-1) : stops[0]
+  if (!next) return false
+  event.preventDefault()
+  next.focus()
+  return true
+}
+
 function listboxKeydown(
   event: globalThis.KeyboardEvent,
   close: (refocus: boolean) => void,
   holdTab: boolean | undefined,
   typeahead: (key: string) => boolean,
-  navigate: (key: string) => void
+  navigate: (key: string) => void,
+  root: globalThis.HTMLElement | null
 ): void {
   const key = event.key
+  if (key === 'Tab' && !holdTab && tabStaysInPanel(event, root)) return
   if (key === 'Escape' || key === 'Tab') {
     if (key === 'Escape' || event.shiftKey || holdTab) event.preventDefault()
     return close(key === 'Tab')
@@ -100,7 +122,7 @@ export function useListboxContent(options: UseListboxContentOptions): UseListbox
   }
 
   const onKeydown = (event: globalThis.KeyboardEvent) =>
-    listboxKeydown(event, close, toValue(options.holdTab), typeahead, navigate)
+    listboxKeydown(event, close, toValue(options.holdTab), typeahead, navigate, root.value)
 
   const onDocumentPointerdown = outsidePress(root, triggerEl, isOpen, setOpen)
 
