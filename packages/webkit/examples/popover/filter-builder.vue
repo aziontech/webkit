@@ -44,7 +44,6 @@
 <template>
   <PopoverRoot
     v-model:open="open"
-    :dismissible="false"
     size="large"
   >
     <PopoverTrigger>
