@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { useEventListener } from '@vueuse/core'
-  import { computed, ref, useAttrs } from 'vue'
+  import { computed, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
@@ -27,7 +26,6 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'hint')
 
   const triggerEl = ref<globalThis.HTMLButtonElement | null>(null)
-  const open = ref(false)
   const pinned = ref(false)
   let tapping = false
   let pinnedAtPress = false
@@ -41,29 +39,35 @@
     if (!tapping) return
     tapping = false
     pinned.value = !pinnedAtPress
-    if (!pinned.value) open.value = false
   }
 
   const unpin = () => {
     pinned.value = false
-    open.value = false
   }
 
-  useEventListener(
-    () => (pinned.value ? globalThis.document : undefined),
-    'pointerdown',
-    (event: globalThis.PointerEvent) => {
-      const target = event.target instanceof globalThis.Node ? event.target : null
-      if (!triggerEl.value?.contains(target)) unpin()
+  const onDocumentPointerdown = (event: globalThis.PointerEvent) => {
+    const target = event.target instanceof globalThis.Node ? event.target : null
+    if (!triggerEl.value?.contains(target)) unpin()
+  }
+
+  const onDocumentKeydown = (event: globalThis.KeyboardEvent) => {
+    if (event.key === 'Escape') unpin()
+  }
+
+  const listen = (on: boolean) => {
+    const doc = globalThis.document
+    if (!doc) return
+    if (on) {
+      doc.addEventListener('pointerdown', onDocumentPointerdown)
+      doc.addEventListener('keydown', onDocumentKeydown)
+    } else {
+      doc.removeEventListener('pointerdown', onDocumentPointerdown)
+      doc.removeEventListener('keydown', onDocumentKeydown)
     }
-  )
-  useEventListener(
-    () => (pinned.value ? globalThis.document : undefined),
-    'keydown',
-    (event: globalThis.KeyboardEvent) => {
-      if (event.key === 'Escape') unpin()
-    }
-  )
+  }
+
+  watch(pinned, listen)
+  onScopeDispose(() => listen(false))
 
   const TRIGGER_CLASS =
     'relative inline-flex size-5 items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-150 ease-out ' +
@@ -72,12 +76,10 @@
 
 <template>
   <Tooltip
-    v-bind="$attrs"
+    v-bind="pinned ? { ...$attrs, open: true } : $attrs"
     :data-testid="testId"
     :content="content"
     :side="side"
-    :open="pinned || open"
-    @update:open="open = $event"
   >
     <button
       ref="triggerEl"

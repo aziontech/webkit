@@ -1,6 +1,15 @@
 <script setup lang="ts">
-  import { useElementSize, watchDebounced } from '@vueuse/core'
-  import { computed, inject, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
+  import { useElementSize } from '@vueuse/core'
+  import {
+    computed,
+    inject,
+    onBeforeUnmount,
+    onScopeDispose,
+    ref,
+    useAttrs,
+    useId,
+    watch
+  } from 'vue'
 
   import { type MessageKey } from '../../../composables/use-locale'
   import { useTranslate } from '../../../composables/use-translate'
@@ -65,14 +74,18 @@
   )
 
   const progress = ref('')
-  watchDebounced(
+  let progressTimer: ReturnType<typeof setTimeout> | undefined
+  watch(
     () => props.value,
     () => {
-      const met = evaluated.value.filter((requirement) => requirement.met).length
-      progress.value = t('passwordRequirements.progress', { met, total: evaluated.value.length })
-    },
-    { debounce: 1000 }
+      clearTimeout(progressTimer)
+      progressTimer = setTimeout(() => {
+        const met = evaluated.value.filter((requirement) => requirement.met).length
+        progress.value = t('passwordRequirements.progress', { met, total: evaluated.value.length })
+      }, 1000)
+    }
   )
+  onScopeDispose(() => clearTimeout(progressTimer))
 
   const CHIP_CLASS =
     'inline-flex shrink-0 items-center justify-center min-h-5 p-(--spacing-2xs) rounded-(--shape-control) leading-none text-label-sm transition-colors duration-fast-02 ' +
