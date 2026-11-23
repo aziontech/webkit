@@ -3600,7 +3600,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - `framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
 - Keep `title` to one line and one ask. A panel that poses two questions gets neither answered.
-- Put the controls in the `actions` slot; the panel lays them out as a row beside the copy from `md` up and stacks them full-width below it.
+- Put the controls in the `actions` slot; the panel lays them out as a row right after the copy from `md` up (a `--spacing-2xl` gap, never pushed to the far edge of a wide band, so the eye goes from the promise to its action) and stacks them full-width below it.
 - Lead with the primary action and keep secondary ones `outline` or `text`, so the panel has one obvious target.
 - Use `eyebrow` only when the panel needs naming out of context; the headline usually carries the ask on its own.
 - In `split`, `title` states the claim and `title-muted` states its consequence — one sentence in two tones, not two headlines. The band renders them as two spans of a single `h2`, so a screen reader reads one heading.
@@ -3759,7 +3759,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - **Active.** An `active` edge, its ports and its label chip are drawn in the accent colour and painted above the rest; an `active` node is part of the highlighted path.
 - **Lit.** A `lit` card, item or pill gets a primary edge and a primary-and-accent glow; a `lit` tile gets a primary edge.
 - **Groups.** A `group` draws its content inside a registration frame with a small label above it; `variant: 'dashed'` dashes its edge and `fill` tints it with the primary or secondary mask.
-- **Node types.** `card` — header row (mark, logo or icon, eyebrow, status tag) over the title, clamped to two lines. `item` — a leading mark, logo or icon, the title with the eyebrow in a mono line under it, and an optional trailing status tag. `pill` — a rounded chip with an optional icon. `tile` — an icon-only cell inside a registration frame, its title shown in a tooltip. `app` — a quiet window placeholder (three dots, the title, placeholder bars) that fades out at the bottom.
+- **Node types.** `card` — header row (mark, logo or icon, eyebrow, status tag) over the title, clamped to two lines. `item` — a leading mark, logo or icon, the title with the eyebrow in a mono line under it, and an optional trailing status tag. `pill` — a rounded chip with an optional icon. `tile` — an icon cell inside a registration frame, its title written as a caption under it (never hover-only, so touch and keyboard readers see the name). `app` — a quiet window placeholder (three dots, the title, placeholder bars) that fades out at the bottom.
 - **Test ids.** Root fallback `diagram` (consumer override wins); `${testId}__canvas` on the measured canvas.
 
 ## Accessibility
@@ -3931,7 +3931,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.
 - Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.
 - Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own "Learn more" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at.
-- A linked claim stretches its link over the nearest positioned ancestor, so the whole cell is the hover and click target, not just the copy. `CardGrid.Cell` and `BentoGrid.Cell` are positioned; a cell the page builds by hand needs `relative`, or every claim in the grid covers the band.
+- A linked claim is its own positioned box: its hover and click target is the claim, grown by `var(--spacing-xs)` on every side, so it never spreads over whatever positioned ancestor holds it. For a whole cell that links, use `BentoGrid.Cell`'s own `link`.
 
 ## Don’t
 
@@ -3975,12 +3975,12 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-described` mirrors whether a description is rendered, from either the prop or the slot
 - `data-linked` present when the claim carries an `href`
 - The root element switches between `<a>` and `<div>` on the `href` data prop, never on an `as` string — so the whole claim is the target, not a control composed under it
-- A linked root lays an `::after` over its positioned cell, so hovering anywhere in the cell hovers the claim
+- A linked root is `relative` and lays an `::after` a `var(--spacing-xs)` beyond its own edges, so the target is the claim and a little air around it
 - The heading element follows `headingLevel`; its size does not change with it
 
 ## Accessibility
 
-- Visible focus: the linked root draws an inset `focus-visible` ring in `var(--ring-color)` on its `::after`, so the ring outlines the whole cell it covers. Without an `href` the topic holds no interactive control of its own.
+- Visible focus: the linked root draws a `focus-visible` ring in `var(--ring-color)` on its `::after`, so the ring outlines the claim with `var(--spacing-xs)` of air. Without an `href` the topic holds no interactive control of its own.
 - Keyboard map: `Tab` reaches the linked claim and `Enter` follows it — the anchor's own behaviour, no handler of our own. Unlinked, the topic is static content and `Tab` passes through whatever the description slot contains.
 - ARIA: both glyphs are decorative and carry `aria-hidden="true"` — the leading icon and the trailing arrow — so the link's accessible name is the headline and the sentence, the copy a reader sees. `headingLevel` is what keeps the document outline in order (axe `heading-order`); the heading stays a heading inside the anchor.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and `var(--text-brand)`, the logo orange, for the hovered headline (an owner-accepted brand exception in light) — all against the fill the surrounding cell provides.
@@ -4077,7 +4077,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `align` | `HeroAlign` | `'center'` | false | Where the content column sits vertically when the band fills a screen (`start` is the top, `end` the bottom). |
 | `mediaAlign` | `HeroMediaAlign` | `'center'` | false | Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up. |
 | `offset` | `string` | `''` | false | Height of the fixed chrome above the band, subtracted from the viewport when `variant` is `screen`; any CSS length. |
-| `bottomHeight` | `string` | `''` | false | Height of the window under the content, where the brand strip and the floor texture stand; any CSS length. |
+| `bottomHeight` | `string` | `''` | false | Height of the window under the content, where the brand strip and the floor texture stand; a CSS length, never a percentage (it collapses the window). |
 | `marquee` | `boolean` | `false` | false | Stand the brand marquee on the band's floor, under the `bottom` window. |
 | `marqueeMarks` | `string[]` | `[]` | false | Registry names of the marks the marquee shows, in order. |
 | `marqueeLabel` | `string` | `''` | false | Eyebrow above the brand marquee, stating the claim the marks make. |
@@ -4124,7 +4124,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - Each asset window clips its slotted child, so an asset larger than the band shows only the part the window frames. Custom properties place it: `--hero-banner-top-height` / `--hero-banner-bottom-height` size the window, and `--hero-banner-top-x` / `-y`, `--hero-banner-bottom-x` / `-y`, `--hero-banner-background-x` / `-y` move the asset inside it
 - Texture behind text only: the backdrop (`data-slot="hero-backdrop"`, under the `texture` prop and the `background` slot) spans the content and the floor by default, so dots run under a console window or a command in the `bottom` window. When a window holds content marked `data-plain-ground` (a chart, `FlowDiagram`, `StatTile`, `Tracker` or a page-JSON content scene) outside an opaque `data-opaque` ground, the backdrop keeps clear of it: with the mark in the `bottom` window (`data-slot="hero-bottom"`) it stops at that window's top edge, so the dots stay behind the copy and end above the diagram; with the mark in the `top` window (`data-slot="hero-top"`) or the `media` cell (`data-slot="hero-media"`), which share the content's area, the band draws no backdrop at all. The floor texture drops itself beside the same mark (see `texture`)
 - The backdrop sets `--texture-fade-lead: transparent`, so a `top` / `bottom` fade on the `texture` layer — or on a `texture` in the `background` slot — ramps in from zero at its leading edge as well as fading out: the opening band sits under the site header, and the texture must clear it. Outside a hero the same fades stay single
-- `data-floor` present when `floorTexture` paints the floor window. The window then takes a fluid default height (`clamp(9rem, 30dvh, 34rem)`) so a `screen` band still measures one screen on a laptop and caps at the design's field where there is room; with no floor texture it stays `auto` and is sized by its slotted child. `--hero-banner-bottom-height` overrides either, and `--hero-banner-floor-ink` (0.6) sets how strongly the texture reads
+- `data-floor` present when `floorTexture` paints the floor window. The window then takes a fluid default height (`clamp(9rem, 30dvh, 34rem)`) so a `screen` band still measures one screen on a laptop and caps at the design's field where there is room; with no floor texture it stays `auto` and is sized by its slotted child. Below `md`, when the brand `marquee` stands under the floor, the default drops to `clamp(4rem, 12dvh, 8rem)` so the customer proof is not pushed below the first screen of a phone. `--hero-banner-bottom-height` (or `bottomHeight`) overrides either; it is a length (`clamp(8rem, 22dvh, 16rem)`), never a percentage, which resolves against the band's own auto height and collapses the window onto its content, and `--hero-banner-floor-ink` (0.6) sets how strongly the texture reads
 - The floor holds the `bottom` window and the `marquee` strip in one block, so a single ground covers both: `--hero-banner-floor-bg` (transparent by default) paints it, which is how a design plinths the floor a shade off the band's own canvas
 - The `marquee` strip stands on `--bg-canvas` edge to edge, so a `texture` backdrop or `background` slot never shows through the marks; a `--hero-banner-floor-bg` plinth replaces that ground so the floor still reads as one block
 - `marquee` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry
@@ -4145,6 +4145,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ```vue
 <script setup>
+  import Button from '@aziontech/webkit/button'
   import Hero from '@aziontech/webkit/hero'
 </script>
 
@@ -4156,7 +4157,19 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
       eyebrow-prefix="//"
       title="A global network built for fast applications"
       description="Run closer to users with low-latency delivery and stable routing."
-    />
+    >
+      <template #actions>
+        <Button
+          label="Start for free"
+          href="https://console.azion.com/signup"
+        />
+        <Button
+          variant="outline"
+          label="Talk to sales"
+          href="https://www.azion.com/en/contact-sales/"
+        />
+      </template>
+    </Hero.Title>
   </Hero>
 </template>
 ```
@@ -4408,7 +4421,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `variant` | `LogoWallVariant` | `'square'` | false | The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`. |
-| `items` | `LogoWallItem[]` | `[]` | false | The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
+| `items` | `LogoWallItem[]` | `[]` | false | The marks rendered in the grid, in order; each item is `{ src, srcDark?, alt, href?, shape? }` where `src` is the mark's URL, `srcDark` its dark-theme file, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the group of marks, announced instead of an unnamed region. |
 | `linkLabel` | `string` | `''` | false | Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. Empty uses the locale catalog (`Read story`). |
 
@@ -4451,9 +4464,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ```vue
 <script setup>
   import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
+  import ifoodLogoDark from '@aziontech/webkit/assets/ifood-extended-reversed.svg'
   import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
+  import itauLogoDark from '@aziontech/webkit/assets/itau-extended-reversed.webp'
   import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import magaluLogoDark from '@aziontech/webkit/assets/magalu-extended-reversed.svg'
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
+  import netshoesLogoDark from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
   import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
   import LogoWall from '@aziontech/webkit/logo-wall'
@@ -4467,9 +4484,15 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     <LogoWall
       aria-label="Clients running on Azion"
       :items="[
-        { src: magaluLogo, alt: 'Magalu', href: 'https://www.azion.com/en/success-case/magalu/' },
+        {
+          src: magaluLogo,
+          srcDark: magaluLogoDark,
+          alt: 'Magalu',
+          href: 'https://www.azion.com/en/success-case/magalu/'
+        },
         {
           src: ifoodLogo,
+          srcDark: ifoodLogoDark,
           alt: 'iFood',
           href: 'https://www.azion.com/en/success-case/ifood/',
           shape: 'compact'
@@ -4477,12 +4500,14 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         { src: stoneLogo, alt: 'Stone', href: 'https://www.azion.com/en/success-case/stone/' },
         {
           src: netshoesLogo,
+          srcDark: netshoesLogoDark,
           alt: 'Netshoes',
           href: 'https://www.azion.com/en/success-case/netshoes/'
         },
         { src: zoopLogo, alt: 'Zoop', href: 'https://www.azion.com/en/success-case/zoop/' },
         {
           src: itauLogo,
+          srcDark: itauLogoDark,
           alt: 'Itaú',
           href: 'https://www.azion.com/en/success-case/itau/',
           shape: 'compact'
@@ -4578,7 +4603,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-duplicate` marks every `aria-hidden` copy after the first — the copies the loop translates into place, and the ones hidden outright under reduced motion
 - Short rows: the row repeats until half the track is at least as wide as the strip, so a strip with few marks never shows an empty run; the pass lengthens with each repeat so the speed stays the same
 - Empty: when `marks` and `items` are both empty the row renders nothing, so a page with no marks to name shows no empty band
-- Reduced motion: the track stops and wraps into a centred static grid, with the duplicate rows removed, so every mark stays reachable
+- Reduced motion: the track stops and wraps into a centred static grid, with the duplicate rows removed, so every mark stays reachable; below `sm` a row of marks lays out on two equal columns, so the marks never fall into uneven pairs
+- Artwork is drawn once: each registered mark renders a single time as an SVG `symbol` in a hidden, `aria-hidden` drawing (`data-slot="marquee-symbols"`), and every cell of every copy is a small `svg` with a `use` reference to it, so a repeated strip costs one node per cell instead of the mark's whole drawing; the track holds its loop (`data-loading`) until each mark's box is measured
 
 ## Accessibility
 
@@ -4838,7 +4864,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `default` | — | Description body; replaces the `description` prop when provided. |
 | `content` | — | Further copy-column content under the description — an inventory, a list of surfaces — inside the paragraph's own measure. |
 | `media` | — | The band's media; replaces the image built from `src`. |
-| `actions` | — | Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `variant="secondary"` for the action, `variant="outline"` for a second beside it, `icon="az az-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
+| `actions` | — | Optional controls under the copy, floored so consecutive bands align on them. Default-size (40px) buttons: `variant="secondary"` for the action, `variant="outline"` for a second beside it, `icon="az az-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
 
 ## States
 
@@ -4867,7 +4893,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - ARIA: the headline is a real `h2` and the band is a `<section>` labelled by it; the image carries `alt`, and an image given no `alt` is marked `aria-hidden` rather than announced as an unnamed graphic.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the band is static.
-- Touch target — the band composes no control of its own; the small buttons its `actions` pattern calls for stand 28 px tall, which clears WCAG 2.2 AA 2.5.8 (24×24 px) but is under this package's own 40×40 px house floor.
+- Touch target — the band composes no control of its own; the buttons its `actions` pattern calls for are the default 40 px size, the package's touch floor (never `small`, 28 px, in a marketing band).
 
 ## Examples
 
@@ -5430,7 +5456,6 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
           variant="secondary"
           size="large"
           href="https://www.azion.com/en/success-case/"
-          target="_blank"
           icon="az az-chevron-right"
           icon-position="trailing"
           animated
@@ -5684,6 +5709,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the figure is `var(--text-default)` (17.65:1 light, 20.12:1 dark) and the accent prefix `var(--text-brand)` (the logo orange `#F3652B` in both themes) is large text (about 3:1 light, 6.71:1 dark; the light pair is the accepted `--text-brand` exception). The caption is `var(--text-muted)` at overline scale — 5.32:1 on the dark canvas, but **3.78:1 on the light canvas, under AA for normal text**. This is a system-wide property of `--text-muted`, not of this component; it is carried as a theme-level follow-up and is not worked around here with an off-token colour.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
 - Touch target ≥40×40 px — not applicable, no interactive target.
+- Right-to-left: the figure (prefix, value, suffix) is a left-to-right token in every locale, so it sits in an isolated `dir="ltr"` run: `< 15 ms` keeps its order and its `<` is never mirrored into `>`, which would invert the claim. The figure still starts on the page's start side, and the caption follows the page direction.
 - Reflow: a figure never breaks across lines; its prefix, value and suffix stay on one line, and the figure shrinks to fit its cell instead (see Best practices), so there is no horizontal scroll at 320 px or at 200% zoom.
 
 ## Examples
@@ -9855,7 +9881,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an illustration is named by `illustrationAriaLabel`, and is decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the scenes stop under reduced motion on their own.
-- Touch target ≥40×40 px — the medium buttons meet it.
+- Touch target ≥40×40 px — the actions are `large` (40 px) buttons.
 
 ## Examples
 

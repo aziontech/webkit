@@ -19861,7 +19861,7 @@
      "type": "LogoWallItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark."
+     "doc": "The marks rendered in the grid, in order; each item is `{ src, srcDark?, alt, href?, shape? }` where `src` is the mark's URL, `srcDark` its dark-theme file, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark."
     },
     {
      "name": "ariaLabel",
@@ -20062,7 +20062,7 @@
     {
      "name": "actions",
      "scope": "—",
-     "notes": "Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `variant=\"secondary\"` for the action, `variant=\"outline\"` for a second beside it, `icon=\"az az-chevron-right\"` + `icon-position=\"trailing\"` when it leaves the page."
+     "notes": "Optional controls under the copy, floored so consecutive bands align on them. Default-size (40px) buttons: `variant=\"secondary\"` for the action, `variant=\"outline\"` for a second beside it, `icon=\"az az-chevron-right\"` + `icon-position=\"trailing\"` when it leaves the page."
     }
    ],
    "surface": "site",
@@ -20635,7 +20635,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Height of the window under the content, where the brand strip and the floor texture stand; any CSS length."
+     "doc": "Height of the window under the content, where the brand strip and the floor texture stand; a CSS length, never a percentage (it collapses the window)."
     },
     {
      "name": "marquee",
@@ -20795,7 +20795,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Height of the window under the content, where the brand strip and the floor texture stand; any CSS length."
+     "doc": "Height of the window under the content, where the brand strip and the floor texture stand; a CSS length, never a percentage (it collapses the window)."
     },
     {
      "name": "marquee",
