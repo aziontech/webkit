@@ -1761,7 +1761,7 @@ export const chartForms = [
         role="status"
         data-testid="period-header__updating"
       >
-        <Spinner />
+        <Spinner class="size-4" />
         Updating
       </span>
       <Select
