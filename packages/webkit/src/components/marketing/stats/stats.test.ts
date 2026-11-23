@@ -45,6 +45,22 @@ async function renderAt(width: number, count: number, size: 'small' | 'medium' |
 }
 
 describe('Stats', () => {
+  it('keeps a figure in left-to-right order in a right-to-left page, so "< 15 ms" never reads "15 ms >"', () => {
+    const host = document.createElement('div')
+    host.dir = 'rtl'
+    document.body.appendChild(host)
+    const { getAllByTestId } = render(Stats, { container: host, props: { items } })
+    const run = getAllByTestId(`${TESTID}__value`)[2]
+    const [prefix, value, suffix] = [...run.children].map(
+      (part) => part.getBoundingClientRect().left
+    )
+
+    expect(run).toHaveAttribute('dir', 'ltr')
+    expect(prefix).toBeLessThan(value)
+    expect(value).toBeLessThan(suffix)
+    host.remove()
+  })
+
   it('renders the band under the default testid', () => {
     const { getByTestId } = render(Stats, { props: { items } })
 

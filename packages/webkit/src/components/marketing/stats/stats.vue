@@ -108,16 +108,22 @@
           :class="FIGURE_CLASS"
         >
           <span
-            v-if="item.prefix"
-            class="text-(--text-brand)"
-            >{{ item.prefix }}</span
+            dir="ltr"
+            :data-testid="`${testId}__value`"
+            class="inline-flex min-w-0 flex-nowrap items-baseline gap-(--spacing-2xs) [unicode-bidi:isolate]"
           >
-          <span class="text-(--text-default)">{{ item.value }}</span>
-          <span
-            v-if="item.suffix"
-            class="text-(--text-muted)"
-            >{{ item.suffix }}</span
-          >
+            <span
+              v-if="item.prefix"
+              class="text-(--text-brand)"
+              >{{ item.prefix }}</span
+            >
+            <span class="text-(--text-default)">{{ item.value }}</span>
+            <span
+              v-if="item.suffix"
+              class="text-(--text-muted)"
+              >{{ item.suffix }}</span
+            >
+          </span>
         </div>
         <figcaption class="text-overline-sm text-(--text-muted)">{{ item.label }}</figcaption>
       </figure>
