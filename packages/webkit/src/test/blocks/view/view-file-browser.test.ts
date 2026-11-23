@@ -131,7 +131,7 @@ describe('view/view-file-browser block', () => {
         'index.html'
       ])
     )
-    expect(view.getByText('17.75 KB')).toBeTruthy()
+    expect(view.getByText('17.8 kB')).toBeTruthy()
     expect(view.queryByText('robots.txt')).toBeNull()
     expect(view.queryByText('favicon.svg')).toBeNull()
   })
@@ -165,8 +165,8 @@ describe('view/view-file-browser block', () => {
     document.documentElement.dir = 'rtl'
     try {
       const view = render(ViewFileBrowser)
-      const size = await waitFor(() => view.getByText('64 B'))
-      expect(readsLeftToRight(size, '64', 'B')).toBe(true)
+      const size = await waitFor(() => view.getByText('64 byte'))
+      expect(readsLeftToRight(size, '64', 'byte')).toBe(true)
       const time = view.container.querySelector('time')!
       expect(time.getAttribute('dir')).toBe('auto')
       const folder = view.getAllByRole('button').find((b) => b.textContent?.trim().endsWith('/'))!

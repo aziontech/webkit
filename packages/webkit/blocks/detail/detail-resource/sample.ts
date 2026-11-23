@@ -36,6 +36,19 @@ export const webAppResource: ResourceDetailResource = {
   frameworkIcon: 'az-color az-nuxt'
 }
 
+export const neverDeployedResource: ResourceDetailResource = {
+  name: 'docs-site',
+  domain: 'docs-site-q4w5e6.example.com',
+  deploymentId: '',
+  environment: 'Production',
+  status: 'Not deployed',
+  statusSeverity: 'neutral',
+  createdAt: new Date(referenceTime - 2 * 3_600_000),
+  createdBy: 'Jane Doe',
+  framework: 'Astro',
+  frameworkIcon: 'az-color az-astro'
+}
+
 export const resourceTabs: { value: ResourceDetailTab; label: string }[] = [
   { value: 'overview', label: 'Overview' },
   { value: 'versions', label: 'Versions' },

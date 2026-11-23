@@ -6,6 +6,7 @@
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
 
   import {
     type ServiceWizardForm,
@@ -110,6 +111,7 @@
           <div
             class="border-t border-(--border-default)"
             role="radiogroup"
+            @keydown="onRadioListKeydown"
             aria-label="Deployments"
           >
             <Item.List>
@@ -120,6 +122,13 @@
                 clickable
                 role="radio"
                 :aria-checked="option.value === deploymentPicker.chosen"
+                :tabindex="
+                  radioListTabIndex(
+                    option.value,
+                    deploymentPicker.chosen,
+                    deploymentPicker.visible.map((entry) => entry.value)
+                  )
+                "
                 @click="deploymentPicker.chosen = option.value"
               >
                 <Item.Media>

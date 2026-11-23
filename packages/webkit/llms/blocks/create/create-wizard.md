@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, [Wizard](../../components/wizard.md), [Wizard](../../components/wizard.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, `utils/radio-list`, [Wizard](../../components/wizard.md), [Wizard](../../components/wizard.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -1372,6 +1372,7 @@ export function filterOptions(
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Tag from '@aziontech/webkit/tag'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
   import { computed, ref } from 'vue'
 
   import type { CreateWizardPolicy } from '../types'
@@ -1436,6 +1437,7 @@ export function filterOptions(
       <div
         class="flex flex-col"
         role="radiogroup"
+        @keydown="onRadioListKeydown"
         aria-label="Policies"
       >
         <Item
@@ -1445,6 +1447,13 @@ export function filterOptions(
           clickable
           role="radio"
           :aria-checked="choice === option.value"
+          :tabindex="
+            radioListTabIndex(
+              option.value,
+              choice,
+              visible.map((entry) => entry.value)
+            )
+          "
           @click="choose(option)"
         >
           <Item.Media>

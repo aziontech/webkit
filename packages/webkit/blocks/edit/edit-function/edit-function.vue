@@ -8,11 +8,23 @@
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import { computed, nextTick, reactive, ref, toRaw, useId, watch } from 'vue'
+  import { leavingLink } from '@aziontech/webkit/utils/leave-link'
+  import {
+    computed,
+    nextTick,
+    onBeforeUnmount,
+    onMounted,
+    reactive,
+    ref,
+    toRaw,
+    useId,
+    watch
+  } from 'vue'
 
   import { useFunctionFields } from './composables/use-function-fields'
   import { documents, loadMonaco, runtimeLabel, tabs } from './lib/function-editor'
   import FunctionArguments from './parts/function-arguments.vue'
+  import FunctionLeaveDialog from './parts/function-leave-dialog.vue'
   import FunctionSaveBar from './parts/function-save-bar.vue'
   import FunctionSettingsTab from './parts/function-settings-tab.vue'
   import { sampleFields, sampleService } from './sample'
@@ -145,7 +157,12 @@
   const fieldList = useFunctionFields(draftFields, formId, props.defaultOpenKeys)
   const { moveStatus } = fieldList
 
-  const guard = useUnsavedChanges(() => ({ form: { ...form }, fields: draftFields.value }))
+  const guard = useUnsavedChanges(() => ({ form: { ...form }, fields: draftFields.value }), {
+    onDiscard: (saved) => {
+      Object.assign(form, saved.form)
+      draftFields.value = saved.fields
+    }
+  })
   Object.assign(form, props.defaultDraft)
   const dirty = guard.isDirty
   const saving = computed(() => props.loading)
@@ -195,6 +212,15 @@
     if (!dirty.value || saving.value) return
     save(event)
   }
+  const onLeaveClick = async (event: MouseEvent) => {
+    const link = leavingLink(event)
+    if (!link || !dirty.value) return
+    event.preventDefault()
+    if (await guard.confirmLeave()) window.location.assign(link.href)
+  }
+
+  onMounted(() => document.addEventListener('click', onLeaveClick, true))
+  onBeforeUnmount(() => document.removeEventListener('click', onLeaveClick, true))
 </script>
 
 <template>
@@ -325,5 +351,6 @@
       @discard="discard"
       @save="save"
     />
+    <FunctionLeaveDialog :guard="guard" />
   </div>
 </template>

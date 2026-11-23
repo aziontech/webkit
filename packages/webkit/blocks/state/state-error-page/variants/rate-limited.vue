@@ -23,6 +23,7 @@
       />
       <Button
         label="About rate limits"
+        aria-label="About rate limits (opens in a new tab)"
         variant="outline"
         size="medium"
         icon="az az-book"

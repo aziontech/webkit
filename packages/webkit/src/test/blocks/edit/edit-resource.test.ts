@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/vue'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import EditResource from '../../../../blocks/edit/edit-resource/edit-resource.vue'
@@ -281,15 +281,35 @@ describe('edit-resource save shortcut', () => {
 })
 
 describe('edit/edit-resource DataStream', () => {
-  it('shows no credential in clear text in Custom headers', async () => {
+  it('edits Custom headers as rows and keeps a credential value masked', async () => {
     render(DataStream)
-    const headers = await waitFor(() => {
-      const field = document.querySelector<HTMLTextAreaElement>('#data-stream-headers')
+    const editor = await waitFor(() => {
+      const field = document.querySelector<HTMLElement>('#data-stream-headers')
       expect(field).not.toBeNull()
       return field!
     })
-    expect(headers.value).not.toBe('')
-    expect(headers.value).not.toMatch(/authorization|bearer|token|secret|api-key|password/i)
+    const values = Array.from(
+      editor.querySelectorAll<HTMLInputElement>('input:not([type="hidden"])')
+    ).map((input) => [input.type, input.value])
+    expect(values).toEqual([
+      ['text', 'X-Stream-Source'],
+      ['text', 'acme-edge'],
+      ['text', 'Authorization'],
+      ['password', 'Bearer example-token']
+    ])
+    expect(within(editor).getAllByRole('button', { name: /Show/ })).toHaveLength(1)
+    await expectNoA11yViolations(editor)
+  })
+
+  it('names the header cell that is missing before it saves', async () => {
+    render(DataStream)
+    const editor = await waitFor(() => document.querySelector<HTMLElement>('#data-stream-headers')!)
+    await fireEvent.click(within(editor).getByRole('button', { name: 'Add header' }))
+    await fireEvent.click(await screen.findByRole('button', { name: 'Save' }, wait))
+    await waitFor(() => expect(editor.textContent).toContain('Enter a value.'))
+    expect(editor.textContent).toContain('Enter a header name of letters, numbers and hyphens.')
+    await waitFor(() => expect(document.activeElement?.getAttribute('aria-invalid')).toBe('true'))
+    expect(editor.contains(document.activeElement)).toBe(true)
   })
 })
 

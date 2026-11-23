@@ -71,6 +71,7 @@
               />
               <Button
                 label="Docs"
+                aria-label="Docs (opens in a new tab)"
                 variant="outline"
                 icon="az az-book"
                 size="medium"
