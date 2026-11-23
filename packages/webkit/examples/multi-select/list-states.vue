@@ -11,8 +11,15 @@
   ]
   const value = ref([])
   const error = computed(() =>
-    state.value === 'error' ? 'Could not load the domains. Try again.' : ''
+    state.value === 'error'
+      ? 'Could not load the domains. Close the list and open it again to retry.'
+      : ''
   )
+  let retry = false
+  const onOpen = (open) => {
+    if (open && retry && state.value === 'error') state.value = 'loading'
+    retry = !open && state.value === 'error'
+  }
 </script>
 
 <template>
@@ -31,6 +38,7 @@
       empty-title="No domains yet"
       placeholder="Select domains"
       aria-label="Domains"
+      @update:open="onOpen"
     >
       <MultiSelect.Trigger />
       <MultiSelect.Content />

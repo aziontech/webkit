@@ -1,6 +1,6 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
-import { defineComponent, nextTick } from 'vue'
+import { type Component, defineComponent, nextTick } from 'vue'
 
 import Folders from '../../../../examples/file-dropzone/folders.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -508,5 +508,23 @@ describe('FileDropzone', () => {
       await waitFor(() => expect(getByTestId(TEST_ID).style.display).not.toBe('none'))
       await expectNoA11yViolations(container)
     })
+  })
+
+  describe('examples', () => {
+    const examples = import.meta.glob<{ default: Component }>(
+      '../../../../examples/file-dropzone/*.vue',
+      { eager: true }
+    )
+
+    it.each(Object.keys(examples))(
+      '%s gives every inline region a button, the non-drag path',
+      (path) => {
+        const { getAllByTestId } = render(examples[path]!.default)
+        const inline = getAllByTestId(TEST_ID).filter((el) => el.dataset['variant'] === 'inline')
+        for (const region of inline) {
+          expect(region.querySelector('button')).not.toBeNull()
+        }
+      }
+    )
   })
 })

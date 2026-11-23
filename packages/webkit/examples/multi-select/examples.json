@@ -59,7 +59,7 @@
     },
     {
       "name": "ListStates",
-      "summary": "Pick a state, then open the list: the loading, error and empty states the panel renders in place of the options.",
+      "summary": "Pick a state, then open the list: loading, error and empty. The error says how to retry; reopening loads again.",
       "file": "list-states.vue"
     }
   ]

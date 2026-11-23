@@ -502,6 +502,32 @@ describe('DatePicker', () => {
       expect(start.getAttribute('tabindex')).toBe('-1')
     })
 
+    it('opening moves focus to the selected day, not the month controls', async () => {
+      const { getByTestId } = render(DatePicker, { props: { modelValue: OCT_8 } })
+      const popover = await openDatePicker(getByTestId)
+      await waitFor(() => expect(document.activeElement).toBe(findDayButton(popover, 8)))
+    })
+
+    it('Cancel closes without committing and returns focus to the trigger', async () => {
+      const { getByTestId, emitted } = render(DatePicker, { props: { modelValue: OCT_8 } })
+      const popover = await openDatePicker(getByTestId)
+      await fireEvent.click(findDayButton(popover, 12))
+      await fireEvent.click(within(popover).getByTestId('date-picker__cancel'))
+      await waitFor(() => expect(getPopover()).toBeNull())
+      expect(emitted('update:modelValue')).toBeUndefined()
+      expect(getByTestId('date-picker__trigger').contains(document.activeElement)).toBe(true)
+      const reopened = await openDatePicker(getByTestId)
+      expect(findDayButton(reopened, 8).getAttribute('data-selected')).not.toBeNull()
+    })
+
+    it('opening with no value moves focus to a day in the grid', async () => {
+      const { getByTestId } = render(DatePicker)
+      await openDatePicker(getByTestId)
+      await waitFor(() =>
+        expect(document.activeElement?.getAttribute('data-testid')).toBe('date-picker__day')
+      )
+    })
+
     it('ArrowDown moves the roving tabindex one week forward (real keyboard)', async () => {
       const { getByTestId } = render(DatePicker, {
         props: { modelValue: OCT_8 }

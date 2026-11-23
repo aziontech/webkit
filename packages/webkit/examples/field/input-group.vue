@@ -9,7 +9,7 @@
 <template>
   <Field class="max-w-(--container-xs)">
     <Field.Label>Domain</Field.Label>
-    <InputGroup>
+    <InputGroup dir="ltr">
       <InputGroup.Addon>https://</InputGroup.Addon>
       <InputGroup.Input
         v-model="domain"

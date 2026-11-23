@@ -51,7 +51,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`)."
+   "doc": "Instruction shown under the icon. Empty uses the locale catalog: `Drop files to upload`, or `Choose files to upload` inline on a coarse pointer."
   },
   {
    "name": "description",

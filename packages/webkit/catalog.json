@@ -14818,7 +14818,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately."
+     "doc": "Stages edits in a draft and shows Cancel and Apply; when false, every edit commits immediately and neither button renders."
     },
     {
      "name": "split",
@@ -14980,7 +14980,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately."
+     "doc": "Stages edits in a draft and shows Cancel and Apply; when false, every edit commits immediately and neither button renders."
     },
     {
      "name": "split",
@@ -15090,7 +15090,7 @@
      "type": "boolean | undefined",
      "default": "undefined",
      "required": "false",
-     "doc": "Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck=\"false\"` on every field."
+     "doc": "Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains; `false` also sets `autocapitalize=\"none\"` and `autocorrect=\"off\"`, so a phone does not capitalize a case-sensitive key (a passed attribute wins). Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck=\"false\"` on every field."
     },
     {
      "name": "size",
@@ -15784,7 +15784,7 @@
      "type": "string",
      "default": "''",
      "required": "true",
-     "doc": "Guidance text revealed on hover or focus; also the trigger's accessible name."
+     "doc": "Guidance text revealed on hover or focus, or by a tap on touch; also the trigger's accessible name."
     },
     {
      "name": "side",
@@ -15995,7 +15995,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`)."
+     "doc": "Instruction shown under the icon. Empty uses the locale catalog: `Drop files to upload`, or `Choose files to upload` inline on a coarse pointer."
     },
     {
      "name": "description",
@@ -16963,7 +16963,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`."
+     "doc": "Sets the value and placeholder in the monospace code face (`.text-body-code-sm`) with `wrap=\"off\"`: each line stays whole and the field scrolls sideways, so a record or a key never breaks across lines for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`."
     },
     {
      "name": "autoResize",

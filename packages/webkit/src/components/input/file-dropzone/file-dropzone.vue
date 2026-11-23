@@ -3,6 +3,7 @@
   import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
+  import { useMediaQuery } from '../../../composables/use-media-query'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { matchesAccept } from '../../../utils/file-accept'
@@ -16,7 +17,7 @@
   export interface FileDropzoneProps {
     /** Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor. */
     variant?: FileDropzoneVariant
-    /** Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`). */
+    /** Instruction shown under the icon. Empty uses the locale catalog: `Drop files to upload`, or `Choose files to upload` inline on a touch screen. */
     title?: string
     /** Secondary line under the title, typically the accepted types and limits. Not rendered when empty. */
     description?: string
@@ -76,6 +77,7 @@
   })
 
   const depth = ref(0)
+  const coarse = useMediaQuery('(pointer: coarse)')
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'file-dropzone'
@@ -83,6 +85,11 @@
   const isInline = computed(() => props.variant === 'inline')
   const isOverlayLive = computed(() => props.variant === 'overlay' && !isDisabled.value)
   const isActive = computed(() => !isDisabled.value && depth.value > 0)
+  const titleText = computed(
+    () =>
+      props.title ||
+      t(isInline.value && coarse.value ? 'fileDropzone.touchTitle' : 'fileDropzone.title')
+  )
   const labelIds = computed(() => [fieldLabelledBy.value, titleId].filter(Boolean).join(' '))
   const descriptionIds = computed(
     () =>
@@ -252,7 +259,7 @@
             :id="titleId"
             class="m-0 text-heading-xs text-(--text-default) group-data-[disabled]:text-(--text-disabled)"
           >
-            {{ title || t('fileDropzone.title') }}
+            {{ titleText }}
           </p>
           <p
             v-if="description"

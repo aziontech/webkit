@@ -19,7 +19,7 @@
     },
     {
       "name": "Accept",
-      "summary": "With `accept=\"image/*\"`, image files arrive in `drop` and every other file arrives in `reject`. Drop a mix of files to see both lists fill.",
+      "summary": "With `accept=\"image/*\"`, images arrive in `drop` and other files in `reject`. Browse images opens a picker with the same filter and sorts picks the same way.",
       "file": "accept.vue"
     },
     {

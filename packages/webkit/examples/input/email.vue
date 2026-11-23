@@ -1,5 +1,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import { ref } from 'vue'
 
@@ -18,20 +19,26 @@
 </script>
 
 <template>
-  <div class="flex w-full max-w-80 items-start gap-(--spacing-xs)">
-    <Input
-      type="email"
-      autocomplete="email"
-      :spellcheck="false"
-      placeholder="you@example.com"
-      :model-value="value"
-      :invalid="invalid"
-      @update:model-value="onUpdate"
-    />
-    <Button
-      label="Submit"
-      size="medium"
-      @click="validate"
-    />
-  </div>
+  <Field
+    :invalid="invalid"
+    class="w-full max-w-80"
+  >
+    <Field.Label>Email</Field.Label>
+    <div class="flex items-start gap-(--spacing-xs)">
+      <Input
+        type="email"
+        autocomplete="email"
+        :spellcheck="false"
+        placeholder="you@example.com"
+        :model-value="value"
+        @update:model-value="onUpdate"
+      />
+      <Button
+        label="Submit"
+        size="medium"
+        @click="validate"
+      />
+    </div>
+    <Field.Error v-if="invalid">Enter an email address like you@example.com.</Field.Error>
+  </Field>
 </template>

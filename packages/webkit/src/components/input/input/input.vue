@@ -26,8 +26,8 @@
      */
     autocomplete?: string
     /**
-     * Native spellcheck on the <input>. Set false for slugs, IDs, domains and code. Omitted when
-     * unset, so the browser keeps its own default.
+     * Native spellcheck on the <input>. Set false for slugs, IDs, domains and code; false also turns
+     * off phone autocapitalize and autocorrect. Omitted when unset, so the browser keeps its own default.
      */
     spellcheck?: boolean
     /** Size token; affects height only. Heights: small=28px, medium=32px, large=40px. */
@@ -84,6 +84,9 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input')
 
   const autofillHints = computed(() => passwordManagerHints(props))
+  const identifierHints = computed(() =>
+    props.spellcheck === false ? { autocapitalize: 'none', autocorrect: 'off' } : {}
+  )
 
   const onInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement
@@ -134,7 +137,7 @@
       :data-testid="testId"
       dir="auto"
       :class="INPUT_CLASS"
-      v-bind="{ ...controlState, ...autofillHints, ...passthroughAttrs }"
+      v-bind="{ ...controlState, ...autofillHints, ...identifierHints, ...passthroughAttrs }"
       :id="controlId"
       :aria-describedby="describedBy"
       @input="onInput"

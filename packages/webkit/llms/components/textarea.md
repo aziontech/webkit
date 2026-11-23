@@ -40,7 +40,7 @@
 | `invalid` | `boolean` | `false` | false | Applies invalid styling and sets `aria-invalid`. |
 | `required` | `boolean` | `false` | false | Marks the field as required and sets `aria-required`. |
 | `resize` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false | Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior. |
-| `monospace` | `boolean` | `false` | false | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`. |
+| `monospace` | `boolean` | `false` | false | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`) with `wrap="off"`: each line stays whole and the field scrolls sideways, so a record or a key never breaks across lines for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`. |
 | `autoResize` | `boolean` | `false` | false | Grows the field with its content instead of a fixed height (`data-auto-resize`): CSS `field-sizing: content`, with a measured height where the browser lacks it. Turns the drag handle off. |
 | `minRows` | `number` | `1` | false | Lines the field shows when empty while `autoResize` is on. Ignored without `autoResize`. |
 | `maxRows` | `number` | `0` | false | Lines the field grows to before it scrolls while `autoResize` is on (`data-max-rows`); `0` sets no limit. Ignored without `autoResize`. |
@@ -92,7 +92,7 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 ## Responsive
 
 - Container queries: none; the field is `width: 100%` of its container.
-- Narrow (≤ 640 px or a narrow container): the text wraps; with `autoResize` a narrower field grows taller, since the height follows the wrapped lines.
+- Narrow (≤ 640 px or a narrow container): the text wraps (a `monospace` field keeps each line whole and scrolls sideways); with `autoResize` a narrower field grows taller, since the height follows the wrapped lines.
 - Touch: the field is the target (≥ 32 px with `autoResize` and one row, 80 px otherwise); no hover-only affordance.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; a `resizable="horizontal"` or `"both"` field can be dragged wider by the person.
 - Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
@@ -103,6 +103,7 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import Textarea from '@aziontech/webkit/textarea'
   import { ref } from 'vue'
 
@@ -110,10 +111,13 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 </script>
 
 <template>
-  <Textarea
-    v-model="value"
-    placeholder="Write your message"
-  />
+  <Field class="w-full max-w-(--container-xs)">
+    <Field.Label>Message</Field.Label>
+    <Textarea
+      v-model="value"
+      placeholder="Write your message"
+    />
+  </Field>
 </template>
 ```
 
@@ -121,6 +125,7 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import Textarea from '@aziontech/webkit/textarea'
   import { ref } from 'vue'
 
@@ -128,11 +133,17 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 </script>
 
 <template>
-  <Textarea
-    v-model="value"
-    placeholder="Placeholder"
+  <Field
     disabled
-  />
+    class="w-full max-w-(--container-xs)"
+  >
+    <Field.Label>Message</Field.Label>
+    <Textarea
+      v-model="value"
+      placeholder="Write your message"
+      disabled
+    />
+  </Field>
 </template>
 ```
 

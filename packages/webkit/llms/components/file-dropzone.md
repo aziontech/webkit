@@ -44,7 +44,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `variant` | `'inline' \| 'overlay'` | `'inline'` | false | Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor. |
-| `title` | `string` | `''` | false | Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`). |
+| `title` | `string` | `''` | false | Instruction shown under the icon. Empty uses the locale catalog: `Drop files to upload`, or `Choose files to upload` inline on a coarse pointer. |
 | `description` | `string` | `''` | false | Secondary line under the title, typically the accepted types and limits. Not rendered when empty. |
 | `accept` | `string` | `''` | false | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file. |
 | `multiple` | `boolean` | `true` | false | When false, only the first accepted file of a drop is accepted and the rest are rejected. `true` by default (recorded exception to the default-false rule; inverting it would break consumers). |
@@ -190,23 +190,46 @@
 
 ```vue
 <script setup>
+  import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import { ref } from 'vue'
+
+  const picker = useFilePicker({ multiple: true })
+  const files = ref([])
+  const add = (picked) => {
+    files.value = [...files.value, ...picked.map((file) => file.name)]
+  }
+  const upload = async () => add(await picker.open())
 </script>
 
 <template>
   <div class="relative w-full max-w-(--container-md)">
     <Card title="Project files">
       <template #default>
-        <div class="flex min-h-48 flex-col gap-(--spacing-xs)">
+        <div class="flex min-h-48 flex-col items-start gap-(--spacing-sm)">
           <p class="text-body-sm text-(--text-muted)">
-            Drag a file from your computer over this window. The drop target covers this card until
-            you drop the file, leave the window or press Escape.
+            Use Upload, or drag files from your computer over this card. The drop target covers the
+            card until you drop the files, leave the window or press Escape.
+          </p>
+          <Button
+            label="Upload"
+            icon="az az-upload"
+            variant="secondary"
+            size="medium"
+            @click="upload"
+          />
+          <p class="text-body-sm text-(--text-default)">
+            Files: {{ files.length ? files.join(', ') : 'none yet' }}
           </p>
         </div>
       </template>
     </Card>
-    <FileDropzone variant="overlay" />
+    <FileDropzone
+      variant="overlay"
+      @drop="(event, dropped) => add(dropped)"
+    />
   </div>
 </template>
 ```

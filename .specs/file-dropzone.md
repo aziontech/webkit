@@ -3,10 +3,10 @@ name: file-dropzone
 category: input
 structure: monolithic
 status: implemented
-checksum: 137869ad41d3341ee0f3fe0e84194615c43a69441558423fe974e47d7013db26
-spec_version: 8
+checksum: 257fe82537e243956bad784a14bb8392636dd38e4c17c880d8eda6696265ee01
+spec_version: 9
 created: 2026-11-10
-last_updated: 2026-11-21
+last_updated: 2026-11-22
 ---
 
 # FileDropzone — Component Spec
@@ -116,7 +116,7 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
 | Prop          | Type                    | Default    | Required | JSDoc                                                                                                                                                                                           |
 | ------------- | ----------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `variant`     | `'inline' \| 'overlay'` | `'inline'` | false    | Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor.                                |
-| `title`       | `string`                | `''`       | false    | Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`).                                                                                                       |
+| `title`       | `string`                | `''`       | false    | Instruction shown under the icon. Empty uses the locale catalog: `Drop files to upload`, or `Choose files to upload` inline on a coarse pointer.                                                |
 | `description` | `string`                | `''`       | false    | Secondary line under the title, typically the accepted types and limits. Not rendered when empty.                                                                                               |
 | `accept`      | `string`                | `''`       | false    | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file.                      |
 | `multiple`    | `boolean`               | `true`     | false    | When false, only the first accepted file of a drop is accepted and the rest are rejected. `true` by default (recorded exception to the default-false rule; inverting it would break consumers). |
@@ -168,6 +168,7 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 - **`accept` matching:** split on commas, trimmed, lower-cased, empty tokens ignored. A token starting with `.` matches the end of the file name (`.png`). A token ending in `/*` matches a `file.type` with that prefix (`image/*`). Any other token must equal `file.type` (`application/pdf`). A file with an empty `type` can only match by extension. An empty `accept` accepts every file.
 - **`multiple="false"`:** the first file that passes `accept`, in `dataTransfer.files` order, is accepted. Every later file, matching or not, goes to `reject`.
 - **Folders (`directories`):** the drop reads `dataTransfer.items[i].webkitGetAsEntry()` synchronously, then walks each entry (a folder's reader is read until it returns an empty batch) and turns each file entry into a `File` whose `webkitRelativePath` is the entry's path without the leading slash (`site/css/main.css`; a loose file keeps its name). `accept` and `multiple` then filter the walked files and `drop` / `reject` fire once, after the walk, with the original event. Without entry support, or when the walk fails, the drop falls back to `dataTransfer.files`. Off by default, a dropped folder is not walked (browsers hand an empty or zero-byte entry). The picker side is the consumer's: a Browse folder button that calls `useFilePicker({ directory: true })`, whose files already carry `webkitRelativePath`.
+- **Touch screens:** a phone cannot drag files, so on a coarse pointer (`(pointer: coarse)`, read after mount) an inline region with no `title` leads with `Choose files to upload` and the slotted Browse button is the way in.
 - **SSR:** `useEventListener` binds nothing when `window` is undefined, so the component renders on the server in its idle state.
 
 ## Motion & Animations
@@ -227,8 +228,8 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 Canonical layout, with two justified deviations: there is no `size` prop (no Sizes story), and there is no Types composite because an `overlay` is invisible at rest, so a side-by-side frame would show one empty box. Each variant gets its own story instead.
 
 - Default: `variant="inline"` with a "Browse files" `Button` in the default slot that opens the system file picker through `useFilePicker({ multiple: true })`. `drop` and `reject` are logged through `argTypes` actions (`onDrop` / `onReject`).
-- Overlay: `variant="overlay"` inside a positioned `Card` (`class="relative"`) with a min height, and placeholder card content under it. The story copy tells the reader to drag a file over the window to see it. Justified because the overlay's placement and window-level behavior cannot be shown in Default.
-- Accept: `variant="inline"`, `accept="image/*"`, with the story rendering the names of rejected files from the `reject` payload under the dropzone. Justified because `reject` is half of the event contract and needs a visible demonstration.
+- Overlay: `variant="overlay"` inside a positioned `Card` (`class="relative"`) with a min height, and placeholder card content under it. The copy offers an Upload button (through `useFilePicker`) first and drag second, since a touch screen cannot drag; the file names from Upload and `drop` are listed in the card. Justified because the overlay's placement and window-level behavior cannot be shown in Default.
+- Accept: `variant="inline"`, `accept="image/*"`, with a Browse images button (through `useFilePicker` with the same `accept`) in the default slot, the keyboard and touch path; picked files are sorted into the same accepted and rejected lists, rendered under the dropzone from the `drop` and `reject` payloads. Justified because `reject` is half of the event contract and needs a visible demonstration.
 - Disabled: `disabled: true` on the Default composition, with the slotted Button also disabled.
 
 ## Open questions

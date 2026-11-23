@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Single thumb over 0–100 in steps of 1, bound with `v-model` and named with `aria-label`.",
+      "summary": "0–100 in steps of 1 in a `Field`: the label names it and the value sits at the end of the label row.",
       "file": "default.vue"
     },
     {
@@ -19,12 +19,12 @@
     },
     {
       "name": "Disabled",
-      "summary": "Disabled: skipped by Tab, ignores pointer and keys, and uses the disabled tokens.",
+      "summary": "Disabled: skipped by Tab, ignores pointer and keys, disabled tokens.",
       "file": "disabled.vue"
     },
     {
       "name": "Invalid",
-      "summary": "Invalid: the fill and thumb border switch to the danger tokens and aria-invalid is set.",
+      "summary": "Invalid: danger fill and thumb, `aria-invalid`, and a `Field.Error`.",
       "file": "invalid.vue"
     }
   ]

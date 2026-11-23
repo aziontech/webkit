@@ -191,6 +191,12 @@
     setOpen(false)
   }
 
+  const cancelSelection = () => {
+    draft.value = cloneValue(model.value)
+    setOpen(false)
+    triggerEl.value?.querySelector<globalThis.HTMLElement>('button')?.focus()
+  }
+
   const clearCommitted = () => {
     if (isDisabled.value) {
       return
@@ -349,17 +355,26 @@
             <slot name="footer" />
           </span>
 
-          <Button
+          <div
             v-if="showApply"
-            :label="t('datePicker.apply')"
-            variant="outline"
-            :size="size"
-            :disabled="isDisabled"
-            icon="az az-arrow-down-left"
-            class="w-full justify-center"
-            :data-testid="`${testId}__apply`"
-            @click="applySelection"
-          />
+            class="flex items-center justify-end gap-(--spacing-xs)"
+          >
+            <Button
+              :label="t('datePicker.cancel')"
+              variant="ghost"
+              :size="size"
+              :data-testid="`${testId}__cancel`"
+              @click="cancelSelection"
+            />
+            <Button
+              :label="t('datePicker.apply')"
+              variant="primary"
+              :size="size"
+              :disabled="isDisabled"
+              :data-testid="`${testId}__apply`"
+              @click="applySelection"
+            />
+          </div>
         </div>
       </div>
     </DatePickerPopover>

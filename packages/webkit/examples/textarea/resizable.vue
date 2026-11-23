@@ -1,4 +1,5 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import Textarea from '@aziontech/webkit/textarea'
   import { ref } from 'vue'
 
@@ -7,25 +8,33 @@
 
 <template>
   <div class="flex flex-col gap-(--spacing-md)">
-    <Textarea
-      v-model="value"
-      placeholder="resize=vertical (default)"
-      resize="vertical"
-    />
-    <Textarea
-      v-model="value"
-      placeholder="resize=horizontal"
-      resize="horizontal"
-    />
-    <Textarea
-      v-model="value"
-      placeholder="resize=both"
-      resize="both"
-    />
-    <Textarea
-      v-model="value"
-      placeholder="resize=none"
-      resize="none"
-    />
+    <Field>
+      <Field.Label>Vertical (default)</Field.Label>
+      <Textarea
+        v-model="value"
+        resize="vertical"
+      />
+    </Field>
+    <Field>
+      <Field.Label>Horizontal</Field.Label>
+      <Textarea
+        v-model="value"
+        resize="horizontal"
+      />
+    </Field>
+    <Field>
+      <Field.Label>Both</Field.Label>
+      <Textarea
+        v-model="value"
+        resize="both"
+      />
+    </Field>
+    <Field>
+      <Field.Label>None</Field.Label>
+      <Textarea
+        v-model="value"
+        resize="none"
+      />
+    </Field>
   </div>
 </template>

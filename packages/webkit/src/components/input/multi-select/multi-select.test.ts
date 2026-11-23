@@ -4,6 +4,7 @@ import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/multi-select/default.vue'
+import ListStates from '../../../../examples/multi-select/list-states.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { hostable } from '../../../test/hostable'
 import MultiSelectRoot, {
@@ -1056,6 +1057,29 @@ describe('MultiSelect', () => {
         'Option 99',
         ...Array.from({ length: 10 }, (_, i) => `Option ${990 + i}`)
       ])
+      cleanupTeleported()
+    })
+  })
+
+  describe('ListStates example', () => {
+    it('says how to retry a failed load, and reopening the list loads again', async () => {
+      const { getByRole, getByTestId } = render(ListStates)
+      await userEvent.click(getByRole('radio', { name: 'Error' }))
+      await userEvent.click(getByTestId('multi-select-trigger'))
+      const error = await vi.waitFor(() => {
+        const found = document.querySelector('[data-testid="multi-select-content__error"]')
+        expect(found).not.toBeNull()
+        return found as HTMLElement
+      })
+      expect(error.textContent).toContain('open it again to retry')
+      await userEvent.keyboard('{Escape}')
+      await vi.waitFor(() => expect(document.querySelector('[role="listbox"]')).toBeNull())
+      await userEvent.click(getByTestId('multi-select-trigger'))
+      await vi.waitFor(() =>
+        expect(
+          document.querySelector('[data-testid="multi-select-content__loading"]')
+        ).not.toBeNull()
+      )
       cleanupTeleported()
     })
   })

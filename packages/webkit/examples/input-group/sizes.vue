@@ -4,7 +4,10 @@
 
 <template>
   <div class="flex flex-col gap-4">
-    <InputGroup size="small">
+    <InputGroup
+      dir="ltr"
+      size="small"
+    >
       <InputGroup.Addon>https://</InputGroup.Addon>
       <InputGroup.Input
         aria-label="Domain"
@@ -12,7 +15,10 @@
       />
       <InputGroup.Addon>.com</InputGroup.Addon>
     </InputGroup>
-    <InputGroup size="medium">
+    <InputGroup
+      dir="ltr"
+      size="medium"
+    >
       <InputGroup.Addon>https://</InputGroup.Addon>
       <InputGroup.Input
         aria-label="Domain"
@@ -20,7 +26,10 @@
       />
       <InputGroup.Addon>.com</InputGroup.Addon>
     </InputGroup>
-    <InputGroup size="large">
+    <InputGroup
+      dir="ltr"
+      size="large"
+    >
       <InputGroup.Addon>https://</InputGroup.Addon>
       <InputGroup.Input
         aria-label="Domain"

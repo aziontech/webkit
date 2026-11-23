@@ -157,7 +157,7 @@
         :data-testid="`${testId}__indicator`"
       />
     </span>
-    <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+    <span class="flex min-w-0 flex-col items-start gap-(--spacing-2xs)">
       <span
         class="flex min-w-0 items-center gap-(--spacing-2xs) group-data-[variant=card]/radio-item:text-body-sm"
       >

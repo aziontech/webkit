@@ -194,6 +194,8 @@
       :data-testid="`${testId}__input`"
       autocomplete="off"
       :spellcheck="false"
+      autocapitalize="none"
+      autocorrect="off"
       dir="auto"
       :class="SEARCH_INPUT_CLASS"
       @input="onInput"

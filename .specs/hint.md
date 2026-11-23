@@ -3,10 +3,10 @@ name: hint
 category: input
 structure: monolithic
 status: implemented
-spec_version: 7
-checksum: a4281aaf90c764324b4e08cd75377bf4886af08f800008e8fda69a8b6ef5ebab
+spec_version: 8
+checksum: 60df62e04365717b59445c540a630f8c491bbb24375086d2fe00b067f58829d3
 created: 2026-08-10
-last_updated: 2026-11-16
+last_updated: 2026-11-22
 ---
 
 # Hint — Component Spec
@@ -37,7 +37,7 @@ Small info affordance — a muted `az az-circle-info` glyph on a focusable butto
 ## Best practices
 
 - One sentence, ending in a period. If it needs two, it belongs in `field-description` or a `popover`.
-- Never hide required information behind a hint — hover is not discoverable on touch, so treat it as an enhancement.
+- Never hide required information behind a hint — on touch it opens only when tapped, so treat it as an enhancement.
 - The `content` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.
 - Place it immediately after the thing it explains, not at the end of a row.
 
@@ -57,7 +57,7 @@ Small info affordance — a muted `az az-circle-info` glyph on a focusable butto
 
 | Prop      | Type                                              | Default | Required | JSDoc                                                                                                                                                          |
 | --------- | ------------------------------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `content` | `string`                                          | `''`    | true     | Guidance text revealed on hover or focus; also the trigger's accessible name.                                                                                  |
+| `content` | `string`                                          | `''`    | true     | Guidance text revealed on hover or focus, or by a tap on touch; also the trigger's accessible name.                                                            |
 | `side`    | `'top' \| 'bottom' \| 'start' \| 'end' \| 'auto'` | `'top'` | false    | Side of the glyph the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room. `start` and `end` follow the text direction. |
 
 ## Events
@@ -100,7 +100,7 @@ The tooltip's own open/close motion belongs to `tooltip` and is specified there.
 
 ## Accessibility (WCAG 2.1 AA)
 
-- The trigger is a native `<button type="button">`, so it is in the tab order and the tooltip opens on `focus` as well as hover (`Tooltip` opens on `focusin`).
+- The trigger is a native `<button type="button">`, so it is in the tab order and the tooltip opens on `focus` as well as hover (`Tooltip` opens on `focusin`). On touch a tap toggles the text; a tap outside, `Escape` or blur closes it.
 - The glyph is decorative (`aria-hidden="true"`); the button's accessible name is the `content` prop, so the hint is reachable by screen readers that never see the tooltip.
 - Keyboard map: `Tab` moves focus to the glyph and opens the tooltip; `Escape` closes it (owned by `Tooltip`); the button has no activation behaviour.
 - The button's default action is prevented on click, so a `Hint` rendered inside a `<label>` never toggles the labelled control.

@@ -9,7 +9,7 @@
     class="w-full max-w-(--container-xs)"
   >
     <Field.Label>Domain</Field.Label>
-    <InputGroup>
+    <InputGroup dir="ltr">
       <InputGroup.Addon>https://</InputGroup.Addon>
       <InputGroup.Input placeholder="domain" />
       <InputGroup.Addon>.com</InputGroup.Addon>

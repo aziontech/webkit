@@ -3,11 +3,11 @@ name: schema-form
 category: input
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: 614c9772784478125186809168cb675e8a6824fb88cbba2d1b70bd017e454f7a
+checksum: 78930a5f27ba22bc5a2cb12f270211e4436a792ad65c26ba63358485f37e394b
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-22
 ---
 
 # SchemaForm — Component Spec
@@ -42,7 +42,7 @@ A form rendered from a JSON schema: each property of an object schema becomes a 
 ## Best practices
 
 - Give every property a `title` and a one-sentence `description`; the key is only the fallback label.
-- Put limits in the schema (`minimum`, `maxLength`, `pattern`, `enum`) so the form checks them; say the rule in the `description` when it is a `pattern`, since the built-in message cannot name it.
+- Put limits in the schema (`minimum`, `maxLength`, `pattern`, `enum`) so the form checks them; say the rule in the `description` when it is a `pattern`: the pattern message repeats it (`Check the format: …`), since the built-in message cannot name the rule on its own.
 - Keep the default `validate-on="blur"` for short forms; use `submit` when the form sits in a drawer or dialog with one Save.
 - Call `validate()` on submit and stop when it returns `valid: false`; it shows every message and focuses the first invalid field.
 - Pass server rejections in `errors` keyed by path (`origin.host`): the field turns invalid with that message until the user edits it (the form-validation rule). Put a section-level failure in an `Alert` above the form, not in `errors`.
@@ -142,7 +142,7 @@ const ui = {
 | any field with `ui[path].options`                             | `Combobox` (searches through the loader), or `MultiSelect` for an array   | `required`, `minItems`, `maxItems`                                                 |
 | anything else (arrays of objects, objects without properties) | `Textarea` holding JSON                                                   | valid JSON                                                                         |
 
-`required` (on the parent object) adds the Required marker and the required check; `title` is the label (else the key); `description` is the helper text, replaced by the message while invalid; `default` seeds the value; `readOnly` makes that field (and a nested object's fields) read-only. The type is read from `default`, `enum`, `properties`, `oneOf` or `items` when `type` is missing. `ui[path].widget` swaps the control (`input`, `textarea`, `select`, `number`, `switch`, `list`, `json`, `password`, `repeat`, `map`). A variant is named by its discriminator property's `const` (or first `enum` value) and labelled by its `title`; the choice is labelled by the discriminator property's `title`. A key two variants share keeps its value when the choice changes.
+`required` (on the parent object) adds the Required marker and the required check; `title` is the label (else the key); `description` is the helper text, replaced by the message while invalid (a `pattern` failure on a field with a `description` restates it as `Check the format:` followed by the description, so the rule stays on screen); `default` seeds the value; `readOnly` makes that field (and a nested object's fields) read-only. The type is read from `default`, `enum`, `properties`, `oneOf` or `items` when `type` is missing. `ui[path].widget` swaps the control (`input`, `textarea`, `select`, `number`, `switch`, `list`, `json`, `password`, `repeat`, `map`). A variant is named by its discriminator property's `const` (or first `enum` value) and labelled by its `title`; the choice is labelled by the discriminator property's `title`. A key two variants share keeps its value when the choice changes.
 
 ## ui options
 
@@ -223,6 +223,7 @@ The form has no motion of its own; the composed controls bring theirs (the `Sele
 | `schemaForm.minLength`            | Use at least {min} characters.                 | —                      |
 | `schemaForm.maxLength`            | Use at most {max} characters.                  | —                      |
 | `schemaForm.pattern`              | This value doesn't match the expected format.  | —                      |
+| `schemaForm.patternRule`          | Check the format: {rule}                       | —                      |
 | `schemaForm.minimum`              | Enter {min} or more.                           | —                      |
 | `schemaForm.maximum`              | Enter {max} or less.                           | —                      |
 | `schemaForm.number`               | Enter a number.                                | —                      |

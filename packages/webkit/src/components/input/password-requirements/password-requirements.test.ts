@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/vue'
+import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/password-requirements/default.vue'
@@ -81,6 +81,27 @@ describe('PasswordRequirements', () => {
         chip.hasAttribute('data-validated')
       )
     ).toBe(true)
+  })
+
+  it('joins the rules to the password field description in the Default example', async () => {
+    const { container, getAllByTestId } = render(Default)
+    const input = container.querySelector('input') as HTMLInputElement
+    const rules = getAllByTestId('password-requirements__chip')[0]!.parentElement as HTMLElement
+    await waitFor(() =>
+      expect((input.getAttribute('aria-describedby') ?? '').split(/\s+/)).toContain(rules.id)
+    )
+  })
+
+  it('announces how many rules are met once typing pauses, and nothing on load', async () => {
+    const { container, getByTestId } = render(Default)
+    const status = getByTestId('password-requirements__progress')
+    expect(status.getAttribute('role')).toBe('status')
+    expect(status.textContent).toBe('')
+    await fireEvent.update(container.querySelector('input') as HTMLInputElement, 'abcdefgh')
+    expect(status.textContent).toBe('')
+    await waitFor(() => expect(status.textContent).toBe('2 of 5 requirements met'), {
+      timeout: 2000
+    })
   })
 
   it('has no axe violations in the Default example', async () => {

@@ -163,6 +163,18 @@ describe('SchemaForm', () => {
     expect(view.queryByText('This field is required.')).toBeNull()
   })
 
+  it('restates a pattern field description in its error, so the rule stays on screen', async () => {
+    const view = render(WithValidation)
+    const name = view.getByLabelText(/Name/)
+    await fireEvent.update(name, 'Bad Name')
+    await fireEvent.click(view.getByRole('button', { name: 'Save' }))
+    await waitFor(() =>
+      expect(
+        view.getByText('Check the format: Lowercase letters, numbers and hyphens.')
+      ).toBeTruthy()
+    )
+  })
+
   it('shows server errors by path until the field is edited', async () => {
     const view = render(SchemaForm, {
       props: {
