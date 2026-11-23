@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 9
-checksum: 718c84d447bb3c3c54ae46dcdab172c301218cc69b0c4881b70322c8a3633b1b
+checksum: 32a63a1741fe0bc6b31ead29e907440b10de95ab45d8da566435566534b12ab8
 created: 2026-09-22
 last_updated: 2026-11-19
 ---
@@ -176,7 +176,7 @@ _none_
 | media column gap                   | `var(--spacing-xl)` from `md` up, `var(--spacing-2xl)` stacked                                   |
 | media end bleed (`mediaAlign` end) | `var(--spacing-xl)`                                                                              |
 | copy block rhythm                  | `var(--spacing-md)`                                                                              |
-| headline                           | `.text-heading-2xl` (`size` large) or `.text-heading-xl` (`size` medium), `var(--text-default)`  |
+| headline                           | `.text-heading-3xl` (`size` large) or `.text-heading-2xl` (`size` medium, about 30px on a phone), `var(--text-default)` |
 | accent phrase                      | `var(--text-brand)` with a `var(--primary)` glow (the logo orange only; `hero-title__highlight`) |
 | description                        | `.text-body-lg`, `var(--text-muted)`                                                             |
 | headline to description            | `var(--spacing-md)` gap plus `var(--spacing-md)` margin                                          |
