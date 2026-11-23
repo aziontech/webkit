@@ -79,6 +79,12 @@ describe('ClientStoryColumnsSection', () => {
     columnItems.forEach((item) => expect(item.getAttribute('role')).toBe('listitem'))
   })
 
+  it('lays the columns side by side from the medium breakpoint', () => {
+    const { getByRole } = columns()
+
+    expect(getByRole('list', { name: ARIA_LABEL }).classList.contains('md:grid-cols-3')).toBe(true)
+  })
+
   it('renders one mark per cell by its client name, with its treatment', () => {
     const { getByAltText } = columns()
 

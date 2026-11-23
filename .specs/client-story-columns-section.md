@@ -6,7 +6,7 @@ status: implemented
 spec_version: 7
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 161263b45f5251a40f6dd13ed8e51861eff6527ae3d35b3a13777107ed8d7c70
+checksum: d4f4c3cd1b36cd4b508fc6d6f0f2a28441f9cffaa84293e248a34507486bae32
 ---
 
 # ClientStoryColumnsSection — Component Spec
@@ -31,7 +31,7 @@ Three featured success stories side by side: each column is a client's mark on a
 
 ## Best practices
 
-- Three cells for `reveal="always"` (the grid is three columns from the large breakpoint); three or four for `reveal="hover"`, which shares the row between them.
+- Three cells for `reveal="always"` (the grid is three columns from the medium breakpoint); three or four for `reveal="hover"`, which shares the row between them.
 - With `reveal="hover"` use the client's reversed (white) logo and one sentence per story; `logoWidth` sizes the mark as a share of the card (default `35%`).
 - Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.
 - Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. A cell with neither paints a black face.

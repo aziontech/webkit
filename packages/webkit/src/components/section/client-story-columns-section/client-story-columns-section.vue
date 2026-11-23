@@ -291,7 +291,7 @@
         <div
           role="list"
           :aria-label="ariaLabel || undefined"
-          class="grid gap-px bg-(--border-default) lg:grid-cols-3"
+          class="grid gap-px bg-(--border-default) md:grid-cols-3"
         >
           <RegistrationFrame
             v-for="cell in cells"
