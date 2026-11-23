@@ -4,6 +4,8 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import { ref } from 'vue'
 
   import type { EventsExplorerFilters } from '../view-events-explorer.vue'
 
@@ -27,6 +29,13 @@
 
   const filters = defineModel<EventsExplorerFilters>('filters', { required: true })
   const search = defineModel<string>('search', { required: true })
+  const searchEl = ref<InstanceType<typeof Input> | null>(null)
+  useShortcuts({
+    keys: '/',
+    label: 'Focus search',
+    element: () => (searchEl.value?.$el as HTMLElement | null | undefined) ?? null,
+    handler: () => searchEl.value?.focus()
+  })
 </script>
 
 <template>
@@ -40,9 +49,11 @@
       />
       <div class="flex min-w-36 grow basis-(--container-2xs)">
         <Input
+          ref="searchEl"
           v-model="search"
           size="medium"
           placeholder="Search events, hosts, paths or addresses"
+          aria-keyshortcuts="/"
           aria-label="Search events"
           class="w-full"
         >

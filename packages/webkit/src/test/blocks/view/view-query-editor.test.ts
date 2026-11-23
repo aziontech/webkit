@@ -5,6 +5,8 @@ import { userEvent } from 'vitest/browser'
 import CreateDatabase from '../../../../blocks/view/view-query-editor/variants/create-database.vue'
 import ImportCsv from '../../../../blocks/view/view-query-editor/variants/import-csv.vue'
 import QueryEditorQuery from '../../../../blocks/view/view-query-editor/variants/query.vue'
+import TableData from '../../../../blocks/view/view-query-editor/variants/table-data.vue'
+import Templates from '../../../../blocks/view/view-query-editor/variants/templates.vue'
 import ViewQueryEditor, {
   type QueryEditorTable
 } from '../../../../blocks/view/view-query-editor/view-query-editor.vue'
@@ -67,6 +69,22 @@ describe('view/view-query-editor Import data from CSV', () => {
     const rows = document.querySelector('[aria-label="Rows of subscribers"]')!
     expect(rows.textContent).toContain('jane.doe@example.com')
     expect(rows.textContent).not.toContain('ops@example.com')
+  })
+  it('opens the templates drawer without focusing its search, so a phone keeps its keyboard down', async () => {
+    render(Templates)
+    const drawer = await waitFor(() => document.querySelector<HTMLElement>('[role="dialog"]')!)
+    await waitFor(() => expect(drawer.contains(document.activeElement)).toBe(true))
+    expect(document.activeElement?.getAttribute('aria-label')).not.toBe('Search templates')
+    expect(document.activeElement?.tagName).not.toBe('INPUT')
+  })
+
+  it('focuses Filter rows on / with nothing focused', async () => {
+    const view = render(TableData)
+    const field = await waitFor(() => view.getByRole('textbox', { name: 'Filter rows' }))
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    await fireEvent.keyDown(document.body, { key: '/' })
+    await waitFor(() => expect(document.activeElement).toBe(field))
+    expect(field.getAttribute('aria-keyshortcuts')).toBe('/')
   })
 })
 

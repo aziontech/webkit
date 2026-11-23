@@ -130,7 +130,7 @@
       <PopoverTrigger
         :aria-label="triggerLabel"
         :data-testid="`${testId}__trigger`"
-        class="rounded-(--shape-control)"
+        class="relative rounded-(--shape-control)"
         @click.stop
       >
         <Tag
@@ -138,6 +138,11 @@
           severity="neutral"
           size="small"
           class="shrink-0 cursor-pointer tabular-nums"
+        />
+        <span
+          aria-hidden="true"
+          data-slot="touch-target"
+          class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
         />
       </PopoverTrigger>
 

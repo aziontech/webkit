@@ -1012,7 +1012,7 @@ export const SIDEBAR_FRAME_CLASS =
 
 <template>
   <div
-    class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
+    class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
   >
     <div
       v-if="!historyOpen"
@@ -1029,6 +1029,7 @@ export const SIDEBAR_FRAME_CLASS =
     <Button
       variant="primary"
       size="medium"
+      class="shrink-0"
       icon="az az-play"
       :loading="running"
       :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
@@ -1290,7 +1291,9 @@ export const SIDEBAR_FRAME_CLASS =
       class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
     >
       <span class="shrink-0 text-heading-2xs text-(--text-default)"> Results </span>
-      <div class="flex ms-(--spacing-sm) min-w-0 flex-1 md:max-w-(--container-sm)">
+      <div
+        class="flex min-w-36 grow basis-(--container-2xs) md:ms-(--spacing-sm) md:max-w-(--container-sm)"
+      >
         <Input
           v-model="resultSearch"
           size="medium"
@@ -1419,6 +1422,7 @@ export const SIDEBAR_FRAME_CLASS =
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, ref } from 'vue'
 
   import type { QueryEditorRow, QueryEditorTable } from '../types'
@@ -1447,6 +1451,13 @@ export const SIDEBAR_FRAME_CLASS =
   const selectedKeys = defineModel<string[]>('selectedKeys', { required: true })
 
   const rowFilter = ref('')
+  const searchEl = ref<InstanceType<typeof Input> | null>(null)
+  useShortcuts({
+    keys: '/',
+    label: 'Focus search',
+    element: () => (searchEl.value?.$el as HTMLElement | null | undefined) ?? null,
+    handler: () => searchEl.value?.focus()
+  })
   const filterPlaceholder = computed(() => {
     const names = (props.table?.columns ?? []).map((column) => column.name)
     return names.length ? `Filter by ${names.slice(0, 3).join(', ')}` : 'Filter rows'
@@ -1486,8 +1497,10 @@ export const SIDEBAR_FRAME_CLASS =
     >
       <div class="flex min-w-0 flex-1 md:max-w-(--container-lg)">
         <Input
+          ref="searchEl"
           v-model="rowFilter"
           size="medium"
+          aria-keyshortcuts="/"
           class="w-full"
           :placeholder="filterPlaceholder"
           aria-label="Filter rows"
@@ -2009,7 +2022,11 @@ export const SIDEBAR_FRAME_CLASS =
       </PanelHeader>
 
       <PanelBody>
-        <div class="flex flex-col gap-(--spacing-md)">
+        <div
+          class="flex flex-col gap-(--spacing-md) outline-none"
+          tabindex="-1"
+          data-autofocus
+        >
           <Input
             v-model="templateQuery"
             size="large"

@@ -54,7 +54,7 @@
     loading?: boolean
     /** Why the catalog could not load, shown in the danger alert with Retry. */
     error?: string
-    /** Search text the filter starts with. */
+    /** Search text the filter starts with, shown as a free-text token. */
     defaultText?: string
     /** Id of the template whose preview starts open. */
     defaultPreview?: string
@@ -115,8 +115,14 @@
 
   const { items, propertyFilterProps, status, clearFilters } = useCollection({
     items: templates,
-    filtering: { fields: ['title', 'description'], defaultText: props.defaultText },
-    propertyFiltering: { properties },
+    filtering: { fields: ['title', 'description'] },
+    propertyFiltering: {
+      properties,
+      defaultQuery: {
+        tokens: props.defaultText ? [{ operator: ':', value: props.defaultText }] : [],
+        operation: 'and'
+      }
+    },
     url: true
   })
 

@@ -7,6 +7,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, ref } from 'vue'
 
   import type { QueryEditorRow, QueryEditorTable } from '../types'
@@ -35,6 +36,13 @@
   const selectedKeys = defineModel<string[]>('selectedKeys', { required: true })
 
   const rowFilter = ref('')
+  const searchEl = ref<InstanceType<typeof Input> | null>(null)
+  useShortcuts({
+    keys: '/',
+    label: 'Focus search',
+    element: () => (searchEl.value?.$el as HTMLElement | null | undefined) ?? null,
+    handler: () => searchEl.value?.focus()
+  })
   const filterPlaceholder = computed(() => {
     const names = (props.table?.columns ?? []).map((column) => column.name)
     return names.length ? `Filter by ${names.slice(0, 3).join(', ')}` : 'Filter rows'
@@ -74,8 +82,10 @@
     >
       <div class="flex min-w-0 flex-1 md:max-w-(--container-lg)">
         <Input
+          ref="searchEl"
           v-model="rowFilter"
           size="medium"
+          aria-keyshortcuts="/"
           class="w-full"
           :placeholder="filterPlaceholder"
           aria-label="Filter rows"

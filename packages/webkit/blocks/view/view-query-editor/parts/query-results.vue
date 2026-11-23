@@ -70,7 +70,9 @@
       class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
     >
       <span class="shrink-0 text-heading-2xs text-(--text-default)"> Results </span>
-      <div class="flex ms-(--spacing-sm) min-w-0 flex-1 md:max-w-(--container-sm)">
+      <div
+        class="flex min-w-36 grow basis-(--container-2xs) md:ms-(--spacing-sm) md:max-w-(--container-sm)"
+      >
         <Input
           v-model="resultSearch"
           size="medium"

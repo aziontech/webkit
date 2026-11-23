@@ -19,6 +19,7 @@
     pathCount: number
     allowing: boolean
     allowError: string
+    defaultReason: string
   }>()
 
   const emit = defineEmits<{
@@ -28,7 +29,7 @@
   const open = defineModel<boolean>('open', { default: false })
 
   const allowFailed = ref(props.allowError !== '')
-  const reason = ref('')
+  const reason = ref(props.defaultReason)
   const submitted = ref(false)
   const reasonMissing = computed(() => submitted.value && !reason.value.trim())
   const reasonFieldEl = ref<HTMLElement | null>(null)
@@ -120,7 +121,6 @@
                 <Textarea
                   v-model="reason"
                   :rows="4"
-                  placeholder="Search accepts quotes in free-text queries."
                 />
                 <Field.Description
                   >Kept with the allowed rules, so the next person knows why.</Field.Description

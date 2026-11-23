@@ -53,7 +53,7 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 ### E. Resource table — `Card`, `DataTable`, `DataTablePagination` (required)
 
-`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, density, wrap and stripes, while `<DataTablePagination v-bind="paginationProps" manual />` in its `footer` slot is the pagination footer; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `type: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
+`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, density, wrap and stripes, while `<DataTablePagination v-bind="paginationProps" manual />` in its `footer` slot is the pagination footer; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `type: 'action'`. Status comes right after Name, so a phone shows the column people scan without scrolling. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
 
 ### F. Cell presets — `TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTime` (optional)
 
@@ -146,7 +146,7 @@ Then delete `sampleResources` and its import (keep `sample.ts` only if you copie
 - **Filter:** placeholder and `aria-label` name what is filtered, e.g. "Filter resources".
 - **Properties:** the column header's words, e.g. "Name", "Author", "Status", "Domain".
 - **Icon buttons:** a verb or noun in sentence case, e.g. "Refresh", "Download CSV", "Row actions". Preferences title: "Table preferences".
-- **Column headers:** one or two words without punctuation, e.g. "Name", "ID", "Domains", "Status", "Last modified".
+- **Column headers:** one or two words without punctuation, e.g. "Name", "Status", "ID", "Domains", "Last modified".
 - **No match:** "No matching resources", then "No resource matches these filters.", and the action "Clear filters".
 - **Empty:** title states the fact, e.g. "No resources yet"; description is one sentence with what to do, e.g. "Create a resource to start serving traffic on your domains."
 - **Copy buttons:** name what they copy, e.g. "Copy resource ID", "Copy domain name".
@@ -297,9 +297,9 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
 
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 104 },
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
-    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 104 },
     { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
     { id: 'actions', type: 'action', hideable: false }
   ]

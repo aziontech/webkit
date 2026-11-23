@@ -1,6 +1,7 @@
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
+import NoMatch from '../../../../blocks/view/view-template-browser/variants/no-match.vue'
 import ViewTemplateBrowser, {
   type TemplateBrowserTemplate
 } from '../../../../blocks/view/view-template-browser/view-template-browser.vue'
@@ -22,6 +23,12 @@ describe('view/view-template-browser block', () => {
         .getByRole('link', { name: /Deploy/ })
         .getAttribute('href')
     ).toBe('/create/deploy?template=astro-blog')
+  })
+
+  it('shows the search that matches nothing as a token it can remove (NoMatch)', async () => {
+    const view = render(NoMatch)
+    const token = await waitFor(() => view.getByTestId('property-filter__token'))
+    expect(token.textContent).toContain('kubernetes')
   })
 
   it('groups the templates by category', () => {

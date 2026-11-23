@@ -433,7 +433,10 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
 
   const pathCrumbs = computed(() => [
     { label: rootName.value, href: '0' },
-    ...folderPath.value.map((segment, index) => ({ label: segment, href: String(index + 1) }))
+    ...folderPath.value.map((segment, index) => ({
+      label: segment.replace(/\/$/, ''),
+      href: String(index + 1)
+    }))
   ])
   const onCrumb = (event: MouseEvent, href: string) => {
     event.preventDefault()
@@ -611,7 +614,7 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
                   />
 
                   <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
-                    <div class="min-w-0">
+                    <div class="min-w-0 flex-1">
                       <Breadcrumb
                         :items="pathCrumbs"
                         class="w-full"
@@ -654,7 +657,11 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
               </template>
 
               <template #cell-bytes="{ row: item }">
-                <span class="text-(--text-muted)">{{ item.size }}</span>
+                <span
+                  dir="ltr"
+                  class="text-(--text-muted)"
+                  >{{ item.size }}</span
+                >
               </template>
 
               <template #cell-modifiedAt="{ row: item }">
@@ -969,7 +976,7 @@ export const listRows = (entries: FileBrowserEntry[], nested: boolean): FileRow[
       .map((entry) => toRow(kind, kind === 'folder' ? folderName(entry.name) : entry.name, entry))
       .sort((a, b) => a.name.localeCompare(b.name))
   const list: FileRow[] = [...ofKind('folder'), ...ofKind('file')]
-  if (nested) list.unshift(toRow('parent', '..'))
+  if (nested && list.length) list.unshift(toRow('parent', '..'))
   return list
 }
 
@@ -1097,11 +1104,13 @@ export const destinationProblem = (raw: string, path: string) => {
       v-else-if="item.kind === 'folder'"
       variant="link"
       :label="value"
+      dir="ltr"
       class="min-w-0"
       @click.stop="(event: MouseEvent) => emit('open', event, item)"
     />
     <span
       v-else
+      dir="ltr"
       class="truncate"
       >{{ value }}</span
     >
@@ -1279,7 +1288,7 @@ export const destinationProblem = (raw: string, path: string) => {
       <div class="flex w-full flex-col gap-(--spacing-sm)">
         <StorageTitle :name="rootName" />
         <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
-          <div class="min-w-0">
+          <div class="min-w-0 flex-1">
             <Breadcrumb
               :items="crumbs"
               class="w-full"

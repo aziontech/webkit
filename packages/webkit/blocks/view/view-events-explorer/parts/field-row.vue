@@ -4,6 +4,7 @@
   import type { FilterMenuValue } from '@aziontech/webkit/filter-menu'
   import Item from '@aziontech/webkit/item-root'
   import Popover from '@aziontech/webkit/popover'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import { useLocale } from '@aziontech/webkit/use-locale'
 
   import {
@@ -27,9 +28,11 @@
     events: EventRow[]
     /** The values of the field applied as filters. */
     applied: FilterMenuValue[]
+    /** Whether the count is known: the events are loading, or failed to load. */
+    countState?: 'ready' | 'loading' | 'unknown'
   }
 
-  const props = defineProps<FieldRowProps>()
+  const props = withDefaults(defineProps<FieldRowProps>(), { countState: 'ready' })
 
   const emit = defineEmits<{
     'toggle-column': []
@@ -73,8 +76,27 @@
       </Field>
     </div>
 
+    <span
+      v-if="countState === 'loading'"
+      class="shrink-0 px-(--spacing-2xs)"
+      data-testid="field-row__count-loading"
+    >
+      <Skeleton
+        width="1.5rem"
+        height="0.75rem"
+      />
+    </span>
+
+    <span
+      v-else-if="countState === 'unknown'"
+      class="shrink-0 px-(--spacing-2xs) text-label-code-sm text-(--text-muted)"
+      :aria-label="`${field.label} values unknown`"
+    >
+      –
+    </span>
+
     <Popover
-      v-if="filterable && count"
+      v-else-if="filterable && count"
       side="end"
       align="start"
     >

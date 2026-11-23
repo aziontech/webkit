@@ -294,6 +294,7 @@
                 :categories="eventFieldCategories"
                 :events="matchedEvents"
                 :shown-columns="shownColumns"
+                :count-state="loading ? 'loading' : error ? 'unknown' : 'ready'"
                 @toggle-column="toggleColumn"
               />
             </div>
@@ -421,7 +422,11 @@
         <PanelHeader class="w-full">
           <DrawerTitle>Event</DrawerTitle>
         </PanelHeader>
-        <div class="min-h-0 flex-1 overflow-auto">
+        <div
+          class="min-h-0 flex-1 overflow-auto outline-none"
+          tabindex="-1"
+          data-autofocus
+        >
           <EventDocument
             v-if="documentEvent"
             v-model:trace-view="traceView"

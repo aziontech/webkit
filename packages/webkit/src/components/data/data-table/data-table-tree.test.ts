@@ -176,10 +176,10 @@ describe('DataTable', () => {
         openKeys: ['a']
       })
       await waitFor(() => expect(ids()).toEqual(['a', 'a1', 'a2', 'b']))
-      const boxes = view.getAllByRole('checkbox', { name: 'Select row' })
+      const boxes = view.getAllByRole('checkbox', { name: /^Select row / })
       await fireEvent.click(boxes[0])
       expect(selection.value).toEqual(['a'])
-      await fireEvent.click(view.getAllByRole('checkbox', { name: 'Select row' })[2])
+      await fireEvent.click(view.getAllByRole('checkbox', { name: /^Select row / })[2])
       expect(selection.value).toEqual(['a', 'a2'])
       await waitFor(() => expect(view.getByTestId('count').textContent).toBe('2'))
       expect(selectedCounts.at(-1)).toBe(2)
@@ -202,7 +202,7 @@ describe('DataTable', () => {
 
     it('leaves keys typed inside a cell control alone', async () => {
       const { view } = mountTree({ selectable: true })
-      const box = view.getAllByRole('checkbox', { name: 'Select row' })[0]
+      const box = view.getAllByRole('checkbox', { name: /^Select row / })[0]
       box.focus()
       await fireEvent.keyDown(box, { key: 'ArrowRight' })
       expect(ids()).toEqual(['a', 'b'])

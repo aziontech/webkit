@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-rule-list/view-rule-list.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-rule-list")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -171,7 +171,7 @@ Then delete `sample.ts` and its import.
 - Empty: `subject="firewall"` and `rules` `[]`: the Request phase shows its `EmptyState`.
 - Loading: `loading`: skeleton rows in each phase, the search and Add Rule disabled.
 - LoadError: `error` set: a danger `Alert` with Retry replaces the phases.
-- EditRule: the list composed with `edit/edit-rule-builder`. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
+- EditRule: the list composed with `edit/edit-rule-builder`, opening on the builder for Docs rewrite. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
 
 ## Related
 
@@ -208,6 +208,7 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import { toast } from '@aziontech/webkit/toast'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, reactive, ref, watch } from 'vue'
 
   import { useNarrowViewport } from './composables/use-narrow-viewport'
@@ -332,6 +333,14 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
   const loading = computed(() => props.loading)
   const saving = computed(() => props.saving)
   const search = ref(props.defaultSearch)
+  const searchEl = ref<InstanceType<typeof Input> | null>(null)
+  useShortcuts({
+    keys: '/',
+    label: 'Focus search',
+    element: () => (searchEl.value?.$el as HTMLElement | null | undefined) ?? null,
+    when: () => !props.loading && !loadFailed.value,
+    handler: () => searchEl.value?.focus()
+  })
   const searching = computed(() => search.value.trim().length > 0)
   const matches = (item: RuleListRule) => matchesSearch(item, search.value)
 
@@ -460,9 +469,11 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
         <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-sm)">
           <div class="min-w-36 grow basis-(--container-2xs)">
             <Input
+              ref="searchEl"
               v-model="search"
               size="medium"
               placeholder="Search rules"
+              aria-keyshortcuts="/"
               aria-label="Search rules"
               class="w-full"
               :disabled="loading || loadFailed"

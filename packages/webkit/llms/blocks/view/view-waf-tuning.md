@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-waf-tuning/view-waf-tuning.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-waf-tuning")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `use-shortcuts`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -40,7 +40,7 @@ A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours,
 
 ### C. Matches table — `Card`, `DataTable`, `TableCellTags`, `EmptyState`, `Alert` (required)
 
-A flush `Card` with a data-driven `DataTable`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells are `TableCellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
+A flush `Card` with a data-driven `DataTable`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Hits (tabular, grouped thousands; second, so a phone shows it without scrolling), Threat, Top IP addresses and Top paths (code font), Top countries; list cells are `TableCellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
 
 ### D. Allow dialog — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
 
@@ -62,6 +62,7 @@ The block takes its matches through props and emits every action; it fetches not
 | `error`               | `string`                | Why the matches failed to load, shown in the danger `Alert` with Retry that replaces the table.                                                                |
 | `defaultSelectedKeys` | `string[]`              | Rule ids checked when the block opens.                                                                                                                         |
 | `defaultOpen`         | `boolean`               | Opens the allow dialog on the checked rules.                                                                                                                   |
+| `defaultReason`       | `string`                | The reason the allow dialog opens with, as a failed submit keeps it.                                                                                           |
 | `allowing`            | `boolean`               | The allow request is in flight: the dialog locks and Allow rules spins. When it turns off with no `allowError`, the dialog closes and the success toast shows. |
 | `allowError`          | `string`                | Why the allowed rules were not created, shown at the top of the dialog; the submit reads Try again.                                                            |
 
@@ -143,7 +144,7 @@ Then delete `sample.ts` and its import.
 
 - Default: the matches passed in `matches` (the sample when it is left out), minimum 100 hits.
 - Allow: `defaultSelectedKeys` checks two rules and `defaultOpen` opens the dialog.
-- AllowError: the same dialog with `allowError` set: the failure `Alert` and Try again.
+- AllowError: the same dialog with `allowError` set and the submitted reason kept (`defaultReason`): the failure `Alert` and Try again.
 - Empty: `matches` is `[]`: no match yet, no settings.
 - Loading: `loading`: settings disabled, skeleton rows.
 - LoadError: `error` set: a danger `Alert` with Retry takes the table's place and Export to CSV is disabled.
@@ -185,6 +186,7 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
   import Tooltip from '@aziontech/webkit/tooltip'
   import { matchesText } from '@aziontech/webkit/use-collection'
   import { useLocale } from '@aziontech/webkit/use-locale'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, ref, watch } from 'vue'
 
   import AllowDialog from './parts/allow-dialog.vue'
@@ -228,6 +230,8 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
     defaultSelectedKeys?: string[]
     /** Opens the allow dialog on the checked rules when the block opens. */
     defaultOpen?: boolean
+    /** The reason the allow dialog opens with, as a failed submit keeps it. */
+    defaultReason?: string
     /** The allow request is in flight: the dialog locks and Allow rules spins. */
     allowing?: boolean
     /** Why the allowed rules were not created, shown at the top of the dialog. */
@@ -240,6 +244,7 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
     error: '',
     defaultSelectedKeys: () => [],
     defaultOpen: false,
+    defaultReason: '',
     allowing: false,
     allowError: ''
   })
@@ -266,8 +271,8 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
       principal: true,
       hideable: false
     },
-    { accessorKey: 'threat', header: 'Threat', grow: 2 },
     { accessorKey: 'hits', header: 'Hits', sortable: true, minWidth: 80 },
+    { accessorKey: 'threat', header: 'Threat', grow: 2 },
     { accessorKey: 'ips', header: 'Top IP addresses', grow: 3 },
     { accessorKey: 'countries', header: 'Top countries', grow: 2 },
     { accessorKey: 'paths', header: 'Top paths', grow: 3 }
@@ -282,6 +287,14 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
 
   const threshold = ref('100')
   const search = ref('')
+  const searchEl = ref<InstanceType<typeof Input> | null>(null)
+  useShortcuts({
+    keys: '/',
+    label: 'Focus search',
+    element: () => (searchEl.value?.$el as HTMLElement | null | undefined) ?? null,
+    when: () => !props.loading,
+    handler: () => searchEl.value?.focus()
+  })
   const selectedKeys = ref<string[]>([...props.defaultSelectedKeys])
   const sorting = ref([{ id: 'hits', desc: true }])
 
@@ -418,9 +431,11 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
           </div>
           <div class="min-w-36 grow basis-(--container-2xs)">
             <Input
+              ref="searchEl"
               v-model="search"
               size="medium"
               placeholder="Search by rule, IP, country or path"
+              aria-keyshortcuts="/"
               aria-label="Search matched requests"
               class="w-full"
               :disabled="loading"
@@ -538,6 +553,7 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
       :path-count="pathCount"
       :allowing="allowing"
       :allow-error="allowError"
+      :default-reason="defaultReason"
       @allow="allow"
     />
   </div>
@@ -617,6 +633,7 @@ export const sampleMatches: WafTuningMatch[] = [
     pathCount: number
     allowing: boolean
     allowError: string
+    defaultReason: string
   }>()
 
   const emit = defineEmits<{
@@ -626,7 +643,7 @@ export const sampleMatches: WafTuningMatch[] = [
   const open = defineModel<boolean>('open', { default: false })
 
   const allowFailed = ref(props.allowError !== '')
-  const reason = ref('')
+  const reason = ref(props.defaultReason)
   const submitted = ref(false)
   const reasonMissing = computed(() => submitted.value && !reason.value.trim())
   const reasonFieldEl = ref<HTMLElement | null>(null)
@@ -718,7 +735,6 @@ export const sampleMatches: WafTuningMatch[] = [
                 <Textarea
                   v-model="reason"
                   :rows="4"
-                  placeholder="Search accepts quotes in free-text queries."
                 />
                 <Field.Description
                   >Kept with the allowed rules, so the next person knows why.</Field.Description

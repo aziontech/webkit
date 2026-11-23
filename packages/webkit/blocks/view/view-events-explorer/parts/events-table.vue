@@ -59,6 +59,9 @@
 
   const tableEl = ref<TableExposed<EventRow> | null>(null)
 
+  const OPEN_ROW_CLASS =
+    'flex min-h-0 flex-1 [&_[role=row]:has([data-open-event])]:[--table-row-bg:var(--bg-selected)]!'
+
   const STATUS_CELL_CLASS =
     'min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) ' +
     'data-[severity=danger]:text-(--danger-foreground) data-[severity=warning]:text-(--warning-foreground)'
@@ -71,7 +74,7 @@
 
 <template>
   <section class="flex min-h-0 min-w-0 flex-1 flex-col">
-    <div class="flex min-h-0 flex-1">
+    <div :class="OPEN_ROW_CLASS">
       <DataTable
         ref="tableEl"
         :data="events"
@@ -96,6 +99,7 @@
             size="small"
             :aria-label="`Open event ${row.id}`"
             :aria-expanded="row.id === selectedKey"
+            :data-open-event="row.id === selectedKey || undefined"
             @click.stop="emit('open', $event, row)"
           />
         </template>

@@ -14,6 +14,8 @@
     addRule,
     applyRule
   } = useRuleEditing()
+
+  openRule(rules.value.find((rule) => rule.name === 'Docs rewrite') ?? null)
 </script>
 
 <template>

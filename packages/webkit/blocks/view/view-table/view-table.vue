@@ -99,9 +99,9 @@
 
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 104 },
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
-    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 104 },
     { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
     { id: 'actions', type: 'action', hideable: false }
   ]

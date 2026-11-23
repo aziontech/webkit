@@ -73,7 +73,7 @@ An "Install" `h3` ("Install on another application" once installed somewhere) ov
 
 ### K. Solution page — `Card`, `Select`, `Field`, `KeyValueList`, `DocProse` (optional)
 
-The drawer's content as a page, for the integration's own URL (the variant renders `parts/solution-page.vue`, which adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `TableCellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValueList`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
+The drawer's content as a page, for the integration's own URL (the variant renders `parts/solution-page.vue`, which adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (what it does and what it needs, under section headings smaller than the page title), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `TableCellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValueList`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
 
 ### L. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
 
@@ -85,7 +85,7 @@ While `loading` is set, the Featured row and the heading of All integrations giv
 
 ### Install toast — through `toast`
 
-Raised through `toast` with one id for the install, so progress turns into the outcome in place. Progress is `toast.loading` ("Installing Rate Guard on storefront…", "It keeps running if you close this panel."). Success is `toast.success`, closable, with Configure and Open application. Failure is `toast.error` with `duration: 0`, closable, with Edit (reopens the drawer with the same choice) and Reinstall. Leaving the page dismisses it. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Raised through `toast` with one id for the install, so progress turns into the outcome in place, and only while the drawer is closed: with the drawer open, the inline `Alert` and the Install button carry the run, so no toast covers the form; closing the drawer raises the toast for the run (an outcome once). Progress is `toast.loading` ("Installing Rate Guard on storefront…", "It keeps running while you work elsewhere."). Success is `toast.success`, closable, with Configure and Open application. Failure is `toast.error` with `duration: 0`, closable, with Edit (reopens the drawer with the same choice) and Reinstall. Leaving the page dismisses it. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -99,7 +99,7 @@ The block takes its records through props and emits every action; it fetches not
 | `installing`           | `boolean`                  | The install request is in flight: Install spins, the field locks and the progress toast shows.               |
 | `error`                | `string`                   | Why the last install failed: the danger `Alert` with Reinstall and the permanent failure toast.              |
 | `installedApplication` | `string`                   | The application the last install succeeded on: the success `Alert`, the Installed tag and the success toast. |
-| `defaultText`          | `string`                   | Search text the filter starts with.                                                                          |
+| `defaultText`          | `string`                   | Search text the filter starts with, shown as a free-text token.                                              |
 | `defaultIntegration`   | `string`                   | Id of the integration whose drawer starts open.                                                              |
 | `defaultApplication`   | `string`                   | Application the install field starts with.                                                                   |
 
@@ -297,7 +297,7 @@ Each variant is the same screen in another state: `get_block("view/view-marketpl
     error?: string
     /** The application the last install succeeded on; the drawer and a toast confirm it. */
     installedApplication?: string
-    /** Search text the filter starts with. */
+    /** Search text the filter starts with, shown as a free-text token. */
     defaultText?: string
     /** Id of the integration whose drawer starts open. */
     defaultIntegration?: string
@@ -377,8 +377,14 @@ Each variant is the same screen in another state: `get_block("view/view-marketpl
 
   const { items, propertyFilterProps, status, filtersActive, clearFilters } = useCollection({
     items: () => catalog.value.map(withStatus),
-    filtering: { fields: ['name', 'vendor', 'description'], defaultText: props.defaultText },
-    propertyFiltering: { properties },
+    filtering: { fields: ['name', 'vendor', 'description'] },
+    propertyFiltering: {
+      properties,
+      defaultQuery: {
+        tokens: props.defaultText ? [{ operator: ':', value: props.defaultText }] : [],
+        operation: 'and'
+      }
+    },
     url: true
   })
 
@@ -427,15 +433,51 @@ Each variant is the same screen in another state: `get_block("view/view-marketpl
     emit('install', event, { integration, application: form.application })
   }
 
+  let announced = false
+  const announce = () => {
+    const item = selected.value
+    if (!item || detailOpen.value || run.state === 'idle') {
+      toast.dismiss(INSTALL_TOAST)
+      return
+    }
+    if (announced && run.state !== 'running') return
+    announced = run.state !== 'running'
+    const { application, reason } = run
+    if (run.state === 'running')
+      toast.loading(`Installing ${item.name} on ${application}…`, {
+        description: 'It keeps running while you work elsewhere.',
+        id: INSTALL_TOAST
+      })
+    else if (run.state === 'succeeded')
+      toast.success(`${item.name} is installed on ${application}.`, {
+        description: 'It runs from the next request to the application.',
+        id: INSTALL_TOAST,
+        closable: true,
+        actions: [
+          { label: 'Configure', onClick: configure },
+          { label: 'Open application', onClick: () => toast.dismiss(INSTALL_TOAST) }
+        ]
+      })
+    else
+      toast.error(`${item.name} wasn't installed on ${application}.`, {
+        description: reason,
+        id: INSTALL_TOAST,
+        duration: 0,
+        closable: true,
+        actions: [
+          { label: 'Edit', onClick: configure },
+          { label: 'Reinstall', onClick: (event: MouseEvent) => install(event) }
+        ]
+      })
+  }
+
   const showRunning = () => {
     const item = selected.value
     if (!item) return
     const application = form.application
+    announced = false
     Object.assign(run, { state: 'running', application, reason: '' })
-    toast.loading(`Installing ${item.name} on ${application}…`, {
-      description: 'It keeps running if you close this panel.',
-      id: INSTALL_TOAST
-    })
+    announce()
   }
 
   const showSucceeded = (application: string) => {
@@ -445,16 +487,9 @@ Each variant is the same screen in another state: `get_block("view/view-marketpl
       item.installedOn = [...item.installedOn, application]
     form.application = ''
     showErrors.value = false
+    announced = false
     Object.assign(run, { state: 'succeeded', application, reason: '' })
-    toast.success(`${item.name} is installed on ${application}.`, {
-      description: 'It runs from the next request to the application.',
-      id: INSTALL_TOAST,
-      closable: true,
-      actions: [
-        { label: 'Configure', onClick: configure },
-        { label: 'Open application', onClick: () => toast.dismiss(INSTALL_TOAST) }
-      ]
-    })
+    announce()
   }
 
   const showFailed = (reason: string) => {
@@ -462,17 +497,9 @@ Each variant is the same screen in another state: `get_block("view/view-marketpl
     if (!item) return
     const application = run.application || form.application
     form.application = application
+    announced = false
     Object.assign(run, { state: 'failed', application, reason })
-    toast.error(`${item.name} wasn't installed on ${application}.`, {
-      description: reason,
-      id: INSTALL_TOAST,
-      duration: 0,
-      closable: true,
-      actions: [
-        { label: 'Edit', onClick: configure },
-        { label: 'Reinstall', onClick: (event: MouseEvent) => install(event) }
-      ]
-    })
+    announce()
   }
 
   const reinstall = (event: MouseEvent) => {
@@ -480,6 +507,7 @@ Each variant is the same screen in another state: `get_block("view/view-marketpl
     install(event)
   }
 
+  watch(detailOpen, announce)
   watch(
     () => props.installing,
     (next) => {
@@ -1387,7 +1415,6 @@ export const sampleSolutionApplications = ['storefront', 'checkout', 'docs', 'ap
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DataTable from '@aziontech/webkit/data-table'
-  import DocProse from '@aziontech/webkit/doc-prose'
   import Field from '@aziontech/webkit/field'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import Link from '@aziontech/webkit/link'
@@ -1480,6 +1507,10 @@ export const sampleSolutionApplications = ['storefront', 'checkout', 'docs', 'ap
     { id: 'update', header: '', minWidth: 120, hideable: false }
   ]
 
+  const HEADING_CLASS = 'm-0 text-heading-2xs text-(--text-default)'
+  const TEXT_CLASS = 'm-0 text-body-md text-(--text-default)'
+  const CODE_CLASS = 'text-label-code-sm text-(--text-default)'
+
   onBeforeUnmount(() => {
     clearTimeout(timer)
     toast.dismiss(RUN_TOAST)
@@ -1539,41 +1570,45 @@ export const sampleSolutionApplications = ['storefront', 'checkout', 'docs', 'ap
           </Tabs.List>
           <div class="relative isolate w-full">
             <Tabs.Content value="overview">
-              <div>
-                <DocProse>
-                  <p>{{ integration.description }}</p>
-                  <p>
-                    When the requests per second pass the capacity you set, new visitors see a queue
-                    page with their place and the estimated wait. Visitors already inside are never
-                    queued.
-                  </p>
-                  <h2>What it needs</h2>
-                  <ul>
-                    <li>Read the visitor's session cookie.</li>
-                    <li>Answer requests with the queue page.</li>
+              <div class="flex max-w-(--container-md) flex-col gap-(--spacing-md)">
+                <p :class="TEXT_CLASS">
+                  When the requests per second pass the capacity you set, new visitors see a queue
+                  page with their place and the estimated wait. Visitors already inside are never
+                  queued.
+                </p>
+                <section class="flex flex-col gap-(--spacing-xs)">
+                  <h2 :class="HEADING_CLASS">What it needs</h2>
+                  <ul class="m-0 flex list-disc flex-col gap-(--spacing-2xs) ps-(--spacing-lg)">
+                    <li :class="TEXT_CLASS">Read the visitor's session cookie.</li>
+                    <li :class="TEXT_CLASS">Answer requests with the queue page.</li>
                   </ul>
-                </DocProse>
+                </section>
               </div>
             </Tabs.Content>
             <Tabs.Content value="usage">
-              <div>
-                <DocProse>
-                  <h2>Set the capacity</h2>
-                  <p>
-                    Open Configure on the application and set <code>capacity</code> to the requests
-                    per second your origin serves comfortably. Start at 80 percent of your measured
-                    peak.
+              <div class="flex max-w-(--container-md) flex-col gap-(--spacing-md)">
+                <section class="flex flex-col gap-(--spacing-xs)">
+                  <h2 :class="HEADING_CLASS">Set the capacity</h2>
+                  <p :class="TEXT_CLASS">
+                    Open Configure on the application and set
+                    <code :class="CODE_CLASS">capacity</code> to the requests per second your origin
+                    serves comfortably. Start at 80 percent of your measured peak.
                   </p>
-                  <h2>Let people in faster</h2>
-                  <p>
-                    Lower <code>session_minutes</code> so visitors who left free their place sooner.
+                </section>
+                <section class="flex flex-col gap-(--spacing-xs)">
+                  <h2 :class="HEADING_CLASS">Let people in faster</h2>
+                  <p :class="TEXT_CLASS">
+                    Lower <code :class="CODE_CLASS">session_minutes</code> so visitors who left free
+                    their place sooner.
                   </p>
-                  <h2>Test it</h2>
-                  <p>
+                </section>
+                <section class="flex flex-col gap-(--spacing-xs)">
+                  <h2 :class="HEADING_CLASS">Test it</h2>
+                  <p :class="TEXT_CLASS">
                     Set the capacity to 1 on a preview environment and open the application in two
                     browsers; the second one sees the queue page.
                   </p>
-                </DocProse>
+                </section>
               </div>
             </Tabs.Content>
             <Tabs.Content value="changelog">
