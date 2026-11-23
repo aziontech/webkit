@@ -273,7 +273,8 @@
     <div
       :style="fill ? undefined : { '--code-editor-height': height }"
       :data-fill="fill || null"
-      class="relative flex h-(--code-editor-height) min-h-0 min-w-0 flex-col data-[fill]:h-auto data-[fill]:flex-1 @lg/code-editor:flex-row"
+      :data-diff="(diff && !fill) || null"
+      class="relative flex h-(--code-editor-height) min-h-0 min-w-0 flex-col data-[fill]:h-auto data-[fill]:flex-1 @lg/code-editor:flex-row data-[diff]:h-[calc(var(--code-editor-height)*2)] @lg/code-editor:data-[diff]:h-(--code-editor-height)"
       :data-testid="`${testId}__area`"
     >
       <div

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { useElementSize } from '@vueuse/core'
   import { computed, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
@@ -163,10 +164,14 @@
     resolveFileIcon(activeTab.value?.language, activeTab.value?.fileIcon)
   )
 
+  const { width: contentWidth } = useElementSize(contentEl)
+  const SPLIT_MIN_WIDTH = 640
   const { isSplit, showDiffGutter, displayLines, splitRows } = useCodeBlockLines(
     activeTab,
     isOutput,
-    () => props.diffView === 'split'
+    () =>
+      props.diffView === 'split' &&
+      (contentWidth.value === 0 || contentWidth.value >= SPLIT_MIN_WIDTH)
   )
 
   const isSingleLine = computed(() => displayLines.value.length === 1)

@@ -6,6 +6,8 @@ import type { Component } from 'vue'
 import { defineComponent, h, nextTick } from 'vue'
 
 import ChartDefault from '../../examples/chart/default.vue'
+import CodeBlockDiff from '../../examples/code-block/computed-diff.vue'
+import CodeEditorDiff from '../../examples/code-editor/diff.vue'
 import MapView from '../../examples/map-chart/view.vue'
 import SparkCards from '../../examples/spark-chart/cards.vue'
 import TrackerDefault from '../../examples/tracker/default.vue'
@@ -85,4 +87,29 @@ describe('content stays readable at phone and desktop widths', () => {
       expect(severities).toContain('warning')
     }
   )
+
+  it.each([
+    [390, 0],
+    [1280, 1]
+  ])('draws a split diff side by side only when it fits (%ipx)', async (width, splits) => {
+    const { container } = inBox(CodeBlockDiff as Component, width)
+    await settle()
+    await settle()
+    expect(container.querySelectorAll('[data-testid="code-block__split"]').length).toBe(splits)
+  })
+
+  it('gives each stacked code editor diff pane the full editor height at 390px', async () => {
+    const { container } = inBox(CodeEditorDiff as Component, 390)
+    await settle()
+    await settle()
+    const area = container.querySelector<HTMLElement>('[data-testid="code-editor__area"]')!
+    const height = Number.parseFloat(
+      getComputedStyle(area).getPropertyValue('--code-editor-height')
+    )
+    const panes = Array.from(area.children).filter((el) => el.getBoundingClientRect().height > 0)
+    expect(panes.length).toBe(2)
+    for (const pane of panes) {
+      expect(pane.getBoundingClientRect().height).toBeGreaterThanOrEqual(height * 16 - 1)
+    }
+  })
 })
