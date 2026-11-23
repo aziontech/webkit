@@ -49,9 +49,12 @@
     const buttons = pagerEl.value?.querySelectorAll<HTMLButtonElement>('button')
     if (!buttons?.length || !pagerEl.value?.contains(document.activeElement)) return
     void nextTick(() => {
-      const active = document.activeElement as HTMLButtonElement | null
-      if (active && active !== document.body && !active.disabled) return
-      buttons[step < 0 ? buttons.length - 1 : 0]?.focus()
+      const active = document.activeElement
+      const lost =
+        !active ||
+        active === document.body ||
+        (active instanceof HTMLButtonElement && active.disabled)
+      if (lost) buttons[step < 0 ? buttons.length - 1 : 0]?.focus()
     })
   }
 
