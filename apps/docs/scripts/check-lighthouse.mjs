@@ -25,7 +25,21 @@ const BUDGET = { accessibility: 100, lcp: 2500, cls: 0.1, tbt: 200 }
 const PAGES = [
   { name: 'docs-home', site: 'docs', path: '/', preset: 'mobile' },
   { name: 'docs-button', site: 'docs', path: '/components/button', preset: 'mobile' },
-  { name: 'demos-resources', site: 'demos', path: '/resources', preset: 'desktop' }
+  { name: 'demos-resources', site: 'demos', path: '/resources', preset: 'desktop' },
+  { name: 'docs-data-table', site: 'docs', path: '/components/data-table', preset: 'desktop' },
+  {
+    name: 'frame-dashboard-analytics',
+    site: 'docs',
+    path: '/frame/block/dashboard/dashboard-analytics/default',
+    preset: 'desktop'
+  },
+  {
+    name: 'frame-example-chart',
+    site: 'docs',
+    path: '/frame/example/chart/default',
+    preset: 'mobile',
+    budget: { lcp: 4500 }
+  }
 ]
 
 function certificate() {
@@ -155,6 +169,7 @@ for (const target of PAGES) {
       tbt: report.audits['total-blocking-time'].numericValue
     })
   }
+  const budget = { ...BUDGET, ...target.budget }
   const result = {
     accessibility: Math.min(...runs.map((run) => run.accessibility)),
     lcp: Math.round(median(runs.map((run) => run.lcp))),
@@ -164,13 +179,13 @@ for (const target of PAGES) {
   console.log(
     `${target.name} (${target.preset}, median of ${RUNS}): accessibility ${result.accessibility}, LCP ${result.lcp} ms, CLS ${result.cls}, TBT ${result.tbt} ms`
   )
-  if (result.accessibility < BUDGET.accessibility)
+  if (result.accessibility < budget.accessibility)
     failures.push(
       `${target.name}: accessibility ${result.accessibility}: ${[...audits].join(', ')}`
     )
-  if (result.lcp > BUDGET.lcp) failures.push(`${target.name}: LCP ${result.lcp} ms > ${BUDGET.lcp}`)
-  if (result.cls > BUDGET.cls) failures.push(`${target.name}: CLS ${result.cls} > ${BUDGET.cls}`)
-  if (result.tbt > BUDGET.tbt) failures.push(`${target.name}: TBT ${result.tbt} ms > ${BUDGET.tbt}`)
+  if (result.lcp > budget.lcp) failures.push(`${target.name}: LCP ${result.lcp} ms > ${budget.lcp}`)
+  if (result.cls > budget.cls) failures.push(`${target.name}: CLS ${result.cls} > ${budget.cls}`)
+  if (result.tbt > budget.tbt) failures.push(`${target.name}: TBT ${result.tbt} ms > ${budget.tbt}`)
 }
 
 await browser.close()
