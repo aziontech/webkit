@@ -60,23 +60,29 @@ const focusFirstError = (errors: FieldProblems) =>
     if (id) document.getElementById(`data-stream-${id}`)?.focus()
   })
 
-export function provideDataStream(): DataStreamContext {
-  const form = reactive(structuredClone(sampleDataStream))
-  const saving = ref(false)
-  const leave = useUnsavedChanges(() => form as DataStreamRecord, {
+const settled = (saving: Ref<boolean>) =>
+  new Promise<void>((resolve) => {
+    if (!saving.value) return resolve()
+    const stop = watch(saving, (next) => {
+      if (next) return
+      stop()
+      resolve()
+    })
+  })
+
+const guardDataStream = (form: DataStreamRecord, saving: Ref<boolean>, save: () => void) =>
+  useUnsavedChanges(() => form, {
     onDiscard: (baseline) => Object.assign(form, baseline),
     onSave: () => {
       save()
-      return new Promise<void>((resolve) => {
-        if (!saving.value) return resolve()
-        const stop = watch(saving, (next) => {
-          if (next) return
-          stop()
-          resolve()
-        })
-      })
+      return settled(saving)
     }
   })
+
+export function provideDataStream(): DataStreamContext {
+  const form = reactive(structuredClone(sampleDataStream))
+  const saving = ref(false)
+  const leave = guardDataStream(form, saving, () => save())
   const errors = reactive<FieldProblems>({})
   const destinationError = ref('')
 

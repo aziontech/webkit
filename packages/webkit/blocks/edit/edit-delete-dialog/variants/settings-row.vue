@@ -39,13 +39,16 @@
     />
 
     <Item variant="outline">
-      <Item.Content class="[&>[data-slot=item-description]]:line-clamp-none">
+      <Item.Content>
         <Item.Title>Delete resource</Item.Title>
-        <Item.Description>
+        <p
+          data-slot="item-description"
+          class="text-balance text-body-sm text-(--text-muted)"
+        >
           Permanently removes
           <span class="text-label-code-sm">{{ resource.name }}</span> and all associated settings.
           This cannot be undone.
-        </Item.Description>
+        </p>
       </Item.Content>
 
       <Item.Actions>

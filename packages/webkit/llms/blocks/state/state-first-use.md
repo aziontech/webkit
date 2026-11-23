@@ -281,15 +281,17 @@ Each variant is the same screen in another state: `get_block("state/state-first-
                   height="2rem"
                 />
               </Item.Media>
-              <Item.Content class="gap-(--spacing-2xs)">
-                <Skeleton
-                  width="8rem"
-                  height="0.875rem"
-                />
-                <Skeleton
-                  width="16rem"
-                  height="0.75rem"
-                />
+              <Item.Content>
+                <div class="flex flex-col gap-(--spacing-2xs)">
+                  <Skeleton
+                    width="8rem"
+                    height="0.875rem"
+                  />
+                  <Skeleton
+                    width="16rem"
+                    height="0.75rem"
+                  />
+                </div>
               </Item.Content>
               <Item.Actions>
                 <Skeleton

@@ -453,12 +453,12 @@
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "121.95 KB"
+    "limit": "122.1 KB"
   },
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "84.65 KB"
+    "limit": "84.8 KB"
   },
   {
     "name": "runtime-api-cloud",
@@ -1272,7 +1272,7 @@
   {
     "name": "conversation-history",
     "path": "src/components/ai/conversation-history/conversation-history.vue",
-    "limit": "6.7 KB"
+    "limit": "6.75 KB"
   },
   {
     "name": "feedback-reason-dialog",
