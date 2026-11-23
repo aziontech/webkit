@@ -310,15 +310,16 @@ describe('edit/edit-resource leave guard', () => {
     ['Protocols', Protocols]
   ])('%s warns on reload once the form holds edits', async (_name, variant) => {
     const view = render(variant)
-    const field = await waitFor(() => {
-      const input = view.container.querySelector<HTMLInputElement>(
-        'input:not([type]):not([disabled]), input[type="text"]:not([disabled])'
+    const control = await waitFor(() => {
+      const found = view.container.querySelector<HTMLElement>(
+        'input:not([type]):not([disabled]), input[type="text"]:not([disabled]), [role="switch"]:not([disabled])'
       )
-      expect(input).not.toBeNull()
-      return input!
+      expect(found).not.toBeNull()
+      return found!
     })
     expect(reloadBlocked()).toBe(false)
-    await fireEvent.update(field, `${field.value}x`)
+    if (control instanceof HTMLInputElement) await fireEvent.update(control, `${control.value}x`)
+    else await fireEvent.click(control)
     await waitFor(() => expect(reloadBlocked()).toBe(true))
     view.unmount()
   })

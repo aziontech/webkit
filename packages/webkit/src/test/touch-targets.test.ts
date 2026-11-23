@@ -1,7 +1,7 @@
 import './reflow.css'
 
 import { fireEvent, render } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { commands, page } from 'vitest/browser'
 import { h, nextTick } from 'vue'
 
@@ -102,8 +102,12 @@ describe('tap targets on a coarse pointer (styled)', () => {
       const view = await mount(SettingsGroupDefault)
       const link = byTestId(view.container as HTMLElement, 'settings-group__copy-link')[0]!
       const hint = link.parentElement!.querySelector<HTMLElement>('[data-testid="hint__trigger"]')!
-      expect(hitSpan(link, 'y')).toBeGreaterThanOrEqual(44)
-      expect(hitSpan(link, 'x')).toBeGreaterThanOrEqual(44)
+      const target = link.querySelector<HTMLElement>('[data-slot="touch-target"]')!
+      await vi.waitFor(() => {
+        const box = target.getBoundingClientRect()
+        expect(box.height).toBeGreaterThanOrEqual(44)
+        expect(box.width).toBeGreaterThanOrEqual(44)
+      })
       const linkBox = link.getBoundingClientRect()
       const hintBox = hint.getBoundingClientRect()
       const linkCentre = linkBox.left + linkBox.width / 2

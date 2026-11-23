@@ -73,7 +73,7 @@
     'absolute -start-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ' +
     'ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
     'group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 [@media(hover:none)]:relative [@media(hover:none)]:order-last [@media(hover:none)]:opacity-100 ' +
-    '[@media(hover:none)]:ms-(--spacing-xl) ' +
+    '[@media(hover:none)]:start-0 [@media(hover:none)]:z-1 [@media(hover:none)]:ms-(--spacing-xl) ' +
     'motion-reduce:transition-none'
 
   const TRIGGER_CLASS =
