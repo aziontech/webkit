@@ -46,14 +46,15 @@
 
   const COPY_CLASS =
     'text-(--text-default) [&_:is(p,ul,ol)+:is(p,ul,ol)]:pt-(--spacing-sm) [&_ul]:list-disc [&_ul]:ps-(--spacing-lg) [&_ol]:list-decimal [&_ol]:ps-(--spacing-lg) ' +
-    '[&_li+li]:pt-(--spacing-xs) [&_strong]:font-normal [&_a]:font-normal [&_a]:text-inherit! [&_a]:underline [&_a]:underline-offset-2 [&_code:not(pre_*)]:rounded-(--shape-control) ' +
-    '[&_code:not(pre_*)]:inset-ring [&_code:not(pre_*)]:forced-colors:border [&_code:not(pre_*)]:px-(--spacing-2xs) [&_code:not(pre_*)]:text-label-code-sm ' +
-    '[&_code:not(pre_*)]:text-(--text-default) [&_code:not(pre_*)]:wrap-anywhere [&_code:not(pre_*)]:box-decoration-clone ' +
-    'data-[severity=info]:[&_code:not(pre_*)]:inset-ring-(--info-border) data-[severity=info]:[&_code:not(pre_*)]:bg-(--info-foreground)/10 ' +
-    'data-[severity=success]:[&_code:not(pre_*)]:inset-ring-(--success-border) data-[severity=success]:[&_code:not(pre_*)]:bg-(--success-foreground)/10 ' +
-    'data-[severity=warning]:[&_code:not(pre_*)]:inset-ring-(--warning-border) data-[severity=warning]:[&_code:not(pre_*)]:bg-(--warning-foreground)/10 ' +
-    'data-[severity=danger]:[&_code:not(pre_*)]:inset-ring-(--danger-border) data-[severity=danger]:[&_code:not(pre_*)]:bg-(--danger-foreground)/10 ' +
-    'data-[neutral]:[&_code:not(pre_*)]:inset-ring-(--border-default)! data-[neutral]:[&_code:not(pre_*)]:bg-(--bg-hover)! ' +
+    '[&_li+li]:pt-(--spacing-xs) [&_strong]:font-normal [&_a]:font-normal [&_a]:text-inherit! [&_a]:underline [&_a]:underline-offset-2 [&_code:not(pre_*,[data-testid])]:rounded-(--shape-control) ' +
+    '[&_code:not(pre_*,[data-testid])]:inset-ring [&_code:not(pre_*,[data-testid])]:forced-colors:border [&_code:not(pre_*,[data-testid])]:px-(--spacing-2xs) ' +
+    '[&_code:not(pre_*,[data-testid])]:text-label-code-sm ' +
+    '[&_code:not(pre_*,[data-testid])]:text-(--text-default) [&_code:not(pre_*,[data-testid])]:wrap-anywhere [&_code:not(pre_*,[data-testid])]:box-decoration-clone ' +
+    'data-[severity=info]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--info-border) data-[severity=info]:[&_code:not(pre_*,[data-testid])]:bg-(--info-foreground)/10 ' +
+    'data-[severity=success]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--success-border) data-[severity=success]:[&_code:not(pre_*,[data-testid])]:bg-(--success-foreground)/10 ' +
+    'data-[severity=warning]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--warning-border) data-[severity=warning]:[&_code:not(pre_*,[data-testid])]:bg-(--warning-foreground)/10 ' +
+    'data-[severity=danger]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--danger-border) data-[severity=danger]:[&_code:not(pre_*,[data-testid])]:bg-(--danger-foreground)/10 ' +
+    'data-[neutral]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--border-default)! data-[neutral]:[&_code:not(pre_*,[data-testid])]:bg-(--bg-hover)! ' +
     '[&_:not(a,pre)>code:not([data-testid])]:cursor-pointer [&_:not(a,pre)>code:not([data-testid])]:hover:ring-1 [&_:not(a,pre)>code:not([data-testid])]:hover:ring-(--border-default) ' +
     '[&_code[data-command]]:outline-none [&_code[data-command]:focus-visible]:ring-2 [&_code[data-command]:focus-visible]:ring-(--ring-color)'
 </script>

@@ -39,6 +39,18 @@ describe('Link', () => {
     expect(queryByTestId('link__ghost')).toBeNull()
   })
 
+  it.each([false, true])('says a target="_blank" link opens a new tab (inline %s)', (inline) => {
+    const { getByRole } = render(Link, {
+      props: { label: 'CLI docs', href: 'https://example.com', target: '_blank', inline }
+    })
+    expect(getByRole('link')).toHaveAccessibleName('CLI docs (opens in a new tab)')
+  })
+
+  it('adds no new-tab text to a same-tab link', () => {
+    const { getByRole } = render(Link, { props: { label: 'Docs', href: 'https://example.com' } })
+    expect(getByRole('link')).toHaveAccessibleName('Docs')
+  })
+
   it('applies href and defaults target to _self with no rel', () => {
     const { getByTestId } = render(Link, {
       props: { href: 'https://example.com', target: '_self' }

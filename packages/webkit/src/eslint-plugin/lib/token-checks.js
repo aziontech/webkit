@@ -121,6 +121,16 @@ const TOKEN_CHECKS = [
       'of the orange scale stay inside the theme (rules/webkit-tokens.md).'
   },
   {
+    id: 'status-fill-as-text',
+    wide: true,
+    regex: /(?<![\w-])text-\((?:color:)?--(?:danger|success|warning|info)\)/g,
+    message:
+      'A status fill colour used as text or icon colour. --danger, --success, --warning and ' +
+      '--info are fills and vanish on a surface: a status icon on a surface is the -mark ' +
+      'token, error text is --text-danger, text on the fill is its -foreground ' +
+      '(rules/webkit-tokens.md).'
+  },
+  {
     id: 'class-in-defineprops',
     regex: /defineProps\s*[<(][^>)]*['"]?class['"]?\s*:/s,
     message:

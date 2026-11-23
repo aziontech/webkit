@@ -230,7 +230,9 @@
                       <span
                         v-if="row.reason"
                         class="text-body-xs"
-                        :class="row.status === 'error' ? 'text-(--danger)' : 'text-(--text-muted)'"
+                        :class="
+                          row.status === 'error' ? 'text-(--text-danger)' : 'text-(--text-muted)'
+                        "
                         >{{ row.reason }}</span
                       >
                     </span>

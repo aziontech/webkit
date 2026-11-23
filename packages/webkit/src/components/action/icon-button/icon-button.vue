@@ -1,7 +1,9 @@
 <script setup lang="ts">
-  import { Transition } from 'vue'
+  import { computed, Transition } from 'vue'
 
   import { useButtonRoot } from '../../../composables/use-button-root'
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
   import { directionalIconClass } from '../../../utils/directional-icons'
   import Spinner from '../../feedback/spinner/spinner.vue'
 
@@ -61,6 +63,12 @@
   const { Root, rootAttrs, onClick } = useButtonRoot(props, 'icon-button', (event) =>
     emit('click', event)
   )
+  const { t } = useTranslate({ common: en.common })
+  const accessibleName = computed(() => {
+    if (!props.ariaLabel) return undefined
+    const newTab = rootAttrs.value['tag'] === 'a' && props.target === '_blank'
+    return newTab ? `${props.ariaLabel} ${t('common.newTab')}` : props.ariaLabel
+  })
 
   const ROOT_CLASS =
     'group/icon-button [:where(&)]:relative inline-flex shrink-0 items-center justify-center rounded-(--shape-button) ' +
@@ -98,7 +106,7 @@
 <template>
   <Root
     v-bind="rootAttrs"
-    :aria-label="ariaLabel || undefined"
+    :aria-label="accessibleName"
     :data-variant="variant"
     :data-size="size"
     :class="ROOT_CLASS"

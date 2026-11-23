@@ -123,7 +123,7 @@
                 <span :class="CERTIFICATION_BADGE_CLASS">
                   <span
                     aria-hidden="true"
-                    class="flex size-5 shrink-0 items-center justify-center rounded-full bg-(--success-foreground) text-tag-sm text-(--success)"
+                    class="flex size-5 shrink-0 items-center justify-center rounded-full bg-(--success) text-tag-sm text-(--success-foreground)"
                   >
                     <i class="az az-check text-[length:inherit] leading-none" />
                   </span>

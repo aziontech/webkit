@@ -77,7 +77,8 @@
     'data-[invalid]:not-data-[checked]:border-(--danger-border) ' +
     'data-[checked]:border-transparent data-[checked]:bg-(--accent) ' +
     'forced-colors:border-[CanvasText] forced-colors:data-[checked]:border-[Highlight] ' +
-    'data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) data-[disabled]:hover:shadow-none ' +
+    'disabled:cursor-not-allowed disabled:border-(--border-input) disabled:bg-(--bg-disabled) disabled:hover:shadow-none ' +
+    'disabled:data-[checked]:border-(--border-input) disabled:data-[checked]:bg-(--bg-disabled) ' +
     'after:absolute after:inset-[min(0rem,calc(50%-12px))] pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]'
 
   const HANDLE_CLASS =
@@ -86,8 +87,8 @@
     'group-data-[checked]:translate-x-3.5 ' +
     'rtl:group-data-[checked]:-translate-x-3.5 ' +
     'group-data-[checked]:bg-(--accent-foreground) ' +
-    'group-data-[disabled]:bg-(--text-disabled) ' +
-    'forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText] forced-colors:group-data-[checked]:bg-[Highlight] forced-colors:group-data-[disabled]:bg-[GrayText]'
+    'group-disabled:bg-(--text-disabled) group-disabled:group-data-[checked]:bg-(--text-disabled) ' +
+    'forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText] forced-colors:group-data-[checked]:bg-[Highlight] forced-colors:group-disabled:bg-[GrayText]'
 </script>
 
 <template>

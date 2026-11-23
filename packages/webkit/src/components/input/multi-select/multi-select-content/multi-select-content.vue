@@ -153,7 +153,7 @@
         class="flex min-h-8 items-center gap-(--spacing-xs) px-(--spacing-xs) text-body-sm text-(--text-default)"
       >
         <i
-          class="az az-circle-alert shrink-0 text-(--danger)"
+          class="az az-circle-alert shrink-0 text-(--danger-mark)"
           aria-hidden="true"
         />
         <span class="min-w-0 flex-1">{{ ctx.error.value }}</span>

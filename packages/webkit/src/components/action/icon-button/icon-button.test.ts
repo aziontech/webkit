@@ -133,6 +133,18 @@ describe('IconButton', () => {
       expect(el).toHaveAttribute('rel', 'noopener noreferrer')
     })
 
+    it('names a new-tab link as opening a new tab, and only a new-tab link', () => {
+      const blank = render(IconButton, {
+        props: { icon: 'az az-github', ariaLabel: 'GitHub', href: '/gh', target: '_blank' }
+      })
+      expect(blank.getByRole('link')).toHaveAccessibleName('GitHub (opens in a new tab)')
+      blank.unmount()
+      const same = render(IconButton, {
+        props: { icon: 'az az-github', ariaLabel: 'GitHub', href: '/gh', target: '_self' }
+      })
+      expect(same.getByRole('link')).toHaveAccessibleName('GitHub')
+    })
+
     it('does not set rel when target is _self', () => {
       const { getByTestId } = render(IconButton, {
         props: {

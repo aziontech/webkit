@@ -332,7 +332,7 @@ test('off-brand-orange stays silent on the logo orange and on the primary roles'
 })
 
 test('tokenChecksFor runs only the wide checks over blocks, examples and given extra dirs', () => {
-  const WIDE = ['rtl-double-flip', 'off-brand-orange']
+  const WIDE = ['rtl-double-flip', 'off-brand-orange', 'status-fill-as-text']
   const idsFor = (rel, dirs) => tokenChecksFor(rel, dirs).map((c) => c.id)
   assert.ok(idsFor('packages/webkit/src/components/action/button/button.vue').includes('hex-color'))
   for (const rel of [
@@ -366,4 +366,26 @@ test('tokenChecksApply scopes enforcement to component sources', () => {
   assert.ok(!tokenChecksApply('packages/webkit/src/components/action/button/button.test.ts'))
   assert.ok(!tokenChecksApply('packages/webkit/src/components/action/button/button.spec.ts'))
   assert.ok(!tokenChecksApply('packages/webkit/src/composables/use-controllable.ts'))
+})
+
+test('status-fill-as-text fires on a status fill used as text or icon colour', () => {
+  for (const content of [
+    'class="az az-circle-x text-(--danger)"',
+    'class="data-[type=ok]:text-(--success)"',
+    "class=\"text-(color:--warning)\"",
+    "'text-(--info)'"
+  ]) {
+    assert.ok(ids(content).includes('status-fill-as-text'), `expected status-fill-as-text for: ${content}`)
+  }
+})
+
+test('status-fill-as-text stays silent on the mark, foreground and text roles', () => {
+  for (const content of [
+    'class="text-(--danger-mark)"',
+    'class="bg-(--success) text-(--success-foreground)"',
+    'class="text-(--text-danger)"',
+    'class="bg-(--danger) border-(--danger-border)"'
+  ]) {
+    assert.ok(!ids(content).includes('status-fill-as-text'), `expected silence for: ${content}`)
+  }
 })

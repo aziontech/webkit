@@ -3,6 +3,8 @@
 
   import { useAnnouncer } from '../../../composables/use-announcer'
   import { useButtonRoot } from '../../../composables/use-button-root'
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
   import { directionalIconClass } from '../../../utils/directional-icons'
   import Spinner from '../../feedback/spinner/spinner.vue'
 
@@ -73,6 +75,7 @@
   }>()
 
   const { announce } = useAnnouncer()
+  const { t } = useTranslate({ common: en.common })
   const attrs = useAttrs()
   const { Root, rootAttrs, onClick } = useButtonRoot(props, 'button', (event) =>
     emit('click', event)
@@ -87,6 +90,7 @@
         }
       : rootAttrs.value
   )
+  const newTab = computed(() => rootAttrs.value['tag'] === 'a' && props.target === '_blank')
 
   watch(
     () => props.loading,
@@ -176,6 +180,11 @@
           class="min-w-0 overflow-x-clip text-ellipsis"
           >{{ label }}</span
         ></slot
+      ><span
+        v-if="newTab"
+        class="sr-only"
+        :data-testid="`${rootAttrs['data-testid']}__new-tab`"
+        >{{ ` ${t('common.newTab')}` }}</span
       >
     </span>
     <span

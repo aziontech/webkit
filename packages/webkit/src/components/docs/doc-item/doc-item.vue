@@ -57,9 +57,11 @@
     'has-[a:focus-visible]:ring-inset has-[a:focus-visible]:ring-(--ring-color) motion-reduce:transition-none'
 
   const DESCRIPTION_CLASS =
-    'line-clamp-none text-pretty [&_code:not(pre_*)]:rounded-(--shape-control) [&_code:not(pre_*)]:inset-ring [&_code:not(pre_*)]:inset-ring-(--border-default) ' +
-    '[&_code:not(pre_*)]:forced-colors:border [&_code:not(pre_*)]:bg-(--bg-hover) [&_code:not(pre_*)]:px-(--spacing-2xs) [&_code:not(pre_*)]:text-label-code-sm ' +
-    '[&_code:not(pre_*)]:text-(--text-default) [&_code:not(pre_*)]:wrap-anywhere [&_code:not(pre_*)]:box-decoration-clone'
+    'line-clamp-none text-pretty [&_code:not(pre_*,[data-testid])]:rounded-(--shape-control) [&_code:not(pre_*,[data-testid])]:inset-ring ' +
+    '[&_code:not(pre_*,[data-testid])]:inset-ring-(--border-default) ' +
+    '[&_code:not(pre_*,[data-testid])]:forced-colors:border [&_code:not(pre_*,[data-testid])]:bg-(--bg-hover) [&_code:not(pre_*,[data-testid])]:px-(--spacing-2xs) ' +
+    '[&_code:not(pre_*,[data-testid])]:text-label-code-sm ' +
+    '[&_code:not(pre_*,[data-testid])]:text-(--text-default) [&_code:not(pre_*,[data-testid])]:wrap-anywhere [&_code:not(pre_*,[data-testid])]:box-decoration-clone'
 </script>
 
 <template>
