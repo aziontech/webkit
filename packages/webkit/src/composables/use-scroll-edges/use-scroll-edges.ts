@@ -67,17 +67,15 @@ export function useScrollEdges(
   const end = ref<number>(0)
   const endInset = ref<number>(0)
   let observer: ResizeObserver | null = null
+  let frame = 0
 
-  const measure = (): void => {
+  const measureColumns = (): void => {
+    frame = 0
     const el = toValue(scroller)
-    if (!el) return
-    const offset = Math.abs(el.scrollLeft)
-    start.value = hidden(offset)
-    const fade = hidden(el.scrollWidth - el.clientWidth - offset)
-    const cells = options.columns
-      ? Array.from(el.querySelectorAll<HTMLElement>(options.columns))
-      : []
-    if (fade === 0 || cells.length === 0) {
+    const fade = el ? hidden(el.scrollWidth - el.clientWidth - Math.abs(el.scrollLeft)) : 0
+    const cells =
+      el && fade > 0 ? Array.from(el.querySelectorAll<HTMLElement>(options.columns ?? '')) : []
+    if (!el || cells.length === 0) {
       end.value = fade
       endInset.value = 0
       return
@@ -87,6 +85,21 @@ export function useScrollEdges(
     const edge = endEdgeOf(inner, cells, rtl)
     endInset.value = Math.max(0, Math.round(Math.abs(inner - edge)))
     end.value = Math.max(fade, cutSlice(el, cells, edge, rtl))
+  }
+
+  const measure = (): void => {
+    const el = toValue(scroller)
+    if (!el) return
+    const offset = Math.abs(el.scrollLeft)
+    start.value = hidden(offset)
+    const fade = hidden(el.scrollWidth - el.clientWidth - offset)
+    if (!options.columns || fade === 0) {
+      end.value = fade
+      endInset.value = 0
+      return
+    }
+    if (end.value === 0) end.value = fade
+    if (!frame) frame = requestAnimationFrame(measureColumns)
   }
 
   onMounted(() => {
@@ -102,6 +115,8 @@ export function useScrollEdges(
   onScopeDispose(() => {
     observer?.disconnect()
     observer = null
+    if (frame) cancelAnimationFrame(frame)
+    frame = 0
   })
 
   return { start: readonly(start), end: readonly(end), endInset: readonly(endInset), measure }
