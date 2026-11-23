@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: d1b18b23d1c6808b9ea1ef8287ca3c3ee1bf2e30e9da847bc0d18e90ab15983d
+checksum: 96783577efdbced4d730a43a1775907f8f086f21a387f17a80083bd10d0b44da
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -95,7 +95,7 @@ The register changes the weight and the arrangement, never the anatomy: every re
 | --------- | ----- | --------------------------------------------------------------------------------------------- |
 | `default` | —     | Quotation body; replaces the `text` prop when provided.                                       |
 | `mark`    | —     | The company mark; replaces the image built from `logo`, for a mark that owns its own theming. |
-| `actions` | —     | A trailing control under the attribution, floored so a row of quotes aligns on it.            |
+| `actions` | —     | A trailing control under the attribution, floored so a row of quotes aligns on it; several controls sit in a row that wraps, `var(--spacing-sm)` apart. |
 
 ## States
 
@@ -135,7 +135,8 @@ _none_
 | spacing (quotation to attribution)               | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xl)` |
 | spacing (quotation to mark column, `highlight`)  | `var(--spacing-xl)`                                             |
 | spacing (attribution lines, `inline` / `signed`) | `var(--spacing-md)`                                             |
-| spacing (attribution inset)                      | `var(--spacing-2xs)`                                            |
+| spacing (attribution) | none: the name and the role start on the quotation's edge |
+| spacing (between actions) | `var(--spacing-sm)` |
 
 ## Theme gaps
 

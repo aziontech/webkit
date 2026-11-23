@@ -200,12 +200,12 @@
           <span
             v-if="name"
             :data-testid="`${testId}__name`"
-            class="px-(--spacing-2xs) text-(--text-brand)"
+            class="text-(--text-brand)"
             >{{ name }}</span
           >
           <span
             v-if="jobTitle"
-            class="px-(--spacing-2xs) text-(--text-muted)"
+            class="text-(--text-muted)"
             >{{ jobTitle }}</span
           >
         </span>
@@ -214,7 +214,7 @@
 
     <div
       v-if="slots.actions"
-      class="mt-auto pt-(--spacing-md) group-data-[variant=highlight]:md:col-start-1 group-data-[variant=highlight]:md:row-start-2"
+      class="mt-auto flex flex-wrap gap-(--spacing-sm) pt-(--spacing-md) group-data-[variant=highlight]:md:col-start-1 group-data-[variant=highlight]:md:row-start-2"
     >
       <slot name="actions" />
     </div>
