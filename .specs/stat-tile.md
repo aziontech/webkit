@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: c3972afbba42c9aaa7e644cc6c0fd702c007f33aec58f40dcb22164a12f5a353
+checksum: fd2d92c4918c044ec2e5aa34888f780ef754945b334953f3c570671115c8270b
 spec_version: 8
 created: 2026-10-20
 last_updated: 2026-11-19
@@ -116,7 +116,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
-- Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value.
+- Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value. The figure box keeps the final figure's width (an invisible copy of it sizes the box), so the count-up never rewraps the row or moves the sparkline.
 
 - Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
