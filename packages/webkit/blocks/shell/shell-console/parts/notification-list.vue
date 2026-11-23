@@ -93,7 +93,7 @@
           <i
             :class="icons[item.kind]"
             :data-type="item.kind"
-            class="data-[type=deploy-failed]:text-(--danger) data-[type=deploy-succeeded]:text-(--success) data-[type=info]:text-(--text-muted)"
+            class="data-[type=deploy-failed]:text-(--danger-mark) data-[type=deploy-succeeded]:text-(--success-mark) data-[type=info]:text-(--text-muted)"
             aria-hidden="true"
           />
         </Item.Media>

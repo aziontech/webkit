@@ -34,6 +34,7 @@
   }>()
 
   const address = computed(() => `https://${props.resource.domain}`)
+  const deployed = computed(() => props.resource.deploymentId !== '')
 
   const menu = [
     [{ value: 'copy-url', label: 'Copy URL', icon: 'az az-copy' }],
@@ -46,44 +47,58 @@
     <template #default>
       <SummarySubjectBand
         icon="az az-globe"
-        :label="resource.domain"
-        :href="address"
-        :visit="address"
+        :label="deployed ? resource.domain : ''"
+        :href="deployed ? address : ''"
+        :visit="deployed ? address : ''"
         actions-label="Resource actions"
         :menu="menu"
         @select="(event, value) => emit('action', event, value)"
-      />
+      >
+        <template
+          v-if="!deployed"
+          #subject
+        >
+          <span class="truncate text-body-sm text-(--text-muted)">Not deployed yet</span>
+        </template>
+      </SummarySubjectBand>
 
       <SummaryFacts>
         <SummaryFact
           label="Deployment"
+          empty="None"
           class="lg:col-span-2"
         >
-          <div class="flex min-w-0">
-            <Tooltip
-              :content="`Open ${resource.deploymentId} in Deployments`"
-              class="w-full"
-            >
-              <Link
-                :label="resource.deploymentId"
-                :href="`/deployments/${resource.deploymentId}`"
-                size="small"
-              />
-            </Tooltip>
-          </div>
-          <Tag
-            :label="resource.environment"
-            severity="neutral"
-            size="small"
-            class="shrink-0"
-          />
+          <template v-if="deployed">
+            <div class="flex min-w-0">
+              <Tooltip
+                :content="`Open ${resource.deploymentId} in Deployments`"
+                class="w-full"
+              >
+                <Link
+                  :label="resource.deploymentId"
+                  :href="`/deployments/${resource.deploymentId}`"
+                  size="small"
+                />
+              </Tooltip>
+            </div>
+            <Tag
+              :label="resource.environment"
+              severity="neutral"
+              size="small"
+              class="shrink-0"
+            />
+          </template>
         </SummaryFact>
 
         <SummaryFact
           label="Domains"
+          empty="None"
           class="lg:col-span-2"
         >
-          <div class="flex min-w-0">
+          <div
+            v-if="deployed"
+            class="flex min-w-0"
+          >
             <TableCellLink
               :label="resource.domain"
               :href="address"
@@ -93,10 +108,12 @@
 
         <SummaryFact
           label="Status"
+          empty="Not deployed"
           value-class=""
           class="lg:col-span-2"
         >
           <StatusIndicator
+            v-if="deployed"
             :severity="resource.statusSeverity"
             :label="resource.status"
           />

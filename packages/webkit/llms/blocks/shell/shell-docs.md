@@ -161,8 +161,9 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
-  import { ref } from 'vue'
+  import { computed, provide, ref } from 'vue'
 
+  import { ShellDocsInjectionKey } from './injection-key'
   import {
     sampleFooterColumns,
     sampleNavigation,
@@ -210,12 +211,18 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
     socials: () => sampleSocials
   })
 
-  defineSlots<{
+  const slots = defineSlots<{
     /** The page body: the route's article; the sample guide stands in for RouterView. */
     default(): unknown
   }>()
 
   const crumbs = [{ label: 'Functions', href: '/docs/functions' }, { label: 'Getting started' }]
+
+  const pageId = ref('')
+  provide(ShellDocsInjectionKey, pageId)
+  const activeId = computed(
+    () => pageId.value || (slots.default ? '' : 'functions-getting-started')
+  )
 
   const { mode: theme } = useColorMode()
 
@@ -225,6 +232,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
 <template>
   <DocLayout
     :navigation="navigation"
+    :active-id="activeId"
     :sections="sections"
     home="/docs"
     :outline-groups="outlineGroups"
@@ -284,7 +292,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
         icon="az az-github"
         variant="outline"
         size="medium"
-        aria-label="Azion on GitHub"
+        aria-label="Azion on GitHub (opens in a new tab)"
         href="https://github.com/aziontech"
         target="_blank"
         class="shrink-0"
@@ -343,7 +351,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
               variant="ghost"
               size="small"
               :icon="social.icon"
-              :aria-label="social.label"
+              :aria-label="`${social.label} (opens in a new tab)`"
               :href="social.href"
               target="_blank"
             />

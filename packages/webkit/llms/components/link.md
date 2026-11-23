@@ -72,6 +72,7 @@
 
 ## Accessibility
 
+- `target="_blank"` adds the visually hidden `common.newTab` text (`(opens in a new tab)`) after the label, so a screen reader hears what the external glyph shows.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter` activates.
 - ARIA: `aria-disabled` and `tabindex="-1"` when disabled.

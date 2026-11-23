@@ -39,6 +39,9 @@
     tips,
     troubleshooting
   } from '../agent-guide-data'
+  import { useShellDocsPage } from '../composables/use-shell-docs-page'
+
+  useShellDocsPage('claude-code')
 </script>
 
 <template>

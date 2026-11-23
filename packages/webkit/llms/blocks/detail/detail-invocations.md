@@ -365,7 +365,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
       type:
         index === current.logs.length - 1 && current.status === 'Completed' ? 'success' : 'text',
       level: entry.level,
-      message: `${entry.level.toUpperCase()} ${entry.message}`
+      message: entry.message
     }))
   })
 

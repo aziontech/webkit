@@ -103,7 +103,7 @@
     v-bind="attrs"
     :class="
       cn(
-        '-ms-(--spacing-xs) inline-flex w-full min-w-0 items-center',
+        '-ms-(--spacing-xs) inline-flex w-[calc(100%+var(--spacing-xs))] min-w-0 items-center',
         attrs.class as string | undefined
       )
     "

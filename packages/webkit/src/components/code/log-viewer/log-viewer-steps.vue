@@ -106,7 +106,7 @@
 
   const STEP_DESCRIPTION_CLASS =
     'min-w-0 truncate text-body-sm text-(--text-muted) ' +
-    'data-[status=error]:whitespace-normal data-[status=error]:text-pretty data-[status=error]:text-(--danger-foreground) ' +
+    'data-[status=error]:whitespace-normal data-[status=error]:text-pretty data-[status=error]:text-(--text-danger) ' +
     'data-[status=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] ' +
     'data-[status=running]:motion-safe:bg-[length:200%_100%] data-[status=running]:motion-safe:bg-clip-text data-[status=running]:motion-safe:text-transparent ' +
     'data-[status=running]:motion-safe:animate-shimmer ' +
@@ -188,13 +188,19 @@
               >
                 {{ step.title }}
               </span>
-              <slot
-                name="step-meta"
-                :step="step"
-              />
+              <span
+                v-if="slots['step-meta']"
+                class="inline-flex shrink-0"
+              >
+                <slot
+                  name="step-meta"
+                  :step="step"
+                />
+              </span>
               <span
                 v-if="step.description"
                 :data-status="step.status"
+                dir="auto"
                 :class="STEP_DESCRIPTION_CLASS"
               >
                 {{ step.description }}

@@ -29292,7 +29292,7 @@
      "type": "SiteFooterSectionSocial[]",
      "default": "[]",
      "required": "false",
-     "doc": "The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab."
+     "doc": "The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab, and each name ends with the `common.newTab` notice."
     },
     {
      "name": "statusLabel",

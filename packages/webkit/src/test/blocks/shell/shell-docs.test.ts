@@ -86,3 +86,26 @@ describe('shell/shell-docs page bodies', () => {
     await waitFor(() => expect(outlineLinks(rail)).toContain('Verify the response'))
   })
 })
+
+describe('shell/shell-docs marks the page you are on in the rail', () => {
+  const current = () =>
+    [...document.querySelectorAll('[data-testid="doc-layout"] [aria-current="page"]')]
+      .filter((el) => !el.closest('nav[aria-label="Breadcrumb"], [data-testid^="breadcrumb"]'))
+      .map((el) => el.textContent?.trim())
+
+  it.each([
+    ['Article', Article, 'First deploy'],
+    ['Reference', Reference, 'Overview'],
+    ['Landing', Landing, 'Overview'],
+    ['AgentSetup', AgentSetup, 'Overview'],
+    ['AgentGuide', AgentGuide, 'Claude Code']
+  ] as [string, Component, string][])('%s marks %s', async (_name, page, label) => {
+    inShell(page)
+    await waitFor(() => expect(current()).toContain(label))
+  })
+
+  it('the stand-in page marks Getting started', async () => {
+    render(DocsShell)
+    await waitFor(() => expect(current()).toContain('Getting started'))
+  })
+})

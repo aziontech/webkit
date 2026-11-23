@@ -71,16 +71,37 @@
           :href="homeHref"
           aria-label="Azion home"
         >
-          <Brand
-            variant="default"
-            size="small"
-          />
+          <span class="flex max-sm:hidden">
+            <Brand
+              variant="default"
+              size="small"
+            />
+          </span>
+          <span class="flex sm:hidden">
+            <Brand
+              variant="reduced"
+              size="small"
+            />
+          </span>
         </AppHeader.Brand>
-        <Breadcrumb
+        <div
           v-if="breadcrumb.length > 0"
-          :items="breadcrumb"
-          @navigate="(event, href) => emit('navigate', event, href)"
-        />
+          class="min-w-0 max-sm:hidden"
+        >
+          <Breadcrumb
+            :items="breadcrumb"
+            @navigate="(event, href) => emit('navigate', event, href)"
+          />
+        </div>
+        <div
+          v-if="breadcrumb.length > 0"
+          class="min-w-0 sm:hidden"
+        >
+          <Breadcrumb
+            :items="breadcrumb.slice(-1)"
+            @navigate="(event, href) => emit('navigate', event, href)"
+          />
+        </div>
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>

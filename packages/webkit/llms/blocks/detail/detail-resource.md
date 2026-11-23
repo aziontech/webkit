@@ -140,6 +140,7 @@ Then delete `sample.ts` and its import.
 ## Accessibility
 
 - The body renders no landmark of its own: the layout's single `main` holds the tab bar and the tab content, and the rail and header are the layout's.
+- The page names itself with a visually hidden `h1` of the resource name (the layout's breadcrumb shows it), so the tab panels' headings sit under it.
 - The tab bar is a tablist; arrow keys move between tabs and the active tab is announced.
 - Links that open a new tab add "(opens in a new tab)" in visually hidden text; decorative icons are `aria-hidden`.
 - Every icon-only button has an `aria-label` and a `Tooltip` with the same words, e.g. "Resource actions", "Add domain".
@@ -154,6 +155,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 - ResourceOverview: the Overview tab of a resource made from the CLI (`resource`, `tab` is `overview`), the summary card followed by Get started; any other `tab` shows the Open link to its own route.
 - Resource: the summary card alone, in its resource shape.
+- Default with `deploymentId: ''`: the same page for a resource never deployed: the summary reads Not deployed yet in place of the address, with None, None and Not deployed as muted values and no Visit.
 - FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
 - ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
 - ResourceBuild: the Build tab, the Git repository, Build configuration and Deployment bands, with a save bar once a command changes.
@@ -227,7 +229,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-reso
     name: string
     /** The live address, without the scheme; Visit and both address links open it. */
     domain: string
-    /** The deployment that serves the address, linked to its page. */
+    /** The deployment that serves the address, linked to its page; empty when it was never deployed, which shows the Not deployed yet state. */
     deploymentId: string
     /** The environment of that deployment, shown as a tag. */
     environment: string
@@ -278,6 +280,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-reso
 
 <template>
   <div class="flex min-h-0 flex-1 flex-col">
+    <h1 class="sr-only">{{ resource.name }}</h1>
     <ResourceTabBar
       v-model="activeTab"
       :tabs="resourceTabs"
@@ -1592,6 +1595,7 @@ jobs:
   }>()
 
   const address = computed(() => `https://${props.resource.domain}`)
+  const deployed = computed(() => props.resource.deploymentId !== '')
 
   const menu = [
     [{ value: 'copy-url', label: 'Copy URL', icon: 'az az-copy' }],
@@ -1604,44 +1608,58 @@ jobs:
     <template #default>
       <SummarySubjectBand
         icon="az az-globe"
-        :label="resource.domain"
-        :href="address"
-        :visit="address"
+        :label="deployed ? resource.domain : ''"
+        :href="deployed ? address : ''"
+        :visit="deployed ? address : ''"
         actions-label="Resource actions"
         :menu="menu"
         @select="(event, value) => emit('action', event, value)"
-      />
+      >
+        <template
+          v-if="!deployed"
+          #subject
+        >
+          <span class="truncate text-body-sm text-(--text-muted)">Not deployed yet</span>
+        </template>
+      </SummarySubjectBand>
 
       <SummaryFacts>
         <SummaryFact
           label="Deployment"
+          empty="None"
           class="lg:col-span-2"
         >
-          <div class="flex min-w-0">
-            <Tooltip
-              :content="`Open ${resource.deploymentId} in Deployments`"
-              class="w-full"
-            >
-              <Link
-                :label="resource.deploymentId"
-                :href="`/deployments/${resource.deploymentId}`"
-                size="small"
-              />
-            </Tooltip>
-          </div>
-          <Tag
-            :label="resource.environment"
-            severity="neutral"
-            size="small"
-            class="shrink-0"
-          />
+          <template v-if="deployed">
+            <div class="flex min-w-0">
+              <Tooltip
+                :content="`Open ${resource.deploymentId} in Deployments`"
+                class="w-full"
+              >
+                <Link
+                  :label="resource.deploymentId"
+                  :href="`/deployments/${resource.deploymentId}`"
+                  size="small"
+                />
+              </Tooltip>
+            </div>
+            <Tag
+              :label="resource.environment"
+              severity="neutral"
+              size="small"
+              class="shrink-0"
+            />
+          </template>
         </SummaryFact>
 
         <SummaryFact
           label="Domains"
+          empty="None"
           class="lg:col-span-2"
         >
-          <div class="flex min-w-0">
+          <div
+            v-if="deployed"
+            class="flex min-w-0"
+          >
             <TableCellLink
               :label="resource.domain"
               :href="address"
@@ -1651,10 +1669,12 @@ jobs:
 
         <SummaryFact
           label="Status"
+          empty="Not deployed"
           value-class=""
           class="lg:col-span-2"
         >
           <StatusIndicator
+            v-if="deployed"
             :severity="resource.statusSeverity"
             :label="resource.status"
           />
@@ -1843,6 +1863,7 @@ jobs:
       <Button
         class="w-full"
         label="Documentation"
+        aria-label="Documentation (opens in a new tab)"
         variant="outline"
         size="medium"
         icon="az az-book"
@@ -1942,6 +1963,7 @@ jobs:
       <Button
         v-if="visit"
         label="Visit"
+        aria-label="Visit (opens in a new tab)"
         :href="visit"
         target="_blank"
         variant="secondary"

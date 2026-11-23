@@ -25,6 +25,9 @@
     tradeoffs,
     workflowTypes
   } from '../agent-setup-data'
+  import { useShellDocsPage } from '../composables/use-shell-docs-page'
+
+  useShellDocsPage('agent-setup')
 </script>
 
 <template>

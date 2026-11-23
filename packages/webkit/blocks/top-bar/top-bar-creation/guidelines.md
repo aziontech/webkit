@@ -26,7 +26,7 @@ Small, outlined, chevron icon, a link (`href`) to the list the flow started from
 
 ### C. Brand — `Brand` (required)
 
-Inside `AppHeader.Brand`, linked to the home route through its `href` with `aria-label="Azion home"`.
+Inside `AppHeader.Brand`, linked to the home route through its `href` with `aria-label="Azion home"`. Below `sm` it is the reduced "A" glyph (`variant="reduced"`) and the breadcrumb shows only the current page, which the back button already pairs with its parent, so a 320px phone reads it in full.
 
 ### D. Breadcrumb — `Breadcrumb` (required until the flow is terminal)
 

@@ -7419,6 +7419,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-resou
 ## Accessibility
 
 - The body renders no landmark of its own: the layout's single `main` holds the tab bar and the tab content, and the rail and header are the layout's.
+- The page names itself with a visually hidden `h1` of the resource name (the layout's breadcrumb shows it), so the tab panels' headings sit under it.
 - The tab bar is a tablist; arrow keys move between tabs and the active tab is announced.
 - Links that open a new tab add "(opens in a new tab)" in visually hidden text; decorative icons are `aria-hidden`.
 - Every icon-only button has an `aria-label` and a `Tooltip` with the same words, e.g. "Resource actions", "Add domain".
@@ -7433,6 +7434,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 - ResourceOverview: the Overview tab of a resource made from the CLI (`resource`, `tab` is `overview`), the summary card followed by Get started; any other `tab` shows the Open link to its own route.
 - Resource: the summary card alone, in its resource shape.
+- Default with `deploymentId: ''`: the same page for a resource never deployed: the summary reads Not deployed yet in place of the address, with None, None and Not deployed as muted values and no Visit.
 - FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
 - ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
 - ResourceBuild: the Build tab, the Git repository, Build configuration and Deployment bands, with a save bar once a command changes.
@@ -26865,9 +26867,9 @@ packages/webkit/src/components/input/radio-group/
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`, `disabled`
 - `data-checked` mirrors the `modelValue` prop (toggled-on state)
 - `data-variant` mirrors the `variant` prop (`default` | `privacy`)
-- `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions.
+- `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions. The treatment keys on the native `:disabled` state, so a switch inside a disabled `fieldset` reads disabled too.
 - `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`); with `aria-invalid` on the control, it paints the danger border while unchecked
-- Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`data-[disabled]:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows
+- Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`disabled:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows
 - Touch: an invisible `::after` extends the hit area of the 36 × 20 px track to 24 px tall, and to 44 × 44 px on a coarse pointer.
 
 ## Accessibility
@@ -30413,6 +30415,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 
 ## Accessibility
 
+- `target="_blank"` adds the visually hidden `common.newTab` text (`(opens in a new tab)`) after the label, so a screen reader hears what the external glyph shows.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter` activates.
 - ARIA: `aria-disabled` and `tabindex="-1"` when disabled.

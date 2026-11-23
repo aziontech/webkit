@@ -98,6 +98,31 @@ describe('detail/detail-resource', () => {
     expect(open.getAttribute('href')).toBe('/resources/acme-store/build')
   })
 
+  it('names the page with an h1 and shows a resource that was never deployed', () => {
+    const view = render(DetailsPage, {
+      props: {
+        resource: {
+          name: 'fresh-app',
+          domain: 'fresh-app.example.com',
+          deploymentId: '',
+          environment: 'Production',
+          status: 'Ready',
+          statusSeverity: 'success',
+          createdAt: new Date(0),
+          createdBy: 'Jane Doe',
+          framework: 'Nuxt',
+          frameworkIcon: 'az-color az-nuxt'
+        }
+      }
+    })
+    expect(view.getByRole('heading', { level: 1, name: 'fresh-app' })).toBeTruthy()
+    expect(view.getByText('Not deployed yet')).toBeTruthy()
+    expect(view.getByText('Not deployed')).toBeTruthy()
+    expect(view.getAllByText('None').length).toBe(2)
+    expect(view.queryByRole('link', { name: /Visit/ })).toBeNull()
+    expect(view.queryByText('Ready')).toBeNull()
+  })
+
   it('adds a custom domain from an IconButton', () => {
     const view = render(Service)
     expect(view.getByRole('button', { name: 'Add a custom domain' })).toBeTruthy()

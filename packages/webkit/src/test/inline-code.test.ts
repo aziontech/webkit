@@ -4,6 +4,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
 
+import CodeBlock from '../components/code/code-block/code-block.vue'
 import DocCallout from '../components/docs/doc-callout/doc-callout.vue'
 import DocItem from '../components/docs/doc-item/doc-item.vue'
 import DocProse from '../components/docs/doc-prose/doc-prose.vue'
@@ -129,5 +130,23 @@ describe('code blocks are not inline code chips', () => {
     ])
     expectPlainBlock(container.querySelector('[data-testid="doc-callout"]') as HTMLElement)
     expectPlainBlock(container.querySelector('[data-testid="doc-item"]') as HTMLElement)
+  })
+
+  it('a CodeBlock in DocProse and DocCallout paints no chip behind each line', () => {
+    const code = 'curl -I https://example.com\nazion login'
+    const { container } = render(() => [
+      h(DocProse, null, () => h(CodeBlock, { code, language: 'bash' })),
+      h(DocCallout, { variant: 'note' }, () => h(CodeBlock, { code, language: 'bash' }))
+    ])
+    const lines = [
+      ...container.querySelectorAll<HTMLElement>('[data-testid="code-block__line-content"]')
+    ]
+    expect(lines.length).toBeGreaterThan(2)
+    for (const line of lines) {
+      const style = getComputedStyle(line)
+      expect(style.backgroundColor).toBe('rgba(0, 0, 0, 0)')
+      expect(style.boxShadow).toBe('none')
+      expect(style.cursor).not.toBe('pointer')
+    }
   })
 })

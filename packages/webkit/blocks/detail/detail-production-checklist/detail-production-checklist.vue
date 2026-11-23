@@ -198,9 +198,9 @@
               <Item.Title>
                 {{ step.title }}
               </Item.Title>
-              <Item.Description>
+              <p class="text-pretty text-body-sm text-(--text-muted)">
                 {{ step.description }}
-              </Item.Description>
+              </p>
             </Item.Content>
 
             <Item.Footer>

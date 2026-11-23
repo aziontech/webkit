@@ -1315,3 +1315,11 @@ Budget-raise: streaming-response 38.1 KB → 38.15 KB: its ToggleGroup wraps ins
 Budget-raise: highlight-button 2.45 KB → 2.55 KB: 44px touch target on a coarse pointer and the glow clipped by an inner layer (audit round 5, lane F01).
 Budget-raise: log-viewer 43.5 KB → 43.6 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
 Budget-raise: log-viewer-steps 41.9 KB → 42.05 KB: its ToggleGroup wraps instead of truncating, or its Alert pauses its life timer while hovered or focused (audit round 5, lane F01).
+Budget-raise: link 2.45 KB → 2.65 KB (measured 2.63 KB): a `target="_blank"` Link now tells assistive technology it opens a new tab with the visually hidden `common.newTab` text (audit 5, A5-054, decision A5-F14-1).
+Budget-raise: client-mosaic-section 7.65 KB → 7.85 KB (measured 7.82 KB): it renders Link, which now announces a new tab (A5-054).
+Budget-raise: plan-comparison-section 39.25 KB → 39.4 KB (measured 39.38 KB): it renders Link, which now announces a new tab (A5-054).
+Budget-raise: feature-tabs-section 58.15 KB → 58.25 KB (measured 58.23 KB): Link's new-tab text and the CodeBlock selector in the prose code rules (A5-054, A5-105).
+Budget-raise: doc-markdown 40.55 KB → 40.65 KB (measured 40.61 KB): Link's new-tab text and the prose rule that keeps the inline-code chip off CodeBlock lines (A5-054, A5-105).
+Budget-raise: trace 39 KB → 39.05 KB (measured 39.02 KB): each span name carries its full name as a `title`, and the name column takes 55% of a narrow trace (A5-282).
+Budget-raise: console-trace-scene 84.65 KB → 84.7 KB (measured 84.68 KB): it renders Trace (A5-282).
+Budget-raise: doc-page-header 32.4 KB → 32.45 KB (measured 32.41 KB): the Breadcrumb root spans its own start margin, so a shrink-wrapped trail no longer clips its last crumb by 8px (A5-286).

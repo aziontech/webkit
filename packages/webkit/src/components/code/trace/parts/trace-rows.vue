@@ -123,6 +123,7 @@
         <span
           dir="ltr"
           class="truncate text-start text-body-code-sm text-(--text-default)"
+          :title="row.span.name"
           :data-testid="`${testId}__name`"
           >{{ row.span.name }}</span
         >

@@ -12,7 +12,10 @@
   import DocProse from '@aziontech/webkit/doc-prose'
   import Link from '@aziontech/webkit/link'
 
+  import { useShellDocsPage } from '../composables/use-shell-docs-page'
   import { crumbs, metaActions, ruleTabs, scope } from '../reference-data'
+
+  useShellDocsPage('applications-overview')
 </script>
 
 <template>
