@@ -91,6 +91,18 @@ describe('Eyebrow', () => {
     expect(container.querySelector('.animate-blink-settle')).toHaveAttribute('aria-hidden', 'true')
   })
 
+  it('sets the cursor inline at the end of the label, so a wrapped label keeps it on its last line', () => {
+    const { getByTestId } = render(Eyebrow, {
+      props: { cursor: true },
+      slots: { default: 'TRUSTED BY TEAMS RUNNING IN PRODUCTION' }
+    })
+    const label = getByTestId('eyebrow__label')
+    const cursor = getByTestId('eyebrow__cursor')
+    expect(label.contains(cursor)).toBe(true)
+    expect(label.lastElementChild).toBe(cursor)
+    expect(label).toHaveTextContent(/^TRUSTED BY TEAMS RUNNING IN PRODUCTION$/)
+  })
+
   it('renders prefix and cursor together', () => {
     const { getByText, container } = render(Eyebrow, {
       props: { prefix: '//', cursor: true },
