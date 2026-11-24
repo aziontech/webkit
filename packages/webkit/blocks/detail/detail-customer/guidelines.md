@@ -23,7 +23,7 @@ A medium `PageHeader` titled with the customer's name, the page's only h1, and t
 
 ### B. Sample clock — `ConfigProvider`
 
-The page body renders inside a `ConfigProvider` with a fixed `now` only while the sample renders, or when the app passes `now`, so countdowns and relative times read the same in every preview. With real data and no `now` there is no provider, so the app's own `ConfigProvider` (its locale and catalogs) reaches every component.
+The page body renders inside a `ConfigProvider` that inherits the app's own (its locale and catalogs). While the sample renders, or when the app passes `now`, it fixes the clock to `now` and reads dates in UTC, so countdowns, relative times and the day headings read the same in every preview and on the server. With real data and no `now` the clock and the time zone are the app's.
 
 ### C. States — `Skeleton`, `Alert`
 

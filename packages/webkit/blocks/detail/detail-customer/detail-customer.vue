@@ -193,15 +193,10 @@
           />
         </template>
         <template
-          v-if="loading || customer"
+          v-if="customer && !loading"
           #description
         >
-          <Skeleton
-            v-if="loading"
-            width="10rem"
-            height="1rem"
-          />
-          <bdi v-else>{{ customer?.organization }}</bdi>
+          <bdi>{{ customer.organization }}</bdi>
         </template>
         <template
           v-if="!error"
@@ -330,6 +325,7 @@
                 :activity="activity"
                 :name="name"
                 :loading="loading"
+                :now="clock"
               />
             </Tabs.Content>
             <Tabs.Content value="notes">

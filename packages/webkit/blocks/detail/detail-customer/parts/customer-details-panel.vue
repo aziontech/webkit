@@ -33,7 +33,9 @@
 
   const tick = ref<number | undefined>(undefined)
   let timer: ReturnType<typeof setInterval> | undefined
+  const mounted = ref(false)
   onMounted(() => {
+    mounted.value = true
     tick.value = Date.now()
     timer = setInterval(() => (tick.value = Date.now()), 60_000)
   })
@@ -45,7 +47,12 @@
     return formatDate(at, { timeStyle: 'short', timeZone: props.customer.timeZone })
   })
   const since = computed(() =>
-    props.customer ? formatDate(props.customer.customerSince, { dateStyle: 'long' }) : ''
+    props.customer
+      ? formatDate(props.customer.customerSince, {
+          dateStyle: 'long',
+          timeZone: props.now === undefined && mounted.value ? undefined : 'UTC'
+        })
+      : ''
   )
   const score = computed(() =>
     formatNumber(props.satisfaction?.average ?? 0, { maximumFractionDigits: 1 })

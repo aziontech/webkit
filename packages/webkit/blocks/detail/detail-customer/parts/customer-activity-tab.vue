@@ -2,7 +2,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import Timeline, { type TimelineItemSeverity } from '@aziontech/webkit/timeline'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
 
   import type { DetailCustomerEvent, DetailCustomerEventType } from '../detail-customer.vue'
 
@@ -13,11 +13,14 @@
     name?: string
     /** Placeholder items stand in for the activity. */
     loading?: boolean
+    /** A fixed reference time; while set, the day headings read in UTC. */
+    now?: string | number | Date
   }
 
   const props = withDefaults(defineProps<CustomerActivityTabProps>(), {
     name: '',
-    loading: false
+    loading: false,
+    now: undefined
   })
 
   const markers: Record<DetailCustomerEventType, { icon: string; severity: TimelineItemSeverity }> =
@@ -31,11 +34,14 @@
     }
 
   const { formatDate } = useLocale()
+  const mounted = ref(false)
+  onMounted(() => (mounted.value = true))
+  const zone = computed(() => (props.now === undefined && mounted.value ? undefined : 'UTC'))
 
   const days = computed(() => {
     const groups: { label: string; events: DetailCustomerEvent[] }[] = []
     for (const event of props.activity) {
-      const label = formatDate(event.at, { dateStyle: 'long' })
+      const label = formatDate(event.at, { dateStyle: 'long', timeZone: zone.value })
       const last = groups.at(-1)
       if (last?.label === label) last.events.push(event)
       else groups.push({ label, events: [event] })
