@@ -4,14 +4,13 @@
 
 <template>
   <Card
-    title="Card Title"
+    title="Domains"
     :padded="false"
     class="w-full max-w-[512px]"
   >
     <template #default>
       <p class="text-body-sm text-(--text-muted) p-(--spacing-md)">
-        With padded=false the content sits flush to the card edges; the content owns its own padding
-        (or renders an ItemList with full-width dividers).
+        acme-store.example.com and www.acme-store.example.com point to this workload.
       </p>
     </template>
   </Card>

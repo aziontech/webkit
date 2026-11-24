@@ -7,10 +7,10 @@
   <Card class="w-full max-w-[512px]">
     <template #header>
       <div class="flex items-center justify-between w-full">
-        <h2 class="text-label-md text-(--text-default)">Card Title</h2>
+        <h2 class="text-label-md text-(--text-default)">Staging</h2>
         <IconButton
           icon="az az-chevron-right"
-          aria-label="Expand"
+          aria-label="Open staging"
           variant="outline"
           size="small"
         />
@@ -18,7 +18,7 @@
     </template>
     <template #default>
       <p class="text-body-sm text-(--text-muted)">
-        An action rendered in the header slot stays visible, aligned to the end of the header.
+        Deploys every push to the main branch. Last deployed yesterday.
       </p>
     </template>
   </Card>

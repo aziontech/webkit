@@ -4,12 +4,12 @@
 
 <template>
   <Card
-    title="Card Title"
+    title="Production"
     class="w-full max-w-[512px]"
   >
     <template #default>
       <p class="text-body-sm text-(--text-muted)">
-        Card body content. Place forms, tables, or any markup in the content slot.
+        Serves acme-store from 120 locations. The last deployment finished 2 minutes ago.
       </p>
     </template>
   </Card>

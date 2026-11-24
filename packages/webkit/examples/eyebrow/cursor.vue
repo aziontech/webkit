@@ -7,8 +7,8 @@
     <Eyebrow
       cursor
       prefix="//"
-      >OVERLINE TEXT</Eyebrow
+      >Developer platform</Eyebrow
     >
-    <Eyebrow cursor>NO PREFIX</Eyebrow>
+    <Eyebrow cursor>Pricing</Eyebrow>
   </div>
 </template>

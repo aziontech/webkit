@@ -6,10 +6,10 @@
     '## What Pro includes',
     '',
     '<PlanFeatureList aria-label="Pro plan features" items={[',
-    '  { "label": "Unlimited Applications" },',
-    '  { "label": "Unlimited Workloads" },',
-    '  { "label": "Custom Domains" },',
-    '  { "label": "Priority Support" }',
+    '  { "label": "Unlimited applications" },',
+    '  { "label": "Unlimited workloads" },',
+    '  { "label": "Custom domains" },',
+    '  { "label": "Priority support" }',
     ']} />'
   ].join('\n')
 </script>

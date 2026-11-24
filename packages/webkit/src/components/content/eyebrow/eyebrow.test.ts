@@ -35,19 +35,19 @@ describe('Eyebrow', () => {
   it('renders the prefix text when a prefix is provided', () => {
     const { getByText } = render(Eyebrow, {
       props: { prefix: '//' },
-      slots: { default: 'COMMENT STYLE' }
+      slots: { default: 'Edge functions' }
     })
     expect(getByText('//')).toBeInTheDocument()
-    expect(getByText('COMMENT STYLE')).toBeInTheDocument()
+    expect(getByText('Edge functions')).toBeInTheDocument()
   })
 
   it('hides the decorative prefix from assistive tech and keeps the label exposed', () => {
     const { getByText } = render(Eyebrow, {
       props: { prefix: '//' },
-      slots: { default: 'COMMENT STYLE' }
+      slots: { default: 'Edge functions' }
     })
     expect(getByText('//').getAttribute('aria-hidden')).toBe('true')
-    expect(getByText('COMMENT STYLE').closest('[aria-hidden]')).toBeNull()
+    expect(getByText('Edge functions').closest('[aria-hidden]')).toBeNull()
   })
 
   it('spaces the prefix, label and cursor with the --spacing-2xs token', () => {
@@ -141,16 +141,16 @@ describe('Eyebrow', () => {
 
   it('composes and renders the Default story', () => {
     const { getByText } = render(Default)
-    expect(getByText('OVERLINE TEXT')).toBeInTheDocument()
+    expect(getByText('Platform')).toBeInTheDocument()
   })
 
   it('composes the Cursor story: blinking cursor with and without a prefix', () => {
     const { getByText, container } = render(Cursor)
 
     // First instance: prefix + text; second: text only, still with its cursor.
-    expect(getByText('OVERLINE TEXT')).toBeInTheDocument()
+    expect(getByText('Developer platform')).toBeInTheDocument()
     expect(getByText('//')).toBeInTheDocument()
-    expect(getByText('NO PREFIX')).toBeInTheDocument()
+    expect(getByText('Pricing')).toBeInTheDocument()
     expect(container.querySelectorAll('.animate-blink-settle')).toHaveLength(2)
   })
 
@@ -158,11 +158,22 @@ describe('Eyebrow', () => {
     const { getByText } = render(Prefixes)
 
     expect(getByText('//')).toBeInTheDocument()
-    expect(getByText('COMMENT STYLE')).toBeInTheDocument()
+    expect(getByText('Edge functions')).toBeInTheDocument()
     expect(getByText('<>')).toBeInTheDocument()
-    expect(getByText('CODE LABEL')).toBeInTheDocument()
+    expect(getByText('Open source')).toBeInTheDocument()
     expect(getByText('</>')).toBeInTheDocument()
-    expect(getByText('CLOSING TAG')).toBeInTheDocument()
+    expect(getByText('Built for developers')).toBeInTheDocument()
+  })
+
+  it('writes the example labels in sentence case and leaves the capitals to the component', () => {
+    for (const example of [Default, Cursor, Prefixes]) {
+      const { getAllByTestId, unmount } = render(example)
+      for (const root of getAllByTestId('eyebrow')) {
+        const text = root.textContent?.replace(/\/\/|<\/?>/g, '').trim() ?? ''
+        expect(text).not.toBe(text.toUpperCase())
+      }
+      unmount()
+    }
   })
 
   describe('on phones', () => {

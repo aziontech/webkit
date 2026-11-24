@@ -8,6 +8,13 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import DocCallToAction from './doc-call-to-action.vue'
 
 describe('DocCallToAction', () => {
+  it('keeps the rail width outside the rail, so a content column never stretches it', () => {
+    const { getByTestId } = render(Default)
+    expect(getByTestId('doc-call-to-action').classList.contains('max-w-(--container-3xs)')).toBe(
+      true
+    )
+  })
+
   it('is a complementary landmark named by its headline', () => {
     const { getByRole } = render(Default)
     expect(getByRole('complementary', { name: 'Ready to build?' })).toBeInTheDocument()

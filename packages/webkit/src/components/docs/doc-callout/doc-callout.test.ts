@@ -14,7 +14,7 @@ import DocCallout from './doc-callout.vue'
 
 const VARIANTS = [
   { variant: 'note', severity: 'info', icon: 'az az-circle-info', neutral: false },
-  { variant: 'info', severity: 'info', icon: 'az az-circle-info', neutral: false },
+  { variant: 'info', severity: 'info', icon: 'az az-circle-info', neutral: true },
   { variant: 'tip', severity: 'info', icon: 'az az-lightbulb', neutral: true },
   { variant: 'check', severity: 'success', icon: 'az az-circle-check', neutral: false },
   { variant: 'warning', severity: 'warning', icon: 'az az-triangle-alert', neutral: false },
@@ -82,7 +82,26 @@ describe('DocCallout', () => {
       expect(container.querySelector(`i.${entry.icon.split(' ').join('.')}`)).toBeInTheDocument()
     })
 
-    it('marks only the tip variant as neutral', () => {
+    it('draws no two variants alike', () => {
+      const looks = VARIANTS.map((entry) => {
+        const { getByTestId, container, unmount } = render(DocCallout, {
+          props: { variant: entry.variant },
+          slots: { default: 'Copy.' }
+        })
+        const root = getByTestId('doc-callout')
+        const look = [
+          root.getAttribute('data-severity') ??
+            container.querySelector('[data-severity]')?.getAttribute('data-severity'),
+          root.hasAttribute('data-neutral'),
+          container.querySelector('i')?.className
+        ].join('|')
+        unmount()
+        return look
+      })
+      expect(new Set(looks).size).toBe(VARIANTS.length)
+    })
+
+    it('marks only the info and tip variants as neutral', () => {
       for (const entry of VARIANTS) {
         const { getByTestId, unmount } = render(DocCallout, {
           props: { variant: entry.variant },

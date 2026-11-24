@@ -122,14 +122,9 @@
               : 'az az-file'
   )
 
-  const meta = computed(() =>
-    [
-      props.mimeType || extensionOf(props.fileName).toUpperCase(),
-      typeof props.bytes === 'number' ? formatFileSize(props.bytes) : ''
-    ]
-      .filter(Boolean)
-      .join(' · ')
-  )
+  const kind = computed(() => props.mimeType || extensionOf(props.fileName).toUpperCase())
+
+  const size = computed(() => (typeof props.bytes === 'number' ? formatFileSize(props.bytes) : ''))
 
   const truncationNote = computed(() =>
     t('filePreview.truncated', { shown: formatNumber(visibleText.value.length) })
@@ -202,11 +197,23 @@
           <bdi>{{ fileName }}</bdi>
         </p>
         <p
-          v-if="meta"
+          v-if="kind || size"
           :data-testid="`${testId}__meta`"
-          class="truncate text-body-xs text-(--text-muted)"
+          class="flex min-w-0 text-body-xs text-(--text-muted)"
         >
-          {{ meta }}
+          <span
+            v-if="kind"
+            class="truncate"
+            >{{ kind }}</span
+          ><span
+            v-if="kind && size"
+            class="shrink-0 whitespace-pre"
+            >{{ ' · ' }}</span
+          ><span
+            v-if="size"
+            class="shrink-0 whitespace-nowrap"
+            >{{ size }}</span
+          >
         </p>
       </div>
       <div class="flex shrink-0 items-center gap-(--spacing-xs)">

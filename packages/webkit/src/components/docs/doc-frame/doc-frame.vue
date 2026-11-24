@@ -127,7 +127,9 @@
     chosenPaused.value = !paused.value
   }
 
-  const zoomable = computed(() => Boolean(props.src) && !isClip.value)
+  const coarsePointer = useMediaQuery('(pointer: coarse)')
+
+  const zoomable = computed(() => Boolean(props.src) && !isClip.value && !coarsePointer.value)
 
   const zoomed = ref(false)
   const triggerEl = ref<HTMLButtonElement | null>(null)
@@ -263,6 +265,8 @@
         <img
           :src="src"
           :alt="alt"
+          loading="lazy"
+          decoding="async"
           class="block h-auto w-full rounded-(--shape-control)"
         />
         <span
@@ -278,6 +282,8 @@
         v-else-if="src"
         :src="src"
         :alt="alt"
+        loading="lazy"
+        decoding="async"
         class="block h-auto w-full rounded-(--shape-control)"
       />
       <template v-else>

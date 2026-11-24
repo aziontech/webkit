@@ -21,6 +21,20 @@ afterEach(() => {
 })
 
 describe('DocPrompt', () => {
+  it('starts and ends a block prompt at its first and last character', () => {
+    const { container } = render(Default)
+    const prompt = container.querySelector('p[data-variant="block"]') as HTMLElement
+    expect(prompt.textContent).toBe(PROMPT)
+  })
+
+  it('trims the edges of a slot that opens and closes with whitespace', () => {
+    const { container } = render(DocPrompt, {
+      props: { variant: 'block' },
+      slots: { default: `\n   ${PROMPT}\n  ` }
+    })
+    expect(container.querySelector('p')!.textContent).toBe(PROMPT)
+  })
+
   describe('capped block disclosure', () => {
     it('ties Show more to the prompt with aria-expanded and aria-controls', async () => {
       const style = document.createElement('style')

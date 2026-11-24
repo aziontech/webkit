@@ -119,7 +119,7 @@ const DOC_MARKDOWN_BLOCK_TAGS: readonly string[] = [
   'Tracker'
 ]
 
-const DOC_MARKDOWN_INLINE_TAGS: readonly string[] = ['Tooltip']
+const DOC_MARKDOWN_INLINE_TAGS: readonly string[] = ['StatusIndicator', 'Tooltip']
 
 const INLINE_TAG = /<([A-Z][A-Za-z0-9]*)\b((?:"[^"]*"|'[^']*'|[^>"'])*?)(?:\/>|>([\s\S]*?)<\/\1>)/g
 

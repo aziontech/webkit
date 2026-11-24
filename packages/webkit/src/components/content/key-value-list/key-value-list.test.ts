@@ -4,6 +4,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
 
+import Default from '../../../../examples/key-value-list/default.vue'
 import Split from '../../../../examples/key-value-list/split.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { useKeyValueListContext } from './composables/use-key-value-list-context'
@@ -49,6 +50,31 @@ const Grouped = defineComponent({
 const itemsOf = (view: ReturnType<typeof render>) => view.getAllByTestId('key-value-list-item')
 
 describe('KeyValueList', () => {
+  describe('Default example', () => {
+    it('draws the domain link at the same type size as every other value', () => {
+      const view = render(Default)
+      const values = view
+        .getAllByTestId('key-value-list-item')
+        .map((item) => item.querySelector('dd')!)
+      const region = values.find((value) => value.textContent?.includes('US East'))!
+      const link = view.getByRole('link', { name: /shop\.example\.com/ })
+      expect(getComputedStyle(link).fontSize).toBe(getComputedStyle(region).fontSize)
+      expect(link.getBoundingClientRect().height).toBeLessThanOrEqual(
+        region.getBoundingClientRect().height + 0.5
+      )
+    })
+
+    it('writes the creation time in the en-US 12-hour pattern Timestamp uses', () => {
+      const view = render(Default)
+      const created = view
+        .getAllByTestId('key-value-list-item')
+        .find((item) => item.querySelector('dt')?.textContent?.includes('Created'))!
+      expect(created.querySelector('dd')!.textContent?.trim()).toMatch(
+        /^[A-Z][a-z]{2} \d{1,2}, \d{4}, \d{1,2}:\d{2} (AM|PM)$/
+      )
+    })
+  })
+
   describe('compound API', () => {
     it('attaches Item and Group to the root for dot-notation', () => {
       expect(KeyValueList.Item).toBe(KeyValueListItem)
@@ -271,10 +297,10 @@ describe('KeyValueList', () => {
       const view = render(Split)
       const items = itemsOf(view)
       expect(items.map((item) => item.querySelector('dt')?.textContent?.trim())).toEqual([
-        'Plan Price',
-        'Billing Period',
-        'Next Invoice',
-        'Payment Method'
+        'Plan price',
+        'Billing period',
+        'Next invoice',
+        'Payment method'
       ])
       expect(items[0]?.querySelector('dd')?.textContent?.trim()).toBe('$0.00 / month')
       expect(items[3]?.querySelector('dd')?.textContent).toContain('Not set')

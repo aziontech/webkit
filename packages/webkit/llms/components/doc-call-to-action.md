@@ -65,7 +65,7 @@
 
 ## Responsive
 
-- Fills the rail (about 225 px); actions stack full width.
+- Fills the rail (about 225 px) and stops at `--container-3xs` anywhere wider, such as a Markdown content column, so it keeps the rail scale; actions stack full width.
 
 ## Examples
 

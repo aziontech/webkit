@@ -47,7 +47,7 @@
 
 - Visual states: `default`, plus `hover` and `focus-visible` on an inline code chip (a ring, and a tooltip offering the copy)
 - `data-variant` mirrors the `variant` prop, so a test or a consumer can target one flavour
-- `data-neutral` is present only for `tip`, the one variant that carries no severity
+- `data-neutral` is present only for `info` and `tip`, the two variants drawn without a severity colour; they differ by glyph
 - `data-doc-block` + `data-doc-chrome` are the `DocProse` contract (block rung; prose stops here)
 - Inline code: the chip `DocProse` defines (`.text-label-code-sm`, no vertical padding, `var(--spacing-2xs)` inline padding, outline as an `inset-ring` with a `border` only under `forced-colors`, `wrap-anywhere` + `box-decoration-clone`), so it is never taller than the `.text-body-sm` line and chips on consecutive wrapped lines keep at least a 1px gap; code inside `pre` never takes the chip (`src/test/inline-code.test.ts`)
 - Inline code: the chip `DocProse` defines (`.text-label-code-sm`, no vertical padding, `var(--spacing-2xs)` inline padding, outline as an `inset-ring` with a `border` only under `forced-colors`, `wrap-anywhere` + `box-decoration-clone`), so it is never taller than the `.text-body-sm` line and chips on consecutive wrapped lines keep at least a 1px gap (`src/test/inline-code.test.ts`)
@@ -112,8 +112,10 @@
 
 <template>
   <div class="flex flex-col gap-(--spacing-md)">
-    <DocCallout variant="note">A neutral aside the reader should not skip.</DocCallout>
-    <DocCallout variant="info">Background that explains why the step exists.</DocCallout>
+    <DocCallout variant="note">A point the reader should not skip.</DocCallout>
+    <DocCallout variant="info"
+      >A neutral aside: background that explains why the step exists.</DocCallout
+    >
     <DocCallout variant="tip"
       >Run <code data-command>azion deploy --local</code> to skip the remote install.</DocCallout
     >

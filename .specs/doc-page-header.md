@@ -4,9 +4,9 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 1a066f64f38cb2494dc8995578193d1ec06306f78223958053586ec138297a30
+checksum: 0fd965cd50fe64df39d10fd8ef6681f93602ce5e96c39aa71cf420403fbf2814
 created: 2026-08-22
-last_updated: 2026-11-22
+last_updated: 2026-11-24
 ---
 
 # DocPageHeader — Component Spec
@@ -134,7 +134,7 @@ _none_
 
 - Visible focus: inherited from `Breadcrumb`, `Button` and `Tooltip`; the masthead adds no focusable element of its own.
 - Keyboard map: `Tab` reaches the breadcrumb links and then each meta-line entry in reading order; a `tip` opens on focus, not on hover alone, so a definition is never pointer-only. The separators are `aria-hidden` — three announced separators on the way to three controls is noise.
-- ARIA: the root is a `header`. The title is the page's single `h1`, so authored content must start at `h2`. The "last updated" glyph is decorative (`aria-hidden`) because the words "Last updated" sit beside it, and the date is wrapped in `<time datetime>` so the machine-readable value survives formatting.
+- ARIA: the root is a `header`. The title is the page's single `h1`, so authored content must start at `h2`. The "last updated" glyph is decorative (`aria-hidden`) because the words "Last updated" sit beside it, and an ISO date is wrapped in `<time datetime>` after the words "Last updated" so the machine-readable value survives formatting; a ready-made string ("Updated this morning") renders alone, with neither the prefix nor a `time` element.
 - The ISO date is parsed and rendered in **UTC** on purpose: read as local time, a bare `2026-06-30` becomes the 29th for every reader west of Greenwich.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: each meta-line entry is a standard `small` button (28px) with its own hover surface; nothing else is interactive.

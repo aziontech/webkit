@@ -4,9 +4,9 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: dfbca79bca5f097cfd09717c005d307b12b76e6288a7bb1dd3ed5757600a6e85
+checksum: 0d18aece7e45a5100049469a93099d73a4437f5d6339a3789e58a46e59d646e5
 created: 2026-08-22
-last_updated: 2026-11-15
+last_updated: 2026-11-24
 ---
 
 # DocPrompt — Component Spec
@@ -71,9 +71,9 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                               |
-| --------- | ----- | --------------------------------------------------------------------------------------------------- |
-| `default` | —     | The prompt itself: one or more sentences of literal text. Also the string the copy control carries. |
+| Slot      | Scope | Notes                                                                                                                                                            |
+| --------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | The prompt itself: one or more sentences of literal text, drawn without the whitespace that opens and closes the slot. Also the string the copy control carries. |
 
 ## States
 

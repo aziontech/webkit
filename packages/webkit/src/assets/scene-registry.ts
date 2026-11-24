@@ -51,6 +51,7 @@ export const sceneAssets = {
   SparkChart: contentScene('SparkChart'),
   StatTile: contentScene('StatTile'),
   StatTileGroup: contentScene('StatTileGroup'),
+  StatusIndicator: contentScene('StatusIndicator'),
   Tracker: contentScene('Tracker'),
   RuntimeApiCloud: () => import('./scenes/runtime-api/runtime-api-cloud.vue'),
   SpinningGlobe: () => import('./globe/spinning-globe.vue')

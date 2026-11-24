@@ -96,6 +96,27 @@ describe('DocCard', () => {
       })
       expect(withLink.getByText('Read the guide')).toBeInTheDocument()
     })
+
+    it('marks a link card without linkLabel with the link glyph, so it differs from a plain card at rest', () => {
+      const linked = render(DocCard, { props: { title: 'T', href: '/x' } })
+      const glyph = linked.getByTestId('doc-card__link-glyph')
+      expect(glyph.classList.contains('az-chevron-right')).toBe(true)
+      expect(glyph.getAttribute('aria-hidden')).toBe('true')
+      linked.unmount()
+
+      const external = render(DocCard, { props: { title: 'T', href: 'https://example.com' } })
+      expect(
+        external.getByTestId('doc-card__link-glyph').classList.contains('az-arrow-up-right')
+      ).toBe(true)
+      external.unmount()
+
+      const plain = render(DocCard, { props: { title: 'T' } })
+      expect(plain.queryByTestId('doc-card__link-glyph')).toBeNull()
+      plain.unmount()
+
+      const labelled = render(DocCard, { props: { title: 'T', href: '/x', linkLabel: 'Open' } })
+      expect(labelled.queryByTestId('doc-card__link-glyph')).toBeNull()
+    })
   })
 
   describe('accessibility', () => {

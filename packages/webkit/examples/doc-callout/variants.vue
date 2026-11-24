@@ -4,8 +4,10 @@
 
 <template>
   <div class="flex flex-col gap-(--spacing-md)">
-    <DocCallout variant="note">A neutral aside the reader should not skip.</DocCallout>
-    <DocCallout variant="info">Background that explains why the step exists.</DocCallout>
+    <DocCallout variant="note">A point the reader should not skip.</DocCallout>
+    <DocCallout variant="info"
+      >A neutral aside: background that explains why the step exists.</DocCallout
+    >
     <DocCallout variant="tip"
       >Run <code data-command>azion deploy --local</code> to skip the remote install.</DocCallout
     >

@@ -136,13 +136,13 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
         label="Active"
       />
     </KeyValueList.Item>
-    <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+    <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
     <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
     <KeyValueList.Item label="Domain">
       <Link
         label="shop.example.com"
         href="https://shop.example.com"
-        size="small"
+        inline
       />
     </KeyValueList.Item>
   </KeyValueList>
@@ -179,13 +179,13 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
           label="Active"
         />
       </KeyValueList.Item>
-      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
       <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
       <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
-          size="small"
+          inline
         />
       </KeyValueList.Item>
     </KeyValueList>
@@ -207,13 +207,13 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
           label="Active"
         />
       </KeyValueList.Item>
-      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
       <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
       <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
-          size="small"
+          inline
         />
       </KeyValueList.Item>
     </KeyValueList>
@@ -235,13 +235,13 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
           label="Active"
         />
       </KeyValueList.Item>
-      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
       <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
       <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
-          size="small"
+          inline
         />
       </KeyValueList.Item>
     </KeyValueList>
@@ -280,14 +280,14 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
           label="Active"
         />
       </KeyValueList.Item>
-      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
     </KeyValueList.Group>
     <KeyValueList.Group label="Networking">
       <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
-          size="small"
+          inline
         />
       </KeyValueList.Item>
       <KeyValueList.Item label="Region">

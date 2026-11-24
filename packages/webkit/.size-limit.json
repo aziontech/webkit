@@ -34,7 +34,7 @@
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "41.05 KB",
+    "limit": "41.5 KB",
     "entryOnly": true
   },
   {
@@ -215,7 +215,7 @@
   {
     "name": "doc-card",
     "path": "src/components/docs/doc-card/doc-card.vue",
-    "limit": "2.45 KB"
+    "limit": "2.5 KB"
   },
   {
     "name": "doc-card-group",
@@ -240,7 +240,7 @@
   {
     "name": "doc-frame",
     "path": "src/components/docs/doc-frame/doc-frame.vue",
-    "limit": "9.9 KB"
+    "limit": "9.95 KB"
   },
   {
     "name": "doc-changelog-entry",
@@ -271,7 +271,7 @@
   {
     "name": "doc-prompt",
     "path": "src/components/docs/doc-prompt/doc-prompt.vue",
-    "limit": "13.2 KB",
+    "limit": "13.35 KB",
     "entryOnly": true
   },
   {
@@ -282,7 +282,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/docs/doc-page-header/doc-page-header.vue",
-    "limit": "32.9 KB"
+    "limit": "32.95 KB"
   },
   {
     "name": "doc-table-of-contents",
@@ -887,7 +887,7 @@
   {
     "name": "timestamp",
     "path": "src/components/content/timestamp/timestamp.vue",
-    "limit": "20.35 KB"
+    "limit": "20.4 KB"
   },
   {
     "name": "error-boundary",
@@ -1376,7 +1376,7 @@
   {
     "name": "file-preview",
     "path": "src/components/content/file-preview/file-preview.vue",
-    "limit": "8.2 KB"
+    "limit": "8.25 KB"
   },
   {
     "name": "video-player",
@@ -1488,7 +1488,7 @@
   {
     "name": "copy-text",
     "path": "src/components/content/copy-text/copy-text.vue",
-    "limit": "10.5 KB",
+    "limit": "10.65 KB",
     "entryOnly": true
   },
   {

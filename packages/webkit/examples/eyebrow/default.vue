@@ -3,5 +3,5 @@
 </script>
 
 <template>
-  <Eyebrow>OVERLINE TEXT</Eyebrow>
+  <Eyebrow>Platform</Eyebrow>
 </template>

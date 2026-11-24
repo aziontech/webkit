@@ -12,7 +12,7 @@
       />
     </Item.Media>
     <Item.Content>
-      <Item.Title>Security Alert</Item.Title>
+      <Item.Title>Security alert</Item.Title>
       <Item.Description>New login detected from unknown device.</Item.Description>
     </Item.Content>
     <Item.Actions>

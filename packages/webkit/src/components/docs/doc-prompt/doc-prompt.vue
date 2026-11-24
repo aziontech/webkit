@@ -1,14 +1,17 @@
 <script setup lang="ts">
   import {
     computed,
+    createTextVNode,
     nextTick,
     onBeforeUnmount,
     onMounted,
     onUpdated,
     ref,
+    Text,
     useAttrs,
     useId,
-    useSlots
+    useSlots,
+    type VNode
   } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
@@ -53,6 +56,21 @@
   const hasPrompt = () => Boolean(slots['default']) || props.label.length > 0
 
   const promptText = ref('')
+
+  const trimEdge = (nodes: VNode[], index: number, trim: (value: string) => string) => {
+    const node = nodes[index]
+    if (node?.type !== Text || typeof node.children !== 'string') return
+    nodes[index] = createTextVNode(trim(node.children))
+  }
+
+  const promptNodes = (): VNode[] => {
+    const nodes = [...(slots['default']?.() ?? [createTextVNode(props.label)])] as VNode[]
+    trimEdge(nodes, 0, (value) => value.trimStart())
+    trimEdge(nodes, nodes.length - 1, (value) => value.trimEnd())
+    return nodes
+  }
+
+  const TrimmedPrompt = (attributes: { nodes?: VNode[] }) => attributes.nodes ?? []
 
   const promptEl = ref<globalThis.HTMLElement | null>(null)
   const expanded = ref(false)
@@ -234,7 +252,7 @@
             :class="PROMPT_CLASS"
             @scroll="measure"
           >
-            <slot>{{ label }}</slot>
+            <TrimmedPrompt :nodes="promptNodes()" />
           </p>
 
           <div

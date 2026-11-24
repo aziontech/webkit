@@ -126,8 +126,27 @@ describe('FilePreview', () => {
 
     const failed = within(render(ErrorExample).container as HTMLElement)
     expect(failed.getByText('The preview could not load')).toBeTruthy()
-    expect(failed.getByText(/Access denied \(403\)/)).toBeTruthy()
+    expect(failed.getByText(/preview service timed out/)).toBeTruthy()
     expect(failed.getByRole('button', { name: 'Download' })).toBeTruthy()
+  })
+
+  it('keeps the error example honest: the message never denies the access Download still offers', () => {
+    const failed = within(render(ErrorExample).container as HTMLElement)
+    expect(failed.getByRole('button', { name: 'Download' }).hasAttribute('disabled')).toBe(false)
+    expect(failed.queryByText(/denied|403|forbidden/i)).toBeNull()
+  })
+
+  it('keeps the size whole and lets the type truncate first on a narrow card', () => {
+    const view = render(FilePreview, {
+      props: { fileName: 'a.json', mimeType: 'application/json', bytes: 182, content: '{}' }
+    })
+    const meta = view.getByTestId(`${TEST_ID}__meta`)
+    const [kind, , size] = Array.from(meta.children)
+    expect(kind?.textContent).toBe('application/json')
+    expect(kind?.classList.contains('truncate')).toBe(true)
+    expect(size?.textContent).toBe('182 bytes')
+    expect(size?.classList.contains('shrink-0')).toBe(true)
+    expect(meta.textContent).toBe('application/json · 182 bytes')
   })
 
   it('emits download with the click event', async () => {
