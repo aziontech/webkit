@@ -483,6 +483,10 @@
       "types": "./types/components/content/tag/tag.vue.d.ts",
       "default": "./src/components/content/tag/tag.vue"
     },
+    "./priority-tag": {
+      "types": "./types/components/content/priority-tag/priority-tag.vue.d.ts",
+      "default": "./src/components/content/priority-tag/priority-tag.vue"
+    },
     "./severity-tag": {
       "types": "./types/components/content/severity-tag/severity-tag.vue.d.ts",
       "default": "./src/components/content/severity-tag/severity-tag.vue"
@@ -2949,6 +2953,9 @@
       ],
       "tag": [
         "./types/components/content/tag/tag.vue.d.ts"
+      ],
+      "priority-tag": [
+        "./types/components/content/priority-tag/priority-tag.vue.d.ts"
       ],
       "severity-tag": [
         "./types/components/content/severity-tag/severity-tag.vue.d.ts"

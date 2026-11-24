@@ -1102,7 +1102,7 @@ export function extractModels(script) {
 }
 
 const AXIS_PROP =
-  /^(variant|size|severity|status|orientation)$|[a-z](Variant|Size|Severity|Status|Orientation)$/
+  /^(variant|size|severity|status|orientation|priority)$|[a-z](Variant|Size|Severity|Status|Orientation|Priority)$/
 
 function checkAxisTypeNames(rel, props, component, script = '') {
   const out = []
@@ -1132,7 +1132,7 @@ export function checkAxisTypes(rel, text, names, ctx = {}) {
   const out = []
   const resolve = unionResolver(text, ctx.types)
   for (const m of text.matchAll(
-    /export\s+type\s+([A-Za-z0-9_]+(Severity|Status|Orientation))\s*=\s*([^\n]+(?:\n\s*\|[^\n]+)*)/g
+    /export\s+type\s+([A-Za-z0-9_]+(Severity|Status|Orientation|Priority))\s*=\s*([^\n]+(?:\n\s*\|[^\n]+)*)/g
   )) {
     const [, name, axis, rhs] = m
     const line = lineOf(text, m.index)

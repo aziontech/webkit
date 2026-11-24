@@ -869,6 +869,11 @@
     "limit": "6.4 KB"
   },
   {
+    "name": "priority-tag",
+    "path": "src/components/content/priority-tag/priority-tag.vue",
+    "limit": "1.95 KB"
+  },
+  {
     "name": "severity-tag",
     "path": "src/components/content/severity-tag/severity-tag.vue",
     "limit": "1.85 KB"

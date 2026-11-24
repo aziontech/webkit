@@ -980,6 +980,14 @@ export const es: Messages = {
   popover: {
     close: 'Cerrar'
   },
+  priorityTag: {
+    prefix: 'Prioridad:',
+    urgent: 'Urgente',
+    high: 'Alta',
+    medium: 'Media',
+    low: 'Baja',
+    none: 'Sin prioridad'
+  },
   progress: {
     label: 'Progreso'
   },

@@ -3604,6 +3604,14 @@
     ]
    },
    {
+    "concept": "priority of a ticket or task (urgent | high | medium | low | none)",
+    "canonical": "priority",
+    "aliases": [
+     "urgency",
+     "importance"
+    ]
+   },
+   {
     "concept": "job or step status (pending | running | success | error | canceled | skipped)",
     "canonical": "status",
     "aliases": [
@@ -3935,6 +3943,14 @@
     "default": "neutral",
     "secondary": "neutral",
     "alt": "neutral"
+   },
+   "priority": {
+    "highest": "urgent",
+    "critical": "urgent",
+    "blocker": "urgent",
+    "normal": "medium",
+    "lowest": "low",
+    "no-priority": "none"
    },
    "status": {
     "done": "success",
@@ -8590,6 +8606,48 @@
    "surface": "app",
    "examplesFile": "catalog/examples/tag.json",
    "docsFile": "catalog/components/tag.json"
+  },
+  "priority-tag": {
+   "import": "@aziontech/webkit/priority-tag",
+   "target": "./src/components/content/priority-tag/priority-tag.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/priority-tag",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "priority",
+     "type": "'urgent' | 'high' | 'medium' | 'low' | 'none'",
+     "default": "'none'",
+     "required": "false",
+     "doc": "Priority level (exported as `PriorityTagPriority`); sets the glyph (alert mark, filled bars or dots) and the default label."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the tag. Empty uses the locale catalog (`Urgent`, `High`, `Medium`, `Low`, `No priority`)."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size token; `medium` is 24px tall, `small` is 20px."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "Replaces the visible label text; the hidden `Priority:` prefix remains."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "examplesFile": "catalog/examples/priority-tag.json",
+   "docsFile": "catalog/components/priority-tag.json"
   },
   "severity-tag": {
    "import": "@aziontech/webkit/severity-tag",

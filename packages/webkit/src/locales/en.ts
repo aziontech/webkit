@@ -822,6 +822,15 @@ export const popover = {
   close: 'Close'
 } as const
 
+export const priorityTag = {
+  prefix: 'Priority:',
+  urgent: 'Urgent',
+  high: 'High',
+  medium: 'Medium',
+  low: 'Low',
+  none: 'No priority'
+} as const
+
 export const progress = {
   label: 'Progress'
 } as const
@@ -1732,6 +1741,7 @@ export const en = {
   phoneInput,
   transferList,
   popover,
+  priorityTag,
   progress,
   promptInput,
   promptQueue,
