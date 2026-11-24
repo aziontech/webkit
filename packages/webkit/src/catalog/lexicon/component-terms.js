@@ -265,16 +265,11 @@ export const COMPONENT_TERMS = {
   'hover-card': ['hover card', 'preview on hover', 'link preview', 'user card'],
   'status-code': ['http status', 'status code', 'http status code', 'http method', 'get post'],
   timeline: [
-    'activity history',
     'activity feed',
     'audit trail',
-    'event history',
     'deployment history',
-    'ticket history',
     'linha do tempo',
-    'histórico de atividades',
-    'línea de tiempo',
-    'historial de actividad'
+    'línea de tiempo'
   ],
   timestamp: ['timestamp', 'relative time', 'time ago', 'date time display'],
   'chart-reference': [
