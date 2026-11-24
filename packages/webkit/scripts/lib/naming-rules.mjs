@@ -632,7 +632,7 @@ function checkFileName(rel) {
       seg === '__mocks__'
     )
       return out
-    const stem = seg.replace(/^_/, '').replace(/(\.[a-z0-9]+)+$/i, '')
+    const stem = seg.replace(/^_/, '').replace(/(\.[a-z0-9]+(-[a-z0-9]+)*)+$/i, '')
     if (!stem) continue
     if (LOCALE_TAG.test(stem)) continue
     if (/^\[[^\]]+\]$/.test(stem)) continue
