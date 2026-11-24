@@ -4111,6 +4111,7 @@
   "assets/getninjas-extended-reversed.svg": "assets/get-ninjas-extended-reversed.svg",
   "assets/gfg-extended-mono.svg": "assets/global-fashion-group-extended-mono.svg",
   "assets/gfg-extended-reversed.svg": "assets/global-fashion-group-extended-reversed.svg",
+  "assets/gpa-photo.jpg": "assets/gpa-photo.webp",
   "assets/gruposabemi-extended-color.svg": "assets/grupo-sabemi-extended-color.svg",
   "assets/gruposabemi-extended-mono.svg": "assets/grupo-sabemi-extended-mono.svg",
   "assets/gruposabemi-extended-reversed.svg": "assets/grupo-sabemi-extended-reversed.svg",
@@ -4119,6 +4120,7 @@
   "assets/lojadomecanico-extended-reversed.svg": "assets/loja-do-mecanico-extended-reversed.svg",
   "assets/lojaintegrada-extended-color.svg": "assets/loja-integrada-extended-color.svg",
   "assets/lojaintegrada-extended-reversed.svg": "assets/loja-integrada-extended-reversed.svg",
+  "assets/netshoes-photo.jpg": "assets/netshoes-photo.webp",
   "assets/newbalance-extended-color.svg": "assets/new-balance-extended-color.svg",
   "assets/newbalance-extended-mono.svg": "assets/new-balance-extended-mono.svg",
   "assets/newbalance-extended-reversed.svg": "assets/new-balance-extended-reversed.svg",
@@ -24834,11 +24836,11 @@
    "treeShakeableImport": "@aziontech/webkit/assets/gpa-extended-reversed.svg",
    "surface": "site"
   },
-  "assets/gpa-photo.jpg": {
-   "import": "@aziontech/webkit/assets/gpa-photo.jpg",
-   "target": "./src/assets/logos/clients/photos/gpa-photo.jpg",
+  "assets/gpa-photo.webp": {
+   "import": "@aziontech/webkit/assets/gpa-photo.webp",
+   "target": "./src/assets/logos/clients/photos/gpa-photo.webp",
    "kind": "asset",
-   "treeShakeableImport": "@aziontech/webkit/assets/gpa-photo.jpg",
+   "treeShakeableImport": "@aziontech/webkit/assets/gpa-photo.webp",
    "surface": "site"
   },
   "assets/gpa-symbol-color.svg": {
@@ -25394,11 +25396,11 @@
    "treeShakeableImport": "@aziontech/webkit/assets/netshoes-extended-reversed.svg",
    "surface": "site"
   },
-  "assets/netshoes-photo.jpg": {
-   "import": "@aziontech/webkit/assets/netshoes-photo.jpg",
-   "target": "./src/assets/logos/clients/photos/netshoes-photo.jpg",
+  "assets/netshoes-photo.webp": {
+   "import": "@aziontech/webkit/assets/netshoes-photo.webp",
+   "target": "./src/assets/logos/clients/photos/netshoes-photo.webp",
    "kind": "asset",
-   "treeShakeableImport": "@aziontech/webkit/assets/netshoes-photo.jpg",
+   "treeShakeableImport": "@aziontech/webkit/assets/netshoes-photo.webp",
    "surface": "site"
   },
   "assets/new-balance-extended-color.svg": {

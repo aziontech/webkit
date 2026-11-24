@@ -1,13 +1,14 @@
 # Client story photographs
 
-One success-case photograph per client, named `<client>-photo.jpg`:
+One success-case photograph per client, as WebP (about a third of a JPEG's weight), named
+`<client>-photo.webp`:
 
 ```
-netshoes-photo.jpg
-gpa-photo.jpg
+netshoes-photo.webp
+gpa-photo.webp
 ```
 
-Registering one takes three lines: the file here, its flat `./assets/<client>-photo.jpg`
+Registering one takes three lines: the file here, its flat `./assets/<client>-photo.webp`
 entry in `packages/webkit/package.json#exports`, and its key in `CLIENT_PHOTOS`
 (`registry.ts` one folder up). The key is the normalized client name
 (`normalizeClientName`: lowercase, accents folded, non-alphanumerics dropped — so `GPA` is

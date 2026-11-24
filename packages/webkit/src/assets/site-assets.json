@@ -50,6 +50,6 @@
   "/marketing-components/logos/renner-extended-color.svg": "@aziontech/webkit/assets/renner-extended-color.svg",
   "/marketing-components/logos/renner-extended-reversed.svg": "@aziontech/webkit/assets/renner-extended-reversed.svg",
   "/marketing-components/logos/zoop-extended-color.svg": "@aziontech/webkit/assets/zoop-extended-color.svg",
-  "/marketing-components/photos/gpa.jpg": "@aziontech/webkit/assets/gpa-photo.jpg",
-  "/marketing-components/photos/netshoes.jpg": "@aziontech/webkit/assets/netshoes-photo.jpg"
+  "/marketing-components/photos/gpa.jpg": "@aziontech/webkit/assets/gpa-photo.webp",
+  "/marketing-components/photos/netshoes.jpg": "@aziontech/webkit/assets/netshoes-photo.webp"
 }
