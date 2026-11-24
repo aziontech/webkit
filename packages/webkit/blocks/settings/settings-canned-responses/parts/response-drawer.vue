@@ -164,6 +164,8 @@
     v-model:open="open"
     size="large"
     side="end"
+    :dismissible="!saving"
+    :closable="!saving"
   >
     <DrawerContent>
       <form
@@ -203,6 +205,7 @@
                   :id="ids.title"
                   v-model="form.title"
                   dir="auto"
+                  size="large"
                   autocomplete="off"
                   @update:model-value="errors.title = ''"
                 />

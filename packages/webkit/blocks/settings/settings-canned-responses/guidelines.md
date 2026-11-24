@@ -46,7 +46,7 @@ The table's `#empty` slot: `No matching responses` with Clear filters, which emp
 
 ### H. Editor drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `PanelFooter` (required)
 
-A large `Drawer` on the end side with one `form`, titled `New response` or `Edit response`. A failed save shows a danger `Alert` at the top of the body and keeps every value. While `saving` the fields lock (one `fieldset`), Cancel is disabled and Save response spins; when `saving` returns to false with no `saveError`, the drawer closes. Footer: Cancel and `Save response`.
+A large `Drawer` on the end side with one `form`, titled `New response` or `Edit response`. A failed save shows a danger `Alert` at the top of the body and keeps every value. While `saving` the fields lock (one `fieldset`), Save response spins, and Cancel, the close button and Escape are disabled (`:closable` and `:dismissible` follow `saving`), so the request cannot be left half-way; when `saving` returns to false with no `saveError`, the drawer closes. Footer: Cancel and `Save response`.
 
 ### I. Fields — `Field`, `Input`, `Combobox`, `RadioGroup`, `Select` (required)
 

@@ -144,6 +144,10 @@ describe('settings/settings-canned-responses block', () => {
     await waitFor(() =>
       expect(within(locked).getByLabelText(/^Title/) as HTMLInputElement).toBeDisabled()
     )
+    expect(within(locked).queryByRole('button', { name: /Close/ })).toBeNull()
+    await userEvent.keyboard('{Escape}')
+    expect(locked.isConnected).toBe(true)
+    expect(dialog()).toBe(locked)
     cleanup()
     render(SaveError)
     const failed = await openDialog()
