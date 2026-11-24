@@ -99,6 +99,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Blocks: Settings
 
+- [SettingsCannedResponses (settings/settings-canned-responses)](blocks/settings/settings-canned-responses.md): Preview. The admin page for the saved replies support agents insert into a ticket.
 - [SettingsForm (settings/settings-form)](blocks/settings/settings-form.md): The place the user goes to change how an account or a project behaves.
 
 ## Blocks: Shell
