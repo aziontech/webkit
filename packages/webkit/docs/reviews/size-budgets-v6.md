@@ -2135,3 +2135,215 @@ Budget-raise: date-picker 15.45 KB → 15.5 KB (measured 15.46 KB): merging the 
 Budget-raise: console-layout 86.95 KB → 87.05 KB (measured 87.02 KB): merging the audit-5 P3 fixes with the single 6.0 branch (AI Copilot, #1201, #1202, #1205, ST-BAND) adds both sides' growth in parts it imports; each fit its own budget.
 Budget-raise: conversation-history 41.95 KB → 42.1 KB (measured 42.06 KB): Today and Yesterday are found in the configured time zone, in UTC until the list mounts, so a server-rendered page hydrates without mismatches.
 Budget-raise: feature-widgets-section 20.55 KB → 20.6 KB (measured 20.55 KB locally, a few bytes over in CI): the merged section sits on its limit, and the CI build rounds it over.
+
+Budget-raise: console-layout-root 85.4 KB → 85.6 KB (measured 85.49 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: doc-layout 75.65 KB → 75.8 KB (measured 75.73 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: doc-markdown 41.6 KB → 41.9 KB (measured 41.83 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: browser-frame 15 KB → 15.1 KB (measured 15.05 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: search-trigger 9.9 KB → 10 KB (measured 9.93 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: copy-prompt-button 9.4 KB → 9.5 KB (measured 9.43 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: doc-agent-card 15.35 KB → 15.5 KB (measured 15.42 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: date-picker-root 15.3 KB → 15.5 KB (measured 15.4 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: date-range-picker 58.2 KB → 58.4 KB (measured 58.29 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: property-filter 36.85 KB → 37 KB (measured 36.92 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: chip 8 KB → 8.1 KB (measured 8.03 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: doc-prose 4.6 KB → 4.7 KB (measured 4.64 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: doc-callout 9.4 KB → 9.5 KB (measured 9.44 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: doc-frame 9.95 KB → 10 KB (measured 9.98 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: doc-code-group 34.7 KB → 34.8 KB (measured 34.74 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: doc-prompt 13.4 KB → 13.5 KB (measured 13.46 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: doc-page-header 33.4 KB → 33.5 KB (measured 33.46 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: console-application-scene 127 KB → 127.1 KB (measured 127.06 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: console-trace-scene 86.15 KB → 86.3 KB (measured 86.23 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: article-body-section 48.8 KB → 48.9 KB (measured 48.87 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: article-index-section 38.45 KB → 38.6 KB (measured 38.53 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: story-index-section 36.6 KB → 36.7 KB (measured 36.68 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: copy-command-section 12.45 KB → 12.6 KB (measured 12.52 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: hero-form-section 57.55 KB → 57.7 KB (measured 57.6 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: site-header-section 60.05 KB → 60.2 KB (measured 60.1 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: plan-comparison-section 40.15 KB → 40.3 KB (measured 40.22 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: job-posting-section 63.55 KB → 63.7 KB (measured 63.59 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: listing-index-section 43.5 KB → 43.6 KB (measured 43.57 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: cli-terminal-section 47.8 KB → 48 KB (measured 47.88 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: feature-tabs-section 60.5 KB → 60.6 KB (measured 60.58 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: timeline 22.5 KB → 22.6 KB (measured 22.56 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: timeline-item 21.5 KB → 21.6 KB (measured 21.52 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: timestamp 20.55 KB → 20.7 KB (measured 20.62 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: tutorial-panel-hotspot 14.15 KB → 14.3 KB (measured 14.19 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: message-thread 38 KB → 38.1 KB (measured 38.04 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: message-thread-item 35.5 KB → 35.6 KB (measured 35.58 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: field 12.8 KB → 12.9 KB (measured 12.86 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: field-label 11.2 KB → 11.3 KB (measured 11.24 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: subheader 10.95 KB → 11.1 KB (measured 11.02 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: settings-group 12.2 KB → 12.3 KB (measured 12.22 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: settings-row 22.4 KB → 22.5 KB (measured 22.43 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: phone-input 35.3 KB → 35.5 KB (measured 35.38 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: language-select 29.1 KB → 29.2 KB (measured 29.14 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: select 23.4 KB → 23.5 KB (measured 23.44 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: multi-select 31.4 KB → 31.5 KB (measured 31.45 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: code-block 34.25 KB → 34.4 KB (measured 34.3 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: log-viewer-content 29.65 KB → 29.8 KB (measured 29.71 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: trace 39.3 KB → 39.5 KB (measured 39.4 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: artifact-canvas 12.2 KB → 12.3 KB (measured 12.28 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: artifact-preview 12.2 KB → 12.3 KB (measured 12.26 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: chat-message 20.5 KB → 20.6 KB (measured 20.57 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: chat-message-actions 14.4 KB → 14.5 KB (measured 14.44 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: chat-message-feedback 16.7 KB → 16.8 KB (measured 16.78 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: prompt-input-model-picker 15.85 KB → 16 KB (measured 15.91 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: prompt-input-context-picker 15.75 KB → 15.9 KB (measured 15.79 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: prompt-input-tools 18.25 KB → 18.4 KB (measured 18.32 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: sources 14.45 KB → 14.6 KB (measured 14.54 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: streaming-response 43.75 KB → 43.9 KB (measured 43.79 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: conversation-history 42.1 KB → 42.3 KB (measured 42.22 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: feedback-reason-dialog 37.85 KB → 38 KB (measured 37.88 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: attribute-editor 25.25 KB → 25.4 KB (measured 25.35 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: button-group 17.35 KB → 17.5 KB (measured 17.42 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: combobox 14 KB → 14.1 KB (measured 14.05 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: tag-editor 27.2 KB → 27.3 KB (measured 27.28 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: schema-form 69.05 KB → 69.2 KB (measured 69.17 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: overflow-count 15.75 KB → 15.9 KB (measured 15.81 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: table-cell-link 20.7 KB → 20.8 KB (measured 20.75 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: table-cell-id 10.5 KB → 10.6 KB (measured 10.58 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: table-cell-time 19.7 KB → 19.8 KB (measured 19.76 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: table-cell-tags 16.9 KB → 17 KB (measured 16.98 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: table-cell-actions 12.55 KB → 12.7 KB (measured 12.62 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: filter-menu 37.75 KB → 37.9 KB (measured 37.85 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: filter-menu-root 33.8 KB → 34 KB (measured 33.89 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: filter-menu-chip-group 22.55 KB → 22.7 KB (measured 22.61 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: copy-button 10.2 KB → 10.3 KB (measured 10.26 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: copy-text 10.65 KB → 10.8 KB (measured 10.71 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: split-button 17.65 KB → 17.8 KB (measured 17.7 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: log-viewer 43.9 KB → 44 KB (measured 43.95 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: log-viewer-steps 42.25 KB → 42.4 KB (measured 42.33 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: table-export-button 9.05 KB → 9.2 KB (measured 9.09 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: table-refresh-button 8.95 KB → 9.1 KB (measured 9.01 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: flow-diagram-bind 16.65 KB → 16.8 KB (measured 16.74 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: toast 11.9 KB → 12 KB (measured 11.93 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: toast-root 11.6 KB → 11.7 KB (measured 11.66 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: date-picker 15.5 KB → 15.6 KB (measured 15.56 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: hint 10.7 KB → 10.8 KB (measured 10.74 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: theme-switcher 18.35 KB → 18.5 KB (measured 18.4 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: markdown-editor 31.95 KB → 32.1 KB (measured 31.99 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: context-menu 12.9 KB → 13 KB (measured 12.97 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: context-menu-root 7.75 KB → 7.9 KB (measured 7.83 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: dropdown-menu 13.9 KB → 14 KB (measured 13.97 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: dropdown-menu-root 7.65 KB → 7.8 KB (measured 7.7 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: dropdown-menu-sub-content 5.3 KB → 5.4 KB (measured 5.35 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: multi-select-trigger 10.35 KB → 10.5 KB (measured 10.41 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: multi-select-content 21.9 KB → 22 KB (measured 21.95 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: select-content 19.75 KB → 19.9 KB (measured 19.79 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: console-layout 87.05 KB → 87.2 KB (measured 87.16 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: sidebar 25.35 KB → 25.5 KB (measured 25.4 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: sidebar-root 25.15 KB → 25.3 KB (measured 25.2 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: breadcrumb 27.45 KB → 27.6 KB (measured 27.5 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: breadcrumb-root 27.4 KB → 27.5 KB (measured 27.46 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: tooltip 5.85 KB → 5.9 KB (measured 5.88 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: hover-card 5.75 KB → 5.9 KB (measured 5.8 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: hover-card-content 1.55 KB → 1.7 KB (measured 1.59 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: popover 11.35 KB → 11.5 KB (measured 11.41 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: popover-content 1.25 KB → 1.4 KB (measured 1.34 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.

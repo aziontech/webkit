@@ -4,6 +4,7 @@
   import { resolveDirection } from '../../../../composables/use-direction'
   import { focusMenuItem, useMenuLevel } from '../../../../composables/use-menu-root'
   import { usePlacement } from '../../../../composables/use-placement'
+  import { useTeleportReady } from '../../../../composables/use-teleport-ready'
   import { usePortalLocale } from '../../../../composables/use-translate'
   import { useDropdownContext } from '../composables/use-dropdown-context'
   import { useDropdownSubContext } from '../composables/use-dropdown-sub-context'
@@ -133,12 +134,14 @@
     'bg-(--bg-surface) py-(--spacing-xs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] ' +
     'data-[inline]:min-w-0 data-[inline]:max-w-none data-[inline]:rounded-none data-[inline]:border-0 data-[inline]:py-0 ' +
     'data-[inline]:ps-(--spacing-md) data-[inline]:shadow-none'
+
+  const teleportReady = useTeleportReady()
 </script>
 
 <template>
   <Teleport
     to="body"
-    :disabled="inline"
+    :disabled="inline || !teleportReady"
   >
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"

@@ -10,6 +10,7 @@
   import { cloneVNode, computed, nextTick, ref, useAttrs, useSlots, watch } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
+  import { useTeleportReady } from '../../../composables/use-teleport-ready'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
@@ -222,6 +223,8 @@
 
   const CAPTION_CLASS =
     'pt-(--spacing-xs) text-center text-body-xs text-(--text-muted) [&_a]:text-link [&_a]:motion-reduce:transition-none [&_a]:forced-colors:text-[LinkText]'
+
+  const teleportReady = useTeleportReady()
 </script>
 
 <template>
@@ -312,7 +315,10 @@
       <slot name="caption">{{ caption }}</slot>
     </figcaption>
 
-    <Teleport to="body">
+    <Teleport
+      to="body"
+      :disabled="!teleportReady"
+    >
       <div
         v-if="zoomed"
         :dir="portalLocale.dir"

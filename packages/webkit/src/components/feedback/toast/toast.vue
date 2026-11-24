@@ -11,6 +11,7 @@
   } from 'vue'
 
   import { useDirection } from '../../../composables/use-direction'
+  import { useTeleportReady } from '../../../composables/use-teleport-ready'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Progress from '../progress/progress.vue'
@@ -237,10 +238,15 @@
     'transition-[transform,opacity,height] duration-moderate-02 ease-productive-entrance ' +
     'data-[removing]:duration-slow-01 data-[removing]:ease-productive-exit ' +
     'motion-reduce:transition-none'
+
+  const teleportReady = useTeleportReady()
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport
+    to="body"
+    :disabled="!teleportReady"
+  >
     <template v-if="isActive">
       <div
         role="status"

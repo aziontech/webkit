@@ -5,6 +5,7 @@
   import LazyNodes from '../../../composables/use-lazy-chunks/lib/lazy-nodes'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
+  import { useTeleportReady } from '../../../composables/use-teleport-ready'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
@@ -19,10 +20,7 @@
 
   export type { ComboboxOption, ComboboxSize } from './types'
 
-  defineOptions({
-    name: 'Combobox',
-    inheritAttrs: false
-  })
+  defineOptions({ name: 'Combobox', inheritAttrs: false })
 
   export interface ComboboxProps {
     /** Suggestions: `{ value, label?, description?, group?, disabled? }`. */
@@ -253,6 +251,8 @@
     'data-[selected]:bg-(--bg-selected) ' +
     'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:hover:bg-transparent ' +
     'motion-reduce:transition-none pointer-coarse:min-h-11'
+
+  const teleportReady = useTeleportReady()
 </script>
 
 <template>
@@ -330,7 +330,10 @@
       :data-testid="`${testId}__status`"
       >{{ status }}</span
     >
-    <Teleport to="body">
+    <Teleport
+      to="body"
+      :disabled="!teleportReady"
+    >
       <Transition
         enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
         leave-active-class="animate-popup-scale-out motion-reduce:animate-none"

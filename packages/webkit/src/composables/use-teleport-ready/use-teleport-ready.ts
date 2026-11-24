@@ -1,10 +1,19 @@
-import { computed, type ComputedRef, getCurrentInstance, onMounted, ref } from 'vue'
+import {
+  computed,
+  type ComputedRef,
+  getCurrentInstance,
+  inject,
+  onMounted,
+  ref,
+  ssrContextKey
+} from 'vue'
 
 export function useTeleportReady(): ComputedRef<boolean> {
+  const serverRendering = inject(ssrContextKey, null) != null
   const hydrating = getCurrentInstance()?.vnode.el != null
-  const mounted = ref(typeof window !== 'undefined' && !hydrating)
+  const ready = ref(!serverRendering && !hydrating)
   onMounted(() => {
-    mounted.value = true
+    ready.value = true
   })
-  return computed(() => mounted.value)
+  return computed(() => ready.value)
 }

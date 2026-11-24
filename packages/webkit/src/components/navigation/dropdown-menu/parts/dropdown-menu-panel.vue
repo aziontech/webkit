@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref, type StyleValue, watch } from 'vue'
 
+  import { useTeleportReady } from '../../../../composables/use-teleport-ready'
   import { usePortalLocale } from '../../../../composables/use-translate'
   import { useDropdownContext } from '../composables/use-dropdown-context'
 
@@ -62,10 +63,15 @@
   const PANEL_CLASS =
     'flex min-w-(--container-3xs) max-w-(--container-2xs) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) py-(--spacing-xs) ' +
     'shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]'
+
+  const teleportReady = useTeleportReady()
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport
+    to="body"
+    :disabled="!teleportReady"
+  >
     <span
       v-if="anchored && ctx.isOpen.value"
       :ref="onAnchorRef"

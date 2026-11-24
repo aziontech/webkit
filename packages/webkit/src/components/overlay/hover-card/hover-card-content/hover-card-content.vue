@@ -2,6 +2,7 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import { useElementListener } from '../../../../composables/use-element-listener'
+  import { useTeleportReady } from '../../../../composables/use-teleport-ready'
   import { usePortalLocale } from '../../../../composables/use-translate'
   import { useHoverCardContext } from '../composables/use-hover-card-context'
   import { HOVER_CARD_FOCUSABLE } from '../injection-key'
@@ -59,10 +60,15 @@
   const PANEL_CLASS =
     'flex w-max min-w-(--container-3xs) max-w-(--container-xs) flex-col gap-(--spacing-sm) overflow-y-auto rounded-(--shape-control) border border-(--border-default) ' +
     'bg-(--bg-surface-raised) p-(--spacing-md) text-body-sm text-(--text-default) shadow-(--shadow-sm) [transform-origin:var(--popup-origin,top_left)]'
+
+  const teleportReady = useTeleportReady()
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport
+    to="body"
+    :disabled="!teleportReady"
+  >
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
       leave-active-class="animate-popup-scale-out motion-reduce:animate-none"

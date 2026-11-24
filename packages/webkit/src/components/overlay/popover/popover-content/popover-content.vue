@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { type ComponentPublicInstance, computed, useAttrs } from 'vue'
 
+  import { useTeleportReady } from '../../../../composables/use-teleport-ready'
   import { usePortalLocale } from '../../../../composables/use-translate'
   import { usePopoverContext } from '../composables/use-popover-context'
 
@@ -29,10 +30,15 @@
     'data-[size=small]:min-w-[min(var(--container-xs),calc(100vw_-_var(--spacing-md)))] data-[size=small]:max-w-[min(var(--container-xs),calc(100vw_-_var(--spacing-md)))] ' +
     'data-[size=medium]:min-w-[min(var(--container-sm),calc(100vw_-_var(--spacing-md)))] data-[size=medium]:max-w-[min(var(--container-sm),calc(100vw_-_var(--spacing-md)))] ' +
     'data-[size=large]:min-w-[min(var(--container-md),calc(100vw_-_var(--spacing-md)))] data-[size=large]:max-w-[min(var(--container-md),calc(100vw_-_var(--spacing-md)))]'
+
+  const teleportReady = useTeleportReady()
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport
+    to="body"
+    :disabled="!teleportReady"
+  >
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
       leave-active-class="animate-popup-scale-out motion-reduce:animate-none"

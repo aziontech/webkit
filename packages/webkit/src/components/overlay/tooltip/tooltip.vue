@@ -5,6 +5,7 @@
   import { useElementListener } from '../../../composables/use-element-listener'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
+  import { useTeleportReady } from '../../../composables/use-teleport-ready'
   import { usePortalLocale } from '../../../composables/use-translate'
   import { triggerControl } from '../../../utils/trigger-control'
 
@@ -227,6 +228,8 @@
     'text-(--text-contrast) [transform-origin:var(--popup-origin,center)] ' +
     'data-[anchored]:transition-[translate] data-[anchored]:duration-fast-02 data-[anchored]:ease-productive-entrance ' +
     'motion-reduce:transition-none'
+
+  const teleportReady = useTeleportReady()
 </script>
 
 <template>
@@ -243,7 +246,10 @@
     <slot />
   </span>
 
-  <Teleport to="body">
+  <Teleport
+    to="body"
+    :disabled="!teleportReady"
+  >
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
       leave-active-class="animate-popup-scale-out motion-reduce:animate-none"

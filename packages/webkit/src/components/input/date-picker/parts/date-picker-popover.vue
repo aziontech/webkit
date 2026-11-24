@@ -5,6 +5,7 @@
   import { useFocusTrap } from '../../../../composables/use-focus-trap'
   import { useOverlayLayer } from '../../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../../composables/use-placement'
+  import { useTeleportReady } from '../../../../composables/use-teleport-ready'
   import { usePortalLocale } from '../../../../composables/use-translate'
 
   defineOptions({
@@ -84,10 +85,15 @@
     'flex flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] ' +
     'max-sm:inset-x-0! max-sm:top-auto! max-sm:bottom-0! max-sm:w-full! max-sm:max-w-none! max-sm:max-h-[85dvh]! max-sm:translate-none! max-sm:rounded-b-none ' +
     'max-sm:border-x-0 max-sm:border-b-0 max-sm:pb-[env(safe-area-inset-bottom)] max-sm:[transform-origin:bottom_center]'
+
+  const teleportReady = useTeleportReady()
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport
+    to="body"
+    :disabled="!teleportReady"
+  >
     <div
       v-if="open"
       aria-hidden="true"

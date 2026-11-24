@@ -8,6 +8,7 @@
   } from '../../../../composables/use-listbox-content'
   import { usePlacement, type UsePlacementOptions } from '../../../../composables/use-placement'
   import type { SelectRootContext } from '../../../../composables/use-select-root'
+  import { useTeleportReady } from '../../../../composables/use-teleport-ready'
   import { usePortalLocale } from '../../../../composables/use-translate'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
 
@@ -79,10 +80,15 @@
 
   const ROOT_CLASS =
     'fixed z-(--z-control-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs)'
+
+  const teleportReady = useTeleportReady()
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport
+    to="body"
+    :disabled="!teleportReady"
+  >
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
       leave-active-class="animate-popup-scale-out motion-reduce:animate-none"

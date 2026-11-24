@@ -2,6 +2,7 @@
   import { computed, ref, watch } from 'vue'
 
   import { usePlacement } from '../../../../composables/use-placement'
+  import { useTeleportReady } from '../../../../composables/use-teleport-ready'
   import { usePortalLocale, useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import Spinner from '../../../feedback/spinner/spinner.vue'
@@ -83,10 +84,15 @@
     'hover:bg-(--bg-hover) ' +
     'data-[active]:bg-(--bg-hover) ' +
     'motion-reduce:transition-none pointer-coarse:min-h-11'
+
+  const teleportReady = useTeleportReady()
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport
+    to="body"
+    :disabled="!teleportReady"
+  >
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
       leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
