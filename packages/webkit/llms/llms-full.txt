@@ -10920,6 +10920,109 @@ What each prop and event does, and the go-live code: [blocks/view/view-template-
 
 ---
 
+<!-- blocks/view/view-ticket-inbox.md -->
+
+# ViewTicketInbox (`view/view-ticket-inbox`)
+
+> The support agent's ticket inbox: a `PageHeader` with Create ticket over one controls band (a `Select` of saved views with their counts, such as My open tickets (4), Unassigned (3) and Overdue (2, needs action); a `Pr…
+
+- Surface: app
+- Source: `blocks/view/view-ticket-inbox/view-ticket-inbox.vue` in `@aziontech/webkit`
+- MCP: `get_block("view/view-ticket-inbox")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+- Components: Alert, Avatar, Button, Card, CollectionPreferences, ConfigProvider, Countdown, DataTable, `DataTablePagination`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, EmptyState, IconButton, PageHeader, PriorityTag, PropertyFilter, Select, `TableCellLink`, `TableCellStatus`, `TableCellTime`, Tooltip, `use-collection`
+- Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
+
+## Asked as
+
+ticket inbox; support inbox; helpdesk; help desk views; ticket list; ticket queue; agent inbox; support queue; saved views; unassigned tickets; overdue tickets; sla countdown; bulk assign tickets; caixa de entrada de tickets; caixa de suporte; fila de chamados; lista de tickets; lista de chamados; visões salvas; chamados sem responsável; chamados atrasados; atribuir chamados em massa
+
+The support agent's inbox. An agent opens a saved view (their own open tickets, the unassigned queue, what is overdue), scans what needs an answer first, opens a ticket, and moves several tickets at once: assigns them, changes their status, merges duplicates or closes them. It follows Zendesk views, the Freshdesk ticket list and the Help Scout mailbox, on the house list page. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
+
+## When to use
+
+- A help desk's ticket queue, where agents work saved views with SLA targets.
+- Any assignable work queue with owners, priorities and deadlines (review requests, abuse reports, onboarding cases).
+
+## When not to use
+
+- One ticket's conversation with the customer: use the `message-thread` component on the ticket's own page.
+- A resource list with no owner, priority or deadline: use `view/view-table`.
+- A log of who did what: use `account/account-activity-history`.
+
+## Building blocks
+
+- A. Page heading — `ConfigProvider`, `PageHeader`, `Button` (required)
+- B. Views and filter — `Select`, `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
+- C. Bulk actions — `Button`, `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuItem`, `Avatar` (conditional)
+- D. Ticket table — `Card`, `DataTable`, `DataTablePagination`, `TableCellLink`, `TableCellStatus`, `PriorityTag`, `Countdown`, `TableCellTime`, `useCollection` (required)
+- E. Empty view and no match — `EmptyState` (required)
+- F. Load failure — `Alert` (conditional)
+
+What each part takes: [blocks/view/view-ticket-inbox.md](blocks/view/view-ticket-inbox.md).
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `TicketInboxTicket`, `TicketInboxView`, `TicketInboxAgent`, `TicketInboxBulkPayload` and `TicketInboxProps` are exported from `view-ticket-inbox.vue`. `sample.ts` holds the sample tickets, views, agents and clock the block renders when `tickets`, `views` and `agents` are left out (none of it while `loading` or `error` is set); `sampleTicketsOf` stands in for the server deciding which tickets a view holds. `lib/ticket-fields.ts` holds the statuses, the status colours, the priority order and the sort comparators.
+
+Prop: `tickets`, `views`, `agents`, `viewKey`, `now`, `loading`, `error`, `defaultQuery`, `defaultSelectedKeys`.
+
+Event: `create`, `open`, `bulk-action`, `refresh`, `retry`, `update:viewKey`.
+
+Then delete `sample.ts` and its import. A queue too large for the browser moves to `useCollection` server mode (`fetch`), which pages and filters on the server.
+
+What each prop and event does, and the go-live code: [blocks/view/view-ticket-inbox.md](blocks/view/view-ticket-inbox.md).
+
+## Do
+
+- Sort by the next SLA target so the most urgent ticket is on top, and pause the countdown while the ticket waits on the customer.
+- Keep the views few and named for the work: My open tickets, Unassigned, Overdue, All open, Solved.
+- Count the selection in every bulk label and clear the selection after the action.
+- Confirm a bulk action's result in a toast from the app, with the number of tickets it changed.
+
+## Don't
+
+- Don't turn the views into a side menu or tabs that navigate: they are presets of this one list.
+- Don't show unread by colour alone: the mark comes with the hidden word Unread.
+- Don't open the ticket when the agent clicks the checkbox or a control in the row.
+
+## Copy
+
+- **Title:** `Tickets`. **Create:** `Create ticket`. **View select:** `View`. **Filter:** `Filter tickets`.
+- **Statuses:** `New`, `Open`, `Pending`, `On hold`, `Solved`. **Unassigned:** `Unassigned`.
+- **Bulk:** `3 selected`, `Select all 12 tickets`, `Clear selection`, `Assign (3)`, `Change status (3)`, `Merge (3)`, `Close (3)`; Merge's reason `Select two or more tickets to merge them.`
+- **Empty view:** `You're all caught up`, `No tickets in <view>.`, `Show all open tickets`. **No match:** `No matching tickets`, `No ticket in this view matches these filters.`, `Clear filters`.
+- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+
+## Accessibility
+
+- No `main` of its own and no second navigation: the `PageHeader` title is the only `h1`; the table is named after the active view.
+- Focus order: Create ticket, View, the filter, Refresh, preferences, the bulk controls while a selection exists, the table (select all, then the rows, one tab stop with the arrow keys), then pagination.
+- Rows: Arrow Up and Down move, Enter opens the ticket, Space toggles its selection; the subject link is reachable with Tab too.
+- Announcements: the selection count is a polite status; the filter announces its match count; Refresh shows its busy state; the result of a bulk action comes from the app's toast.
+- Presence is part of the assignee avatar's name (`Jane Doe, online`), so the printed name beside it is hidden from screen readers; priority and status are text, never colour alone.
+- Names and numbers keep their own direction (`dir="auto"`, `dir="ltr"`) inside a right-to-left page.
+
+## States
+
+- Default: My open tickets with four tickets, one overdue, one paused, two unread, the sample clock fixed; views, filter, sorting, selection, bulk actions and paging wired.
+- Empty: My open tickets holds no ticket (`tickets` is `[]`); You're all caught up with Show all open tickets.
+- Loading: the first load (`loading` with no tickets); the disabled controls and the table's loading rows.
+- Error: the tickets did not load (`error` is set); a danger Alert with the message and Retry.
+- Filtered: `defaultQuery` filters My open tickets by Channel = Phone; No matching tickets with Clear filters.
+- Selected: `defaultSelectedKeys` selects three tickets; the bulk bar counts them.
+
+## Related
+
+- `view/view-table` — the list page this one follows.
+- `account/account-activity-history` — the same filtered table for an audit log.
+
+## Variants
+
+`Default` (primary) · `Empty` · `Loading` · `Error` · `Filtered` · `Selected`. Code: [blocks/view/view-ticket-inbox.md](blocks/view/view-ticket-inbox.md), `get_block("view/view-ticket-inbox", { variant })`.
+
+---
+
 <!-- blocks/view/view-waf-tuning.md -->
 
 # ViewWafTuning (`view/view-waf-tuning`)
