@@ -81,7 +81,7 @@ not apply is `pass` with the reason (e.g. "no built-in strings").
    no Tailwind palette, no raw typography, no primitive spacing (`--spacing-1` … `--spacing-96`);
    colour pairs are documented passing pairs (`rules/webkit-tokens.md` § Contrast): a status icon on
    a surface takes its `-mark` token, a status fill is never text, the logo orange is never text;
-   gaps are in `## Theme gaps` as `TODO: tokenizar`.
+   gaps are in `## Theme gaps` as `TODO: tokenize`.
 10. **Performance budget.** `## Performance` declares a gzip budget for the tree-shakeable entry
     (it becomes the `.size-limit.json` entry), a runtime budget for data-heavy components (rows,
     options, nodes, points) and lazy loading for heavy parts; no new runtime dependency

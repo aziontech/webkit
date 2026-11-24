@@ -4,6 +4,7 @@
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
+  import Tag from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
 
   import { BLOCK_THUMBNAIL } from '../lib/block-thumbnails'
@@ -15,7 +16,13 @@
     description: string
     groups: {
       label: string
-      items: { title: string; to: string; text: string; image?: { light: string; dark: string } }[]
+      items: {
+        title: string
+        to: string
+        text: string
+        preview?: boolean
+        image?: { light: string; dark: string }
+      }[]
     }[]
   }>()
 
@@ -112,7 +119,15 @@
               class="hidden aspect-[8/5] h-auto w-full dark:block"
             />
           </span>
-          <span class="line-clamp-2">{{ item.text }}</span>
+          <span class="flex flex-col items-start gap-(--spacing-2xs)">
+            <Tag
+              v-if="item.preview"
+              :label="t.stabilityPreview"
+              severity="info"
+              size="small"
+            />
+            <span class="line-clamp-2">{{ item.text }}</span>
+          </span>
         </DocCard>
       </DocCardGroup>
     </section>

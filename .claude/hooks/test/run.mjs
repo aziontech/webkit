@@ -132,6 +132,23 @@ group('lib: validateFrontmatter', () => {
       'should flag missing checksum'
     )
   })
+  test('stability takes preview or ga, and may be absent', () => {
+    const fm = {
+      name: 'tooltip',
+      category: 'feedback',
+      structure: 'monolithic',
+      status: 'draft',
+      spec_version: 1,
+      created: '2026-05-22',
+      last_updated: '2026-05-22'
+    }
+    assertEqual(validateFrontmatter({ ...fm, stability: 'preview' }), [])
+    assertEqual(validateFrontmatter({ ...fm, stability: 'ga' }), [])
+    assertTrue(
+      validateFrontmatter({ ...fm, stability: 'beta' }).some((e) => e.startsWith('stability:')),
+      'should flag an unknown stability'
+    )
+  })
   test('invalid category fails', () => {
     const fm = {
       name: 'tooltip',

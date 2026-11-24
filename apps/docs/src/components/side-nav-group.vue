@@ -2,7 +2,12 @@
   import SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'
   import SidebarMenuItem from '@aziontech/webkit/sidebar-menu-item'
 
-  defineProps<{ label: string; items: { label: string; to: string }[]; current: string }>()
+  import { messages } from '../lib/i18n'
+  import type { NavItem } from '../lib/nav'
+
+  defineProps<{ label: string; items: NavItem[]; current: string }>()
+
+  const t = messages
 </script>
 
 <template>
@@ -13,6 +18,8 @@
       :label="item.label"
       :href="item.to"
       :active="current === item.to"
+      :tag-value="item.preview ? t.stabilityPreview : ''"
+      tag-severity="info"
     />
   </SidebarMenuGroup>
 </template>

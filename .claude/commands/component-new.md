@@ -62,7 +62,7 @@ same on the issue (`gh issue comment`), and do nothing else.
    field is filled). The `spec-creator` sub-agent copies `.specs/_template.md`, so the spec
    carries `template: 2` and must fill `## Internationalization`, `## Right-to-left`,
    `## Responsive` and `## Performance`.
-2. Exit condition: `.specs/<name>.md` exists with `status: draft` and no `TBD`. An unanswerable
+2. Exit condition: `.specs/<name>.md` exists with `status: draft`, `stability: preview` and no `TBD`. An unanswerable
    section is `BLOCKED:` — stop and ask on the issue.
 
 ## Step 4 — Spec review by a second agent

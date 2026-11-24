@@ -2128,13 +2128,13 @@ Descriptions: foundations/brand-marks.md.
 
 yout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry (the font); the colour logos come with the WebKit stylesheet, compiled only for the classes written whole in your sources. An `icon` prop takes the class string.
 
-554 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+558 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
 Used by: Alert, ArtifactPreview, Avatar, Button, Combobox, DocCard, DocItem, DocPrompt, EmptyState, FeatureItem, FileDropzone, HighlightButton, IconButton, Link, SettingsGroup, SplitButton, Tag.
 
 ## Names
 
-`az az-ai-gateway` · `az az-ai-inference` · `az az-application-accelerator` · `az az-applications` · `az az-bot-manager` · `az az-certificate-manager` · `az az-connectors` · `az az-custom-pages` · `az az-data-stream` · `az az-durable-objects` · `az az-edge-dns` · `az az-orchestrator` · `az az-edge-pulse` · `az az-firewall` · `az az-functions` · `az az-image-processor` · `az az-kv-store` · `az az-live-ingest` · `az az-load-balancer` · `az az-marketplace` · `az az-network-lists` · `az az-object-storage` · `az az-real-time-events` · `az az-real-time-metrics` · `az az-real-time-purge` · `az az-sql-database` · `az az-variables` · `az az-waf` · `az az-workloads` · `az az-domains` · `az az-edge-libraries` · `az az-edge-nodes` · `az az-edge-services` · `az az-rules-engine` · `az az-ask-azion` · `az az-azion` · `az az-azion-api` · `az az-azion-cli` · `az az-build-pillar` · `az az-deploy-pillar` · `az az-observe-pillar` · `az az-secure-pillar` · `az az-store-pillar` · `az az-application-development` · `az az-performance-and-reliability` · `az az-artificial-intelligence` · `az az-application-security` · `az az-media-and-streaming` · `az az-retail` · `az az-technology` · `az az-financial-services` · `az az-business-support` · `az az-configuration-service` · `az az-integration-services` · `az az-practices-review` · `az az-professional-services` · `az az-security-team` · `az az-technical-account` · `az az-technical-support` · `az az-arrow-down` · `az az-arrow-down-0-1` · `az az-arrow-down-1-0` · `az az-arrow-down-a-z` · `az az-arrow-down-left` · `az az-arrow-down-narrow-wide` · `az az-arrow-down-right` · `az az-arrow-down-wide-narrow` · `az az-arrow-down-z-a` · `az az-arrow-left` · `az az-arrow-right` · `az az-arrow-left-to-line` · `az az-arrow-right-to-line` · `az az-arrow-right-left` · `az az-arrow-up` · `az az-arrow-up-0-1` · `az az-arrow-up-1-0` · `az az-arrow-up-a-z` · `az az-arrow-up-left` · `az az-arrow-up-narrow-wide` · `az az-arrow-up-right` · `az az-arrow-up-wide-narrow` · `az az-arrow-up-z-a` · `az az-caret-down` · `az az-caret-left` · `az az-caret-right` · `az az-caret-up` · `az az-chevron-down` · `az az-chevron-left` · `az az-chevron-right` · `az az-chevron-up` · `az az-chevrons-down` · `az az-chevrons-left` · `az az-chevrons-right` · `az az-chevrons-up` · `az az-circle-arrow-down` · `az az-circle-arrow-left` · `az az-circle-arrow-right` · `az az-circle-arrow-up` · `az az-circle-chevron-down` · `az az-circle-chevron-left` · `az az-circle-chevron-right` · `az az-circle-chevron-up` · `az az-move` · `az az-move-horizontal` · `az az-move-vertical` · `az az-sort` · `az az-sort-down-fill` · `az az-sort-off` · `az az-sort-up-fill` · `az az-arrow-up-from-line` · `az az-circle-plus` · `az az-cloud-download` · `az az-cloud-upload` · `az az-copy` · `az az-delete-left` · `az az-download` · `az az-eraser` · `az az-external-link` · `az az-eye` · `az az-eye-off` · `az az-filter` · `az az-filter-fill` · `az az-filter-off` · `az az-history` · `az az-link` · `az az-log-in` · `az az-log-out` · `az az-minus` · `az az-pencil` · `az az-plus` · `az az-power-off` · `az az-refresh` · `az az-replay` · `az az-save` · `az az-scissors` · `az az-search` · `az az-settings` · `az az-share` · `az az-square-pen` · `az az-sync` · `az az-trash` · `az az-undo` · `az az-upload` · `az az-x` · `az az-zoom-in` · `az az-zoom-out` · `az az-attack` · `az az-ban` · `az az-check` · `az az-circle` · `az az-circle-alert` · `az az-circle-check` · `az az-circle-fill` · `az az-circle-half` · `az az-circle-help` · `az az-circle-info` · `az az-circle-minus` · `az az-circle-off` · `az az-circle-on` · `az az-circle-x` · `az az-disabled` · `az az-enabled` · `az az-hourglass` · `az az-info` · `az az-question` · `az az-spinner` · `az az-spinner-dotted` · `az az-square-check` · `az az-triangle-alert` · `az az-verified` · `az az-clipboard` · `az az-file` · `az az-file-arrow-up` · `az az-file-check` · `az az-file-excel` · `az az-file-export` · `az az-file-import` · `az az-file-pdf` · `az az-file-pen` · `az az-file-plus` · `az az-file-word` · `az az-folder` · `az az-folder-open` · `az az-folder-plus` · `az az-json` · `az az-json-text` · `az az-paperclip` · `az az-backward` · `az az-camera` · `az az-circle-pause` · `az az-circle-play` · `az az-circle-stop` · `az az-forward` · `az az-image` · `az az-images` · `az az-microphone` · `az az-pause` · `az az-play` · `az az-skip-back` · `az az-skip-forward` · `az az-step-back` · `az az-step-forward` · `az az-stop` · `az az-video` · `az az-volume-down` · `az az-volume-off` · `az az-volume-up` · `az az-at` · `az az-bell` · `az az-bell-off` · `az az-comment` · `az az-comments` · `az az-inbox` · `az az-mail` · `az az-megaphone` · `az az-phone` · `az az-reply` · `az az-rss` · `az az-send` · `az az-webhook` · `az az-barcode` · `az az-cart-arrow-down` · `az az-cart-minus` · `az az-cart-plus` · `az az-credit-card` · `az az-dollar` · `az az-euro` · `az az-gift` · `az az-indian-rupee` · `az az-money-bill` · `az az-pound` · `az az-receipt` · `az az-shop` · `az az-shopping-bag` · `az az-shopping-cart` · `az az-ticket` · `az az-turkish-lira` · `az az-wallet` · `az az-address-book` · `az az-face-smile` · `az az-id-card` · `az az-mars` · `az az-user` · `az az-user-minus` · `az az-user-pen` · `az az-user-plus` · `az az-users` · `az az-venus` · `az az-desktop` · `az az-headphones` · `az az-microchip` · `az az-microchip-ai` · `az az-mobile` · `az az-print` · `az az-server` · `az az-tablet` · `az az-wifi` · `az az-calculator` · `az az-chart-bar` · `az az-chart-line` · `az az-chart-pie` · `az az-chart-scatter` · `az az-database` · `az az-gauge` · `az az-list` · `az az-list-check` · `az az-sheet` · `az az-sql` · `az az-table` · `az az-wave-pulse` · `az az-align-center` · `az az-align-justify` · `az az-align-left` · `az az-align-right` · `az az-columns-3` · `az az-ellipsis` · `az az-ellipsis-vertical` · `az az-expand` · `az az-layers` · `az az-layout-grid` · `az az-maximize` · `az az-menu` · `az az-minimize` · `az az-sitemap` · `az az-sliders-horizontal` · `az az-sliders-vertical` · `az az-app-window` · `az az-window-minimize` · `az az-asterisk` · `az az-bolt` · `az az-book` · `az az-bookmark` · `az az-bookmark-fill` · `az az-box` · `az az-briefcase` · `az az-building` · `az az-building-columns` · `az az-bullseye` · `az az-calendar` · `az az-calendar-clock` · `az az-calendar-minus` · `az az-calendar-plus` · `az az-calendar-x` · `az az-car` · `az az-clock` · `az az-cloud` · `az az-code` · `az az-compass` · `az az-crown` · `az az-directions` · `az az-equals` · `az az-flag` · `az az-flag-fill` · `az az-globe` · `az az-graduation-cap` · `az az-hammer` · `az az-hash` · `az az-heart` · `az az-heart-fill` · `az az-home` · `az az-key` · `az az-language` · `az az-lightbulb` · `az az-lock` · `az az-lock-open` · `az az-map` · `az az-map-pin` · `az az-moon` · `az az-palette` · `az az-percentage` · `az az-pin` · `az az-qrcode` · `az az-route` · `az az-shield` · `az az-signpost` · `az az-sparkles` · `az az-star` · `az az-star-fill` · `az az-star-half` · `az az-star-half-fill` · `az az-stopwatch` · `az az-sun` · `az az-tag` · `az az-tags` · `az az-thumbs-down` · `az az-thumbs-down-fill` · `az az-thumbs-up` · `az az-thumbs-up-fill` · `az az-trophy` · `az az-truck` · `az az-warehouse` · `az az-wrench` · `az az-git-branch` · `az az-git-branch-delete` · `az az-git-branch-plus` · `az az-git-cherry-pick` · `az az-git-commit` · `az az-git-compare` · `az az-git-diff` · `az az-git-fork` · `az az-git-graph` · `az az-git-merge` · `az az-git-merge-conflict` · `az az-git-pull-request` · `az az-git-pull-request-closed` · `az az-git-pull-request-draft` · `az az-git-repository` · `az az-angular` · `az az-astro` · `az az-docusaurus` · `az az-eleventy` · `az az-gatsby` · `az az-hexo` · `az az-hono` · `az az-hugo` · `az az-jekyll` · `az az-nextjs` · `az az-nitro` · `az az-nuxt` · `az az-preact` · `az az-qwik` · `az az-react` · `az az-remix` · `az az-stencil` · `az az-svelte` · `az az-vitepress` · `az az-vue` · `az az-vuepress` · `az az-claude` · `az az-deepseek` · `az az-gemini` · `az az-grok` · `az az-meta` · `az az-microsoft-copilot` · `az az-mistral` · `az az-openai` · `az az-perplexity` · `az az-qwen` · `az az-cursor` · `az az-github` · `az az-mcp` · `az az-redis` · `az az-terraform` · `az az-turso` · `az az-vite` · `az az-windsurf` · `az az-graphql` · `az az-html` · `az az-discord` · `az az-facebook` · `az az-google` · `az az-instagram` · `az az-linkedin` · `az az-medium` · `az az-reddit` · `az az-slack` · `az az-twitch` · `az az-whatsapp` · `az az-x-brand` · `az az-youtube` · `az-color az-angular` · `az-color az-astro` · `az-color az-flutter` · `az-color az-nextjs` · `az-color az-nuxt` · `az-color az-react` · `az-color az-redwood` · `az-color az-solidjs` · `az-color az-svelte` · `az-color az-vue` · `az-color az-claude` · `az-color az-deepseek` · `az-color az-gemini` · `az-color az-grok` · `az-color az-meta` · `az-color az-microsoft-copilot` · `az-color az-mistral` · `az-color az-openai` · `az-color az-perplexity` · `az-color az-qwen` · `az-color az-azure-devops` · `az-color az-bitbucket` · `az-color az-cursor` · `az-color az-gitlab` · `az-color az-terraform` · `az-color az-windsurf` · `az-color az-graphql` · `az-color az-html` · `az-color az-javascript` · `az-color az-kotlin` · `az-color az-typescript` · `az-color az-discord` · `az-color az-google` · `az-color az-x-brand` · `az-color az-youtube` · `az az-cache` · `az az-tiered-cache` · `az az-network-shield` · `az az-ddos-protection` · `az az-secure-internet-access` · `az az-lora-fine-tune` · `az az-origin-shield` · `az az-langgraph` · `az az-neon` · `az az-nodejs` · `az az-python` · `az az-upstash` · `az az-wordpress` · `az az-terminal` · `az-color az-docusaurus` · `az-color az-eleventy` · `az-color az-gatsby` · `az-color az-hexo` · `az-color az-hono` · `az-color az-hugo` · `az-color az-jekyll` · `az-color az-langgraph` · `az-color az-neon` · `az-color az-nodejs` · `az-color az-preact` · `az-color az-python` · `az-color az-qwik` · `az-color az-remix` · `az-color az-turso` · `az-color az-upstash` · `az-color az-vite` · `az-color az-vitepress` · `az-color az-vuepress` · `az-color az-wordpress` · `az-color az-stencil` · `az-color az-htmx` · `az-color az-rust` · `az-color az-webassembly` · `az-color az-kimi` · `az-color az-zhipu` · `az-color az-minimax` · `az-color az-ernie` · `az-color az-hunyuan` · `az-color az-doubao` · `az-color az-yi` · `az-color az-stepfun` · `az-color az-baichuan` · `az-color az-iflytek-spark` · `az-color az-sensenova` · `az-color az-internlm` · `az-color az-baai` · `az-color az-nanonets` · `az-color az-hugging-face` · `az-color az-suno` · `az-color az-fish-audio` · `az-color az-stability-ai` · `az-color az-nvidia` · `az-color az-coqui` · `az-color az-mcp` · `az-color az-github-copilot` · `az-color az-codex` · `az-color az-opencode` · `az-color az-warp` · `az-color az-kiro` · `az-color az-datadog` · `az-color az-splunk` · `az-color az-elasticsearch` · `az-color az-grafana` · `az-color az-apache-kafka` · `az-color az-amazon-kinesis` · `az-color az-amazon-s3` · `az-color az-microsoft-azure` · `az-color az-google-bigquery` · `az-color az-ibm` · `az-color az-supabase` · `az-color az-postgresql` · `az-color az-mysql` · `az-color az-mongodb` · `az-color az-tidb` · `az-color az-drizzle` · `az-color az-sanity` · `az-color az-cosmic` · `az-color az-okta` · `az-color az-microsoft-entra` · `az-color az-auth0` · `az-color az-keycloak` · `az-color az-authentik` · `az-color az-authelia` · `az-color az-ory` · `az-color az-zitadel` · `az-color az-hcaptcha` · `az-color az-recaptcha` · `az-color az-fingerprint-brand` · `az-color az-github` · `az-color az-github-actions` · `az-color az-visual-studio-code` · `az-color az-stripe` · `az-color az-resend` · `az-color az-browserless`
+`az az-ai-gateway` · `az az-ai-inference` · `az az-application-accelerator` · `az az-applications` · `az az-bot-manager` · `az az-certificate-manager` · `az az-connectors` · `az az-custom-pages` · `az az-data-stream` · `az az-durable-objects` · `az az-edge-dns` · `az az-orchestrator` · `az az-edge-pulse` · `az az-firewall` · `az az-functions` · `az az-image-processor` · `az az-kv-store` · `az az-live-ingest` · `az az-load-balancer` · `az az-marketplace` · `az az-network-lists` · `az az-object-storage` · `az az-real-time-events` · `az az-real-time-metrics` · `az az-real-time-purge` · `az az-sql-database` · `az az-variables` · `az az-waf` · `az az-workloads` · `az az-domains` · `az az-edge-libraries` · `az az-edge-nodes` · `az az-edge-services` · `az az-rules-engine` · `az az-ask-azion` · `az az-azion` · `az az-azion-api` · `az az-azion-cli` · `az az-build-pillar` · `az az-deploy-pillar` · `az az-observe-pillar` · `az az-secure-pillar` · `az az-store-pillar` · `az az-application-development` · `az az-performance-and-reliability` · `az az-artificial-intelligence` · `az az-application-security` · `az az-media-and-streaming` · `az az-retail` · `az az-technology` · `az az-financial-services` · `az az-business-support` · `az az-configuration-service` · `az az-integration-services` · `az az-practices-review` · `az az-professional-services` · `az az-security-team` · `az az-technical-account` · `az az-technical-support` · `az az-arrow-down` · `az az-arrow-down-0-1` · `az az-arrow-down-1-0` · `az az-arrow-down-a-z` · `az az-arrow-down-left` · `az az-arrow-down-narrow-wide` · `az az-arrow-down-right` · `az az-arrow-down-wide-narrow` · `az az-arrow-down-z-a` · `az az-arrow-left` · `az az-arrow-right` · `az az-arrow-left-to-line` · `az az-arrow-right-to-line` · `az az-arrow-right-left` · `az az-arrow-up` · `az az-arrow-up-0-1` · `az az-arrow-up-1-0` · `az az-arrow-up-a-z` · `az az-arrow-up-left` · `az az-arrow-up-narrow-wide` · `az az-arrow-up-right` · `az az-arrow-up-wide-narrow` · `az az-arrow-up-z-a` · `az az-caret-down` · `az az-caret-left` · `az az-caret-right` · `az az-caret-up` · `az az-chevron-down` · `az az-chevron-left` · `az az-chevron-right` · `az az-chevron-up` · `az az-chevrons-down` · `az az-chevrons-left` · `az az-chevrons-right` · `az az-chevrons-up` · `az az-circle-arrow-down` · `az az-circle-arrow-left` · `az az-circle-arrow-right` · `az az-circle-arrow-up` · `az az-circle-chevron-down` · `az az-circle-chevron-left` · `az az-circle-chevron-right` · `az az-circle-chevron-up` · `az az-move` · `az az-move-horizontal` · `az az-move-vertical` · `az az-sort` · `az az-sort-down-fill` · `az az-sort-off` · `az az-sort-up-fill` · `az az-arrow-up-from-line` · `az az-circle-plus` · `az az-cloud-download` · `az az-cloud-upload` · `az az-copy` · `az az-delete-left` · `az az-download` · `az az-eraser` · `az az-external-link` · `az az-eye` · `az az-eye-off` · `az az-filter` · `az az-filter-fill` · `az az-filter-off` · `az az-history` · `az az-link` · `az az-log-in` · `az az-log-out` · `az az-minus` · `az az-pencil` · `az az-plus` · `az az-power-off` · `az az-refresh` · `az az-replay` · `az az-save` · `az az-scissors` · `az az-search` · `az az-settings` · `az az-share` · `az az-square-pen` · `az az-sync` · `az az-trash` · `az az-undo` · `az az-upload` · `az az-x` · `az az-zoom-in` · `az az-zoom-out` · `az az-attack` · `az az-ban` · `az az-check` · `az az-circle` · `az az-circle-alert` · `az az-circle-check` · `az az-circle-fill` · `az az-circle-half` · `az az-circle-help` · `az az-circle-info` · `az az-circle-minus` · `az az-circle-off` · `az az-circle-on` · `az az-circle-x` · `az az-disabled` · `az az-enabled` · `az az-hourglass` · `az az-info` · `az az-question` · `az az-spinner` · `az az-spinner-dotted` · `az az-square-check` · `az az-triangle-alert` · `az az-verified` · `az az-clipboard` · `az az-file` · `az az-file-arrow-up` · `az az-file-check` · `az az-file-excel` · `az az-file-export` · `az az-file-import` · `az az-file-pdf` · `az az-file-pen` · `az az-file-plus` · `az az-file-word` · `az az-folder` · `az az-folder-open` · `az az-folder-plus` · `az az-json` · `az az-json-text` · `az az-paperclip` · `az az-backward` · `az az-camera` · `az az-circle-pause` · `az az-circle-play` · `az az-circle-stop` · `az az-forward` · `az az-image` · `az az-images` · `az az-microphone` · `az az-pause` · `az az-play` · `az az-skip-back` · `az az-skip-forward` · `az az-step-back` · `az az-step-forward` · `az az-stop` · `az az-video` · `az az-volume-down` · `az az-volume-off` · `az az-volume-up` · `az az-at` · `az az-bell` · `az az-bell-off` · `az az-comment` · `az az-comments` · `az az-inbox` · `az az-mail` · `az az-megaphone` · `az az-phone` · `az az-reply` · `az az-rss` · `az az-send` · `az az-webhook` · `az az-barcode` · `az az-cart-arrow-down` · `az az-cart-minus` · `az az-cart-plus` · `az az-credit-card` · `az az-dollar` · `az az-euro` · `az az-gift` · `az az-indian-rupee` · `az az-money-bill` · `az az-pound` · `az az-receipt` · `az az-shop` · `az az-shopping-bag` · `az az-shopping-cart` · `az az-ticket` · `az az-turkish-lira` · `az az-wallet` · `az az-address-book` · `az az-face-smile` · `az az-id-card` · `az az-mars` · `az az-user` · `az az-user-minus` · `az az-user-pen` · `az az-user-plus` · `az az-users` · `az az-venus` · `az az-desktop` · `az az-headphones` · `az az-microchip` · `az az-microchip-ai` · `az az-mobile` · `az az-print` · `az az-server` · `az az-tablet` · `az az-wifi` · `az az-calculator` · `az az-chart-bar` · `az az-chart-line` · `az az-chart-pie` · `az az-chart-scatter` · `az az-database` · `az az-gauge` · `az az-list` · `az az-list-check` · `az az-sheet` · `az az-sql` · `az az-table` · `az az-wave-pulse` · `az az-align-center` · `az az-align-justify` · `az az-bold` · `az az-italic` · `az az-list-ordered` · `az az-quote` · `az az-align-left` · `az az-align-right` · `az az-columns-3` · `az az-ellipsis` · `az az-ellipsis-vertical` · `az az-expand` · `az az-layers` · `az az-layout-grid` · `az az-maximize` · `az az-menu` · `az az-minimize` · `az az-sitemap` · `az az-sliders-horizontal` · `az az-sliders-vertical` · `az az-app-window` · `az az-window-minimize` · `az az-asterisk` · `az az-bolt` · `az az-book` · `az az-bookmark` · `az az-bookmark-fill` · `az az-box` · `az az-briefcase` · `az az-building` · `az az-building-columns` · `az az-bullseye` · `az az-calendar` · `az az-calendar-clock` · `az az-calendar-minus` · `az az-calendar-plus` · `az az-calendar-x` · `az az-car` · `az az-clock` · `az az-cloud` · `az az-code` · `az az-compass` · `az az-crown` · `az az-directions` · `az az-equals` · `az az-flag` · `az az-flag-fill` · `az az-globe` · `az az-graduation-cap` · `az az-hammer` · `az az-hash` · `az az-heart` · `az az-heart-fill` · `az az-home` · `az az-key` · `az az-language` · `az az-lightbulb` · `az az-lock` · `az az-lock-open` · `az az-map` · `az az-map-pin` · `az az-moon` · `az az-palette` · `az az-percentage` · `az az-pin` · `az az-qrcode` · `az az-route` · `az az-shield` · `az az-signpost` · `az az-sparkles` · `az az-star` · `az az-star-fill` · `az az-star-half` · `az az-star-half-fill` · `az az-stopwatch` · `az az-sun` · `az az-tag` · `az az-tags` · `az az-thumbs-down` · `az az-thumbs-down-fill` · `az az-thumbs-up` · `az az-thumbs-up-fill` · `az az-trophy` · `az az-truck` · `az az-warehouse` · `az az-wrench` · `az az-git-branch` · `az az-git-branch-delete` · `az az-git-branch-plus` · `az az-git-cherry-pick` · `az az-git-commit` · `az az-git-compare` · `az az-git-diff` · `az az-git-fork` · `az az-git-graph` · `az az-git-merge` · `az az-git-merge-conflict` · `az az-git-pull-request` · `az az-git-pull-request-closed` · `az az-git-pull-request-draft` · `az az-git-repository` · `az az-angular` · `az az-astro` · `az az-docusaurus` · `az az-eleventy` · `az az-gatsby` · `az az-hexo` · `az az-hono` · `az az-hugo` · `az az-jekyll` · `az az-nextjs` · `az az-nitro` · `az az-nuxt` · `az az-preact` · `az az-qwik` · `az az-react` · `az az-remix` · `az az-stencil` · `az az-svelte` · `az az-vitepress` · `az az-vue` · `az az-vuepress` · `az az-claude` · `az az-deepseek` · `az az-gemini` · `az az-grok` · `az az-meta` · `az az-microsoft-copilot` · `az az-mistral` · `az az-openai` · `az az-perplexity` · `az az-qwen` · `az az-cursor` · `az az-github` · `az az-mcp` · `az az-redis` · `az az-terraform` · `az az-turso` · `az az-vite` · `az az-windsurf` · `az az-graphql` · `az az-html` · `az az-discord` · `az az-facebook` · `az az-google` · `az az-instagram` · `az az-linkedin` · `az az-medium` · `az az-reddit` · `az az-slack` · `az az-twitch` · `az az-whatsapp` · `az az-x-brand` · `az az-youtube` · `az-color az-angular` · `az-color az-astro` · `az-color az-flutter` · `az-color az-nextjs` · `az-color az-nuxt` · `az-color az-react` · `az-color az-redwood` · `az-color az-solidjs` · `az-color az-svelte` · `az-color az-vue` · `az-color az-claude` · `az-color az-deepseek` · `az-color az-gemini` · `az-color az-grok` · `az-color az-meta` · `az-color az-microsoft-copilot` · `az-color az-mistral` · `az-color az-openai` · `az-color az-perplexity` · `az-color az-qwen` · `az-color az-azure-devops` · `az-color az-bitbucket` · `az-color az-cursor` · `az-color az-gitlab` · `az-color az-terraform` · `az-color az-windsurf` · `az-color az-graphql` · `az-color az-html` · `az-color az-javascript` · `az-color az-kotlin` · `az-color az-typescript` · `az-color az-discord` · `az-color az-google` · `az-color az-x-brand` · `az-color az-youtube` · `az az-cache` · `az az-tiered-cache` · `az az-network-shield` · `az az-ddos-protection` · `az az-secure-internet-access` · `az az-lora-fine-tune` · `az az-origin-shield` · `az az-langgraph` · `az az-neon` · `az az-nodejs` · `az az-python` · `az az-upstash` · `az az-wordpress` · `az az-terminal` · `az-color az-docusaurus` · `az-color az-eleventy` · `az-color az-gatsby` · `az-color az-hexo` · `az-color az-hono` · `az-color az-hugo` · `az-color az-jekyll` · `az-color az-langgraph` · `az-color az-neon` · `az-color az-nodejs` · `az-color az-preact` · `az-color az-python` · `az-color az-qwik` · `az-color az-remix` · `az-color az-turso` · `az-color az-upstash` · `az-color az-vite` · `az-color az-vitepress` · `az-color az-vuepress` · `az-color az-wordpress` · `az-color az-stencil` · `az-color az-htmx` · `az-color az-rust` · `az-color az-webassembly` · `az-color az-kimi` · `az-color az-zhipu` · `az-color az-minimax` · `az-color az-ernie` · `az-color az-hunyuan` · `az-color az-doubao` · `az-color az-yi` · `az-color az-stepfun` · `az-color az-baichuan` · `az-color az-iflytek-spark` · `az-color az-sensenova` · `az-color az-internlm` · `az-color az-baai` · `az-color az-nanonets` · `az-color az-hugging-face` · `az-color az-suno` · `az-color az-fish-audio` · `az-color az-stability-ai` · `az-color az-nvidia` · `az-color az-coqui` · `az-color az-mcp` · `az-color az-github-copilot` · `az-color az-codex` · `az-color az-opencode` · `az-color az-warp` · `az-color az-kiro` · `az-color az-datadog` · `az-color az-splunk` · `az-color az-elasticsearch` · `az-color az-grafana` · `az-color az-apache-kafka` · `az-color az-amazon-kinesis` · `az-color az-amazon-s3` · `az-color az-microsoft-azure` · `az-color az-google-bigquery` · `az-color az-ibm` · `az-color az-supabase` · `az-color az-postgresql` · `az-color az-mysql` · `az-color az-mongodb` · `az-color az-tidb` · `az-color az-drizzle` · `az-color az-sanity` · `az-color az-cosmic` · `az-color az-okta` · `az-color az-microsoft-entra` · `az-color az-auth0` · `az-color az-keycloak` · `az-color az-authentik` · `az-color az-authelia` · `az-color az-ory` · `az-color az-zitadel` · `az-color az-hcaptcha` · `az-color az-recaptcha` · `az-color az-fingerprint-brand` · `az-color az-github` · `az-color az-github-actions` · `az-color az-visual-studio-code` · `az-color az-stripe` · `az-color az-resend` · `az-color az-browserless`
 
 Descriptions, groups and keywords: foundations/icons.md.
 
@@ -5105,6 +5105,124 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 
 ---
 
+<!-- blocks/create/create-ticket.md -->
+
+# CreateTicket (`create/create-ticket`)
+
+> The page a support agent creates a ticket on, on behalf of a customer: the creation header with Back, the brand, Tickets › Create ticket and the account, then a centred form column with a small `PageHeader` and three…
+
+- Surface: app
+- Source: `blocks/create/create-ticket/create-ticket.vue` in `@aziontech/webkit`
+- MCP: `get_block("create/create-ticket")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+- Components: Alert, AppHeader, `AppHeaderAccount`, Avatar, Brand, Breadcrumb, Button, Card, Combobox, ConfirmDialog, `FieldError`, FileTokenGroup, IconButton, Input, Item, Kbd, MarkdownEditor, MultiSelect, PageHeader, PriorityTag, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Toast, `use-escape-to-cancel`, `use-file-picker`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`
+- Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
+
+## Asked as
+
+create ticket; new ticket; new support ticket; log a ticket for a customer; agent creates ticket; helpdesk new ticket form; support request form; ticket form with requester and assignee; create and add another; add new contact inline; criar ticket; novo ticket; novo chamado; abrir chamado em nome de alguém; formulário de chamado; criar chamado de suporte; registrar solicitação de suporte
+
+The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in. The agent's job is to say who asked, what they need and who owns it, then create the ticket and either go to it or log the next one. It follows the Zendesk and Freshdesk new-ticket forms on the house create page (`create/create-page`): its own creation header with no sidebar, a centred form column, three bands of rows, and a raised commit card at the bottom with Cancel, Create and add another, and Create ticket.
+
+A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/webkit-create-surface`).
+
+## When to use
+
+- An agent logs a request for a customer: a phone call, a chat that needs a follow-up, an email forwarded from another inbox.
+- Any first-level work item with a requester, a written description, an owner and a priority (an abuse report, an onboarding case).
+
+## When not to use
+
+- A record created inside another resource without leaving it (a note on a ticket, a macro in a group): use `create/create-drawer`.
+- A short create with a handful of fields and no sections: use `state/state-form-validation`.
+- Replying to an existing ticket: use the `message-thread` component with a `markdown-editor` on the ticket's own page.
+- The queue the agent comes from: use `view/view-ticket-inbox`.
+- A customer filing their own request on a public help center: no block covers it yet; it is a short form without assignment, not this agent page.
+
+## Building blocks
+
+- A. Creation header — `AppHeader`, `AppHeaderAccount`, `Brand`, `Breadcrumb`, `IconButton` (required)
+- B. Heading — `PageHeader` (required)
+- C. Loading rows — `Card`, `Skeleton` (loading only)
+- D. Requester band — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Combobox`, `Avatar`, `Button`, `Input`, `FieldError`, `MultiSelect` (required)
+- E. Request band — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `FieldError`, `MarkdownEditor`, `IconButton`, `FileTokenGroup`, `Select`, `PriorityTag` (required)
+- F. Assignment band — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Combobox`, `Avatar`, `MultiSelect` (required)
+- G. Failure — `Alert` (conditional)
+- H. Commit — `SaveBar`, `Button`, `Kbd` (required)
+- Leaving — `ConfirmDialog`
+- Result — through `toast`
+
+What each part takes: [blocks/create/create-ticket.md](blocks/create/create-ticket.md).
+
+## Data
+
+The block keeps the form as a local draft, validates it on submit and emits `create`; it sends no request and fakes none. `CreateTicketValues`, `CreateTicketPayload`, `CreateTicketContact`, `CreateTicketGroup`, `CreateTicketAgent`, `CreateTicketCreated`, `CreateTicketChannel`, `CreateTicketType`, `CreateTicketPriority` and `CreateTicketProps` are exported from `create-ticket.vue`. `sample.ts` holds the contacts, groups, agents and tags the pickers offer when their props are left out (none of them while `loading`), plus the filled ticket and the created ticket the variants pass. `lib/ticket-form.ts` holds the option lists, the empty draft and the validation messages.
+
+Prop: `contacts`, `groups`, `agents`, `tagOptions`, `defaultValues`, `defaultSubmitted`, `loading`, `submitting`, `error`, `created`.
+
+Event: `create`, `cancel`, `open`.
+
+What each prop and event does, and the go-live code: [blocks/create/create-ticket.md](blocks/create/create-ticket.md).
+
+## Do
+
+- Keep only Requester, Subject and Description required; the rest is triage the team can do later.
+- Validate on create only, and move focus to the first field in error.
+- Keep every value after a failed request, and show the failure where the commit happens.
+- Offer Create and add another for agents logging several calls in a row, and put focus back on Requester.
+
+## Don't
+
+- Don't preselect a channel, type, priority, group or assignee: a blank form starts empty.
+- Don't show an error summary or an `Alert` for field errors; each field says what it needs.
+- Don't accept a typed name as a group or an assignee.
+- Don't send the agent away to create a missing contact: Add new contact stays on the page.
+
+## Copy
+
+- **Title:** `Create ticket`; description `Log a request on behalf of a customer. They get an email with the ticket number.`
+- **Bands:** `Requester`, `Request`, `Assignment`, each with a one-sentence Hint. **Rows:** a noun title and one sentence of guidance (`The customer who asked. Search by name or email address.`).
+- **Requester:** placeholder `Search contacts`, no match `No contact matches. Add a new contact instead.`, actions `Add new contact` and `Search contacts`.
+- **Placeholders:** `Select a channel`, `Select a type`, `Select a priority`, `Search groups`, `Search agents`; Assignee no match `No agent in this group matches.`
+- **Errors:** `Select the customer who asked, or add a new contact.`, `Enter the contact’s name.`, `Enter the contact’s email address.`, `Enter an email address such as name@example.com.`, `<entry> is not an email address. Fix it or remove it.`, `Enter a subject.`, `Describe what the customer needs.`
+- **Attachments:** `Attach files`; the list is named `Attachments`.
+- **Failure:** title `The ticket wasn't created.`, the page's message, `Retry`.
+- **Success:** `Ticket #4840 was created.`, the subject, `Open ticket`.
+- **Commit:** `Cancel`, `Create and add another`, `Create ticket`. The discard dialog uses the built-in `useUnsavedChanges` labels.
+- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+
+## Accessibility
+
+- Landmarks: the creation header, then `main` holding a `form` named by the `Create ticket` h1; the bands are h2s (Requester, Request, Assignment).
+- Focus: on load the Requester search, with its list closed until the agent types or presses Arrow Down (the first invalid field instead when the form opens with messages); Tab runs header, then the fields in band order, then Cancel, Create and add another, Create ticket. A create press with gaps moves focus to the first invalid field; after Create and add another, focus returns to Requester. Add new contact focuses Contact name; Search contacts focuses the search.
+- Each control takes its row title as `aria-label`, its error through `aria-describedby`, and `aria-invalid` once a create press finds a problem; the required rows carry the required mark and `aria-required`.
+- Keyboard: ⌘ Enter (Ctrl Enter) creates from anywhere in the form, Escape cancels; the editor's own shortcuts are Ctrl/⌘ B, I and K.
+- Announcements: the failure `Alert` is re-mounted after each attempt; the success toast is announced by the app's toast region; presence is spoken in the avatar's name, never the dot alone.
+- Names and addresses keep their own direction (`dir="auto"`) on a right-to-left page; the rows stack below the row's container width, so the form reflows at 320 px.
+
+## States
+
+- Default: every field empty, the sample contacts, groups, agents and tags in the pickers, focus on Requester.
+- ValidationErrors: `defaultSubmitted` with only a Subject and a CC entry that is not an address; Requester, Description and CC show their messages.
+- ContactError: `defaultSubmitted` on a new contact whose email has no domain ending; Contact email, Subject and Description show their messages.
+- Submitting: `submitting` on the filled sample ticket; Create ticket spins and the form locks.
+- SubmitError: `error` on the filled sample ticket; the danger Alert with Retry, every value kept.
+- Success: `created` after Create and add another; the success toast with Open ticket and an empty form.
+- Loading: `loading`; skeleton bands and disabled create buttons.
+
+## Related
+
+- `create/create-page` — the house create page this one follows.
+- `view/view-ticket-inbox` — the queue whose Create ticket opens this page.
+- `state/state-form-validation` — every submit outcome of a create form.
+- `create/create-drawer` — a create inside a resource, kept beside its list.
+
+## Variants
+
+`Default` (primary) · `ValidationErrors` · `ContactError` · `Submitting` · `SubmitError` · `Success` · `Loading`. Code: [blocks/create/create-ticket.md](blocks/create/create-ticket.md), `get_block("create/create-ticket", { variant })`.
+
+---
+
 <!-- blocks/create/create-wizard.md -->
 
 # CreateWizard (`create/create-wizard`)
@@ -6597,6 +6715,123 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 
 ---
 
+<!-- blocks/detail/detail-customer.md -->
+
+# DetailCustomer (`detail/detail-customer`)
+
+> The profile of one customer a support agent opens from a ticket or a search, as a page body for ConsoleLayout.
+
+- Surface: app
+- Source: `blocks/detail/detail-customer/detail-customer.vue` in `@aziontech/webkit`
+- MCP: `get_block("detail/detail-customer")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+- Components: Alert, Avatar, Button, Card, ConfigProvider, CopyButton, Countdown, DataTable, DropdownMenu, EmptyState, Field, IconButton, KeyValueList, Link, MessageThread, PageHeader, PriorityTag, Rating, Skeleton, `TableCellStatus`, `TableCellTime`, Tabs, Tag, Textarea, Timeline, Tooltip, `use-locale`
+- Skills: `webkit-layout`, `webkit-ui-states`, `webkit-tables`, `webkit-form`, `webkit-lists`, `webkit-microcopy`
+
+## Asked as
+
+customer profile; customer details; contact profile; requester profile; customer tickets; customer activity; customer notes; support customer; end user profile; perfil do cliente; detalhes do cliente; perfil do contato; perfil do solicitante; tickets do cliente; atividade do cliente; notas do cliente
+
+The page a support agent opens to learn who is asking: how to reach the customer, how happy they have been, every ticket they opened, what happened on their account, and the notes other agents left. It reads from the person to the history. It is a page body for `ConsoleLayout`: the layout owns the rail, the header with the breadcrumb (Customers › Jane Doe) and the `main`.
+
+## When to use
+
+- An agent opens a requester from a ticket, a search result or the customers list and needs their profile.
+- The agent must see the customer's open tickets and their next-reply deadline before answering.
+- The person contacts support: a customer, a contact or a requester of an organization you serve.
+
+## When not to use
+
+- A member of your own team, their roles and invitations: use `account/account-users`.
+- The list of every customer, searched and filtered: use `view/view-table`.
+- The overview of a resource you run, with its own tabs: use `detail/detail-resource`.
+- Editing the customer's fields and tags: Edit emits `edit`, and the edit page is a settings form (`settings/settings-form`) with `TagEditor` for the tags.
+
+## Building blocks
+
+- A. Page heading — `PageHeader`, `Avatar`, `Button`, `DropdownMenu`, `IconButton`, `Tooltip`
+- B. Sample clock — `ConfigProvider`
+- C. States — `Skeleton`, `Alert`
+- D. Details — `Card`, `KeyValueList`, `CopyButton`, `Link`, `Tag`
+- E. Satisfaction — `Card`, `Rating`
+- F. Sections — `Tabs`
+- G. Tickets — `DataTable`, `Link`, `TableCellStatus`, `PriorityTag`, `Countdown`, `TableCellTime`, `EmptyState`, `Button`
+- H. Activity — `Timeline`
+- I. Notes — `MessageThread`, `Field`, `Textarea`, `Button`
+
+What each part takes: [blocks/detail/detail-customer.md](blocks/detail/detail-customer.md).
+
+## Data
+
+The block takes the customer and their history through props, owns the open tab and the note draft as models, and emits its actions; it fetches nothing. `DetailCustomerCustomer`, `DetailCustomerSatisfaction`, `DetailCustomerTicket`, `DetailCustomerEvent`, `DetailCustomerNote` and `DetailCustomerProps` are exported from `detail-customer.vue`, and `sample.ts` holds the sample customer the block renders when they are left out.
+
+Prop / model: `customer`, `satisfaction`, `tickets`, `activity`, `notes`, `now`, `loading`, `error`, `saving`, `v-model:tab`, `v-model:draft`.
+
+Event: `open-ticket`, `new-ticket`, `edit`, `customer-action`, `add-note`, `retry`.
+
+What each prop and event does, and the go-live code: [blocks/detail/detail-customer.md](blocks/detail/detail-customer.md).
+
+## Do
+
+- Lead with who the customer is and how to reach them: copy buttons on the email and the phone.
+- Keep open tickets first in the table, with their next-reply countdown.
+- Write the satisfaction in words next to the stars ("4.5 out of 5 from 12 surveys").
+- Keep internal notes visibly internal: the `MessageThread` note band says Internal note.
+- Show the customer's local time, so the agent knows whether a call is welcome now.
+
+## Don't
+
+- Don't color a ticket status or a priority without its word; `TableCellStatus` and `PriorityTag` carry both.
+- Don't put a ticket's conversation on this page; the subject opens the ticket.
+- Don't prefill the note field or disable Add note while it is empty; show the error instead.
+- Don't show the sample while loading or failed, and don't wrap real data in a fixed clock.
+- Don't add a count to a tab label; the table and the timeline already say how many.
+
+## Copy
+
+- **Heading:** the customer's full name, with the organization ("Acme Inc.") as the description; "Customer" while loading or failed.
+- **Actions:** "Edit", "New ticket"; the menu "More actions" with "Merge customer", "Export data", "Delete customer".
+- **Details:** "Details" over "Email", "Phone", "Local time" ("9:45 AM" then "America/New_York"), "Language" ("English (United States)"), "Organization", "Tags", "Customer since" ("March 12, 2024"); copy buttons "Copy email", "Copy phone number".
+- **Satisfaction:** "Satisfaction", then "4.5 out of 5 from 12 surveys" ("1 survey" for one), or "No ratings yet".
+- **Tabs:** "Tickets", "Activity", "Notes".
+- **Tickets:** caption "Tickets from Jane Doe"; columns "Subject", "Status", "Priority", "Next reply", "Updated"; statuses "Open", "Pending", "Solved", "Closed"; "No SLA running" for the screen reader; empty "No tickets yet" with "Alex Morgan has not contacted support yet." and "New ticket".
+- **Activity:** day labels as the long date ("November 24, 2026"); titles that name the ticket ("Opened ticket #4812", "Replied on ticket #4790", "Ticket #4793 merged into #4790", "Rated ticket #4755 5 out of 5", "Ticket #4755 solved", "Customer created"); empty "No activity yet".
+- **Notes:** "Add a note", "Only agents can read notes.", "Add note"; error "Write the note first."
+- **Error:** title "Couldn't load this customer", message "Check your connection and retry.", action "Retry".
+- Follow `skills/webkit-microcopy`: sentence case, no em dash in copy, no "please", no exclamation marks.
+
+## Accessibility
+
+- Heading order: the h1 is the customer's name (`PageHeader`); the Details and Satisfaction card titles are h2; each tab panel is named by its tab. The body renders no landmark of its own; `ConsoleLayout` owns `main`.
+- Focus order: Edit, More actions, New ticket; the copy buttons and the organization link; the tablist (one stop, arrow keys between tabs); the active panel: the ticket links, or the note field then Add note.
+- The tickets table has a caption naming the customer; each status and priority is a word; a ticket with no deadline running says "No SLA running" to the screen reader instead of the dash.
+- The read-only `Rating` is one image ("Rated 4.5 out of 5") followed by the count in text; the decorative avatar and glyphs are `aria-hidden`.
+- Loading sets `aria-busy` on the details list, the table, the timeline and the thread; the error `Alert` announces itself and Retry is a button in it.
+- Names, emails, phone numbers, tags, subjects and note bodies are isolated (`bdi`, `dir="auto"`), so they read correctly in right-to-left; the email and the phone stay left-to-right.
+
+## States
+
+- Tickets: the primary, Jane Doe of Acme Inc. with four tickets (open with its countdown, pending and paused, solved, closed), 4.5 out of 5 from 12 surveys.
+- Activity: `tab="activity"`, the timeline of the last days grouped by day.
+- Notes: `tab="notes"`, two internal notes and the Add a note field.
+- NoTickets: a customer created today, no phone and no tags, No ratings yet, the No tickets yet empty state with New ticket and one activity event.
+- Loading: `loading`, the Customer title, skeletons in the heading and the details, skeleton rows in the table, the actions disabled.
+- Error: `error`, the Customer title and a danger Alert with Retry in place of the details and tabs.
+
+## Related
+
+- `account/account-users` — your own team, not the people who contact support.
+- `view/view-table` — the list a customer is opened from.
+- `detail/detail-resource` — the same page shape for a resource.
+- `settings/settings-form` — the edit page Edit leads to.
+- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-layout`.
+
+## Variants
+
+`Tickets` (primary) · `Activity` · `Notes` · `NoTickets` · `Loading` · `Error`. Code: [blocks/detail/detail-customer.md](blocks/detail/detail-customer.md), `get_block("detail/detail-customer", { variant })`.
+
+---
+
 <!-- blocks/detail/detail-deployment-logs.md -->
 
 # DetailDeploymentLogs (`detail/detail-deployment-logs`)
@@ -7407,6 +7642,120 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 ## Variants
 
 `ResourceOverview` (primary) · `Resource` · `Service` · `Policy` · `ResourceVersions` · `ResourceBuild` · `ServiceOverview` · `Application` · `NoDeployment` · `FirstDeploy` · `ResourceBuildConnected` · `ApplicationBuild`. Code: [blocks/detail/detail-resource.md](blocks/detail/detail-resource.md), `get_block("detail/detail-resource", { variant })`.
+
+---
+
+<!-- blocks/detail/detail-ticket.md -->
+
+# DetailTicket (`detail/detail-ticket`)
+
+> The support agent's view of one ticket, as in Zendesk Agent Workspace, a Freshdesk ticket or a Help Scout conversation.
+
+- Surface: app
+- Source: `blocks/detail/detail-ticket/detail-ticket.vue` in `@aziontech/webkit`
+- MCP: `get_block("detail/detail-ticket")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+- Components: Alert, Avatar, Button, Card, ConfigProvider, Countdown, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, FileDropzone, FileTokenGroup, IconButton, MarkdownEditor, MessageThread, `MessageThreadItem`, MultiSelect, PageHeader, PriorityTag, Select, Skeleton, SplitButton, Subheader, Tag, Timeline, ToggleGroup, Tooltip, `use-file-picker`
+- Skills: `webkit-layout`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`, `webkit-errors`
+
+## Asked as
+
+ticket detail; ticket view; support ticket; help desk ticket; agent workspace; support conversation; reply to customer; internal note; canned responses; saved replies; ticket properties; sla countdown; collision detection; requester card; detalhe do chamado; detalhe do ticket; conversa de suporte; responder ao solicitante; nota interna; respostas prontas; propriedades do chamado; espaço de trabalho do agente
+
+The support agent's view of one ticket. An agent reads the conversation with the customer, answers it or leaves a note for the team, sets the ticket's status, priority, group, assignee and tags, and checks who asked and what happened so far. It follows the Zendesk Agent Workspace, the Freshdesk ticket page and the Help Scout conversation, on the house detail page. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb and the `main`.
+
+## When to use
+
+- The page an agent opens from a ticket queue to work one ticket: reply, note, triage and close.
+- Any case page where a person and a team trade messages under a deadline (an abuse report, a refund request, a partner escalation).
+
+## When not to use
+
+- The queue of tickets: use `view/view-ticket-inbox`, which opens this page.
+- A chat with an AI assistant: use `ai/ai-chat`.
+- A resource's overview with tabs and a summary card: use `detail/detail-resource`.
+- A log of who did what across the account: use `account/account-activity-history`.
+
+## Building blocks
+
+- A. Page heading — `ConfigProvider`, `PageHeader`, `Tag`, `PriorityTag`, `Countdown`, `Skeleton` (required)
+- B. Header actions — `Avatar`, `Button`, `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `IconButton` (required)
+- C. Conversation — `Subheader`, `MessageThread`, `MessageThreadItem`, `FileTokenGroup` (required)
+- D. Composer — `ToggleGroup`, `Field`, `MultiSelect`, `Alert`, `MarkdownEditor`, `FileDropzone`, `Button` (required)
+- E. Composer footer — `FileTokenGroup`, `Tooltip`, `IconButton`, `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuItem`, `Button`, `SplitButton` (required)
+- F. Properties — `Card`, `Field`, `Select`, `Avatar`, `MultiSelect`, `Skeleton` (required)
+- G. Requester — `Card`, `Avatar`, `Button`, `Skeleton` (required)
+- H. Activity — `Card`, `Timeline` (required)
+- I. Load failure — `Alert` (conditional)
+
+What each part takes: [blocks/detail/detail-ticket.md](blocks/detail/detail-ticket.md).
+
+## Data
+
+The block takes its records through props and emits every action; it fetches, sends and saves nothing. `DetailTicketTicket`, `DetailTicketMessage`, `DetailTicketRequester`, `DetailTicketActivity`, `DetailTicketAgent`, `DetailTicketResponse`, `DetailTicketDraft`, `DetailTicketSendPayload`, `DetailTicketPropertyChange` and `DetailTicketProps` are exported from `detail-ticket.vue`. `sample.ts` holds the sample ticket, conversation, requester, activity, agents, viewer, saved replies, groups, tags and clock the block renders when those props are left out (none of it while `loading` or `error` is set). `lib/ticket-fields.ts` holds the statuses, types, status colours and priorities.
+
+Prop: `ticket`, `messages`, `requester`, `activity`, `agents`, `viewers`, `responses`, `groups`, `tagOptions`, `draft`, `now`, `loading`, `error`, `sending`, `sendError`.
+
+Event: `send`, `property-change`, `open-customer`, `merge`, `ticket-action`, `reopen`, `retry`, `update:draft`.
+
+After a send succeeds, clear the draft, append the message and confirm in a toast; after a failure, keep the draft and set `sendError`. Then delete `sample.ts` and its import.
+
+What each prop and event does, and the go-live code: [blocks/detail/detail-ticket.md](blocks/detail/detail-ticket.md).
+
+## Do
+
+- Keep the draft when a send fails, and say that it is kept.
+- Say in words that a note is internal, not only with the warning colour.
+- Pause the SLA countdown while the ticket waits on the customer, and hide it once the ticket is solved.
+- Save a property change as soon as it is made and confirm a failure in a toast from the app.
+- Ask before Delete ticket and Mark as spam: open a danger confirm dialog from the `ticket-action` handler.
+
+## Don't
+
+- Don't send a reply and a note from one button: the mode decides who reads it.
+- Don't let the composer accept text on a solved ticket: reopen it first.
+- Don't hide the earlier messages of a short thread; collapse only past eight items.
+- Don't show presence by colour alone: the assignee's avatar says it in its name, and each assignee option says it in words.
+
+## Copy
+
+- **Title:** the ticket's subject; `Ticket` while it loads. **Number:** `#4812`.
+- **Statuses:** `New`, `Open`, `Pending`, `On hold`, `Solved`. **SLA:** `Next reply`.
+- **Viewers:** `Sam Lee is viewing`, `Sam Lee and 1 other are viewing`. **Actions:** `Merge`, `More ticket actions`, `Copy link`, `Print`, `Mark as spam`, `Delete ticket`.
+- **Composer:** `Reply`, `Internal note`, `To:`, `Cc`, `Add people to copy`, `Only your team can see internal notes.`, `Write a reply`, `Write a note for your team, @ to mention`, `Attach files`, `Drop files to attach them`, `Insert response`, `Send`, `Send and set Pending`, `Send and set Solved`, `Add note`, `Write the note first.`
+- **Send failure:** `The reply was not sent. Your draft is kept; try again.` with `Retry`. **Solved:** `This ticket is solved. Reopen it to reply to the customer or add a note.` with `Reopen`.
+- **Side column:** `Properties`, `Status`, `Priority`, `Type`, `Group`, `Assignee`, `Unassigned`, `Tags`, `Add tags`; `Requester`, `4 other tickets`, `View customer profile`; `Activity`.
+- **Load failure:** `The ticket could not be loaded. Nothing was changed; try again.` with `Retry`.
+- The components own `Show 5 earlier messages`, `Internal note` on a note, `Paused`, `Due in` and `Overdue by`; do not retype them. Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+
+## Accessibility
+
+- No `main` or landmark of its own: `ConsoleLayout` owns them. Headings: the subject is the only h1; Conversation, the composer (Reply or Internal note, hidden), Properties, Requester and Activity are h2. The side column is an `aside` named Ticket details.
+- Focus order: Merge and More in the header, the thread (Show earlier messages, the quoted-text toggles), the composer (Message type, Cc, the editor and its toolbar, Attach files, Insert response, Send and its menu), then Properties, View customer profile and the activity.
+- Announcements: the viewing line is a polite status; Send and Add note announce their busy state; a failed send is the `Alert`; a successful send comes from the app's toast. Switching to Internal note renames the composer and describes the editor with the lock line.
+- Presence is part of each avatar's accessible name (`Sam Lee, online`). Priority and status are text, never colour alone.
+- Names keep their own direction (`bdi`) and the ticket number and addresses read left to right (`dir="ltr"`) inside a right-to-left page.
+- At 320 px the side column stacks under the composer, the header actions wrap, the file tokens take their own line and Send stays at the inline end; nothing scrolls sideways.
+
+## States
+
+- Default: ticket #4812, Open and urgent with the Next reply countdown running, Sam Lee viewing, a ten-item thread with five earlier items collapsed, the composer on Reply, the sample clock fixed.
+- Loading: the ticket is loading (`loading`); skeletons in the header, the thread, the properties, the requester and the activity, and a disabled composer.
+- Error: the ticket did not load (`error` is set); a danger Alert with the message and Retry.
+- Sending: a reply is on its way (`sending` with a draft); Send spins and the editor is read-only.
+- SendError: the reply was not sent (`sendError` with a draft); the Alert with Retry above the kept draft.
+- Solved: the ticket is solved (`ticket.status` is Solved); no countdown, and Reopen in place of the composer.
+- InternalNote: the composer on Internal note (`draft.mode` is note) with a draft that mentions a teammate; the lock line and Add note.
+
+## Related
+
+- `view/view-ticket-inbox` — the queue that opens this page.
+- `detail/detail-resource` — the house detail page for a resource.
+- `account/account-activity-history` — the account-wide log of who did what.
+
+## Variants
+
+`Default` (primary) · `Loading` · `Error` · `Sending` · `SendError` · `Solved` · `InternalNote`. Code: [blocks/detail/detail-ticket.md](blocks/detail/detail-ticket.md), `get_block("detail/detail-ticket", { variant })`.
 
 ---
 
@@ -8322,6 +8671,129 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-variables
 ## Variants
 
 `List` (primary) · `Create` · `PasteEnv` · `NetworkList`. Code: [blocks/edit/edit-variables.md](blocks/edit/edit-variables.md), `get_block("edit/edit-variables", { variant })`.
+
+---
+
+<!-- blocks/settings/settings-canned-responses.md -->
+
+# SettingsCannedResponses (`settings/settings-canned-responses`)
+
+> The admin page for the saved replies support agents insert into a ticket (macros, canned responses, saved replies): a `PageHeader` with New response, a `PropertyFilter` that searches title and body and filters by fold…
+
+- Surface: app
+- Source: `blocks/settings/settings-canned-responses/settings-canned-responses.vue` in `@aziontech/webkit`
+- MCP: `get_block("settings/settings-canned-responses")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+- Components: Alert, Button, Card, Combobox, ConfigProvider, ConfirmDialog, DataTable, `DataTablePagination`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, MarkdownEditor, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, RadioGroup, Select, Table, `TableCellActions`, `TableCellTime`, Tag, Tooltip, `use-collection`, `use-locale`
+- Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
+
+## Asked as
+
+canned responses; saved replies; macros; support macros; reply templates; response templates; email templates for agents; insert placeholder; template variables; respostas prontas; respostas salvas; macros de atendimento; modelos de resposta; respostas padrão
+
+The admin page for the saved replies support agents insert into a ticket. Zendesk calls them macros, Freshdesk canned responses, Help Scout saved replies. An admin or an agent finds a response by its title or its text, files it in a folder, decides who can insert it, writes the reply in Markdown with placeholders the app fills in for each ticket (the requester's first name, the ticket number, the agent's signature), and can move the ticket to a status when the reply is sent. The list shows which replies the team actually uses. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
+
+## When to use
+
+- Reusable replies, macros or snippets that agents insert into a ticket, a chat or an email.
+- Any library of text templates with folders, a visibility scope and placeholders, managed from a list and edited in a drawer.
+
+## When not to use
+
+- Replies the product sends on its own when a rule matches (auto-replies, triggers): start from `edit/edit-rule-builder`.
+- One notification email with a fixed set of options: use `settings/settings-form`.
+- Answering a ticket: the agent's reply box is `MarkdownEditor` in the ticket view; the ticket list is `view/view-ticket-inbox`.
+- Deleting with a typed confirmation, for a response library shared by many teams: open `edit/edit-delete-dialog` instead of the plain confirmation.
+
+## Building blocks
+
+- A. Page heading — `ConfigProvider`, `PageHeader`, `Button` (required)
+- B. Search row — `PropertyFilter`, `Tooltip`, `IconButton` (required)
+- C. Load failure — `Alert` (conditional)
+- D. First use — `Card`, `EmptyState` (conditional)
+- E. Response table — `DataTable`, `DataTablePagination`, `Tag`, `TableCellTime`, `useCollection`, `useLocale` (required)
+- F. Row actions — `TableCellActions`, `DropdownMenu` (required)
+- G. No match — `EmptyState`, `Button` (required)
+- H. Editor drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `PanelFooter` (required)
+- I. Fields — `Field`, `Input`, `Combobox`, `RadioGroup`, `Select` (required)
+- J. Reply and placeholders — `MarkdownEditor`, `DropdownMenu`, `Button` (required)
+- K. Delete confirmation — `ConfirmDialog` (required)
+
+What each part takes: [blocks/settings/settings-canned-responses.md](blocks/settings/settings-canned-responses.md).
+
+## Data
+
+The block takes its responses through props and emits every action; it fetches nothing and saves nothing. `CannedResponsesResponse`, `CannedResponsesPlaceholder`, `CannedResponsesValues`, `CannedResponsesVisibility`, `CannedResponsesTicketStatus` and `CannedResponsesProps` are exported from `settings-canned-responses.vue`, and `sample.ts` holds the six sample responses, the placeholders and the clock the block renders when `responses`, `placeholders` and `now` are left out (the responses never while `loading` or `error` is set).
+
+Prop: `responses`, `placeholders`, `loading`, `error`, `saving`, `saveError`, `now`, `defaultQuery`, `editorOpen`, `editingKey`.
+
+Event: `create`, `update`, `duplicate`, `remove`, `refresh`, `retry`.
+
+Delete removes the row at once; when the request fails, the page says so in a toast and refreshes, and the fresh `responses` array brings the row back. Then delete `sample.ts` and its import.
+
+What each prop and event does, and the go-live code: [blocks/settings/settings-canned-responses.md](blocks/settings/settings-canned-responses.md).
+
+## Do
+
+- Name a response after the question it answers (`Ask for the request ID`), so an agent finds it by searching.
+- Offer the placeholders from a menu that shows what each one stands for; few writers remember the paths.
+- Show how often each response is used, so the team can retire the ones nobody sends.
+- Keep the typed values when a save fails, and say the previous version still applies.
+
+## Don't
+
+- Don't use the `@` mention menu for placeholders; it inserts a handle, not a placeholder.
+- Don't let two responses share a title; agents pick by title.
+- Don't make Everyone the default visibility; a new response starts Personal.
+- Don't close the drawer before the save succeeds.
+
+## Copy
+
+- **Title:** `Canned responses`; description `Saved replies agents insert into a ticket, with the requester's details filled in.`
+- **Actions:** `New response`, `Edit`, `Duplicate`, `Delete`, `Save response`, `Cancel`, `Insert placeholder`, `Retry`, `Clear filters`. Verb first, sentence case.
+- **Drawer:** titles `New response`, `Edit response`; one sentence under the title that says where the response is used: `Agents insert it from the reply box of a ticket. Placeholders are filled in for each ticket.`
+- **Fields:** `Title`, `Folder`, `Visibility`, `Reply`, `Also set the ticket status to`. Each description says how to fill the field, in one sentence: Title `Agents search for it by title, so name what the reply answers.`; Folder `Pick a folder or type a new name to create one. Leave it empty for no folder.`; Reply `Markdown. A placeholder such as the requester's name is written in double braces.`; status `Applied when the agent sends the reply.`; each visibility option says who can insert it (below). Errors say what to do: `Enter a title.`, `A response with this title already exists. Use another title.`, `Write the reply agents insert.`
+- **Visibility:** `Personal` (Only you can insert it.), `Team` (Everyone in your team can insert it.), `Everyone` (Every agent of the account can insert it.).
+- **Table:** `No folder`, `Never used`. The Uses column is the number formatted for the locale (`1,200`); the narrow summary picks the plural form with `plural` from `useLocale` (`1 use`, `12 uses`), never a word glued to a number.
+- **First use:** `No canned responses yet`, then what they are and what they save. **No match:** `No matching responses`, `No canned response matches this search or these filters.`
+- **Errors:** load `The canned responses could not be loaded. Nothing was changed; try again.`; save after an edit `The response wasn't saved. Agents still insert the previous version; save again to apply your changes.`; save of a new response `The response wasn't saved. Save again to create it.`
+- **Delete:** title `Delete response`; description `Agents can no longer insert “<title>”. Replies already sent keep their text. You cannot undo this.`; button `Delete response`.
+- **Toasts (sent by the page):** `Response “<title>” saved.` after a create or an update, `Copy of “<title>” created.` after Duplicate, `Response “<title>” deleted.` after Delete, and `“<title>” wasn't deleted. It is back in the list.` when a delete fails.
+- **Placeholders:** the label says what is filled in (`Requester first name`); the token is code (`{{ticket.requester.first_name}}`) and is never translated.
+- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+
+## Accessibility
+
+- No `main` of its own (the layout's is the only one); the `PageHeader` title is the only `h1`, and the drawer title names the drawer.
+- Focus order: New response, the search, Refresh, the table rows (one tab stop: Arrow Up and Down move, Home and End jump, Enter opens Edit, Delete asks to delete), the row menus, the pagination.
+- The search and Refresh carry an `aria-label`; each row menu is named `Actions for <title>`.
+- The drawer traps focus, opens on its first field and returns focus to the control that opened it. After Save, the first invalid field takes focus and its `Field.Error` is announced (`role="alert"`). A save error is a danger `Alert` at the top of the body.
+- Insert placeholder is a menu button; after a pick, focus returns to the reply field with the caret after the token. Each token renders `dir="ltr"` inside a `bdi`, so it reads in order in a right-to-left page.
+- The delete dialog names the response; after it closes the focused row's place goes to the next row, as `DataTable` does. The page's toast announces the outcome of save, duplicate and delete; the block itself announces nothing else.
+- User data reads in its own direction: the title, the reply excerpt and the folder render with `dir="auto"`, the Title field and the reply field set it too, and the delete dialog wraps the title in Unicode isolates (U+2068, U+2069) because its sentence is a string. Placeholder tokens are `dir="ltr"` in a `bdi`.
+- Layout uses logical sides only; at 320 px the controls row wraps, the table keeps Title and the menu with the other values under the title, and the drawer takes the full width.
+
+## States
+
+- Default: six responses in four folders and three visibilities, sorted by use, with search, filters, row menus, the editor drawer, placeholders and delete wired.
+- Empty: first use (`responses` is `[]`); the explanation and New response replace the search and the table.
+- Loading: the first load (`loading` with no `responses`); the search row and the table's loading rows.
+- Error: the list did not load (`error` is set); a danger Alert with Retry replaces the table.
+- NoMatch: filters that match nothing (`defaultQuery` with folder Billing and visibility Personal); No matching responses with Clear filters.
+- Editing: the drawer open on one response (`editorOpen` with `editingKey`).
+- Saving: the drawer locked while the save runs (`saving`).
+- SaveError: the save failed (`saveError` is set); the alert at the top of the drawer, values kept.
+
+## Related
+
+- `view/view-ticket-inbox` — the ticket list; its statuses are the ones a response can set.
+- `account/account-personal-tokens` — the same list, drawer and confirmation pattern.
+- `settings/settings-form` — the other settings pages and their save states.
+- `edit/edit-delete-dialog` — the typed confirmation for a library many teams share.
+
+## Variants
+
+`Default` (primary) · `Empty` · `Loading` · `Error` · `NoMatch` · `Editing` · `Saving` · `SaveError`. Code: [blocks/settings/settings-canned-responses.md](blocks/settings/settings-canned-responses.md), `get_block("settings/settings-canned-responses", { variant })`.
 
 ---
 
@@ -10817,6 +11289,107 @@ What each prop and event does, and the go-live code: [blocks/view/view-template-
 ## Variants
 
 `Default` (primary) · `Preview` · `NoMatch` · `Loading` · `Error`. Code: [blocks/view/view-template-browser.md](blocks/view/view-template-browser.md), `get_block("view/view-template-browser", { variant })`.
+
+---
+
+<!-- blocks/view/view-ticket-inbox.md -->
+
+# ViewTicketInbox (`view/view-ticket-inbox`)
+
+> The support agent's ticket inbox: a `PageHeader` with Create ticket over one controls band (a `Select` of saved views with their counts, such as My open tickets (4), Unassigned (3) and Overdue (2, needs action); a `Pr…
+
+- Surface: app
+- Source: `blocks/view/view-ticket-inbox/view-ticket-inbox.vue` in `@aziontech/webkit`
+- MCP: `get_block("view/view-ticket-inbox")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+- Components: Alert, Avatar, Button, Card, CollectionPreferences, ConfigProvider, Countdown, DataTable, `DataTablePagination`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, EmptyState, IconButton, PageHeader, PriorityTag, PropertyFilter, Select, `TableCellLink`, `TableCellStatus`, `TableCellTime`, Tooltip, `use-collection`
+- Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
+
+## Asked as
+
+ticket inbox; support inbox; helpdesk; help desk views; ticket list; ticket queue; agent inbox; support queue; saved views; unassigned tickets; overdue tickets; sla countdown; bulk assign tickets; caixa de entrada de tickets; caixa de suporte; fila de chamados; lista de tickets; lista de chamados; visões salvas; chamados sem responsável; chamados atrasados; atribuir chamados em massa
+
+The support agent's inbox. An agent opens a saved view (their own open tickets, the unassigned queue, what is overdue), scans what needs an answer first, opens a ticket, and moves several tickets at once: assigns them, changes their status, merges duplicates or closes them. It follows Zendesk views, the Freshdesk ticket list and the Help Scout mailbox, on the house list page. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
+
+## When to use
+
+- A help desk's ticket queue, where agents work saved views with SLA targets.
+- Any assignable work queue with owners, priorities and deadlines (review requests, abuse reports, onboarding cases).
+
+## When not to use
+
+- One ticket's conversation with the customer: use the `message-thread` component on the ticket's own page.
+- A resource list with no owner, priority or deadline: use `view/view-table`.
+- A log of who did what: use `account/account-activity-history`.
+
+## Building blocks
+
+- A. Page heading — `ConfigProvider`, `PageHeader`, `Button` (required)
+- B. Views and filter — `Select`, `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
+- C. Bulk actions — `Button`, `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuItem`, `Avatar` (conditional)
+- D. Ticket table — `Card`, `DataTable`, `DataTablePagination`, `TableCellLink`, `TableCellStatus`, `PriorityTag`, `Countdown`, `TableCellTime`, `useCollection` (required)
+- E. Empty view and no match — `EmptyState` (required)
+- F. Load failure — `Alert` (conditional)
+
+What each part takes: [blocks/view/view-ticket-inbox.md](blocks/view/view-ticket-inbox.md).
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `TicketInboxTicket`, `TicketInboxView`, `TicketInboxAgent`, `TicketInboxBulkPayload` and `TicketInboxProps` are exported from `view-ticket-inbox.vue`. `sample.ts` holds the sample tickets, views, agents and clock the block renders when `tickets`, `views` and `agents` are left out (none of it while `loading` or `error` is set); `sampleTicketsOf` stands in for the server deciding which tickets a view holds. `lib/ticket-fields.ts` holds the statuses, the status colours, the priority order and the sort comparators.
+
+Prop: `tickets`, `views`, `agents`, `viewKey`, `now`, `loading`, `error`, `defaultQuery`, `defaultSelectedKeys`.
+
+Event: `create`, `open`, `bulk-action`, `refresh`, `retry`, `update:viewKey`.
+
+What each prop and event does, and the go-live code: [blocks/view/view-ticket-inbox.md](blocks/view/view-ticket-inbox.md).
+
+## Do
+
+- Sort by the next SLA target so the most urgent ticket is on top, and pause the countdown while the ticket waits on the customer.
+- Keep the views few and named for the work: My open tickets, Unassigned, Overdue, All open, Solved.
+- Count the selection in every bulk label and clear the selection after the action.
+- Confirm a bulk action's result in a toast from the app, with the number of tickets it changed.
+
+## Don't
+
+- Don't turn the views into a side menu or tabs that navigate: they are presets of this one list.
+- Don't show unread by colour alone: the mark comes with the hidden word Unread.
+- Don't open the ticket when the agent clicks the checkbox or a control in the row.
+
+## Copy
+
+- **Title:** `Tickets`. **Create:** `Create ticket`. **View select:** `View`. **Filter:** `Filter tickets`.
+- **Statuses:** `New`, `Open`, `Pending`, `On hold`, `Solved`. **Unassigned:** `Unassigned`.
+- **Bulk:** `3 selected`, `Select all 12 tickets`, `Clear selection`, `Assign (3)`, `Change status (3)`, `Merge (3)`, `Close (3)`; Merge's reason `Select two or more tickets to merge them.`
+- **Empty view:** `You're all caught up`, `No tickets in <view>.`, `Show all open tickets`. **No match:** `No matching tickets`, `No ticket in this view matches these filters.`, `Clear filters`.
+- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+
+## Accessibility
+
+- No `main` of its own and no second navigation: the `PageHeader` title is the only `h1`; the table is named after the active view.
+- Focus order: Create ticket, View, the filter, Refresh, preferences, the bulk controls while a selection exists, the table (select all, then the rows, one tab stop with the arrow keys), then pagination.
+- Rows: Arrow Up and Down move, Enter opens the ticket, Space toggles its selection; the subject link is reachable with Tab too.
+- Announcements: the selection count is a polite status; the filter announces its match count; Refresh shows its busy state; the result of a bulk action comes from the app's toast.
+- Presence is part of the assignee avatar's name (`Jane Doe, online`), so the printed name beside it is hidden from screen readers; priority and status are text, never colour alone.
+- Names and numbers keep their own direction (`dir="auto"`, `dir="ltr"`) inside a right-to-left page.
+
+## States
+
+- Default: My open tickets with four tickets, one overdue, one paused, two unread, the sample clock fixed; views, filter, sorting, selection, bulk actions and paging wired.
+- Empty: My open tickets holds no ticket (`tickets` is `[]`); You're all caught up with Show all open tickets.
+- Loading: the first load (`loading` with no tickets); the disabled controls and the table's loading rows.
+- Error: the tickets did not load (`error` is set); a danger Alert with the message and Retry.
+- Filtered: `defaultQuery` filters My open tickets by Channel = Phone; No matching tickets with Clear filters.
+- Selected: `defaultSelectedKeys` selects three tickets; the bulk bar counts them.
+
+## Related
+
+- `view/view-table` — the list page this one follows.
+- `account/account-activity-history` — the same filtered table for an audit log.
+
+## Variants
+
+`Default` (primary) · `Empty` · `Loading` · `Error` · `Filtered` · `Selected`. Code: [blocks/view/view-ticket-inbox.md](blocks/view/view-ticket-inbox.md), `get_block("view/view-ticket-inbox", { variant })`.
 
 ---
 
@@ -17359,7 +17932,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 # Avatar
 
-> Identifies a person, an account or an organization with a small visual mark: their picture when there is one, otherwise their initials, a fallback icon or a generated pattern seeded by the name. It comes in a circle or a square at three sizes, so the same person reads the same way in a header, a list row or a comment thread.
+> Identifies a person, an account or an organization with a small visual mark: their picture when there is one, otherwise their initials, a fallback icon or a generated pattern seeded by the name. It comes in a circle or a square at three sizes, so the same person reads the same way in a header, a list row or a comment thread. An optional presence dot on its bottom inline-end edge says whether the person is online, away, busy or offline.
 
 - Import: `import Avatar from '@aziontech/webkit/avatar'`
 - Category: content · Surface: app · Structure: monolithic
@@ -17368,6 +17941,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 - Identify a person next to their name: comment threads, member lists, "Last modified" cells, quotes.
 - The user entry in a header or account menu.
+- Show whether a teammate or support agent is reachable now (`presence`): an assignee picker, a ticket's agent list, a conversation header.
 - The mark of an organization or account that has no logo: `pattern="marble"` draws a soft generated mark seeded by its name, the same for the same name everywhere (account switcher, create organization, onboarding).
 
 ## Do
@@ -17376,6 +17950,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 - Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
 - Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `az az-user`).
 - For a generated mark, pass the full name in `label` (`"Acme Inc."`) with `pattern="marble"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.
+- Set `presence` only when the value is live (`online`, `away`, `busy`, `offline`); leave it empty when the app does not know, rather than showing `offline`. The presence joins the accessible name ("Jane Doe, away"), so keep `alt` to the name alone.
 - `size` maps to 24 / 32 / 48 px with `medium` as the default; `variant` is `circle` (default) or `square`.
 
 ## Don’t
@@ -17383,6 +17958,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 - The Azion logo → use `brand`.
 - A count or short status → use `badge`.
 - A loading placeholder → use `skeleton`.
+- The outcome of a job or a deploy → use `status-indicator`; `presence` is only whether a person is reachable.
 
 ## Related
 
@@ -17402,6 +17978,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 | `size` | `AvatarSize` | `'medium'` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
 | `pattern` | `AvatarPattern` | `undefined` | false | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |
 | `colors` | `string[]` | `['var(--primary)', 'var(--warning)', 'var(--brand-blue)']` | false | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`. |
+| `presence` | `AvatarPresence \| ''` | `''` | false | Whether the person is reachable now, drawn as a dot on the bottom inline-end edge and added to the accessible name; empty draws no dot. |
 
 ## Assets
 
@@ -17413,6 +17990,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 - Content: `image` (`src`), `pattern` (`pattern` set, no `src`), `label` (initials), `icon`. `data-pattern` mirrors `pattern` on the root while the pattern renders.
 - Root attributes: `data-variant` and `data-size` mirror the props; `data-content` names the content that renders (`image`, `pattern`, `label`, `icon`). Variants are styled from these attributes.
 - Image error: when `src` fails to load, the avatar falls back to the next content in the precedence (`pattern`, `label`, `icon`) instead of a broken image; a new `src` tries the image again. An image that already failed before hydration is detected on mount.
+- Presence: `presence` is `online`, `away`, `busy` or `offline` (`AvatarPresence`); `''` (default) renders nothing. When set, the root carries `data-presence` and a dot (`data-slot="presence"`, test id `${testId}__presence`) sits inside the avatar's box, in its bottom inline-end corner, overlapping only the picture, at 10 / 12 / 16 px for `small` / `medium` / `large` (its 2 px ring included), the same for `circle` and `square`. The content is clipped to the avatar shape by an inner box, so the dot is never clipped by the avatar itself, and a parent that clips its content never cuts it off. Each value has its own shape, so colour is not the only signal: `online` a filled dot, `away` a crescent, `busy` a dot with a horizontal bar, `offline` a hollow ring. A 2 px ring in `--avatar-presence-ring` (default `var(--bg-surface)`) separates the dot from the picture and from the background; an app on another background sets that variable on the avatar or an ancestor.
 - Attributes: every consumer attribute (`id`, `title`, `aria-*`, `style`, listeners) lands on the root.
 - Marble: three layers seeded by a 32-bit string hash of `label` (falling back to `alt`): a filled square, then two blurred shapes translated, rotated and scaled by the seed, the last blended with `overlay`. Each layer takes the color at `(seed + layer) % colors.length`. The same seed and colors always draw the same mark, on the server and in the browser.
 
@@ -17422,6 +18000,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 - Keyboard map: none.
 - ARIA: with `src` the `img` carries `alt`; without it the root is `role="img"` with `aria-label` (see Internationalization), and the initials, icon or pattern inside are presentational (`aria-hidden` on the icon and the pattern SVG).
 - Contrast ≥4.5:1 for the initials on `var(--bg-surface-raised)`; the generated pattern is decorative and carries no text.
+- Presence: the dot is presentational (`aria-hidden`); the presence joins the accessible name of the root (`aria-label`) or of the image (`alt`) through `avatar.withPresence`, for example "Jane Doe, away"; it wraps whichever name applies (`alt`, the label, the initials or the fallback, so "User avatar, away"). The dot colours are the documented `-mark` colours (`--text-muted` for `offline`, the neutral mark), solid marks at APCA Lc 30 and WCAG 3:1 on the surface, and each value differs in shape as well as colour (WCAG 1.4.1). A change of `presence` is not announced (no live region): the avatar is a label, and a live roster announces through the app.
 
 ## Examples
 
@@ -18226,6 +18805,130 @@ The frame is static apart from its resize handles.
 ```
 
 2 more example(s) in [components/copy-text.md](components/copy-text.md).
+
+---
+
+<!-- components/countdown.md -->
+
+# Countdown
+
+> Countdown shows the time left until a deadline as a compact tag: the SLA badge of a support ticket (`Due in 2h 15m`, `Due tomorrow`, `Overdue by 15m`), or the time before a certificate or a trial expires (`Expires in 30 days`, `Expired yesterday`). It turns from neutral to warning when the time left falls under a threshold and to danger once the deadline has passed, and every step changes the icon and the words as well as the colour. It can show a paused SLA (waiting on the customer). It parses the deadline like `Timestamp`, reads the reference clock from the nearest `ConfigProvider` (`now`) and updates once a minute on the clock every Timestamp shares. It differs from `Timestamp`, which shows a moment without urgency, and from `Tag`, which it renders through: Countdown owns the time phrase and picks the tag's severity from it.
+
+- Import: `import Countdown from '@aziontech/webkit/countdown'`
+- Category: content · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+
+## When to use
+
+- A ticket list or a ticket header shows how long the agent has before the first reply or the resolution is due, and when it is overdue.
+- A support or task tool shows a due date that must stand out as it gets close and once it is missed.
+- A settings or billing page shows how long until a certificate, an API key or a trial expires.
+- A row of an SLA policy shows that the clock is paused while the ticket waits on the customer.
+- An SLA timer or a due-date badge has to turn amber as the date gets close and red once it is overdue, with words and an icon, not colour alone.
+
+## Do
+
+- Pass the deadline from your data as it comes (`'2026-11-24T17:00:00Z'`, an epoch in milliseconds, a `Date`); do not pre-format it.
+- Name what is due with `label` when a row shows more than one deadline (`First reply`, `Resolution`); a single SLA column can leave it empty.
+- Set `warning-threshold` to the policy's warning window (one hour by default); `0` keeps it neutral until it is overdue.
+- Use `type="expiry"` for something that ends (a certificate, a key, a trial), so the words say `Expires` and `Expired` instead of `Due` and `Overdue`.
+- Set `paused` while the SLA clock is stopped (ticket pending on the customer); the badge then says `Paused` and stops counting.
+- In an example, a test or a server render, fix `now` on the `ConfigProvider`, so the phrase does not depend on when it renders.
+
+## Don’t
+
+- A moment in the past or future with no urgency (created at, last deployed) → use `timestamp` (`format="relative"`).
+- A generic status or category label → use `tag`.
+- A count on an icon or a tab → use `badge`.
+- The severity of a security finding → use `severity-tag`.
+- The status of a running job or deployment → use `status-indicator`.
+- A date the person picks → use `date-picker`.
+
+## Related
+
+- `timestamp` — the same parsing and relative phrasing for a moment with no deadline; pair them when people need the exact due date beside the countdown.
+- `tag` — Countdown renders through Tag (`severity` neutral, warning or danger, with an icon); use Tag directly for a label that does not depend on time.
+- `config-provider` — `now` fixes the reference time (examples, tests, server render); `locale` sets the language of the phrase.
+- Look-alikes: Countdown imports `Tag` and the Timestamp parsing, so `check:look-alikes` reads it as reuse of both, not as a second tag or a second timestamp; `badge` (a count) and `severity-tag` (a findings scale) share no job with it.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `deadline` | `string \| number \| Date` | `undefined` | false | The deadline: a `Date`, an epoch in milliseconds (microseconds when the number has 15 digits or more), a numeric string, or an ISO string. Empty or unparseable renders a muted dash. |
+| `warningThreshold` | `number` | `3600000` | false | Time left, in milliseconds, at or under which the countdown turns to warning. `0` stays neutral until the deadline passes. |
+| `label` | `string` | `''` | false | Name of what is due (`First reply`, `Certificate`), shown before the phrase. Empty shows the phrase alone. |
+| `type` | `'due' \| 'expiry'` | `'due'` | false | The words of the phrase: `due` says `Due in` and `Overdue by` (a task, an SLA); `expiry` says `Expires in` and `Expired` (a certificate, a key, a trial). |
+| `paused` | `boolean` | `false` | false | The clock is stopped (an SLA waiting on the customer): the countdown says `Paused` with a pause icon, stays neutral and stops counting. |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token of the tag; `medium` is 24px tall, `small` is 20px. |
+
+## States
+
+The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
+
+| State | Condition | `data-severity` | Icon | Phrase (`type="due"` / `type="expiry"`) |
+| --- | --- | --- | --- | --- |
+| remaining | time left above `warningThreshold` | `neutral` | `az az-clock` | `Due in 2h 15m` / `Expires in 2h 15m`; from 24 h: `Due tomorrow`, `Due in 3 days` / `Expires in 30 days` |
+| warning | 0 < time left ≤ `warningThreshold` | `warning` | `az az-triangle-alert` | `Due in 45m` / `Expires in 45m` |
+| overdue | deadline reached or passed | `danger` | `az az-circle-alert` | `Overdue by 15m`, `Overdue by 2d 3h` / `Expired 15 minutes ago`, `Expired yesterday` |
+| paused | `paused` is true (any deadline) | `neutral` | `az az-circle-pause` | `Paused` |
+| invalid | `deadline` empty or unparseable | — | — | a muted dash, no tag |
+
+- `invalid` wins over `paused`: an empty or unparseable deadline renders the dash even when `paused` is set. `invalid` means an unparseable deadline, as in Timestamp, not form validation.
+- `loading`, `empty`, `error`, `disabled` and `readonly` do not apply: the deadline is a prop the consumer passes, the component holds no async state and is not interactive.
+- Test ids: Countdown passes `data-testid` to Tag with the fallback `countdown` (a consumer `data-testid` wins); the parts are `countdown__icon` (from Tag), `countdown__label` and `countdown__text`. Countdown renders its text in Tag's default slot and never passes `label` to Tag, so it isolates the label itself (`dir="auto"`).
+
+- Root data attributes: `data-type` mirrors `type`; `data-overdue` while the deadline has passed and the countdown is not paused; `data-paused` while `paused`; `data-invalid` on the dash.
+- Durations under 24 h are written in whole minutes rounded up (2 h 14 m 30 s left reads `2h 15m`, 20 s left reads `1m`), with the two largest non-zero units (`2d 3h`, `2h 15m`, `45m`), so it never says overdue early. When the rounded time left reaches 24 h (1,440 minutes) the relative day phrase takes over. Two units are joined by the `countdown.duration` message, so the order and the separator come from the locale. From 24 h left the phrase is the relative day phrase of `Timestamp` (`tomorrow`, `in 3 days`, `in 2 months`).
+- Overdue for `type="due"` is a duration since the deadline, rounded up to the minute (at least `1m`); expired for `type="expiry"` is the relative phrase of `Timestamp` (`just now`, `15 minutes ago`, `yesterday`).
+- Clock: the reference time is the provider's `now` when set, else the shared `useMinuteClock` that every Countdown, Timestamp and `TableCellTime` on the page reads, ticking once a minute. This work extends that composable (`src/composables/use-minute-clock/use-minute-clock.ts`, with its own test): while the document is hidden it clears its interval; when the document shows again it reads the time at once and restarts the interval; its `visibilitychange` listener is added with the first subscriber and removed with the last (unsubscribe runs in `onScopeDispose`). Timestamp and TableCellTime get the same pause. The crossing into warning or overdue therefore shows within a minute; SLA targets are counted in minutes, and one shared timer keeps a list of a thousand tickets at one interval.
+- Before mount, the server and the first client render may differ by the time between them; the phrase is marked `data-allow-mismatch="text"`. With `now` on the provider both render the same text.
+- Live announcements: none. The phrase is not a live region: a list of tickets would interrupt a screen reader every minute, and an app that must alert an agent about a breach does it once with a `Toast`. The current phrase is read when the reader reaches the countdown.
+
+## Accessibility
+
+- Visible focus: not focusable; Countdown is static text inside the row or header that holds it.
+- Keyboard map: none (no interactive element).
+- ARIA: no role and no `aria-label`. The visible phrase with narrow units (`Due in 2h 15m`) is `aria-hidden`, and beside it a visually hidden (`sr-only`) span carries the same phrase with long units (`unitDisplay: 'long'`: `Due in 2 hours 15 minutes`), so a screen reader never reads `m` as meters; a relative phrase (`Due tomorrow`) and `Paused` are the same in both. A screen reader hears `First reply: Due in 2 hours 15 minutes`. The icon is `aria-hidden`. Both spans sit in a `time` element whose `datetime` is the ISO 8601 UTC deadline.
+- Never colour only: each state changes the icon (clock, triangle, circle alert, pause) and the words (`Due in`, `Overdue by`, `Paused`), so it reads in forced colours and for colour-blind people.
+- Contrast ≥4.5:1 (text) / ≥3:1 (icons): `Tag`'s neutral, warning and danger pairs are documented token pairs (`rules/webkit-tokens.md` § Contrast).
+- `motion-reduce:*`: no motion.
+- Touch target: not interactive.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
+  import Countdown from '@aziontech/webkit/countdown'
+
+  const NOW = Date.UTC(2026, 10, 24, 14, 45)
+  const HOUR = 3_600_000
+</script>
+
+<template>
+  <ConfigProvider :now="NOW">
+    <div class="flex flex-wrap items-center gap-(--spacing-sm)">
+      <Countdown
+        :deadline="NOW + 5 * HOUR"
+        label="First reply"
+      />
+      <Countdown
+        :deadline="NOW + 0.75 * HOUR"
+        label="First reply"
+      />
+      <Countdown
+        :deadline="NOW - 0.25 * HOUR"
+        label="First reply"
+      />
+    </div>
+  </ConfigProvider>
+</template>
+```
+
+2 more example(s) in [components/countdown.md](components/countdown.md).
 
 ---
 
@@ -19403,6 +20106,241 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ---
 
+<!-- components/message-thread.md -->
+
+# Message Thread
+
+> The conversation of a support ticket, oldest first, as Help Scout, Front, Plain and the Zendesk Agent Workspace show it: each message names its author (avatar, name, customer or agent), the channel it came by, when it was sent and, for email, who received it; then the body, the attachments and the quoted previous messages behind a toggle. Three types of item share the list: a public reply, an internal note (a warning band labelled "Internal note", so it never reads as a reply sent to the customer), and a system event line ("Jane Doe changed status to Pending"). A long middle collapses behind "Show 6 earlier messages". It is not `ChatMessage`, which is the generative AI chat (decision SUP-03).
+
+- Import: `import MessageThreadRoot from '@aziontech/webkit/message-thread-root'`
+- Compound import (dot notation, not tree-shakeable): `import MessageThread from '@aziontech/webkit/message-thread'`
+- Category: content · Surface: app · Structure: composition
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+
+## When to use
+
+- The conversation on a support ticket or a customer case: the customer's emails and chats, the agents' replies, the internal notes agents leave each other, and the status changes in between.
+- An email-style message history where each message shows its sender, recipients (To, Cc), channel, attachments and the quoted text of earlier messages.
+- A ticket that mixes public replies and private notes, where an agent must see at a glance which messages the customer can read.
+
+## Do
+
+- Render the items oldest first; the newest message sits at the end, next to the reply composer.
+- Put every message after the first two and before the last three in a `MessageThread.Group` once a thread holds more than eight, so the newest messages stay in view.
+- Pass `count` on the Group with the number of items it holds; the button reads it.
+- Use `type="note"` for anything only agents can read; never colour a reply to make it look private.
+- Put the text of earlier messages that an email quotes in the `quoted` slot, not in the body, so the reader sees only what is new.
+- Keep the `actions` slot short: Reply as an `IconButton`, Forward and the rest as items of a More `DropdownMenu`.
+- Write an event line as one short sentence that names who did what ("Jane Doe changed status to Pending").
+
+## Don’t
+
+- A chat with the generative AI assistant → `chat-message` inside `conversation`.
+- A log of what happened to a resource, with no messages (deploys, status changes, audit entries) → the Timeline component planned in SUP-01.
+- A single notice on a page → `alert`.
+- Comments on a code line or a review → not this component; it carries support semantics (channels, recipients, internal notes).
+
+## Related
+
+- `chat-message` — the AI conversation turn (`from: user | assistant | system`, feedback thumbs, regenerate). A ticket has customers and agents, notes, channels and recipients instead (SUP-03).
+- Timeline (planned in SUP-01) — an activity log of events; a thread interleaves a few event lines between messages.
+- `timestamp` — the sent time of each item; it opens the full date in every zone.
+- `avatar` — the author's picture or initials.
+- `file-token-group`, `file-preview` — the attachments composed into an item's `attachments` slot.
+- `icon-button`, `dropdown-menu` — the Reply button and the More menu (Forward, …) composed into an item's `actions` slot.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `timestampFormat` | `TimestampFormat` | `'local'` | false | How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, or `utc` — Timestamp's own union. |
+| `loading` | `boolean` | `false` | false | Shows three placeholder messages in place of the items while the thread loads, and marks it busy. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Conversation`). |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The `MessageThread.Item` and `MessageThread.Group` children, oldest first. Not rendered while `loading`. |
+
+## Sub-component imports
+
+- `@aziontech/webkit/message-thread-item`
+- `@aziontech/webkit/message-thread-group`
+
+## Sub-components
+
+Compound API through `index.ts` (`MessageThread.Item`, `MessageThread.Group`); standalone entries
+`message-thread-root`, `message-thread-item`, `message-thread-group`. The root provides
+`{ timestampFormat }` (`injection-key.ts`, `MessageThreadInjectionKey`, type `MessageThreadContext`);
+`useMessageThreadContext()` (`composables/use-message-thread-context.ts`, a public named export of `index.ts`
+with its type, `CODE_QUALITY.md` § 3.5 point 6, so an app can write its own context-aware part) throws outside a `MessageThread`, so a part rendered loose fails loudly.
+
+The root is an `ol` (`role="list"`): every Item is an `li`, and a Group is an `li` holding a nested
+`ol` of its Items once open. The parts never read their slot vnodes.
+
+- `message-thread-item/message-thread-item.vue` — one item of the thread, an `li`.
+  - `type="reply"` and `type="note"`: an `article` card. Header, three columns: the author's `Avatar` (`medium`, decorative, initials from `author` when `avatarSrc` is empty) at the inline start; in the middle a wrapping meta block of the identity (the name `__author`, the role `Customer` / `Agent` `__role`, the channel `via Email` with its glyph `__channel`, replies only) followed by the sent `Timestamp` (`__time`); and the `actions` slot (`__actions`) at the inline end, outside the meta block, so it never wraps away from the first line. Under the header, for a reply with recipients, a line `To: …` and `Cc: …` (`__recipients`, one `To` and one `Cc` line, the address list isolated). Then the body (`__content`, the default slot), the quoted-text toggle and region (`__quoted-toggle`, `__quoted`) when the `quoted` slot is given, and the `attachments` slot (`__attachments`).
+  - `type="note"` adds a band across the top of the card (`__note`): a lock glyph and the words `Internal note`, on the warning fill. Channel and recipients are not shown on a note.
+  - `type="event"`: no card, no article; one muted line (`__event`) with a history glyph, the default slot (the sentence) and the `Timestamp`. Author, avatar, role, channel, recipients, `quoted`, `attachments` and `actions` are not rendered.
+  - Props: see the table below (`MessageThreadItemProps`).
+  - v-model: `v-model:quotedOpen` — `boolean`, `defineModel('quotedOpen')`, default `false`, emits `update:quotedOpen`. The quoted-text toggle flips it.
+  - Slots: `default` — the body (plain text keeps its line breaks, or composed content); `actions` — a Reply `IconButton` and a More `DropdownMenu` (Forward, …) at the end of the header; `attachments` — a read-only `FileTokenGroup` or `FilePreview`s under the body; `quoted` — the earlier messages an email quotes, hidden until the toggle opens it.
+  - `data-testid` fallback `message-thread-item`; `data-slot="message-thread-item"`.
+- `message-thread-group/message-thread-group.vue` — a run of items collapsed behind one button, an `li`.
+  - Closed: a `Button` (`variant="outline"`, `size="small"`, `__toggle`) reading `Show {count} earlier messages`, centred between two hairlines. It reveals and is then replaced, like a load-more button, so it carries no `aria-expanded` or `aria-controls`; focus moves into what it revealed.
+  - Open: a nested `ol` (`role="list"`, `__list`, named `Earlier messages`) holding the default slot. Opening moves focus to the first item's `article` (or `li` for an event) inside it, so a keyboard or screen reader user lands on the first revealed message.
+  - Props: `count?: number` (default `0` — how many items the group holds, read in the button; `0` reads `Show earlier messages`).
+  - v-model: `v-model:open` — `boolean`, `defineModel('open')`, default `false`, emits `update:open`.
+  - Slots: `default` — the hidden `MessageThread.Item`s.
+  - `data-testid` fallback `message-thread-group`; `data-slot="message-thread-group"`; `data-state="open|closed"`.
+
+Exported types: `MessageThreadProps`, `MessageThreadItemProps`, `MessageThreadGroupProps`,
+`MessageThreadItemType` (`'reply' | 'note' | 'event'`), `MessageThreadFrom`
+(`'customer' | 'agent'`), `MessageThreadChannel` (`'email' | 'chat' | 'phone' | 'web' | 'api'`),
+`MessageThreadContext`; `timestampFormat` reuses `TimestampFormat` exported by `timestamp`. Composed DS components: `timestamp`, `avatar`, `icon-button`, `button`,
+`skeleton`.
+
+```
+packages/webkit/src/components/content/message-thread/
+├── message-thread.vue
+├── message-thread.test.ts
+├── index.ts
+├── injection-key.ts
+├── composables/use-message-thread-context.ts
+├── message-thread-item/message-thread-item.vue
+└── message-thread-group/message-thread-group.vue
+```
+
+Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message-thread.vue`,
+`./message-thread-item`, `./message-thread-group` → their `.vue` files.
+
+#### MessageThread.Item props
+
+| Prop | Type | Default | Required | JSDoc |
+| --- | --- | --- | --- | --- |
+| `type` | `'reply' \| 'note' \| 'event'` | `'reply'` | false | What the item is: a public reply, an internal note only agents read, or a system event line. |
+| `author` | `string` | `''` | false | Name of who wrote the message, shown in the header and read in the item's accessible name. |
+| `avatarSrc` | `string` | `''` | false | Image URL of the author's avatar. Empty shows the initials of `author`. |
+| `from` | `'customer' \| 'agent'` | `'customer'` | false | Whether the author is the customer or an agent; shown as the role beside the name. |
+| `channel` | `'email' \| 'chat' \| 'phone' \| 'web' \| 'api'` | `undefined` | false | How a reply came in or went out, shown as `via Email` with its glyph. Unset shows no channel. |
+| `timestamp` | `string \| number \| Date` | `undefined` | false | When the item was sent: an ISO string, an epoch in milliseconds or a `Date`, rendered by `Timestamp`. |
+| `to` | `string[]` | `[]` | false | Email addresses the reply was sent to, shown on the recipients line. |
+| `cc` | `string[]` | `[]` | false | Email addresses copied on the reply, shown on the recipients line. |
+
+## States
+
+- Root: `data-testid` fallback `message-thread`, `data-slot="message-thread"`, `data-loading` and `aria-busy="true"` while `loading`; `data-timestamp-format` mirrors `timestampFormat`.
+- Loading: three `li` placeholders (`__placeholder`), each an avatar circle and two text lines built from `Skeleton`, in place of the slot. When `loading` turns on, `Loading conversation` is announced through `useAnnouncer`; when it turns off, `Conversation loaded`.
+- No empty state (`emptyTitle` is not taken, the second exception to § 3.7): a ticket always holds its first message; an app with nothing to show renders `EmptyState` instead of the thread.
+- Item: `data-type` (`reply` | `note` | `event`), `data-from` (`customer` | `agent`, not on events), `data-channel` when `channel` is set. The quoted region (`__quoted`) carries `data-state` (`open` | `closed`).
+- Group: `data-state` (`open` | `closed`).
+- Quoted region: always rendered once the `quoted` slot is given, with the `hidden` attribute while closed, so the toggle's `aria-controls` always points at an element.
+- States the thread does not own: `disabled`, `readonly` and `invalid` do not apply (the items are display-only; the controls in `actions` carry their own); there is no `error` / `retry` either. The thread is one region of a ticket page that loads the ticket as a whole, so a failed load is the page's own state (an `Alert` or `EmptyState` with Try again in place of the thread), as the `detail` blocks do. This is the explicit exception to the list state contract of `CODE_QUALITY.md` § 3.7, which is written for pickers and data lists that fetch and page their own rows; the thread keeps only its `loading`.
+- Invalid or missing `timestamp`: the item shows no time (Timestamp is not rendered) and its accessible name is the author alone.
+
+## Accessibility
+
+- Structure: the root is an `ol` with `role="list"` (kept under `list-style: none`), named by `ariaLabel` or `Conversation`; each Item is an `li`. A reply or note is an `article` named by `aria-labelledby`: for a note the `Internal note` band, then the author name, then the Timestamp's text — so every message has a unique name ("Internal note Jane Doe Nov 20, 2026, 10:05 AM"). An event line is plain text in its `li`. It is a list of articles, not the APG Feed pattern (`role="feed"`): the thread does not load more as the reader scrolls; it collapses its middle behind a Group button instead.
+- Never colour alone: a note carries the visible words `Internal note` and a lock glyph; the role is written (`Customer`, `Agent`); the channel is written beside its glyph. Every glyph is `aria-hidden`.
+- The avatar is decorative (`aria-hidden`): the name beside it is the text.
+- Keyboard map: `Tab` moves through the controls in reading order — each Timestamp, the item's actions, the quoted-text toggle, links and attachments in the content, the Group button. `Enter` / `Space` activate. Opening a Group moves focus to the first revealed item (`tabindex="-1"` on its `article` or `li`); nothing else moves focus.
+- Quoted text: the toggle follows the WAI-ARIA APG Disclosure (Show/Hide) pattern: a small ghost `IconButton` (ellipsis glyph) named `Show quoted text` / `Hide quoted text`, with `aria-expanded` and `aria-controls` pointing at the region (`useId`), which is `hidden` while closed.
+- Group: the button is a native `Button` that reveals and is replaced (no `aria-expanded`); open, the nested list is named `Earlier messages` and focus is on its first item.
+- Loading: `aria-busy="true"` on the list; the placeholders are `aria-hidden`; the start and end are announced through `useAnnouncer`.
+- Visible focus: the composed controls draw the ring token; the focused `article` after opening a Group draws `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
+- Contrast: `--text-default` and `--text-muted` on `--bg-surface`, `--warning-foreground` on `--warning` — documented pairs in both themes.
+- Touch target: the quoted toggle and the app's `IconButton`s are 32 px with a 44 px hit area on a coarse pointer; the Group button is a `Button` with the same hit area.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import FileTokenGroup from '@aziontech/webkit/file-token-group'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import MessageThread from '@aziontech/webkit/message-thread'
+
+  const attachments = [{ file: { name: 'invoice-1042.pdf', size: 84000, type: 'application/pdf' } }]
+  const body =
+    'Hi, I was charged twice for the November invoice. Can you refund one of the payments?\n\nThanks,\nAlex'
+  const quoted = 'On Nov 18, 2026, Acme Billing wrote:\nYour invoice 1042 for $49.00 is ready.'
+</script>
+
+<template>
+  <MessageThread aria-label="Ticket 1042 conversation">
+    <MessageThread.Item
+      author="Alex Morgan"
+      from="customer"
+      channel="email"
+      timestamp="2026-11-20T09:12:00Z"
+      :to="['support@example.com']"
+      :cc="['sam.lee@example.com']"
+    >
+      {{ body }}
+      <template #attachments>
+        <FileTokenGroup
+          :items="attachments"
+          orientation="horizontal"
+          readonly
+        />
+      </template>
+      <template #quoted>{{ quoted }}</template>
+    </MessageThread.Item>
+    <MessageThread.Item
+      type="event"
+      timestamp="2026-11-20T09:40:00Z"
+    >
+      Jane Doe changed status to Pending
+    </MessageThread.Item>
+    <MessageThread.Item
+      author="Jane Doe"
+      from="agent"
+      channel="email"
+      timestamp="2026-11-20T10:02:00Z"
+      :to="['alex.morgan@example.com']"
+    >
+      Hi Alex, thanks for letting us know. The refund for the second payment is on its way and will
+      reach your card in 5 to 10 business days.
+      <template #actions>
+        <IconButton
+          icon="az az-reply"
+          variant="ghost"
+          size="small"
+          aria-label="Reply"
+        />
+        <DropdownMenu>
+          <DropdownMenu.Trigger>
+            <IconButton
+              icon="az az-ellipsis"
+              variant="ghost"
+              size="small"
+              aria-label="More actions"
+            />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Group>
+            <DropdownMenu.Item
+              value="forward"
+              label="Forward"
+            />
+            <DropdownMenu.Item
+              value="copy-link"
+              label="Copy link"
+            />
+          </DropdownMenu.Group>
+        </DropdownMenu>
+      </template>
+    </MessageThread.Item>
+  </MessageThread>
+</template>
+```
+
+2 more example(s) in [components/message-thread.md](components/message-thread.md).
+
+---
+
 <!-- components/network-map.md -->
 
 # Network Map
@@ -19868,6 +20806,96 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ---
 
+<!-- components/priority-tag.md -->
+
+# Priority Tag
+
+> Use PriorityTag only for the priority of a ticket, task or request on the urgent → low scale, or for "no priority"; the severity of a finding or alert is a SeverityTag, and the state of a ticket is a StatusIndicator or a Tag. PriorityTag labels a work item with how soon it should be handled: urgent, high, medium, low or none. The level reads from a three-bar signal glyph (the filled bars count the level), from a distinct alert mark for urgent, from three flat dots for none, and from the label, so no level depends on colour alone. Its accessible name always says the axis ("Priority: High"), which is why it is its own component and not a SeverityTag (decision SUP-05).
+
+- Import: `import PriorityTag from '@aziontech/webkit/priority-tag'`
+- Category: content · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+
+## When to use
+
+- Show how urgent a support ticket, task, issue or request is, in a ticket list row, a table cell, a board card or a ticket detail header.
+- Rank work on the fixed urgent, high, medium, low scale used by help desks and issue trackers, with "no priority" for items nobody has triaged yet.
+
+## Do
+
+- Keep the default label (the level name from the locale catalog, translated under `ConfigProvider`); override `label` only when the product glossary names a level differently (`Normal` for medium).
+- Show `none` for an untriaged item instead of leaving the cell empty, so the column reads the same on every row.
+- Use one PriorityTag per row, in its own column, so the glyphs line up and the scale reads down the column.
+- Do not add a toned `tag` beside it for the same level; the glyph and the label already carry it.
+
+## Don’t
+
+- The value is how severe a finding, alert, incident or vulnerability is → use `severity-tag`.
+- The value is the state of the ticket (open, pending, solved) → use `status-indicator` or `tag`.
+- The user picks or changes the priority (a priority field or filter) → use `select` or `chip`; show the chosen value with this tag elsewhere.
+- The value is a count on an icon or avatar → use `badge`.
+
+## Related
+
+- `severity-tag` — the same frame and bar glyph for the critical → info findings scale; its accessible name is the level alone.
+- `tag` — a toned status or category label with no order between values.
+- `status-indicator` — the live state of a resource or ticket.
+- `chip` — an interactive or removable token, for priority filters.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `priority` | `'urgent' \| 'high' \| 'medium' \| 'low' \| 'none'` | `'none'` | false | Priority level (exported as `PriorityTagPriority`); sets the glyph (alert mark, filled bars or dots) and the default label. |
+| `label` | `string` | `''` | false | Text of the tag. Empty uses the locale catalog (`Urgent`, `High`, `Medium`, `Low`, `No priority`). |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | Replaces the visible label text; the hidden `Priority:` prefix remains. |
+
+## States
+
+- Visual states: `default` (static, non-interactive)
+- `data-priority` mirrors the `priority` prop: `urgent` | `high` | `medium` | `low` | `none`
+- `data-size` mirrors the `size` prop: `small` | `medium`
+- Glyph per level: urgent the `az-circle-alert` mark; high 3 filled bars of 3; medium 2; low 1; none three flat dots
+- `none` ("No priority", three dots) is the empty, untriaged value: the tag never renders blank
+- Loading, error, disabled, readonly and invalid do not apply: the tag is static and non-interactive (a loading row shows a `skeleton` in its place)
+
+## Accessibility
+
+- Visible focus: not focusable; the tag is static text and takes no `tabindex`.
+- Keyboard map: none; the tag has no interaction.
+- ARIA: the glyph is `aria-hidden="true"`; a visually hidden prefix (`sr-only`, locale key `priorityTag.prefix`, `Priority:`) sits before the label, so the text a screen reader reads is "Priority: High". No `role` or `aria-label` on the root (a generic element takes no name); the hidden prefix stays when the default slot replaces the label.
+- Contrast: label `var(--text-default)` on `var(--bg-canvas)` ≥4.5:1; filled bars `var(--text-default)` and the urgent mark `var(--danger-mark)` meet the mark and icon targets (Lc 30 / Lc 45, WCAG ≥3:1) in both themes; only documented token pairs (`rules/webkit-tokens.md` § Contrast).
+- Never colour only: every level differs by glyph shape and by text.
+- No motion, so no `motion-reduce:*` fallback is needed.
+- Touch target: not applicable; the tag is not interactive.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import PriorityTag from '@aziontech/webkit/priority-tag'
+</script>
+
+<template>
+  <PriorityTag
+    priority="high"
+    size="medium"
+  />
+</template>
+```
+
+2 more example(s) in [components/priority-tag.md](components/priority-tag.md).
+
+---
+
 <!-- components/qr-code.md -->
 
 # Qr Code
@@ -20330,6 +21358,204 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ```
 
 2 more example(s) in [components/third-party-logo.md](components/third-party-logo.md).
+
+---
+
+<!-- components/timeline.md -->
+
+# Timeline
+
+> Use Timeline for the history of one record: a vertical list of dated events joined by a line, newest or oldest first, such as the activity of a ticket (status changed, assigned, SLA breached, merged), the audit trail of one resource or the deployment history of an application. Each event is a `Timeline.Item`: a marker (a dot or an icon in its severity's `-mark` colour, or any small component the app puts in its `marker` slot), a title that says what happened, an optional description, who did it, when it happened (a `Timestamp`) and any content the app adds under it (a quoted comment, a diff summary, a link). `Timeline.Group` gathers the events of one day (or any period) under a label. It is read-only and has no current position: unlike `Stepper` it does not move anyone through steps, unlike `Trace` it does not place spans on a clock, and unlike `LogViewer` it does not stream lines.
+
+- Import: `import TimelineRoot from '@aziontech/webkit/timeline-root'`
+- Compound import (dot notation, not tree-shakeable): `import Timeline from '@aziontech/webkit/timeline'`
+- Category: content · Surface: app · Structure: composition
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+
+## When to use
+
+- Show the activity history of one ticket, order or incident: who changed the status, who it was assigned to, when an SLA was breached, when it was merged or closed.
+- Show the audit trail of one resource on its detail page: created, settings changed, key rotated, deleted.
+- Show the deployment or version history of one application, each deploy with its outcome and who started it.
+- Group a long history by day ("Today", "November 21, 2026") so a reader finds when something happened.
+
+## Do
+
+- The title says what happened in plain words, past tense, with the changed value ("Status changed to Solved", "Assigned to Sam Lee"). Colour and icon only reinforce it; a reader who cannot see them still knows what happened.
+- Pick the severity from what the event means for the reader: `danger` for a breach or a failed deploy, `warning` for something that needs attention soon, `success` for a resolved or merged event, `info` for a notable but neutral change, `neutral` (the default) for routine changes. Most events are `neutral`, so the few coloured ones stand out.
+- Keep one order per timeline (newest first for activity people check often, oldest first for a history read as a story) and say which in the surrounding heading or copy when it is not obvious.
+- Use `Timeline.Group` for histories longer than a screen; format its `label` in the app with `useLocale` (a date, "Today", "Yesterday").
+- Put long content (a full comment, a diff) in the default slot, short and quoted; link to the full record rather than rendering it all.
+- `size="small"` is for a side panel or a drawer; the page body uses `medium`.
+- When the history is empty, render an `EmptyState` in place of the timeline, not a timeline with no items.
+
+## Don’t
+
+- A searchable, sortable log of many records or a whole account (filter by user, export as CSV) → use `data-table` (the `account/account-activity-history` block).
+- Moving the reader through the ordered steps of a task, with a current step → use `stepper`.
+- The timed spans of one request or invocation → use `trace`.
+- Streaming build or runtime log lines with levels → use `log-viewer` (`log-viewer-steps` for known steps).
+- The state of a service across many periods at a glance (uptime) → use `tracker`.
+- The current state of one resource → use `status-indicator`.
+- The messages of an AI conversation → use `chat-message`; a timeline lists events about a record, not the messages themselves.
+- An agent's progress while it works → use `agent-activity`.
+
+## Related
+
+- `timestamp` — every item's `time` renders through it, so the reader can open the exact UTC and local value and copy it.
+- `status-indicator` — the current state of the record, usually in the detail header above its timeline.
+- `outcome-icon` — a small outcome mark the app can put in an item's `marker` slot when an event is a finished run.
+- `avatar` — the actor's picture, in an item's `marker` slot, when the people matter more than the event type.
+- `stepper` — the look-alike: a vertical rail of dots too, but for steps the reader moves through.
+- `empty-state` — what the page shows instead of a timeline that has no events.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Density of every item: `small` for a side panel or drawer, `medium` for a page body. |
+| `timeFormat` | `'relative' \| 'local' \| 'utc'` | `'local'` | false | How every item's `time` reads, passed to `Timestamp` as its `format`. |
+| `loading` | `boolean` | `false` | false | Renders three placeholder items in place of the slot while the history loads; sets `aria-busy`. |
+| `loadingLabel` | `string` | `''` | false | What a screen reader hears while loading. Empty uses the locale catalog (`Loading activity`). |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Activity`). |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | `Timeline.Item` children, or `Timeline.Group` children, in display order. Hidden while `loading`. |
+
+## Sub-component imports
+
+- `@aziontech/webkit/timeline-item`
+- `@aziontech/webkit/timeline-group`
+
+## Sub-components
+
+The root ships a **compound API**: `index.ts` attaches `Item` and `Group` to the root so `<Timeline.Item>` and `<Timeline.Group>` resolve from one import. The timeline has no open/closed state, so there is no `Trigger` / `Content`; `Item` and `Group` are the closed-list part words for what the parts are. The root provides a read-only context (`injection-key.ts`, `TimelineInjectionKey = Symbol('Timeline')`) holding `size` and `timeFormat`; `composables/use-timeline-context.ts` exports `useTimelineContext` and the `TimelineContext` type (`CODE_QUALITY.md` § 3.5) and throws a clear error outside `<Timeline>`. No part registers itself or reads its slot: the line under the last item is hidden by CSS (`:last-child`).
+
+Markup: the root is an `<ol>`. An Item is an `<li>`. A Group is an `<li>` holding its label and a nested `<ol>` of Items, named by that label (`aria-labelledby`).
+
+- `timeline-item/timeline-item.vue` — one event: `<li data-slot="timeline-item">` → the marker column (`data-slot="timeline-marker"`, `aria-hidden="true"`, then the connector line `data-slot="timeline-connector"` runnin…
+  - Props:
+
+    | Prop          | Type                                                        | Default     | Required | JSDoc                                                                                                                               |
+    | ------------- | ----------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+    | `title`       | `string`                                                    | `''`        | false    | What happened, in plain words ("Status changed to Solved").                                                                         |
+    | `description` | `string`                                                    | `''`        | false    | One or two lines of detail under the title.                                                                                         |
+    | `actor`       | `string`                                                    | `''`        | false    | Who did it (a person, a team or a system); shown before the time.                                                                    |
+    | `time`        | `string \| number \| Date`                                  | `undefined` | false    | When it happened, rendered by `Timestamp` in the root's `timeFormat`; a `Date`, an epoch or an ISO string. Absent renders no time. |
+    | `severity`    | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `'neutral'` | false    | What the event means for the reader; colours the marker with its `-mark` token.                                                     |
+    | `icon`        | `string`                                                    | `''`        | false    | Icon class (`az az-clock`) drawn as the marker instead of the dot.                                                       |
+
+  - Events: _none_.
+  - Slots: `default` — content under the description (a quoted comment, a link, a small key-value list); `marker` — replaces the dot or icon (an `Avatar`, an `OutcomeIcon`), sized by the app to the marker box.
+  - Marker precedence: the `marker` slot, then `icon`, then the dot.
+  - `data-testid` fallback `timeline-item`; inner `${testId}__title`, `${testId}__marker`. A consumer `data-testid` wins.
+- `timeline-group/timeline-group.vue` — the events of one period: `<li data-slot="timeline-group">` → the label (`data-slot="timeline-group-label"`, with an id from `useId()`) and an `<ol aria-labelledby="<that id>">` h…
+  - Props:
+
+    | Prop    | Type     | Default | Required | JSDoc                                                        |
+    | ------- | -------- | ------- | -------- | ------------------------------------------------------------ |
+    | `label` | `string` | `''`    | false    | The period's header ("Today", "November 21, 2026"), formatted by the app. |
+
+  - Events: _none_.
+  - Slots: `default` — the `Timeline.Item` children of this period.
+  - The line joins the items of one group; a group's label starts a new run of the line.
+  - `data-testid` fallback `timeline-group`; inner `${testId}__label`. A consumer `data-testid` wins.
+
+Resulting layout:
+
+```
+packages/webkit/src/components/content/timeline/
+├── timeline.vue
+├── timeline.test.ts
+├── index.ts
+├── injection-key.ts
+├── composables/
+│   └── use-timeline-context.ts
+├── timeline-item/
+│   └── timeline-item.vue
+└── timeline-group/
+    └── timeline-group.vue
+```
+
+Exports (flat; run `pnpm --filter @aziontech/webkit build:exports` after adding them):
+
+```jsonc
+"./timeline": "./src/components/content/timeline/index.ts",
+"./timeline-root": "./src/components/content/timeline/timeline.vue",
+"./timeline-item": "./src/components/content/timeline/timeline-item/timeline-item.vue",
+"./timeline-group": "./src/components/content/timeline/timeline-group/timeline-group.vue"
+```
+
+The same change rewrites the `timeline` entry of `packages/webkit/src/cli/migrations/v6.json` (`legacy.manual`) to "PrimeVue Timeline; use Timeline with Timeline.Item and Timeline.Group (different API)", so `webkit migrate` points v3 apps at the new export.
+
+`./timeline` and `./timeline-root` export `TimelineProps`, `TimelineSize`, `TimelineTimeFormat`; `./timeline-item` exports `TimelineItemProps` and `TimelineItemSeverity` (derived from `Severity`); `./timeline-group` exports `TimelineGroupProps`; `./timeline` also exports `useTimelineContext` and `TimelineContext`.
+
+## States
+
+- Visual states: `default`, `loading`. No hover, focus, selection or disabled state of its own: only the `Timestamp` and slotted content are interactive. No `readonly` or `invalid` state either: it is display-only, with no field and no validation.
+- `data-size` on the root mirrors `size`; items read it from the context and carry their own `data-size`.
+- `data-loading` on the root mirrors `loading`; `aria-busy="true"` while loading. The placeholders are three `aria-hidden` `<li>` with a circle `Skeleton` as the marker and two line `Skeleton`s as the content, plus one visually hidden `<li>` with the loading label.
+- `data-severity` on each Item mirrors `severity`; the marker colour switches on it.
+- `data-marker="dot" | "icon" | "custom"` on each Item says which marker renders.
+- Part markers: `data-slot="timeline"`, `timeline-item`, `timeline-marker`, `timeline-connector`, `timeline-title`, `timeline-meta`, `timeline-description`, `timeline-body`, `timeline-group`, `timeline-group-label`.
+- `data-orientation="vertical"` on the root.
+- Empty: the app renders `EmptyState` instead of the timeline; the component does not inspect its slot (`CODE_QUALITY.md` § 3.6). Error: the page's `Alert` with Retry; the component fetches nothing.
+
+## Accessibility
+
+- Visible focus: the timeline adds no focusable element; the `Timestamp` buttons and slotted controls keep their own ring (`focus-visible:ring-(--ring-color)`).
+- Keyboard map: `Tab` moves through each item's `Timestamp` and any interactive slotted content, in reading order. No roving focus and no arrow keys: it is a list, not a widget.
+- ARIA: the root is an `<ol>` named by `aria-label` (default `Activity`), so a screen reader announces "list, N items". Each Group is an `<li>` with a nested `<ol aria-labelledby>` pointing at its label. Markers and the connector are `aria-hidden="true"`; the severity is carried by the title text, never by colour alone (WCAG 1.4.1). While `loading`, the root has `aria-busy="true"` and a visually hidden item reads the loading label.
+- Contrast: text uses `--text-default` / `--text-muted` on the canvas or surface; markers use the documented `-mark` tokens (OI-02) and `--text-muted`, which meet 3:1 for graphics and APCA Lc 30 for marks; the connector is a border (`--border-default`, Lc 15) and carries no meaning.
+- Motion: none of its own; `Skeleton` honours `motion-reduce`.
+- Touch target: no target of its own; `Timestamp` owns its 44 px coarse-pointer hit area.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Timeline from '@aziontech/webkit/timeline'
+</script>
+
+<template>
+  <Timeline aria-label="Ticket activity">
+    <Timeline.Item
+      title="SLA breached"
+      description="First response was due 2 hours after the ticket was opened."
+      severity="danger"
+      icon="az az-clock"
+      actor="System"
+      time="2026-11-21T15:30:00Z"
+    />
+    <Timeline.Item
+      title="Status changed to Pending"
+      actor="Sam Lee"
+      time="2026-11-21T14:05:00Z"
+    />
+    <Timeline.Item
+      title="Assigned to Sam Lee"
+      actor="Jane Doe"
+      time="2026-11-21T13:10:00Z"
+      icon="az az-user-plus"
+    >
+      Moved from the Billing queue: the customer asks about a refund for a duplicate charge.
+    </Timeline.Item>
+    <Timeline.Item
+      title="Ticket opened"
+      description="Duplicate charge on the November invoice."
+      actor="Alex Morgan"
+      time="2026-11-21T13:00:00Z"
+    />
+  </Timeline>
+</template>
+```
+
+2 more example(s) in [components/timeline.md](components/timeline.md).
 
 ---
 
@@ -25622,6 +26848,156 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ---
 
+<!-- components/markdown-editor.md -->
+
+# Markdown Editor
+
+> The text area of a reply composer: a person writes Markdown in a `Textarea`, formats it from a toolbar (bold, italic, link, bulleted list, numbered list, quote, code) or with Ctrl/⌘+B, I and K, checks the result on a Preview tab, and mentions a teammate by typing `@`, which opens a filtered list of people. It is the GitHub comment box pattern (decision SUP-02): plain Markdown text with helpers, never a rich-text (WYSIWYG) editor, so no editor library enters the package. The value is the Markdown string.
+
+- Import: `import MarkdownEditor from '@aziontech/webkit/markdown-editor'`
+- Category: input · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+
+## When to use
+
+- Write a reply to a support ticket, a customer or a teammate.
+- Add an internal note or a comment that can carry bold text, links, lists, quotes and code.
+- Let the writer mention a teammate with `@` so the app can notify them.
+- Any long free-text field whose content is shown later as formatted Markdown (a release note, an incident update).
+
+## Do
+
+- Wrap it in a `Field` with a visible label ("Reply", "Internal note"); without one, the field is named by the built-in "Message" label.
+- Pass `mentions` only with the people who can be mentioned in this ticket; the menu shows the first eight matches, so a long list is filtered by typing.
+- Listen to `mention-select` to record who was mentioned; the inserted text is `@` plus the person's `value`, so `value` is a handle with no spaces (`jane.doe`).
+- Put the send button and the attachment control in the `footer` slot, not above the field.
+- Render the posted message with `StreamingResponse` so it reads as the preview did.
+- Keep `maxRows` so a long reply scrolls inside the field instead of pushing the page down.
+- The preview and the posted message read `[1]` or `[2, 3]` as a citation chip (the `StreamingResponse` rule); write a bracketed number as `\[1]` when it is plain text.
+
+## Don’t
+
+- Plain text that is never formatted (a description, a reason) → use `textarea`.
+- A question to an AI assistant, with send, model picker and attachments → use `prompt-input`.
+- Code that people edit with highlighting and line numbers → use `code-editor`.
+- Showing Markdown that nobody edits → use `streaming-response` (or `doc-markdown` on a docs page).
+
+## Related
+
+- `textarea` — the field this component is built on; every field prop (`placeholder`, `disabled`, `readonly`, `invalid`, `required`) means the same here.
+- `prompt-input` — the AI prompt box; it shares the `@` menu list with this component (the private part `prompt-input/parts/prompt-input-menu-list.vue`, imported across components as `doc-layout` imports a `console-layout` part; it moves to a shared folder only if a third component needs it).
+- `streaming-response` — the Markdown renderer the Preview tab uses; render the sent message with it so the preview and the posted message match. This build changes its root to merge the consumer `class` with `cn` (no API change, its test extended).
+- `tabs` — Write and Preview are a controlled `Tabs` (the editor owns the value, `data-tab`, so a disabled editor still shows Write). This build moves `Tabs.Content`'s `tabindex="0"` before its attribute passthrough, so a panel whose first content is focusable can take `tabindex="-1"` (APG tabs pattern; no API change, its test extended).
+- `prompt-input`/composables/use-prompt-input-menu.ts` exports its pure `findQuery` and `filterOptions` (the `@` token before the caret, at the start of the text or after whitespace; case-insensitive match on label or value; at most eight), which the editor reuses. The editor keeps its own small pick and key handler, because it inserts `@value` (not the label) through the undo-friendly path and stops Escape from propagating.
+- `prompt-input`/parts/prompt-input-menu-list.vue` renders each option's label and description with `dir="auto"`.
+- `streaming-response`/streaming-response.vue` merges the consumer `class` with `cn`.
+- `navigation/tabs/tabs-content.vue` lets a consumer `tabindex` replace its default `0`.
+- `field` — wraps the editor with its label, description and error.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `placeholder` | `string` | `''` | false | Placeholder shown in the empty field. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the field when no Field label or aria-labelledby names it; empty uses the built-in Message label. Write it as the aria-label attribute. |
+| `disabled` | `boolean` | `false` | false | Disables the field, the toolbar, the tabs and the mention menu. |
+| `readonly` | `boolean` | `false` | false | Shows the value without letting it change: the toolbar is disabled and the mention menu never opens; the Preview tab still works. |
+| `invalid` | `boolean` | `false` | false | Applies the invalid border to the field and the preview and sets aria-invalid on the field. |
+| `required` | `boolean` | `false` | false | Marks the field as required and sets aria-required. |
+| `mentions` | `MarkdownEditorMention[]` | `[]` | false | People the menu offers after `@`; each is `{ value, label, description?, icon? }` and inserts `@` plus its `value`. Empty turns the menu off. |
+| `minRows` | `number` | `4` | false | Lines the empty field shows; the field grows with its content from here. |
+| `maxRows` | `number` | `12` | false | Lines the field grows to before it scrolls; `0` sets no limit. |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `mention-select` | `(event: MouseEvent \| KeyboardEvent, mention: MarkdownEditorMention)` | Fires when a person is picked from the `@` menu (click, Enter or Tab), after `@value` is inserted into the text. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `footer` | — | A row under the field for attachments and actions (an attach button, a Send button); omitted when empty. |
+
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `string` | `''` | `update:modelValue` | The Markdown text via `defineModel`; updates on every input, toolbar action and mention. |
+
+## States
+
+- Visual states: `default`, `hover`, `focus`, `filled`, `disabled`, `readonly`, `invalid`, `required` (no visual change: the wrapping `Field` label carries the Required marker); the field's own states come from `Textarea`.
+- `data-tab` on the root: `write` | `preview`, the open tab.
+- `data-disabled` and `data-invalid` on the root mirror the props or the wrapping `Field`'s state; `data-readonly` mirrors the `readonly` prop only (`Field` has no read-only state).
+- Write tab: the toolbar shows; each button inserts its Markdown at the selection. Preview tab: the toolbar hides and the Markdown renders in a box the shape of the field (`data-slot="preview"`); an empty value shows the muted text "Nothing to preview".
+- Mention menu: `data-mention-state="open|closed"` on the root. Open while the `@` token before the caret matches at least one person and the field is editable: the listbox renders above the field (or below it, when there is not enough room above and more below), the match count is spoken in the polite live region, and the field carries `aria-controls` (the listbox) and `aria-activedescendant` (the highlighted option). Closed: no listbox in the DOM, and the field carries neither attribute (`aria-autocomplete="list"` stays while `mentions` is not empty). No match, Escape, a pick, or the caret leaving the token closes it.
+- `disabled`: field, toolbar buttons and tab triggers disabled; the mention menu never opens.
+- `readonly`: toolbar buttons disabled (so the toolbar has no focus stop and Tab skips it), keyboard shortcuts do nothing, the mention menu never opens; the tabs work.
+- Preview loading: the renderer is a lazy chunk (see Performance). Until it arrives the preview box keeps its `minRows` height, carries `aria-busy="true"` and `data-loading`, and shows the muted text "Loading preview" (`markdownEditor.previewLoading`). If the chunk fails to load, the box shows the Markdown source as plain text (`whitespace-pre-wrap`), so the writer still reads what they wrote; there is no retry button.
+- Empty: an empty value shows the muted "Nothing to preview" (`markdownEditor.emptyTitle`). A send error belongs to the host's `Field` error, not to the editor.
+- Every insertion (toolbar buttons, Ctrl/⌘+B, I, K, a picked mention, and `insert()`) keeps the browser's undo history: text goes in through `document.execCommand('insertText')`; where that returns false the component falls back to `setRangeText` plus an `input` event, which is not undoable.
+- What each action inserts (GitHub's markers), on the selection or at the caret:
+  - Bold `**text**`, Italic `_text_`; with no selection the empty markers go in with the caret between them; a selection already wrapped in the markers is unwrapped.
+  - Link `[text](https://github.com/aziontech/webkit/blob/main/.specs/url)` with `url` selected; with no selection `[](https://github.com/aziontech/webkit/blob/main/.specs/url)` with the caret between the brackets. The `url` word is the `markdownEditor.linkPlaceholder` string.
+  - Bulleted list `- `, Numbered list `1. `, `2. `…, Quote `> `: the selection grows to whole lines and every line gets the prefix; when every line already has it, it is removed.
+  - Code: a selection inside one line becomes `` `text` ``; a selection over several lines becomes a fenced block (three backticks on their own lines around it).
+- Switching to Preview unmounts the field (a `Tabs.Content` panel renders only when active), so the browser's undo history does not survive a round trip through Preview; the value does.
+- The preview box has the field's minimum height (`minRows` lines), so switching tabs on a short reply does not change the height.
+
+## Accessibility
+
+- Visible focus: the field, tabs and toolbar buttons keep the focus rings of `Textarea`, `Tabs.Trigger` and `IconButton`. Both panels take `tabindex="-1"`, so neither `Tabs.Content` panel is a stop of its own: in Write the first content is the field; in Preview the preview box (`data-slot="preview"`, `tabindex="0"`) is the one focus stop, with `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the box itself.
+- Keyboard map:
+  - Tab order: the active tab (Write or Preview), then the toolbar (one stop, Write only), then the field (Write) or the preview box (Preview), then the controls in the `footer` slot.
+  - In the field: Ctrl+B (⌘B on Apple) bold, Ctrl+I (⌘I) italic, Ctrl+K (⌘K) link; each wraps the selection, or inserts the empty markers with the caret between them.
+  - `@` opens the menu only at the start of the text or after whitespace, so an email address (`jane@example.com`) never opens it mid-word; the text typed after `@` up to the caret filters the people by label or value, case-insensitively.
+  - With the mention menu open: ArrowDown / ArrowUp move the highlight (wrapping), Enter or Tab insert `@value` and a space, Escape closes the menu and stops there (a surrounding dialog stays open); typing keeps filtering; the menu closes when the caret leaves the `@` token.
+  - Toolbar (`role="toolbar"`, WAI-ARIA toolbar pattern): Tab enters on one button (roving `tabindex`), ArrowRight / ArrowLeft move to the next / previous button (swapped under `dir="rtl"`), Home / End go to the first / last; Enter or Space applies the format and returns focus to the field with the new selection.
+  - Tabs: the `Tabs` keyboard map (arrows between Write and Preview, automatic activation).
+- ARIA: the toolbar carries `aria-label` "Formatting" and `aria-controls` the field; each button has its accessible name ("Bold") and `aria-keyshortcuts` (`Meta+B Control+B`) for the three with shortcuts. The field keeps its native textbox role (ARIA in HTML allows no `combobox` role on `textarea`) and takes the combobox attributes the role allows: `aria-autocomplete="list"`, `aria-controls` (the listbox, while open) and `aria-activedescendant` (the highlighted option). The menu is `role="listbox"` with `aria-label` "People"; options are `role="option"` with `aria-selected`. The match count is announced in a polite live region ("3 people").
+- Accessible name: from the wrapping `Field` label, or `aria-label` / `aria-labelledby` passed to the editor (forwarded to the field); with neither, the built-in "Message".
+- Contrast: only documented token pairs (`rules/webkit-tokens.md` § Contrast); the muted empty-preview text is `--text-muted` on `--bg-surface`; the disabled preview is `--text-disabled` on `--bg-disabled`, the pair `Textarea` uses (disabled text is outside the WCAG 1.4.3 minimum).
+- Motion: none of its own (see Motion).
+- Touch targets: toolbar buttons are `IconButton` size `small` with its 44 × 44 px hit area on a coarse pointer (TT01); menu options take `min-h-11` on a coarse pointer.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Field from '@aziontech/webkit/field'
+  import MarkdownEditor from '@aziontech/webkit/markdown-editor'
+  import { ref } from 'vue'
+
+  const reply = ref('')
+  const people = [
+    { value: 'jane.doe', label: 'Jane Doe', description: 'jane.doe@example.com' },
+    { value: 'john.smith', label: 'John Smith', description: 'john.smith@example.com' },
+    { value: 'alex.morgan', label: 'Alex Morgan', description: 'alex.morgan@example.com' },
+    { value: 'priya.patel', label: 'Priya Patel', description: 'priya.patel@example.com' }
+  ]
+</script>
+
+<template>
+  <Field class="w-full max-w-(--container-md)">
+    <Field.Label>Reply</Field.Label>
+    <MarkdownEditor
+      v-model="reply"
+      placeholder="Write a reply. Type @ to mention a teammate."
+      :mentions="people"
+    />
+  </Field>
+</template>
+```
+
+2 more example(s) in [components/markdown-editor.md](components/markdown-editor.md).
+
+---
+
 <!-- components/multi-select.md -->
 
 # Multi Select
@@ -26489,6 +27865,119 @@ packages/webkit/src/components/input/radio-group/
 ```
 
 2 more example(s) in [components/radio-group.md](components/radio-group.md).
+
+---
+
+<!-- components/rating.md -->
+
+# Rating
+
+> Rating is a row of stars that picks a whole score from 1 to `max` (5 by default), the way a customer rates a support conversation (CSAT) or a product review. It renders as a native radio group, one radio per star named "1 star" … "5 stars", so it is one tab stop, the arrow keys move the score and the value posts with a form. With `readonly` it becomes a display of a score, including a fractional average rounded to the nearest half star (4.5 shows four and a half stars), announced as one image ("Rated 4.5 out of 5").
+
+- Import: `import Rating from '@aziontech/webkit/rating'`
+- Category: input · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+
+## When to use
+
+- Ask a customer to rate a support conversation, an answer or a resolved ticket on a 1-to-5 scale (customer satisfaction, CSAT).
+- Collect a star score in a review or feedback form, inside a `Field` with a label, a description and a required error.
+- Show a stored score or an average of scores as stars in a ticket, a table cell or a review list (`readonly`).
+
+## Do
+
+- Name the group: put it in a `Field` with a `Field.Title`, or set `aria-label` on the root ("Rate this conversation").
+- Keep `max` at 5 for satisfaction and reviews; scales above 5 are hard to tell apart at a glance.
+- Start empty (`0`) when you ask for a rating, so nobody submits a score they did not choose; set `required` when the score is mandatory.
+- Set `clearable` when a score is optional, so a person can take it back with the keyboard and a screen reader, not only by reloading.
+- Show averages with `readonly`; print the count of ratings beside it in text ("4.5 · 128 reviews"), the stars do not carry it.
+- Do not put a rating in a dense table row as an input; show it `readonly` and edit it in a dialog or a detail page.
+
+## Don’t
+
+- A good / bad (thumbs up / thumbs down) answer → use `ToggleGroup` with two options, or `ChatMessageFeedback` under an AI answer.
+- A score on a scale wider than 10 or a continuous value → use `Slider` or `NumberInput`.
+- A choice between named options (plans, channels) → use `RadioGroup`.
+- A score shown as a number or a bar (NPS breakdown, a meter) → use `StatTile` or `Progress`.
+
+## Related
+
+- `radio-group` — the same native radio pattern, for picking one labelled option instead of a score.
+- `toggle-group` — two or three compact options such as good / bad.
+- `chat-message-feedback` — thumbs up / thumbs down under an AI chat answer.
+- `field` — wraps the rating with its label, description and error; the label names the group.
+- `slider` — a number on a wide or continuous scale.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `max` | `number` | `5` | false | Number of stars, the highest score. Rounded to a whole number and kept between 1 and 10. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Star size: 16, 20 or 24 px glyphs in 24, 28 or 32 px targets. `RatingSize`, exported. |
+| `name` | `string` | `''` | false | Form field name shared by every star radio; the score submits under it. Empty uses a generated name so the radios still group. |
+| `readonly` | `boolean` | `false` | false | Shows the score instead of asking for it: no radios, the value rounded to the nearest half star, announced as one image. |
+| `disabled` | `boolean` | `false` | false | Disables every star and the clear button; the row shows at 50 % opacity with a not-allowed cursor. |
+| `required` | `boolean` | `false` | false | Requires a score: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit. |
+| `invalid` | `boolean` | `false` | false | Marks the rating invalid: sets `aria-invalid` on the group and draws the empty stars in the danger mark colour. |
+| `clearable` | `boolean` | `false` | false | Shows a clear button after the stars that resets the score to 0 and moves focus to the first star. Not shown while `readonly`. |
+| `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
+
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `number` | `0` | `update:modelValue` | The score via `defineModel`; `0` means no score. Picking a star emits its whole number (1 … `max`); the clear button emits `0`. Unbound, the rating keeps its own score. As an input a fractional value shows rounded to a whole star; `readonly` shows it to the nearest half. |
+
+## States
+
+- Visual states: `default`, `hover` (preview), `focus-visible`, `checked`, `disabled`, `invalid`, `readonly`
+- Root: `role="radiogroup"` as an input, `role="img"` while `readonly`; `data-size` mirrors `size`; `data-readonly`, `data-disabled`, `data-required` and `data-invalid` mirror the state (the `Field` state included); `data-preview` while a fine pointer hovers a star.
+- Each star: `data-fill="full" | "half" | "empty"` on its glyph; `half` only while `readonly`. A filled or half star draws in `var(--warning-mark)`, an empty star in `var(--text-muted)`, or `var(--danger-mark)` while invalid. Each star label carries `data-checked` on the star whose value is the score.
+- Hover preview: on a fine pointer (`pointerType === 'mouse'`), hovering star `n` fills stars 1 … `n` until the pointer leaves the row; it never changes the model, and it does not run while `disabled` or `readonly`. Touch and pen get no preview: the tap selects.
+- Picking the selected star again keeps the score (native radio); the score is cleared only by the clear button.
+- While `readonly`, `required`, `invalid`, `name` and `clearable` have no effect: the display renders no inputs and no clear button, and sets no `aria-required` / `aria-invalid`; `disabled` only dims it.
+- Not states of this component: `loading`, `empty` and `error` (the `Field.Error` carries the message).
+
+## Accessibility
+
+- Visible focus: `ring-2 ring-(--ring-color) ring-offset-1 ring-offset-(--bg-canvas)` on the focused star's target (the native radio inside is invisible).
+- Keyboard map (APG radio group, native radios sharing one `name`): `Tab` enters on the checked star, or, when none is checked, on the first star (`Shift+Tab` enters on the last), and the next `Tab` moves to the clear button when shown, then out; `ArrowRight` / `ArrowDown` select the next star and `ArrowLeft` / `ArrowUp` the previous one, wrapping at the ends, all handled by the browser (it swaps `ArrowLeft` / `ArrowRight` under `dir="rtl"`); the component adds no key handling of its own; `Space` selects the focused star; `Enter` / `Space` on the clear button reset the score to 0 and move focus to the first star.
+- Clear affordance: a separate `IconButton` ("Clear rating"), chosen over "click the selected star again" because a native radio cannot be unchecked from the keyboard, a toggle on re-click is not announced to screen readers and surprises people who double-click; the button is named, focusable and disabled while the score is 0.
+- ARIA: root `role="radiogroup"` with `aria-labelledby` (the `Field` label ids) or the consumer's `aria-label`, `aria-describedby` (the `Field.Description` / `Field.Error` ids), `aria-required` and `aria-invalid`; each star is a native `type="radio"` input with `aria-label` "1 star" … "5 stars"; the glyphs are `aria-hidden`. While `readonly` the root is `role="img"`, renders no inputs, and is named by `aria-labelledby`: the `Field` label ids (when inside a `Field`) followed by a visually hidden summary, "Rated 4.5 out of 5" ("Not rated" at 0), whose `{value}` is the half-rounded value the stars show (4.37 reads "4.5"); a consumer `aria-label` is not used in this mode, put context in the text beside it.
+- Contrast: star glyphs in documented icon pairs (`--warning-mark`, `--text-muted`, `--danger-mark` on the surfaces); filled and empty differ in shape as well as colour. The disabled row (50 % opacity) is an inactive control, exempt from WCAG 1.4.3 / 1.4.11, as in `radio-group` and `checkbox`.
+- `motion-reduce:transition-none` on the star glyph transition.
+- Touch target: each star target is 24, 28 or 32 px on a fine pointer and grows to 44 × 44 px on `pointer: coarse` (decision TT01, the row widens); the clear button follows `IconButton`'s coarse-pointer target.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Rating from '@aziontech/webkit/rating'
+  import { ref } from 'vue'
+
+  const score = ref(0)
+</script>
+
+<template>
+  <div class="flex items-center gap-(--spacing-sm)">
+    <Rating
+      v-model="score"
+      name="satisfaction"
+      aria-label="Rate this conversation"
+      clearable
+    />
+    <span
+      class="text-body-sm text-(--text-muted)"
+      aria-live="polite"
+      >{{ score ? `${score} of 5` : 'No score yet' }}</span
+    >
+  </div>
+</template>
+```
+
+2 more example(s) in [components/rating.md](components/rating.md).
 
 ---
 
@@ -33462,7 +34951,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ## Do
 
-- Mount one `ConfigProvider` at the app root and pass the locale the user chose, or leave it unset to follow the device; do not nest one per page. A nested provider (a right-to-left preview, a fixed `now` for one panel) inherits from the provider around it every setting it does not set: the locale, the registered catalogs, the `messages` overrides (its own merge over the outer ones), `now` and `timeZone`.
+- Mount one `ConfigProvider` at the app root and pass the locale the user chose, or leave it unset to follow the device; do not nest one per page.
+- A nested provider changes only what it sets: every prop it leaves unset (`locale`, `catalogs`, `messages`, `now`, `timeZone`, `dir`) comes from the provider above it, and at the root from the device and the page. A provider placed only for `now` (a fixed sample clock) keeps the app's language, catalogs, overrides and time zone; `catalogs` adds to the ones above and `messages` merges over the overrides above.
 - Register every language the app offers in `catalogs` (`{ 'pt-BR': ptBR, es }`), imported from `@aziontech/webkit/locales/<tag>`; a `pt-BR` or `es` locale with no registered catalog falls back to English and warns once in development.
 - Use a full BCP 47 tag (`pt-BR`, not `pt`); a tag with no registered catalog falls back to the same language, then to English.
 - Override built-in strings through `messages` (partial, deep-merged), not by forking components.
@@ -33485,12 +34975,12 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `locale` | `string` | `''` | false | BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats. Empty follows the device locale, `en-US` on the server and until mount. |
-| `catalogs` | `Record<string, Messages>` | `undefined` | false | Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`); a locale with no catalog falls back to English. |
-| `messages` | `PartialMessages` | `undefined` | false | Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`). |
+| `locale` | `string` | `''` | false | BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats. Empty inherits the provider above; at the root it follows the device locale, `en-US` on the server and until mount. |
+| `catalogs` | `Record<string, Messages>` | `undefined` | false | Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`), added to those of the provider above; a locale with no catalog falls back to English. |
+| `messages` | `PartialMessages` | `undefined` | false | Partial catalog deep-merged over the built-in one and the provider above's overrides, keyed by component group (`{ pagination: { next: 'Seguinte' } }`). |
 | `dir` | `'ltr' \| 'rtl' \| 'auto'` | `'auto'` | false | Text direction of the subtree; `auto` derives it from `locale` (`ar`, `he`, `fa`, `ur` are right-to-left), and with no `locale` inherits the direction around the provider. |
-| `now` | `string \| number \| Date` | `undefined` | false | Reference time for every relative time below the provider (`TableCellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset reads the real clock, ticking each minute. |
-| `timeZone` | `string` | `''` | false | IANA time zone every `Timestamp` below the provider shows its local time in, and every `DateRangePicker` with no `v-model:time-zone` formats in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone. |
+| `now` | `string \| number \| Date` | `undefined` | false | Reference time for every relative time below the provider (`TableCellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset inherits the provider above, and at the root reads the real clock, ticking each minute. |
+| `timeZone` | `string` | `''` | false | IANA time zone every `Timestamp` below the provider shows its local time in, and every `DateRangePicker` with no `v-model:time-zone` formats in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty inherits the provider above, and at the root reads the browser's zone. |
 
 ## Slots
 
@@ -33501,6 +34991,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ## States
 
 - No visual states; the root carries `lang` (the locale) and `dir` (`ltr` | `rtl`) whenever `dir` or `locale` is set; with neither it carries no `dir` and inherits.
+- Direction with neither `dir` nor `locale`: a nested provider takes the direction of the provider above; a root provider takes the page's. The page's direction is read after mount from the nearest `dir` around the provider's element, and again when a `dir` attribute changes; the server render and hydration read `ltr` for `useLocale().dir` and write no `dir` anywhere, so the markup never changes on hydration.
+- Nested: each unset prop comes from the provider above (`locale`, `dir`, `now`, `timeZone`), `catalogs` add to the ones above and `messages` merge over the overrides above; an explicit prop always wins.
 - `locale` unset: `lang` and the formats are `en-US` in the server render and during hydration, then the device locale after mount.
 - `now` set: every relative time below reads it instead of the real clock; changing it re-renders them. An empty or unparseable value reads the real clock.
 - `timeZone` set: every `Timestamp` below shows its local time in that zone and renders it on the server too, and every `DateRangePicker` without its own `timeZone` formats and edits its range in it; `useLocale().formatDate` and the other formatters are unchanged. Empty reads the browser's zone after mount.
@@ -33509,7 +35001,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 - `lang` on the root lets screen readers pick the right voice and pronunciation (WCAG 3.1.1 / 3.1.2).
 - `dir` on the root mirrors reading order for right-to-left languages.
-- Overlays that teleport to `body` (Dialog, Drawer, Popover, Tooltip, DropdownMenu, Select, MultiSelect, Toaster, DatePicker, DateRangePicker, PropertyFilter, NavigationMenu.Viewport, the doc overlays) read the provider through `usePortalLocale()` (`@aziontech/webkit/use-locale`) and set the same `dir` and `lang` on their teleported root, so they do not fall back to the document's direction and language. A consumer's own `<Teleport>` does the same with `v-bind="usePortalLocale().value"` on its root.
+- Overlays that teleport to `body` (Dialog, Drawer, Popover, Tooltip, DropdownMenu, Select, MultiSelect, Toaster, DatePicker, DateRangePicker, PropertyFilter, NavigationMenu.Viewport, the doc overlays) read the provider through `usePortalLocale()` (`@aziontech/webkit/use-locale`) and set the same `dir` and `lang` on their teleported root, so they do not fall back to the document's direction and language. When no provider in the chain sets a direction (no `dir`, no `locale`, no registered right-to-left device locale), `usePortalLocale()` returns no `dir`, and the teleported root inherits the page's direction from `body` (a Drawer with `side="end"` under `<html dir="rtl">` opens on the left). A consumer's own `<Teleport>` does the same with `v-bind="usePortalLocale().value"` on its root.
 - Every assistive label WebKit ships (close buttons, pagination, sort state, empty states) is read in the provider's language.
 - No focusable element of its own; it adds no role and no landmark.
 

@@ -3,6 +3,7 @@ name: <kebab-case-name>
 category: <action|ai|chart|code|content|data|docs|feedback|input|layout|marketing|navigation|overlay|provider|section>
 structure: <monolithic|composition>
 status: draft
+stability: preview
 spec_version: 1
 template: 2
 figma:
@@ -254,7 +255,7 @@ export default Object.assign(Root, { Part: RootPart })
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| `<figma var>` | `<closest primitive>` | `TODO: tokenizar` |
+| `<figma var>` | `<closest primitive>` | `TODO: tokenize` |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -263,7 +264,7 @@ export default Object.assign(Root, { Part: RootPart })
 - ARIA: `<aria-label / aria-busy / aria-disabled / aria-hidden / aria-current / aria-expanded as applicable>`
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state, and the APCA targets: only documented token pairs (`rules/webkit-tokens.md` § Contrast)
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states
-- Touch target ≥40×40 px (or justified deviation)
+- Touch target ≥44×44 px on a coarse pointer, through an invisible hit area (decision TT01), or a justified deviation
 
 ## Internationalization
 

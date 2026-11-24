@@ -7,9 +7,11 @@ import {
 } from 'vue-router'
 
 import { resources } from './lib/store'
+import { findCustomer, findTicket } from './lib/support'
 
 const SITE = 'Azion'
 const RESOURCES = 'Resources'
+const SUPPORT = 'Support'
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/resources' },
@@ -95,6 +97,44 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/support',
+    name: 'support',
+    component: () => import('./pages/support-inbox-page.vue'),
+    meta: {
+      title: `Tickets - ${SUPPORT}`,
+      breadcrumbs: [{ label: SUPPORT }, { label: 'Tickets' }]
+    }
+  },
+  {
+    path: '/support/tickets/new',
+    name: 'support-ticket-create',
+    component: () => import('./pages/support-create-ticket-page.vue'),
+    meta: { shell: 'focused', title: `Create ticket - ${SUPPORT}` }
+  },
+  {
+    path: '/support/tickets/:id',
+    name: 'support-ticket',
+    component: () => import('./pages/support-ticket-page.vue'),
+    meta: { title: '', ticket: true }
+  },
+  {
+    path: '/support/customers/:id',
+    name: 'support-customer',
+    component: () => import('./pages/support-customer-page.vue'),
+    meta: { title: '', customer: true }
+  },
+  {
+    path: '/support/settings/canned-responses',
+    name: 'support-canned-responses',
+    component: () => import('./pages/support-canned-responses-page.vue'),
+    meta: {
+      title: `Canned responses - ${SUPPORT}`,
+      breadcrumbs: [{ label: SUPPORT }, { label: 'Canned responses' }]
+    }
+  },
+  { path: '/tickets', redirect: '/support' },
+  { path: '/tickets/:id', redirect: (to) => `/support/tickets/${String(to.params.id)}` },
+  {
     path: '/:path(.*)*',
     name: 'not-found',
     component: () => import('./pages/not-found-page.vue'),
@@ -108,7 +148,16 @@ export const router = createRouter({
   scrollBehavior: () => ({ top: 0 })
 })
 
+function supportTitle(route: RouteLocationNormalized): string {
+  const id = String(route.params.id ?? '')
+  const label = route.meta.ticket
+    ? `#${id} ${findTicket(id)?.subject ?? ''}`.trim()
+    : (findCustomer(id)?.name ?? id)
+  return [label, SUPPORT, SITE].filter(Boolean).join(' - ')
+}
+
 function pageTitle(route: RouteLocationNormalized): string {
+  if (route.meta.ticket || route.meta.customer) return supportTitle(route)
   const title = String(route.meta.title ?? '')
   if (!route.meta.resource) return [title, SITE].filter(Boolean).join(' - ')
   const id = String(route.params.id ?? '')

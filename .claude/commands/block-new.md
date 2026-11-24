@@ -29,7 +29,8 @@ docs sidebar lists its full title ("Dashboard Alerts" under Dashboard); see
 ```
 <folder>/
 ├── block.json          id (= folder path under blocks/), name, title, surface, summary, preview,
-│                       intents (en + pt-BR), skills, primary { name, file }, variants[], files,
+│                       stability: "preview" (until the owner marks it GA), intents (en + pt-BR),
+│                       skills, primary { name, file }, variants[], files,
 │                       keyboard (entry field of a task screen), steps?
 ├── <name>.vue          the primary state, a copyable SFC that takes its data through typed props
 ├── sample.ts           the sample records the primary renders when its data props are left out

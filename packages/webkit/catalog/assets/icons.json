@@ -3526,6 +3526,51 @@
    ]
   },
   {
+   "name": "az-bold",
+   "class": "az az-bold",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Bold text",
+   "keywords": [
+    "layout"
+   ]
+  },
+  {
+   "name": "az-italic",
+   "class": "az az-italic",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Italic text",
+   "keywords": [
+    "layout"
+   ]
+  },
+  {
+   "name": "az-list-ordered",
+   "class": "az az-list-ordered",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Numbered list",
+   "keywords": [
+    "items",
+    "bullets"
+   ]
+  },
+  {
+   "name": "az-quote",
+   "class": "az az-quote",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Quoted text or a block quote",
+   "keywords": [
+    "layout"
+   ]
+  },
+  {
    "name": "az-align-left",
    "class": "az az-align-left",
    "set": "azionicons",

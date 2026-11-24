@@ -4,6 +4,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
   import Link from '@aziontech/webkit/link'
+  import Tag from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
 
   import { index } from '../lib/data'
@@ -124,6 +125,13 @@
                   icon="az az-arrow-right"
                   size="small"
                   class="min-w-0"
+                />
+                <Tag
+                  v-if="item.entry?.stability === 'preview'"
+                  :label="t.stabilityPreview"
+                  severity="info"
+                  size="small"
+                  class="ms-auto shrink-0"
                 />
                 <span
                   v-if="item.entry?.exampleCount"
