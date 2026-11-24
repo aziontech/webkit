@@ -239,7 +239,7 @@
           </svg>
           <span
             v-else-if="!mark.art"
-            class="whitespace-nowrap text-heading-2xs"
+            class="whitespace-nowrap font-medium group-data-[size=medium]/strip:text-heading-md group-data-[size=small]/strip:text-heading-xs"
             >{{ mark.label }}</span
           >
         </li>
