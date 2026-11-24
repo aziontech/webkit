@@ -61,6 +61,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [CreatePage (create/create-page)](blocks/create/create-page.md): The page a first-level resource is created on when everything it needs fits on one screen.
 - [CreateReleaseImpact (create/create-release-impact)](blocks/create/create-release-impact.md): The Review and deploy page of a release that carries several resources at once: a service, the policy in front of it, its storage, its error page and every dependency they reference.
 - [CreateResourcePicker (create/create-resource-picker)](blocks/create/create-resource-picker.md): The band a create flow uses when the resource being created needs another resource that may already exist.
+- [CreateTicket (create/create-ticket)](blocks/create/create-ticket.md): Preview. The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in.
 - [CreateWizard (create/create-wizard)](blocks/create/create-wizard.md): The page a first-level resource is created on one step at a time.
 
 ## Blocks: Dashboard

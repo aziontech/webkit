@@ -35073,6 +35073,130 @@
    ],
    "file": "catalog/blocks/create/create-resource-picker.json"
   },
+  "create/create-ticket": {
+   "name": "CreateTicket",
+   "title": "Blocks/Create/CreateTicket",
+   "source": "blocks/create/create-ticket/create-ticket.vue",
+   "surface": "app",
+   "stability": "preview",
+   "summary": "The page a support agent creates a ticket on, on behalf of a customer: the creation header with Back, the brand, Tickets › Create ticket and the account, then a centred form column with a small `PageHeader` and three `SettingsGroup` bands of `SettingsRow`s in flush `Card`s. Requester: a `Combobox` that searches contacts by name or email, each row an `Avatar` with the name and email, with Add new contact swapping it for Contact name and Contact email inputs, and CC as `MultiSelect` chips of email addresses. Request: Subject (`Input`), Description (`MarkdownEditor` with @mentions of agents and an attachments footer: Attach files and a `FileTokenGroup`), Channel, Type and Priority (`Select`, each priority a `PriorityTag`). Assignment: Group and Assignee (`Combobox`, the agents with `Avatar` presence and only those in the chosen group) and Tags (`MultiSelect` chips). Every field starts empty; Requester, Subject and Description carry the required mark. A raised `SaveBar` holds Cancel, Create and add another and Create ticket (⌘ Enter). Fields turn invalid only after a create press, with a `FieldError` under each and focus on the first; there is no summary. A failed request opens a danger `Alert` with Retry and keeps every value; a created ticket raises a success `toast` with Open ticket and clears the form for the next one. Escape cancels, and a changed form asks before it is discarded (`ConfirmDialog`). The block fetches nothing: it emits `create` with the typed ticket and whether to add another, and the page passes back `submitting`, `error` or `created`.",
+   "intents": [
+    "create ticket",
+    "new ticket",
+    "new support ticket",
+    "log a ticket for a customer",
+    "agent creates ticket",
+    "helpdesk new ticket form",
+    "support request form",
+    "ticket form with requester and assignee",
+    "create and add another",
+    "add new contact inline",
+    "criar ticket",
+    "novo ticket",
+    "novo chamado",
+    "abrir chamado em nome de alguém",
+    "formulário de chamado",
+    "criar chamado de suporte",
+    "registrar solicitação de suporte"
+   ],
+   "skills": [
+    "webkit-create-surface",
+    "webkit-form",
+    "webkit-errors",
+    "webkit-layout"
+   ],
+   "components": [
+    "Alert",
+    "AppHeader",
+    "AppHeaderAccount",
+    "Avatar",
+    "Brand",
+    "Breadcrumb",
+    "Button",
+    "Card",
+    "Combobox",
+    "ConfirmDialog",
+    "FieldError",
+    "FileTokenGroup",
+    "IconButton",
+    "Input",
+    "Item",
+    "Kbd",
+    "MarkdownEditor",
+    "MultiSelect",
+    "PageHeader",
+    "PriorityTag",
+    "SaveBar",
+    "Select",
+    "SettingsGroup",
+    "SettingsRow",
+    "Skeleton",
+    "toast",
+    "use-escape-to-cancel",
+    "use-file-picker",
+    "use-locale",
+    "use-shortcuts",
+    "use-unsaved-changes",
+    "utils/focus-invalid"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/app-header",
+    "@aziontech/webkit/app-header-account",
+    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/brand",
+    "@aziontech/webkit/breadcrumb-root",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/combobox",
+    "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/field-error",
+    "@aziontech/webkit/file-token-group",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
+    "@aziontech/webkit/markdown-editor",
+    "@aziontech/webkit/multi-select",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/priority-tag",
+    "@aziontech/webkit/save-bar",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/settings-group",
+    "@aziontech/webkit/settings-row",
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/use-escape-to-cancel",
+    "@aziontech/webkit/use-file-picker",
+    "@aziontech/webkit/use-locale",
+    "@aziontech/webkit/use-shortcuts",
+    "@aziontech/webkit/use-unsaved-changes",
+    "@aziontech/webkit/utils/focus-invalid"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in. The agent's job is to say who asked, what they need and who owns it, then create the ticket and either go to it or log the next one. It follows the Zendesk and Freshdesk new-ticket forms on the house create page (`create/create-page`): its own creation header with no sidebar, a centred form column, three bands of rows, and a raised commit card at the bottom with Cancel, Create and add another, and Create ticket. A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/webkit-create-surface`).",
+   "variants": [
+    {
+     "name": "ValidationErrors"
+    },
+    {
+     "name": "ContactError"
+    },
+    {
+     "name": "Submitting"
+    },
+    {
+     "name": "SubmitError"
+    },
+    {
+     "name": "Success"
+    },
+    {
+     "name": "Loading"
+    }
+   ],
+   "file": "catalog/blocks/create/create-ticket.json"
+  },
   "create/create-wizard": {
    "name": "CreateWizard",
    "title": "Blocks/Create/CreateWizard",
