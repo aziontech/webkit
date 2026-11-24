@@ -47,7 +47,7 @@ A bordered `DataTable` of the customer's tickets, open ones first, with an sr-on
 
 ### H. Activity — `Timeline`
 
-A `Timeline` with one `Timeline.Group` per day, labelled with the long date, newest first. Each event is a `Timeline.Item` with its glyph and meaning: ticket opened, replied, merged (info), rated (warning, the star), solved (success), customer created (info). The actor and the time sit on the meta line. While loading the timeline draws its own placeholder items; with no event a small `EmptyState` says so.
+A `Timeline` with one `Timeline.Group` per day, labelled with the long date, newest first. Each event is a `Timeline.Item` with its glyph and meaning: ticket opened, replied, merged (info), rated (warning, the star), solved (success), customer created (info). The actor and the relative time ("2 hours ago") sit on the meta line. While loading the timeline draws its own placeholder items; with no event a small `EmptyState` says so.
 
 ### I. Notes — `MessageThread`, `Field`, `Textarea`, `Button`
 

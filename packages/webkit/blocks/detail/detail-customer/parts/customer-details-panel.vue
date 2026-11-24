@@ -84,7 +84,7 @@
         </KeyValueList.Item>
         <KeyValueList.Item label="Local time">
           <template v-if="customer">
-            <span v-if="localTime">{{ localTime }}</span>
+            <bdi v-if="localTime">{{ localTime }}</bdi>
             <span class="text-(--text-muted)"
               ><bdi dir="ltr">{{ customer.timeZone }}</bdi></span
             >
@@ -97,10 +97,11 @@
           <template v-if="customer">
             <Link
               v-if="customer.organizationHref"
-              :label="customer.organization"
               :href="customer.organizationHref"
-              size="small"
-            />
+              inline
+            >
+              <bdi>{{ customer.organization }}</bdi>
+            </Link>
             <bdi v-else>{{ customer.organization }}</bdi>
           </template>
         </KeyValueList.Item>

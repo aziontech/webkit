@@ -178,10 +178,7 @@
 <template>
   <CustomerClock :now="clock">
     <div class="@container/customer layout-column layout-boundary flex min-w-0 flex-col">
-      <PageHeader
-        :title="customer?.name ?? 'Customer'"
-        :description="customer?.organization ?? ''"
-      >
+      <PageHeader :title="customer?.name ?? 'Customer'">
         <template #icon>
           <Skeleton
             v-if="loading"
@@ -196,13 +193,15 @@
           />
         </template>
         <template
-          v-if="loading"
+          v-if="loading || customer"
           #description
         >
           <Skeleton
+            v-if="loading"
             width="10rem"
             height="1rem"
           />
+          <bdi v-else>{{ customer?.organization }}</bdi>
         </template>
         <template
           v-if="!error"

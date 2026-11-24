@@ -46,6 +46,7 @@
     <MessageThread
       v-if="loading || notes.length"
       :loading="loading"
+      timestamp-format="relative"
       :aria-label="name ? `Notes on ${name}` : 'Notes'"
     >
       <MessageThread.Item

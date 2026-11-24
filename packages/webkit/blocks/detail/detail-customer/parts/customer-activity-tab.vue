@@ -55,6 +55,7 @@
   <Timeline
     v-else
     :loading="loading"
+    time-format="relative"
     :aria-label="name ? `Activity of ${name}` : 'Activity'"
   >
     <Timeline.Group
