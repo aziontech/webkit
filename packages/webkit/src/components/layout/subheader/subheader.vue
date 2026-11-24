@@ -35,6 +35,8 @@
     description(): unknown
     /** The band's own actions, on the right of the copy. */
     actions(): unknown
+    /** An affordance right after the title, outside the h2, such as a help button that opens the page's HelpPanel. */
+    info(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -69,6 +71,13 @@
           >
             {{ title }}
           </h2>
+          <span
+            v-if="$slots['info']"
+            :data-testid="`${testId}__info`"
+            class="flex shrink-0 items-center"
+          >
+            <slot name="info" />
+          </span>
           <span
             v-if="anchor"
             :class="ANCHOR_CLASS"

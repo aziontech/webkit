@@ -3,13 +3,13 @@ name: number-input
 category: input
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: a2f61ef80c5db9e1ca822f5390b0c232e814b05e024ddc14582e5a6d99c078b7
+checksum: 18aba21b69d83e6a03691bfee9ecee1037c3ea7dd20bf06cc334f88c5b0692ea
 created: 2026-06-22
-last_updated: 2026-11-19
+last_updated: 2026-11-24
 ---
 
 # Input Number — Component Spec
@@ -97,9 +97,9 @@ An optional field binds a `number | null` model and sets `nullable`:
 
 ## v-model
 
-| Model     | Type                                        | Default | Emits               | Notes                                                                                                                                                                                                                                                                                                                                                                              |
-| --------- | ------------------------------------------- | ------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `number` (`number \| null` with `nullable`) | `0`     | `update:modelValue` | The value via `defineModel`, clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`; with `nullable` it emits `null` and shows the placeholder, and the spinner on a `null` value starts at `min ?? 0` (clamped). The component is generic over `nullable`, so the model and `change` are typed `number` unless `nullable` is set. |
+| Model     | Type                                        | Default | Emits               | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| --------- | ------------------------------------------- | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `number` (`number \| null` with `nullable`) | `0`     | `update:modelValue` | The value via `defineModel`, clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`; with `nullable` it emits `null` and shows the placeholder, and the spinner on a `null` value starts at `min ?? 0` (clamped). The component is generic over `nullable`, so the model and `change` are typed `number` unless `nullable` is set. A comma typed or pasted as the decimal separator is read as a decimal point (`12,5` is `12.5`): the native number field would drop it and read `125`. A second separator is ignored. |
 
 ## Events
 

@@ -36,6 +36,7 @@
   } from '@aziontech/webkit/utils/ai-chat'
   import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
+  import { failureText, turnTime } from './lib/ai-chat-failure'
   import AiChatComposer from './parts/ai-chat-composer.vue'
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
   import AiChatHeader, { type AiChatHeaderAction } from './parts/ai-chat-header.vue'
@@ -189,11 +190,7 @@
   const welcome = computed(() => !turns.value.length && !props.hydrating)
   let refocus = false
   const last = computed(() => turns.value[turns.value.length - 1])
-  const failure = computed(() => {
-    if (!props.error) return ''
-    if (typeof props.error === 'string') return props.error
-    return 'The connection was interrupted before the response finished.'
-  })
+  const failure = computed(() => failureText(props.error))
   const waiting = computed(
     () => (props.loading || Boolean(failure.value)) && last.value?.role === 'user'
   )
@@ -225,16 +222,18 @@
       : null
   })
 
-  function timeOf(turn: AiChatMessage): string {
-    return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
-  }
+  const timeOf = (turn: AiChatMessage) => turnTime(turn, formatDate)
 
   onMounted(() => nextTick(() => composerEl.value?.focus()))
 
   watch(
     () => props.loading,
     (now, before) => {
-      if (before && !now) composerEl.value?.focus()
+      if (!before || now) return
+      const active = globalThis.document?.activeElement
+      const idle = !active || active === globalThis.document.body || !active.isConnected
+      const box = composerEl.value?.$el as globalThis.Element | undefined
+      if (idle || (box && box.contains(active))) composerEl.value?.focus()
     }
   )
 

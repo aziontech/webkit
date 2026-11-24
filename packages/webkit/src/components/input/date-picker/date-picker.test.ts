@@ -993,6 +993,43 @@ describe('DatePicker', () => {
     })
   })
 
+  describe('time zone', () => {
+    // The browser runs in UTC; Asia/Tokyo is UTC+9 all year, so the two zones put
+    // 23:30 UTC on Oct 8 on different days (Oct 9, 08:30 in Tokyo).
+    const OCT_8_2330_UTC = new Date(Date.UTC(2026, 9, 8, 23, 30))
+
+    it('shows and edits the value as wall-clock time in v-model:time-zone', async () => {
+      const { getByTestId, emitted } = render(DatePicker, {
+        props: { modelValue: OCT_8_2330_UTC, timeZone: 'Asia/Tokyo', showTime: true }
+      })
+      expect(getByTestId('date-picker__trigger').textContent).toContain('Oct 9, 2026')
+
+      const popover = await openDatePicker(getByTestId)
+      expect(findDayButton(popover, 9).getAttribute('data-band')).toBe('single')
+      expect((within(popover).getByLabelText('Time') as HTMLInputElement).value).toBe('08:30')
+
+      await fireEvent.click(findDayButton(popover, 12))
+      await fireEvent.click(within(popover).getByTestId('date-picker__apply'))
+
+      const events = emitted<unknown[]>()['update:modelValue']
+      expect((events.at(-1)?.[0] as Date).toISOString()).toBe('2026-10-11T23:30:00.000Z')
+    })
+
+    it('reads min and max as instants and bounds the days of the zone', async () => {
+      const { getByTestId } = render(DatePicker, {
+        props: {
+          modelValue: OCT_8_2330_UTC,
+          timeZone: 'Asia/Tokyo',
+          // Oct 9 15:00 UTC is Oct 10, 00:00 in Tokyo.
+          min: new Date(Date.UTC(2026, 9, 9, 15, 0))
+        }
+      })
+      const popover = await openDatePicker(getByTestId)
+      expect(findDayButton(popover, 9).hasAttribute('data-disabled')).toBe(true)
+      expect(findDayButton(popover, 10).hasAttribute('data-disabled')).toBe(false)
+    })
+  })
+
   describe('reference time', () => {
     it('opens on the ConfigProvider now and marks that day as today', async () => {
       const { getByTestId } = render(

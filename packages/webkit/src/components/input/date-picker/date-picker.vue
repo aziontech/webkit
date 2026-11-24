@@ -15,6 +15,7 @@
     type DatePickerSize,
     type DatePickerValue
   } from './injection-key'
+  import { fromPanelValue, toPanelValue } from './lib/panel-value'
   import DatePickerControl from './parts/date-picker-control.vue'
   import DatePickerControlButton from './parts/date-picker-control-button.vue'
   import DatePickerPopover from './parts/date-picker-popover.vue'
@@ -83,7 +84,7 @@
   /** Controlled open state of the popover (v-model:open); omit for uncontrolled, seeded by defaultOpen. */
   const openModel = defineModel<boolean>('open', { default: undefined as never })
 
-  /** IANA time zone the trigger formats the value in (v-model:time-zone). Empty resolves to the local zone. */
+  /** IANA time zone the value is shown and picked in (v-model:time-zone). Empty resolves to the local zone. */
   const timeZone = defineModel<string>('timeZone', { default: '' })
 
   defineSlots<{
@@ -120,17 +121,15 @@
 
   const { panel, panelOpen } = useDatePickerPanel(isOpen)
 
-  const cloneValue = (value: DatePickerValue): DatePickerValue => {
-    const date = asSingle(value)
-    return date ? new Date(date.getTime()) : null
-  }
+  const toPanel = (value: DatePickerValue | undefined) => toPanelValue(value, timeZone.value)
+  const fromPanel = (value: DatePickerValue) => fromPanelValue(value, timeZone.value)
 
-  const draft = ref<DatePickerValue>(cloneValue(model.value))
+  const draft = ref<DatePickerValue>(toPanel(model.value))
   const draftRef = computed(() => draft.value)
 
   watch(isOpen, (open) => {
     if (open) {
-      draft.value = cloneValue(model.value)
+      draft.value = toPanel(model.value)
     }
   })
 
@@ -138,7 +137,7 @@
     if (props.showApply) {
       return
     }
-    model.value = cloneValue(draft.value)
+    model.value = fromPanel(draft.value)
     if (asSingle(draft.value)) {
       setOpen(false)
     }
@@ -187,13 +186,13 @@
     if (isDisabled.value) {
       return
     }
-    model.value = cloneValue(draft.value)
-    emit('apply', event, cloneValue(draft.value))
+    model.value = fromPanel(draft.value)
+    emit('apply', event, fromPanel(draft.value))
     setOpen(false)
   }
 
   const cancelSelection = () => {
-    draft.value = cloneValue(model.value)
+    draft.value = toPanel(model.value)
     setOpen(false)
     triggerEl.value?.querySelector<globalThis.HTMLElement>('button')?.focus()
   }
@@ -224,8 +223,8 @@
     mode: computed<'single'>(() => 'single'),
     size: computed(() => props.size),
     disabled: isDisabled,
-    min: computed(() => props.min),
-    max: computed(() => props.max),
+    min: computed(() => toPanel(props.min) ?? undefined),
+    max: computed(() => toPanel(props.max) ?? undefined),
     showTime: computed(() => props.showTime),
     horizontal: isHorizontal,
     draft: draftRef,

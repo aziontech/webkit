@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "A response with its thumbs: thumbs-down records the vote and opens the dialog; a reason is required, details are optional, Send feedback stays open with a spinner while the request runs and then closes, returning focus to the thumbs.",
+   "summary": "A response with its Feedback menu: Bad response records the vote and opens the dialog; a reason is required, details are optional, Send feedback stays open with a spinner while the request runs and then closes, returning focus to the Feedback button.",
    "file": "examples/feedback-reason-dialog/default.vue"
   }
  ]

@@ -827,6 +827,22 @@ column, and the page it talks about must stay visible. It never opens a nested d
 - **Phones.** Below `md` each drawer is a bottom sheet and below `sm` a full-screen sheet; the nested
   one covers its parent fully. The depth limit still holds.
 
+### Help inside a dialog or a drawer
+
+The help region of the layout (`ConsoleLayout` and `AppLayout` `tools`, holding a `HelpPanel`) is part
+of the page. While a modal `Dialog` or `Drawer` is open, its overlay covers that region, its focus
+trap keeps focus out of it and `aria-modal` hides it from screen readers, so help opened from inside
+the modal opens **behind** it, out of reach (in a compact layout the tools are a drawer of their own
+and would stack one layer more than the depth rule allows).
+
+- **Inside a modal, the help glyph shows its text in place.** A `Hint` for one sentence; a `Popover`
+  for a few lines, ending in a "Learn more" `Link` that opens the docs in a new tab. Both are layers
+  above the modal, so they open in front of it and `Escape` closes them before the modal.
+- **Never open the tools region from inside a modal**, and never close the modal to show help: the
+  person loses their place and, in a form, what they typed.
+- **On the page, help stays in the tools region.** The header's help button and the help button in a
+  band's `info` slot (`SettingsGroup`, `Subheader`) toggle the tools, which sit beside the work.
+
 ### What the market does, and where we differ
 
 | System                      | Overlay stacking                                                                    |

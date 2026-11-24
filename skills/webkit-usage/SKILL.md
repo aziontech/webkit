@@ -126,7 +126,9 @@ props, so it imports the primary instead of copying it. A marketing band is a pa
 Structure and states first, polish last:
 
 - **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (loading,
-  empty, error, async) · `/webkit-form` · `/webkit-create-surface` (page vs drawer) · `/webkit-errors`
+  empty, error, async) · `/webkit-form` (and its control table: dates in `DatePicker`,
+  periods in `DateRangePicker`, references in a searchable picker, never an ID or ISO date typed as
+  text) · `/webkit-create-surface` (page vs drawer) · `/webkit-errors`
   (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation` (shells,
   levels, breadcrumb, and drawers: never the way into a resource; `large`, then at most one `medium`)
 - **Layout:** `/webkit-layout` · **Words:** `/webkit-microcopy`
@@ -142,6 +144,8 @@ Structure and states first, polish last:
   or rule owns each design problem, and what enforces it)
 - **An Azion web page (site, product or Solution page, campaign):** `/webkit-site-pages`, under rule
   `webkit-site-pages` (the Web Design Guide, SD-01 to SD-25)
+- **API data:** `/webkit-api-data` (references by name, remote pickers, fresh lookups, typed
+  records, server-owned lists; rule `webkit-api-data`)
 - **Azion API:** `/webkit-azion-api` (CORS, the dev and edge proxy, where the personal token
   lives) · `/webkit-query-explorer` (a Metrics or Events GraphQL explorer from WebKit pieces)
 
@@ -277,6 +281,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ Colour logos (`az-color az-<name>`) need no import: `./webkit.css` compiles the ones your sources name, so write the whole class in the code (`'az-color az-react'`, never `` `az-color az-${name}` ``). A logo named only in fetched data goes in `@source inline("az-react");` in `webkit.css`; the whole set (`import '@aziontech/icons/azionicons-color'`, about 85 KB gzip) is only for a page that shows every logo.
 - ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`variant`, plus a `query` such as "ddos" or "delete"). Icon classes are `az az-<name>`, and `az-color az-<name>` for a colour logo; pick one by what it stands for (`list_assets` gives each icon's group, category and meaning, and a product icon names only that product). WebKit 6 uses only the Azion set: write `az az-check`, never the removed `pi pi-check` set (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
 - ✅ A webkit component reused instead of a hand-rolled or third-party equivalent.
+- ✅ A control that matches the value's type: `DatePicker` (`show-time` for an instant) or `DateRangePicker` for dates and periods, a searchable picker for a reference to another resource, a `Select` or `RadioGroup` for an enum (`/webkit-form`, Pick the control from the kind of value; the lint rule `prefer-value-control` fails a typed date, and `prefer-date-picker` and `no-raw-id-input` warn on the text fields it cannot see).
 
 ## Must Not Have
 

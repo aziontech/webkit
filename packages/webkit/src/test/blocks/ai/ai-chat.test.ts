@@ -22,6 +22,37 @@ describe('ai/ai-chat entry', () => {
     const view = render(AiChat)
     await waitFor(() => expect(document.activeElement).toBe(view.getByRole('textbox')))
   })
+
+  it('leaves focus where the reader moved it when an answer finishes', async () => {
+    const messages: AiChatMessage[] = [
+      { id: 'u1', role: 'user', parts: [{ type: 'text', content: 'Purge the cache' }] },
+      { id: 'a1', role: 'assistant', parts: [{ type: 'text', content: 'Run azion purge.' }] },
+      { id: 'u2', role: 'user', parts: [{ type: 'text', content: 'And one URL?' }] }
+    ]
+    const view = render(AiChat, { props: { messages, loading: true } })
+    const prompt = view.getByRole('textbox', { name: 'Prompt' })
+    await waitFor(() => expect(document.activeElement).toBe(prompt))
+    const copy = await view.findAllByRole('button', { name: 'Copy' })
+    copy[0]!.focus()
+    expect(document.activeElement).toBe(copy[0])
+    await view.rerender({ messages, loading: false })
+    await nextTick()
+    await nextTick()
+    expect(document.activeElement).toBe(copy[0])
+  })
+
+  it('returns focus to the composer when an answer finishes and focus was idle', async () => {
+    const messages: AiChatMessage[] = [
+      { id: 'u1', role: 'user', parts: [{ type: 'text', content: 'Purge the cache' }] }
+    ]
+    const view = render(AiChat, { props: { messages, loading: true } })
+    await nextTick()
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    await view.rerender({ messages, loading: false })
+    await waitFor(() =>
+      expect(document.activeElement).toBe(view.getByRole('textbox', { name: 'Prompt' }))
+    )
+  })
 })
 
 describe('ai/ai-chat Artifact', () => {
@@ -201,8 +232,11 @@ describe('ai/ai-chat', () => {
   it('emits feedback with the value and the rated message', async () => {
     await page.viewport(1280, 900)
     const view = render(AiChat, { props: { messages: thread } })
-    const good = await view.findByRole('button', { name: 'Good response' })
-    await userEvent.click(good)
+    await waitFor(() =>
+      expect(view.getAllByRole('button', { name: 'Feedback' })[0]).not.toBeDisabled()
+    )
+    await userEvent.click(view.getAllByRole('button', { name: 'Feedback' })[0]!)
+    await userEvent.click(await view.findByRole('menuitem', { name: 'Good response' }))
     await page.viewport(414, 896)
     const [[value, message]] = view.emitted('feedback') as [[string, AiChatMessage]]
     expect(value).toBe('up')
@@ -303,14 +337,21 @@ describe('ai/ai-chat', () => {
       const view = render(AiChat, { props: { messages: thread } })
       const row = responseActions(view)
       await waitFor(() => expect(row).not.toHaveAttribute('data-compact'))
-      await userEvent.click(within(row).getByRole('button', { name: 'Bad response' }))
+      await waitFor(() =>
+        expect(within(row).getByRole('button', { name: 'Feedback' })).not.toBeDisabled()
+      )
+      await userEvent.click(within(row).getByRole('button', { name: 'Feedback' }))
+      await userEvent.click(await view.findByRole('menuitem', { name: 'Bad response' }))
       expect(view.emitted('feedback')![0]).toEqual([
         'down',
         expect.objectContaining({ id: 'a1' }),
         undefined
       ])
       const dialog = await view.findByRole('dialog', { name: 'What went wrong?' })
-      expect(within(row).queryByRole('button', { name: 'Good response' })).toBeNull()
+      expect(within(row).getByTestId('chat-message-actions__feedback')).toHaveAttribute(
+        'data-value',
+        'down'
+      )
       expect(within(row).getByTestId('chat-message-actions__feedback__status')).toHaveClass(
         'sr-only'
       )

@@ -66,7 +66,9 @@ export const sampleStreamingMessages: AiChatMessage[] = [
         href: 'https://www.azion.com/en/documentation/',
         description: 'A 502 means the edge reached the origin but got no valid answer back.',
         site: 'Azion',
-        icon: 'az az-azion'
+        icon: 'az az-azion',
+        publisher: 'Azion Technologies',
+        publishedAt: '2026-09-14'
       }
     ]
   })
@@ -84,7 +86,9 @@ export const sampleInterruptedMessages: AiChatMessage[] = [
         href: 'https://www.azion.com/en/documentation/',
         description: 'Removes a cached object from every data center in a few seconds.',
         site: 'Azion',
-        icon: 'az az-azion'
+        icon: 'az az-azion',
+        publisher: 'Azion Technologies',
+        publishedAt: '2026-03-02'
       },
       {
         title: 'aziontech/azion: purge',
@@ -155,13 +159,16 @@ const cacheKeySources: SourcesItem[] = [
     href: 'https://www.azion.com/en/documentation/',
     description: 'Choose which query string parameters build the cache key of each path.',
     site: 'Azion',
-    icon: 'az az-azion'
+    icon: 'az az-azion',
+    publisher: 'Azion Technologies',
+    publishedAt: '2026-08-21'
   },
   {
     title: 'aziontech/azion',
     href: 'https://github.com/aziontech/azion',
     description: 'Change the cache settings of an application from a terminal.',
     site: 'GitHub',
+    publisher: 'aziontech',
     image: 'https://github.com/favicon.ico'
   },
   {
@@ -169,7 +176,9 @@ const cacheKeySources: SourcesItem[] = [
     href: 'https://www.w3.org/Protocols/',
     description: 'Every distinct URL, query string included, is a separate entry in a cache.',
     site: 'W3C',
-    image: 'https://www.w3.org/favicon.ico'
+    image: 'https://www.w3.org/favicon.ico',
+    publisher: 'World Wide Web Consortium',
+    publishedAt: '2022-06-01'
   },
   {
     title: 'cache-control',

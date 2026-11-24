@@ -239,6 +239,13 @@ const properties = [
   are suggested and printed by label in the token.
 - **Number or date column → a property with `type: 'number'` / `'date'`**, which offers `>`, `<`, `>=`,
   `<=` as well as `=` and `!=`.
+- **Reference column (another resource: the organization, the assignee) → a property whose values
+  come from `loadValues`**, the `PropertyFilter` prop that fetches the values for the typed text. The
+  suggestion and the token print the name, the query keeps the ID; nobody types an ID into a filter.
+  It is the filter form of the searchable picker in `/webkit-form` (Pick the control from the kind of value).
+- **Date column on a time-ordered list → a `DateRangePicker` next to the filter** when the period is
+  the main question (logs, activity, invoices); a `type: 'date'` property when it is one filter among
+  many. Never a text token holding an ISO date.
 - **Free-text column → a plain property** (name, domain) — the free-text token covers it too, so keep
   only the ones people name ("Name contains api").
 - **A column with two values that are never both interesting → nothing.**
@@ -350,6 +357,8 @@ Close with `List sound` or `N gaps — fix before polish`.
 
 ## References
 
+- `/webkit-api-data` — server-owned lists, the default order, a new item on the first page, and
+  reference columns rendered by name.
 - `/webkit-tables` — the `Table`, the column model and the cell recipes inside the card.
 - `/webkit-navigation` — the shell the page sits in and how its nav row is activated.
 - `/webkit-ui-states` — the loading skeleton, the error alert, and the empty vs no-match states.

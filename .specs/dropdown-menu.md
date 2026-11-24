@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 6917d081091be3838a65c054b27953d23853e4ac824f4bef2730ad8e6c63693e
+checksum: 13e1777402d9cbee29c80df8790453baca31a02f83c2263db1a3e368f2dc36c5
 created: 2026-06-26
-last_updated: 2026-11-19
+last_updated: 2026-11-23
 ---
 
 # DropdownMenu — Component Spec
@@ -169,7 +169,7 @@ Sub-menus and checkable options:
   - Props: `label: string` default `''` — section label rendered above the options. Omit for an unlabeled group.
   - Events: _none_.
   - Slots: `default` — one or more `<DropdownMenu.Item>`; `header` — inline region rendered between the group label and the options (e.g. a per-section search or description); `footer` — inline region rendered after the options (e.g. a "see all" link).
-- `dropdown-menu-item/dropdown-menu-item.vue` — selectable row, attached as `DropdownMenu.Item`. Renders the leading slot, the label, the trailing slot, an optional `command` hint and, when `selected`, a check mark. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`. Every row is `tabindex="-1"`; the root moves focus with the arrows and typeahead. Outside a group the row teleports itself into the panel body (`data-ungrouped`, with the group's horizontal inset).
+- `dropdown-menu-item/dropdown-menu-item.vue` — selectable row, attached as `DropdownMenu.Item`. Renders the leading slot, the label, the trailing slot, an optional `command` hint and, when `selected`, a check mark. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`. Every row is `tabindex="-1"`; the root moves focus with the arrows and typeahead. Outside a group the row teleports itself into the panel body (`data-ungrouped`, with the group's horizontal inset). With a `description` the row grows to two lines: the label (two lines) over the description (`text-body-xs`, `--text-muted`, two lines), the leading slot aligned to the top.
   - Props:
     - `value: string | number` (required) — identifier emitted on the root `select` event when this option is activated.
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
@@ -177,6 +177,8 @@ Sub-menus and checkable options:
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
     - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `az az-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
+    - `target: '_self' | '_blank'` default `'_self'` — where the link opens; `_blank` (only with a safe `href`) adds `rel="noopener noreferrer"`, a trailing `aria-hidden` `az az-external-link` glyph (unless the `trailing` slot or `command` is set) and the sr-only `common.newTab` hint in the name. Exported as `DropdownMenuItemTarget`.
+    - `description: string` default `''` — secondary line under the label (`data-description`); the item is then named by the label (`aria-labelledby`) and described by this line (`aria-describedby`).
     - `type: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuItemType`.
     - `severity: 'neutral' | 'danger'` default `'neutral'` — colour meaning of the row. `danger` marks a destructive action (Delete, Remove): the label and leading glyph take `--text-danger` (`data-severity="danger"`) on the same hover fill, so the row reads as destructive before it is activated. Exported as `DropdownMenuItemSeverity` (derived from `Severity`).
   - Events: _none_ (root emits `select`).
@@ -233,6 +235,7 @@ Sub-menus and checkable options:
 - `data-disabled` mirrors the `disabled` prop on root, trigger, and option
 - `data-selected` on option mirrors the `selected` prop
 - `data-type` on option mirrors the `type` prop (`default` | `checkbox` | `radio`)
+- `data-description` on option when `description` is set (the row grows to fit two lines)
 - `data-severity` on option mirrors the `severity` prop (`neutral` | `danger`)
 - `data-state` on sub, sub-trigger and sub-panel: `open` | `closed`; `data-disabled` on sub-trigger mirrors its `disabled` prop
 - `data-side` / `data-align` on the sub-panel mirror its resolved side and alignment (`end` or `start`, after flipping)
@@ -267,6 +270,8 @@ Sub-menus and checkable options:
 | row fill inset (2px gap)        | `border-y border-transparent bg-clip-padding`                                                                                   |
 | option disabled text            | `var(--text-disabled)`                                                                                                          |
 | option command text             | `text-(--text-muted)`                                                                                                           |
+| option description              | `.text-body-xs` + `text-(--text-muted)`, two lines; row padding.y `var(--spacing-xs)`                                           |
+| option external glyph           | `az az-external-link` + `text-(--text-muted)`                                                                                   |
 | checkable indicator             | `az az-check` / a `size-1.5` `rounded-full` `bg-current` dot in `text-(--text-default)`, in a `size-4` column                   |
 | sub-trigger chevron             | `az az-chevron-right` + `text-(--text-muted)`, `rtl:-scale-x-100`                                                               |
 | sub-trigger open surface        | `var(--bg-hover)`                                                                                                               |
@@ -300,10 +305,11 @@ Sub-menus and checkable options:
 - Teleported panel: the `role="menu"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it lays out and is announced in the provider's direction and language although it renders under `body`.
 - Touch target ≥40×40 px on the trigger; option and sub-menu rows are 32 px tall on a fine pointer and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer, full-row click targets whose fills stay inset 1 px so two filled rows never touch.
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): renders a plain item.
+- A `target="_blank"` link is announced with the `common.newTab` hint; the glyph is `aria-hidden`.
 
 ## Internationalization
 
-No built-in strings: every label comes from the consumer (`label` props and slots).
+Labels come from the consumer (`label` props and slots); the one built-in string is `common.newTab` (`(opens in a new tab)`), read after the label of a `target="_blank"` link.
 
 - Formatting: none.
 
@@ -337,6 +343,7 @@ Canonical layout — composite examples (`types.vue`, `sizes.vue`) render every 
 - Placements — composite story rendering the four corners (`bottom` / `top` × `start` / `end`) side-by-side. Required because `side` × `align` is a multi-value prop axis with no other coverage; consumers need to see how each anchors against its trigger.
 - AutoPlacement — composite story demonstrating `side="auto"`: four triggers anchored near each viewport corner so the resolver opens the panel toward the side with the most available space. Required because `'auto'` is the only `side` value not covered by `Placements` and is the recommended default for consumer-positioned triggers.
 - OptionAffordances — composite story rendering options that demonstrate the `command` prop and the `leading` + `trailing` slots in a single panel. Required because these affordances are public Option API surface the existing stories do not exercise, and the spec calls out their mutual exclusivity.
+- WithLinks — a panel, opened by the reader, of link options with a `leading` icon and a `description` line, one with `target="_blank"`. Required because `href`, `target` and `description` are public Option API with no other coverage.
 - WithHeaderAndFooter — a single panel, opened by the reader, showing the root `header` and `footer` named slots in use (e.g. a search input on top, a footer action on bottom). Required because both slots are public root API documented in the Slots table and have no other coverage.
 - GroupsWithHeaderAndFooter — a panel, opened by the reader, with two `<DropdownMenu.Group>` each using its own `header` (per-section caption) and `footer` (per-section action) slots. Required because the group-level `header`/`footer` are public API on `DropdownMenu.Group` and behave differently from the root slots (inline, per-section — not sticky).
 - SubMenus — a panel, opened by the reader, with a `DropdownMenu.Sub` that opens with it by `defaultOpen`, one nested level holding a second sub-menu. Required because the sub-menu parts are public API with no other coverage.

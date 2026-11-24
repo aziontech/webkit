@@ -25,6 +25,18 @@ function staticValue(node, name) {
   return attr ? String(attr.value?.value ?? '') : null
 }
 
+export function valueControlMessage(node) {
+  if (!TEXT_INPUTS.has(node.rawName ?? '')) return null
+  const type = staticValue(node, 'type')
+  const byType = type === null ? undefined : BY_TYPE.get(type.toLowerCase())
+  if (byType) return byType
+  const placeholder = staticValue(node, 'placeholder')
+  if (placeholder && DATE_FORMAT.test(placeholder)) {
+    return TIME_PART.test(placeholder) ? 'dateTime' : 'date'
+  }
+  return null
+}
+
 export default {
   meta: {
     type: 'problem',
@@ -53,20 +65,8 @@ export default {
 
     return factory({
       VElement(node) {
-        if (!TEXT_INPUTS.has(node.rawName ?? '')) return
-        const type = staticValue(node, 'type')
-        const byType = type === null ? undefined : BY_TYPE.get(type.toLowerCase())
-        if (byType) {
-          context.report({ node: node.startTag, messageId: byType })
-          return
-        }
-        const placeholder = staticValue(node, 'placeholder')
-        if (placeholder && DATE_FORMAT.test(placeholder)) {
-          context.report({
-            node: node.startTag,
-            messageId: TIME_PART.test(placeholder) ? 'dateTime' : 'date'
-          })
-        }
+        const messageId = valueControlMessage(node)
+        if (messageId) context.report({ node: node.startTag, messageId })
       }
     })
   }

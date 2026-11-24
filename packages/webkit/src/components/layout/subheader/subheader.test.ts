@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/subheader/default.vue'
 import Sizes from '../../../../examples/subheader/sizes.vue'
+import WithInfo from '../../../../examples/subheader/with-info.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Subheader from './subheader.vue'
 
@@ -58,6 +59,24 @@ describe('Subheader', () => {
     expect(getByTestId('subheader__title').className).not.toContain('text-label')
   })
 
+  it('renders the info slot right after the title, outside the h2', () => {
+    const bare = within(render(Subheader, { props: { title: 'Domains' } }).container as HTMLElement)
+    expect(bare.queryByTestId('subheader__info')).toBeNull()
+
+    const { getByTestId, getByRole } = within(
+      render(Subheader, {
+        props: { title: 'Domains', anchor: 'domains' },
+        slots: { info: '<button type="button" aria-label="Help: Domains">?</button>' }
+      }).container as HTMLElement
+    )
+    const heading = getByRole('heading', { level: 2 })
+    const info = getByTestId('subheader__info')
+    expect(heading.contains(info)).toBe(false)
+    expect(heading.nextElementSibling).toBe(info)
+    expect(heading.textContent?.trim()).toBe('Domains')
+    expect(getByRole('button', { name: 'Help: Domains' })).toBeTruthy()
+  })
+
   it('renders description and actions only when given', () => {
     const bare = within(render(Subheader, { props: { title: 'General' } }).container as HTMLElement)
     expect(bare.queryByTestId('subheader__description')).toBeNull()
@@ -80,6 +99,11 @@ describe('Subheader', () => {
     expect(
       within(render(Sizes).container as HTMLElement).getAllByRole('heading', { level: 2 })
     ).toHaveLength(2)
+    expect(
+      within(render(WithInfo).container as HTMLElement).getByRole('button', {
+        name: 'Help: Domains'
+      })
+    ).toBeTruthy()
   })
 
   it('has no accessibility violations', async () => {

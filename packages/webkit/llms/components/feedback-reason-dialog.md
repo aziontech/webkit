@@ -1,6 +1,6 @@
 # Feedback Reason Dialog
 
-> Asks why an assistant response was not helpful, right after the thumbs-down in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.
+> Asks why an assistant response was not helpful, right after Bad response in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.
 
 - Import: `import FeedbackReasonDialog from '@aziontech/webkit/feedback-reason-dialog'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -25,7 +25,7 @@
 
 ## Related
 
-- [chat-message](chat-message.md) — `ChatMessage.Feedback` holds the thumbs that open it.
+- [chat-message](chat-message.md) — `ChatMessage.Feedback` holds the Bad response choice that opens it.
 - [confirm-dialog](confirm-dialog.md) — the same dialog anatomy for a yes/no decision.
 
 ## Props
@@ -59,7 +59,7 @@
 
 ## Accessibility
 
-- A modal `Dialog` named by its title and described by its one-line description; focus moves into it and returns to the thumbs-down on close.
+- A modal `Dialog` named by its title and described by its one-line description; focus moves into it and returns to the Feedback button on close.
 - The reasons are a `fieldset` with a `legend` (`Reason`), a `RadioGroup` with one `RadioGroup.Item` per reason and its label; the details `Textarea` is labelled `Details (optional)`.
 - Submitting without a reason marks the fieldset invalid, shows the error text and focuses the first radio; nothing is sent.
 - Keyboard: `Tab` through radios (arrows within the group), details, Cancel, Send feedback; `Enter` in a radio submits; `Escape` closes.

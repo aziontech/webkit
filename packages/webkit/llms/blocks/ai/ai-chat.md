@@ -1,6 +1,6 @@
 # AiChat (`ai/ai-chat`)
 
-> The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with "What can I help with?", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the "+" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).
+> The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with "What can I help with?", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the "+" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).
 
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
@@ -44,7 +44,7 @@ Before the first message there is no log: a welcome page with one question as it
 
 ### C. Message log — `Conversation`
 
-Fills the page and is the only part that scrolls, in a centered reading column; the header controls and the composer float over it. It follows the newest message while the reader is at the end, stops when they scroll up, and offers Scroll to the latest message. It announces each finished response once; streaming text is never read token by token.
+Fills the page and is the only part that scrolls, in a centered reading column 752px wide (`--container-2xl`), the composer as wide, with 36px between messages (28px on a phone); the header controls and the composer float over it. It follows the newest message while the reader is at the end, stops when they scroll up, and offers Scroll to the latest message. It announces each finished response once; streaming text is never read token by token.
 
 ### D. Prompt — `ChatMessage`, `ImageGallery`, `FilePreview`
 
@@ -52,7 +52,7 @@ The reader's prompt at the inline end in a filled bubble with the stacked compos
 
 ### E. Response — `ChatMessage`, `Reasoning`, `StreamingResponse`
 
-The assistant's response as plain text across the reading column, in the larger reading size, with no avatar, bubble or visible name. It shows the loading text while pending, a collapsed `Reasoning` that reads Thinking and then Thought for N seconds, and the Markdown answer in `StreamingResponse` with a caret while it streams. Each citation is a small chip with the source's site name that links to it. On failure the partial text stays with the error line and Try again.
+The assistant's response as plain text across the reading column, at the prose reading size (16px on 26px lines), with no avatar, bubble or visible name. It shows the loading text while pending, a collapsed `Reasoning` that reads Thinking and then Thought for N seconds, and the Markdown answer in `StreamingResponse` with a caret while it streams. Each citation is a small chip with the source's site name that links to it. On failure the partial text stays with the error line and Try again.
 
 ### F. Sources — `Sources`
 
@@ -60,7 +60,7 @@ At the end of the action row of a complete response that used documents: a pill 
 
 ### G. Response actions — `ChatMessage`, `ResponseBranches`, `FeedbackReasonDialog`
 
-`ChatMessage.Actions` under a complete response, always visible and always one line, with its built-in actions in ChatGPT's order: Copy, Good response, Bad response, Read aloud (hidden where the browser has no speech synthesis), Share, Try again (disabled while another response is generating), More (Branch in new chat), then the Sources pill in `#trailing`. When the row is narrower than 480px (a phone, the drawer) it keeps Copy, Read aloud, Share and More, and More also holds Good response, Bad response and Try again. A rating fills its thumb and hides the other; pressing it again clears it. Good response raises the toast Thanks for your feedback; Bad response opens `FeedbackReasonDialog`, and sending it emits `feedback` again with the reason, then the toast. After Try again the row starts with a `ResponseBranches` pager (`‹ 2/2 ›`) over the versions of that response. Icons draw at 16px inside a 40px target.
+`ChatMessage.Actions` under a complete response, always visible and always one line, with its built-in actions in ChatGPT's order: Copy, Feedback (one button whose menu holds Good response and Bad response), Read aloud (hidden where the browser has no speech synthesis), Share, Try again (disabled while another response is generating), More (Branch in new chat), then the Sources pill in `#trailing`. When the row is narrower than 480px (a phone, the drawer) it keeps Copy, Read aloud, Share and More, and More also holds Good response, Bad response and Try again. A rating shows its filled thumb on the Feedback button and checks its item in the menu; choosing it again clears it. Good response raises the toast Thanks for your feedback; Bad response opens `FeedbackReasonDialog`, and sending it emits `feedback` again with the reason, then the toast. After Try again the row starts with a `ResponseBranches` pager (`‹ 2/2 ›`) over the versions of that response. Icons draw at 18px in the muted grey inside 32px buttons, with a 44px target on a touch screen.
 
 ### H. Follow-up questions — `SuggestionGroup`
 
@@ -273,7 +273,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - **Loading:** `Generating a response` (built in); `Loading <what>` when fetching data.
 - **Error:** what happened, in one sentence, e.g. "The connection was interrupted before the response finished.", with Try again.
 - **Stopped:** "You stopped this response."
-- **Feedback:** Good response, Bad response (built in); the toast says Thanks for your feedback.
+- **Feedback:** the Feedback menu with Good response and Bad response (built in); the toast says Thanks for your feedback.
 - Follow `skills/webkit-microcopy`: sentence case, "select" not "click", "response" not "answer", no "please".
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 - **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.
@@ -284,7 +284,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - Each message is an `article` named by author and time; the author and time are visually hidden, never removed.
 - Responses are `aria-busy` while loading or streaming; the caret is hidden.
 - The composer is named Prompt, described by its counter and disclaimer; Enter submits and an IME composition never does.
-- Feedback thumbs are toggle buttons with `aria-pressed`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
+- Feedback is a menu button (`aria-haspopup="menu"`) whose chosen item is `aria-checked`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
 - A prompt's Copy and Edit are transparent until hover or focus, never removed from the tab order; the editor's field is named Edit your message, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
 - Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer. On the welcome page: header, heading, support prompts, composer.
 - The model picker and the More and "+" menus are `DropdownMenu`s: arrows, typeahead, Escape and focus return come from it; the model trigger's name is its visible text.
@@ -368,6 +368,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   } from '@aziontech/webkit/utils/ai-chat'
   import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
+  import { failureText, turnTime } from './lib/ai-chat-failure'
   import AiChatComposer from './parts/ai-chat-composer.vue'
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
   import AiChatHeader, { type AiChatHeaderAction } from './parts/ai-chat-header.vue'
@@ -521,11 +522,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   const welcome = computed(() => !turns.value.length && !props.hydrating)
   let refocus = false
   const last = computed(() => turns.value[turns.value.length - 1])
-  const failure = computed(() => {
-    if (!props.error) return ''
-    if (typeof props.error === 'string') return props.error
-    return 'The connection was interrupted before the response finished.'
-  })
+  const failure = computed(() => failureText(props.error))
   const waiting = computed(
     () => (props.loading || Boolean(failure.value)) && last.value?.role === 'user'
   )
@@ -557,16 +554,18 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
       : null
   })
 
-  function timeOf(turn: AiChatMessage): string {
-    return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
-  }
+  const timeOf = (turn: AiChatMessage) => turnTime(turn, formatDate)
 
   onMounted(() => nextTick(() => composerEl.value?.focus()))
 
   watch(
     () => props.loading,
     (now, before) => {
-      if (before && !now) composerEl.value?.focus()
+      if (!before || now) return
+      const active = globalThis.document?.activeElement
+      const idle = !active || active === globalThis.document.body || !active.isConnected
+      const box = composerEl.value?.$el as globalThis.Element | undefined
+      if (idle || (box && box.contains(active))) composerEl.value?.focus()
     }
   )
 
@@ -851,7 +850,9 @@ export const sampleStreamingMessages: AiChatMessage[] = [
         href: 'https://www.azion.com/en/documentation/',
         description: 'A 502 means the edge reached the origin but got no valid answer back.',
         site: 'Azion',
-        icon: 'az az-azion'
+        icon: 'az az-azion',
+        publisher: 'Azion Technologies',
+        publishedAt: '2026-09-14'
       }
     ]
   })
@@ -869,7 +870,9 @@ export const sampleInterruptedMessages: AiChatMessage[] = [
         href: 'https://www.azion.com/en/documentation/',
         description: 'Removes a cached object from every data center in a few seconds.',
         site: 'Azion',
-        icon: 'az az-azion'
+        icon: 'az az-azion',
+        publisher: 'Azion Technologies',
+        publishedAt: '2026-03-02'
       },
       {
         title: 'aziontech/azion: purge',
@@ -940,13 +943,16 @@ const cacheKeySources: SourcesItem[] = [
     href: 'https://www.azion.com/en/documentation/',
     description: 'Choose which query string parameters build the cache key of each path.',
     site: 'Azion',
-    icon: 'az az-azion'
+    icon: 'az az-azion',
+    publisher: 'Azion Technologies',
+    publishedAt: '2026-08-21'
   },
   {
     title: 'aziontech/azion',
     href: 'https://github.com/aziontech/azion',
     description: 'Change the cache settings of an application from a terminal.',
     site: 'GitHub',
+    publisher: 'aziontech',
     image: 'https://github.com/favicon.ico'
   },
   {
@@ -954,7 +960,9 @@ const cacheKeySources: SourcesItem[] = [
     href: 'https://www.w3.org/Protocols/',
     description: 'Every distinct URL, query string included, is a separate entry in a cache.',
     site: 'W3C',
-    image: 'https://www.w3.org/favicon.ico'
+    image: 'https://www.w3.org/favicon.ico',
+    publisher: 'World Wide Web Consortium',
+    publishedAt: '2022-06-01'
   },
   {
     title: 'cache-control',
@@ -1120,6 +1128,24 @@ export const sampleTools: PromptInputMenuOption[] = [
   { value: 'create-image', label: 'Create image', icon: 'az az-image' }
 ]
 ````
+
+## `lib/ai-chat-failure.ts`
+
+```ts
+import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
+
+export const failureText = (error: unknown): string => {
+  if (!error) return ''
+  if (typeof error === 'string') return error
+  return 'The connection was interrupted before the response finished.'
+}
+
+export const turnTime = (
+  turn: Pick<AiChatMessage, 'createdAt'>,
+  formatDate: (value: Date | string | number, options?: Intl.DateTimeFormatOptions) => string
+): string =>
+  turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
+```
 
 ## `parts/ai-chat-composer.vue`
 
@@ -1696,7 +1722,7 @@ export const sampleTools: PromptInputMenuOption[] = [
 <template>
   <div :class="START_CLASS">
     <div
-      class="mx-auto flex w-full max-w-(--layout-measure-content) flex-col gap-(--spacing-md) max-md:flex-1"
+      class="mx-auto flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-md) max-md:flex-1"
     >
       <div class="flex items-center justify-center max-md:flex-1 md:pb-(--spacing-sm)">
         <h2 class="text-center text-heading-lg text-(--text-default)">What can I help with?</h2>

@@ -10,6 +10,7 @@ import GroupsWithHeaderAndFooter from '../../../../examples/dropdown-menu/groups
 import OptionAffordances from '../../../../examples/dropdown-menu/option-affordances.vue'
 import SubMenus from '../../../../examples/dropdown-menu/sub-menus.vue'
 import WithHeaderAndFooter from '../../../../examples/dropdown-menu/with-header-and-footer.vue'
+import WithLinks from '../../../../examples/dropdown-menu/with-links.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DropdownMenu, {
   type DropdownMenuAlign,
@@ -523,6 +524,19 @@ describe('DropdownMenu', () => {
     })
   })
 
+  describe('with links example', () => {
+    it('opens link options in a new tab with a description line', async () => {
+      const { container } = render(WithLinks)
+      await openFromTrigger(container)
+      await waitForOpen(2)
+      const [external, internal] = getOptions() as [HTMLElement, HTMLElement]
+      expect(external).toHaveAttribute('target', '_blank')
+      expect(external).toHaveAccessibleDescription('docs.example.com · Mar 2, 2026')
+      expect(internal).not.toHaveAttribute('target')
+      await expectNoA11yViolations(getPanel()!)
+    })
+  })
+
   describe('keyboard map (spec)', () => {
     const Sandwich = defineComponent({
       setup() {
@@ -746,6 +760,70 @@ describe('DropdownMenu', () => {
       expect(link.getAttribute('href')).toBe('https://example.com/docs')
       await fireEvent.click(link)
       expect(onSelect).toHaveBeenCalledWith(expect.any(MouseEvent), '/docs')
+    })
+
+    it('opens a target=_blank link in a new tab with the external glyph and new-tab hint', async () => {
+      render(
+        menu(
+          () => [
+            h(DropdownMenuGroup, null, () => [
+              h(DropdownMenuItem, {
+                value: 'docs',
+                label: 'Docs',
+                href: 'https://example.com/docs',
+                target: '_blank'
+              }),
+              h(DropdownMenuItem, { value: 'home', label: 'Home', href: '/home' }),
+              h(DropdownMenuItem, { value: 'plain', label: 'Plain', target: '_blank' })
+            ])
+          ],
+          { open: true }
+        )
+      )
+      await waitForOpen(3)
+      const [external, internal, plain] = getOptions() as [HTMLElement, HTMLElement, HTMLElement]
+      expect(external).toHaveAttribute('target', '_blank')
+      expect(external).toHaveAttribute('rel', 'noopener noreferrer')
+      expect(external).toHaveAccessibleName('Docs (opens in a new tab)')
+      expect(
+        external.querySelector('[data-testid="dropdown-menu-item__external"]')
+      ).toHaveAttribute('aria-hidden', 'true')
+      expect(internal).not.toHaveAttribute('target')
+      expect(internal.querySelector('[data-testid="dropdown-menu-item__external"]')).toBeNull()
+      expect(plain.tagName).toBe('DIV')
+      expect(plain).not.toHaveAttribute('target')
+      expect(plain).toHaveAccessibleName('Plain')
+    })
+
+    it('draws a description as a second line that describes the item', async () => {
+      render(
+        menu(
+          () => [
+            h(DropdownMenuGroup, null, () => [
+              h(DropdownMenuItem, {
+                value: 'purge',
+                label: 'Real-Time Purge',
+                description: 'Azion · Mar 2, 2026',
+                href: 'https://example.com/purge',
+                target: '_blank'
+              }),
+              h(DropdownMenuItem, { value: 'plain', label: 'Plain' })
+            ])
+          ],
+          { open: true }
+        )
+      )
+      await waitForOpen(2)
+      const [described, plain] = getOptions() as [HTMLElement, HTMLElement]
+      expect(described).toHaveAttribute('data-description')
+      expect(described).toHaveAccessibleName('Real-Time Purge (opens in a new tab)')
+      expect(described).toHaveAccessibleDescription('Azion · Mar 2, 2026')
+      expect(
+        described.querySelector('[data-testid="dropdown-menu-item__description"]')
+      ).toHaveTextContent('Azion · Mar 2, 2026')
+      expect(plain).not.toHaveAttribute('data-description')
+      expect(plain).not.toHaveAttribute('aria-describedby')
+      await expectNoA11yViolations(getPanel()!)
     })
 
     it('treats the first rendered group as first when an earlier group is removed', async () => {

@@ -1842,7 +1842,9 @@ props, so it imports the primary instead of copying it. A marketing band is a pa
 Structure and states first, polish last:
 
 - **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (loading,
-  empty, error, async) · `/webkit-form` · `/webkit-create-surface` (page vs drawer) · `/webkit-errors`
+  empty, error, async) · `/webkit-form` (and its control table: dates in `DatePicker`,
+  periods in `DateRangePicker`, references in a searchable picker, never an ID or ISO date typed as
+  text) · `/webkit-create-surface` (page vs drawer) · `/webkit-errors`
   (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation` (shells,
   levels, breadcrumb, and drawers: never the way into a resource; `large`, then at most one `medium`)
 - **Layout:** `/webkit-layout` · **Words:** `/webkit-microcopy`
@@ -1858,6 +1860,8 @@ Structure and states first, polish last:
   or rule owns each design problem, and what enforces it)
 - **An Azion web page (site, product or Solution page, campaign):** `/webkit-site-pages`, under rule
   `webkit-site-pages` (the Web Design Guide, SD-01 to SD-25)
+- **API data:** `/webkit-api-data` (references by name, remote pickers, fresh lookups, typed
+  records, server-owned lists; rule `webkit-api-data`)
 - **Azion API:** `/webkit-azion-api` (CORS, the dev and edge proxy, where the personal token
   lives) · `/webkit-query-explorer` (a Metrics or Events GraphQL explorer from WebKit pieces)
 
@@ -1993,6 +1997,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ Colour logos (`az-color az-<name>`) need no import: `./webkit.css` compiles the ones your sources name, so write the whole class in the code (`'az-color az-react'`, never `` `az-color az-${name}` ``). A logo named only in fetched data goes in `@source inline("az-react");` in `webkit.css`; the whole set (`import '@aziontech/icons/azionicons-color'`, about 85 KB gzip) is only for a page that shows every logo.
 - ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`variant`, plus a `query` such as "ddos" or "delete"). Icon classes are `az az-<name>`, and `az-color az-<name>` for a colour logo; pick one by what it stands for (`list_assets` gives each icon's group, category and meaning, and a product icon names only that product). WebKit 6 uses only the Azion set: write `az az-check`, never the removed `pi pi-check` set (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
 - ✅ A webkit component reused instead of a hand-rolled or third-party equivalent.
+- ✅ A control that matches the value's type: `DatePicker` (`show-time` for an instant) or `DateRangePicker` for dates and periods, a searchable picker for a reference to another resource, a `Select` or `RadioGroup` for an enum (`/webkit-form`, Pick the control from the kind of value; the lint rule `prefer-value-control` fails a typed date, and `prefer-date-picker` and `no-raw-id-input` warn on the text fields it cannot see).
 
 ## Must Not Have
 
@@ -3737,7 +3742,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - **Loading:** `Generating a response` (built in); `Loading <what>` when fetching data.
 - **Error:** what happened, in one sentence, e.g. "The connection was interrupted before the response finished.", with Try again.
 - **Stopped:** "You stopped this response."
-- **Feedback:** Good response, Bad response (built in); the toast says Thanks for your feedback.
+- **Feedback:** the Feedback menu with Good response and Bad response (built in); the toast says Thanks for your feedback.
 - Follow `skills/webkit-microcopy`: sentence case, "select" not "click", "response" not "answer", no "please".
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 - **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.
@@ -3748,7 +3753,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Each message is an `article` named by author and time; the author and time are visually hidden, never removed.
 - Responses are `aria-busy` while loading or streaming; the caret is hidden.
 - The composer is named Prompt, described by its counter and disclaimer; Enter submits and an IME composition never does.
-- Feedback thumbs are toggle buttons with `aria-pressed`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
+- Feedback is a menu button (`aria-haspopup="menu"`) whose chosen item is `aria-checked`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
 - A prompt's Copy and Edit are transparent until hover or focus, never removed from the tab order; the editor's field is named Edit your message, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
 - Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer. On the welcome page: header, heading, support prompts, composer.
 - The model picker and the More and "+" menus are `DropdownMenu`s: arrows, typeahead, Escape and focus return come from it; the model trigger's name is its visible text.
@@ -4007,6 +4012,7 @@ What each prop and event does, and the go-live code: [blocks/auth/auth-sign-in.m
 ## Don't
 
 - Don't toast. Not for errors, not for success, not for the session-expired notice.
+- Don't show the session-expired notice to someone who never signed in. A route guard that finds no session can't tell a first visit from an ended session by itself: send `reason=expired` only when the 401 came on a request that carried a credential, or when the server says the session it received has ended (an HttpOnly cookie is invisible to the page, so the server has to say it).
 - Don't say which half of the pair was wrong after a 401; it confirms the address exists.
 - Don't put a Retry button on a 401: the form under the notice is the retry.
 - Don't put client-side validation in the `Alert`; it belongs on the field.
@@ -9594,7 +9600,7 @@ The block is a page body: render it in the default slot of `ConsoleLayout` (`she
 ## When to use
 
 - A route that matches nothing: the catch-all route renders the primary (404).
-- A session that ended while the user was away: SessionExpired (401).
+- A session that ended while the user was away: SessionExpired (401). Never for a first visit with no session; that goes straight to sign-in with no notice.
 - A route the user's role does not include: Forbidden (403), instead of hiding the page or sending them home.
 - A request the API refused for the rate limit: RateLimited (429).
 - A page whose server request failed as a whole: ServerError (500).
@@ -13194,7 +13200,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 
 # Chat Message
 
-> One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the good / bad response thumbs, read aloud, share, try again, branch in new chat, the sources), and on the reader's own prompt Copy and Edit. It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). Assistant messages are plain text across the reading column (`.text-body-lg`): no avatar, name, time or bubble. User messages are a filled bubble at the inline end, at most 80 % wide; system messages a muted centered line. A user message opens for editing (`v-model:editing`) and Send emits `edit` with the new text for the app's `setMessages` and `sendMessage`. Author and time live in the accessible name (the time also shows on hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
+> One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the a Feedback menu with good / bad response, read aloud, share, try again, branch in new chat, the sources), and on the reader's own prompt Copy and Edit. It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). Assistant messages are plain text across the reading column at the prose reading size (`.text-body-prose-md`, 16 px on 26 px lines): no avatar, name, time or bubble. User messages are a filled bubble at the inline end, at most 70 % wide; system messages a muted centered line. A user message opens for editing (`v-model:editing`) and Send emits `edit` with the new text for the app's `setMessages` and `sendMessage`. Author and time live in the accessible name (the time also shows on hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
 
 - Import: `import ChatMessageRoot from '@aziontech/webkit/chat-message-root'`
 - Compound import (dot notation, not tree-shakeable): `import ChatMessage from '@aziontech/webkit/chat-message'`
@@ -13208,7 +13214,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 ## Do
 
 - Pass `status` from your request: `pending` until the first token, `streaming` while tokens arrive, then `success` or `error`.
-- Turn on the built-in actions with props instead of composing buttons: `copyable`, `show-feedback`, `show-read-aloud`, `shareable`, `retryable`, `branchable` on a response; `copyable`, `editable` on a prompt. The row keeps one order and moves the thumbs and Try again into More when it is narrow.
+- Turn on the built-in actions with props instead of composing buttons: `copyable`, `show-feedback`, `show-read-aloud`, `shareable`, `retryable`, `branchable` on a response; `copyable`, `editable` on a prompt. The row keeps one order and moves Good response, Bad response and Try again into More when it is narrow.
 - Put the `Sources` pill in `#trailing` (it stays on the same line) and a `ResponseBranches` pager in `#leading` once a response or prompt has versions.
 - Raise a toast after a rating, and open `FeedbackReasonDialog` after Bad response; the row itself shows no confirmation text.
 - Use `grouped` for a second message by the same author so stacked messages read as one turn.
@@ -13267,14 +13273,14 @@ Compound API through `index.ts` (`ChatMessage.Actions`, `ChatMessage.Feedback`);
 `{ from, status, contentText }` (`injection-key.ts`; `contentText()` reads the `StreamingResponse` text, `lib/content-text.ts`); `useChatMessageContext()` throws outside a `ChatMessage`.
 
 - `chat-message-actions/chat-message-actions.vue` — `role="group"` row of actions on one line (it never wraps); renders nothing unless `status` is `success`.
-  - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`); `copyable?: boolean` (default `false` — shows Copy, a `CopyButton`); `copyText?: string` (default `''` — what Copy copies; empty copies `contentText()`); `editable?: boolean` (default `false` — shows Edit on a user message, which opens the root's editor); `showFeedback?: boolean` (default `false` — shows the thumbs, a `ChatMessage.Feedback` bound to `v-model:feedback`); `showReadAloud?: boolean` (default `false` — shows Read aloud); `readAloudText?: string` (default `''` — the text Read aloud speaks; empty reads `contentText()`); `shareable?: boolean` (default `false` — shows Share); `retryable?: boolean` (default `false` — shows Try again); `branchable?: boolean` (default `false` — adds Branch in new chat to More); `disabled?: boolean` (default `false` — locks Edit, Try again and Branch in new chat).
-  - v-model: `v-model:feedback` — `'up' | 'down' | null` through `defineModel('feedback')` (default `null`; emits `update:feedback`). Choosing the chosen thumb again clears it, in the row and in More.
+  - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`); `copyable?: boolean` (default `false` — shows Copy, a `CopyButton`); `copyText?: string` (default `''` — what Copy copies; empty copies `contentText()`); `editable?: boolean` (default `false` — shows Edit on a user message, which opens the root's editor); `showFeedback?: boolean` (default `false` — shows Feedback, a `ChatMessage.Feedback` bound to `v-model:feedback`); `showReadAloud?: boolean` (default `false` — shows Read aloud); `readAloudText?: string` (default `''` — the text Read aloud speaks; empty reads `contentText()`); `shareable?: boolean` (default `false` — shows Share); `retryable?: boolean` (default `false` — shows Try again); `branchable?: boolean` (default `false` — adds Branch in new chat to More); `disabled?: boolean` (default `false` — locks Edit, Try again and Branch in new chat).
+  - v-model: `v-model:feedback` — `'up' | 'down' | null` through `defineModel('feedback')` (default `null`; emits `update:feedback`). Choosing the chosen item again clears it, in Feedback and in More.
   - Events: `share` — `(event: MouseEvent)`, Share pressed; `retry` — `(event: MouseEvent | KeyboardEvent)`, Try again pressed or chosen in More; `branch` — `(event: MouseEvent | KeyboardEvent)`, Branch in new chat chosen.
   - Slots: `leading` — before Copy, a `ResponseBranches` pager; `default` — app actions after the built-in ones; `trailing` — the `Sources` pill, at the end of the same line (`__trailing`, which may shrink and clips past its end rather than widen the row; it keeps 4 px around the pill for its focus ring).
   - Test ids: `__copy`, `__edit`, `__feedback`, `__read-aloud`, `__share`, `__retry`, `__more`, `__trailing`.
   - Read aloud (private part `parts/chat-message-read-aloud.vue`, test id `chat-message-actions__read-aloud`): a 40 px ghost `IconButton` that speaks the text with `speechSynthesis` in the active locale; while speaking it is `Stop reading` (`data-speaking`). Pressing it again, another message's Read aloud or unmounting stops it. Rendered after mount, only where the browser has speech synthesis.
   - `data-testid` fallback: `chat-message-actions`.
-- `chat-message-feedback/chat-message-feedback.vue` — thumbs up / down (`aria-pressed`, large ghost `IconButton`s), each with a tooltip (`Good response`, `Bad response`).
+- `chat-message-feedback/chat-message-feedback.vue` — one medium ghost `IconButton` named `Feedback` (`__trigger`, a thumbs-up glyph) that opens a `DropdownMenu` (side `bottom`, align `start`) with two items: Good respo…
   - Props: `loading?: boolean` (default `false`).
   - v-model: `'up' | 'down' | null` through `defineModel` (default `null`; emits `update:modelValue`).
   - `data-testid` fallback: `chat-message-feedback`.
@@ -13293,7 +13299,10 @@ packages/webkit/src/components/ai/chat-message/
 ├── injection-key.ts
 ├── composables/use-chat-message-context.ts
 ├── lib/content-text.ts
+├── lib/feedback-icon.ts
 ├── parts/chat-message-read-aloud.vue
+├── parts/chat-message-more.vue
+├── parts/chat-message-feedback-menu.vue
 ├── chat-message-actions/chat-message-actions.vue
 └── chat-message-feedback/chat-message-feedback.vue
 ```
@@ -13317,9 +13326,9 @@ packages/webkit/src/components/ai/chat-message/
 ## Accessibility
 
 - Visible focus: the composed controls carry their own `focus-visible` rings.
-- Keyboard map: `Tab` through links in the content, then the actions in order; Enter / Space activate; More opens its menu (arrows move, `Esc` closes). In the editor, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
+- Keyboard map: `Tab` through links in the content, then the actions in order; Enter / Space activate; Feedback and More open their menus with Enter, Space or the arrow keys (arrows move, Enter chooses, `Esc` closes and returns focus to the button). In the editor, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
 - The user message's actions are transparent, never hidden from the tab order: focusing one shows the row.
-- ARIA: `<article aria-label="<author> at <time>">` so each message has a unique name (Cloudscape), repeated in a visually hidden line at its start for browse mode; `aria-busy` while loading or streaming; actions are a `role="group"` named `Message actions`; feedback thumbs use `aria-pressed`, the feedback status is a visually hidden `role="status"`; the editor field is named `Edit your message`.
+- ARIA: `<article aria-label="<author> at <time>">` so each message has a unique name (Cloudscape), repeated in a visually hidden line at its start for browse mode; `aria-busy` while loading or streaming; actions are a `role="group"` named `Message actions`; Feedback is a menu button (`aria-haspopup="menu"`, `aria-expanded`) whose chosen item is `aria-checked`, the feedback status is a visually hidden `role="status"`; the editor field is named `Edit your message`.
 - Announcement: when an assistant or system message turns `success` or `error` (or mounts finished after the conversation is ready), its text is read once through the `Conversation` live region.
 - Never rely on alignment alone: every message names its author in its accessible name and hidden line (or is `grouped` after one that does).
 - Contrast ≥4.5:1 on the muted time and system text.
@@ -13360,7 +13369,7 @@ packages/webkit/src/components/ai/chat-message/
 
 # Citation
 
-> An inline reference in generated text: a small rounded chip with the mark of the source's site (its favicon, its icon, or its first letter on a colour of its own) and the site's name (`Azion`, else the host of `href` without `www.`), and `+N` when one marker cites several sources (`[1][2]`, `[1, 2]`). Hovering, focusing or pressing the chip opens a card with the site, the linked title and a snippet (`description`); with several sources a pager `‹ 1/3 ›` steps through them. `StreamingResponse` renders it for every run of `[n]` markers.
+> An inline reference in generated text: a small rounded chip with the mark of the source's site (its favicon, its icon, or its first letter on a colour of its own) and the site's name (`Azion`, else the host of `href` without `www.`), and `+N` when one marker cites several sources (`[1][2]`, `[1, 2]`). Hovering, focusing or pressing the chip opens one card that stacks every cited source. `StreamingResponse` renders it for every run of `[n]` markers.
 
 - Import: `import Citation from '@aziontech/webkit/citation'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -13373,7 +13382,7 @@ packages/webkit/src/components/ai/chat-message/
 
 - Number in order of first use: [1], [2], [3]; the numbers stay in the accessible name.
 - Give each web source a `site` name (`Azion`, `GitHub`) and, when you have one, its favicon as `image`; a bare host reads as a URL.
-- Keep `description` to a sentence or two of the page; the card cuts it at three lines.
+- Give each source its `publisher` and `publishedAt` when you have them.
 
 ## Don’t
 
@@ -13395,23 +13404,24 @@ packages/webkit/src/components/ai/chat-message/
 
 ## Sub-components
 
-_None. Exports: `"./citation"`. Composed DS components: `hover-card`, `icon-button`, and the
-`sources` mark part (`sources/parts/sources-mark.vue`)._
+_None. Exports: `"./citation"`. Composed DS components: `hover-card`, and the `sources` private
+parts `sources/parts/sources-mark.vue` (the round mark) and `sources/parts/sources-item.vue` (one
+source block, shared with the `Sources` panel)._
 
 ## States
 
 - A chip is a `button` that opens the card: after 300 ms of hover or focus, at once on a press; a mouse press keeps it open, a touch or keyboard press toggles it. `Escape`, a press outside or moving the pointer away closes it.
 - `data-state="open|closed"` on the chip; `data-slot="citation"` on the root, so `ChatMessage`'s Read aloud skips it.
 - The chip text is the first source's site name (else its host, else its title), cut with an ellipsis at `max-w-48`; `+N` counts the other sources.
-- The card shows one source at a time: mark and site name, the title (a link when `href` is safe; external URLs open in a new tab), the `description` cut at three lines. With more than one source, previous and next buttons and `1/3`; they disable at the ends, and the card starts at the first source each time it opens.
+- The card stacks every cited source in an `<ol>`, dividers between items only. Each item follows the `Sources` menu row: the 24 px mark at the inline start; the title (a link when `href` is safe, external URLs in a new tab), two lines; `site · publisher · date` (`publishedAt` as a medium date in the reader's locale; parts it lacks are left out). No hover fill, no underline, no `description`, no pager.
 - No resolvable source: a `role="note"` chip with the numbers and no card.
 - The mark is the source's `image` (favicon), else its `icon`, else its first letter on one of seven chart series colours picked by a stable hash of the host, so neighbouring sites rarely share a colour. A favicon that fails to load falls back to the letter.
 
 ## Accessibility
 
-- Visible focus: the chip, the card link and the pager buttons show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
-- Keyboard map: `Tab` reaches the chip and opens the card after the delay; `Enter` / `Space` toggles it; `Tab` from an open chip moves into the card (link, previous, next); `Escape` closes it and returns focus to the chip.
-- ARIA: the chip is named with the site first so the name holds the visible text (WCAG 2.5.3): `Source 1, Azion: Real-Time Purge`, `Azion +2, sources 1, 2, 3`, or `Source 1: <title>` without a site; it carries `aria-expanded` and, while open, `aria-controls` and `aria-describedby` to the card. The marks are `aria-hidden`; the pager position is `aria-live="polite"`.
+- Visible focus: the chip and the card links show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
+- Keyboard map: `Tab` reaches the chip and opens the card after the delay; `Enter` / `Space` toggles it; `Tab` from an open chip moves into the card and through every source link in order; `Escape` closes it and returns focus to the chip.
+- ARIA: the chip is named with the site first so the name holds the visible text (WCAG 2.5.3): `Source 1, Azion: Real-Time Purge`, `Azion +2, sources 1, 2, 3`, or `Source 1: <title>` without a site; it carries `aria-expanded` and, while open, `aria-controls` and `aria-describedby` to the card. The marks are `aria-hidden`; the card is an `<ol>`.
 - Touch target: inline text reference; exempt from the 24 px minimum as inline text (WCAG 2.5.8 exception).
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`) or `image`: the title is plain text, the mark falls back to the icon or letter.
 - Contrast: the letter is `--text-default` on a 30% tint, well above Lc 60; the series ring is a solid mark (Lc 30).
@@ -13430,20 +13440,25 @@ _None. Exports: `"./citation"`. Composed DS components: `hover-card`, `icon-butt
       href: 'https://www.azion.com/en/documentation/',
       description: 'Removes a cached object from every data center in a few seconds.',
       site: 'Azion',
-      icon: 'az az-azion'
+      icon: 'az az-azion',
+      publisher: 'Azion Technologies',
+      publishedAt: '2026-03-02'
     },
     {
       title: 'HTTP Caching (RFC 9111)',
       href: 'https://www.w3.org/Protocols/',
       description: 'How caches store responses and when they must ask the origin again.',
-      site: 'W3C'
+      site: 'W3C',
+      publisher: 'World Wide Web Consortium',
+      publishedAt: '2022-06-01'
     },
     {
       title: 'aziontech/azion: the Azion command line',
       href: 'https://github.com/aziontech/azion',
       description: 'Purge URLs, wildcards and cache keys from a terminal.',
       site: 'GitHub',
-      icon: 'az az-github'
+      icon: 'az az-github',
+      publisher: 'aziontech'
     }
   ]
 </script>
@@ -13469,7 +13484,7 @@ _None. Exports: `"./citation"`. Composed DS components: `hover-card`, `icon-butt
 
 # Conversation
 
-> The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a "Scroll to the latest message" button brings them back. It is a `role="log"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. With `moreMessages`, a Load earlier messages button opens the thread and the log also emits `load-more` as the reader scrolls near the top; prepended messages never move what the reader sees. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces). The thread is a centred reading column (`--layout-measure-content`) with a 16 px gutter on a phone, and a larger gap before each user turn. The `composer` slot floats the composer over the bottom of the column: the thread scrolls under it behind a fade and is padded by its height; the Scroll to latest button floats just above it.
+> The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a "Scroll to the latest message" button brings them back. It is a `role="log"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. With `moreMessages`, a Load earlier messages button opens the thread and the log also emits `load-more` as the reader scrolls near the top; prepended messages never move what the reader sees. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces). The thread is a centred reading column 752 px wide (`--container-2xl`, closest to ChatGPT's 48 rem) inside a 16 px gutter, with one even gap between messages: 36 px from `sm`, 28 px on a phone. The `composer` slot floats the composer over the bottom of the column: the thread scrolls under it behind a fade and is padded by its height; the Scroll to latest button floats just above it.
 
 - Import: `import Conversation from '@aziontech/webkit/conversation'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -13633,7 +13648,7 @@ never read as new.
 
 # Conversation History
 
-> The list of past conversations with an assistant, in a side panel on wide screens or a `Drawer` on phones: plain rows of titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, an optional Delete per row, and at the top an optional New chat row and a search field that filters the titles. Choosing a row sets `v-model` to its id; the owner loads that conversation into `Conversation`.
+> The chat list of an assistant, in a side panel or a `Drawer` on phones: rows grouped by last activity (Today, Yesterday, Previous 7 days, Previous 30 days, Older) or by status (Working, Settled), the open one current, pinned chats on top, an optional Projects section of folders that expand in place, and on top a New chat row, a search field or a toolbar whose Search button opens the app's palette. A row is a title or a rich row (tag, description, age, status); per-row actions (pin, rename, share, lock, move, archive, delete) sit on hover and in a `DropdownMenu`. Choosing a row sets `v-model` to its id.
 
 - Import: `import ConversationHistory from '@aziontech/webkit/conversation-history'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -13645,11 +13660,12 @@ never read as new.
 
 ## Do
 
-- Title each conversation from its first prompt, short; the full title shows on hover through `title`.
-- Put it in a side panel beside the conversation on wide screens and in a `Drawer` (`side="start"`) opened from a menu button on phones; close the drawer from `update:modelValue` and `create` so the chosen conversation shows at once (the Default example).
-- Turn on `creatable` when the page has no other New chat control, and `searchable` once the list is long enough to scroll.
-- Fix the reference time so the groups match on the server and the client: set `now` on the app's `ConfigProvider` once (every time-relative component below reads it), or pass `now` here to override it for this list.
-- Never delete on the first tap: open a `ConfirmDialog` from the `remove` handler and remove the item from `@confirm` (the Default example), or remove it at once and offer Undo in a toast.
+- Title each conversation from its first prompt, short.
+- Put it beside the conversation on wide screens and in a start-side `Drawer` on phones; close the drawer from `update:modelValue` and `create`.
+- Fix `now` on the app's `ConfigProvider` (or here) so groups and ages match on the server and the client.
+- The component never changes `items`: apply each action event to the data (flip `pinned`, `archived`, `locked`, set `projectId`, the new `title`).
+- Never delete on the first tap: open a `ConfirmDialog` from `remove` / `project-remove`, or remove at once and offer Undo.
+- With `showToolbar`, open the app's `Command` palette from `search-open`; a mounted `Command` claims ⌘K, so the Search button does not bind it twice.
 
 ## Don’t
 
@@ -13666,45 +13682,84 @@ never read as new.
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `{ id: string; title: string; updatedAt: string \| number \| Date }[]` | `[]` | false | Conversations, any order; they are sorted newest first inside their group. |
-| `now` | `string \| number \| Date` | `undefined` | false | Reference time for the groups. Empty uses the nearest `ConfigProvider`'s `now`, then the current time; set either when the list is rendered on the server. |
-| `removable` | `boolean` | `false` | false | Shows a Delete button on each row that emits `remove`. |
-| `creatable` | `boolean` | `false` | false | Shows a New chat row at the top that emits `create`. |
-| `searchable` | `boolean` | `false` | false | Shows a search field at the top that hides conversations whose title does not contain the typed text. |
+| `items` | `ConversationHistoryItem[]` | `[]` | false | Conversations, any order; sorted newest first in their group or project. |
+| `projects` | `ConversationHistoryProject[]` | `[]` | false | Projects shown in a Projects section above Recents; empty keeps the plain groups. |
+| `now` | `string \| number \| Date` | `undefined` | false | Reference time for groups and ages. Empty uses the nearest ConfigProvider now, then the current time. |
+| `removable` | `boolean` | `false` | false | Lets each row be deleted (emits `remove`): a Delete button, or Delete in the row menu when `itemActions` is set. |
+| `creatable` | `boolean` | `false` | false | Shows New chat (a row, or a toolbar button with `showToolbar`) that emits `create`. |
+| `projectCreatable` | `boolean` | `false` | false | Shows New project (in the Projects header, or the toolbar) that emits `project-create`. |
+| `searchable` | `boolean` | `false` | false | Shows a search field that hides conversations whose title does not contain the typed text. |
+| `showToolbar` | `boolean` | `false` | false | Shows a top toolbar: a Search button that emits `search-open`, then New project and New chat as icon buttons. |
+| `itemActions` | `('pin' \| 'rename' \| 'share' \| 'lock' \| 'move' \| 'archive')[]` | `[]` | false | Row actions: a Pin button and a More menu on each row; `move` needs `projects`. |
+| `projectActions` | `('pin' \| 'settings' \| 'remove' \| 'chat-create')[]` | `[]` | false | Project row actions: a More menu (pin, settings, remove) and a New chat button (`chat-create`). |
+| `groupBy` | `'date' \| 'status'` | `'date'` | false | Groups chats outside projects by last activity, or into Working (`status: 'running'`) and Settled (the rest and archived chats). |
+| `showTime` | `boolean` | `false` | false | Shows each chat's age (`10m`, `15h`, `3d`) at the end of its row. |
 | `loading` | `boolean` | `false` | false | Shows placeholder rows while the history loads. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Conversation history`). |
 | `modelValue` | `string \| null` | `null` | false | Two-way value (`v-model`). |
+| `openKeys` | `string[]` | `() => []` | false | Two-way value (`v-model:openKeys`). |
+| `projectsOpen` | `boolean` | `true` | false | Two-way value (`v-model:projectsOpen`). |
+| `projectSort` | `ConversationHistoryProjectSort` | `'recent'` | false | Two-way value (`v-model:projectSort`). |
+| `openSectionKeys` | `string[]` | `—` | false | Two-way value (`v-model:openSectionKeys`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `remove` | `(event: MouseEvent, id: string)` |  |
+| `remove` | `(event: MouseEvent \| KeyboardEvent, id: string)` |  |
 | `create` | `(event: MouseEvent)` |  |
+| `project-create` | `(event: MouseEvent)` |  |
+| `search-open` | `(event: MouseEvent \| KeyboardEvent)` |  |
+| `item-pin` | `(event: MouseEvent \| KeyboardEvent, item: ConversationHistoryItem)` |  |
+| `item-rename` | `(event: KeyboardEvent \| FocusEvent, payload: { item; title: string })` |  |
+| `item-share` | `(event: MouseEvent \| KeyboardEvent, item: ConversationHistoryItem)` |  |
+| `item-lock` | `(event: MouseEvent \| KeyboardEvent, item: ConversationHistoryItem)` |  |
+| `item-move` | `(event: MouseEvent \| KeyboardEvent, payload: { item; project })` |  |
+| `item-archive` | `(event: MouseEvent \| KeyboardEvent, item: ConversationHistoryItem)` |  |
+| `project-pin` | `(event: MouseEvent \| KeyboardEvent, project: ConversationHistoryProject)` |  |
+| `project-settings-open` | `(event: MouseEvent \| KeyboardEvent, project: ConversationHistoryProject)` |  |
+| `project-remove` | `(event: MouseEvent \| KeyboardEvent, project: ConversationHistoryProject)` |  |
+| `project-chat-create` | `(event: MouseEvent, project: ConversationHistoryProject)` |  |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `item` | { item: ConversationHistoryItem } | Replaces a chat row's tag, title and description; the row keeps its button and actions. |
+| `item-meta` | { item: ConversationHistoryItem } | Replaces the end of a chat row (age, lock, status). |
 
 ## v-model
 
 | Model | Type | Default | Emits | Notes |
 | --- | --- | --- | --- | --- |
 | `v-model` | `string \| null` | `null` | `update:modelValue` | Id of the open conversation; its row is `aria-current="page"`. |
+| `v-model:openKeys` | `string[]` | `[]` | `update:openKeys` | Ids of the expanded projects. |
+| `v-model:projectsOpen` | `boolean` | `true` | `update:projectsOpen` | Whether the Projects section is expanded. |
+| `v-model:projectSort` | `'recent' \| 'name'` (`ConversationHistoryProjectSort`) | `'recent'` | `update:projectSort` | Project order from the Organize menu: by newest chat (empty projects last) or by name; pinned first. |
+| `v-model:openSectionKeys` | `string[]` | `['recents', 'working']` | `update:openSectionKeys` | Expanded sections, of `recents`, `working`, `settled` (`ConversationHistorySection`). |
 
 ## States
 
-- Groups render only when they have items; inside a group, newest first.
-- Active row: `data-active` and `aria-current="page"`, the selected surface.
-- Empty: a title, `No conversations yet.`, over one muted line that says chats appear here after the first question; compact enough for a sidebar.
-- No match: while the search field holds text that no title contains, one muted line, `No conversations match “{query}”.`; New chat and the search field stay.
-- Loading: `aria-busy="true"` and five skeleton rows; no group headings.
+- Order from the top: toolbar, New chat row and search, Pinned, Projects, then Recents (by date) or Working and Settled (by status). A group renders only with items; inside a group, newest first. Pinned (`pinned`, not `archived`) leaves its project or group. By date, archived chats show nowhere.
+- Sections: Projects, Recents (shown with Projects), Working and Settled are collapsible headers (`data-state="open|closed"`, chevron down when open, toward the inline end when closed); Working and Settled show their count. A collapsed section mounts no rows. Pinned and the date groups are labels.
+- Projects: one folder row per project (`az-folder`, `az-folder-open` expanded) whose chats indent under it, or `No chats in this project yet.`; a `projectId` matching no project stays outside. Organize (two or more projects) opens a `DropdownMenu` with Sort by, Recent activity and Name.
+- Search: matching projects and sections show expanded with only their matches; the models do not change.
+- Rows: the `SidebarMenuItem` menu row, 32 px (44 px on coarse pointers), fill inset 1 px top and bottom (`border-y border-transparent bg-clip-padding`, `forced-colors:border-y-0`) for a 2 px gap between filled rows, no list gap. A row with a `description` is 56 px: title over the description (`text-body-xs`, muted, one line), `var(--spacing-xs)` block padding. Hover and focus fill the row; the active row is `data-active`, the selected surface.
+- Row end: the age (`showTime`, narrow units in the active locale, `now` under a minute), a lock glyph (`locked`), a `Spinner` (running) or `az-circle-alert` in `var(--text-danger)` (error).
+- Row actions: Pin and More (`itemActions`), or Delete alone (`removable` only), at the inline end; with a fine pointer they show on hover, focus inside the row, the active row and an open menu, on touch always. More opens Pin (P), Rename (R), Share, Lock, Move to project (a sub-menu of the other projects), Archive (A), then Delete in `var(--text-danger)`; labels flip to Unpin, Unlock, Unarchive. Letter hints are `DropdownMenu.Item` `command`s, mounted only while the menu is open.
+- Project actions: New chat (`az-square-pen`) and More: Pin project, Project settings, then Delete project in danger.
+- Rename: the row becomes an `Input` holding the title; Enter or blur saves a changed, non-empty title, Escape cancels; Enter and Escape return focus to the row.
+- Cut-off title: the row's `title` holds the full title only while it is cut off.
+- Empty: `No conversations yet.`; no match: `No conversations match “{query}”.`. Loading: `aria-busy` and five skeleton rows.
 
 ## Accessibility
 
-- The root is a `nav` named by `ariaLabel`; each group is a `ul` labelled by its visible heading (`aria-labelledby`).
-- Each conversation is a `button` with its title as the name; the open one carries `aria-current="page"`.
-- Delete is an `IconButton` named `Delete <title>` on every row. On touch it is always shown; with a fine pointer it fades in on hover, on keyboard focus inside the row and on the open row, and it is always in the tab order, so it is reachable by keyboard, pointer and touch.
-- New chat is a `button` named `New chat`, first in the list. The search field is an `Input` with `role="searchbox"` (and `enterkeyhint="search"`) named `Search conversations`; filtering announces nothing, the rows change in place.
-- Keyboard: `Tab` moves through rows and their Delete; `Enter`/`Space` open a conversation.
-- Focus after a delete: when the owner removes the item whose Delete was pressed and focus was lost with it (on `body`, or on the closed `ConfirmDialog`), focus moves to the conversation that took its place, else the last one, else the list itself (`tabindex="-1"`). Tests: `conversation-history.test.ts` › moves focus to the next row after a delete.
-- Loading sets `aria-busy` on the list.
+- The root is a `nav` named by `ariaLabel`; each group is a `ul` labelled by its heading (`aria-labelledby`).
+- A chat is a `button` named by its title (`aria-labelledby`), described by its description and end (`aria-describedby`: age, `Locked`, `Working`, `Failed`); the open one is `aria-current="page"`.
+- Section headers and project rows are `button`s with `aria-expanded` and `aria-controls`; the list they open is labelled by them. A header with a count is named `Working 2`.
+- Row actions are `IconButton`s named `Pin <title>` / `Unpin <title>`, `More actions for <title>`, `Delete <title>`, `New chat in <project>`; always in the tab order. More and Organize open a `menu` (arrow keys, `Enter`/`Space`, `ArrowRight` opens Move to project, `Esc` closes and returns focus). After Pin, Lock, Archive or Move to project, focus follows the chat to its new place (the row button, marked `data-key`); a chat that no longer shows hands focus to the nearest row, as Delete does.
+- The toolbar Search is a `SearchTrigger` (`aria-keyshortcuts`); the search field is a `searchbox` named `Search conversations`; the rename field is named `Rename <title>`.
+- Focus after a delete: when the removed row took focus with it, focus moves to the row in its place, else the last, else the list (`tabindex="-1"`).
 
 ## Examples
 
@@ -13845,7 +13900,7 @@ never read as new.
 </template>
 ```
 
-1 more example(s) in [components/conversation-history.md](components/conversation-history.md).
+2 more example(s) in [components/conversation-history.md](components/conversation-history.md).
 
 ---
 
@@ -13853,7 +13908,7 @@ never read as new.
 
 # Feedback Reason Dialog
 
-> Asks why an assistant response was not helpful, right after the thumbs-down in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.
+> Asks why an assistant response was not helpful, right after Bad response in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.
 
 - Import: `import FeedbackReasonDialog from '@aziontech/webkit/feedback-reason-dialog'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -13876,7 +13931,7 @@ never read as new.
 
 ## Related
 
-- `chat-message` — `ChatMessage.Feedback` holds the thumbs that open it.
+- `chat-message` — `ChatMessage.Feedback` holds the Bad response choice that opens it.
 - `confirm-dialog` — the same dialog anatomy for a yes/no decision.
 
 ## Props
@@ -13910,7 +13965,7 @@ never read as new.
 
 ## Accessibility
 
-- A modal `Dialog` named by its title and described by its one-line description; focus moves into it and returns to the thumbs-down on close.
+- A modal `Dialog` named by its title and described by its one-line description; focus moves into it and returns to the Feedback button on close.
 - The reasons are a `fieldset` with a `legend` (`Reason`), a `RadioGroup` with one `RadioGroup.Item` per reason and its label; the details `Textarea` is labelled `Details (optional)`.
 - Submitting without a reason marks the fieldset invalid, shows the error text and focuses the first radio; nothing is sent.
 - Keyboard: `Tab` through radios (arrows within the group), details, Cancel, Send feedback; `Enter` in a radio submits; `Escape` closes.
@@ -14914,7 +14969,7 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 
 # Sources
 
-> The sources a generative AI response drew on (ChatGPT's Sources, Cloudscape's sources section, AI Elements Sources): a small `Sources` pill with the overlapping marks of up to three cited sources that opens a panel listing every source — mark, site name, linked title and snippet. The panel is a side `Drawer` from the end on wide screens (non-modal, the answer stays readable beside it) and a bottom sheet on a phone. Sources the answer searched but did not cite (`cited: false`) are listed under More, after the Citations. The pill ends the message's action row (`ChatMessage.Actions` `#trailing`), on the same line as the actions. Each mark is the site's favicon (`image`), its icon, or its first letter on a colour of its own, so three sources never look alike.
+> The sources a generative AI response drew on (ChatGPT's Sources, Cloudscape's sources section, AI Elements Sources): a small `Sources` pill with the overlapping marks of up to three cited sources that opens, in place, a `DropdownMenu` of link items, one per source. Sources the answer searched but did not cite (`cited: false`) are listed under More, after the Citations. The pill ends the message's action row (`ChatMessage.Actions` `#trailing`), on the same line as the actions. Each mark is the site's favicon (`image`), its icon, or its first letter on a colour of its own, so three sources never look alike.
 
 - Import: `import Sources from '@aziontech/webkit/sources'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -14927,8 +14982,9 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 
 - Order items as the response first cites them, so `[1]` is item 1; put uncited items (`cited: false`) last so the numbers stay aligned.
 - Use the page title as the title and the site's own name as `site` (`Azion`, `GitHub`); without `site` the host of `href` shows.
-- Give `image` the site's favicon URL when the app has one (from the search tool's result); otherwise `icon` for a site in the icon set, or nothing for the lettered mark.
+- Pass `publisher` and `publishedAt` when you have them.
 - Keep the panel closed by default; the inline citations are the primary path.
+- Give `image` the site's favicon URL when the app has one (from the search tool's result); otherwise `icon` for a site in the icon set, or nothing for the lettered mark.
 
 ## Don’t
 
@@ -14940,7 +14996,7 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 - `citation` — the inline chip whose numbers point at these items.
 - `streaming-response` — renders the citations; pass it the same items.
 - `chat-message` — the pill goes in the `#trailing` slot of `ChatMessage.Actions`, after the icon actions.
-- `drawer` — the panel the pill opens.
+- `dropdown-menu` — the menu the pill opens; its items draw every row.
 
 ## Props
 
@@ -14955,33 +15011,35 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 
 _None. Data-driven: a source list is a record set the response already holds, like table rows.
 Exports: `"./sources"`; exported type `SourcesItem` (`title`, `href?`, `description?`, `site?`,
-`image?`, `icon?`, `cited?`) from `sources/types.ts`, shared with `StreamingResponse` and `Citation`.
-Private parts: `parts/sources-mark.vue` draws one round mark (also used by `Citation`), and
-`parts/sources-panel.vue` holds the panel, loaded on demand. Composed DS components: `drawer`._
+`image?`, `icon?`, `publisher?`, `publishedAt?`, `cited?`) from `sources/types.ts`, shared with
+`StreamingResponse` and `Citation`. Private parts: `parts/sources-mark.vue` draws one round mark
+(also the leading slot of each menu item), and `parts/sources-item.vue` the `Citation` card row.
+Composed DS components: `dropdown-menu` (`Trigger`, `Group`, `Item`)._
 
 ## v-model
 
 | Model | Type | Default | Emits | Notes |
 | --- | --- | --- | --- | --- |
-| `v-model:open` | `boolean` | `undefined` | `update:open` | The panel's open state, by the pill, the panel's close button, `Escape` or a press on the overlay (phone). Unbound, the state is local and starts from `defaultOpen`. |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | The panel's open state, by the pill, `Escape` or a press outside the panel. Unbound, the state is local and starts from `defaultOpen`. |
 
 ## States
 
 - `data-state="open|closed"` on the root and the pill (an open pill keeps the hover fill); renders nothing when `items` is empty.
 - The root is `display: contents` and the pill does not wrap (`whitespace-nowrap`, `shrink-0`), so it sits at the end of the action row.
 - The pill's marks are the first three cited items (all items when none is cited).
-- Panel: from `md` a non-modal side `Drawer` (`size="small"`, from the end); below `md` the `Drawer`'s bottom sheet, modal. Its title is the pill's label.
-- Groups: when some items have `cited: false`, the panel shows a Citations section and a More section with headings; otherwise one unheaded list.
+- Panel: a `DropdownMenu` (`side="auto"`, `align="start"`) on every width, never a `Drawer`; it scrolls when taller than the room left.
+- Row: one `DropdownMenu.Item` per source: `value` its index, `label` the title, `href` (a safe URL), `target="_blank"` for an external URL, the 24 px mark in `#leading`, and `description` the line `site · publisher · date` (medium date in the reader's locale; parts it lacks are left out; none, a one-line row). Hover, focus, the highlighted fill with its 2px inset gap, padding and type are the menu item's; no underline. The item `description` (snippet) is not drawn.
+- Groups: when some items have `cited: false`, the menu shows a Citations and a More `DropdownMenu.Group` with their labels and divider; otherwise one unlabelled group.
 - Mark: favicon (`image`, a safe URL), else `icon`, else the first letter of the site on one of seven `--chart-series-*` colours picked by a stable hash of the host; a favicon that fails to load falls back to the letter.
 
 ## Accessibility
 
-- Visible focus: the pill and the links show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
-- Keyboard map: `Tab` to the pill, `Enter` / `Space` opens the panel and moves focus into it; `Tab` through the links and the close button; `Escape` closes it and returns focus to the pill.
-- ARIA: the pill is a `button` with `aria-haspopup="dialog"` and `aria-expanded`, named `3 sources` (it holds the visible `Sources`, WCAG 2.5.3) or by `title`; the marks are `aria-hidden`; the panel is the `Drawer`'s `dialog`, titled by the pill's label; each group is a `section` named Citations or More (or Sources when there is one group) holding an `<ol>`.
+- Visible focus: the pill shows `focus-visible:ring-2 focus-visible:ring-(--ring-color)`; rows show the menu item's inset ring.
+- Keyboard map: `DropdownMenu`'s: `Enter` / `Space` / `Down` on the pill opens and focuses the first source, `Up` the last; `Down` / `Up` / `Home` / `End` and typeahead move; `Enter` opens the link; `Escape` closes and returns focus to the pill; `Tab` closes.
+- ARIA: the pill is a `button` with `aria-haspopup="menu"` and `aria-expanded`, named `3 sources` (it holds the visible `Sources`, WCAG 2.5.3) or by `title`; the marks are `aria-hidden`; the `menu` is labelled by the pill; each source is a link `menuitem` named by its title and described by its meta line; groups are `role="group"` named Citations or More.
 - Touch: the 32 px pill carries an invisible 44 px hit area on coarse pointers.
-- External links open in a new tab with `rel="noopener noreferrer"`, followed by an `aria-hidden` `az-external-link` glyph and the sr-only `common.newTab` text.
-- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the title as plain text; an unsafe `image` is dropped.
+- External links open in a new tab (`target="_blank"` on the item: `rel`, glyph and `common.newTab` hint).
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): a plain item; an unsafe `image` is dropped.
 - Contrast: the letter is `--text-default` on a 30% tint; the series ring is a solid mark (Lc 30).
 
 ## Examples
@@ -14998,19 +15056,24 @@ Private parts: `parts/sources-mark.vue` draws one round mark (also used by `Cita
       href: 'https://www.azion.com/en/documentation/products/cache/real-time-purge/',
       description: 'Removes a cached object from every data center in a few seconds.',
       site: 'Azion',
-      icon: 'az az-azion'
+      icon: 'az az-azion',
+      publisher: 'Azion Technologies',
+      publishedAt: '2026-03-02'
     },
     {
       title: 'aziontech/azion: the Azion command line',
       href: 'https://github.com/aziontech/azion',
       description: 'Purge URLs, wildcards and cache keys from a terminal.',
       site: 'GitHub',
-      icon: 'az az-github'
+      icon: 'az az-github',
+      publisher: 'aziontech'
     },
     {
       title: 'HTTP Caching (RFC 9111)',
       href: 'https://www.w3.org/Protocols/',
-      description: 'How caches store responses and when they must ask the origin again.'
+      description: 'How caches store responses and when they must ask the origin again.',
+      publisher: 'World Wide Web Consortium',
+      publishedAt: '2022-06-01'
     },
     {
       title: 'Cache-Control',
@@ -15036,7 +15099,7 @@ Private parts: `parts/sources-mark.vue` draws one round mark (also used by `Cita
 
 # Streaming Response
 
-> Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:`, `data:` and protocol-relative links are dropped (only `http(s)`, `mailto`, `tel`, relative and `#` links survive, checked by the shared `safeHref`), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists (nested by indenting an item's lines under it, to any depth), block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Text renders at the reading size (`.text-body-lg`) with a full step (`--spacing-md`) between blocks, the plain, wide answer column of a chat. Headings are bold, with an extra `--spacing-sm` above them so a section reads as a new start: `#` at `.text-heading-md`, every deeper level at the reading size. A fenced code block is a filled `CodeBlock` card with the language and copy in a sticky header, the same while the fence is still open. Numbered citations become `Citation` chips resolved against `sources`: `[1]` one chip with the site's mark and name, and a run of markers (`[1][2]`, `[1] [2]`, `[1, 2]`) one chip with `+1` whose card pages through both sources. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.
+> Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:`, `data:` and protocol-relative links are dropped (only `http(s)`, `mailto`, `tel`, relative and `#` links survive, checked by the shared `safeHref`), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists (nested by indenting an item's lines under it, to any depth), block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Text renders at the prose reading size (`.text-body-prose-md`, 16 px on 26 px lines, ChatGPT's answer size) with a full step (`--spacing-md`) between blocks, the plain answer column of a chat. Headings are bold, one step larger than the text, 24 px below the block above and 8 px above their first line: `#` at `.text-heading-md`, every deeper level at `.text-body-lg`. Lists indent 32 px from `sm` (24 px on a phone) with no extra gap between items. Inline code is `.text-label-code-md` (14 px) in medium weight. A fenced code block is a filled `CodeBlock` card with the language and copy in a sticky header, the same while the fence is still open. Numbered citations become `Citation` chips resolved against `sources`: `[1]` one chip with the site's mark and name, and a run of markers (`[1][2]`, `[1] [2]`, `[1, 2]`) one chip with `+1` whose card pages through both sources. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.
 
 - Import: `import StreamingResponse from '@aziontech/webkit/streaming-response'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -15090,7 +15153,7 @@ components: `code-block`, `citation`._
 - `data-slot="streaming-response"` on the root marks the answer text, which `ChatMessage.Actions` Read aloud speaks.
 - Caret: inside the last paragraph or heading, else after the last block; only while `streaming`.
 - Open fence while streaming: the card `data-testid="…__pending-code"` (language header over a `<pre>`); closed fence or stream ended: `CodeBlock` with `show-label`, `:bordered="false"` and no height cap (`--code-block-max-height: none`).
-- Lists: a nested list carries `data-nested` (top margin `--spacing-xs`, an unordered one uses circles); `data-ordered` switches to decimals.
+- Lists: a nested list carries `data-nested` (an unordered one uses circles); `data-ordered` switches to decimals.
 
 ## Accessibility
 
@@ -16730,7 +16793,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - Set `inverse` on every metric where a rise is bad, so a growing threat count reads as a regression.
 - Keep the label in sentence case with no trailing colon.
 - Put the unit in `unit` ("GB", "ms", "%"), not inside `formatValue`, so it reads muted beside the figure.
-- Leave `trend` out for a strip of figures with no history; the tile then has no chart band.
+- Leave `trend` out for a strip of figures with no history; the tile then has no chart band. In a row where some tiles have a trend, the others draw the gray placeholder band by themselves; do not fake a trend for them.
 - Give the sparkline the same buckets as the chart below it, about twelve points.
 - For a KPI strip that reads as one band (an overview's usage row), put the tiles in a `StatTileGroup`; do not hand-build the card, the grid or the dividers. Separate tiles are for figures that stand alone.
 - Use `variant="mono"` (default) for usage figures with a delta, `variant="sans"` for a summary row of plain figures (requests, data transferred, error rate) above its charts. Keep one variant per row.
@@ -16749,7 +16812,6 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `stats` — the marketing figure band, with no delta and no live data.
 - `spark-chart` — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.
 - `tag` — the delta renders as a `Tag`; the empty band's "No data" is a `Tag` too.
-- `separator` — carries the "No data" `Tag` across the empty band.
 - `stat-tile-group` — one card split into cells, one per tile: the KPI strip of an overview.
 
 ## Props
@@ -16764,7 +16826,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 | `delta` | `number \| null` | `null` | false | Signed change against the named period, in percent, printed with at most two decimals and no trailing zeros. Null hides the delta. |
 | `deltaLabel` | `string` | `''` | false | The comparison period, read after the delta. |
 | `inverse` | `boolean` | `false` | false | A rise is bad for this metric; flips the delta between success and danger. |
-| `trend` | `(number \| null)[]` | `[]` | false | Sparkline values, oldest first; `null` leaves a gap, as in `spark-chart`. Empty hides the sparkline. |
+| `trend` | `(number \| null)[]` | `[]` | false | Sparkline values, oldest first. Under two points draws a gray placeholder curve; empty leaves the figure alone unless a sibling in its group draws a band. |
 | `loading` | `boolean` | `false` | false | Renders Skeleton lines in place of the figure, delta and sparkline. |
 | `error` | `string` | `''` | false | Why the value failed to load. When set, the tile shows a dash and a neutral band that says it could not load, never No data. |
 
@@ -16777,7 +16839,9 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton lines: the figure always, the delta line when `deltaLabel` is set and the sparkline height when `trend` has two or more points, so the tile keeps the shape it loads into), `error` (a dash over the same band with a `neutral` "Couldn't load" `Tag` in place of "No data", kept quiet because the danger `Alert` that explains the failure and offers Retry belongs to the page or region, not to every tile; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
+- Visual states: `default`, `loading` (Skeleton), `error`, `empty value`, `not enough data`. A tile never shows a band without a graph: the band under the figure (48px, `data-band`) draws the sparkline when `trend` has two or more points, and otherwise a gray placeholder curve (`spark-chart` `color="other"` at 40% opacity, a fixed gentle wave drawn from zero so it sits low, decorative and hidden from assistive tech) with a centred `Tag` that says why: `not-enough-data` ("Not enough data", neutral) when the value is there but the trend has under two points; `no-data` ("No data", neutral) when `value` is null, over a dash; `error` ("Couldn't load", neutral, because the danger `Alert` that explains the failure and offers Retry belongs to the page, A5-F12-2) when `error` is set, over a dash, with the delta and the sparkline hidden, `data-error` set and the figure's accessible text reading "Couldn't load." followed by the `error` message; `loading` (the curve with no label) while `loading`, and `loading` wins over `error`.
+- When the band shows: always for `no-data` and `error`; for the other kinds when `trend` is not empty (a tile that is loading keeps its band when it is given a `trend`, so nothing moves when the data lands; pass a row of nulls while loading). An empty `trend` leaves the figure alone, the shape of a usage strip. Inside a `StatTileGroup` a tile with no band still renders its placeholder band hidden, and CSS shows it as soon as any cell in the group shows a band (`group-has-[[data-band-shown]]/stat-tile-group`), so a mixed row keeps every label and figure on one line. The figure block is top-aligned in every tile.
+- Why a placeholder curve (reverses FR07, owner 2026-11-22): a cell without a graph in a row of graphs reads as broken, and a band that comes and goes moves the row. The curve is the reference systems' chart-shaped placeholder (Carbon Charts skeletons, Infragistics skeleton charts, Dynatrace chart states, Preline chart-shaped empty states); it is gray, faint and always labelled, so it does not read as data.
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
@@ -16793,7 +16857,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - The tile is a `role="group"` named by its label (`aria-labelledby`), not a region landmark, so a strip of KPI tiles adds no landmarks.
 - The animated figure and its unit are `aria-hidden`; a visually hidden copy holds the final formatted value with its unit, so assistive tech never reads a ticking number.
 - The delta pairs an arrow icon and a signed value with its period, and a visually hidden word (better / worse), so its meaning never rests on color.
-- The sparkline is a decorative `spark-chart` (`aria-hidden`); the figure and delta carry the information.
+- The sparkline and the placeholder curve are decorative `spark-chart`s (`aria-hidden`); the figure, the delta and the band's `Tag` (Not enough data, No data, Couldn't load) carry the information.
 - Proportional figures on the big number; `tabular-nums` on the delta.
 - Right-to-left: the figure with its unit and the signed delta are left-to-right isolates (`dir="ltr"`), so `110 GB` and `+10.5%` keep their order inside a right-to-left page.
 - Text contrast at least 4.5:1 in both themes.
@@ -16873,6 +16937,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 - Visual states: `default` only; loading and empty are each tile's own (`loading`, a null `value`).
 - The group provides an injected context (`StatTileGroupInjectionKey`); a `StatTile` inside it sets `data-grouped`, drops its border, radius and surface, and draws `border-e` + `border-b` as dividers. The inner grid is pulled out by `-me-px -mb-px` and the root clips it (`overflow-hidden`), so the last column's end edge and the last row's bottom edge fall under the card border and every column count gets correct dividers with no `nth-child` rules.
+- The root is also `group/stat-tile-group`: when any cell shows a band (`data-band-shown`, a sparkline or a placeholder), every other cell shows its gray placeholder band too (`group-has-[[data-band-shown]]/stat-tile-group:block` on the tile's band), so the labels and figures of a mixed row stay on one line. Pure CSS, so the server render already matches.
 - Not applicable: `disabled`, `readonly`, `invalid`, `open`/`closed`, `error`.
 
 ## Accessibility
@@ -25816,7 +25881,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 # Date Picker
 
-> DatePicker picks **one date**, optionally with a time, in a form field. A trigger button opens a popover that holds a month grid, a typed date field (and a time field with `showTime`), an optional footer and a Cancel / Apply pair. The selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); Cancel closes, drops the draft and refocuses the trigger, as in `date-range-picker`. Date math uses the native `Date` API only — no date library; the trigger formats the value with `Intl` in `v-model:time-zone` (the local zone when empty). Before 6.0 this component was `Calendar` and also picked ranges, periods and presets; every range — relative or absolute, with or without times — now belongs to `date-range-picker`, which reuses this component's month grid and fields as internal parts. The name follows Cloudscape DatePicker and the shadcn "Date Picker".
+> DatePicker picks **one date**, optionally with a time, in a form field. A trigger button opens a popover that holds a month grid, a typed date field (and a time field with `showTime`), an optional footer and a Cancel / Apply pair. The selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); Cancel closes, drops the draft and refocuses the trigger, as in `date-range-picker`. Date math uses the native `Date` API only — no date library; the trigger formats the value with `Intl` in `v-model:time-zone` (the local zone when empty), and the panel shows and edits it in that zone too: the grid, the date and time fields and the `min` / `max` bounds are wall-clock time there, and `v-model` stays the instant. Before 6.0 this component was `Calendar` and also picked ranges, periods and presets; every range — relative or absolute, with or without times — now belongs to `date-range-picker`, which reuses this component's month grid and fields as internal parts. The name follows Cloudscape DatePicker and the shadcn "Date Picker".
 
 - Import: `import DatePickerRoot from '@aziontech/webkit/date-picker-root'`
 - Compound import (dot notation, not tree-shakeable): `import DatePicker from '@aziontech/webkit/date-picker'`
@@ -25902,7 +25967,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 | --- | --- | --- | --- | --- |
 | `v-model` | `Date \| null` | `null` | `update:modelValue` | The committed date via `defineModel`; `null` on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound. |
 | `v-model:open` | `boolean` | `undefined` | `update:open` | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts at `defaultOpen`. |
-| `v-model:time-zone` | `string` | `''` | `update:timeZone` | IANA time zone the trigger formats the value in, via `defineModel('timeZone')`. Empty resolves to the local zone. Same name as on `date-range-picker`. |
+| `v-model:time-zone` | `string` | `''` | `update:timeZone` | IANA time zone the value is shown and picked in, via `defineModel('timeZone')`: the trigger formats in it, and the grid, the fields and `min` / `max` are its wall-clock time, so picking 16:00 commits 16:00 there. Empty resolves to the local zone. Same name as on `date-range-picker`. |
 
 **Booleans that default to true.** `showFields` and `showApply` default to `true`: they switch off parts of the default panel. Inverting them (`hideFields`, `instant`) would break every consumer, so they are recorded here as the exceptions to props.md's default-false rule.
 
@@ -27349,7 +27414,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 | Model | Type | Default | Emits | Notes |
 | --- | --- | --- | --- | --- |
-| `v-model` | `number` (`number \| null` with `nullable`) | `0` | `update:modelValue` | The value via `defineModel`, clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`; with `nullable` it emits `null` and shows the placeholder, and the spinner on a `null` value starts at `min ?? 0` (clamped). The component is generic over `nullable`, so the model and `change` are typed `number` unless `nullable` is set. |
+| `v-model` | `number` (`number \| null` with `nullable`) | `0` | `update:modelValue` | The value via `defineModel`, clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`; with `nullable` it emits `null` and shows the placeholder, and the spinner on a `null` value starts at `min ?? 0` (clamped). The component is generic over `nullable`, so the model and `change` are typed `number` unless `nullable` is set. A comma typed or pasted as the decimal separator is read as a decimal point (`12,5` is `12.5`): the native number field would drop it and read `125`. A second separator is ignored. |
 
 ## States
 
@@ -29149,6 +29214,7 @@ Unbound, each one keeps its own local state.
 - `data-navigation`, `data-tools`, `data-split-panel` on the root: `open` | `closed`.
 - `data-split-panel-position` on the root: `bottom` | `side` (always `bottom` while compact).
 - `data-resizing` on the split separator while it is dragged.
+- Fill: while the body holds an element with `data-layout-fill`, the body is a `flex flex-col min-h-0` item of the content region, so a page that fills (a chat, an editor) gets the exact height under the header and scrolls inside itself instead of scrolling the content region.
 - First render (server and client) is the wide layout; the compact layout applies after mount, once the layout has measured itself.
 
 ## Accessibility
@@ -29480,7 +29546,7 @@ packages/webkit/src/components/layout/console-layout/
 
 - Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the brand joins the breadcrumbs, which hide only below a 28rem header (`@max-md`); when the page trail has control crumbs, they take the brand's place as a trail of their own, `__page-control`, and the brand stays in the navigation drawer), the palette `open` / `closed`.
 - `data-compact` and `data-navigation` come from `AppLayout` on the inner frame.
-- Fill: a direct child of the `<main>` with `data-layout-fill` makes the main `h-full overflow-hidden` and the child `flex-1 min-h-0`; pure CSS, right in the server render.
+- Fill: a direct child of the `<main>` with `data-layout-fill` makes the main a `flex-1 min-h-0 h-full overflow-hidden` item of `AppLayout`'s body (which turns into a fixed-height flex column while it holds a fill page), and the child `flex-1 min-h-0`; pure CSS, right in the server render. The page then never scrolls as a whole: a chat keeps its composer pinned and scrolls only its thread, at every width (styled test `src/test/layout-fill.test.ts`).
 - Page entrance: the `<main>` is keyed on the current route path (the router's `currentRoute.path`, or `location.pathname` on `popstate` without a router); a path change replaces the main and remounts the page body, so `animate-page-enter` replays. The first path read after mount (no router) and a change of only the query or the hash keep the main.
 - Page trail: registered on mount, so the server render shows the layout's trail and the page trail replaces it after hydration (no mismatch); use `breadcrumbs` when the first server paint must show it.
 - Unsafe `href` on a navigation row, crumb, section or palette page (`javascript:`, `data:`, any non-web scheme, `//host`): the row renders with no link and choosing it, by pointer or keyboard, follows nothing; `navigate` still fires, so the handler decides.
@@ -29496,7 +29562,7 @@ packages/webkit/src/components/layout/console-layout/
 - Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the rail account trigger (`Account menu`, an icon button) come from the locale catalog; the avatar carries the account name. The header avatar trigger shows the initials, so its name starts with them and then says whose menu it is (`JD, Jane Doe, account menu`, `consoleLayout.accountMenuFor`; the initials are the first letters of the first and last words of the name, as `Avatar` draws them) to meet WCAG 2.5.3 Label in Name (a speech user says what they see); with an account image it has no visible text and is named `Account menu`.
 - Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
-- Choosing a row in the compact drawer closes it.
+- Choosing a row in the compact drawer closes it, and so does any route change, so a link or a list in `sidebar-header` (a chat history) that navigates also closes the drawer and shows the page.
 - A page's control crumb is the last item of the header's `Breadcrumb` list (while compact, the only items of a `Breadcrumb` list that holds just the controls); it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
 - Page help: `ConsoleLayout.ToolsTrigger` is a native `button` (a disclosure: `Enter` and `Space` toggle) with `aria-expanded` and, while open, `aria-controls` pointing at the tools region's body (`useId()`-based, stable in the server render). Its name is the visible `Info` or an `aria-label` that starts with it. Focus stays on the trigger when the region opens; the region's close button (`AppLayout`) and the trigger both close it. Tests: `console-layout.test.ts` › tools trigger.
 
@@ -30756,6 +30822,7 @@ context, so a consumer never wires one part to the other.
 | --- | --- | --- |
 | `default` | — | The band body, usually a flush Card of SettingsRow rows. |
 | `label` | — | Rich label content; replaces the `label` prop text in the h2. |
+| `info` | — | An affordance beside the heading, after the `hint` glyph and outside the h2 and the disclosure button: a help button that opens the page's `HelpPanel`. Clicking it never folds the band. |
 
 ## Assets
 
@@ -30777,7 +30844,8 @@ context, so a consumer never wires one part to the other.
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the copy-link and the disclosure button (plus `ring-offset` on the disclosure).
-- Keyboard map: `Tab` reaches the copy-link, the disclosure and then the body; `Enter`/`Space` toggles the disclosure.
+- Keyboard map: `Tab` reaches the copy-link, the disclosure, the `hint` glyph, the `info` slot's controls and then the body; `Enter`/`Space` toggles the disclosure.
+- ARIA: the `info` slot sits outside the h2, so its button's name never joins the heading's name or the disclosure's; name it after the topic (`Help: Advanced`).
 - ARIA: the disclosure is a `button` inside the h2 with `aria-expanded` and `aria-controls` pointing at the body (`useId`); a folded body is `inert` and `aria-hidden`. The copy-link button is named "Copy link to the {title} section"; after a successful copy its glyph turns into a check and its name into "Link copied" for two seconds, then both return.
 - Contrast ≥4.5:1 for the title.
 - `motion-reduce:transition-none` on every transition.
@@ -31484,6 +31552,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 | --- | --- | --- |
 | `description` | — | Rich description content (links, inline code); replaces the `description` prop. |
 | `actions` | — | The band's own actions, on the right of the copy. |
+| `info` | — | An affordance right after the title and outside the h2, before the copy-link: a help button that opens the page's `HelpPanel`. |
 
 ## States
 
@@ -31495,7 +31564,8 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 ## Accessibility
 
 - Visible focus: the copy-link `CopyButton` and the actions carry their own focus ring; focusing the copy-link reveals it.
-- Keyboard map: `Tab` reaches the copy-link button, then the actions; `Enter`/`Space` copies the link.
+- Keyboard map: `Tab` reaches the `info` slot's controls, the copy-link button, then the actions; `Enter`/`Space` copies the link.
+- ARIA: the `info` slot sits outside the h2, so its button's name never joins the heading's name; name it after the topic (`Help: Domains`).
 - ARIA: the copy-link button is named "Copy link to the {title} section" and announces "Link copied".
 - Contrast ≥4.5:1 for the title and the description.
 - `motion-reduce:transition-none` on the reveal.
@@ -32009,6 +32079,8 @@ with `defineModel`, so their `update:*` events are not hand-declared.
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
     - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `az az-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
+    - `target: '_self' | '_blank'` default `'_self'` — where the link opens; `_blank` (only with a safe `href`) adds `rel="noopener noreferrer"`, a trailing `aria-hidden` `az az-external-link` glyph (unless the `trailing` slot or `command` is set) and the sr-only `common.newTab` hint in the name. Exported as `DropdownMenuItemTarget`.
+    - `description: string` default `''` — secondary line under the label (`data-description`); the item is then named by the label (`aria-labelledby`) and described by this line (`aria-describedby`).
     - `type: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuItemType`.
     - `severity: 'neutral' | 'danger'` default `'neutral'` — colour meaning of the row. `danger` marks a destructive action (Delete, Remove): the label and leading glyph take `--text-danger` (`data-severity="danger"`) on the same hover fill, so the row reads as destructive before it is activated. Exported as `DropdownMenuItemSeverity` (derived from `Severity`).
   - Events: _none_ (root emits `select`).
@@ -32039,6 +32111,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - `data-disabled` mirrors the `disabled` prop on root, trigger, and option
 - `data-selected` on option mirrors the `selected` prop
 - `data-type` on option mirrors the `type` prop (`default` | `checkbox` | `radio`)
+- `data-description` on option when `description` is set (the row grows to fit two lines)
 - `data-severity` on option mirrors the `severity` prop (`neutral` | `danger`)
 - `data-state` on sub, sub-trigger and sub-panel: `open` | `closed`; `data-disabled` on sub-trigger mirrors its `disabled` prop
 - `data-side` / `data-align` on the sub-panel mirror its resolved side and alignment (`end` or `start`, after flipping)
@@ -32061,6 +32134,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - Teleported panel: the `role="menu"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it lays out and is announced in the provider's direction and language although it renders under `body`.
 - Touch target ≥40×40 px on the trigger; option and sub-menu rows are 32 px tall on a fine pointer and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer, full-row click targets whose fills stay inset 1 px so two filled rows never touch.
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): renders a plain item.
+- A `target="_blank"` link is announced with the `common.newTab` hint; the glyph is `aria-hidden`.
 
 ## Examples
 

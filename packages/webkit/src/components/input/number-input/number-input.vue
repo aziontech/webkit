@@ -116,6 +116,22 @@
     emit('change', readValue(event))
   }
 
+  const insert = (event: Event, text: string) => {
+    event.preventDefault()
+    const field = event.target instanceof HTMLInputElement ? event.target : null
+    if (text !== '.' || !field?.value.includes('.'))
+      globalThis.document.execCommand('insertText', false, text)
+  }
+
+  const onBeforeinput = (event: InputEvent) => {
+    if (event.data === ',') insert(event, '.')
+  }
+
+  const onPaste = (event: ClipboardEvent) => {
+    const text = event.clipboardData?.getData('text').trim() ?? ''
+    if (/^-?\d*,\d+$/.test(text)) insert(event, text.replace(',', '.'))
+  }
+
   const canInteract = computed(() => !isDisabled.value && !props.readonly)
 
   const stepBy = (delta: number): NumberInputValue<TNullable> => {
@@ -182,6 +198,8 @@
       dir="auto"
       v-bind="{ ...controlState, ...PASSWORD_MANAGER_IGNORE, ...passthroughAttrs }"
       :class="INPUT_CLASS"
+      @beforeinput="onBeforeinput"
+      @paste="onPaste"
       @input="onInput"
       @change="onChange"
     />

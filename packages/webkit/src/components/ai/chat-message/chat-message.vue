@@ -156,17 +156,17 @@
 
   const COLUMN_CLASS =
     'flex min-w-0 flex-col gap-(--spacing-xs) ' +
-    'data-[from=assistant]:flex-1 data-[from=user]:max-w-[80%] data-[from=user]:data-[alignment=split]:items-end data-[from=system]:max-w-full data-[from=system]:items-center ' +
+    'data-[from=assistant]:flex-1 data-[from=user]:max-w-[70%] data-[from=user]:data-[alignment=split]:items-end data-[from=system]:max-w-full data-[from=system]:items-center ' +
     'data-[editing]:w-full data-[from=user]:data-[editing]:max-w-full'
 
   const ACTIONS_CLASS =
-    'flex min-w-0 items-center data-[from=assistant]:-ms-(--spacing-sm) ' +
+    'flex min-w-0 items-center data-[from=assistant]:-ms-(--spacing-xs) ' +
     'data-[from=user]:opacity-0 data-[from=user]:transition-opacity data-[from=user]:duration-fast-02 data-[from=user]:ease-productive-entrance ' +
     'data-[from=user]:motion-reduce:transition-none data-[from=user]:group-hover/message:opacity-100 data-[from=user]:group-focus-within/message:opacity-100 ' +
     'data-[from=user]:pointer-coarse:opacity-100'
 
   const CONTENT_CLASS =
-    'flex min-w-0 flex-col gap-(--spacing-md) text-body-lg text-(--text-default) break-words ' +
+    'flex min-w-0 flex-col gap-(--spacing-md) text-body-prose-md text-(--text-default) break-words ' +
     'data-[from=user]:gap-(--spacing-sm) data-[from=user]:rounded-(--shape-card) data-[from=user]:bg-(--bg-selected) ' +
     'data-[from=user]:px-(--spacing-md) data-[from=user]:py-(--spacing-sm) ' +
     'data-[from=system]:text-body-sm data-[from=system]:text-(--text-muted) data-[from=system]:text-center'
@@ -182,7 +182,7 @@
     :data-status="status"
     :data-alignment="alignment"
     :data-grouped="grouped || null"
-    class="group/message flex w-full min-w-0 data-[from=user]:data-[alignment=split]:justify-end data-[from=system]:justify-center data-[grouped]:-mt-(--spacing-sm)"
+    class="group/message flex w-full min-w-0 data-[from=user]:data-[alignment=split]:justify-end data-[from=system]:justify-center data-[grouped]:-mt-(--spacing-md)"
   >
     <div
       :data-from="from"

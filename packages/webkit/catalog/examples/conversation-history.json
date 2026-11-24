@@ -9,6 +9,11 @@
    "name": "States",
    "summary": "Loading (five placeholder rows, `aria-busy`) and empty (`No conversations yet.`).",
    "file": "examples/conversation-history/states.vue"
+  },
+  {
+   "name": "Projects",
+   "summary": "Chats organized by project in a side panel: a collapsible Projects section with an Organize menu (sort by Recent activity or Name) and a New project button, three projects with storefront expanded to show its chats, then Recents with the chats outside any project in their date groups. Search filters across projects and Recents.",
+   "file": "examples/conversation-history/projects.vue"
   }
  ]
 }

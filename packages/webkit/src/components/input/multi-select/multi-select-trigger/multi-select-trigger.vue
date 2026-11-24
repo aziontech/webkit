@@ -32,6 +32,17 @@
 
   const { t } = useTranslate({ multiSelect: en.multiSelect })
 
+  const wrapperAttrs = computed(() => {
+    const {
+      id: _id,
+      'aria-label': _label,
+      'aria-labelledby': _labelledby,
+      'aria-describedby': _describedby,
+      ...rest
+    } = attrs
+    return rest
+  })
+
   const field = computed(() => ctx.variant.value === 'chips' || ctx.searchable.value)
 
   const selection = computed(() => ctx.modelValue.value ?? [])
@@ -145,7 +156,7 @@
   <div
     v-else
     :ref="ctx.triggerEl"
-    v-bind="{ ...$attrs, ...ctx.stateAttrs.value }"
+    v-bind="{ ...wrapperAttrs, ...ctx.stateAttrs.value }"
     :data-testid="testId"
     :data-variant="ctx.variant.value"
     :data-searchable="ctx.searchable.value || null"

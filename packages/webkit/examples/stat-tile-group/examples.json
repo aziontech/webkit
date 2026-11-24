@@ -13,6 +13,11 @@
       "file": "beside-card.vue"
     },
     {
+      "name": "MissingData",
+      "summary": "A row where some cells have no history. A cell with no trend draws the same gray placeholder curve as soon as a sibling draws a sparkline, so every label and figure stays on one line: Not enough data when the value is there, No data when it is missing, Couldn't load when the request failed.",
+      "file": "missing-data.vue"
+    },
+    {
       "name": "Markdown",
       "summary": "The same data written in a docs page: `DocMarkdown` turns a `<StatTileGroup>` tag with `<StatTile label value unit delta />` tags inside into a real `StatTileGroup` of `StatTile`s. The attribute values are JSON, so a docs author copies them from the props or a page entry.",
       "file": "markdown.vue"

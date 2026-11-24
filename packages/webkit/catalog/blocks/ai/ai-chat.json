@@ -35,6 +35,7 @@
  "guidelinesFile": "blocks/ai/ai-chat/guidelines.md",
  "fileSources": [
   "sample.ts",
+  "lib/ai-chat-failure.ts",
   "parts/ai-chat-composer.vue",
   "parts/ai-chat-connection-status.vue",
   "parts/ai-chat-header.vue",

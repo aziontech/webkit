@@ -1,11 +1,16 @@
 <script setup lang="ts">
-  import { computed, defineAsyncComponent, ref, useAttrs } from 'vue'
+  import { computed, inject, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-translate'
+  import { LocaleInjectionKey, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
+  import DropdownMenu from '../../navigation/dropdown-menu/dropdown-menu.vue'
+  import DropdownMenuGroup from '../../navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue'
+  import DropdownMenuItem from '../../navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue'
+  import DropdownMenuTrigger from '../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
   import SourcesMark from './parts/sources-mark.vue'
   import type { SourcesItem } from './types'
-  import { sourceCited } from './types'
+  import { sourceCited, sourceMeta } from './types'
 
   export type { SourcesItem }
 
@@ -32,10 +37,23 @@
   /** Controlled open state of the panel. Use with `v-model:open`; while unbound it follows `defaultOpen` and toggles locally. */
   const open = defineModel<boolean>('open', { default: undefined as never })
 
-  const SourcesPanel = defineAsyncComponent(() => import('./parts/sources-panel.vue'))
+  interface SourcesRow {
+    index: number
+    item: SourcesItem
+    href: string
+    external: boolean
+    meta: string
+  }
+
+  interface SourcesGroup {
+    key: 'cited' | 'more'
+    label: string
+    rows: SourcesRow[]
+  }
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ sources: en.sources })
+  const { t, locale } = useTranslate({ sources: en.sources })
+  const context = inject(LocaleInjectionKey, null)
 
   const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'sources')
   const heading = computed<string>(() => props.title || t('sources.label'))
@@ -47,13 +65,37 @@
     return (cited.length ? cited : props.items).slice(0, 3)
   })
 
-  const isOpen = computed<boolean>(() => open.value ?? props.defaultOpen)
-  const wanted = ref<boolean>(false)
-  const loaded = computed<boolean>(() => wanted.value || isOpen.value)
+  const rows = computed<SourcesRow[]>(() =>
+    props.items.map((item, index) => {
+      const href = safeHref(item.href) ?? ''
+      return {
+        index,
+        item,
+        href,
+        external: /^https?:\/\//i.test(href),
+        meta: sourceMeta(item, locale.value, context?.timeZone?.value)
+      }
+    })
+  )
 
-  function load(): void {
-    wanted.value = true
-  }
+  const groups = computed<SourcesGroup[]>(() => {
+    const all: SourcesGroup[] = [
+      {
+        key: 'cited',
+        label: t('sources.cited'),
+        rows: rows.value.filter((row) => sourceCited(row.item))
+      },
+      {
+        key: 'more',
+        label: t('sources.more'),
+        rows: rows.value.filter((row) => !sourceCited(row.item))
+      }
+    ]
+    return all.filter((group) => group.rows.length)
+  })
+  const grouped = computed<boolean>(() => groups.value.length > 1)
+
+  const isOpen = computed<boolean>(() => open.value ?? props.defaultOpen)
 
   function setOpen(value: boolean): void {
     open.value = value
@@ -73,44 +115,66 @@
     :data-state="isOpen ? 'open' : 'closed'"
     class="contents"
   >
-    <button
-      type="button"
-      aria-haspopup="dialog"
-      :aria-expanded="isOpen ? 'true' : 'false'"
-      :aria-label="triggerName"
-      :data-testid="`${testId}__trigger`"
-      :data-state="isOpen ? 'open' : 'closed'"
-      :class="TRIGGER_CLASS"
-      @pointerenter="load"
-      @focus="load"
-      @click="setOpen(!isOpen)"
-    >
-      <span
-        aria-hidden="true"
-        class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-      />
-      <span
-        aria-hidden="true"
-        :data-testid="`${testId}__marks`"
-        class="flex items-center"
-      >
-        <SourcesMark
-          v-for="(item, i) in marks"
-          :key="`${i}-${item.title}`"
-          :item="item"
-          :data-testid="`${testId}__mark`"
-          class="ring-2 ring-(--bg-canvas) not-first:-ms-1.5"
-        />
-      </span>
-      <span>{{ heading }}</span>
-    </button>
-    <SourcesPanel
-      v-if="loaded"
+    <DropdownMenu
       :open="isOpen"
-      :items="items"
-      :title="heading"
-      :data-testid="`${testId}__drawer`"
+      side="auto"
+      align="start"
+      :data-testid="`${testId}__menu`"
+      class="shrink-0"
       @update:open="setOpen"
-    />
+    >
+      <DropdownMenuTrigger :data-testid="`${testId}__host`">
+        <button
+          type="button"
+          :aria-label="triggerName"
+          :data-testid="`${testId}__trigger`"
+          :data-state="isOpen ? 'open' : 'closed'"
+          :class="TRIGGER_CLASS"
+        >
+          <span
+            aria-hidden="true"
+            class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+          />
+          <span
+            aria-hidden="true"
+            :data-testid="`${testId}__marks`"
+            class="flex items-center"
+          >
+            <SourcesMark
+              v-for="(item, i) in marks"
+              :key="`${i}-${item.title}`"
+              :item="item"
+              :data-testid="`${testId}__mark`"
+              class="ring-2 ring-(--bg-canvas) not-first:-ms-1.5"
+            />
+          </span>
+          <span>{{ heading }}</span>
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuGroup
+        v-for="group in groups"
+        :key="group.key"
+        :label="grouped ? group.label : ''"
+        :data-testid="`${testId}__group`"
+      >
+        <DropdownMenuItem
+          v-for="row in group.rows"
+          :key="`${row.index}-${row.item.title}`"
+          :value="row.index"
+          :label="row.item.title"
+          :href="row.href"
+          :target="row.external ? '_blank' : '_self'"
+          :description="row.meta"
+          :data-testid="`${testId}__item`"
+        >
+          <template #leading>
+            <SourcesMark
+              :item="row.item"
+              size="medium"
+            />
+          </template>
+        </DropdownMenuItem>
+      </DropdownMenuGroup>
+    </DropdownMenu>
   </div>
 </template>

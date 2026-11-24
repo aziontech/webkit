@@ -87,6 +87,11 @@
    "name": "label",
    "scope": "—",
    "notes": "Rich label content; replaces the `label` prop text in the h2."
+  },
+  {
+   "name": "info",
+   "scope": "—",
+   "notes": "An affordance beside the heading, after the `hint` glyph and outside the h2 and the disclosure button: a help button that opens the page's `HelpPanel`. Clicking it never folds the band."
   }
  ],
  "styleSeam": false,

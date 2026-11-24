@@ -1,8 +1,8 @@
 # OSSF Scorecard — PUBLIC repositories only.
 # Runs the PUBLIC ossf/scorecard-action on GitHub-hosted runners (free for public).
 # Results are NOT published (publish_results: false -> no OpenSSF API, no badge).
-# The job gates the PR on the aggregate score. Ramp with THRESHOLD + MODE before
-# flipping MODE=enforce org-wide (today 0/52 public repos are >= 8).
+# The job gates the PR on the aggregate score: below THRESHOLD the PR is blocked.
+# The threshold only goes up (8.0 measured on feat/webkit-ai-ready, 2026-11-23).
 name: OSSF Scorecard
 
 on:
@@ -21,15 +21,15 @@ jobs:
     permissions:
       contents: read
     env:
-      THRESHOLD: '8' # target aggregate; start lower during the ramp
-      MODE: 'warn' # warn = never blocks; enforce = fail PR below THRESHOLD
+      THRESHOLD: '8' # committed minimum aggregate score
+      MODE: 'enforce' # enforce = fail PR below THRESHOLD; warn = never blocks
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Run Scorecard (results not published)
-        uses: ossf/scorecard-action@2d1146689b8cda280b9bc96326124645441f03bc # v2.4.4
+        uses: ossf/scorecard-action@23f22cd43608bae7a1f1fa2603d7314dee9538a5 # v2.6.0
         with:
           results_file: results.json
           results_format: json

@@ -116,6 +116,12 @@ Heading (what this is, one line)
 - **The band step is the same everywhere**, and the page opens on that same step: header → heading →
   first band → every band after it. One rhythm, top to bottom.
 
+**The control in the row follows the type of the value** (`/webkit-form`, Pick the control from the kind of value): an
+instant is a `DatePicker` with `show-time`, a period one `DateRangePicker`, an enum a `Select` or
+`RadioGroup` with human labels, a reference to another resource a searchable picker labelled with
+the thing (`Organization`, never `Organization ID`). A row never asks for an ISO date or an ID typed
+by hand.
+
 Each piece of the anatomy is a component — compose them, never re-type their markup:
 
 | Piece                        | Component                                                                                                                                                                                                                                                               |
@@ -244,7 +250,11 @@ clear the search.`;
 **A single field that references an existing resource stays a row with a `Select`** — a domain's
 certificate, a rule's function, an environment. It follows the same rule in the Select's own
 panel: search in `Select.Content`'s `#search` slot past 7 options, Load more in its `#footer`, and a
-`Create <noun>` option there that opens the resource's create form in a drawer (section 1).
+`Create <noun>` option there that opens the resource's create form in a drawer (section 1). When the
+options come from the server, debounce the search, page with Load more and pass `display-value` so the
+chosen name shows before its page is loaded; `/webkit-form` (Pick the control from the kind of value) has the code, and a
+`Combobox` with server search for the case where typing is the way in. The person never types the
+resource's ID.
 
 **New is never a trip away.** In the band, New shows the create fields inline when the resource needs
 only a name or two; when it needs its full form, New opens that form in a drawer over the page.
@@ -277,3 +287,4 @@ would ship without search never exists.
 - [ ] `required` static from the first render; validation on submit only sets `invalid` for an empty or a malformed value.
 - [ ] A reusable resource gets an Existing / New band; Existing is the default when any exist, and the segment is absent when none do.
 - [ ] Every pick of an existing resource (inline picker or `Select`) has search past 7, Load more, a no-match line, and shows a pre-chosen value on open.
+- [ ] Every control matches its value's type (`/webkit-form`, Pick the control from the kind of value): no date, time or resource ID typed as text.

@@ -1,9 +1,10 @@
-import { fireEvent, render, within } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 
 import Collapsible from '../../../../examples/settings-group/collapsible.vue'
 import Default from '../../../../examples/settings-group/default.vue'
 import Stacked from '../../../../examples/settings-group/stacked.vue'
+import WithInfo from '../../../../examples/settings-group/with-info.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SettingsGroup from './settings-group.vue'
 
@@ -43,6 +44,32 @@ describe('SettingsGroup', () => {
         .container as HTMLElement
     )
     expect(hinted.getByTestId('hint')).toBeTruthy()
+  })
+
+  it('renders the info slot beside the heading, outside the h2 and the disclosure', async () => {
+    const view = render(SettingsGroup, {
+      props: { label: 'Advanced', collapsible: true, hint: 'Defaults suit most apps.' },
+      slots: { info: '<button type="button" aria-label="Help: Advanced">?</button>' }
+    })
+    const { getByTestId, getByRole } = within(view.container as HTMLElement)
+
+    const info = getByTestId('settings-group__info')
+    const heading = getByRole('heading', { level: 2 })
+    const trigger = getByTestId('settings-group__trigger')
+    expect(heading.contains(info)).toBe(false)
+    expect(trigger.contains(info)).toBe(false)
+    expect(heading.parentElement).toBe(info.parentElement)
+    expect(getByRole('button', { name: 'Advanced' })).toBe(trigger)
+
+    await fireEvent.click(getByRole('button', { name: 'Help: Advanced' }))
+    expect(view.emitted()['update:open']).toBeUndefined()
+  })
+
+  it('renders no info wrapper without the slot', () => {
+    const { queryByTestId } = within(
+      render(SettingsGroup, { props: { label: 'General' } }).container as HTMLElement
+    )
+    expect(queryByTestId('settings-group__info')).toBeNull()
   })
 
   it('renders the gutter copy-link and the h2 id only with an anchor', () => {
@@ -116,6 +143,15 @@ describe('SettingsGroup', () => {
     const trigger = collapsible.getByRole('button', { name: 'Advanced' })
     await fireEvent.click(trigger)
     expect(trigger.getAttribute('aria-expanded')).toBe('true')
+
+    const withInfo = within(render(WithInfo).container as HTMLElement)
+    await fireEvent.click(withInfo.getByRole('button', { name: 'Help: Advanced' }))
+    expect(withInfo.getByRole('button', { name: 'Advanced' }).getAttribute('aria-expanded')).toBe(
+      'false'
+    )
+    await waitFor(() =>
+      expect(document.body.querySelector('[data-testid="help-panel"]')).toBeTruthy()
+    )
   })
 
   it('has no accessibility violations, open or folded', async () => {

@@ -51,7 +51,7 @@ expired and irreversible for approval) as variants. Adapt the words and the data
 | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | The scrolling thread                                                    | `Conversation` (`layout="start"` in a drawer or side panel)                     |
 | One prompt or response, its author, lifecycle and actions               | `ChatMessage` + `ChatMessage.Actions`                                           |
-| Thumbs up / down on a response                                          | `ChatMessage.Feedback`                                                          |
+| Good / bad response rating (one Feedback menu) on a response            | `ChatMessage.Feedback`                                                          |
 | The composer                                                            | `PromptInput`                                                                   |
 | Waiting for the first token                                             | `ChatMessage status="pending"` (renders `ResponseLoading`)                      |
 | A table or code block about to appear while text streams                | `ResponseLoading variant="bar"`                                                 |

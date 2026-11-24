@@ -45,7 +45,7 @@
   })
   const lastIndex = computed<number>(() => blocks.value.length - 1)
   const ROOT_CLASS =
-    'flex w-full min-w-0 flex-col gap-(--spacing-md) text-body-lg text-(--text-default) break-words'
+    'flex w-full min-w-0 flex-col gap-(--spacing-md) text-body-prose-md text-(--text-default) break-words'
   const caretInline = computed<boolean>(() => {
     const last = blocks.value[lastIndex.value]
     return Boolean(last && (last.type === 'paragraph' || last.type === 'heading'))
@@ -84,7 +84,7 @@
         :is="`h${block.level}`"
         v-else-if="block.type === 'heading'"
         :data-level="block.level"
-        class="m-0 mt-(--spacing-sm) text-body-lg text-(--text-default) first:mt-0 data-[level]:font-semibold data-[level='3']:text-heading-md"
+        class="m-0 mt-(--spacing-xs) text-body-lg text-(--text-default) first:mt-0 data-[level]:font-semibold data-[level='3']:text-heading-md [&+*]:-mt-(--spacing-xs)"
       >
         <MarkdownInline
           :nodes="block.children"
