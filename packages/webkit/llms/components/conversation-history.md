@@ -195,18 +195,18 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-  const now = '2026-11-11T15:00:00'
+  const now = '2026-11-11T15:00:00Z'
   const items = ref([
-    { id: 'c1', title: 'Purge the cache after a deploy', updatedAt: '2026-11-11T14:20:00' },
-    { id: 'c2', title: 'Why is my function returning 502?', updatedAt: '2026-11-11T09:05:00' },
-    { id: 'c3', title: 'Set up a WAF rule for login attempts', updatedAt: '2026-11-10T18:40:00' },
-    { id: 'c4', title: 'Image optimization query parameters', updatedAt: '2026-11-07T11:00:00' },
+    { id: 'c1', title: 'Purge the cache after a deploy', updatedAt: '2026-11-11T14:20:00Z' },
+    { id: 'c2', title: 'Why is my function returning 502?', updatedAt: '2026-11-11T09:05:00Z' },
+    { id: 'c3', title: 'Set up a WAF rule for login attempts', updatedAt: '2026-11-10T18:40:00Z' },
+    { id: 'c4', title: 'Image optimization query parameters', updatedAt: '2026-11-07T11:00:00Z' },
     {
       id: 'c5',
       title: 'Migrate DNS records from another provider',
-      updatedAt: '2026-10-28T16:30:00'
+      updatedAt: '2026-10-28T16:30:00Z'
     },
-    { id: 'c6', title: 'Edge storage pricing', updatedAt: '2026-08-02T10:00:00' }
+    { id: 'c6', title: 'Edge storage pricing', updatedAt: '2026-08-02T10:00:00Z' }
   ])
   const active = ref('c2')
   const historyOpen = ref(false)
@@ -350,7 +350,7 @@
   import ConversationHistory from '@aziontech/webkit/conversation-history'
   import { ref } from 'vue'
 
-  const now = '2026-11-11T15:00:00'
+  const now = '2026-11-11T15:00:00Z'
   const projects = ref([
     { id: 'p1', title: 'storefront' },
     { id: 'p2', title: 'docs-site' },
@@ -360,30 +360,30 @@
     {
       id: 'c1',
       title: 'Why does storefront return 502 errors?',
-      updatedAt: '2026-11-11T14:20:00',
+      updatedAt: '2026-11-11T14:20:00Z',
       projectId: 'p1'
     },
     {
       id: 'c2',
       title: 'Cache the product images at the edge',
-      updatedAt: '2026-11-09T10:00:00',
+      updatedAt: '2026-11-09T10:00:00Z',
       projectId: 'p1'
     },
     {
       id: 'c3',
       title: 'Redirect the old docs.example.com links',
-      updatedAt: '2026-11-04T16:10:00',
+      updatedAt: '2026-11-04T16:10:00Z',
       projectId: 'p2'
     },
     {
       id: 'c4',
       title: 'A WAF rule for login attempts',
-      updatedAt: '2026-11-10T18:40:00',
+      updatedAt: '2026-11-10T18:40:00Z',
       projectId: 'p3'
     },
-    { id: 'c5', title: 'Purge the cache after a deploy', updatedAt: '2026-11-11T09:05:00' },
-    { id: 'c6', title: 'Image optimization query parameters', updatedAt: '2026-11-07T11:00:00' },
-    { id: 'c7', title: 'Move DNS records to Azion', updatedAt: '2026-10-28T16:30:00' }
+    { id: 'c5', title: 'Purge the cache after a deploy', updatedAt: '2026-11-11T09:05:00Z' },
+    { id: 'c6', title: 'Image optimization query parameters', updatedAt: '2026-11-07T11:00:00Z' },
+    { id: 'c7', title: 'Move DNS records to Azion', updatedAt: '2026-10-28T16:30:00Z' }
   ])
   const active = ref('c1')
   const openKeys = ref(['p1'])

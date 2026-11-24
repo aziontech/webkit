@@ -24,7 +24,6 @@
   import { announcement } from './router'
 
   const consolePages = [
-    { label: 'Home', icon: 'az az-home', href: '/onboarding' },
     { label: 'Resources', icon: 'az az-box', href: '/resources' },
     { label: 'Settings', icon: 'az az-settings', href: '/settings' }
   ]

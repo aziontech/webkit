@@ -3,7 +3,7 @@
   import ConversationHistory from '@aziontech/webkit/conversation-history'
   import { ref } from 'vue'
 
-  const now = '2026-11-11T15:00:00'
+  const now = '2026-11-11T15:00:00Z'
   const projects = ref([
     { id: 'p1', title: 'acme-store', pinned: true },
     { id: 'p2', title: 'docs-site' }
@@ -12,7 +12,7 @@
     {
       id: 'c1',
       title: 'Fix the checkout 502 errors',
-      updatedAt: '2026-11-11T14:50:00',
+      updatedAt: '2026-11-11T14:50:00Z',
       status: 'running',
       tag: 'Bug',
       description: 'fix/checkout-timeout',
@@ -21,31 +21,31 @@
     {
       id: 'c2',
       title: 'Cache the product images at the edge',
-      updatedAt: '2026-11-11T13:10:00',
+      updatedAt: '2026-11-11T13:10:00Z',
       projectId: 'p1',
       description: 'feat/image-cache'
     },
     {
       id: 'c3',
       title: 'Redirect the old docs.example.com links',
-      updatedAt: '2026-11-10T16:10:00',
+      updatedAt: '2026-11-10T16:10:00Z',
       projectId: 'p2',
       status: 'error'
     },
     {
       id: 'c4',
       title: 'Purge the cache after a deploy',
-      updatedAt: '2026-11-11T09:05:00',
+      updatedAt: '2026-11-11T09:05:00Z',
       locked: true
     },
     {
       id: 'c5',
       title: 'A WAF rule for login attempts',
-      updatedAt: '2026-11-08T11:00:00',
+      updatedAt: '2026-11-08T11:00:00Z',
       tag: 'Security',
       description: 'acme-store'
     },
-    { id: 'c6', title: 'Move DNS records to Azion', updatedAt: '2026-10-28T16:30:00' }
+    { id: 'c6', title: 'Move DNS records to Azion', updatedAt: '2026-10-28T16:30:00Z' }
   ])
   const active = ref('c2')
   const openKeys = ref(['p1'])

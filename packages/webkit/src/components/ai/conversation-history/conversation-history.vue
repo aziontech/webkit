@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, defineAsyncComponent, h, ref, useAttrs, useSlots } from 'vue'
+  import { computed, defineAsyncComponent, h, onMounted, ref, useAttrs, useSlots } from 'vue'
 
   import { useLocaleContext, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -167,6 +167,10 @@
   const nowTime = computed<number>(() =>
     new Date(props.now ?? localeContext?.now?.value ?? Date.now()).getTime()
   )
+  const mounted = ref<boolean>(false)
+  const dayZone = computed<string | undefined>(
+    () => localeContext?.timeZone?.value || (mounted.value ? undefined : 'UTC')
+  )
   const byStatus = computed<boolean>(() => props.groupBy === 'status')
 
   const { rows, outside, pinned, archived, hasMatch } = useConversationHistoryProjects({
@@ -180,7 +184,8 @@
     outside,
     nowTime,
     () => props.groupBy,
-    archived
+    archived,
+    dayZone
   )
 
   const showProjects = computed<boolean>(
@@ -222,6 +227,10 @@
     emit,
     track,
     follow
+  })
+
+  onMounted(() => {
+    mounted.value = true
   })
 
   const NEW_CHAT_CLASS =

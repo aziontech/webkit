@@ -29,14 +29,31 @@ const ORDER: ConversationHistoryGroupKey[] = [
 ]
 const DAY = 86_400_000
 
-const startOfDay = (time: number): number => {
-  const date = new Date(time)
-  date.setHours(0, 0, 0, 0)
-  return date.getTime()
+const dayFormats = new Map<string, Intl.DateTimeFormat>()
+
+const dayIndex = (time: number, timeZone?: string): number => {
+  const key = timeZone ?? ''
+  let format = dayFormats.get(key)
+  if (!format) {
+    format = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric'
+    })
+    dayFormats.set(key, format)
+  }
+  const part = (type: string): number =>
+    Number(format.formatToParts(time).find((item) => item.type === type)?.value)
+  return Math.round(Date.UTC(part('year'), part('month') - 1, part('day')) / DAY)
 }
 
-export const groupOf = (time: number, today: number): ConversationHistoryGroupKey => {
-  const days = Math.round((today - startOfDay(time)) / DAY)
+export const groupOf = (
+  time: number,
+  today: number,
+  timeZone?: string
+): ConversationHistoryGroupKey => {
+  const days = dayIndex(today, timeZone) - dayIndex(time, timeZone)
   if (days <= 0) return 'today'
   if (days === 1) return 'yesterday'
   if (days < 7) return 'previous7'
@@ -48,19 +65,20 @@ export function useConversationHistoryGroups(
   items: MaybeRefOrGetter<readonly ConversationHistoryItem[]>,
   now: MaybeRefOrGetter<string | number | Date>,
   groupBy: MaybeRefOrGetter<ConversationHistoryGroupBy> = 'date',
-  archived: MaybeRefOrGetter<readonly ConversationHistoryItem[]> = []
+  archived: MaybeRefOrGetter<readonly ConversationHistoryItem[]> = [],
+  timeZone: MaybeRefOrGetter<string | undefined> = undefined
 ): UseConversationHistoryGroupsReturn {
   const lazy = Object.fromEntries(
     ORDER.map((key) => [key, useLazyChunks({ rowHeight: 44 })])
   ) as Record<ConversationHistoryGroupKey, ReturnType<typeof useLazyChunks>>
 
   const keyOf = (item: ConversationHistoryItem, today: number): ConversationHistoryGroupKey => {
-    if (toValue(groupBy) === 'date') return groupOf(timeOf(item), today)
+    if (toValue(groupBy) === 'date') return groupOf(timeOf(item), today, toValue(timeZone))
     return item.status === 'running' && !item.archived ? 'working' : 'settled'
   }
 
   const groups = computed<ConversationHistoryGroup[]>(() => {
-    const today = startOfDay(new Date(toValue(now)).getTime())
+    const today = new Date(toValue(now)).getTime()
     const byStatus = toValue(groupBy) === 'status'
     const buckets = new Map<
       ConversationHistoryGroupKey,
