@@ -207,12 +207,12 @@
 
   watch([() => appMenu.currentId, navEl], () => revealActive(navEl.value), { flush: 'post' })
 
-  const closeDrawer: () => void = () => {}
+  const navDrawer: { close: () => void } = { close: () => {} }
 
   watch(currentPath, (_next, previous) => {
     if (!previous) return
     pageKey.value += 1
-    closeDrawer()
+    navDrawer.close()
   })
 
   if (dev) useConsoleLayoutNavAudit(mainEl, currentPath, () => props.navigation, menuPath, hrefOf)
@@ -251,7 +251,7 @@
     >
       <template #navigation="{ drawer, closeNavigation }">
         <Sidebar
-          :ref="() => (closeDrawer = closeNavigation)"
+          :ref="() => (navDrawer.close = closeNavigation)"
           v-model:width="railWidth"
           v-model:open="navigationOpen"
           :resizable="!drawer"
