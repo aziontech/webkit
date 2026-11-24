@@ -158,7 +158,7 @@ Find components through the catalog or the MCP when building the page, not by fi
    - **Not measured**: say why (needs a real phone, cannot be triggered safely).
 3. **Scorecard** at the top of the page: count of Fix / Brand clash / Keep ours / Not measured,
    and the seven known gaps from "1.10 in detail" each marked with what the measurement found.
-4. **Screenshots** stay outside git (scratchpad or `/data/claude/webkit-tmp/chatgpt/`) and are
+4. **Screenshots** stay outside git (a scratchpad or a temp folder outside the repository) and are
    embedded in the page as files published with the artifact, never committed.
 5. **Owner questions**: the brand clashes, gathered in one list at the end, each with the two
    options, ready for the owner to answer in one message. Each answer becomes a `DECISIONS.md`

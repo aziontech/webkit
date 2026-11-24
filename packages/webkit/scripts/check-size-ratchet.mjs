@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
 import { spawnSync } from 'node:child_process'
-import { readdirSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(SCRIPT_DIR, '../../..')
 const SIZE_LIMIT = 'packages/webkit/.size-limit.json'
-const REVIEWS = 'packages/webkit/docs/reviews'
-export const FALLBACK_BASE = 'origin/feat/webkit-ai-ready'
+export const FALLBACK_BASE = 'origin/main'
+const RECORD = 'packages/webkit/docs/reviews/size-budgets-v6.md'
 
 export function limitToBytes(limit) {
   const m = String(limit)
@@ -39,28 +39,32 @@ export function raisedBudgets(baseEntries, headEntries) {
   return raised.sort((a, b) => a.name.localeCompare(b.name))
 }
 
-export function budgetRaiseNames(...texts) {
-  const names = new Set()
-  const line = /^[ \t]*Budget-raise:[ \t]*([A-Za-z0-9][A-Za-z0-9-]*)[ \t][^\n]*?:[ \t]*\S/gm
-  for (const text of texts) {
-    for (const m of String(text ?? '')
-      .replace(/\r\n?/g, '\n')
-      .matchAll(line))
-      names.add(m[1])
-  }
-  return names
+const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+export function budgetRaiseLines(text) {
+  return String(text ?? '')
+    .replace(/\r\n?/g, '\n')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => /^Budget-raise:[ \t]*\S/.test(line))
 }
 
-export function unjustifiedRaises(raised, ...texts) {
-  const names = budgetRaiseNames(...texts)
-  return raised.filter((r) => !names.has(r.name))
+export function justifies(line, raise) {
+  const head = line.match(new RegExp(`^Budget-raise:\\s*${escape(raise.name)}\\s+(.*)$`))
+  if (!head) return false
+  const to = String(raise.to).trim()
+  const limit = to.split(' (')[0]
+  if (limit !== to) return true
+  const target = limitToBytes(limit)
+  const unit = limit.match(/(B|KB|MB)$/i)[1]
+  return [...head[1].matchAll(/(?:→|->)\s*([\d.]+)\s*(B|KB|MB)?/gi)].some(
+    (m) => limitToBytes(`${m[1]} ${m[2] ?? unit}`) >= target
+  )
 }
 
-function reviewTexts() {
-  const dir = join(ROOT, REVIEWS)
-  return readdirSync(dir)
-    .filter((f) => /^size-budgets.*\.md$/.test(f))
-    .map((f) => readFileSync(join(dir, f), 'utf-8'))
+export function unjustified(raised, ...texts) {
+  const lines = texts.flatMap(budgetRaiseLines)
+  return raised.filter((raise) => !lines.some((line) => justifies(line, raise)))
 }
 
 export function baseRef(env) {
@@ -104,17 +108,20 @@ function main() {
     console.log(`✓ size ratchet: no budget raised against ${base.ref} (merge base ${short}).`)
     return 0
   }
-  const list = (rows) => rows.map((r) => `  ${r.name}: ${r.from} → ${r.to}`).join('\n')
-  const missing = unjustifiedRaises(raised, process.env.PR_BODY, ...reviewTexts())
+  const list = raised.map((r) => `  ${r.name}: ${r.from} → ${r.to}`).join('\n')
+  const record = readFileSync(join(ROOT, RECORD), 'utf-8')
+  const missing = unjustified(raised, process.env.PR_BODY, record)
   if (!missing.length) {
     console.log(
-      `✓ size ratchet: ${raised.length} budget(s) raised, each with its own Budget-raise: line:\n${list(raised)}`
+      `✓ size ratchet: ${raised.length} budget(s) raised, each with its Budget-raise: line (PR body or ${RECORD}):\n${list}`
     )
     return 0
   }
+  const missingList = missing.map((r) => `  ${r.name}: ${r.from} → ${r.to}`).join('\n')
   console.error(
-    `✖ ${missing.length} of ${raised.length} raised size budget(s) against ${base.ref} (merge base ${short}) have no Budget-raise: line:\n${list(missing)}\n\n` +
-      'Budgets only ratchet down. Shrink the entry, or add one line per raised entry, "Budget-raise: <name> <from> → <to> (measured <n>): <reason>", to the PR body or to packages/webkit/docs/reviews/size-budgets-*.md (.claude/rules/bundle-budget.md).'
+    `✖ ${raised.length} size budget(s) raised against ${base.ref} (merge base ${short}):\n${list}\n\n` +
+      `${missing.length} have no Budget-raise: line naming the entry and its new limit:\n${missingList}\n\n` +
+      `Budgets only ratchet down. Shrink the entry, or add one line per entry, "Budget-raise: <name> <old> → <new> (measured …): <reason>", to ${RECORD} or the PR body (.claude/rules/bundle-budget.md).`
   )
   return 1
 }

@@ -94,6 +94,7 @@ function printRemoved(plan, dryRun) {
   out(
     `${dryRun ? 'would drop' : 'dropped'} ${plan.whole ? plan.id : `${plan.files.length} file(s) of ${plan.id}`} from ${MANIFEST}\n`
   )
+  for (const path of plan.outside) out(`${path}: outside the project, left in place\n`)
   if (plan.importers.length) {
     out('\nStill imported by (remove these imports and the route):\n')
     for (const hit of plan.importers) out(`  ${hit.file}: ${hit.imports}\n`)

@@ -63,7 +63,13 @@ test('every expected id exists in the catalog', () => {
 })
 
 for (const q of pending) {
-  test(`${q.tool} "${q.query}" → ${q.top1}`, { skip: q.pending }, () => {})
+  test(`${q.tool} "${q.query}" → ${q.top1} is still pending`, () => {
+    const got = ranked(q.tool, q.query)
+    assert.ok(
+      got[0] !== q.top1 || !got.slice(0, 3).some((id) => q.top3.includes(id)),
+      `passes now: drop its pending field (${q.pending})`
+    )
+  })
 }
 
 test('every query has an acceptable answer in its first three results', () => {

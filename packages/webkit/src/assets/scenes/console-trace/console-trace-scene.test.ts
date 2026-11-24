@@ -5,7 +5,7 @@ import { defineComponent } from 'vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ConsoleTraceScene from './console-trace-scene.vue'
 
-const TESTID = 'assets-console-trace-scene'
+const TESTID = 'console-trace-scene'
 
 const host = (props: Record<string, unknown> = {}) =>
   defineComponent({

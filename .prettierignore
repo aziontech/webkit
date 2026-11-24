@@ -10,5 +10,6 @@ packages/webkit/catalog/
 lint-canaries/
 
 packages/webkit/llms/
+packages/webkit/docs/migration-v6-maps.md
 
 packages/icons/docs/ICONS.md

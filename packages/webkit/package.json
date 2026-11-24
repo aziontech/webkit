@@ -31,6 +31,7 @@
     "check:catalog": "node scripts/build-catalog.mjs --check && node scripts/build-llms.mjs --check",
     "build:llms": "node scripts/build-llms.mjs",
     "check:llms": "node scripts/build-llms.mjs --check",
+    "build:migration-maps": "node scripts/build-migration-maps.mjs",
     "check:size": "node scripts/check-size.mjs && node scripts/check-css-size.mjs",
     "check:css-size": "node scripts/check-css-size.mjs",
     "check:size-ratchet": "node scripts/check-size-ratchet.mjs",

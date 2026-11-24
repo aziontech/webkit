@@ -74,6 +74,25 @@ Tailwind's `dark:` variant follows the same three hooks. For a settings control,
 </template>
 ```
 
+Under a Content-Security-Policy that blocks inline scripts, allow this one script by its hash instead of
+`'unsafe-inline'`. The hash covers the exact text of `colorModeScript`, and a WebKit test fails when the
+script changes without this line:
+
+```text
+script-src 'self' 'sha256-Mr2TXUqeQwYxZgSb0xwpzGaZroVMkDVGwawpZp7IcjY='
+```
+
+A starting policy for an app built on WebKit, sent as response headers by the server or the edge:
+
+```text
+Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-Mr2TXUqeQwYxZgSb0xwpzGaZroVMkDVGwawpZp7IcjY='; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+```
+
+`style-src 'unsafe-inline'` is there because components set a few inline styles and custom properties;
+add the origins your app frames (`frame-src`, for `Embed`) or fetches (`connect-src`).
+
 ## The core rule — style through the role, never the value
 
 A token carries the role; its value is the theme's job. Reference the role and both themes are handled

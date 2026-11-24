@@ -38,13 +38,13 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `src` | `string` | `—` | true | URL of the document to embed. Only an absolute `http(s)` URL is framed; anything else renders the title as text. |
+| `src` | `string` | `—` | true | URL of the document to embed. Only an absolute `https` URL is framed; anything else renders the title as text. |
 | `title` | `string` | `—` | true | Accessible name for the embedded document, announced before its content. |
 | `ratio` | `'video' \| 'square' \| 'wide'` | `'video'` | false | Aspect ratio the frame holds while it scales. |
 
 ## States
 
-- Visual states: `default`, `unavailable` (the `src` is not an absolute `http(s)` URL: no `iframe`, the `title` shows as muted text in the reserved box)
+- Visual states: `default`, `unavailable` (the `src` is not an absolute `https` URL: no `iframe`, the `title` shows as muted text in the reserved box)
 - `data-ratio` mirrors the `ratio` prop and drives the frame's aspect ratio
 - The frame reserves its aspect ratio before the document loads, so the page does not shift when it arrives
 
@@ -56,7 +56,8 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the embedded document carries its own contrast; the frame contributes only its border.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the frame is static.
 - Touch target ≥40×40 px — not applicable; any control belongs to the embedded document.
-- Only an absolute `http(s)` `src` is framed, always with a fixed `sandbox` (no top-level navigation); any other `src` shows the `title` as text.
+- Only an absolute `https` `src` is framed, always with a fixed `sandbox` (no top-level navigation); any other `src`, `http:` included, shows the `title` as text.
+- The frame is rendered once the component is mounted in the browser, where the page origin is known: a `src` of another origin gets `allow-same-origin` so the embedded page keeps its own storage, while a `src` of the embedding page's own origin is framed without it, because `allow-scripts` with `allow-same-origin` would let a same-origin page remove its own sandbox. On the server the reserved box renders empty.
 
 ## Examples
 

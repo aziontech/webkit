@@ -50,8 +50,14 @@ overrides:
   "joi@18": ">=18.3.1 <19"
 
 auditConfig:
+  # Each ignored advisory names its package, why it is ignored and the date to review it by;
+  # packages/webkit/test/standards/supply-chain.test.mjs fails once a date has passed.
   ignoreGhsas:
+    # braces <= 3.0.3, dev-only (build tooling); withdrawn by GitHub. Review by 2027-02-24.
     - GHSA-vfj7-8cjw-p6xm
+    # sprintf-js <= 1.1.3, dev-only; withdrawn by GitHub. Review by 2027-02-24.
     - GHSA-hp3w-g68c-fv3c
+    # deepmerge 4.2.0 to 4.3.1, dev-only; withdrawn by GitHub. Review by 2027-02-24.
     - GHSA-gcqx-w48m-w2h4
+    # picomatch <= 4.0.7, dev-only (build tooling); withdrawn by GitHub. Review by 2027-02-24.
     - GHSA-fc5q-39xc-vjpf

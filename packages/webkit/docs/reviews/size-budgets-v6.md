@@ -1806,3 +1806,58 @@ Budget-raise: quote-tabs 24.6 KB → 24.85 KB (measured 24.78 KB): QuoteTabs aut
 Budget-raise: article-highlight-section 12.65 KB → 13.05 KB (measured 12.98 KB): ArticleHighlightSection, now on the shared useAutoplayProgress instead of its own copy, autoplay advances on one timeout per slide with a CSS hairline and holds off screen (audit-5 P3 A5P3-235).
 Budget-raise: client-quotes-section 27.85 KB → 28.05 KB (measured 28.00 KB): carries QuoteTabs, whose autoplay advances on one timeout per slide with a CSS hairline and holds off screen (audit-5 P3 A5P3-235).
 Budget-raise: feature-tabs-section 59.9 KB → 60.1 KB (measured 60.06 KB): carries MediaTabs, whose autoplay advances on one timeout per slide with a CSS hairline and holds off screen (audit-5 P3 A5P3-235).
+
+## PR #1170 push 8e86a5b59 to e106f1a04 (copied from the PR body, audit A5P3-209)
+
+Budget-raise: date-picker-root 42.15 KB → 42.2 KB — imports Select (list minimum width)
+Budget-raise: date-range-picker 53.2 KB → 53.3 KB — imports Select (list minimum width)
+Budget-raise: table-root 1.95 KB → 2.3 KB — scroll cue fade spans and wrapper (measured 1.89 → 2.25)
+Budget-raise: data-table 57.05 KB → 57.45 KB — scroll cue fade spans and wrapper (57.02 → 57.40)
+Budget-raise: data-grid 10.5 KB → 11.15 KB — scroll cue plus edge measuring the grid lacked before (10.50 → 11.12)
+Budget-raise: console-application-scene 118.35 KB → 118.75 KB — includes DataTable scroll cue (118.34 → 118.70)
+Budget-raise: console-trace-scene 82.35 KB → 82.8 KB — embeds FlowDiagram
+Budget-raise: article-index-section 35.2 KB → 35.25 KB — imports Select (list minimum width)
+Budget-raise: story-index-section 33.7 KB → 33.75 KB — imports Select (list minimum width)
+Budget-raise: hero-form-section 51.15 KB → 51.25 KB — imports Select (list minimum width)
+Budget-raise: plan-comparison-section 37.55 KB → 37.6 KB — imports Select (list minimum width)
+Budget-raise: job-posting-section 56.95 KB → 57 KB — imports Select (list minimum width)
+Budget-raise: listing-index-section 40.2 KB → 40.55 KB — includes DataTable scroll cue and the Select list minimum width (measured 40.48)
+Budget-raise: listing-table-section 25.05 KB → 25.25 KB — includes Table scroll cue (24.92 → 25.19)
+Budget-raise: timestamp 19.45 KB → 19.5 KB — date and time formatted separately so Safari and the server render the same text (hydration fix, measured 19.48)
+Budget-raise: phone-input 33.5 KB → 33.55 KB — imports Select (list minimum width)
+Budget-raise: select 22.4 KB → 22.45 KB — outline list gets a 256 px minimum width (R5 Type picker fix)
+Budget-raise: attribute-editor 17.75 KB → 17.95 KB — rows stack until every column fits (data-fit breakpoints, R5 Type picker fix)
+Budget-raise: tag-editor 19.65 KB → 19.85 KB — imports AttributeEditor (data-fit breakpoints)
+Budget-raise: schema-form 61.4 KB → 61.7 KB — imports AttributeEditor (data-fit breakpoints)
+Budget-raise: table 7.6 KB → 7.9 KB — scroll cue fade spans and wrapper (7.55 → 7.85)
+Budget-raise: flow-diagram 21.55 KB → 21.95 KB — same code, the compound includes the root
+Budget-raise: flow-diagram-root 19.3 KB → 19.75 KB — row-fit measuring, re-fit when lazy cards render, and inline-edge scroll fade (nodes were clipped off-screen)
+Budget-raise: date-picker 42.35 KB → 42.4 KB — imports Select (list minimum width)
+
+## Lines restored from history (audit A5P3-209, 2026-11-24)
+
+The per-entry ratchet found raises whose line a later merge had dropped from this file. The SectionBand lines and the NetworkMap line come back as they were written in 5ec1d66d2; the two Select lines record the merge 7571abba9, which added the A5-015 and A5-028 raises (each measured from 23 KB and 19.35 KB on its own lane, both recorded above) together.
+
+Budget-raise: article-highlight-section 12.5 KB → 12.65 KB (measured 12.61 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: capability-grid-section 8.25 KB → 8.35 KB (measured 8.33 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: client-mosaic-section 7.95 KB → 8.2 KB (measured 8.17 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: client-quotes-section 27.7 KB → 28.15 KB (measured 28.10 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: client-story-columns-section 8.9 KB → 9.2 KB (measured 9.16 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: competitor-comparison-section 25.75 KB → 25.95 KB (measured 25.94 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: compliance-logos-section 8.25 KB → 8.55 KB (measured 8.53 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: feature-tiles-section 6.35 KB → 6.55 KB (measured 6.54 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: investor-marks-section 5 KB → 5.1 KB (measured 5.09 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: listing-index-section 43.25 KB → 43.5 KB (measured 43.48 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: listing-table-section 26.5 KB → 26.7 KB (measured 26.68 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: logo-wall-section 24.7 KB → 25.2 KB (measured 25.13 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: media-split-section 17.25 KB → 17.6 KB (measured 17.56 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: media-split-stack-section 17.6 KB → 17.9 KB (measured 17.88 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: platform-directory-section 4.8 KB → 5 KB (measured 4.99 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: recognition-marquee-section 21.75 KB → 22.2 KB (measured 22.17 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: stats-section 4.8 KB → 5.05 KB (measured 5.03 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: story-index-section 36.25 KB → 36.6 KB (measured 36.57 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: subject-grid-section 8.7 KB → 8.95 KB (measured 8.91 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: select 23.3 KB → 23.35 KB: the merge 7571abba9 carries both the A5-015 panel Tab order and the A5-028 named ScrollArea, each recorded above from 23 KB on its own lane.
+Budget-raise: select-content 19.65 KB → 19.7 KB: the merge 7571abba9 carries both the A5-015 panel Tab order and the A5-028 named ScrollArea, each recorded above from 19.35 KB on its own lane.
+Budget-raise: network-map 6.5 KB → 7.1 KB (measured 6.97 KB): NetworkMap traffic (MapMesh rays and packets, a still frame under reduced motion), on in BannerArt network (M2.10 row 43); it peaked at 7.5 KB and was lowered to 7.1 KB.
+Budget-raise: embed 1.1 KB → 1.15 KB (measured 1.13 KB): Embed frames only https and decides allow-same-origin after mount, from the page origin, so a same-origin page cannot lift its sandbox (A5P3-223).

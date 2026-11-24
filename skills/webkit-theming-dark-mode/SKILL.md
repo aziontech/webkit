@@ -2,7 +2,7 @@
 name: webkit-theming-dark-mode
 description: Every screen in a @aziontech/webkit app works in BOTH light and dark with zero per-theme edits, because it is styled only through semantic tokens (var(--bg-surface), var(--text-default), var(--primary)…) that carry a role and swap value per theme — never a hex, rgb/hsl, Tailwind palette color, or a value that reads in one theme only. Use when building or reviewing any screen, and before calling one done. Covers the data-theme mechanism, elevation-in-dark, and the two-theme check.
 status: active
-last_updated: 2026-11-21
+last_updated: 2026-11-24
 scope: general
 enforced_by: [webkit-tokens, ui-verify]
 ---
@@ -80,6 +80,25 @@ Tailwind's `dark:` variant follows the same three hooks. For a settings control,
   />
 </template>
 ```
+
+Under a Content-Security-Policy that blocks inline scripts, allow this one script by its hash instead of
+`'unsafe-inline'`. The hash covers the exact text of `colorModeScript`, and a WebKit test fails when the
+script changes without this line:
+
+```text
+script-src 'self' 'sha256-Mr2TXUqeQwYxZgSb0xwpzGaZroVMkDVGwawpZp7IcjY='
+```
+
+A starting policy for an app built on WebKit, sent as response headers by the server or the edge:
+
+```text
+Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-Mr2TXUqeQwYxZgSb0xwpzGaZroVMkDVGwawpZp7IcjY='; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+```
+
+`style-src 'unsafe-inline'` is there because components set a few inline styles and custom properties;
+add the origins your app frames (`frame-src`, for `Embed`) or fetches (`connect-src`).
 
 ## The core rule — style through the role, never the value
 

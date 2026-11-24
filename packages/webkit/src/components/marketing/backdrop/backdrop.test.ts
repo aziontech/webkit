@@ -28,7 +28,7 @@ describe('Backdrop', () => {
   it('draws the globe over the dot lattice', () => {
     const { getByTestId } = render(Backdrop, { props: { variant: 'globe' } })
     const root = getByTestId('backdrop')
-    expect(root.querySelector('[data-testid="assets-spinning-globe"]')).not.toBeNull()
+    expect(root.querySelector('[data-testid="spinning-globe"]')).not.toBeNull()
     expect(root.querySelector('[data-testid="texture"]')).not.toBeNull()
   })
 

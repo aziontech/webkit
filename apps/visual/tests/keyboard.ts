@@ -106,6 +106,7 @@ function keyboardStart(entry: KeyboardEntry): KeyboardStart {
     elements: Element[]
     before: WeakMap<Element, string>
     visited: Set<number>
+    disabled: WeakSet<Element>
     initial: Element | null
   }
   const FIELD =
@@ -155,6 +156,7 @@ function keyboardStart(entry: KeyboardEntry): KeyboardStart {
     elements: [],
     before: new WeakMap(),
     visited: new Set(),
+    disabled: new WeakSet(),
     initial: document.activeElement === document.body ? null : document.activeElement
   }
   const entryEl = probe.initial instanceof HTMLElement ? probe.initial : null
@@ -259,11 +261,14 @@ function keyboardStop(): KeyboardStop {
     elements: Element[]
     before: WeakMap<Element, string>
     visited: Set<number>
+    disabled: WeakSet<Element>
     initial: Element | null
   }
   for (const animation of document.getAnimations())
     if (animation instanceof CSSTransition) animation.finish()
   const probe = (window as unknown as { __keyboardProbe: Probe }).__keyboardProbe
+  for (const element of Array.from(document.querySelectorAll(':disabled, [aria-disabled="true"]')))
+    probe.disabled.add(element)
   let active: Element | null = document.activeElement
   while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement
   const visible = (element: Element) => {
@@ -405,6 +410,7 @@ function keyboardReach(limited: boolean): KeyboardReach {
     elements: Element[]
     before: WeakMap<Element, string>
     visited: Set<number>
+    disabled: WeakSet<Element>
     initial: Element | null
   }
   const probe = (window as unknown as { __keyboardProbe: Probe }).__keyboardProbe
@@ -436,6 +442,7 @@ function keyboardReach(limited: boolean): KeyboardReach {
   for (const element of Array.from(scope.querySelectorAll(INTERACTIVE))) {
     if (element.closest('svg')) continue
     if (element.matches(':disabled') || element.getAttribute('aria-disabled') === 'true') continue
+    if (probe.disabled.has(element)) continue
     if (!visible(element)) continue
     const tabindex = element.getAttribute('tabindex')
     const group = element.closest(ROVING)

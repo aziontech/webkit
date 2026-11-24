@@ -126,6 +126,7 @@
         :aria-labelledby="confirmLabelId"
         autocomplete="off"
         class="w-full"
+        data-autofocus
         :disabled="deleting"
         @keydown.enter="confirm"
       />

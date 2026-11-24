@@ -893,8 +893,7 @@
       "lang": "en",
       "query": "date picker",
       "top1": "date-picker",
-      "top3": ["date-picker"],
-      "pending": "calendar is renamed to date-picker by the inputs lane; un-skip after the catalog is regenerated"
+      "top3": ["date-picker"]
     },
     {
       "tool": "components",
@@ -1062,8 +1061,7 @@
       "lang": "pt-BR",
       "query": "seletor de data",
       "top1": "date-picker",
-      "top3": ["date-picker"],
-      "pending": "calendar is renamed to date-picker by the inputs lane; un-skip after the catalog is regenerated"
+      "top3": ["date-picker"]
     },
     {
       "tool": "components",
@@ -1168,8 +1166,7 @@
       "lang": "es",
       "query": "selector de fecha",
       "top1": "date-picker",
-      "top3": ["date-picker"],
-      "pending": "calendar is renamed to date-picker by the inputs lane; un-skip after the catalog is regenerated"
+      "top3": ["date-picker"]
     },
     {
       "tool": "components",

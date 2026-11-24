@@ -9,3 +9,4 @@ scripts/api-snapshot.json
 /catalog/
 CHANGELOG.md
 llms/
+docs/migration-v6-maps.md

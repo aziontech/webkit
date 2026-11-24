@@ -5,7 +5,7 @@ import { defineComponent, nextTick } from 'vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ConsoleApplicationScene from './console-application-scene.vue'
 
-const TESTID = 'assets-console-application-scene'
+const TESTID = 'console-application-scene'
 
 const reducedMotion = () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 

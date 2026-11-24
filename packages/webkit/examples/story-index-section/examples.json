@@ -32,7 +32,6 @@
       "json": "site-story-index.json"
     }
   ],
-  "siteTitle": "Templates/Marketing/Listings/StoryIndexSection",
   "sitePreview": {
     "layout": "fullscreen",
     "background": "dark"

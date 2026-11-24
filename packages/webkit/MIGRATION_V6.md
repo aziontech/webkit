@@ -2451,3 +2451,7 @@ in a `computed` and rewound the page in a `watch` becomes one call:
 Theme tokens (apart from the sans stack, the container variants above and the theme changes in section 4), icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style
 (`@aziontech/webkit/<name>`) are the same. The theme's removed variables, fonts entry and device-default dark mode are in section 4. The AI bundle (`skills/`, `rules/`) is updated by
 `npx @aziontech/webkit sync`.
+
+## Appendix: every rename in the codemod maps
+
+[`docs/migration-v6-maps.md`](./docs/migration-v6-maps.md) lists every entry of `src/cli/migrations/*.json`, the maps `webkit migrate v6` applies: components, types and parts, props and values, block ids, test ids, icon classes, tokens and ESLint rules. It is generated from the maps (`pnpm --filter @aziontech/webkit build:migration-maps`), and a toolkit test fails when it falls behind them.

@@ -12,10 +12,11 @@ extend-exclude = [
   # Multilingual search synonyms (pt-BR and es queries an app user types).
   "packages/webkit/src/catalog/lexicon/",
   "packages/webkit/test/catalog/search-queries.json",
-  # Generated from the sources by build:catalog / build:llms.
+  # Generated from the sources by build:catalog / build:llms / build:migration-maps (old names, typos included).
   "packages/webkit/catalog.json",
   "packages/webkit/catalog/",
   "packages/webkit/llms/",
+  "packages/webkit/docs/migration-v6-maps.md",
   # Built theme output.
   "packages/theme/dist/",
   # Release history written by release-please from past commit messages.
