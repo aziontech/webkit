@@ -42,7 +42,7 @@
     },
     {
       "name": "Empty",
-      "summary": "Nothing recorded yet. Each card keeps its place and size and shows its empty state, so the reader can still arrange the dashboard before any data arrives.",
+      "summary": "Nothing recorded yet. One bordered page-level EmptyState, No requests yet with Create Application as the next step, replaces the grid and its layout controls instead of repeating the same empty card six times.",
       "file": "variants/empty.vue"
     },
     {

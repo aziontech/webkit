@@ -36,11 +36,16 @@ describe('dashboard/dashboard-alerts', () => {
     expect(view.container.textContent).not.toContain('ava.wilson')
   })
 
-  it('shows every region empty for an empty period', () => {
+  it('shows one page-level empty state with a next step, and zeros in the tiles', async () => {
     const view = render(AlertsDashboardEmpty)
-    expect(view.container.textContent).toContain('No entities at risk yet')
-    expect(view.container.textContent).toContain('No open alerts')
+    const empty = view.container.querySelector('[data-testid="dashboard-alerts__empty"]')!
+    expect(empty.textContent).toContain('No alerts in the last 30 days')
+    expect(view.container.textContent).not.toContain('No entities at risk yet')
     expect(view.container.textContent).not.toContain('ava.wilson')
+    const values = [...view.container.querySelectorAll('[data-testid="stat-tile__value"]')]
+    expect(values.map((value) => value.textContent?.trim())).toEqual(['0', '0', '0', '0%'])
+    await fireEvent.click(view.getByRole('button', { name: 'Show the last 90 days' }))
+    await waitFor(() => expect(empty.textContent).toContain('No alerts in the last 90 days'))
   })
 
   it('hides the sample while loading', () => {

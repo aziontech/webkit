@@ -75,9 +75,12 @@ alerts. The word is always visible; color never carries severity alone.
 
 ### J. Empty regions — `EmptyState` (required)
 
-Every region renders its own empty state with a reason and the next step: the chart
-(`No alerts in this period` / `Select a longer period.`), Open by severity (`No open alerts`), Highest
-risk (`No entities at risk yet`) and the table.
+When the whole period is empty, the tiles print `0` (zero is the truth, never a dash) and one
+bordered page-level `EmptyState` replaces the cards: `No alerts in the last 30 days`, what fills the
+page, and `Show the last 90 days` as the next step. Six copies of the same empty card teach nothing.
+When only some regions are empty, each renders its own empty state with a reason and the next step:
+the chart (`No alerts in this period` / `Select a longer period.`), Open by severity
+(`No open alerts`), Highest risk (`No entities at risk yet`) and the table.
 
 ### K. Alerts by type — `BarList` (required)
 

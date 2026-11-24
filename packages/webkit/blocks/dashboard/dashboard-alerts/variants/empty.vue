@@ -4,7 +4,12 @@
 
 <template>
   <DashboardAlerts
-    :kpis="{}"
+    :kpis="{
+      open: { value: 0, delta: null },
+      'critical-high': { value: 0, delta: null },
+      raised: { value: 0, delta: null },
+      'false-positives': { value: 0, delta: null }
+    }"
     :labels="[]"
     :series="[]"
     :open-by-level="[]"
