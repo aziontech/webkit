@@ -56,7 +56,7 @@ When `status` is `no-match`, the `CardList` `#empty` slot holds a medium `EmptyS
 
 ### I. Empty listing and load failure — `Card`, `EmptyState`, `Alert`, `Button` (required)
 
-When `error` is set, a danger `Alert` with that message and Retry (which emits `retry`) takes the cards' place. When `status` is `empty`, the cards and the pagination give way to a flush `Card :padded="false"` holding a medium `EmptyState`, as view-table does, with the module glyph, one sentence, and a small secondary `Create <Object>` with the heading's label. The heading and the controls row stay.
+When `error` is set, a danger `Alert` with that message and Retry (which emits `retry`) takes the cards' place. When `status` is `empty`, the cards and the pagination give way to a flush `Card :padded="false"` holding a medium `EmptyState`, as view-table does, with the module glyph, one sentence, and the primary medium `Create <Object>` with the heading's label. The heading and the controls row stay; the heading hides its own Create while the list is empty, so the empty state owns the only call to action.
 
 ## Data
 
@@ -68,11 +68,11 @@ The block takes its records through props and emits every action; it fetches not
 | `loading`      | `boolean`               | A request is in flight. With no cards it is the first load (the controls disable, `CardList` shows placeholder cards); with cards a refresh. |
 | `error`        | `string`                | Why the load failed, shown in the danger `Alert` with Retry that replaces the cards.                                                         |
 
-| Event    | Payload                 | When                                                                            |
-| -------- | ----------------------- | ------------------------------------------------------------------------------- |
-| `create` | `(event)`               | Create Application, in the heading or the empty card.                           |
-| `retry`  | `(event)`               | Retry in the error alert.                                                       |
-| `delete` | `(event, applications)` | The delete dialog was confirmed; the selected cards are already gone from view. |
+| Event    | Payload                 | When                                                                              |
+| -------- | ----------------------- | --------------------------------------------------------------------------------- |
+| `create` | `(event)`               | Create Application, in the heading, or in the empty card while the list is empty. |
+| `retry`  | `(event)`               | Retry in the error alert.                                                         |
+| `delete` | `(event, applications)` | The delete dialog was confirmed; the selected cards are already gone from view.   |
 
 To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -121,7 +121,7 @@ Then delete `sample.ts` and its import.
 ## Copy
 
 - **Title:** the module name as the sidebar shows it, e.g. "Applications". Description: one sentence with a period.
-- **Create action:** `Create <Object>` with the entity's capitalization, e.g. "Create Application"; never "New" or a bare noun. The empty state repeats the same label.
+- **Create action:** `Create <Object>` with the entity's capitalization, e.g. "Create Application"; never "New" or a bare noun. The empty state uses the same label and is the only Create while the list is empty.
 - **Filter:** placeholder and `aria-label` name what is filtered, e.g. "Filter applications".
 - **Bulk action:** the verb, then the count in parentheses, e.g. "Delete", "Delete (3)".
 - **Field labels:** one or two words, sentence case, no colon, e.g. "Status", "Domain", "Region", "Requests in 24h", "Owner". Preferences title: "Card preferences".

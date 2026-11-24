@@ -1,6 +1,7 @@
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
+import Detail from '../../../../blocks/view/view-marketplace/variants/detail.vue'
 import Installed from '../../../../blocks/view/view-marketplace/variants/installed.vue'
 import NoMatch from '../../../../blocks/view/view-marketplace/variants/no-match.vue'
 import ViewMarketplace from '../../../../blocks/view/view-marketplace/view-marketplace.vue'
@@ -42,6 +43,17 @@ describe('view/view-marketplace block', () => {
         within(drawer).getByText('Select the application to install Rate Guard on.')
       ).toBeTruthy()
     )
+  })
+
+  it('opens the integration drawer on its title, so its details are not scrolled away', async () => {
+    const view = render(Detail)
+    const drawer = await waitFor(() => view.getByRole('dialog'))
+    await waitFor(() =>
+      expect(document.activeElement?.getAttribute('data-autofocus')).not.toBeNull()
+    )
+    expect(document.activeElement?.textContent).toContain('Request Signer')
+    expect(drawer.contains(document.activeElement)).toBe(true)
+    expect(document.activeElement?.closest('[data-testid="field"]')).toBeNull()
   })
 
   it('shows the installed state in the drawer, then in a toast with Configure and Open application once it closes', async () => {

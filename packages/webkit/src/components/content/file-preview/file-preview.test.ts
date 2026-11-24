@@ -144,9 +144,9 @@ describe('FilePreview', () => {
     const [kind, , size] = Array.from(meta.children)
     expect(kind?.textContent).toBe('application/json')
     expect(kind?.classList.contains('truncate')).toBe(true)
-    expect(size?.textContent).toBe('182 bytes')
+    expect(size?.textContent).toBe('182 B')
     expect(size?.classList.contains('shrink-0')).toBe(true)
-    expect(meta.textContent).toBe('application/json · 182 bytes')
+    expect(meta.textContent).toBe('application/json · 182 B')
   })
 
   it('emits download with the click event', async () => {

@@ -77,7 +77,10 @@ beside it in tabular numbers.
 
 ### L. Empty regions — `EmptyState` (required)
 
-Each region names the quarter in its empty state: trend cards
+When the whole quarter has nothing reported, the tiles keep their dash (nothing was reported, so zero
+would be false) and one bordered page-level `EmptyState` replaces the trends, goals and commentary:
+`No results reported for Q3 2025`, what fills the page, and `Show Q4 2025` as the next step. When only
+some regions are empty, each names the quarter in its own empty state: trend cards
 (`No results for Q3` / `Nothing was reported in this period. Select a later quarter.`), goals and
 commentary (`Leads add notes here when they review the quarter.`).
 
@@ -174,7 +177,7 @@ Then delete `sample.ts` and its import.
 
 - Default: the reported quarter (`v-model:quarter`).
 - Loading: `loading` is set; tiles and charts render their own `Skeleton`; goals and commentary hold Skeleton rows.
-- Empty: a quarter with nothing reported (`kpis` and `trends` are `{}`, `goals` and `notes` are `[]`); tiles show a dash with no delta, every trend card keeps its box with an `EmptyState` that names the quarter, and goals and commentary say what fills them.
+- Empty: a quarter with nothing reported (`kpis` and `trends` are `{}`, `goals` and `notes` are `[]`); tiles show a dash with no delta, and one page-level `EmptyState` names the quarter and offers the next later one in place of the trend cards, goals and commentary.
 - Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related

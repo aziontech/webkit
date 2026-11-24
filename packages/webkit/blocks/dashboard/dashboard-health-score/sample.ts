@@ -114,14 +114,20 @@ export const sampleLocations: BarListItem[] = [
   }
 ]
 
+const bandFor = (score: number): HealthScoreHourlyRow['band'] => {
+  if (score >= 80) return { label: 'Good', severity: 'success' }
+  if (score >= 50) return { label: 'Fair', severity: 'warning' }
+  return { label: 'Poor', severity: 'danger' }
+}
+
+const scoreOf = (id: string): number =>
+  sampleApplications.find((application) => application.id === id)?.value ?? 0
+
 export const sampleHourly: HealthScoreHourlyRow[] = [
   {
     id: 'video-calls',
     name: 'Video calls',
-    band: {
-      label: 'Fair',
-      severity: 'warning'
-    },
+    band: bandFor(scoreOf('video-calls')),
     blocks: [
       {
         id: 'video-calls-00:00',
@@ -248,10 +254,7 @@ export const sampleHourly: HealthScoreHourlyRow[] = [
   {
     id: 'file-storage',
     name: 'File storage',
-    band: {
-      label: 'Fair',
-      severity: 'warning'
-    },
+    band: bandFor(scoreOf('file-storage')),
     blocks: [
       {
         id: 'file-storage-00:00',
@@ -378,10 +381,7 @@ export const sampleHourly: HealthScoreHourlyRow[] = [
   {
     id: 'crm',
     name: 'CRM',
-    band: {
-      label: 'Good',
-      severity: 'success'
-    },
+    band: bandFor(scoreOf('crm')),
     blocks: [
       {
         id: 'crm-00:00',
@@ -508,10 +508,7 @@ export const sampleHourly: HealthScoreHourlyRow[] = [
   {
     id: 'mail',
     name: 'Mail',
-    band: {
-      label: 'Good',
-      severity: 'success'
-    },
+    band: bandFor(scoreOf('mail')),
     blocks: [
       {
         id: 'mail-00:00',
@@ -638,10 +635,7 @@ export const sampleHourly: HealthScoreHourlyRow[] = [
   {
     id: 'chat',
     name: 'Chat',
-    band: {
-      label: 'Good',
-      severity: 'success'
-    },
+    band: bandFor(scoreOf('chat')),
     blocks: [
       {
         id: 'chat-00:00',
@@ -768,10 +762,7 @@ export const sampleHourly: HealthScoreHourlyRow[] = [
   {
     id: 'docs',
     name: 'Docs',
-    band: {
-      label: 'Good',
-      severity: 'success'
-    },
+    band: bandFor(scoreOf('docs')),
     blocks: [
       {
         id: 'docs-00:00',

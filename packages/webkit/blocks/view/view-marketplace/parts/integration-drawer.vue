@@ -73,7 +73,11 @@
                 aria-hidden="true"
               />
             </span>
-            <div class="flex min-w-0 flex-col">
+            <div
+              class="flex min-w-0 flex-col outline-none"
+              tabindex="-1"
+              data-autofocus
+            >
               <DrawerTitle>{{ integration.name }}</DrawerTitle>
               <span class="text-body-xs text-(--text-muted)"
                 >by <bdi>{{ integration.vendor }}</bdi></span

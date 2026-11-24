@@ -3,10 +3,10 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: 9e93be505d50a1d60fb9fa601f7e0f39fc63fb367e06f7c1c778a48fe05002ad
+checksum: 31cd6bdbbfc6be5d09b0e49b4acbac9fcc445cc6014a1bf62699a33df304ae4f
 spec_version: 8
 created: 2026-10-20
-last_updated: 2026-11-19
+last_updated: 2026-11-24
 ---
 
 # StatTile — Component Spec
@@ -110,7 +110,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `error` (a dash over the same band with a `neutral` "Couldn't load" `Tag` in place of "No data", kept quiet because the danger `Alert` that explains the failure and offers Retry belongs to the page or region, not to every tile; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
+- Visual states: `default`, `loading` (Skeleton lines: the figure always, the delta line when `deltaLabel` is set and the sparkline height when `trend` has two or more points, so the tile keeps the shape it loads into), `error` (a dash over the same band with a `neutral` "Couldn't load" `Tag` in place of "No data", kept quiet because the danger `Alert` that explains the failure and offers Retry belongs to the page or region, not to every tile; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row

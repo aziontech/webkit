@@ -324,6 +324,10 @@ describe('view/view-query-editor keyboard', () => {
     expect(
       view.getByRole('button', { name: 'Create Database' }).getAttribute('aria-keyshortcuts')
     ).toBe('Meta+Enter Control+Enter')
+    const hint = view
+      .getByRole('button', { name: 'Create Database' })
+      .querySelector('[data-testid="shortcut-hint"]')!
+    expect(hint.classList.contains('pointer-coarse:hidden')).toBe(true)
     pressShortcut('Enter', name)
     await waitFor(() => expect(view.getByText('This field is required.')).toBeTruthy())
   })

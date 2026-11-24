@@ -55,11 +55,7 @@
                 "
                 variant="outline"
                 size="medium"
-                :icon="
-                  provider.connected || !provider.href.startsWith('http')
-                    ? undefined
-                    : 'az az-external-link'
-                "
+                :icon="provider.href.startsWith('http') ? 'az az-external-link' : undefined"
                 :href="provider.href"
                 :target="provider.href.startsWith('http') ? '_blank' : undefined"
               />

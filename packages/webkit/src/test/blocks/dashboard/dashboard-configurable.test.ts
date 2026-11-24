@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import DashboardConfigurable from '../../../../blocks/dashboard/dashboard-configurable/dashboard-configurable.vue'
+import ConfigurableEmpty from '../../../../blocks/dashboard/dashboard-configurable/variants/empty.vue'
 
 afterEach(() => cleanup())
 
@@ -44,6 +45,18 @@ describe('dashboard/dashboard-configurable', () => {
     expect(retries).toHaveLength(1)
     await fireEvent.click(retries[0]!)
     expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
+  })
+
+  it('shows one page-level empty state with a next step instead of six empty cards', () => {
+    const view = render(ConfigurableEmpty)
+    expect(view.getAllByText('No requests yet')).toHaveLength(1)
+    expect(
+      view.container.querySelector('[data-testid="dashboard-configurable__empty"]')
+    ).not.toBeNull()
+    expect(view.getByRole('link', { name: 'Create Application' }).getAttribute('href')).toBe(
+      '/applications/new'
+    )
+    expect(view.queryByRole('button', { name: 'Edit layout' })).toBeNull()
   })
 
   it('moves a card with Move up and Move down while editing', async () => {

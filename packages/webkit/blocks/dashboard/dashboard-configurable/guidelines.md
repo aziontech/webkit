@@ -138,7 +138,7 @@ Then delete `sample.ts` and its import.
 - Give every `DashboardGrid.Item` the card title as its `label`; it is what moves and resizes announce.
 - Announce a reset yourself in a polite live region (`Layout reset to the default.`); the board
   announces only what it did.
-- Keep every card at its place and size in loading and empty states, so the reader can arrange it
+- Keep every card at its place and size in loading and partly empty states, so the reader can arrange it
   before data arrives.
 
 ## Don't
@@ -156,7 +156,7 @@ Then delete `sample.ts` and its import.
 - **Help line:** two short sentences on how, no layout positions. `Drag a card by its handle to move it, or by its corner to resize it. Focus a handle to use the arrow keys.`
 - **Handle labels:** verb plus card title. `Move Requests over time`, `Resize Requests over time`.
 - **Announcements:** full sentences with a period. `Layout reset to the default.`
-- **Empty state:** `No requests yet` / `Metrics appear here once a service serves requests.`
+- **Empty state:** `No requests yet` / `Metrics appear here once a service serves requests.` for one card; the page-level one says what fills the page and offers Create Application.
 
 ## Accessibility
 
@@ -172,7 +172,7 @@ Then delete `sample.ts` and its import.
 - Default: the arranged dashboard, read-only (`v-model:layout`).
 - Editing: `v-model:editing` is `true`; handles and resize corners on every card, span tags in the headers, help line visible.
 - Loading: `loading` is set; every chart renders its own `Skeleton` inside its card; the layout holds its shape.
-- Empty: nothing recorded yet (`series` is `{}`, `sources` is `[]`); each card keeps its place and size and shows its empty state.
+- Empty: nothing recorded yet (`series` is `{}`, `sources` is `[]`); one bordered page-level `EmptyState` (`No requests yet`, with Create Application as the next step) replaces the grid and the layout controls, instead of the same empty state in every card. A card left empty while others have data keeps its place and size and shows its own empty state.
 - Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related

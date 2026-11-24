@@ -55,7 +55,8 @@ describe('view/view-card block', () => {
     expect(view.queryByRole('link', { name: 'storefront' })).toBeNull()
     view.unmount()
     const empty = render(CardViewEmpty)
-    expect(empty.container.textContent).toContain('No applications yet')
+    await waitFor(() => expect(empty.container.textContent).toContain('No applications yet'))
+    expect(empty.getAllByRole('button', { name: 'Create Application' })).toHaveLength(1)
   })
 
   it('emits create and delete with the selected applications', async () => {

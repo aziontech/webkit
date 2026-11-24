@@ -34,7 +34,7 @@
 <template>
   <ChartCard :span="span">
     <ChartCard.Header>
-      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
+      <span class="inline-flex min-w-0 flex-1 items-center gap-(--spacing-2xs)">
         <ChartCard.Title>{{ title }}</ChartCard.Title>
         <Hint :content="hint" />
       </span>

@@ -12,7 +12,7 @@
   },
   {
    "name": "Empty",
-   "summary": "An account with no applications: the heading and the controls stay, and the cards give way to a medium EmptyState with a small secondary Create Application button.",
+   "summary": "An account with no applications: the heading and the controls stay, and the cards give way to a medium EmptyState whose primary Create Application is the page's only Create (the heading hides its own while the list is empty).",
    "file": "blocks/view/view-card/variants/empty.vue"
   }
  ],

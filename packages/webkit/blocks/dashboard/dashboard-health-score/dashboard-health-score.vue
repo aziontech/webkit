@@ -6,7 +6,7 @@
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
-  import StatTile from '@aziontech/webkit/stat-tile'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import type { TrackerItem } from '@aziontech/webkit/tracker'
   import { computed, ref } from 'vue'
@@ -157,7 +157,7 @@
         description="How people experience each application: the overall score, the score per application and location, each hour of the period and the incidents still open."
       >
         <template #actions>
-          <div class="w-44 shrink-0">
+          <div class="shrink-0">
             <Select
               variant="ghost"
               v-model="period"
@@ -218,15 +218,32 @@
               class="grid grid-cols-1 items-center gap-(--spacing-lg) md:grid-cols-[minmax(0,12rem)_1fr]"
             >
               <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                <StatTile
-                  label="Overall score"
-                  variant="sans"
-                  unit="/ 100"
-                  :value="overall.score"
-                  :format-value="formatScore"
-                  :loading="loading"
-                  :error="error"
+                <Skeleton
+                  v-if="loading"
+                  width="60%"
+                  height="2rem"
                 />
+                <p
+                  v-else
+                  class="flex items-baseline gap-(--spacing-2xs) tabular-nums"
+                  dir="ltr"
+                  data-testid="dashboard-health-score__score"
+                >
+                  <template v-if="overall.score === null">
+                    <span
+                      aria-hidden="true"
+                      class="text-heading-lg text-(--text-muted)"
+                      >–</span
+                    >
+                    <span class="sr-only">No score</span>
+                  </template>
+                  <template v-else>
+                    <span class="text-heading-lg text-(--text-default)">{{
+                      formatScore(overall.score)
+                    }}</span>
+                    <span class="text-body-md text-(--text-muted)">/ 100</span>
+                  </template>
+                </p>
                 <p
                   v-if="overall.cause && !loading"
                   class="text-pretty text-body-sm text-(--text-muted)"

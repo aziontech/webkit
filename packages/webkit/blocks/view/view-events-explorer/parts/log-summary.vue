@@ -71,9 +71,20 @@
               width="4rem"
               height="1.5rem"
             />
-            <template v-else>{{
-              summary.avgRequestTimeMs === null ? '—' : `${summary.avgRequestTimeMs} ms`
-            }}</template>
+            <bdi
+              v-else
+              dir="ltr"
+              data-testid="log-summary__request-time"
+              >{{
+                summary.avgRequestTimeMs === null
+                  ? '—'
+                  : formatNumber(summary.avgRequestTimeMs, {
+                      style: 'unit',
+                      unit: 'millisecond',
+                      unitDisplay: 'short'
+                    })
+              }}</bdi
+            >
           </dd>
         </div>
       </dl>

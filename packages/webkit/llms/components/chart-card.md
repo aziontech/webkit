@@ -126,7 +126,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `data-draggable`, `data-resizable` mirror the props
 - `data-dragging` while a native drag runs; `data-resizing` while a pointer resize runs
 - `data-flush` on the content is set when the padding is off (`padded` false)
-- Responsive: the root is the `@container/chart-card`. The header and footer wrap; below `@xs` of the card the controls take their own line at full width.
+- Responsive: the root is the `@container/chart-card`. The header and footer wrap; the controls stay at the end of the title row, and when they cannot fit beside the title they wrap to a line of their own, still aligned to the end, never stretched to full width under a start-aligned title.
 
 ## Accessibility
 

@@ -21,6 +21,19 @@ describe('dashboard/dashboard-service-monitoring', () => {
     )
   })
 
+  it('prints the latency unit apart from the figure and hides the delta of a service that is down', () => {
+    const view = render(ServiceMonitoring)
+    const tiles = [...view.container.querySelectorAll('li')]
+    const tileOf = (name: string) => tiles.find((li) => li.textContent?.includes(name))!
+    const prod = tileOf('web-app-prod')
+    expect(prod.querySelector('[data-testid="stat-tile__unit"]')?.textContent?.trim()).toBe('ms')
+    expect(prod.querySelector('[data-testid="stat-tile__value"]')?.textContent).not.toContain('ms')
+    expect(prod.querySelector('[data-testid="stat-tile__delta"]')).not.toBeNull()
+    const staging = tileOf('web-app-staging')
+    expect(staging.textContent).toContain('Down')
+    expect(staging.querySelector('[data-testid="stat-tile__delta"]')).toBeNull()
+  })
+
   it('links every open alert to its page', () => {
     const view = render(ServiceMonitoring)
     const link = view.getByRole('link', { name: /Status 5xx above 5%/ })

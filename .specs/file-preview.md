@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: a3f92bea511ce9148c60ff1c27ecf68f0a8faedc01f0b8f1dbab5a899de90912
+checksum: ae10e06ca6ec9c793f9c51baadc62f7c50d0e8698d159a31e4d5f314d58756cc
 created: 2026-11-16
 last_updated: 2026-11-24
 ---
@@ -157,7 +157,7 @@ _none_
 | `filePreview.document`        | `Preview of {name}`                                                         | —             |
 | `filePreview.truncated`       | `Showing the first {shown} characters. Download the file to see all of it.` | —             |
 
-- Formatting: `formatFileSize` (`Intl.NumberFormat` units, the byte step spelled out: `1 byte`, `182 bytes`) for `bytes`, `formatNumber` for the truncation count, both with the `ConfigProvider` locale.
+- Formatting: `formatFileSize` (`Intl.NumberFormat` units, the byte step as `B`: `182 B`, then `kB`, `MB`) for `bytes`, `formatNumber` for the truncation count, both with the `ConfigProvider` locale.
 
 ## Right-to-left
 
@@ -170,7 +170,7 @@ _none_
 ## Responsive
 
 - Container queries: none; it fills its column or drawer.
-- Narrow (≤ 640 px): the name truncates with an ellipsis, the meta line stays under it, the Download label stays. On the meta line the type truncates first and the size never does, so a phone reads `application/js… · 182 bytes`.
+- Narrow (≤ 640 px): the name truncates with an ellipsis, the meta line stays under it, the Download label stays. On the meta line the type truncates first and the size never does, so a phone reads `application/js… · 182 B`.
 - Touch: the Download button and the `actions` slot keep the `Button` touch target.
 - Reflow: no horizontal page scroll at 320 px; long text lines wrap, an image scales down to the body width, and the PDF viewer fills the body width at a fixed height.
 

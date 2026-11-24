@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import DonutChart from '@aziontech/webkit/donut-chart'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
@@ -91,7 +92,8 @@
 
   const period = defineModel<string>('period', { default: '12m' })
 
-  const comparison = 'vs previous month'
+  const comparison = 'this month vs previous month'
+  const LOADING_TREND = [0, 0]
 
   const tiles: { metric: BreakdownDashboardMetric; label: string; description: string }[] = [
     {
@@ -123,6 +125,14 @@
   const split = computed(() => props.split ?? (blocked.value ? [] : sampleSplit))
   const contributors = computed(
     () => props.contributors ?? (blocked.value ? [] : sampleContributors)
+  )
+  const nothing = computed(
+    () =>
+      !blocked.value &&
+      series.value.length === 0 &&
+      split.value.length === 0 &&
+      contributors.value.length === 0 &&
+      Object.values(kpis.value).every((kpi) => !kpi?.value)
   )
   const exportable = computed(
     () =>
@@ -242,7 +252,7 @@
         description="How the organization’s spend splits across categories and the resources that drive it."
       >
         <template #actions>
-          <div class="w-full md:w-48">
+          <div class="shrink-0">
             <Select
               variant="ghost"
               v-model="period"
@@ -295,7 +305,7 @@
             :delta="kpis[tile.metric]?.delta ?? null"
             :delta-label="comparison"
             inverse
-            :trend="kpis[tile.metric]?.trend ?? []"
+            :trend="kpis[tile.metric]?.trend ?? (loading ? LOADING_TREND : [])"
             :loading="loading"
             :error="error"
           >
@@ -306,14 +316,36 @@
         </li>
       </ul>
 
+      <EmptyState
+        v-if="nothing"
+        bordered
+        icon="az az-chart-bar"
+        title="No spend in this period"
+        description="Nothing was billed to the organization yet. Spend by category, the split and the top contributors fill in once a resource runs."
+        data-testid="dashboard-breakdown__empty"
+      >
+        <template
+          v-if="period !== '12m'"
+          #actions
+        >
+          <Button
+            label="Show the last 12 months"
+            variant="outline"
+            size="medium"
+            @click="period = '12m'"
+          />
+        </template>
+      </EmptyState>
+
       <div
+        v-else
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
       >
         <SpendCard
           v-model:form="trendForm"
           :span="8"
           title="Spend by category"
-          hint="Monthly spend stacked by category; the top edge is the total. Legend totals sum the whole range."
+          hint="Monthly spend stacked by category over the period picked in the header; the top edge is the total. Legend totals sum the whole range."
           :forms="forms"
           :exportable="exportable"
           :error="error"

@@ -1779,3 +1779,9 @@ Budget-raise: doc-page-header 32.9 KB → 32.95 KB (measured 32.92 KB): a free `
 Budget-raise: timestamp 20.35 KB → 20.4 KB (measured 20.39 KB): the 40 px coarse-pointer hit layer on the trigger (A5P3-034).
 Budget-raise: file-preview 8.2 KB → 8.25 KB (measured 8.23 KB): the meta line splits the type and the size so the size never truncates on a phone (A5P3-033).
 Budget-raise: copy-text 10.5 KB → 10.65 KB (measured 10.61 KB): middle truncation that keeps the end of a long value visible (A5P3-L02-3).
+
+## StatTile loading keeps the loaded shape (2026-11-24, audit-5 P3, A5P3-138)
+
+While `loading`, StatTile now reserves the delta line (when `deltaLabel` is set) and the sparkline (when `trend` has two or more points) with Skeletons, as its spec already promised, so a row of KPI tiles no longer grows by about 80 px when the data lands.
+
+Budget-raise: stat-tile 9.35 KB → 9.4 KB (measured 9.39 KB): two loading Skeletons that reserve the delta line and the sparkline height (A5P3-138), so dashboards do not shift on arrival.

@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import DashboardExecutiveSummary from '../../../../blocks/dashboard/dashboard-executive-summary/dashboard-executive-summary.vue'
+import { sampleNotes } from '../../../../blocks/dashboard/dashboard-executive-summary/sample'
 import ExecutiveSummaryEmpty from '../../../../blocks/dashboard/dashboard-executive-summary/variants/empty.vue'
 import { useToastRegion } from '../../toast-region'
 
@@ -42,6 +43,16 @@ describe('dashboard/dashboard-executive-summary', () => {
     expect(view.container.textContent).not.toContain('Emma Wilson')
   })
 
+  it('gives every sample note the initials of its author', () => {
+    for (const note of sampleNotes) {
+      const initials = note.author
+        .split(' ')
+        .map((word) => word[0])
+        .join('')
+      expect(note.initials).toBe(initials)
+    }
+  })
+
   it('emits export and downloads the quarter', async () => {
     const view = render(DashboardExecutiveSummary)
     await fireEvent.click(view.getByRole('button', { name: 'Export' }))
@@ -53,7 +64,12 @@ describe('dashboard/dashboard-executive-summary', () => {
 
   it('names the quarter when nothing was reported and disables Export', () => {
     const view = render(ExecutiveSummaryEmpty)
-    expect(view.container.textContent).toContain('No goal results for Q3 2025')
+    const empty = view.container.querySelector(
+      '[data-testid="dashboard-executive-summary__empty"]'
+    )!
+    expect(empty.textContent).toContain('No results reported for Q3 2025')
+    expect(view.container.textContent).not.toContain('No goal results for Q3 2025')
+    expect(view.getByRole('button', { name: 'Show Q4 2025' })).toBeTruthy()
     expect((view.getByRole('button', { name: 'Export' }) as HTMLButtonElement).disabled).toBe(true)
   })
 

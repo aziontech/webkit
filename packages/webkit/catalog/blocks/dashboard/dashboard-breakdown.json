@@ -7,7 +7,7 @@
   },
   {
    "name": "Empty",
-   "summary": "Nothing was billed in the selected period. The tiles show a dash with no delta or trend, and the stacked chart, the donut and the table each keep their box with an EmptyState that names the reason.",
+   "summary": "Nothing was billed in the selected period. The tiles print $0 with no delta or trend, and one bordered page-level EmptyState, No spend in this period, replaces the stacked chart, the donut and the table.",
    "file": "blocks/dashboard/dashboard-breakdown/variants/empty.vue"
   },
   {

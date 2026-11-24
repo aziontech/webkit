@@ -5260,7 +5260,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-wizar
 - Surface: app
 - Source: `blocks/dashboard/dashboard-alerts/dashboard-alerts.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-alerts")`
-- Components: Alert, BarList, Card, Chart, ChartCard, DataTable, `DataTablePagination`, EmptyState, Hint, PageHeader, Select, SeverityTag, Skeleton, StatTile, `TableCellStatus`, Tag, `use-locale`
+- Components: Alert, BarList, Button, Card, Chart, ChartCard, DataTable, `DataTablePagination`, EmptyState, Hint, PageHeader, Select, SeverityTag, Skeleton, StatTile, `TableCellStatus`, Tag, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -5482,7 +5482,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - **Menu items:** verb first. `Copy query`, `Export CSV`.
 - **Overview:** footer links read `Open <Product> dashboard`; breakdown searches name what they match (`Search addresses, networks or countries`).
 - **Toasts:** `Query copied.` / `Paste it into any GraphQL client that sends your token.`; `The query could not be copied.`; `CSV exported.` with the file name.
-- **Metrics:** title `Real-time metrics`; tab labels are product names; aggregation tags name the math (`Sum`, `Median`, `Percentile`).
+- **Metrics:** title `Real-time metrics`; tab labels are product names; the aggregation names the math in muted text (`Sum`, `Median`, `Percentile`).
 - **Usage:** title `Data usage`, description `What your projects consumed in the period, against the previous period.`; card titles say what is compared (`Data transferred, this period vs previous`); series `This period`, `Previous period`.
 - **Empty state:** `No traffic yet` / `Metrics appear here once a service serves requests.`
 - **No-match state:** `No matching rows` / `Change the search.`
@@ -5628,7 +5628,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 
 - Default: the populated breakdown for the period (`v-model:period`).
 - Loading: `loading` is set; every tile, both charts and the table hold their place with a `Skeleton`.
-- Empty: nothing billed in the period (`kpis` is `{}` and every list is `[]`); tiles show a dash with no delta or trend, the exports disable, and the stacked chart, donut and table each keep their box with an `EmptyState` that names the reason.
+- Empty: nothing billed in the period (every kpi `0` and every list `[]`); tiles print `$0` with no delta or trend, the exports disable, and one page-level `EmptyState` replaces the stacked chart, the donut and the table.
 - Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
@@ -5653,7 +5653,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Surface: app
 - Source: `blocks/dashboard/dashboard-configurable/dashboard-configurable.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-configurable")`
-- Components: Alert, BarList, Button, Chart, ChartCard, DashboardGrid, DonutChart, Hint, IconButton, PageHeader, Tag, `use-locale`
+- Components: Alert, BarList, Button, Chart, ChartCard, DashboardGrid, DonutChart, EmptyState, Hint, IconButton, PageHeader, Tag, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-layout`, `webkit-ui-states`
 
 ## Asked as
@@ -5717,7 +5717,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Give every `DashboardGrid.Item` the card title as its `label`; it is what moves and resizes announce.
 - Announce a reset yourself in a polite live region (`Layout reset to the default.`); the board
   announces only what it did.
-- Keep every card at its place and size in loading and empty states, so the reader can arrange it
+- Keep every card at its place and size in loading and partly empty states, so the reader can arrange it
   before data arrives.
 
 ## Don't
@@ -5735,7 +5735,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - **Help line:** two short sentences on how, no layout positions. `Drag a card by its handle to move it, or by its corner to resize it. Focus a handle to use the arrow keys.`
 - **Handle labels:** verb plus card title. `Move Requests over time`, `Resize Requests over time`.
 - **Announcements:** full sentences with a period. `Layout reset to the default.`
-- **Empty state:** `No requests yet` / `Metrics appear here once a service serves requests.`
+- **Empty state:** `No requests yet` / `Metrics appear here once a service serves requests.` for one card; the page-level one says what fills the page and offers Create Application.
 
 ## Accessibility
 
@@ -5751,7 +5751,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Default: the arranged dashboard, read-only (`v-model:layout`).
 - Editing: `v-model:editing` is `true`; handles and resize corners on every card, span tags in the headers, help line visible.
 - Loading: `loading` is set; every chart renders its own `Skeleton` inside its card; the layout holds its shape.
-- Empty: nothing recorded yet (`series` is `{}`, `sources` is `[]`); each card keeps its place and size and shows its empty state.
+- Empty: nothing recorded yet (`series` is `{}`, `sources` is `[]`); one bordered page-level `EmptyState` (`No requests yet`, with Create Application as the next step) replaces the grid and the layout controls, instead of the same empty state in every card. A card left empty while others have data keeps its place and size and shows its own empty state.
 - Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
@@ -5866,7 +5866,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 
 - Default: the reported quarter (`v-model:quarter`).
 - Loading: `loading` is set; tiles and charts render their own `Skeleton`; goals and commentary hold Skeleton rows.
-- Empty: a quarter with nothing reported (`kpis` and `trends` are `{}`, `goals` and `notes` are `[]`); tiles show a dash with no delta, every trend card keeps its box with an `EmptyState` that names the quarter, and goals and commentary say what fills them.
+- Empty: a quarter with nothing reported (`kpis` and `trends` are `{}`, `goals` and `notes` are `[]`); tiles show a dash with no delta, and one page-level `EmptyState` names the quarter and offers the next later one in place of the trend cards, goals and commentary.
 - Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
@@ -5925,7 +5925,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - B. Period — `Select` (required)
 - C. Cards — `ChartCard` (required)
 - D. Definitions — `Hint` (required)
-- E. Overall figure — `StatTile` (required)
+- E. Overall figure (required)
 - F. Band — `Tag` (required)
 - G. Loading placeholders — `Skeleton` (required)
 - H. Score per hour — `Chart` (required)
@@ -8337,7 +8337,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-variables
 - Surface: app
 - Source: `blocks/settings/settings-form/settings-form.vue` in `@aziontech/webkit`
 - MCP: `get_block("settings/settings-form")`
-- Components: Alert, Button, Card, ConfirmDialog, Field, `FieldError`, Input, Item, Kbd, LanguageSelect, Link, PageHeader, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, `use-unsaved-changes`
+- Components: Alert, Button, Card, ConfirmDialog, CopyText, Field, `FieldError`, Input, Item, Kbd, LanguageSelect, Link, PageHeader, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -9853,7 +9853,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-card.md](
 ## Copy
 
 - **Title:** the module name as the sidebar shows it, e.g. "Applications". Description: one sentence with a period.
-- **Create action:** `Create <Object>` with the entity's capitalization, e.g. "Create Application"; never "New" or a bare noun. The empty state repeats the same label.
+- **Create action:** `Create <Object>` with the entity's capitalization, e.g. "Create Application"; never "New" or a bare noun. The empty state uses the same label and is the only Create while the list is empty.
 - **Filter:** placeholder and `aria-label` name what is filtered, e.g. "Filter applications".
 - **Bulk action:** the verb, then the count in parentheses, e.g. "Delete", "Delete (3)".
 - **Field labels:** one or two words, sentence case, no colon, e.g. "Status", "Domain", "Region", "Requests in 24h", "Owner". Preferences title: "Card preferences".
@@ -10280,7 +10280,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-marketpla
 - Each tile's target is a real button named by the integration; the action button sits above it and is named with the integration, so "Install" is never ambiguous in a list.
 - The Installed state is text in a `Tag`, never colour alone.
 - `/` focuses the integrations search from anywhere on the page, except while typing in a field.
-- The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to what opened it; its form has an accessible name.
+- The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to what opened it; its form has an accessible name. It opens with focus on its title block (the name and publisher, marked `data-autofocus` with `tabindex="-1"`), not on the Application field near the bottom, so the body stays scrolled to its top and Version and Updated stay in view; Tab reaches Application.
 - The Application field is required and labelled; its error is tied to the `Select` through the `Field`, and focus stays on Install so the person can correct and resubmit.
 - Toasts never take focus and are announced politely, the failure toast assertively; the failure toast stays until closed and its actions are reachable by keyboard.
 - In Configure, `⌘ S` (`Ctrl S` off Apple) saves the settings while the `SaveBar` shows unsaved changes, the same as Save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
@@ -15490,7 +15490,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `data-draggable`, `data-resizable` mirror the props
 - `data-dragging` while a native drag runs; `data-resizing` while a pointer resize runs
 - `data-flush` on the content is set when the padding is off (`padded` false)
-- Responsive: the root is the `@container/chart-card`. The header and footer wrap; below `@xs` of the card the controls take their own line at full width.
+- Responsive: the root is the `@container/chart-card`. The header and footer wrap; the controls stay at the end of the title row, and when they cannot fit beside the title they wrap to a line of their own, still aligned to the end, never stretched to full width under a start-aligned title.
 
 ## Accessibility
 
@@ -16106,7 +16106,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `error` (a dash over the same band with a `neutral` "Couldn't load" `Tag` in place of "No data", kept quiet because the danger `Alert` that explains the failure and offers Retry belongs to the page or region, not to every tile; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
+- Visual states: `default`, `loading` (Skeleton lines: the figure always, the delta line when `deltaLabel` is set and the sparkline height when `trend` has two or more points, so the tile keeps the shape it loads into), `error` (a dash over the same band with a `neutral` "Couldn't load" `Tag` in place of "No data", kept quiet because the danger `Alert` that explains the failure and offers Retry belongs to the page or region, not to every tile; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row

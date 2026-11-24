@@ -36,6 +36,18 @@ describe('view/view-events-explorer block', () => {
     expect(view.getByTestId('events-time-zone').textContent?.trim()).toBe('Times in UTC')
   })
 
+  it('keeps the average request time reading number then unit in a right-to-left page', async () => {
+    document.documentElement.dir = 'rtl'
+    try {
+      const view = render(ViewEventsExplorer)
+      const time = await waitFor(() => view.getByTestId('log-summary__request-time'))
+      expect(time.getAttribute('dir')).toBe('ltr')
+      expect(time.textContent?.trim()).toMatch(/^\d[\d,]* ms$/)
+    } finally {
+      document.documentElement.removeAttribute('dir')
+    }
+  })
+
   it('shows the zone beside the picker in the Query variant and changes it there', async () => {
     const view = render(EventsExplorerQuery)
     const zone = await waitFor(() => view.getByRole('combobox', { name: 'Time zone' }))
@@ -147,6 +159,22 @@ describe('view/view-events-explorer block', () => {
     )
     expect(failed.queryAllByLabelText('0 distinct values')).toHaveLength(0)
     await page.viewport(414, 896)
+  })
+
+  it('gives each value count a framed trigger of at least 24 px that opens the top values', async () => {
+    await page.viewport(1280, 900)
+    try {
+      const view = render(ViewEventsExplorer)
+      const trigger = await waitFor(() =>
+        view.getByRole('button', { name: /^Filter by Level, \d+ values$/ })
+      )
+      const count = within(trigger).getByTestId('field-row__count')
+      expect(count.classList.contains('min-h-6')).toBe(true)
+      expect(count.classList.contains('min-w-6')).toBe(true)
+      expect(count.classList.contains('hover:bg-(--bg-hover)')).toBe(true)
+    } finally {
+      await page.viewport(414, 896)
+    }
   })
 
   it('focuses Search events on / with nothing focused', async () => {
