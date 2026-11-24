@@ -5,6 +5,8 @@
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Diagram, { type DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
+  import { sectionActions } from '../lib/section-actions'
+  import SectionActions from '../parts/section-actions.vue'
   import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
@@ -73,6 +75,7 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'architecture-tabs-section'
   )
+  const headerActions = computed(() => sectionActions(props.primaryAction, undefined))
 
   const items = computed(() =>
     props.tabs.map((tab) => ({ title: tab.title, description: tab.description }))
@@ -92,8 +95,14 @@
     :framed="false"
     align="split"
     header-padding="small"
-    :primary-action="primaryAction"
   >
+    <template
+      v-if="headerActions.length"
+      #header-actions
+    >
+      <SectionActions :actions="headerActions" />
+    </template>
+
     <RegistrationFrame
       flush
       borders="top"

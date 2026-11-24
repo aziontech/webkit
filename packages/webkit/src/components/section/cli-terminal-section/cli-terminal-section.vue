@@ -5,6 +5,8 @@
   import Texture from '../../content/texture/texture.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import { sectionActions } from '../lib/section-actions'
+  import SectionActions from '../parts/section-actions.vue'
   import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
@@ -62,6 +64,7 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'cli-terminal-section'
   )
+  const headerActions = computed(() => sectionActions(props.primaryAction, undefined, 'outline'))
 
   const tabs = computed(() =>
     props.session.length > 0
@@ -119,10 +122,15 @@
     :framed="false"
     align="split"
     header-padding="small"
-    :primary-action="primaryAction"
-    primary-variant="outline"
     class="[--module-header-headline-span:2] [--module-header-headline-max:var(--container-xl)]"
   >
+    <template
+      v-if="headerActions.length"
+      #header-actions
+    >
+      <SectionActions :actions="headerActions" />
+    </template>
+
     <RegistrationFrame
       flush
       borders="y"

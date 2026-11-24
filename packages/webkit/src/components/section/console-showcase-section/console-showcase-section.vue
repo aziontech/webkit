@@ -7,15 +7,14 @@
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
   import type { TextureFade, TextureVariant } from '../../content/texture/texture.vue'
   import Texture from '../../content/texture/texture.vue'
-  import Module from '../../layout/module/module.vue'
   import type {
     ModuleHeaderAlign,
     ModuleHeaderPadding,
     ModuleHeaderSize
   } from '../../layout/module-header/module-header.vue'
   import ModuleHeader from '../../layout/module-header/module-header.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CapabilityGridSectionActions from '../capability-grid-section/parts/capability-grid-section-actions.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({ name: 'ConsoleShowcaseSection', inheritAttrs: false })
 
@@ -149,76 +148,64 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
     :data-testid="testId"
     :data-variant="variant"
-    :aria-label="title || undefined"
+    :label="title"
   >
-    <Module
-      :divided="false"
-      :padded="false"
+    <template
+      v-if="title"
+      #header
     >
-      <template
-        v-if="title"
-        #header
+      <ModuleHeader
+        class="[--module-header-headline-max:var(--container-xl)] [--module-header-headline-span:2]"
+        :align="titleAlign"
+        :padding="titlePadding"
+        :size="size"
+        :eyebrow="eyebrow"
+        :title="title"
+        :description="description"
       >
-        <ModuleHeader
-          class="[--module-header-headline-max:var(--container-xl)] [--module-header-headline-span:2]"
-          :align="titleAlign"
-          :padding="titlePadding"
-          :size="size"
-          :eyebrow="eyebrow"
-          :title="title"
-          :description="description"
+        <template
+          v-if="tabs.length || buttons.length"
+          #actions
         >
-          <template
-            v-if="tabs.length || buttons.length"
-            #actions
-          >
-            <CapabilityGridSectionActions :actions="buttons" />
-            <ToggleGroup
-              v-if="tabs.length"
-              v-model="current"
-              :options="options"
-              :fluid="!roomy && !cramped"
-              :size="cramped ? 'medium' : 'large'"
-              :aria-label="tabsAriaLabel || t('consoleShowcaseSection.views')"
-            />
-          </template>
-        </ModuleHeader>
-      </template>
-
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="all"
-      >
-        <div
-          :data-variant="variant"
-          :data-testid="`${testId}__frame`"
-          class="relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-md) pb-(--spacing-xl) md:data-[variant=console]:pb-0"
-        >
-          <Texture
-            v-if="variant === 'console'"
-            :variant="texture"
-            size="small"
-            :fade="textureFade"
+          <CapabilityGridSectionActions :actions="buttons" />
+          <ToggleGroup
+            v-if="tabs.length"
+            v-model="current"
+            :options="options"
+            :fluid="!roomy && !cramped"
+            :size="cramped ? 'medium' : 'large'"
+            :aria-label="tabsAriaLabel || t('consoleShowcaseSection.views')"
           />
-          <div
-            :data-variant="variant"
-            :class="SCENE_CLASS"
-            :style="cropStyle"
-          >
-            <slot
-              name="scene"
-              :tab="tabs.length ? current : undefined"
-            />
-          </div>
-        </div>
-      </RegistrationFrame>
-    </Module>
-  </section>
+        </template>
+      </ModuleHeader>
+    </template>
+
+    <div
+      :data-variant="variant"
+      :data-testid="`${testId}__frame`"
+      class="relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-md) pb-(--spacing-xl) md:data-[variant=console]:pb-0"
+    >
+      <Texture
+        v-if="variant === 'console'"
+        :variant="texture"
+        size="small"
+        :fade="textureFade"
+      />
+      <div
+        :data-variant="variant"
+        :class="SCENE_CLASS"
+        :style="cropStyle"
+      >
+        <slot
+          name="scene"
+          :tab="tabs.length ? current : undefined"
+        />
+      </div>
+    </div>
+  </SectionBand>
 </template>

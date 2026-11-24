@@ -4,9 +4,9 @@
   import { safeHref } from '../../../utils/safe-href'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'ComplianceLogosSection',
@@ -73,84 +73,79 @@
 </script>
 
 <template>
-  <div
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
+    :anchor="anchor"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-2xl)"
+    :filled="title.length > 0"
+    :framed="false"
   >
-    <Module
-      v-if="title.length > 0"
-      :divided="false"
-      :padded="false"
+    <MediaSplit
+      framed
+      align="center"
+      texture="none"
+      size="large"
+      :eyebrow="eyebrow"
+      :title="title"
+      :description="description"
     >
-      <MediaSplit
-        framed
-        align="center"
-        texture="none"
-        size="large"
-        :eyebrow="eyebrow"
-        :title="title"
-        :description="description"
-      >
-        <template #media>
-          <CardGrid
-            flush
-            variant="frame"
-            :columns="3"
-            :mobile-columns="2"
-            role="list"
-            :aria-label="ariaLabel || undefined"
-            class="w-full self-stretch"
+      <template #media>
+        <CardGrid
+          flush
+          variant="frame"
+          :columns="3"
+          :mobile-columns="2"
+          role="list"
+          :aria-label="ariaLabel || undefined"
+          class="w-full self-stretch"
+        >
+          <CardGridCell
+            v-for="certification in certifications"
+            :key="certification.label"
+            variant="surface"
+            :padded="false"
+            role="listitem"
           >
-            <CardGridCell
-              v-for="certification in certifications"
-              :key="certification.label"
-              variant="surface"
-              :padded="false"
-              role="listitem"
+            <div
+              class="flex h-full flex-col items-center justify-center gap-(--spacing-lg) px-(--spacing-sm) py-(--spacing-xl)"
             >
-              <div
-                class="flex h-full flex-col items-center justify-center gap-(--spacing-lg) px-(--spacing-sm) py-(--spacing-xl)"
-              >
-                <img
-                  :src="certification.badge"
-                  :alt="certification.alt"
-                  loading="lazy"
-                  decoding="async"
-                  class="h-16 w-24 object-contain"
-                />
-                <span :class="CERTIFICATION_BADGE_CLASS">
-                  <span
-                    aria-hidden="true"
-                    class="flex size-5 shrink-0 items-center justify-center rounded-full bg-(--success) text-tag-sm text-(--success-foreground)"
-                  >
-                    <i class="az az-check text-[length:inherit] leading-none" />
-                  </span>
-                  {{ certification.label }}
-                </span>
-              </div>
-            </CardGridCell>
-            <CardGridCell
-              v-if="primaryAction"
-              variant="surface"
-              :padded="false"
-              role="listitem"
-            >
-              <a
-                :href="safeHref(primaryAction.href) ?? undefined"
-                :class="MORE_LINK_CLASS"
-              >
-                {{ primaryAction.label }}
-                <i
+              <img
+                :src="certification.badge"
+                :alt="certification.alt"
+                loading="lazy"
+                decoding="async"
+                class="h-16 w-24 object-contain"
+              />
+              <span :class="CERTIFICATION_BADGE_CLASS">
+                <span
                   aria-hidden="true"
-                  :class="MORE_LINK_CHEVRON_CLASS"
-                />
-              </a>
-            </CardGridCell>
-          </CardGrid>
-        </template>
-      </MediaSplit>
-    </Module>
-  </div>
+                  class="flex size-5 shrink-0 items-center justify-center rounded-full bg-(--success) text-tag-sm text-(--success-foreground)"
+                >
+                  <i class="az az-check text-[length:inherit] leading-none" />
+                </span>
+                {{ certification.label }}
+              </span>
+            </div>
+          </CardGridCell>
+          <CardGridCell
+            v-if="primaryAction"
+            variant="surface"
+            :padded="false"
+            role="listitem"
+          >
+            <a
+              :href="safeHref(primaryAction.href) ?? undefined"
+              :class="MORE_LINK_CLASS"
+            >
+              {{ primaryAction.label }}
+              <i
+                aria-hidden="true"
+                :class="MORE_LINK_CHEVRON_CLASS"
+              />
+            </a>
+          </CardGridCell>
+        </CardGrid>
+      </template>
+    </MediaSplit>
+  </SectionBand>
 </template>

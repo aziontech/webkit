@@ -8,6 +8,8 @@
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
   import Link from '../../navigation/link/link.vue'
+  import { sectionActions } from '../lib/section-actions'
+  import SectionActions from '../parts/section-actions.vue'
   import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
@@ -85,6 +87,7 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'feature-tabs-section'
   )
+  const headerActions = computed(() => sectionActions(props.primaryAction, undefined))
 
   const hasHeader = computed(() => props.title.length > 0)
 
@@ -111,8 +114,14 @@
     :filled="tabs.length > 0"
     :framed="false"
     align="split"
-    :primary-action="primaryAction"
   >
+    <template
+      v-if="headerActions.length"
+      #header-actions
+    >
+      <SectionActions :actions="headerActions" />
+    </template>
+
     <RegistrationFrame
       flush
       :borders="primaryAction && !hasHeader ? 'y' : 'none'"

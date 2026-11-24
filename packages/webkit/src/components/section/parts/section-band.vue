@@ -1,10 +1,6 @@
 <script setup lang="ts">
-  import { computed } from 'vue'
-
-  import Button from '../../action/button/button.vue'
   import Module from '../../layout/module/module.vue'
   import ModuleHeader, {
-    type ModuleHeaderAction,
     type ModuleHeaderAlign,
     type ModuleHeaderDescriptionWidth,
     type ModuleHeaderPadding,
@@ -40,19 +36,13 @@
     headerPadding?: ModuleHeaderPadding
     /** Measure of the supporting sentence. */
     descriptionWidth?: ModuleHeaderDescriptionWidth
-    /** First large button in the header; shown only with a label and a link. */
-    primaryAction?: ModuleHeaderAction
-    /** Second large button in the header, outlined; shown only with a label and a link. */
-    secondaryAction?: ModuleHeaderAction
-    /** Button variant of the first action. */
-    primaryVariant?: 'secondary' | 'outline'
     /** Wraps the content in the band's registration frame; false hands the content the bare module. */
     framed?: boolean
     /** Corner marks of the frame around the content. */
     marks?: RegistrationFrameMarks
   }
 
-  const props = withDefaults(defineProps<SectionBandProps>(), {
+  withDefaults(defineProps<SectionBandProps>(), {
     anchor: '',
     label: '',
     filled: true,
@@ -63,9 +53,6 @@
     headerSize: undefined,
     headerPadding: undefined,
     descriptionWidth: undefined,
-    primaryAction: undefined,
-    secondaryAction: undefined,
-    primaryVariant: 'secondary',
     framed: true,
     marks: 'all'
   })
@@ -75,22 +62,11 @@
     default(): unknown
     /** Replaces the band's header row. */
     header?(): unknown
-    /** Replaces the header's buttons. */
+    /** Buttons at the end of the header row. */
     'header-actions'?(): unknown
     /** Rendered after the module, inside the band. */
     after?(): unknown
   }>()
-
-  const shown = (action: ModuleHeaderAction | undefined): action is ModuleHeaderAction =>
-    Boolean(action?.label && action.href)
-
-  const actions = computed(() => {
-    const named: (ModuleHeaderAction & { variant: 'secondary' | 'outline' })[] = []
-    if (shown(props.primaryAction))
-      named.push({ ...props.primaryAction, variant: props.primaryVariant })
-    if (shown(props.secondaryAction)) named.push({ ...props.secondaryAction, variant: 'outline' })
-    return named
-  })
 </script>
 
 <template>
@@ -120,22 +96,10 @@
             :description="description"
           >
             <template
-              v-if="slots['header-actions'] || actions.length"
+              v-if="slots['header-actions']"
               #actions
             >
-              <slot name="header-actions">
-                <Button
-                  v-for="action in actions"
-                  :key="action.label"
-                  :label="action.label"
-                  :href="action.href"
-                  :target="action.target"
-                  :variant="action.variant"
-                  :icon="action.trailing ? 'az az-chevron-right' : ''"
-                  icon-position="trailing"
-                  :animated="Boolean(action.trailing)"
-                />
-              </slot>
+              <slot name="header-actions" />
             </template>
           </ModuleHeader>
         </slot>

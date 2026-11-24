@@ -8,15 +8,13 @@
   import ThirdPartyLogo, {
     type ThirdPartyLogoArtwork
   } from '../../content/third-party-logo/third-party-logo.vue'
-  import Module from '../../layout/module/module.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Popover from '../../overlay/popover/popover.vue'
   import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
   import PopoverDescription from '../../overlay/popover/popover-description/popover-description.vue'
   import PopoverTitle from '../../overlay/popover/popover-title/popover-title.vue'
   import PopoverTrigger from '../../overlay/popover/popover-trigger/popover-trigger.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'CompetitorComparisonSection',
@@ -175,178 +173,158 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
-    class="scroll-mt-(--spacing-2xl)"
     :data-testid="testId"
-    :aria-label="title || undefined"
+    :anchor="anchor"
+    :label="title"
+    :filled="hasGroups"
+    align="start"
+    :eyebrow="eyebrow"
+    :title="title"
   >
-    <Module
-      v-if="hasGroups"
-      :divided="false"
-      :padded="false"
+    <ul
+      v-if="legend.length > 0"
+      :data-testid="`${testId}__legend`"
+      :class="LEGEND_CLASS"
     >
-      <template
-        v-if="title"
-        #header
+      <li
+        v-for="level in legend"
+        :key="level"
+        class="flex items-center gap-(--spacing-xs)"
       >
-        <ModuleHeader
-          align="start"
-          :eyebrow="eyebrow"
-          :title="title"
+        <i
+          :data-level="level"
+          :class="supportIcon[level]"
+          class="text-body-md text-(--text-muted) data-[level=full]:text-(--success-mark)"
+          aria-hidden="true"
         />
-      </template>
-
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="all"
+        {{ labelOf(level) }}
+      </li>
+    </ul>
+    <table
+      class="w-full table-fixed border-separate border-spacing-0 text-start [--competitor-comparison-section-head:3.5rem] sm:[--competitor-comparison-section-head:5rem]"
+    >
+      <caption
+        v-if="caption"
+        class="sr-only"
       >
-        <ul
-          v-if="legend.length > 0"
-          :data-testid="`${testId}__legend`"
-          :class="LEGEND_CLASS"
-        >
-          <li
-            v-for="level in legend"
-            :key="level"
-            class="flex items-center gap-(--spacing-xs)"
+        {{
+          caption
+        }}
+      </caption>
+      <colgroup>
+        <col class="w-[52%] sm:w-[50%] md:w-[44%] lg:w-[40%]" />
+        <col />
+        <col />
+      </colgroup>
+      <thead>
+        <tr>
+          <th
+            scope="col"
+            :class="CAPABILITY_HEADER_CELL_CLASS"
           >
-            <i
-              :data-level="level"
-              :class="supportIcon[level]"
-              class="text-body-md text-(--text-muted) data-[level=full]:text-(--success-mark)"
-              aria-hidden="true"
+            <span class="text-overline-md text-(--text-muted)">{{ columnLabel }}</span>
+          </th>
+          <th
+            scope="col"
+            aria-label="Azion"
+            :class="PLATFORM_HEADER_CELL_CLASS"
+          >
+            <Brand
+              variant="default"
+              size="small"
+              class="max-w-full [&>svg]:h-3! [&>svg]:max-w-full sm:[&>svg]:h-4! md:[&>svg]:h-6!"
             />
-            {{ labelOf(level) }}
-          </li>
-        </ul>
-        <table
-          class="w-full table-fixed border-separate border-spacing-0 text-start [--competitor-comparison-section-head:3.5rem] sm:[--competitor-comparison-section-head:5rem]"
-        >
-          <caption
-            v-if="caption"
-            class="sr-only"
+            <span class="sr-only">Azion</span>
+          </th>
+          <th
+            scope="col"
+            :aria-label="competitor.name"
+            :class="PLATFORM_HEADER_CELL_CLASS"
           >
-            {{
-              caption
-            }}
-          </caption>
-          <colgroup>
-            <col class="w-[52%] sm:w-[50%] md:w-[44%] lg:w-[40%]" />
-            <col />
-            <col />
-          </colgroup>
-          <thead>
-            <tr>
-              <th
-                scope="col"
-                :class="CAPABILITY_HEADER_CELL_CLASS"
-              >
-                <span class="text-overline-md text-(--text-muted)">{{ columnLabel }}</span>
-              </th>
-              <th
-                scope="col"
-                aria-label="Azion"
-                :class="PLATFORM_HEADER_CELL_CLASS"
-              >
-                <Brand
-                  variant="default"
-                  size="small"
-                  class="max-w-full [&>svg]:h-3! [&>svg]:max-w-full sm:[&>svg]:h-4! md:[&>svg]:h-6!"
-                />
-                <span class="sr-only">Azion</span>
-              </th>
-              <th
-                scope="col"
-                :aria-label="competitor.name"
-                :class="PLATFORM_HEADER_CELL_CLASS"
-              >
-                <ThirdPartyLogo
-                  :name="competitorMark.name"
-                  :src="competitorMark.logo"
-                  :src-light="competitorMark.logoLight"
-                  :artwork="competitorMark.artwork"
-                  :data-testid="`${testId}__competitor-logo`"
-                  class="h-3 sm:h-4 md:h-6"
-                />
-              </th>
-            </tr>
-          </thead>
-          <tbody
-            v-for="(group, groupIndex) in groups"
-            :key="group.title"
+            <ThirdPartyLogo
+              :name="competitorMark.name"
+              :src="competitorMark.logo"
+              :src-light="competitorMark.logoLight"
+              :artwork="competitorMark.artwork"
+              :data-testid="`${testId}__competitor-logo`"
+              class="h-3 sm:h-4 md:h-6"
+            />
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        v-for="(group, groupIndex) in groups"
+        :key="group.title"
+      >
+        <tr>
+          <th
+            scope="colgroup"
+            colspan="3"
+            :class="GROUP_HEADER_CELL_CLASS"
           >
-            <tr>
-              <th
-                scope="colgroup"
-                colspan="3"
-                :class="GROUP_HEADER_CELL_CLASS"
-              >
-                <span
-                  :data-testid="`${testId}__group-title`"
-                  class="border-s-2 border-(--primary) ps-(--spacing-xs) text-overline-md text-(--text-default)"
-                  >{{ group.title }}</span
-                >
-              </th>
-            </tr>
-            <tr
-              v-for="(item, rowIndex) in group.rows"
-              :key="item.capability"
-              :data-last="isLast(groupIndex, rowIndex) || null"
-              class="group/row"
+            <span
+              :data-testid="`${testId}__group-title`"
+              class="border-s-2 border-(--primary) ps-(--spacing-xs) text-overline-md text-(--text-default)"
+              >{{ group.title }}</span
             >
-              <th
-                scope="row"
-                :class="ROW_HEADER_CELL_CLASS"
+          </th>
+        </tr>
+        <tr
+          v-for="(item, rowIndex) in group.rows"
+          :key="item.capability"
+          :data-last="isLast(groupIndex, rowIndex) || null"
+          class="group/row"
+        >
+          <th
+            scope="row"
+            :class="ROW_HEADER_CELL_CLASS"
+          >
+            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <span class="min-w-0 text-pretty wrap-break-word">{{ item.capability }}</span>
+              <span
+                v-if="item.definition"
+                class="-my-(--spacing-2xs) inline-flex shrink-0"
               >
-                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <span class="min-w-0 text-pretty wrap-break-word">{{ item.capability }}</span>
-                  <span
-                    v-if="item.definition"
-                    class="-my-(--spacing-2xs) inline-flex shrink-0"
-                  >
-                    <Popover side="auto">
-                      <PopoverTrigger>
-                        <IconButton
-                          variant="ghost"
-                          size="small"
-                          icon="az az-circle-info"
-                          :ariaLabel="
-                            t('competitorComparisonSection.about', { capability: item.capability })
-                          "
-                        />
-                      </PopoverTrigger>
-                      <PopoverContent>
-                        <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-sm)">
-                          <PopoverTitle>{{ item.capability }}</PopoverTitle>
-                          <PopoverDescription>{{ item.definition }}</PopoverDescription>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  </span>
-                </span>
-              </th>
-              <td
-                v-for="platform in platforms"
-                :key="platform"
-                class="border-b border-s border-(--border-default) px-(--spacing-xs) py-(--spacing-md) text-center align-middle group-data-[last]/row:border-b-0 sm:px-(--spacing-md)"
-              >
-                <Tooltip :content="labelOf(item[platform])">
-                  <i
-                    :data-support="item[platform] ?? 'none'"
-                    :class="iconOf(item[platform])"
-                    class="text-body-md data-[support=full]:text-(--success-mark) data-[support=none]:text-(--text-muted) data-[support=partial]:text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                </Tooltip>
-                <span class="sr-only">{{ labelOf(item[platform]) }}</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </RegistrationFrame>
-    </Module>
-  </section>
+                <Popover side="auto">
+                  <PopoverTrigger>
+                    <IconButton
+                      variant="ghost"
+                      size="small"
+                      icon="az az-circle-info"
+                      :ariaLabel="
+                        t('competitorComparisonSection.about', { capability: item.capability })
+                      "
+                    />
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-sm)">
+                      <PopoverTitle>{{ item.capability }}</PopoverTitle>
+                      <PopoverDescription>{{ item.definition }}</PopoverDescription>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </span>
+            </span>
+          </th>
+          <td
+            v-for="platform in platforms"
+            :key="platform"
+            class="border-b border-s border-(--border-default) px-(--spacing-xs) py-(--spacing-md) text-center align-middle group-data-[last]/row:border-b-0 sm:px-(--spacing-md)"
+          >
+            <Tooltip :content="labelOf(item[platform])">
+              <i
+                :data-support="item[platform] ?? 'none'"
+                :class="iconOf(item[platform])"
+                class="text-body-md data-[support=full]:text-(--success-mark) data-[support=none]:text-(--text-muted) data-[support=partial]:text-(--text-muted)"
+                aria-hidden="true"
+              />
+            </Tooltip>
+            <span class="sr-only">{{ labelOf(item[platform]) }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </SectionBand>
 </template>

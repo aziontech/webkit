@@ -21,6 +21,7 @@
   import PanelBody from '../../overlay/panel/panel-body.vue'
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
+  import SectionBand from '../parts/section-band.vue'
   import { useJobPostingForm } from './composables/use-job-posting-form'
   import JobPostingSectionRail from './parts/job-posting-section-rail.vue'
 
@@ -219,83 +220,76 @@
 </script>
 
 <template>
-  <div
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
     :data-loading="loading || null"
     :data-submitted="submitted || null"
     :data-failed="failed || null"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :filled="Boolean(title)"
+    marks="bottom"
   >
-    <template v-if="title">
-      <Module
-        :divided="false"
-        :padded="false"
-      >
-        <RegistrationFrame
-          flush
-          borders="y"
-          marks="bottom"
+    <div class="grid lg:grid-cols-[minmax(0,1fr)_var(--container-xs)]">
+      <JobPostingSectionRail
+        :test-id="testId"
+        :area="area"
+        :title="title"
+        :facets="facets"
+        :apply-label="applyLabel"
+        :apply-href="`#${applyId}`"
+      />
+
+      <div class="min-w-0 lg:col-start-1 lg:row-start-1">
+        <div
+          v-for="(section, index) in sections"
+          :key="`${section.title}-${index}`"
+          :data-ruled="index > 0 || null"
+          :data-testid="`${testId}__section`"
+          class="border-(--border-default) data-[ruled]:border-t"
         >
-          <div class="grid lg:grid-cols-[minmax(0,1fr)_var(--container-xs)]">
-            <JobPostingSectionRail
-              :test-id="testId"
-              :area="area"
-              :title="title"
-              :facets="facets"
-              :apply-label="applyLabel"
-              :apply-href="`#${applyId}`"
+          <div
+            class="flex max-w-(--layout-measure-content) flex-col gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-2xl)"
+          >
+            <ModuleHeader
+              :framed="false"
+              align="start"
+              size="small"
+              :title="section.title"
             />
 
-            <div class="min-w-0 lg:col-start-1 lg:row-start-1">
-              <div
-                v-for="(section, index) in sections"
-                :key="`${section.title}-${index}`"
-                :data-ruled="index > 0 || null"
-                :data-testid="`${testId}__section`"
-                class="border-(--border-default) data-[ruled]:border-t"
+            <template
+              v-for="(block, blockIndex) in section.blocks"
+              :key="blockIndex"
+            >
+              <p
+                v-if="block.type === 'text'"
+                class="m-0 text-pretty text-body-md text-(--text-muted)"
               >
-                <div
-                  class="flex max-w-(--layout-measure-content) flex-col gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-2xl)"
+                {{ block.text }}
+              </p>
+              <ul
+                v-else
+                class="m-0 flex list-disc flex-col gap-(--spacing-sm) ps-(--spacing-lg)"
+              >
+                <li
+                  v-for="(item, itemIndex) in block.items"
+                  :key="itemIndex"
+                  class="text-pretty text-body-md text-(--text-muted)"
                 >
-                  <ModuleHeader
-                    :framed="false"
-                    align="start"
-                    size="small"
-                    :title="section.title"
-                  />
-
-                  <template
-                    v-for="(block, blockIndex) in section.blocks"
-                    :key="blockIndex"
-                  >
-                    <p
-                      v-if="block.type === 'text'"
-                      class="m-0 text-pretty text-body-md text-(--text-muted)"
-                    >
-                      {{ block.text }}
-                    </p>
-                    <ul
-                      v-else
-                      class="m-0 flex list-disc flex-col gap-(--spacing-sm) ps-(--spacing-lg)"
-                    >
-                      <li
-                        v-for="(item, itemIndex) in block.items"
-                        :key="itemIndex"
-                        class="text-pretty text-body-md text-(--text-muted)"
-                      >
-                        {{ item }}
-                      </li>
-                    </ul>
-                  </template>
-                </div>
-              </div>
-            </div>
+                  {{ item }}
+                </li>
+              </ul>
+            </template>
           </div>
-        </RegistrationFrame>
-      </Module>
+        </div>
+      </div>
+    </div>
 
+    <template
+      v-if="title"
+      #after
+    >
       <Module
         :id="applyId"
         :divided="false"
@@ -483,5 +477,5 @@
         </DialogContent>
       </Dialog>
     </template>
-  </div>
+  </SectionBand>
 </template>

@@ -6,12 +6,12 @@
   import type { CardGridColumns } from '../../layout/card-grid/card-grid.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
-  import Module from '../../layout/module/module.vue'
   import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import FeatureItem from '../../marketing/feature-item/feature-item.vue'
   import Quote from '../../marketing/quote/quote.vue'
   import Stats from '../../marketing/stats/stats.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'NetworkSection',
@@ -131,154 +131,149 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
+    :anchor="anchor"
     :data-testid="testId"
     :data-variant="variant"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :label="title"
+    :filled="title.length > 0"
+    :framed="false"
   >
-    <Module
-      v-if="title.length > 0"
-      :divided="false"
-      :padded="false"
+    <RegistrationFrame
+      flush
+      borders="y"
+      marks="all"
+      class="relative overflow-hidden"
     >
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="all"
-        class="relative overflow-hidden"
-      >
-        <NetworkMap
-          region="world"
-          position="top-right"
-          animated
-          fade="left"
-          :opacity="0.3"
-          density="medium"
-          :scale="1.3"
-          :offset-x="0.5"
-          :offset-y="-0.22"
-          class="max-md:hidden md:max-lg:[--network-map-fade-start:70%] md:max-lg:[--network-map-fade-end:100%]"
-        />
+      <NetworkMap
+        region="world"
+        position="top-right"
+        animated
+        fade="left"
+        :opacity="0.3"
+        density="medium"
+        :scale="1.3"
+        :offset-x="0.5"
+        :offset-y="-0.22"
+        class="max-md:hidden md:max-lg:[--network-map-fade-start:70%] md:max-lg:[--network-map-fade-end:100%]"
+      />
 
-        <div class="relative flex h-full flex-col">
+      <div class="relative flex h-full flex-col">
+        <div
+          class="relative flex min-h-[38rem] flex-col justify-between gap-(--spacing-xl) p-(--spacing-2xl) md:min-h-[clamp(36rem,60vh,40rem)] lg:min-h-[clamp(340px,52vh,620px)]"
+        >
+          <ModuleHeader
+            :framed="false"
+            align="start"
+            size="small"
+            :eyebrow="eyebrow"
+            :title="title"
+            class="relative [&_h2]:max-w-(--container-lg)"
+          />
+
           <div
-            class="relative flex min-h-[38rem] flex-col justify-between gap-(--spacing-xl) p-(--spacing-2xl) md:min-h-[clamp(36rem,60vh,40rem)] lg:min-h-[clamp(340px,52vh,620px)]"
+            class="relative -mx-(--spacing-2xl) min-h-48 flex-1 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_75%,transparent)] md:hidden"
           >
-            <ModuleHeader
-              :framed="false"
-              align="start"
-              size="small"
-              :eyebrow="eyebrow"
-              :title="title"
-              class="relative [&_h2]:max-w-(--container-lg)"
+            <NetworkMap
+              region="world"
+              position="center"
+              animated
+              :opacity="0.3"
+              density="medium"
+              :scale="3.3"
+              :offset-x="0.31"
+              :offset-y="0.14"
             />
-
-            <div
-              class="relative -mx-(--spacing-2xl) min-h-48 flex-1 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_75%,transparent)] md:hidden"
-            >
-              <NetworkMap
-                region="world"
-                position="center"
-                animated
-                :opacity="0.3"
-                density="medium"
-                :scale="3.3"
-                :offset-x="0.31"
-                :offset-y="0.14"
-              />
-            </div>
-
-            <div class="relative flex flex-col gap-(--spacing-md)">
-              <p
-                v-if="claimsEyebrow"
-                class="m-0 text-overline-md text-(--text-muted)"
-              >
-                {{ claimsEyebrow }}
-              </p>
-
-              <ul
-                v-if="chips.length"
-                class="m-0 flex max-w-(--container-sm) list-none flex-wrap gap-(--spacing-xs) p-0"
-              >
-                <li
-                  v-for="claim in chips"
-                  :key="claim.label"
-                  :data-mobile="claim.mobile ? null : 'hidden'"
-                  :class="CLAIM_CHIP_CLASS"
-                >
-                  {{ claim.label }}
-                </li>
-              </ul>
-            </div>
           </div>
 
-          <CardGrid
-            key="card-grid-1"
-            v-if="variant === 'outcomes' && outcomes.length"
-            flush
-            variant="frame"
-            :columns="outcomeColumns"
-            class="border-t border-(--border-default)"
-          >
-            <CardGridCell
-              v-for="outcome in outcomes"
-              :key="outcome.logoAlt || outcome.text"
-              variant="canvas"
+          <div class="relative flex flex-col gap-(--spacing-md)">
+            <p
+              v-if="claimsEyebrow"
+              class="m-0 text-overline-md text-(--text-muted)"
             >
-              <Quote
-                :text="outcome.text"
-                :highlights="outcome.highlights ?? []"
-                class="h-full"
+              {{ claimsEyebrow }}
+            </p>
+
+            <ul
+              v-if="chips.length"
+              class="m-0 flex max-w-(--container-sm) list-none flex-wrap gap-(--spacing-xs) p-0"
+            >
+              <li
+                v-for="claim in chips"
+                :key="claim.label"
+                :data-mobile="claim.mobile ? null : 'hidden'"
+                :class="CLAIM_CHIP_CLASS"
               >
-                <template
-                  v-if="outcome.logo"
-                  #mark
-                >
-                  <img
-                    :src="outcome.logo"
-                    :alt="outcome.logoAlt ?? ''"
-                    decoding="async"
-                    :data-treatment="outcome.logoTreatment ?? 'color'"
-                    class="h-full w-auto max-w-32 object-contain data-[treatment=monochrome]:brightness-0 [[data-theme=dark]_&[data-treatment=monochrome]]:invert"
-                  />
-                </template>
-              </Quote>
-            </CardGridCell>
-          </CardGrid>
-
-          <CardGrid
-            key="card-grid-2"
-            v-else-if="variant === 'benefits' && benefits.length"
-            flush
-            variant="frame"
-            :columns="3"
-            class="border-t border-(--border-default)"
-          >
-            <CardGridCell
-              v-for="benefit in benefits"
-              :key="benefit.title"
-              variant="canvas"
-            >
-              <FeatureItem
-                :heading-level="3"
-                :icon="benefit.icon"
-                :title="benefit.title"
-                :description="benefit.description"
-              />
-            </CardGridCell>
-          </CardGrid>
-
-          <Stats
-            v-else-if="variant === 'stats' && stats.length"
-            key="stats"
-            :items="stats"
-            class="border-t border-(--border-default)"
-          />
+                {{ claim.label }}
+              </li>
+            </ul>
+          </div>
         </div>
-      </RegistrationFrame>
-    </Module>
-  </section>
+
+        <CardGrid
+          key="card-grid-1"
+          v-if="variant === 'outcomes' && outcomes.length"
+          flush
+          variant="frame"
+          :columns="outcomeColumns"
+          class="border-t border-(--border-default)"
+        >
+          <CardGridCell
+            v-for="outcome in outcomes"
+            :key="outcome.logoAlt || outcome.text"
+            variant="canvas"
+          >
+            <Quote
+              :text="outcome.text"
+              :highlights="outcome.highlights ?? []"
+              class="h-full"
+            >
+              <template
+                v-if="outcome.logo"
+                #mark
+              >
+                <img
+                  :src="outcome.logo"
+                  :alt="outcome.logoAlt ?? ''"
+                  decoding="async"
+                  :data-treatment="outcome.logoTreatment ?? 'color'"
+                  class="h-full w-auto max-w-32 object-contain data-[treatment=monochrome]:brightness-0 [[data-theme=dark]_&[data-treatment=monochrome]]:invert"
+                />
+              </template>
+            </Quote>
+          </CardGridCell>
+        </CardGrid>
+
+        <CardGrid
+          key="card-grid-2"
+          v-else-if="variant === 'benefits' && benefits.length"
+          flush
+          variant="frame"
+          :columns="3"
+          class="border-t border-(--border-default)"
+        >
+          <CardGridCell
+            v-for="benefit in benefits"
+            :key="benefit.title"
+            variant="canvas"
+          >
+            <FeatureItem
+              :heading-level="3"
+              :icon="benefit.icon"
+              :title="benefit.title"
+              :description="benefit.description"
+            />
+          </CardGridCell>
+        </CardGrid>
+
+        <Stats
+          v-else-if="variant === 'stats' && stats.length"
+          key="stats"
+          :items="stats"
+          class="border-t border-(--border-default)"
+        />
+      </div>
+    </RegistrationFrame>
+  </SectionBand>
 </template>

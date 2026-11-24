@@ -5,8 +5,8 @@
   import Button from '../../action/button/button.vue'
   import type { ConsoleMockupName } from '../../content/console-mockup/console-mockup.vue'
   import type { TextureVariant } from '../../content/texture/texture.vue'
-  import Module from '../../layout/module/module.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
+  import SectionBand from '../parts/section-band.vue'
   import { resolveMedia } from './lib/media-split-media'
   import MediaSplitSectionMedia from './parts/media-split-section-media.vue'
 
@@ -161,87 +161,82 @@
 </script>
 
 <template>
-  <div
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :filled="Boolean(title)"
+    :framed="false"
   >
-    <Module
-      v-if="title"
-      :divided="false"
-      :padded="false"
+    <MediaSplit
+      framed
+      :orientation="orientation"
+      :align="size === 'large' ? 'center' : 'start'"
+      :size="size"
+      media-fill="surface"
+      :texture="texture"
+      texture-size="small"
+      texture-fade="top"
+      :eyebrow="eyebrow"
+      :title="title"
+      :description="description"
+      :media-href="bandHref"
+      :media-padded="mediaPadded"
+      @pointerenter="hovered = true"
+      @pointerleave="hovered = false"
     >
-      <MediaSplit
-        framed
-        :orientation="orientation"
-        :align="size === 'large' ? 'center' : 'start'"
-        :size="size"
-        media-fill="surface"
-        :texture="texture"
-        texture-size="small"
-        texture-fade="top"
-        :eyebrow="eyebrow"
-        :title="title"
-        :description="description"
-        :media-href="bandHref"
-        :media-padded="mediaPadded"
-        @pointerenter="hovered = true"
-        @pointerleave="hovered = false"
+      <template
+        v-if="hasMedia"
+        #media
       >
-        <template
-          v-if="hasMedia"
-          #media
-        >
-          <MediaSplitSectionMedia
-            :source="source"
-            :illustration-aria-label="illustrationAriaLabel"
-            :hovered="hovered"
-            :orientation="orientation"
-          />
-        </template>
-        <template
-          v-if="primary || secondary"
-          #actions
-        >
-          <Button
-            key="button-1"
-            v-if="lone"
-            :label="lone.label"
-            :href="lone.href"
-            :target="lone.target"
-            :variant="lone.variant ?? 'outline'"
-            size="large"
-            :icon="lone.icon && !lone.trailing ? lone.icon : 'az az-chevron-right'"
-            :icon-position="lone.icon && !lone.trailing ? 'leading' : 'trailing'"
-            :animated="!(lone.icon && !lone.trailing)"
-          />
-          <Button
-            key="button-2"
-            v-else-if="primary"
-            :label="primary.label"
-            :href="primary.href"
-            :target="primary.target"
-            :variant="primary.variant ?? 'secondary'"
-            size="large"
-            :icon="actionIcon(primary)"
-            :icon-position="primary.trailing ? 'trailing' : 'leading'"
-            :animated="Boolean(primary.trailing)"
-          />
-          <Button
-            key="button-3"
-            v-if="secondary && !lone"
-            :label="secondary.label"
-            :href="secondary.href"
-            :target="secondary.target"
-            :variant="secondary.variant ?? 'outline'"
-            size="large"
-            :icon="actionIcon(secondary)"
-            :icon-position="secondary.trailing ? 'trailing' : 'leading'"
-            :animated="Boolean(secondary.trailing)"
-          />
-        </template>
-      </MediaSplit>
-    </Module>
-  </div>
+        <MediaSplitSectionMedia
+          :source="source"
+          :illustration-aria-label="illustrationAriaLabel"
+          :hovered="hovered"
+          :orientation="orientation"
+        />
+      </template>
+      <template
+        v-if="primary || secondary"
+        #actions
+      >
+        <Button
+          key="button-1"
+          v-if="lone"
+          :label="lone.label"
+          :href="lone.href"
+          :target="lone.target"
+          :variant="lone.variant ?? 'outline'"
+          size="large"
+          :icon="lone.icon && !lone.trailing ? lone.icon : 'az az-chevron-right'"
+          :icon-position="lone.icon && !lone.trailing ? 'leading' : 'trailing'"
+          :animated="!(lone.icon && !lone.trailing)"
+        />
+        <Button
+          key="button-2"
+          v-else-if="primary"
+          :label="primary.label"
+          :href="primary.href"
+          :target="primary.target"
+          :variant="primary.variant ?? 'secondary'"
+          size="large"
+          :icon="actionIcon(primary)"
+          :icon-position="primary.trailing ? 'trailing' : 'leading'"
+          :animated="Boolean(primary.trailing)"
+        />
+        <Button
+          key="button-3"
+          v-if="secondary && !lone"
+          :label="secondary.label"
+          :href="secondary.href"
+          :target="secondary.target"
+          :variant="secondary.variant ?? 'outline'"
+          size="large"
+          :icon="actionIcon(secondary)"
+          :icon-position="secondary.trailing ? 'trailing' : 'leading'"
+          :animated="Boolean(secondary.trailing)"
+        />
+      </template>
+    </MediaSplit>
+  </SectionBand>
 </template>

@@ -16,6 +16,8 @@
     ModuleHeaderAlign
   } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import { sectionActions } from '../lib/section-actions'
+  import SectionActions from '../parts/section-actions.vue'
   import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
@@ -110,6 +112,7 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'feature-widgets-section'
   )
+  const headerActions = computed(() => sectionActions(props.primaryAction, props.secondaryAction))
 
   const scenes = computed(() => resolveItemScenes(props.items))
 
@@ -141,9 +144,14 @@
     :filled="items.length > 0"
     :framed="false"
     :align="titleAlign"
-    :primary-action="primaryAction"
-    :secondary-action="secondaryAction"
   >
+    <template
+      v-if="headerActions.length"
+      #header-actions
+    >
+      <SectionActions :actions="headerActions" />
+    </template>
+
     <RegistrationFrame
       flush
       borders="y"
