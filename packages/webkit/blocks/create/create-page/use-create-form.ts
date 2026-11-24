@@ -39,6 +39,7 @@ export interface UseCreateFormReturn<T> {
 
 const SAVE_FAILURES = 0
 const SUBMIT_KEYS = 'meta+enter'
+const SAVE_KEYS = 'meta+s'
 
 export function useCreateForm<T>(options: UseCreateFormOptions<T>): UseCreateFormReturn<T> {
   const submitting = ref(false)
@@ -53,19 +54,21 @@ export function useCreateForm<T>(options: UseCreateFormOptions<T>): UseCreateFor
 
   useEscapeToCancel(leave, { enabled: () => !submitting.value })
 
-  useShortcuts({
-    keys: SUBMIT_KEYS,
-    label: options.shortcutLabel,
-    group: 'Page',
-    element: options.formEl,
-    when: () => !submitting.value,
-    handler: () => options.formEl.value?.requestSubmit()
-  })
+  useShortcuts(
+    [SUBMIT_KEYS, SAVE_KEYS].map((keys) => ({
+      keys,
+      label: options.shortcutLabel,
+      group: 'Page',
+      element: options.formEl,
+      when: () => !submitting.value,
+      handler: () => options.formEl.value?.requestSubmit()
+    }))
+  )
 
   const submitButton = computed(() => ({
     type: 'submit' as const,
     loading: submitting.value,
-    'aria-keyshortcuts': toAriaKeyshortcuts(SUBMIT_KEYS)
+    'aria-keyshortcuts': `${toAriaKeyshortcuts(SUBMIT_KEYS)} ${toAriaKeyshortcuts(SAVE_KEYS)}`
   }))
 
   const sendRequest = () =>

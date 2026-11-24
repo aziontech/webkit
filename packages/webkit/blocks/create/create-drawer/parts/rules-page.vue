@@ -12,7 +12,6 @@
 
   import { useDrawerGuard } from '../composables/use-drawer-guard'
   import FormDrawer from './form-drawer.vue'
-  import SubmitButton from './submit-button.vue'
   import UnsavedChangesDialog from './unsaved-changes-dialog.vue'
 
   let nextId = 0
@@ -250,19 +249,6 @@
           </template>
         </Card>
       </section>
-      <template #footer>
-        <div
-          class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
-        >
-          <div class="w-full md:w-fit">
-            <SubmitButton
-              class="w-full"
-              :loading="submitting"
-              >Add Rule</SubmitButton
-            >
-          </div>
-        </div>
-      </template>
     </FormDrawer>
 
     <FormDrawer
@@ -340,19 +326,6 @@
           </template>
         </Card>
       </section>
-      <template #footer>
-        <div
-          class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
-        >
-          <div class="w-full md:w-fit">
-            <SubmitButton
-              class="w-full"
-              :loading="childSubmitting"
-              >Create Origin</SubmitButton
-            >
-          </div>
-        </div>
-      </template>
     </FormDrawer>
 
     <UnsavedChangesDialog

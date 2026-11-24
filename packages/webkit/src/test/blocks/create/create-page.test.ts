@@ -326,7 +326,9 @@ describe('create-page keyboard', () => {
       const name = screen.getByRole('textbox', { name: 'Name' })
       await waitFor(() => expect(document.activeElement).toBe(name), wait)
       const save = screen.getByRole('button', { name: 'Save' })
-      expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+      expect(save.getAttribute('aria-keyshortcuts')).toBe(
+        'Meta+Enter Control+Enter Meta+S Control+S'
+      )
       await fireEvent.update(name, 'acme-domain')
       await fireEvent.update(screen.getByRole('textbox', { name: 'Domain name' }), 'example.com')
       pressSubmitShortcut(name)
@@ -339,6 +341,29 @@ describe('create-page keyboard', () => {
         dnssec: false,
         active: true
       })
+    } finally {
+      unmount()
+    }
+  })
+
+  it('submits with Cmd or Ctrl S too, without the browser save dialog', async () => {
+    const onSubmit = vi.fn()
+    const unmount = mountAttached(SinglePageCreate, { onSubmit })
+    try {
+      const name = screen.getByRole('textbox', { name: 'Name' })
+      await waitFor(() => expect(document.activeElement).toBe(name), wait)
+      await fireEvent.update(name, 'acme-domain')
+      await fireEvent.update(screen.getByRole('textbox', { name: 'Domain name' }), 'example.com')
+      const save = new KeyboardEvent('keydown', {
+        key: 's',
+        metaKey: apple,
+        ctrlKey: !apple,
+        bubbles: true,
+        cancelable: true
+      })
+      name.dispatchEvent(save)
+      expect(save.defaultPrevented).toBe(true)
+      await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1), wait)
     } finally {
       unmount()
     }
@@ -376,7 +401,9 @@ describe('create-page keyboard', () => {
         expect(active?.checked).toBe(true)
       }, wait)
       const purge = screen.getByRole('button', { name: 'Purge' })
-      expect(purge.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+      expect(purge.getAttribute('aria-keyshortcuts')).toBe(
+        'Meta+Enter Control+Enter Meta+S Control+S'
+      )
       const list = screen.getByRole('textbox', { name: /list$/ }) as HTMLTextAreaElement
       await userEvent.click(list)
       await userEvent.keyboard('example.com/a{Enter}example.com/b')

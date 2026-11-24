@@ -36,7 +36,12 @@
           size="small"
         >
           <span class="grid grid-cols-1">
-            <span class="truncate">{{ group.domains[0] }}</span>
+            <span
+              class="truncate"
+              dir="ltr"
+              data-testid="domain-group-item__domain"
+              >{{ group.domains[0] }}</span
+            >
           </span>
         </Link>
       </Tooltip>

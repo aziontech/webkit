@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import CreateDeployProgressDialog from '../../../../blocks/create/create-deploy-progress-dialog/create-deploy-progress-dialog.vue'
 import {
+  sampleDeployedItems,
   samplePartialItems,
   sampleRunningItems
 } from '../../../../blocks/create/create-deploy-progress-dialog/sample'
@@ -41,6 +42,34 @@ describe('create-deploy-progress-dialog', () => {
     const [event, failed] = view.emitted<unknown[]>('retry')?.[0] ?? []
     expect(event).toBeInstanceOf(MouseEvent)
     expect(failed).toEqual(samplePartialItems.filter((item) => item.status === 'failed'))
+  })
+
+  it('leads a partial failure with Retry failed and leaves the failed share out of the bar', async () => {
+    render(CreateDeployProgressDialog, { props: { items: samplePartialItems } })
+    const dialog = await screen.findByRole('dialog')
+    const retry = within(dialog).getByRole('button', { name: 'Retry failed' })
+    const close = within(dialog).getByRole('button', { name: 'Close' })
+    expect(retry.getAttribute('data-variant')).toBe('primary')
+    expect(close.getAttribute('data-variant')).toBe('outline')
+    const bar = within(dialog).getByTestId('create-deploy-progress-dialog__progress')
+    const value = Number(
+      bar.querySelector('[role="progressbar"]')?.getAttribute('aria-valuenow') ??
+        bar.getAttribute('aria-valuenow')
+    )
+    expect(value).toBe(80)
+  })
+
+  it('drops the filter and the partial-failure sentence when every deploy succeeded', async () => {
+    render(CreateDeployProgressDialog, { props: { items: sampleDeployedItems } })
+    const dialog = await screen.findByRole('dialog')
+    expect(within(dialog).queryByRole('group', { name: 'Filter deploys by status' })).toBeNull()
+    expect(
+      within(dialog).queryByRole('radiogroup', { name: 'Filter deploys by status' })
+    ).toBeNull()
+    expect(dialog.textContent).not.toContain('the ones that succeeded stay live')
+    expect(within(dialog).getByRole('button', { name: 'Close' }).getAttribute('data-variant')).toBe(
+      'primary'
+    )
   })
 
   it('follows the rows the page passes instead of a timer', async () => {

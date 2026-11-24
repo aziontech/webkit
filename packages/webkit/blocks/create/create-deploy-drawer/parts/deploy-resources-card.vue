@@ -64,8 +64,8 @@
       >
         <Separator v-if="index" />
         <Item
-          variant="inline"
           size="small"
+          data-testid="deploy-resources-card__row"
         >
           <Item.Media>
             <span
