@@ -1,5 +1,6 @@
 import { render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 
 import ProductMedia from '../../../../examples/media-split-stack-section/product-media.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -89,10 +90,21 @@ describe('MediaSplitStackSection', () => {
     bands
       .filter((band) => band.action)
       .forEach((band) => {
-        const links = getAllByRole('link', { name: band.action?.label })
+        const links = getAllByRole('link', { name: `${band.action?.label}, ${band.title}` })
         expect(links.length).toBeGreaterThanOrEqual(1)
         links.forEach((link) => expect(link).toHaveAttribute('href', band.action?.href))
       })
+  })
+
+  it('names each action with its band title and leaves one tab stop per destination', async () => {
+    const { getAllByRole, getByRole } = run()
+    await nextTick()
+
+    const first = bands[0]
+    const action = getByRole('link', { name: `${first?.action?.label}, ${first?.title}` })
+    const media = getAllByRole('link', { name: first?.title }).filter((link) => link !== action)
+    expect(media.length).toBeGreaterThanOrEqual(1)
+    media.forEach((link) => expect(link.getAttribute('tabindex')).toBe('-1'))
   })
 
   it('renders no link for a band without an action', () => {
