@@ -1686,3 +1686,7 @@ Budget-raise: table-cell-time 19.05 KB → 19.2 KB (measured 19.13 KB): the shar
 Budget-raise: config-provider 12.8 KB → 12.9 KB (measured 12.85 KB): the English catalog gained the `countdown` strings (SUP-CD-1).
 Budget-raise: locales-pt-BR 12 KB → 12.1 KB (measured 12.05 KB): the Portuguese catalog gained the `countdown` strings (SUP-CD-1).
 Budget-raise: locales-es 12.1 KB → 12.25 KB (measured 12.18 KB): the Spanish catalog gained the `countdown` strings (SUP-CD-1).
+Budget-raise: config-provider 12.8 KB → 12.85 KB (measured 12.81 KB): carries the three locale catalogs, which gain the `rating` strings (star names in plural forms, the score summary, "Not rated", "Clear rating"; SUP-RT).
+Budget-raise: locales-pt-BR 12 KB → 12.05 KB (measured 12.00 KB): the `rating` strings (SUP-RT).
+Budget-raise: locales-es 12.1 KB → 12.15 KB (measured 12.13 KB): the `rating` strings (SUP-RT).
+Budget-raise: package packedBytes 8,620,000 → 8,630,000 bytes (measured 8,625,782): the `Rating` component, its test, five examples and its catalog and llms pages (SUP-RT).

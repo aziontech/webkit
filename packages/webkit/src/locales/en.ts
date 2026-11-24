@@ -881,6 +881,16 @@ export const propertyFilter = {
   unclosedQuote: 'Close the quote that opens at character {position}.'
 } as const
 
+export const rating = {
+  star: {
+    one: '{count} star',
+    other: '{count} stars'
+  },
+  value: 'Rated {value} out of {max}',
+  empty: 'Not rated',
+  clear: 'Clear rating'
+} as const
+
 export const resizable = {
   handle: 'Resize panel'
 } as const
@@ -1728,6 +1738,7 @@ export const en = {
   propertyFilter,
   agentActivity,
   reasoning,
+  rating,
   resizable,
   schemaForm,
   subheader,

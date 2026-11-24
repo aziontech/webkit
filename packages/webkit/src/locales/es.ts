@@ -1037,6 +1037,15 @@ export const es: Messages = {
     danglingConnective: 'Añade una condición después de {connective}.',
     unclosedQuote: 'Cierra las comillas abiertas en el carácter {position}.'
   },
+  rating: {
+    star: {
+      one: '{count} estrella',
+      other: '{count} estrellas'
+    },
+    value: 'Valorado con {value} de {max}',
+    empty: 'Sin valoración',
+    clear: 'Borrar valoración'
+  },
   resizable: {
     handle: 'Redimensionar panel'
   },

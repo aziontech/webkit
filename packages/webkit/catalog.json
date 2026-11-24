@@ -16709,6 +16709,86 @@
    "surface": "app",
    "docsFile": "catalog/components/radio-group-root.json"
   },
+  "rating": {
+   "import": "@aziontech/webkit/rating",
+   "target": "./src/components/input/rating/rating.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/rating",
+   "models": [
+    "modelValue"
+   ],
+   "category": "input",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "max",
+     "type": "number",
+     "default": "5",
+     "required": "false",
+     "doc": "Number of stars, the highest score. Rounded to a whole number and kept between 1 and 10."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium' | 'large'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Star size: 16, 20 or 24 px glyphs in 24, 28 or 32 px targets. `RatingSize`, exported."
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Form field name shared by every star radio; the score submits under it. Empty uses a generated name so the radios still group."
+    },
+    {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the score instead of asking for it: no radios, the value rounded to the nearest half star, announced as one image."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables every star and the clear button; the row shows at 50 % opacity with a not-allowed cursor."
+    },
+    {
+     "name": "required",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Requires a score: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the rating invalid: sets `aria-invalid` on the group and draws the empty stars in the danger mark colour."
+    },
+    {
+     "name": "clearable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a clear button after the stars that resets the score to 0 and moves focus to the first star. Not shown while `readonly`."
+    },
+    {
+     "name": "modelValue",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "examplesFile": "catalog/examples/rating.json",
+   "docsFile": "catalog/components/rating.json"
+  },
   "chip": {
    "import": "@aziontech/webkit/chip",
    "target": "./src/components/input/chip/chip.vue",
