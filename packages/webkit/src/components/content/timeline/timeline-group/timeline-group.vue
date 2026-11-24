@@ -35,13 +35,13 @@
     :data-testid="testId"
     :data-size="size"
     data-slot="timeline-group"
-    class="flex min-w-0 flex-col gap-(--spacing-sm) not-first:pt-(--spacing-md) data-[size=small]:gap-(--spacing-xs)"
+    class="group/timeline-group flex min-w-0 flex-col gap-(--spacing-sm) not-first:pt-(--spacing-md) data-[size=small]:gap-(--spacing-xs)"
   >
     <span
       :id="labelId"
       :data-testid="`${testId}__label`"
       data-slot="timeline-group-label"
-      class="text-label-sm text-(--text-muted)"
+      class="ps-[calc(1.5rem+var(--spacing-sm))] text-label-sm text-(--text-muted) group-data-[size=small]/timeline-group:ps-[calc(1.25rem+var(--spacing-xs))]"
       >{{ label }}</span
     >
     <ol
