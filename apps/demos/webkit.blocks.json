@@ -185,6 +185,187 @@
         }
       ]
     },
+    "create/create-ticket": {
+      "version": "5.13.0",
+      "files": [
+        {
+          "path": "src/blocks/create-ticket-ticket-assignment-band.vue",
+          "source": "blocks/create/create-ticket/parts/ticket-assignment-band.vue",
+          "variant": "Data",
+          "imports": {
+            "../create-ticket.vue": "./create-ticket.vue",
+            "./ticket-person-option.vue": "./create-ticket-ticket-person-option.vue"
+          },
+          "checksum": "sha256:4f234dcd91173b52425ec0ca25b57f92e4eabe4068387f7eb423126b8ea32f66"
+        },
+        {
+          "path": "src/blocks/create-ticket-ticket-creation-header.vue",
+          "source": "blocks/create/create-ticket/parts/ticket-creation-header.vue",
+          "variant": "Data",
+          "checksum": "sha256:0abcef4594766f3548fff82f9aa75ae73b272fd65be9ae4b2d45552878668dc8"
+        },
+        {
+          "path": "src/blocks/create-ticket-ticket-description-field.vue",
+          "source": "blocks/create/create-ticket/parts/ticket-description-field.vue",
+          "variant": "Data",
+          "checksum": "sha256:e99a8e258a024beefef129743b256bdbb831927a4933fd562f6693ab676ec0ca"
+        },
+        {
+          "path": "src/blocks/create-ticket-ticket-discard-dialog.vue",
+          "source": "blocks/create/create-ticket/parts/ticket-discard-dialog.vue",
+          "variant": "Data",
+          "checksum": "sha256:8901656560e8cf720f8e532b2d6b891fc3c240f4f38c4b974e02cc6efacd6761"
+        },
+        {
+          "path": "src/blocks/create-ticket-ticket-loading-bands.vue",
+          "source": "blocks/create/create-ticket/parts/ticket-loading-bands.vue",
+          "variant": "Data",
+          "checksum": "sha256:ed73c05a1561ace2d5e6c76dc7b77908537f8278070cb74dadf7eba6930de519"
+        },
+        {
+          "path": "src/blocks/create-ticket-ticket-person-option.vue",
+          "source": "blocks/create/create-ticket/parts/ticket-person-option.vue",
+          "variant": "Data",
+          "checksum": "sha256:4d2bb84c73538c4ce00086da27e31e75281313565656aca31973f98b6563ff37"
+        },
+        {
+          "path": "src/blocks/create-ticket-ticket-request-band.vue",
+          "source": "blocks/create/create-ticket/parts/ticket-request-band.vue",
+          "variant": "Data",
+          "imports": {
+            "../create-ticket.vue": "./create-ticket.vue",
+            "../lib/ticket-form": "./create-ticket.ticket-form",
+            "./ticket-description-field.vue": "./create-ticket-ticket-description-field.vue"
+          },
+          "checksum": "sha256:529d8d5d0af43e5a5e6295354d29213f3358e27c74862956e150f7f767a57e0a"
+        },
+        {
+          "path": "src/blocks/create-ticket-ticket-requester-band.vue",
+          "source": "blocks/create/create-ticket/parts/ticket-requester-band.vue",
+          "variant": "Data",
+          "imports": {
+            "../create-ticket.vue": "./create-ticket.vue",
+            "./ticket-requester-field.vue": "./create-ticket-ticket-requester-field.vue"
+          },
+          "checksum": "sha256:49c94d18c4d84ed91adcbe528d578951679c3de1fb13417e7247658f016f38af"
+        },
+        {
+          "path": "src/blocks/create-ticket-ticket-requester-field.vue",
+          "source": "blocks/create/create-ticket/parts/ticket-requester-field.vue",
+          "variant": "Data",
+          "imports": {
+            "../create-ticket.vue": "./create-ticket.vue",
+            "./ticket-person-option.vue": "./create-ticket-ticket-person-option.vue"
+          },
+          "checksum": "sha256:08f4b15e8886446c10949e375e90cdf8b503ce13691703dcf7bea19ea46ed6ec"
+        },
+        {
+          "path": "src/blocks/create-ticket-ticket-save-actions.vue",
+          "source": "blocks/create/create-ticket/parts/ticket-save-actions.vue",
+          "variant": "Data",
+          "checksum": "sha256:37030e8751114c4be6a4c4562449c3ca96aa98a502f8c3e9d6a686cc2e8577be"
+        },
+        {
+          "path": "src/blocks/create-ticket.sample.ts",
+          "source": "blocks/create/create-ticket/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:b04300f460b71e8ad48846a45aca23486f297a5e6adf5829404e0d192ec3c017"
+        },
+        {
+          "path": "src/blocks/create-ticket.ticket-form.ts",
+          "source": "blocks/create/create-ticket/lib/ticket-form.ts",
+          "variant": "Data",
+          "imports": {
+            "../create-ticket.vue": "./create-ticket.vue"
+          },
+          "checksum": "sha256:365eef1442ec3307b03da1943590efc84b00fff62c51c56124e2057e6b60b821"
+        },
+        {
+          "path": "src/blocks/create-ticket.vue",
+          "source": "blocks/create/create-ticket/create-ticket.vue",
+          "variant": "Default",
+          "imports": {
+            "./lib/ticket-form": "./create-ticket.ticket-form",
+            "./parts/ticket-assignment-band.vue": "./create-ticket-ticket-assignment-band.vue",
+            "./parts/ticket-creation-header.vue": "./create-ticket-ticket-creation-header.vue",
+            "./parts/ticket-discard-dialog.vue": "./create-ticket-ticket-discard-dialog.vue",
+            "./parts/ticket-loading-bands.vue": "./create-ticket-ticket-loading-bands.vue",
+            "./parts/ticket-request-band.vue": "./create-ticket-ticket-request-band.vue",
+            "./parts/ticket-requester-band.vue": "./create-ticket-ticket-requester-band.vue",
+            "./parts/ticket-save-actions.vue": "./create-ticket-ticket-save-actions.vue",
+            "./sample": "./create-ticket.sample"
+          },
+          "checksum": "sha256:21a9647c3563ac470dcdfc69d1a8f496a492f50cfe6b493f85e1943ef80acfca"
+        }
+      ]
+    },
+    "detail/detail-customer": {
+      "version": "5.13.0",
+      "files": [
+        {
+          "path": "src/blocks/detail-customer-customer-activity-tab.vue",
+          "source": "blocks/detail/detail-customer/parts/customer-activity-tab.vue",
+          "variant": "Data",
+          "imports": {
+            "../detail-customer.vue": "./detail-customer.vue"
+          },
+          "checksum": "sha256:e5e1543227e70bfa43e405a5d89d9cd566264ff1f4a778bf7bfa7571d0573ef0"
+        },
+        {
+          "path": "src/blocks/detail-customer-customer-clock.vue",
+          "source": "blocks/detail/detail-customer/parts/customer-clock.vue",
+          "variant": "Data",
+          "checksum": "sha256:243729e968c4f75e37c38166c11ba62c3f8baeeb27b886a698412300ad76f80a"
+        },
+        {
+          "path": "src/blocks/detail-customer-customer-details-panel.vue",
+          "source": "blocks/detail/detail-customer/parts/customer-details-panel.vue",
+          "variant": "Data",
+          "imports": {
+            "../detail-customer.vue": "./detail-customer.vue"
+          },
+          "checksum": "sha256:4df527e3cddb9d50da832dbaf31ebb4ed93ac34bc786abdb6d3256b3fb8e4c30"
+        },
+        {
+          "path": "src/blocks/detail-customer-customer-notes-tab.vue",
+          "source": "blocks/detail/detail-customer/parts/customer-notes-tab.vue",
+          "variant": "Data",
+          "imports": {
+            "../detail-customer.vue": "./detail-customer.vue"
+          },
+          "checksum": "sha256:0688d537c0fb55ac5c7cc1a0b9844aa6f84d8e0f97fb20b03352851e200afbbb"
+        },
+        {
+          "path": "src/blocks/detail-customer-customer-tickets-tab.vue",
+          "source": "blocks/detail/detail-customer/parts/customer-tickets-tab.vue",
+          "variant": "Data",
+          "imports": {
+            "../detail-customer.vue": "./detail-customer.vue"
+          },
+          "checksum": "sha256:b70780d9cc3ba76dd0211e81dd46a418d9a0aa1c9990e40b11bb7aac2757b248"
+        },
+        {
+          "path": "src/blocks/detail-customer.sample.ts",
+          "source": "blocks/detail/detail-customer/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:f8469c0a1b17f297a61534dc2c20e3a0ec9921b669a564635c0a31e52801deab"
+        },
+        {
+          "path": "src/blocks/detail-customer.vue",
+          "source": "blocks/detail/detail-customer/detail-customer.vue",
+          "variant": "Tickets",
+          "imports": {
+            "./parts/customer-activity-tab.vue": "./detail-customer-customer-activity-tab.vue",
+            "./parts/customer-clock.vue": "./detail-customer-customer-clock.vue",
+            "./parts/customer-details-panel.vue": "./detail-customer-customer-details-panel.vue",
+            "./parts/customer-notes-tab.vue": "./detail-customer-customer-notes-tab.vue",
+            "./parts/customer-tickets-tab.vue": "./detail-customer-customer-tickets-tab.vue",
+            "./sample": "./detail-customer.sample"
+          },
+          "checksum": "sha256:f609467454f01dca0e5ba7e409360df59fce7199c0a7ab24be0f655894316c30"
+        }
+      ]
+    },
     "detail/detail-resource": {
       "version": "5.12.3",
       "files": [
@@ -202,6 +383,118 @@
             "./sample": "./resource-detail.sample"
           },
           "checksum": "sha256:1ff8d6afd5197cd376892a49bae32d6409a7c3066dc475c53e26b018e4f5a942"
+        }
+      ]
+    },
+    "detail/detail-ticket": {
+      "version": "5.13.0",
+      "files": [
+        {
+          "path": "src/blocks/detail-ticket-composer-footer.vue",
+          "source": "blocks/detail/detail-ticket/parts/composer-footer.vue",
+          "variant": "Data",
+          "imports": {
+            "../detail-ticket.vue": "./detail-ticket.vue"
+          },
+          "checksum": "sha256:299d7fdb65f8d3556d6a81599f93d729ca4c49c8807f7da0b9eb63c815b76625"
+        },
+        {
+          "path": "src/blocks/detail-ticket-ticket-activity.vue",
+          "source": "blocks/detail/detail-ticket/parts/ticket-activity.vue",
+          "variant": "Data",
+          "imports": {
+            "../detail-ticket.vue": "./detail-ticket.vue",
+            "../lib/ticket-fields": "./detail-ticket.ticket-fields"
+          },
+          "checksum": "sha256:c60a0b1efba91e5fa5a18e9bdf2d35367c3f467b318cb8efdc734ca1328dbeaa"
+        },
+        {
+          "path": "src/blocks/detail-ticket-ticket-composer.vue",
+          "source": "blocks/detail/detail-ticket/parts/ticket-composer.vue",
+          "variant": "Data",
+          "imports": {
+            "../detail-ticket.vue": "./detail-ticket.vue",
+            "./composer-footer.vue": "./detail-ticket-composer-footer.vue"
+          },
+          "checksum": "sha256:2f9de211c5484fae2dee0b1bff92bfeb927558d1f6536778192d2a9b22447887"
+        },
+        {
+          "path": "src/blocks/detail-ticket-ticket-conversation.vue",
+          "source": "blocks/detail/detail-ticket/parts/ticket-conversation.vue",
+          "variant": "Data",
+          "imports": {
+            "../detail-ticket.vue": "./detail-ticket.vue",
+            "./ticket-message.vue": "./detail-ticket-ticket-message.vue"
+          },
+          "checksum": "sha256:2ae880a85895d4ab1fe86f118f44b515541439e7d8e70b242dc7fb2d08ff99f8"
+        },
+        {
+          "path": "src/blocks/detail-ticket-ticket-header-actions.vue",
+          "source": "blocks/detail/detail-ticket/parts/ticket-header-actions.vue",
+          "variant": "Data",
+          "imports": {
+            "../detail-ticket.vue": "./detail-ticket.vue"
+          },
+          "checksum": "sha256:09d6452e2edf82c611b1d0cdc22c5eaef89abc11a1621a5704441157baa2f623"
+        },
+        {
+          "path": "src/blocks/detail-ticket-ticket-message.vue",
+          "source": "blocks/detail/detail-ticket/parts/ticket-message.vue",
+          "variant": "Data",
+          "imports": {
+            "../detail-ticket.vue": "./detail-ticket.vue"
+          },
+          "checksum": "sha256:6ee1016eceab4c42c8d95a01bac3bc3d5e68a0343ab40f0d847dfc8fce59f9da"
+        },
+        {
+          "path": "src/blocks/detail-ticket-ticket-properties.vue",
+          "source": "blocks/detail/detail-ticket/parts/ticket-properties.vue",
+          "variant": "Data",
+          "imports": {
+            "../detail-ticket.vue": "./detail-ticket.vue",
+            "../lib/ticket-fields": "./detail-ticket.ticket-fields"
+          },
+          "checksum": "sha256:5af8571cc6095563b9bd053beef646e931aba52063471789fc7fac9b89d7d827"
+        },
+        {
+          "path": "src/blocks/detail-ticket-ticket-requester.vue",
+          "source": "blocks/detail/detail-ticket/parts/ticket-requester.vue",
+          "variant": "Data",
+          "imports": {
+            "../detail-ticket.vue": "./detail-ticket.vue"
+          },
+          "checksum": "sha256:fb5d97c03dcd8b2258f3dd436721a1d9018ce251c7d76de1ba666483f909e5a8"
+        },
+        {
+          "path": "src/blocks/detail-ticket.sample.ts",
+          "source": "blocks/detail/detail-ticket/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:12423e02911494242cefd446fa27ddd3b2428632da22bebaa407486a3df55dbb"
+        },
+        {
+          "path": "src/blocks/detail-ticket.ticket-fields.ts",
+          "source": "blocks/detail/detail-ticket/lib/ticket-fields.ts",
+          "variant": "Data",
+          "imports": {
+            "../detail-ticket.vue": "./detail-ticket.vue"
+          },
+          "checksum": "sha256:194586623c3cae7b3c3f355bed286a03beed04f809f9796ee43277b4669d74de"
+        },
+        {
+          "path": "src/blocks/detail-ticket.vue",
+          "source": "blocks/detail/detail-ticket/detail-ticket.vue",
+          "variant": "Default",
+          "imports": {
+            "./lib/ticket-fields": "./detail-ticket.ticket-fields",
+            "./parts/ticket-activity.vue": "./detail-ticket-ticket-activity.vue",
+            "./parts/ticket-composer.vue": "./detail-ticket-ticket-composer.vue",
+            "./parts/ticket-conversation.vue": "./detail-ticket-ticket-conversation.vue",
+            "./parts/ticket-header-actions.vue": "./detail-ticket-ticket-header-actions.vue",
+            "./parts/ticket-properties.vue": "./detail-ticket-ticket-properties.vue",
+            "./parts/ticket-requester.vue": "./detail-ticket-ticket-requester.vue",
+            "./sample": "./detail-ticket.sample"
+          },
+          "checksum": "sha256:5b62c9d36b3d6f2046044f1a7edd068f68d4c9376ac27a871ddb158246e13b68"
         }
       ]
     },
@@ -242,6 +535,46 @@
             "./sample": "./edit-resource.sample"
           },
           "checksum": "sha256:d28f33e2822be3bcf8c61a3b89a203d5f225d3139ca3ebb9c4597987b920a7c6"
+        }
+      ]
+    },
+    "settings/settings-canned-responses": {
+      "version": "5.13.0",
+      "files": [
+        {
+          "path": "src/blocks/settings-canned-responses-response-drawer.vue",
+          "source": "blocks/settings/settings-canned-responses/parts/response-drawer.vue",
+          "variant": "Data",
+          "imports": {
+            "../settings-canned-responses.vue": "./settings-canned-responses.vue"
+          },
+          "checksum": "sha256:972c366b9d1bfe9dde05ffd86170b760daaf2e9a5022eb25e21cae98794db0fc"
+        },
+        {
+          "path": "src/blocks/settings-canned-responses-responses-table.vue",
+          "source": "blocks/settings/settings-canned-responses/parts/responses-table.vue",
+          "variant": "Data",
+          "imports": {
+            "../settings-canned-responses.vue": "./settings-canned-responses.vue"
+          },
+          "checksum": "sha256:2a6ac5c1dfded533bf6485bb4d116bf41b0a98440f16c3922865d312e2a4a960"
+        },
+        {
+          "path": "src/blocks/settings-canned-responses.sample.ts",
+          "source": "blocks/settings/settings-canned-responses/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:89c7d4dd7a45880a7ced5a708eb831ea23bf1b5c55c147c9080bd5dab1929aa2"
+        },
+        {
+          "path": "src/blocks/settings-canned-responses.vue",
+          "source": "blocks/settings/settings-canned-responses/settings-canned-responses.vue",
+          "variant": "Default",
+          "imports": {
+            "./parts/response-drawer.vue": "./settings-canned-responses-response-drawer.vue",
+            "./parts/responses-table.vue": "./settings-canned-responses-responses-table.vue",
+            "./sample": "./settings-canned-responses.sample"
+          },
+          "checksum": "sha256:b0c5f2be70bdb8c79c059dcf2b67c204808bf84c6f304f3a471725d9a98a9d7b"
         }
       ]
     },
@@ -310,6 +643,76 @@
             "./sample": "./table-view.sample"
           },
           "checksum": "sha256:f87338377865ca163fa5db81d1799fe05a9feb5fbb3d3b1d39b3ce2ee92a8325"
+        }
+      ]
+    },
+    "view/view-ticket-inbox": {
+      "version": "5.13.0",
+      "files": [
+        {
+          "path": "src/blocks/view-ticket-inbox-inbox-controls.vue",
+          "source": "blocks/view/view-ticket-inbox/parts/inbox-controls.vue",
+          "variant": "Data",
+          "imports": {
+            "../view-ticket-inbox.vue": "./view-ticket-inbox.vue"
+          },
+          "checksum": "sha256:ecb98c436640fbefac8e04b422bdc0b2bf00ea7b42eb361c8e02058f7d675893"
+        },
+        {
+          "path": "src/blocks/view-ticket-inbox-ticket-assignee-cell.vue",
+          "source": "blocks/view/view-ticket-inbox/parts/ticket-assignee-cell.vue",
+          "variant": "Data",
+          "imports": {
+            "../view-ticket-inbox.vue": "./view-ticket-inbox.vue"
+          },
+          "checksum": "sha256:e6dd32c81689b576f140b5e6bb6bf4016d36c97087b5372cf2d57b324ce520fa"
+        },
+        {
+          "path": "src/blocks/view-ticket-inbox-ticket-bulk-actions.vue",
+          "source": "blocks/view/view-ticket-inbox/parts/ticket-bulk-actions.vue",
+          "variant": "Data",
+          "imports": {
+            "../view-ticket-inbox.vue": "./view-ticket-inbox.vue"
+          },
+          "checksum": "sha256:d72f079d888c4c5afab2226b5afee751a21b1622e966599e28a3e8b1cfa6d0cd"
+        },
+        {
+          "path": "src/blocks/view-ticket-inbox-ticket-subject-cell.vue",
+          "source": "blocks/view/view-ticket-inbox/parts/ticket-subject-cell.vue",
+          "variant": "Data",
+          "imports": {
+            "../view-ticket-inbox.vue": "./view-ticket-inbox.vue"
+          },
+          "checksum": "sha256:15acce5fb33b5b108f3d97ec7c808f188667163c39e6bcf3a3480077ed6140e6"
+        },
+        {
+          "path": "src/blocks/view-ticket-inbox.sample.ts",
+          "source": "blocks/view/view-ticket-inbox/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:1ed935b6dee4f739e5ba529f9948fcd1a90d67300be66970751fca6b7965018b"
+        },
+        {
+          "path": "src/blocks/view-ticket-inbox.ticket-fields.ts",
+          "source": "blocks/view/view-ticket-inbox/lib/ticket-fields.ts",
+          "variant": "Data",
+          "imports": {
+            "../view-ticket-inbox.vue": "./view-ticket-inbox.vue"
+          },
+          "checksum": "sha256:b741d1ee9e39e9e07642cfc4ef1928b200b17b1b619a054868f776c3344cd8aa"
+        },
+        {
+          "path": "src/blocks/view-ticket-inbox.vue",
+          "source": "blocks/view/view-ticket-inbox/view-ticket-inbox.vue",
+          "variant": "Default",
+          "imports": {
+            "./lib/ticket-fields": "./view-ticket-inbox.ticket-fields",
+            "./parts/inbox-controls.vue": "./view-ticket-inbox-inbox-controls.vue",
+            "./parts/ticket-assignee-cell.vue": "./view-ticket-inbox-ticket-assignee-cell.vue",
+            "./parts/ticket-bulk-actions.vue": "./view-ticket-inbox-ticket-bulk-actions.vue",
+            "./parts/ticket-subject-cell.vue": "./view-ticket-inbox-ticket-subject-cell.vue",
+            "./sample": "./view-ticket-inbox.sample"
+          },
+          "checksum": "sha256:f1e4c678018164add39c3cc13f4d4806dcf680a856f4d9e662fa824e540d4ad3"
         }
       ]
     }
