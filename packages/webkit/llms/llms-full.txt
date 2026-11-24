@@ -5136,6 +5136,126 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 
 ---
 
+<!-- blocks/create/create-ticket.md -->
+
+# CreateTicket (`create/create-ticket`)
+
+> The page a support agent creates a ticket on, on behalf of a customer: the creation header with Back, the brand, Tickets › Create ticket and the account, then a centred form column with a small `PageHeader` and three…
+
+- Surface: app
+- Source: `blocks/create/create-ticket/create-ticket.vue` in `@aziontech/webkit`
+- MCP: `get_block("create/create-ticket")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+- Components: Alert, AppHeader, `AppHeaderAccount`, Avatar, Brand, Breadcrumb, Button, Card, Combobox, ConfirmDialog, `FieldError`, FileTokenGroup, IconButton, Input, Item, Kbd, MarkdownEditor, MultiSelect, PageHeader, PriorityTag, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Toast, `use-escape-to-cancel`, `use-file-picker`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`
+- Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
+
+## Asked as
+
+create ticket; new ticket; new support ticket; log a ticket for a customer; agent creates ticket; helpdesk new ticket form; support request form; ticket form with requester and assignee; create and add another; add new contact inline; criar ticket; novo ticket; novo chamado; abrir chamado em nome de alguém; formulário de chamado; criar chamado de suporte; registrar solicitação de suporte
+
+The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in. The agent's job is to say who asked, what they need and who owns it, then create the ticket and either go to it or log the next one. It follows the Zendesk and Freshdesk new-ticket forms on the house create page (`create/create-page`): its own creation header with no sidebar, a centred form column, three bands of rows, and a raised commit card at the bottom with Cancel, Create and add another, and Create ticket.
+
+A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/webkit-create-surface`).
+
+## When to use
+
+- An agent logs a request for a customer: a phone call, a chat that needs a follow-up, an email forwarded from another inbox.
+- Any first-level work item with a requester, a written description, an owner and a priority (an abuse report, an onboarding case).
+
+## When not to use
+
+- A record created inside another resource without leaving it (a note on a ticket, a macro in a group): use `create/create-drawer`.
+- A short create with a handful of fields and no sections: use `state/state-form-validation`.
+- Replying to an existing ticket: use the `message-thread` component with a `markdown-editor` on the ticket's own page.
+- The queue the agent comes from: use `view/view-ticket-inbox`.
+- A customer filing their own request on a public help center: no block covers it yet; it is a short form without assignment, not this agent page.
+
+## Building blocks
+
+- A. Creation header — `AppHeader`, `AppHeaderAccount`, `Brand`, `Breadcrumb`, `IconButton` (required)
+- B. Heading — `PageHeader` (required)
+- C. Loading rows — `Card`, `Skeleton` (loading only)
+- D. Requester band — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Combobox`, `Avatar`, `Button`, `Input`, `FieldError`, `MultiSelect` (required)
+- E. Request band — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `FieldError`, `MarkdownEditor`, `IconButton`, `FileTokenGroup`, `Select`, `PriorityTag` (required)
+- F. Assignment band — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Combobox`, `Avatar`, `MultiSelect` (required)
+- G. Failure — `Alert` (conditional)
+- H. Commit — `SaveBar`, `Button`, `Kbd` (required)
+- Leaving — `ConfirmDialog`
+- Result — through `toast`
+
+What each part takes: [blocks/create/create-ticket.md](blocks/create/create-ticket.md).
+
+## Data
+
+The block keeps the form as a local draft, validates it on submit and emits `create`; it sends no request and fakes none. `CreateTicketValues`, `CreateTicketPayload`, `CreateTicketContact`, `CreateTicketGroup`, `CreateTicketAgent`, `CreateTicketCreated`, `CreateTicketChannel`, `CreateTicketType`, `CreateTicketPriority` and `CreateTicketProps` are exported from `create-ticket.vue`. `sample.ts` holds the contacts, groups, agents and tags the pickers offer when their props are left out (none of them while `loading`), plus the filled ticket and the created ticket the variants pass. `lib/ticket-form.ts` holds the option lists, the empty draft and the validation messages.
+
+Prop: `contacts`, `groups`, `agents`, `tagOptions`, `defaultValues`, `defaultSubmitted`, `loading`, `submitting`, `error`, `created`.
+
+Event: `create`, `cancel`, `open`.
+
+Then delete `sample.ts` and its import. A large contact list moves to server search: pass `:filter="false"` to the requester `Combobox`, fetch on its `search` event and pass the results as `contacts`.
+
+What each prop and event does, and the go-live code: [blocks/create/create-ticket.md](blocks/create/create-ticket.md).
+
+## Do
+
+- Keep only Requester, Subject and Description required; the rest is triage the team can do later.
+- Validate on create only, and move focus to the first field in error.
+- Keep every value after a failed request, and show the failure where the commit happens.
+- Offer Create and add another for agents logging several calls in a row, and put focus back on Requester.
+
+## Don't
+
+- Don't preselect a channel, type, priority, group or assignee: a blank form starts empty.
+- Don't show an error summary or an `Alert` for field errors; each field says what it needs.
+- Don't accept a typed name as a group or an assignee.
+- Don't send the agent away to create a missing contact: Add new contact stays on the page.
+
+## Copy
+
+- **Title:** `Create ticket`; description `Log a request on behalf of a customer. They get an email with the ticket number.`
+- **Bands:** `Requester`, `Request`, `Assignment`, each with a one-sentence Hint. **Rows:** a noun title and one sentence of guidance (`The customer who asked. Search by name or email address.`).
+- **Requester:** placeholder `Search contacts`, no match `No contact matches. Add a new contact instead.`, actions `Add new contact` and `Search contacts`.
+- **Placeholders:** `Select a channel`, `Select a type`, `Select a priority`, `Search groups`, `Search agents`; Assignee no match `No agent in this group matches.`
+- **Errors:** `Select the customer who asked, or add a new contact.`, `Enter the contact’s name.`, `Enter the contact’s email address.`, `Enter an email address such as name@example.com.`, `<entry> is not an email address. Fix it or remove it.`, `Enter a subject.`, `Describe what the customer needs.`
+- **Attachments:** `Attach files`; the list is named `Attachments`.
+- **Failure:** title `The ticket wasn't created.`, the page's message, `Retry`.
+- **Success:** `Ticket #4840 was created.`, the subject, `Open ticket`.
+- **Commit:** `Cancel`, `Create and add another`, `Create ticket`. The discard dialog uses the built-in `useUnsavedChanges` labels.
+- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+
+## Accessibility
+
+- Landmarks: the creation header, then `main` holding a `form` named by the `Create ticket` h1; the bands are h2s (Requester, Request, Assignment).
+- Focus: on load the Requester search, with its list closed until the agent types or presses Arrow Down (the first invalid field instead when the form opens with messages); Tab runs header, then the fields in band order, then Cancel, Create and add another, Create ticket. A create press with gaps moves focus to the first invalid field; after Create and add another, focus returns to Requester. Add new contact focuses Contact name; Search contacts focuses the search.
+- Each control takes its row title as `aria-label`, its error through `aria-describedby`, and `aria-invalid` once a create press finds a problem; the required rows carry the required mark and `aria-required`.
+- Keyboard: ⌘ Enter (Ctrl Enter) creates from anywhere in the form, Escape cancels; the editor's own shortcuts are Ctrl/⌘ B, I and K.
+- Announcements: the failure `Alert` is re-mounted after each attempt; the success toast is announced by the app's toast region; presence is spoken in the avatar's name, never the dot alone.
+- Names and addresses keep their own direction (`dir="auto"`) on a right-to-left page; the rows stack below the row's container width, so the form reflows at 320 px.
+
+## States
+
+- Default: every field empty, the sample contacts, groups, agents and tags in the pickers, focus on Requester.
+- ValidationErrors: `defaultSubmitted` with only a Subject and a CC entry that is not an address; Requester, Description and CC show their messages.
+- ContactError: `defaultSubmitted` on a new contact whose email has no domain ending; Contact email, Subject and Description show their messages.
+- Submitting: `submitting` on the filled sample ticket; Create ticket spins and the form locks.
+- SubmitError: `error` on the filled sample ticket; the danger Alert with Retry, every value kept.
+- Success: `created` after Create and add another; the success toast with Open ticket and an empty form.
+- Loading: `loading`; skeleton bands and disabled create buttons.
+
+## Related
+
+- `create/create-page` — the house create page this one follows.
+- `view/view-ticket-inbox` — the queue whose Create ticket opens this page.
+- `state/state-form-validation` — every submit outcome of a create form.
+- `create/create-drawer` — a create inside a resource, kept beside its list.
+
+## Variants
+
+`Default` (primary) · `ValidationErrors` · `ContactError` · `Submitting` · `SubmitError` · `Success` · `Loading`. Code: [blocks/create/create-ticket.md](blocks/create/create-ticket.md), `get_block("create/create-ticket", { variant })`.
+
+---
+
 <!-- blocks/create/create-wizard.md -->
 
 # CreateWizard (`create/create-wizard`)
