@@ -79,6 +79,16 @@ describe('MediaSplit', () => {
     expect(getByText(DESCRIPTION)).toBeInTheDocument()
   })
 
+  it('steps the medium description down to body-sm on a phone, under the heading-md headline', () => {
+    const { getByText } = render(MediaSplit, {
+      props: { title: TITLE, description: DESCRIPTION }
+    })
+
+    const classes = getByText(DESCRIPTION).classList
+    expect(classes.contains('group-data-[size=medium]/split:max-sm:text-body-sm')).toBe(true)
+    expect(classes.contains('group-data-[size=medium]/split:text-body-md')).toBe(true)
+  })
+
   it('lets the default slot replace the description prop', () => {
     const { getByText, queryByText } = render(MediaSplit, {
       props: { title: TITLE, description: DESCRIPTION },

@@ -262,7 +262,7 @@
 
               <p
                 v-if="hasDescription()"
-                class="m-0 text-pretty text-(--text-muted) group-data-[size=medium]/split:text-body-md group-data-[size=large]/split:text-body-lg"
+                class="m-0 text-pretty text-(--text-muted) group-data-[size=medium]/split:text-body-md group-data-[size=medium]/split:max-sm:text-body-sm group-data-[size=large]/split:text-body-lg"
               >
                 <slot>{{ description }}</slot>
               </p>

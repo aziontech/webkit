@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 9
-checksum: 5a6b30f8d4840cc43457ae5294dfa5030e1ef1288f739e7fd503a902d14e5bbc
+checksum: 2c67bd53670479c60b46031fbd34ba5d921ced090741b3e85947b9878e6916d5
 created: 2026-09-22
 last_updated: 2026-11-24
 ---
@@ -174,24 +174,24 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 
 ## Tokens
 
-| Region                         | Token (DESIGN.md)                                                          |
-| ------------------------------ | -------------------------------------------------------------------------- |
-| typography (headline)          | `.text-heading-md` (`medium`), `.text-heading-xl` (`large`)                |
-| typography (description)       | `.text-body-md` (`medium`), `.text-body-lg` (`large`)                      |
-| headline text                  | `var(--text-default)`                                                      |
-| description text               | `var(--text-muted)`                                                        |
-| copy cell fill (`canvas`)      | `var(--bg-canvas)`                                                         |
-| copy cell fill (`surface`)     | `var(--bg-surface)`                                                        |
-| media cell fill (`surface`)    | `var(--bg-surface)`                                                        |
-| media cell fill (`canvas`)     | `var(--bg-canvas)`                                                         |
-| media affordance               | `var(--secondary)` on `var(--secondary-foreground)`, `var(--shape-button)` |
-| band rules, marks and the seam | `var(--border-default)`                                                    |
-| spacing (cell padding)         | `var(--spacing-xl)`                                                        |
-| spacing (copy cell, `large`)   | `var(--spacing-2xl)`                                                       |
-| media ground ink               | `var(--text-default)`, mixed down by `texture`                             |
-| spacing (copy stack)           | `var(--spacing-lg)`                                                        |
-| spacing (copy to actions)      | `var(--spacing-2xl)`                                                       |
-| spacing (between actions)      | `var(--spacing-sm)`                                                        |
+| Region                         | Token (DESIGN.md)                                                                                                                           |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| typography (headline)          | `.text-heading-md` (`medium`), `.text-heading-xl` (`large`)                                                                                 |
+| typography (description)       | `.text-body-md` (`medium`, `.text-body-sm` below `sm` so the `heading-md` headline keeps a size step on a phone), `.text-body-lg` (`large`) |
+| headline text                  | `var(--text-default)`                                                                                                                       |
+| description text               | `var(--text-muted)`                                                                                                                         |
+| copy cell fill (`canvas`)      | `var(--bg-canvas)`                                                                                                                          |
+| copy cell fill (`surface`)     | `var(--bg-surface)`                                                                                                                         |
+| media cell fill (`surface`)    | `var(--bg-surface)`                                                                                                                         |
+| media cell fill (`canvas`)     | `var(--bg-canvas)`                                                                                                                          |
+| media affordance               | `var(--secondary)` on `var(--secondary-foreground)`, `var(--shape-button)`                                                                  |
+| band rules, marks and the seam | `var(--border-default)`                                                                                                                     |
+| spacing (cell padding)         | `var(--spacing-xl)`                                                                                                                         |
+| spacing (copy cell, `large`)   | `var(--spacing-2xl)`                                                                                                                        |
+| media ground ink               | `var(--text-default)`, mixed down by `texture`                                                                                              |
+| spacing (copy stack)           | `var(--spacing-lg)`                                                                                                                         |
+| spacing (copy to actions)      | `var(--spacing-2xl)`                                                                                                                        |
+| spacing (between actions)      | `var(--spacing-sm)`                                                                                                                         |
 
 ## Theme gaps
 
