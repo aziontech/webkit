@@ -26,6 +26,16 @@ describe('settings/settings-form · Profile', () => {
     )
   })
 
+  it('shows Client ID as copyable text and marks the GitHub tab link as external', () => {
+    const view = render(Profile)
+    expect(view.queryByRole('textbox', { name: 'Client ID' })).toBeNull()
+    expect(view.getByRole('button', { name: 'Copy Client ID' })).toBeTruthy()
+    expect(view.getByText('9757a')).toBeTruthy()
+    const github = view.getByRole('link', { name: 'Manage GitHub (opens in a new tab)' })
+    expect(github.getAttribute('target')).toBe('_blank')
+    expect(github.querySelector('.az-external-link')).not.toBeNull()
+  })
+
   it('starts with Billing emails empty and asks for it on Save', async () => {
     const view = render(Profile)
     const emails = view.getByRole('textbox', { name: 'Billing emails' }) as HTMLTextAreaElement

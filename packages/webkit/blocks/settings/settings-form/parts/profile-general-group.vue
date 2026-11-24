@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import Card from '@aziontech/webkit/card'
+  import CopyText from '@aziontech/webkit/copy-text'
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -50,13 +51,9 @@
             title="Client ID"
             description="Can't be changed. Quote it when opening a support ticket about this account."
           >
-            <Input
-              v-model="form.clientId"
-              size="large"
-              class="w-full"
-              aria-label="Client ID"
-              readonly
-              :disabled="saving"
+            <CopyText
+              :value="form.clientId"
+              aria-label="Copy Client ID"
             />
           </SettingsRow>
         </Item.List>
