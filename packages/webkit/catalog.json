@@ -21193,7 +21193,7 @@
      "type": "string",
      "default": "—",
      "required": "true",
-     "doc": "URL of the document to embed. Only an absolute `http(s)` URL is framed; anything else renders the title as text."
+     "doc": "URL of the document to embed. Only an absolute `https` URL is framed; anything else renders the title as text."
     },
     {
      "name": "title",
