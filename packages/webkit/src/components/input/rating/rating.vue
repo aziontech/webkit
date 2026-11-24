@@ -48,15 +48,19 @@
   const model = defineModel<number>({ default: 0 })
 
   const attrs = useAttrs()
+  const attr = (key: string): string | undefined => {
+    const value = attrs[key]
+    return typeof value === 'string' ? value : undefined
+  }
   const uid = useId()
   const generatedName = `rating-${uid}`
   const summaryId = `${uid}-summary`
   const { t, locale } = useTranslate({ rating: en.rating })
 
   const field = useFieldControl({
-    id: () => attrs['id'] as string | undefined,
-    describedBy: () => attrs['aria-describedby'] as string | undefined,
-    labelledBy: () => attrs['aria-labelledby'] as string | undefined,
+    id: () => attr('id'),
+    describedBy: () => attr('aria-describedby'),
+    labelledBy: () => attr('aria-labelledby'),
     invalid: () => props.invalid,
     disabled: () => props.disabled,
     required: () => props.required
@@ -65,7 +69,7 @@
   const hovered = ref<number | null>(null)
   const controlEls = ref<HTMLInputElement[]>([])
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'rating')
+  const testId = computed(() => attr('data-testid') ?? 'rating')
   const count = computed(() => Math.min(10, Math.max(1, Math.round(props.max) || 1)))
   const stars = computed(() => Array.from({ length: count.value }, (_, index) => index + 1))
   const groupName = computed(() => props.name || generatedName)
@@ -153,7 +157,7 @@
     v-bind="$attrs"
     :role="readonly ? 'img' : 'radiogroup'"
     :id="field.controlId.value"
-    :aria-label="readonly ? undefined : (attrs['aria-label'] as string | undefined)"
+    :aria-label="readonly ? undefined : attr('aria-label')"
     :aria-labelledby="labelledBy || undefined"
     :aria-describedby="field.describedBy.value"
     :aria-required="isRequired || undefined"
