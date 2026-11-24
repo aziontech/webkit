@@ -263,7 +263,12 @@ export const ptBR: Messages = {
   },
   avatar: {
     fallbackLabel: 'Avatar do usuário',
-    imageAlt: 'Avatar'
+    imageAlt: 'Avatar',
+    presenceOnline: 'online',
+    presenceAway: 'ausente',
+    presenceBusy: 'ocupado',
+    presenceOffline: 'offline',
+    withPresence: '{name}, {presence}'
   },
   avatarGroup: {
     people: {
@@ -933,6 +938,30 @@ export const ptBR: Messages = {
     expand: 'Expandir',
     expandNamed: 'Expandir {label}'
   },
+  messageThread: {
+    label: 'Conversa',
+    loading: 'Carregando conversa',
+    loaded: 'Conversa carregada',
+    customer: 'Cliente',
+    agent: 'Agente',
+    via: 'via {channel}',
+    email: 'E-mail',
+    chat: 'Chat',
+    phone: 'Telefone',
+    web: 'Formulário web',
+    api: 'API',
+    internalNote: 'Nota interna',
+    to: 'Para: {addresses}',
+    cc: 'Cc: {addresses}',
+    showQuoted: 'Mostrar texto citado',
+    hideQuoted: 'Ocultar texto citado',
+    showEarlier: {
+      one: 'Mostrar {count} mensagem anterior',
+      other: 'Mostrar {count} mensagens anteriores'
+    },
+    showEarlierAll: 'Mostrar mensagens anteriores',
+    earlier: 'Mensagens anteriores'
+  },
   multiSelect: {
     noMatch: 'Nenhum resultado',
     loading: 'Carregando opções',
@@ -1010,6 +1039,14 @@ export const ptBR: Messages = {
   popover: {
     close: 'Fechar'
   },
+  priorityTag: {
+    prefix: 'Prioridade:',
+    urgent: 'Urgente',
+    high: 'Alta',
+    medium: 'Média',
+    low: 'Baixa',
+    none: 'Sem prioridade'
+  },
   progress: {
     label: 'Progresso'
   },
@@ -1066,6 +1103,15 @@ export const ptBR: Messages = {
     expectedConnective: 'Junte as condições com AND ou OR antes de “{word}”.',
     danglingConnective: 'Adicione uma condição depois de {connective}.',
     unclosedQuote: 'Feche as aspas abertas no caractere {position}.'
+  },
+  rating: {
+    star: {
+      one: '{count} estrela',
+      other: '{count} estrelas'
+    },
+    value: 'Avaliado em {value} de {max}',
+    empty: 'Sem avaliação',
+    clear: 'Limpar avaliação'
   },
   resizable: {
     handle: 'Redimensionar painel'
@@ -1274,6 +1320,22 @@ export const ptBR: Messages = {
     system: 'Sistema',
     dark: 'Escuro',
     light: 'Claro'
+  },
+  timeline: {
+    label: 'Atividade',
+    loading: 'Carregando atividade'
+  },
+
+  countdown: {
+    label: '{label}:',
+    dueIn: 'Vence em {duration}',
+    due: 'Vence {relative}',
+    overdue: 'Atrasado há {duration}',
+    duration: '{major} {minor}',
+    expiresIn: 'Expira em {duration}',
+    expires: 'Expira {relative}',
+    expired: 'Expirou {relative}',
+    paused: 'Pausado'
   },
   timestamp: {
     title: 'Detalhes do horário',
@@ -1496,5 +1558,27 @@ export const ptBR: Messages = {
     reorderMoved: '{name} movido para a posição {position} de {total}.',
     reorderDropped: '{name} solto na posição {position} de {total}.',
     reorderCancelled: 'Reordenação cancelada.'
+  },
+  markdownEditor: {
+    label: 'Mensagem',
+    write: 'Escrever',
+    preview: 'Visualizar',
+    toolbar: 'Formatação',
+    bold: 'Negrito',
+    italic: 'Itálico',
+    link: 'Link',
+    bulletedList: 'Lista com marcadores',
+    numberedList: 'Lista numerada',
+    quote: 'Citação',
+    code: 'Código',
+    shortcut: '{label} ({keys})',
+    linkPlaceholder: 'url',
+    emptyTitle: 'Nada para visualizar',
+    previewLoading: 'Carregando a visualização',
+    mentionMenu: 'Pessoas',
+    mentionResults: {
+      one: '{count} pessoa',
+      other: '{count} pessoas'
+    }
   }
 }

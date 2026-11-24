@@ -27,10 +27,14 @@ function table(rows: Row[], columns: string[]): string {
   return `${head}\n${body}`
 }
 
+const PREVIEW_LINE =
+  'Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.'
+
 export function componentMarkdown(item: ComponentIndexItem, doc: ComponentDoc): string {
   const parts = [
     `# ${item.title}`,
     text(doc.purpose),
+    ...(item.stability === 'preview' ? [PREVIEW_LINE] : []),
     '```js\n' + `import ${item.title} from '${doc.import}'` + '\n```'
   ]
   if (doc.useWhen.length)
@@ -62,6 +66,7 @@ export function blockMarkdown(block: BlockIndexItem, summary: string): string {
   const parts = [
     `# ${block.title}`,
     summary,
+    ...(block.stability === 'preview' ? [PREVIEW_LINE] : []),
     '```bash\n' + `npx @aziontech/webkit add ${block.id}` + '\n```'
   ]
   for (const state of block.states) {

@@ -1,6 +1,6 @@
 name: New block
 description: Request a new WebKit block (a screen agents copy). An agent builds it through /block-new from this issue.
-title: 'block: <category>/<name>'
+title: 'block: <group>/<group>-<what>'
 labels: ['new-block', 'ai-flow']
 body:
   - type: markdown
@@ -13,34 +13,35 @@ body:
   - type: dropdown
     id: category
     attributes:
-      label: Category
-      description: The task the screen serves.
+      label: Group
+      description: The job the screen serves (the block groups of `.claude/rules/naming.md` § 3).
       options:
-        - auth
         - account
+        - ai
+        - auth
         - create
-        - view
+        - dashboard
         - detail
         - edit
-        - delete
         - settings
-        - states
-        - dashboard
+        - state
+        - view
         - shell
+        - top-bar
     validations:
       required: true
   - type: input
     id: name
     attributes:
       label: Proposed name
-      description: kebab-case English, named by the job (e.g. `domain-details`, `api-token-create`).
+      description: kebab-case English, starting with the group word once (`<group>-<what>`, e.g. `detail-domain`, `create-api-token`); the block id is `<group>/<name>`.
     validations:
       required: true
   - type: textarea
     id: intent
     attributes:
       label: Intent
-      description: What the user comes to this screen to do, and what they leave with.
+      description: What the user comes to this screen to do, and what they leave with. Add the words people would search for, in English and pt-BR; they seed `block.json#intents`.
     validations:
       required: true
   - type: textarea
@@ -61,9 +62,10 @@ body:
     id: surface
     attributes:
       label: Surface
+      description: Where the screen lives; it becomes `block.json#surface`.
       options:
-        - product
-        - marketing
+        - app
+        - site
         - docs
     validations:
       required: true

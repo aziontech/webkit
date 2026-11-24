@@ -40,6 +40,7 @@ export type ComponentIndexItem = {
   title: string
   category: string
   surface: string
+  stability: 'preview' | 'ga'
   purpose: string
   import: string
   exampleDir: string | null
@@ -55,6 +56,7 @@ export type BlockIndexItem = {
   title: string
   group: string
   surface: string
+  stability: 'preview' | 'ga'
   summary: string
   states: { name: string; slug: string; file: string }[]
   dir: string

@@ -9,6 +9,7 @@ import ShortcutMenus from '../../../../examples/prompt-input/shortcut-menus.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import { filterOptions, findQuery } from './composables/use-prompt-input-menu'
 import PromptInputCompound from './index'
 import PromptInput from './prompt-input.vue'
 
@@ -313,6 +314,30 @@ describe('PromptInput', () => {
       expect(input).toHaveAttribute('aria-autocomplete', 'list')
       expect(document.body.textContent).toContain('1 suggestion')
       await expectNoA11yViolations(document.body.firstElementChild as HTMLElement)
+    })
+
+    it('renders each option label and description with dir="auto"', async () => {
+      render(ShortcutMenus)
+      await typeInto(textbox(), 'Check @im')
+      const option = listbox()!.querySelector('[role="option"]')!
+      expect(option.querySelectorAll('[dir="auto"]').length).toBeGreaterThanOrEqual(1)
+      expect(option.querySelector('[dir="auto"]')).toHaveTextContent('image-resize')
+    })
+
+    it('exports the query and filter helpers another component reuses', () => {
+      const field = document.createElement('textarea')
+      field.value = 'mail jane@example.com cc @ja'
+      field.setSelectionRange(field.value.length, field.value.length)
+      const options = [
+        { value: 'jane.doe', label: 'Jane Doe' },
+        { value: 'john.smith', label: 'John Smith' }
+      ]
+      const query = findQuery(field, [{ trigger: '@', label: 'People', options }])
+      expect(query).toMatchObject({ start: 25, text: 'ja' })
+      expect(filterOptions(query)).toEqual([options[0]])
+      field.value = 'jane@exa'
+      field.setSelectionRange(8, 8)
+      expect(findQuery(field, [{ trigger: '@', label: 'People', options }])).toBeNull()
     })
 
     it('opens the menu below the box when there is no room above it, above otherwise', async () => {

@@ -1,0 +1,39 @@
+{
+ "variants": [
+  {
+   "name": "Activity",
+   "summary": "The Activity tab: a `Timeline` with one group per day, newest first, each event with its marker, actor and time (ticket opened, replied, merged, rated, solved).",
+   "file": "blocks/detail/detail-customer/variants/activity.vue"
+  },
+  {
+   "name": "Notes",
+   "summary": "The Notes tab: the internal notes agents left on the customer as a `MessageThread` of notes, oldest first, then the Add a note field and the Add note button.",
+   "file": "blocks/detail/detail-customer/variants/notes.vue"
+  },
+  {
+   "name": "NoTickets",
+   "summary": "A customer created today: no phone and no tags, No ratings yet, the Tickets tab showing the No tickets yet empty state with New ticket, and one activity event.",
+   "file": "blocks/detail/detail-customer/variants/no-tickets.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "While the customer loads: the Customer title with skeletons for the avatar and organization, the actions disabled, skeleton values in the details, and skeleton rows in the tickets table.",
+   "file": "blocks/detail/detail-customer/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The customer failed to load: the Customer title with no actions and a danger `Alert` with Retry in place of the details and tabs.",
+   "file": "blocks/detail/detail-customer/variants/error.vue"
+  }
+ ],
+ "sfcFile": "blocks/detail/detail-customer/detail-customer.vue",
+ "guidelinesFile": "blocks/detail/detail-customer/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "parts/customer-clock.vue",
+  "parts/customer-details-panel.vue",
+  "parts/customer-tickets-tab.vue",
+  "parts/customer-activity-tab.vue",
+  "parts/customer-notes-tab.vue"
+ ]
+}

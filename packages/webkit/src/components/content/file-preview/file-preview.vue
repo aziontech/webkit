@@ -206,7 +206,7 @@
           :data-testid="`${testId}__meta`"
           class="truncate text-body-xs text-(--text-muted)"
         >
-          {{ meta }}
+          <bdi>{{ meta }}</bdi>
         </p>
       </div>
       <div class="flex shrink-0 items-center gap-(--spacing-xs)">

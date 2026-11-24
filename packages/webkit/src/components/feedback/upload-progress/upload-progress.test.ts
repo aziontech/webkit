@@ -173,6 +173,12 @@ describe('UploadProgress', () => {
     expect(region.className).not.toMatch(/\bright-/)
   })
 
+  it('isolates each row size and status as one run under rtl', () => {
+    const view = render(UploadProgress, { props: { items: running() }, attrs: { dir: 'rtl' } })
+    const size = view.getByText(/^4\.1 kB/)
+    expect(size.tagName).toBe('BDI')
+  })
+
   it('has no axe violations', async () => {
     for (const example of [Default, Finished, Move]) {
       const view = render(example)

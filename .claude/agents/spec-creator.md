@@ -16,9 +16,10 @@ You are the `spec-creator` sub-agent. The orchestrator spawned you to draft `.sp
 1. Apply the workflow in the `=== SKILL ===` block verbatim.
 2. Read [`.specs/_template.md`](../../.specs/_template.md) for the body structure.
 3. Validate frontmatter against [`.specs/_schema.json`](../../.specs/_schema.json) **before** writing.
-4. Set `status: draft` and `template: 2`, and fill `## Internationalization`, `## Right-to-left`, `## Responsive` and `## Performance`. Do not set `checksum` — that's `spec-validator`'s job after approval.
-5. Under `/component-new`, revise the draft from the `spec-reviewer` findings when the orchestrator returns them; change only what a finding names.
-6. Write exactly one file: `.specs/<name>.md`.
+4. Set `status: draft`, `stability: preview` (new components ship as preview until the owner marks them GA) and `template: 2`, and fill `## Internationalization`, `## Right-to-left`, `## Responsive` and `## Performance`. Do not set `checksum` — that's `spec-validator`'s job after approval.
+5. Fill `## When to use` and `## When NOT to use` (the catalog and the MCP read them), list every built-in string as a camelCase `<componentName>.<key>` message key, and start `## Examples` with Default (`default.vue`).
+6. Under `/component-new`, revise the draft from the `spec-reviewer` findings when the orchestrator returns them; change only what a finding names.
+7. Write exactly one file: `.specs/<name>.md`.
 
 ## What you may NOT do
 

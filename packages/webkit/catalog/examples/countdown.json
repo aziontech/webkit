@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The first-reply SLA of a ticket in its three states: time left, warning when under an hour is left, and overdue once the deadline has passed. Each state changes the icon and the words as well as the colour.",
+   "file": "examples/countdown/default.vue"
+  },
+  {
+   "name": "Paused",
+   "summary": "A paused resolution SLA next to a running first-reply SLA, as a ticket header shows them while the ticket waits on the customer.",
+   "file": "examples/countdown/paused.vue"
+  },
+  {
+   "name": "Expiry",
+   "summary": "`type=\"expiry\"` for a certificate, an API key with a two-day warning window and a trial that ended yesterday.",
+   "file": "examples/countdown/expiry.vue"
+  }
+ ]
+}

@@ -70,7 +70,8 @@ async function main() {
         'surface, structure, import, tree-shakeable import, PascalCase binding). Optionally filter ' +
         'by category or by surface: "app" (console and apps), "site" (the azion.com site: ' +
         'sections, bands, brand assets) or "docs" (the documentation site). Returns ' +
-        `${LIST_LIMIT} cards per page; pass the answer's \`nextCursor\` as \`cursor\` for the next page.`,
+        `${LIST_LIMIT} cards per page; pass the answer's \`nextCursor\` as \`cursor\` for the next page. ` +
+        'A card with stability: "preview" may change its API in a minor release before GA.',
       inputSchema: {
         category: z
           .string()
@@ -164,7 +165,9 @@ async function main() {
         'Full API for one component: purpose, when to use / when not to use, props, events, ' +
         'slots, sub-components, structure, compound-root info, runnable examples taken from its ' +
         'examples and the classes allowed on its tag. A deprecated part carries deprecated: true, its note ' +
-        'and replacedBy; use the replacement. Returns fuzzy suggestions when the name is unknown.',
+        'and replacedBy; use the replacement. A preview part carries stability: "preview" and a ' +
+        'stabilityNote: its API may change in a minor release before GA, so tell the user. ' +
+        'Returns fuzzy suggestions when the name is unknown.',
       inputSchema: {
         name: z.string().describe('Component name (kebab-case), e.g. "button" or "table".')
       }
@@ -253,7 +256,8 @@ async function main() {
         '"delete dialog", "tela de login"). Blocks are whole screens built from WebKit ' +
         'components: start every screen from one. Returns ranked ids with a one-line summary, the ' +
         'first intents, components, skills, steps and `guidelinesSummary` (the job the screen ' +
-        'serves); get_block has the detail. An empty query lists every block.',
+        'serves); get_block has the detail. An empty query lists every block. A block with ' +
+        'stability: "preview" may still change in a minor release before GA.',
       inputSchema: {
         query: z
           .string()

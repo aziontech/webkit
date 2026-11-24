@@ -46,7 +46,10 @@ same on the issue (`gh issue comment`), and do nothing else.
    copied (`.claude/rules/migration.md`).
 2. **Reuse.** Run the `reuse-auditor` sub-agent (`reuse-audit` skill); ask the webkit MCP
    `search_components` and `suggest_component` with the intent in plain words; look the name and
-   its synonyms up in `packages/webkit/catalog.json#aliases`.
+   its synonyms up in `packages/webkit/catalog.json#aliases`. Read the closest exports against
+   the planned API: `check:look-alikes` fails a new pair that scores 35 % or more and where neither
+   imports the other (`.claude/docs/CODE_QUALITY.md` § 3.3), so a near-twin is a prop or a shared
+   part, not a new component.
 3. Write the notes (benchmark summary + reuse JSON) to the run log; they are the input of steps 3
    and 4.
 4. Exit condition: no existing export or block does the job. If one does, stop and answer the
@@ -59,7 +62,7 @@ same on the issue (`gh issue comment`), and do nothing else.
    field is filled). The `spec-creator` sub-agent copies `.specs/_template.md`, so the spec
    carries `template: 2` and must fill `## Internationalization`, `## Right-to-left`,
    `## Responsive` and `## Performance`.
-2. Exit condition: `.specs/<name>.md` exists with `status: draft` and no `TBD`. An unanswerable
+2. Exit condition: `.specs/<name>.md` exists with `status: draft`, `stability: preview` and no `TBD`. An unanswerable
    section is `BLOCKED:` — stop and ask on the issue.
 
 ## Step 4 — Spec review by a second agent
@@ -77,17 +80,32 @@ same on the issue (`gh issue comment`), and do nothing else.
 
 1. `/component-create <name>`: scaffold (`component-scaffold`), examples, Code
    Connect when a frame exists, echo cross-check, `component-validate`. Its hooks run on every
-   write.
-2. Co-located test `<name>.test.ts` (Vitest browser; `.claude/rules/testing.md`): every state,
+   write. The code stays inside the `.claude/docs/CODE_QUALITY.md` § 3.1 limits (400-line `.vue`,
+   200-line script, 60-line functions, 20 props and 5 models per root) and ships the § 3.5
+   extension points; a native control or ARIA widget role it renders needs its owner entry in
+   `packages/webkit/src/eslint-plugin/owners.json` (`webkit/no-unowned-element`).
+2. Exports: after the scaffold adds the flat `./<name>` entries, run
+   `pnpm --filter @aziontech/webkit build:exports` (the `exports` gate wants the typed
+   `{ types, default }` shape and `typesVersions`).
+3. Co-located test `<name>.test.ts` (Vitest browser; `.claude/rules/testing.md`): every state,
    the keyboard map, axe, and the `dir="rtl"` case.
-3. Examples in `packages/webkit/examples/<name>/`: `examples.json` (`component`, `title`,
-   `examples[]` with `name`, `summary`, `file`) and one copyable `.vue` per example, covering the
-   states of the spec.
-4. Budget: an entry in `packages/webkit/.size-limit.json` with the spec's `## Performance` budget.
-5. Regenerate: `pnpm --filter @aziontech/webkit build:catalog`. The docs page
+4. Strings: every key of the spec's `## Internationalization` goes into the component's camelCase
+   namespace in all three catalogs, `packages/webkit/src/locales/en.ts`, `pt-BR.ts` and `es.ts`
+   (`naming.md` § 13; `test/standards/i18n-catalogs.test.mjs` fails a missing key or placeholder).
+5. Examples in `packages/webkit/examples/<name>/`: `examples.json` (`component`, `title`
+   `Components/<Category>/<Pascal>`, `examples[]` with `name`, `summary`, `file`) and one copyable
+   `.vue` per example of the spec's `## Examples`, no fewer (`check:complete`). The first is
+   `default.vue`; file names follow `naming.md` § 4; sample data follows
+   `rules/webkit-example-data.md`; a floating overlay starts closed
+   (`rules/webkit-overlays-closed-on-load.md`).
+6. Budget: an entry in `packages/webkit/.size-limit.json` with the spec's `## Performance` budget.
+7. Regenerate: `pnpm --filter @aziontech/webkit build:catalog` (it writes `catalog.json`,
+   `catalog/` and `llms/`; commit all three). The docs page
    (`/components/<name>`, `/frame/example/<name>/<file>`) and the visual test of the first example follow
    from the files; its baseline comes from the `Visual baselines` workflow (`/baselines-regenerate`).
-6. Exit condition: `/component-create` finished with `status: implemented` and the echo verdict
+   `check:complete` fails until `apps/visual/baselines/examples/<name>/default--light-1280.png`
+   is committed, so dispatch it as soon as the examples are final.
+8. Exit condition: `/component-create` finished with `status: implemented` and the echo verdict
    is `parity`.
 
 ## Step 6 — Machine gates
@@ -95,16 +113,14 @@ same on the issue (`gh issue comment`), and do nothing else.
 Run, from the repository root, and keep the output for the PR:
 
 ```bash
-pnpm --filter @aziontech/webkit run gates          # catalog, naming, marketing, blocks, cited names,
-                                                    # spec status, spec template, authoring, doc standards,
-                                                    # test gate, bundle budget, hook tests,
-                                                    # toolkit tests → table
+pnpm --filter @aziontech/webkit run gates          # every gate in scripts/run-gates.mjs (GATES) → table
 pnpm --filter @aziontech/webkit lint
 pnpm --filter @aziontech/webkit lint:style
 pnpm --filter @aziontech/webkit typecheck
 pnpm --filter @aziontech/webkit check:type-coverage
 pnpm --filter @aziontech/webkit check:format
 pnpm --filter @aziontech/webkit run check:size
+pnpm --filter @aziontech/webkit test:ssr
 cd packages/webkit && pnpm exec vitest run <name>.test copyable-sfcs   # filters by file path
 ```
 
@@ -126,7 +142,7 @@ so a skipped one fails the PR anyway.
    never the component name or a synonym of it.
 2. Run `pnpm --filter @aziontech/webkit run check:usage -- <name> "<prompt>" --report usage-report.md`
    when the `claude` CLI and an API key are available; otherwise the PR in step 9 opens as draft
-   and you dispatch `gh workflow run check:usage.yml -f target=<name> -f prompt="<prompt>"` on the
+   and you dispatch `gh workflow run usage-check.yml -f target=<name> -f prompt="<prompt>"` on the
    branch.
 3. Exit condition: the report says `Usage check passed.` (the fresh session imported
    `@aziontech/webkit/<name>` through the MCP and `webkit doctor` passed). A failure means the

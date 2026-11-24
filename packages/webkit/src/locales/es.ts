@@ -263,7 +263,12 @@ export const es: Messages = {
   },
   avatar: {
     fallbackLabel: 'Avatar del usuario',
-    imageAlt: 'Avatar'
+    imageAlt: 'Avatar',
+    presenceOnline: 'en línea',
+    presenceAway: 'ausente',
+    presenceBusy: 'ocupado',
+    presenceOffline: 'desconectado',
+    withPresence: '{name}, {presence}'
   },
   avatarGroup: {
     people: {
@@ -933,6 +938,30 @@ export const es: Messages = {
     expand: 'Expandir',
     expandNamed: 'Expandir {label}'
   },
+  messageThread: {
+    label: 'Conversación',
+    loading: 'Cargando conversación',
+    loaded: 'Conversación cargada',
+    customer: 'Cliente',
+    agent: 'Agente',
+    via: 'por {channel}',
+    email: 'Correo electrónico',
+    chat: 'Chat',
+    phone: 'Teléfono',
+    web: 'Formulario web',
+    api: 'API',
+    internalNote: 'Nota interna',
+    to: 'Para: {addresses}',
+    cc: 'Cc: {addresses}',
+    showQuoted: 'Mostrar texto citado',
+    hideQuoted: 'Ocultar texto citado',
+    showEarlier: {
+      one: 'Mostrar {count} mensaje anterior',
+      other: 'Mostrar {count} mensajes anteriores'
+    },
+    showEarlierAll: 'Mostrar mensajes anteriores',
+    earlier: 'Mensajes anteriores'
+  },
   multiSelect: {
     noMatch: 'Sin resultados',
     loading: 'Cargando opciones',
@@ -1010,6 +1039,14 @@ export const es: Messages = {
   popover: {
     close: 'Cerrar'
   },
+  priorityTag: {
+    prefix: 'Prioridad:',
+    urgent: 'Urgente',
+    high: 'Alta',
+    medium: 'Media',
+    low: 'Baja',
+    none: 'Sin prioridad'
+  },
   progress: {
     label: 'Progreso'
   },
@@ -1066,6 +1103,15 @@ export const es: Messages = {
     expectedConnective: 'Une las condiciones con AND u OR antes de “{word}”.',
     danglingConnective: 'Añade una condición después de {connective}.',
     unclosedQuote: 'Cierra las comillas abiertas en el carácter {position}.'
+  },
+  rating: {
+    star: {
+      one: '{count} estrella',
+      other: '{count} estrellas'
+    },
+    value: 'Valorado con {value} de {max}',
+    empty: 'Sin valoración',
+    clear: 'Borrar valoración'
   },
   resizable: {
     handle: 'Redimensionar panel'
@@ -1274,6 +1320,22 @@ export const es: Messages = {
     system: 'Sistema',
     dark: 'Oscuro',
     light: 'Claro'
+  },
+  timeline: {
+    label: 'Actividad',
+    loading: 'Cargando actividad'
+  },
+
+  countdown: {
+    label: '{label}:',
+    dueIn: 'Vence en {duration}',
+    due: 'Vence {relative}',
+    overdue: 'Vencido hace {duration}',
+    duration: '{major} {minor}',
+    expiresIn: 'Caduca en {duration}',
+    expires: 'Caduca {relative}',
+    expired: 'Caducó {relative}',
+    paused: 'En pausa'
   },
   timestamp: {
     title: 'Detalles de la marca de tiempo',
@@ -1497,5 +1559,27 @@ export const es: Messages = {
     reorderMoved: '{name} movido a la posición {position} de {total}.',
     reorderDropped: '{name} soltado en la posición {position} de {total}.',
     reorderCancelled: 'Reordenación cancelada.'
+  },
+  markdownEditor: {
+    label: 'Mensaje',
+    write: 'Escribir',
+    preview: 'Vista previa',
+    toolbar: 'Formato',
+    bold: 'Negrita',
+    italic: 'Cursiva',
+    link: 'Enlace',
+    bulletedList: 'Lista con viñetas',
+    numberedList: 'Lista numerada',
+    quote: 'Cita',
+    code: 'Código',
+    shortcut: '{label} ({keys})',
+    linkPlaceholder: 'url',
+    emptyTitle: 'Nada que previsualizar',
+    previewLoading: 'Cargando la vista previa',
+    mentionMenu: 'Personas',
+    mentionResults: {
+      one: '{count} persona',
+      other: '{count} personas'
+    }
   }
 }

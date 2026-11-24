@@ -31,10 +31,18 @@ export function apiFromCatalog(catalog) {
         .sort(([a], [b]) => a.localeCompare(b))
     )
   }
+  const preview = Object.keys(imports)
+    .filter((subpath) => imports[subpath].stability === 'preview')
+    .sort()
+  const previewBlocks = Object.keys(catalog.blocks || {})
+    .filter((id) => catalog.blocks[id].stability === 'preview')
+    .sort()
   return {
     exports: Object.keys(imports).sort(),
     blocks: Object.keys(catalog.blocks || {}).sort(),
-    props
+    props,
+    ...(preview.length ? { preview } : {}),
+    ...(previewBlocks.length ? { previewBlocks } : {})
   }
 }
 
@@ -69,9 +77,11 @@ export function diffApi(before, after, migrations) {
   const uncovered = []
   const afterExports = new Set(after.exports)
   const afterBlocks = new Set(after.blocks)
+  const preview = new Set(before.preview || [])
+  const previewBlocks = new Set(before.previewBlocks || [])
 
   for (const subpath of before.exports) {
-    if (afterExports.has(subpath)) continue
+    if (afterExports.has(subpath) || preview.has(subpath)) continue
     const renamed = renamedSubpath(subpath, migrations.components)
     if (renamed && afterExports.has(renamed)) continue
     if (migrations.removed[subpath]) continue
@@ -81,13 +91,14 @@ export function diffApi(before, after, migrations) {
   }
 
   for (const id of before.blocks) {
-    if (afterBlocks.has(id)) continue
+    if (afterBlocks.has(id) || previewBlocks.has(id)) continue
     const target = migrations.blocks[id]
     if (target && afterBlocks.has(String(target).split('#')[0])) continue
     uncovered.push(`block ${id} was removed or renamed (add it to v<N>-blocks.json)`)
   }
 
   for (const [subpath, props] of Object.entries(before.props)) {
+    if (preview.has(subpath)) continue
     const target = after.props[subpath]
       ? subpath
       : renamedSubpath(subpath, migrations.components) || subpath

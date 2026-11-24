@@ -18,6 +18,7 @@ The list of accepted types and the type→release-effect must be **identical** a
 - `feat` → **minor**
 - `fix` → **patch**
 - `!` after the type or a `BREAKING CHANGE:` footer → **major** (on any type)
+- A change to the API of a **preview** part (`stability: preview`) is a `feat`/`fix` → **minor**/**patch**, never `!`; it is named in the commit body (see [`deprecation.md`](./deprecation.md) § Preview parts)
 - `chore` / `docs` / `style` / `refactor` / `perf` / `test` / `ci` / `revert` → **no release on their own**. They are accepted for hygiene and ride along in the next release cut by a `feat`/`fix`; release-please does not count them as releasable units.
 
 > **`hotfix` was removed from the enum (2026-07-26).** Its name implied a release, but release-please does not recognize the type — a silent trap for exactly the most urgent commits. It had zero uses in the repo's history, so it was dropped: commitlint now rejects it loudly, and urgent production fixes are committed as `fix`.

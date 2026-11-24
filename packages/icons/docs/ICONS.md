@@ -2,7 +2,7 @@
 
 > Generated from `src/icons.json` by `scripts/build-docs.mjs`. Edit the JSON, then run `npm run build`; do not edit this page by hand.
 
-554 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
+558 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
 
 ## How the icons are organised
 
@@ -12,7 +12,7 @@
   - Platform (9) — The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
   - Solutions (8) — The Azion Solutions, one icon each: the five By Need Solutions and the three By Industry Solutions, named after the Solution's short name.
   - Services (8) — Support plans and professional services.
-- **Interface** (309) — Generic glyphs for the interface. They name an action, an object or a state, never a product.
+- **Interface** (313) — Generic glyphs for the interface. They name an action, an object or a state, never a product.
   - Arrows (50) — Arrows, chevrons, carets, sorting and moving.
   - Actions (37) — Things a person does: edit, copy, delete, search, share, download, zoom.
   - Status (24) — Alerts, information, success, help and states such as on, off or loading.
@@ -23,7 +23,7 @@
   - People (10) — People, accounts and identity.
   - Devices (9) — Computers, phones, servers, chips and hardware.
   - Data (13) — Charts, tables, lists, databases and measurement.
-  - Layout (18) — Alignment, grids, columns, windows, menus and controls.
+  - Layout (22) — Alignment, grids, columns, windows, menus and controls.
   - Objects (65) — Everyday objects and symbols: calendar, clock, lock, key, globe, star, flag, tools.
   - Git (15) — Branches, commits, merges and pull requests.
 - **External** (179) — Logos of other companies and projects. Azion does not own them; each is used to name that third party.
@@ -439,6 +439,10 @@ Alignment, grids, columns, windows, menus and controls.
 | --- | --- | --- | --- |
 | `az az-align-center` | Center-align text | Three horizontal lines of different lengths, centered |  |
 | `az az-align-justify` | Justify text | Three horizontal lines of equal length |  |
+| `az az-bold` | Bold text | A bold capital letter B |  |
+| `az az-italic` | Italic text | A slanted capital letter I with serifs |  |
+| `az az-list-ordered` | Numbered list | Three lines numbered 1 and 2 |  |
+| `az az-quote` | Quoted text or a block quote | Two closing quotation marks |  |
 | `az az-align-left` | Left-align text | Three horizontal lines aligned to the left edge |  |
 | `az az-align-right` | Right-align text | Three horizontal lines aligned to the right edge |  |
 | `az az-columns-3` | A column layout, show or hide columns | A box split into three columns |  |

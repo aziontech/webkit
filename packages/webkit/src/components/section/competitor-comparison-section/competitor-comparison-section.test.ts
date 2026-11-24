@@ -53,6 +53,12 @@ const band = (props: Record<string, unknown> = {}) =>
     }
   })
 
+const visibleText = (cell: HTMLElement) => {
+  const copy = cell.cloneNode(true) as HTMLElement
+  copy.querySelectorAll('[hidden], [aria-hidden="true"]').forEach((node) => node.remove())
+  return (copy.textContent ?? '').replace(/\s+/g, ' ').trim()
+}
+
 describe('CompetitorComparisonSection', () => {
   it('renders the band under the default testid', () => {
     const { getByTestId } = band()
@@ -86,7 +92,7 @@ describe('CompetitorComparisonSection', () => {
   it('renders one category head and one row head per capability, in order', () => {
     const { getAllByRole } = band()
 
-    const heads = getAllByRole('rowheader').map((cell) => cell.innerText.trim())
+    const heads = getAllByRole('rowheader').map(visibleText)
     expect(heads).toEqual(['Bot management', 'Zero Trust', 'AI inference'])
     expect(getAllByRole('columnheader').length).toBeGreaterThanOrEqual(3)
   })

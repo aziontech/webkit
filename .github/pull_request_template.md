@@ -30,7 +30,7 @@
 
 - Closes #<!-- issue -->
 - Spec: `.specs/<name>.md` (`status: implemented`, `template: 2`) <!-- or the block folder: packages/webkit/blocks/... -->
-- Spec review (`spec-reviewer`): <!-- approve after N rounds; paste the checklist -->
+- Spec review (`spec-reviewer`): <!-- approve after N rounds; paste the checklist, one row per item of .claude/agents/spec-reviewer.md -->
 
 | Item                 | Result |
 | -------------------- | ------ |
@@ -49,14 +49,16 @@
 
 <!-- Paste the table printed by `pnpm --filter @aziontech/webkit run gates`. -->
 
-| Command                                                         | Result |
-| --------------------------------------------------------------- | ------ |
-| `pnpm --filter @aziontech/webkit run gates`                     |        |
-| `pnpm --filter @aziontech/webkit lint` and `lint:style`         |        |
-| `pnpm --filter @aziontech/webkit typecheck` and `type-coverage` |        |
-| `pnpm --filter @aziontech/webkit check:format`                  |        |
-| `pnpm --filter @aziontech/webkit run check:size`                |        |
-| `vitest run <name>.test copyable-sfcs`                          |        |
+| Command                                                                       | Result |
+| ----------------------------------------------------------------------------- | ------ |
+| `pnpm --filter @aziontech/webkit run gates`                                   |        |
+| `pnpm --filter @aziontech/webkit lint` and `lint:style`                       |        |
+| `pnpm --filter @aziontech/webkit typecheck` and `check:type-coverage`         |        |
+| `pnpm --filter @aziontech/webkit check:format`                                |        |
+| `pnpm --filter @aziontech/webkit run check:size`                              |        |
+| `pnpm --filter @aziontech/webkit test:ssr`                                    |        |
+| `vitest run <name>.test copyable-sfcs`                                        |        |
+| Visual baselines from `/baselines-regenerate` (first example, light and dark) |        |
 
 ## `ui-craft` review
 

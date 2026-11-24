@@ -18,7 +18,10 @@ export interface UsePromptInputMenuReturn {
   onMenuKeydown: (event: KeyboardEvent) => boolean
 }
 
-function findQuery(el: HTMLTextAreaElement, menus: PromptInputMenu[]): PromptInputQuery | null {
+export function findQuery(
+  el: HTMLTextAreaElement,
+  menus: PromptInputMenu[]
+): PromptInputQuery | null {
   const text = el.value
   const caret = el.selectionStart ?? text.length
   const token = /(^|\s)(\S*)$/.exec(text.slice(0, caret))?.[2] ?? ''
@@ -27,7 +30,7 @@ function findQuery(el: HTMLTextAreaElement, menus: PromptInputMenu[]): PromptInp
   return { menu, start: caret - token.length, text: token.slice(menu.trigger.length) }
 }
 
-function filterOptions(current: PromptInputQuery | null): PromptInputMenuOption[] {
+export function filterOptions(current: PromptInputQuery | null): PromptInputMenuOption[] {
   if (!current) return []
   const needle = current.text.toLocaleLowerCase()
   return current.menu.options

@@ -1,0 +1,124 @@
+{
+ "name": "rating",
+ "binding": "Rating",
+ "import": "@aziontech/webkit/rating",
+ "treeShakeableImport": "@aziontech/webkit/rating",
+ "category": "input",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Rating is a row of stars that picks a whole score from 1 to `max` (5 by default), the way a customer rates a support conversation (CSAT) or a product review. It renders as a native radio group, one radio per star named \"1 star\" … \"5 stars\", so it is one tab stop, the arrow keys move the score and the value posts with a form. With `readonly` it becomes a display of a score, including a fractional average rounded to the nearest half star (4.5 shows four and a half stars), announced as one image (\"Rated 4.5 out of 5\").",
+ "setup": null,
+ "useWhen": [
+  "Ask a customer to rate a support conversation, an answer or a resolved ticket on a 1-to-5 scale (customer satisfaction, CSAT).",
+  "Collect a star score in a review or feedback form, inside a `Field` with a label, a description and a required error.",
+  "Show a stored score or an average of scores as stars in a ticket, a table cell or a review list (`readonly`)."
+ ],
+ "avoidWhen": [
+  "A good / bad (thumbs up / thumbs down) answer → use `ToggleGroup` with two options, or `ChatMessageFeedback` under an AI answer.",
+  "A score on a scale wider than 10 or a continuous value → use `Slider` or `NumberInput`.",
+  "A choice between named options (plans, channels) → use `RadioGroup`.",
+  "A score shown as a number or a bar (NPS breakdown, a meter) → use `StatTile` or `Progress`."
+ ],
+ "related": [
+  "`radio-group` — the same native radio pattern, for picking one labelled option instead of a score.",
+  "`toggle-group` — two or three compact options such as good / bad.",
+  "`chat-message-feedback` — thumbs up / thumbs down under an AI chat answer.",
+  "`field` — wraps the rating with its label, description and error; the label names the group.",
+  "`slider` — a number on a wide or continuous scale."
+ ],
+ "bestPractices": [
+  "Name the group: put it in a `Field` with a `Field.Title`, or set `aria-label` on the root (\"Rate this conversation\").",
+  "Keep `max` at 5 for satisfaction and reviews; scales above 5 are hard to tell apart at a glance.",
+  "Start empty (`0`) when you ask for a rating, so nobody submits a score they did not choose; set `required` when the score is mandatory.",
+  "Set `clearable` when a score is optional, so a person can take it back with the keyboard and a screen reader, not only by reloading.",
+  "Show averages with `readonly`; print the count of ratings beside it in text (\"4.5 · 128 reviews\"), the stars do not carry it.",
+  "Do not put a rating in a dense table row as an input; show it `readonly` and edit it in a dialog or a detail page."
+ ],
+ "props": [
+  {
+   "name": "max",
+   "type": "number",
+   "default": "5",
+   "required": "false",
+   "doc": "Number of stars, the highest score. Rounded to a whole number and kept between 1 and 10."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Star size: 16, 20 or 24 px glyphs in 24, 28 or 32 px targets. `RatingSize`, exported."
+  },
+  {
+   "name": "name",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Form field name shared by every star radio; the score submits under it. Empty uses a generated name so the radios still group."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the score instead of asking for it: no radios, the value rounded to the nearest half star, announced as one image."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables every star and the clear button; the row shows at 50 % opacity with a not-allowed cursor."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Requires a score: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the rating invalid: sets `aria-invalid` on the group and draws the empty stars in the danger mark colour."
+  },
+  {
+   "name": "clearable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a clear button after the stars that resets the score to 0 and moves focus to the first star. Not shown while `readonly`."
+  },
+  {
+   "name": "modelValue",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "stability": "preview",
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/rating/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/rating/sizes.vue"
+  },
+  {
+   "name": "Readonly",
+   "file": "examples/rating/readonly.vue"
+  }
+ ],
+ "docs": "components/rating.md"
+}

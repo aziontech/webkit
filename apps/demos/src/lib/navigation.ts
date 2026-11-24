@@ -50,6 +50,18 @@ const tree: ConsoleLayoutNavGroup[] = [
     ]
   },
   {
+    label: 'Support',
+    items: [
+      { id: 'support-tickets', label: 'Tickets', icon: 'az az-ticket', href: '/support' },
+      {
+        id: 'support-canned-responses',
+        label: 'Canned responses',
+        icon: 'az az-reply',
+        href: '/support/settings/canned-responses'
+      }
+    ]
+  },
+  {
     label: 'Data',
     items: [
       { id: 'databases', label: 'Databases', icon: 'az az-database' },

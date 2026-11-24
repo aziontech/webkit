@@ -33,6 +33,7 @@
         return {
           title: item.label,
           to: item.to,
+          preview: item.preview === true,
           text: cardPurpose(block?.summary ?? ''),
           image: block ? thumbnail(block.id) : undefined
         }

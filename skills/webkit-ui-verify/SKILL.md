@@ -108,6 +108,9 @@ npx @aziontech/webkit check --no-lint --url http://localhost:5173/policies/acme/
     keys type into the field and trigger nothing;
   - in a table or list, arrows move between rows, `Enter` opens, `Space` selects, `Delete` asks
     first; after a delete focus is on the next row (or previous, or the list), never on `body`;
+  - every `Hint` glyph opens its note on `Enter` and `Space` (never on hover) and `Esc` returns
+    focus to the glyph; the page `Info` link opens and closes the tools region and its
+    `aria-expanded` follows;
   - closing anything returns focus to its trigger, and every shortcut shown in a menu or bar is a
     `Kbd` with `aria-keyshortcuts` on its control.
 

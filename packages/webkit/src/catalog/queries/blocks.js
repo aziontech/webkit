@@ -6,7 +6,7 @@ import {
   scoreBlock
 } from '../lib/block-search.js'
 import { marketingPageIntent } from '../lib/marketing-page.js'
-import { NOT_AVAILABLE, surfaceOf } from '../lib/results.js'
+import { NOT_AVAILABLE, stabilityOf, surfaceOf } from '../lib/results.js'
 import { normalize, sameVariant, screenIntentOf } from '../lib/text.js'
 
 const BLOCK_SECTIONS = ['sfc', 'guidelines']
@@ -145,7 +145,8 @@ function blockBasics(p) {
     skills: p.skills || [],
     source: p.source,
     surface: p.surface ?? 'app',
-    ...(p.kind === 'fragment' ? { kind: 'fragment', fragmentNote: FRAGMENT_NOTE } : {})
+    ...(p.kind === 'fragment' ? { kind: 'fragment', fragmentNote: FRAGMENT_NOTE } : {}),
+    ...stabilityOf(p)
   }
 }
 

@@ -4,6 +4,7 @@ import { dirname, join, normalize, relative } from 'node:path'
 import { GUIDELINE_FILE, guidelinesSummary } from './guidelines.mjs'
 
 const PKG_PREFIX = '@aziontech/webkit/'
+const BLOCK_STABILITIES = ['preview', 'ga']
 
 const EXAMPLES_PER_COMPONENT = 3
 const EXAMPLE_MAX_CHARS = 8000
@@ -100,6 +101,10 @@ export function readBlocks(pkgRoot) {
       errors.push(`${expectedId}/block.json: id "${block.id}" does not match its folder`)
       continue
     }
+    if (block.stability !== undefined && !BLOCK_STABILITIES.includes(block.stability)) {
+      errors.push(`${expectedId}/block.json: stability "${block.stability}" is not preview or ga`)
+      continue
+    }
     const primarySfc = readText(join(dir, block.primary.file))
     const variants = (block.variants || []).map((v) => ({
       name: v.name,
@@ -133,6 +138,7 @@ export function readBlocks(pkgRoot) {
       source: `blocks/${block.id}/${block.primary.file}`,
       surface: block.surface || 'app',
       ...(block.kind === 'fragment' ? { kind: 'fragment' } : {}),
+      ...(block.stability === 'preview' ? { stability: 'preview' } : {}),
       summary: block.summary || '',
       intents: block.intents || [],
       skills: block.skills || []

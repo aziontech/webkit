@@ -49,6 +49,7 @@ export function surfaceFromCatalog(catalog) {
       slots: Object.fromEntries((entry.slots || []).map((s) => [s.name, norm(s.scope)])),
       models: hasModels ? [...(entry.models || [])].sort() : null,
       subcomponents: [...(entry.subcomponents || [])].sort(),
+      stability: entry.stability === 'preview' ? 'preview' : 'ga',
       specs: [subpath, entry.rootOf, entry.parent].filter(Boolean)
     }
   }
@@ -134,13 +135,24 @@ const valueChange = (subpath, area, kind) => (name, before, after) =>
 
 const asKeys = (list) => Object.fromEntries((list || []).map((name) => [name, true]))
 
+const asPreview = (c) => (c.breaking ? { ...c, breaking: false, preview: true } : c)
+
+function stabilityChange(subpath, before, after) {
+  if (before.stability === after.stability) return []
+  return after.stability === 'preview'
+    ? [change(subpath, 'stability', 'stability', 'demoted to preview', false, 'ga → preview')]
+    : [change(subpath, 'stability', 'stability', 'promoted to GA', false, 'preview → ga')]
+}
+
 export function diffSurface(base, head) {
   const changes = []
   const headExports = new Set(head.exports)
   const baseExports = new Set(base.exports)
   for (const subpath of base.exports) {
-    if (!headExports.has(subpath))
-      changes.push(change(subpath, 'export', subpath, 'removed', true, ''))
+    if (!headExports.has(subpath)) {
+      const removed = change(subpath, 'export', subpath, 'removed', true, '')
+      changes.push(base.components[subpath]?.stability === 'preview' ? asPreview(removed) : removed)
+    }
   }
   for (const subpath of head.exports) {
     if (!baseExports.has(subpath))
@@ -157,7 +169,7 @@ export function diffSurface(base, head) {
         Object.assign(c, { kind: 'added required', breaking: true })
       }
     }
-    changes.push(
+    const surface = [
       ...props,
       ...diffKeyed(
         subpath,
@@ -180,12 +192,16 @@ export function diffSurface(base, head) {
         asKeys(after.subcomponents),
         () => []
       )
-    )
+    ]
     if (before.models && after.models) {
-      changes.push(
+      surface.push(
         ...diffKeyed(subpath, 'model', asKeys(before.models), asKeys(after.models), () => [])
       )
     }
+    changes.push(
+      ...(before.stability === 'preview' ? surface.map(asPreview) : surface),
+      ...stabilityChange(subpath, before, after)
+    )
   }
   return changes.filter((c) => !movedToModel(c, base.components, head.components))
 }
@@ -247,6 +263,11 @@ export function addedLines(headText, baseText) {
 
 export function evaluate(changes, ctx) {
   const failures = []
+  for (const c of changes.filter((x) => x.kind === 'demoted to preview')) {
+    failures.push(
+      `${c.subpath}: GA → preview is not allowed. A GA API is frozen (deprecation applies); keep stability ga in .specs/${ctx.parents?.[c.subpath] || c.subpath}.md.`
+    )
+  }
   const breaking = changes.filter((c) => c.breaking)
   if (breaking.length && !isBreakingTitle(ctx.prTitle)) {
     failures.push(
@@ -267,7 +288,7 @@ export function evaluate(changes, ctx) {
     }
   }
   const bySpec = new Map()
-  for (const c of changes) {
+  for (const c of changes.filter((x) => x.area !== 'stability')) {
     const spec = (ctx.specOf?.[c.subpath] || []).find((s) => s in ctx.baseSpecVersions)
     if (spec) bySpec.set(spec, [...(bySpec.get(spec) || []), c])
   }
@@ -288,7 +309,7 @@ export function formatTable(changes) {
   if (!changes.length) return 'No public API change.'
   const rows = changes.map(
     (c) =>
-      `| ${c.subpath} | ${c.area} | ${c.name} | ${c.kind} | ${c.breaking ? '**breaking**' : 'non-breaking'} | ${c.detail.replace(/\|/g, '\\|')} |`
+      `| ${c.subpath} | ${c.area} | ${c.name} | ${c.kind} | ${c.breaking ? '**breaking**' : c.preview ? 'preview (exempt)' : 'non-breaking'} | ${c.detail.replace(/\|/g, '\\|')} |`
   )
   return [
     '| Export | Area | Name | Change | Class | Detail |',

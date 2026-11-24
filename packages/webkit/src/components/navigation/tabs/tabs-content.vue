@@ -80,6 +80,7 @@
 
 <template>
   <div
+    tabindex="0"
     v-bind="passthroughAttrs"
     role="tabpanel"
     :id="panelId"
@@ -93,7 +94,6 @@
     :data-state="isActive ? 'active' : 'inactive'"
     :aria-labelledby="tabId"
     :hidden="!isActive ? true : undefined"
-    tabindex="0"
   >
     <div
       v-if="isActive"
