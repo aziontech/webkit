@@ -901,7 +901,12 @@
   {
     "name": "timestamp",
     "path": "src/components/content/timestamp/timestamp.vue",
-    "limit": "20.35 KB"
+    "limit": "20.5 KB"
+  },
+  {
+    "name": "countdown",
+    "path": "src/components/content/countdown/countdown.vue",
+    "limit": "4.3 KB"
   },
   {
     "name": "error-boundary",
@@ -1107,17 +1112,17 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "12.85 KB"
+    "limit": "12.9 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "12.05 KB"
+    "limit": "12.1 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "12.2 KB"
+    "limit": "12.25 KB"
   },
   {
     "name": "phone-input",

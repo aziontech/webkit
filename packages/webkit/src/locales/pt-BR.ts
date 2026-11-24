@@ -1249,6 +1249,18 @@ export const ptBR: Messages = {
     label: 'Atividade',
     loading: 'Carregando atividade'
   },
+
+  countdown: {
+    label: '{label}:',
+    dueIn: 'Vence em {duration}',
+    due: 'Vence {relative}',
+    overdue: 'Atrasado há {duration}',
+    duration: '{major} {minor}',
+    expiresIn: 'Expira em {duration}',
+    expires: 'Expira {relative}',
+    expired: 'Expirou {relative}',
+    paused: 'Pausado'
+  },
   timestamp: {
     title: 'Detalhes do horário',
     utc: 'UTC',

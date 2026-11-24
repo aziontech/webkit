@@ -511,6 +511,10 @@
       "types": "./types/components/content/timeline/timeline-group/timeline-group.vue.d.ts",
       "default": "./src/components/content/timeline/timeline-group/timeline-group.vue"
     },
+    "./countdown": {
+      "types": "./types/components/content/countdown/countdown.vue.d.ts",
+      "default": "./src/components/content/countdown/countdown.vue"
+    },
     "./avatar": {
       "types": "./types/components/content/avatar/avatar.vue.d.ts",
       "default": "./src/components/content/avatar/avatar.vue"
@@ -2962,6 +2966,9 @@
       ],
       "timeline-group": [
         "./types/components/content/timeline/timeline-group/timeline-group.vue.d.ts"
+      ],
+      "countdown": [
+        "./types/components/content/countdown/countdown.vue.d.ts"
       ],
       "avatar": [
         "./types/components/content/avatar/avatar.vue.d.ts"

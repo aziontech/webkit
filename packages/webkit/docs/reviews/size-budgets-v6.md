@@ -1681,3 +1681,8 @@ Budget-raise: table-filter 6.65 KB → 6.75 KB (measured 6.69 KB): the shared lo
 Budget-raise: console-layout 84.7 KB → 85.2 KB (measured 85.15 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
 Budget-raise: app-header-account 13.85 KB → 14.4 KB (measured 14.34 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
 Budget-raise: locales-es 12.1 KB → 12.2 KB (measured 12.10 KB): the Timeline strings (`timeline.label`, `timeline.loading`, SUP-TL-1) in the shared catalog, a budget with no headroom.
+Budget-raise: timestamp 20.35 KB → 20.5 KB (measured 20.41 KB): the shared minute clock now stops while the document is hidden (SUP-CD-2), and the English catalog it carries gained the `countdown` strings.
+Budget-raise: table-cell-time 19.05 KB → 19.2 KB (measured 19.13 KB): the shared minute clock now stops while the document is hidden (SUP-CD-2), and the English catalog it carries gained the `countdown` strings.
+Budget-raise: config-provider 12.8 KB → 12.9 KB (measured 12.85 KB): the English catalog gained the `countdown` strings (SUP-CD-1).
+Budget-raise: locales-pt-BR 12 KB → 12.1 KB (measured 12.05 KB): the Portuguese catalog gained the `countdown` strings (SUP-CD-1).
+Budget-raise: locales-es 12.1 KB → 12.25 KB (measured 12.18 KB): the Spanish catalog gained the `countdown` strings (SUP-CD-1).
