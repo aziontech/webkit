@@ -78,7 +78,6 @@
                   variant="option"
                 >
                   <span class="truncate">{{ domain }}</span>
-                  <span class="sr-only"> (opens in a new tab)</span>
                   <i
                     class="az az-external-link ms-auto shrink-0 text-body-xs leading-none"
                     aria-hidden="true"

@@ -203,9 +203,9 @@ describe('view/view-rule-list block', () => {
     expect(view.getByText('No response rules yet')).toBeTruthy()
   })
 
-  it('emits create from Add Rule in the heading and with the phase from an empty phase', async () => {
+  it('emits create from Add rule in the heading and with the phase from an empty phase', async () => {
     const view = render(RulesList, { props: { subject: 'firewall', rules: [] } })
-    const adds = view.getAllByRole('button', { name: 'Add Rule' })
+    const adds = view.getAllByRole('button', { name: 'Add rule' })
     await fireEvent.click(adds[0])
     await fireEvent.click(adds[1])
     const calls = view.emitted<unknown[]>('create') as [MouseEvent, string?][]
@@ -307,16 +307,16 @@ describe('view/view-rule-list block', () => {
   it('opens on the rule builder with a rule loaded (EditRule)', async () => {
     render(EditRule)
     const drawer = await waitFor(() => document.querySelector<HTMLElement>('[role="dialog"]')!)
-    expect(drawer.textContent).toContain('Edit Rule')
+    expect(drawer.textContent).toContain('Edit rule')
     expect(drawer.querySelector<HTMLInputElement>('#rule-name')!.value).toBe('Docs rewrite')
   })
 
-  it('opens the rule builder as Edit Rule from a name and as Add Rule from the header (EditRule)', async () => {
+  it('opens the rule builder as Edit rule from a name and as Add rule from the header (EditRule)', async () => {
     const view = await renderEditRuleClosed()
     await fireEvent.click(view.getByRole('button', { name: 'Edit Docs rewrite' }))
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
     const drawer = document.querySelector('[role="dialog"]') as HTMLElement
-    expect(drawer.textContent).toContain('Edit Rule')
+    expect(drawer.textContent).toContain('Edit rule')
     const name = drawer.querySelector<HTMLInputElement>('#rule-name')!
     expect(name.value).toBe('Docs rewrite')
     await fireEvent.update(name, 'Docs rewrite v2')
@@ -330,10 +330,10 @@ describe('view/view-rule-list block', () => {
     expect(view.getByRole('button', { name: 'Edit Docs rewrite v2' })).toBeTruthy()
     expect(view.queryByRole('button', { name: 'Review changes' })).toBeNull()
 
-    await fireEvent.click(view.getAllByRole('button', { name: 'Add Rule' })[0])
+    await fireEvent.click(view.getAllByRole('button', { name: 'Add rule' })[0])
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
     const adding = document.querySelector('[role="dialog"]') as HTMLElement
-    expect(adding.textContent).toContain('Add Rule')
+    expect(adding.textContent).toContain('Add rule')
     expect(adding.querySelector<HTMLInputElement>('#rule-name')!.value).toBe('')
   })
 
@@ -361,7 +361,7 @@ describe('view/view-rule-list block', () => {
     ])
     expect(view.container.textContent).toMatch(/2\s+changes to the rules, not saved yet\./)
 
-    await fireEvent.click(view.getAllByRole('button', { name: 'Add Rule' })[0])
+    await fireEvent.click(view.getAllByRole('button', { name: 'Add rule' })[0])
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
     const adding = document.querySelector('[role="dialog"]') as HTMLElement
     await fireEvent.update(adding.querySelector<HTMLInputElement>('#rule-name')!, 'Geo block')
@@ -422,7 +422,7 @@ describe('view/view-rule-list block', () => {
     })
     expect(view.getByText("Couldn't load the rules. Check your connection and retry.")).toBeTruthy()
     expect(view.queryByText('Docs rewrite')).toBeNull()
-    expect(view.getByRole('button', { name: 'Add Rule' }).hasAttribute('disabled')).toBe(true)
+    expect(view.getByRole('button', { name: 'Add rule' }).hasAttribute('disabled')).toBe(true)
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
     expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
   })

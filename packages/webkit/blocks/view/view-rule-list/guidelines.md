@@ -13,14 +13,14 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## When not to use
 
 - Records whose order does not matter: use `view/view-table`.
-- Writing or editing one rule's criteria and behaviors: use `edit/edit-rule-builder`, which this list opens from Add Rule and from a rule's name.
+- Writing or editing one rule's criteria and behaviors: use `edit/edit-rule-builder`, which this list opens from Add rule and from a rule's name.
 - Fewer than two rules that can move: show the list without the Order controls.
 
 ## Building blocks
 
 ### A. Header — `PageHeader`, `Button` (required)
 
-`PageHeader` at `size="small"` titled Rules, with a one-sentence description that says order is behavior and that an inactive rule keeps its place. Actions: outlined Documentation, then outlined Add Rule on the outer edge.
+`PageHeader` at `size="small"` titled Rules, with a one-sentence description that says order is behavior and that an inactive rule keeps its place. Actions: outlined Documentation, then outlined Add rule on the outer edge.
 
 ### B. Search — `Input`, `Alert` (required)
 
@@ -46,7 +46,7 @@ Any move or status change raises a `SaveBar` counting the changes, with Discard 
 
 ### G. States — `EmptyState`, `Alert` (required)
 
-Loading: triggers read Loading, the search and Add Rule are disabled and each `DataTable` shows as many skeleton rows as the phase had when it last loaded, or three, never a full page of ten, so the page does not jump when the rules land (`loading`). Load failure: the heading and the disabled search stay and a danger `Alert`, "Couldn't load the rules. Check your connection and retry.", with Retry takes the phases' place. Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add Rule. No match in a phase: a small `EmptyState` in the table's `empty` slot, "No request rule matches “cache”", with an outlined Clear search.
+Loading: triggers read Loading, the search and Add rule are disabled and each `DataTable` shows as many skeleton rows as the phase had when it last loaded, or three, never a full page of ten, so the page does not jump when the rules land (`loading`). Load failure: the heading and the disabled search stay and a danger `Alert`, "Couldn't load the rules. Check your connection and retry.", with Retry takes the phases' place. Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add rule. No match in a phase: a small `EmptyState` in the table's `empty` slot, "No request rule matches “cache”", with an outlined Clear search.
 
 A rule's name is a `Button variant="link"` named "Edit <rule>" that emits `edit` with the event and the rule; the page opens `edit/edit-rule-builder` from it, as EditRule shows.
 
@@ -64,7 +64,7 @@ The block takes its rules through props and emits every action; it fetches nothi
 | ------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `subject`           | `'application' \| 'firewall'` | What runs the rules: an application has Request and Response phases, a firewall only Request. Sets the copy. |
 | `rules`             | `RuleListRule[]`              | The saved rules, each phase in run order. Pass `[]` for none.                                                |
-| `loading`           | `boolean`                     | The rules are loading: each phase reads Loading and shows skeleton rows; the search and Add Rule disable.    |
+| `loading`           | `boolean`                     | The rules are loading: each phase reads Loading and shows skeleton rows; the search and Add rule disable.    |
 | `error`             | `string`                      | Why the rules failed to load, shown in the danger `Alert` with Retry that replaces the phases.               |
 | `saving`            | `boolean`                     | The save is in flight. When it turns off with no `saveError`, the draft becomes the saved order.             |
 | `saveError`         | `string`                      | Why the save failed, shown at the top of the review dialog; Save reads Save again.                           |
@@ -75,7 +75,7 @@ The block takes its rules through props and emits every action; it fetches nothi
 | Event    | Payload           | When                                                            |
 | -------- | ----------------- | --------------------------------------------------------------- |
 | `edit`   | `(event, rule)`   | A rule's name.                                                  |
-| `create` | `(event, phase?)` | Add Rule in the heading, or in an empty phase (with its phase). |
+| `create` | `(event, phase?)` | Add rule in the heading, or in an empty phase (with its phase). |
 | `retry`  | `(event)`         | Retry in the load error alert.                                  |
 | `save`   | `(event, rules)`  | Save in the review dialog; every rule of every phase, in order. |
 
@@ -157,9 +157,9 @@ Then delete `sample.ts` and its import.
 - SaveError: the same with `saveError` set: the failure `Alert` and Save again.
 - Searching: `defaultSearch` "cache": reordering off with its `Alert`, phases reading "n of total".
 - Empty: `subject="firewall"` and `rules` `[]`: the Request phase shows its `EmptyState`.
-- Loading: `loading`: skeleton rows in each phase, the search and Add Rule disabled.
+- Loading: `loading`: skeleton rows in each phase, the search and Add rule disabled.
 - LoadError: `error` set: a danger `Alert` with Retry replaces the phases.
-- EditRule: the list composed with `edit/edit-rule-builder`, opening on the builder for Docs rewrite. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
+- EditRule: the list composed with `edit/edit-rule-builder`, opening on the builder for Docs rewrite. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit rule, seeded with the rule and its phase locked; Add rule in the header or in an empty phase opens it as Add rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
 
 ## Related
 

@@ -10495,7 +10495,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## When not to use
 
 - Records whose order does not matter: use `view/view-table`.
-- Writing or editing one rule's criteria and behaviors: use `edit/edit-rule-builder`, which this list opens from Add Rule and from a rule's name.
+- Writing or editing one rule's criteria and behaviors: use `edit/edit-rule-builder`, which this list opens from Add rule and from a rule's name.
 - Fewer than two rules that can move: show the list without the Order controls.
 
 ## Building blocks
@@ -10569,9 +10569,9 @@ What each prop and event does, and the go-live code: [blocks/view/view-rule-list
 - SaveError: the same with `saveError` set: the failure `Alert` and Save again.
 - Searching: `defaultSearch` "cache": reordering off with its `Alert`, phases reading "n of total".
 - Empty: `subject="firewall"` and `rules` `[]`: the Request phase shows its `EmptyState`.
-- Loading: `loading`: skeleton rows in each phase, the search and Add Rule disabled.
+- Loading: `loading`: skeleton rows in each phase, the search and Add rule disabled.
 - LoadError: `error` set: a danger `Alert` with Retry replaces the phases.
-- EditRule: the list composed with `edit/edit-rule-builder`, opening on the builder for Docs rewrite. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
+- EditRule: the list composed with `edit/edit-rule-builder`, opening on the builder for Docs rewrite. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit rule, seeded with the rule and its phase locked; Add rule in the header or in an empty phase opens it as Add rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
 
 ## Related
 

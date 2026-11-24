@@ -9,7 +9,7 @@
       href="https://example.com/docs/domains"
       target="_blank"
       inline
-      >domains guide<span class="sr-only"> (opens in a new tab)</span></Link
+      >domains guide</Link
     >
     or open the
     <Link

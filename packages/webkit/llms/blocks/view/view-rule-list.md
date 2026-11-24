@@ -1,6 +1,6 @@
 # ViewRuleList (`view/view-rule-list`)
 
-> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `DataTable` (scrolling sideways when narrow) with the grip, Position, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Position cell adds a numeric position `Input` (type a position and press Enter to move the rule there; disabled with the lock reason on the locked rule) and Move up and Move down `IconButton`s, folded on a phone into one Move `DropdownMenu` (Move to top, Move up, Move down, Move to bottom) in a Move column pinned to the end edge beside a pinned Status; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `DataTable`, `IconButton`, `DropdownMenu`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `DataTable` (scrolling sideways when narrow) with the grip, Position, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Position cell adds a numeric position `Input` (type a position and press Enter to move the rule there; disabled with the lock reason on the locked rule) and Move up and Move down `IconButton`s, folded on a phone into one Move `DropdownMenu` (Move to top, Move up, Move down, Move to bottom) in a Move column pinned to the end edge beside a pinned Status; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `DataTable`, `IconButton`, `DropdownMenu`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/view/view-rule-list/view-rule-list.vue` in `@aziontech/webkit`
@@ -25,14 +25,14 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## When not to use
 
 - Records whose order does not matter: use `view/view-table`.
-- Writing or editing one rule's criteria and behaviors: use `edit/edit-rule-builder`, which this list opens from Add Rule and from a rule's name.
+- Writing or editing one rule's criteria and behaviors: use `edit/edit-rule-builder`, which this list opens from Add rule and from a rule's name.
 - Fewer than two rules that can move: show the list without the Order controls.
 
 ## Building blocks
 
 ### A. Header — `PageHeader`, `Button` (required)
 
-`PageHeader` at `size="small"` titled Rules, with a one-sentence description that says order is behavior and that an inactive rule keeps its place. Actions: outlined Documentation, then outlined Add Rule on the outer edge.
+`PageHeader` at `size="small"` titled Rules, with a one-sentence description that says order is behavior and that an inactive rule keeps its place. Actions: outlined Documentation, then outlined Add rule on the outer edge.
 
 ### B. Search — `Input`, `Alert` (required)
 
@@ -58,7 +58,7 @@ Any move or status change raises a `SaveBar` counting the changes, with Discard 
 
 ### G. States — `EmptyState`, `Alert` (required)
 
-Loading: triggers read Loading, the search and Add Rule are disabled and each `DataTable` shows as many skeleton rows as the phase had when it last loaded, or three, never a full page of ten, so the page does not jump when the rules land (`loading`). Load failure: the heading and the disabled search stay and a danger `Alert`, "Couldn't load the rules. Check your connection and retry.", with Retry takes the phases' place. Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add Rule. No match in a phase: a small `EmptyState` in the table's `empty` slot, "No request rule matches “cache”", with an outlined Clear search.
+Loading: triggers read Loading, the search and Add rule are disabled and each `DataTable` shows as many skeleton rows as the phase had when it last loaded, or three, never a full page of ten, so the page does not jump when the rules land (`loading`). Load failure: the heading and the disabled search stay and a danger `Alert`, "Couldn't load the rules. Check your connection and retry.", with Retry takes the phases' place. Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add rule. No match in a phase: a small `EmptyState` in the table's `empty` slot, "No request rule matches “cache”", with an outlined Clear search.
 
 A rule's name is a `Button variant="link"` named "Edit <rule>" that emits `edit` with the event and the rule; the page opens `edit/edit-rule-builder` from it, as EditRule shows.
 
@@ -76,7 +76,7 @@ The block takes its rules through props and emits every action; it fetches nothi
 | ------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `subject`           | `'application' \| 'firewall'` | What runs the rules: an application has Request and Response phases, a firewall only Request. Sets the copy. |
 | `rules`             | `RuleListRule[]`              | The saved rules, each phase in run order. Pass `[]` for none.                                                |
-| `loading`           | `boolean`                     | The rules are loading: each phase reads Loading and shows skeleton rows; the search and Add Rule disable.    |
+| `loading`           | `boolean`                     | The rules are loading: each phase reads Loading and shows skeleton rows; the search and Add rule disable.    |
 | `error`             | `string`                      | Why the rules failed to load, shown in the danger `Alert` with Retry that replaces the phases.               |
 | `saving`            | `boolean`                     | The save is in flight. When it turns off with no `saveError`, the draft becomes the saved order.             |
 | `saveError`         | `string`                      | Why the save failed, shown at the top of the review dialog; Save reads Save again.                           |
@@ -87,7 +87,7 @@ The block takes its rules through props and emits every action; it fetches nothi
 | Event    | Payload           | When                                                            |
 | -------- | ----------------- | --------------------------------------------------------------- |
 | `edit`   | `(event, rule)`   | A rule's name.                                                  |
-| `create` | `(event, phase?)` | Add Rule in the heading, or in an empty phase (with its phase). |
+| `create` | `(event, phase?)` | Add rule in the heading, or in an empty phase (with its phase). |
 | `retry`  | `(event)`         | Retry in the load error alert.                                  |
 | `save`   | `(event, rules)`  | Save in the review dialog; every rule of every phase, in order. |
 
@@ -169,9 +169,9 @@ Then delete `sample.ts` and its import.
 - SaveError: the same with `saveError` set: the failure `Alert` and Save again.
 - Searching: `defaultSearch` "cache": reordering off with its `Alert`, phases reading "n of total".
 - Empty: `subject="firewall"` and `rules` `[]`: the Request phase shows its `EmptyState`.
-- Loading: `loading`: skeleton rows in each phase, the search and Add Rule disabled.
+- Loading: `loading`: skeleton rows in each phase, the search and Add rule disabled.
 - LoadError: `error` set: a danger `Alert` with Retry replaces the phases.
-- EditRule: the list composed with `edit/edit-rule-builder`, opening on the builder for Docs rewrite. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
+- EditRule: the list composed with `edit/edit-rule-builder`, opening on the builder for Docs rewrite. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit rule, seeded with the rule and its phase locked; Add rule in the header or in an empty phase opens it as Add rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
 
 ## Related
 
@@ -187,10 +187,10 @@ Then delete `sample.ts` and its import.
 - `ReviewChanges` — After two moves and one rule turned on: the SaveBar counts the changes and the Review changes dialog is open, listing Docs rewrite moving from 5 to 3 (and the rules it pushed down), Maintenance page turned on, and Security headers moving to the top of the Response phase.
 - `SaveError` — The same changes after a failed save: the dialog stays open with a danger Alert saying the rules still run in the saved order, and Save reads Save again; pressing it emits `save` once more, and when `saving` turns off with no `saveError` the dialog closes with the success toast.
 - `Searching` — A search for cache narrows both phases to their matches, the counts read n of total, an info Alert says reordering is off while searching, and every Order control is disabled with the reason in its name and tooltip.
-- `Empty` — A firewall with no rules: the Request phase panel shows a small EmptyState with Add Rule instead of the table.
+- `Empty` — A firewall with no rules: the Request phase panel shows a small EmptyState with Add rule instead of the table.
 - `Loading` — While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns.
-- `LoadError` — The rules could not load: the heading and the disabled search stay, Add Rule is disabled, and a danger Alert with Retry takes the phases' place.
-- `EditRule` — The list composed with `edit/edit-rule-builder`: a rule's name opens the large edit-rule-builder `Drawer` as Edit Rule, seeded with that rule's criteria and behaviors and its phase locked; Add Rule in the header (or in an empty phase) opens it as Add Rule in that phase. Saving an edit updates the row in place and confirms it in a toast; a new rule lands last in its phase, the phase opens, and the toast offers Edit. Neither changes the run order, so the SaveBar only counts moves and status switches.
+- `LoadError` — The rules could not load: the heading and the disabled search stay, Add rule is disabled, and a danger Alert with Retry takes the phases' place.
+- `EditRule` — The list composed with `edit/edit-rule-builder`: a rule's name opens the large edit-rule-builder `Drawer` as Edit rule, seeded with that rule's criteria and behaviors and its phase locked; Add rule in the header (or in an empty phase) opens it as Add rule in that phase. Saving an edit updates the row in place and confirms it in a toast; a new rule lands last in its phase, the phase opens, and the toast offers Edit. Neither changes the run order, so the SaveBar only counts moves and status switches.
 
 Each variant is the same screen in another state: `get_block("view/view-rule-list", { variant })`, or the file under `blocks/view/view-rule-list/variants/`.
 
@@ -269,7 +269,7 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
     subject?: RuleListSubject
     /** The saved rules of every phase, each phase in run order. Pass an empty list for none. Left out, the sample renders. */
     rules?: RuleListRule[]
-    /** The rules are loading: each phase shows skeleton rows and the search and Add Rule disable. */
+    /** The rules are loading: each phase shows skeleton rows and the search and Add rule disable. */
     loading?: boolean
     /** Why the rules could not load; a danger alert with Retry takes the phases' place. */
     error?: string
@@ -451,7 +451,7 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
             target="_blank"
           />
           <Button
-            label="Add Rule"
+            label="Add rule"
             icon="az az-plus"
             variant="outline"
             size="medium"
@@ -561,7 +561,7 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
                     >
                       <template #actions>
                         <Button
-                          label="Add Rule"
+                          label="Add rule"
                           icon="az az-plus"
                           variant="outline"
                           size="medium"
@@ -1406,7 +1406,7 @@ import { phaseLabel } from '../lib/rule-list'
 import { sampleApplicationRules } from '../sample'
 import type { RuleListPhase, RuleListRule } from '../view-rule-list.vue'
 
-/** The rules of the Edit Rule variant and the rule open in the builder. */
+/** The rules of the Edit rule variant and the rule open in the builder. */
 export interface UseRuleEditingReturn {
   /** The rules, as saved. */
   rules: ComputedRef<RuleListRule[]>
@@ -2623,13 +2623,13 @@ export const pageDescription = (subject: string) =>
       <form
         ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
-        :aria-label="editing ? 'Edit Rule' : 'Add Rule'"
+        :aria-label="editing ? 'Edit rule' : 'Add rule'"
         novalidate
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>{{ editing ? 'Edit Rule' : 'Add Rule' }}</DrawerTitle>
+            <DrawerTitle>{{ editing ? 'Edit rule' : 'Add rule' }}</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               Handle the conditional execution of behaviors through logical operators.
             </p>
@@ -2641,7 +2641,7 @@ export const pageDescription = (subject: string) =>
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
           >
-            <legend class="sr-only">{{ editing ? 'Edit Rule' : 'Add Rule' }}</legend>
+            <legend class="sr-only">{{ editing ? 'Edit rule' : 'Add rule' }}</legend>
             <SettingsGroup
               label="General"
               hint="Names the rule in the list and in the deployment log."
