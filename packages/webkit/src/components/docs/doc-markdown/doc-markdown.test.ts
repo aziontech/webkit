@@ -347,7 +347,7 @@ describe('DocMarkdown', () => {
     const items = within(list).getAllByTestId('key-value-list-item')
     expect(items[3]!.querySelector('dd')!.textContent).toBe('US East (Virginia)')
     expect(items[0]!.querySelector('dd')!.textContent).toBe('1752167890')
-    const status = within(items[1]!).getByTestId('status-indicator')
+    const status = await within(items[1]!).findByTestId('status-indicator')
     expect(status.getAttribute('data-severity')).toBe('success')
     expect(status.textContent).toContain('Active')
     const link = getByRole('link', { name: /shop\.example\.com/ })

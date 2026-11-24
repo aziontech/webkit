@@ -1771,3 +1771,11 @@ Budget-raise: contact-hub-section 9.55 KB → 9.8 KB (measured 9.75 KB): the sec
 Budget-raise: newsletter-section 14 KB → 14.3 KB (measured 14.25 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
 Budget-raise: job-posting-section 63.05 KB → 63.35 KB (measured 63.32 KB): the click-open Hint (HELP-A-1) merged with the SectionBand frame (LA-2); both changes landed in the same entry.
 Budget-raise: feature-tabs-section 59.85 KB → 59.9 KB (measured 59.85 KB, a rounding hair over): the SectionBand frame (LA-2) merged with the in-product help branch.
+Budget-raise: doc-markdown 41.05 KB → 41.5 KB (measured 41.44 KB): the inline `<StatusIndicator>` tag (A5P3-L02-1, the component itself stays an async chunk) plus the DocCallout, DocCard, DocFrame and DocPrompt fixes of audit-5 P3 lane L02 that the entry imports statically.
+Budget-raise: doc-card 2.45 KB → 2.5 KB (measured 2.48 KB): a linked card without `linkLabel` draws its link glyph so it differs from a plain card at rest (A5P3-032).
+Budget-raise: doc-frame 9.9 KB → 9.95 KB (measured 9.91 KB): no zoom on a coarse pointer and lazy, async-decoded stills (A5P3-L02-4).
+Budget-raise: doc-prompt 13.2 KB → 13.35 KB (measured 13.33 KB): the prompt drops the whitespace that opens and closes its slot, so a block prompt no longer starts one space in (A5P3-027).
+Budget-raise: doc-page-header 32.9 KB → 32.95 KB (measured 32.92 KB): a free `lastUpdated` string renders alone, without "Last updated" and a `time` element whose `datetime` is not a date (A5P3-027).
+Budget-raise: timestamp 20.35 KB → 20.4 KB (measured 20.39 KB): the 40 px coarse-pointer hit layer on the trigger (A5P3-034).
+Budget-raise: file-preview 8.2 KB → 8.25 KB (measured 8.23 KB): the meta line splits the type and the size so the size never truncates on a phone (A5P3-033).
+Budget-raise: copy-text 10.5 KB → 10.65 KB (measured 10.61 KB): middle truncation that keeps the end of a long value visible (A5P3-L02-3).

@@ -1,6 +1,5 @@
-import { h, type VNodeChild } from 'vue'
+import { defineAsyncComponent, h, type VNodeChild } from 'vue'
 
-import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
 import Link from '../../../navigation/link/link.vue'
 import HoverCard from '../../../overlay/hover-card/hover-card.vue'
 import HoverCardContent from '../../../overlay/hover-card/hover-card-content/hover-card-content.vue'
@@ -45,6 +44,10 @@ function renderTooltip(ctx: Ctx, attributes: DocMarkdownAttributes, children: VN
     ])
   ])
 }
+
+const StatusIndicator = defineAsyncComponent(
+  () => import('../../../feedback/status-indicator/status-indicator.vue')
+)
 
 const STATUS_SEVERITIES = ['neutral', 'info', 'success', 'warning', 'danger'] as const
 
