@@ -14,6 +14,10 @@ export interface SourcesItem {
   image?: string
   /** Icon class of the site's mark (`az az-github`), drawn when there is no `image`. */
   icon?: string
+  /** Organisation behind the page (`Acme Inc.`), shown before the date on the line under the title. */
+  publisher?: string
+  /** When the page was published, shown as a medium date in the reader's locale after the publisher; a date-only ISO string (`2026-06-16`) reads as that calendar day. */
+  publishedAt?: string | number | Date
   /** `false` lists the source under More (searched, not cited in the text); left out, it counts as cited. */
   cited?: boolean
 }
@@ -57,4 +61,17 @@ export function sourceImage(item: SourcesItem): string {
 
 export function sourceCited(item: SourcesItem): boolean {
   return item.cited !== false
+}
+
+export interface SourcesPublished {
+  date: Date
+  calendar: boolean
+}
+
+export function sourcePublished(item: SourcesItem): SourcesPublished | null {
+  const value = item.publishedAt
+  if (value === undefined || value === null || value === '') return null
+  const date = value instanceof Date ? value : new Date(value)
+  if (Number.isNaN(date.getTime())) return null
+  return { date, calendar: typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) }
 }

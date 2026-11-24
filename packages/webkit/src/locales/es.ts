@@ -72,10 +72,7 @@ export const es: Messages = {
     label: 'Fuente {index}: {title}',
     labelUntitled: 'Fuente {index}',
     labelWithSite: 'Fuente {index}, {site}: {title}',
-    labelMany: '{site} +{more}, fuentes {indexes}',
-    next: 'Fuente siguiente',
-    page: '{current}/{total}',
-    previous: 'Fuente anterior'
+    labelMany: '{site} +{more}, fuentes {indexes}'
   },
   conversation: {
     label: 'Conversación',

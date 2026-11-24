@@ -13,13 +13,14 @@ const items = [
     title: 'Real-Time Purge',
     href: 'https://www.azion.com/en/documentation/',
     description: 'Removes cached objects from every data center.',
-    site: 'Azion'
+    site: 'Azion',
+    publisher: 'Acme Inc.',
+    publishedAt: '2026-03-02'
   },
   { title: 'Cache settings', href: '/cache' }
 ]
 
-const panel = () =>
-  document.body.querySelector<HTMLElement>('[data-testid="sources__drawer__panel"]')
+const panel = () => document.body.querySelector<HTMLElement>('[data-testid="sources__content"]')
 
 describe('Sources', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
@@ -66,15 +67,35 @@ describe('Sources', () => {
     expect(marks[0]?.closest('[aria-hidden="true"]')).not.toBeNull()
   })
 
-  it('opens a panel listing each source with its site, linked title and snippet', async () => {
+  it('opens an anchored panel in place, never a drawer', async () => {
     const { getByRole, emitted } = render(Sources, { props: { items } })
-    await userEvent.click(getByRole('button'))
+    const trigger = getByRole('button')
+    await userEvent.click(trigger)
     expect(emitted('update:open')?.[0]).toEqual([true])
     await waitFor(() => expect(panel()).not.toBeNull())
-    const rows = panel()!.querySelectorAll('[data-testid="sources__drawer__item"]')
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
+    expect(panel()).toHaveAttribute('role', 'dialog')
+    expect(panel()).toHaveAttribute('aria-modal', 'false')
+    expect(panel()).toHaveAttribute('data-side')
+    expect(document.body.querySelector('[data-testid*="drawer"]')).toBeNull()
+    expect(document.body.querySelector('[aria-modal="true"]')).toBeNull()
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(panel()).toBeNull())
+    expect(document.activeElement).toBe(trigger)
+  })
+
+  it('opens a panel listing each source with its site, linked title, meta line and snippet', async () => {
+    const { getByRole } = render(Sources, { props: { items } })
+    await userEvent.click(getByRole('button'))
+    await waitFor(() => expect(panel()).not.toBeNull())
+    const rows = panel()!.querySelectorAll('[data-testid="sources__item"]')
     expect(rows).toHaveLength(2)
     expect(rows[0]).toHaveTextContent('Azion')
     expect(rows[0]).toHaveTextContent('Removes cached objects')
+    expect(rows[0]!.querySelector('[data-testid="sources__item__meta"]')).toHaveTextContent(
+      'Acme Inc. · Mar 2, 2026'
+    )
+    expect(rows[1]!.querySelector('[data-testid="sources__item__meta"]')).toBeNull()
     expect(rows[1]).toHaveTextContent('Cache settings')
     const links = panel()!.querySelectorAll('a')
     expect(links[0]).toHaveAttribute('target', '_blank')
@@ -93,7 +114,7 @@ describe('Sources', () => {
       }
     })
     await waitFor(() => expect(panel()).not.toBeNull())
-    const groups = panel()!.querySelectorAll('[data-testid="sources__drawer__group"]')
+    const groups = panel()!.querySelectorAll('[data-testid="sources__group"]')
     expect(groups).toHaveLength(2)
     expect(groups[0]).toHaveAccessibleName('Citations')
     expect(groups[0]!.querySelectorAll('li')).toHaveLength(2)

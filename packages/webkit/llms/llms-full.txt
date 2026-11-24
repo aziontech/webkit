@@ -12789,7 +12789,7 @@ packages/webkit/src/components/ai/chat-message/
 
 # Citation
 
-> An inline reference in generated text: a small rounded chip with the mark of the source's site (its favicon, its icon, or its first letter on a colour of its own) and the site's name (`Azion`, else the host of `href` without `www.`), and `+N` when one marker cites several sources (`[1][2]`, `[1, 2]`). Hovering, focusing or pressing the chip opens a card with the site, the linked title and a snippet (`description`); with several sources a pager `‹ 1/3 ›` steps through them. `StreamingResponse` renders it for every run of `[n]` markers.
+> An inline reference in generated text: a small rounded chip with the mark of the source's site (its favicon, its icon, or its first letter on a colour of its own) and the site's name (`Azion`, else the host of `href` without `www.`), and `+N` when one marker cites several sources (`[1][2]`, `[1, 2]`). Hovering, focusing or pressing the chip opens one card that stacks every cited source. `StreamingResponse` renders it for every run of `[n]` markers.
 
 - Import: `import Citation from '@aziontech/webkit/citation'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -12802,7 +12802,7 @@ packages/webkit/src/components/ai/chat-message/
 
 - Number in order of first use: [1], [2], [3]; the numbers stay in the accessible name.
 - Give each web source a `site` name (`Azion`, `GitHub`) and, when you have one, its favicon as `image`; a bare host reads as a URL.
-- Keep `description` to a sentence or two of the page; the card cuts it at three lines.
+- Give each source its `publisher` and `publishedAt` when you have them.
 
 ## Don’t
 
@@ -12824,23 +12824,24 @@ packages/webkit/src/components/ai/chat-message/
 
 ## Sub-components
 
-_None. Exports: `"./citation"`. Composed DS components: `hover-card`, `icon-button`, and the
-`sources` mark part (`sources/parts/sources-mark.vue`)._
+_None. Exports: `"./citation"`. Composed DS components: `hover-card`, and the `sources` private
+parts `sources/parts/sources-mark.vue` (the round mark) and `sources/parts/sources-item.vue` (one
+source block, shared with the `Sources` panel)._
 
 ## States
 
 - A chip is a `button` that opens the card: after 300 ms of hover or focus, at once on a press; a mouse press keeps it open, a touch or keyboard press toggles it. `Escape`, a press outside or moving the pointer away closes it.
 - `data-state="open|closed"` on the chip; `data-slot="citation"` on the root, so `ChatMessage`'s Read aloud skips it.
 - The chip text is the first source's site name (else its host, else its title), cut with an ellipsis at `max-w-48`; `+N` counts the other sources.
-- The card shows one source at a time: mark and site name, the title (a link when `href` is safe; external URLs open in a new tab), the `description` cut at three lines. With more than one source, previous and next buttons and `1/3`; they disable at the ends, and the card starts at the first source each time it opens.
+- The card stacks every cited source in an `<ol>`, dividers between items only. Each item: mark and site name; the title (a link when `href` is safe, external URLs in a new tab), two lines; `publisher · date` (`publishedAt` as a medium date in the reader's locale; either alone; none, no line). No `description`, no pager.
 - No resolvable source: a `role="note"` chip with the numbers and no card.
 - The mark is the source's `image` (favicon), else its `icon`, else its first letter on one of seven chart series colours picked by a stable hash of the host, so neighbouring sites rarely share a colour. A favicon that fails to load falls back to the letter.
 
 ## Accessibility
 
-- Visible focus: the chip, the card link and the pager buttons show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
-- Keyboard map: `Tab` reaches the chip and opens the card after the delay; `Enter` / `Space` toggles it; `Tab` from an open chip moves into the card (link, previous, next); `Escape` closes it and returns focus to the chip.
-- ARIA: the chip is named with the site first so the name holds the visible text (WCAG 2.5.3): `Source 1, Azion: Real-Time Purge`, `Azion +2, sources 1, 2, 3`, or `Source 1: <title>` without a site; it carries `aria-expanded` and, while open, `aria-controls` and `aria-describedby` to the card. The marks are `aria-hidden`; the pager position is `aria-live="polite"`.
+- Visible focus: the chip and the card links show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
+- Keyboard map: `Tab` reaches the chip and opens the card after the delay; `Enter` / `Space` toggles it; `Tab` from an open chip moves into the card and through every source link in order; `Escape` closes it and returns focus to the chip.
+- ARIA: the chip is named with the site first so the name holds the visible text (WCAG 2.5.3): `Source 1, Azion: Real-Time Purge`, `Azion +2, sources 1, 2, 3`, or `Source 1: <title>` without a site; it carries `aria-expanded` and, while open, `aria-controls` and `aria-describedby` to the card. The marks are `aria-hidden`; the card is an `<ol>`.
 - Touch target: inline text reference; exempt from the 24 px minimum as inline text (WCAG 2.5.8 exception).
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`) or `image`: the title is plain text, the mark falls back to the icon or letter.
 - Contrast: the letter is `--text-default` on a 30% tint, well above Lc 60; the series ring is a solid mark (Lc 30).
@@ -12859,20 +12860,25 @@ _None. Exports: `"./citation"`. Composed DS components: `hover-card`, `icon-butt
       href: 'https://www.azion.com/en/documentation/',
       description: 'Removes a cached object from every data center in a few seconds.',
       site: 'Azion',
-      icon: 'az az-azion'
+      icon: 'az az-azion',
+      publisher: 'Azion Technologies',
+      publishedAt: '2026-03-02'
     },
     {
       title: 'HTTP Caching (RFC 9111)',
       href: 'https://www.w3.org/Protocols/',
       description: 'How caches store responses and when they must ask the origin again.',
-      site: 'W3C'
+      site: 'W3C',
+      publisher: 'World Wide Web Consortium',
+      publishedAt: '2022-06-01'
     },
     {
       title: 'aziontech/azion: the Azion command line',
       href: 'https://github.com/aziontech/azion',
       description: 'Purge URLs, wildcards and cache keys from a terminal.',
       site: 'GitHub',
-      icon: 'az az-github'
+      icon: 'az az-github',
+      publisher: 'aziontech'
     }
   ]
 </script>
@@ -14342,7 +14348,7 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 
 # Sources
 
-> The sources a generative AI response drew on (ChatGPT's Sources, Cloudscape's sources section, AI Elements Sources): a small `Sources` pill with the overlapping marks of up to three cited sources that opens a panel listing every source — mark, site name, linked title and snippet. The panel is a side `Drawer` from the end on wide screens (non-modal, the answer stays readable beside it) and a bottom sheet on a phone. Sources the answer searched but did not cite (`cited: false`) are listed under More, after the Citations. The pill ends the message's action row (`ChatMessage.Actions` `#trailing`), on the same line as the actions. Each mark is the site's favicon (`image`), its icon, or its first letter on a colour of its own, so three sources never look alike.
+> The sources a generative AI response drew on (ChatGPT's Sources, Cloudscape's sources section, AI Elements Sources): a small `Sources` pill with the overlapping marks of up to three cited sources that opens, in place, a `Popover` listing every source. Sources the answer searched but did not cite (`cited: false`) are listed under More, after the Citations. The pill ends the message's action row (`ChatMessage.Actions` `#trailing`), on the same line as the actions. Each mark is the site's favicon (`image`), its icon, or its first letter on a colour of its own, so three sources never look alike.
 
 - Import: `import Sources from '@aziontech/webkit/sources'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -14355,8 +14361,9 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 
 - Order items as the response first cites them, so `[1]` is item 1; put uncited items (`cited: false`) last so the numbers stay aligned.
 - Use the page title as the title and the site's own name as `site` (`Azion`, `GitHub`); without `site` the host of `href` shows.
-- Give `image` the site's favicon URL when the app has one (from the search tool's result); otherwise `icon` for a site in the icon set, or nothing for the lettered mark.
+- Pass `publisher` and `publishedAt` when you have them.
 - Keep the panel closed by default; the inline citations are the primary path.
+- Give `image` the site's favicon URL when the app has one (from the search tool's result); otherwise `icon` for a site in the icon set, or nothing for the lettered mark.
 
 ## Don’t
 
@@ -14368,7 +14375,7 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 - `citation` — the inline chip whose numbers point at these items.
 - `streaming-response` — renders the citations; pass it the same items.
 - `chat-message` — the pill goes in the `#trailing` slot of `ChatMessage.Actions`, after the icon actions.
-- `drawer` — the panel the pill opens.
+- `popover` — the anchored panel the pill opens.
 
 ## Props
 
@@ -14383,30 +14390,32 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 
 _None. Data-driven: a source list is a record set the response already holds, like table rows.
 Exports: `"./sources"`; exported type `SourcesItem` (`title`, `href?`, `description?`, `site?`,
-`image?`, `icon?`, `cited?`) from `sources/types.ts`, shared with `StreamingResponse` and `Citation`.
-Private parts: `parts/sources-mark.vue` draws one round mark (also used by `Citation`), and
-`parts/sources-panel.vue` holds the panel, loaded on demand. Composed DS components: `drawer`._
+`image?`, `icon?`, `publisher?`, `publishedAt?`, `cited?`) from `sources/types.ts`, shared with
+`StreamingResponse` and `Citation`. Private parts: `parts/sources-mark.vue` draws one round mark,
+and `parts/sources-item.vue` one source block; `Citation` uses both. Composed DS components:
+`popover`._
 
 ## v-model
 
 | Model | Type | Default | Emits | Notes |
 | --- | --- | --- | --- | --- |
-| `v-model:open` | `boolean` | `undefined` | `update:open` | The panel's open state, by the pill, the panel's close button, `Escape` or a press on the overlay (phone). Unbound, the state is local and starts from `defaultOpen`. |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | The panel's open state, by the pill, `Escape` or a press outside the panel. Unbound, the state is local and starts from `defaultOpen`. |
 
 ## States
 
 - `data-state="open|closed"` on the root and the pill (an open pill keeps the hover fill); renders nothing when `items` is empty.
 - The root is `display: contents` and the pill does not wrap (`whitespace-nowrap`, `shrink-0`), so it sits at the end of the action row.
 - The pill's marks are the first three cited items (all items when none is cited).
-- Panel: from `md` a non-modal side `Drawer` (`size="small"`, from the end); below `md` the `Drawer`'s bottom sheet, modal. Its title is the pill's label.
-- Groups: when some items have `cited: false`, the panel shows a Citations section and a More section with headings; otherwise one unheaded list.
+- Panel: a non-modal `Popover` (`size="small"`, `side="auto"`, `align="start"`) on every width, never a `Drawer`; it scrolls when taller than the room left.
+- Row: mark and site; title, two lines; `publisher · date` (medium date in the reader's locale; either alone; none, no line); `description`, two lines.
+- Groups: when some items have `cited: false`, the panel shows a Citations section and a More section with headings and a divider between; otherwise one unheaded list.
 - Mark: favicon (`image`, a safe URL), else `icon`, else the first letter of the site on one of seven `--chart-series-*` colours picked by a stable hash of the host; a favicon that fails to load falls back to the letter.
 
 ## Accessibility
 
 - Visible focus: the pill and the links show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
-- Keyboard map: `Tab` to the pill, `Enter` / `Space` opens the panel and moves focus into it; `Tab` through the links and the close button; `Escape` closes it and returns focus to the pill.
-- ARIA: the pill is a `button` with `aria-haspopup="dialog"` and `aria-expanded`, named `3 sources` (it holds the visible `Sources`, WCAG 2.5.3) or by `title`; the marks are `aria-hidden`; the panel is the `Drawer`'s `dialog`, titled by the pill's label; each group is a `section` named Citations or More (or Sources when there is one group) holding an `<ol>`.
+- Keyboard map: `Tab` to the pill, `Enter` / `Space` opens the panel and focuses its first link; `Tab` through the links, past the last closes it; `Escape` closes it and returns focus to the pill.
+- ARIA: the pill is a `button` with `aria-haspopup="dialog"` and `aria-expanded`, named `3 sources` (it holds the visible `Sources`, WCAG 2.5.3) or by `title`; the marks are `aria-hidden`; the panel is the `Popover`'s non-modal `dialog` labelled by the pill; each group is a `section` named Citations or More (or Sources when there is one group) holding an `<ol>`.
 - Touch: the 32 px pill carries an invisible 44 px hit area on coarse pointers.
 - External links open in a new tab with `rel="noopener noreferrer"`, followed by an `aria-hidden` `az-external-link` glyph and the sr-only `common.newTab` text.
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the title as plain text; an unsafe `image` is dropped.
@@ -14426,19 +14435,24 @@ Private parts: `parts/sources-mark.vue` draws one round mark (also used by `Cita
       href: 'https://www.azion.com/en/documentation/products/cache/real-time-purge/',
       description: 'Removes a cached object from every data center in a few seconds.',
       site: 'Azion',
-      icon: 'az az-azion'
+      icon: 'az az-azion',
+      publisher: 'Azion Technologies',
+      publishedAt: '2026-03-02'
     },
     {
       title: 'aziontech/azion: the Azion command line',
       href: 'https://github.com/aziontech/azion',
       description: 'Purge URLs, wildcards and cache keys from a terminal.',
       site: 'GitHub',
-      icon: 'az az-github'
+      icon: 'az az-github',
+      publisher: 'aziontech'
     },
     {
       title: 'HTTP Caching (RFC 9111)',
       href: 'https://www.w3.org/Protocols/',
-      description: 'How caches store responses and when they must ask the origin again.'
+      description: 'How caches store responses and when they must ask the origin again.',
+      publisher: 'World Wide Web Consortium',
+      publishedAt: '2022-06-01'
     },
     {
       title: 'Cache-Control',

@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Two references in a sentence, each a small chip with the site's mark and name. The second cites two sources, so it shows `+1`. Hovering or pressing a chip opens a card with the site, the linked title and a snippet, with a pager when it cites more than one source.",
+   "summary": "Two references in a sentence, each a small chip with the site's mark and name. The second cites two sources, so it shows `+1`. Hovering or pressing a chip opens one card that stacks every cited source: site, linked title, publisher and date.",
    "file": "examples/citation/default.vue"
   }
  ]

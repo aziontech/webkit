@@ -1201,7 +1201,7 @@
   {
     "name": "citation",
     "path": "src/components/ai/citation/citation.vue",
-    "limit": "11.45 KB"
+    "limit": "9.8 KB"
   },
   {
     "name": "conversation",
@@ -1263,13 +1263,12 @@
   {
     "name": "sources",
     "path": "src/components/ai/sources/sources.vue",
-    "limit": "4.05 KB",
-    "entryOnly": true
+    "limit": "11.8 KB"
   },
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "43.35 KB",
+    "limit": "43.55 KB",
     "entryOnly": true
   },
   {
