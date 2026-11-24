@@ -3416,7 +3416,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-use
 - Surface: app
 - Source: `blocks/ai/ai-action-approval/ai-action-approval.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-action-approval")`
-- Components: AgentQuestion, Alert, Button, ChatMessage, CodeBlock, Conversation, ImageGallery, `PromptInputAttachButton`, `PromptInputDictateButton`, PromptInput, StreamingResponse, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`
+- Components: AgentQuestion, Alert, Button, ChatMessage, CodeBlock, Conversation, ImageGallery, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, PromptInput, `PromptInputTools`, StreamingResponse, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -3535,7 +3535,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-action-approv
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, ChatMessage, CodeBlock, Conversation, ConversationHistory, `DrawerBody`, `DrawerContent`, `DrawerHeader`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, DropdownMenu, `DropdownMenuTrigger`, FeedbackReasonDialog, FilePreview, IconButton, ImageGallery, McpAppFrame, `PromptInputAttachButton`, `PromptInputDictateButton`, PromptInput, PromptQueue, Reasoning, Resizable, ResponseBranches, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, Toast, ToolApproval, ToolCall, `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, VideoPlayer
+- Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, ChatMessage, CodeBlock, Conversation, ConversationHistory, `DrawerBody`, `DrawerContent`, `DrawerHeader`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, DropdownMenu, `DropdownMenuTrigger`, FeedbackReasonDialog, FilePreview, IconButton, ImageGallery, McpAppFrame, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, PromptInput, `PromptInputTools`, PromptQueue, Reasoning, Resizable, ResponseBranches, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, Toast, ToolApproval, ToolCall, `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3569,7 +3569,7 @@ A full page where a person talks with the generative AI assistant about their ac
 - F. Sources — `Sources`
 - G. Response actions — `ChatMessage`, `ResponseBranches`, `FeedbackReasonDialog`
 - H. Follow-up questions — `SuggestionGroup`
-- I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
+- I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputModelPicker`, `PromptInputDictateButton`, `PromptInputContextPicker`, `PromptInputTools`
 - J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
 - K. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 - L. Media — `ImageGallery`, `AudioPlayer`, `VideoPlayer`, `FilePreview`
@@ -3684,7 +3684,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: AgentActivity, AgentQuestion, Alert, AudioPlayer, Button, Card, ChatMessage, ChatMessage, CodeBlock, Conversation, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FeedbackReasonDialog, FilePreview, IconButton, ImageGallery, KeyValueList, McpAppFrame, PageHeader, `PanelHeader`, `PromptInputAttachButton`, `PromptInputDictateButton`, PromptInput, PromptQueue, Reasoning, ResponseBranches, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, Toast, ToolApproval, ToolCall, `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, VideoPlayer
+- Components: AgentActivity, AgentQuestion, Alert, AudioPlayer, Button, Card, ChatMessage, ChatMessage, CodeBlock, Conversation, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FeedbackReasonDialog, FilePreview, IconButton, ImageGallery, KeyValueList, McpAppFrame, PageHeader, `PanelHeader`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, PromptInput, `PromptInputTools`, PromptQueue, Reasoning, ResponseBranches, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, Toast, ToolApproval, ToolCall, `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -14109,13 +14109,50 @@ never read as new.
   import { ref } from 'vue'
 
   const widget = `<style>
-  :root { color-scheme: light dark; }
-  body { margin: 0; padding: 16px; font: 14px/1.5 system-ui, sans-serif; }
-  p { margin: 0 0 12px; }
+  :root {
+    color-scheme: light dark;
+    --ink: CanvasText;
+    --muted: color-mix(in srgb, CanvasText 64%, Canvas);
+    --line: color-mix(in srgb, CanvasText 16%, Canvas);
+    --accent: CanvasText;
+    --accent-ink: Canvas;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: auto; font: 14px/1.5 system-ui, -apple-system, sans-serif; color: var(--ink); }
+  .card { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .name { font-size: 15px; font-weight: 600; margin: 0; }
+  .price { font-size: 14px; font-weight: 600; margin: 0; }
+  .price span { font-weight: 400; color: var(--muted); }
+  .desc { margin: 0; color: var(--muted); }
+  .actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 4px; }
+  button {
+    appearance: none;
+    border: 0;
+    border-radius: 6px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font: inherit;
+    font-weight: 500;
+    padding: 8px 14px;
+    cursor: pointer;
+  }
+  button:hover { filter: brightness(0.95); }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .status { margin: 0; font-size: 13px; color: var(--muted); }
+  .status:empty { display: none; }
 </style>
-<p>Acme Pro adds 10 workloads and priority support for $49 a month.</p>
-<button id="choose" type="button">Choose the Pro plan</button>
-<p id="result" role="status"></p>
+<div class="card">
+  <div class="row">
+    <p class="name">Acme Pro</p>
+    <p class="price">$49 <span>/ month</span></p>
+  </div>
+  <p class="desc">Adds 10 workloads, custom certificates, and priority support for your team.</p>
+  <div class="actions">
+    <button id="choose" type="button">Choose the Pro plan</button>
+    <p id="result" class="status" role="status"></p>
+  </div>
+</div>
 <script>
   let next = 1
   const waiting = new Map()
@@ -14136,7 +14173,10 @@ never read as new.
   const report = () =>
     send({
       method: 'ui/notifications/size-changed',
-      params: { width: document.body.scrollWidth, height: document.documentElement.scrollHeight }
+      params: {
+        width: Math.ceil(document.body.scrollWidth),
+        height: Math.ceil(document.body.getBoundingClientRect().height)
+      }
     })
   request('ui/initialize', {
     protocolVersion: '2026-01-26',
@@ -14238,7 +14278,7 @@ never read as new.
 - Set `queueable` only when the owner queues what is sent while a response runs, and shows the
 - Clear `v-model` and `v-model:files` in the `submit` handler and keep focus in the input.
 - Use `maxLength` only when the backend has a limit; the counter is the warning, and it stays hidden
-- Compose only the controls the product has. Attach first at the inline start; model, dictate and
+- Default to the full composer in blocks and new AI surfaces (`PromptInput.AttachButton` in `actions`, `PromptInput.ModelPicker` and `PromptInput.DictateButton` in `end`, `voice`, `PromptInput.ContextPicker` and `PromptInput.Tools` in `footer`, and the disclaimer in `hint`); omit a control only when the product explicitly does not offer that capability. Attach goes first at the inline start; model, dictate and Submit at the inline end, in that order; the secondary row holds what is not about this prompt (where the chat lives, the tools, a link to the desktop app).
 - Show the upload state on each file (`loading`, `progress`, `error`); Submit waits for them.
 - Set `voice` only when the product has a voice conversation; Submit replaces it as soon as there is
 
@@ -14453,6 +14493,7 @@ packages/webkit/src/components/ai/prompt-input/
 <script setup>
   import Button from '@aziontech/webkit/button'
   import PromptInput from '@aziontech/webkit/prompt-input'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import { ref } from 'vue'
 
   const prompt = ref('')
@@ -14462,6 +14503,8 @@ packages/webkit/src/components/ai/prompt-input/
   const project = ref('')
   const tools = ref([])
   const last = ref('')
+  const voiceActive = ref(false)
+  const muted = ref(false)
 
   const models = [
     { value: 'sol', label: 'Sol 6.1', description: 'Best for everyday tasks' },
@@ -14488,17 +14531,67 @@ packages/webkit/src/components/ai/prompt-input/
     prompt.value = ''
     files.value = []
   }
+
+  const VOICE_CLASS =
+    'flex flex-wrap items-center justify-between gap-(--spacing-sm) rounded-(--shape-card) ' +
+    'border border-(--border-input) bg-(--bg-surface-raised) px-(--spacing-md) py-(--spacing-sm) shadow-(--shadow-lg)'
 </script>
 
 <template>
   <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)">
+    <div
+      v-if="voiceActive"
+      role="region"
+      aria-label="Live voice conversation"
+      :class="VOICE_CLASS"
+    >
+      <div class="flex items-center gap-(--spacing-sm)">
+        <i
+          class="az az-wave-pulse shrink-0 text-(--text-default)"
+          aria-hidden="true"
+        />
+        <StatusIndicator
+          :severity="muted ? 'neutral' : 'info'"
+          :label="muted ? 'Microphone muted' : 'Listening…'"
+          :loading="!muted"
+        />
+      </div>
+      <div class="flex items-center gap-(--spacing-xs)">
+        <Button
+          :label="muted ? 'Unmute' : 'Mute'"
+          :icon="muted ? 'az az-volume-off' : 'az az-microphone'"
+          variant="ghost"
+          size="small"
+          @click="muted = !muted"
+        />
+        <Button
+          label="End voice"
+          icon="az az-x"
+          variant="secondary"
+          size="small"
+          @click="
+            () => {
+              voiceActive = false
+              muted = false
+              last = 'Voice conversation ended'
+            }
+          "
+        />
+      </div>
+    </div>
     <PromptInput
+      v-else
       v-model="prompt"
       v-model:files="files"
       :max-files="5"
       voice
       @submit="send"
-      @voice-start="last = 'Voice conversation started'"
+      @voice-start="
+        () => {
+          voiceActive = true
+          last = 'Voice conversation started'
+        }
+      "
     >
       <template #actions>
         <PromptInput.AttachButton />
@@ -15366,13 +15459,14 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 
 ## When to use
 
-- The empty state of an assistant, to show what it can do (vertical, up to five).
-- After a broad response, to narrow it (horizontal chips, up to five, most likely first).
+- The empty state of an assistant, to show what it can do (vertical, ideally up to three, each with an icon).
+- After a broad response, to narrow it (horizontal chips, ideally up to three, most likely first, each with an icon).
 - A follow-up question with predefined answers.
 
 ## Do
 
-- Five or fewer, ordered by likelihood.
+- Ideally three or fewer, ordered by likelihood.
+- Always include an icon on every item (the component falls back to `az az-sparkles` when `icon` is omitted).
 - Write prompts as the reader would ask them, under 72 characters, sentence case, no end punctuation needed for questions you send verbatim.
 - Disable the group while a response is generating.
 - Remove follow-ups once the reader sends anything else.
@@ -15381,7 +15475,7 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 
 - Navigation or filters → `tabs`, `toggle-group`, `property-filter`.
 - Choices that are a form value → `radio-group`.
-- More than five options → let the reader type; the prompt input stays available.
+- More than three options → keep the set focused or let the reader type; the prompt input stays available.
 
 ## Related
 
@@ -15431,9 +15525,9 @@ types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 
   const sent = ref('')
   const items = [
-    { id: 'ttl', label: 'What TTL should my images use?' },
-    { id: 'wildcard', label: 'How do I purge a whole folder?' },
-    { id: 'origin', label: 'Why does the origin still get requests?' }
+    { id: 'ttl', label: 'What TTL should my images use?', icon: 'az az-image' },
+    { id: 'wildcard', label: 'How do I purge a whole folder?', icon: 'az az-bolt' },
+    { id: 'origin', label: 'Why does the origin still get requests?', icon: 'az az-globe' }
   ]
 </script>
 
@@ -15578,7 +15672,8 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
     >
       <KeyValueList aria-label="Command to run">
         <KeyValueList.Item label="Command">
-          <code class="text-label-code-sm [overflow-wrap:break-word] text-(--text-default)"
+          <code
+            class="rounded-(--shape-control) bg-(--bg-subtle) px-(--spacing-xs) py-(--spacing-2xs) text-body-code-sm [overflow-wrap:break-word] text-(--text-default)"
             >azion deploy <span class="whitespace-nowrap">--env production</span>
             <span class="whitespace-nowrap">--workload storefront</span></code
           >

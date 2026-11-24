@@ -89,9 +89,9 @@
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
-    /** The models the header title picks from on desktop; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
+    /** The models the header and composer pick from; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
     models?: PromptInputMenuOption[]
-    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    /** The tools the composer turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
     toolOptions?: PromptInputMenuOption[]
   }
 
@@ -155,9 +155,9 @@
   }>()
 
   const activeKey = defineModel<string | null>('activeKey', { default: null })
-  /** The model chosen in the header title, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
+  /** The model chosen in the header or composer, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
   const modelKey = defineModel<string>('modelKey', { default: 'auto' })
-  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  /** The tools turned on in the composer, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
   const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
   const { formatDate } = useLocale()
@@ -186,7 +186,18 @@
   })
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
   const modelOptions = computed(() => props.models ?? sampleModels)
-  const composerTools = computed(() => props.toolOptions ?? sampleTools)
+  const composerBindings = computed(() => ({
+    state: state.value,
+    queueable: queueable.value,
+    hydrating: props.hydrating,
+    accept: props.accept,
+    maxFiles: props.maxFiles,
+    maxFileSize: props.maxFileSize,
+    attachable: props.attachable,
+    voice: props.voice,
+    models: modelOptions.value,
+    tools: props.toolOptions ?? sampleTools
+  }))
   const welcome = computed(() => !turns.value.length && !props.hydrating)
   let refocus = false
   const last = computed(() => turns.value[turns.value.length - 1])
@@ -328,16 +339,9 @@
           ref="composerEl"
           v-model="prompt"
           v-model:files="files"
+          v-model:model-key="modelKey"
           v-model:tool-keys="toolKeys"
-          :state="state"
-          :queueable="queueable"
-          :hydrating="hydrating"
-          :accept="accept"
-          :max-files="maxFiles"
-          :max-file-size="maxFileSize"
-          :attachable="attachable"
-          :voice="voice"
-          :tools="composerTools"
+          v-bind="composerBindings"
           @submit="(event, text) => send(event, text, true)"
           @stop="stop"
           @voice-start="emit('voice-start', $event)"
@@ -426,16 +430,9 @@
             ref="composerEl"
             v-model="prompt"
             v-model:files="files"
+            v-model:model-key="modelKey"
             v-model:tool-keys="toolKeys"
-            :state="state"
-            :queueable="queueable"
-            :hydrating="hydrating"
-            :accept="accept"
-            :max-files="maxFiles"
-            :max-file-size="maxFileSize"
-            :attachable="attachable"
-            :voice="voice"
-            :tools="composerTools"
+            v-bind="composerBindings"
             @submit="(event, text) => send(event, text, true)"
             @stop="stop"
             @voice-start="emit('voice-start', $event)"

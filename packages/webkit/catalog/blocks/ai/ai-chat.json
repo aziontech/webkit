@@ -44,6 +44,7 @@
   "parts/ai-chat-skeleton.vue",
   "parts/ai-chat-start.vue",
   "parts/ai-chat-tool-segment.vue",
-  "parts/ai-chat-turn.vue"
+  "parts/ai-chat-turn.vue",
+  "parts/ai-chat-voice.vue"
  ]
 }

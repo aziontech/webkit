@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [McpAppFrame](../../components/mcp-app-frame.md), `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [McpAppFrame](../../components/mcp-app-frame.md), `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), `PromptInputTools`, [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -66,9 +66,9 @@ At the end of the action row of a complete response that used documents: a pill 
 
 After the last complete response, two or three questions that narrow it, as wrapping pills aligned with the response text. They disappear as soon as the reader sends anything else.
 
-### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
+### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputModelPicker`, `PromptInputDictateButton`, `PromptInputContextPicker`, `PromptInputTools`
 
-The `#composer` of `Conversation`: one floating box at the foot of the reading column, pinned there while the thread scrolls behind it (the log keeps room for it, and it keeps the phone's bottom safe area under it), over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter once the prompt passes 3,200 characters, and Submit becomes Stop while a response is pending or streaming. While the composer is empty the button at the end is Start voice conversation (`voice`, on by default), which emits `voice-start` for the app to open its audio session. The disclaimer is its hint, shown from the md breakpoint and kept for assistive tech on a phone. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions` (Web search, Deep research, Create image); a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys`. It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating box at the foot of the reading column, pinned there while the thread scrolls behind it (the log keeps room for it, and it keeps the phone's bottom safe area under it), over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It ships with the full `PromptInput` feature set by default so apps start complete and only turn off controls they do not offer: `PromptInputAttachButton` with `tools` in `#actions`, `PromptInputModelPicker` (model + effort) and `PromptInputDictateButton` in `#end`, `voice` on by default, `PromptInputContextPicker` and `PromptInputTools` in `#footer`, and the disclaimer in `#hint`. It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter once the prompt passes 3,200 characters, and Submit becomes Stop while a response is pending or streaming. While the composer is empty the button at the end is Start voice conversation (`voice`, on by default), which emits `voice-start` for the app to open its audio session. The disclaimer is its hint, shown from the md breakpoint and kept for assistive tech on a phone. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions` (Web search, Deep research, Create image); a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys`. It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
 
 ### J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
 
@@ -421,9 +421,9 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
-    /** The models the header title picks from on desktop; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
+    /** The models the header and composer pick from; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
     models?: PromptInputMenuOption[]
-    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    /** The tools the composer turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
     toolOptions?: PromptInputMenuOption[]
   }
 
@@ -487,9 +487,9 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   }>()
 
   const activeKey = defineModel<string | null>('activeKey', { default: null })
-  /** The model chosen in the header title, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
+  /** The model chosen in the header or composer, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
   const modelKey = defineModel<string>('modelKey', { default: 'auto' })
-  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  /** The tools turned on in the composer, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
   const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
   const { formatDate } = useLocale()
@@ -518,7 +518,18 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   })
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
   const modelOptions = computed(() => props.models ?? sampleModels)
-  const composerTools = computed(() => props.toolOptions ?? sampleTools)
+  const composerBindings = computed(() => ({
+    state: state.value,
+    queueable: queueable.value,
+    hydrating: props.hydrating,
+    accept: props.accept,
+    maxFiles: props.maxFiles,
+    maxFileSize: props.maxFileSize,
+    attachable: props.attachable,
+    voice: props.voice,
+    models: modelOptions.value,
+    tools: props.toolOptions ?? sampleTools
+  }))
   const welcome = computed(() => !turns.value.length && !props.hydrating)
   let refocus = false
   const last = computed(() => turns.value[turns.value.length - 1])
@@ -660,16 +671,9 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
           ref="composerEl"
           v-model="prompt"
           v-model:files="files"
+          v-model:model-key="modelKey"
           v-model:tool-keys="toolKeys"
-          :state="state"
-          :queueable="queueable"
-          :hydrating="hydrating"
-          :accept="accept"
-          :max-files="maxFiles"
-          :max-file-size="maxFileSize"
-          :attachable="attachable"
-          :voice="voice"
-          :tools="composerTools"
+          v-bind="composerBindings"
           @submit="(event, text) => send(event, text, true)"
           @stop="stop"
           @voice-start="emit('voice-start', $event)"
@@ -758,16 +762,9 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
             ref="composerEl"
             v-model="prompt"
             v-model:files="files"
+            v-model:model-key="modelKey"
             v-model:tool-keys="toolKeys"
-            :state="state"
-            :queueable="queueable"
-            :hydrating="hydrating"
-            :accept="accept"
-            :max-files="maxFiles"
-            :max-file-size="maxFileSize"
-            :attachable="attachable"
-            :voice="voice"
-            :tools="composerTools"
+            v-bind="composerBindings"
             @submit="(event, text) => send(event, text, true)"
             @stop="stop"
             @voice-start="emit('voice-start', $event)"
@@ -984,8 +981,8 @@ export const sampleLongThread: AiChatMessage[] = history.flatMap(
 )
 
 export const sampleLongThreadFollowUps: SuggestionGroupItem[] = [
-  { id: 'apply', label: 'Apply the allowlist to storefront' },
-  { id: 'ratio', label: 'How much would the hit ratio improve?' }
+  { id: 'apply', label: 'Apply the allowlist to storefront', icon: 'az az-bolt' },
+  { id: 'ratio', label: 'How much would the hit ratio improve?', icon: 'az az-chart-line' }
 ]
 
 export const sampleSuggestions: SuggestionGroupItem[] = [
@@ -995,8 +992,7 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
     label: 'Why is storefront answering with 502 errors?',
     icon: 'az az-triangle-alert'
   },
-  { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'az az-github' },
-  { id: 'waf', label: 'Protect my site with a WAF', icon: 'az az-shield' }
+  { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'az az-github' }
 ]
 
 export const sampleArtifactVersions: string[] = [
@@ -1018,8 +1014,8 @@ export const sampleArtifactThread: (AiChatMessage & { version?: number })[] = [
 ]
 
 export const sampleArtifactFollowUps: SuggestionGroupItem[] = [
-  { id: 'email', label: 'Show the customer email too' },
-  { id: 'items', label: 'Count the items of each order' }
+  { id: 'email', label: 'Show the customer email too', icon: 'az az-mail' },
+  { id: 'items', label: 'Count the items of each order', icon: 'az az-list' }
 ]
 
 export const sampleReportCsv =
@@ -1122,6 +1118,17 @@ export const sampleModels: PromptInputMenuOption[] = [
   { value: 'thinking', label: 'Thinking', description: 'Thinks longer for harder questions' }
 ]
 
+export const sampleModes: PromptInputMenuOption[] = [
+  { value: 'low', label: 'Low' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'high', label: 'High' }
+]
+
+export const sampleContexts: PromptInputMenuOption[] = [
+  { value: 'acme-store', label: 'acme-store', description: 'Storefront and checkout' },
+  { value: 'docs-site', label: 'docs-site', description: 'Product documentation' }
+]
+
 export const sampleTools: PromptInputMenuOption[] = [
   { value: 'web-search', label: 'Web search', icon: 'az az-globe' },
   { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
@@ -1157,9 +1164,15 @@ export const turnTime = (
     PromptInputStatus
   } from '@aziontech/webkit/prompt-input'
   import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
+  import PromptInputContextPicker from '@aziontech/webkit/prompt-input-context-picker'
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
+  import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import { ref } from 'vue'
+  import PromptInputTools from '@aziontech/webkit/prompt-input-tools'
+  import { nextTick, ref } from 'vue'
+
+  import { sampleContexts, sampleModes } from '../sample'
+  import AiChatVoice from './ai-chat-voice.vue'
 
   defineProps<{
     state: PromptInputStatus
@@ -1170,6 +1183,7 @@ export const turnTime = (
     maxFileSize: number
     attachable: boolean
     voice: boolean
+    models: PromptInputMenuOption[]
     tools: PromptInputMenuOption[]
   }>()
 
@@ -1181,15 +1195,38 @@ export const turnTime = (
 
   const prompt = defineModel<string>({ required: true })
   const files = defineModel<PromptInputFile[]>('files', { required: true })
+  const modelKey = defineModel<string>('modelKey', { required: true })
   const toolKeys = defineModel<string[]>('toolKeys', { required: true })
 
+  const modeKey = ref('medium')
+  const contextKey = ref('')
+  const modes = sampleModes
+  const contexts = sampleContexts
+
   const inputEl = ref<InstanceType<typeof PromptInput> | null>(null)
+  const voiceActive = ref(false)
+
+  function startVoice(event: MouseEvent) {
+    voiceActive.value = true
+    emit('voice-start', event)
+  }
+
+  function endVoice() {
+    voiceActive.value = false
+    void nextTick(() => inputEl.value?.focus())
+  }
 
   defineExpose({ focus: () => inputEl.value?.focus() })
 </script>
 
 <template>
+  <AiChatVoice
+    v-if="voiceActive"
+    @send="(event, text) => emit('submit', event, text)"
+    @end="endVoice"
+  />
   <PromptInput
+    v-else
     ref="inputEl"
     v-model="prompt"
     v-model:files="files"
@@ -1203,7 +1240,7 @@ export const turnTime = (
     :voice="voice"
     @submit="(event, { value }) => emit('submit', event, value)"
     @stop="emit('stop', $event)"
-    @voice-start="emit('voice-start', $event)"
+    @voice-start="startVoice"
   >
     <template
       v-if="attachable"
@@ -1215,7 +1252,31 @@ export const turnTime = (
       />
     </template>
     <template #end>
+      <PromptInputModelPicker
+        v-if="models.length"
+        v-model="modelKey"
+        v-model:mode="modeKey"
+        :models="models"
+        :modes="modes"
+        mode-label="Effort"
+      />
       <PromptInputDictateButton />
+    </template>
+    <template
+      v-if="contexts.length || tools.length"
+      #footer
+    >
+      <PromptInputContextPicker
+        v-if="contexts.length"
+        v-model="contextKey"
+        :options="contexts"
+        placeholder="Choose project"
+      />
+      <PromptInputTools
+        v-if="tools.length"
+        v-model="toolKeys"
+        :tools="tools"
+      />
     </template>
     <template #hint>
       <span class="max-md:sr-only">
@@ -2149,5 +2210,84 @@ export const turnTime = (
     v-model:open="reasonOpen"
     @submit="(_event, reason) => sendReason(reason)"
   />
+</template>
+```
+
+## `parts/ai-chat-voice.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import { ref } from 'vue'
+
+  const emit = defineEmits<{
+    send: [event: MouseEvent, text: string]
+    end: [event: MouseEvent]
+  }>()
+
+  const muted = ref(false)
+  const spoken = ref('')
+
+  function simulateSpeak(event: MouseEvent) {
+    spoken.value = 'Why is storefront answering with 502 errors?'
+    emit('send', event, spoken.value)
+  }
+
+  const VOICE_CLASS =
+    'flex flex-wrap items-center justify-between gap-(--spacing-sm) rounded-(--shape-card) ' +
+    'border border-(--border-input) bg-(--bg-surface-raised) px-(--spacing-md) py-(--spacing-sm) shadow-(--shadow-lg)'
+</script>
+
+<template>
+  <div
+    role="region"
+    aria-label="Live voice conversation"
+    data-testid="ai-chat-voice"
+    :class="VOICE_CLASS"
+  >
+    <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+      <i
+        class="az az-wave-pulse shrink-0 text-(--text-default)"
+        aria-hidden="true"
+      />
+      <div class="flex min-w-0 flex-col gap-(--spacing-3xs)">
+        <StatusIndicator
+          :severity="muted ? 'neutral' : 'info'"
+          :label="muted ? 'Microphone muted' : 'Listening…'"
+          :loading="!muted"
+        />
+        <span
+          v-if="spoken"
+          class="truncate text-body-xs text-(--text-muted)"
+          >{{ spoken }}</span
+        >
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+      <Button
+        :label="muted ? 'Unmute' : 'Mute'"
+        :icon="muted ? 'az az-volume-off' : 'az az-microphone'"
+        variant="ghost"
+        size="small"
+        @click="muted = !muted"
+      />
+      <Button
+        label="Try sample question"
+        icon="az az-sparkles"
+        variant="outline"
+        size="small"
+        :disabled="muted"
+        @click="simulateSpeak"
+      />
+      <Button
+        label="End voice"
+        icon="az az-x"
+        variant="secondary"
+        size="small"
+        @click="emit('end', $event)"
+      />
+    </div>
+  </div>
 </template>
 ```

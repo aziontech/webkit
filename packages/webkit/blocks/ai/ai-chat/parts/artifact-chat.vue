@@ -10,8 +10,11 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import type { PromptInputFile } from '@aziontech/webkit/prompt-input'
   import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
+  import PromptInputContextPicker from '@aziontech/webkit/prompt-input-context-picker'
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
+  import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import PromptInputTools from '@aziontech/webkit/prompt-input-tools'
   import Resizable from '@aziontech/webkit/resizable'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup from '@aziontech/webkit/suggestion-group'
@@ -20,7 +23,15 @@
   import { type AiChatMessage, textOf } from '@aziontech/webkit/utils/ai-chat'
   import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
-  import { sampleArtifactFollowUps, sampleArtifactThread, sampleArtifactVersions } from '../sample'
+  import {
+    sampleArtifactFollowUps,
+    sampleArtifactThread,
+    sampleArtifactVersions,
+    sampleContexts,
+    sampleModels,
+    sampleModes,
+    sampleTools
+  } from '../sample'
 
   const ARTIFACT = 'top-orders.sql'
   const turns = sampleArtifactThread
@@ -39,6 +50,10 @@
   const drawerCanvasEl = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
   const prompt = ref('')
   const files = ref<PromptInputFile[]>([])
+  const modelKey = ref('auto')
+  const modeKey = ref('medium')
+  const contextKey = ref('acme-store')
+  const toolKeys = ref<string[]>([])
   const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
   const lines = computed(() => versions[version.value].split('\n').length)
 
@@ -175,13 +190,35 @@
                   :max-length="4000"
                   placeholder="Ask for a change"
                   accept="image/*,application/pdf"
+                  voice
                   @submit="clearPrompt"
                 >
                   <template #actions>
-                    <PromptInputAttachButton />
+                    <PromptInputAttachButton
+                      v-model="toolKeys"
+                      :tools="sampleTools"
+                    />
                   </template>
                   <template #end>
+                    <PromptInputModelPicker
+                      v-model="modelKey"
+                      v-model:mode="modeKey"
+                      :models="sampleModels"
+                      :modes="sampleModes"
+                      mode-label="Effort"
+                    />
                     <PromptInputDictateButton />
+                  </template>
+                  <template #footer>
+                    <PromptInputContextPicker
+                      v-model="contextKey"
+                      :options="sampleContexts"
+                      placeholder="Choose project"
+                    />
+                    <PromptInputTools
+                      v-model="toolKeys"
+                      :tools="sampleTools"
+                    />
                   </template>
                   <template #hint>
                     The AI assistant can make mistakes. Check a query before you run it.

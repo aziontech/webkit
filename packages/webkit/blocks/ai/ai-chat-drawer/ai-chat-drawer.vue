@@ -44,7 +44,13 @@
   import DrawerChatHeader from './parts/drawer-chat-header.vue'
   import DrawerChatStart from './parts/drawer-chat-start.vue'
   import WorkloadOverview from './parts/workload-overview.vue'
-  import { sampleSuggestions, sampleTools } from './sample'
+  import {
+    sampleContexts,
+    sampleModels,
+    sampleModes,
+    sampleSuggestions,
+    sampleTools
+  } from './sample'
 
   export interface AiChatDrawerProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
@@ -87,7 +93,15 @@
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
-    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    /** An empty composer shows Start voice conversation in place of Send; it emits `voice-start`. */
+    voice?: boolean
+    /** The models the composer picks from; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
+    models?: PromptInputMenuOption[]
+    /** The reasoning effort modes of the chosen model; left out, the sample modes show. Read the chosen one from `v-model:modeKey`. */
+    modes?: PromptInputMenuOption[]
+    /** The projects or workloads the composer can scope a conversation to; left out, the sample contexts show. Read the chosen one from `v-model:contextKey`. */
+    contexts?: PromptInputMenuOption[]
+    /** The tools the composer turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
     toolOptions?: PromptInputMenuOption[]
   }
 
@@ -108,16 +122,21 @@
     hydrating: false,
     sessionGenerating: false,
     attachable: true,
+    voice: true,
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
     resolveAppUrl: undefined,
+    models: undefined,
+    modes: undefined,
+    contexts: undefined,
     toolOptions: undefined
   })
 
   const emit = defineEmits<{
     send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     stop: [event: MouseEvent]
+    'voice-start': [event: MouseEvent]
     retry: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
     share: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
     branch: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
@@ -145,7 +164,13 @@
 
   /** Whether the assistant drawer is open; Agent opens it and its close button closes it. */
   const open = defineModel<boolean>('open', { default: true })
-  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  /** The model chosen in the composer, one of `models`. */
+  const modelKey = defineModel<string>('modelKey', { default: 'auto' })
+  /** The effort mode chosen in the composer, one of `modes`. */
+  const modeKey = defineModel<string>('modeKey', { default: 'medium' })
+  /** The project or workload chosen in the composer footer, one of `contexts`. */
+  const contextKey = defineModel<string>('contextKey', { default: 'storefront' })
+  /** The tools turned on in the composer, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
   const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
   const { formatDate } = useLocale()
@@ -171,6 +196,9 @@
     onDeny: (event, call) => emit('deny', event, call)
   })
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
+  const modelOptions = computed(() => props.models ?? sampleModels)
+  const modeOptions = computed(() => props.modes ?? sampleModes)
+  const contextOptions = computed(() => props.contexts ?? sampleContexts)
   const composerTools = computed(() => props.toolOptions ?? sampleTools)
   const last = computed(() => turns.value[turns.value.length - 1])
   const failure = computed(() => {
@@ -375,6 +403,9 @@
                   ref="composerEl"
                   v-model="prompt"
                   v-model:files="files"
+                  v-model:model-key="modelKey"
+                  v-model:mode-key="modeKey"
+                  v-model:context-key="contextKey"
                   v-model:tool-keys="toolKeys"
                   :state="state"
                   :queueable="queueable"
@@ -383,9 +414,14 @@
                   :max-files="maxFiles"
                   :max-file-size="maxFileSize"
                   :attachable="attachable"
+                  :voice="voice"
+                  :models="modelOptions"
+                  :modes="modeOptions"
+                  :contexts="contextOptions"
                   :tools="composerTools"
                   @submit="send"
                   @stop="stop"
+                  @voice-start="emit('voice-start', $event)"
                 />
               </template>
             </Conversation>

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), `PromptInputTools`, [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -335,7 +335,13 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   import DrawerChatHeader from './parts/drawer-chat-header.vue'
   import DrawerChatStart from './parts/drawer-chat-start.vue'
   import WorkloadOverview from './parts/workload-overview.vue'
-  import { sampleSuggestions, sampleTools } from './sample'
+  import {
+    sampleContexts,
+    sampleModels,
+    sampleModes,
+    sampleSuggestions,
+    sampleTools
+  } from './sample'
 
   export interface AiChatDrawerProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
@@ -378,7 +384,15 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
-    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    /** An empty composer shows Start voice conversation in place of Send; it emits `voice-start`. */
+    voice?: boolean
+    /** The models the composer picks from; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
+    models?: PromptInputMenuOption[]
+    /** The reasoning effort modes of the chosen model; left out, the sample modes show. Read the chosen one from `v-model:modeKey`. */
+    modes?: PromptInputMenuOption[]
+    /** The projects or workloads the composer can scope a conversation to; left out, the sample contexts show. Read the chosen one from `v-model:contextKey`. */
+    contexts?: PromptInputMenuOption[]
+    /** The tools the composer turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
     toolOptions?: PromptInputMenuOption[]
   }
 
@@ -399,16 +413,21 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     hydrating: false,
     sessionGenerating: false,
     attachable: true,
+    voice: true,
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
     resolveAppUrl: undefined,
+    models: undefined,
+    modes: undefined,
+    contexts: undefined,
     toolOptions: undefined
   })
 
   const emit = defineEmits<{
     send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     stop: [event: MouseEvent]
+    'voice-start': [event: MouseEvent]
     retry: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
     share: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
     branch: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
@@ -436,7 +455,13 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 
   /** Whether the assistant drawer is open; Agent opens it and its close button closes it. */
   const open = defineModel<boolean>('open', { default: true })
-  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  /** The model chosen in the composer, one of `models`. */
+  const modelKey = defineModel<string>('modelKey', { default: 'auto' })
+  /** The effort mode chosen in the composer, one of `modes`. */
+  const modeKey = defineModel<string>('modeKey', { default: 'medium' })
+  /** The project or workload chosen in the composer footer, one of `contexts`. */
+  const contextKey = defineModel<string>('contextKey', { default: 'storefront' })
+  /** The tools turned on in the composer, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
   const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
   const { formatDate } = useLocale()
@@ -462,6 +487,9 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     onDeny: (event, call) => emit('deny', event, call)
   })
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
+  const modelOptions = computed(() => props.models ?? sampleModels)
+  const modeOptions = computed(() => props.modes ?? sampleModes)
+  const contextOptions = computed(() => props.contexts ?? sampleContexts)
   const composerTools = computed(() => props.toolOptions ?? sampleTools)
   const last = computed(() => turns.value[turns.value.length - 1])
   const failure = computed(() => {
@@ -666,6 +694,9 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
                   ref="composerEl"
                   v-model="prompt"
                   v-model:files="files"
+                  v-model:model-key="modelKey"
+                  v-model:mode-key="modeKey"
+                  v-model:context-key="contextKey"
                   v-model:tool-keys="toolKeys"
                   :state="state"
                   :queueable="queueable"
@@ -674,9 +705,14 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
                   :max-files="maxFiles"
                   :max-file-size="maxFileSize"
                   :attachable="attachable"
+                  :voice="voice"
+                  :models="modelOptions"
+                  :modes="modeOptions"
+                  :contexts="contextOptions"
                   :tools="composerTools"
                   @submit="send"
                   @stop="stop"
+                  @voice-start="emit('voice-start', $event)"
                 />
               </template>
             </Conversation>
@@ -839,8 +875,8 @@ export const sampleLongThread: AiChatMessage[] = history.flatMap(
 )
 
 export const sampleLongThreadFollowUps: SuggestionGroupItem[] = [
-  { id: 'apply', label: 'Apply the allowlist to storefront' },
-  { id: 'ratio', label: 'How much would the hit ratio improve?' }
+  { id: 'apply', label: 'Apply the allowlist to storefront', icon: 'az az-bolt' },
+  { id: 'ratio', label: 'How much would the hit ratio improve?', icon: 'az az-chart-line' }
 ]
 
 export const sampleSuggestions: SuggestionGroupItem[] = [
@@ -851,6 +887,23 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
   },
   { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'az az-bolt' },
   { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'az az-globe' }
+]
+
+export const sampleModels: PromptInputMenuOption[] = [
+  { value: 'auto', label: 'Auto', description: 'Decides how long to think' },
+  { value: 'fast', label: 'Fast', description: 'Answers right away' },
+  { value: 'thinking', label: 'Thinking', description: 'Thinks longer for harder questions' }
+]
+
+export const sampleModes: PromptInputMenuOption[] = [
+  { value: 'low', label: 'Low' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'high', label: 'High' }
+]
+
+export const sampleContexts: PromptInputMenuOption[] = [
+  { value: 'storefront', label: 'storefront', description: 'Workload · Production' },
+  { value: 'docs-site', label: 'docs-site', description: 'Product documentation' }
 ]
 
 export const sampleTools: PromptInputMenuOption[] = [
@@ -1431,8 +1484,11 @@ export const sampleTools: PromptInputMenuOption[] = [
     PromptInputStatus
   } from '@aziontech/webkit/prompt-input'
   import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
+  import PromptInputContextPicker from '@aziontech/webkit/prompt-input-context-picker'
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
+  import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import PromptInputTools from '@aziontech/webkit/prompt-input-tools'
   import { ref } from 'vue'
 
   defineProps<{
@@ -1443,16 +1499,24 @@ export const sampleTools: PromptInputMenuOption[] = [
     maxFiles: number
     maxFileSize: number
     attachable: boolean
+    voice: boolean
+    models: PromptInputMenuOption[]
+    modes: PromptInputMenuOption[]
+    contexts: PromptInputMenuOption[]
     tools: PromptInputMenuOption[]
   }>()
 
   const emit = defineEmits<{
     submit: [event: MouseEvent | KeyboardEvent, value: string]
     stop: [event: MouseEvent]
+    'voice-start': [event: MouseEvent]
   }>()
 
   const prompt = defineModel<string>({ required: true })
   const files = defineModel<PromptInputFile[]>('files', { required: true })
+  const modelKey = defineModel<string>('modelKey', { required: true })
+  const modeKey = defineModel<string>('modeKey', { required: true })
+  const contextKey = defineModel<string>('contextKey', { required: true })
   const toolKeys = defineModel<string[]>('toolKeys', { required: true })
 
   const inputEl = ref<InstanceType<typeof PromptInput> | null>(null)
@@ -1472,9 +1536,11 @@ export const sampleTools: PromptInputMenuOption[] = [
     :max-files="maxFiles"
     :max-file-size="maxFileSize"
     :max-rows="4"
+    :voice="voice"
     placeholder="Ask about storefront"
     @submit="(event, { value }) => emit('submit', event, value)"
     @stop="emit('stop', $event)"
+    @voice-start="emit('voice-start', $event)"
   >
     <template
       v-if="attachable"
@@ -1486,7 +1552,31 @@ export const sampleTools: PromptInputMenuOption[] = [
       />
     </template>
     <template #end>
+      <PromptInputModelPicker
+        v-if="models.length"
+        v-model="modelKey"
+        v-model:mode="modeKey"
+        :models="models"
+        :modes="modes"
+        mode-label="Effort"
+      />
       <PromptInputDictateButton />
+    </template>
+    <template
+      v-if="contexts.length || tools.length"
+      #footer
+    >
+      <PromptInputContextPicker
+        v-if="contexts.length"
+        v-model="contextKey"
+        :options="contexts"
+        placeholder="Choose project"
+      />
+      <PromptInputTools
+        v-if="tools.length"
+        v-model="toolKeys"
+        :tools="tools"
+      />
     </template>
     <template #hint
       >The AI assistant can make mistakes. Check important information before you act on

@@ -4,8 +4,7 @@
   const items = [
     { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'az az-github' },
     { id: 'waf', label: 'Protect my site with a WAF', icon: 'az az-shield' },
-    { id: 'cache', label: 'Explain why my cache hit ratio dropped', icon: 'az az-chart-line' },
-    { id: 'domain', label: 'Point my domain to a workload', icon: 'az az-globe' }
+    { id: 'cache', label: 'Explain why my cache hit ratio dropped', icon: 'az az-chart-line' }
   ]
 </script>
 

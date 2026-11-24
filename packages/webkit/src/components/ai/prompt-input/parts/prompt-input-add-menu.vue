@@ -89,6 +89,7 @@
     side="top"
     align="start"
     :disabled="disabled"
+    class="inline-flex items-center"
     @select="onSelect"
   >
     <DropdownMenuTrigger>

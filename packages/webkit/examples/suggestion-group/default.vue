@@ -4,9 +4,9 @@
 
   const sent = ref('')
   const items = [
-    { id: 'ttl', label: 'What TTL should my images use?' },
-    { id: 'wildcard', label: 'How do I purge a whole folder?' },
-    { id: 'origin', label: 'Why does the origin still get requests?' }
+    { id: 'ttl', label: 'What TTL should my images use?', icon: 'az az-image' },
+    { id: 'wildcard', label: 'How do I purge a whole folder?', icon: 'az az-bolt' },
+    { id: 'origin', label: 'Why does the origin still get requests?', icon: 'az az-globe' }
   ]
 </script>
 

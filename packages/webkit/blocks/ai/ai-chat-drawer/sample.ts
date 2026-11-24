@@ -146,8 +146,8 @@ export const sampleLongThread: AiChatMessage[] = history.flatMap(
 )
 
 export const sampleLongThreadFollowUps: SuggestionGroupItem[] = [
-  { id: 'apply', label: 'Apply the allowlist to storefront' },
-  { id: 'ratio', label: 'How much would the hit ratio improve?' }
+  { id: 'apply', label: 'Apply the allowlist to storefront', icon: 'az az-bolt' },
+  { id: 'ratio', label: 'How much would the hit ratio improve?', icon: 'az az-chart-line' }
 ]
 
 export const sampleSuggestions: SuggestionGroupItem[] = [
@@ -158,6 +158,23 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
   },
   { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'az az-bolt' },
   { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'az az-globe' }
+]
+
+export const sampleModels: PromptInputMenuOption[] = [
+  { value: 'auto', label: 'Auto', description: 'Decides how long to think' },
+  { value: 'fast', label: 'Fast', description: 'Answers right away' },
+  { value: 'thinking', label: 'Thinking', description: 'Thinks longer for harder questions' }
+]
+
+export const sampleModes: PromptInputMenuOption[] = [
+  { value: 'low', label: 'Low' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'high', label: 'High' }
+]
+
+export const sampleContexts: PromptInputMenuOption[] = [
+  { value: 'storefront', label: 'storefront', description: 'Workload · Production' },
+  { value: 'docs-site', label: 'docs-site', description: 'Product documentation' }
 ]
 
 export const sampleTools: PromptInputMenuOption[] = [

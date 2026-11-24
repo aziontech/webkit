@@ -264,33 +264,49 @@
       :label="t('mcpAppFrame.errorDescription')"
       :data-testid="`${testId}__error`"
     />
-    <div
-      v-else
-      class="relative h-(--mcp-app-frame-view-height)"
-    >
-      <iframe
-        v-if="hasDocument"
-        ref="iframeEl"
-        :key="documentKey"
-        :title="title"
-        sandbox="allow-scripts"
-        referrerpolicy="no-referrer"
-        allow=""
-        loading="lazy"
-        :srcdoc="srcdoc || undefined"
-        :src="src || undefined"
-        class="block h-full w-full border-0"
-        :data-testid="`${testId}__view`"
-        @load="onLoad"
-      />
-      <Skeleton
-        v-if="phase === 'loading'"
-        width="100%"
-        height="100%"
-        class="absolute inset-0"
-        :data-testid="`${testId}__loading`"
-      />
-    </div>
+    <template v-else>
+      <div
+        :data-testid="`${testId}__header`"
+        class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-subtle) px-(--spacing-sm) py-(--spacing-xs)"
+      >
+        <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+          <i
+            class="az az-app-window shrink-0 text-(--text-muted)"
+            aria-hidden="true"
+          />
+          <span class="truncate text-title-sm text-(--text-default)">{{ title }}</span>
+        </div>
+        <span
+          v-if="resource.uri"
+          class="max-w-56 shrink-0 truncate text-label-code-sm text-(--text-muted) max-sm:hidden"
+          >{{ resource.uri }}</span
+        >
+      </div>
+      <div class="relative h-(--mcp-app-frame-view-height)">
+        <iframe
+          v-if="hasDocument"
+          ref="iframeEl"
+          :key="documentKey"
+          :title="title"
+          sandbox="allow-scripts"
+          referrerpolicy="no-referrer"
+          allow=""
+          loading="lazy"
+          :srcdoc="srcdoc || undefined"
+          :src="src || undefined"
+          class="block h-full w-full border-0"
+          :data-testid="`${testId}__view`"
+          @load="onLoad"
+        />
+        <Skeleton
+          v-if="phase === 'loading'"
+          width="100%"
+          height="100%"
+          class="absolute inset-0"
+          :data-testid="`${testId}__loading`"
+        />
+      </div>
+    </template>
     <span
       role="status"
       class="sr-only"

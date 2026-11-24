@@ -1,6 +1,7 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import PromptInput from '@aziontech/webkit/prompt-input'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import { ref } from 'vue'
 
   const prompt = ref('')
@@ -10,6 +11,8 @@
   const project = ref('')
   const tools = ref([])
   const last = ref('')
+  const voiceActive = ref(false)
+  const muted = ref(false)
 
   const models = [
     { value: 'sol', label: 'Sol 6.1', description: 'Best for everyday tasks' },
@@ -36,17 +39,67 @@
     prompt.value = ''
     files.value = []
   }
+
+  const VOICE_CLASS =
+    'flex flex-wrap items-center justify-between gap-(--spacing-sm) rounded-(--shape-card) ' +
+    'border border-(--border-input) bg-(--bg-surface-raised) px-(--spacing-md) py-(--spacing-sm) shadow-(--shadow-lg)'
 </script>
 
 <template>
   <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)">
+    <div
+      v-if="voiceActive"
+      role="region"
+      aria-label="Live voice conversation"
+      :class="VOICE_CLASS"
+    >
+      <div class="flex items-center gap-(--spacing-sm)">
+        <i
+          class="az az-wave-pulse shrink-0 text-(--text-default)"
+          aria-hidden="true"
+        />
+        <StatusIndicator
+          :severity="muted ? 'neutral' : 'info'"
+          :label="muted ? 'Microphone muted' : 'Listening…'"
+          :loading="!muted"
+        />
+      </div>
+      <div class="flex items-center gap-(--spacing-xs)">
+        <Button
+          :label="muted ? 'Unmute' : 'Mute'"
+          :icon="muted ? 'az az-volume-off' : 'az az-microphone'"
+          variant="ghost"
+          size="small"
+          @click="muted = !muted"
+        />
+        <Button
+          label="End voice"
+          icon="az az-x"
+          variant="secondary"
+          size="small"
+          @click="
+            () => {
+              voiceActive = false
+              muted = false
+              last = 'Voice conversation ended'
+            }
+          "
+        />
+      </div>
+    </div>
     <PromptInput
+      v-else
       v-model="prompt"
       v-model:files="files"
       :max-files="5"
       voice
       @submit="send"
-      @voice-start="last = 'Voice conversation started'"
+      @voice-start="
+        () => {
+          voiceActive = true
+          last = 'Voice conversation started'
+        }
+      "
     >
       <template #actions>
         <PromptInput.AttachButton />

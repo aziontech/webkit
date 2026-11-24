@@ -53,7 +53,9 @@
     :data-variant="context.variant.value"
     :class="ROOT_CLASS"
   >
-    <dt class="flex shrink-0 items-center gap-(--spacing-2xs) text-body-sm text-(--text-muted)">
+    <dt
+      class="flex shrink-0 items-center gap-(--spacing-2xs) text-label-sm font-medium text-(--text-muted)"
+    >
       <span>{{ label }}</span>
       <slot name="info" />
     </dt>

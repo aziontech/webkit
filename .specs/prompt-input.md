@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 9
 template: 2
-checksum: cf370ac1a0e4731d6f1ef0c7bdb8f506b547b103e66bfe3228443b88e6606501
+checksum: 7deb80a1c44234ef742bf3df15962d8a17b0717cbe9f84660d17ef3cc1bf0e1b
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -73,9 +73,7 @@ two rows (text on its own row) until the prompt is cleared.
 - Clear `v-model` and `v-model:files` in the `submit` handler and keep focus in the input.
 - Use `maxLength` only when the backend has a limit; the counter is the warning, and it stays hidden
   until the prompt reaches 80% of the limit, so a resting composer shows no number.
-- Compose only the controls the product has. Attach first at the inline start; model, dictate and
-  Submit at the inline end, in that order; the secondary row holds what is not about this prompt
-  (where the chat lives, the tools, a link to the desktop app).
+- Default to the full composer in blocks and new AI surfaces (`PromptInput.AttachButton` in `actions`, `PromptInput.ModelPicker` and `PromptInput.DictateButton` in `end`, `voice`, `PromptInput.ContextPicker` and `PromptInput.Tools` in `footer`, and the disclaimer in `hint`); omit a control only when the product explicitly does not offer that capability. Attach goes first at the inline start; model, dictate and Submit at the inline end, in that order; the secondary row holds what is not about this prompt (where the chat lives, the tools, a link to the desktop app).
 - Show the upload state on each file (`loading`, `progress`, `error`); Submit waits for them.
 - Set `voice` only when the product has a voice conversation; Submit replaces it as soon as there is
   something to send.

@@ -1225,7 +1225,7 @@
   {
     "name": "mcp-app-frame",
     "path": "src/components/ai/mcp-app-frame/mcp-app-frame.vue",
-    "limit": "10.05 KB"
+    "limit": "10.25 KB"
   },
   {
     "name": "chat-message",
@@ -1262,13 +1262,13 @@
   {
     "name": "prompt-input",
     "path": "src/components/ai/prompt-input/index.ts",
-    "limit": "15.75 KB",
+    "limit": "15.85 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-root",
     "path": "src/components/ai/prompt-input/prompt-input.vue",
-    "limit": "11.85 KB",
+    "limit": "11.95 KB",
     "entryOnly": true
   },
   {
@@ -1341,7 +1341,7 @@
   {
     "name": "suggestion-group",
     "path": "src/components/ai/suggestion-group/suggestion-group.vue",
-    "limit": "2 KB"
+    "limit": "2.05 KB"
   },
   {
     "name": "prompt-queue",

@@ -54,8 +54,8 @@
   <IconButton
     v-else-if="showVoice"
     key="voice"
-    icon="az az-headphones"
-    variant="primary"
+    icon="az az-wave-pulse"
+    variant="secondary"
     size="large"
     :ariaLabel="labels.voice"
     :disabled="disabled"

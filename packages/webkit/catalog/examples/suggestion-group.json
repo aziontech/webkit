@@ -2,12 +2,12 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Three follow-up questions under a response, as wrapping chips ordered by likelihood; choosing one sends it as the next prompt.",
+   "summary": "Three follow-up questions under a response, as wrapping chips with icons ordered by likelihood; choosing one sends it as the next prompt.",
    "file": "examples/suggestion-group/default.vue"
   },
   {
    "name": "SupportPrompts",
-   "summary": "Support prompts on an empty assistant, stacked vertically with an icon each, showing what the assistant can do before the first message.",
+   "summary": "Three support prompts on an empty assistant, stacked vertically with an icon each, showing what the assistant can do before the first message.",
    "file": "examples/suggestion-group/support-prompts.vue"
   }
  ]

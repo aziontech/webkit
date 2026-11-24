@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 6357f59e2afbf1e73dc90bd14cfae7fb7f6f472311d6afc98ccc46b5383db0b8
+checksum: 062bd05c4d4b67eac76400d3afcd27384bf8551445f4def0ac87ddccbfbabc13
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -21,15 +21,15 @@ and the owner either sends it or places it in the prompt input to edit.
 
 ## When to use
 
-- The empty state of an assistant, to show what it can do (vertical, up to five).
-- After a broad response, to narrow it (horizontal chips, up to five, most likely first).
+- The empty state of an assistant, to show what it can do (vertical, ideally up to three, each with an icon).
+- After a broad response, to narrow it (horizontal chips, ideally up to three, most likely first, each with an icon).
 - A follow-up question with predefined answers.
 
 ## When NOT to use
 
 - Navigation or filters → `tabs`, `toggle-group`, `property-filter`.
 - Choices that are a form value → `radio-group`.
-- More than five options → let the reader type; the prompt input stays available.
+- More than three options → keep the set focused or let the reader type; the prompt input stays available.
 
 ## Related
 
@@ -39,7 +39,8 @@ and the owner either sends it or places it in the prompt input to edit.
 
 ## Best practices
 
-- Five or fewer, ordered by likelihood.
+- Ideally three or fewer, ordered by likelihood.
+- Always include an icon on every item (the component falls back to `az az-sparkles` when `icon` is omitted).
 - Write prompts as the reader would ask them, under 72 characters, sentence case, no end punctuation needed for questions you send verbatim.
 - Disable the group while a response is generating.
 - Remove follow-ups once the reader sends anything else.

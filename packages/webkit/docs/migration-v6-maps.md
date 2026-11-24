@@ -1596,7 +1596,7 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 
 ## Block ids
 
-`v6-blocks.json`, 298 entries.
+`v6-blocks.json`, 299 entries.
 
 | Where | Old | New |
 | --- | --- | --- |
@@ -1610,6 +1610,7 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 |  | `account/personal-tokens` | `account/account-personal-tokens` |
 |  | `account/team-permissions` | `account/account-team-permissions` |
 |  | `account/users` | `account/account-users` |
+|  | `ai/ai-api-key` | `settings/settings-api-key` |
 |  | `auth/sign-in` | `auth/auth-sign-in` |
 |  | `create/deploy-drawer` | `create/create-deploy-drawer` |
 |  | `create/deploy-progress-dialog` | `create/create-deploy-progress-dialog` |

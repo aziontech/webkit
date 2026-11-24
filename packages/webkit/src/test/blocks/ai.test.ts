@@ -129,16 +129,19 @@ describe('ai', () => {
     expect(view.emitted('stop')).toHaveLength(1)
   })
 
-  it('ai-chat-drawer and ai-action-approval show Attach at the start and Dictate before Send', async () => {
+  it('ai-chat-drawer and ai-action-approval show the full composer by default', async () => {
     for (const block of [AiChatDrawer, AiActionApproval]) {
       const view = render(block)
       const box = view.getByTestId('prompt-input__box')
       const buttons = within(box).getAllByRole('button')
       expect(buttons[0]).toHaveAccessibleName('Attach files')
-      expect(buttons.at(-1)).toHaveAccessibleName('Submit')
+      expect(buttons.at(-1)).toHaveAccessibleName('Start voice conversation')
       await waitFor(() =>
         expect(within(box).getAllByRole('button').at(-2)).toHaveAccessibleName('Dictate')
       )
+      expect(view.getByTestId('prompt-input-model-picker')).toBeTruthy()
+      expect(view.getByTestId('prompt-input-context-picker')).toBeTruthy()
+      expect(view.getByTestId('prompt-input-tools')).toBeTruthy()
       cleanup()
     }
   })

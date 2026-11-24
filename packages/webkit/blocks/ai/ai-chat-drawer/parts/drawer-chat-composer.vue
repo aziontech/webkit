@@ -5,8 +5,11 @@
     PromptInputStatus
   } from '@aziontech/webkit/prompt-input'
   import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
+  import PromptInputContextPicker from '@aziontech/webkit/prompt-input-context-picker'
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
+  import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import PromptInputTools from '@aziontech/webkit/prompt-input-tools'
   import { ref } from 'vue'
 
   defineProps<{
@@ -17,16 +20,24 @@
     maxFiles: number
     maxFileSize: number
     attachable: boolean
+    voice: boolean
+    models: PromptInputMenuOption[]
+    modes: PromptInputMenuOption[]
+    contexts: PromptInputMenuOption[]
     tools: PromptInputMenuOption[]
   }>()
 
   const emit = defineEmits<{
     submit: [event: MouseEvent | KeyboardEvent, value: string]
     stop: [event: MouseEvent]
+    'voice-start': [event: MouseEvent]
   }>()
 
   const prompt = defineModel<string>({ required: true })
   const files = defineModel<PromptInputFile[]>('files', { required: true })
+  const modelKey = defineModel<string>('modelKey', { required: true })
+  const modeKey = defineModel<string>('modeKey', { required: true })
+  const contextKey = defineModel<string>('contextKey', { required: true })
   const toolKeys = defineModel<string[]>('toolKeys', { required: true })
 
   const inputEl = ref<InstanceType<typeof PromptInput> | null>(null)
@@ -46,9 +57,11 @@
     :max-files="maxFiles"
     :max-file-size="maxFileSize"
     :max-rows="4"
+    :voice="voice"
     placeholder="Ask about storefront"
     @submit="(event, { value }) => emit('submit', event, value)"
     @stop="emit('stop', $event)"
+    @voice-start="emit('voice-start', $event)"
   >
     <template
       v-if="attachable"
@@ -60,7 +73,31 @@
       />
     </template>
     <template #end>
+      <PromptInputModelPicker
+        v-if="models.length"
+        v-model="modelKey"
+        v-model:mode="modeKey"
+        :models="models"
+        :modes="modes"
+        mode-label="Effort"
+      />
       <PromptInputDictateButton />
+    </template>
+    <template
+      v-if="contexts.length || tools.length"
+      #footer
+    >
+      <PromptInputContextPicker
+        v-if="contexts.length"
+        v-model="contextKey"
+        :options="contexts"
+        placeholder="Choose project"
+      />
+      <PromptInputTools
+        v-if="tools.length"
+        v-model="toolKeys"
+        :tools="tools"
+      />
     </template>
     <template #hint
       >The AI assistant can make mistakes. Check important information before you act on

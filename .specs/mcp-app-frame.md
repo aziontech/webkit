@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: f9c98a9c300f95d920cea60d03025cc4c63f66359b53bbbe6d4acbe453533a30
+checksum: 0b5525d71d52a816db5ab67f518db8eb80646c7faa727c4b7f3573b7a4ad4ea3
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
@@ -153,11 +153,12 @@ _No slots._
 
 ## Tokens
 
-| Region  | Token                                                                                  |
-| ------- | -------------------------------------------------------------------------------------- |
-| frame   | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`, `var(--ring-color)` |
-| loading | `Skeleton` tokens                                                                      |
-| blocked | `Alert` tokens (`severity="warning"`)                                                  |
+| Region  | Token                                                                                                         |
+| ------- | ------------------------------------------------------------------------------------------------------------- |
+| frame   | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`, `var(--ring-color)`                        |
+| header  | `var(--bg-subtle)`, `var(--border-default)`, `.text-title-sm`, `var(--text-default)`, `.text-label-code-sm`, `var(--text-muted)` |
+| loading | `Skeleton` tokens                                                                                             |
+| blocked | `Alert` tokens (`severity="warning"`)                                                                         |
 
 ## Theme gaps
 

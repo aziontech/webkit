@@ -3,7 +3,7 @@ name: key-value-list
 category: content
 structure: composition
 status: implemented
-checksum: 442d0dabf993b04c416132c66857cce4343ff4583b3394a12cc0bae181d18f30
+checksum: ffcfd1a604b8398a4745b06135a6161dbeb5e64c30e31675550f4ce2f31a5e78
 spec_version: 6
 created: 2026-11-10
 last_updated: 2026-11-24
@@ -219,7 +219,7 @@ The loading shimmer belongs to the composed `Skeleton`, which already suppresses
 
 | Region                                        | Token (DESIGN.md)                          |
 | --------------------------------------------- | ------------------------------------------ |
-| key (`<dt>`)                                  | `.text-body-sm`, `var(--text-muted)`       |
+| key (`<dt>`)                                  | `.text-label-sm`, `font-medium`, `var(--text-muted)` |
 | value (`<dd>`)                                | `.text-body-sm`, `var(--text-default)`     |
 | empty-value marker                            | `.text-body-sm`, `var(--text-muted)`       |
 | group title                                   | `.text-heading-2xs`, `var(--text-default)` |

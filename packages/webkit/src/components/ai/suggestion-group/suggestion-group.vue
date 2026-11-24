@@ -11,7 +11,7 @@
     id: string
     /** The prompt as the reader would say it, under 72 characters. */
     label: string
-    /** Optional Azion icon class drawn before the label. */
+    /** Azion icon class drawn before the label; defaults to `az az-sparkles`. */
     icon?: string
   }
 
@@ -21,7 +21,7 @@
   })
 
   export interface SuggestionGroupProps {
-    /** Up to five prompts, most likely first. */
+    /** Ideally up to three prompts, most likely first. */
     items?: SuggestionGroupItem[]
     /** Accessible name of the group. Empty uses the locale catalog (`Suggested prompts`). */
     ariaLabel?: string
@@ -87,8 +87,7 @@
       @click="(event: MouseEvent) => choose(event, item)"
     >
       <i
-        v-if="item.icon"
-        :class="item.icon"
+        :class="item.icon || 'az az-sparkles'"
         class="shrink-0 text-(--text-muted)"
         aria-hidden="true"
       />

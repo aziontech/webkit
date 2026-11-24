@@ -234,9 +234,11 @@
   defineExpose({ focus })
 
   const BOX_CLASS =
-    'group/prompt-input-box relative flex w-full cursor-text flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) ' +
+    'group/prompt-input-box relative flex w-full cursor-text flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-input) ' +
     'bg-[color-mix(in_srgb,var(--bg-surface-raised)_88%,transparent)] p-(--spacing-xs) shadow-(--shadow-lg) backdrop-blur-md transition-colors ' +
-    'duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--ring-color) ' +
+    'duration-fast-02 ease-productive-entrance motion-reduce:transition-none ' +
+    '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) ' +
+    'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas) ' +
     'data-[invalid]:border-(--danger-border) ' +
     'data-[disabled]:bg-(--bg-disabled)'
 
@@ -315,13 +317,17 @@
         @select="(_event: Event, option: PromptInputMenuOption) => choose(option)"
       />
       <div class="flex flex-wrap items-end gap-(--spacing-2xs)">
-        <fieldset
+        <div
           v-if="slots.actions"
-          :disabled="disabled"
-          class="m-0 flex min-h-10 min-w-0 flex-wrap items-center gap-(--spacing-2xs) border-0 p-0"
+          class="flex min-h-10 min-w-0 items-center"
         >
-          <slot name="actions" />
-        </fieldset>
+          <fieldset
+            :disabled="disabled"
+            class="m-0 flex min-w-0 flex-wrap items-center gap-(--spacing-2xs) border-0 p-0"
+          >
+            <slot name="actions" />
+          </fieldset>
+        </div>
         <textarea
           ref="textareaEl"
           :value="model"

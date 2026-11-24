@@ -8,13 +8,14 @@
 
 ## When to use
 
-- The empty state of an assistant, to show what it can do (vertical, up to five).
-- After a broad response, to narrow it (horizontal chips, up to five, most likely first).
+- The empty state of an assistant, to show what it can do (vertical, ideally up to three, each with an icon).
+- After a broad response, to narrow it (horizontal chips, ideally up to three, most likely first, each with an icon).
 - A follow-up question with predefined answers.
 
 ## Do
 
-- Five or fewer, ordered by likelihood.
+- Ideally three or fewer, ordered by likelihood.
+- Always include an icon on every item (the component falls back to `az az-sparkles` when `icon` is omitted).
 - Write prompts as the reader would ask them, under 72 characters, sentence case, no end punctuation needed for questions you send verbatim.
 - Disable the group while a response is generating.
 - Remove follow-ups once the reader sends anything else.
@@ -23,7 +24,7 @@
 
 - Navigation or filters → `tabs`, `toggle-group`, `property-filter`.
 - Choices that are a form value → `radio-group`.
-- More than five options → let the reader type; the prompt input stays available.
+- More than three options → keep the set focused or let the reader type; the prompt input stays available.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -96,9 +97,9 @@ types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 
   const sent = ref('')
   const items = [
-    { id: 'ttl', label: 'What TTL should my images use?' },
-    { id: 'wildcard', label: 'How do I purge a whole folder?' },
-    { id: 'origin', label: 'Why does the origin still get requests?' }
+    { id: 'ttl', label: 'What TTL should my images use?', icon: 'az az-image' },
+    { id: 'wildcard', label: 'How do I purge a whole folder?', icon: 'az az-bolt' },
+    { id: 'origin', label: 'Why does the origin still get requests?', icon: 'az az-globe' }
   ]
 </script>
 
@@ -128,8 +129,7 @@ types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
   const items = [
     { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'az az-github' },
     { id: 'waf', label: 'Protect my site with a WAF', icon: 'az az-shield' },
-    { id: 'cache', label: 'Explain why my cache hit ratio dropped', icon: 'az az-chart-line' },
-    { id: 'domain', label: 'Point my domain to a workload', icon: 'az az-globe' }
+    { id: 'cache', label: 'Explain why my cache hit ratio dropped', icon: 'az az-chart-line' }
   ]
 </script>
 

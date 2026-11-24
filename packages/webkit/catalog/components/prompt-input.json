@@ -26,7 +26,7 @@
   "Set `queueable` only when the owner queues what is sent while a response runs, and shows the",
   "Clear `v-model` and `v-model:files` in the `submit` handler and keep focus in the input.",
   "Use `maxLength` only when the backend has a limit; the counter is the warning, and it stays hidden",
-  "Compose only the controls the product has. Attach first at the inline start; model, dictate and",
+  "Default to the full composer in blocks and new AI surfaces (`PromptInput.AttachButton` in `actions`, `PromptInput.ModelPicker` and `PromptInput.DictateButton` in `end`, `voice`, `PromptInput.ContextPicker` and `PromptInput.Tools` in `footer`, and the disclaimer in `hint`); omit a control only when the product explicitly does not offer that capability. Attach goes first at the inline start; model, dictate and Submit at the inline end, in that order; the secondary row holds what is not about this prompt (where the chat lives, the tools, a link to the desktop app).",
   "Show the upload state on each file (`loading`, `progress`, `error`); Submit waits for them.",
   "Set `voice` only when the product has a voice conversation; Submit replaces it as soon as there is"
  ]
