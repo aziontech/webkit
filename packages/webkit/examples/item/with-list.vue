@@ -20,7 +20,7 @@
           </Item.Media>
           <Item.Content>
             <Item.Title>storefront-prod</Item.Title>
-            <Item.Description>Deployed 2 minutes ago</Item.Description>
+            <Item.Description>Deployed from main</Item.Description>
           </Item.Content>
           <Item.Actions>
             <Button

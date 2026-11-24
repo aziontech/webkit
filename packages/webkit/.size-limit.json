@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "85.3 KB",
+    "limit": "85.4 KB",
     "entryOnly": true
   },
   {
@@ -282,7 +282,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/docs/doc-page-header/doc-page-header.vue",
-    "limit": "33.3 KB"
+    "limit": "33.4 KB"
   },
   {
     "name": "doc-table-of-contents",
@@ -484,7 +484,7 @@
   {
     "name": "article-body-section",
     "path": "src/components/section/article-body-section/article-body-section.vue",
-    "limit": "48.4 KB",
+    "limit": "48.8 KB",
     "entryOnly": true
   },
   {
@@ -687,7 +687,7 @@
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "60.45 KB",
+    "limit": "60.5 KB",
     "entryOnly": true
   },
   {
@@ -1107,13 +1107,13 @@
   {
     "name": "subheader",
     "path": "src/components/layout/subheader/subheader.vue",
-    "limit": "10.9 KB",
+    "limit": "10.95 KB",
     "entryOnly": true
   },
   {
     "name": "settings-group",
     "path": "src/components/layout/settings-group/settings-group.vue",
-    "limit": "12.15 KB"
+    "limit": "12.2 KB"
   },
   {
     "name": "settings-row",
@@ -1138,17 +1138,17 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "14.45 KB"
+    "limit": "14.5 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "12.9 KB"
+    "limit": "12.95 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "13.05 KB"
+    "limit": "13.1 KB"
   },
   {
     "name": "phone-input",
@@ -1230,7 +1230,7 @@
   {
     "name": "chat-message",
     "path": "src/components/ai/chat-message/index.ts",
-    "limit": "20.45 KB",
+    "limit": "20.5 KB",
     "entryOnly": true
   },
   {
@@ -1241,13 +1241,13 @@
   {
     "name": "chat-message-actions",
     "path": "src/components/ai/chat-message/chat-message-actions/chat-message-actions.vue",
-    "limit": "14.35 KB",
+    "limit": "14.4 KB",
     "entryOnly": true
   },
   {
     "name": "chat-message-feedback",
     "path": "src/components/ai/chat-message/chat-message-feedback/chat-message-feedback.vue",
-    "limit": "9.55 KB"
+    "limit": "16.7 KB"
   },
   {
     "name": "citation",
@@ -1298,7 +1298,7 @@
   {
     "name": "prompt-input-tools",
     "path": "src/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue",
-    "limit": "18.2 KB",
+    "limit": "18.25 KB",
     "entryOnly": true
   },
   {
@@ -1320,13 +1320,13 @@
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "43.6 KB",
+    "limit": "43.75 KB",
     "entryOnly": true
   },
   {
     "name": "conversation-history",
     "path": "src/components/ai/conversation-history/conversation-history.vue",
-    "limit": "17.4 KB"
+    "limit": "41.95 KB"
   },
   {
     "name": "feedback-reason-dialog",
@@ -1371,7 +1371,7 @@
   {
     "name": "button-group",
     "path": "src/components/action/button-group/button-group.vue",
-    "limit": "17.3 KB"
+    "limit": "17.35 KB"
   },
   {
     "name": "combobox",
@@ -1549,7 +1549,7 @@
   {
     "name": "split-button",
     "path": "src/components/action/split-button/split-button.vue",
-    "limit": "17.6 KB"
+    "limit": "17.65 KB"
   },
   {
     "name": "chart-card-content",
@@ -1973,7 +1973,7 @@
   {
     "name": "date-picker",
     "path": "src/components/input/date-picker/index.ts",
-    "limit": "15.45 KB",
+    "limit": "15.5 KB",
     "entryOnly": true
   },
   {
@@ -2185,7 +2185,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "86.95 KB"
+    "limit": "87.05 KB"
   },
   {
     "name": "use-console-layout",

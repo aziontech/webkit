@@ -18,8 +18,8 @@ hides on page 3, a state code reaches the reader as `pending_approval`. Each of 
 small bug and each comes back on the next screen, because the screen rebuilt something the API (or one
 shared module) should own.
 
-The contract is rule [`webkit-api-data`](../../rules/webkit-api-data.md). This skill is how to meet it
-with webkit pieces. How the request reaches the API (proxy, token, status codes) is
+The contract is rule [`webkit-api-data`](../../rules/webkit-api-data.md). This page is how to meet it
+with WebKit pieces. How the request reaches the API (proxy, token, status codes) is
 [`webkit-azion-api`](../webkit-azion-api/SKILL.md).
 
 ## When to use

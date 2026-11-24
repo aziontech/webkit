@@ -264,7 +264,7 @@ describe('Item', () => {
         expect(getByTestId('item-content')).toBeTruthy()
         expect(getByTestId('item-title').textContent?.trim()).toBe('storefront-prod')
         expect(getByTestId('item-actions')).toBeTruthy()
-        expect(getByText('Deployed 2 minutes ago')).toBeTruthy()
+        expect(getByText('Deployed from main')).toBeTruthy()
       })
 
       it('gives every row of the list examples its own title', () => {

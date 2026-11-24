@@ -9,7 +9,7 @@
   >
     <template #default>
       <p class="text-body-sm text-(--text-muted)">
-        Serves acme-store from 120 locations. The last deployment finished 2 minutes ago.
+        Serves acme-store from 120 locations. The last deployment succeeded.
       </p>
     </template>
   </Card>

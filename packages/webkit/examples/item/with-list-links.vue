@@ -19,7 +19,7 @@
           </Item.Media>
           <Item.Content>
             <Item.Title>storefront-prod</Item.Title>
-            <Item.Description>Deployed 2 minutes ago</Item.Description>
+            <Item.Description>Deployed from main</Item.Description>
           </Item.Content>
           <i
             class="az az-arrow-right text-(--text-muted)"
