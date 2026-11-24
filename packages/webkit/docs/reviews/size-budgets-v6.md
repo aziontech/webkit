@@ -1771,3 +1771,9 @@ Budget-raise: contact-hub-section 9.55 KB → 9.8 KB (measured 9.75 KB): the sec
 Budget-raise: newsletter-section 14 KB → 14.3 KB (measured 14.25 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
 Budget-raise: job-posting-section 63.05 KB → 63.35 KB (measured 63.32 KB): the click-open Hint (HELP-A-1) merged with the SectionBand frame (LA-2); both changes landed in the same entry.
 Budget-raise: feature-tabs-section 59.85 KB → 59.9 KB (measured 59.85 KB, a rounding hair over): the SectionBand frame (LA-2) merged with the in-product help branch.
+
+## One reason per raised entry (2026-11-24, audit-5 P3 lane L13)
+
+`check-size-ratchet.mjs` now asks for one `Budget-raise: <name> …: <reason>` line per raised entry, read from the PR body and from this file, instead of any single `Budget-raise:` line. Against `main` one raise had no line of its own:
+
+Budget-raise: network-map 6.5 KB → 7.1 KB (measured 6.97 KB): NetworkMap traffic (MapMesh rays and packets, a still frame under reduced motion), on in BannerArt network (M2.10 row 43); it peaked at 7.5 KB and was lowered to 7.1 KB.
