@@ -2,7 +2,7 @@
 name: message-thread
 category: content
 structure: composition
-status: approved
+status: implemented
 stability: preview
 spec_version: 2
 template: 2

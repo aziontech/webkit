@@ -2,7 +2,7 @@
 name: markdown-editor
 category: input
 structure: monolithic
-status: approved
+status: implemented
 stability: preview
 spec_version: 2
 template: 2

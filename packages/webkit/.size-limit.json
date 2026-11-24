@@ -2052,7 +2052,7 @@
   {
     "name": "markdown-editor",
     "path": "src/components/input/markdown-editor/markdown-editor.vue",
-    "limit": "31.8 KB",
+    "limit": "31.9 KB",
     "entryOnly": true
   },
   {

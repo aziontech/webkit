@@ -79,8 +79,7 @@
   const tab = ref<'write' | 'preview'>('write')
   const previewReady = ref(false)
   const previewFailed = ref(false)
-  const hadFocus = ref(false)
-  const leftSelection = ref<{ start: number; end: number } | null>(null)
+  let leftSelection: [number, number] | undefined
 
   const MentionList = defineAsyncComponent(
     () => import('../../ai/prompt-input/parts/prompt-input-menu-list.vue')
@@ -172,34 +171,31 @@
     if (event instanceof MouseEvent || event instanceof KeyboardEvent) mention.pick(event, picked)
   }
 
-  function rememberSelection(): void {
-    const field = fieldEl()
-    if (tab.value === 'write' && field && hadFocus.value)
-      leftSelection.value = { start: field.selectionStart, end: field.selectionEnd }
-  }
-
   function onTabChange(next: TabsValue | null | undefined): void {
-    if (next === 'preview') rememberSelection()
+    const field = fieldEl()
+    if (next === 'preview' && field) leftSelection = [field.selectionStart, field.selectionEnd]
     if (next === 'write' || next === 'preview') tab.value = next
     mention.close()
   }
 
-  async function insert(text: string): Promise<void> {
-    if (!text || !editable.value) return
-    const fromPreview = tab.value !== 'write'
-    tab.value = 'write'
-    mention.close()
-    await nextTick()
-    const field = fieldEl()
-    if (!field || !editable.value) return
-    const length = field.value.length
-    const current = hadFocus.value ? { start: field.selectionStart, end: field.selectionEnd } : null
-    const range = fromPreview ? leftSelection.value : current
-    const from = Math.min(range?.start ?? length, length)
-    const to = Math.min(range?.end ?? length, length)
-    const caret = from + text.length
-    applyEdit(field, { from, to, text, selectStart: caret, selectEnd: caret })
-    mention.close()
+  function insert(text: string): Promise<void> {
+    const kept = tab.value === 'preview' && leftSelection
+    const run = text && editable.value
+    if (run) tab.value = 'write'
+    return nextTick(() => {
+      const field = fieldEl()
+      if (!field || !run) return
+      if (kept) field.setSelectionRange(...kept)
+      const from = field.selectionStart
+      applyEdit(field, {
+        from,
+        to: field.selectionEnd,
+        text,
+        selectStart: from + text.length,
+        selectEnd: from + text.length
+      })
+      mention.close()
+    })
   }
 
   defineExpose({
@@ -286,7 +282,6 @@
             @keyup="onKeyup"
             @input="mention.readQuery"
             @click="mention.readQuery"
-            @focus="hadFocus = true"
             @blur="mention.close"
           />
           <MentionList
