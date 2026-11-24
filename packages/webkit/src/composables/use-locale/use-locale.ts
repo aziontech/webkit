@@ -1,4 +1,13 @@
-import { computed, type ComputedRef, inject, type MaybeRefOrGetter, provide, toValue } from 'vue'
+import {
+  computed,
+  type ComputedRef,
+  inject,
+  type MaybeRefOrGetter,
+  onMounted,
+  provide,
+  ref,
+  toValue
+} from 'vue'
 
 import type {
   Direction,
@@ -8,6 +17,7 @@ import type {
   PartialMessages,
   PluralMessage
 } from '../../i18n/types'
+import { useDirection } from '../use-direction'
 import {
   cached,
   createMessageHelpers,
@@ -24,20 +34,22 @@ export { DEFAULT_LOCALE, type LocaleContext, LocaleInjectionKey }
 /** The direction a provider asks for; `auto` derives it from the locale. */
 export type DirectionSetting = Direction | 'auto'
 
-/** Options accepted by `provideLocale`. */
+/** Options accepted by `provideLocale`; every option left empty comes from the provider above, and at the root from the device and the page. */
 export interface ProvideLocaleOptions {
-  /** BCP 47 locale tag; empty follows the device locale (`en-US` until mount). */
+  /** BCP 47 locale tag; empty inherits the parent provider's, at the root the device locale (`en-US` until mount). */
   locale: MaybeRefOrGetter<string>
-  /** Partial catalog deep-merged over the built-in one. */
+  /** Partial catalog deep-merged over the built-in one and over the parent provider's overrides. */
   messages?: MaybeRefOrGetter<PartialMessages | undefined>
-  /** Explicit direction, or `auto` to derive it from the locale. */
+  /** Explicit direction, or `auto` to derive it from the locale and otherwise inherit it. */
   dir?: MaybeRefOrGetter<DirectionSetting | undefined>
-  /** Catalogs the provider can pick from, keyed by locale tag; English must be one of them. */
+  /** Catalogs the provider can pick from, keyed by locale tag, added to the parent provider's; English must be one of them at the root. */
   catalogs: MaybeRefOrGetter<Record<string, Messages>>
-  /** Reference time for relative times below the provider; undefined reads the real clock. */
+  /** Reference time for relative times below the provider; undefined inherits the parent provider's, at the root the real clock. */
   now?: MaybeRefOrGetter<string | number | Date | undefined>
-  /** IANA time zone for absolute times below the provider; empty or undefined reads the browser's zone. */
+  /** IANA time zone for absolute times below the provider; empty inherits the parent provider's, at the root the browser's zone. */
   timeZone?: MaybeRefOrGetter<string | undefined>
+  /** Element the provider renders; a root provider with no direction of its own reads the page's direction around it after mount. */
+  el?: MaybeRefOrGetter<Element | null | undefined>
 }
 
 /** Plural forms passed to `plural`; `{count}` in a form is replaced by the formatted count. */
@@ -214,27 +226,63 @@ export interface ProvidedLocale extends LocaleContext {
 export function provideLocale(options: ProvideLocaleOptions): ProvidedLocale {
   const parent = inject(LocaleInjectionKey, null)
   const device = useDeviceLocale()
+  const page = useDirection(() => toValue(options.el) ?? null)
+  const mounted = ref(false)
+  onMounted(() => {
+    mounted.value = true
+  })
   const explicit = computed(() => toValue(options.locale) || '')
-  const locale = computed(() => explicit.value || device.value)
+  const locale = computed(() => explicit.value || parent?.locale.value || device.value)
+  const catalogs = computed<Record<string, Messages>>(() => ({
+    ...parent?.catalogs?.value,
+    ...toValue(options.catalogs)
+  }))
+  const overrides = computed<PartialMessages | undefined>(() => {
+    const inherited = parent?.overrides?.value
+    const own = toValue(options.messages)
+    if (!inherited) return own
+    return own ? (mergeMessages(inherited as Messages, own) as PartialMessages) : inherited
+  })
   const ownDir = computed<Direction | undefined>(() => {
     const requested = toValue(options.dir) ?? 'auto'
     if (requested !== 'auto') return requested
     return explicit.value ? directionOf(explicit.value) : undefined
   })
-  const dir = computed<Direction>(() => {
+  const declaredDir = computed<Direction | undefined>(() => {
     if (ownDir.value) return ownDir.value
+    if (parent) return parent.declaredDir ? parent.declaredDir.value : parent.dir.value
+    const rtlDevice =
+      directionOf(locale.value) === 'rtl' && findCatalog(locale.value, catalogs.value)
+    return rtlDevice ? 'rtl' : undefined
+  })
+  const dir = computed<Direction>(() => {
+    if (declaredDir.value) return declaredDir.value
     if (parent) return parent.dir.value
-    return findCatalog(locale.value, toValue(options.catalogs)) ? directionOf(locale.value) : 'ltr'
+    return mounted.value ? page.value : 'ltr'
   })
   const messages = computed(() => {
-    const catalogs = toValue(options.catalogs)
-    const found = findCatalog(locale.value, catalogs)
+    const found = findCatalog(locale.value, catalogs.value)
     if (!found && explicit.value) warnMissingCatalog(locale.value)
-    return mergeMessages(found ?? (catalogs[DEFAULT_LOCALE] as Messages), toValue(options.messages))
+    const base =
+      found ?? (catalogs.value[DEFAULT_LOCALE] as Messages | undefined) ?? parent?.messages.value
+    return mergeMessages(base as Messages, overrides.value)
   })
-  const now = computed<number | undefined>(() => epochOf(toValue(options.now)))
-  const timeZone = computed<string | undefined>(() => toValue(options.timeZone) || undefined)
-  const context: LocaleContext = { locale, dir, messages, now, timeZone }
+  const now = computed<number | undefined>(
+    () => epochOf(toValue(options.now)) ?? parent?.now?.value
+  )
+  const timeZone = computed<string | undefined>(
+    () => toValue(options.timeZone) || parent?.timeZone?.value || undefined
+  )
+  const context: LocaleContext = {
+    locale,
+    dir,
+    messages,
+    now,
+    timeZone,
+    declaredDir,
+    catalogs,
+    overrides
+  }
   provide(LocaleInjectionKey, context)
   return { ...context, ownDir }
 }

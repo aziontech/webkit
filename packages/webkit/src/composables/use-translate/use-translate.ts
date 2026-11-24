@@ -30,6 +30,12 @@ export interface LocaleContext {
   now?: ComputedRef<number | undefined>
   /** IANA time zone that absolute times below the provider read in (`Timestamp`); undefined reads the browser's zone. */
   timeZone?: ComputedRef<string | undefined>
+  /** Direction a provider in the chain sets (its `dir`, its `locale`, or a registered right-to-left device locale); undefined when the root provider inherits the page's direction. */
+  declaredDir?: ComputedRef<Direction | undefined>
+  /** Catalogs registered along the provider chain, keyed by locale tag. */
+  catalogs?: ComputedRef<Record<string, Messages>>
+  /** Partial catalog overrides merged along the provider chain. */
+  overrides?: ComputedRef<PartialMessages | undefined>
 }
 
 /** What `useTranslate()` returns. */
@@ -180,7 +186,7 @@ export function useTranslate(fallback: PartialMessages = {}): UseTranslateReturn
   return { locale, dir, t }
 }
 
-/** `dir` and `lang` of the nearest `ConfigProvider`, for an element teleported out of it (empty with no provider). */
+/** `dir` and `lang` of the nearest `ConfigProvider`, for an element teleported out of it (empty with no provider; no `dir` when the providers inherit the page's direction). */
 export interface PortalLocaleAttrs {
   dir?: Direction
   lang?: string
@@ -189,6 +195,11 @@ export interface PortalLocaleAttrs {
 export function usePortalLocale(): ComputedRef<PortalLocaleAttrs> {
   const context = inject(LocaleInjectionKey, null)
   return computed<PortalLocaleAttrs>(() =>
-    context ? { dir: context.dir.value, lang: context.locale.value } : {}
+    context
+      ? {
+          dir: context.declaredDir ? context.declaredDir.value : context.dir.value,
+          lang: context.locale.value
+        }
+      : {}
   )
 }
