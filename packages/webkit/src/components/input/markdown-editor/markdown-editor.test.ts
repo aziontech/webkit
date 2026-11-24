@@ -221,11 +221,11 @@ describe('MarkdownEditor', () => {
 
   describe('mentions', () => {
     it('opens a filtered listbox after @ and wires the combobox attributes', async () => {
-      const { field, getByRole, getByTestId } = mountEditor({ mentions: PEOPLE })
+      const { field, findByRole, getByTestId } = mountEditor({ mentions: PEOPLE })
       expect(field).toHaveAttribute('aria-autocomplete', 'list')
       await userEvent.click(field)
       await userEvent.keyboard('Hi @jo')
-      const list = getByRole('listbox', { name: 'People' })
+      const list = await findByRole('listbox', { name: 'People' })
       expect(getByTestId('markdown-editor')).toHaveAttribute('data-mention-state', 'open')
       expect(list.querySelectorAll('[role="option"]')).toHaveLength(1)
       expect(field).toHaveAttribute('aria-controls', list.id)
