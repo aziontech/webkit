@@ -42,7 +42,7 @@
 
   const displayView = (key: string) => {
     const view = props.views.find((entry) => entry.key === key)
-    return view ? labelOf(view) : key
+    return view ? labelOf(view) : ''
   }
 </script>
 
@@ -52,6 +52,8 @@
       <Select
         v-model="viewKey"
         size="medium"
+        placeholder="View"
+        :disabled="!views.length"
         :display-value="displayView"
       >
         <Select.Trigger

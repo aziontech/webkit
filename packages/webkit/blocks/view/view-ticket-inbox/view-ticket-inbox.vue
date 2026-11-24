@@ -146,12 +146,15 @@
 
   const viewKey = defineModel<string>('viewKey', { default: 'my-open' })
 
+  const fallback = <T,>(sample: T[]): T[] => (props.loading || props.error ? [] : sample)
   const items = computed<TicketInboxTicket[]>(
-    () => props.tickets ?? (props.loading || props.error ? [] : sampleTicketsOf(viewKey.value))
+    () => props.tickets ?? fallback(sampleTicketsOf(viewKey.value))
   )
-  const viewList = computed<TicketInboxView[]>(() => props.views ?? sampleViews)
-  const clock = computed(() => props.now ?? (props.tickets ? undefined : sampleNow))
-  const agentList = computed<TicketInboxAgent[]>(() => props.agents ?? sampleAgents)
+  const viewList = computed<TicketInboxView[]>(() => props.views ?? fallback(sampleViews))
+  const clock = computed(
+    () => props.now ?? (props.tickets || props.loading || props.error ? undefined : sampleNow)
+  )
+  const agentList = computed<TicketInboxAgent[]>(() => props.agents ?? fallback(sampleAgents))
   const activeView = computed(() => viewList.value.find((view) => view.key === viewKey.value))
   const offerAllOpen = computed(
     () => viewKey.value !== 'all-open' && viewList.value.some((view) => view.key === 'all-open')

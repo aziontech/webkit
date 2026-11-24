@@ -6,8 +6,8 @@ import type { TicketInboxStatus, TicketInboxTicket } from '../view-ticket-inbox.
 export const TICKET_STATUSES: TicketInboxStatus[] = ['New', 'Open', 'Pending', 'On hold', 'Solved']
 
 export const statusSeverity: Record<TicketInboxStatus, TagSeverity> = {
-  New: 'info',
-  Open: 'warning',
+  New: 'warning',
+  Open: 'info',
   Pending: 'neutral',
   'On hold': 'neutral',
   Solved: 'success'
