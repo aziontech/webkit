@@ -8453,12 +8453,12 @@ What each prop and event does, and the go-live code: [blocks/settings/settings-f
 - Surface: app
 - Source: `blocks/shell/shell-console/shell-console.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/shell-console")`
-- Components: Alert, Avatar, Badge, Button, Card, Command, ConsoleLayout, `ConsoleLayoutRoot`, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, HighlightButton, IconButton, Input, Item, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, `TableCellId`, `TableCellLink`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-color-mode`
+- Components: Alert, Avatar, Badge, Button, Card, Command, ConsoleLayout, `ConsoleLayoutRoot`, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, HelpPanel, HighlightButton, IconButton, Input, Item, Item, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, `TableCellId`, `TableCellLink`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-color-mode`
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
 
-platform shell; console shell; app shell; sidebar layout; navigation rail; dashboard layout; admin layout; app layout with sidebar; estrutura do console; layout com menu lateral; menu lateral; console; console layout; layout do console; notifications panel; notifications drawer; notification center; central de notificações; painel de notificações; switch account; account switcher; organization switcher; change organization; trocar conta; trocar organização; selecionar conta; console layout component; ConsoleLayout; app layout with router view; layout do console com RouterView; account list failed to load; switch account error; erro ao carregar contas
+platform shell; console shell; app shell; sidebar layout; navigation rail; dashboard layout; admin layout; app layout with sidebar; estrutura do console; layout com menu lateral; menu lateral; console; console layout; layout do console; notifications panel; notifications drawer; notification center; central de notificações; painel de notificações; switch account; account switcher; organization switcher; change organization; trocar conta; trocar organização; selecionar conta; console layout component; ConsoleLayout; app layout with router view; layout do console com RouterView; account list failed to load; switch account error; erro ao carregar contas; page help; help panel; info link; contextual help; ajuda da página; painel de ajuda
 
 The application shell every signed-in page renders inside. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: the navigation rail (wordmark, grouped navigation with drill-in levels, the account at its foot), one global header (breadcrumbs, search, the app's actions, the avatar) and the ⌘K palette. All of that is one component, `ConsoleLayout`: this block is the app's `App.vue` — compose it once around `RouterView` and every console page is only the body rendered through its default slot. The body here is a stand-in for `view/view-table`.
 
@@ -8510,6 +8510,7 @@ What each prop and event does, and the go-live code: [blocks/shell/shell-console
 - Keep the navigation in one data file shared by the app; the rail and the palette both read it.
 - Give every row an `href` (never `to` or `path`); derive a static `breadcrumbs` trail from the route.
 - Let a detail page set its own trail, control crumb included, with `ConsoleLayout.Breadcrumb`.
+- Open a page's help from `ConsoleLayout.ToolsTrigger` in its `PageHeader` `meta` slot, with the `HelpPanel` in `tools`.
 - Frame a list or form body with `layout-boundary` + `layout-column`; open a detail body flush on `PageTabs`.
 
 ## Don't
@@ -8522,6 +8523,7 @@ What each prop and event does, and the go-live code: [blocks/shell/shell-console
 - Don't render the account switcher in both `sidebar-header` and `header-leading` at once; pick by the slots' `compact`.
 - Don't leave an empty account table when the list fails to load; show the danger `Alert` with Retry in its place.
 - Don't open the notifications region as a popover over the page; it is the layout's tools region beside the content.
+- Don't open page help from a boxed `IconButton`, a typed `?` or a `Tooltip` beside the title; the page's `Info` link is the one way in.
 
 ## Copy
 
@@ -8545,6 +8547,7 @@ What each prop and event does, and the go-live code: [blocks/shell/shell-console
 - ListPage: a first-level list page in the `ConsoleLayout` default slot: no breadcrumb on a first level, the page opens on its `PageHeader` (title, description, Documentation and the create action) over the page body. The controls row and the table belong to `view/view-table`, which builds them from the Table toolbar parts; the shell does not draw them.
 - DetailPage: a resource detail page rendered through `ConsoleLayout`. The page body sets its own trail with `ConsoleLayout.Breadcrumb`: Applications and the application as `items`, then the environment in its slot, a `Select` with `variant="ghost"` and `size="small"` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). While compact the header hides the crumbs but keeps the environment `Select` in place of the brand, so Deploy always has its target in view; the body repeats the rest of the trail under `md` in its own `nav` row named Application (a ghost back `IconButton` to Applications and the application name). The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
 - Notifications: the ListPage through `ConsoleLayout` with the bell after Create and Agent in the `actions` slot; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Notifications"`), a region beside the content and a drawer when narrow. The `tools` slot holds the list as `Item.List` of `Item` rows (`Item.Media type="icon"` toned through `data-type`, title, description, time, `Item.Actions`), five at a time with `Show older` for the rest: unread items marked with a `New` tag (and a visually hidden `Unread:` prefix), Edit and Redeploy on each deploy, Mark all as read, Clear all (it empties the list and toasts `Notifications cleared.` with Undo, which brings them back), and the EmptyState `You are all caught up` once cleared. The failed deploy also shows as a flash Alert (Edit, Redeploy) in the `notifications` slot above the page. The bell's `aria-label` carries the unread count, `aria-pressed` follows the region, and the `Badge` on it is hidden from assistive technology.
+- PageHelp: the ListPage through `ConsoleLayout` with page help. `ConsoleLayout.ToolsTrigger` is first in the `PageHeader`'s `meta` slot, so the `Info` link (named `Info about applications`) sits right after the h1 on the same line; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Help"`, a drawer when narrow), carries `aria-expanded` and, while open, `aria-controls` on the region's body. The `tools` slot holds the `HelpPanel` topic: what an application is, when to create one, and the Learn more link to the documentation. The region's close button closes it as well; focus stays on the link.
 - AccountSwitch: the ListPage through `ConsoleLayout` with the current account in the `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar` with its initials, the name, a sort glyph), `Switch account (Ctrl+O)` on its tooltip (to the right) and `aria-keyshortcuts`; the rail slot renders nothing while `compact` is true, and the same switcher moves to the `header-leading` slot, before the breadcrumbs, with the avatar and the chevron only (the name stays in its `aria-label`). It and the shortcut open a large `Dialog`, rendered beside the layout, with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `TableCellStatus`, ID and client ID as `TableCellId`. Each name is a `Button` with `variant="link"`. The table pages ten rows at a time (`paginated`), and while the list loads on open it shows the `Table` loading rows. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search. The search `Input` takes its `id` from `useId()` so the dialog can focus it on open.
 - AccountSwitchError: the AccountSwitch dialog when the account list fails to load. A danger `Alert` (`The account list could not be loaded.`, action `Retry`) takes the place of the account `Table` under the search; the search, the title and the footer stay. Retry loads the list again and shows the table.
 
@@ -8555,7 +8558,7 @@ What each prop and event does, and the go-live code: [blocks/shell/shell-console
 
 ## Variants
 
-`ListPage` (primary) · `DetailPage` · `Notifications` · `AccountSwitch` · `AccountSwitchError`. Code: [blocks/shell/shell-console.md](blocks/shell/shell-console.md), `get_block("shell/shell-console", { variant })`.
+`ListPage` (primary) · `DetailPage` · `Notifications` · `PageHelp` · `AccountSwitch` · `AccountSwitchError`. Code: [blocks/shell/shell-console.md](blocks/shell/shell-console.md), `get_block("shell/shell-console", { variant })`.
 
 ---
 
@@ -18539,6 +18542,7 @@ The frame is static apart from its resize handles.
 - Title sections with the question the reader is asking (`What is a workload?`), not with a noun (`Overview`).
 - Put links to the documentation in `HelpPanel.Footer`, at the end, not inline in every section.
 - Close affordances belong to the host. Do not put a close button in `HelpPanel.Header`; the `Drawer` or side rail already has one.
+- How it opens in the console: the panel is the body of `ConsoleLayout`'s `tools` slot, and the page opens it with `ConsoleLayout.ToolsTrigger`, the `Info` link placed first in `PageHeader`'s `meta` slot, right after the page title. The trigger's `click` runs before the region toggles, so the page sets the topic there. Never open help from a boxed icon button, a typed `?` or a `Tooltip`.
 
 ## Don’t
 
@@ -27452,7 +27456,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 - One `AppLayout` per page, at the root. Do not nest them.
 - Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer; call `closeNavigation` from the scope when an item is chosen in the drawer.
 - Put the control that opens the navigation drawer in the header, and show it only when the header scope's `compact` is true.
-- Put a help button in the header that calls `toggleTools`; the tools region carries its own close button.
+- Put a help button in the header that calls `toggleTools`; the tools region carries its own close button. In the console, `ConsoleLayout` wraps this layout and a page opens its own help from `ConsoleLayout.ToolsTrigger`, the `Info` link after the page title.
 - Use the split panel for the selected item of a collection. Close it when the selection clears.
 - Pass `storageKey` when the reader's choices (split panel size and position, navigation and tools open) should survive a reload.
 - Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background.
@@ -27727,7 +27731,7 @@ Unbound, each one keeps its own local state.
 
 # Console Layout
 
-> The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `SidebarMenu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`, sets its own trail with `ConsoleLayout.Breadcrumb`, and fills a fixed-height main with `data-layout-fill` on its root. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.
+> The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `SidebarMenu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`, sets its own trail with `ConsoleLayout.Breadcrumb`, opens its help in the tools region with `ConsoleLayout.ToolsTrigger` (the `Info` link after its title), and fills a fixed-height main with `data-layout-fill` on its root. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.
 
 - Import: `import ConsoleLayoutRoot from '@aziontech/webkit/console-layout-root'`
 - Compound import (dot notation, not tree-shakeable): `import ConsoleLayout from '@aziontech/webkit/console-layout'`
@@ -27749,6 +27753,9 @@ Unbound, each one keeps its own local state.
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
 - Put an account switcher in `sidebar-header` (full width under the wordmark, the design sample's rail) and, below the compact breakpoint, in `header-leading` while `compact`; page-level flash messages go in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
 - A page's control crumb is its `ConsoleLayout.Breadcrumb`, never `App.vue`'s `breadcrumbs` slot.
+- Page help (level D of the in-product help standard) is a `HelpPanel` in the `tools` slot, opened by `ConsoleLayout.ToolsTrigger` placed first in `PageHeader`'s `meta` slot, so the `Info` link sits right after the page title on the same line. One per page. Never a boxed `IconButton`, a typed `?` or a `Tooltip` to open page help; never hand-build the toggle with `useConsoleLayout()` and a `Button`.
+- The app-wide help or notifications entry in the header (`actions` with `toggleTools`) and a page's `Info` link drive the same tools region: the page swaps the panel's topic in the trigger's `click` handler, which runs before the region toggles. To keep the region open while switching topic, call `event.preventDefault()` in the handler and then `useConsoleLayout().openTools()`.
+- A section of a page (a `Subheader`, a `SettingsGroup`, a `Card` header) takes no `Info` link: one per page, after the h1. A section explains itself with its `description` (level A) or a `Hint` after its title (level C).
 - A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))` (lint `webkit/no-viewport-height-calc`, also run by the authoring ratchet over blocks and examples).
 - Bind `v-model:navigation-open` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
 - Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`. `useConsoleLayout()` throws outside a `ConsoleLayout`, so a misplaced call fails loudly.
@@ -27812,6 +27819,7 @@ Unbound, each one keeps its own local state.
 ## Sub-component imports
 
 - `@aziontech/webkit/console-layout-breadcrumb`
+- `@aziontech/webkit/console-layout-tools-trigger`
 
 ## Sub-components
 
@@ -27824,13 +27832,18 @@ packages/webkit/src/components/layout/console-layout/
 ├── injection-key.ts            (the page context and the trail registry)
 ├── composables/use-console-layout.ts
 ├── console-layout.test.ts
-└── console-layout-breadcrumb/console-layout-breadcrumb.vue
+├── console-layout-breadcrumb/console-layout-breadcrumb.vue
+└── console-layout-tools-trigger/console-layout-tools-trigger.vue
 ```
 
 - `console-layout-breadcrumb/console-layout-breadcrumb.vue` — a page's own trail.
   - Props: `items: BreadcrumbItemData[]` default `[]` — the page's crumbs, each `{ label, href? }`; without a control crumb the last one is the current page.
   - Events: _none_ (crumb clicks are followed by the layout).
   - Slots: `default` — one or more controls that end the trail (a `Select` with `variant="ghost"`, `size="small"` and an `aria-label`); each top-level element is its own crumb (environment then version: two `Select`s); they keep the page's reactivity.
+- `console-layout-tools-trigger/console-layout-tools-trigger.vue` — the page's `Info` link: a `Button` with `variant="link"` (text only, `.text-body-sm`, the link colour) that opens and closes the layout's tools region.
+  - Props: `label: string` default `''` — the visible label; empty uses the locale catalog (`consoleLayout.info`, `Info`). `ariaLabel: string` default `''` — a fuller accessible name that starts with the visible label (`Info about workloads`, WCAG 2.5.3); empty leaves the visible label as the name.
+  - Events: `click` — `(event: MouseEvent)`, fired before the region toggles, so the page can set the `HelpPanel` topic first; `event.preventDefault()` keeps the region as it is.
+  - Slots: _none_.
 
 ## v-model
 
@@ -27862,6 +27875,7 @@ packages/webkit/src/components/layout/console-layout/
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Choosing a row in the compact drawer closes it.
 - A page's control crumb is the last item of the header's `Breadcrumb` list (while compact, the only items of a `Breadcrumb` list that holds just the controls); it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
+- Page help: `ConsoleLayout.ToolsTrigger` is a native `button` (a disclosure: `Enter` and `Space` toggle) with `aria-expanded` and, while open, `aria-controls` pointing at the tools region's body (`useId()`-based, stable in the server render). Its name is the visible `Info` or an `aria-label` that starts with it. Focus stays on the trigger when the region opens; the region's close button (`AppLayout`) and the trigger both close it. Tests: `console-layout.test.ts` › tools trigger.
 
 ## Examples
 
@@ -28509,6 +28523,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 - `breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
 - `icon`: one decorative glyph or a square `Avatar`, at most 32 px; it is `aria-hidden` by default, since the title already names the page.
 - `meta`: one or two small `Tag`s (status, environment). Longer facts (owner, created date) belong in the page body, not the header.
+- Page help: put `ConsoleLayout.ToolsTrigger` first in `meta`, so the `Info` link sits right after the title on the same line and opens the page's `HelpPanel` in the console's tools region. One per page. Never a boxed `IconButton`, a typed `?` or a `Tooltip` beside the title; a one-line explanation is the `description`.
 - `tabs`: a `Tabs` row of the page's sections. A page that already shows `PageTabs` above the header leaves this slot empty; never both.
 
 ## Don’t
@@ -28523,6 +28538,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 - `page-tabs` — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.
 - `breadcrumb` — the usual content of the `breadcrumbs` slot.
 - `tag` — the usual content of the `meta` slot (a status, an environment, a version).
+- `console-layout` — `ConsoleLayout.ToolsTrigger`, the page's `Info` link, goes first in the `meta` slot and opens the page's `HelpPanel` in the layout's tools region.
 - `button` — the usual content of the `actions` slot (`size="medium"`; the create action primary, the others outlined).
 
 ## Props
@@ -28542,7 +28558,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 | `actions` | — | The actions the page owns, Documentation first and the create action on the outer edge. |
 | `breadcrumbs` | — | The trail back to the parent pages, above the title row; usually a `Breadcrumb` with `items`. |
 | `icon` | — | A leading glyph or square avatar before the title, decorative (`aria-hidden`). |
-| `meta` | — | Short facts beside the title, such as a status `Tag`; wraps under the title when the row is narrow. |
+| `meta` | — | Short facts beside the title, such as a status `Tag`, and the page's `Info` link (`ConsoleLayout.ToolsTrigger`, first); wraps under the title when the row is narrow. |
 | `tabs` | — | The tabs of the page's sections, across the full width under the title and actions. |
 
 ## States
@@ -29798,6 +29814,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - Keep the description to one sentence; put longer guidance in the band body.
 - Set `anchor` on bands people link to, so the h2 takes the id and the copy-link button appears.
 - Keep band actions to one or two outlined medium buttons.
+- Help for a band: the `description` first (level A of the in-product help standard). Subheader has no slot on its title line, so it takes no help glyph and never an `Info` link: the page's one `Info` link (`ConsoleLayout.ToolsTrigger`) sits after the h1 in `PageHeader`. A settings band that needs a click-open note uses `SettingsGroup`, whose `hint` renders a `Hint` after its title (level C).
 
 ## Don’t
 

@@ -18435,7 +18435,8 @@
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/console-layout-root",
    "subcomponents": [
-    "@aziontech/webkit/console-layout-breadcrumb"
+    "@aziontech/webkit/console-layout-breadcrumb",
+    "@aziontech/webkit/console-layout-tools-trigger"
    ],
    "models": [
     "searchOpen",
@@ -18756,6 +18757,14 @@
    "kind": "subcomponent",
    "parent": "console-layout",
    "treeShakeableImport": "@aziontech/webkit/console-layout-breadcrumb",
+   "surface": "app"
+  },
+  "console-layout-tools-trigger": {
+   "import": "@aziontech/webkit/console-layout-tools-trigger",
+   "target": "./src/components/layout/console-layout/console-layout-tools-trigger/console-layout-tools-trigger.vue",
+   "kind": "subcomponent",
+   "parent": "console-layout",
+   "treeShakeableImport": "@aziontech/webkit/console-layout-tools-trigger",
    "surface": "app"
   },
   "use-console-layout": {
@@ -19232,7 +19241,7 @@
     {
      "name": "meta",
      "scope": "—",
-     "notes": "Short facts beside the title, such as a status `Tag`; wraps under the title when the row is narrow."
+     "notes": "Short facts beside the title, such as a status `Tag`, and the page's `Info` link (`ConsoleLayout.ToolsTrigger`, first); wraps under the title when the row is narrow."
     },
     {
      "name": "tabs",
@@ -37459,7 +37468,13 @@
     "layout do console com RouterView",
     "account list failed to load",
     "switch account error",
-    "erro ao carregar contas"
+    "erro ao carregar contas",
+    "page help",
+    "help panel",
+    "info link",
+    "contextual help",
+    "ajuda da página",
+    "painel de ajuda"
    ],
    "skills": [
     "webkit-navigation",
@@ -37482,11 +37497,13 @@
     "DialogTitle",
     "DropdownMenu",
     "EmptyState",
+    "HelpPanel",
     "HighlightButton",
     "IconButton",
     "Input",
     "Item",
     "Item",
+    "Link",
     "PageHeader",
     "PageTabs",
     "PanelBody",
@@ -37520,11 +37537,13 @@
     "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/help-panel",
     "@aziontech/webkit/highlight-button",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/item-root",
+    "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
     "@aziontech/webkit/panel-body",
@@ -37549,6 +37568,9 @@
     },
     {
      "name": "Notifications"
+    },
+    {
+     "name": "PageHelp"
     },
     {
      "name": "AccountSwitch"

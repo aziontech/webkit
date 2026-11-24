@@ -20,6 +20,7 @@ export const MARKET_ALIASES = {
   'help-tooltip': 'hint',
   'image-viewer': 'file-preview',
   'info-icon': 'hint',
+  'info-link': 'console-layout-tools-trigger',
   'input-otp': 'otp-input',
   kebab: 'dropdown-menu',
   keyboard: 'kbd',

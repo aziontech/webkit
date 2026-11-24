@@ -1379,6 +1379,10 @@
       "types": "./types/components/layout/console-layout/console-layout-breadcrumb/console-layout-breadcrumb.vue.d.ts",
       "default": "./src/components/layout/console-layout/console-layout-breadcrumb/console-layout-breadcrumb.vue"
     },
+    "./console-layout-tools-trigger": {
+      "types": "./types/components/layout/console-layout/console-layout-tools-trigger/console-layout-tools-trigger.vue.d.ts",
+      "default": "./src/components/layout/console-layout/console-layout-tools-trigger/console-layout-tools-trigger.vue"
+    },
     "./use-console-layout": {
       "types": "./types/components/layout/console-layout/composables/use-console-layout.d.ts",
       "default": "./src/components/layout/console-layout/composables/use-console-layout.ts"
@@ -3605,6 +3609,9 @@
       ],
       "console-layout-breadcrumb": [
         "./types/components/layout/console-layout/console-layout-breadcrumb/console-layout-breadcrumb.vue.d.ts"
+      ],
+      "console-layout-tools-trigger": [
+        "./types/components/layout/console-layout/console-layout-tools-trigger/console-layout-tools-trigger.vue.d.ts"
       ],
       "use-console-layout": [
         "./types/components/layout/console-layout/composables/use-console-layout.d.ts"

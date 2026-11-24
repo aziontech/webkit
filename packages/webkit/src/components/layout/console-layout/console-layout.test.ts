@@ -6,6 +6,7 @@ import { createSSRApp, defineComponent, h, KeepAlive, nextTick, onMounted, ref }
 import { renderToString, type SSRContext } from 'vue/server-renderer'
 
 import FillPageExample from '../../../../examples/console-layout/fill-page.vue'
+import HelpInfoExample from '../../../../examples/console-layout/help-info.vue'
 import NavigationOpenExample from '../../../../examples/console-layout/navigation-open.vue'
 import PageBreadcrumbsExample from '../../../../examples/console-layout/page-breadcrumbs.vue'
 import SidebarHeaderExample from '../../../../examples/console-layout/sidebar-header.vue'
@@ -18,6 +19,7 @@ import CommandItem from '../../overlay/command/command-item/command-item.vue'
 import { useConsoleLayout } from './composables/use-console-layout'
 import ConsoleLayout, { type ConsoleLayoutNavGroup } from './console-layout.vue'
 import ConsoleLayoutBreadcrumb from './console-layout-breadcrumb/console-layout-breadcrumb.vue'
+import ConsoleLayoutToolsTrigger from './console-layout-tools-trigger/console-layout-tools-trigger.vue'
 import ConsoleLayoutCompound from './index'
 
 const navigation: ConsoleLayoutNavGroup[] = [
@@ -1242,6 +1244,144 @@ describe('ConsoleLayout', () => {
       } finally {
         warn.mockRestore()
       }
+    })
+  })
+
+  describe('tools trigger', () => {
+    const mountWithTrigger = (
+      props: Record<string, unknown> = {},
+      triggerProps: Record<string, unknown> = {}
+    ) =>
+      mount(
+        props,
+        {},
+        {
+          default: () =>
+            h('div', [h('h1', 'Workloads'), h(ConsoleLayoutToolsTrigger, triggerProps)]),
+          tools: () => h('p', 'What is a workload?')
+        }
+      )
+
+    it('is attached to the compound and renders the Info link with its own test id', () => {
+      expect(ConsoleLayoutCompound.ToolsTrigger).toBe(ConsoleLayoutToolsTrigger)
+      const { getByRole } = mountWithTrigger()
+      const trigger = getByRole('button', { name: 'Info' })
+      expect(trigger.getAttribute('data-testid')).toBe('console-layout-tools-trigger')
+      expect(trigger.getAttribute('data-variant')).toBe('link')
+    })
+
+    it('lets a consumer data-testid, label and aria-label win', () => {
+      const { getByRole } = mountWithTrigger(
+        {},
+        { 'data-testid': 'page-info', label: 'Help', ariaLabel: 'Help about workloads' }
+      )
+      const trigger = getByRole('button', { name: 'Help about workloads' })
+      expect(trigger.textContent?.trim()).toBe('Help')
+      expect(trigger.getAttribute('data-testid')).toBe('page-info')
+    })
+
+    it('opens and closes the tools region, with aria-expanded and aria-controls', async () => {
+      const onTools = vi.fn()
+      const onClick = vi.fn()
+      const { getByRole, getByText, queryByText } = mountWithTrigger(
+        { 'onUpdate:toolsOpen': onTools },
+        { onClick }
+      )
+      const trigger = getByRole('button', { name: 'Info' })
+      expect(trigger.getAttribute('aria-expanded')).toBe('false')
+      expect(trigger.getAttribute('data-state')).toBe('closed')
+      expect(trigger.hasAttribute('aria-controls')).toBe(false)
+
+      await userEvent.click(trigger)
+      expect(onClick).toHaveBeenCalledTimes(1)
+      expect(onClick.mock.calls[0]?.[0]).toBeInstanceOf(MouseEvent)
+      expect(onTools).toHaveBeenLastCalledWith(true)
+      await waitFor(() => expect(getByText('What is a workload?')).toBeTruthy())
+      expect(trigger.getAttribute('aria-expanded')).toBe('true')
+      expect(trigger.getAttribute('data-state')).toBe('open')
+      const controls = trigger.getAttribute('aria-controls')
+      expect(controls).toBeTruthy()
+      expect(document.getElementById(controls ?? '')?.textContent).toContain('What is a workload?')
+
+      await userEvent.click(trigger)
+      expect(onTools).toHaveBeenLastCalledWith(false)
+      await waitFor(() => expect(queryByText('What is a workload?')).toBeNull())
+      expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    })
+
+    it('toggles from the keyboard with Enter and Space', async () => {
+      const onTools = vi.fn()
+      const { getByRole } = mountWithTrigger({ 'onUpdate:toolsOpen': onTools })
+      const trigger = getByRole('button', { name: 'Info' })
+      trigger.focus()
+      await userEvent.keyboard('{Enter}')
+      expect(onTools).toHaveBeenLastCalledWith(true)
+      await userEvent.keyboard(' ')
+      expect(onTools).toHaveBeenLastCalledWith(false)
+      expect(document.activeElement).toBe(trigger)
+    })
+
+    it('keeps the region as it is when the click handler prevents the default', async () => {
+      const onTools = vi.fn()
+      const { getByRole } = mountWithTrigger(
+        { 'onUpdate:toolsOpen': onTools },
+        { onClick: (event: MouseEvent) => event.preventDefault() }
+      )
+      await userEvent.click(getByRole('button', { name: 'Info' }))
+      expect(onTools).not.toHaveBeenCalled()
+    })
+
+    it('exposes the tools state and actions on the page context', async () => {
+      let layout: ReturnType<typeof useConsoleLayout> | null = null
+      const Page = defineComponent({
+        setup() {
+          layout = useConsoleLayout()
+          return () => h('p', 'Page')
+        }
+      })
+      const { getByText } = mount({}, {}, { default: () => h(Page), tools: () => h('p', 'Topic') })
+      expect(layout!.toolsOpen.value).toBe(false)
+      expect(layout!.toolsId).toMatch(/-tools$/)
+      layout!.openTools()
+      await waitFor(() => expect(getByText('Topic')).toBeTruthy())
+      expect(layout!.toolsOpen.value).toBe(true)
+      layout!.toggleTools()
+      await nextTick()
+      expect(layout!.toolsOpen.value).toBe(false)
+      layout!.openTools()
+      await nextTick()
+      layout!.closeTools()
+      await nextTick()
+      expect(layout!.toolsOpen.value).toBe(false)
+    })
+
+    it('renders and emits click outside a ConsoleLayout, with no disclosure state', async () => {
+      const onClick = vi.fn()
+      const { getByRole } = render(ConsoleLayoutToolsTrigger, { attrs: { onClick } })
+      const trigger = getByRole('button', { name: 'Info' })
+      expect(trigger.hasAttribute('aria-expanded')).toBe(false)
+      expect(trigger.hasAttribute('aria-controls')).toBe(false)
+      expect(trigger.hasAttribute('data-state')).toBe(false)
+      await userEvent.click(trigger)
+      expect(onClick).toHaveBeenCalledTimes(1)
+    })
+
+    it('renders the help info example open, closes from the region and has no axe violations', async () => {
+      const { container, getByRole, findByRole } = render(
+        defineComponent({
+          render: () => h('div', { style: { width: '1200px' } }, [h(HelpInfoExample)])
+        })
+      )
+      const trigger = getByRole('button', { name: 'Info about workloads' })
+      const panel = await findByRole('complementary', { name: 'Help: Workloads' })
+      expect(trigger.getAttribute('aria-expanded')).toBe('true')
+      expect(
+        panel.closest(`#${CSS.escape(trigger.getAttribute('aria-controls') ?? '')}`)
+      ).toBeTruthy()
+      await expectNoA11yViolations(container)
+      await userEvent.click(getByRole('button', { name: 'Close help' }))
+      await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('false'))
+      await expectNoA11yViolations(container)
     })
   })
 })

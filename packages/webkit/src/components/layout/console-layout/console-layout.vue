@@ -1,5 +1,15 @@
 <script setup lang="ts">
-  import { computed, provide, proxyRefs, readonly, ref, shallowRef, useAttrs, watch } from 'vue'
+  import {
+    computed,
+    provide,
+    proxyRefs,
+    readonly,
+    ref,
+    shallowRef,
+    useAttrs,
+    useId,
+    watch
+  } from 'vue'
 
   import {
     type AppNavGroup,
@@ -141,6 +151,8 @@
     'account-menu'(): unknown
   }>()
 
+  const toolsId = `${useId()}-tools`
+
   provide(ConsoleLayoutInjectionKey, {
     openSearch: () => {
       searchOpen.value = true
@@ -148,7 +160,18 @@
     closeSearch: () => {
       searchOpen.value = false
     },
-    searchOpen: readonly(searchOpen)
+    searchOpen: readonly(searchOpen),
+    openTools: () => {
+      toolsOpen.value = true
+    },
+    closeTools: () => {
+      toolsOpen.value = false
+    },
+    toggleTools: () => {
+      toolsOpen.value = !toolsOpen.value
+    },
+    toolsOpen: readonly(toolsOpen),
+    toolsId
   })
 
   const trails = shallowRef<ConsoleLayoutTrail[]>([])
@@ -422,7 +445,12 @@
         v-if="$slots['tools']"
         #tools
       >
-        <slot name="tools" />
+        <div
+          :id="toolsId"
+          :data-testid="`${testId}__tools`"
+        >
+          <slot name="tools" />
+        </div>
       </template>
 
       <main

@@ -17,6 +17,7 @@
 - Keep the description to one sentence; put longer guidance in the band body.
 - Set `anchor` on bands people link to, so the h2 takes the id and the copy-link button appears.
 - Keep band actions to one or two outlined medium buttons.
+- Help for a band: the `description` first (level A of the in-product help standard). Subheader has no slot on its title line, so it takes no help glyph and never an `Info` link: the page's one `Info` link (`ConsoleLayout.ToolsTrigger`) sits after the h1 in `PageHeader`. A settings band that needs a click-open note uses `SettingsGroup`, whose `hint` renders a `Hint` after its title (level C).
 
 ## Don’t
 
