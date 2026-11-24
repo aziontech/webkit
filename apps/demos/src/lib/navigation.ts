@@ -4,8 +4,6 @@ import type {
 } from '@aziontech/webkit/console-layout-root'
 import { reactive } from 'vue'
 
-import { sampleHistory, sampleHistoryNow } from '../blocks/ai-chat.sample'
-
 const SOON = 'Soon'
 
 const leadsSomewhere = (item: ConsoleLayoutNavItem): boolean =>
@@ -23,45 +21,11 @@ const markPageless = (item: ConsoleLayoutNavItem): ConsoleLayoutNavItem => {
   }
 }
 
-const DAY = 86_400_000
-
-function copilotGroups(): ConsoleLayoutNavGroup[] {
-  const now = new Date(sampleHistoryNow).getTime()
-  const today = new Date(sampleHistoryNow).setHours(0, 0, 0, 0)
-  const buckets: { label: string; test: (at: number) => boolean }[] = [
-    { label: 'Today', test: (at) => at >= today },
-    { label: 'Yesterday', test: (at) => at >= today - DAY },
-    { label: 'Previous 7 days', test: (at) => at >= now - 7 * DAY },
-    { label: 'Previous 30 days', test: (at) => at >= now - 30 * DAY },
-    { label: 'Older', test: () => true }
-  ]
-  const groups: ConsoleLayoutNavGroup[] = [
-    { items: [{ id: 'copilot-new', label: 'New chat', icon: 'az az-square-pen', href: '/assistant' }] }
-  ]
-  const left = [...sampleHistory]
-  for (const bucket of buckets) {
-    const items = left.filter((chat) => bucket.test(new Date(chat.updatedAt).getTime()))
-    if (!items.length) continue
-    for (const chat of items) left.splice(left.indexOf(chat), 1)
-    groups.push({
-      label: bucket.label,
-      items: items.map((chat) => ({ id: `chat-${chat.id}`, label: chat.title, href: `/assistant/c/${chat.id}` }))
-    })
-  }
-  return groups
-}
-
 const tree: ConsoleLayoutNavGroup[] = [
   {
     items: [
       { id: 'home', label: 'Home', icon: 'az az-home', href: '/onboarding' },
-      {
-        id: 'copilot',
-        label: 'AI Copilot',
-        icon: 'az az-ask-azion',
-        type: 'drill',
-        groups: copilotGroups()
-      },
+      { id: 'copilot', label: 'AI Copilot', icon: 'az az-ask-azion', href: '/assistant' },
       { id: 'projects', label: 'Projects', icon: 'az az-folder' },
       { id: 'deployments', label: 'Deployments', icon: 'az az-cloud-upload' }
     ]

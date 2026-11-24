@@ -83,13 +83,13 @@ const routes: RouteRecordRaw[] = [
     path: '/assistant',
     name: 'assistant',
     component: () => import('./pages/ai-chat-page.vue'),
-    meta: { title: 'AI Copilot' }
+    meta: { shell: 'copilot', title: 'AI Copilot' }
   },
   {
     path: '/assistant/c/:chatId',
     name: 'assistant-chat',
     component: () => import('./pages/ai-chat-page.vue'),
-    meta: { title: 'AI Copilot' }
+    meta: { shell: 'copilot', title: 'AI Copilot' }
   },
   {
     path: '/settings/ai-keys',

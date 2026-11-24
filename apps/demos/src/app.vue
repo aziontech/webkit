@@ -15,6 +15,7 @@
   import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import CopilotShell from './components/copilot-shell.vue'
   import DemoBar from './components/demo-bar.vue'
   import { account, navigation } from './lib/navigation'
   import { settings } from './lib/settings'
@@ -25,6 +26,7 @@
   const route = useRoute()
   const router = useRouter()
   const focused = computed(() => route.meta.shell === 'focused')
+  const copilot = computed(() => route.meta.shell === 'copilot')
   const breadcrumbs = computed(() => (route.meta.breadcrumbs ?? []) as BreadcrumbItemData[])
 
   const recents = computed(() =>
@@ -81,6 +83,9 @@
       <RouterView />
       <ShortcutsDialog />
     </template>
+    <CopilotShell v-else-if="copilot">
+      <RouterView />
+    </CopilotShell>
     <ConsoleLayoutRoot
       v-else
       :navigation="navigation"
