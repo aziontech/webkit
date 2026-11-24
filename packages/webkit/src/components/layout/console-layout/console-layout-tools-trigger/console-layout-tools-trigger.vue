@@ -32,8 +32,8 @@
   const { t } = useTranslate({ consoleLayout: en.consoleLayout })
   const layout = useConsoleLayout({ optional: true })
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'console-layout-tools-trigger'
+  const testId = computed<string>(() =>
+    String(attrs['data-testid'] ?? 'console-layout-tools-trigger')
   )
 
   const open = computed(() => layout?.toolsOpen.value ?? false)

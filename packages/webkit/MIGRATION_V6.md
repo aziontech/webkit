@@ -1410,6 +1410,15 @@ rewrite this, because the replacement depends on whether the child was a link or
 </Item>
 ```
 
+### `Hint` opens on click and below the glyph
+
+`Hint` is now a click-open note: it opens on click, tap, Enter or Space (no longer on hover), holds
+1 to 3 sentences and an optional docs link (`href`, `linkLabel`, `target`), and its `side` default
+is `bottom` (was `top`). Pass `side="top"` to keep the old position. The glyph's accessible name is
+`ariaLabel` (default "More information") and the note is its description. Explanations that sat in
+a `Tooltip` move to a `Hint` or a field description: a `Tooltip` only names a control in a few
+words (`webkit/prefer-hint` flags one longer than 80 characters).
+
 ### `LineFigure` is removed
 
 `LineFigure` (`@aziontech/webkit/line-figure`) and its line figures are removed, with no

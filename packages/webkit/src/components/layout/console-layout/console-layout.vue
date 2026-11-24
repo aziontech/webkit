@@ -1,15 +1,5 @@
 <script setup lang="ts">
-  import {
-    computed,
-    provide,
-    proxyRefs,
-    readonly,
-    ref,
-    shallowRef,
-    useAttrs,
-    useId,
-    watch
-  } from 'vue'
+  import { computed, provide, proxyRefs, ref, shallowRef, useAttrs, useId, watch } from 'vue'
 
   import {
     type AppNavGroup,
@@ -49,6 +39,7 @@
     type ConsoleLayoutTrail,
     ConsoleLayoutTrailsInjectionKey
   } from './injection-key'
+  import { createLayoutContext } from './lib/layout-context'
   import { revealActive } from './lib/reveal-active'
   import ConsoleLayoutHeaderStart from './parts/console-layout-header-start.vue'
   import ConsoleLayoutPalette from './parts/console-layout-palette.vue'
@@ -153,26 +144,7 @@
 
   const toolsId = `${useId()}-tools`
 
-  provide(ConsoleLayoutInjectionKey, {
-    openSearch: () => {
-      searchOpen.value = true
-    },
-    closeSearch: () => {
-      searchOpen.value = false
-    },
-    searchOpen: readonly(searchOpen),
-    openTools: () => {
-      toolsOpen.value = true
-    },
-    closeTools: () => {
-      toolsOpen.value = false
-    },
-    toggleTools: () => {
-      toolsOpen.value = !toolsOpen.value
-    },
-    toolsOpen: readonly(toolsOpen),
-    toolsId
-  })
+  provide(ConsoleLayoutInjectionKey, createLayoutContext(searchOpen, toolsOpen, toolsId))
 
   const trails = shallowRef<ConsoleLayoutTrail[]>([])
 

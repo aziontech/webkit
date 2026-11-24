@@ -1749,3 +1749,5 @@ Budget-raise: schema-form 64.55 KB → 68.85 KB (measured 68.80 KB): renders Hin
 Budget-raise: hint 6.4 KB → 10.7 KB (measured 10.64 KB): Hint is now the click-open note: it composes Popover (trigger, panel, focus return, light dismiss) and a docs Link instead of the hover Tooltip (in-product help level C, owner-approved 2026-11-23).
 
 Budget-raise: llms-full.txt 2,400,000 → 2,415,000 bytes (measured 2,405,402): in-product help (HELP-1 to HELP-C-3), the click-open Hint, the ConsoleLayout.ToolsTrigger part and their spec, example and guidance pages in the full AI bundle.
+Budget-raise: css-console 24.25 KB → 24.6 KB (measured 24.54 KB): Field and SettingsRow now carry the click-open Hint, so a console screen compiles the Popover and Link classes (in-product help, HELP-A-1).
+Budget-raise: catalog/ 1,415,000 → 1,425,000 bytes (measured 1,417,876): the ConsoleLayout.ToolsTrigger part, the Hint and Info examples and the shell-console PageHelp state (in-product help).

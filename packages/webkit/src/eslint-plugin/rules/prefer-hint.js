@@ -25,16 +25,21 @@ function literalOf(expression) {
   return null
 }
 
+function boundName(attribute) {
+  if (attribute.key?.name?.name !== 'bind') return null
+  const argument = attribute.key.argument
+  return argument?.type === 'VIdentifier' ? argument.name : null
+}
+
+function attributeValue(attribute, name) {
+  if (!attribute.directive)
+    return attribute.key?.name === name ? (attribute.value?.value ?? '') : null
+  return boundName(attribute) === name ? literalOf(attribute.value?.expression) : null
+}
+
 function staticAttribute(node, name) {
   for (const attribute of node.startTag?.attributes ?? []) {
-    if (!attribute.directive) {
-      if (attribute.key?.name === name) return attribute.value?.value ?? ''
-      continue
-    }
-    if (attribute.key?.name?.name !== 'bind') continue
-    const argument = attribute.key.argument
-    if (argument?.type !== 'VIdentifier' || argument.name !== name) continue
-    const value = literalOf(attribute.value?.expression)
+    const value = attributeValue(attribute, name)
     if (value !== null) return value
   }
   return null

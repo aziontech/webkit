@@ -60,7 +60,7 @@ function dirBytes(path) {
 
 test('catalog/ stays under 1.4 MB because block and example sources are read from blocks/ and examples/', () => {
   const bytes = dirBytes(fileURLToPath(new URL('../../catalog', import.meta.url)))
-  assert.ok(bytes < 1_415_000, `${bytes} bytes`)
+  assert.ok(bytes < 1_425_000, `${bytes} bytes`)
 })
 
 test('splitCatalog points sfc, variants and guidelines at their shipped files and keeps everything else', () => {
