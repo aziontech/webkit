@@ -1492,6 +1492,31 @@ function checkExampleIndex(rel, text, ctx = {}) {
   }
   if (/^(Templates|Patterns)\//.test(json.title || ''))
     out.push(v('block-word', rel, 1, `title "${json.title}" — the word is "Blocks" (${RULE_DOC}).`))
+  out.push(...retiredPathWords(rel, json))
+  return out
+}
+
+const RETIRED_PATH = /\b(?:Templates|Patterns)\/[A-Z][\w ]*(?:\/[\w ]+)*/
+
+function retiredPathWords(rel, json) {
+  const out = []
+  const walk = (value, key) => {
+    if (typeof value === 'string') {
+      const hit = key !== 'title' && value.match(RETIRED_PATH)
+      if (hit)
+        out.push(
+          v(
+            'block-word',
+            rel,
+            1,
+            `"${key}" cites the retired path "${hit[0]}" — name the block by its id (${RULE_DOC}).`
+          )
+        )
+    } else if (Array.isArray(value)) value.forEach((item) => walk(item, key))
+    else if (value && typeof value === 'object')
+      for (const [k, item] of Object.entries(value)) walk(item, k)
+  }
+  walk(json, '')
   return out
 }
 
@@ -1539,6 +1564,7 @@ function checkBlockFile(rel, text) {
     out.push(
       v('block-word', rel, 1, `title "${json.title}" — the word is "Blocks/…" (${RULE_DOC}).`)
     )
+  out.push(...retiredPathWords(rel, json))
   for (const variant of json.variants || []) {
     if (!variant.file) continue
     const stem = variant.file

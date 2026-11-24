@@ -8767,7 +8767,7 @@ What each part takes: [blocks/shell/shell-site.md](blocks/shell/shell-site.md).
 
 # StateAsyncSubmit (`state/state-async-submit`)
 
-> The async counterpart of the server rejection in the SectionRejected state of the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends.
+> The async counterpart of the server rejection in the SectionRejected state of the `state/state-form-validation` block: a deploy that runs for about half a minute, so the user walks away before it ends.
 
 - Surface: app
 - Source: `blocks/state/state-async-submit/state-async-submit.vue` in `@aziontech/webkit`

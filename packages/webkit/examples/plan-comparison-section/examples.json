@@ -37,7 +37,6 @@
       "json": "site-tier-matrix.json"
     }
   ],
-  "siteTitle": "Templates/Marketing/Comparison/PlanComparisonSection",
   "sitePreview": {
     "layout": "fullscreen",
     "background": "dark"
