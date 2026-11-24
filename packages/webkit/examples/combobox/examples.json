@@ -19,7 +19,7 @@
     },
     {
       "name": "States",
-      "summary": "`disabled`, `invalid` and `loading` side by side.",
+      "summary": "`disabled`, `invalid` (inside a Field, with a Field.Error) and `loading` side by side.",
       "file": "states.vue"
     }
   ]

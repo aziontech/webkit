@@ -153,17 +153,17 @@ describe('screen-reader smoke · overlays', () => {
         - heading "Command menu" [level=2]
         - button "Close"
         - combobox "Search commands…" [expanded]
-        - listbox:
+        - listbox "Command menu":
           - group "Suggestions":
             - text: Suggestions
-            - option "Deploy Project" [selected]
-            - option "Create Application"
-            - option "Go to Settings"
+            - option "Deploy project" [selected]
+            - option "Create application"
+            - option "Go to settings"
           - group "Commands":
             - text: Commands
             - option "Search everything Ctrl K"
-            - option "New Application Ctrl N"
-            - option "Toggle Theme Ctrl ⇧ L""
+            - option "New application Ctrl N"
+            - option "Toggle theme Ctrl ⇧ L""
     `)
   })
 

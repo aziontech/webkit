@@ -11301,7 +11301,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 # Copy Prompt Button
 
-> The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip carries the design system's AI treatment, the same three layers as `HighlightButton`: a blurred gradient glow that turns once behind it and rests, the brand-accent gradient over the glow, and a dark scrim over both that holds the white label at contrast; on hover the gradient and the scrim fade to a quarter and the glow blooms through. It is dark in both themes (it renders under `data-theme="dark"`), so it reads as the AI entry point next to a primary button, and a tooltip says what it does. The marks are single-colour and decorative, drawn in the chip's own ink; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor"). With `closable` a dismiss button sits beside the chip, and dismissing removes both from the layout.
+> The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip carries the design system's AI treatment, the same three layers as `HighlightButton`: a blurred gradient glow that turns once behind it and rests, the brand-accent gradient over the glow, and a dark scrim over both that holds the white label at contrast; on hover the gradient and the scrim fade to a quarter and the glow blooms through. It is dark in both themes (it renders under `data-theme="dark"`; a disabled chip drops it and takes the page theme's disabled fill, like every other disabled button), so it reads as the AI entry point next to a primary button, and a tooltip says what it does. The marks are single-colour and decorative, drawn in the chip's own ink; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor"). With `closable` a dismiss button sits beside the chip, and dismissing removes both from the layout.
 
 - Import: `import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'`
 - Category: action · Surface: app · Structure: monolithic
@@ -11363,7 +11363,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ## States
 
-- Visual states: `idle`, `hover` (the gradient and the scrim fade to 25% and the glow blooms through), `focus-visible` (ring), `copied` (the label swaps to a check and `Copied` for two seconds, without changing the width), `disabled` (the AI layers hide and the chip takes the disabled fill), `dismissed` (`open` is false: the chip and its dismiss button unmount).
+- Visual states: `idle`, `hover` (the gradient and the scrim fade to 25% and the glow blooms through), `focus-visible` (ring), `copied` (the label swaps to a check and `Copied` for two seconds, without changing the width), `disabled` (the AI layers hide, the chip leaves `data-theme="dark"` and takes the page theme's disabled fill, the same grey as a disabled `Button`), `dismissed` (`open` is false: the chip and its dismiss button unmount).
 - `data-state` is `idle` or `copied`; `data-disabled` mirrors `disabled`.
 - Not applicable: `loading`, `empty`, `error`, `readonly`, `invalid`, `open`/`closed` (the tooltip owns its own open state).
 
@@ -11930,21 +11930,21 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
   import { ref } from 'vue'
 
   const options = [
-    { label: 'Label', value: 'option-1' },
-    { label: 'Label', value: 'option-2' },
-    { label: 'Label', value: 'option-3' },
-    { label: 'Label', value: 'option-4' },
-    { label: 'Label', value: 'option-5' }
+    { label: 'Overview', value: 'overview' },
+    { label: 'Requests', value: 'requests' },
+    { label: 'Errors', value: 'errors' },
+    { label: 'Latency', value: 'latency' },
+    { label: 'Bandwidth', value: 'bandwidth' }
   ]
 
-  const selected = ref('option-1')
+  const selected = ref('overview')
 </script>
 
 <template>
   <ToggleGroup
     v-model="selected"
     :options="options"
-    aria-label="Segmented options"
+    aria-label="Metrics view"
   />
 </template>
 ```
@@ -23007,7 +23007,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
   <Alert
     severity="info"
     label="Your workload finished deploying in 42 seconds."
-    action-label="Label"
+    action-label="View workload"
   />
 </template>
 ```
@@ -23665,7 +23665,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 <template>
   <StatusIndicator
     severity="success"
-    label="Status"
+    label="Healthy"
   />
 </template>
 ```
@@ -24073,7 +24073,7 @@ The imperative API is backed by a small reactive store composable, declared here
 
 - Visible focus: every control and button keeps its own ring.
 - Keyboard map: Tab moves through the cells of a row, its reorder controls, its Remove, then the next row; Add moves focus to the first control of the new row; Remove moves focus to the same position in the next row, else the previous row, else Add. With `reorderable`: Arrow Up / Arrow Down on a grip, or Alt+Arrow Up / Alt+Arrow Down on any control of a row, move the row one position inside its group (on a group's grip, the group); focus follows the moved row (the same control, or its grip when that control is now disabled). Drag and drop is a pointer shortcut only; every move is reachable by keyboard and by the buttons.
-- ARIA: the rows are a `list` named by `ariaLabel`; each cell is a `Field` whose label is programmatically tied to its control (visually hidden on wide containers, where one header row shows the labels and is `aria-hidden`); an error is a `FieldError` referenced by `aria-describedby` and sets `aria-invalid`; each Remove is named "Remove item n" (or `removeButtonLabel` n); each grip is a button named "Reorder item n" ("Reorder group n") and described by the hint "Drag, or press Arrow Up or Arrow Down to move."; Move up / Move down are named "Move item n up" / "Move item n down" ("Move group n up" / "down"); groups are `group`s named "Group n"; a polite `status` region announces "Item n added", "Item n removed" and "Item n moved to position m." ("Group n moved to position m.").
+- ARIA: the rows are a `list` named by `ariaLabel`; each cell is a `Field` whose label is programmatically tied to its control (visually hidden on wide containers, where one header row shows the labels, with the same `*` after a required column's label as the stacked label, and is `aria-hidden`); an error is a `FieldError` referenced by `aria-describedby` and sets `aria-invalid`; each Remove is named "Remove item n" (or `removeButtonLabel` n); each grip is a button named "Reorder item n" ("Reorder group n") and described by the hint "Drag, or press Arrow Up or Arrow Down to move."; Move up / Move down are named "Move item n up" / "Move item n down" ("Move group n up" / "down"); groups are `group`s named "Group n"; a polite `status` region announces "Item n added", "Item n removed" and "Item n moved to position m." ("Group n moved to position m.").
 - Contrast ≥4.5:1 from the semantic text tokens, including the disabled state.
 - Touch target: Remove follows `size` (40 px at `large`); the stacked layout keeps it at the row's end.
 
@@ -24317,7 +24317,7 @@ The imperative API is backed by a small reactive store composable, declared here
 - ARIA: when neither `clickable` nor `selectable`, the root is a non-interactive `<span>` container; when either is set, it is `role="button"` with `tabindex="0"`. A `selectable` chip is a toggle button: `aria-pressed="true|false"` mirrors the `selected` model and flips on every activation, so the state is announced, not only painted. When `disabled`, the root carries `aria-disabled="true"` (interactive or not) and an interactive root drops `tabindex`; the remove control is a native disabled `<button>`. The remove control is a real `<button type="button">`; the `az az-x` glyph is `aria-hidden="true"`. Its `aria-label` and its tooltip text are **the same derived string** — `Remove <label>` when `label` is set, `Remove` otherwise — so what is shown and what is announced cannot drift.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the remove icon.
 - `motion-reduce:transition-none` on every transition the chip declares (variant/border colour, remove-button colour). The chip declares no dismiss animation at all, so there is nothing to suppress there.
-- Touch target: the remove control is drawn at 24×24 px at `medium` and 16×16 px at `small`; a `[data-slot=touch-target]` span extends its hit area to at least 24×24 px at both sizes (WCAG 2.5.8), and to 44×44 px on a coarse pointer.
+- Touch target: the remove control is drawn at 24×24 px at `medium` and 16×16 px at `small`; a `[data-slot=touch-target]` span extends its hit area to at least 24×24 px at both sizes (WCAG 2.5.8), and to 44×44 px on a coarse pointer; the chip root does not clip it (no `overflow-hidden`: the label truncates on its own), so the target may extend past the chip's edge.
 
 ## Examples
 
@@ -25498,7 +25498,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 </script>
 
 <template>
-  <InputGroupRoot>
+  <InputGroupRoot class="w-full max-w-(--container-xs)">
     <InputGroupInput
       aria-label="Domain"
       placeholder="domain"
@@ -26799,22 +26799,24 @@ packages/webkit/src/components/input/radio-group/
 </script>
 
 <template>
-  <Select
-    aria-label="Option"
-    v-model="value"
-    size="large"
-    placeholder="Select an option"
-  >
-    <Select.Trigger />
-    <Select.Content>
-      <Select.Item
-        v-for="o in options"
-        :key="o.value"
-        :value="o.value"
-        >{{ o.label }}</Select.Item
-      >
-    </Select.Content>
-  </Select>
+  <div class="w-full max-w-(--container-xs)">
+    <Select
+      aria-label="Option"
+      v-model="value"
+      size="large"
+      placeholder="Select an option"
+    >
+      <Select.Trigger />
+      <Select.Content>
+        <Select.Item
+          v-for="o in options"
+          :key="o.value"
+          :value="o.value"
+          >{{ o.label }}</Select.Item
+        >
+      </Select.Content>
+    </Select>
+  </div>
 </template>
 ```
 
@@ -32343,9 +32345,9 @@ packages/webkit/src/components/overlay/command/
     <CommandInput placeholder="Search commands…" />
     <CommandList>
       <CommandGroup label="Suggestions">
-        <CommandItem value="deploy">Deploy Project</CommandItem>
-        <CommandItem value="new-app">Create Application</CommandItem>
-        <CommandItem value="settings">Go to Settings</CommandItem>
+        <CommandItem value="deploy">Deploy project</CommandItem>
+        <CommandItem value="new-app">Create application</CommandItem>
+        <CommandItem value="settings">Go to settings</CommandItem>
       </CommandGroup>
       <CommandSeparator />
       <CommandGroup label="Commands">
@@ -32357,12 +32359,12 @@ packages/webkit/src/components/overlay/command/
         <CommandItem
           value="new-app-cmd"
           shortcut="meta+n"
-          >New Application</CommandItem
+          >New application</CommandItem
         >
         <CommandItem
           value="toggle-theme"
           shortcut="meta+shift+l"
-          >Toggle Theme</CommandItem
+          >Toggle theme</CommandItem
         >
       </CommandGroup>
     </CommandList>
@@ -32477,7 +32479,7 @@ packages/webkit/src/components/overlay/command/
     v-model:open="open"
     title="Remove domain"
     description="shop.example.com stops answering for this resource once you save. Traffic already pointed at it gets no response."
-    confirm-label="Remove Domain"
+    confirm-label="Remove domain"
     @confirm="open = false"
   >
     <template #trigger>

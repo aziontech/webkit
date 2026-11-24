@@ -146,7 +146,7 @@
 
   const ROOT_CLASS =
     'group relative inline-flex w-fit shrink-0 items-stretch gap-(--spacing-2xs) p-(--spacing-2xs) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) ' +
-    'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10'
+    'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[disabled]:bg-(--bg-disabled)'
 
   const SEGMENT_CLASS =
     'relative z-(--z-control) inline-flex shrink-0 items-center justify-center rounded-(--shape-button) cursor-pointer ' +
@@ -156,7 +156,7 @@
     'data-[state=active]:text-(--text-default) data-[state=inactive]:text-(--text-muted) ' +
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
     '[&:not([data-state=active])]:hover:bg-(--bg-hover) ' +
-    'hover:text-(--text-default) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
+    'hover:text-(--text-default) disabled:cursor-not-allowed disabled:text-(--text-disabled)!'
 </script>
 
 <template>
@@ -176,7 +176,7 @@
       aria-hidden="true"
       :data-testid="`${testId}__indicator`"
       :style="indicator ?? undefined"
-      class="pointer-events-none absolute top-0 z-0 rounded-(--shape-button) bg-(--bg-selected) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      class="pointer-events-none absolute top-0 z-0 rounded-(--shape-button) bg-(--bg-selected) group-data-[disabled]:bg-(--bg-surface) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
     />
     <Tooltip
       v-for="(mode, index) in MODES"

@@ -5,7 +5,7 @@
 <template>
   <StatusIndicator
     severity="success"
-    label="Status"
+    label="Deploying"
     loading
   />
 </template>

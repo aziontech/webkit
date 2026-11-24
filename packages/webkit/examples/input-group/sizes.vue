@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex w-full max-w-(--container-xs) flex-col gap-4">
     <InputGroup
       dir="ltr"
       size="small"

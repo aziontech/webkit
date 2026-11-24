@@ -22,7 +22,7 @@
     />
     <SplitButton
       variant="outline"
-      label="Outlined"
+      label="Outline"
       :items="items"
     />
   </div>

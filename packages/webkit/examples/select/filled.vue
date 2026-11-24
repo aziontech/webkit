@@ -12,19 +12,21 @@
 </script>
 
 <template>
-  <Select
-    aria-label="Option"
-    v-model="value"
-    placeholder="Select an option"
-  >
-    <Select.Trigger />
-    <Select.Content>
-      <Select.Item
-        v-for="o in options"
-        :key="o.value"
-        :value="o.value"
-        >{{ o.label }}</Select.Item
-      >
-    </Select.Content>
-  </Select>
+  <div class="w-full max-w-(--container-xs)">
+    <Select
+      aria-label="Option"
+      v-model="value"
+      placeholder="Select an option"
+    >
+      <Select.Trigger />
+      <Select.Content>
+        <Select.Item
+          v-for="o in options"
+          :key="o.value"
+          :value="o.value"
+          >{{ o.label }}</Select.Item
+        >
+      </Select.Content>
+    </Select>
+  </div>
 </template>

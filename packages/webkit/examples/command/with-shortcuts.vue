@@ -27,17 +27,17 @@
         <CommandItem
           value="command"
           shortcut="meta+k"
-          >Open Command Menu</CommandItem
+          >Open command menu</CommandItem
         >
         <CommandItem
           value="command-palette"
           shortcut="meta+shift+p"
-          >Open Command Palette</CommandItem
+          >Open command palette</CommandItem
         >
         <CommandItem
           value="close"
           shortcut="esc"
-          >Close Overlay</CommandItem
+          >Close overlay</CommandItem
         >
       </CommandGroup>
     </CommandList>

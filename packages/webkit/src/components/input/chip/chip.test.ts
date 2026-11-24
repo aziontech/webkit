@@ -513,6 +513,15 @@ describe('Chip', () => {
       const target = getByTestId('chip__remove').querySelector('[data-slot="touch-target"]')
       expect(target?.getAttribute('aria-hidden')).toBe('true')
     })
+
+    it('does not clip the remove hit area to the chip edge', () => {
+      const { getByTestId } = render(Chip, { props: { label: 'region', removable: true } })
+      let node: HTMLElement | null = getByTestId('chip__remove').parentElement
+      while (node && node !== getByTestId('chip').parentElement) {
+        expect(node.classList).not.toContain('overflow-hidden')
+        node = node.parentElement
+      }
+    })
   })
 
   describe('Disabled example', () => {

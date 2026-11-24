@@ -101,7 +101,7 @@
     v-model:open="open"
     title="Remove domain"
     description="shop.example.com stops answering for this resource once you save. Traffic already pointed at it gets no response."
-    confirm-label="Remove Domain"
+    confirm-label="Remove domain"
     @confirm="open = false"
   >
     <template #trigger>

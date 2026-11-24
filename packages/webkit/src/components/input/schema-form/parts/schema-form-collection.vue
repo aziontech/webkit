@@ -45,6 +45,18 @@
     { key: 'value', label: t('schemaForm.mapValue') }
   ])
 
+  const itemTitleOf = (node: SchemaFormNode) =>
+    (node.schema.items as SchemaFormSchema | undefined)?.title ?? ''
+
+  const addLabelOf = (node: SchemaFormNode) => {
+    const title = itemTitleOf(node)
+    if (!title) return ''
+    const word = /^\p{Lu}\p{Ll}/u.test(title)
+      ? title.charAt(0).toLocaleLowerCase() + title.slice(1)
+      : title
+    return t('schemaForm.addItem', { item: word })
+  }
+
   const itemLabelOf = (node: SchemaFormNode, index: number) =>
     (node.schema.items as SchemaFormSchema | undefined)?.title
       ? `${(node.schema.items as SchemaFormSchema).title} ${index + 1}`
@@ -69,6 +81,7 @@
       :new-item="newToken"
       :min-items="node.schema.minItems ?? 0"
       :limit="node.schema.maxItems"
+      :add-button-label="addLabelOf(node)"
       :disabled="isDisabled(node) || isReadonly(node)"
       :aria-label="node.label"
       @update:items="setRepeat(node, $event)"

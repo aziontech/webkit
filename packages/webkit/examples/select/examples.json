@@ -49,7 +49,7 @@
     },
     {
       "name": "Invalid",
-      "summary": "Invalid state (danger border + ring); it clears once a value is selected.",
+      "summary": "Invalid state inside a Field: the danger border and a Field.Error saying what to choose; both clear once a region is selected.",
       "file": "invalid.vue"
     },
     {

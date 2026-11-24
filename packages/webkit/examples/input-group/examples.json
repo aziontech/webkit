@@ -44,7 +44,7 @@
     },
     {
       "name": "Invalid",
-      "summary": "Invalid state — root shows the danger border.",
+      "summary": "Invalid state inside a Field: the group shows the danger border and a Field.Error says what to fix.",
       "file": "invalid.vue"
     },
     {

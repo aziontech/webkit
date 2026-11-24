@@ -95,7 +95,7 @@
         icon="az az-chevron-right"
         icon-position="trailing"
         animated
-        #prefix
+        #leading
       >
         <i
           class="az az-azion text-(--primary)"

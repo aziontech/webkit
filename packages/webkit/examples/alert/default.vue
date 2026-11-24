@@ -6,6 +6,6 @@
   <Alert
     severity="info"
     label="Your workload finished deploying in 42 seconds."
-    action-label="Label"
+    action-label="View workload"
   />
 </template>

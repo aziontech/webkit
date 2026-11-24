@@ -9,6 +9,7 @@
 
 <template>
   <FileTokenGroup
+    class="w-full max-w-(--container-xs)"
     :items="items"
     readonly
     aria-label="Attached files"

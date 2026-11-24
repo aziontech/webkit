@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import Default from '../../../../examples/button/default.vue'
 import Disabled from '../../../../examples/button/disabled.vue'
 import DisabledReason from '../../../../examples/button/disabled-reason.vue'
+import Icon from '../../../../examples/button/icon.vue'
 import Loading from '../../../../examples/button/loading.vue'
 import Types from '../../../../examples/button/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -12,6 +13,13 @@ import { UNSAFE_URLS } from '../../../test/unsafe-urls'
 import Button from './button.vue'
 
 describe('Button', () => {
+  it('draws the brand mark of the Icon example through the leading slot', () => {
+    const view = render(Icon)
+    const mark = view.container.querySelector('.az-azion')
+    expect(mark).not.toBeNull()
+    expect(mark!.closest('[data-testid="button"]')?.textContent).toContain('Deploy now')
+  })
+
   it.each(UNSAFE_URLS)('stays a native button for the unsafe href %j', (href) => {
     const { getByTestId } = render(Button, { props: { label: 'Go', href } })
     const root = getByTestId('button')

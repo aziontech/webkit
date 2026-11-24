@@ -3,10 +3,12 @@ import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
+import AutoRefresh from '../../../../examples/date-range-picker/auto-refresh.vue'
 import Default from '../../../../examples/date-range-picker/default.vue'
 import Disabled from '../../../../examples/date-range-picker/disabled.vue'
 import RelativeOnly from '../../../../examples/date-range-picker/relative-only.vue'
 import TimeZone from '../../../../examples/date-range-picker/time-zone.vue'
+import UntilNow from '../../../../examples/date-range-picker/until-now.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import ConfigProvider from '../../provider/config-provider/config-provider.vue'
@@ -459,6 +461,19 @@ describe('DateRangePicker', () => {
     expect(trigger.textContent).toContain('21:00')
     expect(trigger.textContent).toContain('3:30')
     expect(trigger.textContent).toContain('UTC+09:00')
+  })
+
+  it.each([
+    ['UntilNow', UntilNow],
+    ['TimeZone', TimeZone],
+    ['AutoRefresh', AutoRefresh]
+  ])('keeps raw emitted values out of the %s example', (_name, example) => {
+    const view = render(example)
+    const text = view.container.textContent ?? ''
+    expect(text).not.toMatch(/\d{4}-\d{2}-\d{2}T\d{2}/)
+    expect(text).not.toContain('{"type"')
+    expect(text).not.toMatch(/refreshed \d+ times/)
+    expect(view.container.querySelector('code')).toBeNull()
   })
 
   it('leaves the zone to the page unless show-time-zone asks for the selector', async () => {

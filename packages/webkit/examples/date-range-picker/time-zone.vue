@@ -13,15 +13,12 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-start gap-(--spacing-xs)">
-    <DateRangePicker
-      v-model="range"
-      v-model:time-zone="timeZone"
-      :time-zones="zones"
-      show-time-zone
-      aria-label="Log window"
-      @refresh="runQuery"
-    />
-    <p class="text-body-sm text-(--text-muted) tabular-nums">{{ range.start }} – {{ range.end }}</p>
-  </div>
+  <DateRangePicker
+    v-model="range"
+    v-model:time-zone="timeZone"
+    :time-zones="zones"
+    show-time-zone
+    aria-label="Log window"
+    @refresh="runQuery"
+  />
 </template>

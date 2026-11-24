@@ -24,13 +24,13 @@
     <CommandInput placeholder="Search commands…" />
     <CommandList>
       <CommandGroup label="Actions">
-        <CommandItem value="deploy">Deploy Project</CommandItem>
+        <CommandItem value="deploy">Deploy project</CommandItem>
         <CommandItem
           value="publish"
           disabled
-          >Publish Release</CommandItem
+          >Publish release</CommandItem
         >
-        <CommandItem value="new-app">Create Application</CommandItem>
+        <CommandItem value="new-app">Create application</CommandItem>
       </CommandGroup>
     </CommandList>
   </CommandRoot>
