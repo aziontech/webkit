@@ -353,10 +353,10 @@ export const products: Product[] = [
       {
         id: 'status',
         title: 'Status codes',
-        hint: 'Sum of requests per status class, per interval.',
+        hint: 'Sum of requests per status class, per interval, stacked so the error classes read as their part of every bar.',
         aggregation: 'Sum',
         format: 'count',
-        form: 'line',
+        form: 'stacked',
         series: [
           { id: '2xx', name: 'Status 2xx', base: 1700000, color: 1 },
           { id: '3xx', name: 'Status 3xx', base: 240000, color: 2 },
@@ -817,13 +817,13 @@ export const overviewHighlights: Highlight[] = [
   {
     id: 'status',
     title: 'Status codes',
-    hint: 'Requests per status class, per interval.',
+    hint: 'Requests per status class, per interval, stacked so the error classes read as their part of every bar.',
     product: 'Applications',
     href: '/metrics/applications?view=status-codes',
     dataset: 'workloadMetrics',
     measure: 'requests',
     format: 'count',
-    form: 'line',
+    form: 'stacked',
     series: [
       { id: '2xx', name: 'Status 2xx', base: 1700000, color: 1 },
       { id: '3xx', name: 'Status 3xx', base: 240000, color: 2 },

@@ -194,7 +194,7 @@
   }
 
   const requestsForm = ref('line')
-  const statusForm = ref('line')
+  const statusForm = ref('bar')
   const activeIndex = ref<number | null>(null)
   const search = ref('')
 

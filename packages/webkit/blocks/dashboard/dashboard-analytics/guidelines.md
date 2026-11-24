@@ -97,7 +97,8 @@ mounts the toast region; this page body never renders a `Toaster`.
 
 ### J. Charts — `Chart` (required)
 
-`Requests over time` as an area, `Status codes` as a multi-series line (2xx, 3xx, 4xx, 5xx), and
+`Requests over time` as an area, `Status codes` as stacked bars by default (2xx, 3xx, 4xx, 5xx), so the error classes read as their
+part of each interval instead of flat lines on the 2xx scale (Line stays one toggle away), and
 `Requests by country` as labeled horizontal bars. The series take the categorical role in declaration
 order; reserve the status role for a series whose color means a state.
 

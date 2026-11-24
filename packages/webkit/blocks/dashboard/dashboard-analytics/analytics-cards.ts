@@ -80,7 +80,8 @@ export const trafficCards: Record<AnalyticsDashboardCardId, TrafficCard> = {
   },
   'status-codes': {
     label: 'Status codes',
-    description: 'Sum of requests per status class. Switch to Bar to stack the classes.',
+    description:
+      'Sum of requests per status class, stacked as bars so 4xx and 5xx show as their part of every interval. Switch to Line to compare the classes on one scale.',
     limit: 10000,
     groupBy: ['ts', 'status'],
     orderBy: 'ts_ASC',
