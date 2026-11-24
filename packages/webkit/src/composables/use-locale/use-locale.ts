@@ -1,13 +1,4 @@
-import {
-  computed,
-  type ComputedRef,
-  inject,
-  type MaybeRefOrGetter,
-  onMounted,
-  provide,
-  ref,
-  toValue
-} from 'vue'
+import { computed, type ComputedRef, inject, type MaybeRefOrGetter, provide, toValue } from 'vue'
 
 import type {
   Direction,
@@ -17,7 +8,6 @@ import type {
   PartialMessages,
   PluralMessage
 } from '../../i18n/types'
-import { useDirection } from '../use-direction'
 import {
   cached,
   createMessageHelpers,
@@ -48,8 +38,8 @@ export interface ProvideLocaleOptions {
   now?: MaybeRefOrGetter<string | number | Date | undefined>
   /** IANA time zone for absolute times below the provider; empty inherits the parent provider's, at the root the browser's zone. */
   timeZone?: MaybeRefOrGetter<string | undefined>
-  /** Element the provider renders; a root provider with no direction of its own reads the page's direction around it after mount. */
-  el?: MaybeRefOrGetter<Element | null | undefined>
+  /** Direction of the page around a root provider that sets none of its own; undefined reads `ltr` (the server render and hydration). */
+  pageDir?: MaybeRefOrGetter<Direction | undefined>
 }
 
 /** Plural forms passed to `plural`; `{count}` in a form is replaced by the formatted count. */
@@ -124,7 +114,10 @@ function warnMissingCatalog(locale: string): void {
   )
 }
 
-export function mergeMessages(base: Messages, overrides?: PartialMessages): Messages {
+export function mergeMessages<T extends PartialMessages = Messages>(
+  base: T,
+  overrides?: PartialMessages
+): T {
   if (!overrides) return base
   const merged: Record<string, unknown> = { ...base }
   for (const [group, values] of Object.entries(overrides)) {
@@ -132,7 +125,7 @@ export function mergeMessages(base: Messages, overrides?: PartialMessages): Mess
     const current = (merged[group] ?? {}) as Record<string, unknown>
     merged[group] = { ...current, ...values }
   }
-  return merged as Messages
+  return merged as T
 }
 
 const RELATIVE_STEPS: [Intl.RelativeTimeFormatUnit, number][] = [
@@ -223,14 +216,39 @@ export interface ProvidedLocale extends LocaleContext {
   ownDir: ComputedRef<Direction | undefined>
 }
 
+interface ProviderDirection {
+  ownDir: ComputedRef<Direction | undefined>
+  declaredDir: ComputedRef<Direction | undefined>
+  dir: ComputedRef<Direction>
+}
+
+function useProviderDirection(
+  options: ProvideLocaleOptions,
+  parent: LocaleContext | null,
+  explicit: ComputedRef<string>,
+  rtlDevice: () => boolean
+): ProviderDirection {
+  const ownDir = computed<Direction | undefined>(() => {
+    const requested = toValue(options.dir) ?? 'auto'
+    if (requested !== 'auto') return requested
+    return explicit.value ? directionOf(explicit.value) : undefined
+  })
+  const declaredDir = computed<Direction | undefined>(() => {
+    if (ownDir.value) return ownDir.value
+    if (parent) return parent.declaredDir ? parent.declaredDir.value : parent.dir.value
+    return rtlDevice() ? 'rtl' : undefined
+  })
+  const dir = computed<Direction>(() => {
+    if (declaredDir.value) return declaredDir.value
+    if (parent) return parent.dir.value
+    return toValue(options.pageDir) ?? 'ltr'
+  })
+  return { ownDir, declaredDir, dir }
+}
+
 export function provideLocale(options: ProvideLocaleOptions): ProvidedLocale {
   const parent = inject(LocaleInjectionKey, null)
   const device = useDeviceLocale()
-  const page = useDirection(() => toValue(options.el) ?? null)
-  const mounted = ref(false)
-  onMounted(() => {
-    mounted.value = true
-  })
   const explicit = computed(() => toValue(options.locale) || '')
   const locale = computed(() => explicit.value || parent?.locale.value || device.value)
   const catalogs = computed<Record<string, Messages>>(() => ({
@@ -240,39 +258,23 @@ export function provideLocale(options: ProvideLocaleOptions): ProvidedLocale {
   const overrides = computed<PartialMessages | undefined>(() => {
     const inherited = parent?.overrides?.value
     const own = toValue(options.messages)
-    if (!inherited) return own
-    return own ? (mergeMessages(inherited as Messages, own) as PartialMessages) : inherited
+    return inherited ? mergeMessages(inherited, own) : own
   })
-  const ownDir = computed<Direction | undefined>(() => {
-    const requested = toValue(options.dir) ?? 'auto'
-    if (requested !== 'auto') return requested
-    return explicit.value ? directionOf(explicit.value) : undefined
-  })
-  const declaredDir = computed<Direction | undefined>(() => {
-    if (ownDir.value) return ownDir.value
-    if (parent) return parent.declaredDir ? parent.declaredDir.value : parent.dir.value
-    const rtlDevice =
-      directionOf(locale.value) === 'rtl' && findCatalog(locale.value, catalogs.value)
-    return rtlDevice ? 'rtl' : undefined
-  })
-  const dir = computed<Direction>(() => {
-    if (declaredDir.value) return declaredDir.value
-    if (parent) return parent.dir.value
-    return mounted.value ? page.value : 'ltr'
-  })
+  const { ownDir, declaredDir, dir } = useProviderDirection(
+    options,
+    parent,
+    explicit,
+    () => directionOf(locale.value) === 'rtl' && !!findCatalog(locale.value, catalogs.value)
+  )
   const messages = computed(() => {
-    const found = findCatalog(locale.value, catalogs.value)
-    if (!found && explicit.value) warnMissingCatalog(locale.value)
-    const base =
-      found ?? (catalogs.value[DEFAULT_LOCALE] as Messages | undefined) ?? parent?.messages.value
-    return mergeMessages(base as Messages, overrides.value)
+    if (explicit.value && !findCatalog(locale.value, catalogs.value)) {
+      warnMissingCatalog(locale.value)
+    }
+    return mergeMessages(pickCatalog(locale.value, catalogs.value), overrides.value)
   })
-  const now = computed<number | undefined>(
-    () => epochOf(toValue(options.now)) ?? parent?.now?.value
-  )
-  const timeZone = computed<string | undefined>(
-    () => toValue(options.timeZone) || parent?.timeZone?.value || undefined
-  )
+  const now = computed(() => epochOf(toValue(options.now)) ?? parent?.now?.value)
+  const timeZone = computed(() => toValue(options.timeZone) || parent?.timeZone?.value || undefined)
+  const portal = computed(() => ({ dir: declaredDir.value, lang: locale.value }))
   const context: LocaleContext = {
     locale,
     dir,
@@ -280,6 +282,7 @@ export function provideLocale(options: ProvideLocaleOptions): ProvidedLocale {
     now,
     timeZone,
     declaredDir,
+    portal,
     catalogs,
     overrides
   }

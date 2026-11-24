@@ -32,6 +32,8 @@ export interface LocaleContext {
   timeZone?: ComputedRef<string | undefined>
   /** Direction a provider in the chain sets (its `dir`, its `locale`, or a registered right-to-left device locale); undefined when the root provider inherits the page's direction. */
   declaredDir?: ComputedRef<Direction | undefined>
+  /** The `dir` and `lang` an element teleported out of the provider copies (`usePortalLocale`); a context without it gives teleported roots neither. */
+  portal?: ComputedRef<PortalLocaleAttrs>
   /** Catalogs registered along the provider chain, keyed by locale tag. */
   catalogs?: ComputedRef<Record<string, Messages>>
   /** Partial catalog overrides merged along the provider chain. */
@@ -193,13 +195,5 @@ export interface PortalLocaleAttrs {
 }
 
 export function usePortalLocale(): ComputedRef<PortalLocaleAttrs> {
-  const context = inject(LocaleInjectionKey, null)
-  return computed<PortalLocaleAttrs>(() =>
-    context
-      ? {
-          dir: context.declaredDir ? context.declaredDir.value : context.dir.value,
-          lang: context.locale.value
-        }
-      : {}
-  )
+  return inject(LocaleInjectionKey, null)?.portal ?? computed<PortalLocaleAttrs>(() => ({}))
 }
