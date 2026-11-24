@@ -163,6 +163,17 @@ describe('CompetitorComparisonSection', () => {
     expect(within(bare).queryByTestId('hint')).toBeNull()
   })
 
+  it('names the platform columns in text on phones instead of shrinking the logos', () => {
+    const { getByTestId, getByRole } = band()
+
+    const name = getByTestId(`${TESTID}__competitor-name`)
+    expect(name.textContent?.trim()).toBe('Cloudflare')
+    expect(name.classList.contains('sm:hidden')).toBe(true)
+    expect(getByTestId(`${TESTID}__competitor-logo`).classList.contains('max-sm:hidden')).toBe(true)
+    expect(getByRole('columnheader', { name: 'Cloudflare' })).toBeInTheDocument()
+    expect(getByRole('columnheader', { name: 'Azion' }).textContent).toContain('Azion')
+  })
+
   it('renders both theme logos when both files are set', () => {
     const { getByTestId } = band()
 
