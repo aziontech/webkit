@@ -1657,3 +1657,7 @@ Budget-raise: hero-form-section 54.2 KB → 54.25 KB (measured 54.20 KB): carrie
 Budget-raise: job-posting-section 59.8 KB → 59.9 KB (measured 59.85 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
 Budget-raise: newsletter-section 13.95 KB → 14 KB (measured 13.96 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
 Budget-raise: feedback-reason-dialog 34.55 KB → 34.6 KB (measured 34.56 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
+Budget-raise: config-provider 12.8 KB → 12.85 KB (measured 12.81 KB): carries the three locale catalogs, which gain the `rating` strings (star names in plural forms, the score summary, "Not rated", "Clear rating"; SUP-RT).
+Budget-raise: locales-pt-BR 12 KB → 12.05 KB (measured 12.00 KB): the `rating` strings (SUP-RT).
+Budget-raise: locales-es 12.1 KB → 12.15 KB (measured 12.13 KB): the `rating` strings (SUP-RT).
+Budget-raise: package packedBytes 8,620,000 → 8,630,000 bytes (measured 8,625,782): the `Rating` component, its test, five examples and its catalog and llms pages (SUP-RT).
