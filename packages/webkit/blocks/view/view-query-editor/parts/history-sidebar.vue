@@ -126,6 +126,7 @@
                 <DropdownMenu.Item
                   value="delete"
                   label="Delete query"
+                  severity="danger"
                 >
                   <template #leading
                     ><i

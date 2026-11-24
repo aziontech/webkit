@@ -183,6 +183,7 @@
               <DropdownMenu.Item
                 value="delete"
                 label="Delete"
+                severity="danger"
               />
             </DropdownMenu.Group>
           </TableCellActions>

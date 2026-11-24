@@ -176,6 +176,7 @@
                 <DropdownMenu.Item
                   value="delete"
                   label="Delete table"
+                  severity="danger"
                 >
                   <template #leading
                     ><i
