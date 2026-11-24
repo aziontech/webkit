@@ -83,7 +83,7 @@
       :data-testid="testId"
       :data-speaking="speaking || null"
       variant="ghost"
-      size="large"
+      size="medium"
       @click="onClick"
     />
   </Tooltip>

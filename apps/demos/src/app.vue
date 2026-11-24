@@ -15,16 +15,25 @@
   import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import { sampleHistory } from './blocks/ai-chat.sample'
+  import CopilotHistory from './components/copilot-history.vue'
   import DemoBar from './components/demo-bar.vue'
   import { account, navigation } from './lib/navigation'
   import { settings } from './lib/settings'
   import { resources } from './lib/store'
   import { announcement } from './router'
 
+  const consolePages = [
+    { label: 'Home', icon: 'az az-home', href: '/onboarding' },
+    { label: 'Resources', icon: 'az az-box', href: '/resources' },
+    { label: 'Settings', icon: 'az az-settings', href: '/settings' }
+  ]
+
   const catalogs = { 'pt-BR': ptBR }
   const route = useRoute()
   const router = useRouter()
   const focused = computed(() => route.meta.shell === 'focused')
+  const copilot = computed(() => route.meta.shell === 'copilot')
   const breadcrumbs = computed(() => (route.meta.breadcrumbs ?? []) as BreadcrumbItemData[])
 
   const recents = computed(() =>
@@ -51,6 +60,8 @@
   const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     const [scope, id] = String(value).split(':')
     if (scope === 'recent') router.push(`/resources/${id}`)
+    if (scope === 'chat') router.push(`/assistant/c/${id}`)
+    if (scope === 'page') router.push(String(value).slice('page:'.length))
     if (value === 'action:create') router.push('/resources/new')
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
   }
@@ -83,7 +94,7 @@
     </template>
     <ConsoleLayoutRoot
       v-else
-      :navigation="navigation"
+      :navigation="copilot ? [] : navigation"
       :breadcrumbs="breadcrumbs"
       :account="account"
       class="max-h-(--demo-viewport-height)"
@@ -105,14 +116,14 @@
             />
           </Tooltip>
           <Tooltip
-            content="Agent"
+            content="AI Copilot"
             side="bottom"
           >
             <IconButton
               icon="az az-ask-azion"
               variant="outline"
               size="medium"
-              aria-label="Agent"
+              aria-label="AI Copilot"
               @click="router.push('/assistant')"
             />
           </Tooltip>
@@ -126,7 +137,7 @@
             @click="router.push('/resources/new')"
           />
           <HighlightButton
-            label="Agent"
+            label="AI Copilot"
             size="medium"
             icon="az az-ask-azion"
             @click="router.push('/assistant')"
@@ -134,8 +145,53 @@
         </template>
       </template>
 
+      <template
+        v-if="copilot"
+        #sidebar-header
+      >
+        <CopilotHistory />
+      </template>
+
       <template #search="{ query }">
         <Command.Group
+          v-if="copilot"
+          label="Chats"
+        >
+          <Command.Item
+            v-for="chat in sampleHistory"
+            :key="chat.id"
+            :value="`chat:${chat.id}`"
+          >
+            <template #leading>
+              <i
+                class="az az-comment"
+                aria-hidden="true"
+              />
+            </template>
+            {{ chat.title }}
+          </Command.Item>
+        </Command.Group>
+        <Command.Group
+          key="command.group-2"
+          v-if="copilot"
+          label="Console"
+        >
+          <Command.Item
+            v-for="page in consolePages"
+            :key="page.href"
+            :value="`page:${page.href}`"
+          >
+            <template #leading>
+              <i
+                :class="page.icon"
+                aria-hidden="true"
+              />
+            </template>
+            {{ page.label }}
+          </Command.Item>
+        </Command.Group>
+        <Command.Group
+          key="command.group-3"
           v-if="!query"
           label="Recents"
         >

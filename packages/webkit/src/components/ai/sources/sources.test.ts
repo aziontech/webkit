@@ -13,13 +13,16 @@ const items = [
     title: 'Real-Time Purge',
     href: 'https://www.azion.com/en/documentation/',
     description: 'Removes cached objects from every data center.',
-    site: 'Azion'
+    site: 'Azion',
+    publisher: 'Acme Inc.',
+    publishedAt: '2026-03-02'
   },
   { title: 'Cache settings', href: '/cache' }
 ]
 
-const panel = () =>
-  document.body.querySelector<HTMLElement>('[data-testid="sources__drawer__panel"]')
+const panel = () => document.body.querySelector<HTMLElement>('[data-testid="sources__menu__panel"]')
+const menuItems = () =>
+  Array.from(panel()?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? [])
 
 describe('Sources', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
@@ -38,7 +41,7 @@ describe('Sources', () => {
     const trigger = getByRole('button', { name: /2 sources/ })
     expect(trigger).toHaveTextContent('Sources')
     expect(trigger).toHaveAttribute('aria-expanded', 'false')
-    expect(trigger).toHaveAttribute('aria-haspopup', 'dialog')
+    expect(trigger).toHaveAttribute('aria-haspopup', 'menu')
     expect(panel()).toBeNull()
   })
 
@@ -66,23 +69,64 @@ describe('Sources', () => {
     expect(marks[0]?.closest('[aria-hidden="true"]')).not.toBeNull()
   })
 
-  it('opens a panel listing each source with its site, linked title and snippet', async () => {
+  it('opens a DropdownMenu in place, never a drawer, and closes on Escape', async () => {
     const { getByRole, emitted } = render(Sources, { props: { items } })
-    await userEvent.click(getByRole('button'))
+    const trigger = getByRole('button')
+    await userEvent.click(trigger)
     expect(emitted('update:open')?.[0]).toEqual([true])
     await waitFor(() => expect(panel()).not.toBeNull())
-    const rows = panel()!.querySelectorAll('[data-testid="sources__drawer__item"]')
-    expect(rows).toHaveLength(2)
-    expect(rows[0]).toHaveTextContent('Azion')
-    expect(rows[0]).toHaveTextContent('Removes cached objects')
-    expect(rows[1]).toHaveTextContent('Cache settings')
-    const links = panel()!.querySelectorAll('a')
-    expect(links[0]).toHaveAttribute('target', '_blank')
-    expect(links[0]).toHaveAttribute('rel', 'noopener noreferrer')
-    expect(links[0]).toHaveTextContent('(opens in a new tab)')
-    expect(links[0]!.querySelector('.az-external-link')).toHaveAttribute('aria-hidden', 'true')
-    expect(links[1]).not.toHaveAttribute('target')
-    expect(links[1]!.querySelector('.az-external-link')).toBeNull()
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
+    expect(panel()!.querySelector('[role="menu"]')).not.toBeNull()
+    expect(panel()).toHaveAttribute('data-side')
+    expect(document.body.querySelector('[data-testid*="drawer"]')).toBeNull()
+    expect(document.body.querySelector('[aria-modal="true"]')).toBeNull()
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(panel()).toBeNull())
+    expect(document.activeElement).toBe(trigger)
+  })
+
+  it('moves between the sources with the arrow keys', async () => {
+    const { getByRole } = render(Sources, { props: { items } })
+    getByRole('button').focus()
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() => expect(menuItems()).toHaveLength(2))
+    await waitFor(() => expect(document.activeElement).toBe(menuItems()[0]))
+    await userEvent.keyboard('{ArrowDown}')
+    expect(document.activeElement).toBe(menuItems()[1])
+    await userEvent.keyboard('{ArrowDown}')
+    expect(document.activeElement).toBe(menuItems()[0])
+  })
+
+  it('lists each source as a menu link with its mark, title and site, publisher and date', async () => {
+    const { getByRole } = render(Sources, { props: { items } })
+    await userEvent.click(getByRole('button'))
+    await waitFor(() => expect(menuItems()).toHaveLength(2))
+    const [first, second] = menuItems() as [HTMLElement, HTMLElement]
+    expect(first.tagName).toBe('A')
+    expect(first).toHaveAttribute('data-testid', 'sources__item')
+    expect(
+      first.querySelector('[data-testid="sources__item__leading"] [data-size="medium"]')
+    ).not.toBeNull()
+    expect(first).toHaveAccessibleName('Real-Time Purge (opens in a new tab)')
+    expect(first).toHaveAccessibleDescription('Azion · Acme Inc. · Mar 2, 2026')
+    expect(first).not.toHaveTextContent('Removes cached objects')
+    expect(first).toHaveAttribute('target', '_blank')
+    expect(first).toHaveAttribute('rel', 'noopener noreferrer')
+    expect(first.querySelector('.az-external-link')).toHaveAttribute('aria-hidden', 'true')
+    expect(second).not.toHaveAttribute('target')
+    expect(second.querySelector('.az-external-link')).toBeNull()
+    expect(second.querySelector('[data-testid="sources__item__description"]')).toBeNull()
+    expect(second).toHaveAccessibleName('Cache settings')
+  })
+
+  it('takes the hover fill from the menu row and never underlines the title', async () => {
+    render(Sources, { props: { items, defaultOpen: true } })
+    await waitFor(() => expect(menuItems()).toHaveLength(2))
+    const row = menuItems()[0]!
+    expect(row.className).toContain('hover:bg-(--bg-hover)')
+    expect(row.className).toContain('bg-clip-padding')
+    expect(panel()!.innerHTML).not.toContain('hover:underline')
+    expect(panel()!.innerHTML).not.toContain('has-[a:hover]')
   })
 
   it('groups cited sources under Citations and the rest under More', async () => {
@@ -93,10 +137,10 @@ describe('Sources', () => {
       }
     })
     await waitFor(() => expect(panel()).not.toBeNull())
-    const groups = panel()!.querySelectorAll('[data-testid="sources__drawer__group"]')
+    const groups = panel()!.querySelectorAll('[data-testid="sources__group"]')
     expect(groups).toHaveLength(2)
     expect(groups[0]).toHaveAccessibleName('Citations')
-    expect(groups[0]!.querySelectorAll('li')).toHaveLength(2)
+    expect(groups[0]!.querySelectorAll('[role="menuitem"]')).toHaveLength(2)
     expect(groups[1]).toHaveAccessibleName('More')
     expect(groups[1]).toHaveTextContent('Searched')
   })
@@ -104,7 +148,9 @@ describe('Sources', () => {
   it('shows no group headings when every source is cited', async () => {
     render(Sources, { props: { items, defaultOpen: true } })
     await waitFor(() => expect(panel()).not.toBeNull())
-    expect(panel()!.querySelector('h3')).toBeNull()
+    const group = panel()!.querySelector('[data-testid="sources__group"]')
+    expect(group).not.toHaveAttribute('aria-labelledby')
+    expect(panel()!.querySelector('[data-testid="sources__group__label"]')).toBeNull()
   })
 
   it.each(UNSAFE_URLS)('renders the title as plain text for the unsafe href %j', async (href) => {

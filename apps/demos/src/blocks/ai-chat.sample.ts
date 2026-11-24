@@ -1,4 +1,7 @@
-import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
+import type {
+  ConversationHistoryItem,
+  ConversationHistoryProject
+} from '@aziontech/webkit/conversation-history'
 import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
@@ -66,7 +69,9 @@ export const sampleStreamingMessages: AiChatMessage[] = [
         href: 'https://www.azion.com/en/documentation/',
         description: 'A 502 means the edge reached the origin but got no valid answer back.',
         site: 'Azion',
-        icon: 'az az-azion'
+        icon: 'az az-azion',
+        publisher: 'Azion Technologies',
+        publishedAt: '2026-09-14'
       }
     ]
   })
@@ -84,7 +89,9 @@ export const sampleInterruptedMessages: AiChatMessage[] = [
         href: 'https://www.azion.com/en/documentation/',
         description: 'Removes a cached object from every data center in a few seconds.',
         site: 'Azion',
-        icon: 'az az-azion'
+        icon: 'az az-azion',
+        publisher: 'Azion Technologies',
+        publishedAt: '2026-03-02'
       },
       {
         title: 'aziontech/azion: purge',
@@ -155,13 +162,16 @@ const cacheKeySources: SourcesItem[] = [
     href: 'https://www.azion.com/en/documentation/',
     description: 'Choose which query string parameters build the cache key of each path.',
     site: 'Azion',
-    icon: 'az az-azion'
+    icon: 'az az-azion',
+    publisher: 'Azion Technologies',
+    publishedAt: '2026-08-21'
   },
   {
     title: 'aziontech/azion',
     href: 'https://github.com/aziontech/azion',
     description: 'Change the cache settings of an application from a terminal.',
     site: 'GitHub',
+    publisher: 'aziontech',
     image: 'https://github.com/favicon.ico'
   },
   {
@@ -169,7 +179,9 @@ const cacheKeySources: SourcesItem[] = [
     href: 'https://www.w3.org/Protocols/',
     description: 'Every distinct URL, query string included, is a separate entry in a cache.',
     site: 'W3C',
-    image: 'https://www.w3.org/favicon.ico'
+    image: 'https://www.w3.org/favicon.ico',
+    publisher: 'World Wide Web Consortium',
+    publishedAt: '2022-06-01'
   },
   {
     title: 'cache-control',
@@ -314,13 +326,70 @@ export const sampleAgentInterrupts: AiChatInterrupt[] = [
 
 export const sampleHistoryNow = '2026-11-19T12:00:00'
 
+export const sampleProjects: ConversationHistoryProject[] = [
+  { id: 'storefront', title: 'storefront' },
+  { id: 'docs-site', title: 'docs-site' },
+  { id: 'security-review', title: 'Security review' }
+]
+
 export const sampleHistory: ConversationHistoryItem[] = [
-  { id: 'h1', title: 'Why does storefront return 502 errors?', updatedAt: '2026-11-19T11:02:00' },
-  { id: 'h2', title: 'Purge the cache after a deploy', updatedAt: '2026-11-19T09:40:00' },
-  { id: 'h3', title: 'A WAF rule for login attempts', updatedAt: '2026-11-18T17:15:00' },
-  { id: 'h4', title: 'Top orders query for acme-store', updatedAt: '2026-11-16T10:20:00' },
+  {
+    id: 'h1',
+    title: 'Why does storefront return 502 errors?',
+    updatedAt: '2026-11-19T11:02:00',
+    projectId: 'storefront',
+    tag: 'Bug',
+    description: 'fix/checkout-timeout'
+  },
+  {
+    id: 'h2',
+    title: 'Purge the cache after a deploy',
+    updatedAt: '2026-11-19T09:40:00',
+    pinned: true
+  },
+  {
+    id: 'h3',
+    title: 'A WAF rule for login attempts',
+    updatedAt: '2026-11-18T17:15:00',
+    projectId: 'security-review',
+    status: 'error'
+  },
+  {
+    id: 'h4',
+    title: 'Top orders query for acme-store',
+    updatedAt: '2026-11-16T10:20:00',
+    projectId: 'storefront',
+    description: 'acme-store',
+    status: 'success'
+  },
   { id: 'h5', title: 'Move DNS records to Azion', updatedAt: '2026-11-04T14:05:00' },
-  { id: 'h6', title: 'Image optimization for docs-site', updatedAt: '2026-09-28T08:30:00' }
+  {
+    id: 'h6',
+    title: 'Image optimization for docs-site',
+    updatedAt: '2026-09-28T08:30:00',
+    projectId: 'docs-site'
+  },
+  { id: 'h7', title: 'Set up a custom domain', updatedAt: '2026-11-12T15:30:00' },
+  {
+    id: 'h8',
+    title: 'Migrate acme-store to the new runtime',
+    updatedAt: '2026-11-19T11:50:00',
+    status: 'running',
+    description: 'feat/runtime-upgrade'
+  },
+  {
+    id: 'h9',
+    title: 'Write the cache tests',
+    updatedAt: '2026-11-19T11:40:00',
+    status: 'running',
+    description: 'test/cache'
+  },
+  {
+    id: 'h10',
+    title: 'Draft the docs-site navigation',
+    updatedAt: '2026-11-02T09:30:00',
+    archived: true
+  }
 ]
 
 export const sampleModels: PromptInputMenuOption[] = [

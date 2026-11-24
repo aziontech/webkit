@@ -297,7 +297,41 @@ export const conversationHistory = {
   delete: 'Delete {title}',
   newChat: 'New chat',
   search: 'Search conversations',
-  noMatch: 'No conversations match “{query}”.'
+  noMatch: 'No conversations match “{query}”.',
+  projects: 'Projects',
+  recents: 'Recents',
+  newProject: 'New project',
+  organizeProjects: 'Organize projects',
+  sortBy: 'Sort by',
+  sortRecent: 'Recent activity',
+  sortName: 'Name',
+  projectEmptyTitle: 'No chats in this project yet.',
+  pinned: 'Pinned',
+  working: 'Working',
+  settled: 'Settled',
+  failed: 'Failed',
+  locked: 'Locked',
+  justNow: 'now',
+  searchChats: 'Search chats',
+  pin: 'Pin',
+  unpin: 'Unpin',
+  pinTitle: 'Pin {title}',
+  unpinTitle: 'Unpin {title}',
+  moreActions: 'More actions for {title}',
+  rename: 'Rename',
+  renameTitle: 'Rename {title}',
+  share: 'Share',
+  lock: 'Lock',
+  unlock: 'Unlock',
+  moveToProject: 'Move to project',
+  archive: 'Archive',
+  unarchive: 'Unarchive',
+  remove: 'Delete',
+  pinProject: 'Pin project',
+  unpinProject: 'Unpin project',
+  projectSettings: 'Project settings',
+  removeProject: 'Delete project',
+  newChatIn: 'New chat in {title}'
 } as const
 
 export const qrCode = {
@@ -1390,7 +1424,7 @@ export const chatMessage = {
   retry: 'Try again',
   goodResponse: 'Good response',
   badResponse: 'Bad response',
-  feedback: 'Response feedback',
+  feedback: 'Feedback',
   feedbackSubmitting: 'Submitting feedback',
   feedbackThanks: 'Thanks for your feedback',
   readAloud: 'Read aloud',
@@ -1408,10 +1442,7 @@ export const citation = {
   label: 'Source {index}: {title}',
   labelMany: '{site} +{more}, sources {indexes}',
   labelUntitled: 'Source {index}',
-  labelWithSite: 'Source {index}, {site}: {title}',
-  next: 'Next source',
-  page: '{current}/{total}',
-  previous: 'Previous source'
+  labelWithSite: 'Source {index}, {site}: {title}'
 } as const
 
 export const conversation = {

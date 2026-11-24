@@ -179,14 +179,15 @@ describe('StreamingResponse', () => {
     expect(nested).toHaveTextContent('PurgeRules')
   })
 
-  it('renders every heading bold with a step above it, # the largest', () => {
+  it('renders every heading bold with a step above it and a tight one below, # the largest', () => {
     const { getByRole } = render(StreamingResponse, {
       props: { content: 'Intro\n\n# Title\n\n### Step' }
     })
     const title = getByRole('heading', { level: 3, name: 'Title' })
     expect(title).toHaveAttribute('data-level', '3')
     expect(title.classList.contains('data-[level]:font-semibold')).toBe(true)
-    expect(title.classList.contains('mt-(--spacing-sm)')).toBe(true)
+    expect(title.classList.contains('mt-(--spacing-xs)')).toBe(true)
+    expect(title.classList.contains('[&+*]:-mt-(--spacing-xs)')).toBe(true)
     expect(getByRole('heading', { level: 5, name: 'Step' })).toHaveAttribute('data-level', '5')
   })
 

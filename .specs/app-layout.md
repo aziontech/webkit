@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 3c63f0961863f0955cb0b28ba665fc20fc2bda54545bdb37cb0effcb4a86e4dd
+checksum: 71e876bdf6bc993225af2bb26418366de07e8b8b7033e241e9ff7e887e1a0922
 created: 2026-11-11
 last_updated: 2026-11-23
 ---
@@ -167,6 +167,7 @@ The only events are the `update:*` of the models above.
 - `data-navigation`, `data-tools`, `data-split-panel` on the root: `open` | `closed`.
 - `data-split-panel-position` on the root: `bottom` | `side` (always `bottom` while compact).
 - `data-resizing` on the split separator while it is dragged.
+- Fill: while the body holds an element with `data-layout-fill`, the body is a `flex flex-col min-h-0` item of the content region, so a page that fills (a chat, an editor) gets the exact height under the header and scrolls inside itself instead of scrolling the content region.
 - First render (server and client) is the wide layout; the compact layout applies after mount, once the layout has measured itself.
 
 ## Motion & Animations

@@ -202,8 +202,12 @@
 
   watch([() => appMenu.currentId, navEl], () => revealActive(navEl.value), { flush: 'post' })
 
+  const navDrawer: { close: () => void } = { close: () => {} }
+
   watch(currentPath, (_next, previous) => {
-    if (previous) pageKey.value += 1
+    if (!previous) return
+    pageKey.value += 1
+    navDrawer.close()
   })
 
   if (dev) useConsoleLayoutNavAudit(mainEl, currentPath, () => props.navigation, menuPath, hrefOf)
@@ -221,7 +225,7 @@
 
   const MAIN_CLASS =
     'flex min-h-full min-w-0 flex-col animate-page-enter ' +
-    'has-[>[data-layout-fill]]:h-full has-[>[data-layout-fill]]:overflow-hidden ' +
+    'has-[>[data-layout-fill]]:h-full has-[>[data-layout-fill]]:min-h-0 has-[>[data-layout-fill]]:flex-1 has-[>[data-layout-fill]]:overflow-hidden ' +
     'motion-reduce:animate-none ' +
     '[&>[data-layout-fill]]:h-auto [&>[data-layout-fill]]:min-h-0 [&>[data-layout-fill]]:flex-1'
 </script>
@@ -242,6 +246,7 @@
     >
       <template #navigation="{ drawer, closeNavigation }">
         <Sidebar
+          :ref="() => (navDrawer.close = closeNavigation)"
           v-model:width="railWidth"
           v-model:open="navigationOpen"
           :resizable="!drawer"

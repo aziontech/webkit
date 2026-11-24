@@ -3,11 +3,11 @@ name: sources
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 6
 template: 2
-checksum: ddf8d1ab9e9197c48da2bbc27f70e17cdb8c182b1aa24ec9e444f77c222c67b2
+checksum: 076d28a8998f3d053c496eb70035beebc64919a7e03bae7b6dc0cd696e0f8034
 created: 2026-11-11
-last_updated: 2026-11-22
+last_updated: 2026-11-23
 ---
 
 # Sources — Component Spec
@@ -16,9 +16,7 @@ last_updated: 2026-11-22
 
 The sources a generative AI response drew on (ChatGPT's Sources, Cloudscape's sources section, AI
 Elements Sources): a small `Sources` pill with the overlapping marks of up to three cited sources
-that opens a panel listing every source — mark, site name, linked title and snippet. The panel is a
-side `Drawer` from the end on wide screens (non-modal, the answer stays readable beside it) and a
-bottom sheet on a phone. Sources the answer searched but did not cite (`cited: false`) are listed
+that opens, in place, a `DropdownMenu` of link items, one per source. Sources the answer searched but did not cite (`cited: false`) are listed
 under More, after the Citations. The pill ends the message's action row (`ChatMessage.Actions`
 `#trailing`), on the same line as the actions. Each mark is the site's favicon (`image`), its icon,
 or its first letter on a colour of its own, so three sources never look alike.
@@ -37,14 +35,15 @@ or its first letter on a colour of its own, so three sources never look alike.
 - `citation` — the inline chip whose numbers point at these items.
 - `streaming-response` — renders the citations; pass it the same items.
 - `chat-message` — the pill goes in the `#trailing` slot of `ChatMessage.Actions`, after the icon actions.
-- `drawer` — the panel the pill opens.
+- `dropdown-menu` — the menu the pill opens; its items draw every row.
 
 ## Best practices
 
 - Order items as the response first cites them, so `[1]` is item 1; put uncited items (`cited: false`) last so the numbers stay aligned.
 - Use the page title as the title and the site's own name as `site` (`Azion`, `GitHub`); without `site` the host of `href` shows.
-- Give `image` the site's favicon URL when the app has one (from the search tool's result); otherwise `icon` for a site in the icon set, or nothing for the lettered mark.
+- Pass `publisher` and `publishedAt` when you have them.
 - Keep the panel closed by default; the inline citations are the primary path.
+- Give `image` the site's favicon URL when the app has one (from the search tool's result); otherwise `icon` for a site in the icon set, or nothing for the lettered mark.
 
 ## Usage
 
@@ -60,7 +59,9 @@ or its first letter on a colour of its own, so three sources never look alike.
         title: 'Real-Time Purge',
         href: 'https://www.azion.com/en/documentation/',
         description: 'Removes a cached object from every data center in a few seconds.',
-        site: 'Azion'
+        site: 'Azion',
+        publisher: 'Azion Technologies',
+        publishedAt: '2026-03-02'
       },
       {
         title: 'aziontech/azion',
@@ -78,9 +79,10 @@ or its first letter on a colour of its own, so three sources never look alike.
 
 _None. Data-driven: a source list is a record set the response already holds, like table rows.
 Exports: `"./sources"`; exported type `SourcesItem` (`title`, `href?`, `description?`, `site?`,
-`image?`, `icon?`, `cited?`) from `sources/types.ts`, shared with `StreamingResponse` and `Citation`.
-Private parts: `parts/sources-mark.vue` draws one round mark (also used by `Citation`), and
-`parts/sources-panel.vue` holds the panel, loaded on demand. Composed DS components: `drawer`._
+`image?`, `icon?`, `publisher?`, `publishedAt?`, `cited?`) from `sources/types.ts`, shared with
+`StreamingResponse` and `Citation`. Private parts: `parts/sources-mark.vue` draws one round mark
+(also the leading slot of each menu item), and `parts/sources-item.vue` the `Citation` card row.
+Composed DS components: `dropdown-menu` (`Trigger`, `Group`, `Item`)._
 
 ## Props
 
@@ -92,9 +94,9 @@ Private parts: `parts/sources-mark.vue` draws one round mark (also used by `Cita
 
 ## v-model
 
-| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                 |
-| -------------- | --------- | ----------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:open` | `boolean` | `undefined` | `update:open` | The panel's open state, by the pill, the panel's close button, `Escape` or a press on the overlay (phone). Unbound, the state is local and starts from `defaultOpen`. |
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                                  |
+| -------------- | --------- | ----------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | The panel's open state, by the pill, `Escape` or a press outside the panel. Unbound, the state is local and starts from `defaultOpen`. |
 
 ## Events
 
@@ -109,8 +111,9 @@ _No slots._
 - `data-state="open|closed"` on the root and the pill (an open pill keeps the hover fill); renders nothing when `items` is empty.
 - The root is `display: contents` and the pill does not wrap (`whitespace-nowrap`, `shrink-0`), so it sits at the end of the action row.
 - The pill's marks are the first three cited items (all items when none is cited).
-- Panel: from `md` a non-modal side `Drawer` (`size="small"`, from the end); below `md` the `Drawer`'s bottom sheet, modal. Its title is the pill's label.
-- Groups: when some items have `cited: false`, the panel shows a Citations section and a More section with headings; otherwise one unheaded list.
+- Panel: a `DropdownMenu` (`side="auto"`, `align="start"`) on every width, never a `Drawer`; it scrolls when taller than the room left.
+- Row: one `DropdownMenu.Item` per source: `value` its index, `label` the title, `href` (a safe URL), `target="_blank"` for an external URL, the 24 px mark in `#leading`, and `description` the line `site · publisher · date` (medium date in the reader's locale; parts it lacks are left out; none, a one-line row). Hover, focus, the highlighted fill with its 2px inset gap, padding and type are the menu item's; no underline. The item `description` (snippet) is not drawn.
+- Groups: when some items have `cited: false`, the menu shows a Citations and a More `DropdownMenu.Group` with their labels and divider; otherwise one unlabelled group.
 - Mark: favicon (`image`, a safe URL), else `icon`, else the first letter of the site on one of seven `--chart-series-*` colours picked by a stable hash of the host; a favicon that fails to load falls back to the letter.
 
 ## Motion & Animations
@@ -118,9 +121,8 @@ _No slots._
 | Trigger    | Animation / Transition                                        | Token     | Reduced-motion fallback         |
 | ---------- | ------------------------------------------------------------- | --------- | ------------------------------- |
 | pill hover | `transition-colors duration-fast-02 ease-productive-entrance` | `fast-02` | `motion-reduce:transition-none` |
-| row hover  | `transition-colors duration-fast-02 ease-productive-entrance` | `fast-02` | `motion-reduce:transition-none` |
 
-The panel slides with the `Drawer`'s own transition and its reduced-motion fallback.
+The menu and its rows animate with `DropdownMenu`'s own transitions and reduced-motion fallbacks.
 
 ## Tokens
 
@@ -128,10 +130,7 @@ The panel slides with the `Drawer`'s own transition and its reduced-motion fallb
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | pill        | `.text-label-md`, `var(--text-muted)`, hover and open `var(--bg-hover)` / `var(--text-default)`, `var(--shape-control)`, height 32 px                                                                                                                          |
 | mark        | 20 px (pill) and 24 px (rows) circles; favicon or icon on `var(--bg-surface-raised)` with `var(--border-default)`; a letter on `var(--chart-series-n)` mixed 30% into `var(--bg-surface-raised)`, ringed in the series colour; overlap ring `var(--bg-canvas)` |
-| group label | `.text-label-sm`, `var(--text-muted)`                                                                                                                                                                                                                          |
-| row         | `var(--shape-control)`, padding `var(--spacing-xs)`, hover `var(--bg-hover)`; site `.text-label-sm` `var(--text-muted)`                                                                                                                                        |
-| title       | `.text-label-md`, `var(--text-default)`, underline on hover, two lines                                                                                                                                                                                         |
-| description | `.text-body-sm`, `var(--text-muted)`, two lines                                                                                                                                                                                                                |
+| menu        | `DropdownMenu`'s panel, groups, labels, items and description line, unchanged                                                                                                                                                                                  |
 
 ## Theme gaps
 
@@ -139,12 +138,12 @@ _None._
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: the pill and the links show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
-- Keyboard map: `Tab` to the pill, `Enter` / `Space` opens the panel and moves focus into it; `Tab` through the links and the close button; `Escape` closes it and returns focus to the pill.
-- ARIA: the pill is a `button` with `aria-haspopup="dialog"` and `aria-expanded`, named `3 sources` (it holds the visible `Sources`, WCAG 2.5.3) or by `title`; the marks are `aria-hidden`; the panel is the `Drawer`'s `dialog`, titled by the pill's label; each group is a `section` named Citations or More (or Sources when there is one group) holding an `<ol>`.
+- Visible focus: the pill shows `focus-visible:ring-2 focus-visible:ring-(--ring-color)`; rows show the menu item's inset ring.
+- Keyboard map: `DropdownMenu`'s: `Enter` / `Space` / `Down` on the pill opens and focuses the first source, `Up` the last; `Down` / `Up` / `Home` / `End` and typeahead move; `Enter` opens the link; `Escape` closes and returns focus to the pill; `Tab` closes.
+- ARIA: the pill is a `button` with `aria-haspopup="menu"` and `aria-expanded`, named `3 sources` (it holds the visible `Sources`, WCAG 2.5.3) or by `title`; the marks are `aria-hidden`; the `menu` is labelled by the pill; each source is a link `menuitem` named by its title and described by its meta line; groups are `role="group"` named Citations or More.
 - Touch: the 32 px pill carries an invisible 44 px hit area on coarse pointers.
-- External links open in a new tab with `rel="noopener noreferrer"`, followed by an `aria-hidden` `az-external-link` glyph and the sr-only `common.newTab` text.
-- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the title as plain text; an unsafe `image` is dropped.
+- External links open in a new tab (`target="_blank"` on the item: `rel`, glyph and `common.newTab` hint).
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): a plain item; an unsafe `image` is dropped.
 - Contrast: the letter is `--text-default` on a 30% tint; the series ring is a solid mark (Lc 30).
 
 ## Internationalization
@@ -156,11 +155,11 @@ _None._
 | `sources.label` | `Sources`                    | `title`       |
 | `sources.more`  | `More`                       | —             |
 
-- Formatting: `Intl.PluralRules` and `Intl.NumberFormat` through `t()`.
+- Formatting: `Intl.PluralRules` and `Intl.NumberFormat` through `t()`; `publishedAt` with `Intl.DateTimeFormat` (`dateStyle: 'medium'`), a date-only string kept on its day.
 
 ## Right-to-left
 
-- Layout: logical utilities; the marks overlap toward the inline end (`-ms`), the mark sits at the inline start of each row; the side panel opens from the inline end.
+- Layout: logical utilities; the marks overlap toward the inline end (`-ms`); rows and the menu follow `DropdownMenu`.
 - Icons: site glyphs and favicons are not mirrored.
 - Keyboard: none.
 - User data: site names, titles and snippets render with the document direction.
@@ -168,19 +167,19 @@ _None._
 ## Responsive
 
 - Container queries: none.
-- Narrow: below `md` the panel is the `Drawer`'s bottom sheet (full screen below `sm`); titles and snippets cut at two lines.
+- Narrow: the menu stays anchored and within the viewport; titles and meta lines cut at two lines.
 - Touch: the pill has a 44 px hit area on coarse pointers.
 - Reflow: no horizontal scroll.
 
 ## Performance
 
-- Bundle budget: see `.size-limit.json` (`sources`; the entry without the lazy panel chunk).
-- Runtime budget: static; the panel (with `Drawer`) is a separate chunk loaded when the pointer enters or focus reaches the pill, or when it opens; one media query listener while the panel is mounted; favicons load lazily.
+- Bundle budget: see `.size-limit.json` (`sources`; includes `DropdownMenu`).
+- Runtime budget: the menu renders only while open; favicons load lazily.
 - Heavy parts: none.
 
 ## Examples
 
-_Examples in `packages/webkit/examples/sources/`: Default (the pill, closed; one source under More), Open (the panel open)._
+_Examples in `packages/webkit/examples/sources/`: Default (the pill, closed; one source under More), Open (the menu open)._
 
 ## Constraints — DO NOT
 

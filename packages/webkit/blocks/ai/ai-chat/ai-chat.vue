@@ -234,7 +234,11 @@
   watch(
     () => props.loading,
     (now, before) => {
-      if (before && !now) composerEl.value?.focus()
+      if (!before || now) return
+      const active = globalThis.document?.activeElement
+      const idle = !active || active === globalThis.document.body || !active.isConnected
+      const box = composerEl.value?.$el as globalThis.Element | undefined
+      if (idle || (box && box.contains(active))) composerEl.value?.focus()
     }
   )
 

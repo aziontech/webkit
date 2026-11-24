@@ -536,6 +536,39 @@ describe('ConsoleLayout', () => {
       expect(await findByRole('button', { name: 'Compact switcher' })).toBeTruthy()
     })
 
+    it('closes the compact drawer when content in it changes the route', async () => {
+      const user = userEvent.setup()
+      const start = globalThis.location.pathname
+      const { getByRole, findByRole, queryByRole } = mount(
+        {},
+        { width: 480 },
+        {
+          'sidebar-header': () =>
+            h(
+              'button',
+              {
+                type: 'button',
+                onClick: () => {
+                  globalThis.history.pushState({}, '', '/chats/c-2')
+                  globalThis.dispatchEvent(new PopStateEvent('popstate'))
+                }
+              },
+              'Open chat'
+            )
+        }
+      )
+      await waitFor(() =>
+        expect(
+          within(getByRole('banner')).getByRole('button', { name: 'Open navigation' })
+        ).toBeTruthy()
+      )
+      await user.click(within(getByRole('banner')).getByRole('button', { name: 'Open navigation' }))
+      await user.click(await findByRole('button', { name: 'Open chat' }))
+
+      await waitFor(() => expect(queryByRole('button', { name: 'Open chat' })).toBeNull())
+      globalThis.history.replaceState({}, '', start)
+    })
+
     it('shows flash notifications and toggles the tools region from an action', async () => {
       const onTools = vi.fn()
       const { getByRole, getByText } = mount(

@@ -6,6 +6,7 @@ import { userEvent } from 'vitest/browser'
 import { nextTick } from 'vue'
 
 import ComboboxDefault from '../../examples/combobox/default.vue'
+import ConversationHistoryProjects from '../../examples/conversation-history/projects.vue'
 import DropdownMenuStates from '../../examples/dropdown-menu/states.vue'
 import MultiSelectDefault from '../../examples/multi-select/default.vue'
 import SelectDefault from '../../examples/select/default.vue'
@@ -107,5 +108,22 @@ describe('a selected row and a highlighted row keep a visible gap', () => {
     await userEvent.hover(neighbour)
     await waitForFill(neighbour)
     expectSeparatedFills(...orderByPosition(neighbour, selected))
+  })
+
+  it('ConversationHistory', async () => {
+    const view = render(ConversationHistoryProjects)
+    await settle()
+    const rows = Array.from(
+      view.container.querySelectorAll<HTMLElement>('[data-slot="conversation-history-item"]')
+    )
+    const selected = rows.find((row) => row.getAttribute('aria-current') === 'page')!
+    const next = rows[rows.indexOf(selected) + 1]!
+    await userEvent.hover(next)
+    await waitForFill(next)
+    expectSeparatedFills(selected, next)
+    const folders = Array.from(
+      view.container.querySelectorAll<HTMLElement>('[data-testid="conversation-history__project"]')
+    )
+    for (const row of [...rows, ...folders]) expect(row.getBoundingClientRect().height).toBe(32)
   })
 })

@@ -1,5 +1,5 @@
 {
- "purpose": "An inline reference in generated text: a small rounded chip with the mark of the source's site (its favicon, its icon, or its first letter on a colour of its own) and the site's name (`Azion`, else the host of `href` without `www.`), and `+N` when one marker cites several sources (`[1][2]`, `[1, 2]`). Hovering, focusing or pressing the chip opens a card with the site, the linked title and a snippet (`description`); with several sources a pager `‹ 1/3 ›` steps through them. `StreamingResponse` renders it for every run of `[n]` markers.",
+ "purpose": "An inline reference in generated text: a small rounded chip with the mark of the source's site (its favicon, its icon, or its first letter on a colour of its own) and the site's name (`Azion`, else the host of `href` without `www.`), and `+N` when one marker cites several sources (`[1][2]`, `[1, 2]`). Hovering, focusing or pressing the chip opens one card that stacks every cited source. `StreamingResponse` renders it for every run of `[n]` markers.",
  "useWhen": [
   "A statement in a generated response that comes from one or more specific sources."
  ],
@@ -15,6 +15,6 @@
  "bestPractices": [
   "Number in order of first use: [1], [2], [3]; the numbers stay in the accessible name.",
   "Give each web source a `site` name (`Azion`, `GitHub`) and, when you have one, its favicon as `image`; a bare host reads as a URL.",
-  "Keep `description` to a sentence or two of the page; the card cuts it at three lines."
+  "Give each source its `publisher` and `publishedAt` when you have them."
  ]
 }

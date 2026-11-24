@@ -56,25 +56,6 @@
 <template>
   <header :class="HEADER_CLASS">
     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-      <span :class="FLOATING_CLASS">
-        <IconButton
-          icon="az az-menu"
-          aria-label="Open conversation history"
-          variant="ghost"
-          @click="emit('open-history', $event)"
-        />
-      </span>
-      <span class="pointer-events-auto inline-flex max-md:hidden">
-        <IconButton
-          icon="az az-history"
-          :aria-label="historyOpen ? 'Hide conversation history' : 'Show conversation history'"
-          :aria-expanded="historyOpen"
-          aria-controls="ai-chat-history"
-          variant="ghost"
-          size="medium"
-          @click="emit('toggle-history', $event)"
-        />
-      </span>
       <h1
         id="ai-chat-title"
         class="sr-only"

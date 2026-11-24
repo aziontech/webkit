@@ -5341,45 +5341,98 @@
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/conversation-history",
    "models": [
-    "modelValue"
+    "modelValue",
+    "openKeys",
+    "projectsOpen",
+    "projectSort",
+    "openSectionKeys"
    ],
    "category": "ai",
    "structure": "monolithic",
    "props": [
     {
      "name": "items",
-     "type": "{ id: string; title: string; updatedAt: string | number | Date }[]",
+     "type": "ConversationHistoryItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "Conversations, any order; they are sorted newest first inside their group."
+     "doc": "Conversations, any order; sorted newest first in their group or project."
+    },
+    {
+     "name": "projects",
+     "type": "ConversationHistoryProject[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Projects shown in a Projects section above Recents; empty keeps the plain groups."
     },
     {
      "name": "now",
      "type": "string | number | Date",
      "default": "undefined",
      "required": "false",
-     "doc": "Reference time for the groups. Empty uses the nearest `ConfigProvider`'s `now`, then the current time; set either when the list is rendered on the server."
+     "doc": "Reference time for groups and ages. Empty uses the nearest ConfigProvider now, then the current time."
     },
     {
      "name": "removable",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows a Delete button on each row that emits `remove`."
+     "doc": "Lets each row be deleted (emits `remove`): a Delete button, or Delete in the row menu when `itemActions` is set."
     },
     {
      "name": "creatable",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows a New chat row at the top that emits `create`."
+     "doc": "Shows New chat (a row, or a toolbar button with `showToolbar`) that emits `create`."
+    },
+    {
+     "name": "projectCreatable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows New project (in the Projects header, or the toolbar) that emits `project-create`."
     },
     {
      "name": "searchable",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows a search field at the top that hides conversations whose title does not contain the typed text."
+     "doc": "Shows a search field that hides conversations whose title does not contain the typed text."
+    },
+    {
+     "name": "showToolbar",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a top toolbar: a Search button that emits `search-open`, then New project and New chat as icon buttons."
+    },
+    {
+     "name": "itemActions",
+     "type": "('pin' | 'rename' | 'share' | 'lock' | 'move' | 'archive')[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Row actions: a Pin button and a More menu on each row; `move` needs `projects`."
+    },
+    {
+     "name": "projectActions",
+     "type": "('pin' | 'settings' | 'remove' | 'chat-create')[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Project row actions: a More menu (pin, settings, remove) and a New chat button (`chat-create`)."
+    },
+    {
+     "name": "groupBy",
+     "type": "'date' | 'status'",
+     "default": "'date'",
+     "required": "false",
+     "doc": "Groups chats outside projects by last activity, or into Working (`status: 'running'`) and Settled (the rest and archived chats)."
+    },
+    {
+     "name": "showTime",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows each chat's age (`10m`, `15h`, `3d`) at the end of its row."
     },
     {
      "name": "loading",
@@ -5401,18 +5454,118 @@
      "default": "null",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "openKeys",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:openKeys`)."
+    },
+    {
+     "name": "projectsOpen",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Two-way value (`v-model:projectsOpen`)."
+    },
+    {
+     "name": "projectSort",
+     "type": "ConversationHistoryProjectSort",
+     "default": "'recent'",
+     "required": "false",
+     "doc": "Two-way value (`v-model:projectSort`)."
+    },
+    {
+     "name": "openSectionKeys",
+     "type": "string[]",
+     "default": "—",
+     "required": "false",
+     "doc": "Two-way value (`v-model:openSectionKeys`)."
     }
    ],
    "events": [
     {
      "name": "remove",
-     "payload": "(event: MouseEvent, id: string)",
+     "payload": "(event: MouseEvent | KeyboardEvent, id: string)",
      "notes": ""
     },
     {
      "name": "create",
      "payload": "(event: MouseEvent)",
      "notes": ""
+    },
+    {
+     "name": "project-create",
+     "payload": "(event: MouseEvent)",
+     "notes": ""
+    },
+    {
+     "name": "search-open",
+     "payload": "(event: MouseEvent | KeyboardEvent)",
+     "notes": ""
+    },
+    {
+     "name": "item-pin",
+     "payload": "(event: MouseEvent | KeyboardEvent, item: ConversationHistoryItem)",
+     "notes": ""
+    },
+    {
+     "name": "item-rename",
+     "payload": "(event: KeyboardEvent | FocusEvent, payload: { item; title: string })",
+     "notes": ""
+    },
+    {
+     "name": "item-share",
+     "payload": "(event: MouseEvent | KeyboardEvent, item: ConversationHistoryItem)",
+     "notes": ""
+    },
+    {
+     "name": "item-lock",
+     "payload": "(event: MouseEvent | KeyboardEvent, item: ConversationHistoryItem)",
+     "notes": ""
+    },
+    {
+     "name": "item-move",
+     "payload": "(event: MouseEvent | KeyboardEvent, payload: { item; project })",
+     "notes": ""
+    },
+    {
+     "name": "item-archive",
+     "payload": "(event: MouseEvent | KeyboardEvent, item: ConversationHistoryItem)",
+     "notes": ""
+    },
+    {
+     "name": "project-pin",
+     "payload": "(event: MouseEvent | KeyboardEvent, project: ConversationHistoryProject)",
+     "notes": ""
+    },
+    {
+     "name": "project-settings-open",
+     "payload": "(event: MouseEvent | KeyboardEvent, project: ConversationHistoryProject)",
+     "notes": ""
+    },
+    {
+     "name": "project-remove",
+     "payload": "(event: MouseEvent | KeyboardEvent, project: ConversationHistoryProject)",
+     "notes": ""
+    },
+    {
+     "name": "project-chat-create",
+     "payload": "(event: MouseEvent, project: ConversationHistoryProject)",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "item",
+     "scope": "{ item: ConversationHistoryItem }",
+     "notes": "Replaces a chat row's tag, title and description; the row keeps its button and actions."
+    },
+    {
+     "name": "item-meta",
+     "scope": "{ item: ConversationHistoryItem }",
+     "notes": "Replaces the end of a chat row (age, lock, status)."
     }
    ],
    "surface": "app",
@@ -33658,7 +33811,7 @@
    "title": "Blocks/Ai/AiChat",
    "source": "blocks/ai/ai-chat/ai-chat.vue",
    "surface": "app",
-   "summary": "The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with \"What can I help with?\", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the \"+\" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).",
+   "summary": "The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with \"What can I help with?\", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the \"+\" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).",
    "intents": [
     "ai chat",
     "ai assistant",
@@ -33831,7 +33984,7 @@
    "title": "Blocks/Ai/AiChatDrawer",
    "source": "blocks/ai/ai-chat-drawer/ai-chat-drawer.vue",
    "surface": "app",
-   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with the reader's prompts in bubbles at the inline end and plain-text responses that think (`Reasoning`), stream (`StreamingResponse` with site-name citation chips) and carry Copy, Read aloud, Share and More (with the feedback thumbs, Try again and Branch in new chat) and a `Sources` pill on the same line, prompts with Copy and Edit, and `ResponseBranches` over their versions, and a `PromptInput` pill floating at the foot with the disclaimer, the thread on the canvas. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
+   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with the reader's prompts in bubbles at the inline end and plain-text responses that think (`Reasoning`), stream (`StreamingResponse` with site-name citation chips) and carry Copy, Read aloud, Share and More (with Good response, Bad response, Try again and Branch in new chat) and a `Sources` pill on the same line, prompts with Copy and Edit, and `ResponseBranches` over their versions, and a `PromptInput` pill floating at the foot with the disclaimer, the thread on the canvas. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
    "intents": [
     "ai assistant drawer",
     "ask ai about this page",
