@@ -40,18 +40,20 @@ If `--dry-run`, print the planned writes here and exit 0.
 
 ### Step 4 — Scaffold (writes)
 
-Spawn the `component-scaffolder` sub-agent. Envelope includes: spec verbatim + Constraints + the construction rules — `no-invention`, `naming`, `component-structure`, `props`, `prop-vocabulary`, `v-model`, `emits`, `event-payloads`, `slots`, `composables`, `root-element`, `component-states`, `styling`, `tokens`, `accessibility`, `testid` — + `component-scaffold` skill + canonical paths to inspect (button.vue, pricing-card.vue). Task tells it exactly which files to write.
+Spawn the `component-scaffolder` sub-agent. Envelope includes: spec verbatim + Constraints + the construction rules — `no-invention`, `naming`, `imports`, `compound-api`, `component-structure`, `props`, `prop-vocabulary`, `v-model`, `emits`, `event-payloads`, `slots`, `composables`, `root-element`, `component-states`, `styling`, `accessibility`, `testid`, `comments`, `dependencies`, `bundle-budget` — + `.claude/docs/DESIGN.md` (tokens) + `.claude/docs/CODE_QUALITY.md` § 3 (size limits, grouped class strings, extension points) + `component-scaffold` skill + the reference components to inspect (`button`, `pricing-card`, found through the MCP `get_component`). Task tells it exactly which files to write: the `.vue` files, the starter `<name>.test.ts`, and the flat `package.json#exports` entries.
 
-Hooks that fire on every Write:
+After it returns, run `pnpm --filter @aziontech/webkit build:exports` so the new entries take the typed `{ types, default }` shape and `typesVersions` follows (`exports` gate). A component with built-in strings also gets its keys, from the spec's `## Internationalization`, in `packages/webkit/src/locales/en.ts`, `pt-BR.ts` and `es.ts` (camelCase component namespace; `test/standards/i18n-catalogs.test.mjs`). A native control or ARIA widget role it renders gets its owner entry in `packages/webkit/src/eslint-plugin/owners.json`.
 
-- PreToolUse: `enforce-spec-exists`, `validate-tokens`, `validate-references`, `enforce-component-create`.
-- PostToolUse: `validate-spec-compliance`.
+Hooks that fire on every Write or Edit:
+
+- PreToolUse: `validate-tokens`, `validate-references`, `validate-authoring`, `validate-naming`; on Write also `enforce-component-create`, `enforce-spec-exists`.
+- PostToolUse: `validate-spec-compliance`, `enforce-test-exists` (a root `.vue` without its `<name>.test.ts`), `validate-authoring-docs`.
 
 If any hook blocks, surface the stderr and abort. **Do not retry with workarounds.**
 
 ### Step 5 — Examples (writes)
 
-Write `packages/webkit/examples/<name>/`: `examples.json` (`component`, `title`, `examples[]` with `name`, `summary`, `file`) and one copyable `.vue` per example the spec's `## Examples` section lists (Default + per variant + per size + Disabled by default — nothing else unless the spec is explicit). Each example imports only `@aziontech/webkit/*` subpaths and stands alone. The docs site renders every example on the component page and at `/frame/example/<name>/<file>`, and the styled visual suite (`apps/visual`) screenshots the first one; nothing else to register.
+Write `packages/webkit/examples/<name>/`: `examples.json` (`component`, `title`, `examples[]` with `name`, `summary`, `file`) and one copyable `.vue` per example the spec's `## Examples` section lists (Default + per variant + per size + Disabled by default — nothing else unless the spec is explicit; `check:complete` fails when `examples.json` ships fewer). The first file is `default.vue`, the others are named after what they show (`variants.vue`, `sizes.vue`, `disabled.vue`; `.claude/rules/naming.md` § 4), and the `title` is `Components/<Category>/<PascalName>`. Each example imports only `@aziontech/webkit/*` subpaths and stands alone, uses the sample data of `rules/webkit-example-data.md`, keeps a floating overlay closed until the reader opens it (`rules/webkit-overlays-closed-on-load.md`), and never calls `Date.now()` or `new Date()` in setup. A summary names only real props. The docs site renders every example on the component page and at `/frame/example/<name>/<file>`, and the styled visual suite (`apps/visual`) screenshots the first one; nothing else to register.
 
 ### Step 6 — Code Connect (writes or skip)
 
@@ -67,12 +69,13 @@ Spawn the `echo-reporter` sub-agent. Independently re-parses every file written 
 
 ### Step 8 — Validation (read-only)
 
-Spawn the `component-validate` sub-agent. Runs `pnpm lint:webkit && type-check && type-coverage && pnpm --filter @aziontech/webkit test:ssr`. Surfaces failures.
+Spawn the `component-validate` sub-agent. Runs `pnpm lint:webkit && pnpm typecheck:webkit && pnpm check:webkit:type-coverage && pnpm --filter @aziontech/webkit test:ssr`. Surfaces failures. The full gate set (`pnpm --filter @aziontech/webkit run gates`) runs in `/component-new` step 6, after the size entry, `build:catalog` and the visual baseline exist.
 
 ### Step 9 — Finalize
 
 - Flip `.specs/<name>.md` `status: approved → implemented` (or stay at `implemented` for re-runs).
 - Refresh `checksum` and `last_updated`.
+- Run `pnpm --filter @aziontech/webkit build:catalog` (it writes `catalog.json`, `catalog/` and `llms/`).
 - Close `.claude/logs/<run-id>.jsonl` with a summary line.
 - Emit the final Markdown report (from `echo-reporter`) to the user.
 
@@ -82,6 +85,8 @@ Spawn the `component-validate` sub-agent. Runs `pnpm lint:webkit && type-check &
 - **No HEX/Tailwind palette/raw typography/`class` in defineProps/`any`/`@ts-ignore`** in `packages/webkit/src/components/**`. `validate-tokens.mjs` enforces this.
 - **No webkit `.vue` write without the spec.** `enforce-spec-exists.mjs` blocks Writes when `.specs/<name>.md` is missing, not approved, or checksum-mismatched.
 - **No `.vue` that diverges from the spec.** `validate-spec-compliance.mjs` blocks props/events/slots/animations the spec did not list.
+- **No root `.vue` without its test.** `enforce-test-exists.mjs` blocks it, so the starter test is written with the component.
+- **No naming or authoring drift.** `validate-naming.mjs` (the `check:naming` engine) and `validate-authoring.mjs` (prose comments, composable signatures, `as`/`asChild` props, literal UI strings) block a write that adds a violation.
 - **No bypass.** `enforce-component-create.mjs` blocks first Write to a new webkit `.vue` if this command or skill was not referenced in the session.
 
 ## Acknowledge before doing anything
