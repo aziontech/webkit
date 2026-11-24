@@ -31,6 +31,19 @@ describe('state state-async-submit and state-form-validation', () => {
     view.unmount()
   })
 
+  it('async-submit: the status Tag sits beside the default-size title and one duration is stated', () => {
+    const view = render(AsyncSubmit)
+    const header = view.getByTestId('page-header')
+    expect(header.getAttribute('data-size')).toBe('medium')
+    const meta = view.getByTestId('page-header__meta')
+    expect(meta.querySelector('[data-testid="tag"]')?.textContent).toContain('Idle')
+    expect(view.queryByTestId('page-header__actions')).toBeNull()
+    const text = view.container.textContent ?? ''
+    expect(text).toContain('about half a minute')
+    expect(text).not.toMatch(/\d+ seconds/)
+    view.unmount()
+  })
+
   it('async-submit: the failure shows the given reason and Redeploy emits redeploy', async () => {
     const view = render(AsyncSubmit, {
       props: {

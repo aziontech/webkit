@@ -30,7 +30,7 @@ The toasts are raised through `toast` with one id per run so each state replaces
 
 ### B. Page heading — `PageHeader` (required)
 
-`size="large"`, the page title and one sentence on what the run does. Its `#actions` slot carries the run status as a `Tag`, so the state of the run is readable from the heading in every state.
+The default size, the page title and one sentence on what the run does. Its `#meta` slot carries the run status as a `Tag` beside the title, at its own width on every screen, so the state of the run is readable from the heading in every state.
 
 ### C. Run status — `Tag` (required)
 
@@ -117,7 +117,7 @@ Then delete `sample.ts`; the variants are the only files that import it.
 
 - **Page heading:** names the action and the resource, sentence case: `Deploy web-app`. Lead: what the run does and that the user may leave: `Builds acme/web-app and publishes it to production. A deploy takes about half a minute and keeps running if you leave this page; the result reports back wherever you are.`
 - **Status tag:** one or two words: `Idle`, `Deploying`, `Failed`, `Deployed`.
-- **Empty state:** title states the fact, description says what to do: `No deployment running` / `Start one above. It takes about 25 seconds.`
+- **Empty state:** title states the fact, description says what to do: `No deployment running` / `Start one above. It takes about half a minute.`
 - **Progress toast:** present progressive with the single-character ellipsis, names the item: `Deploying web-app…`; description names the source and that the user may leave: `acme/web-app. It keeps running if you leave.`
 - **Failure toast:** what failed and why, then the ways out: `web-app wasn't deployed.` / `The routing rules were refused.` Actions: `Edit`, `Redeploy`.
 - **Success toast:** past tense, names the item and where it is live: `web-app is live.` / `It is available at web-app.example.com.` Actions: `Edit`, `Redeploy`.

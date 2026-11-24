@@ -122,9 +122,8 @@
       <PageHeader
         :title="`Deploy ${REPO.name}`"
         :description="`Builds ${REPO.scope}/${REPO.name} and publishes it to production. A deploy takes about half a minute and keeps running if you leave this page; the result reports back wherever you are.`"
-        size="large"
       >
-        <template #actions>
+        <template #meta>
           <Tag
             :label="statusTag.label"
             :severity="statusTag.severity"
@@ -278,7 +277,7 @@
           bordered
           icon="az az-cloud-upload"
           title="No deployment running"
-          :description="`Deploy ${REPO.name} to build it and publish it to production. It takes about 25 seconds, and you can leave this page while it runs.`"
+          :description="`Deploy ${REPO.name} to build it and publish it to production. It takes about half a minute, and you can leave this page while it runs.`"
         >
           <template #actions>
             <Button
