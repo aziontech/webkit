@@ -65,6 +65,10 @@ export const keyframes = {
     '60%': 'inset-inline-start: 107%; inset-inline-end: -8%',
     '100%': 'inset-inline-start: 107%; inset-inline-end: -8%'
   },
+  autoplayProgress: {
+    '0%': 'scale: 0 1',
+    '100%': 'scale: 1 1'
+  },
   flowDash: {
     '0%': 'stroke-dashoffset: 24',
     '100%': 'stroke-dashoffset: 0'

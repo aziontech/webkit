@@ -6,8 +6,8 @@ status: implemented
 spec_version: 5
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-16
-checksum: a12ed88528669457543f59ae1dddb02c049837e1568236cb048a9fc5d68b92c6
+last_updated: 2026-11-24
+checksum: 3352fd597f2763ffff76748eff7f26eb17c6b12413e23ffeba1ebb6b3fad43c6
 ---
 
 # ArticleHighlightSection — Component Spec
@@ -95,7 +95,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 - `data-columns` on the wall: one column per article from `lg`, three at least and five at most
 - Empty: when `items` is empty the band renders nothing
 - Without `autoplay` the band has no timer: the selected article changes only on a click, an arrow key or a bound `modelValue`
-- Autoplay: with `autoplay`, more than one article and no reduced-motion preference, the band advances (wrapping to the first) every `autoplayInterval` ms after mount and writes the index back through `v-model`; `data-autoplay` is set while it runs; an outlined `IconButton` at the band's top end pauses and resumes it, and `data-paused` marks the band while the reader holds it; a progress line (`var(--primary)`, `aria-hidden`) grows along the panel's foot from the inline start; pointer hover over the band or a `:focus-visible` element inside it pauses it, and leaving resumes it; any selection restarts the count
+- Autoplay: with `autoplay`, more than one article and no reduced-motion preference, the band advances (wrapping to the first) every `autoplayInterval` ms after mount and writes the index back through `v-model`; `data-autoplay` is set while it runs; an outlined `IconButton` at the band's top end pauses and resumes it, and `data-paused` marks the band while the reader holds it; a progress line (`var(--primary)`, `aria-hidden`) grows along the panel's foot from the inline start; pointer hover over the band or a `:focus-visible` element inside it pauses it, and leaving resumes it; it also holds while the band is scrolled out of the viewport; any selection restarts the count
 - Direction: `data-direction` on the panel is `forward` or `back` (from the arrow key, the autoplay step, or the index change) and drives an out-in slide of the panel's article, mirrored under `rtl`
 - Fill: `data-fill` is set; from `lg` the band's height is the viewport minus `var(--layout-header-height)` and the section gaps, the panel takes the free height and its cover drops its fixed aspect; under 50 rem of viewport height the copy tightens and the deck hides
 - Reflow: the hidden layout sizer is `min-w-0`, so the panel never grows past a 320 px box.
@@ -103,15 +103,15 @@ The band that opens a blog under its hero. One article is shown large — its co
 
 ## Motion & Animations
 
-| Trigger                             | Animation / Transition                                                              | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
-| ----------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| hover scale of the panel cover      | `transition-[scale] duration-moderate-02 ease-productive-entrance`                  | inline (matches catalog)                          | `motion-reduce:transition-none`        |
-| hover fill of the panel copy        | `transition-colors duration-fast-02 ease-productive-entrance`                       | inline (matches catalog)                          | `motion-reduce:transition-none`        |
-| selection fill of a wall title      | `transition-colors duration-moderate-01 ease-out`                                   | inline (matches catalog)                          | `motion-reduce:transition-none`        |
-| hover wash of a wall title          | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:before:transition-none` |
-| panel article entering on selection | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance`      | inline (matches catalog)                          | `motion-reduce:transition-none`        |
-| panel article leaving on selection  | `transition-[translate,opacity] duration-moderate-01 ease-productive-exit`          | inline (matches catalog)                          | `motion-reduce:transition-none`        |
-| autoplay progress line              | `transition-[width] duration-fast-01 ease-linear`                                   | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| Trigger                             | Animation / Transition                                                                                                                                                                                                                                       | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | -------------------------------------- |
+| hover scale of the panel cover      | `transition-[scale] duration-moderate-02 ease-productive-entrance`                                                                                                                                                                                           | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| hover fill of the panel copy        | `transition-colors duration-fast-02 ease-productive-entrance`                                                                                                                                                                                                | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| selection fill of a wall title      | `transition-colors duration-moderate-01 ease-out`                                                                                                                                                                                                            | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| hover wash of a wall title          | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance`                                                                                                                                                                          | inline (matches catalog)                          | `motion-reduce:before:transition-none` |
+| panel article entering on selection | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance`                                                                                                                                                                               | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| panel article leaving on selection  | `transition-[translate,opacity] duration-moderate-01 ease-productive-exit`                                                                                                                                                                                   | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| autoplay progress line              | `animate-autoplay-progress` on the hairline: one `scale` from 0 to full width across the inline start, its `animation-duration` set on the element to `autoplayInterval`, restarted per slide and held with `animation-play-state` while the rotation pauses | `autoplay-progress` (catalog)                     | `motion-reduce:animate-none`           |
 
 ## Tokens
 

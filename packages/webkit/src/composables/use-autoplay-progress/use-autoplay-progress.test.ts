@@ -26,16 +26,53 @@ afterEach(() => {
 })
 
 describe('useAutoplayProgress', () => {
-  it('fills the progress over the interval, then advances and starts again', async () => {
+  it('advances once per interval with one timeout, not a ticking interval', async () => {
+    const intervals = vi.spyOn(globalThis, 'setInterval')
     const { api, onAdvance, unmount } = setup()
     expect(api.autoplayRunning.value).toBe(true)
+    expect(api.playing.value).toBe(true)
     await wait(180)
-    expect(api.progress.value).toBeGreaterThan(0)
     expect(onAdvance).not.toHaveBeenCalled()
+    expect(api.cycle.value).toBe(0)
     await wait(250)
-    expect(onAdvance).toHaveBeenCalled()
-    expect(api.progress.value).toBeLessThan(100)
+    expect(onAdvance).toHaveBeenCalledTimes(1)
+    expect(api.cycle.value).toBe(1)
+    expect(intervals).not.toHaveBeenCalled()
     unmount()
+  })
+
+  it('keeps the time already spent when it resumes after a hold', async () => {
+    const { api, onAdvance, unmount } = setup()
+    await wait(200)
+    api.enterPointer()
+    await wait(300)
+    expect(onAdvance).not.toHaveBeenCalled()
+    api.leavePointer()
+    await wait(160)
+    expect(onAdvance).toHaveBeenCalledTimes(1)
+    unmount()
+  })
+
+  it('holds while its target is scrolled out of the viewport', async () => {
+    const onAdvance = vi.fn()
+    let api: UseAutoplayProgressReturn | undefined
+    const view = render(
+      defineComponent({
+        setup() {
+          const rootEl = ref<HTMLElement | null>(null)
+          api = useAutoplayProgress({ enabled: true, interval: 300, onAdvance, target: rootEl })
+          return () =>
+            h('div', { style: 'height: 300vh' }, [
+              h('div', { ref: rootEl, style: 'margin-top: 250vh; height: 10px' })
+            ])
+        }
+      })
+    )
+    await vi.waitFor(() => expect(api!.playing.value).toBe(false))
+    expect(api!.autoplayRunning.value).toBe(true)
+    await wait(400)
+    expect(onAdvance).not.toHaveBeenCalled()
+    view.unmount()
   })
 
   it('does not run while disabled and starts when it is enabled', async () => {
@@ -71,11 +108,13 @@ describe('useAutoplayProgress', () => {
     unmount()
   })
 
-  it('stops advancing after unmount and restartProgress empties the bar', async () => {
+  it('stops advancing after unmount and restartProgress starts a new cycle', async () => {
     const { api, onAdvance, unmount } = setup()
     await wait(150)
     api.restartProgress()
-    expect(api.progress.value).toBe(0)
+    expect(api.cycle.value).toBe(1)
+    await wait(200)
+    expect(onAdvance).not.toHaveBeenCalled()
     unmount()
     await wait(450)
     expect(onAdvance).not.toHaveBeenCalled()

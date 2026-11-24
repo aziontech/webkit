@@ -240,12 +240,12 @@ one that is.
 
 ## Token groups
 
-767 CSS custom properties from `@aziontech/theme`, grouped by their first segment. The MCP tool `list_tokens` returns the same list.
+768 CSS custom properties from `@aziontech/theme`, grouped by their first segment. The MCP tool `list_tokens` returns the same list.
 
 | Group | Count | Tokens |
 | --- | --- | --- |
 | accent | 4 | `--accent` · `--accent-foreground` · `--accent-mask` · `--accent-selected` |
-| animate | 30 | `--animate-blink` · `--animate-blink-settle` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-flow-dash-settle` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-ping-settle` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-pulse-settle` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-spin-settle` · `--animate-status-pulse` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
+| animate | 31 | `--animate-autoplay-progress` · `--animate-blink` · `--animate-blink-settle` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-flow-dash-settle` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-ping-settle` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-pulse-settle` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-spin-settle` · `--animate-status-pulse` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
 | aspect | 1 | `--aspect-video` |
 | bg | 13 | `--bg-active` · `--bg-backdrop` · `--bg-canvas` · `--bg-contrast` · `--bg-disabled` · `--bg-hover` · `--bg-mask` · `--bg-placeholder` · `--bg-placeholder-highlight` · `--bg-selected` · `--bg-surface` · `--bg-surface-overlay` · `--bg-surface-raised` |
 | blur | 7 | `--blur-2xl` · `--blur-3xl` · `--blur-lg` · `--blur-md` · `--blur-sm` · `--blur-xl` · `--blur-xs` |
@@ -1147,6 +1147,7 @@ stay a review concern:
 
 | Class | Value | Use when |
 | --- | --- | --- |
+| `animate-autoplay-progress` | `autoplayProgress 2100ms linear forwards` | The hairline that fills while a rotating band (tabs, quotes, highlights) waits to advance. Set animation-duration ON THE ELEMENT to the rotation interval, key the element on the slide so it restarts, pause it with animation-play-state while the rotation holds, and anchor its transform origin at the inline start. |
 | `animate-blink` | `blink 1s step-end infinite` | Text caret / terminal cursor blink while text is being typed or streamed (stops when the typing does). |
 | `animate-blink-settle` | `blink 1s step-end 4` | Four caret blinks, then a solid caret (4s): a decorative cursor that must stop by itself within 5 seconds (WCAG 2.2.2). |
 | `animate-bounce` | `bounce 1s infinite` | Playful attention bounce (scroll-down hints); use sparingly. |
@@ -1184,7 +1185,7 @@ stay a review concern:
 | --- | --- | --- |
 | transition | 8 | `--transition-duration-fast-01` · `--transition-duration-fast-02` · `--transition-duration-moderate-01` · `--transition-duration-moderate-02` · `--transition-duration-slow-01` · `--transition-duration-slow-02` · `--transition-duration-slow-03` · `--transition-duration-slow-04` |
 | ease | 7 | `--ease-expressive-entrance` · `--ease-expressive-exit` · `--ease-in` · `--ease-in-out` · `--ease-out` · `--ease-productive-entrance` · `--ease-productive-exit` |
-| animate | 30 | `--animate-blink` · `--animate-blink-settle` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-flow-dash-settle` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-ping-settle` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-pulse-settle` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-spin-settle` · `--animate-status-pulse` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
+| animate | 31 | `--animate-autoplay-progress` · `--animate-blink` · `--animate-blink-settle` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-flow-dash-settle` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-ping-settle` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-pulse-settle` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-spin-settle` · `--animate-status-pulse` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
 
 ---
 

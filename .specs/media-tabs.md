@@ -7,9 +7,9 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: d955b59cee0262b6bd42c06c5cae03b488936ac7022785202799c7374e0fd205
+checksum: 33203bf46ccb087a8efd4f44998a5bfc732d6ecedbacd10805afdda88a1f2122
 created: 2026-09-24
-last_updated: 2026-11-23
+last_updated: 2026-11-24
 ---
 
 # Media Tabs — Component Spec
@@ -45,7 +45,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 - Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.
 - Use scenes of the same shape. The frame does not resize between tabs.
 - Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step so five claims fit.
-- Leave `autoplay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion. Below `lg` it does not run either: there the media opens inside the active row, so a tick would move the page under the reader's thumb; a tap selects the tab instead.
+- Leave `autoplay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus and while the band is scrolled out of the viewport, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion. Below `lg` it does not run either: there the media opens inside the active row, so a tick would move the page under the reader's thumb; a tap selects the tab instead.
 
 ## Usage
 
@@ -136,12 +136,12 @@ None. The tab shown is the `v-model` (`update:modelValue`).
 
 ## Motion & Animations
 
-| Trigger                  | Animation / Transition                                                                                                                                  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                       |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------- |
-| selection change (media) | `transition-[translate,opacity] duration-moderate-02 ease-productive-entrance`; the inactive medium rests one `--spacing-lg` below and rises into place | `moderate-02` (240ms) + `productive-entrance`     | `motion-reduce:translate-y-0 motion-reduce:transition-none` (swaps instantly) |
-| selection change (row)   | `transition-colors duration-moderate-01 ease-out`                                                                                                       | `moderate-01` (150ms)                             | `motion-reduce:transition-none`                                               |
-| hover (row)              | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` on the ghost layer                                                  | `fast-02` (110ms) + `productive-entrance`         | `motion-reduce:before:transition-none`                                        |
-| autoplay progress        | `transition-[width] duration-fast-01 ease-linear` on the hairline                                                                                       | `fast-01` (70ms)                                  | autoplay does not start under reduced motion, so the hairline never moves     |
+| Trigger                  | Animation / Transition                                                                                                                                                                                                                                       | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                                                 |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| selection change (media) | `transition-[translate,opacity] duration-moderate-02 ease-productive-entrance`; the inactive medium rests one `--spacing-lg` below and rises into place                                                                                                      | `moderate-02` (240ms) + `productive-entrance`     | `motion-reduce:translate-y-0 motion-reduce:transition-none` (swaps instantly)                           |
+| selection change (row)   | `transition-colors duration-moderate-01 ease-out`                                                                                                                                                                                                            | `moderate-01` (150ms)                             | `motion-reduce:transition-none`                                                                         |
+| hover (row)              | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` on the ghost layer                                                                                                                                                       | `fast-02` (110ms) + `productive-entrance`         | `motion-reduce:before:transition-none`                                                                  |
+| autoplay progress        | `animate-autoplay-progress` on the hairline: one `scale` from 0 to full width across the inline start, its `animation-duration` set on the element to `autoplayInterval`, restarted per slide and held with `animation-play-state` while the rotation pauses | `autoplay-progress` (linear)                      | `motion-reduce:animate-none`; autoplay does not start under reduced motion, so the hairline never moves |
 
 ## Tokens
 

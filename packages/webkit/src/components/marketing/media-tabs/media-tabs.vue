@@ -103,13 +103,15 @@
     sideBySide.value = Boolean(wideQuery?.matches)
   }
   const hydrated = ref(false)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
 
   const {
     autoplayEnabled,
     autoplayRunning,
     paused,
     pauseLabel,
-    progress,
+    playing,
+    cycle,
     restartProgress,
     togglePause,
     enterPointer,
@@ -121,7 +123,8 @@
     interval: () => props.autoplayInterval,
     onAdvance: () => {
       activeIndex.value = (activeIndex.value + 1) % tabs.value.length
-    }
+    },
+    target: rootEl
   })
 
   watch(
@@ -228,6 +231,7 @@
 
 <template>
   <div
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-tabs-side="tabsSide"
@@ -318,10 +322,14 @@
 
             <span
               v-if="isActive(index) && showProgress && autoplayEnabled"
+              :key="cycle"
               aria-hidden="true"
               data-progress
-              :style="{ width: `${progress}%` }"
-              class="absolute bottom-0 start-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
+              :style="{
+                animationDuration: `${autoplayInterval}ms`,
+                animationPlayState: playing ? undefined : 'paused'
+              }"
+              class="absolute bottom-0 start-0 h-px w-full origin-left bg-(--primary) animate-autoplay-progress rtl:origin-right motion-reduce:animate-none"
             />
           </RegistrationFrame>
         </li>

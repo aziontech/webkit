@@ -42,6 +42,7 @@
    "--accent-foreground",
    "--accent-mask",
    "--accent-selected",
+   "--animate-autoplay-progress",
    "--animate-blink",
    "--animate-blink-settle",
    "--animate-bounce",
@@ -854,6 +855,7 @@
     "--accent-selected"
    ],
    "animate": [
+    "--animate-autoplay-progress",
     "--animate-blink",
     "--animate-blink-settle",
     "--animate-bounce",
@@ -1694,6 +1696,7 @@
    ]
   },
   "animations": [
+   "autoplay-progress",
    "blink",
    "blink-settle",
    "bounce",
@@ -1726,6 +1729,10 @@
    "texture-wave-b"
   ],
   "animationGuide": {
+   "autoplay-progress": {
+    "value": "autoplayProgress 2100ms linear forwards",
+    "useWhen": "The hairline that fills while a rotating band (tabs, quotes, highlights) waits to advance. Set animation-duration ON THE ELEMENT to the rotation interval, key the element on the slide so it restarts, pause it with animation-play-state while the rotation holds, and anchor its transform origin at the inline start."
+   },
    "blink": {
     "value": "blink 1s step-end infinite",
     "useWhen": "Text caret / terminal cursor blink while text is being typed or streamed (stops when the typing does)."

@@ -1783,3 +1783,11 @@ FlowDiagram's fit stops probing a row layout on every resize callback (A5P3-242)
 Budget-raise: flow-diagram 22 KB → 22.1 KB (measured 22.05 KB): FlowDiagram fit skips the row probe when the scroller and list size are unchanged (audit-5 P3 A5P3-242, resize-only layout work halved).
 Budget-raise: flow-diagram-root 19.75 KB → 19.85 KB (measured 19.79 KB): FlowDiagram fit skips the row probe when the scroller and list size are unchanged (audit-5 P3 A5P3-242).
 Budget-raise: console-trace-scene 85.5 KB → 85.6 KB (measured 85.56 KB): carries FlowDiagram, whose fit skips the row probe when the scroller and list size are unchanged (audit-5 P3 A5P3-242).
+
+The autoplay hairline of QuoteTabs, MediaTabs and ArticleHighlightSection (A5P3-235) no longer re-renders ten times a second: one `setTimeout` per slide advances the band, the hairline is one catalogued `animate-autoplay-progress` (a `scale`, not a `width`) restarted per slide and held with `animation-play-state`, and an IntersectionObserver holds the rotation while the band is off screen. Before: 10 reactive updates and 10 style recalculations of the bar per second, off screen too; after: none between slides, none off screen.
+
+Budget-raise: media-tabs 10.25 KB → 10.45 KB (measured 10.41 KB): MediaTabs autoplay advances on one timeout per slide with a CSS hairline and holds off screen (audit-5 P3 A5P3-235).
+Budget-raise: quote-tabs 24.6 KB → 24.85 KB (measured 24.78 KB): QuoteTabs autoplay advances on one timeout per slide with a CSS hairline and holds off screen (audit-5 P3 A5P3-235).
+Budget-raise: article-highlight-section 12.65 KB → 13.05 KB (measured 12.98 KB): ArticleHighlightSection, now on the shared useAutoplayProgress instead of its own copy, autoplay advances on one timeout per slide with a CSS hairline and holds off screen (audit-5 P3 A5P3-235).
+Budget-raise: client-quotes-section 27.85 KB → 28.05 KB (measured 28.00 KB): carries QuoteTabs, whose autoplay advances on one timeout per slide with a CSS hairline and holds off screen (audit-5 P3 A5P3-235).
+Budget-raise: feature-tabs-section 59.9 KB → 60.1 KB (measured 60.06 KB): carries MediaTabs, whose autoplay advances on one timeout per slide with a CSS hairline and holds off screen (audit-5 P3 A5P3-235).
