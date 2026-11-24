@@ -8,9 +8,6 @@
 
   defineOptions({ name: 'Marquee', inheritAttrs: false })
 
-  /** Mark scale. */
-  export type MarqueeSize = 'small' | 'medium'
-
   /** Whether the strip paints its own ground. */
   export type MarqueeVariant = 'plain' | 'band'
 
@@ -31,8 +28,6 @@
     items?: MarqueeItem[]
     /** Eyebrow above the row, stating the claim the marks make. */
     label?: string
-    /** Mark scale; medium is the marketing band and climbs 32/40/48 px by device class, small is a flat 24 px for a column. */
-    size?: MarqueeSize
     /** Seconds for one full pass; left at 0 it is derived from the number of marks, or of items, so every strip moves at one speed. */
     duration?: number
     /** Accessible name for the row of marks, announced instead of an unnamed list. */
@@ -44,7 +39,6 @@
     marks: () => [],
     items: () => [],
     label: '',
-    size: 'medium',
     duration: 0,
     ariaLabel: ''
   })
@@ -126,28 +120,22 @@
   const ROOT_CLASS =
     'group/strip relative flex flex-col items-center gap-(--spacing-xl) ' +
     'data-[variant=band]:w-full data-[variant=band]:bg-(--bg-canvas) data-[variant=band]:py-(--spacing-xl) ' +
-    'data-[size=medium]:[--marquee-brand-cell:150px] data-[size=medium]:[--marquee-brand-mark:32px] data-[size=small]:[--marquee-brand-cell:120px] ' +
-    'data-[size=small]:[--marquee-brand-mark:24px] ' +
-    'md:data-[size=medium]:[--marquee-brand-cell:200px] md:data-[size=medium]:[--marquee-brand-mark:40px] lg:data-[size=medium]:[--marquee-brand-cell:240px] ' +
-    'lg:data-[size=medium]:[--marquee-brand-mark:48px]'
+    '[--marquee-brand-cell:120px] [--marquee-brand-mark:24px]'
 
   const STRIP_CLASS =
     'm-0 flex w-max shrink-0 list-none items-center p-0 ' +
-    'data-[size=medium]:gap-(--spacing-4) data-[size=medium]:pe-(--spacing-4) data-[size=small]:gap-(--spacing-10) data-[size=small]:pe-(--spacing-10) ' +
-    'md:data-[size=medium]:gap-(--spacing-8) md:data-[size=medium]:pe-(--spacing-8) ' +
-    'data-[content=items]:data-[size]:gap-[max(var(--spacing-2xl),calc(var(--spacing-xl)*2))] data-[content=items]:data-[size]:pe-[max(var(--spacing-2xl),calc(var(--spacing-xl)*2))] ' +
-    'motion-reduce:data-[content=items]:data-[size]:gap-(--spacing-md) motion-reduce:data-[content=items]:data-[size]:pe-0 motion-reduce:w-full motion-reduce:flex-wrap ' +
+    'gap-(--spacing-10) pe-(--spacing-10) ' +
+    'data-[content=items]:gap-[max(var(--spacing-2xl),calc(var(--spacing-xl)*2))] data-[content=items]:pe-[max(var(--spacing-2xl),calc(var(--spacing-xl)*2))] ' +
+    'motion-reduce:data-[content=items]:gap-(--spacing-md) motion-reduce:data-[content=items]:pe-0 motion-reduce:w-full motion-reduce:flex-wrap ' +
     'motion-reduce:justify-center motion-reduce:gap-(--spacing-md) motion-reduce:data-[duplicate]:hidden ' +
     'max-sm:motion-reduce:data-[content=marks]:grid max-sm:motion-reduce:data-[content=marks]:grid-cols-2 max-sm:motion-reduce:data-[content=marks]:justify-items-center'
 
   const ITEM_CLASS =
-    'flex shrink-0 items-center gap-(--spacing-xs) whitespace-nowrap text-body-md text-(--text-default) ' +
-    'group-data-[size=small]/strip:text-body-sm ' +
+    'flex shrink-0 items-center gap-(--spacing-xs) whitespace-nowrap text-body-sm text-(--text-default) ' +
     'motion-reduce:max-w-full motion-reduce:shrink motion-reduce:whitespace-normal motion-reduce:text-center'
 
   const MARK_CLASS =
-    'flex w-(--marquee-brand-cell) shrink-0 items-center ' +
-    'group-data-[size=small]/strip:w-auto ' +
+    'flex shrink-0 items-center ' +
     'justify-center text-(--text-default) opacity-70 transition-opacity duration-fast-02 ease-productive-entrance ' +
     'hover:opacity-100 motion-reduce:transition-none'
 </script>
@@ -156,7 +144,6 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :data-size="size"
     :data-variant="variant"
     :data-content="isItems ? 'items' : 'marks'"
     :class="ROOT_CLASS"
@@ -201,8 +188,7 @@
       reduced="wrap"
     >
       <ul
-        :data-size="size"
-        :data-content="isItems ? 'items' : 'marks'"
+            :data-content="isItems ? 'items' : 'marks'"
         :data-duplicate="duplicate || null"
         :aria-label="!duplicate && ariaLabel ? ariaLabel : undefined"
         :aria-hidden="duplicate ? 'true' : undefined"
@@ -239,7 +225,7 @@
           </svg>
           <span
             v-else-if="!mark.art"
-            class="whitespace-nowrap font-medium group-data-[size=medium]/strip:text-heading-md group-data-[size=small]/strip:text-heading-xs"
+            class="whitespace-nowrap font-medium text-heading-xs"
             >{{ mark.label }}</span
           >
         </li>

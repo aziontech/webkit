@@ -174,8 +174,7 @@ describe('Marquee', () => {
     await markFor(container, 'magalu')
 
     const wordmark = getAllByText('Splunk')[0]?.classList
-    expect(wordmark?.contains('group-data-[size=medium]/strip:text-heading-md')).toBe(true)
-    expect(wordmark?.contains('group-data-[size=small]/strip:text-heading-xs')).toBe(true)
+    expect(wordmark?.contains('text-heading-xs')).toBe(true)
     expect(wordmark?.contains('text-heading-2xs')).toBe(false)
   })
 
@@ -189,15 +188,6 @@ describe('Marquee', () => {
     return rerender({ marks: MARKS, label: '' }).then(() => {
       expect(queryByText(/Trusted by mission-critical workloads/)).toBeNull()
     })
-  })
-
-  it.each(['small', 'medium'] as const)('mirrors size=%s onto data-size', (size) => {
-    const { getByTestId, container } = render(Marquee, { props: { marks: MARKS, size } })
-
-    expect(getByTestId(TESTID)).toHaveAttribute('data-size', size)
-    for (const row of container.querySelectorAll('ul')) {
-      expect(row).toHaveAttribute('data-size', size)
-    }
   })
 
   it('derives the pass from the mark count, so speed is constant across strips', () => {

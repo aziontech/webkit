@@ -253,7 +253,6 @@
           :data-width="maxWidth"
           :marks="marqueeMarks"
           :label="marqueeLabel"
-          size="small"
           :class="MARQUEE_CLASS"
         />
       </div>

@@ -1,12 +1,12 @@
 import { fireEvent, render, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/rating/default.vue'
 import Disabled from '../../../../examples/rating/disabled.vue'
-import InField from '../../../../examples/rating/in-field.vue'
 import Readonly from '../../../../examples/rating/readonly.vue'
+import SendOnSelect from '../../../../examples/rating/send-on-select.vue'
 import Sizes from '../../../../examples/rating/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
@@ -231,12 +231,62 @@ describe('Rating', () => {
     expect(form.checkValidity()).toBe(true)
   })
 
-  it('shows the error of the InField example after an empty submit', async () => {
-    const view = render(InField)
-    expect(view.queryByRole('alert')).toBeNull()
-    await fireEvent.click(view.getByRole('button', { name: 'Send feedback' }))
-    expect(view.getByRole('alert').textContent).toContain('Pick a score')
-    expect(view.getByRole('radiogroup').getAttribute('aria-invalid')).toBe('true')
+  it('emits select with the event and the score on a click, without a second click', async () => {
+    const score = ref(0)
+    const picks: Array<[string, number]> = []
+    const view = host(
+      `<Rating v-model="score" aria-label="Score" @select="(event, value) => picks.push([event.type, value])" />`,
+      () => ({ score, picks })
+    )
+    await userEvent.click(view.getByRole('radio', { name: '4 stars' }))
+    expect(picks).toEqual([['click', 4]])
+    expect(score.value).toBe(4)
+    await userEvent.click(view.getByRole('radio', { name: '4 stars' }))
+    expect(picks).toEqual([
+      ['click', 4],
+      ['click', 4]
+    ])
+  })
+
+  it('does not emit select while the arrow keys move the score, and emits it on Enter or Space', async () => {
+    const score = ref(2)
+    const picks: number[] = []
+    const view = host(
+      `<Rating v-model="score" aria-label="Score" @select="(_event, value) => picks.push(value)" />`,
+      () => ({ score, picks })
+    )
+    await userEvent.keyboard('{Tab}')
+    await userEvent.keyboard('{ArrowRight}')
+    await userEvent.keyboard('{ArrowRight}')
+    expect(score.value).toBe(4)
+    expect(picks).toEqual([])
+    await userEvent.keyboard('{Enter}')
+    expect(picks).toEqual([4])
+    await userEvent.keyboard('{ArrowLeft}')
+    await userEvent.keyboard(' ')
+    expect(picks).toEqual([4, 3])
+    expect(view.getByRole('radio', { name: '3 stars' })).toBe(document.activeElement)
+  })
+
+  it('does not emit select while disabled', async () => {
+    const picks: number[] = []
+    const view = host(
+      `<Rating aria-label="Score" disabled @select="(_event, value) => picks.push(value)" />`,
+      () => ({ picks })
+    )
+    await fireEvent.click(view.getByRole('radio', { name: '2 stars' }), { detail: 1 })
+    expect(picks).toEqual([])
+  })
+
+  it('sends the SendOnSelect rating on the pick and replaces the stars with a focused thank-you', async () => {
+    const view = render(SendOnSelect)
+    expect(view.queryByRole('button')).toBeNull()
+    expect(view.getByRole('status').textContent?.trim()).toBe('')
+    await userEvent.click(view.getByRole('radio', { name: '4 stars' }))
+    await vi.waitFor(() => expect(view.queryByRole('radiogroup')).toBeNull())
+    const status = view.getByRole('status')
+    expect(status.textContent).toContain('Thanks, your rating was sent.')
+    expect(document.activeElement).toBe(status)
   })
 
   it('names the stars and the score in the ConfigProvider locale', () => {
@@ -281,7 +331,7 @@ describe('Rating', () => {
   })
 
   it('has no axe violations in every example', async () => {
-    for (const example of [Default, Sizes, Readonly, Disabled, InField]) {
+    for (const example of [Default, Sizes, Readonly, Disabled, SendOnSelect]) {
       const view = render(example)
       await expectNoA11yViolations(view.container)
       view.unmount()

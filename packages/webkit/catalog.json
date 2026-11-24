@@ -17232,6 +17232,13 @@
      "doc": "Two-way value (`v-model`)."
     }
    ],
+   "events": [
+    {
+     "name": "select",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: number)",
+     "notes": ""
+    }
+   ],
    "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/rating.json",
@@ -20921,13 +20928,6 @@
      "default": "''",
      "required": "false",
      "doc": "Eyebrow above the row, stating the claim the marks make."
-    },
-    {
-     "name": "size",
-     "type": "'small' | 'medium'",
-     "default": "'medium'",
-     "required": "false",
-     "doc": "Mark scale; `medium` is the marketing band and climbs 32/40/48 px by device class, `small` is a flat 24 px for a column."
     },
     {
      "name": "duration",

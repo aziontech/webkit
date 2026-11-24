@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 21a88f7a346f3cbb0a08b8385d431e9a9b28448641bcca847971edcc34a778cb
+checksum: 22dd9e349eff767ab8172c8e0d0a3f647e125bf003b60eac0260cb4c0376be1f
 created: 2026-09-23
 last_updated: 2026-11-24
 ---
@@ -42,7 +42,7 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 - Name marks from the registry rather than passing artwork: the registry is what keeps one company's mark identical on every surface, and a name with no entry still renders as its own wordmark so a strip is never incomplete. A brand whose terms refuse its logo (Splunk, Google BigQuery, Amazon S3 and Kinesis, Zoop, G2 badges, Rust, Datadog in one ink) is a registered text wordmark: name it like any mark (`splunk`, `amazon-s3`) and the row writes its proper name in the same fallback type, never the raw id.
 - Let `duration` derive itself. The component holds speed constant rather than duration (two seconds per mark, six per item, since a claim is read and a mark is not), so an eleven-mark strip and a thirty-mark strip advance at the same rate; pass a number only to slow one deliberately.
 - Keep `label` to the claim the row makes, not to a heading — the strip sits under a hero, and a second heading competes with the one above it.
-- Use `size="small"` only where the strip is the quietest thing on the page, such as the floor of a sign-in column; `medium` is the marketing band and carries its own responsive ladder.
+- The strip has one scale, the scale of the Azion site's logo row: marks are 24 px tall at their own width, one fixed gap apart. It is proof under a claim, never the loudest thing on the page, so there is no larger size.
 - Keep each `items` label to a short clause with no punctuation to end it, and give every item the same kind of icon; the row repeats, so a claim is read as one of a run, never on its own.
 - Never put a call to action, a price or anything else a reader needs inside a strip. It scrolls away, and under `prefers-reduced-motion` it becomes a wrapped grid instead.
 
@@ -64,15 +64,14 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 ## Props
 
-| Prop        | Type                  | Default    | Required | JSDoc                                                                                                                                                                                        |
-| ----------- | --------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `variant`   | `'plain' \| 'band'`   | `'plain'`  | false    | Whether the strip paints its own ground; `band` fills it with the page canvas so a textured hero cannot show through the marks, and the floor still reads continuous with the band above it. |
-| `marks`     | `string[]`            | `[]`       | false    | Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete.                                           |
-| `items`     | `MarqueeItem[]`       | `[]`       | false    | Short claims printed in the row instead of marks, each with its label and an optional leading icon class; when set, `marks` is not rendered.                                                 |
-| `label`     | `string`              | `''`       | false    | Eyebrow above the row, stating the claim the marks make.                                                                                                                                     |
-| `size`      | `'small' \| 'medium'` | `'medium'` | false    | Mark scale; `medium` is the marketing band and climbs 32/40/48 px by device class, `small` is a flat 24 px for a column.                                                                     |
-| `duration`  | `number`              | `0`        | false    | Seconds for one full pass; left at `0` it is derived from the number of marks, or of items, so every strip moves at one speed.                                                               |
-| `ariaLabel` | `string`              | `''`       | false    | Accessible name for the row of marks, announced instead of an unnamed list.                                                                                                                  |
+| Prop        | Type                | Default   | Required | JSDoc                                                                                                                                                                                        |
+| ----------- | ------------------- | --------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`   | `'plain' \| 'band'` | `'plain'` | false    | Whether the strip paints its own ground; `band` fills it with the page canvas so a textured hero cannot show through the marks, and the floor still reads continuous with the band above it. |
+| `marks`     | `string[]`          | `[]`      | false    | Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete.                                           |
+| `items`     | `MarqueeItem[]`     | `[]`      | false    | Short claims printed in the row instead of marks, each with its label and an optional leading icon class; when set, `marks` is not rendered.                                                 |
+| `label`     | `string`            | `''`      | false    | Eyebrow above the row, stating the claim the marks make.                                                                                                                                     |
+| `duration`  | `number`            | `0`       | false    | Seconds for one full pass; left at `0` it is derived from the number of marks, or of items, so every strip moves at one speed.                                                               |
+| `ariaLabel` | `string`            | `''`      | false    | Accessible name for the row of marks, announced instead of an unnamed list.                                                                                                                  |
 
 ## Events
 
@@ -85,8 +84,7 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 ## States
 
 - Visual states: every mark rests at 70% opacity and lifts to full on `hover`; an item is real text and rests at full ink
-- `data-size` mirrors the `size` prop and is what drives the mark height, the cell width and the row gap
-- `data-content` is `items` when `items` is set and `marks` otherwise; in `items` mode the cells size to their text, the row gap widens to `--spacing-2xl` (never under twice `--spacing-xl`, so a phone keeps room between claims), and the label steps down to `text-body-sm` under `size="small"`
+- `data-content` is `items` when `items` is set and `marks` otherwise; in `items` mode the cells size to their text, the row gap widens to `--spacing-2xl` (never under twice `--spacing-xl`, so a phone keeps room between claims)
 - `data-variant` mirrors the `variant` prop; `band` paints the page canvas and the strip's own vertical rhythm so nothing behind it shows through while the fill still matches the band it floors, `plain` leaves it transparent over whatever it sits on
 - `data-duplicate` marks every `aria-hidden` copy after the first — the copies the loop translates into place, and the ones hidden outright under reduced motion
 - Short rows: the row repeats until half the track is at least as wide as the strip, so a strip with few marks never shows an empty run; the pass lengthens with each repeat so the speed stays the same
@@ -103,17 +101,16 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 ## Tokens
 
-| Region                            | Token (DESIGN.md)                                                                                                                    |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| typography (fallback wordmark)    | `.text-heading-md` at `medium`, `.text-heading-xs` at `small`, medium weight, so a typed mark matches the drawn marks' visual height |
-| typography (item label)           | `.text-body-md`, `.text-body-sm` under `small`                                                                                       |
-| spacing (item row gap)            | `max(var(--spacing-2xl), calc(var(--spacing-xl) * 2))`                                                                               |
-| spacing (item icon ↔ label)       | `var(--spacing-xs)`                                                                                                                  |
-| ink (mark)                        | `var(--text-default)` at 70% opacity, full on hover                                                                                  |
-| spacing (label ↔ row)             | `var(--spacing-xl)`                                                                                                                  |
-| spacing (row gap, medium)         | `var(--spacing-4)` / `var(--spacing-8)`                                                                                              |
-| spacing (row gap, small)          | `var(--spacing-10)`, cells sized to the mark                                                                                         |
-| spacing (reduced-motion grid gap) | `var(--spacing-md)`                                                                                                                  |
+| Region                            | Token (DESIGN.md)                                                                         |
+| --------------------------------- | ----------------------------------------------------------------------------------------- |
+| typography (fallback wordmark)    | `.text-heading-xs`, medium weight, so a typed mark matches the drawn marks' visual height |
+| typography (item label)           | `.text-body-sm`                                                                           |
+| spacing (item row gap)            | `max(var(--spacing-2xl), calc(var(--spacing-xl) * 2))`                                    |
+| spacing (item icon ↔ label)       | `var(--spacing-xs)`                                                                       |
+| ink (mark)                        | `var(--text-default)` at 70% opacity, full on hover                                       |
+| spacing (label ↔ row)             | `var(--spacing-xl)`                                                                       |
+| spacing (row gap)                 | `var(--spacing-10)`, cells sized to the mark                                              |
+| spacing (reduced-motion grid gap) | `var(--spacing-md)`                                                                       |
 
 ## Theme gaps
 
@@ -149,7 +146,6 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 ## Examples
 
 - Default
-- Sizes — composite story rendering both `size` values side-by-side
 - Frameworks — the stack strip rather than the client strip (justified: the two registries are the component's whole reason for existing, and no arg on the Default story shows that a framework mark resolves the same way a client mark does)
 - Benefits — `items` instead of `marks` (justified: the claim row is a different cell shape, and no arg on the Default story reaches it without also swapping `marks`)
 - Fallback — a row mixing registered names with an unregistered one (justified: the typographic wordmark is a rendered state no prop can reach, and it is what lets a page name a company whose artwork has not landed)

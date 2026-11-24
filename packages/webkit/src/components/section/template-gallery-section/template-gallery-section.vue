@@ -247,7 +247,6 @@
     >
       <Module :divided="false">
         <Marquee
-          size="small"
           :label="marqueeLabel"
           :marks="marqueeMarks"
         />

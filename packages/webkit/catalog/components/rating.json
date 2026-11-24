@@ -1,7 +1,7 @@
 {
  "purpose": "Rating is a row of stars that picks a whole score from 1 to `max` (5 by default), the way a customer rates a support conversation (CSAT) or a product review. It renders as a native radio group, one radio per star named \"1 star\" … \"5 stars\", so it is one tab stop, the arrow keys move the score and the value posts with a form. With `readonly` it becomes a display of a score, including a fractional average rounded to the nearest half star (4.5 shows four and a half stars), announced as one image (\"Rated 4.5 out of 5\").",
  "useWhen": [
-  "Ask a customer to rate a support conversation, an answer or a resolved ticket on a 1-to-5 scale (customer satisfaction, CSAT).",
+  "Ask a customer to rate a support conversation, an answer or a resolved ticket on a 1-to-5 scale (customer satisfaction, CSAT): the star they pick is the answer, sent on `select`.",
   "Collect a star score in a review or feedback form, inside a `Field` with a label, a description and a required error.",
   "Show a stored score or an average of scores as stars in a ticket, a table cell or a review list (`readonly`)."
  ],
@@ -21,6 +21,7 @@
  "bestPractices": [
   "Name the group: put it in a `Field` with a `Field.Title`, or set `aria-label` on the root (\"Rate this conversation\").",
   "Keep `max` at 5 for satisfaction and reviews; scales above 5 are hard to tell apart at a glance.",
+  "When the score is the whole answer (a CSAT question), send it on `select` and add no Send button: the pick is the submit, as in Intercom and Help Scout. Then replace the stars with a short thank-you (\"Thanks, your rating was sent.\") in a `role=\"status\"` element and move focus to it. A comment, when you ask for one, comes after the score is already saved.",
   "Start empty (`0`) when you ask for a rating, so nobody submits a score they did not choose; set `required` when the score is mandatory.",
   "Set `clearable` when a score is optional, so a person can take it back with the keyboard and a screen reader, not only by reloading.",
   "Show averages with `readonly`; print the count of ratings beside it in text (\"4.5 · 128 reviews\"), the stars do not carry it.",

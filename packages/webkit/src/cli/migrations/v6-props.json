@@ -1621,7 +1621,10 @@
     "kind": "variant"
   },
   "marquee": {
-    "kind": "variant"
+    "kind": "variant",
+    "size": {
+      "removed": "the strip has one scale now, the size of the Azion site's logo row; drop the attribute."
+    }
   },
   "carousel": {
     "kind": "variant"

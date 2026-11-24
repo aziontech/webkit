@@ -28053,7 +28053,7 @@ packages/webkit/src/components/input/radio-group/
 
 ## When to use
 
-- Ask a customer to rate a support conversation, an answer or a resolved ticket on a 1-to-5 scale (customer satisfaction, CSAT).
+- Ask a customer to rate a support conversation, an answer or a resolved ticket on a 1-to-5 scale (customer satisfaction, CSAT): the star they pick is the answer, sent on `select`.
 - Collect a star score in a review or feedback form, inside a `Field` with a label, a description and a required error.
 - Show a stored score or an average of scores as stars in a ticket, a table cell or a review list (`readonly`).
 
@@ -28061,6 +28061,7 @@ packages/webkit/src/components/input/radio-group/
 
 - Name the group: put it in a `Field` with a `Field.Title`, or set `aria-label` on the root ("Rate this conversation").
 - Keep `max` at 5 for satisfaction and reviews; scales above 5 are hard to tell apart at a glance.
+- When the score is the whole answer (a CSAT question), send it on `select` and add no Send button: the pick is the submit, as in Intercom and Help Scout. Then replace the stars with a short thank-you ("Thanks, your rating was sent.") in a `role="status"` element and move focus to it. A comment, when you ask for one, comes after the score is already saved.
 - Start empty (`0`) when you ask for a rating, so nobody submits a score they did not choose; set `required` when the score is mandatory.
 - Set `clearable` when a score is optional, so a person can take it back with the keyboard and a screen reader, not only by reloading.
 - Show averages with `readonly`; print the count of ratings beside it in text ("4.5 · 128 reviews"), the stars do not carry it.
@@ -28095,6 +28096,12 @@ packages/webkit/src/components/input/radio-group/
 | `clearable` | `boolean` | `false` | false | Shows a clear button after the stars that resets the score to 0 and moves focus to the first star. Not shown while `readonly`. |
 | `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `select` | `(event: MouseEvent \| KeyboardEvent, value: number)` |  |
+
 ## v-model
 
 | Model | Type | Default | Emits | Notes |
@@ -28107,14 +28114,15 @@ packages/webkit/src/components/input/radio-group/
 - Root: `role="radiogroup"` as an input, `role="img"` while `readonly`; `data-size` mirrors `size`; `data-readonly`, `data-disabled`, `data-required` and `data-invalid` mirror the state (the `Field` state included); `data-preview` while a fine pointer hovers a star.
 - Each star: `data-fill="full" | "half" | "empty"` on its glyph; `half` only while `readonly`. A filled or half star draws in `var(--warning-mark)`, an empty star in `var(--text-muted)`, or `var(--danger-mark)` while invalid. Each star label carries `data-checked` on the star whose value is the score.
 - Hover preview: on a fine pointer (`pointerType === 'mouse'`), hovering star `n` fills stars 1 … `n` until the pointer leaves the row; it never changes the model, and it does not run while `disabled` or `readonly`. Touch and pen get no preview: the tap selects.
-- Picking the selected star again keeps the score (native radio); the score is cleared only by the clear button.
+- Picking the selected star again keeps the score (native radio) and fires `select` again; the score is cleared only by the clear button.
+- `select` versus `update:modelValue`: the arrow keys change the score (and `v-model`) one star at a time on the way to the one a person wants, so a score that is sent as soon as it is chosen listens to `select`, which fires only on a click, a tap, `Enter` or `Space`.
 - While `readonly`, `required`, `invalid`, `name` and `clearable` have no effect: the display renders no inputs and no clear button, and sets no `aria-required` / `aria-invalid`; `disabled` only dims it.
 - Not states of this component: `loading`, `empty` and `error` (the `Field.Error` carries the message).
 
 ## Accessibility
 
 - Visible focus: `ring-2 ring-(--ring-color) ring-offset-1 ring-offset-(--bg-canvas)` on the focused star's target (the native radio inside is invisible).
-- Keyboard map (APG radio group, native radios sharing one `name`): `Tab` enters on the checked star, or, when none is checked, on the first star (`Shift+Tab` enters on the last), and the next `Tab` moves to the clear button when shown, then out; `ArrowRight` / `ArrowDown` select the next star and `ArrowLeft` / `ArrowUp` the previous one, wrapping at the ends, all handled by the browser (it swaps `ArrowLeft` / `ArrowRight` under `dir="rtl"`); the component adds no key handling of its own; `Space` selects the focused star; `Enter` / `Space` on the clear button reset the score to 0 and move focus to the first star.
+- Keyboard map (APG radio group, native radios sharing one `name`): `Tab` enters on the checked star, or, when none is checked, on the first star (`Shift+Tab` enters on the last), and the next `Tab` moves to the clear button when shown, then out; `ArrowRight` / `ArrowDown` select the next star and `ArrowLeft` / `ArrowUp` the previous one, wrapping at the ends, all handled by the browser (it swaps `ArrowLeft` / `ArrowRight` under `dir="rtl"`); the component adds no key handling of its own; `Space` selects the focused star and fires `select`; `Enter` fires `select` with the focused star (the arrow keys never do); `Enter` / `Space` on the clear button reset the score to 0 and move focus to the first star.
 - Clear affordance: a separate `IconButton` ("Clear rating"), chosen over "click the selected star again" because a native radio cannot be unchecked from the keyboard, a toggle on re-click is not announced to screen readers and surprises people who double-click; the button is named, focusable and disabled while the score is 0.
 - ARIA: root `role="radiogroup"` with `aria-labelledby` (the `Field` label ids) or the consumer's `aria-label`, `aria-describedby` (the `Field.Description` / `Field.Error` ids), `aria-required` and `aria-invalid`; each star is a native `type="radio"` input with `aria-label` "1 star" … "5 stars"; the glyphs are `aria-hidden`. While `readonly` the root is `role="img"`, renders no inputs, and is named by `aria-labelledby`: the `Field` label ids (when inside a `Field`) followed by a visually hidden summary, "Rated 4.5 out of 5" ("Not rated" at 0), whose `{value}` is the half-rounded value the stars show (4.37 reads "4.5"); a consumer `aria-label` is not used in this mode, put context in the text beside it.
 - Contrast: star glyphs in documented icon pairs (`--warning-mark`, `--text-muted`, `--danger-mark` on the surfaces); filled and empty differ in shape as well as colour. The disabled row (50 % opacity) is an inactive control, exempt from WCAG 1.4.3 / 1.4.11, as in `radio-group` and `checkbox`.
