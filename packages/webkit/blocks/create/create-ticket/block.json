@@ -48,6 +48,7 @@
     "parts/ticket-description-field.vue",
     "parts/ticket-assignment-band.vue",
     "parts/ticket-loading-bands.vue",
+    "parts/ticket-save-actions.vue",
     "parts/ticket-discard-dialog.vue"
   ],
   "variants": [

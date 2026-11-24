@@ -39,8 +39,13 @@
 
   const nameEl = ref<InstanceType<typeof Input> | null>(null)
 
-  const focusSearch = () =>
+  const listOpen = ref(false)
+
+  const focusSearch = async () => {
     document.getElementById('create-ticket-requester')?.focus({ preventScroll: true })
+    await nextTick()
+    listOpen.value = false
+  }
 
   const addContact = async () => {
     newContact.value = true
@@ -80,6 +85,7 @@
       <Combobox
         id="create-ticket-requester"
         v-model="requesterEmail"
+        v-model:open="listOpen"
         :options="options"
         :allow-custom="false"
         :loading="loading"

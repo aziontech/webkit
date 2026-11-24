@@ -79,6 +79,7 @@
                 size="large"
                 searchable
                 allow-custom
+                placeholder="Add email addresses"
                 aria-label="CC"
                 :disabled="disabled"
                 :invalid="Boolean(errors.cc)"

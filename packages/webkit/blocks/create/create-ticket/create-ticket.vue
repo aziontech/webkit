@@ -1,14 +1,12 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import type { AvatarPresence } from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import type { PriorityTagPriority } from '@aziontech/webkit/priority-tag'
   import SaveBar from '@aziontech/webkit/save-bar'
   import { toast } from '@aziontech/webkit/toast'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
@@ -26,6 +24,7 @@
   import TicketLoadingBands from './parts/ticket-loading-bands.vue'
   import TicketRequestBand from './parts/ticket-request-band.vue'
   import TicketRequesterBand from './parts/ticket-requester-band.vue'
+  import TicketSaveActions from './parts/ticket-save-actions.vue'
   import { sampleAgents, sampleContacts, sampleGroups, sampleTagOptions } from './sample'
 
   /** How the request reached the team. */
@@ -206,7 +205,6 @@
   }
 
   useEscapeToCancel(onCancel, { enabled: () => !props.submitting })
-
   const formEl = ref<HTMLFormElement | null>(null)
   const requesterEl = ref<InstanceType<typeof TicketRequesterBand> | null>(null)
 
@@ -252,7 +250,7 @@
   onMounted(async () => {
     if (props.created) return reportCreated(props.created)
     await nextTick()
-    requesterEl.value?.focus()
+    if (!submitted.value || !(await focusFirstInvalid(formEl.value))) requesterEl.value?.focus()
   })
 
   watch(
@@ -357,39 +355,13 @@
           </div>
           <SaveBar variant="centered">
             <template #actions>
-              <Button
-                type="button"
-                label="Cancel"
-                variant="outline"
-                size="medium"
-                :disabled="submitting"
-                @click="onCancel"
+              <TicketSaveActions
+                :loading="loading"
+                :submitting="submitting"
+                :add-another="addAnother"
+                @cancel="onCancel"
+                @add-another="(event: MouseEvent) => submit(event, true)"
               />
-              <Button
-                type="button"
-                label="Create and add another"
-                variant="secondary"
-                size="medium"
-                :disabled="loading || (submitting && !addAnother)"
-                :loading="submitting && addAnother"
-                @click="(event: MouseEvent) => submit(event, true)"
-              />
-              <Button
-                variant="primary"
-                size="medium"
-                type="submit"
-                :disabled="loading || (submitting && addAnother)"
-                :loading="submitting && !addAnother"
-                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
-              >
-                Create ticket
-                <Kbd
-                  meta
-                  key-name="enter"
-                  size="small"
-                  aria-hidden="true"
-                />
-              </Button>
             </template>
           </SaveBar>
         </div>

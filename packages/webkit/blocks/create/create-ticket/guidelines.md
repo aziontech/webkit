@@ -49,7 +49,7 @@ A danger `Alert` under the bands, `The ticket wasn't created.` with the page's m
 
 ### H. Commit — `SaveBar`, `Button`, `Kbd` (required)
 
-`variant="centered"`: Cancel (outline), Create and add another (secondary) and Create ticket (primary, `type="submit"`, with the `Kbd` for ⌘ Enter and `aria-keyshortcuts`). The pressed button shows `loading` and the other two are disabled while the request runs; below `sm` the bar lets the three wrap.
+`variant="centered"`, the buttons in `parts/ticket-save-actions.vue`: Cancel (outline), Create and add another (secondary) and Create ticket (primary, `type="submit"`, with the `Kbd` for ⌘ Enter and `aria-keyshortcuts`). The pressed button shows `loading` and the other two are disabled while the request runs. Below `sm` the three stack at full width with Create ticket on top, and the `Kbd` hides.
 
 ### Leaving — `ConfirmDialog`
 
@@ -148,7 +148,7 @@ Then delete `sample.ts` and its import. A large contact list moves to server sea
 ## Accessibility
 
 - Landmarks: the creation header, then `main` holding a `form` named by the `Create ticket` h1; the bands are h2s (Requester, Request, Assignment).
-- Focus: on load the Requester search; Tab runs header, then the fields in band order, then Cancel, Create and add another, Create ticket. A create press with gaps moves focus to the first invalid field; after Create and add another, focus returns to Requester. Add new contact focuses Contact name; Search contacts focuses the search.
+- Focus: on load the Requester search, with its list closed until the agent types or presses Arrow Down (the first invalid field instead when the form opens with messages); Tab runs header, then the fields in band order, then Cancel, Create and add another, Create ticket. A create press with gaps moves focus to the first invalid field; after Create and add another, focus returns to Requester. Add new contact focuses Contact name; Search contacts focuses the search.
 - Each control takes its row title as `aria-label`, its error through `aria-describedby`, and `aria-invalid` once a create press finds a problem; the required rows carry the required mark and `aria-required`.
 - Keyboard: ⌘ Enter (Ctrl Enter) creates from anywhere in the form, Escape cancels; the editor's own shortcuts are Ctrl/⌘ B, I and K.
 - Announcements: the failure `Alert` is re-mounted after each attempt; the success toast is announced by the app's toast region; presence is spoken in the avatar's name, never the dot alone.

@@ -127,6 +127,7 @@
               size="large"
               searchable
               allow-custom
+              placeholder="Add tags"
               aria-label="Tags"
               :disabled="disabled"
               @create="addTag"
