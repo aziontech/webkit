@@ -98,17 +98,19 @@ or the migration note that moves consumers to the replacement.
 
 ### What must ship with a component
 
-| Ships with the component                                                           | Checked by                                                                                                    |
-| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| Spec `.specs/<name>.md`, `approved` then `implemented`, checksum matching the body | `spec-integrity` (checksum and status, in CI), `spec-status` (no draft), `spec-template`, `complete` (status) |
-| The `.vue`, matching the spec 1-to-1                                               | hooks (`enforce-spec-exists`, `validate-spec-compliance`), `authoring`                                        |
-| `<name>.test.ts` next to the root `.vue`                                           | `test-gate`                                                                                                   |
-| Examples in `packages/webkit/examples/<name>/`, one per example the spec lists     | `complete`                                                                                                    |
-| `package.json#exports` entry, plus `<name>-root` for a compound                    | `complete`                                                                                                    |
-| `.size-limit.json` entry                                                           | `complete`; `size` measures it                                                                                |
-| Regenerated `catalog.json` and `catalog/`                                          | `catalog`                                                                                                     |
-| Regenerated `llms/`                                                                | `llms`                                                                                                        |
-| Visual baselines for the first example, light and dark                             | `complete`; the `visual` job compares them                                                                    |
+| Ships with the component                                                                                                                       | Checked by                                                                                                    |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Spec `.specs/<name>.md`, `approved` then `implemented`, checksum matching the body                                                             | `spec-integrity` (checksum and status, in CI), `spec-status` (no draft), `spec-template`, `complete` (status) |
+| The `.vue`, matching the spec 1-to-1                                                                                                           | hooks (`enforce-spec-exists`, `validate-spec-compliance`), `authoring`                                        |
+| `<name>.test.ts` next to the root `.vue`                                                                                                       | `tests` (`check:tests`) and the `enforce-test-exists` hook                                                    |
+| Examples in `packages/webkit/examples/<name>/`, at least one per example the spec lists, the first `default.vue`                               | `complete`, `naming` (`example-file`)                                                                         |
+| `package.json#exports` entry in the typed shape (`pnpm --filter @aziontech/webkit build:exports`), plus `<name>-root` for a compound           | `exports`, `complete`                                                                                         |
+| `.size-limit.json` entry with the spec's `## Performance` budget                                                                               | `complete`; `size` measures it                                                                                |
+| Every built-in string of the spec's `## Internationalization` as a key in `src/locales/en.ts`, `pt-BR.ts` and `es.ts`                          | `toolkit` (`test/standards/i18n-catalogs.test.mjs`)                                                           |
+| An owner in `src/eslint-plugin/owners.json` for each native control or ARIA widget role it renders                                             | `quality-lint` (`webkit/no-unowned-element`)                                                                  |
+| Files, functions and props within the [`CODE_QUALITY.md`](./.claude/docs/CODE_QUALITY.md) § 3.1 limits; no new look-alike pair at 35 % or more | `maintainability`, `look-alikes`, `duplication`, `assertions`                                                 |
+| Regenerated `catalog.json`, `catalog/` and `llms/` (`build:catalog` writes all three)                                                          | `catalog`, `llms`                                                                                             |
+| The visual baseline of the first example (`apps/visual/baselines/examples/<name>/<stem>--light-1280.png`, from `/baselines-regenerate`)        | `complete`; the `visual` job compares light and dark                                                          |
 
 Two more gates hold the Change and Remove stages to their rules:
 
@@ -159,7 +161,7 @@ design opens the request and approves the merge, and nobody edits the code by ha
 
 1. **Request.** Open an issue from **New component** or **New block**
    (`.github/ISSUE_TEMPLATE/`): intent, benchmark links (Cloudscape `index.html.md`, shadcn page),
-   where it is used, surface (product / marketing / docs), acceptance criteria.
+   where it is used, surface (`app` / `site` / `docs`), acceptance criteria.
 2. **Run the flow.** An agent runs `/component-new <issue>` (`.claude/commands/component-new.md`) or
    `/block-new <issue>` (`.claude/commands/block-new.md`). Each step stops the run on
    failure:
@@ -186,15 +188,19 @@ pnpm --filter @aziontech/webkit run gates            # all fast gates, in order,
 pnpm --filter @aziontech/webkit run gates -- --only naming,catalog --bail
 ```
 
-It runs `check:catalog`, `check:naming`, `check:marketing-inventory`, `check:blocks`, `check:cited-names`,
-`check:spec-status` (no draft spec), `check:spec-template` (template-2 sections), `check:authoring`,
-`check:authoring-docs`, `check:tests`, `check:size` (the bundle budget, about 15 s), the hook tests and
-`test:toolkit` (which also builds the icon font and fails when an official Azion product or Solution,
-listed in `test/catalog/azion-products.json` and `azion-solutions.json`, has no `az az-<name>` icon).
-It also runs, from the repository root and with the same commands as CI, the MCP, theme and icons
-package tests and the icons manifest, `test:docs`, Stylelint, the lint canaries, the tests TypeScript
-check (`typecheck:webkit:tests`) and the Prettier check (`check:webkit:format`, about 40 s); the last two
-were the most common reasons a Governance run went red. The `toolkit` job of
+The list of gates is `GATES` in
+[`packages/webkit/scripts/run-gates.mjs`](./packages/webkit/scripts/run-gates.mjs); read it there
+rather than here. In short: the generated files in sync (catalog, llms, runtime `.d.ts`, typed
+exports), naming, migrations and the public API diff, the marketing inventory, blocks, the examples'
+consumer lint, cited names, the spec status, integrity and template, the authoring and authoring-docs
+ratchets, Do / Don't docs Markdown, a test per component, the bundle budget, `complete` (with the
+size ratchet), look-alikes, duplication, maintainability, type assertions, `lint:quality`, the hook
+and toolkit tests (`test:toolkit` also builds the icon font and fails when an official Azion product
+or Solution has no `az az-<name>` icon, and checks that every locale catalog has every key). From the
+repository root, with the same commands as CI, it also runs the MCP, theme and icons package tests and
+the icons manifest, `test:docs`, Stylelint, the lint canaries, the tests TypeScript check
+(`typecheck:webkit:tests`), the Prettier check (`check:webkit:format`), knip (`check:unused`),
+`check:versions`, `check:spelling` and the workflow linters. The `toolkit` job of
 `.github/workflows/governance.yml` runs the same commands on **every** PR, except `check:size`, which
 runs in the `build` job; the lint, type, size, Vitest browser (including
 `src/test/copyable-sfcs.test.ts`, which mounts every block and example) jobs run when
@@ -216,8 +222,8 @@ gains a step that is neither a gate nor listed there.
 finds it:
 
 ```bash
-pnpm --filter @aziontech/webkit run usage-check -- date-picker "Let users pick the start and end of a billing period" --report usage-report.md
-pnpm --filter @aziontech/webkit run usage-check -- auth/auth-sign-in "A sign-in screen for the console" --dry-run
+pnpm --filter @aziontech/webkit run check:usage -- date-picker "Let users pick the start and end of a billing period" --report usage-report.md
+pnpm --filter @aziontech/webkit run check:usage -- auth/auth-sign-in "A sign-in screen for the console" --dry-run
 ```
 
 It packs the three packages, creates a clean Vite + Vue app in a temp dir, runs
@@ -258,17 +264,20 @@ You only write the source. `build:catalog` and the package's `prepack` generate 
 (`catalog.json`, its `blocks`, the packaged `skills/` and `rules/`), and CI fails the PR when the
 source and the generated files disagree. Nobody rewrites the AI files by hand.
 
-| When you…                                             | You write                                                                                          | Generated                                      | CI gate                                                             |
-| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------- |
-| Create or change a component or a section             | `.specs/<name>.md` (with Purpose, When to use, When NOT to use), the `.vue` and its examples       | `catalog.json` imports, with docs and examples | `check:catalog` (fails on a missing doc section), hooks             |
-| Create or change a block in `packages/webkit/blocks/` | `block.json` (`intents`, `skills`, `files`), the `.vue`, `sample.ts`, `variants/`, `guidelines.md` | `catalog.json` `blocks`                        | `check:blocks` (G1)                                                 |
-| Rename, deprecate or remove a component               | The spec, with `deprecated: true` / `replaced_by`                                                  | The catalog                                    | `cited-names` (G2)                                                  |
-| Create or change a skill or a rule                    | `skills/<name>/SKILL.md` or `rules/<name>.md` at the repo root                                     | The copy in the package (`prepack`)            | `cited-names` (G2), `doc-standards`, invariant tests                |
-| Change a token                                        | `packages/theme`                                                                                   | Tokens in the catalog                          | `validate-tokens`                                                   |
-| Open a new spec                                       | The spec in `status: draft`, `template: 2`, only on your branch                                    | —                                              | `spec-status` (G3): no draft lands on `main`; `check:spec-template` |
-| Release a version                                     | Nothing                                                                                            | The release, by release-please                 | —                                                                   |
+| When you…                                             | You write                                                                                                               | Generated                                      | CI gate                                                                |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------- |
+| Create or change a component or a section             | `.specs/<name>.md` (with Purpose, When to use, When NOT to use), the `.vue` and its examples                            | `catalog.json` imports, with docs and examples | `check:catalog` (fails on a missing doc section), hooks                |
+| Create or change a block in `packages/webkit/blocks/` | `block.json` (`intents` in English and pt-BR, `skills`, `files`), the `.vue`, `sample.ts`, `variants/`, `guidelines.md` | `catalog.json` `blocks`                        | `check:blocks` (G1)                                                    |
+| Rename, deprecate or remove a component               | The spec, with `deprecated: true` / `replaced_by`                                                                       | The catalog                                    | `cited-names` (G2)                                                     |
+| Create or change a skill or a rule                    | `skills/<name>/SKILL.md` or `rules/<name>.md` at the repo root                                                          | The copy in the package (`prepack`)            | `cited-names` (G2), `authoring-docs`, `docs-markdown`, invariant tests |
+| Change a token                                        | `packages/theme`                                                                                                        | Tokens in the catalog                          | `validate-tokens`                                                      |
+| Open a new spec                                       | The spec in `status: draft`, `template: 2`, only on your branch                                                         | —                                              | `spec-status` (G3): no draft lands on `main`; `check:spec-template`    |
+| Release a version                                     | Nothing                                                                                                                 | The release, by release-please                 | —                                                                      |
 
-After any of these, run `pnpm --filter @aziontech/webkit build:catalog` and commit `catalog.json` and `catalog/`.
+After any of these, run `pnpm --filter @aziontech/webkit build:catalog` and commit `catalog.json`,
+`catalog/` and `llms/` (the same script writes the llms pages). After adding or moving an export, run
+`pnpm --filter @aziontech/webkit build:exports` first: it writes the typed `{ "types", "default" }`
+shape and `typesVersions` that the `exports` gate checks.
 A block's SFC must pass the consumer lint; legacy findings are frozen in
 `packages/webkit/scripts/blocks-baseline.json` and can only go down
 (`pnpm --filter @aziontech/webkit run check:blocks --update` after fixing some). A block also
@@ -294,7 +303,7 @@ pnpm build:docs             # the docs site, every route prerendered
 Or the aggregate:
 
 ```bash
-pnpm gates             # lint + typecheck + format check + audit
+pnpm gates             # lint + Stylelint + format check + every typecheck + type coverage + audit
 ```
 
 The `governance` workflow runs on every push to `main` — its status is the badge at the top of the README.

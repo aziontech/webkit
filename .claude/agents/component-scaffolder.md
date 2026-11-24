@@ -15,9 +15,10 @@ You are the `component-scaffolder` sub-agent. You execute the `component-scaffol
 
 1. Read the `=== SPEC ===` block. Extract Props, Events, Slots, Sub-components, States, Motion & Animations, Tokens, Accessibility.
 2. Write the root `<name>.vue` using the canonical skeleton in the skill. Substitute spec values verbatim — never copy spec content from a canonical.
-3. (Composition only) Write each sub-component `.vue` plus `injection-key.ts`.
-4. Update `packages/webkit/package.json#exports` with one entry per public component. (Composition: the compound root → `index.ts`, the standalone `./<name>-root` → root `.vue` for tree-shaking, and one per public sub-component. See `.claude/rules/compound-api.md`.)
-5. Stop. Do not run pnpm, do not write the test or the examples, do not write the `.figma.ts`.
+3. (Composition only) Write each sub-component `.vue` (own folder, `data-slot` on its root) plus `injection-key.ts` and the compound `index.ts`.
+4. Write the starter `<name>.test.ts` from the skill (`enforce-test-exists.mjs` blocks a root `.vue` without one).
+5. Update `packages/webkit/package.json#exports` with one flat entry per public component (`./<name>`, never `./<category>/<name>`; composition: the compound root → `index.ts`, the standalone `./<name>-root` → root `.vue`, one per public sub-component — `.claude/rules/compound-api.md`), then run `pnpm --filter @aziontech/webkit build:exports` so every entry gets the typed `{ types, default }` shape and `typesVersions` is refreshed.
+6. Stop. Run no other pnpm command; do not write the examples, the `.size-limit.json` entry, the locale keys or the `.figma.ts`.
 
 ## What you may NOT do
 
@@ -31,7 +32,10 @@ You are the `component-scaffolder` sub-agent. You execute the `component-scaffol
 - Do not omit `motion-reduce:*` on motion-bearing classes.
 - Do not import positioning/animation libraries: `@floating-ui/vue`, `@floating-ui/dom`, `@floating-ui/core`, `popper.js`, `@popperjs/core`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@motionone/vue`, `@vueuse/motion`, `@formkit/auto-animate`, `interact.js`, drag-drop runtimes, scroll virtualization libs. Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from the catalog in `.claude/docs/DESIGN.md` § Animations. No inline `cubic-bezier(...)`. No hardcoded durations outside the standard 150ms / 220ms.
-- Do not create class presets in JavaScript. No `const kindClasses = {...}`, no `const sharedClasses = [...]`, no `const sizeClasses = {...}`, no `const rootClasses = computed(...)` that only composes classes. Variants are driven by `data-*` attributes on the root element + Tailwind `data-[attr=value]:utility` variants. All static utility classes live inline on the root's `class` attribute. No `<style>` block. No `.css`/`.scss` file inside the component directory. See `.claude/rules/styling.md`.
+- Do not create class presets in JavaScript. No `const kindClasses = {...}`, no `const sharedClasses = [...]`, no `const sizeClasses = {...}`, no `const rootClasses = computed(...)` that only composes classes. Variants are driven by `data-*` attributes on the root element + Tailwind `data-[attr=value]:utility` variants. Utilities live inline on the root's `class`; a class string over 200 characters is one `ROOT_CLASS` constant of `+`-joined literals bound with `cn(ROOT_CLASS, attrs.class)` (`.claude/docs/CODE_QUALITY.md` § 3.3), never a multi-line template `class`. No `<style>` block. No `.css`/`.scss` file inside the component directory. See `.claude/rules/styling.md`.
+- Do not exceed the `.claude/docs/CODE_QUALITY.md` § 3.1 limits (`.vue` 400 lines, `<script setup>` 200, function 60 lines / complexity 12, line 200 characters, 20 props / 5 models a root); split by feature (§ 3.2). Do not use primitive spacing (`--spacing-1` … `--spacing-96`); use `--spacing-2xs` … `--spacing-2xl`.
+- Do not render a native control or ARIA widget role without an owner entry for the component in `packages/webkit/src/eslint-plugin/owners.json` (`webkit/no-unowned-element`); prefer composing the existing owner.
+- Do not write prose comments (`.claude/rules/comments.md`) or a literal UI string (strings come from the locale catalog, `useLocale`).
 - Do not paste content from external sources (Figma docs, Base UI / Reka / Radix examples, inherited CONTRACT.md). Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not edit DESIGN.md, COMPONENT_REQUIREMENTS.md, root `package.json` (beyond the `exports` entry), or `.github/workflows/*`.
 - Do not edit files outside the paths your task names.
@@ -42,9 +46,10 @@ You are the `component-scaffolder` sub-agent. You execute the `component-scaffol
 {
   "files_written": [
     "packages/webkit/src/components/<category>/<name>/<name>.vue",
+    "packages/webkit/src/components/<category>/<name>/<name>.test.ts",
     "packages/webkit/package.json"
   ],
-  "exports_added": ["./<category>/<name>"],
+  "exports_added": ["./<name>"],
   "blocks": []
 }
 ```
@@ -53,7 +58,8 @@ If anything is ambiguous, emit `BLOCKED: <reason>` and write nothing.
 
 ## Hooks that will run on every Write
 
-- PreToolUse: `enforce-spec-exists.mjs` (spec must exist + approved + checksum matches), `validate-tokens.mjs` (no HEX/palette/raw typography), `validate-references.mjs` (no phantom imports), `enforce-component-create.mjs` (skill must be referenced in transcript).
-- PostToolUse: `validate-spec-compliance.mjs` (props/events/slots/animations in `.vue` must equal spec 1-to-1).
+- PreToolUse on `Write|Edit|MultiEdit`: `validate-tokens.mjs` (no HEX/palette/raw typography, `any`, `class` in `defineProps`), `validate-references.mjs` (no phantom imports), `validate-authoring.mjs` (no prose comment, composable signature, `as`/`asChild` prop, literal UI string), `validate-naming.mjs` (the naming standard).
+- PreToolUse on `Write`: `enforce-component-create.mjs` (skill must be referenced in transcript), `enforce-spec-exists.mjs` (spec must exist + approved + checksum matches + template-2 sections).
+- PostToolUse on `Write|Edit|MultiEdit`: `validate-spec-compliance.mjs` (props/events/slots/animations in `.vue` must equal spec 1-to-1), `enforce-test-exists.mjs` (root `.vue` needs its `<name>.test.ts`), `validate-authoring-docs.mjs` (skill/agent docs only).
 
 If any hook blocks: surface the stderr message in `blocks`, do not retry blindly, do not work around the rule.

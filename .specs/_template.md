@@ -23,7 +23,8 @@ last_updated: 2026-11-15
 
 <!-- Bullets: the concrete situations this component is the right choice for. Extracted
      into the catalog (useWhen) + surfaced by the MCP (get_best_practices / suggest_component).
-     Optional today, but strongly recommended — especially to disambiguate siblings. -->
+     Write them in the words of the product task: the usage check (`check:usage`, step 8 of
+     /component-new) only passes when a fresh agent finds the component from its intent. -->
 
 - <use case>
 
@@ -81,11 +82,6 @@ import MyComponent from '@aziontech/webkit/<name>'
 ```vue
 <script setup>
 import Dialog from '@aziontech/webkit/dialog'
-import DialogTrigger from '@aziontech/webkit/dialog-trigger'
-import DialogContent from '@aziontech/webkit/dialog-content'
-import DialogTitle from '@aziontech/webkit/dialog-title'
-import DialogDescription from '@aziontech/webkit/dialog-description'
-import DialogClose from '@aziontech/webkit/dialog-close'
 </script>
 
 <template>
@@ -118,9 +114,11 @@ import DialogContent from '@aziontech/webkit/dialog-content'
 <!-- For structure: composition, list every public sub-component AND the folder layout the component-scaffolder must emit. Each sub-component lives in its own folder under the root component, one folder per part. The file name keeps the full prefix (e.g. `dialog-trigger.vue`, never `index.vue`) so traces and editor breadcrumbs stay unambiguous. -->
 <!-- Composition components ship a COMPOUND API: an `index.ts` that uses `Object.assign` to attach every sub-component to the root (vue-tsc generates the adjacent `index.d.ts`, so `<Root.Part>` is typed; never hand-write the `.d.ts` — it is gitignored). Consumers reach `<Root.Part>` with one import, while the standalone sub-component imports remain for tree-shaking. Member names mirror THIS component's anatomy (`SortButton`, not a generic `Trigger`); `Trigger`/`Content` are for overlay/disclosure components only. See `.claude/rules/compound-api.md`. -->
 
+<!-- Part words come from the closed list in `.claude/rules/naming.md` § 2 (Trigger, Content,
+     Header, Body, Footer, Title, Description, Close, Item, Group, Label, Separator, List) or a
+     domain part the root declares. There is no Portal or Overlay part: Content renders both. -->
+
 - `<name>-trigger/<name>-trigger.vue` — purpose
-- `<name>-portal/<name>-portal.vue` — purpose
-- `<name>-overlay/<name>-overlay.vue` — purpose
 - `<name>-content/<name>-content.vue` — purpose
 - `<name>-title/<name>-title.vue` — purpose
 - `<name>-description/<name>-description.vue` — purpose
@@ -131,19 +129,20 @@ import DialogContent from '@aziontech/webkit/dialog-content'
   packages/webkit/src/components/<category>/<name>/
   ├── <name>.vue
   ├── index.ts                    (compound: Object.assign attaches every sub-component; vue-tsc emits index.d.ts)
-  ├── package.json                (main/module → ./index.ts, types → ./index.d.ts)
   ├── injection-key.ts            (shared by every sub-component; one directory up from each sub-component)
+  ├── composables/
+  │   └── use-<name>-context.ts   (exported, with its context type: CODE_QUALITY.md § 3.5)
   ├── <name>-trigger/
-  │   ├── <name>-trigger.vue
-  │   └── package.json
+  │   └── <name>-trigger.vue
   ├── <name>-content/
-  │   ├── <name>-content.vue
-  │   └── package.json
+  │   └── <name>-content.vue
   └── ...
 
-  The root export (`./<name>`) points at `index.ts`, NOT the root
-  `.vue`. Sub-component exports stay flat (`./<name>-trigger`) and
-  point at their `.vue` regardless of the folder nesting. -->
+  No per-component package.json. The root export (`./<name>`) points at
+  `index.ts`, NOT the root `.vue`, and a standalone `./<name>-root` points at
+  the root `.vue`. Sub-component exports stay flat (`./<name>-trigger`) and
+  point at their `.vue` regardless of the folder nesting. Run
+  `pnpm --filter @aziontech/webkit build:exports` after adding them. -->
 
 <!-- Compound API file (composition only), beside `<name>.vue` — one `.ts`; vue-tsc derives index.d.ts:
 
@@ -166,7 +165,10 @@ export default Object.assign(Root, { Part: RootPart })
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 
 <!-- Rules enforced by spec-validator:
-     - kebab-case prop names; no `is`/`has` prefix on booleans.
+     - camelCase prop names (consumers write the kebab attribute); no `is`/`has` prefix on booleans;
+       names and value sets from `.claude/rules/prop-vocabulary.md`.
+     - At most 20 props on a root (`.claude/docs/CODE_QUALITY.md` § 3.4); past that, a feature
+       becomes a companion part. The `.vue` declares them as an exported `interface <Component>Props`.
      - Visual variants always named `variant` (a sort of part is `type`). Sizes always named `size`.
      - Every prop has a JSDoc one-liner; no empty cells.
      - Types are union literals or primitives; no `any`.
@@ -189,12 +191,14 @@ export default Object.assign(Root, { Part: RootPart })
 
 | Event | Payload | Notes |
 |---|---|---|
-| `click` | `MouseEvent` | Fires on activation. |
-| `update:open` | `boolean` | v-model:open. |
+| `click` | `(event: MouseEvent)` | Fires on activation. |
+| `update:open` | `(value: boolean)` | v-model:open. |
 
 <!-- Rules:
-     - Event names in kebab-case (or `update:<prop>` for v-model).
-     - Payload is a single TypeScript type or `void`. -->
+     - Event names in kebab-case (or `update:<prop>` for v-model, declared with defineModel).
+     - An activation event's payload is the DOM event first, then the subject:
+       `(event: MouseEvent, item: <Component>Item)` (`.claude/rules/event-payloads.md`).
+     - A model or value event carries the new value only; no `<x>-change` echo of `update:<x>`. -->
 
 ## Slots
 
@@ -211,6 +215,7 @@ export default Object.assign(Root, { Part: RootPart })
 - `data-state` values (when applicable): `open` | `closed`
 - `data-disabled` mirrors the `disabled` prop
 - `data-orientation` (when applicable): `horizontal` | `vertical`
+- Loading / empty / error / readonly / invalid as the component owns them (`.claude/rules/component-states.md`); a component that shows a list takes the list state contract of `.claude/docs/CODE_QUALITY.md` § 3.7
 
 ## Motion & Animations
 
@@ -219,10 +224,10 @@ export default Object.assign(Root, { Part: RootPart })
 | open (overlay / popover) | `animate-popup-scale-in` | semantic (150ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
 | close (overlay / popover) | `animate-popup-scale-out` | semantic (110ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
 | hover/focus state change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
-| loading indicator | `animate-blink` or component (`Spinner`) | semantic (1s step-end) | `aria-hidden="true"` + `motion-reduce:animate-none` |
+| loading indicator | component (`Spinner`) | semantic (`animate-spin-settle`) | `aria-hidden="true"` + `motion-reduce:animate-none` |
 
 <!-- Rules:
-     - Every animation MUST come from packages/theme/src/tokens/semantic/animations.js.
+     - Every animation MUST come from packages/theme/src/tokens/primitives/animations/animate.js.
      - Every motion-bearing transition pairs with `motion-reduce:transition-none` (or `motion-reduce:transform-none` / `motion-reduce:animate-none`).
      - No `@keyframes` declared inside the component.
      - Decorative spinners/loaders use `aria-hidden="true"`.
@@ -234,12 +239,14 @@ export default Object.assign(Root, { Part: RootPart })
 |---|---|
 | typography (label) | `.text-button-lg` |
 | surface | `var(--bg-surface)` |
-| spacing.x | `var(--spacing-4)` |
+| spacing.x | `var(--spacing-md)` |
 | shape | `var(--shape-button)` |
 | ring | `var(--ring-color)` |
 
 <!-- Every token here must exist in .claude/docs/DESIGN.md.
-     spec-validator and token-mapper independently verify this. -->
+     spec-validator and token-mapper independently verify this. Spacing is semantic
+     (`--spacing-2xs` … `--spacing-2xl`), never the primitive `--spacing-1` … `--spacing-96`.
+     A status icon on a surface takes its `-mark` token, never `-foreground` or the fill. -->
 
 ## Theme gaps
 
@@ -254,7 +261,7 @@ export default Object.assign(Root, { Part: RootPart })
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `<Tab focuses; Enter/Space activates; Esc closes; arrows navigate; ...>`
 - ARIA: `<aria-label / aria-busy / aria-disabled / aria-hidden / aria-current / aria-expanded as applicable>`
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state, and the APCA targets: only documented token pairs (`rules/webkit-tokens.md` § Contrast)
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states
 - Touch target ≥40×40 px (or justified deviation)
 
@@ -264,7 +271,10 @@ export default Object.assign(Root, { Part: RootPart })
      List every built-in string the component renders or announces (visible text, aria-label,
      aria-live text, placeholder, title) as a message key, its English source and the
      prop that overrides it. Dates, numbers, currency, relative time and plurals go through
-     `Intl` with the locale from `ConfigProvider`. Write "No built-in strings" when that is true. -->
+     `Intl` with the locale from `ConfigProvider`. Write "No built-in strings" when that is true.
+     Keys sit in the camelCase component namespace (`<componentName>.<key>`; shared words in
+     `common`) and are added to all three catalogs, `packages/webkit/src/locales/en.ts`, `pt-BR.ts`
+     and `es.ts` (`.claude/rules/naming.md` § 13). -->
 
 | Key | English source | Override prop |
 |---|---|---|
@@ -294,7 +304,7 @@ export default Object.assign(Root, { Part: RootPart })
 
 <!-- Required on template 2. The budgets CI and review hold the component to. -->
 
-- Bundle budget: `<gzip kB for the tree-shakeable entry in .size-limit.json>`
+- Bundle budget: `<gzip kB for the tree-shakeable entry; it becomes the .size-limit.json entry>`
 - Runtime budget: `<interaction or render budget, e.g. "1k options open in < 100 ms", or "none: static">`
 - Heavy parts: `<lazy-loaded parts (editor, charts), virtualization, or "none">`
 
@@ -302,7 +312,7 @@ export default Object.assign(Root, { Part: RootPart })
 
 Canonical layout — composite examples (`variants.vue`, `sizes.vue`) render every variant of one axis side-by-side in a single frame; state examples (`loading.vue`, `disabled.vue`) change only the prop they demonstrate.
 
-- Default
+- Default — the first example, file `default.vue`.
 - Variants — composite example rendering every `variant` value side-by-side. Omit when the component has only one `variant`.
 - Sizes — composite example rendering every `size` value side-by-side. Omit when the component has only one `size`.
 - Loading — only when the component has a `loading` prop.
@@ -310,6 +320,7 @@ Canonical layout — composite examples (`variants.vue`, `sizes.vue`) render eve
 
 <!-- Rules:
      - DO NOT add LightDark, Accessibility (with play), Playground, WithSlots, WithComposition, Controlled, Uncontrolled examples unless the spec explicitly justifies them in writing here.
+     - File names follow `.claude/rules/naming.md` § 4 (`variants.vue`, `sizes.vue`, `disabled.vue`; never `types`, `basic`, `playground`, `demo`). examples.json ships at least every example listed here (`check:complete`).
      - The harnesses (a11y, hydration, server render) and the styled visual suite cover every example automatically.
      - For each additional state example (Loading/Disabled), the prop delta is the prop being demonstrated — nothing else.
      - Do NOT replace Variants/Sizes with one-example-per-variant (Primary/Secondary/...). The composite examples are the canonical pattern. -->
@@ -325,11 +336,11 @@ Canonical layout — composite examples (`variants.vue`, `sizes.vue`) render eve
 - Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
-- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/primitives/animations/animate.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not add examples beyond Default + Variants + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Variants/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
