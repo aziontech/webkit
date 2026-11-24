@@ -97,6 +97,7 @@
         <Button
           v-if="llms('illustrations')"
           :label="t.viewMarkdown"
+          :aria-label="`${t.viewMarkdown} ${t.newTab}`"
           variant="ghost"
           size="medium"
           icon="az az-file"

@@ -2,7 +2,7 @@
 name: webkit-azion-api
 description: Calling the Azion API from a browser app built on @aziontech/webkit — why a direct fetch to api.azion.com fails (CORS), the Vite dev proxy for local work, a same-origin edge function proxy for production, where the person's personal token lives (memory or sessionStorage, never a bundle, a URL or localStorage), and how each API answer maps to a webkit state. Use when an app signs in with a personal token (auth/auth-sign-in PersonalToken) or calls the Azion REST or GraphQL APIs.
 status: active
-last_updated: 2026-11-19
+last_updated: 2026-11-24
 scope: general
 enforced_by: [webkit-example-data, webkit-component-states, review]
 ---
@@ -11,7 +11,7 @@ enforced_by: [webkit-example-data, webkit-component-states, review]
 
 ## Purpose
 
-A console app on WebKit (a dashboard, a storage browser, an events explorer) calls the Azion API with the signed-in person's **personal token**. Three things go wrong the first time: the browser blocks the call, the token ends up somewhere it should not, and API errors surface as a blank screen. This skill fixes all three. The query explorer recipe built on top of it is `webkit-query-explorer`.
+A console app on WebKit (a dashboard, a storage browser, an events explorer) calls the Azion API with the signed-in person's **personal token**. Three things go wrong the first time: the browser blocks the call, the token ends up somewhere it should not, and API errors surface as a blank screen. The sections below fix all three. The query explorer recipe built on top of it is `webkit-query-explorer`.
 
 ## Why a direct call fails
 

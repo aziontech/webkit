@@ -16,7 +16,7 @@ export const accents: Accent[] = [
     value: 'orange',
     label: 'Orange',
     ariaLabel: 'Orange mark',
-    colors: ['var(--primary)', 'var(--warning)', 'var(--brand-blue)']
+    colors: ['var(--primary)', 'var(--warning)', 'var(--primary)']
   },
   {
     value: 'yellow',
@@ -34,7 +34,7 @@ export const accents: Accent[] = [
     value: 'green',
     label: 'Green',
     ariaLabel: 'Green mark',
-    colors: ['var(--success)', 'var(--success-mark)', 'var(--brand-blue)']
+    colors: ['var(--success)', 'var(--success-mark)', 'var(--success)']
   },
   {
     value: 'blue',

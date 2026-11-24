@@ -241,7 +241,7 @@
         >
           <Button
             v-if="shown > 0"
-            variant="secondary"
+            variant="outline"
             :label="t('wizard.previous')"
             :disabled="loading"
             @click="onPrevious"

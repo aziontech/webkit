@@ -3,12 +3,29 @@ import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import AccountOnboardingForm from '../../../../blocks/account/account-onboarding-form/account-onboarding-form.vue'
+import { accents } from '../../../../blocks/account/account-onboarding-form/onboarding-form-data'
 import Plan from '../../../../blocks/account/account-onboarding-form/variants/plan.vue'
 import Profile from '../../../../blocks/account/account-onboarding-form/variants/profile.vue'
 import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
 describe('account/account-onboarding-form', () => {
+  it('builds each named mark swatch from its own hue', () => {
+    const hues: Record<string, RegExp> = {
+      orange: /^var\(--(primary|warning)\)$/,
+      green: /^var\(--success(-mark)?\)$/,
+      red: /^var\(--(danger(-mark)?|primary)\)$/,
+      yellow: /^var\(--(warning(-mark)?|primary)\)$/
+    }
+    for (const [value, hue] of Object.entries(hues)) {
+      const accent = accents.find((item) => item.value === value)
+      expect(
+        accent?.colors.every((color) => hue.test(color)),
+        value
+      ).toBe(true)
+    }
+  })
+
   it('renders the step card on the layout column, with the Wizard holding the step', async () => {
     const view = render(AccountOnboardingForm)
     const column = view.container.querySelector('.layout-column.layout-boundary')

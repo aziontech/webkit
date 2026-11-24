@@ -1,6 +1,7 @@
-import { reactive, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 
-export type Theme = 'dark' | 'light'
+export type Theme = 'dark' | 'light' | 'system'
+export type ResolvedTheme = 'dark' | 'light'
 export type Direction = 'ltr' | 'rtl'
 
 export const LOCALES = [
@@ -9,12 +10,20 @@ export const LOCALES = [
 ]
 
 export const settings = reactive({
-  theme: (globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light') as Theme,
+  theme: 'system' as Theme,
   locale: 'en',
   dir: 'ltr' as Direction
 })
+
+const darkScheme = globalThis.matchMedia?.('(prefers-color-scheme: dark)')
+const systemTheme = ref<ResolvedTheme>(darkScheme?.matches ? 'dark' : 'light')
+darkScheme?.addEventListener?.('change', (event) => {
+  systemTheme.value = event.matches ? 'dark' : 'light'
+})
+
+export const resolvedTheme = computed<ResolvedTheme>(() =>
+  settings.theme === 'system' ? systemTheme.value : settings.theme
+)
 
 const KEY = 'webkit-demos:'
 
@@ -35,7 +44,7 @@ function write(name: string, value: string) {
 function apply() {
   const root = globalThis.document?.documentElement
   if (!root) return
-  root.dataset.theme = settings.theme
+  root.dataset.theme = resolvedTheme.value
   root.lang = settings.locale
 }
 
@@ -44,12 +53,12 @@ export function restoreSettings() {
   const theme = params.get('theme') ?? read('theme')
   const locale = params.get('lang') ?? read('locale')
   const dir = params.get('dir') ?? read('dir')
-  if (theme === 'dark' || theme === 'light') settings.theme = theme
+  if (theme === 'dark' || theme === 'light' || theme === 'system') settings.theme = theme
   if (locale && LOCALES.some((option) => option.value === locale)) settings.locale = locale
   if (dir === 'ltr' || dir === 'rtl') settings.dir = dir
   apply()
   watch(
-    () => ({ ...settings }),
+    () => ({ ...settings, resolved: resolvedTheme.value }),
     (value) => {
       write('theme', value.theme)
       write('locale', value.locale)

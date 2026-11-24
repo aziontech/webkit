@@ -39,7 +39,7 @@
   >
     <DocPageHeader
       :title="t.components"
-      :description="`${index.components.length} components, each with its examples, API and guidelines.`"
+      :description="format(t.componentsLead, { count: index.components.length })"
     />
     <div class="max-w-md">
       <Input

@@ -22,12 +22,11 @@
       ;(function () {
         try {
           var params = new URLSearchParams(location.search)
-          var stored =
-            params.get('theme') ||
-            localStorage.getItem('webkit-demos:theme') ||
-            (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          var stored = params.get('theme') || localStorage.getItem('webkit-demos:theme')
+          if (stored !== 'light' && stored !== 'dark')
+            stored = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
           var root = document.documentElement
-          root.dataset.theme = stored === 'light' ? 'light' : 'dark'
+          root.dataset.theme = stored
         } catch (e) {}
       })()
     </script>

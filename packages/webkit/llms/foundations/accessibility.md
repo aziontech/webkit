@@ -2,7 +2,7 @@
 
 > WCAG 2.1 AA rules every component and screen follows: names, focus, keyboard, contrast, motion.
 
-Webkit components are accessible by construction: drop in a `Dialog` or `Table` and its
+WebKit components are accessible by construction: drop in a `Dialog` or `Table` and its
 role, keyboard model, focus management, and reduced-motion fallback come with it. Anything
 you build around them — custom components, views, composed overlays — must hold the same
 contract. In this project accessibility is **convention + code review**; two parts are
@@ -48,8 +48,9 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
   composable (e.g. VueUse), not a hand-written trap.
 - Pair every motion-bearing class with **`motion-reduce:`**
   (`motion-reduce:transition-none` / `motion-reduce:animate-none`).
-- Keep hit targets at **24px or more** (44px on touch layouts), even when the visible glyph is
-  smaller.
+- Keep hit targets at **24px or more**, and at **40px or more** on touch layouts (the WebKit
+  floor: its controls draw at least 40px where they are tapped, and a button's invisible touch
+  area reaches 44px on a coarse pointer), even when the visible glyph is smaller.
 - Announce async results politely: inline validation and status updates go to an
   `aria-live="polite"` region (the webkit `Toast` and `Alert` already do this). Only an error
   interrupts: a `danger` toast is announced assertively by the `Toaster`, every other kind politely.
