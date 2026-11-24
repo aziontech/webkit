@@ -1,5 +1,6 @@
 import { RENDERS_THROUGH } from '../lexicon/component-terms.js'
 import { SYNONYM_GROUPS } from '../lexicon/synonyms.js'
+import { stabilityOf } from './results.js'
 import {
   contentWords,
   firstSentence,
@@ -43,6 +44,7 @@ export function blockCard(id, p, score) {
     source: p.source,
     surface: p.surface ?? 'app',
     ...(p.kind === 'fragment' ? { kind: 'fragment', note: FRAGMENT_NOTE } : {}),
+    ...stabilityOf(p),
     ...(score != null ? { score } : {})
   }
 }

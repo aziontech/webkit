@@ -267,3 +267,58 @@ test('diffSurface ignores a type that only gained or lost Markdown backticks', (
   })
   assert.deepEqual(diffSurface(surfaceFromCatalog(before), surfaceFromCatalog(after)), [])
 })
+
+test('a preview part may change its API without "!" or a migration', () => {
+  const changes = diff({ stability: 'preview' }, { stability: 'preview', events: [] })
+  assert.deepEqual(
+    changes.map((c) => [c.area, c.name, c.kind, c.breaking, c.preview]),
+    [['event', 'remove', 'removed', false, true]]
+  )
+  assert.deepEqual(evaluate(changes, ctx()), [])
+  assert.match(formatTable(changes), /preview \(exempt\)/)
+})
+
+test('a removed preview export is not breaking', () => {
+  const base = surfaceFromCatalog(catalog({ stability: 'preview' }))
+  const head = { exports: [], components: {} }
+  const changes = diffSurface(base, head)
+  assert.deepEqual(
+    changes.map((c) => [c.area, c.kind, c.breaking]),
+    [['export', 'removed', false]]
+  )
+  assert.deepEqual(evaluate(changes, ctx()), [])
+})
+
+test('promoting preview to GA is allowed and keeps the change of that PR exempt', () => {
+  const changes = diff({ stability: 'preview' }, { events: [] })
+  assert.deepEqual(
+    changes.map((c) => [c.area, c.kind, c.breaking]),
+    [
+      ['event', 'removed', false],
+      ['stability', 'promoted to GA', false]
+    ]
+  )
+  assert.deepEqual(evaluate(changes, ctx()), [])
+})
+
+test('a promotion alone needs no spec_version bump', () => {
+  const changes = diff({ stability: 'preview' }, {})
+  assert.deepEqual(evaluate(changes, ctx({ headSpecVersions: { badge: 1 } })), [])
+})
+
+test('demoting GA to preview fails, and a GA part stays breaking', () => {
+  const changes = diff({}, { stability: 'preview', events: [] })
+  assert.deepEqual(
+    changes.map((c) => [c.area, c.kind, c.breaking]),
+    [
+      ['event', 'removed', true],
+      ['stability', 'demoted to preview', false]
+    ]
+  )
+  const failures = evaluate(
+    changes,
+    ctx({ prTitle: 'feat(webkit)!: badge', migrationLines: ['`Badge`'] })
+  )
+  assert.equal(failures.length, 1)
+  assert.match(failures[0], /GA → preview is not allowed/)
+})

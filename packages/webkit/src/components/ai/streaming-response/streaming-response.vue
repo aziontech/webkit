@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { cn } from '../../../utils/cn'
   import CodeBlock from '../../code/code-block/code-block.vue'
   import { languageName } from '../../code/code-block/lib/language-name'
   import Separator from '../../layout/separator/separator.vue'
@@ -35,9 +36,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'streaming-response'
-  )
+  const testId = computed<string>(() => String(attrs['data-testid'] ?? 'streaming-response'))
   let parsed: MarkdownParse | undefined
 
   const blocks = computed<MarkdownBlock[]>(() => {
@@ -45,6 +44,8 @@
     return parsed.blocks
   })
   const lastIndex = computed<number>(() => blocks.value.length - 1)
+  const ROOT_CLASS =
+    'flex w-full min-w-0 flex-col gap-(--spacing-md) text-body-lg text-(--text-default) break-words'
   const caretInline = computed<boolean>(() => {
     const last = blocks.value[lastIndex.value]
     return Boolean(last && (last.type === 'paragraph' || last.type === 'heading'))
@@ -58,7 +59,7 @@
     :data-testid="testId"
     :data-streaming="streaming || null"
     data-slot="streaming-response"
-    class="flex w-full min-w-0 flex-col gap-(--spacing-md) text-body-lg text-(--text-default) break-words"
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
   >
     <template
       v-for="(block, i) in blocks"

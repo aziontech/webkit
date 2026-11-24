@@ -229,12 +229,13 @@ The full dictionary (concept → canonical name, banned aliases, values) is
 | Position         | `leading · trailing`                                                                   |
 | Side, align      | `start · center · end`                                                                 |
 | Orientation      | `horizontal · vertical`                                                                |
+| Priority         | `urgent · high · medium · low · none`                                                  |
 | Overlay side     | `top · bottom · start · end` (+ `auto`); `start`/`end` follow the text direction       |
 | Selection mode   | `none · single · multiple`                                                             |
 | Logo treatment   | `color · monochrome · knockout`                                                        |
 | Scale steps      | `2xs · xs · sm · md · lg · xl · 2xl · 3xl` (tokens and utilities only)                 |
 
-Five axes are **closed**: a `variant`, `severity`, `status`, `orientation` or `size` union holds
+Six axes are **closed**: a `variant`, `severity`, `status`, `orientation`, `priority` or `size` union holds
 only shared values or extras the component documents in the vocabulary (see
 [`prop-vocabulary.md`](./prop-vocabulary.md) § Closed value sets). A `variant` made only of
 alignment words is `align`; an exported `*Severity` type derives from `Severity`.

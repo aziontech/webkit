@@ -12,6 +12,7 @@ const STRUCTURES = ['monolithic', 'composition']
 const STATUSES = ['draft', 'approved', 'implemented', 'locked']
 const KEBAB_RE = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/
 const TEMPLATE_VERSIONS = [1, 2]
+const STABILITIES = ['preview', 'ga']
 export const CURRENT_TEMPLATE = 2
 export const TEMPLATE_2_SINCE = '2026-11-12'
 export const TEMPLATE_2_SECTIONS = [
@@ -108,6 +109,9 @@ export function validateFrontmatter(fm) {
   }
   if (fm.setup !== undefined && (typeof fm.setup !== 'string' || !fm.setup.trim())) {
     errors.push('setup: must be a non-empty string when present')
+  }
+  if (fm.stability !== undefined && !STABILITIES.includes(fm.stability)) {
+    errors.push(`stability: must be one of ${STABILITIES.join('|')} (absent means ga)`)
   }
   return errors
 }

@@ -81,6 +81,7 @@ emai = "emai"
 vulnerabilit = "vulnerabilit"
 # pt-BR words in block search intents, pt-BR UI strings of the demos app and of the sign-in block, and pt-BR test assertions.
 argumentos = "argumentos"
+cliente = "cliente"
 clientes = "clientes"
 comando = "comando"
 conter = "conter"

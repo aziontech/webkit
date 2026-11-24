@@ -48,7 +48,7 @@ Transform the structured JSON from `figma-extract` into a deterministic mapping 
 
    | Figma variable | Temporary primitive | Follow-up |
    |---|---|---|
-   | color/overlay-shadow | `shadow-lg` | `TODO: tokenizar` |
+   | color/overlay-shadow | `shadow-lg` | `TODO: tokenize` |
    ```
 
 ## Outputs

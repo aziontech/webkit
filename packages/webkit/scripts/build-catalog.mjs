@@ -321,6 +321,7 @@ function _readSpec(subpath) {
         ? frontmatter.setup.trim()
         : null,
     styleSeam: frontmatter.style_seam === true,
+    stability: frontmatter.stability ?? null,
     purpose: firstProse(getSection(body, 'Purpose')),
     useWhen: bullets(getSection(body, 'When to use')),
     avoidWhen: bullets(getSection(body, 'When NOT to use')),
@@ -491,6 +492,11 @@ export async function build() {
       if (spec.setup) entry.setup = spec.setup
     } else if (entry.kind === 'component') {
       entry.category = categoryFromTarget(target)
+    }
+    if (['component', 'root', 'subcomponent'].includes(entry.kind)) {
+      const owner = entry.parent || entry.rootOf
+      const stability = loadSpec(subpath)?.stability ?? (owner ? loadSpec(owner)?.stability : null)
+      if (stability === 'preview') entry.stability = 'preview'
     }
     const deprecation = targetDeprecation(target)
     if (deprecation) {

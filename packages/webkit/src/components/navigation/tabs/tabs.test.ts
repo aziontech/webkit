@@ -55,6 +55,21 @@ describe('Tabs', () => {
   })
 
   describe('composition', () => {
+    it('lets a consumer tabindex replace the panel tab stop', () => {
+      const Host = defineComponent({
+        components: { TabsRoot, TabsList, TabsTrigger, TabsContent },
+        template: `
+          <TabsRoot default-value="a">
+            <TabsList><TabsTrigger value="a" label="A" /><TabsTrigger value="b" label="B" /></TabsList>
+            <TabsContent value="a" tabindex="-1" data-testid="panel-a">One</TabsContent>
+            <TabsContent value="b" data-testid="panel-b">Two</TabsContent>
+          </TabsRoot>`
+      })
+      const view = render(Host)
+      expect(view.getByTestId('panel-a')).toHaveAttribute('tabindex', '-1')
+      expect(view.getByTestId('panel-b')).toHaveAttribute('tabindex', '0')
+    })
+
     // The panel slide offset is a Tailwind `translate-x-*` utility, which in v4 compiles to
     // the standalone `translate` property — NOT to `transform`. If `translate` is dropped
     // from this list the offset stops interpolating and the swap pops instead of sliding,

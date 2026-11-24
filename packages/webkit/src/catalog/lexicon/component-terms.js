@@ -1,31 +1,15 @@
+import { SUPPORT_TERMS } from './support-terms.js'
+import { TIME_TERMS } from './time-terms.js'
+
 export const RENDERS_THROUGH = {
   'data-table': ['table']
 }
 
 export const COMPONENT_TERMS = {
+  ...SUPPORT_TERMS,
+  ...TIME_TERMS,
   button: ['botão', 'botón', 'boton'],
   checkbox: ['check box', 'caixa de seleção', 'casilla de verificación', 'casilla'],
-  'date-picker': [
-    'date picker',
-    'datepicker',
-    'pick a date',
-    'choose a date',
-    'seletor de data',
-    'selector de fecha',
-    'calendário',
-    'calendario'
-  ],
-  'date-range-picker': [
-    'date range picker',
-    'time range',
-    'last 24 hours',
-    'last 7 days',
-    'last 30 days',
-    'last hour',
-    'relative time range',
-    'period',
-    'time window'
-  ],
   tabs: ['abas', 'guias', 'pestañas'],
   toast: ['notificação', 'notificación', 'aviso temporário'],
   input: [
@@ -287,5 +271,15 @@ export const COMPONENT_TERMS = {
   'capability-grid-section': ['feature grid', 'features grid', 'capabilities grid'],
   'plan-comparison-section': ['comparison', 'plan comparison', 'feature matrix', 'compare plans'],
   'article-index-section': ['blog index', 'article index', 'resource hub', 'blog list'],
-  'newsletter-section': ['newsletter', 'newsletter signup', 'subscribe to newsletter']
+  'newsletter-section': ['newsletter', 'newsletter signup', 'subscribe to newsletter'],
+  'message-thread': [
+    'support ticket',
+    'ticket conversation',
+    'ticket thread',
+    'support conversation',
+    'email thread',
+    'internal note',
+    'conversa do ticket',
+    'conversación del ticket'
+  ]
 }

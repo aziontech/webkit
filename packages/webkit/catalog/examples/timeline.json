@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The activity of one support ticket, newest first: an SLA breach with a clock icon in danger, a status change, an assignment with a note in the default slot, and the ticket being opened.",
+   "file": "examples/timeline/default.vue"
+  },
+  {
+   "name": "Groups",
+   "summary": "A deployment history grouped by day with Timeline.Group, each deploy's outcome as its severity and icon.",
+   "file": "examples/timeline/groups.vue"
+  },
+  {
+   "name": "Severities",
+   "summary": "One event per severity, as dots and as icons side by side; most events stay neutral so the coloured ones stand out.",
+   "file": "examples/timeline/severities.vue"
+  }
+ ]
+}
