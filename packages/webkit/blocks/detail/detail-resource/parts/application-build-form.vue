@@ -3,14 +3,16 @@
   import Card from '@aziontech/webkit/card'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Input from '@aziontech/webkit/input'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
+  import PasswordInput from '@aziontech/webkit/password-input'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Subheader from '@aziontech/webkit/subheader'
+
+  import { buildToken } from '../sample'
 
   /** The build settings of the application. */
   export interface ApplicationBuildSettings {
@@ -25,8 +27,6 @@
   }
 
   export interface ApplicationBuildFormProps {
-    /** The application name, used in the token. */
-    name: string
     /** The connected repository, owner and name. */
     repository: string
     /** The settings differ from the saved ones. */
@@ -187,24 +187,23 @@
                   description="Stored as the PLATFORM_TOKEN GitHub secret."
                   stackable
                 >
-                  <InputGroupRoot class="w-full">
-                    <div class="flex flex-1">
-                      <Input
-                        :model-value="`${name} build token`"
-                        size="large"
-                        class="w-full"
+                  <div class="flex w-full items-center gap-(--spacing-xs)">
+                    <div class="min-w-0 flex-1">
+                      <PasswordInput
+                        :model-value="buildToken"
                         aria-label="API token"
+                        autocomplete="off"
                         monospace
                         readonly
                       />
                     </div>
                     <CopyButton
-                      variant="ghost"
-                      :value="`${name} build token`"
+                      variant="outline"
+                      size="large"
+                      :value="buildToken"
                       aria-label="Copy API token"
-                      size="small"
                     />
-                  </InputGroupRoot>
+                  </div>
                 </SettingsRow>
               </Item.List>
             </template>

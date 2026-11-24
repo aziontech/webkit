@@ -49,6 +49,8 @@ export const neverDeployedResource: ResourceDetailResource = {
   frameworkIcon: 'az-color az-astro'
 }
 
+export const buildToken = 'azn_build_example_k3p9qa7f2m8x4w1c6v5b'
+
 export const resourceTabs: { value: ResourceDetailTab; label: string }[] = [
   { value: 'overview', label: 'Overview' },
   { value: 'versions', label: 'Versions' },

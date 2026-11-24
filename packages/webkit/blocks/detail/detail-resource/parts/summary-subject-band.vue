@@ -26,6 +26,8 @@
     destination?: string
     /** The address Visit opens in a new tab; empty draws no Visit. */
     visit?: string
+    /** Why Visit is unavailable yet; set, Visit stays in place but disabled with this reason. */
+    visitDisabledReason?: string
     /** The accessible name and tooltip of the actions menu. */
     actionsLabel: string
     /** The groups of the actions menu. */
@@ -41,6 +43,7 @@
     href: '',
     destination: '',
     visit: '',
+    visitDisabledReason: '',
     showMenuIcons: true,
     container: true
   })
@@ -83,9 +86,11 @@
       <Button
         v-if="visit"
         label="Visit"
-        aria-label="Visit (opens in a new tab)"
-        :href="visit"
-        target="_blank"
+        :aria-label="visitDisabledReason ? 'Visit' : 'Visit (opens in a new tab)'"
+        :href="visitDisabledReason ? '' : visit"
+        :target="visitDisabledReason ? '_self' : '_blank'"
+        :disabled="Boolean(visitDisabledReason)"
+        :disabled-reason="visitDisabledReason"
         variant="secondary"
         size="medium"
         icon="az az-external-link"
