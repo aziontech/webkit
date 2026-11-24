@@ -88,6 +88,8 @@ show:
 - **Name the trigger from the same resolution.** `displayValue` maps each value through
   `referenceLabel`, so the trigger never prints an ID.
 
+<!-- snippet: partial -->
+
 ```vue
 <script setup lang="ts">
   import MultiSelect from '@aziontech/webkit/multi-select'

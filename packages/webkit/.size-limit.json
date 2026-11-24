@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "84.8 KB",
+    "limit": "85.3 KB",
     "entryOnly": true
   },
   {
@@ -89,12 +89,13 @@
   {
     "name": "date-picker-root",
     "path": "src/components/input/date-picker/date-picker.vue",
-    "limit": "43.05 KB"
+    "limit": "15.3 KB",
+    "entryOnly": true
   },
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "58 KB"
+    "limit": "58.15 KB"
   },
   {
     "name": "table-root",
@@ -483,7 +484,7 @@
   {
     "name": "article-body-section",
     "path": "src/components/section/article-body-section/article-body-section.vue",
-    "limit": "48 KB",
+    "limit": "48.35 KB",
     "entryOnly": true
   },
   {
@@ -686,7 +687,7 @@
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "59.9 KB",
+    "limit": "59.95 KB",
     "entryOnly": true
   },
   {
@@ -1142,17 +1143,17 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "14.25 KB"
+    "limit": "14.45 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "12.65 KB"
+    "limit": "12.9 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "12.8 KB"
+    "limit": "13.05 KB"
   },
   {
     "name": "phone-input",
@@ -1174,7 +1175,7 @@
   {
     "name": "multi-select",
     "path": "src/components/input/multi-select/index.ts",
-    "limit": "31.35 KB"
+    "limit": "31.4 KB"
   },
   {
     "name": "code-block",
@@ -1978,7 +1979,8 @@
   {
     "name": "date-picker",
     "path": "src/components/input/date-picker/index.ts",
-    "limit": "43.25 KB"
+    "limit": "15.45 KB",
+    "entryOnly": true
   },
   {
     "name": "date-picker-clear",
@@ -2003,7 +2005,7 @@
   {
     "name": "number-input",
     "path": "src/components/input/number-input/number-input.vue",
-    "limit": "3.75 KB"
+    "limit": "3.95 KB"
   },
   {
     "name": "hint",
@@ -2124,7 +2126,7 @@
   {
     "name": "multi-select-trigger",
     "path": "src/components/input/multi-select/multi-select-trigger/multi-select-trigger.vue",
-    "limit": "10.3 KB"
+    "limit": "10.35 KB"
   },
   {
     "name": "multi-select-content",
@@ -2189,7 +2191,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "86.45 KB"
+    "limit": "86.95 KB"
   },
   {
     "name": "use-console-layout",

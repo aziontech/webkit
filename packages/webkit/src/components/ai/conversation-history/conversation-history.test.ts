@@ -1,5 +1,12 @@
 import userEvent from '@testing-library/user-event'
-import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
+import {
+  cleanup,
+  fireEvent,
+  render,
+  type RenderResult,
+  waitFor,
+  within
+} from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { page } from 'vitest/browser'
 import { h } from 'vue'
@@ -207,12 +214,12 @@ describe('ConversationHistory', () => {
   })
 
   it('moves focus to the next row after a delete', async () => {
-    const view = render(ConversationHistory, {
+    const view: RenderResult = render(ConversationHistory, {
       props: {
         items,
         now,
         removable: true,
-        onRemove: (_event: MouseEvent, id: string) =>
+        onRemove: (_event: MouseEvent | KeyboardEvent, id: string): Promise<void> =>
           view.rerender({ items: items.filter((item) => item.id !== id), now, removable: true })
       }
     })
@@ -532,10 +539,10 @@ describe('ConversationHistory', () => {
           now,
           removable: true,
           itemActions: [...actions],
-          onItemPin: record('pin'),
-          onItemShare: record('share'),
-          onItemLock: record('lock'),
-          onItemArchive: record('archive'),
+          'onItem-pin': record('pin'),
+          'onItem-share': record('share'),
+          'onItem-lock': record('lock'),
+          'onItem-archive': record('archive'),
           onRemove: record('remove')
         }
       })
@@ -566,7 +573,7 @@ describe('ConversationHistory', () => {
           items: chats,
           now,
           itemActions: ['pin', 'archive'],
-          onItemPin: (_event: Event, item: { id: string }) => pins.push(item.id)
+          'onItem-pin': (_event: Event, item: { id: string }) => pins.push(item.id)
         }
       })
       await userEvent.keyboard('p')

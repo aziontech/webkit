@@ -5,7 +5,6 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
-  import { fromWallClock, toWallClock } from '../date-range-picker/date-range'
   import { useDatePickerPanel } from './composables/use-date-picker-panel'
   import { asSingle, formatValueLabel, withTime } from './format'
   import {
@@ -16,6 +15,7 @@
     type DatePickerSize,
     type DatePickerValue
   } from './injection-key'
+  import { fromPanelValue, toPanelValue } from './lib/panel-value'
   import DatePickerControl from './parts/date-picker-control.vue'
   import DatePickerControlButton from './parts/date-picker-control-button.vue'
   import DatePickerPopover from './parts/date-picker-popover.vue'
@@ -121,17 +121,8 @@
 
   const { panel, panelOpen } = useDatePickerPanel(isOpen)
 
-  const toPanel = (value: DatePickerValue | undefined): Date | null => {
-    const date = asSingle(value ?? null)
-    if (!date) return null
-    return timeZone.value ? toWallClock(date, timeZone.value) : new Date(date.getTime())
-  }
-
-  const fromPanel = (value: DatePickerValue): DatePickerValue => {
-    const date = asSingle(value)
-    if (!date) return null
-    return timeZone.value ? fromWallClock(date, timeZone.value) : new Date(date.getTime())
-  }
+  const toPanel = (value: DatePickerValue | undefined) => toPanelValue(value, timeZone.value)
+  const fromPanel = (value: DatePickerValue) => fromPanelValue(value, timeZone.value)
 
   const draft = ref<DatePickerValue>(toPanel(model.value))
   const draftRef = computed(() => draft.value)

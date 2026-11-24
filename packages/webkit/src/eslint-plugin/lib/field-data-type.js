@@ -29,22 +29,30 @@ const NON_TEXT_TYPES = new Set([
 
 const normalized = (name) => String(name ?? '').toLowerCase()
 
+function literalText(expression) {
+  if (expression?.type === 'Literal' && typeof expression.value === 'string')
+    return expression.value
+  if (expression?.type === 'TemplateLiteral' && expression.expressions.length === 0) {
+    return expression.quasis[0]?.value?.cooked ?? ''
+  }
+  return undefined
+}
+
+function boundName(attr) {
+  if (attr.key?.name?.name !== 'bind') return null
+  const argument = attr.key.argument
+  return argument?.type === 'VIdentifier' ? normalized(argument.rawName) : null
+}
+
 function staticAttr(node, name) {
   for (const attr of node.startTag?.attributes ?? []) {
-    if (attr.directive) {
-      if (attr.key?.name?.name !== 'bind') continue
-      const argument = attr.key.argument
-      if (argument?.type !== 'VIdentifier' || normalized(argument.rawName) !== name) continue
-      const expression = attr.value?.expression
-      if (expression?.type === 'Literal' && typeof expression.value === 'string') {
-        return expression.value
-      }
-      if (expression?.type === 'TemplateLiteral' && expression.expressions.length === 0) {
-        return expression.quasis[0]?.value?.cooked ?? ''
-      }
+    if (!attr.directive) {
+      if (normalized(attr.key?.name) === name) return attr.value?.value ?? ''
       continue
     }
-    if (normalized(attr.key?.name) === name) return attr.value?.value ?? ''
+    if (boundName(attr) !== name) continue
+    const text = literalText(attr.value?.expression)
+    if (text !== undefined) return text
   }
   return null
 }
@@ -136,7 +144,7 @@ const DATE_LABEL = /\b(?:date|datetime|timestamp)\b|\s(?:at)$/i
 const DATE_PLACEHOLDER =
   /\d{4}-\d{2}-\d{2}|\b(?:yyyy|YYYY)[-/.]?(?:mm|MM)\b|\b(?:dd|DD)[-/.](?:mm|MM)\b|\b(?:mm|MM)[-/.](?:dd|DD)\b|\bISO[ -]?8601\b|\bRFC[ -]?3339\b|\bhh:mm\b/i
 
-export const NATIVE_DATE_TYPES = new Set(['date', 'datetime-local', 'datetime', 'month', 'week'])
+const NATIVE_DATE_TYPES = new Set(['date', 'datetime-local', 'datetime', 'month', 'week'])
 
 export function dateEvidence(control) {
   if (control.autocomplete.startsWith('cc-')) return null

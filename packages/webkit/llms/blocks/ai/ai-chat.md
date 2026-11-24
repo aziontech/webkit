@@ -368,6 +368,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   } from '@aziontech/webkit/utils/ai-chat'
   import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
+  import { failureText, turnTime } from './lib/ai-chat-failure'
   import AiChatComposer from './parts/ai-chat-composer.vue'
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
   import AiChatHeader, { type AiChatHeaderAction } from './parts/ai-chat-header.vue'
@@ -521,11 +522,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   const welcome = computed(() => !turns.value.length && !props.hydrating)
   let refocus = false
   const last = computed(() => turns.value[turns.value.length - 1])
-  const failure = computed(() => {
-    if (!props.error) return ''
-    if (typeof props.error === 'string') return props.error
-    return 'The connection was interrupted before the response finished.'
-  })
+  const failure = computed(() => failureText(props.error))
   const waiting = computed(
     () => (props.loading || Boolean(failure.value)) && last.value?.role === 'user'
   )
@@ -557,9 +554,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
       : null
   })
 
-  function timeOf(turn: AiChatMessage): string {
-    return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
-  }
+  const timeOf = (turn: AiChatMessage) => turnTime(turn, formatDate)
 
   onMounted(() => nextTick(() => composerEl.value?.focus()))
 
@@ -1133,6 +1128,24 @@ export const sampleTools: PromptInputMenuOption[] = [
   { value: 'create-image', label: 'Create image', icon: 'az az-image' }
 ]
 ````
+
+## `lib/ai-chat-failure.ts`
+
+```ts
+import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
+
+export const failureText = (error: unknown): string => {
+  if (!error) return ''
+  if (typeof error === 'string') return error
+  return 'The connection was interrupted before the response finished.'
+}
+
+export const turnTime = (
+  turn: Pick<AiChatMessage, 'createdAt'>,
+  formatDate: (value: Date | string | number, options?: Intl.DateTimeFormatOptions) => string
+): string =>
+  turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
+```
 
 ## `parts/ai-chat-composer.vue`
 

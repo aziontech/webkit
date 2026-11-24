@@ -44,8 +44,9 @@
   const hasFirstGroup = computed<boolean>(
     () => movable.value || ACTIONS.some((action) => has(action))
   )
-  const label = (on: boolean, yes: string, no: string): string =>
-    ctx.t(`conversationHistory.${on ? yes : no}` as 'conversationHistory.pin')
+  type RowMenuToggle = 'pin' | 'unpin' | 'lock' | 'unlock' | 'archive' | 'unarchive'
+  const label = (on: boolean, yes: RowMenuToggle, no: RowMenuToggle): string =>
+    ctx.t(`conversationHistory.${on ? yes : no}`)
 
   const onSelect = (event: MouseEvent | KeyboardEvent, value: string | number) => {
     const key = String(value)

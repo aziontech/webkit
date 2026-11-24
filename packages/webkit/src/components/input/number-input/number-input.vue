@@ -118,7 +118,8 @@
 
   const insert = (event: Event, text: string) => {
     event.preventDefault()
-    if (text !== '.' || !(event.target as HTMLInputElement).value.includes('.'))
+    const field = event.target instanceof HTMLInputElement ? event.target : null
+    if (text !== '.' || !field?.value.includes('.'))
       globalThis.document.execCommand('insertText', false, text)
   }
 

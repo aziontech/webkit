@@ -69,7 +69,7 @@ export interface SourcesPublished {
   calendar: boolean
 }
 
-export function sourcePublished(item: SourcesItem): SourcesPublished | null {
+function sourcePublished(item: SourcesItem): SourcesPublished | null {
   const value = item.publishedAt
   if (value === undefined || value === null || value === '') return null
   const date = value instanceof Date ? value : new Date(value)
