@@ -279,7 +279,7 @@
     home-aria-label="Azion home"
     :columns="columns"
     :socials="socials"
-    status-label="All Systems Operational"
+    status-label="All systems operational"
     :languages="languages"
     language-aria-label="Language"
   />

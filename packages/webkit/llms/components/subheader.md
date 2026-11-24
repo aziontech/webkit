@@ -30,7 +30,7 @@
 - [page-header](page-header.md) — the page's h1.
 - [settings-group](settings-group.md) — the settings band with a Hint, a gutter copy-link and an optional disclosure; use it, not this, for a band of `SettingsRow`s.
 - [module-header](module-header.md) — the marketing section heading (centred, left or horizontal); use it on site pages, this one in the console.
-- [copy-button](copy-button.md) — the copy-link affordance it renders.
+- [copy-button](copy-button.md) — the copy-link affordance it renders, with the `az az-link` glyph that `settings-group` uses for the same action.
 
 ## Props
 

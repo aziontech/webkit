@@ -6493,6 +6493,13 @@
      "default": "false",
      "required": "false",
      "doc": "Disables interaction and applies disabled tokens."
+    },
+    {
+     "name": "icon",
+     "type": "string",
+     "default": "'az az-copy'",
+     "required": "false",
+     "doc": "Idle glyph; `az az-link` when the value is a link to a section. The check glyph replaces it after a copy."
     }
    ],
    "events": [
@@ -31747,6 +31754,7 @@
     "avatar",
     "button",
     "combobox",
+    "copy-button",
     "doc-card",
     "doc-item",
     "doc-prompt",

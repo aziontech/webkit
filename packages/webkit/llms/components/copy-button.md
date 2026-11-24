@@ -43,12 +43,17 @@
 | `variant` | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'danger'` | `'ghost'` | false | Visual variant forwarded to `IconButton`. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token forwarded to `IconButton`. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| `icon` | `string` | `'az az-copy'` | false | Idle glyph; `az az-link` when the value is a link to a section. The check glyph replaces it after a copy. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `copy` | `(event: MouseEvent, value: string)` | Emitted after a successful clipboard write; `value` is the copied text. |
+
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
 
 ## States
 
@@ -71,7 +76,7 @@
 
 ## Right-to-left
 
-- Layout: a single icon button; nothing to mirror. The copy and check glyphs do not mirror.
+- Layout: a single icon button; nothing to mirror. The copy, link and check glyphs do not mirror.
 - Keyboard: no arrow-key logic.
 - User data: the copied value is not rendered.
 

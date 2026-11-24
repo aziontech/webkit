@@ -107,21 +107,21 @@
   <div>
     <ModuleHeader
       align="center"
-      eyebrow="Centered"
-      title="A symmetric section opener"
-      description="Copy capped at the reading width and centered in the frame — the default."
+      eyebrow="Platform"
+      title="Build once, run everywhere"
+      description="One deploy serves your application from every region, with no servers to manage."
     />
     <ModuleHeader
       align="start"
-      eyebrow="Left"
-      title="The same stack, at the start edge"
-      description="Same anatomy, aligned to the start — for a section that reads rather than announces."
+      eyebrow="Observability"
+      title="See every request as it happens"
+      description="Logs, metrics and traces stream to one place, ready to query in seconds."
     />
     <ModuleHeader
       align="split"
-      eyebrow="Horizontal"
-      title="Headline in the first column"
-      description="The description takes the third column, with the middle one left as air. Below the md breakpoint the grid collapses and this falls back under the headline."
+      eyebrow="Security"
+      title="Protect every request"
+      description="Firewall rules, bot protection and DDoS mitigation run before your code, on the same network, so a blocked request never costs you compute."
     />
   </div>
 </template>
@@ -139,23 +139,23 @@
     <ModuleHeader
       size="small"
       align="start"
-      eyebrow="Small"
-      title="A subsection inside a band"
-      description="The headline drops a step so it opens a part of a section without competing with the section's own header."
+      eyebrow="Functions"
+      title="Runtime APIs"
+      description="Fetch, streams and crypto work the way they do in the browser."
     />
     <ModuleHeader
       size="medium"
       align="start"
-      eyebrow="Medium"
-      title="An ordinary section opener"
-      description="The default step, and the one nearly every section header wants."
+      eyebrow="Security"
+      title="Protect every request"
+      description="Firewall rules and bot protection run before your code, on the same network."
     />
     <ModuleHeader
       size="large"
       align="start"
-      eyebrow="Large"
-      title="The headline is the statement"
-      description="For a band that carries one claim and little else — the copy under it stays at reading size."
+      eyebrow="Platform"
+      title="Build once, run everywhere"
+      description="One deploy serves your application from every region, with no servers to manage."
     />
   </div>
 </template>

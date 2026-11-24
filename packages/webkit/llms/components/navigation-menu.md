@@ -106,7 +106,7 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
 - ARIA: the root is a `nav` landmark. A panel trigger is a disclosure button: `aria-expanded` reflects its panel and, while open, `aria-controls` names the panel (`role="region"`); it carries no `aria-haspopup`, since the panel is navigation, not a menu. A link trigger carries `aria-current="page"` when `active`. Tests: `navigation-menu.test.ts` › axe on the closed bar, the open panel and the vertical menu.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target ≥40×40 px where the control is interactive.
+- Touch target ≥40×40 px where the control is interactive; a `Trigger` grows to 44 px tall on a coarse pointer (`pointer-coarse:min-h-11`), like `Tabs.Trigger` and the `SidebarMenu` rows.
 
 ## Right-to-left
 
@@ -172,6 +172,32 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
                         close-on-click
                       >
                         See all solutions
+                      </NavigationMenu.Item>
+                    </NavigationMenu.List>
+                    <NavigationMenu.List label="By industry">
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/retail/"
+                        description="Keep stores fast through peak sales"
+                        close-on-click
+                      >
+                        Retail and e-commerce
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/financial-services/"
+                        description="Protect transactions and customer data"
+                        close-on-click
+                      >
+                        Financial services
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/media/"
+                        description="Stream live and on-demand video"
+                        close-on-click
+                      >
+                        Media and entertainment
                       </NavigationMenu.Item>
                     </NavigationMenu.List>
                   </div>

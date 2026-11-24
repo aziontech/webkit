@@ -210,7 +210,7 @@
     <template #status>
       <StatusIndicator
         severity="success"
-        label="All Systems Operational"
+        label="All systems operational"
       />
     </template>
     <template #language>
@@ -351,7 +351,7 @@
     <template #status>
       <StatusIndicator
         severity="success"
-        label="All Systems Operational"
+        label="All systems operational"
       />
     </template>
     <template #language>

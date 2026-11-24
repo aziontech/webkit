@@ -308,7 +308,10 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
           <ChartCard.Header>
             <ChartCard.DragHandle :aria-label="'Move ' + cards[item.id].title" />
             <ChartCard.Title>{{ cards[item.id].title }}</ChartCard.Title>
-            <ChartCard.Action v-if="editing">
+            <ChartCard.Action
+              v-if="editing"
+              class="@max-3xl/dashboard-grid:hidden"
+            >
               <Tag
                 :label="item.span + '/12'"
                 severity="neutral"

@@ -339,7 +339,6 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             icon="az az-sql-database"
             href="/sql-database"
             tag-value="Preview"
-            tag-variant="primary"
           />
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Account">
@@ -502,7 +501,6 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 icon="az az-sql-database"
                 href="/sql-database"
                 tag-value="Preview"
-                tag-variant="primary"
               />
             </SidebarMenuGroup>
             <SidebarMenuGroup label="Account">
