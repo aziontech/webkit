@@ -5587,7 +5587,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       props: {
         eyebrow: 'SQL Database',
         title: 'What teams use SQL Database for',
-        description: 'Teams use it to:',
+        description: 'Four ways teams put vector search and SQL to work.',
         primaryAction: { label: 'Docs', href: '/docs', trailing: true },
         items: [
           {
@@ -6063,6 +6063,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - The header renders only when `title` is set
 - `anchor` sets the band's `id`; a card whose `target` is `_blank` links with `rel="noopener"`
 - A card title clamps to two lines (`line-clamp-2`); the clamp is visual only, so the full title stays in the accessibility tree, with no `title` attribute.
+- Broken cover: an `image` that fails to load is dropped, so the cover shows its `mark` when it has one and otherwise the plain `--bg-surface` panel, never the browser's broken-image glyph.
 
 ## Accessibility
 
@@ -6333,6 +6334,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Empty: when no entry matches, the list and the load-more button are not rendered; with `emptyTitle` set, an `EmptyState` (search icon) renders `emptyTitle` and `emptyDescription`, and an `emptyActionLabel` button clears every filter
 - `data-variant` on the list mirrors the row layout: `byline` spreads the copy so the byline sits at the foot, `center` centres it
 - A row with no `image` draws its `mark` (the client's logo, flattened to one ink that inverts in the dark theme); an author with an `avatar` URL shows the photo, otherwise the initials
+- Broken cover: an `image` that fails to load is dropped, so the cover shows its `mark` when it has one and otherwise the plain `--bg-surface` panel, never the browser's broken-image glyph.
 - A row whose `target` is `_blank` opens in a new tab (with `rel="noopener"`)
 - `categoryParam` (`category-search`): on mount (client only) a query value that matches one of `categories` selects it and scrolls the band into view
 
@@ -6704,6 +6706,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## States
 
 - Visual states: `default`; the copy button and the button own their hover and focus states
+- The session window opens on a `Shell` label strip that holds the copy button, so the button never covers the first command line; long lines scroll sideways inside the window.
 - Empty: when neither `script` nor `session` is set the band renders nothing — not the header, not the frame
 - `script` draws the `console-mockup` `cli-terminal-start` or `cli-terminal-deploy` in a stage 18rem tall (24rem from `md` up); `data-entered` is set on the stage the first time a fifth of it is on screen, and the stage rises, grows and fades in. The widget types its session while on screen and shows its finished state under reduced motion (owned by `console-mockup`). Without `script` the `session` renders as a `code-block`
 - The header renders only when `title` is set
@@ -6858,8 +6861,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         logo: dafitiExtendedMono,
         logoAlt: 'Dafiti',
         href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',
-        fill: 'white',
-        logoTreatment: 'knockout'
+        fill: 'canvas',
+        logoTreatment: 'monochrome'
       },
       {
         logo: agibankExtendedReversed,
@@ -6879,8 +6882,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         logo: fourbankExtendedReversed,
         logoAlt: 'Fourbank',
         href: 'https://www.azion.com/en/success-case/fourbank/',
-        fill: 'primary',
-        logoTreatment: 'knockout'
+        fill: 'canvas',
+        logoTreatment: 'monochrome'
       },
       {
         logo: exameExtendedMono,
@@ -8024,7 +8027,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   <CustomerUseCasesSection
     eyebrow="SQL Database"
     title="What teams use SQL Database for"
-    description="Teams use it to:"
+    description="Four ways teams put vector search and SQL to work."
     :primary-action="{ label: 'Docs', href: '/site/docs', trailing: true }"
     :items="[
       {
@@ -8169,7 +8172,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Do
 
 - Four to six items; the stack needs enough steps to earn the scroll.
-- Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ConsoleMockup` (`{ component: 'ConsoleMockup', props: { name } }`): it shows the console itself.
+- Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ConsoleMockup` (`{ component: 'ConsoleMockup', props: { name } }`): it shows the console itself. Give a workload screen (`workloads-list`, `workload-topology`, `workload-domains`, `workload-rollout-rows`) `width: 600` so it fills the pinned pane near its true size; at its own 860 design width it shrinks to about two thirds and its table text cannot be read.
+- Describe illustration scenes as pictures of the product; only a `ConsoleMockup` scene is the console itself.
 - Keep `action` to a short label such as "Docs" — it sits under the step copy at the small size.
 
 ## Don’t
@@ -8203,7 +8207,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Below the large breakpoint the features render as a three-column grid of media tiles; from it up they render as a `MediaScroll` whose active step is `media-scroll`'s own
 - The server renders both layouts (CSS shows the right one); once mounted only the layout that matches the width stays in the document, so the band never carries two copies of every scene and illustration
 - Empty: when `items` is empty the band renders nothing — not the header, not the frames
-- Media: an item's `scene` wins over its `code`, which wins over its `illustration`; a `code` sample is a one-file `code-block` with line numbers, typed in once in the stack and loaded on demand; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. A scene name that is not registered draws nothing.
+- Media: an item's `scene` wins over its `code`, which wins over its `illustration`; a `code` sample is a one-file `code-block` with line numbers, typed in once in the stack and loaded on demand; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. In the grid a `code` sample opens on a label strip naming its file, which holds the copy button, so the button never covers the first line. A scene name that is not registered draws nothing.
 
 ## Accessibility
 
@@ -8227,7 +8231,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   <FeatureScrollSection
     eyebrow="Workloads"
     title="Everything a workload does, one screen at a time"
-    description="Scroll through the console a workload is run from: the list, the topology, the domains, the deploy and the rollout. Each screen is the one you get, not a picture of it."
+    description="Scroll through what a workload does: the list, the topology, the domains, the deploy and the rollout."
     :items="[
       {
         title: 'Every workload on one list',
@@ -8574,6 +8578,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - A cell's copy button writes `copy.text` to the clipboard on activation, then reads `copiedLabel` (or the catalog's `Copied`) with a check icon for two seconds before it returns to its label; the timer is cleared when the band unmounts. A failed write leaves the label as it was
 - A cell with both `action` and `copy` renders the link button first, then the copy button
 - Media per cell: `scene` wins over `illustration`; the scene receives `hover: true` while the pointer is over its cell (also on `pointermove`, so a pointer left still while the page scrolls under it counts). A scene name that is not registered draws nothing
+- A scene and an illustration share one inset: `var(--spacing-xl)` from the cell's top and side edges, so no art runs into the cell frame.
 
 ## Accessibility
 

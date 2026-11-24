@@ -7,7 +7,7 @@
   },
   {
    "name": "Ordered cells",
-   "summary": "`cells` places story and mark tiles in one ordered list, each with its own `span` and `rows`, as the home page does: Netshoes leads two by two, three marks follow, GPA runs two rows tall with its stacked lockup one step taller, and the marks on `white` and `primary` fills take the knockout ink. `anchor` makes the band a `#clients` target.",
+   "summary": "`cells` places story and mark tiles in one ordered list, each with its own `span` and `rows`, as the home page does: Netshoes leads two by two, three marks follow, GPA runs two rows tall with its stacked lockup one step taller, and the mark on the `primary` fill takes the knockout ink. `anchor` makes the band a `#clients` target.",
    "file": "examples/client-mosaic-section/ordered-cells.vue"
   }
  ]
