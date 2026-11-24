@@ -159,6 +159,17 @@ describe('DocTableOfContents', () => {
     })
   })
 
+  describe('hover highlight', () => {
+    it('moves with translate, so the pointer never animates its top or left', async () => {
+      const { getByTestId, getByText } = render(DocTableOfContents, { props: { items: ITEMS } })
+      await fireEvent.pointerEnter(getByText('Bind a domain').closest('li')!)
+      const highlight = getByTestId('doc-table-of-contents__highlight')
+      expect(highlight.style.translate).toMatch(/px/)
+      expect(highlight.style.top).toBe('')
+      expect(highlight.style.left).toBe('')
+    })
+  })
+
   describe('right-to-left', () => {
     it('mirrors the rail so its depth bends follow the inline direction', () => {
       const { getByTestId } = render(DocTableOfContents, {
