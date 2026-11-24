@@ -655,11 +655,9 @@ export interface ButtonProps {
 
 ### 2.3. Controlled vs uncontrolled state
 
-When the component owns relevant internal state (open/value/selected/expanded), expose **both** APIs:
+Two-way state follows [`.claude/rules/v-model.md`](../rules/v-model.md): `defineModel` is controlled when the parent binds `v-model` and holds local state when it does not, so no computed `isOpen` and no `watch` mirror are needed.
 
-- **Controlled:** prop `open` (`boolean | undefined`) + emit `update:open` + `v-model:open` via `defineModel<boolean>('open')`.
-- **Uncontrolled:** prop `defaultOpen` (initial value), internally managed when `open === undefined`.
-- A computed `isOpen` decides between `openModel.value` (controlled) and `internalOpen.value` (uncontrolled).
+- **Shape:** `const open = defineModel<boolean>('open', { default: false })`, seeded by a `defaultOpen` prop when the spec lists one (one shape per concept: [`prop-vocabulary.md`](../rules/prop-vocabulary.md) § Two-way models).
 - Examples `controlled.vue` and `uncontrolled.vue` document both usages only when the spec's `## Examples` lists them.
 
 ### 2.4. Typed slots
@@ -836,7 +834,7 @@ When the component is interactive and accepts `href`, derive `isAnchor` and rend
 
 ### 7. Capturing tokens from Figma
 
-Before creating or updating a component, invoke the `/component-create` skill which automates the discovery via MCP `plugin:figma:figma` (`get_variable_defs`, `get_design_context`). Map each Figma variable to its DESIGN.md equivalent (generated class for typography, `var(--*)` for everything else). When no equivalent exists, register a **theme gap** in the PR and use the closest primitive temporarily with `TODO: tokenizar`. Never commit hardcoded hex to close the gap.
+Before creating or updating a component, invoke the `/component-create` skill which automates the discovery via MCP `plugin:figma:figma` (`get_variable_defs`, `get_design_context`). Map each Figma variable to its DESIGN.md equivalent (generated class for typography, `var(--*)` for everything else). When no equivalent exists, register a **theme gap** in the PR and use the closest primitive temporarily with `TODO: tokenize`. Never commit hardcoded hex to close the gap.
 
 ### 8. No duplication / DRY
 
@@ -856,7 +854,7 @@ Sweep these locations before implementing. Create a new utility only when nothin
 - **ARIA minimum:** `aria-label`, `aria-labelledby`/`aria-describedby`, `aria-busy`, `aria-disabled`, `aria-hidden="true"` on decorative icons, `aria-current`/`aria-selected`/`aria-expanded` as appropriate, `aria-live="polite"` for dynamic feedback.
 - **Contrast:** >=4.5:1 (text) / >=3:1 (large/icons) and the APCA targets of [`rules/accessibility.md`](../rules/accessibility.md), from token pairs the theme documents. Verify disabled, which often fails.
 - **`prefers-reduced-motion`:** components that animate must apply `motion-reduce:transition-none motion-reduce:transform-none`.
-- **Touch targets:** >=40x40px; smaller require justification.
+- **Touch targets:** >=44x44px on a coarse pointer (decision TT01: an invisible `data-slot="touch-target"` hit area, or the row grows with `pointer-coarse:min-h-11`); smaller requires justification.
 - **Forms:** `<label>` associated, `aria-describedby` for hint/error, `aria-invalid="true"` on error, message announced via `aria-live`.
 
 ### 10. Usability
@@ -1083,7 +1081,7 @@ The spec lists which `variant` / `size` examples exist. Do **not** add visual pe
 - [ ] ARIA applied per component type.
 - [ ] Contrast >=4.5:1 / >=3:1, including disabled.
 - [ ] `motion-reduce:*` on animated components.
-- [ ] Touch target >=40x40px or justified.
+- [ ] Touch target >=44x44px on a coarse pointer (TT01) or justified.
 - [ ] Tested in a screen reader.
 
 #### Usability
