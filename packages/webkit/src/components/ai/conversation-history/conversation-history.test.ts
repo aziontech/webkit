@@ -5,6 +5,7 @@ import { page } from 'vitest/browser'
 import { h } from 'vue'
 
 import Default from '../../../../examples/conversation-history/default.vue'
+import Projects from '../../../../examples/conversation-history/projects.vue'
 import States from '../../../../examples/conversation-history/states.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
@@ -261,6 +262,173 @@ describe('ConversationHistory', () => {
       expect(getAllByTestId('conversation-history__item').length).toBeLessThan(1000)
       expect(getAllByTestId('conversation-history__item')[0]).toHaveTextContent('Conversation 0')
       expect(container.querySelector('[data-chunk][aria-hidden="true"]')).not.toBeNull()
+    })
+  })
+  describe('projects', () => {
+    const projects = [
+      { id: 'p1', title: 'storefront' },
+      { id: 'p2', title: 'Acme docs' },
+      { id: 'p3', title: 'Billing' }
+    ]
+    const filed = [
+      ...items,
+      {
+        id: 'g',
+        title: 'Storefront 502 errors',
+        updatedAt: '2026-11-11T13:00:00',
+        projectId: 'p1'
+      },
+      { id: 'h', title: 'Storefront cache', updatedAt: '2026-11-08T10:00:00', projectId: 'p1' },
+      { id: 'i', title: 'Docs redirects', updatedAt: '2026-11-11T14:00:00', projectId: 'p2' },
+      { id: 'j', title: 'Orphan chat', updatedAt: '2026-11-11T11:00:00', projectId: 'gone' }
+    ]
+    const projectNames = (view: ReturnType<typeof render>) =>
+      view.getAllByTestId('conversation-history__project').map((b) => b.textContent!.trim())
+
+    it('lists projects above Recents and keeps project chats out of the date groups', () => {
+      const view = render(ConversationHistory, {
+        props: { items: filed, projects, now, openKeys: ['p1', 'p3'] }
+      })
+      const header = view.getByRole('button', { name: 'Projects' })
+      expect(header).toHaveAttribute('aria-expanded', 'true')
+      const list = view.getByRole('list', { name: 'Projects' })
+      expect(header).toHaveAttribute('aria-controls', list.id)
+      const storefront = view.getByRole('button', { name: 'storefront' })
+      expect(storefront).toHaveAttribute('aria-expanded', 'true')
+      const chats = view.getByRole('list', { name: 'storefront' })
+      expect(
+        within(chats)
+          .getAllByRole('button')
+          .map((b) => b.textContent!.trim())
+      ).toEqual(['Storefront 502 errors', 'Storefront cache'])
+      expect(view.getByRole('button', { name: 'Acme docs' })).toHaveAttribute(
+        'aria-expanded',
+        'false'
+      )
+      expect(view.queryByText('Docs redirects')).toBeNull()
+      expect(view.getByTestId('conversation-history__recents')).toHaveTextContent('Recents')
+      const today = view.getByRole('list', { name: 'Today' })
+      const titles = within(today)
+        .getAllByRole('button')
+        .map((b) => b.textContent!.trim())
+      expect(titles).toEqual(['Later today', 'Orphan chat', 'Earlier today'])
+      expect(
+        within(view.getByRole('list', { name: 'Billing' })).getByRole('listitem')
+      ).toHaveTextContent('No chats in this project yet.')
+    })
+
+    it('expands and collapses projects and the section through their models', async () => {
+      const view = render(ConversationHistory, { props: { items: filed, projects, now } })
+      await userEvent.click(view.getByRole('button', { name: 'Acme docs' }))
+      expect(view.emitted('update:openKeys')![0]).toEqual([['p2']])
+      expect(view.getByText('Docs redirects')).toBeTruthy()
+      await userEvent.click(view.getByRole('button', { name: 'Docs redirects' }))
+      expect(view.emitted('update:modelValue')![0]).toEqual(['i'])
+      await userEvent.click(view.getByRole('button', { name: 'Acme docs' }))
+      expect(view.emitted('update:openKeys')![1]).toEqual([[]])
+      expect(view.queryByText('Docs redirects')).toBeNull()
+      await userEvent.click(view.getByRole('button', { name: 'Projects' }))
+      expect(view.emitted('update:projectsOpen')![0]).toEqual([false])
+      expect(view.getByRole('button', { name: 'Projects' })).toHaveAttribute(
+        'aria-expanded',
+        'false'
+      )
+      expect(view.queryByRole('button', { name: 'storefront' })).toBeNull()
+    })
+
+    it('sorts projects by recent activity or by name from the Organize menu', async () => {
+      const view = render(ConversationHistory, { props: { items: filed, projects, now } })
+      expect(projectNames(view)).toEqual(['Acme docs', 'storefront', 'Billing'])
+      const organize = await waitFor(() => {
+        const found = view.getByRole('button', { name: 'Organize projects' })
+        expect(found).toHaveAttribute('aria-haspopup', 'menu')
+        return found
+      })
+      await userEvent.click(organize)
+      const name = await waitFor(() => {
+        const found = document.querySelector<HTMLElement>(
+          '[role="menuitemradio"][aria-checked="false"]'
+        )
+        expect(found).toBeTruthy()
+        return found!
+      })
+      expect(
+        document.querySelector('[role="menuitemradio"][aria-checked="true"]')
+      ).toHaveTextContent('Recent activity')
+      expect(name).toHaveTextContent('Name')
+      await userEvent.click(name)
+      expect(view.emitted('update:projectSort')![0]).toEqual(['name'])
+      await view.rerender({ items: filed, projects, now, projectSort: 'name' })
+      expect(projectNames(view)).toEqual(['Acme docs', 'Billing', 'storefront'])
+    })
+
+    it('emits project-create with the click and shows the section with no projects yet', async () => {
+      const calls: MouseEvent[] = []
+      const view = render(ConversationHistory, {
+        props: {
+          items,
+          now,
+          projectCreatable: true,
+          'onProject-create': (event: MouseEvent) => calls.push(event)
+        }
+      })
+      expect(view.getByRole('button', { name: 'Projects' })).toBeTruthy()
+      expect(view.queryByRole('button', { name: 'Organize projects' })).toBeNull()
+      await userEvent.click(view.getByRole('button', { name: 'New project' }))
+      expect(calls).toHaveLength(1)
+      expect(calls[0]).toBeInstanceOf(MouseEvent)
+    })
+
+    it('searches across projects and Recents without changing the models', async () => {
+      const view = render(ConversationHistory, {
+        props: { items: filed, projects, now, searchable: true, projectsOpen: false }
+      })
+      await userEvent.type(view.getByRole('searchbox'), 'storefront')
+      expect(projectNames(view)).toEqual(['storefront'])
+      expect(view.getByRole('button', { name: 'storefront' })).toHaveAttribute(
+        'aria-expanded',
+        'true'
+      )
+      expect(
+        view.getAllByTestId('conversation-history__item').map((row) => row.textContent?.trim())
+      ).toEqual(['Storefront 502 errors', 'Storefront cache'])
+      expect(view.queryByTestId('conversation-history__recents')).toBeNull()
+      await userEvent.clear(view.getByRole('searchbox'))
+      await userEvent.type(view.getByRole('searchbox'), 'today')
+      expect(view.queryByRole('button', { name: 'Projects' })).toBeNull()
+      expect(view.getAllByTestId('conversation-history__item')).toHaveLength(2)
+      expect(view.emitted('update:openKeys')).toBeUndefined()
+      expect(view.emitted('update:projectsOpen')).toBeUndefined()
+    })
+
+    it('renders no project parts without projects', () => {
+      const view = render(ConversationHistory, { props: { items: filed, now } })
+      expect(view.queryByRole('button', { name: 'Projects' })).toBeNull()
+      expect(view.queryByTestId('conversation-history__recents')).toBeNull()
+      expect(view.getAllByTestId('conversation-history__item')).toHaveLength(filed.length)
+    })
+
+    it('reads the project strings from the locale catalog', () => {
+      const view = render(ConfigProvider, {
+        props: { locale: 'pt-BR', catalogs: LOCALES },
+        slots: {
+          default: () =>
+            h(ConversationHistory, { items: filed, projects, now, projectCreatable: true })
+        }
+      })
+      expect(view.getByRole('button', { name: 'Projetos' })).toBeTruthy()
+      expect(view.getByRole('button', { name: 'Novo projeto' })).toBeTruthy()
+      expect(view.getByRole('button', { name: 'Organizar projetos' })).toBeTruthy()
+      expect(view.getByText('Recentes')).toBeTruthy()
+    })
+
+    it('renders the Projects example with no axe violations', async () => {
+      const view = render(Projects)
+      expect(view.getByRole('button', { name: 'storefront' })).toHaveAttribute(
+        'aria-expanded',
+        'true'
+      )
+      await expectNoA11yViolations(view.container)
     })
   })
 })

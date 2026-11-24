@@ -1646,3 +1646,7 @@ Budget-raise: prompt-input-root 11.55 KB → 11.85 KB (measured 11.82 KB): the m
 Budget-raise: sources 4 KB → 4.05 KB (measured 4.01 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
 Budget-raise: streaming-response 42.9 KB → 43.35 KB (measured 43.32 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
 Budget-raise: conversation-history 9 KB → 9.05 KB (measured 9.01 KB): the merge of the chat redesign, BRAND-1 and LA-1 onto the audit-5 fixes carries the changes of both sides.
+
+## Copilot projects (2026-11-23)
+
+Budget-raise: conversation-history 9.05 KB → 11.85 KB (measured 11.81 KB): the ChatGPT-style Projects section (owner request 2026-11-23): `projects`, `projectCreatable`, `v-model:openKeys`, `v-model:projectsOpen` and `v-model:projectSort`, a collapsible Projects header with New project, folder rows that expand in place, a Recents label, search across projects and eight new locale strings; the row moves to a private part shared by project and Recents lists, and grouping, project filing and focus-after-delete move to three composables (CODE_QUALITY.md 3.1). The Organize menu (`DropdownMenu`, 11.28 KB) loads as a lazy chunk, so the budget becomes `entryOnly`.

@@ -1,4 +1,7 @@
-import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
+import type {
+  ConversationHistoryItem,
+  ConversationHistoryProject
+} from '@aziontech/webkit/conversation-history'
 import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
@@ -314,13 +317,40 @@ export const sampleAgentInterrupts: AiChatInterrupt[] = [
 
 export const sampleHistoryNow = '2026-11-19T12:00:00'
 
+export const sampleProjects: ConversationHistoryProject[] = [
+  { id: 'storefront', title: 'storefront' },
+  { id: 'docs-site', title: 'docs-site' },
+  { id: 'security-review', title: 'Security review' }
+]
+
 export const sampleHistory: ConversationHistoryItem[] = [
-  { id: 'h1', title: 'Why does storefront return 502 errors?', updatedAt: '2026-11-19T11:02:00' },
+  {
+    id: 'h1',
+    title: 'Why does storefront return 502 errors?',
+    updatedAt: '2026-11-19T11:02:00',
+    projectId: 'storefront'
+  },
   { id: 'h2', title: 'Purge the cache after a deploy', updatedAt: '2026-11-19T09:40:00' },
-  { id: 'h3', title: 'A WAF rule for login attempts', updatedAt: '2026-11-18T17:15:00' },
-  { id: 'h4', title: 'Top orders query for acme-store', updatedAt: '2026-11-16T10:20:00' },
+  {
+    id: 'h3',
+    title: 'A WAF rule for login attempts',
+    updatedAt: '2026-11-18T17:15:00',
+    projectId: 'security-review'
+  },
+  {
+    id: 'h4',
+    title: 'Top orders query for acme-store',
+    updatedAt: '2026-11-16T10:20:00',
+    projectId: 'storefront'
+  },
   { id: 'h5', title: 'Move DNS records to Azion', updatedAt: '2026-11-04T14:05:00' },
-  { id: 'h6', title: 'Image optimization for docs-site', updatedAt: '2026-09-28T08:30:00' }
+  {
+    id: 'h6',
+    title: 'Image optimization for docs-site',
+    updatedAt: '2026-09-28T08:30:00',
+    projectId: 'docs-site'
+  },
+  { id: 'h7', title: 'Set up a custom domain', updatedAt: '2026-11-12T15:30:00' }
 ]
 
 export const sampleModels: PromptInputMenuOption[] = [
