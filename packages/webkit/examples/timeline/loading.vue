@@ -1,5 +1,5 @@
 <script setup>
-  import Timeline from '@aziontech/webkit/timeline'
+  import Timeline from '@aziontech/webkit/timeline-root'
 </script>
 
 <template>

@@ -2,15 +2,10 @@ import Timeline from './timeline.vue'
 import TimelineGroup from './timeline-group/timeline-group.vue'
 import TimelineItem from './timeline-item/timeline-item.vue'
 
-type CompoundTimeline = typeof Timeline & {
-  Item: typeof TimelineItem
-  Group: typeof TimelineGroup
-}
-
 const TimelineRoot = Object.assign(Timeline, {
   Item: TimelineItem,
   Group: TimelineGroup
-}) as CompoundTimeline
+})
 
 export default TimelineRoot
 export { TimelineGroup, TimelineItem }

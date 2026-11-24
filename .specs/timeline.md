@@ -6,7 +6,7 @@ status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: 20b98af9811e0b4049afd1f16871d85836a94a35d1a77567cb1de14e7bfb33d3
+checksum: ed5854328e953c52b2ba5ff49af94ebd7eaf7a05ae52fa0e08820672db49cd76
 created: 2026-11-23
 last_updated: 2026-11-23
 ---
@@ -201,7 +201,8 @@ _none_ — the timeline is static. The loading placeholders use `Skeleton`'s own
 | ------------------------------------- | -------------------------------------- |
 | typography (title, medium)            | `.text-label-md`                       |
 | typography (title, small)             | `.text-label-sm`                       |
-| typography (meta, description, body)  | `.text-body-sm`                        |
+| typography (meta, description, body, medium) | `.text-body-sm`                  |
+| typography (meta, description, body, small)  | `.text-body-xs`                  |
 | typography (group label)              | `.text-label-sm`                       |
 | title ink                             | `var(--text-default)`                  |
 | meta, description and group label ink | `var(--text-muted)`                    |

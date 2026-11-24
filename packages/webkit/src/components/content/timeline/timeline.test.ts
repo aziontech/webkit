@@ -115,9 +115,9 @@ describe('Timeline', () => {
     const { getAllByTestId } = render(Groups)
     const groups = getAllByTestId('timeline-group')
     expect(groups).toHaveLength(2)
-    const label = groups[0].querySelector('[data-testid="timeline-group__label"]') as HTMLElement
+    const label = groups[0].querySelector<HTMLElement>('[data-testid="timeline-group__label"]')!
     expect(label.textContent).toBe('November 21, 2026')
-    const list = groups[0].querySelector('ol') as HTMLElement
+    const list = groups[0].querySelector('ol')!
     expect(list.getAttribute('aria-labelledby')).toBe(label.id)
     expect(list.querySelectorAll(':scope > li[data-slot="timeline-item"]')).toHaveLength(2)
   })

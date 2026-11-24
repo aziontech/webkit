@@ -47,16 +47,16 @@
   const attrs = useAttrs()
   const { size, timeFormat } = useTimelineContext()
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'timeline-item'
-  )
+  const testId = computed(() => String(attrs['data-testid'] ?? 'timeline-item'))
 
   const hasTime = computed(() => props.time !== undefined && props.time !== '')
 
-  const marker = computed(() => {
+  const marker = () => {
     if (slots.marker) return 'custom'
     return props.icon ? 'icon' : 'dot'
-  })
+  }
+
+  const hasBody = () => Boolean(slots.default)
 
   const MARKER_CLASS =
     'flex size-6 shrink-0 items-center justify-center text-(--text-muted) group-data-[size=small]/item:size-5 ' +
@@ -77,7 +77,7 @@
     :data-testid="testId"
     :data-size="size"
     :data-severity="severity"
-    :data-marker="marker"
+    :data-marker="marker()"
     data-slot="timeline-item"
     class="group/item flex min-w-0 gap-x-(--spacing-sm) [--timeline-item-gap:var(--spacing-md)] data-[size=small]:gap-x-(--spacing-xs) data-[size=small]:[--timeline-item-gap:var(--spacing-sm)]"
   >
@@ -118,14 +118,9 @@
         <span
           v-if="actor || hasTime"
           data-slot="timeline-meta"
-          class="inline-flex min-w-0 flex-wrap items-center gap-x-(--spacing-2xs) text-body-sm text-(--text-muted)"
+          class="inline-flex min-w-0 flex-wrap items-center gap-x-(--spacing-xs) text-body-sm text-(--text-muted) group-data-[size=small]/item:text-body-xs"
         >
           <bdi v-if="actor">{{ actor }}</bdi>
-          <span
-            v-if="actor && hasTime"
-            aria-hidden="true"
-            >·</span
-          >
           <Timestamp
             v-if="hasTime"
             :value="time"
@@ -136,14 +131,14 @@
       <p
         v-if="description"
         data-slot="timeline-description"
-        class="break-words text-body-sm text-(--text-muted)"
+        class="break-words text-body-sm text-(--text-muted) group-data-[size=small]/item:text-body-xs"
       >
         {{ description }}
       </p>
       <div
-        v-if="slots.default"
+        v-if="hasBody()"
         data-slot="timeline-body"
-        class="min-w-0 break-words text-body-sm text-(--text-default)"
+        class="min-w-0 break-words text-body-sm text-(--text-default) group-data-[size=small]/item:text-body-xs"
       >
         <slot />
       </div>

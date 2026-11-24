@@ -26,9 +26,7 @@
   const { size } = useTimelineContext()
   const labelId = useId()
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'timeline-group'
-  )
+  const testId = computed(() => String(attrs['data-testid'] ?? 'timeline-group'))
 </script>
 
 <template>

@@ -47,7 +47,7 @@
     timeFormat: computed(() => props.timeFormat)
   })
 
-  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'timeline')
+  const testId = computed(() => String(attrs['data-testid'] ?? 'timeline'))
 
   const PLACEHOLDERS = [1, 2, 3]
 </script>
