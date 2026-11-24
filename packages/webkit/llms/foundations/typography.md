@@ -23,9 +23,9 @@ Text uses the generated classes from `@aziontech/theme`. Each one bundles font f
 | `text-body-xs` | `0.75rem` |  | Captions and helper text. |
 | `text-button-lg` | `0.875rem` |  | The label of a large button. |
 | `text-button-md` | `0.75rem` |  | The label of a medium or small button. |
-| `text-heading-2xl` | `1.875rem` | sm: 2.25rem, md: 3rem | A marketing section heading. |
+| `text-heading-2xl` | `1.875rem` | sm: 2.25rem, md: 3rem -0.053em | A marketing section heading. |
 | `text-heading-2xs` | `0.875rem` |  | A small title or a wordmark written in type, a flat 14px. |
-| `text-heading-3xl` | `1.875rem` | sm: 3rem, md: 3.5rem | The largest page heading, for a marketing hero. |
+| `text-heading-3xl` | `1.875rem` | sm: 3rem, md: 3.5rem -0.046em | The largest page heading, for a marketing hero. |
 | `text-heading-lg` | `1.125rem` | md: 1.875rem | A large section heading. |
 | `text-heading-md` | `1rem` | sm: 1.25rem, md: 1.5rem | A section heading. |
 | `text-heading-sm` | `0.875rem` | sm: 1rem, md: 1.125rem | A subsection or dialog heading. |

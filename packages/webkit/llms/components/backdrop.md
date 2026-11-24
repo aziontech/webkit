@@ -43,7 +43,7 @@
 ## Accessibility
 
 - `aria-hidden="true"` and `pointer-events-none`: never announced, never in the way of a click.
-- The washes keep the copy column at canvas contrast.
+- The fades mask the art out of the copy column, so the copy sits on the plain canvas.
 
 ## Right-to-left
 

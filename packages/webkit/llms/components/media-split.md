@@ -105,7 +105,7 @@
 ## Accessibility
 
 - Visible focus: not applicable to the band; controls composed into `actions` keep their own `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
-- Keyboard map: none of its own — `Tab` reaches the controls placed in the `actions` slot, in DOM order, which is the copy column first at every width, then the media cell's link when `mediaHref` is set. The band-wide click is a pointer convenience over that link, not a second tab stop.
+- Keyboard map: none of its own — `Tab` reaches the controls placed in the `actions` slot, in DOM order, which is the copy column first at every width, then the media cell's link when `mediaHref` is set. When a link in the `actions` slot already points at `mediaHref`, the media cell's link takes `tabindex="-1"`, so one destination is one tab stop. The band-wide click is a pointer convenience over that link, not a second tab stop.
 - ARIA: the headline is a real `h2` and the band is a `<section>` labelled by it; the image carries `alt`, and an image given no `alt` is marked `aria-hidden` rather than announced as an unnamed graphic.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the band is static.

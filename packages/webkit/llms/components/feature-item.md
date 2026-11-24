@@ -80,7 +80,7 @@
 ## Right-to-left
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
-- Icons: the external-link arrow does not mirror; its hover nudge moves toward the end edge (`rtl:` flips the `translate-x`).
+- Icons: a same-site link closes on `az-arrow-right`, which the stylesheet mirrors under `rtl`; only a link given `target="_blank"` closes on the external `az-arrow-up-right`, which does not mirror. Either arrow's hover nudge moves toward the end edge (`rtl:` flips the `translate-x`).
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
 

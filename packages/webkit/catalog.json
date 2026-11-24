@@ -799,6 +799,7 @@
    "--transition-duration-slow-02",
    "--transition-duration-slow-03",
    "--transition-duration-slow-04",
+   "--tw-ring-color",
    "--warning",
    "--warning-border",
    "--warning-foreground",
@@ -1681,6 +1682,9 @@
     "--transition-duration-slow-02",
     "--transition-duration-slow-03",
     "--transition-duration-slow-04"
+   ],
+   "tw": [
+    "--tw-ring-color"
    ],
    "warning": [
     "--warning",
@@ -3149,7 +3153,7 @@
      "font-size": "1.875rem",
      "line-height": "1.25",
      "font-weight": "400",
-     "letter-spacing": "-0.046em"
+     "letter-spacing": "-0.035em"
     },
     "purpose": "The largest page heading, for a marketing hero.",
     "breakpoints": {
@@ -3157,7 +3161,8 @@
       "font-size": "3rem"
      },
      "md": {
-      "font-size": "3.5rem"
+      "font-size": "3.5rem",
+      "letter-spacing": "-0.046em"
      }
     }
    },
@@ -3169,7 +3174,7 @@
      "font-size": "1.875rem",
      "line-height": "1",
      "font-weight": "400",
-     "letter-spacing": "-0.053em"
+     "letter-spacing": "-0.035em"
     },
     "purpose": "A marketing section heading.",
     "breakpoints": {
@@ -3177,7 +3182,8 @@
       "font-size": "2.25rem"
      },
      "md": {
-      "font-size": "3rem"
+      "font-size": "3rem",
+      "letter-spacing": "-0.053em"
      }
     }
    },
@@ -19934,7 +19940,7 @@
      "type": "LogoWallVariant",
      "default": "'square'",
      "required": "false",
-     "doc": "The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`."
+     "doc": "The cell's proportion; `rectangle` sets every cell at 3:2 and holds three columns beside `aside` from `lg`."
     },
     {
      "name": "items",
@@ -21248,7 +21254,7 @@
     {
      "name": "answer",
      "scope": "{ item: FaqItem }",
-     "notes": "Replaces the rendered answer for every item, so an answer can carry a link or richer content."
+     "notes": "Replaces the rendered answer for every item, so an answer can carry a link or richer content; it renders in a padded block, so paragraphs, lists and code stay on the answer column, spaced `var(--spacing-xs)` apart."
     }
    ],
    "surface": "site",
