@@ -17018,6 +17018,107 @@
    "examplesFile": "catalog/examples/textarea.json",
    "docsFile": "catalog/components/textarea.json"
   },
+  "markdown-editor": {
+   "import": "@aziontech/webkit/markdown-editor",
+   "target": "./src/components/input/markdown-editor/markdown-editor.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/markdown-editor",
+   "models": [
+    "modelValue"
+   ],
+   "category": "input",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "placeholder",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Placeholder shown in the empty field."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the field when no Field label or aria-labelledby names it; empty uses the built-in Message label. Write it as the aria-label attribute."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the field, the toolbar, the tabs and the mention menu."
+    },
+    {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the value without letting it change: the toolbar is disabled and the mention menu never opens; the Preview tab still works."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Applies the invalid border to the field and the preview and sets aria-invalid on the field."
+    },
+    {
+     "name": "required",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the field as required and sets aria-required."
+    },
+    {
+     "name": "mentions",
+     "type": "MarkdownEditorMention[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "People the menu offers after `@`; each is `{ value, label, description?, icon? }` and inserts `@` plus its `value`. Empty turns the menu off."
+    },
+    {
+     "name": "minRows",
+     "type": "number",
+     "default": "4",
+     "required": "false",
+     "doc": "Lines the empty field shows; the field grows with its content from here."
+    },
+    {
+     "name": "maxRows",
+     "type": "number",
+     "default": "12",
+     "required": "false",
+     "doc": "Lines the field grows to before it scrolls; `0` sets no limit."
+    },
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "mention-select",
+     "payload": "(event: MouseEvent | KeyboardEvent, mention: MarkdownEditorMention)",
+     "notes": "Fires when a person is picked from the `@` menu (click, Enter or Tab), after `@value` is inserted into the text."
+    }
+   ],
+   "slots": [
+    {
+     "name": "footer",
+     "scope": "—",
+     "notes": "A row under the field for attachments and actions (an attach button, a Send button); omitted when empty."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "examplesFile": "catalog/examples/markdown-editor.json",
+   "docsFile": "catalog/components/markdown-editor.json"
+  },
   "context-menu": {
    "import": "@aziontech/webkit/context-menu",
    "target": "./src/components/navigation/context-menu/index.ts",
@@ -31695,7 +31796,7 @@
     "split-button",
     "tag"
    ],
-   "count": 554,
+   "count": 558,
    "file": "catalog/assets/icons.json"
   }
  },
