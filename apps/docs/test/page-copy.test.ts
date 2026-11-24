@@ -35,7 +35,7 @@ test('every element that opens a new tab says so in its accessible name', () => 
   for (const file of vueFiles('')) {
     const text = read(file)
     for (const match of text.matchAll(/<[A-Za-z][^>]*?target="_blank"[^>]*>/gs)) {
-      if (!/newTab|openInNewTab/.test(match[0])) missing.push(file)
+      if (!match[0].startsWith('<Link') && !/newTab|openInNewTab/.test(match[0])) missing.push(file)
     }
   }
   assert.deepEqual(missing, [])

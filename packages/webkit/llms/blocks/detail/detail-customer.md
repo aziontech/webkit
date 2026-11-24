@@ -464,6 +464,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-cust
               <DropdownMenu.Item
                 value="delete"
                 label="Delete customer"
+                severity="danger"
               >
                 <template #leading>
                   <i
