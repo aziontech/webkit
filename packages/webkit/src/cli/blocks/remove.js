@@ -1,9 +1,14 @@
 import { existsSync, rmSync } from 'node:fs'
-import { dirname, join, relative, resolve } from 'node:path'
+import { dirname, isAbsolute, join, relative, resolve } from 'node:path'
 
 import { appSourceFiles, specifiersIn } from '../css-sources.js'
 import { PACKAGE_NAME } from '../source.js'
 import { findInManifest, MANIFEST, read, readManifest, toPosix, writeManifest } from './manifest.js'
+
+export function insideProject(projectDir, path) {
+  const rel = relative(resolve(projectDir), resolve(projectDir, path))
+  return rel !== '' && !rel.startsWith('..') && !isAbsolute(rel)
+}
 
 function guidelinesOf(path) {
   return path.endsWith('.vue') ? `${path.slice(0, -'.vue'.length)}.guidelines.md` : null
@@ -42,7 +47,10 @@ export function planRemove(projectDir, target) {
         .map((file) => guidelinesOf(file.path))
         .filter((path) => path && !recorded.includes(path))
     : []
-  const files = [...new Set([...recorded, ...extras])]
+  const paths = [...new Set([...recorded, ...extras])]
+  const outside = paths.filter((path) => !insideProject(projectDir, path))
+  const files = paths
+    .filter((path) => insideProject(projectDir, path))
     .map((path) => ({ path, exists: existsSync(join(projectDir, path)) }))
     .filter((file) => file.exists || recorded.includes(file.path))
   return {
@@ -50,6 +58,7 @@ export function planRemove(projectDir, target) {
     id: hit.id,
     whole,
     files,
+    outside,
     importers: importersOf(
       projectDir,
       files.map((file) => file.path)
@@ -60,7 +69,7 @@ export function planRemove(projectDir, target) {
 export function applyRemove(projectDir, plan) {
   const removed = []
   for (const file of plan.files) {
-    if (!file.exists) continue
+    if (!file.exists || !insideProject(projectDir, file.path)) continue
     rmSync(join(projectDir, file.path), { force: true })
     removed.push(file.path)
   }
