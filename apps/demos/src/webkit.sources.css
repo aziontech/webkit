@@ -23,6 +23,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/composables/use-conversation-history-projects.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/composables/use-conversation-history-removal-focus.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/conversation-history.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/lib/truncated-title.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/parts/conversation-history-project-sort.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/parts/conversation-history-row.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation/composables/use-conversation-pin.ts";
