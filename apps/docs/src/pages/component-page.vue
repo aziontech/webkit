@@ -16,6 +16,7 @@
   import { messages } from '../lib/i18n'
   import { categoryLabel } from '../lib/nav'
   import type { ComponentDoc } from '../lib/types'
+  import { spacedTitle } from '../lib/words'
   import NotFound from './not-found-page.vue'
 
   const ApiTable = defineAsyncComponent({
@@ -67,12 +68,16 @@
     if (!doc.value) return []
     const items: { id: string; text: string; depth: number }[] = []
     if (firstExample.value && doc.value.exampleDir)
-      items.push({ id: anchor(firstExample.value.name), text: firstExample.value.name, depth: 2 })
+      items.push({
+        id: anchor(firstExample.value.name),
+        text: spacedTitle(firstExample.value.name),
+        depth: 2
+      })
     items.push({ id: 'usage', text: t.value.whenToUse, depth: 2 })
     if (moreExamples.value.length && doc.value.exampleDir) {
       items.push({ id: 'examples', text: t.value.moreExamples, depth: 2 })
       for (const example of moreExamples.value)
-        items.push({ id: anchor(example.name), text: example.name, depth: 3 })
+        items.push({ id: anchor(example.name), text: spacedTitle(example.name), depth: 3 })
     }
     if (doc.value.props.length || doc.value.events.length || doc.value.slots.length)
       items.push({ id: 'api', text: t.value.api, depth: 2 })
@@ -95,7 +100,7 @@
       value: 'copy',
       label: t.value.copyForAi,
       icon: 'az az-copy',
-      tip: 'Copy this page as Markdown, ready to paste into an assistant.'
+      tip: t.value.copyPageTip
     },
     ...(item.value?.llms
       ? [
@@ -296,7 +301,7 @@
               class="az az-chevron-down -rotate-90 text-label-md text-(--text-muted) transition-[rotate] duration-fast-02 ease-productive-entrance group-open:rotate-0 motion-reduce:transition-none rtl:rotate-90 rtl:group-open:rotate-0"
               aria-hidden="true"
             />
-            {{ t.howItIsBuilt }}
+            <h2 class="text-heading-md">{{ t.howItIsBuilt }}</h2>
           </summary>
           <DocProse class="pt-(--spacing-sm)">
             <RawHtml :html="doc.purposeRest" />

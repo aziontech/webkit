@@ -42,6 +42,7 @@ export const ptBR: Messages = {
   rightToLeft: 'Direita para a esquerda',
   leftToRight: 'Esquerda para a direita',
   github: 'WebKit no GitHub',
+  newTab: '(abre em uma nova aba)',
   footer: 'Rodapé',
   footerWebkit: 'WebKit',
   footerAzion: 'Azion',
@@ -237,5 +238,10 @@ export const ptBR: Messages = {
   whyNextBody:
     'Fundamentos opinativos com padrões componíveis, para o sistema acompanhar a evolução do ofício.',
   openComponent: 'Abrir',
-  categoryLead: '{count} componentes'
+  categoryLead: '{count} componentes',
+  componentsLead: '{count} componentes, cada um com seus exemplos, API e diretrizes.',
+  blocksLead:
+    '{count} telas e fragmentos, cada um com seus estados, código e diretrizes. Copie um com npx @aziontech/webkit add <id>.',
+  copyPageTip: 'Copie esta página em Markdown, pronta para colar em um assistente.',
+  copyBlockTip: 'Copie este bloco em Markdown, pronto para colar em um assistente.'
 }
