@@ -29,6 +29,11 @@ with webkit pieces. How the request reaches the API (proxy, token, status codes)
 - A screen shows codes (states, reasons, types) that come from an API.
 - A list pages, sorts or searches data that lives on a server.
 
+## When not to use
+
+- A field holds free text or a value the person types (a name, a description): `/webkit-form` covers it.
+- The screen shows only static content with no API behind it.
+
 ## 1. One data layer between the API and the screen
 
 Put three things in one module per app, never in a page:
@@ -169,6 +174,15 @@ options for the whole session, and never clear them only on sign-out.
 - **A new item is visible.** After a create, the list shows the new item without paging (refresh and
   move to its page, or keep it pinned at the top with a highlight until the next sort or filter).
 - **Columns render the shape the API sends**, with the formatters of section 5.
+
+## Do
+
+- Show a reference by its name, resolved through one shared lookup, and keep the ID for the request.
+- Resolve every ID a page shows in one batched request, and show an unresolved state while it runs.
+- List the selected values first in a remote picker, so a value outside the results still shows.
+- Give fetched options an age: refresh them when they go stale or when the person reopens the picker.
+- Type every API record from its contract, and map codes to labels in one shared place.
+- Page, sort and filter a server-paged collection on the server.
 
 ## Don't
 
