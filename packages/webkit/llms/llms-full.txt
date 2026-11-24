@@ -7479,6 +7479,120 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 ---
 
+<!-- blocks/detail/detail-ticket.md -->
+
+# DetailTicket (`detail/detail-ticket`)
+
+> The support agent's view of one ticket, as in Zendesk Agent Workspace, a Freshdesk ticket or a Help Scout conversation.
+
+- Surface: app
+- Source: `blocks/detail/detail-ticket/detail-ticket.vue` in `@aziontech/webkit`
+- MCP: `get_block("detail/detail-ticket")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+- Components: Alert, Avatar, Button, Card, ConfigProvider, Countdown, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, FileDropzone, FileTokenGroup, IconButton, MarkdownEditor, MessageThread, `MessageThreadItem`, MultiSelect, PageHeader, PriorityTag, Select, Skeleton, SplitButton, Subheader, Tag, Timeline, ToggleGroup, Tooltip, `use-file-picker`
+- Skills: `webkit-layout`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`, `webkit-errors`
+
+## Asked as
+
+ticket detail; ticket view; support ticket; help desk ticket; agent workspace; support conversation; reply to customer; internal note; canned responses; saved replies; ticket properties; sla countdown; collision detection; requester card; detalhe do chamado; detalhe do ticket; conversa de suporte; responder ao solicitante; nota interna; respostas prontas; propriedades do chamado; espaço de trabalho do agente
+
+The support agent's view of one ticket. An agent reads the conversation with the customer, answers it or leaves a note for the team, sets the ticket's status, priority, group, assignee and tags, and checks who asked and what happened so far. It follows the Zendesk Agent Workspace, the Freshdesk ticket page and the Help Scout conversation, on the house detail page. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb and the `main`.
+
+## When to use
+
+- The page an agent opens from a ticket queue to work one ticket: reply, note, triage and close.
+- Any case page where a person and a team trade messages under a deadline (an abuse report, a refund request, a partner escalation).
+
+## When not to use
+
+- The queue of tickets: use `view/view-ticket-inbox`, which opens this page.
+- A chat with an AI assistant: use `ai/ai-chat`.
+- A resource's overview with tabs and a summary card: use `detail/detail-resource`.
+- A log of who did what across the account: use `account/account-activity-history`.
+
+## Building blocks
+
+- A. Page heading — `ConfigProvider`, `PageHeader`, `Tag`, `PriorityTag`, `Countdown`, `Skeleton` (required)
+- B. Header actions — `Avatar`, `Button`, `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `IconButton` (required)
+- C. Conversation — `Subheader`, `MessageThread`, `MessageThreadItem`, `FileTokenGroup` (required)
+- D. Composer — `ToggleGroup`, `Field`, `MultiSelect`, `Alert`, `MarkdownEditor`, `FileDropzone`, `Button` (required)
+- E. Composer footer — `FileTokenGroup`, `Tooltip`, `IconButton`, `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuItem`, `Button`, `SplitButton` (required)
+- F. Properties — `Card`, `Field`, `Select`, `Avatar`, `MultiSelect`, `Skeleton` (required)
+- G. Requester — `Card`, `Avatar`, `Button`, `Skeleton` (required)
+- H. Activity — `Card`, `Timeline` (required)
+- I. Load failure — `Alert` (conditional)
+
+What each part takes: [blocks/detail/detail-ticket.md](blocks/detail/detail-ticket.md).
+
+## Data
+
+The block takes its records through props and emits every action; it fetches, sends and saves nothing. `DetailTicketTicket`, `DetailTicketMessage`, `DetailTicketRequester`, `DetailTicketActivity`, `DetailTicketAgent`, `DetailTicketResponse`, `DetailTicketDraft`, `DetailTicketSendPayload`, `DetailTicketPropertyChange` and `DetailTicketProps` are exported from `detail-ticket.vue`. `sample.ts` holds the sample ticket, conversation, requester, activity, agents, viewer, saved replies, groups, tags and clock the block renders when those props are left out (none of it while `loading` or `error` is set). `lib/ticket-fields.ts` holds the statuses, types, status colours and priorities.
+
+Prop: `ticket`, `messages`, `requester`, `activity`, `agents`, `viewers`, `responses`, `groups`, `tagOptions`, `draft`, `now`, `loading`, `error`, `sending`, `sendError`.
+
+Event: `send`, `property-change`, `open-customer`, `merge`, `ticket-action`, `reopen`, `retry`, `update:draft`.
+
+After a send succeeds, clear the draft, append the message and confirm in a toast; after a failure, keep the draft and set `sendError`. Then delete `sample.ts` and its import.
+
+What each prop and event does, and the go-live code: [blocks/detail/detail-ticket.md](blocks/detail/detail-ticket.md).
+
+## Do
+
+- Keep the draft when a send fails, and say that it is kept.
+- Say in words that a note is internal, not only with the warning colour.
+- Pause the SLA countdown while the ticket waits on the customer, and hide it once the ticket is solved.
+- Save a property change as soon as it is made and confirm a failure in a toast from the app.
+- Ask before Delete ticket and Mark as spam: open a danger confirm dialog from the `ticket-action` handler.
+
+## Don't
+
+- Don't send a reply and a note from one button: the mode decides who reads it.
+- Don't let the composer accept text on a solved ticket: reopen it first.
+- Don't hide the earlier messages of a short thread; collapse only past eight items.
+- Don't show presence by colour alone: the assignee's avatar says it in its name, and each assignee option says it in words.
+
+## Copy
+
+- **Title:** the ticket's subject; `Ticket` while it loads. **Number:** `#4812`.
+- **Statuses:** `New`, `Open`, `Pending`, `On hold`, `Solved`. **SLA:** `Next reply`.
+- **Viewers:** `Sam Lee is viewing`, `Sam Lee and 1 other are viewing`. **Actions:** `Merge`, `More ticket actions`, `Copy link`, `Print`, `Mark as spam`, `Delete ticket`.
+- **Composer:** `Reply`, `Internal note`, `To:`, `Cc`, `Add people to copy`, `Only your team can see internal notes.`, `Write a reply`, `Write a note for your team, @ to mention`, `Attach files`, `Drop files to attach them`, `Insert response`, `Send`, `Send and set Pending`, `Send and set Solved`, `Add note`, `Write the note first.`
+- **Send failure:** `The reply was not sent. Your draft is kept; try again.` with `Retry`. **Solved:** `This ticket is solved. Reopen it to reply to the customer or add a note.` with `Reopen`.
+- **Side column:** `Properties`, `Status`, `Priority`, `Type`, `Group`, `Assignee`, `Unassigned`, `Tags`, `Add tags`; `Requester`, `4 other tickets`, `View customer profile`; `Activity`.
+- **Load failure:** `The ticket could not be loaded. Nothing was changed; try again.` with `Retry`.
+- The components own `Show 5 earlier messages`, `Internal note` on a note, `Paused`, `Due in` and `Overdue by`; do not retype them. Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+
+## Accessibility
+
+- No `main` or landmark of its own: `ConsoleLayout` owns them. Headings: the subject is the only h1; Conversation, the composer (Reply or Internal note, hidden), Properties, Requester and Activity are h2. The side column is an `aside` named Ticket details.
+- Focus order: Merge and More in the header, the thread (Show earlier messages, the quoted-text toggles), the composer (Message type, Cc, the editor and its toolbar, Attach files, Insert response, Send and its menu), then Properties, View customer profile and the activity.
+- Announcements: the viewing line is a polite status; Send and Add note announce their busy state; a failed send is the `Alert`; a successful send comes from the app's toast. Switching to Internal note renames the composer and describes the editor with the lock line.
+- Presence is part of each avatar's accessible name (`Sam Lee, online`). Priority and status are text, never colour alone.
+- Names keep their own direction (`bdi`) and the ticket number and addresses read left to right (`dir="ltr"`) inside a right-to-left page.
+- At 320 px the side column stacks under the composer, the header actions wrap, the file tokens take their own line and Send stays at the inline end; nothing scrolls sideways.
+
+## States
+
+- Default: ticket #4812, Open and urgent with the Next reply countdown running, Sam Lee viewing, a ten-item thread with five earlier items collapsed, the composer on Reply, the sample clock fixed.
+- Loading: the ticket is loading (`loading`); skeletons in the header, the thread, the properties, the requester and the activity, and a disabled composer.
+- Error: the ticket did not load (`error` is set); a danger Alert with the message and Retry.
+- Sending: a reply is on its way (`sending` with a draft); Send spins and the editor is read-only.
+- SendError: the reply was not sent (`sendError` with a draft); the Alert with Retry above the kept draft.
+- Solved: the ticket is solved (`ticket.status` is Solved); no countdown, and Reopen in place of the composer.
+- InternalNote: the composer on Internal note (`draft.mode` is note) with a draft that mentions a teammate; the lock line and Add note.
+
+## Related
+
+- `view/view-ticket-inbox` — the queue that opens this page.
+- `detail/detail-resource` — the house detail page for a resource.
+- `account/account-activity-history` — the account-wide log of who did what.
+
+## Variants
+
+`Default` (primary) · `Loading` · `Error` · `Sending` · `SendError` · `Solved` · `InternalNote`. Code: [blocks/detail/detail-ticket.md](blocks/detail/detail-ticket.md), `get_block("detail/detail-ticket", { variant })`.
+
+---
+
 <!-- blocks/detail/detail-version.md -->
 
 # DetailVersion (`detail/detail-version`)

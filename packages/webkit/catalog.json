@@ -36871,6 +36871,130 @@
    ],
    "file": "catalog/blocks/detail/detail-resource.json"
   },
+  "detail/detail-ticket": {
+   "name": "DetailTicket",
+   "title": "Blocks/Detail/DetailTicket",
+   "source": "blocks/detail/detail-ticket/detail-ticket.vue",
+   "surface": "app",
+   "stability": "preview",
+   "summary": "The support agent's view of one ticket, as in Zendesk Agent Workspace, a Freshdesk ticket or a Help Scout conversation. A `PageHeader` carries the subject as the h1, the ticket number, the status `Tag`, a `PriorityTag` and the next SLA as a `Countdown` (paused while Pending or On hold), and its actions: the teammates who have the ticket open (an `Avatar` with presence each and Sam Lee is viewing), Merge and a More menu (Copy link, Print, Mark as spam, Delete ticket). The main column is a `MessageThread` of the conversation (customer emails with attachments and quoted text, agent replies, internal notes, system events, the middle of a long thread collapsed behind Show N earlier messages) over the composer: a `ToggleGroup` of Reply and Internal note, the To line and a Cc `MultiSelect` for a reply, a warning-edged card that says Only your team can see internal notes for a note, a `MarkdownEditor` with @mentions of teammates, and in its footer Attach files, Insert response (saved replies), the attached files and a `SplitButton` Send with Send and set Pending and Send and set Solved (Add note for a note); files dropped on the composer attach through a `FileDropzone`. The side column, under the thread on narrow screens, holds the ticket's properties (`Field` and `Select` for status, priority, type, group and the assignee with their `Avatar`, and a `MultiSelect` of tags), the requester card (avatar, name, email, organization, other tickets and View customer profile) and the ticket's activity as a small `Timeline`. A failed load is a danger `Alert` with Retry; a failed send keeps the draft and shows an `Alert` with Retry in the composer; a solved ticket replaces the composer with Reopen. A page body for ConsoleLayout, rendered in its default slot.",
+   "intents": [
+    "ticket detail",
+    "ticket view",
+    "support ticket",
+    "help desk ticket",
+    "agent workspace",
+    "support conversation",
+    "reply to customer",
+    "internal note",
+    "canned responses",
+    "saved replies",
+    "ticket properties",
+    "sla countdown",
+    "collision detection",
+    "requester card",
+    "detalhe do chamado",
+    "detalhe do ticket",
+    "conversa de suporte",
+    "responder ao solicitante",
+    "nota interna",
+    "respostas prontas",
+    "propriedades do chamado",
+    "espaço de trabalho do agente"
+   ],
+   "skills": [
+    "webkit-layout",
+    "webkit-form",
+    "webkit-ui-states",
+    "webkit-microcopy",
+    "webkit-errors"
+   ],
+   "components": [
+    "Alert",
+    "Avatar",
+    "Button",
+    "Card",
+    "ConfigProvider",
+    "Countdown",
+    "DropdownMenuGroup",
+    "DropdownMenuItem",
+    "DropdownMenuRoot",
+    "DropdownMenuTrigger",
+    "Field",
+    "FileDropzone",
+    "FileTokenGroup",
+    "IconButton",
+    "MarkdownEditor",
+    "MessageThread",
+    "MessageThreadItem",
+    "MultiSelect",
+    "PageHeader",
+    "PriorityTag",
+    "Select",
+    "Skeleton",
+    "SplitButton",
+    "Subheader",
+    "Tag",
+    "Timeline",
+    "ToggleGroup",
+    "Tooltip",
+    "use-file-picker"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/config-provider",
+    "@aziontech/webkit/countdown",
+    "@aziontech/webkit/dropdown-menu-group",
+    "@aziontech/webkit/dropdown-menu-item",
+    "@aziontech/webkit/dropdown-menu-root",
+    "@aziontech/webkit/dropdown-menu-trigger",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/file-dropzone",
+    "@aziontech/webkit/file-token-group",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/markdown-editor",
+    "@aziontech/webkit/message-thread",
+    "@aziontech/webkit/message-thread-item",
+    "@aziontech/webkit/multi-select",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/priority-tag",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/split-button",
+    "@aziontech/webkit/subheader",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/timeline",
+    "@aziontech/webkit/toggle-group",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-file-picker"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The support agent's view of one ticket. An agent reads the conversation with the customer, answers it or leaves a note for the team, sets the ticket's status, priority, group, assignee and tags, and checks who asked and what happened so far. It follows the Zendesk Agent Workspace, the Freshdesk ticket page and the Help Scout conversation, on the house detail page. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb and the `main`.",
+   "variants": [
+    {
+     "name": "Loading"
+    },
+    {
+     "name": "Error"
+    },
+    {
+     "name": "Sending"
+    },
+    {
+     "name": "SendError"
+    },
+    {
+     "name": "Solved"
+    },
+    {
+     "name": "InternalNote"
+    }
+   ],
+   "file": "catalog/blocks/detail/detail-ticket.json"
+  },
   "detail/detail-version": {
    "name": "DetailVersion",
    "title": "Blocks/Detail/DetailVersion",
