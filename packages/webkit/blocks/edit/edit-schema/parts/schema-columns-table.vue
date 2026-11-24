@@ -100,7 +100,7 @@
                 <DropdownMenu.Group>
                   <DropdownMenu.Item
                     value="create"
-                    label="Create Table"
+                    label="Create table"
                   >
                     <template #leading
                       ><i

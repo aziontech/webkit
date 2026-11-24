@@ -7,6 +7,7 @@ import EditSchema from '../../../../blocks/edit/edit-schema/edit-schema.vue'
 import AddColumn from '../../../../blocks/edit/edit-schema/variants/add-column.vue'
 import ChangeType from '../../../../blocks/edit/edit-schema/variants/change-type.vue'
 import ImportCsv from '../../../../blocks/edit/edit-schema/variants/import-csv.vue'
+import InsertRow from '../../../../blocks/edit/edit-schema/variants/insert-row.vue'
 import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
@@ -20,7 +21,7 @@ const submitButton = (label: string) =>
 
 const columnNames = () =>
   Array.from(drawer().querySelectorAll<HTMLInputElement>('input[placeholder="column_name"]'))
-describe('edit/edit-schema Create Table', () => {
+describe('edit/edit-schema Create table', () => {
   it('reads a CSV into columns with guessed types and previews the rows', async () => {
     render(ImportCsv)
     await waitFor(() => expect(drawer()).not.toBeNull())
@@ -64,7 +65,7 @@ describe('edit/edit-schema Create Table', () => {
     )!
     await fireEvent.click(add)
     const create = Array.from(drawer().querySelectorAll('button')).find(
-      (button) => button.textContent?.trim() === 'Create Table'
+      (button) => button.textContent?.trim() === 'Create table'
     )!
     await fireEvent.click(create)
     await waitFor(() =>
@@ -106,7 +107,7 @@ describe('edit/edit-schema data contract', () => {
     await waitFor(() => expect(drawer()).not.toBeNull())
     const name = drawer().querySelector<HTMLInputElement>('input[placeholder="users"]')!
     await fireEvent.update(name, 'events')
-    await fireEvent.click(submitButton('Create Table'))
+    await fireEvent.click(submitButton('Create table'))
     const [[event, table]] = emitted('create-table') as [
       [Event, { name: string; columns: { name: string }[] }]
     ]
@@ -118,7 +119,7 @@ describe('edit/edit-schema data contract', () => {
     await waitFor(() => expect(document.body.textContent).toContain('Table events created.'))
   })
 
-  it('shows a refused Create Table on the Name field and keeps the drawer', async () => {
+  it('shows a refused Create table on the Name field and keeps the drawer', async () => {
     render(EditSchema, {
       props: { defaultDraft: { name: 'invoices' }, error: 'A table named invoices already exists.' }
     })
@@ -186,6 +187,32 @@ describe('edit/edit-schema Type picker', () => {
       return el!
     })
     expect(trigger.textContent).not.toMatch(/[a-z0-9][A-Z][a-z]+/)
+  })
+
+  it('confirms the irreversible Change type with the danger look', async () => {
+    render(ChangeType)
+    const confirm = await waitFor(() => {
+      const el = Array.from(
+        document.querySelectorAll<HTMLButtonElement>(
+          '[role="alertdialog"] button, [role="dialog"] button'
+        )
+      ).find((button) => button.textContent?.trim() === 'Change type')
+      expect(el).toBeTruthy()
+      return el!
+    })
+    expect(confirm.getAttribute('data-variant')).toBe('danger')
+  })
+
+  it('offers NULL as the placeholder only for nullable columns', async () => {
+    render(InsertRow)
+    const email = await waitFor(() => {
+      const field = Array.from(drawer().querySelectorAll('[data-slot="field"]')).find(
+        (node) => node.querySelector('label')?.textContent?.trim() === 'email'
+      )
+      expect(field).toBeTruthy()
+      return field!.querySelector('input') as HTMLInputElement
+    })
+    expect(email.placeholder).not.toBe('NULL')
   })
 
   it('moves from the search field to the options with ArrowDown and closes on Escape', async () => {

@@ -1833,7 +1833,7 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
           data-testid="code-editor-save-error"
         />
       </template>
-      You have unsaved changes.
+      {{ saving ? 'Saving changes…' : 'You have unsaved changes.' }}
 
       <template #actions>
         <Button

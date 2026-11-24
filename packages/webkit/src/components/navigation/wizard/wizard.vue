@@ -220,7 +220,7 @@
           :data-testid="`${testId}__progress`"
           aria-live="polite"
           aria-atomic="true"
-          class="hidden text-overline-xs text-(--text-muted) @max-2xl/wizard:block @max-2xl/wizard:pb-(--spacing-2xs)"
+          class="hidden text-body-sm text-(--text-muted) @max-2xl/wizard:block @max-2xl/wizard:pb-(--spacing-2xs)"
         >
           {{ progressText }}
         </p>

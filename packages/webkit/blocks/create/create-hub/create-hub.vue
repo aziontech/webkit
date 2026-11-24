@@ -160,7 +160,7 @@
             <section
               class="flex w-full min-w-0 flex-col gap-(--layout-group-gap) lg:min-h-0 lg:flex-1"
             >
-              <header class="flex min-h-(--size-8) items-center px-(--spacing-xs)">
+              <header class="flex min-h-(--size-8) items-center">
                 <h2 class="text-heading-2xs text-(--text-default)">Import from GitHub</h2>
               </header>
 
@@ -206,13 +206,17 @@
                         :loading="connecting"
                         @click="(event: MouseEvent) => emit('connect', event)"
                       />
-                      <Alert
+                      <div
                         v-if="connectError"
-                        severity="danger"
-                        size="small"
-                        :label="connectError"
-                        class="w-full"
-                      />
+                        class="w-(--container-xs) max-w-full"
+                        data-testid="create-hub__connect-error"
+                      >
+                        <Alert
+                          severity="danger"
+                          size="small"
+                          :label="connectError"
+                        />
+                      </div>
                       <Link
                         label="Manage connected providers"
                         href="#"

@@ -174,6 +174,7 @@
             :label="statusTag.label"
             :severity="statusTag.severity"
             size="medium"
+            data-testid="state-async-submit__status"
           />
         </template>
       </PageHeader>

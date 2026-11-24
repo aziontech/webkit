@@ -27,6 +27,9 @@ describe('create-deploy-drawer', () => {
       0
     )
     expect(dialog.textContent).not.toMatch(/publish/i)
+    const domains = within(dialog).getAllByTestId('domain-group-item__domain')
+    expect(domains.length).toBeGreaterThan(0)
+    domains.forEach((domain) => expect(domain.getAttribute('dir')).toBe('ltr'))
   })
   it('renders the resources it is given and emits submit with the picked values', async () => {
     const resources = [

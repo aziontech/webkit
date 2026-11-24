@@ -34,8 +34,9 @@
     {
       name: 'hostHeader',
       label: 'Host header',
-      placeholder: '${host}',
-      description: 'Sent to the origin on every request. Leave the default to pass yours through.',
+      placeholder: 'www.example.com',
+      description:
+        'Sent to the origin on every request. Leave it empty to pass the request host through.',
       required: false
     }
   ]

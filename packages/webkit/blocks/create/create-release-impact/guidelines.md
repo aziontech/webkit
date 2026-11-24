@@ -29,9 +29,9 @@ When a run ends, one `Alert` above the columns says how it ended: `severity="dan
 
 One flush `Card` per resource (a named `section`, its `header` slot holding the type, the tags and the switch), in the order of the request path (service, policy, storage, error page). The header has the type icon and label and, on the end side, a Required `Tag` (warning), a Read-only `Tag` with a lock when the release keeps the active version, or an include `Switch` named by `aria-label` and explained by a `Tooltip` ("Leave edge-policy out of this release"). A left-out resource collapses to one sentence saying what keeps serving.
 
-### D. Resource and version — `Field`, `Input`, `Select`, `Tag` (required)
+### D. Resource and version — `KeyValueList`, `Field`, `Select`, `Tag` (required)
 
-Two `Field`s side by side from `sm` up: the resource as a `readonly` `Input` (so its `Field.Label` names a real control) and its version. The version `Select` offers Track latest Ready first (with "resolves at deploy") and a Pin a ready version group, each option with a Current `Tag` and its age. When the version tracks the latest, the `Field.Description` names the version it resolves to now. When nothing is Ready, the `Select` is disabled and `invalid`, `Field.Error` gives the reason, and a transparent Build a version `Button` links to its versions.
+Side by side from `sm` up: the resource name as text in a `KeyValueList` (it is fixed, so it is not a field and takes no Tab stop) and its version `Field`. A Read-only resource shows both the name and the kept version as text in one two-column `KeyValueList`; its header already carries the Read-only `Tag`, so no disabled `Select` is drawn. The version `Select` offers Track latest Ready first (with "resolves at deploy") and a Pin a ready version group, each option with a Current `Tag` and its age. When the version tracks the latest, the `Field.Description` names the version it resolves to now. When nothing is Ready, the `Select` is disabled and `invalid`, `Field.Error` gives the reason, and a transparent Build a version `Button` links to its versions.
 
 ### E. Dependencies — `Badge`, `Accordion`, `Alert`, `Tag`, `Tooltip`, `Select` (required when a resource references others)
 

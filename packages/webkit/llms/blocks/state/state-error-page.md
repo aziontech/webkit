@@ -253,11 +253,19 @@ Each variant is the same screen in another state: `get_block("state/state-error-
           <div
             class="flex flex-col items-center gap-(--spacing-2xs) text-body-xs text-(--text-muted)"
           >
-            <p class="m-0 flex flex-wrap items-center justify-center gap-x-(--spacing-xs)">
+            <p
+              class="m-0 flex flex-col items-center justify-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs) sm:flex-row sm:flex-wrap"
+              data-testid="state-error-page__reference"
+            >
               <span>
                 Code <bdi class="text-label-code-sm text-(--text-default)">{{ errorCode }}</bdi>
               </span>
-              <span aria-hidden="true">·</span>
+              <span
+                aria-hidden="true"
+                class="hidden sm:inline"
+                data-testid="state-error-page__separator"
+                >·</span
+              >
               <span class="inline-flex items-center gap-(--spacing-2xs)">
                 ID <bdi class="text-label-code-sm text-(--text-default)">{{ requestId }}</bdi>
                 <CopyButton

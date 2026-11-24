@@ -3,7 +3,7 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: 869f1e714e63faadc3b2c127dbf6cdfdd2b81c4c256bde302590f84b8b907676
+checksum: 76b37d6b61f00a86b8565b88c7d6d0f307c2e76b9931ae6d62044a1a0f462e9c
 spec_version: 8
 created: 2026-11-10
 last_updated: 2026-11-24
@@ -185,7 +185,8 @@ The root composes, and does not re-implement:
   always renders its own root (a `<div role="group">` labelled by its heading), so document-order
   registration works. When inactive, that root is `hidden` and its content is not mounted (`v-if`).
   When active, it renders:
-  - The header: the counter `Step {n} of {N}` as an overline paragraph with an id from `useId()`.
+  - The header: the counter `Step {n} of {N}` as a plain muted body-text paragraph (sentence case, not an
+    overline kicker) with an id from `useId()`.
   - The title as an `<h2 tabindex="-1">` with `aria-describedby` pointing at the counter, followed by
     `Optional` when `optional` is set.
   - The `description` paragraph, only when non-empty.
@@ -279,7 +280,7 @@ State matrix:
 | next blocked  | `next` handler calls `preventDefault` | The wizard stays on the step. The consumer renders the reason inside the step's slot.                                                                                                                                                                                                                                                          |
 | invalid step  | `Wizard.Step` `invalid`               | The step root carries `data-invalid`. Its rail step carries `data-invalid` and renders the `Stepper.Step` `error` state: the danger dot with the warning glyph and the screen-reader word `Needs attention`.                                                                                                                                   |
 | step reached  | the `v-model` index once held a step  | That step and every step before it stay reachable from the rail after the reader goes back.                                                                                                                                                                                                                                                    |
-| narrow box    | wizard box under `@2xl`               | The rail is not displayed (`@max-2xl/wizard:hidden`). The root shows its own `Step n of N` progress line (`wizard.stepOf`, `aria-live="polite"`, `data-testid="<testid>__progress"`) at the top of the content column in place of the step header's overline, which hides at that width; the step title follows it and the footer stays below. |
+| narrow box    | wizard box under `@2xl`               | The rail is not displayed (`@max-2xl/wizard:hidden`). The root shows its own `Step n of N` progress line (`wizard.stepOf`, `aria-live="polite"`, `data-testid="<testid>__progress"`) at the top of the content column in place of the step header's counter, which hides at that width; the step title follows it and the footer stays below. |
 | narrow footer | wizard box under `@sm` (408 px)       | The footer wraps: Cancel and Previous share the first row (Cancel at the start, Previous at the end) and the primary action takes the full width on its own row below, so a long `submitLabel` is never cut off. The order on screen is the DOM and focus order: Cancel, Previous, primary.                                                    |
 
 Layout from `@2xl` of the wizard's own box (`@container/wizard`, so a wizard in a drawer or split view follows that box): a row with the rail column (`@2xl/wizard:w-(--container-3xs) @2xl/wizard:shrink-0`) on the start
@@ -307,7 +308,7 @@ separated from the content by a top border. The footer row wraps (`flex-wrap`, t
 
 | Region                                    | Token (DESIGN.md)       |
 | ----------------------------------------- | ----------------------- |
-| typography (step counter)                 | `.text-overline-xs`     |
+| typography (step counter)                 | `.text-body-sm`         |
 | typography (step heading)                 | `.text-heading-sm`      |
 | typography (step description)             | `.text-body-sm`         |
 | typography (Optional, header)             | `.text-body-sm`         |

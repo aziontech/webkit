@@ -65,6 +65,14 @@ describe('create-drawer#Certificate', () => {
     await waitFor(() => expect(document.activeElement?.tagName).toBe('TEXTAREA'))
   })
 
+  it('sets the certificate and the private key in the monospace face through the Textarea prop', async () => {
+    render(Certificate)
+    const panel = await openDrawer(/Create Certificate/)
+    const pems = Array.from(panel.querySelectorAll('textarea'))
+    expect(pems).toHaveLength(2)
+    for (const pem of pems) expect(pem.closest('[data-monospace]')).toBeTruthy()
+  })
+
   it('asks before Escape discards an edited certificate; Escape on the alert keeps the drawer', async () => {
     render(Certificate)
     const panel = await openDrawer(/Create Certificate/)

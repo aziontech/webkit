@@ -60,7 +60,7 @@
   }
 
   export interface RuleBuilderProps {
-    /** The rule to edit: the drawer becomes Edit Rule with the phase locked. Left out, it adds a new rule. */
+    /** The rule to edit: the drawer becomes Edit rule with the phase locked. Left out, it adds a new rule. */
     rule?: RuleBuilderRule | null
     /** The save is in flight: the form locks and Save spins; when it ends with no error the drawer closes. */
     loading?: boolean
@@ -106,7 +106,7 @@
     { immediate: true }
   )
 
-  const title = computed(() => (editing.value ? 'Edit Rule' : 'Add Rule'))
+  const title = computed(() => (editing.value ? 'Edit rule' : 'Add rule'))
   const lockedPhase = computed(() => PHASES.find((phase) => phase.value === form.phase))
 
   watch(
@@ -184,7 +184,7 @@
     <DrawerTrigger>
       <Button
         v-if="editing"
-        label="Edit Rule"
+        label="Edit rule"
         icon="az az-pencil"
         variant="outline"
         size="medium"
@@ -194,7 +194,7 @@
         class="w-full md:w-fit"
       >
         <Button
-          label="Add Rule"
+          label="Add rule"
           icon="az az-plus"
           variant="outline"
           size="medium"
@@ -252,7 +252,7 @@
                     size="large"
                     placeholder="My rule"
                   />
-                  <Field.Description v-if="nameError">Name is required.</Field.Description>
+                  <Field.Error v-if="nameError">Name is required.</Field.Error>
                 </Field>
 
                 <Field :disabled="submitting">

@@ -207,7 +207,7 @@
                 size="large"
                 class="w-full"
                 aria-label="Name"
-                placeholder="Acme Inc."
+                placeholder="Acme Studio"
                 autocomplete="off"
                 :disabled="submitting"
                 required
@@ -234,7 +234,8 @@
                   :options="MARKS"
                   :disabled="submitting"
                   aria-label="Organization mark"
-                  class="w-full"
+                  class="grid! w-full grid-cols-3 sm:grid-cols-6"
+                  data-testid="create-organization__marks"
                 >
                   <template #option="{ option }">
                     <span class="flex flex-col items-center gap-(--spacing-xs)">
@@ -251,7 +252,7 @@
                   </template>
                 </RadioGroup>
                 <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                  <p class="m-0 text-overline-sm text-(--text-muted)">In the header</p>
+                  <p class="m-0 text-label-sm text-(--text-muted)">In the header</p>
                   <span
                     :class="HEADER_PREVIEW_CLASS"
                     data-testid="create-organization__preview"

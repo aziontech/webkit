@@ -76,7 +76,7 @@
     <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
       <Subheader
         title="What gets created"
-        description="Each value is sent as the property named under it."
+        description="What the new access list holds."
         size="small"
       >
         <template #actions>
@@ -96,7 +96,6 @@
             <Item>
               <Item.Content>
                 <Item.Title>Name</Item.Title>
-                <Item.Description>name</Item.Description>
               </Item.Content>
               <Item.Actions>
                 <span class="max-w-80 truncate text-label-sm text-(--text-default)">{{
@@ -115,7 +114,6 @@
             <Item>
               <Item.Content>
                 <Item.Title>Type</Item.Title>
-                <Item.Description>type</Item.Description>
               </Item.Content>
               <Item.Actions>
                 <span class="text-label-sm text-(--text-default)">{{ typeLabel }}</span>
@@ -124,7 +122,6 @@
             <Item>
               <Item.Content>
                 <Item.Title>{{ listLabel }}</Item.Title>
-                <Item.Description>items</Item.Description>
                 <ul
                   class="m-0 mt-(--spacing-xs) flex list-none flex-wrap gap-(--spacing-2xs) p-0"
                   :aria-label="`${entries.length} entries`"

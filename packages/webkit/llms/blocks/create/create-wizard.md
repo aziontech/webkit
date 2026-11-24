@@ -175,13 +175,13 @@ Then delete `sample.ts` and its import.
 - WhereItRuns: the first step (the default `defaultStep`); the chooser of policies with search, module tags and the two escape routes.
 - ModuleOff: acme-staging was chosen with IP filtering off (`defaultStep="module"`, `defaultPolicy="acme-staging"`), so the IP filtering step shows the warning, the switch card and the note.
 - ListSettings: the settings step (`defaultStep="settings"`, a `defaultPolicy` and a Name in `defaultValues`); Type as radio choice cards and the List textarea, with Previous and Next (Review follows). Next with an empty list stays and shows the message.
-- Review: the last step (`defaultStep="review"` with a `defaultPolicy` and `defaultValues`), read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created pairs each value with the property it is sent as and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error; on success it emits `submit`, `loading` spins it and `error` raises the error toast with Retry.
+- Review: the last step (`defaultStep="review"` with a `defaultPolicy` and `defaultValues`), read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created lists each value under its plain label (never the API property name) and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error; on success it emits `submit`, `loading` spins it and `error` raises the error toast with Retry.
 - CreateAndDeploy: Create Service on its Project step with the paged project list; Next is gated on the project, and step two ends on Create and deploy with its loading state. Cancel and Back to Services emit `cancel`, asking first once anything is answered.
 
 ## Review step
 
 - Add a Review step when the create has three or more steps or binds the resource to something; skip it for a one-step create.
-- Show values as they will be sent, with the property name under each, and never show secrets in clear.
+- Show values as they will be sent, under plain labels (no API property names or dotted paths), and never show secrets in clear.
 - Put Edit on each band, and on a value whose step differs from its band's (Name, on General); after the edit, Next walks forward through the later steps, already filled, back to Review.
 - Say plainly when nothing will read the resource yet (unbound, or a module off) with a warning `Alert`, not a disabled create.
 
@@ -209,7 +209,7 @@ Then delete `sample.ts` and its import.
 - `WhereItRuns` — primary (the code below)
 - `ModuleOff` — acme-staging was chosen with IP filtering off, so an IP filtering step follows Where it runs: a warning Alert, the Switch choice card that turns the module on with the list, and a note on what leaving it off means.
 - `ListSettings` — The settings step of a list bound to acme-production, before Review: the Type as wide RadioGroup choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Previous and Next in the Wizard footer. Next with the list empty stays on the step and shows the required message under it.
-- `Review` — The Review step that closes the create, after List settings: three bands under small `Subheader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as (Name with its own Edit back to General), the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step with the message under the field.
+- `Review` — The Review step that closes the create, after List settings: three bands under small `Subheader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value under its plain label (Name with its own Edit back to General), the entries as `Tag`s with a count and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step with the message under the field.
 - `CreateAndDeploy` — A resource that is useless until it is bound and deployed (Create Service): step one binds the project it serves, an existing one from the paged list or a new one configured in place (cache settings, origin); step two reads the project back with Change, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), environment and certificate, the deployment the first release is cut against and a collapsed Advanced section. Next is gated on the project; the last action reads Create and deploy and shows its loading state, then the build logs (`detail/detail-deployment-logs#InCreateFlow`) and `create/create-deploy-success` follow.
 
 Each variant is the same screen in another state: `get_block("create/create-wizard", { variant })`, or the file under `blocks/create/create-wizard/variants/`.
@@ -508,9 +508,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                   <Field.Title> Turn on IP filtering </Field.Title>
                   <Field.Description>
                     {{
-                      'Sets modules.ip_filtering on the policy ' +
-                      choice +
-                      ' when this access list is created.'
+                      'Turns on IP filtering for ' + choice + ' when this access list is created.'
                     }}
                   </Field.Description>
                 </Field.Content>
@@ -1601,7 +1599,7 @@ export function filterOptions(
     <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
       <Subheader
         title="What gets created"
-        description="Each value is sent as the property named under it."
+        description="What the new access list holds."
         size="small"
       >
         <template #actions>
@@ -1621,7 +1619,6 @@ export function filterOptions(
             <Item>
               <Item.Content>
                 <Item.Title>Name</Item.Title>
-                <Item.Description>name</Item.Description>
               </Item.Content>
               <Item.Actions>
                 <span class="max-w-80 truncate text-label-sm text-(--text-default)">{{
@@ -1640,7 +1637,6 @@ export function filterOptions(
             <Item>
               <Item.Content>
                 <Item.Title>Type</Item.Title>
-                <Item.Description>type</Item.Description>
               </Item.Content>
               <Item.Actions>
                 <span class="text-label-sm text-(--text-default)">{{ typeLabel }}</span>
@@ -1649,7 +1645,6 @@ export function filterOptions(
             <Item>
               <Item.Content>
                 <Item.Title>{{ listLabel }}</Item.Title>
-                <Item.Description>items</Item.Description>
                 <ul
                   class="m-0 mt-(--spacing-xs) flex list-none flex-wrap gap-(--spacing-2xs) p-0"
                   :aria-label="`${entries.length} entries`"

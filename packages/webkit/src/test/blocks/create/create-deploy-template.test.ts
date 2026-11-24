@@ -23,7 +23,7 @@ describe('create-deploy-template#Upload', () => {
     const list = within(region).getByRole('list', { name: 'Files in acme-landing' })
     expect(within(list).getAllByRole('listitem')).toHaveLength(7)
     expect(screen.getByText('4.2 kB')).toBeTruthy()
-    expect(screen.getByText('68B')).toBeTruthy()
+    expect(screen.getByText('68 B')).toBeTruthy()
     await expectNoA11yViolations(view.container as HTMLElement)
   })
 })
@@ -115,6 +115,10 @@ describe('create-deploy-template#InstallIntegration', () => {
     const added = screen.getByText('Records').parentElement as HTMLElement
     expect(within(added).getByText(/origin\.example\.com/)).toBeTruthy()
     expect(screen.queryByText('This field is required.')).toBeNull()
+    const hostHeader = screen.getByRole('textbox', { name: /Host header/ }) as HTMLInputElement
+    expect(hostHeader.value).toBe('')
+    expect(hostHeader.placeholder).not.toContain('${')
+    expect(screen.getByText(/Leave it empty to pass the request host through/)).toBeTruthy()
   })
   it('goes back to the Creation Center on Escape', async () => {
     const view = render(CreateDeployTemplate)

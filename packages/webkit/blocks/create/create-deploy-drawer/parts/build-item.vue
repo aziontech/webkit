@@ -42,7 +42,10 @@
       <Item.Description>Building…</Item.Description>
     </Item.Content>
     <Item.Actions>
-      <span class="font-(family-name:--font-code) text-label-sm tabular-nums text-(--text-muted)">
+      <span
+        class="whitespace-nowrap font-(family-name:--font-code) text-label-sm tabular-nums text-(--text-muted)"
+        data-testid="build-item__elapsed"
+      >
         {{ build.elapsed }} s
       </span>
       <span class="flex size-4 shrink-0 text-(--text-default)">

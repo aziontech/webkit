@@ -36,7 +36,7 @@
     rowCount: number
   }
 
-  /** One foreign key row of the Create Table drawer. */
+  /** One foreign key row of the Create table drawer. */
   export interface SchemaEditorRelation {
     /** Stable key of the row. */
     key: string
@@ -50,7 +50,7 @@
     onDelete: string
   }
 
-  /** A CSV file the Create Table drawer reads. */
+  /** A CSV file the Create table drawer reads. */
   export interface SchemaEditorCsvFile {
     /** File name. */
     name: string
@@ -68,7 +68,7 @@
     text: string
   }
 
-  /** The table Create Table sends. */
+  /** The table Create table sends. */
   export interface SchemaEditorNewTable {
     /** Table name. */
     name: string
@@ -104,11 +104,11 @@
     database?: string
     /** A change is in flight: the open drawer or dialog locks and its submit spins. When it turns off with no error, the change is applied and the success toast shows. */
     loading?: boolean
-    /** Why the change failed. Create Table shows it on the Name field and in an Alert; the other changes show a danger toast with Retry. */
+    /** Why the change failed. Create table shows it on the Name field and in an Alert; the other changes show a danger toast with Retry. */
     error?: string
-    /** The Create Table name and foreign keys the drawer opens with. */
+    /** The Create table name and foreign keys the drawer opens with. */
     defaultDraft?: { name?: string; relations?: SchemaEditorRelation[] }
-    /** A CSV file the Create Table drawer opens with, already read. */
+    /** A CSV file the Create table drawer opens with, already read. */
     defaultCsv?: SchemaEditorCsv
     /** The Add column values the drawer opens with. */
     defaultColumn?: Partial<SchemaEditorColumnForm>

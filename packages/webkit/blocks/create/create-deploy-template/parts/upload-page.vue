@@ -33,35 +33,11 @@
   const FILE_LIMIT = 100
   const folderName = 'acme-landing'
 
-  const { formatNumber } = useLocale()
+  const { formatNumber, formatFileSize } = useLocale()
 
-  const byteFormat = (value: number) =>
-    formatNumber(value, {
-      style: 'unit',
-      unit: 'byte',
-      unitDisplay: 'narrow'
-    })
-  const kilobyteFormat = (value: number) =>
-    formatNumber(value, {
-      style: 'unit',
-      unit: 'kilobyte',
-      unitDisplay: 'short',
-      maximumFractionDigits: 1
-    })
-  const megabyteFormat = (value: number) =>
-    formatNumber(value, {
-      style: 'unit',
-      unit: 'megabyte',
-      unitDisplay: 'short',
-      maximumFractionDigits: 1
-    })
   const countFormat = (value: number) => formatNumber(value)
 
-  function formatSize(bytes: number): string {
-    if (bytes < 1024) return byteFormat(bytes)
-    if (bytes < 1024 * 1024) return kilobyteFormat(bytes / 1024)
-    return megabyteFormat(bytes / (1024 * 1024))
-  }
+  const formatSize = (bytes: number): string => formatFileSize(bytes)
 
   const totalBytes = files.reduce((sum, file) => sum + file.bytes, 0)
   const folderSummary = `${folderName} · ${countFormat(files.length)} ${

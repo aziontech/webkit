@@ -88,7 +88,7 @@
       <div class="flex flex-col gap-(--spacing-2xs)">
         <p
           :id="counterId"
-          class="text-overline-xs text-(--text-muted) @max-2xl/wizard:hidden"
+          class="text-body-sm text-(--text-muted) @max-2xl/wizard:hidden"
         >
           {{ t('wizard.stepOf', { step: index + 1, total: context.total.value }) }}
         </p>

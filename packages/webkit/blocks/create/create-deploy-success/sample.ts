@@ -93,7 +93,7 @@ export const sampleCliNextSteps: DeploySuccessNextStep[] = [
     icon: 'az az-cloud-upload',
     title: 'Deploy this resource',
     description:
-      'Provision a service for it and deploy, without leaving this flow. The platform names the domain, and you can change it after.',
+      'Provision a service and deploy it here. The platform names the domain, and you can change it later.',
     recommended: true
   },
   {

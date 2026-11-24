@@ -1,6 +1,6 @@
 # StateAsyncSubmit (`state/state-async-submit`)
 
-> The async counterpart of the server rejection in the SectionRejected state of the `state/state-form-validation` block: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`: the page shows an `EmptyState` whose Deploy starts the run while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: the app's one toast region (ToastPlugin, or one Toaster near the app root) shows it, never a Toaster in the page body; the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, `Tag`, `Button`, `EmptyState`, `Alert`, and the deployment logs card of `detail/detail-deployment-logs` (`Card`, `StatusIndicator`, `LogViewer` with its `LogViewer.Steps` steps and progress bar, and `ToggleGroup` for the Phased or Complete log switch on failure). A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The async counterpart of the server rejection in the SectionRejected state of the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`: the page shows an `EmptyState` whose Deploy starts the run while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: the app's one toast region (ToastPlugin, or one Toaster near the app root) shows it, never a Toaster in the page body; the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, `Tag`, `Button`, `EmptyState`, `Alert`, and the deployment logs card of Templates/Platform/Detail/DeploymentLogs (`Card`, `StatusIndicator`, `LogViewer` with its `LogViewer.Steps` steps and progress bar, and `ToggleGroup` for the Phased or Complete log switch on failure). A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/state/state-async-submit/state-async-submit.vue` in `@aziontech/webkit`
@@ -42,7 +42,7 @@ The toasts are raised through `toast` with one id per run so each state replaces
 
 ### B. Page heading — `PageHeader` (required)
 
-The default size, the page title and one sentence on what the run does. Its `#meta` slot carries the run status as a `Tag` beside the title, at its own width on every screen, so the state of the run is readable from the heading in every state.
+`size="large"`, the page title and one sentence on what the run does. Its `#meta` slot carries the run status as a `Tag` beside the title, at its own width, so the state of the run is readable from the heading in every state and never stretches into a button-like bar on a phone (`#actions` is for buttons).
 
 ### C. Run status — `Tag` (required)
 
@@ -129,7 +129,7 @@ Then delete `sample.ts`; the variants are the only files that import it.
 
 - **Page heading:** names the action and the resource, sentence case: `Deploy web-app`. Lead: what the run does and that the user may leave: `Builds acme/web-app and publishes it to production. A deploy takes about half a minute and keeps running if you leave this page; the result reports back wherever you are.`
 - **Status tag:** one or two words: `Idle`, `Deploying`, `Failed`, `Deployed`.
-- **Empty state:** title states the fact, description says what to do: `No deployment running` / `Start one above. It takes about half a minute.`
+- **Empty state:** title states the fact, description says what to do: `No deployment running` / `Start one above. It takes about 25 seconds.`
 - **Progress toast:** present progressive with the single-character ellipsis, names the item: `Deploying web-app…`; description names the source and that the user may leave: `acme/web-app. It keeps running if you leave.`
 - **Failure toast:** what failed and why, then the ways out: `web-app wasn't deployed.` / `The routing rules were refused.` Actions: `Edit`, `Redeploy`.
 - **Success toast:** past tense, names the item and where it is live: `web-app is live.` / `It is available at web-app.example.com.` Actions: `Edit`, `Redeploy`.
@@ -341,12 +341,14 @@ Each variant is the same screen in another state: `get_block("state/state-async-
       <PageHeader
         title="Deploy web-app"
         description="Builds acme/web-app and publishes it to production. A deploy takes about half a minute and keeps running if you leave this page; the result reports back wherever you are."
+        size="large"
       >
         <template #meta>
           <Tag
             :label="statusTag.label"
             :severity="statusTag.severity"
             size="medium"
+            data-testid="state-async-submit__status"
           />
         </template>
       </PageHeader>
@@ -496,7 +498,7 @@ Each variant is the same screen in another state: `get_block("state/state-async-
           bordered
           icon="az az-cloud-upload"
           title="No deployment running"
-          description="Deploy web-app to build it and publish it to production. It takes about half a minute, and you can leave this page while it runs."
+          description="Deploy web-app to build it and publish it to production. It takes about 25 seconds, and you can leave this page while it runs."
         >
           <template #actions>
             <Button

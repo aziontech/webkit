@@ -1443,7 +1443,10 @@ export function listFormat(names: string[]): string {
       <Item.Description>Building…</Item.Description>
     </Item.Content>
     <Item.Actions>
-      <span class="font-(family-name:--font-code) text-label-sm tabular-nums text-(--text-muted)">
+      <span
+        class="whitespace-nowrap font-(family-name:--font-code) text-label-sm tabular-nums text-(--text-muted)"
+        data-testid="build-item__elapsed"
+      >
         {{ build.elapsed }} s
       </span>
       <span class="flex size-4 shrink-0 text-(--text-default)">
@@ -1571,8 +1574,8 @@ export function listFormat(names: string[]): string {
       >
         <Separator v-if="index" />
         <Item
-          variant="inline"
           size="small"
+          data-testid="deploy-resources-card__row"
         >
           <Item.Media>
             <span
@@ -1801,7 +1804,12 @@ export function listFormat(names: string[]): string {
           size="small"
         >
           <span class="grid grid-cols-1">
-            <span class="truncate">{{ group.domains[0] }}</span>
+            <span
+              class="truncate"
+              dir="ltr"
+              data-testid="domain-group-item__domain"
+              >{{ group.domains[0] }}</span
+            >
           </span>
         </Link>
       </Tooltip>

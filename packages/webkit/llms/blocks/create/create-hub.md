@@ -338,7 +338,7 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
             <section
               class="flex w-full min-w-0 flex-col gap-(--layout-group-gap) lg:min-h-0 lg:flex-1"
             >
-              <header class="flex min-h-(--size-8) items-center px-(--spacing-xs)">
+              <header class="flex min-h-(--size-8) items-center">
                 <h2 class="text-heading-2xs text-(--text-default)">Import from GitHub</h2>
               </header>
 
@@ -384,13 +384,17 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
                         :loading="connecting"
                         @click="(event: MouseEvent) => emit('connect', event)"
                       />
-                      <Alert
+                      <div
                         v-if="connectError"
-                        severity="danger"
-                        size="small"
-                        :label="connectError"
-                        class="w-full"
-                      />
+                        class="w-(--container-xs) max-w-full"
+                        data-testid="create-hub__connect-error"
+                      >
+                        <Alert
+                          severity="danger"
+                          size="small"
+                          :label="connectError"
+                        />
+                      </div>
                       <Link
                         label="Manage connected providers"
                         href="#"
@@ -1100,9 +1104,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
   <section class="flex w-full min-w-0 flex-col gap-(--layout-group-gap) lg:min-h-0 lg:flex-1">
     <div class="flex flex-col gap-(--spacing-sm)">
       <div class="flex min-h-(--size-8) flex-wrap items-center justify-between gap-(--spacing-md)">
-        <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">
-          Start from template
-        </h2>
+        <h2 class="text-heading-2xs text-(--text-default)">Start from template</h2>
 
         <div class="flex w-full shrink-0 items-center sm:w-(--container-3xs)">
           <Input
@@ -1153,7 +1155,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
                 :key="section.id"
                 class="flex flex-col gap-(--layout-group-gap)"
               >
-                <h3 class="px-(--spacing-xs) text-label-sm text-(--text-muted)">
+                <h3 class="text-label-sm text-(--text-muted)">
                   {{ section.label }}
                 </h3>
 

@@ -98,9 +98,13 @@
     () => items.value.find((item) => item.status === 'deploying')?.name ?? ''
   )
 
-  const percent = computed(() =>
-    counts.value.total ? Math.round((counts.value.settled / counts.value.total) * 100) : 0
-  )
+  const percent = computed(() => {
+    const { total, settled, done } = counts.value
+    if (!total) return 0
+    return Math.round(((running.value ? settled : done) / total) * 100)
+  })
+
+  const partial = computed(() => !running.value && counts.value.failed > 0)
 
   const filterOptions = computed(() => [
     { value: 'all', label: 'All' },
@@ -125,9 +129,10 @@
     return `Deployed ${total} ${noun(total)}`
   })
 
-  const tally = computed(
-    () =>
-      `${counts.value.done} succeeded, ${counts.value.failed} failed. Each Deployment Setting deploys on its own, and the ones that succeeded stay live.`
+  const tally = computed(() =>
+    counts.value.failed || running.value
+      ? `${counts.value.done} succeeded, ${counts.value.failed} failed. Each Deployment Setting deploys on its own, and the ones that succeeded stay live.`
+      : `All ${counts.value.done} succeeded and are live.`
   )
 
   const outcomeSeverity = computed(() => (counts.value.failed ? 'warning' : 'success'))
@@ -257,6 +262,7 @@
             <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
               <Progress
                 :value="percent"
+                data-testid="create-deploy-progress-dialog__progress"
                 aria-label="Deploy progress"
                 size="small"
               />
@@ -269,6 +275,7 @@
             </div>
 
             <ToggleGroup
+              v-if="running || counts.failed"
               v-model="filter"
               :options="filterOptions"
               aria-label="Filter deploys by status"
@@ -349,7 +356,7 @@
               <Button
                 class="w-full"
                 label="Retry failed"
-                variant="outline"
+                variant="primary"
                 size="medium"
                 icon="az az-refresh"
                 @click="retryFailed"
@@ -359,7 +366,7 @@
               <Button
                 class="w-full"
                 :label="running ? 'Hide' : 'Close'"
-                variant="primary"
+                :variant="partial ? 'outline' : 'primary'"
                 size="medium"
                 @click="open = false"
               />
