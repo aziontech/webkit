@@ -62,3 +62,23 @@ test('SECURITY.md gives a private path that works when private reporting is off'
   assert.match(text, /\*\*security@azion\.com\*\*/)
   assert.match(text, /Report a vulnerability/)
 })
+
+test('every container image is pinned by digest and every action SHA is commented with its release', () => {
+  for (const file of files) {
+    const text = readFileSync(resolve(DIR, file), 'utf8')
+    for (const [, image] of text.matchAll(/^\s*image:\s*(\S+)/gm))
+      assert.match(image, /@sha256:[0-9a-f]{64}$/, `${file}: ${image} is pinned by tag only`)
+    for (const [line, ref, comment] of text.matchAll(/uses:\s*[^@\s]+@(\S+)(?:\s*#\s*(\S+))?/g)) {
+      if (ref.startsWith('./')) continue
+      assert.match(ref, /^[0-9a-f]{40}$/, `${file}: ${line.trim()} is not pinned by SHA`)
+      assert.match(comment ?? '', /^v\d+(\.\d+)*$/, `${file}: ${line.trim()} names no release`)
+    }
+  }
+})
+
+test('no workflow runs on pull_request_target', () => {
+  for (const file of files) {
+    const text = readFileSync(resolve(DIR, file), 'utf8').replace(/^\s*#.*$/gm, '')
+    assert.ok(!/\bpull_request_target\b/.test(text), file)
+  }
+})
