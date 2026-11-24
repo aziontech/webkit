@@ -79,7 +79,8 @@ check joins the CI with no baseline, then the branch is pushed.
 **Progress: page sections on one frame (2026-11-23, decision LA-2).** The page sections no longer
 each draw their own outer frame (band, module, header row, registration frame). 35 of the 46
 sections draw it through the private `SectionBand` part; the hatched closing strip is
-`SectionHatch` and the header buttons are `SectionActions`. `FeatureTabsSectionShell`, the second
+`SectionHatch`, the header buttons are `SectionActions` and the floating code window of the two
+feature bands is `SectionCodeWindow`. `FeatureTabsSectionShell`, the second
 copy of the frame, is gone. No public API changed, and a pixel-exact before/after comparison of
 all 238 examples of the sections and pages (light, dark, 390 px, right-to-left: 952 captures,
 pixels and accessibility tree) found no difference. The 11 left out are a different kind of band

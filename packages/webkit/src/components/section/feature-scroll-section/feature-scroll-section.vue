@@ -95,6 +95,7 @@
   })
 
   const CodeBlock = defineAsyncComponent(() => import('../../code/code-block/code-block.vue'))
+  const SectionCodeWindow = defineAsyncComponent(() => import('../parts/section-code-window.vue'))
 
   const attrs = useAttrs()
 
@@ -226,17 +227,13 @@
                     v-bind="{ ...items[index].scene?.props, active }"
                   />
                 </div>
-                <div
+                <SectionCodeWindow
                   v-else-if="items[index].code"
-                  class="w-full min-w-0 rounded-(--shape-control) shadow-(--shadow-sm)"
-                >
-                  <CodeBlock
-                    :tabs="sampleTabs(items[index].code)"
-                    show-line-numbers
-                    v-bind="{ animateLines: true }"
-                    :copy-aria-label="items[index].code.copyAriaLabel || undefined"
-                  />
-                </div>
+                  :tabs="sampleTabs(items[index].code)"
+                  animated
+                  :copy-aria-label="items[index].code.copyAriaLabel"
+                  class="w-full"
+                />
                 <div
                   v-else-if="items[index].illustration"
                   class="w-full min-w-0"

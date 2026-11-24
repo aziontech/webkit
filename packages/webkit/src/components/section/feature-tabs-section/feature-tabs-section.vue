@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
-  import CodeBlock, { type CodeBlockTab } from '../../code/code-block/code-block.vue'
+  import type { CodeBlockTab } from '../../code/code-block/code-block.vue'
   import Illustration from '../../content/illustration/illustration.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
@@ -11,6 +11,7 @@
   import { sectionActions } from '../lib/section-actions'
   import SectionActions from '../parts/section-actions.vue'
   import SectionBand from '../parts/section-band.vue'
+  import SectionCodeWindow from '../parts/section-code-window.vue'
 
   defineOptions({
     name: 'FeatureTabsSection',
@@ -145,14 +146,11 @@
               v-if="codeFiles[index]?.length"
               class="w-full min-w-0 p-(--spacing-xl)"
             >
-              <div class="min-w-0 rounded-(--shape-control) shadow-(--shadow-sm)">
-                <CodeBlock
-                  :tabs="codeFiles[index]"
-                  show-line-numbers
-                  v-bind="{ animateLines: active }"
-                  :copy-aria-label="copyAriaLabel || undefined"
-                />
-              </div>
+              <SectionCodeWindow
+                :tabs="codeFiles[index]"
+                :animated="active"
+                :copy-aria-label="copyAriaLabel"
+              />
             </div>
             <component
               :is="sceneComponent"
