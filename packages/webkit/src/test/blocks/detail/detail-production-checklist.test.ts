@@ -49,4 +49,18 @@ describe('detail/detail-production-checklist', () => {
     expect((emitted[0] as unknown[])[1]).toEqual(steps[0])
     await waitFor(() => expect(view.queryByRole('dialog')).toBeNull())
   })
+
+  it('marks the first open step as next and leaves the done ones plain', () => {
+    const view = render(DetailProductionChecklist)
+    const rows = Array.from(view.container.querySelectorAll('.group\\/step'))
+    const done = rows.filter((row) => row.hasAttribute('data-done'))
+    const next = rows.filter((row) => row.hasAttribute('data-next'))
+    expect(done.length).toBeGreaterThan(0)
+    expect(next).toHaveLength(1)
+    expect(next[0]?.hasAttribute('data-done')).toBe(false)
+    expect(next[0]?.textContent).toContain('Next step')
+    expect(rows.indexOf(next[0] as Element)).toBe(
+      rows.findIndex((row) => !row.hasAttribute('data-done'))
+    )
+  })
 })
