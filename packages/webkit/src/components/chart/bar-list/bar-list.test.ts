@@ -187,4 +187,13 @@ describe('BarList', () => {
       expect(bar.classList.contains('border-(--bar-list-fill)')).toBe(true)
     }
   })
+
+  it('shows the failed-load cause with a Try again action in its error example', async () => {
+    const { default: Example } = await import('../../../../examples/bar-list/error.vue')
+    const view = render(Example)
+    const alert = view.getByRole('alert')
+    expect(alert.textContent).toContain('Could not load the top paths')
+    expect(view.getByRole('button', { name: 'Try again' })).toBeTruthy()
+    await expectNoA11yViolations(view.container)
+  })
 })

@@ -342,7 +342,12 @@ describe('FilterMenu', () => {
       await expectNoA11yViolations(first.container)
       first.unmount()
       const sizes = render(Sizes)
-      expect(sizes.getAllByTestId('filter-menu__count')).toHaveLength(3)
+      const badges = sizes.getAllByTestId('filter-menu__count')
+      expect(badges).toHaveLength(3)
+      const small = badges
+        .map((badge) => badge.parentElement as HTMLElement)
+        .find((holder) => holder.dataset['size'] === 'small') as HTMLElement
+      expect(small.classList.contains('data-[size=small]:-end-3.5')).toBe(true)
     })
   })
 

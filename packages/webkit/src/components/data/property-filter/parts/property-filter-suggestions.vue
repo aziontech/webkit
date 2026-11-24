@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { useElementSize } from '@vueuse/core'
   import { computed, ref } from 'vue'
 
   import { usePlacement } from '../../../../composables/use-placement'
@@ -33,6 +34,9 @@
   const { t, locale } = useTranslate({ propertyFilter: en.propertyFilter })
   const portalLocale = usePortalLocale()
   const panelEl = ref<HTMLElement | null>(null)
+  const { width: anchorWidth } = useElementSize(() => props.anchor, undefined, {
+    box: 'border-box'
+  })
 
   const sections = computed(() => groupSections(props.suggestions, props.uid, t))
   const numberFormat = computed(() => new Intl.NumberFormat(locale.value))
@@ -43,9 +47,13 @@
     isOpen: () => props.open,
     side: 'bottom',
     align: 'start',
-    sideOffset: 4,
-    matchTriggerWidth: true
+    sideOffset: 4
   })
+
+  const style = computed(() => ({
+    ...panelStyle.value,
+    '--property-filter-suggestions-width': `${anchorWidth.value}px`
+  }))
 
   const groupLabel = (group: Suggestion['group']): string => {
     if (group === 'properties') return t('propertyFilter.properties')
@@ -55,7 +63,7 @@
   }
 
   const SUGGESTIONS_CLASS =
-    'fixed z-(--z-control-overlay) flex max-h-80 flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) ' +
+    'fixed z-(--z-control-overlay) flex w-[min(var(--property-filter-suggestions-width),var(--container-md))] max-h-80 flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) ' +
     'bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)'
 
   const OPTION_CLASS =
@@ -84,7 +92,7 @@
         :data-testid="`${testId}__suggestions`"
         :data-side="resolvedSide"
         :data-align="resolvedAlign"
-        :style="panelStyle"
+        :style="style"
         :class="SUGGESTIONS_CLASS"
       >
         <li
@@ -135,7 +143,7 @@
                 >{{ item.description }}</span
               >
               <span
-                v-else-if="groupLabel(item.group)"
+                v-else-if="!section.title && groupLabel(item.group)"
                 class="shrink-0 text-label-sm text-(--text-muted)"
                 >{{ groupLabel(item.group) }}</span
               >

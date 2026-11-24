@@ -24,7 +24,7 @@
     },
     {
       "name": "Error",
-      "summary": "`error` holds the message of a failed load and renders an error state in place of the rows, the same state surface as Chart.",
+      "summary": "`error` holds the message of a failed load; the error slot shows the cause and a Try again button in place of the rows, the same error state as Chart and DataTable.",
       "file": "error.vue"
     },
     {

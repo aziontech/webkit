@@ -1,5 +1,7 @@
 <script setup>
+  import Button from '@aziontech/webkit/button'
   import Chart from '@aziontech/webkit/chart'
+  import EmptyState from '@aziontech/webkit/empty-state'
 
   const labels = [
     '13:05',
@@ -39,8 +41,30 @@
     :series="series"
     :labels="labels"
     aria-label="Threats vs requests"
-    error="Could not load this report."
+    error="The analytics service did not answer. Check your connection and try again."
   >
+    <template #error>
+      <div
+        role="alert"
+        class="w-full"
+      >
+        <EmptyState
+          title="Could not load this report"
+          description="The analytics service did not answer. Check your connection and try again."
+          icon="az az-triangle-alert"
+          size="small"
+        >
+          <template #actions>
+            <Button
+              label="Try again"
+              variant="secondary"
+              size="small"
+              icon="az az-refresh"
+            />
+          </template>
+        </EmptyState>
+      </div>
+    </template>
     <Chart.Grid />
     <Chart.Axis type="y" />
     <Chart.Axis type="x" />
