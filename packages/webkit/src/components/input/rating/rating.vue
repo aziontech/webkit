@@ -2,7 +2,7 @@
   import { computed, nextTick, ref, useAttrs, useId } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useTranslate } from '../../../composables/use-translate'
+  import { intlLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
 
@@ -97,7 +97,7 @@
 
   const summary = computed(() => {
     if (halfScore.value === 0) return t('rating.empty')
-    const format = new Intl.NumberFormat(locale.value, { maximumFractionDigits: 1 })
+    const format = new Intl.NumberFormat(intlLocale(locale.value), { maximumFractionDigits: 1 })
     return t('rating.value', {
       value: format.format(halfScore.value),
       max: format.format(count.value)
