@@ -149,6 +149,7 @@ describe('Wizard', () => {
       expect(rootOf(view).getAttribute('data-active-step')).toBe('1')
       expect(headingOf(view).textContent?.trim()).toBe('Settings')
       expect(within(view.getByRole('group')).getByText('Step 2 of 3')).toBeInTheDocument()
+      expect(button(view, 'Previous').getAttribute('data-variant')).toBe('outline')
 
       await userEvent.click(button(view, 'Previous'))
       expect(rootOf(view).getAttribute('data-active-step')).toBe('0')
