@@ -62,15 +62,17 @@
     <span
       v-if="required"
       :data-testid="`${testId}__required`"
-      class="text-label-sm text-(--text-muted)"
+      aria-hidden="true"
+      class="text-label-sm text-(--text-default)"
+      >*</span
     >
-      <span
-        aria-hidden="true"
-        class="text-(--text-default)"
-        >*</span
-      >
-      {{ t('field.required') }}
-    </span>
+    <span
+      v-if="field?.required.value"
+      :id="field.requiredId"
+      :data-testid="`${testId}__required-text`"
+      hidden
+      >{{ t('field.required') }}</span
+    >
     <Hint
       v-if="hint"
       :content="hint"

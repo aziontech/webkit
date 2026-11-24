@@ -62,6 +62,7 @@
   const hoverTimer = ref<ReturnType<typeof setTimeout> | null>(null)
   const closeTimer = ref<ReturnType<typeof setTimeout> | null>(null)
   const pressTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+  let escaped = false
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tooltip')
 
@@ -123,7 +124,7 @@
 
   function scheduleOpen() {
     clearCloseTimer()
-    if (props.disabled || !props.content) return
+    if (props.disabled || !props.content || escaped) return
     if (isOpen.value) return
     clearHoverTimer()
     hoverTimer.value = setTimeout(() => setOpen(true), props.delay)
@@ -137,6 +138,7 @@
   }
 
   function scheduleClose(wait: number = CLOSE_GRACE_MS) {
+    escaped = false
     clearHoverTimer()
     clearCloseTimer()
     closeTimer.value = setTimeout(closeTooltip, wait)
@@ -159,6 +161,7 @@
     if (!isOpen.value || !isTop.value || event.defaultPrevented) return
     if (event.key === 'Escape') {
       event.preventDefault()
+      escaped = true
       closeTooltip()
     }
   }

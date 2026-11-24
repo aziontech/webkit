@@ -676,7 +676,7 @@ export const es: Messages = {
     retry: 'Reintentar'
   },
   field: {
-    required: '(Obligatorio)'
+    required: 'Obligatorio'
   },
   fileDropzone: {
     title: 'Suelta archivos para subirlos',

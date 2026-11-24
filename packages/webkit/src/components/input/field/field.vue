@@ -32,6 +32,7 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'field')
+  const requiredId = `field-required-${useId()}`
 
   const descriptions = ref<string[]>([])
   const errors = ref<string[]>([])
@@ -54,6 +55,7 @@
     invalid,
     disabled: computed(() => props.disabled),
     required: computed(() => props.required),
+    requiredId,
     hasError: computed(() => errors.value.length > 0),
     register
   })

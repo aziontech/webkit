@@ -7,7 +7,7 @@ it is mechanical: run the codemod, then do the few manual steps it lists.
 ## 1. Run the codemod
 
 ```bash
-pnpm add @aziontech/webkit@^6 @aziontech/theme@latest
+pnpm add @aziontech/webkit@^6 @aziontech/theme@^6
 npx @aziontech/webkit migrate v6 --dry-run   # see every change first
 npx @aziontech/webkit migrate v6             # rewrite the project
 npx @aziontech/webkit doctor
@@ -910,11 +910,15 @@ The RTL mirror of `@aziontech/webkit/styles` targets the `az` names (`az-chevron
 ### `@aziontech/theme` is a peer dependency
 
 v5 listed `@aziontech/theme@^4` as a dependency, so an app on theme 5 got a second, nested theme
-copy under `@aziontech/webkit/node_modules`. v6 declares it as a peer (`^5.2.2`): install it next to
-WebKit (`npm install @aziontech/theme@^5.2.2`; `npx @aziontech/webkit init` adds it). `webkit doctor`
+copy under `@aziontech/webkit/node_modules`. v6 declares it as a peer (`^5.2.2 || ^6.0.0`): install it
+next to WebKit (`npm install @aziontech/theme@^6`; `npx @aziontech/webkit init` adds it). `webkit doctor`
 fails when a nested copy is left or the installed theme misses the range. `init` now writes caret
 ranges for every dependency it adds, never `latest`. The `@aziontech/icons` peer accepts
-`^4.4.0 || ^5.0.0`, so the icons major that drops PrimeIcons from its default entry installs as is.
+`^4.4.0 || ^5.0.0 || ^6.0.0`, so the icons major that drops PrimeIcons from its default entry installs as is.
+
+From 6.0 the four packages (`@aziontech/webkit`, `@aziontech/theme`, `@aziontech/icons`,
+`@aziontech/webkit-mcp`) share one version and release together: theme and icons jump to 6.0.0 with
+WebKit, and every later release (`6.1.0`, `6.1.1`, …) carries the same number on all four.
 
 ### Theme: dark mode follows the device, fonts are a separate import, unused variables are gone
 

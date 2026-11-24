@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-resource-picker/create-resource-picker.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-resource-picker")`
-- Components: [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [ToggleGroup](../../components/toggle-group.md)
+- Components: [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [ToggleGroup](../../components/toggle-group.md), `utils/radio-list`
 - Skills: `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -184,6 +184,7 @@ Each variant is the same screen in another state: `get_block("create/create-reso
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
   import { computed, reactive } from 'vue'
 
   import { usePagedList } from './composables/use-paged-list'
@@ -367,7 +368,15 @@ Each variant is the same screen in another state: `get_block("create/create-reso
                 size="small"
                 clickable
                 role="radio"
+                @keydown="onRadioListKeydown"
                 :aria-checked="option.value === projectPicker.chosen"
+                :tabindex="
+                  radioListTabIndex(
+                    option.value,
+                    projectPicker.chosen,
+                    projectPicker.visible.map((entry) => entry.value)
+                  )
+                "
                 @click="projectPicker.chosen = option.value"
               >
                 <Item.Media>

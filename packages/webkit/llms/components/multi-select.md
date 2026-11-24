@@ -66,7 +66,7 @@
 | `error` | `string` | `''` | false | Message shown in place of the options when they failed to load; empty shows the options. |
 | `emptyTitle` | `string` | `''` | false | Text of the list when no option is visible. Empty uses the locale catalog. |
 | `modelValue` | `TValue[]` | `() => []` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 

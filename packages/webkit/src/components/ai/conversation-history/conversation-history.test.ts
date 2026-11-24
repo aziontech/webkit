@@ -261,6 +261,8 @@ describe('ConversationHistory', () => {
       expect(getAllByTestId('conversation-history__item').length).toBeLessThan(1000)
       expect(getAllByTestId('conversation-history__item')[0]).toHaveTextContent('Conversation 0')
       expect(container.querySelector('[data-chunk][aria-hidden="true"]')).not.toBeNull()
+      const placeholder = container.querySelector<HTMLElement>('[data-chunk][aria-hidden="true"]')!
+      expect(placeholder.style.height).toBe(`${100 * 48}px`)
     })
   })
 })

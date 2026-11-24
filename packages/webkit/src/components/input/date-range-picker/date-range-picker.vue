@@ -275,7 +275,11 @@
         :icon="model?.type === 'relative' ? 'az az-clock' : 'az az-calendar'"
         data-slot="date-range-picker-trigger"
         :aria-label="ariaLabel || !field.field ? triggerLabel : undefined"
-        :aria-describedby="field.describedBy.value"
+        :aria-describedby="
+          [field.describedBy.value, field.required.value && field.field?.requiredId]
+            .filter(Boolean)
+            .join(' ') || undefined
+        "
         :aria-invalid="field.invalid.value || undefined"
         class="focus-visible:ring-inset"
         @click="setOpen(!isOpen)"

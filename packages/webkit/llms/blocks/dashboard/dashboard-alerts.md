@@ -99,7 +99,8 @@ Ranks alert types by count, largest first, labelled `Alerts by type`.
 
 Highest risk pairs each entity with its risk score and the `SeverityTag` of its worst open alert.
 Open alerts leads every row with its `SeverityTag` and sorts from critical to info by default.
-Figures use tabular numbers.
+Figures use tabular numbers. Both tables set `stackable`: on a phone each row becomes a card of
+label and value lines, so the deciding figure never sits off-screen.
 
 ### M. Alert status — `TableCellStatus`, `Tag` (required)
 
@@ -1111,6 +1112,7 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
     row-key="id"
     sortable
     density="compact"
+    stackable
     bordered
     :loading="loading"
   >

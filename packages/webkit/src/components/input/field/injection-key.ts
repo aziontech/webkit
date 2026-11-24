@@ -17,6 +17,8 @@ export interface FieldContext {
   disabled: ComputedRef<boolean>
   /** Whether the field is required; FieldLabel shows the marker and the control sets required. */
   required: ComputedRef<boolean>
+  /** Id of the hidden Required text FieldLabel renders; a control whose role cannot take aria-required adds it to its description. */
+  requiredId?: string
   /** Whether a FieldError is mounted; FieldDescription then keeps its neutral tone. */
   hasError: ComputedRef<boolean>
   /** Registers a description, error or title id; returns the function that unregisters it. */

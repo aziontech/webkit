@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: 5a887d823ce85ec2db22c495a5fb5e722e9ba76e25a9635ce71ff9cbbcbb0795
+checksum: 171ceaca9918037b9b856d612e0ce9b14d497547e1f6d9399bca1e131f946d37
 created: 2026-11-09
-last_updated: 2026-11-22
+last_updated: 2026-11-23
 ---
 
 # ToggleGroup — Component Spec
@@ -113,7 +113,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 - Visual states per segment: `default`, `focus-visible`, `selected`, `disabled`.
 - Root: `role="radiogroup"`; consumer attributes (`id`, `aria-labelledby`, `aria-describedby`, …) land on it; `data-disabled` when `disabled`; `data-size` mirrors `size` (`small` | `medium` | `large`); `data-fluid` is present only when `fluid` is set.
-- Segment: `role="radio"` with `aria-checked`; `data-state="active"` on the selected segment and `"inactive"` on the others; `data-disabled` and the native `disabled` attribute on a disabled option (or every option when the root is `disabled`); a trailing lock icon (`az az-lock`) and `data-locked` on a locked option (see Locked options). Each segment carries a touch-target span that grows its hit area to 44px under `pointer-coarse`.
+- Segment: `role="radio"` with `aria-checked`; `data-state="active"` on the selected segment and `"inactive"` on the others; `data-disabled` and the native `disabled` attribute on a disabled option (or every option when the root is `disabled`); a trailing lock icon (`az az-lock`) and `data-locked` on a locked option (see Locked options). Each segment carries a touch-target span that grows its hit area to 44px tall under `pointer-coarse`, never sideways into a neighbour.
 - Indicator: an `aria-hidden` span positioned under the selected segment from its measured size and offset; hidden when nothing is selected or the selected segment is not rendered. It re-measures on option, selection and size changes (`ResizeObserver`).
 - Option normalization: a missing `label` falls back to `value`, then to `Option <n>`; a missing `value` falls back to `label`, then to the index.
 - Test ids: root `toggle-group` (consumer `data-testid` wins), `<testId>__indicator`, `<testId>__option`, `<testId>__option-lock`.
@@ -159,7 +159,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 - Disabled options use the native `disabled` attribute, so they are skipped by arrow navigation, never take the tab stop and cannot be clicked.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons): selected text uses `var(--text-default)` on `var(--bg-selected)`, unselected text `var(--text-muted)` on `var(--bg-surface)`.
 - `motion-reduce:transition-none` on the segment color transition and on the indicator slide.
-- Touch target: segments fill the group height minus its padding (40px group at `size="large"`); under `pointer-coarse` a touch-target span extends each segment's hit area to 44px.
+- Touch target: segments fill the group height minus its padding (40px group at `size="large"`); under `pointer-coarse` a touch-target span extends each segment's hit area to 44px tall.
 
 ## Right-to-left
 
@@ -180,7 +180,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 ## Responsive
 
 - The root is capped at its container (`max-w-full`, `min-w-0`); options that do not fit flow onto another row instead of truncating, and `fluid` makes the options in each row share its full width.
-- Touch: under `pointer-coarse` each segment is drawn at least 44px tall, so a group that wraps its options onto several rows still gives every option a full 44px target; a touch-target span also widens each segment's hit area.
+- Touch: under `pointer-coarse` each segment is drawn at least 44px tall, so a group that wraps its options onto several rows still gives every option a full 44px target; each segment is also at least 44px wide, and its touch-target span grows only vertically, so two neighbouring segments never share a hit area.
 - No hover-only affordance: selection, focus and disabled states are all visible without hover.
 
 ## Performance

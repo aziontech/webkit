@@ -285,7 +285,7 @@ Shipped in the table scroll cue until 2026-11-20 (the 10k-row virtual DataTable 
 
 ## One orange: the logo orange
 
-Content uses one orange, the logo orange `#F3652B` (owner decisions 2026-11-18 and 2026-11-22), and it is never the colour of text: as text it misses WCAG AA on light surfaces (about 3:1). It is `--primary`, in two shapes: a **fill** behind `--primary-foreground` text (the button, `Tag variant="highlight"`, the `HeroTitle` highlight), or a **mark** beside text in `--text-default`: a bar (the `Eyebrow`, the `Quote` name, a comparison group title), an underline (a `LinkDirectory` column title, a hovered linked `FeatureItem`), a glyph or a glow fading to transparent. A mark is decoration, so it carries no contrast requirement; the text beside it does, and passes.
+Content uses one orange, the logo orange `#F3652B` (owner decisions 2026-11-18 and 2026-11-22), and it is never the colour of text: as text it misses WCAG AA on light surfaces (about 3:1). It is `--primary`, in two shapes: a **fill** behind `--primary-foreground` text (the button, `Tag variant="highlight"`, the `HeroTitle` highlight), or a **mark** beside text in `--text-default`: a bar (the `Quote` name, a comparison group title; never before an `Eyebrow`, whose only mark is its `//` prefix, EB-1), an underline (a `LinkDirectory` column title, a hovered linked `FeatureItem`), a glyph or a glow fading to transparent. A mark is decoration, so it carries no contrast requirement; the text beside it does, and passes.
 
 ```html
 <!-- ❌ the orange as text: 3:1 on white, and a second orange -->

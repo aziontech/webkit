@@ -3,10 +3,10 @@ name: config-provider
 category: provider
 structure: monolithic
 status: implemented
-checksum: c1993733ec6aa20a0688120c33b34da550304ebeff1873788d03df7889750f60
+checksum: f134438b74d29da4001de74ede25de101e4d3141d2a539f730f274b8a3dcd25f
 spec_version: 6
 created: 2026-11-11
-last_updated: 2026-11-17
+last_updated: 2026-11-23
 ---
 
 # ConfigProvider — Component Spec
@@ -35,7 +35,7 @@ Sets the language and text direction of every WebKit component below it. It wrap
 
 ## Best practices
 
-- Mount one `ConfigProvider` at the app root and pass the locale the user chose, or leave it unset to follow the device; do not nest one per page.
+- Mount one `ConfigProvider` at the app root and pass the locale the user chose, or leave it unset to follow the device; do not nest one per page. A nested provider (a right-to-left preview, a fixed `now` for one panel) inherits from the provider around it every setting it does not set: the locale, the registered catalogs, the `messages` overrides (its own merge over the outer ones), `now` and `timeZone`.
 - Register every language the app offers in `catalogs` (`{ 'pt-BR': ptBR, es }`), imported from `@aziontech/webkit/locales/<tag>`; a `pt-BR` or `es` locale with no registered catalog falls back to English and warns once in development.
 - Use a full BCP 47 tag (`pt-BR`, not `pt`); a tag with no registered catalog falls back to the same language, then to English.
 - Override built-in strings through `messages` (partial, deep-merged), not by forking components.

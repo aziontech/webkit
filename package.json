@@ -1,5 +1,6 @@
 {
   "name": "@aziontech/webkit-monorepo",
+  "version": "5.13.0",
   "author": "@aziontech",
   "private": true,
   "type": "module",

@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2048-5713
   node_id: 2048:5713
-checksum: 05204fd5b1d330fc20267a7d5478a41d66e975b2896a6215488b6a5d4c9a6eef
+checksum: 267454d8e19e2b1de3c64dfb5763a892703fd4409476e2ce0700570b37e4e0af
 created: 2026-11-10
 last_updated: 2026-11-20
 ---
@@ -78,7 +78,7 @@ International phone-number control: an `InputGroup` with a searchable country `S
 | `size`              | `'small' \| 'medium' \| 'large'` | `'medium'`                  | false    | Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px.                                                                                                                                            |
 | `disabled`          | `boolean`                        | `false`                     | false    | Disables both the dial-code Select and the internal input.                                                                                                                                                                                                  |
 | `readonly`          | `boolean`                        | `false`                     | false    | Marks the internal input read-only; dial-code Select is also disabled while readonly.                                                                                                                                                                       |
-| `required`          | `boolean`                        | `false`                     | false    | Applies the required border on the InputGroup and sets required on the input.                                                                                                                                                                               |
+| `required`          | `boolean`                        | `false`                     | false    | Sets required and aria-required on the phone number input; it draws no border of its own.                                                                                                                                                                   |
 | `invalid`           | `boolean`                        | `false`                     | false    | Applies the invalid border on the InputGroup and sets aria-invalid on the input.                                                                                                                                                                            |
 | `name`              | `string`                         | `''`                        | false    | Form field name. Set, a hidden input submits the full E.164 number (dial code followed by the digits, empty while there are none) under this name; the visible input carries no name, so a native `form` never posts a national number without its country. |
 | `searchPlaceholder` | `string`                         | `''`                        | false    | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`).                                                                                                                                            |

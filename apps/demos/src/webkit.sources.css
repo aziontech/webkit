@@ -361,6 +361,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/overlay/command/command.vue";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/command/composables/use-command-active.ts";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/command/composables/use-command-menu-context.ts";
+@source "../node_modules/@aziontech/webkit/src/components/overlay/command/composables/use-command-order.ts";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/command/composables/use-command-pages.ts";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/command/index.ts";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/command/injection-key.ts";
@@ -532,4 +533,5 @@
 @source "../node_modules/@aziontech/webkit/src/utils/safe-href.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/severity.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/tabbable.ts";
+@source "../node_modules/@aziontech/webkit/src/utils/text-direction.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/trigger-control.ts";

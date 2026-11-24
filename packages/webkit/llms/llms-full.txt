@@ -50,7 +50,7 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 ## Do
 
 - Use CSS variables from `@aziontech/theme` for color: `var(--primary)`, `var(--bg-surface)`, `var(--text-default)`, `var(--border-default)`, and the other semantic tokens.
-- Use one orange, the logo orange `#F3652B`, and never as a text colour: it misses WCAG AA as text on light surfaces. It is `var(--primary)`: a fill behind `--primary-foreground` text (the button, `Tag variant="highlight"`, the `HeroTitle` highlight), or a bar, underline, glyph or glow beside text in `--text-default` (the `Eyebrow` bar, the `Quote` name bar, `LinkDirectory` column underlines). A glow starts from `--primary` and fades to transparent, never to a lighter or darker orange.
+- Use one orange, the logo orange `#F3652B`, and never as a text colour: it misses WCAG AA as text on light surfaces. It is `var(--primary)`: a fill behind `--primary-foreground` text (the button, `Tag variant="highlight"`, the `HeroTitle` highlight), or a bar, underline, glyph or glow beside text in `--text-default` (the `Quote` name bar, `LinkDirectory` column underlines). The `Eyebrow` carries no orange mark: its only mark is the `//` prefix on marketing headers. A glow starts from `--primary` and fades to transparent, never to a lighter or darker orange.
 - Put text on a fill with that fill's pair: every fill colour has a `-foreground` text colour (`--primary` / `--primary-foreground`, `--danger` / `--danger-foreground`); the inverted surface `--bg-contrast` takes `--text-contrast`.
 - Use the theme's semantic spacing and radius tokens: `var(--spacing-xs)`, `var(--spacing-md)` (scale `2xs…2xl`), `var(--shape-button)`.
 - Use the generated typography classes / tokens for text (`text-button-lg`, and the other named type scales), not raw font sizes.
@@ -111,7 +111,7 @@ use it, so you can check a choice against a real one.
 | Second action | `--secondary`, `--secondary-foreground` | `Button variant="secondary"`, `IconButton`, `Badge variant="secondary"` |
 | Brand tint | `--primary-mask`, `--primary-selected` | `Tag variant="highlight"` surface, `RadioGroup` selected card |
 | Accent: a live state or connection, never an action | `--accent`, `--accent-foreground` | `Switch` on, `Slider` fill, `Tag variant="accent"`, resize handles in `Sidebar` and `Resizable`, a dragged `Table` row, `FlowDiagram` edges and ports |
-| Brand marks: the logo colours | `--primary`, `--brand-blue`, `--brand-blue-foreground` | the logo orange as a mark beside text in `--text-default` or a fill behind `--primary-foreground`, never as text (owner, 2026-11-22): the `Eyebrow` bar, the `Quote` name bar, `LinkDirectory` column underlines, the `HeroTitle` highlight fill, the `CompetitorComparisonSection` group bar, `Tag variant="highlight"`, the hovered linked `FeatureItem` underline; the `Eyebrow` cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
+| Brand marks: the logo colours | `--primary`, `--brand-blue`, `--brand-blue-foreground` | the logo orange as a mark beside text in `--text-default` or a fill behind `--primary-foreground`, never as text (owner, 2026-11-22): the `Quote` name bar, `LinkDirectory` column underlines, the `HeroTitle` highlight fill, the `CompetitorComparisonSection` group bar, `Tag variant="highlight"`, the hovered linked `FeatureItem` underline; the `Eyebrow` cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
 | Selected item | `--bg-selected`, `--border-selected` | selected rows and options in `Table`, `MenuItem`, `DropdownMenu`, `ToggleGroup`, `Select`, `Combobox`, `Trace`; `RadioGroup` card and `Chip` borders |
 | Selected tab | `--secondary-mask` | the sliding indicator in `Tabs` |
 | Hover and press | `--bg-hover`, `--bg-active`, `--bg-mask` | every interactive component (`--bg-mask` is the hover layer on `Button variant="outline"` and `variant="ghost"`) |
@@ -2182,8 +2182,6 @@ Prop: `events`, `now`, `range`, `loading`, `error`.
 
 Event: `refresh`, `retry`, `update:range`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/account/account-activity-history.md](blocks/account/account-activity-history.md).
 
 ## Do
@@ -2287,8 +2285,6 @@ The block takes its records through props and emits every action; it fetches not
 Prop: `invoices`, `paymentMethods`, `subscription`, `paymentInformation`, `updatedAt`, `defaultQuery`, `tab`, `loading`, `error`.
 
 Event: `refresh`, `retry`, `set-default`, `remove`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/account/account-billing.md](blocks/account/account-billing.md).
 
@@ -2408,8 +2404,6 @@ Prop: `plans`, `upgradeFeatures`, `charges`, `accountAddress`, `cardLast4`, `ope
 
 Event: `plan-select`, `upgrade`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/account/account-change-plan-drawer.md](blocks/account/account-change-plan-drawer.md).
 
 ## Do
@@ -2511,8 +2505,6 @@ The block takes its records through props and emits every action; it fetches not
 Prop: `settings`, `services`, `defaults`, `defaultDraft`, `currentUser`, `loading`, `saving`, `error`.
 
 Event: `save`, `discard`, `refresh`, `bind`, `create`, `update`, `clone`, `delete`.
-
-Then delete `sample.ts` and its import, and persist `bind`, `create`, `update`, `clone` and `delete` the same way.
 
 What each prop and event does, and the go-live code: [blocks/account/account-deployment-settings.md](blocks/account/account-deployment-settings.md).
 
@@ -2622,8 +2614,6 @@ Prop: `resources`, `currentId`, `roleBindings`, `selectedKeys`, `loading`, `erro
 
 Event: `refresh`, `retry`, `move`, `labels`, `delete`, `undo`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/account/account-hierarchy.md](blocks/account/account-hierarchy.md).
 
 ## Do
@@ -2728,8 +2718,6 @@ Prop: `members`, `loading`, `error`, `required`.
 
 Event: `update:required`, `refresh`, `retry`, `remind`, `reset`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/account/account-mfa-settings.md](blocks/account/account-mfa-settings.md).
 
 ## Do
@@ -2833,8 +2821,6 @@ Prop: `account`, `plans`, `defaultValues`, `step`, `loading`, `error`.
 
 Event: `submit`, `cancel`, `update:step`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/account/account-onboarding-form.md](blocks/account/account-onboarding-form.md).
 
 ## Do
@@ -2937,8 +2923,6 @@ Prop: `card`, `editing`, `disabled`, `loading`, `error`.
 
 Event: `submit`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/account/account-payment-method-card.md](blocks/account/account-payment-method-card.md).
 
 ## Do
@@ -3035,8 +3019,6 @@ Prop: `tokens`, `loading`, `error`, `creating`, `now`, `secret`.
 
 Event: `refresh`, `retry`, `create`, `revoke`, `delete`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/account/account-personal-tokens.md](blocks/account/account-personal-tokens.md).
 
 ## Do
@@ -3100,7 +3082,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-per
 - Surface: app
 - Source: `blocks/account/account-team-permissions/account-team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-team-permissions")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DataTablePagination`, DropdownMenu, EmptyState, Field, IconButton, Input, Kbd, PageHeader, PropertyFilter, SaveBar, SettingsGroup, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`, `use-shortcuts`, `use-unsaved-changes`
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DataTablePagination`, DropdownMenu, EmptyState, Field, IconButton, Input, Kbd, PageHeader, PropertyFilter, SaveBar, SettingsGroup, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`, `use-shortcuts`, `use-unsaved-changes`, `utils/leave-link`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3143,8 +3125,6 @@ The list takes its teams through props and emits every action; it fetches nothin
 Prop: `teams`, `loading`, `error`.
 
 Event: `refresh`, `retry`, `row-action`, `delete`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/account/account-team-permissions.md](blocks/account/account-team-permissions.md).
 
@@ -3262,8 +3242,6 @@ The block takes its records through props and emits every action; it fetches not
 Prop: `users`, `teams`, `loading`, `error`, `defaultInviteOpen`, `defaultEditRoleId`.
 
 Event: `invite`, `refresh`, `retry`, `role-change`, `teams-change`, `resend-invitation`, `remove`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/account/account-users.md](blocks/account/account-users.md).
 
@@ -4083,8 +4061,6 @@ Event: `submit`, `retry`.
 
 The `environment-alerts` slot renders under the environment choices with `{ environment, project }`, for alerts about what the chosen environment changes. A dependency with `sharedWith` carries a Shared `Tag` in a `Tooltip` naming the other services, and one info `Alert` above the list says it deploys at one version; Projects impacted shows only when there are projects, with an environment heading and a count per group once they span more than one environment.
 
-Then delete `sample.ts` and its import. The page reports the run through the toast (`state/state-async-submit`).
-
 What each prop and event does, and the go-live code: [blocks/create/create-deploy-drawer.md](blocks/create/create-deploy-drawer.md).
 
 ## Do
@@ -4231,8 +4207,6 @@ Slot: `actions`.
 
 A run whose rows are all queued has not started: the block raises no toast for it. Drop renders the block with its two Deployment Settings queued, opens its own confirm beside it, and on Deploy to Production opens the progress dialog and moves the rows through the run.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/create/create-deploy-progress-dialog.md](blocks/create/create-deploy-progress-dialog.md).
 
 ## Do
@@ -4334,8 +4308,6 @@ Prop: `title`, `description`, `deployment`, `resources`, `nextSteps`, `getStarte
 
 Event: `next-step`, `manage`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/create/create-deploy-success.md](blocks/create/create-deploy-success.md).
 
 ## Do
@@ -4401,7 +4373,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-deploy-template/create-deploy-template.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-template")`
-- Components: Accordion, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Kbd, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-escape-to-cancel`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`
+- Components: Accordion, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Kbd, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-escape-to-cancel`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`, `utils/radio-list`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4441,8 +4413,6 @@ Prop: `template`, `account`, `providersHref`, `crumb`, `service`.
 Slot: `default`, `details`.
 
 Event: `back`, `account`, `connect`, `skip-git`, `browse`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/create/create-deploy-template.md](blocks/create/create-deploy-template.md).
 
@@ -4587,8 +4557,6 @@ Event: `submit`, `update:open`, `update:environmentOpen`.
 
 The `trigger` slot replaces the Add button (an environment menu, a row menu) and receives `open` to call.
 
-Then delete the `sample.ts` import of `create-drawer.vue`.
-
 What each prop and event does, and the go-live code: [blocks/create/create-drawer.md](blocks/create/create-drawer.md).
 
 ## Do
@@ -4713,8 +4681,6 @@ The block takes its accounts, repositories and templates through props and emits
 Prop: `accounts`, `repositories`, `templates`, `connecting`, `connectError`, `loading`, `error`, `v-model:scope`.
 
 Event: `connect`, `update:scope`, `retry`, `import`, `upload`.
-
-Then delete the sample imports. Pass `templates` from the template catalog, or keep the sample sections as the shipped list.
 
 What each prop and event does, and the go-live code: [blocks/create/create-hub.md](blocks/create/create-hub.md).
 
@@ -4953,8 +4919,6 @@ Prop: `resources`, `impact`, `loading`, `error`, `truncated`, `deploying`, `depl
 
 Event: `deploy`, `retry`, `edit`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/create/create-release-impact.md](blocks/create/create-release-impact.md).
 
 ## Do
@@ -5024,7 +4988,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-relea
 - Surface: app
 - Source: `blocks/create/create-resource-picker/create-resource-picker.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-resource-picker")`
-- Components: Button, Card, Field, `FieldError`, Input, Item, SettingsRow, Skeleton, Switch, ToggleGroup
+- Components: Button, Card, Field, `FieldError`, Input, Item, SettingsRow, Skeleton, Switch, ToggleGroup, `utils/radio-list`
 - Skills: `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -5066,8 +5030,6 @@ The block takes its resources through props, keeps the answer in `v-model`s and 
 Prop / model: `projects`, `loading`, `error`, `v-model`, `v-model:mode`, `v-model:name`.
 
 Event: `load-more`.
-
-Then delete `sample.ts` and its import. Set `error` when Next is pressed with nothing chosen and clear it once the user answers.
 
 What each prop and event does, and the go-live code: [blocks/create/create-resource-picker.md](blocks/create/create-resource-picker.md).
 
@@ -5145,7 +5107,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: Alert, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, ConfirmDialog, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, Wizard, Wizard
+- Components: Alert, AppHeader, `AppHeaderAccount`, Brand, Breadcrumb, Button, Card, ConfirmDialog, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, `utils/radio-list`, Wizard, Wizard
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -5193,8 +5155,6 @@ The block keeps the form as a local draft, validates each step and emits `submit
 Prop: `policies`, `defaultStep`, `defaultPolicy`, `defaultValues`, `loading`, `error`.
 
 Event: `submit`, `cancel`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/create/create-wizard.md](blocks/create/create-wizard.md).
 
@@ -5348,8 +5308,6 @@ Prop: `kpis`, `labels`, `series`, `openByLevel`, `types`, `entities`, `alerts`, 
 
 Event: `retry`, `update:period`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-alerts.md](blocks/dashboard/dashboard-alerts.md).
 
 ## Do
@@ -5483,8 +5441,6 @@ Card: Requests over time, Status codes, Requests by country, Top hosts.
 - `resample: { function: sum, points: 96 }` returns a fixed number of points for a time series, so a long period does not come back as thousands of rows.
 - One query returns at most 10,000 rows (`limit: 10000`).
 - Data transferred is `aggregate: { sum: bytesSent }`; the Functions product reads `functionsMetrics` (`sum: invocations`) and Edge DNS reads `idnsQueriesMetrics`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-analytics.md](blocks/dashboard/dashboard-analytics.md).
 
@@ -5626,8 +5582,6 @@ Prop: `kpis`, `labels`, `series`, `split`, `contributors`, `loading`, `error`, `
 
 Event: `retry`, `export`, `update:period`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-breakdown.md](blocks/dashboard/dashboard-breakdown.md).
 
 ## Do
@@ -5743,8 +5697,6 @@ The block takes its series through props and emits every change; it fetches noth
 Prop: `labels`, `series`, `sources`, `loading`, `error`, `v-model:layout`, `v-model:editing`.
 
 Event: `retry`, `update:layout`, `update:editing`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-configurable.md](blocks/dashboard/dashboard-configurable.md).
 
@@ -5869,8 +5821,6 @@ Prop: `kpis`, `goals`, `labels`, `trends`, `notes`, `loading`, `error`, `v-model
 
 Event: `retry`, `export`, `update:quarter`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-executive-summary.md](blocks/dashboard/dashboard-executive-summary.md).
 
 ## Do
@@ -5987,8 +5937,6 @@ Prop / model: `overall`, `applications`, `locations`, `hourly`, `incidents`, `lo
 
 Event: `retry`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-health-score.md](blocks/dashboard/dashboard-health-score.md).
 
 ## Do
@@ -6104,8 +6052,6 @@ Prop: `userName`, `greeting`, `metrics`, `projects`, `resources`, `domains`, `re
 Pass `[]` for all four lists on an account that owns nothing: the page becomes the first-access screen.
 
 Event: `retry`, `update:agentSetup`, `create-project`, `check-domain`, `register-domain`, `copy-prompt`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-home.md](blocks/dashboard/dashboard-home.md).
 
@@ -6232,8 +6178,6 @@ Prop: `summary`, `verdictSplit`, `sources`, `submissions`, `loading`, `error`.
 
 Event: `refresh`, `retry`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-scan-results.md](blocks/dashboard/dashboard-scan-results.md).
 
 ## Do
@@ -6355,8 +6299,6 @@ Every region empty (`[]` lists and no series) is the no-rule-set state: one `Emp
 
 Event: `retry`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-security.md](blocks/dashboard/dashboard-security.md).
 
 ## Do
@@ -6473,8 +6415,6 @@ The block takes its records through props and emits every action; it fetches not
 Prop / model: `services`, `latency`, `errorRate`, `alerts`, `loading`, `error`, `v-model:window`.
 
 Event: `retry`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-service-monitoring.md](blocks/dashboard/dashboard-service-monitoring.md).
 
@@ -6600,8 +6540,6 @@ Prop / model: `views`, `data`, `loading`, `error`, `v-model:view`, `v-model:peri
 
 Event: `refresh`, `retry`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/dashboard/dashboard-switcher.md](blocks/dashboard/dashboard-switcher.md).
 
 ## Do
@@ -6706,8 +6644,6 @@ A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger 
 The block takes the run through props; it fetches nothing and has no actions of its own. `DeploymentLogsStep` and `DeploymentLogsProps` are exported from `detail-deployment-logs.vue`, and `sample.ts` holds the sample runs (running, succeeded, failed) the block renders when `steps` is left out. Running or settled, the outcome, the counts, the open step and the step tags all follow from the step statuses.
 
 Prop / model: `steps`, `duration`, `v-model:view`, `v-model:open-step`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/detail/detail-deployment-logs.md](blocks/detail/detail-deployment-logs.md).
 
@@ -6831,8 +6767,6 @@ Prop: `zone`, `records`, `loading`, `error`, `saving`, `importable`, `v-model:ta
 
 Event: `submit`, `discard`, `create`, `import`, `refresh`, `retry`, `row-action`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/detail/detail-dns-zone.md](blocks/detail/detail-dns-zone.md).
 
 ## Do
@@ -6953,8 +6887,6 @@ Prop: `domains`, `loading`, `error`.
 
 Event: `create`, `retry`, `row-action`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/detail/detail-domains-card.md](blocks/detail/detail-domains-card.md).
 
 ## Do
@@ -7056,8 +6988,6 @@ The block fetches nothing; the steps are its copy. `GetStartedProps` and `GetSta
 Prop: `resourceName`, `v-model`.
 
 Event: `update:modelValue`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/detail/detail-get-started.md](blocks/detail/detail-get-started.md).
 
@@ -7161,8 +7091,6 @@ Prop / model: `edgeFunction`, `invocations`, `v-model:invocation`, `v-model:span
 
 Event: `replay`, `invocation-action`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/detail/detail-invocations.md](blocks/detail/detail-invocations.md).
 
 ## Do
@@ -7265,8 +7193,6 @@ The block takes its gates through props and emits every action; it fetches nothi
 Prop: `steps`, `defaultOpen`.
 
 Event: `step-action`, `done`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/detail/detail-production-checklist.md](blocks/detail/detail-production-checklist.md).
 
@@ -7388,8 +7314,6 @@ Prop / model: `resource`, `v-model:tab`.
 
 Event: `resource-action`, `connect-repository`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/detail/detail-resource.md](blocks/detail/detail-resource.md).
 
 ## Do
@@ -7440,7 +7364,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 - ResourceOverview: the Overview tab of a resource made from the CLI (`resource`, `tab` is `overview`), the summary card followed by Get started; any other `tab` shows the Open link to its own route.
 - Resource: the summary card alone, in its resource shape.
-- Default with `deploymentId: ''`: the same page for a resource never deployed: the summary reads Not deployed yet in place of the address, with None, None and Not deployed as muted values and no Visit.
+- NoDeployment: the same page for a resource never deployed (`deploymentId: ''`): the summary reads Not deployed yet in place of the address, with None, None and Not deployed as muted values and no Visit.
 - FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
 - ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
 - ResourceBuild: the Build tab, the Git repository, Build configuration and Deployment bands, with a save bar once a command changes.
@@ -7475,7 +7399,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 ## Variants
 
-`ResourceOverview` (primary) · `Resource` · `Service` · `Policy` · `ResourceVersions` · `ResourceBuild` · `ServiceOverview` · `Application` · `FirstDeploy` · `ResourceBuildConnected` · `ApplicationBuild`. Code: [blocks/detail/detail-resource.md](blocks/detail/detail-resource.md), `get_block("detail/detail-resource", { variant })`.
+`ResourceOverview` (primary) · `Resource` · `Service` · `Policy` · `ResourceVersions` · `ResourceBuild` · `ServiceOverview` · `Application` · `NoDeployment` · `FirstDeploy` · `ResourceBuildConnected` · `ApplicationBuild`. Code: [blocks/detail/detail-resource.md](blocks/detail/detail-resource.md), `get_block("detail/detail-resource", { variant })`.
 
 ---
 
@@ -7537,8 +7461,6 @@ The block takes its versions and settings through props and emits every action; 
 Prop / model: `resource`, `versions`, `settings`, `revertDiff`, `environments`, `creating`, `reverting`, `v-model:version-id`, `v-model:tab`, `v-model:history-open`, `v-model:environment`.
 
 Event: `save`, `save-description`, `add-version`, `add-environment`, `redeploy`, `revert`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/detail/detail-version.md](blocks/detail/detail-version.md).
 
@@ -7673,8 +7595,6 @@ Prop: `name`, `loading`, `error`, `defaultOpen`, `v-model:open`.
 
 Event: `delete`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/edit/edit-delete-dialog.md](blocks/edit/edit-delete-dialog.md).
 
 ## Do
@@ -7743,7 +7663,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-delete-di
 - Surface: app
 - Source: `blocks/edit/edit-function/edit-function.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-function")`
-- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, CopyButton, EmptyState, `FieldError`, IconButton, Input, Item, Kbd, KeyValueList, Link, `LogViewerContent`, LogViewer, PageTabs, RadioGroup, `ResizableHandle`, `ResizablePane`, `ResizableRoot`, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Tabs, Tag, Textarea, Toast, ToggleGroup, Tooltip, Trace, `use-shortcuts`, `use-unsaved-changes`
+- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, CopyButton, EmptyState, `FieldError`, IconButton, Input, Item, Kbd, KeyValueList, Link, `LogViewerContent`, LogViewer, PageTabs, RadioGroup, `ResizableHandle`, `ResizablePane`, `ResizableRoot`, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Tabs, Tag, Textarea, Toast, ToggleGroup, Tooltip, Trace, `use-shortcuts`, `use-unsaved-changes`, `utils/leave-link`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -7792,8 +7712,6 @@ Prop: `service`, `fields`, `defaultDraft`, `v-model:tab`, `v-model:document`, `d
 Event: `submit`, `discard`, `editor-ready`.
 
 Slot: `editor-actions`, `code-panel`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/edit/edit-function.md](blocks/edit/edit-function.md).
 
@@ -7878,7 +7796,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-function.
 - Surface: app
 - Source: `blocks/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-resource")`
-- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
+- Components: Alert, AttributeEditor, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`, `utils/focus-invalid`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -7928,8 +7846,6 @@ Prop: `resource`, `defaultDraft`, `stale`, `loading`, `error`, `v-model:tab`.
 Event: `submit`, `discard`.
 
 Slot: `sections`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/edit/edit-resource.md](blocks/edit/edit-resource.md).
 
@@ -8002,7 +7918,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-resource.
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
 - Saving: while the request is in flight; the fieldset is disabled, so no field can change under the save, Save is loading and Discard is disabled.
-- DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the state-form-validation rule.
+- DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Custom headers are `AttributeEditor` rows of Name and Value (up to 5) whose value turns into a masked `PasswordInput` when the name reads as a credential (Authorization, Cookie, a token, key, secret or password), Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the state-form-validation rule.
 - StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
 - DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
 - CacheSettings: one cache setting of an application; General, Browser cache, Edge cache and the collapsed Advanced cache key. Rows that only apply under a switch or an override sit one level in (`SettingsRow` `level`). An edge TTL under 60 seconds and an empty allowlist or denylist are field errors with their reason, focused on Save. Save deploys and reports through the state-async-submit toast with Edit and Redeploy.
@@ -8201,8 +8117,6 @@ Prop: `tables`, `database`, `loading`, `error`, `v-model:dialog`, `v-model:table
 
 Event: `create-table`, `add-column`, `insert-row`, `change-type`, `truncate`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/edit/edit-schema.md](blocks/edit/edit-schema.md).
 
 ## Do
@@ -8326,8 +8240,6 @@ The block is a folder. `edit-variables.vue` is the wiring: the props, the list r
 Prop: `variables`, `loading`, `saving`, `saveError`, `defaultOpen`.
 
 Event: `refresh`, `save`, `clone`, `delete`.
-
-Then delete the sample variables from `sample.ts` and their import. With no `saving` set during the `save` handler the block treats the save as done at once, which is how it runs on its sample.
 
 What each prop and event does, and the go-live code: [blocks/edit/edit-variables.md](blocks/edit/edit-variables.md).
 
@@ -8458,8 +8370,6 @@ The SaveAll form takes the saved profile and the save request's state through pr
 Prop: `profile`, `defaultDraft`, `loading`, `error`.
 
 Event: `submit`, `discard`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/settings/settings-form.md](blocks/settings/settings-form.md).
 
@@ -8901,8 +8811,6 @@ Prop: `loading`, `error`, `errorSummary`, `deployment`, `steps`.
 With none of them set the block is Idle. `loading` wins over `error`, and `error` over `deployment`, so a redeploy after a failure reads Deploying.
 
 Event: `deploy`, `redeploy`, `edit`, `open-service`.
-
-Then delete `sample.ts`; the variants are the only files that import it.
 
 What each prop and event does, and the go-live code: [blocks/state/state-async-submit.md](blocks/state/state-async-submit.md).
 
@@ -9386,8 +9294,6 @@ Event: `submit`.
 
 The Section form takes `origins`, `originError`, `reloading` and `submitting`, and emits `submit` `(event, values)`, `cancel` `(event)` and `reload-origins` `(event)`. A chosen origin missing from a new `origins` list is cleared and flagged with Select an origin to continue.
 
-Then delete `sample.ts` and its imports in the variants.
-
 What each prop and event does, and the go-live code: [blocks/state/state-form-validation.md](blocks/state/state-form-validation.md).
 
 ## Do
@@ -9805,8 +9711,6 @@ Prop: `account`, `backHref`, `backLabel`, `homeHref`, `breadcrumb`.
 
 Event: `account-select`, `navigate`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/top-bar/top-bar-creation.md](blocks/top-bar/top-bar-creation.md).
 
 ## Do
@@ -9908,8 +9812,6 @@ The block takes its records through props and emits every action; it fetches not
 Prop: `applications`, `loading`, `error`.
 
 Event: `create`, `retry`, `delete`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/view/view-card.md](blocks/view/view-card.md).
 
@@ -10042,8 +9944,6 @@ Slot: `toolbar`, `document-fields`.
 
 Event: `refresh`, `retry`, `select`, `load-more`.
 
-Then delete `sample.ts` and its import, and give `fields` its own list. A log that streams instead of paging passes `moreRows` and appends the next events on `load-more`.
-
 What each prop and event does, and the go-live code: [blocks/view/view-events-explorer.md](blocks/view/view-events-explorer.md).
 
 ## Do
@@ -10131,7 +10031,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-events-ex
 - Surface: app
 - Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-file-browser")`
-- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress, `use-file-picker`
+- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress, `use-file-picker`, `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -10324,8 +10224,6 @@ Prop: `integrations`, `applications`, `loading`, `installing`, `error`, `install
 
 Event: `select`, `install`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/view/view-marketplace.md](blocks/view/view-marketplace.md).
 
 ## Do
@@ -10460,8 +10358,6 @@ Prop: `tables`, `history`, `result`, `loading`, `running`, `error`, `defaultTabl
 
 Event: `run`, `refresh-tables`, `create-table`, `delete-table`, `refresh`, `retry`, `insert-row`, `import-csv`, `add-column`, `delete-rows`, `delete-query`, `download-results`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/view/view-query-editor.md](blocks/view/view-query-editor.md).
 
 ## Do
@@ -10591,8 +10487,6 @@ Prop: `subject`, `rules`, `loading`, `error`, `saving`, `saveError`, `defaultEdi
 
 Event: `edit`, `create`, `retry`, `save`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/view/view-rule-list.md](blocks/view/view-rule-list.md).
 
 ## Do
@@ -10719,8 +10613,6 @@ The block takes its records through props and emits every action; it fetches not
 Prop: `resources`, `loading`, `error`.
 
 Event: `create`, `refresh`, `retry`, `row-action`, `delete`.
-
-Then delete `sampleResources` and its import (keep `sample.ts` only if you copied the Deployments state, which reads `sampleDeployments` from it). A list too large for the browser moves to `useCollection` server mode (`fetch`), which pages and filters on the server.
 
 What each prop and event does, and the go-live code: [blocks/view/view-table.md](blocks/view/view-table.md).
 
@@ -10853,8 +10745,6 @@ Prop: `templates`, `loading`, `error`, `defaultText`, `defaultPreview`.
 
 Event: `select`, `retry`.
 
-Then delete `sample.ts` and its import.
-
 What each prop and event does, and the go-live code: [blocks/view/view-template-browser.md](blocks/view/view-template-browser.md).
 
 ## Do
@@ -10969,8 +10859,6 @@ The block takes its matches through props and emits every action; it fetches not
 Prop: `matches`, `v-model:range`, `loading`, `error`, `defaultSelectedKeys`, `defaultOpen`, `defaultReason`, `allowing`, `allowError`.
 
 Event: `refresh`, `retry`, `allow`, `update:range`.
-
-Then delete `sample.ts` and its import.
 
 What each prop and event does, and the go-live code: [blocks/view/view-waf-tuning.md](blocks/view/view-waf-tuning.md).
 
@@ -11996,7 +11884,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 - Visual states per segment: `default`, `focus-visible`, `selected`, `disabled`.
 - Root: `role="radiogroup"`; consumer attributes (`id`, `aria-labelledby`, `aria-describedby`, …) land on it; `data-disabled` when `disabled`; `data-size` mirrors `size` (`small` | `medium` | `large`); `data-fluid` is present only when `fluid` is set.
-- Segment: `role="radio"` with `aria-checked`; `data-state="active"` on the selected segment and `"inactive"` on the others; `data-disabled` and the native `disabled` attribute on a disabled option (or every option when the root is `disabled`); a trailing lock icon (`az az-lock`) and `data-locked` on a locked option (see Locked options). Each segment carries a touch-target span that grows its hit area to 44px under `pointer-coarse`.
+- Segment: `role="radio"` with `aria-checked`; `data-state="active"` on the selected segment and `"inactive"` on the others; `data-disabled` and the native `disabled` attribute on a disabled option (or every option when the root is `disabled`); a trailing lock icon (`az az-lock`) and `data-locked` on a locked option (see Locked options). Each segment carries a touch-target span that grows its hit area to 44px tall under `pointer-coarse`, never sideways into a neighbour.
 - Indicator: an `aria-hidden` span positioned under the selected segment from its measured size and offset; hidden when nothing is selected or the selected segment is not rendered. It re-measures on option, selection and size changes (`ResizeObserver`).
 - Option normalization: a missing `label` falls back to `value`, then to `Option <n>`; a missing `value` falls back to `label`, then to the index.
 - Test ids: root `toggle-group` (consumer `data-testid` wins), `<testId>__indicator`, `<testId>__option`, `<testId>__option-lock`.
@@ -12010,7 +11898,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - Disabled options use the native `disabled` attribute, so they are skipped by arrow navigation, never take the tab stop and cannot be clicked.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons): selected text uses `var(--text-default)` on `var(--bg-selected)`, unselected text `var(--text-muted)` on `var(--bg-surface)`.
 - `motion-reduce:transition-none` on the segment color transition and on the indicator slide.
-- Touch target: segments fill the group height minus its padding (40px group at `size="large"`); under `pointer-coarse` a touch-target span extends each segment's hit area to 44px.
+- Touch target: segments fill the group height minus its padding (40px group at `size="large"`); under `pointer-coarse` a touch-target span extends each segment's hit area to 44px tall.
 
 ## Examples
 
@@ -12090,7 +11978,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | `steps` | `AgentActivityStep[]` | `[]` | false | The steps of the work, in order: each has a `key`, a `title`, a `status` from the shared status set and an optional `description`. The current step is the first running one, else the first failed one, else the last canceled one of a stopped run, else the last one that is not pending. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state of the step list when uncontrolled; collapsed shows only the current step. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the activity. Empty uses the locale catalog (`Agent activity`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## v-model
 
@@ -13316,7 +13204,7 @@ never read as new.
 | `loading` | `boolean` | `false` | false | The feedback is being sent: Send feedback shows a spinner and the form is locked. |
 | `title` | `string` | `''` | false | Dialog title. Empty uses the locale catalog (`What went wrong?`). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -14064,7 +13952,7 @@ _None. Data-driven. `PromptQueueItem`: `{ id: string; text: string; attachmentCo
 | `duration` | `number` | `undefined` | false | Seconds the reasoning took, when the server reports it. Without it the component measures from `streaming` turning on to turning off. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; collapsed is the default in a chat, where the response is the main content. |
 | `skippable` | `boolean` | `false` | false | Offers `Skip thinking` while streaming, for a model that can answer before it finishes reasoning. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -14377,7 +14265,7 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 | `items` | `SourcesItem[]` | `[]` | false | The sources behind the response, in citation order; item `n` is what `[n]` points at. |
 | `title` | `string` | `''` | false | Label of the pill that opens the panel. Empty shows `Sources` and names the pill with the count (`3 sources`). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Sub-components
 
@@ -14619,7 +14507,7 @@ components: `code-block`, `citation`._
 | `duration` | `number` | `undefined` | false | Seconds the helper has worked, when the host knows it. Without it the card counts its own running time, held while `pending`, frozen once the run ends. |
 | `stoppable` | `boolean` | `false` | false | Offers `Stop` while the status is `running` or `pending`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; the helper's messages start collapsed. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -14998,7 +14886,7 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 | `title` | `string` | `''` | false | What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. |
 | `status` | `'pending' \| 'streaming' \| 'running' \| 'success' \| 'error' \| 'canceled' \| 'denied'` | `'running'` | false | `pending` waits for authorization, `streaming` receives its arguments, `running` is in flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the reader refused it). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; details start collapsed. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -18413,7 +18301,7 @@ The frame is static apart from its resize handles.
 
 # Eyebrow
 
-> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in `--text-default` after a short bar in the logo orange (`--primary`, a decorative mark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`module-header`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
+> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in `--text-default`, optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`module-header`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
 
 - Import: `import Eyebrow from '@aziontech/webkit/eyebrow'`
 - Category: content · Surface: app · Structure: monolithic
@@ -18429,6 +18317,8 @@ The frame is static apart from its resize handles.
 - Keep the label to one or two words: it is set uppercase and, with the default `single-line`, stays on one line whenever it fits its container.
 - Turn `single-line` off only when the label can be longer than its container (narrow columns, translated copy); the label then wraps under `text-pretty`, which avoids a lone word on the last line.
 - Use a `prefix` from the preset set only (`//`, `<>`, `</>`); the prefix is decorative and hidden from screen readers (`aria-hidden="true"`), so never put meaning in it.
+- `//` marks marketing section headers (`module-header`, `call-to-action`, `media-split`, `hero-section`); `<>` / `</>` only for a band about code. No prefix in app or docs.
+- No colour mark (dash, bar) before the eyebrow (EB-1).
 - Use `cursor` for one eyebrow per view at most; it blinks four times and then stays solid, and never blinks under reduced motion.
 - Keep the semantic heading in the element after the Eyebrow; the Eyebrow itself carries no heading role.
 
@@ -18465,10 +18355,10 @@ The frame is static apart from its resize handles.
 
 - Static: no hover, focus, active or disabled states; the root is a non-interactive `div`.
 - Prefix: a `span` before the label is rendered only when `prefix` is not empty; it carries `aria-hidden="true"`.
-- Cursor: a decorative, `aria-hidden` `span` after the label is rendered only when `cursor` is set; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
+- Cursor: a decorative, `aria-hidden` `span` (`${testId}__cursor`) is rendered only when `cursor` is set, inline at the end of the label, so a wrapped label keeps it after its last word; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
 - Wrapping: with `singleLine` (default) the root carries `data-single-line` and the prefix turns `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
-- Test ids: root `eyebrow` (consumer `data-testid` wins); the bar `<root>__mark`; the label `<root>__label`.
+- Test ids: root `eyebrow` (consumer `data-testid` wins); the label `<root>__label`.
 - Reflow: the root is capped at the width of its container, and a label that does not fit wraps instead of overflowing at any width, at 200% zoom and with translated copy (no viewport breakpoint involved).
 
 ## Accessibility
@@ -18476,7 +18366,7 @@ The frame is static apart from its resize handles.
 - Visible focus: not applicable — the component renders no focusable element.
 - Keyboard map: none; the component is not interactive.
 - ARIA: no role; the root is a plain `div` and the label is read as text. The prefix `span` is decorative and carries `aria-hidden="true"`, so only the label is announced; the cursor `span` is empty and contributes no text.
-- Contrast: the prefix and the label use `var(--text-default)` (≥4.5:1 on every surface). The logo orange appears only as the bar before them (`<root>__mark`, `aria-hidden`), a decorative mark with no contrast requirement; every part passes WCAG 2 AA with no exception (owner decision 2026-11-22).
+- Contrast: the prefix and the label use `var(--text-default)` (≥4.5:1 on every surface); every part passes WCAG 2 AA with no exception (owner decision 2026-11-22).
 - `motion-reduce:animate-none` on the cursor's `animate-blink-settle`.
 - Pause, Stop, Hide (WCAG 2.2.2): the cursor blinks four times and stops by itself after 4 seconds, resting solid, so it needs no pause control.
 - Touch target: not applicable (non-interactive).
@@ -18865,7 +18755,8 @@ name.
 - A `name` that resolves to no scene — empty, or not in the registry — renders the **placeholder**: a tinted frame reading `PLACE DESIGN ASSET`, marked `data-placeholder`, on the 592×300 canvas. An unregistered `name` also warns in the console, naming where the valid names are listed; neither case throws, and neither collapses the layout. The placeholder is always decorative, `ariaLabel` or not: it draws no scene, so announcing a description of the missing artwork would describe something that is not on the page.
 - While a registered scene's SVG is still resolving, the frame already on screen stays — the placeholder never flashes in front of a scene that is about to arrive.
 - Theme: each colour of the export palette maps to one `--illustration-*` role (see § Tokens), resolved where the scene renders, so a scene inside a `[data-theme]` subtree follows that subtree. A translucent ground colour is a drop shadow and stays as drawn; colours that read the same in both themes (window controls, framework marks, the dot map) stay as drawn too. Masks, clip paths and filters are never repainted.
-- A run of eight or more sibling square dots of one paint (a dot map, a pixel grid) is drawn as one path holding every dot, so a dotted scene costs a few hundred nodes, not thousands; a dot that differs in paint or shape breaks the run and stays its own path.
+- A dotted scene (a dot map, a pixel grid) is stored with the dots of one paint merged into one path, so it draws a few hundred nodes; a standards test caps every inline asset at 200 paths.
+- Every scene fills its frame: the asset's `viewBox` is cropped to the drawn artwork (glows included) with a small margin, at the frame's aspect ratio. Artwork that runs off an edge on purpose keeps the full frame.
 - Every instance scopes the SVG's internal ids, so two scenes — or two copies of one — on the same page never resolve each other's gradients, masks or filters.
 
 ## Accessibility
@@ -21102,7 +20993,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 | `title` | `string` | `''` | false | Panel title and trigger label. Empty uses the locale catalog. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 | `preferences` | `CollectionPreferencesValue` | `—` | false | Two-way value (`v-model:preferences`). |
 
 ## Events
@@ -21690,7 +21581,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 | `disabled` | `boolean` | `false` | false | Disables the trigger: the menu does not open. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `modelValue` | `FilterMenuModel` | `—` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Sub-component imports
 
@@ -23849,6 +23740,7 @@ The imperative API is backed by a small reactive store composable, declared here
 - `data-removing` on a `Toaster` item while its exit transition runs (switches the transition to the exit token).
 - Progress: an entry with `progress` (set by `toast.progress(message, value, options?)`, which defaults `duration` to `0`) renders `__progress` under the copy: a rounded `Progress` bar named by the toast message (`role="progressbar"`, `aria-valuenow` clamped to 0–100) and the percentage formatted with `Intl.NumberFormat` (`style: 'percent'`) in the provider's locale, `aria-hidden` so the region does not announce every step. A later call with the same `id` replaces the entry in place; a typed toast with that `id` drops the bar.
 - `data-position` on the `Toaster` container: one of the six `position` values; drives the fixed anchoring (`top`/`bottom` × `start`/`center`/`end`, where `start` is the left edge under `ltr` and the right edge under `rtl`) and the enter/leave translate direction.
+- Bottom offset: a `bottom-*` region sits `var(--spacing-md)` above the viewport bottom plus `--toast-offset-bottom` (set by the app for its own bottom chrome) plus `--save-bar-height` (published by a mounted `SaveBar`), so a toast never covers either. Test: `src/test/save-bar-toast.test.ts`.
 - `data-state="open|closed"` on each `Toaster` region: `open` while the stack is laid out expanded (the `expand` prop, hover or focus), `closed` while it overlaps into a peek.
 - The dismiss control (`ToastClose`) renders, and is **always visible**, only when `closable` is set — the per-toast `closable` option, or the Toaster's `closable` default (the per-toast option overrides). When unset, no close control is shown.
 - Announcements go through the two hidden live regions: `danger` to `__live-assertive`, every other severity to `__live-polite`; items inside a Toaster carry no role of their own and the visible regions are not live, so each toast is announced once and never twice. A `ToastItem` rendered outside a Toaster keeps `role="status"` (or `role="alert"` for `danger`). Focus is never stolen (the region is not focused on mount). Tests: `toast.test.ts` › live region (spec), Escape dismisses the focused toast.
@@ -23938,7 +23830,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | `title` | `string` | `''` | false | Overrides the header text. Empty builds it from the operation and the counts. |
 | `floating` | `boolean` | `true` | false | Fixes the card to the inline-end bottom corner of the viewport; false renders it in the flow. |
 | `cancelable` | `boolean` | `true` | false | Shows Cancel on running and waiting files and Cancel all in the header. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -24255,7 +24147,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | `readonly` | `boolean` | `false` | false | Marks the field read-only; value is visible but cannot change via interaction. |
 | `invalid` | `boolean` | `false` | false | Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too. |
 | `name` | `string` | `''` | false | HTML name for form submission. |
-| `modelValue` | `TModel` | `undefined as never` | false | Two-way value (`v-model`). |
+| `modelValue` | `TModel` | `undefined` | false | Two-way value (`v-model`). |
 
 ## v-model
 
@@ -24487,7 +24379,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | `invalid` | `boolean` | `false` | false | Marks the field invalid (`aria-invalid`, danger border). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -24634,7 +24526,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 | `showApply` | `boolean` | `true` | false | Stages edits in a draft and shows Cancel and Apply; when false, every edit commits immediately and neither button renders. |
 | `split` | `boolean` | `false` | false | Renders the trigger as a split control with a separate chevron affordance. |
 | `modelValue` | `DatePickerValue` | `null` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 | `timeZone` | `string` | `''` | false | Two-way value (`v-model:timeZone`). |
 
 ## Events
@@ -24692,6 +24584,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 - Field labels: the visible Date label is a `<label for>` bound to its date field through `useId()`; the time field beside it carries its own `aria-label` (`Time`), so every field has a programmatic accessible name.
 - Keyboard map: the trigger toggles the popover with `Enter`/`Space` and exposes `aria-haspopup`/`aria-expanded`; `Escape` and click-outside close it and return focus to the trigger; focus is trapped in the open popover. Opening focuses the selected day (else today, else the first enabled day); `Shift+Tab` reaches the month controls. In the grid, `Tab` enters at the focused day, `Arrow` keys move focus (paging the visible month when crossing its first/last day), `Enter`/`Space` selects, `Home`/`End` move to the first/last day of the week (the grid starts on Sunday; logical, so the same under `dir="rtl"`), `PageUp`/`PageDown` change month, `Shift+PageUp`/`Shift+PageDown` change year. The caption's Month and Year selects keep the `select` keyboard map (`Enter`/`Space`/`ArrowDown` open the list, the arrows move, typing jumps to an option, `Escape` closes only the list and leaves the popover open). Tests: `date-picker.test.ts` › Home and End, Shift+PageDown and Shift+PageUp; jumps to the month and year picked in the caption selects; bounds the year list by min and max. Cancel, Apply, Clear and the fields are all reachable by `Tab`.
 - ARIA: the month grid uses `role="grid"` with `role="row"` and `role="gridcell"` descendants; the selected cell sets `aria-selected="true"`; the current date sets `aria-current="date"`; navigation buttons carry `aria-label`; the caption's Month and Year selects are `combobox` buttons named `Month` and `Year` from the catalog, showing the visible month and year; the popover is a `dialog` named by the catalog (`Choose date`); decorative icons are `aria-hidden="true"`.
+- In a required `Field`, the trigger's `aria-describedby` adds the Field's `requiredId`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:animate-none` on the popover and `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px (or justified deviation): day cells use a 32×32 px (`small`), 36×36 px (`medium`), or 40×40 px (`large`) hit area; `small`/`medium` are a justified deviation for dense month-grid layouts, `large` meets the 40 px target.
@@ -24785,7 +24678,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token of the trigger and the panel controls. |
 | `modelValue` | `DateRangeValue \| null` | `null` | false | Two-way value (`v-model`). |
 | `timeZone` | `string` | `''` | false | Two-way value (`v-model:timeZone`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 | `refreshInterval` | `number` | `300` | false | Two-way value (`v-model:refreshInterval`). |
 
 ## Events
@@ -24818,7 +24711,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 - Visible focus: a 2 px `--ring-color` ring inset on each trigger segment; the quick ranges ring their row when the radio inside has focus.
 - Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select, down the first column and then the second, the order they are read in); Custom range is a link-variant button after them (`Enter`/`Space` shows the Duration and Unit fields and moves focus to Duration), and Back to quick ranges is the first button of that view (it returns to the list and focuses Custom range); on the Absolute tab the order is the grid (or the Start and End fields), End at now, then the view button: **Enter dates** (`Enter`/`Space` shows the fields and moves focus to the Start date) and **Show calendar** (`Enter`/`Space` shows the grid and moves focus to its focusable day); the End at now checkbox toggles with `Space`; then Refresh every, Cancel and Apply in the footer; Unit, Refresh every and the calendar's Month and Year are WebKit `Select`s (`Enter`/`Space`/`ArrowDown` open the list, the arrows move, typing jumps to an option, `Escape` closes only the list); the time zone selector is a `Combobox`; the range type lists Relative before Absolute; the grid keeps the `date-picker` keyboard map; a time field keeps the `combobox` keyboard map (focus or `ArrowDown` opens the 30-minute list, `Enter` takes the highlighted time or the typed one, `Escape` closes only the list); `Escape` closes without committing and returns focus to the trigger. On a phone a tap on the backdrop closes the sheet like Cancel.
-- ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range and, with auto refresh on, the interval (inside a `Field` with no `ariaLabel`, the Field label names it and the trigger also carries the Field's `aria-describedby` and `aria-invalid`); the panel is a named `dialog`; the custom duration is a `group` named "Custom range" whose duration and unit have visible labels; the quick ranges are a `fieldset` with a `legend`; End at now is a `checkbox` named by its visible `label`; the view switch is a native `button` named by its visible text; Unit is a `combobox` button (WebKit `Select`) labelled by its visible text through `aria-labelledby`, and Refresh every is a `combobox` button named "Refresh every" by `aria-label` (it shows only the glyph and the short interval); the calendar's Month and Year selects are named `Month` and `Year`; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons; the sheet backdrop is `aria-hidden`.
+- ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range and, with auto refresh on, the interval (inside a `Field` with no `ariaLabel`, the Field label names it and the trigger also carries the Field's `aria-describedby` and `aria-invalid`, plus `requiredId` when required); the panel is a named `dialog`; the custom duration is a `group` named "Custom range" whose duration and unit have visible labels; the quick ranges are a `fieldset` with a `legend`; End at now is a `checkbox` named by its visible `label`; the view switch is a native `button` named by its visible text; Unit is a `combobox` button (WebKit `Select`) labelled by its visible text through `aria-labelledby`, and Refresh every is a `combobox` button named "Refresh every" by `aria-label` (it shows only the glyph and the short interval); the calendar's Month and Year selects are named `Month` and `Year`; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons; the sheet backdrop is `aria-hidden`.
 - Targets: options are 32 px high (44 px on `pointer: coarse`); the selects are 44 px high and the step buttons 44 px wide on `pointer: coarse`.
 - The custom duration is one two-column grid (a third for the duration, two thirds for the Unit select); Refresh every, Cancel and Apply share the footer row, Refresh every at the start edge and the buttons at the end edge, in both directions (checked at 320, 390 and 1280 px, and right-to-left at 390 px, in `src/test/date-picker-readability.test.ts`).
 - Quick ranges layout: the `legend` and every option are padded `var(--spacing-xs)` inline, so the heading and the option labels start on one inline edge in both directions (checked left-to-right and right-to-left in `src/test/date-picker-readability.test.ts`).
@@ -24918,9 +24811,9 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ## Sub-components
 
-The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated `controlId`, the reactive `invalid` / `disabled` / `required` flags, `describedBy` (the ids of the mounted `Field.Description` and `Field.Error` parts), `labelledBy` (the ids of the mounted `Field.Title` parts) and `register`. Controls read it through the shared `useFieldControl` composable (`src/composables/use-field-control`); an explicit prop or attribute on the control always wins over the Field, except `aria-describedby`: the control's own ids are joined with the Field's description and error ids (deduplicated), so a consumer description never hides the Field's error. Composite controls (`Select`, `MultiSelect`, `PhoneInput`) consume the context on their root and provide `null` below it, so their inner search inputs never take the field id. Every part works outside a `Field` too (it then reads no state). Member names mirror the anatomy; there is no `Trigger`/`Content` pair because the field has no open/closed state.
+The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated `controlId`, the reactive `invalid` / `disabled` / `required` flags, `describedBy` (the ids of the mounted `Field.Description` and `Field.Error` parts), `labelledBy` (the ids of the mounted `Field.Title` parts), `requiredId` (id of the hidden "Required" text in `Field.Label`) and `register`. Controls read it through the shared `useFieldControl` composable (`src/composables/use-field-control`); an explicit prop or attribute on the control always wins over the Field, except `aria-describedby`: the control's own ids are joined with the Field's description and error ids (deduplicated), so a consumer description never hides the Field's error. Composite controls (`Select`, `MultiSelect`, `PhoneInput`) consume the context on their root and provide `null` below it, so their inner search inputs never take the field id. Every part works outside a `Field` too (it then reads no state). Member names mirror the anatomy; there is no `Trigger`/`Content` pair because the field has no open/closed state.
 
-- `field-label/field-label.vue` — `<label>` whose `for` defaults to the Field's `controlId`; appends the Required marker (`*` + "(Required)") when the Field is `required` or its own `required` prop is set (for a label s…
+- `field-label/field-label.vue` — `<label>` whose `for` defaults to the Field's `controlId`; appends the Required marker (a lone `*`, hidden from assistive tech) and, in a required Field, a `hidden` "Required" text (`re…
   - Props: `hint` (`string`, default `''`) — short explanation revealed by a `Hint` glyph.
   - Events: _none_.
   - Slots: `default` — label text, or a horizontal `Field` for a choice card.
@@ -24954,7 +24847,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 - Visible focus: the control keeps its own ring; a choice card shows `has-[:focus-visible]:ring-2 ring-(--ring-color) ring-offset-1 ring-offset-(--bg-canvas)` around the whole card.
 - Keyboard map: the Field adds no keys; `Tab` reaches the control, and clicking `Field.Label` focuses or toggles it.
-- ARIA: root `role="group"`; `Field.Label` `for` → control `id`; control `aria-describedby` → every mounted `Field.Description` and `Field.Error` id; control `aria-invalid` when the Field is `invalid` or a `Field.Error` is mounted; `required` / `aria-required` when it is `required`; `Field.Error` `role="alert"`; `Field.Set` is a native `fieldset` named by its `legend`; the Required marker's `*` is `aria-hidden` and the word "(Required)" is read.
+- ARIA: root `role="group"`; `Field.Label` `for` → control `id`; control `aria-describedby` → every mounted `Field.Description` and `Field.Error` id; control `aria-invalid` when the Field is `invalid` or a `Field.Error` is mounted; `required` / `aria-required` when it is `required`; `Field.Error` `role="alert"`; `Field.Set` is a native `fieldset` named by its `legend`; the `*` is `aria-hidden`; a control whose role cannot take `aria-required` (DatePicker, DateRangePicker, FileDropzone, TagEditor) adds `requiredId` to its `aria-describedby`.
 - Contrast ≥4.5:1 for label, description and error text in every tone, including disabled.
 - `motion-reduce:transition-none` on the choice card transition.
 - Touch target: the whole choice card is the target; a horizontal Field's label extends the control's target.
@@ -25083,7 +24976,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 - Keyboard map: none on the dropzone. Drag and drop from the OS is a pointer gesture with no keyboard equivalent on the target. The keyboard path is the consumer's Browse button, which opens a native file input and reaches the same outcome. `Escape` during a drag hides the overlay (window `keydown` fallback; browsers also cancel the drag natively).
 - No `@click` on the root: clicking the region does nothing, so there is no click-without-key handler. The Browse button is the click target.
 - ARIA, inline: the root is a `<div role="group">` with `aria-labelledby` pointing at the title and `aria-describedby` pointing at the description (only when `description` is non-empty), both ids from `useId()`. A screen reader therefore reads the slotted Browse button in context ("Drop files to upload, group, PNG or JPG, up to 5 MB each, Browse files, button"). The title is a `<p>`, not a heading: the page owns its heading outline. When `disabled`, the group carries `aria-disabled="true"`, so the dimmed title and description are announced as part of a disabled control and fall under the WCAG 1.4.3 exemption for inactive components.
-- Inside a `Field` (inline): the group reads the field through `useFieldControl` — it takes the field's `id`, prepends `Field.Title` to `aria-labelledby`, appends `Field.Description` / `Field.Error` to `aria-describedby`, sets `aria-invalid` from the field's (or its own) `invalid`, and the field's `disabled` disables it (`aria-disabled`, drops ignored).
+- Inside a `Field` (inline): the group reads the field through `useFieldControl` — it takes the field's `id`, prepends `Field.Title` to `aria-labelledby`, appends `Field.Description` / `Field.Error` to `aria-describedby`, sets `aria-invalid` from the field's (or its own) `invalid`, adds `requiredId` to `aria-describedby` when required, and the field's `disabled` disables it (`aria-disabled`, drops ignored).
 - ARIA, overlay: the root is `aria-hidden="true"`. It is a pointer-only duplicate of an affordance that must exist elsewhere on the page, and it renders no interactive content.
 - No `aria-live` in the component. Announcing every drag that crosses the window is noise, and the outcome that matters (files accepted or skipped) is the consumer's to announce from `drop` / `reject` (a `toast`, or a live region on its file list). `aria-dropeffect` / `aria-grabbed` are deprecated in WAI-ARIA 1.1 and are not used.
 - The icon is decorative: `aria-hidden="true"`.
@@ -25769,7 +25662,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `error` | `string` | `''` | false | Message shown in place of the options when they failed to load; empty shows the options. |
 | `emptyTitle` | `string` | `''` | false | Text of the list when no option is visible. Empty uses the locale catalog. |
 | `modelValue` | `TValue[]` | `() => []` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -26352,7 +26245,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | false | Disables both the dial-code Select and the internal input. |
 | `readonly` | `boolean` | `false` | false | Marks the internal input read-only; dial-code Select is also disabled while readonly. |
-| `required` | `boolean` | `false` | false | Applies the required border on the InputGroup and sets required on the input. |
+| `required` | `boolean` | `false` | false | Sets required and aria-required on the phone number input; it draws no border of its own. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border on the InputGroup and sets aria-invalid on the input. |
 | `name` | `string` | `''` | false | Form field name. Set, a hidden input submits the full E.164 number (dial code followed by the digits, empty while there are none) under this name; the visible input carries no name, so a native `form` never posts a national number without its country. |
 | `searchPlaceholder` | `string` | `''` | false | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). |
@@ -26427,7 +26320,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 </template>
 ```
 
-1 more example(s) in [components/phone-input.md](components/phone-input.md).
+2 more example(s) in [components/phone-input.md](components/phone-input.md).
 
 ---
 
@@ -26785,8 +26678,8 @@ packages/webkit/src/components/input/radio-group/
 | `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger. |
 | `displayValue` | `(value: TValue) => string` | `undefined` | false | Custom formatter used by the trigger to render the selection; receives the current `modelValue`, typed as the bound model. Unset, the trigger shows the selected options' labels. |
 | `name` | `string` | `''` | false | Form field name. Set, the root renders one hidden input per selected value (`String(value)`, objects as JSON) so a native `form` and `FormData` submit the selection; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the value out, as a native control does. |
-| `modelValue` | `TValue` | `undefined as never` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `modelValue` | `TValue` | `undefined` | false | Two-way value (`v-model`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -27184,7 +27077,7 @@ packages/webkit/src/components/input/radio-group/
 - ARIA: rows, labels, errors and announcements come from `attribute-editor`; Undo is named "Undo removal of tag n"; a marked tag keeps a visible note ("This tag will be removed when you save.").
 - Contrast ≥4.5:1 from the semantic text tokens.
 - Touch target: Remove and Undo are 32 px buttons (`medium`).
-- Inside a `Field`: the root is a `role="group"` that reads the field through `useFieldControl` — `id` from the field, `aria-labelledby` from `Field.Title`, `aria-describedby` from `Field.Description` / `Field.Error`, `aria-invalid` + `data-invalid` from the field's `invalid`, and the field's `disabled` disables every row. Each cell keeps its own inner field from `attribute-editor`, so the row inputs never take the outer field's id.
+- Inside a `Field`: the root is a `role="group"` that reads the field through `useFieldControl` — `id` from the field, `aria-labelledby` from `Field.Title`, `aria-describedby` from `Field.Description` / `Field.Error` (plus `requiredId` when required), `aria-invalid` + `data-invalid` from the field's `invalid`, and the field's `disabled` disables every row. Each cell keeps its own inner field from `attribute-editor`, so the row inputs never take the outer field's id.
 
 ## Examples
 
@@ -28909,7 +28802,7 @@ context, so a consumer never wires one part to the other.
 
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop on the root
-- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--toast-offset-bottom` (so the `toaster` stacks above the bar), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it, whether the content scrolls in a scroll region of its own or the page itself scrolls; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. Every other variant sits at the bottom too, so it publishes `--toast-offset-bottom` the same way (a toast never covers its Save or Discard) but no `--save-bar-inset` and no reserved height.
+- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--save-bar-height` (so the `toaster` stacks above the bar, on top of any `--toast-offset-bottom` the app sets for its own bottom chrome, which the bar never overwrites), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it, whether the content scrolls in a scroll region of its own or the page itself scrolls; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. Every other variant sits at the bottom too, so it publishes `--save-bar-height` the same way (a toast never covers its Save or Discard) but no `--save-bar-inset` and no reserved height.
 - Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Accessibility
@@ -29395,7 +29288,7 @@ context, so a consumer never wires one part to the other.
 
 ## States
 
-- Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set), `required` (after the title, the same marker a required `Field.Label` renders: a `*` hidden from assistive tech, then the `field.required` string, "(Required)" in English)
+- Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set), `required` (after the title, the same marker a required `Field.Label` renders: a lone `*` hidden from assistive tech)
 - `data-row-variant` mirrors `variant` and `data-depth` mirrors `depth` on the root; `data-stackable` is set when `stackable` is on
 - Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
 - Responsive: the row is the `@container/settings-row`. The description wraps in full at every width; it is never clamped or cut with an ellipsis. From `@md` of the row up, a `field` control keeps the end cell, capped at the 3xs container; below `@md` (a phone) it moves under the copy at full width. With `stackable` the move happens below `@lg` instead. A `compact` control stays at the end side at every width; a `stacked` control is always under the copy.
@@ -29406,7 +29299,7 @@ context, so a consumer never wires one part to the other.
 - Keyboard map: `Tab` reaches the control; the row is not interactive.
 - ARIA: the row is an `Item` (a `listitem` inside `Item.List`); the control carries `aria-label` equal to the title, and a message is linked with `aria-describedby`.
 - No truncation: the description shows its full text to every user at every width (WCAG 1.4.10 Reflow). `hint` holds the longer explanation: its glyph is a focusable button whose accessible name and tooltip are the hint text, reachable with `Tab` and revealed on hover or focus.
-- Contrast ≥4.5:1 for the title and the muted description. The required `*` is `var(--text-default)`, like the `Field.Label` asterisk (the logo orange is never a text colour); it is `aria-hidden`, and the "(Required)" text after it is what a screen reader reads. The control in the slot still sets its own `required`.
+- Contrast ≥4.5:1 for the title and the muted description. The required `*` is `var(--text-default)`, like the `Field.Label` asterisk (the logo orange is never a text colour); it is `aria-hidden`, so a screen reader learns it from the control in the slot, which sets its own `required`.
 
 ## Examples
 
@@ -30226,7 +30119,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 | --- | --- | --- | --- | --- |
 | `disabled` | `boolean` | `false` | false | Leaves the area to the browser's native context menu and never opens the panel. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the menu panel; when empty the panel has no name of its own. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -30414,7 +30307,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 | `sideOffset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
 | `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -32166,7 +32059,7 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 
 # Command
 
-> Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the `Dialog` primitive for its panel, backdrop, focus trap, scroll-lock, and Escape handling, and adds the palette chrome on top — a search `Input`, a scrollable `List` of `Item`s organized into optional `Group`s, an `Empty` state, and `Separator`s. The root owns open/closed state (controlled or uncontrolled), a global open shortcut (⌘K / Ctrl+K), the ranked filter, nested pages, and roving active-item navigation. The filter is fuzzy and ranked: an item matches on its label (prefix, then word start, then anywhere, then an in-order abbreviation such as `dpl` for "Deploy"), its `value`, or its extra `keywords` (a keyword equal to the query, then one that starts with it, then one that contains it, all below a label prefix or word-start match); better matches rise to the top of their group, groups rise by their best item, and the matched characters of a plain-text label are emphasized. An item can open a `Page` — a nested list such as "Switch project" — with a back control in the search bar. It differs from `dropdown` (a small trigger-anchored menu) and `select` (a form value picker): Command Menu is a full-screen search-first launcher for actions, not a positioned menu or an input control.
+> Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the `Dialog` primitive for its panel, backdrop, focus trap, scroll-lock, and Escape handling, and adds the palette chrome on top — a search `Input`, a scrollable `List` of `Item`s organized into optional `Group`s, an `Empty` state, and `Separator`s. The root owns open/closed state (controlled or uncontrolled), a global open shortcut (⌘K / Ctrl+K), the ranked filter, nested pages, and roving active-item navigation. The filter is fuzzy and ranked: an item matches on its label (prefix, then word start, then anywhere, then an in-order abbreviation such as `dpl` for "Deploy"), its `value`, or its extra `keywords` (a keyword equal to the query, then one that starts with it, then one that contains it, all below any match in the label and above an abbreviation, since the reader cannot see why a keyword matched); better matches rise to the top of their group, groups rise by their best item, and while any label matches the query a group shows at most three matches that come only from its values or keywords (its best three), so a strong label match in a later group is not pushed under a run of hidden-keyword matches, and the matched characters of a plain-text label are emphasized. An item can open a `Page` — a nested list such as "Switch project" — with a back control in the search bar. It differs from `dropdown` (a small trigger-anchored menu) and `select` (a form value picker): Command Menu is a full-screen search-first launcher for actions, not a positioned menu or an input control.
 
 - Import: `import CommandRoot from '@aziontech/webkit/command-root'`
 - Compound import (dot notation, not tree-shakeable): `import Command from '@aziontech/webkit/command'`
@@ -32206,7 +32099,7 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
 | `dismissible` | `boolean` | `true` | false | When true, backdrop click and Escape close the palette. |
 | `shortcut` | `string` | `'meta+k'` | false | Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 | `pageKey` | `string` | `''` | false | Two-way value (`v-model:pageKey`). |
 
 ## Events
@@ -32426,7 +32319,7 @@ packages/webkit/src/components/overlay/command/
 | `disabled` | `boolean` | `false` | false | Disables the confirm button, for a confirmation that needs input first. |
 | `confirmationPhrase` | `string` | `''` | false | A phrase the reader must type, exactly and with the same case, before confirm enables; usually the resource name. Empty asks for no typing. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -32537,7 +32430,7 @@ packages/webkit/src/components/overlay/command/
 | `closable` | `boolean` | `true` | false | Shows the close (X) button at the end of the dialog header. False removes it; Escape and overlay click still follow `dismissible`. |
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when true, overlay click and Escape close the dialog. It does not govern the close button; see `closable`. |
 | `size` | `DialogSize` | `'medium'` | false | Panel max-width preset passed to the inner Panel. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -32704,7 +32597,7 @@ packages/webkit/src/components/overlay/command/
 | `modal` | `boolean` | `true` | false | Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, `aria-modal` false; Escape, the close button and focus restore still work. |
 | `side` | `DrawerSide` | `'end'` | false | Edge the drawer panel slides from, in reading direction (`start` or `end`). |
 | `size` | `DrawerSize` | `'large'` | false | Panel width preset: `small` `--container-sm`, `medium` 30% of the screen (at least `--container-md`), `large` 40% of the screen (at least `--container-lg`), the widest and the default. Height is always 100% viewport. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -32864,7 +32757,7 @@ packages/webkit/src/components/overlay/command/
 | `closeDelay` | `number` | `300` | false | Milliseconds after the pointer or focus leaves the trigger and the card before the card closes. |
 | `disabled` | `boolean` | `false` | false | Never opens the card. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state while `v-model:open` is unbound. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -33127,7 +33020,7 @@ packages/webkit/src/components/overlay/command/
 | `size` | ``PopoverSize` (`'small' \| 'medium' \| 'large'`)` | `undefined` | false | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -33297,7 +33190,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `title` | `string` | `''` | false | Dialog title. Empty uses the locale catalog (`Keyboard shortcuts`). |
 | `shortcut` | `string` | `'?'` | false | Keys that open the list, in the `useShortcuts` syntax; listed under the general group. Empty binds no key. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -33446,7 +33339,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `delay` | `number` | `200` | false | Hover-open delay in milliseconds. |
 | `disabled` | `boolean` | `false` | false | Disables tooltip activation. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -33475,7 +33368,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger wrapper.
 - Hoverable (WCAG 1.4.13): the panel takes the pointer. Leaving the trigger closes the tooltip after a 100 ms grace, and entering the panel within the grace keeps it open (so text can be read under magnification); leaving the panel closes it after the same grace. Tests: `tooltip.test.ts` › hoverable content.
 - Touch: a long-press (500 ms `pointerdown` with `pointerType` `touch`) opens the tooltip; it hides 1.5 s after the finger lifts. A mouse press never opens it.
-- Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. `Escape` is taken only while the tooltip is open: closing removes the trigger's `aria-describedby` at once, and a page that reads open overlays (`useEscapeToCancel`) counts a tooltip only while a control still points to it, so the next `Escape` reaches the page even while the leave animation runs. Tests: `tooltip.test.ts` › keyboard map (spec).
+- Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. `Escape` is taken only while the tooltip is open: closing removes the trigger's `aria-describedby` at once, and a page that reads open overlays (`useEscapeToCancel`) counts a tooltip only while a control still points to it, so the next `Escape` reaches the page even while the leave animation runs. A tooltip closed by `Escape` stays closed while the pointer rests on the trigger (a browser fires `mouseenter` when the panel disappears under a still pointer); it opens on hover again only after the pointer leaves the trigger and comes back, and on the next focus as usual. Tests: `tooltip.test.ts` › keyboard map (spec).
 - Nested overlays: while open, the tooltip joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (it never takes focus, so it does not pause a dialog's focus trap). Inside a `Dialog`, `Drawer` or `Popover`, the first `Escape` closes only the tooltip; the next one reaches the host. Tests: `tooltip.test.ts` › inside an open Dialog, Escape closes only the tooltip.
 - ARIA: `role="tooltip"` on the panel; the slotted control references the panel via `aria-describedby` (merged into a WebKit `Button` / `IconButton` or native control at render, otherwise forwarded onto the first focusable element in the slot after mount; on the wrapper only when the slot has none). The wrapper itself has no `role` and no tab stop. `aria-hidden="true"` when `data-state="closed"`.
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.
@@ -33528,7 +33421,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ## Do
 
-- Mount one `ConfigProvider` at the app root and pass the locale the user chose, or leave it unset to follow the device; do not nest one per page.
+- Mount one `ConfigProvider` at the app root and pass the locale the user chose, or leave it unset to follow the device; do not nest one per page. A nested provider (a right-to-left preview, a fixed `now` for one panel) inherits from the provider around it every setting it does not set: the locale, the registered catalogs, the `messages` overrides (its own merge over the outer ones), `now` and `timeZone`.
 - Register every language the app offers in `catalogs` (`{ 'pt-BR': ptBR, es }`), imported from `@aziontech/webkit/locales/<tag>`; a `pt-BR` or `es` locale with no registered catalog falls back to English and warns once in development.
 - Use a full BCP 47 tag (`pt-BR`, not `pt`); a tag with no registered catalog falls back to the same language, then to English.
 - Override built-in strings through `messages` (partial, deep-merged), not by forking components.

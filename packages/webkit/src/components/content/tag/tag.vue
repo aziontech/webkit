@@ -2,6 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import type { Severity } from '../../../utils/severity'
+  import { labelDirection } from '../../../utils/text-direction'
 
   export type { Severity } from '../../../utils/severity'
 
@@ -97,7 +98,7 @@
     <span
       v-else-if="label"
       :data-testid="`${testId}__label`"
-      dir="auto"
+      :dir="labelDirection(label)"
     >
       {{ label }}
     </span>

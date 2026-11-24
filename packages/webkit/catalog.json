@@ -3543,7 +3543,7 @@
     "group": "typography",
     "type": "typography",
     "value": {
-     "font-family": "Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif",
+     "font-family": "Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif",
      "font-size": "0.875rem",
      "font-weight": "400",
      "line-height": "1.25",
@@ -3555,7 +3555,7 @@
     "group": "typography",
     "type": "typography",
     "value": {
-     "font-family": "Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif",
+     "font-family": "Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif",
      "font-size": "0.75rem",
      "font-weight": "400",
      "line-height": "1.25",
@@ -4704,7 +4704,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -5231,7 +5231,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -5892,7 +5892,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -6001,7 +6001,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -6155,7 +6155,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -6225,7 +6225,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -11971,7 +11971,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     },
@@ -14478,7 +14478,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -14709,7 +14709,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     },
@@ -14857,7 +14857,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     },
@@ -15019,7 +15019,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     },
@@ -15656,7 +15656,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Applies the required border on the InputGroup and sets required on the input."
+     "doc": "Sets required and aria-required on the phone number input; it draws no border of its own."
     },
     {
      "name": "invalid",
@@ -16220,7 +16220,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -16287,7 +16287,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -16714,7 +16714,7 @@
     {
      "name": "modelValue",
      "type": "TModel",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
     }
@@ -17050,7 +17050,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -17102,7 +17102,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -17191,7 +17191,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -17274,7 +17274,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -17508,7 +17508,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -17678,7 +17678,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -17833,14 +17833,14 @@
     {
      "name": "modelValue",
      "type": "TValue",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
     },
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -17942,14 +17942,14 @@
     {
      "name": "modelValue",
      "type": "TValue",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
     },
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -22441,7 +22441,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -22503,7 +22503,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     },
@@ -22570,7 +22570,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     },
@@ -22715,7 +22715,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -22774,7 +22774,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -22937,7 +22937,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -23042,7 +23042,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -23115,7 +23115,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -23360,7 +23360,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -23440,7 +23440,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -23546,7 +23546,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -23626,7 +23626,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -29803,6 +29803,18 @@
    "kind": "util",
    "treeShakeableImport": "@aziontech/webkit/utils/focus-invalid"
   },
+  "utils/leave-link": {
+   "import": "@aziontech/webkit/utils/leave-link",
+   "target": "./src/utils/leave-link.ts",
+   "kind": "util",
+   "treeShakeableImport": "@aziontech/webkit/utils/leave-link"
+  },
+  "utils/radio-list": {
+   "import": "@aziontech/webkit/utils/radio-list",
+   "target": "./src/utils/radio-list.ts",
+   "kind": "util",
+   "treeShakeableImport": "@aziontech/webkit/utils/radio-list"
+  },
   "styles/country-flags": {
    "import": "@aziontech/webkit/styles/country-flags",
    "target": "./src/styles/country-flags.css",
@@ -30480,7 +30492,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -31186,7 +31198,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "undefined as never",
+     "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -32672,7 +32684,8 @@
     "Tooltip",
     "use-collection",
     "use-shortcuts",
-    "use-unsaved-changes"
+    "use-unsaved-changes",
+    "utils/leave-link"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -32709,7 +32722,8 @@
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-collection",
     "@aziontech/webkit/use-shortcuts",
-    "@aziontech/webkit/use-unsaved-changes"
+    "@aziontech/webkit/use-unsaved-changes",
+    "@aziontech/webkit/utils/leave-link"
    ],
    "primary": "Default",
    "guidelinesSummary": "Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model. The list is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`. Create Team and Edit Team are full pages in the creation frame instead (building block I).",
@@ -33863,7 +33877,8 @@
     "use-locale",
     "use-shortcuts",
     "use-unsaved-changes",
-    "utils/focus-invalid"
+    "utils/focus-invalid",
+    "utils/radio-list"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
@@ -33894,7 +33909,8 @@
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/use-shortcuts",
     "@aziontech/webkit/use-unsaved-changes",
-    "@aziontech/webkit/utils/focus-invalid"
+    "@aziontech/webkit/utils/focus-invalid",
+    "@aziontech/webkit/utils/radio-list"
    ],
    "primary": "ConnectGit",
    "guidelinesSummary": "A focused page, outside the console shell, where the user turns a template into a running project. They chose a template in the Creation Center and now need to see what it clones, connect a Git provider if they have none, name the repository it creates, fill the settings the template requires and deploy. The same column then shows the build and the outcome, so the user never leaves the page.",
@@ -34486,7 +34502,8 @@
     "SettingsRow",
     "Skeleton",
     "Switch",
-    "ToggleGroup"
+    "ToggleGroup",
+    "utils/radio-list"
    ],
    "imports": [
     "@aziontech/webkit/button",
@@ -34498,7 +34515,8 @@
     "@aziontech/webkit/settings-row",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/switch",
-    "@aziontech/webkit/toggle-group"
+    "@aziontech/webkit/toggle-group",
+    "@aziontech/webkit/utils/radio-list"
    ],
    "primary": "Existing",
    "guidelinesSummary": "The band a create flow uses when the resource being created needs another resource that may already exist. The user either reuses one of theirs or makes a new one on the spot, and answers it in one place: an Existing / New choice, then a searchable, paged list of what exists or the few fields that create a new one. The chosen row is marked, every search and load is announced, and a missing answer is flagged above the list where it is seen first. When the binding itself is optional (a firewall in front of a project), the same band sits behind an opt-in switch row and unfolds in place when it is turned on.",
@@ -34601,6 +34619,7 @@
     "use-escape-to-cancel",
     "use-shortcuts",
     "use-unsaved-changes",
+    "utils/radio-list",
     "Wizard",
     "Wizard"
    ],
@@ -34636,6 +34655,7 @@
     "@aziontech/webkit/use-escape-to-cancel",
     "@aziontech/webkit/use-shortcuts",
     "@aziontech/webkit/use-unsaved-changes",
+    "@aziontech/webkit/utils/radio-list",
     "@aziontech/webkit/wizard",
     "@aziontech/webkit/wizard-root"
    ],
@@ -36308,6 +36328,9 @@
      "name": "Application"
     },
     {
+     "name": "NoDeployment"
+    },
+    {
      "name": "FirstDeploy"
     },
     {
@@ -36640,7 +36663,8 @@
     "Tooltip",
     "Trace",
     "use-shortcuts",
-    "use-unsaved-changes"
+    "use-unsaved-changes",
+    "utils/leave-link"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -36678,7 +36702,8 @@
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/trace",
     "@aziontech/webkit/use-shortcuts",
-    "@aziontech/webkit/use-unsaved-changes"
+    "@aziontech/webkit/use-unsaved-changes",
+    "@aziontech/webkit/utils/leave-link"
    ],
    "primary": "Code",
    "guidelinesSummary": "The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the Services breadcrumb, the ⌘K palette and the `main`. The editor pins its own panes, so its root carries `data-layout-fill`: the layout's `main` stops scrolling and the root fills it (`h-dvh` only sizes a standalone preview).",
@@ -36777,6 +36802,7 @@
    ],
    "components": [
     "Alert",
+    "AttributeEditor",
     "Button",
     "Card",
     "CodeBlock",
@@ -36816,10 +36842,12 @@
     "Textarea",
     "toast",
     "Tooltip",
-    "use-unsaved-changes"
+    "use-unsaved-changes",
+    "utils/focus-invalid"
    ],
    "imports": [
     "@aziontech/webkit/alert",
+    "@aziontech/webkit/attribute-editor",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/code-block",
@@ -36859,7 +36887,8 @@
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-unsaved-changes"
+    "@aziontech/webkit/use-unsaved-changes",
+    "@aziontech/webkit/utils/focus-invalid"
    ],
    "primary": "ProjectSettings",
    "guidelinesSummary": "The settings page of one existing resource. The user comes here to change how the resource is named, what it runs with and whether it is active, review the change, and commit it or throw it away. Every field sits in a labeled section of the form column, and one save band appears only once something has changed, so the page reads as the resource's current state until the user edits it. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the resource breadcrumb, the ⌘K palette and the `main`; the save band sticks to the bottom of the layout's scrolling region.",
@@ -38652,7 +38681,8 @@
     "toast",
     "Tooltip",
     "UploadProgress",
-    "use-file-picker"
+    "use-file-picker",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -38685,7 +38715,8 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/upload-progress",
-    "@aziontech/webkit/use-file-picker"
+    "@aziontech/webkit/use-file-picker",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "The contents of one storage resource. The user opens a bucket to find a file, walk into a folder and back out, upload something or add a folder, and download or delete what is there. The table's toolbar is the whole page header, so the storage name, search, the folder path and Add to files all sit on the one surface the files live on. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`.",

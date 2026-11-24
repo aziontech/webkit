@@ -11,9 +11,11 @@
     bindingLabel,
     reachLabel,
     rewrittenNames,
+    savedDefaultsDescription,
     servicesBoundTo,
     settingNameIn,
-    type SettingsRowData
+    type SettingsRowData,
+    withBindingPolicy
   } from './deployment-policies'
   import DeploymentDefaultsGroup from './parts/deployment-defaults-group.vue'
   import DeploymentSaveBar from './parts/deployment-save-bar.vue'
@@ -228,24 +230,12 @@
         return
       }
       const apply = form.applyToExisting
-      if (apply) {
-        settingList.value = settingList.value.map((setting) =>
-          setting.system
-            ? setting
-            : {
-                ...setting,
-                bindingPolicy: form.bindingPolicy,
-                updatedAt: new Date(),
-                updatedBy: author.value
-              }
-        )
-      }
+      if (apply)
+        settingList.value = withBindingPolicy(settingList.value, form.bindingPolicy, author.value)
       Object.assign(saved, { ...form, applyToExisting: false })
       form.applyToExisting = false
       toast.success('Deployment defaults saved.', {
-        description: apply
-          ? `${settingList.value.filter((setting) => !setting.system).length} settings now use the ${bindingLabel(form.bindingPolicy)} binding policy. Default is never changed.`
-          : 'The next service is created with them. Existing settings keep theirs.',
+        description: savedDefaultsDescription(settingList.value, form.bindingPolicy, apply),
         id: SAVE_TOAST
       })
     }
@@ -387,6 +377,7 @@
         <template #actions>
           <Button
             label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"

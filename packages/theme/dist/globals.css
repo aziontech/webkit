@@ -383,7 +383,7 @@
   --shape-button: 6px;
   --shape-control: 6px;
   --border-width-default: 0.8px;
-  --font-sans: Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   --font-code: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-display: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
   --text-xs: 0.75rem;
@@ -685,12 +685,12 @@
   --text-overline-xs-line-height: 1.375;
   --text-overline-xs-letter-spacing: 0.1rem;
   --text-overline-xs-text-transform: uppercase;
-  --text-button-lg-font-family: Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --text-button-lg-font-family: Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   --text-button-lg-font-size: 0.875rem;
   --text-button-lg-font-weight: 400;
   --text-button-lg-line-height: 1.25;
   --text-button-lg-letter-spacing: 0;
-  --text-button-md-font-family: Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --text-button-md-font-family: Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   --text-button-md-font-size: 0.75rem;
   --text-button-md-font-weight: 400;
   --text-button-md-line-height: 1.25;

@@ -9,6 +9,7 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
   import { onBeforeUnmount, reactive, ref, watch } from 'vue'
 
   import { usePagedList } from '../composables/use-paged-list'
@@ -183,7 +184,15 @@
                       size="small"
                       clickable
                       role="radio"
+                      @keydown="onRadioListKeydown"
                       :aria-checked="option.value === firewallPicker.chosen"
+                      :tabindex="
+                        radioListTabIndex(
+                          option.value,
+                          firewallPicker.chosen,
+                          firewallPicker.visible.map((entry) => entry.value)
+                        )
+                      "
                       @click="firewallPicker.chosen = option.value"
                     >
                       <Item.Media>

@@ -7,6 +7,7 @@
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
   import { computed, reactive } from 'vue'
 
   import { usePagedList } from './composables/use-paged-list'
@@ -190,7 +191,15 @@
                 size="small"
                 clickable
                 role="radio"
+                @keydown="onRadioListKeydown"
                 :aria-checked="option.value === projectPicker.chosen"
+                :tabindex="
+                  radioListTabIndex(
+                    option.value,
+                    projectPicker.chosen,
+                    projectPicker.visible.map((entry) => entry.value)
+                  )
+                "
                 @click="projectPicker.chosen = option.value"
               >
                 <Item.Media>

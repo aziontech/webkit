@@ -41,7 +41,7 @@
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | false | Disables both the dial-code Select and the internal input. |
 | `readonly` | `boolean` | `false` | false | Marks the internal input read-only; dial-code Select is also disabled while readonly. |
-| `required` | `boolean` | `false` | false | Applies the required border on the InputGroup and sets required on the input. |
+| `required` | `boolean` | `false` | false | Sets required and aria-required on the phone number input; it draws no border of its own. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border on the InputGroup and sets aria-invalid on the input. |
 | `name` | `string` | `''` | false | Form field name. Set, a hidden input submits the full E.164 number (dial code followed by the digits, empty while there are none) under this name; the visible input carries no name, so a native `form` never posts a national number without its country. |
 | `searchPlaceholder` | `string` | `''` | false | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). |
@@ -143,5 +143,52 @@
       >Starts on the United Kingdom; the user can still pick another country.</Field.Description
     >
   </Field>
+</template>
+```
+
+### Optional
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import Field from '@aziontech/webkit/field'
+  import PhoneInput from '@aziontech/webkit/phone-input'
+  import { computed, ref } from 'vue'
+
+  const digits = ref('')
+  const country = ref('US')
+  const phone = ref(null)
+  const submitted = ref(false)
+
+  const invalid = computed(
+    () => submitted.value && Boolean(phone.value?.digits) && !phone.value?.complete
+  )
+</script>
+
+<template>
+  <form
+    class="flex max-w-(--container-xs) flex-col items-start gap-(--spacing-md)"
+    novalidate
+    @submit.prevent="submitted = true"
+  >
+    <Field
+      :invalid="invalid"
+      class="w-full"
+    >
+      <Field.Label>Phone</Field.Label>
+      <PhoneInput
+        v-model="digits"
+        v-model:country="country"
+        name="phone"
+        @phone-change="phone = $event"
+      />
+      <Field.Error v-if="invalid">Enter the full number, or leave the field empty.</Field.Error>
+    </Field>
+    <Button
+      type="submit"
+      variant="secondary"
+      >Save</Button
+    >
+  </form>
 </template>
 ```

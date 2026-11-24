@@ -368,6 +368,7 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
         <template #actions>
           <Button
             label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
@@ -426,6 +427,7 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
                       />
                       <Button
                         label="Documentation"
+                        aria-label="Documentation (opens in a new tab)"
                         icon="az az-book"
                         variant="outline"
                         size="small"
@@ -1006,6 +1008,7 @@ export const deploymentColumns: TableColumn[] = [
         <template #actions>
           <Button
             label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
@@ -1041,6 +1044,7 @@ export const deploymentColumns: TableColumn[] = [
                   <template #actions>
                     <Button
                       label="Documentation"
+                      aria-label="Documentation (opens in a new tab)"
                       icon="az az-book"
                       variant="outline"
                       size="small"

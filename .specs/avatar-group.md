@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: e888e5d0a172eb7cc4c233d82c951be69013ac69908d31b6af03b3a1c1403ccd
+checksum: eb1ddc74ca63f82e0488c97648345bd103d0b6aad0077aeddacf397a9afb1f6e
 created: 2026-11-14
-last_updated: 2026-11-17
+last_updated: 2026-11-23
 ---
 
 # AvatarGroup — Component Spec
@@ -145,6 +145,7 @@ _No slots._
 - Icons: none.
 - Keyboard: no horizontal arrow-key logic.
 - User data: names are text in the accessible name, the hint and the list; no wrapper needed.
+- Overflow count: the `+N` sits in a `dir="ltr"` span, so it never reads `N+`.
 
 ## Responsive
 

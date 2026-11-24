@@ -13,6 +13,7 @@
     "check:external-links": "node scripts/check-external-links.mjs",
     "check:editor-chunks": "node scripts/check-editor-chunks.mjs",
     "check:lighthouse": "node scripts/check-lighthouse.mjs",
+    "generate:block-thumbnails": "node scripts/generate-block-thumbnails.mjs",
     "test": "node --test \"test/**/*.test.ts\"",
     "test:smoke": "node scripts/test-smoke.mjs",
     "test:shell": "node scripts/test-shell.mjs",

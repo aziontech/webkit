@@ -5,6 +5,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
+  import { useDatePickerPanel } from './composables/use-date-picker-panel'
   import { asSingle, formatValueLabel, withTime } from './format'
   import {
     DatePickerInjectionKey,
@@ -16,8 +17,6 @@
   } from './injection-key'
   import DatePickerControl from './parts/date-picker-control.vue'
   import DatePickerControlButton from './parts/date-picker-control-button.vue'
-  import DatePickerFields from './parts/date-picker-fields.vue'
-  import DatePickerGrid from './parts/date-picker-grid.vue'
   import DatePickerPopover from './parts/date-picker-popover.vue'
   import DatePickerTrigger from './parts/date-picker-trigger.vue'
 
@@ -118,6 +117,8 @@
   }
 
   const toggleOpen = () => setOpen(!isOpen.value)
+
+  const { panel, panelOpen } = useDatePickerPanel(isOpen)
 
   const cloneValue = (value: DatePickerValue): DatePickerValue => {
     const date = asSingle(value)
@@ -284,7 +285,11 @@
             :show-placeholder="!hasCommitted"
             :show-chevron="!split && !(clearable && hasCommitted)"
             :aria-label="ariaLabel ? `${ariaLabel}: ${triggerText}` : undefined"
-            :aria-describedby="field.describedBy.value"
+            :aria-describedby="
+              [field.describedBy.value, field.required.value && field.field?.requiredId]
+                .filter(Boolean)
+                .join(' ') || undefined
+            "
             :aria-invalid="field.invalid.value || undefined"
             class="focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
             @click="toggleOpen"
@@ -327,18 +332,19 @@
 
     <DatePickerPopover
       :test-id="testId"
-      :open="isOpen"
+      :open="panelOpen"
       :anchor="triggerEl"
       :aria-label="t('datePicker.chooseDate')"
       class="max-w-[min(calc(100vw-2*var(--spacing-sm)),44rem)] overflow-x-hidden overflow-y-auto overscroll-contain max-sm:items-center"
       @close="onPopoverClose"
     >
       <div
+        v-if="panel"
         class="flex flex-col items-stretch data-[horizontal]:sm:flex-row"
         :data-horizontal="isHorizontal || null"
       >
         <div class="p-(--spacing-sm)">
-          <DatePickerGrid />
+          <component :is="panel.grid" />
         </div>
 
         <div
@@ -346,7 +352,10 @@
           :data-horizontal="isHorizontal || null"
           :class="FOOTER_CLASS"
         >
-          <DatePickerFields v-if="showFields" />
+          <component
+            :is="panel.fields"
+            v-if="showFields"
+          />
 
           <span
             v-if="$slots['footer']"

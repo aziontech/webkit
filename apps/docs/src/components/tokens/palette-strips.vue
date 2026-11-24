@@ -16,7 +16,7 @@
     <li
       v-for="group in groups"
       :key="group.id"
-      class="flex flex-col gap-(--spacing-xs)"
+      class="flex flex-col gap-(--spacing-xs) [content-visibility:auto] [contain-intrinsic-block-size:auto_8rem]"
     >
       <h3 class="text-label-md text-(--text-default)">{{ titleCase(group.id) }}</h3>
       <div class="flex gap-(--spacing-2xs) overflow-x-auto pb-(--spacing-2xs)">

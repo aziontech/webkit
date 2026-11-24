@@ -43,7 +43,7 @@
     disabled?: boolean
     /** Marks the internal input read-only; dial-code Select is also disabled while readonly. */
     readonly?: boolean
-    /** Applies the required border on the InputGroup and sets required on the input. */
+    /** Sets required and aria-required on the phone number input; it draws no border of its own. */
     required?: boolean
     /** Applies the invalid border on the InputGroup and sets aria-invalid on the input. */
     invalid?: boolean

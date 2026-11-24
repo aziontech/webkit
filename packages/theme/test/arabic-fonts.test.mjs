@@ -7,10 +7,13 @@ import { fontFamily } from '../src/tokens/primitives/typography/font-family.js';
 const fontsCss = await readFile(new URL('../dist/fonts.css', import.meta.url), 'utf8');
 const globalsCss = await readFile(new URL('../dist/globals.css', import.meta.url), 'utf8');
 
-test('the sans stack falls back to an Arabic-capable face right after Rubik', () => {
+test('the sans stack falls back to an Arabic-capable face right after Rubik and its Latin fallback', () => {
   const stack = fontFamily.sans.split(',').map((name) => name.trim().replace(/^'|'$/g, ''));
   assert.equal(stack[0], 'Rubik');
-  assert.equal(stack[1], 'Noto Sans Arabic');
+  assert.equal(stack[1], 'Rubik Fallback');
+  assert.equal(stack[2], 'Noto Sans Arabic');
+  const fallback = fontsCss.match(/@font-face\s*{[^}]*'Rubik Fallback'[^}]*}/)?.[0] ?? '';
+  assert.doesNotMatch(fallback, /U\+06/);
   assert.equal(stack.at(-1), 'sans-serif');
 });
 

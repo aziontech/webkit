@@ -676,7 +676,7 @@ export const ptBR: Messages = {
     retry: 'Tentar novamente'
   },
   field: {
-    required: '(Obrigatório)'
+    required: 'Obrigatório'
   },
   fileDropzone: {
     title: 'Solte arquivos para enviar',

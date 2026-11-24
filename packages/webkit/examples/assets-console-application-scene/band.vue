@@ -22,19 +22,21 @@
 </script>
 
 <template>
-  <MediaTabs
-    :items="tabs"
-    tabs-side="end"
-    size="large"
-    :autoplay-interval="4600"
-  >
-    <template #media="{ index, active }">
-      <ConsoleApplicationScene
-        :tab="tabs[index].value"
-        :active="active"
-        :width="760"
-        class="size-full"
-      />
-    </template>
-  </MediaTabs>
+  <div class="[--media-tabs-media-min:20rem]">
+    <MediaTabs
+      :items="tabs"
+      tabs-side="end"
+      size="large"
+      :autoplay-interval="4600"
+    >
+      <template #media="{ index, active }">
+        <ConsoleApplicationScene
+          :tab="tabs[index].value"
+          :active="active"
+          :width="760"
+          class="size-full"
+        />
+      </template>
+    </MediaTabs>
+  </div>
 </template>

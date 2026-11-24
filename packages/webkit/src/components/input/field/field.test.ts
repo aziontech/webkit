@@ -180,7 +180,9 @@ describe('Field', () => {
     expect(input.getAttribute('aria-invalid')).toBe('true')
     expect(input.required).toBe(true)
     expect(input.disabled).toBe(true)
-    expect(getByTestId('field-label__required').textContent).toContain('(Required)')
+    expect(getByTestId('field-label__required').textContent?.trim()).toBe('*')
+    expect(getByTestId('field-label__required').getAttribute('aria-hidden')).toBe('true')
+    expect(input.getAttribute('aria-describedby')).toBeNull()
   })
 
   it('lets a control prop win over a calm Field', () => {

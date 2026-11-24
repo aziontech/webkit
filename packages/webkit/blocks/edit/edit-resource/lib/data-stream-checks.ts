@@ -6,7 +6,19 @@ type Need = (id: keyof DataStreamRecord) => boolean
 type Check = (form: DataStreamRecord, errors: FieldProblems, need: Need) => void
 
 const URL_PATTERN = /^https?:\/\/[^\s/$.?#][^\s]*$/
-const HEADERS_PATTERN = /^[^:\n]+:[^\n]*\S[^\n]*(\n[^:\n]+:[^\n]*\S[^\n]*){0,4}$/
+const HEADER_NAME_PATTERN = /^[A-Za-z0-9!#$%&'*+.^_`|~-]+$/
+const CREDENTIAL_HEADER_PATTERN =
+  /^(authorization|proxy-authorization|cookie)$|token|key|secret|password/i
+
+export const isCredentialHeader = (name: string) => CREDENTIAL_HEADER_PATTERN.test(name.trim())
+
+export function headerProblem(header: { name: string; value: string }) {
+  const name = HEADER_NAME_PATTERN.test(header.name.trim())
+    ? undefined
+    : 'Enter a header name of letters, numbers and hyphens.'
+  const value = header.value.trim() ? undefined : 'Enter a value.'
+  return name || value ? { name, value } : undefined
+}
 const SERVERS_PATTERN = /^[^\s,]+(,[^\s,]+)*$/
 const WORKLOADS_PATTERN = /^[^\n]*\S[^\n]*(\n[^\n]*\S[^\n]*)*$/
 
@@ -54,8 +66,8 @@ const checkStandard: Check = (form, errors, need) => {
     errors.url = invalid('Enter a valid URL. Example: https://collector.example.com/ingest.')
   need('payloadFormat')
   need('lineSeparator')
-  if (form.headers.trim() && !HEADERS_PATTERN.test(form.headers.trim()))
-    errors.headers = invalid('Write up to 5 headers, one per line, in the Key:Value format.')
+  if (form.headers.some(headerProblem))
+    errors.headers = invalid('Give every header a name and a value.')
 }
 
 const checkKafka: Check = (form, errors, need) => {

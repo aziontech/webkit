@@ -75,7 +75,7 @@
   }
 
   const lazy = Object.fromEntries(
-    ORDER.map((key) => [key, useLazyChunks({ rowHeight: 40 })])
+    ORDER.map((key) => [key, useLazyChunks({ rowHeight: 48 })])
   ) as Record<GroupKey, ReturnType<typeof useLazyChunks>>
 
   const groupOf = (time: number, today: number): GroupKey => {

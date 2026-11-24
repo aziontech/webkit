@@ -44,7 +44,7 @@
 | `duration` | `number` | `undefined` | false | Seconds the helper has worked, when the host knows it. Without it the card counts its own running time, held while `pending`, frozen once the run ends. |
 | `stoppable` | `boolean` | `false` | false | Offers `Stop` while the status is `running` or `pending`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; the helper's messages start collapsed. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 

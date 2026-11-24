@@ -67,6 +67,7 @@
 - Icons: none.
 - Keyboard: no horizontal arrow-key logic.
 - User data: names are text in the accessible name, the hint and the list; no wrapper needed.
+- Overflow count: the `+N` sits in a `dir="ltr"` span, so it never reads `N+`.
 
 ## Internationalization
 

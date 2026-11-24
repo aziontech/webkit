@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-file-browser")`
-- Components: [Alert](../../components/alert.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SplitButton](../../components/split-button.md), `TableCellActions`, `TableCellTime`, `TableSearch`, [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [UploadProgress](../../components/upload-progress.md), `use-file-picker`
+- Components: [Alert](../../components/alert.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SplitButton](../../components/split-button.md), `TableCellActions`, `TableCellTime`, `TableSearch`, [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [UploadProgress](../../components/upload-progress.md), `use-file-picker`, `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -273,13 +273,15 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import { toast } from '@aziontech/webkit/toast'
   import type { UploadProgressItem } from '@aziontech/webkit/upload-progress'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import {
     addToFilesActions,
+    destinationOptionsOf,
     fileColumns,
     type FileRow,
-    folderName,
+    folderPathsIn,
     listRows,
     sortRows,
     UPLOAD_LIMIT
@@ -391,6 +393,8 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
   const path = defineModel<string>('path', { default: '' })
   const selectedKeys = defineModel<string[]>('selectedKeys', { default: () => [] })
 
+  const { formatFileSize } = useLocale()
+
   const rootName = computed(() => props.storageName ?? sampleStorageName)
   const folderPath = computed(() => path.value.match(/[^/]+\//g) ?? [])
 
@@ -406,7 +410,9 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
     { immediate: true }
   )
 
-  const rows = computed<FileRow[]>(() => listRows(items.value, folderPath.value.length > 0))
+  const rows = computed<FileRow[]>(() =>
+    listRows(items.value, folderPath.value.length > 0, formatFileSize)
+  )
 
   const sorting = ref<{ desc: boolean; id: string }[]>([])
   const sortedRows = computed<FileRow[]>(() => sortRows(rows.value, sorting.value[0]))
@@ -472,19 +478,14 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
     emit('delete', event, entry)
   }
 
-  const destinationPaths = computed(
-    () =>
+  const destinationOptions = computed(() =>
+    destinationOptionsOf(
       props.destinations ??
-      (props.entries
-        ? props.entries
-            .filter((entry) => entry.kind === 'folder')
-            .map((entry) => path.value + folderName(entry.name))
-        : Object.keys(sampleFolders).filter(Boolean))
+        (props.entries
+          ? folderPathsIn(props.entries, path.value)
+          : Object.keys(sampleFolders).filter(Boolean))
+    )
   )
-  const destinationOptions = computed(() => [
-    { value: '/', label: '/', description: 'Storage root' },
-    ...destinationPaths.value.map((value) => ({ value }))
-  ])
 
   const moveOpen = ref(false)
   const moving = ref<FileRow[]>([])
@@ -929,24 +930,20 @@ export const addToFilesActions = [
 
 export const UPLOAD_LIMIT = 300 * 1024 * 1024
 
-export const formatBytes = (bytes: number) => {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${Number((bytes / 1024).toFixed(2))} KB`
-  return `${Number((bytes / 1024 / 1024).toFixed(2))} MB`
-}
+type FormatSize = (bytes: number) => string
 
 const extensionOf = (name: string) => name.split('.').pop()?.toLowerCase() ?? ''
 
-export const folderName = (name: string) => (name.endsWith('/') ? name : `${name}/`)
+const folderName = (name: string) => (name.endsWith('/') ? name : `${name}/`)
 
-const fileRow = (name: string, entry?: FileBrowserEntry): FileRow => {
+const fileRow = (name: string, formatSize: FormatSize, entry?: FileBrowserEntry): FileRow => {
   const bytes = entry?.bytes ?? 0
   return {
     name,
     id: name,
     kind: 'file',
     icon: GLYPHS[extensionOf(name)] ?? 'az az-file',
-    size: formatBytes(bytes),
+    size: formatSize(bytes),
     bytes,
     modifiedAt: entry?.modifiedAt,
     author: entry?.editor,
@@ -954,8 +951,13 @@ const fileRow = (name: string, entry?: FileBrowserEntry): FileRow => {
   }
 }
 
-const toRow = (kind: FileRowKind, name: string, entry?: FileBrowserEntry): FileRow => {
-  if (kind === 'file') return fileRow(name, entry)
+const toRow = (
+  kind: FileRowKind,
+  name: string,
+  formatSize: FormatSize,
+  entry?: FileBrowserEntry
+): FileRow => {
+  if (kind === 'file') return fileRow(name, formatSize, entry)
   return {
     name,
     id: name,
@@ -969,14 +971,20 @@ const toRow = (kind: FileRowKind, name: string, entry?: FileBrowserEntry): FileR
   }
 }
 
-export const listRows = (entries: FileBrowserEntry[], nested: boolean): FileRow[] => {
+export const listRows = (
+  entries: FileBrowserEntry[],
+  nested: boolean,
+  formatSize: FormatSize
+): FileRow[] => {
   const ofKind = (kind: FileBrowserEntryKind) =>
     entries
       .filter((entry) => entry.kind === kind)
-      .map((entry) => toRow(kind, kind === 'folder' ? folderName(entry.name) : entry.name, entry))
+      .map((entry) =>
+        toRow(kind, kind === 'folder' ? folderName(entry.name) : entry.name, formatSize, entry)
+      )
       .sort((a, b) => a.name.localeCompare(b.name))
   const list: FileRow[] = [...ofKind('folder'), ...ofKind('file')]
-  if (nested && list.length) list.unshift(toRow('parent', '..'))
+  if (nested && list.length) list.unshift(toRow('parent', '..', formatSize))
   return list
 }
 
@@ -1011,6 +1019,14 @@ export const destinationProblem = (raw: string, path: string) => {
   if (target === path) return 'The files are already in this folder. Pick another one.'
   return ''
 }
+
+export const folderPathsIn = (entries: FileBrowserEntry[], path: string): string[] =>
+  entries.filter((entry) => entry.kind === 'folder').map((entry) => path + folderName(entry.name))
+
+export const destinationOptionsOf = (paths: string[]) => [
+  { value: '/', label: '/', description: 'Storage root' },
+  ...paths.map((value) => ({ value }))
+]
 ```
 
 ## `parts/delete-entry-dialog.vue`
@@ -1404,14 +1420,10 @@ export const destinationProblem = (raw: string, path: string) => {
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, watch } from 'vue'
 
-  import {
-    destinationProblem,
-    type FileRow,
-    formatBytes,
-    normalizeDestination
-  } from '../lib/file-rows'
+  import { destinationProblem, type FileRow, normalizeDestination } from '../lib/file-rows'
 
   const props = defineProps<{
     moving: FileRow[]
@@ -1426,6 +1438,8 @@ export const destinationProblem = (raw: string, path: string) => {
 
   const open = defineModel<boolean>('open', { default: false })
 
+  const { formatFileSize } = useLocale()
+
   const destination = ref('')
   const destinationError = ref('')
 
@@ -1433,7 +1447,7 @@ export const destinationProblem = (raw: string, path: string) => {
     props.moving.length === 1 ? `Move ${props.moving[0].name}` : `Move ${props.moving.length} files`
   )
   const movingSize = computed(() =>
-    formatBytes(props.moving.reduce((sum, item) => sum + item.bytes, 0))
+    formatFileSize(props.moving.reduce((sum, item) => sum + item.bytes, 0))
   )
 
   watch(open, (now) => {

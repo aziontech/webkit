@@ -260,6 +260,7 @@ function sectionAsNames(md, heading, more) {
   const out = lines.slice(0, start + 1)
   let fence = false
   let cut = false
+  let afterCode = false
   let i = start + 1
   for (; i < lines.length; i++) {
     if (!fence && /^#{1,2}\s/.test(lines[i])) break
@@ -267,10 +268,15 @@ function sectionAsNames(md, heading, more) {
       if (!fence && /:\s*$/.test(out.at(-1) ?? '')) out.pop()
       else if (!fence && !out.at(-1)?.trim() && /:\s*$/.test(out.at(-2) ?? '')) out.splice(-2)
       fence = !fence
+      afterCode = !fence
       cut = true
       continue
     }
     if (fence) continue
+    if (afterCode && lines[i].trim()) {
+      afterCode = false
+      if (/^Then\b/.test(lines[i])) continue
+    }
     if (/^\|/.test(lines[i])) {
       const rows = []
       while (i < lines.length && /^\|/.test(lines[i])) rows.push(tableCells(lines[i++]))

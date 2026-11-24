@@ -88,7 +88,7 @@
     "tailwind-merge": "^3.6.0"
   },
   "peerDependencies": {
-    "@aziontech/icons": "^4.4.0 || ^5.0.0",
+    "@aziontech/icons": "^4.4.0 || ^5.0.0 || ^6.0.0",
     "@aziontech/theme": "^5.2.2 || ^6.0.0",
     "@tanstack/ai": "^1.5.0",
     "eslint": ">=9",
@@ -2517,6 +2517,14 @@
       "types": "./types/utils/focus-invalid.d.ts",
       "default": "./src/utils/focus-invalid.ts"
     },
+    "./utils/leave-link": {
+      "types": "./types/utils/leave-link.d.ts",
+      "default": "./src/utils/leave-link.ts"
+    },
+    "./utils/radio-list": {
+      "types": "./types/utils/radio-list.d.ts",
+      "default": "./src/utils/radio-list.ts"
+    },
     "./styles/country-flags": {
       "types": "./types/css.d.ts",
       "default": "./src/styles/country-flags.css"
@@ -4182,6 +4190,12 @@
       ],
       "utils/focus-invalid": [
         "./types/utils/focus-invalid.d.ts"
+      ],
+      "utils/leave-link": [
+        "./types/utils/leave-link.d.ts"
+      ],
+      "utils/radio-list": [
+        "./types/utils/radio-list.d.ts"
       ],
       "styles/country-flags": [
         "./types/css.d.ts"

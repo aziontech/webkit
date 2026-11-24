@@ -12,6 +12,10 @@ const fontsEntry = join(ROOT, pkg.exports['./fonts.css'].default);
 const fontsCss = readFileSync(fontsEntry, 'utf8');
 const faces = fontsCss.match(/@font-face\s*{[^}]*}/g) ?? [];
 const urlsOf = (face) => [...face.matchAll(/url\(\s*(['"]?)([^'")]+)\1\s*\)/g)].map((m) => m[2]);
+const familyOf = (face) => /font-family:\s*'?([^';]+)'?;/.exec(face)?.[1] ?? '';
+const isMetricFallback = (face) =>
+  familyOf(face).endsWith(' Fallback') && urlsOf(face).length === 0 && /src:\s*local\(/.test(face);
+const webFaces = faces.filter((face) => !isMetricFallback(face));
 
 const published = (rel) =>
   pkg.files.some((entry) => rel === entry.replace(/\/$/, '') || rel.startsWith(entry));
@@ -21,7 +25,7 @@ test('fonts.css declares faces', () => {
 });
 
 test('every @font-face src is a relative woff2 file that ships in the package', () => {
-  for (const face of faces) {
+  for (const face of webFaces) {
     const urls = urlsOf(face);
     assert.ok(urls.length > 0, `a face without a url: ${face}`);
     for (const url of urls) {
@@ -62,4 +66,15 @@ test('the first face of the sans and code stacks is declared', () => {
     const pattern = new RegExp(`font-family: '?${first}'?;`);
     assert.match(fontsCss, pattern, `${first} has no @font-face`);
   }
+});
+
+test('Rubik swaps in over a metric-matched local fallback, listed right after it', () => {
+  const fallback = faces.find((face) => familyOf(face) === 'Rubik Fallback');
+  assert.ok(fallback, 'no Rubik Fallback face');
+  for (const descriptor of ['size-adjust', 'ascent-override', 'descent-override', 'line-gap-override']) {
+    assert.match(fallback, new RegExp(`${descriptor}:\\s*[\\d.]+%;`), `Rubik Fallback has no ${descriptor}`);
+  }
+  assert.match(fallback, /unicode-range:/, 'Rubik Fallback must not claim the Arabic range of the next face');
+  const stack = fontFamily.sans.split(',').map((name) => name.trim().replace(/^'|'$/g, ''));
+  assert.deepEqual(stack.slice(0, 2), ['Rubik', 'Rubik Fallback']);
 });

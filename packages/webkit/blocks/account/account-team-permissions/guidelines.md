@@ -47,7 +47,7 @@ On the Edit Team page, a Members section above the matrix: an Add member `Combob
 
 ### H. Delete team and save — `ConfirmDialog`, `Button` (EditTeam)
 
-A Delete team section at the end of the form opens a `ConfirmDialog` that says how many members lose what the team grants; the confirm button spins while the request runs. The `SaveBar` says `You have unsaved changes.` and offers Discard and Save changes only once something differs from the saved team; unchanged, it offers Back to teams and a disabled Save changes. On both pages, with unsaved changes, every way out that is a link (Cancel, Back to teams, the back button, the breadcrumb, the brand) and a reload or tab close first ask `Discard changes?` through `useUnsavedChanges` (Keep editing or Discard); nothing typed is lost silently.
+A Delete team section at the end of the form opens a `ConfirmDialog` that says how many members lose what the team grants; the confirm button spins while the request runs. The `SaveBar` says `You have unsaved changes.` and offers Discard and Save changes only once something differs from the saved team; unchanged, it offers Back to teams and a disabled Save changes. On both pages, with unsaved changes, every way out that is a link (Cancel, Back to teams, the back button, the breadcrumb, the brand) and a reload or tab close first open the `Unsaved changes` dialog of `useUnsavedChanges` (Keep editing or Discard changes); nothing typed is lost silently.
 
 ### I. Creation frame — `IconButton` (CreateTeam, EditTeam)
 

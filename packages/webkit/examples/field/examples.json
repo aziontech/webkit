@@ -36,6 +36,11 @@
       "name": "RequiredAndDisabled",
       "summary": "`required` on the `Field` shows the Required marker and a `hint` glyph on the label; `disabled` on the `Field` disables the input it wraps.",
       "file": "required-and-disabled.vue"
+    },
+    {
+      "name": "Validation",
+      "summary": "Validated on submit from one `errors` object; each `Field` reads its own entry. Required fields show `*`; the optional phone is unmarked.",
+      "file": "validation.vue"
     }
   ]
 }

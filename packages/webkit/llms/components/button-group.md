@@ -97,7 +97,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 ## Responsive
 
 - The row wraps (`flex-wrap`) instead of overflowing a narrow container; use `visibleCount` to keep one line on small screens.
-- Touch: targets follow `IconButton` sizes; prefer `size="large"` on touch-first surfaces.
+- Touch: targets follow `IconButton` sizes; prefer `size="large"` on touch-first surfaces. Inside the group each button's touch-target span grows only vertically (44px tall on a coarse pointer), so a tap never lands on the neighbouring button.
 - No hover-only affordance: every label is the accessible name and is reachable by focus.
 
 ## Examples

@@ -68,7 +68,9 @@
     describedBy,
     labelledBy,
     invalid: isInvalid,
-    disabled: isDisabled
+    disabled: isDisabled,
+    required: isRequired,
+    field
   } = useFieldControl({
     id: () => attrs['id'] as string | undefined,
     describedBy: () => attrs['aria-describedby'] as string | undefined,
@@ -167,7 +169,9 @@
     :id="controlId"
     role="group"
     :aria-labelledby="labelledBy"
-    :aria-describedby="describedBy"
+    :aria-describedby="
+      [describedBy, isRequired && field?.requiredId].filter(Boolean).join(' ') || undefined
+    "
     :aria-invalid="isInvalid || undefined"
     :data-invalid="isInvalid || null"
     :data-disabled="isDisabled || null"

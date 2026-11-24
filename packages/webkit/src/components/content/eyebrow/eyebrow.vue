@@ -38,11 +38,6 @@
     class="group/eyebrow flex items-center gap-(--spacing-2xs) relative w-fit max-w-full ps-(--spacing-2xs) pe-(--spacing-2xs) data-[cursor]:pe-0"
   >
     <span
-      aria-hidden="true"
-      :data-testid="`${testId}__mark`"
-      class="h-0.5 w-3 shrink-0 bg-(--primary)"
-    />
-    <span
       v-if="prefix"
       aria-hidden="true"
       class="text-(--text-default) font-medium text-overline-md group-data-[single-line]/eyebrow:whitespace-nowrap"
@@ -53,12 +48,12 @@
       :data-testid="`${testId}__label`"
       class="min-w-0 text-pretty text-(--text-default) font-medium uppercase text-overline-md"
     >
-      <slot />
+      <slot /><span
+        v-if="cursor"
+        aria-hidden="true"
+        :data-testid="`${testId}__cursor`"
+        class="ms-(--spacing-2xs) -my-1 inline-block h-5 w-1 align-middle bg-(--brand-blue) animate-blink-settle motion-reduce:animate-none"
+      />
     </span>
-    <span
-      v-if="cursor"
-      aria-hidden="true"
-      class="w-1 h-5 shrink-0 relative bg-(--brand-blue) animate-blink-settle motion-reduce:animate-none"
-    />
   </div>
 </template>

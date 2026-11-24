@@ -48,7 +48,7 @@
 | `disabled` | `boolean` | `false` | false | Disables the trigger: the menu does not open. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `modelValue` | `FilterMenuModel` | `—` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Sub-component imports
 

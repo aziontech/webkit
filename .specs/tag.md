@@ -7,9 +7,9 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: da53d36e5fa6d36426774ad0256ded795e811e300260181a80b3ede2b4715872
+checksum: 97ef913ca76fbee5c1e2ba4e0357713fae5c058530e62ada5cf8de406d71986b
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-23
 ---
 
 # Tag — Component Spec
@@ -122,7 +122,7 @@ _none_
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: a directional `icon` is the consumer's choice and does not mirror.
 - Keyboard: no horizontal arrow-key logic.
-- Isolation: the label renders `dir="auto"`, so a value in another script (a domain, an ID) keeps its own direction inside right-to-left UI.
+- Isolation: the label renders `dir="auto"`, so a value in another script (a domain, an ID) keeps its own direction inside right-to-left UI; a label with no letter (a count, `+10.5%`, `#1024`) renders `dir="ltr"`, so its sign and unit stay in order in every engine.
 
 ## Examples
 
