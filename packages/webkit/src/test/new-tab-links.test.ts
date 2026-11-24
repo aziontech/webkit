@@ -8,12 +8,15 @@ const modules = import.meta.glob<{ default: Component }>([
   '../../blocks/shell/*/*.vue',
   '../../blocks/shell/*/variants/*.vue',
   '../../blocks/top-bar/*/*.vue',
-  '../../blocks/top-bar/*/variants/*.vue'
+  '../../blocks/top-bar/*/variants/*.vue',
+  '../../examples/article-body-section/*.vue',
+  '../../examples/contact-hub-section/*.vue',
+  '../../examples/faq-section/*.vue'
 ])
 
 afterEach(() => cleanup())
 
-describe('detail, shell and top-bar blocks say when a link opens a new tab', () => {
+describe('detail, shell and top-bar blocks and the article, contact and FAQ sections say when a link opens a new tab', () => {
   it.each(Object.keys(modules).map((file) => [file.replace('../../', '')]))('%s', async (file) => {
     const page = (await modules[`../../${file}`]!()).default
     render(page)
