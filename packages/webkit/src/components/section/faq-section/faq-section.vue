@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
   import Module from '../../layout/module/module.vue'
   import Faq from '../../marketing/faq/faq.vue'
@@ -55,6 +57,8 @@
   const LIST_ITEM = /^[ \t]*- (.*)$/
 
   const attrs = useAttrs()
+
+  const { t } = useTranslate({ common: en.common })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'faq-section')
 
@@ -159,7 +163,12 @@
                 :target="run.external ? '_blank' : undefined"
                 :rel="run.external ? 'noopener noreferrer' : undefined"
                 class="text-link"
-                >{{ run.text }}</a
+                >{{ run.text
+                }}<span
+                  v-if="run.external"
+                  class="sr-only"
+                  >{{ ' ' + t('common.newTab') }}</span
+                ></a
               >
               <strong v-else-if="run.strong">{{ run.text }}</strong>
               <em v-else-if="run.emphasis">{{ run.text }}</em>
@@ -194,7 +203,12 @@
                     :target="run.external ? '_blank' : undefined"
                     :rel="run.external ? 'noopener noreferrer' : undefined"
                     class="text-link"
-                    >{{ run.text }}</a
+                    >{{ run.text
+                    }}<span
+                      v-if="run.external"
+                      class="sr-only"
+                      >{{ ' ' + t('common.newTab') }}</span
+                    ></a
                   >
                   <strong v-else-if="run.strong">{{ run.text }}</strong>
                   <em v-else-if="run.emphasis">{{ run.text }}</em>

@@ -142,6 +142,16 @@ describe('ContactHubSection', () => {
     expect(band().getByTestId(TESTID).hasAttribute('id')).toBe(false)
   })
 
+  it('says which channel links open a new tab', () => {
+    const { getAllByTestId } = band({ lanes: [] })
+
+    const [attack, community, docs] = getAllByTestId(TOPIC_TESTID)
+    expect(attack!.textContent).toContain('(opens in a new tab)')
+    expect(community!.textContent).toContain('(opens in a new tab)')
+    expect(docs!.textContent).not.toContain('(opens in a new tab)')
+    expect(attack!.querySelector('p')!.textContent).toContain(channels[0]!.description)
+  })
+
   it('draws the lanes and the channels in one frame', () => {
     const { getAllByTestId } = band()
 

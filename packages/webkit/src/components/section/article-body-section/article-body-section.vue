@@ -2,6 +2,8 @@
   import { useEventListener } from '@vueuse/core'
   import { computed, onMounted, ref, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
   import type { SplitButtonItem } from '../../action/split-button/split-button.vue'
   import Avatar from '../../content/avatar/avatar.vue'
   import DocProse from '../../docs/doc-prose/doc-prose.vue'
@@ -146,6 +148,8 @@
   })
 
   const attrs = useAttrs()
+
+  const { t } = useTranslate({ common: en.common })
 
   const TRIP_LINE = 120
 
@@ -344,7 +348,12 @@
                           :href="run.href"
                           :target="isRemote(run.href) ? '_blank' : undefined"
                           :rel="isRemote(run.href) ? 'noopener' : undefined"
-                          >{{ run.text }}</a
+                          >{{ run.text
+                          }}<span
+                            v-if="isRemote(run.href)"
+                            class="sr-only"
+                            >{{ ' ' + t('common.newTab') }}</span
+                          ></a
                         >
                         <strong v-else-if="run.kind === 'strong'">{{ run.text }}</strong>
                         <em v-else-if="run.kind === 'em'">{{ run.text }}</em>
@@ -363,7 +372,12 @@
                         :href="run.href"
                         :target="isRemote(run.href) ? '_blank' : undefined"
                         :rel="isRemote(run.href) ? 'noopener' : undefined"
-                        >{{ run.text }}</a
+                        >{{ run.text
+                        }}<span
+                          v-if="isRemote(run.href)"
+                          class="sr-only"
+                          >{{ ' ' + t('common.newTab') }}</span
+                        ></a
                       >
                       <strong v-else-if="run.kind === 'strong'">{{ run.text }}</strong>
                       <em v-else-if="run.kind === 'em'">{{ run.text }}</em>

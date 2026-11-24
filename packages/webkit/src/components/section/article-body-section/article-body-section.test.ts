@@ -185,10 +185,14 @@ describe('ArticleBodySection', () => {
   it('builds the share links from the article URL', () => {
     const { getByRole } = band()
 
-    expect(getByRole('link', { name: share.shareX }).getAttribute('href')).toBe(
-      `https://x.com/intent/tweet?url=${article.href}&via=aziontech`
-    )
-    expect(getByRole('link', { name: share.shareLinkedIn }).getAttribute('href')).toBe(
+    expect(
+      getByRole('link', { name: `${share.shareX} (opens in a new tab)` }).getAttribute('href')
+    ).toBe(`https://x.com/intent/tweet?url=${article.href}&via=aziontech`)
+    expect(
+      getByRole('link', { name: `${share.shareLinkedIn} (opens in a new tab)` }).getAttribute(
+        'href'
+      )
+    ).toBe(
       `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(article.href)}`
     )
   })
@@ -317,7 +321,7 @@ describe('ArticleBodySection', () => {
       ].join('\n')
     })
 
-    const link = getByRole('link', { name: 'guide' })
+    const link = getByRole('link', { name: /^guide ?\(opens in a new tab\)$/ })
     expect(link.getAttribute('href')).toBe('https://example.com/docs')
     expect(link.getAttribute('target')).toBe('_blank')
     expect(container.querySelector('article strong')?.textContent).toBe('care')
@@ -363,7 +367,11 @@ describe('ArticleBodySection', () => {
   it('opens external community links in a new tab', () => {
     const { getByRole } = band()
 
-    expect(getByRole('link', { name: 'Join us on Discord' }).getAttribute('target')).toBe('_blank')
+    expect(
+      getByRole('link', { name: /^Join us on Discord ?\(opens in a new tab\)$/ }).getAttribute(
+        'target'
+      )
+    ).toBe('_blank')
     expect(getByRole('link', { name: 'Read our blog posts' }).hasAttribute('target')).toBe(false)
   })
 
