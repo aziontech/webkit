@@ -187,7 +187,10 @@ describe('StatTile', () => {
     }
     expect(skeletons({})).toBe(1)
     expect(skeletons({ deltaLabel: 'vs last week' })).toBe(2)
-    expect(skeletons({ deltaLabel: 'vs last week', trend: [1, 2, 3] })).toBe(3)
+    const view = mount({ loading: true, deltaLabel: 'vs last week', trend: [1, 2, 3] })
+    expect(view.getByTestId('stat-tile__empty')).toHaveAttribute('data-band', 'loading')
+    expect(view.getByTestId('stat-tile__empty')).toHaveAttribute('data-band-shown')
+    expect(view.queryByTestId('stat-tile__sparkline')).toBeNull()
   })
 
   it('has no a11y violations with and without a delta', async () => {

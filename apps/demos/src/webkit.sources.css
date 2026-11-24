@@ -357,6 +357,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/input/multi-select/multi-select-item/multi-select-item.vue";
 @source "../node_modules/@aziontech/webkit/src/components/input/multi-select/multi-select-trigger/multi-select-trigger.vue";
 @source "../node_modules/@aziontech/webkit/src/components/input/multi-select/multi-select.vue";
+@source "../node_modules/@aziontech/webkit/src/components/input/number-input/number-input.vue";
 @source "../node_modules/@aziontech/webkit/src/components/input/parts/form-value.ts";
 @source "../node_modules/@aziontech/webkit/src/components/input/password-input/password-input.vue";
 @source "../node_modules/@aziontech/webkit/src/components/input/radio-group/injection-key.ts";
