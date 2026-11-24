@@ -22,6 +22,37 @@ describe('ai/ai-chat entry', () => {
     const view = render(AiChat)
     await waitFor(() => expect(document.activeElement).toBe(view.getByRole('textbox')))
   })
+
+  it('leaves focus where the reader moved it when an answer finishes', async () => {
+    const messages: AiChatMessage[] = [
+      { id: 'u1', role: 'user', parts: [{ type: 'text', content: 'Purge the cache' }] },
+      { id: 'a1', role: 'assistant', parts: [{ type: 'text', content: 'Run azion purge.' }] },
+      { id: 'u2', role: 'user', parts: [{ type: 'text', content: 'And one URL?' }] }
+    ]
+    const view = render(AiChat, { props: { messages, loading: true } })
+    const prompt = view.getByRole('textbox', { name: 'Prompt' })
+    await waitFor(() => expect(document.activeElement).toBe(prompt))
+    const copy = await view.findAllByRole('button', { name: 'Copy' })
+    copy[0]!.focus()
+    expect(document.activeElement).toBe(copy[0])
+    await view.rerender({ messages, loading: false })
+    await nextTick()
+    await nextTick()
+    expect(document.activeElement).toBe(copy[0])
+  })
+
+  it('returns focus to the composer when an answer finishes and focus was idle', async () => {
+    const messages: AiChatMessage[] = [
+      { id: 'u1', role: 'user', parts: [{ type: 'text', content: 'Purge the cache' }] }
+    ]
+    const view = render(AiChat, { props: { messages, loading: true } })
+    await nextTick()
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    await view.rerender({ messages, loading: false })
+    await waitFor(() =>
+      expect(document.activeElement).toBe(view.getByRole('textbox', { name: 'Prompt' }))
+    )
+  })
 })
 
 describe('ai/ai-chat Artifact', () => {
