@@ -3,10 +3,10 @@ name: field
 category: input
 structure: composition
 status: implemented
-spec_version: 9
-checksum: 322da99e7f5f21f1f2e1c3a12e5dd63b29497927de807027095e20269fd4f2cf
+spec_version: 10
+checksum: a694609fe5dd4cfa25f5d74666f8827c0806aff92bdf42df38f581f5c7e8172b
 created: 2026-11-10
-last_updated: 2026-11-17
+last_updated: 2026-11-23
 ---
 
 # Field — Component Spec
@@ -17,7 +17,7 @@ One composable form field that wraps **any** control — `Input`, `Textarea`, `S
 
 ## When to use
 
-- Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Field.Description and Field.Error also work alone, under a control that is not inside a Field; for a one-sentence explanation beside a label use Hint.
+- Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Field.Description and Field.Error also work alone, under a control that is not inside a Field; for an optional explanation beside a label (a click-open note) use Hint; information needed to fill the field goes in Field.Description.
 - Any labelled form control: a text input, a select, a textarea, a password, a phone number, a slider.
 - A checkbox, radio or switch with its label beside it (`orientation="horizontal"`).
 - A selectable checkbox or switch card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants). For one choice among cards use `RadioGroup variant="card"`, never a radio inside a `Field.Label`.
@@ -110,7 +110,7 @@ Tree-shaking alternative — the standalone root + each part from its own entry 
 The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated `controlId`, the reactive `invalid` / `disabled` / `required` flags, `describedBy` (the ids of the mounted `Field.Description` and `Field.Error` parts), `labelledBy` (the ids of the mounted `Field.Title` parts), `requiredId` (id of the hidden "Required" text in `Field.Label`) and `register`. Controls read it through the shared `useFieldControl` composable (`src/composables/use-field-control`); an explicit prop or attribute on the control always wins over the Field, except `aria-describedby`: the control's own ids are joined with the Field's description and error ids (deduplicated), so a consumer description never hides the Field's error. Composite controls (`Select`, `MultiSelect`, `PhoneInput`) consume the context on their root and provide `null` below it, so their inner search inputs never take the field id. Every part works outside a `Field` too (it then reads no state). Member names mirror the anatomy; there is no `Trigger`/`Content` pair because the field has no open/closed state.
 
 - `field-label/field-label.vue` — `<label>` whose `for` defaults to the Field's `controlId`; appends the Required marker (a lone `*`, hidden from assistive tech) and, in a required Field, a `hidden` "Required" text (`requiredId`) when the Field is `required` or its own `required` prop is set (for a label set apart from its control, outside any Field), and a `Hint` glyph when `hint` is set. When it wraps a `Field` it becomes a selectable card (border, padding, hover, focus ring, selected tokens when the control inside is `data-checked`).
-  - Props: `hint` (`string`, default `''`) — short explanation revealed by a `Hint` glyph.
+  - Props: `hint` (`string`, default `''`) — short explanation, one to three sentences, in a `Hint` glyph that opens it on click. Clicking the glyph never toggles or focuses the labelled control.
   - Events: _none_.
   - Slots: `default` — label text, or a horizontal `Field` for a choice card.
 - `field-description/field-description.vue` — guidance line in the label-sm text style; registers its id with the Field. Tone follows the Field: `disabled` (lock icon) > `invalid` (`--text-danger`, only when no `Field.Error` is mounted) > `helper` (`--text-muted`). A required field keeps the helper tone: the Required marker on `Field.Label` says it is required, and no control shows a warning colour for it.

@@ -14,7 +14,7 @@
   export interface SettingsGroupProps {
     /** The group heading, rendered as an h2. */
     label: string
-    /** One-sentence guidance shown in a Hint glyph beside the label. */
+    /** One-sentence guidance in a click-open Hint note beside the label. */
     hint?: string
     /** Id of the h2 that a hash link targets; when set, a copy-link button appears in the gutter on hover or focus. */
     anchor?: string

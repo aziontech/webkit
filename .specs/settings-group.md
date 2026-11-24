@@ -3,17 +3,17 @@ name: settings-group
 category: layout
 structure: monolithic
 status: implemented
-checksum: 711dd9df4efcb57147a3774f43d545728617c5b050bbd5859f072e1ed40fde2c
-spec_version: 8
+checksum: 93eb15edb4f967f21d226b9d47f84322d2de17d96010e878fe4208d491ac2979
+spec_version: 9
 created: 2026-11-10
-last_updated: 2026-11-22
+last_updated: 2026-11-23
 ---
 
 # SettingsGroup — Component Spec
 
 ## Purpose
 
-A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingsRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.
+A band of a settings page: an h2 with a `Hint` glyph that opens the one-sentence guidance on click, over the band body (usually a flush `Card` of `SettingsRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.
 
 ## When to use
 
@@ -87,7 +87,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
 | Prop          | Type      | Default | Required | JSDoc                                                                                                        |
 | ------------- | --------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------ |
 | `label`       | `string`  | `—`     | true     | The group heading, rendered as an h2.                                                                        |
-| `hint`        | `string`  | `''`    | false    | One-sentence guidance shown in a Hint glyph beside the label.                                                |
+| `hint`        | `string`  | `''`    | false    | One-sentence guidance in a click-open Hint note beside the label.                                            |
 | `anchor`      | `string`  | `''`    | false    | Id of the h2 that a hash link targets; when set, a copy-link button appears in the gutter on hover or focus. |
 | `collapsible` | `boolean` | `false` | false    | Turns the label into a disclosure that folds the band body.                                                  |
 | `icon`        | `string`  | `''`    | false    | Glyph shown before the label of a collapsible band (e.g. `az az-settings`).                                  |

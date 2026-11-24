@@ -4,13 +4,18 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Hover or focus the glyph to reveal the hint.",
+      "summary": "Click the glyph, or focus it and press Enter, to open the note. Esc or a click outside closes it.",
       "file": "default.vue"
     },
     {
       "name": "Placements",
-      "summary": "The four anchors. Hover each glyph to see where its tooltip opens.",
+      "summary": "The four sides. The note opens below by default and flips when there is no room.",
       "file": "placements.vue"
+    },
+    {
+      "name": "WithLink",
+      "summary": "A Hint placed after a field label, with `href` adding a Learn more link to the docs under the note.",
+      "file": "with-link.vue"
     }
   ]
 }

@@ -638,6 +638,10 @@ export const helpPanel = {
   learnMore: 'Learn more'
 } as const
 
+export const hint = {
+  label: 'More information'
+} as const
+
 export const heroSection = {
   carouselLabel: 'Proven on mission-critical workloads'
 } as const
@@ -1678,6 +1682,7 @@ export const en = {
   gaugeChart,
   appHeader,
   helpPanel,
+  hint,
   heroSection,
   heroFormSection,
   keyValueList,
