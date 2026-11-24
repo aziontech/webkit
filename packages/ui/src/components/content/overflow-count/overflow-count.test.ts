@@ -7,7 +7,7 @@ import Default from '../../../../examples/overflow-count/default.vue'
 import LongList from '../../../../examples/overflow-count/long-list.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import OverflowCount from './overflow-count.vue'
 
 const byTestId = (id: string): HTMLElement | null =>

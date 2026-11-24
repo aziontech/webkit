@@ -2393,7 +2393,7 @@ own scripts that open `node_modules/@aziontech/ui/catalog.json`. The file is now
 
 Component categories are singular and match the source folders: `actions` → `action`, `inputs` →
 `input`, `sections` → `section`, `documentation` → `docs`, and `utils` is gone (`spinner` is
-`feedback`, `config-provider` is `provider`). The `category` of every `imports` entry and the
+`feedback`, `config-provider` is `layout`). The `category` of every `imports` entry and the
 `title` of every example (`Components/Action/Button`, was `Components/Primitives/Actions/Button`)
 follow.
 

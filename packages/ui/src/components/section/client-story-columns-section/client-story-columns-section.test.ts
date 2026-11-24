@@ -7,7 +7,7 @@ import RevealHover from '../../../../examples/client-story-columns-section/revea
 import { CLIENT_BRANDS } from '../../../assets/logos/clients/brands'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import ClientStoryColumnsSection from './client-story-columns-section.vue'
 
 const TESTID = 'client-story-columns-section'

@@ -125,7 +125,7 @@ For onboarding content, prioritize the docs site's `Foundations` pages.
 
 ## 11) Azion UI Layer Components (mandatory for agents)
 
-**Scope:** any file under `packages/ui/src/components/<category>/<name>/` (categories `action`, `ai`, `chart`, `code`, `content`, `data`, `docs`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`, `provider`, `section` — the registry is [`contributing/hooks/lib/component-categories.mjs`](./hooks/lib/component-categories.mjs)).
+**Scope:** any file under `packages/ui/src/components/<category>/<name>/` (categories `action`, `ai`, `chart`, `code`, `content`, `data`, `docs`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`, `section` — the registry is [`contributing/hooks/lib/component-categories.mjs`](./hooks/lib/component-categories.mjs)).
 
 ### 11.1) Sources of truth (read first)
 
@@ -189,7 +189,7 @@ building blocks it calls.
 
 ### 11.3) Auto-invoke triggers (mandatory — do not wait for the user to mention the skill)
 
-- **Intent triggers (textual):** the user's request combines a creation verb (`criar`/`crie`/`gerar`/`adicionar`/`novo`/`create`/`add`/`make`/`build`) with a UI noun (`componente`/`component`/`button`/`botao`/`dialog`/`modal`/`drawer`/`sheet`/`tooltip`/`tabs`/`accordion`/`card`/`tag`/`badge`/`chip`/`input`/`select`/`dropdown`/`checkbox`/`radio`/`switch`/`spinner`/`toast`/`alert`/`message`/`breadcrumb`/`menu`/`popover`/`avatar`/`progress`/`skeleton`/`divider`) — or one of the categories (`action`/`content`/`data`/`feedback`/`input`/`layout`/`navigation`/`overlay`/`provider`) — or any Figma reference (`figma.com/design/...`, `figma.com/proto/...`, "design", "frame", "mockup").
+- **Intent triggers (textual):** the user's request combines a creation verb (`criar`/`crie`/`gerar`/`adicionar`/`novo`/`create`/`add`/`make`/`build`) with a UI noun (`componente`/`component`/`button`/`botao`/`dialog`/`modal`/`drawer`/`sheet`/`tooltip`/`tabs`/`accordion`/`card`/`tag`/`badge`/`chip`/`input`/`select`/`dropdown`/`checkbox`/`radio`/`switch`/`spinner`/`toast`/`alert`/`message`/`breadcrumb`/`menu`/`popover`/`avatar`/`progress`/`skeleton`/`divider`) — or one of the categories (`action`/`content`/`data`/`feedback`/`input`/`layout`/`navigation`/`overlay`) — or any Figma reference (`figma.com/design/...`, `figma.com/proto/...`, "design", "frame", "mockup").
 - **File triggers (context):** the agent is about to `Write`/`Edit` any of:
   - `packages/ui/src/components/**/*.vue`
   - new entries in `packages/ui/package.json#exports` (flat `./<name>` keys pointing into `src/components/<category>/<name>/`)

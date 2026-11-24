@@ -315,6 +315,7 @@ export const en = {
   whyNextBody:
     'Opinionated foundations with composable patterns, so the system keeps pace as the craft changes.',
   openComponent: 'Open',
+  categoryLeadOne: '{count} component',
   categoryLead: '{count} components',
   componentsLead: '{count} components, each with its examples, API and guidelines.',
   blocksLead:

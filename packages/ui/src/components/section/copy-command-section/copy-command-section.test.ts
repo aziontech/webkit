@@ -7,7 +7,7 @@ import Prompt from '../../../../examples/copy-command-section/prompt.vue'
 import * as en from '../../../locales/en'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import CopyCommandSection from './copy-command-section.vue'
 
 describe('CopyCommandSection', () => {

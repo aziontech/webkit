@@ -4,7 +4,7 @@ import { defineComponent, h, nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import Kbd from './kbd.vue'
 
 // Starter suite emitted by the scaffold — a FLOOR, not the ceiling. Expand per

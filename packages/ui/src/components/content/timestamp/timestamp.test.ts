@@ -6,7 +6,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/timestamp/default.vue'
 import LogDetails from '../../../../examples/timestamp/log-details.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import Timestamp from './timestamp.vue'
 import { relativeText, toDate } from './timestamp-format'
 

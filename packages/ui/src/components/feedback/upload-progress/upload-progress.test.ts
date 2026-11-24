@@ -8,7 +8,7 @@ import Finished from '../../../../examples/upload-progress/finished.vue'
 import Move from '../../../../examples/upload-progress/move.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import UploadProgress, { type UploadProgressItem } from './upload-progress.vue'
 
 const running = (): UploadProgressItem[] => [

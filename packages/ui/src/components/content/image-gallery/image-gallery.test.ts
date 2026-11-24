@@ -10,7 +10,7 @@ import Loading from '../../../../examples/image-gallery/loading.vue'
 import Single from '../../../../examples/image-gallery/single.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import ImageGallery from './image-gallery.vue'
 import { imageFileName, imageSource } from './lib/image-source'
 

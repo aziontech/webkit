@@ -6,7 +6,7 @@ import Default from '../../../../examples/countdown/default.vue'
 import TicketList from '../../../../examples/countdown/ticket-list.vue'
 import { ptBR } from '../../../locales/pt-BR'
 import { expectNoA11yViolations } from '../../../test/axe'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import Countdown from './countdown.vue'
 import { durationParts, roundedMinutes } from './lib/countdown-phrase'
 

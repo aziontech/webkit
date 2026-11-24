@@ -101,8 +101,7 @@ const CATEGORIES = [
   'marketing',
   'navigation',
   'overlay',
-  'section',
-  'provider'
+  'section'
 ]
 
 const CATEGORY_RENAMES = {
@@ -111,7 +110,8 @@ const CATEGORY_RENAMES = {
   sections: 'section',
   charts: 'chart',
   overlays: 'overlay',
-  utils: 'feedback (spinner) or provider (config-provider)',
+  provider: 'layout',
+  utils: 'feedback (spinner) or layout (config-provider)',
   templates: '(no such category)',
   documentation: 'docs'
 }

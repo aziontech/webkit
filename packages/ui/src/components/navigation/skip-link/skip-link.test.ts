@@ -6,7 +6,7 @@ import { h } from 'vue'
 import Default from '../../../../examples/skip-link/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import SkipLink from './skip-link.vue'
 
 const mounted: HTMLElement[] = []

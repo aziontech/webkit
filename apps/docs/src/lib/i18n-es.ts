@@ -308,6 +308,7 @@ export const es: Messages = {
   whyNextBody:
     'Fundamentos con criterio y patrones componibles, para que el sistema siga el ritmo del oficio.',
   openComponent: 'Abrir',
+  categoryLeadOne: '{count} componente',
   categoryLead: '{count} componentes',
   componentsLead: '{count} componentes, cada uno con sus ejemplos, API y pautas.',
   blocksLead:

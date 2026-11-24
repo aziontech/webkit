@@ -8,7 +8,7 @@ You are working inside the `@aziontech/ui` package. Universal monorepo guidance 
 packages/ui/src/
 ├── components/          ← the design-system components (spec-driven; see contributing/)
 │   ├── action/  ai/  chart/  code/  content/  data/  docs/  feedback/
-│   └── input/  layout/  marketing/  navigation/  overlay/  provider/  section/
+│   └── input/  layout/  marketing/  navigation/  overlay/  section/
 ├── composables/         use-controllable, use-direction, use-focus-trap, use-placement, use-collection, …
 ├── utils/               cn (clsx + tailwind-merge), csv
 ├── cli/                 `ui` bin — init / doctor / plan / apply

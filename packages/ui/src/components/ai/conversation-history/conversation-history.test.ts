@@ -18,7 +18,7 @@ import States from '../../../../examples/conversation-history/states.vue'
 import StatusGroups from '../../../../examples/conversation-history/status-groups.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import ConversationHistory from './conversation-history.vue'
 
 afterEach(() => cleanup())

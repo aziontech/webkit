@@ -1,9 +1,9 @@
 # Config Provider
 
-> Sets the language and text direction of every Azion UI component below it. It wraps the app once, at the root, with the user's BCP 47 locale: components then read their built-in strings (close buttons, pagination, empty states, assistive labels) from the locale catalog and format dates, numbers, file sizes, relative times and plurals with `Intl` for that locale. English is built in; Portuguese (`@aziontech/ui/locales/pt-BR`) and Spanish (`@aziontech/ui/locales/es`) are separate entries the app imports and passes through `catalogs`, so an English-only app does not ship them. The catalogs are static imports, so the server and the client render the same strings and hydration never flips after the first render. Digits are Latin unless the tag picks a numbering system (`ar-u-nu-arab`): engines ship different CLDR defaults (Node and Chromium format `ar` with Latin digits, Safari with Arabic-Indic ones), so every `Intl` formatter receives the tag through `intlLocale`, and server and client render the same text. By default everything follows the person's device: an unset `locale` (and every component with no provider mounted) uses the device locale (`navigator.language`) for the `Intl` formats and picks its catalog when one is registered, falling back to English text. The server cannot know the device, so the server render and the hydrating client render `en-US`, and the device locale applies right after mount; an explicit `locale` (the user's saved choice) renders the same on both from the start. Only what people read follows the device: values that components hand back through `v-model` stay unambiguous (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs). It also carries the reference time of relative times (`now`), so a page that must render the same text on the server and the client, or an example, fixes it once instead of on every cell. The element it renders carries `lang` and `dir`.
+> Sets the language, text direction, reference clock and time zone of every Azion UI component below it. It wraps the app once, at the root, with the user's BCP 47 locale: components then read their built-in strings (close buttons, pagination, empty states, assistive labels) from the locale catalog and format dates, numbers, file sizes, relative times and plurals with `Intl` for that locale. English is built in; Portuguese (`@aziontech/ui/locales/pt-BR`) and Spanish (`@aziontech/ui/locales/es`) are separate entries the app imports and passes through `catalogs`, so an English-only app does not ship them. The catalogs are static imports, so the server and the client render the same strings and hydration never flips after the first render. Digits are Latin unless the tag picks a numbering system (`ar-u-nu-arab`): engines ship different CLDR defaults (Node and Chromium format `ar` with Latin digits, Safari with Arabic-Indic ones), so every `Intl` formatter receives the tag through `intlLocale`, and server and client render the same text. By default everything follows the person's device: an unset `locale` (and every component with no provider mounted) uses the device locale (`navigator.language`) for the `Intl` formats and picks its catalog when one is registered, falling back to English text. The server cannot know the device, so the server render and the hydrating client render `en-US`, and the device locale applies right after mount; an explicit `locale` (the user's saved choice) renders the same on both from the start. Only what people read follows the device: values that components hand back through `v-model` stay unambiguous (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs). It also carries the reference time of relative times (`now`), so a page that must render the same text on the server and the client, or an example, fixes it once instead of on every cell. The element it renders carries `lang` and `dir`.
 
 - Import: `import ConfigProvider from '@aziontech/ui/config-provider'`
-- Category: provider · Surface: app · Structure: monolithic
+- Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [config-provider.json](config-provider.json)
 
 ## When to use
@@ -102,41 +102,120 @@ No built-in strings: the provider renders none. It is the source of the locale, 
   import Button from '@aziontech/ui/button'
   import ConfigProvider from '@aziontech/ui/config-provider'
   import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import Field from '@aziontech/ui/field'
+  import LanguageSelect from '@aziontech/ui/language-select'
+  import { es } from '@aziontech/ui/locales/es'
   import { ptBR } from '@aziontech/ui/locales/pt-BR'
   import PaginationRoot from '@aziontech/ui/pagination-root'
+  import Select from '@aziontech/ui/select'
+  import Timestamp from '@aziontech/ui/timestamp'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { ref } from 'vue'
 
+  const NOW = Date.UTC(2026, 10, 14, 12, 10)
+  const DEPLOYED_AT = '2026-11-14T12:04:31Z'
+  const catalogs = { 'pt-BR': ptBR, es }
+
+  const locale = ref('pt-BR')
+  const dir = ref('auto')
+  const timeZone = ref('America/Sao_Paulo')
   const page = ref(1)
   const open = ref(false)
+
+  const directions = [
+    { label: 'Auto', value: 'auto' },
+    { label: 'LTR', value: 'ltr' },
+    { label: 'RTL', value: 'rtl' }
+  ]
+
+  const zones = [
+    { value: 'UTC', label: 'UTC' },
+    { value: 'America/Sao_Paulo', label: 'São Paulo' },
+    { value: 'America/New_York', label: 'New York' },
+    { value: 'Asia/Tokyo', label: 'Tokyo' }
+  ]
 </script>
 
 <template>
-  <ConfigProvider
-    locale="pt-BR"
-    :catalogs="{ 'pt-BR': ptBR }"
-  >
-    <div class="flex flex-col gap-(--spacing-md)">
-      <PaginationRoot
-        v-model:page="page"
-        :total="120"
-      />
-      <ConfirmDialog
-        v-model:open="open"
-        title="Remover domínio"
-        description="shop.example.com deixa de responder por este recurso."
-        size="small"
-        @confirm="open = false"
-      >
-        <template #trigger>
-          <Button
-            label="Remover domínio"
-            variant="outline"
+  <div class="flex flex-col gap-(--spacing-md)">
+    <div class="flex flex-wrap items-end gap-(--spacing-sm)">
+      <div class="w-48 max-w-full">
+        <Field>
+          <Field.Label>Language</Field.Label>
+          <LanguageSelect
+            v-model="locale"
             size="medium"
           />
-        </template>
-      </ConfirmDialog>
+        </Field>
+      </div>
+      <div class="w-44 max-w-full">
+        <Field>
+          <Field.Label>Time zone</Field.Label>
+          <Select
+            v-model="timeZone"
+            size="medium"
+          >
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Item
+                v-for="zone in zones"
+                :key="zone.value"
+                :value="zone.value"
+                >{{ zone.label }}</Select.Item
+              >
+            </Select.Content>
+          </Select>
+        </Field>
+      </div>
+      <div class="flex flex-col gap-(--spacing-2xs)">
+        <span class="text-label-md text-(--text-default)">Direction</span>
+        <ToggleGroup
+          v-model="dir"
+          :options="directions"
+          aria-label="Direction"
+          size="medium"
+        />
+      </div>
     </div>
-  </ConfigProvider>
+
+    <ConfigProvider
+      :locale="locale"
+      :catalogs="catalogs"
+      :dir="dir"
+      :now="NOW"
+      :time-zone="timeZone"
+    >
+      <div
+        class="flex flex-col gap-(--spacing-md) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
+      >
+        <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
+          <div class="flex flex-wrap items-baseline gap-(--spacing-xs) text-body-sm">
+            <span class="text-(--text-muted)">Last deploy</span>
+            <Timestamp :value="DEPLOYED_AT" />
+          </div>
+          <ConfirmDialog
+            v-model:open="open"
+            title="Delete domain"
+            description="edge.example.com will stop serving traffic for this resource."
+            size="small"
+            @confirm="open = false"
+          >
+            <template #trigger>
+              <Button
+                label="Delete domain"
+                variant="outline"
+                size="medium"
+              />
+            </template>
+          </ConfirmDialog>
+        </div>
+        <PaginationRoot
+          v-model:page="page"
+          :total="120"
+        />
+      </div>
+    </ConfigProvider>
+  </div>
 </template>
 ```
 

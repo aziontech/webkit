@@ -7,7 +7,7 @@ import CustomFallback from '../../../../examples/error-boundary/custom-fallback.
 import Default from '../../../../examples/error-boundary/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import ErrorBoundary from './error-boundary.vue'
 
 const broken = ref(false)

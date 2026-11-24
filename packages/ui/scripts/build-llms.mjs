@@ -47,7 +47,6 @@ const CATEGORY_TITLES = {
   marketing: 'Marketing',
   navigation: 'Navigation',
   overlay: 'Overlay',
-  provider: 'Providers',
   section: 'Page sections'
 }
 

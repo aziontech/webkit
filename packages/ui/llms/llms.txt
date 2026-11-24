@@ -350,6 +350,7 @@ Installed copy: `node_modules/@aziontech/ui/llms/`. Every component also has a J
 - [AppLayout](components/app-layout.md): The frame every signed-in product page renders inside.
 - [BentoGrid](components/bento-grid.md): A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface.
 - [CardGrid](components/card-grid.md): The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `regi…
+- [ConfigProvider](components/config-provider.md): Sets the language, text direction, reference clock and time zone of every Azion UI component below it.
 - [ConsoleLayout](components/console-layout.md): The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `SidebarMenu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's…
 - [Container](components/container.md): The framed content column: a centered, width-capped block carrying only its two vertical rules, which every section below a hero stacks inside.
 - [DashboardGrid](components/dashboard-grid.md): A configurable dashboard grid: the reader arranges the cards.
@@ -416,10 +417,6 @@ Installed copy: `node_modules/@aziontech/ui/llms/`. Every component also has a J
 - [Popover](components/popover.md): Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a fl…
 - [ShortcutsDialog](components/shortcuts-dialog.md): The list of every keyboard shortcut the current screen offers, opened with `?` (Shift+/) as the console keyboard standard asks.
 - [Tooltip](components/tooltip.md): Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it.
-
-## Components: Providers
-
-- [ConfigProvider](components/config-provider.md): Sets the language and text direction of every Azion UI component below it.
 
 ## Components: Page sections
 

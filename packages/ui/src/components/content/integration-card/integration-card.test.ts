@@ -8,7 +8,7 @@ import Featured from '../../../../examples/integration-card/featured.vue'
 import Installed from '../../../../examples/integration-card/installed.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import IntegrationCard from './integration-card.vue'
 
 describe('IntegrationCard', () => {

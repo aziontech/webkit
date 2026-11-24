@@ -8,7 +8,7 @@ import Default from '../../../../examples/qr-code/default.vue'
 import Sizes from '../../../../examples/qr-code/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import QrCode from './qr-code.vue'
 import { encodeQr } from './qr-encode'
 

@@ -65,7 +65,7 @@ packages/ui/src/components/<category>/<name>/
 └── <name>.test.ts    # browser test (rules/testing.md)
 ```
 
-Categories: `action`, `ai`, `chart`, `code`, `content`, `data`, `docs`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`, `provider`, `section`. The spec is `.specs/<name>.md`, and runnable examples are `packages/ui/examples/<export>/` (folder named after the export it documents). The full layout and script order are [`rules/component-structure.md`](../rules/component-structure.md).
+Categories: `action`, `ai`, `chart`, `code`, `content`, `data`, `docs`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`, `section`. The spec is `.specs/<name>.md`, and runnable examples are `packages/ui/examples/<export>/` (folder named after the export it documents). The full layout and script order are [`rules/component-structure.md`](../rules/component-structure.md).
 
 **Example:**
 

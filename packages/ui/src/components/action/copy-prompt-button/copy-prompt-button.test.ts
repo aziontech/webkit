@@ -9,7 +9,7 @@ import DefaultExample from '../../../../examples/copy-prompt-button/default.vue'
 import DisabledExample from '../../../../examples/copy-prompt-button/disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import CopyPromptButton from './copy-prompt-button.vue'
 
 const PROMPT = 'Set up the Azion CLI and link this project.'

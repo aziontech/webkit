@@ -8,7 +8,7 @@ import Groups from '../../../../examples/otp-input/groups.vue'
 import States from '../../../../examples/otp-input/states.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import OtpInput from './otp-input.vue'
 
 afterEach(() => cleanup())

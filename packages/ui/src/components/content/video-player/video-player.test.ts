@@ -7,7 +7,7 @@ import Default from '../../../../examples/video-player/default.vue'
 import Statuses from '../../../../examples/video-player/statuses.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import { formatTime } from './lib/format-time'
 import VideoPlayer from './video-player.vue'
 

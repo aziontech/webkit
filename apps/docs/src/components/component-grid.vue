@@ -77,7 +77,9 @@
         >
           {{ group.label }}
           <span class="text-body-sm text-(--text-muted)">{{
-            format(t.categoryLead, { count: group.items.length })
+            format(group.items.length === 1 ? t.categoryLeadOne : t.categoryLead, {
+              count: group.items.length
+            })
           }}</span>
         </h2>
         <p

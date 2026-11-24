@@ -5,7 +5,7 @@ import { defineComponent, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import Command from './command.vue'
 import CommandEmpty from './command-empty/command-empty.vue'
 import CommandGroup from './command-group/command-group.vue'

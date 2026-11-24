@@ -1972,8 +1972,8 @@
       "default": "./src/components/feedback/spinner/spinner.vue"
     },
     "./config-provider": {
-      "types": "./types/components/provider/config-provider/config-provider.vue.d.ts",
-      "default": "./src/components/provider/config-provider/config-provider.vue"
+      "types": "./types/components/layout/config-provider/config-provider.vue.d.ts",
+      "default": "./src/components/layout/config-provider/config-provider.vue"
     },
     "./svg/error-403": {
       "types": "./types/svg/error-403/error-403.vue.d.ts",
@@ -4112,7 +4112,7 @@
         "./types/components/feedback/spinner/spinner.vue.d.ts"
       ],
       "config-provider": [
-        "./types/components/provider/config-provider/config-provider.vue.d.ts"
+        "./types/components/layout/config-provider/config-provider.vue.d.ts"
       ],
       "svg/error-403": [
         "./types/svg/error-403/error-403.vue.d.ts"

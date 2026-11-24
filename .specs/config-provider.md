@@ -1,20 +1,20 @@
 ---
 name: config-provider
-category: provider
+category: layout
 structure: monolithic
 status: implemented
-checksum: 1419d11e01b99e8e342ea2b4854375cbc440b022a9523182c253d271b984098a
+checksum: 76d3e2985addf2a2fbfe3aea51ec413e5bcb37df9d2f4043890f275a6125fd5d
 spec_version: 7
 template: 2
 created: 2026-11-11
-last_updated: 2026-11-23
+last_updated: 2026-11-24
 ---
 
 # ConfigProvider — Component Spec
 
 ## Purpose
 
-Sets the language and text direction of every Azion UI component below it. It wraps the app once, at the root, with the user's BCP 47 locale: components then read their built-in strings (close buttons, pagination, empty states, assistive labels) from the locale catalog and format dates, numbers, file sizes, relative times and plurals with `Intl` for that locale. English is built in; Portuguese (`@aziontech/ui/locales/pt-BR`) and Spanish (`@aziontech/ui/locales/es`) are separate entries the app imports and passes through `catalogs`, so an English-only app does not ship them. The catalogs are static imports, so the server and the client render the same strings and hydration never flips after the first render. Digits are Latin unless the tag picks a numbering system (`ar-u-nu-arab`): engines ship different CLDR defaults (Node and Chromium format `ar` with Latin digits, Safari with Arabic-Indic ones), so every `Intl` formatter receives the tag through `intlLocale`, and server and client render the same text. By default everything follows the person's device: an unset `locale` (and every component with no provider mounted) uses the device locale (`navigator.language`) for the `Intl` formats and picks its catalog when one is registered, falling back to English text. The server cannot know the device, so the server render and the hydrating client render `en-US`, and the device locale applies right after mount; an explicit `locale` (the user's saved choice) renders the same on both from the start. Only what people read follows the device: values that components hand back through `v-model` stay unambiguous (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs). It also carries the reference time of relative times (`now`), so a page that must render the same text on the server and the client, or an example, fixes it once instead of on every cell. The element it renders carries `lang` and `dir`.
+Sets the language, text direction, reference clock and time zone of every Azion UI component below it. It wraps the app once, at the root, with the user's BCP 47 locale: components then read their built-in strings (close buttons, pagination, empty states, assistive labels) from the locale catalog and format dates, numbers, file sizes, relative times and plurals with `Intl` for that locale. English is built in; Portuguese (`@aziontech/ui/locales/pt-BR`) and Spanish (`@aziontech/ui/locales/es`) are separate entries the app imports and passes through `catalogs`, so an English-only app does not ship them. The catalogs are static imports, so the server and the client render the same strings and hydration never flips after the first render. Digits are Latin unless the tag picks a numbering system (`ar-u-nu-arab`): engines ship different CLDR defaults (Node and Chromium format `ar` with Latin digits, Safari with Arabic-Indic ones), so every `Intl` formatter receives the tag through `intlLocale`, and server and client render the same text. By default everything follows the person's device: an unset `locale` (and every component with no provider mounted) uses the device locale (`navigator.language`) for the `Intl` formats and picks its catalog when one is registered, falling back to English text. The server cannot know the device, so the server render and the hydrating client render `en-US`, and the device locale applies right after mount; an explicit `locale` (the user's saved choice) renders the same on both from the start. Only what people read follows the device: values that components hand back through `v-model` stay unambiguous (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs). It also carries the reference time of relative times (`now`), so a page that must render the same text on the server and the client, or an example, fixes it once instead of on every cell. The element it renders carries `lang` and `dir`.
 
 ## When to use
 
@@ -68,7 +68,7 @@ Sets the language and text direction of every Azion UI component below it. It wr
 | Prop       | Type                       | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                         |
 | ---------- | -------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `locale`   | `string`                   | `''`        | false    | BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats. Empty inherits the provider above; at the root it follows the device locale, `en-US` on the server and until mount.                                                                           |
-| `catalogs` | `Record<string, Messages>` | `undefined` | false    | Extra catalogs keyed by locale tag, imported from `@aziontech/ui/locales/<tag>` (`{ 'pt-BR': ptBR, es }`), added to those of the provider above; a locale with no catalog falls back to English.                                                                                                                          |
+| `catalogs` | `Record<string, Messages>` | `undefined` | false    | Extra catalogs keyed by locale tag, imported from `@aziontech/ui/locales/<tag>` (`{ 'pt-BR': ptBR, es }`), added to those of the provider above; a locale with no catalog falls back to English.                                                                                                                              |
 | `messages` | `PartialMessages`          | `undefined` | false    | Partial catalog deep-merged over the built-in one and the provider above's overrides, keyed by component group (`{ pagination: { next: 'Seguinte' } }`).                                                                                                                                                                      |
 | `dir`      | `'ltr' \| 'rtl' \| 'auto'` | `'auto'`    | false    | Text direction of the subtree; `auto` derives it from `locale` (`ar`, `he`, `fa`, `ur` are right-to-left), and with no `locale` inherits the direction around the provider.                                                                                                                                                   |
 | `now`      | `string \| number \| Date` | `undefined` | false    | Reference time for every relative time below the provider (`TableCellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset inherits the provider above, and at the root reads the real clock, ticking each minute. |
@@ -147,7 +147,7 @@ No built-in strings: the provider renders none. It is the source of the locale, 
 
 ## Examples
 
-- Default — Pagination and a ConfirmDialog in Portuguese, with the pt-BR catalog registered.
+- Default — interactive controls for `locale`, `timeZone` and `dir` with a fixed `now`, updating `Timestamp`, `Pagination` and `ConfirmDialog` together.
 - CustomMessages — `messages` overrides one built-in string; justified because the override is the provider's second job.
 - Rtl — `locale="ar"` turns the subtree right-to-left; justified because `dir` is derived from the locale.
 - DeviceLocale — no `locale`: a DateRangePicker prints dates in the device's language and format while its `v-model` keeps ISO 8601 instants; justified because following the device is the provider's default.

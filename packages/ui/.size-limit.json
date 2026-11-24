@@ -1152,7 +1152,7 @@
   },
   {
     "name": "config-provider",
-    "path": "src/components/provider/config-provider/config-provider.vue",
+    "path": "src/components/layout/config-provider/config-provider.vue",
     "limit": "14.75 KB"
   },
   {

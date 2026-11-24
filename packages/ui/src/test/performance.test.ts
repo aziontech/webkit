@@ -60,6 +60,7 @@ import MultiSelectRoot from '../components/input/multi-select'
 import type { SchemaFormSchema } from '../components/input/schema-form/schema'
 import SchemaForm from '../components/input/schema-form/schema-form.vue'
 import SelectRoot from '../components/input/select'
+import ConfigProvider from '../components/layout/config-provider/config-provider.vue'
 import DropdownMenu, {
   DropdownMenuGroup,
   DropdownMenuItem,
@@ -71,7 +72,6 @@ import Command, {
   CommandItem,
   CommandList
 } from '../components/overlay/command'
-import ConfigProvider from '../components/provider/config-provider/config-provider.vue'
 import ListingIndexSection from '../components/section/listing-index-section/listing-index-section.vue'
 import ListingTableSection from '../components/section/listing-table-section/listing-table-section.vue'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'

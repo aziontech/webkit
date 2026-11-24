@@ -340,8 +340,8 @@ imports are flat ([`imports.md`](./imports.md)).
 
 Singular, from a closed list: `action`, `ai`, `chart`, `code`, `content`, `data`,
 `docs`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`,
-`section`, `provider`. `utils` dissolves (spinner → `feedback`, config-provider →
-`provider`). The category never appears in an export key or a test id.
+`section`. `utils` and `provider` dissolve (spinner → `feedback`, config-provider →
+`layout`). The category never appears in an export key or a test id.
 
 | ✅                              | ❌                               |
 | ------------------------------- | -------------------------------- |

@@ -4,7 +4,7 @@ import { defineComponent, h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import ResponseLoading from './response-loading.vue'
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))

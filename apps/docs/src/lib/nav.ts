@@ -21,7 +21,6 @@ const CATEGORY_ORDER = [
   'chart',
   'code',
   'ai',
-  'provider',
   'docs',
   'marketing',
   'section'
@@ -37,12 +36,11 @@ export const CATEGORY_LEADS: Record<string, string> = {
   overlay:
     'Layered, floating surfaces: dialogs, drawers, popovers, tooltips and menus above the page.',
   layout:
-    'Structure and shells: app frames, the marketing page frame (container, module, spacer), dividers, scroll areas and panes.',
+    'Structure, shells and app-root configuration: app frames, ConfigProvider (locale, direction, clock and time zone), the marketing page frame (container, module, spacer), dividers, scroll areas and panes.',
   content: 'Status and identity: tags, badges, avatars, cards and the pieces that describe things.',
   chart: 'Charts and figures: series, totals and trends drawn from the chart palette.',
   code: 'Source and log surfaces: code blocks and log views for monospaced content.',
   ai: 'Conversation pieces: messages, prompts, reasoning, sources and tool calls.',
-  provider: 'Providers that set locale, direction and context for the rest.',
   docs: 'Documentation site pieces: page chrome, callouts, steps, cards and the table of contents.',
   marketing:
     'Marketing site pieces you compose by hand: heroes, quotes, stats, media and the page renderer.',
@@ -56,7 +54,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   chart: 'Charts',
   docs: 'Docs',
   input: 'Inputs',
-  provider: 'Providers',
   section: 'Page sections'
 }
 

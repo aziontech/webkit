@@ -1,4 +1,4 @@
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createSSRApp, defineComponent, h, inject, nextTick, ref } from 'vue'
 import { renderToString } from 'vue/server-renderer'
@@ -515,9 +515,13 @@ describe('ConfigProvider', () => {
   })
 
   describe('examples', () => {
-    it('Default renders Pagination and ConfirmDialog in Portuguese', () => {
-      const { getByLabelText } = render(Default)
+    it('Default renders interactive controls and updates direction live', async () => {
+      const { getByLabelText, getByRole, getByTestId } = render(Default)
       expect(getByLabelText('Próxima página')).toBeTruthy()
+      expect(getByTestId('config-provider').getAttribute('dir')).toBe('ltr')
+      await fireEvent.click(getByRole('radio', { name: 'RTL' }))
+      await settle()
+      expect(getByTestId('config-provider').getAttribute('dir')).toBe('rtl')
     })
 
     it('a Portuguese subtree has no a11y violations', async () => {

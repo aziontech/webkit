@@ -7,7 +7,7 @@ import Default from '../../../../examples/outcome-icon/default.vue'
 import Sizes from '../../../../examples/outcome-icon/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import OutcomeIcon from './outcome-icon.vue'
 
 describe('OutcomeIcon', () => {

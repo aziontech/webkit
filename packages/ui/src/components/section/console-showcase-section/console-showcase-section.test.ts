@@ -7,7 +7,7 @@ import Default from '../../../../examples/console-showcase-section/default.vue'
 import Diagram from '../../../../examples/console-showcase-section/diagram.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import ConsoleShowcaseSection from './console-showcase-section.vue'
 
 const tabs = [

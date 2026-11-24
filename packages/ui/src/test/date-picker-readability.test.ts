@@ -11,7 +11,7 @@ import RelativeOnly from '../../examples/date-range-picker/relative-only.vue'
 import TimeZone from '../../examples/date-range-picker/time-zone.vue'
 import UntilNow from '../../examples/date-range-picker/until-now.vue'
 import WithStep from '../../examples/date-range-picker/with-step.vue'
-import ConfigProvider from '../components/provider/config-provider/config-provider.vue'
+import ConfigProvider from '../components/layout/config-provider/config-provider.vue'
 import { LOCALES } from './locales'
 
 const NOW = new Date('2026-11-10T16:00:00.000Z')

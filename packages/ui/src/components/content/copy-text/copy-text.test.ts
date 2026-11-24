@@ -7,7 +7,7 @@ import LongValue from '../../../../examples/copy-text/long-value.vue'
 import Sizes from '../../../../examples/copy-text/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import CopyText from './copy-text.vue'
 
 function stubClipboardResolved() {

@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent, effectScope, h, nextTick, ref } from 'vue'
 
 import DateRangePicker from '../../components/input/date-range-picker/date-range-picker.vue'
-import ConfigProvider from '../../components/provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../components/layout/config-provider/config-provider.vue'
 import { type DateRangeValue, TIME_RANGE_PRESETS, timeRangePreset, useTimeRange } from './index'
 
 const NOW = new Date('2026-11-16T12:00:00.000Z')

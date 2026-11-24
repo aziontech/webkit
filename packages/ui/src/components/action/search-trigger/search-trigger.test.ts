@@ -9,8 +9,8 @@ import DefaultExample from '../../../../examples/search-trigger/default.vue'
 import DisabledExample from '../../../../examples/search-trigger/disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import Command from '../../overlay/command/command.vue'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import SearchTrigger from './search-trigger.vue'
 
 describe('SearchTrigger', () => {

@@ -307,6 +307,7 @@ export const ptBR: Messages = {
   whyNextBody:
     'Fundamentos opinativos com padrões componíveis, para o sistema acompanhar a evolução do ofício.',
   openComponent: 'Abrir',
+  categoryLeadOne: '{count} componente',
   categoryLead: '{count} componentes',
   componentsLead: '{count} componentes, cada um com seus exemplos, API e diretrizes.',
   blocksLead:

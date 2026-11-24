@@ -11,7 +11,7 @@ import Text from '../../../../examples/file-preview/text.vue'
 import Unknown from '../../../../examples/file-preview/unknown.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import FilePreview from './file-preview.vue'
 import { decodeBase64Text, filePreviewType } from './lib/file-type'
 

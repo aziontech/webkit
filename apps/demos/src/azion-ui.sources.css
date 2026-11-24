@@ -455,6 +455,7 @@
 @source "../node_modules/@aziontech/ui/src/components/layout/app-layout/app-layout.vue";
 @source "../node_modules/@aziontech/ui/src/components/layout/app-layout/composables/use-app-layout-storage.ts";
 @source "../node_modules/@aziontech/ui/src/components/layout/app-layout/parts/app-layout-split-panel.vue";
+@source "../node_modules/@aziontech/ui/src/components/layout/config-provider/config-provider.vue";
 @source "../node_modules/@aziontech/ui/src/components/layout/console-layout/composables/use-console-layout-nav-audit.ts";
 @source "../node_modules/@aziontech/ui/src/components/layout/console-layout/composables/use-console-layout.ts";
 @source "../node_modules/@aziontech/ui/src/components/layout/console-layout/console-layout-breadcrumb/console-layout-breadcrumb.vue";
@@ -587,7 +588,6 @@
 @source "../node_modules/@aziontech/ui/src/components/overlay/tooltip/lib/trigger-class.ts";
 @source "../node_modules/@aziontech/ui/src/components/overlay/tooltip/parts/tooltip-content.vue";
 @source "../node_modules/@aziontech/ui/src/components/overlay/tooltip/tooltip.vue";
-@source "../node_modules/@aziontech/ui/src/components/provider/config-provider/config-provider.vue";
 @source "../node_modules/@aziontech/ui/src/composables/use-ai-chat-tools/index.ts";
 @source "../node_modules/@aziontech/ui/src/composables/use-ai-chat-tools/use-ai-chat-tools.ts";
 @source "../node_modules/@aziontech/ui/src/composables/use-ai-chat-versions/index.ts";

@@ -15,6 +15,7 @@ import SelectContent from '../components/input/select/select-content/select-cont
 import SelectItem from '../components/input/select/select-item/select-item.vue'
 import SelectTrigger from '../components/input/select/select-trigger/select-trigger.vue'
 import Slider from '../components/input/slider/slider.vue'
+import ConfigProvider from '../components/layout/config-provider/config-provider.vue'
 import DropdownMenu, {
   DropdownMenuGroup,
   DropdownMenuItem,
@@ -30,7 +31,6 @@ import Popover from '../components/overlay/popover/popover.vue'
 import PopoverContent from '../components/overlay/popover/popover-content/popover-content.vue'
 import PopoverTrigger from '../components/overlay/popover/popover-trigger/popover-trigger.vue'
 import Tooltip from '../components/overlay/tooltip/tooltip.vue'
-import ConfigProvider from '../components/provider/config-provider/config-provider.vue'
 import { hostable } from './hostable'
 
 const Select = hostable(SelectRoot)

@@ -6,7 +6,7 @@ import Brands from '../../../../examples/payment-brand/brands.vue'
 import Default from '../../../../examples/payment-brand/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import PaymentBrand from './payment-brand.vue'
 
 afterEach(() => cleanup())

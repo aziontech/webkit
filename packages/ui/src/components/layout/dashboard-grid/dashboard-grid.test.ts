@@ -14,7 +14,7 @@ import ChartCard, {
   ChartCardResizeHandle,
   ChartCardTitle
 } from '../../chart/chart-card/index'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../config-provider/config-provider.vue'
 import DashboardGrid, { DashboardGridItem, type DashboardGridLayoutItem } from './index'
 
 const titles: Record<string, string> = {

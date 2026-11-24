@@ -6,7 +6,7 @@ import { defineComponent, h, nextTick, type PropType, ref } from 'vue'
 import Default from '../../../../examples/feedback-reason-dialog/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import FeedbackReasonDialog, {
   type FeedbackReasonDialogPayload,
   type FeedbackReasonDialogReason

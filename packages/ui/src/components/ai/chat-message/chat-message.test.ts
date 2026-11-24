@@ -5,7 +5,7 @@ import { defineComponent, h, nextTick, ref, type VNodeChild } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import Conversation from '../conversation/conversation.vue'
 import StreamingResponse from '../streaming-response/streaming-response.vue'
 import { useChatMessageContext } from './composables/use-chat-message-context'

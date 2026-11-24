@@ -12,7 +12,7 @@ import Loading from '../../../../examples/audio-player/loading.vue'
 import PlaybackRates from '../../../../examples/audio-player/playback-rates.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import AudioPlayer from './audio-player.vue'
 
 const TEST_ID = 'audio-player'

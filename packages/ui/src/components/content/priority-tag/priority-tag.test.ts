@@ -5,7 +5,7 @@ import { defineComponent, h } from 'vue'
 import Priorities from '../../../../examples/priority-tag/priorities.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import PriorityTag from './priority-tag.vue'
 
 const LEVELS = [

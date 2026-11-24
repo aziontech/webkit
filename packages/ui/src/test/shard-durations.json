@@ -228,7 +228,7 @@
   "src/components/overlay/popover/popover.test.ts": 1607,
   "src/components/overlay/shortcuts-dialog/shortcuts-dialog.test.ts": 1765,
   "src/components/overlay/tooltip/tooltip.test.ts": 1174,
-  "src/components/provider/config-provider/config-provider.test.ts": 201,
+  "src/components/layout/config-provider/config-provider.test.ts": 201,
   "src/components/section/architecture-tabs-section/architecture-tabs-section.test.ts": 200,
   "src/components/section/article-body-section/article-body-section.test.ts": 879,
   "src/components/section/article-cards-section/article-cards-section.test.ts": 160,

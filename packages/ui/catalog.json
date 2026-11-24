@@ -24858,10 +24858,10 @@
   },
   "config-provider": {
    "import": "@aziontech/ui/config-provider",
-   "target": "./src/components/provider/config-provider/config-provider.vue",
+   "target": "./src/components/layout/config-provider/config-provider.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/ui/config-provider",
-   "category": "provider",
+   "category": "layout",
    "structure": "monolithic",
    "props": [
     {

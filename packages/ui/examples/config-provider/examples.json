@@ -1,10 +1,10 @@
 {
   "component": "config-provider",
-  "title": "Components/Provider/ConfigProvider",
+  "title": "Components/Layout/ConfigProvider",
   "examples": [
     {
       "name": "Default",
-      "summary": "Mounted with `locale=\"pt-BR\"`: Pagination and ConfirmDialog read their built-in labels in Portuguese and format numbers in the pt-BR style.",
+      "summary": "Interactive controls for `locale`, `timeZone`, and `dir` with a fixed `now`: switch them to see `Timestamp`, `Pagination`, and the teleported `ConfirmDialog` update together.",
       "file": "default.vue"
     },
     {

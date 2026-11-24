@@ -7,7 +7,7 @@ import DefaultExample from '../../../../examples/doc-agent-card/default.vue'
 import NarrowExample from '../../../../examples/doc-agent-card/narrow.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import DocAgentCard from './doc-agent-card.vue'
 
 const PROMPT = 'Set up the Azion CLI.'

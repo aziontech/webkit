@@ -4,7 +4,7 @@ import { h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import CopyButton from './copy-button.vue'
 
 // The real Clipboard API rejects in headless Chromium ("Document is not

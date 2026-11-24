@@ -12,6 +12,5 @@ export const COMPONENT_CATEGORIES = [
   'marketing',
   'navigation',
   'overlay',
-  'provider',
   'section'
 ]

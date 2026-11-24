@@ -6,7 +6,7 @@ import ReorderableRows from '../../../../examples/data-table/reorderable-rows.vu
 import { expectNoA11yViolations } from '../../../test/axe'
 import { hostable } from '../../../test/hostable'
 import { LOCALES } from '../../../test/locales'
-import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
 import DataTableRoot from './data-table.vue'
 import DataTablePagination from './data-table-pagination/data-table-pagination.vue'
 
