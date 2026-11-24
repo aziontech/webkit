@@ -10,6 +10,7 @@ const DRAG_EVENTS = ['dragenter', 'dragover', 'dragleave', 'drop'] as const
 export interface UsePromptInputAttachOptions {
   boxEl: Readonly<Ref<HTMLElement | null>>
   disabled: () => boolean
+  voiceActive: () => boolean
   accept: () => string
   maxFiles: () => number
   maxFileSize: () => number
@@ -36,6 +37,7 @@ export function usePromptInputAttach(
 
   provide(PromptInputInjectionKey, {
     disabled: computed(options.disabled),
+    voiceActive: computed(options.voiceActive),
     accept: computed(options.accept),
     maxFiles: computed(options.maxFiles),
     getText: () => model.value,

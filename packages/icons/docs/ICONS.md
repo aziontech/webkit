@@ -2,7 +2,7 @@
 
 > Generated from `src/icons.json` by `scripts/build-docs.mjs`. Edit the JSON, then run `npm run build`; do not edit this page by hand.
 
-558 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
+560 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
 
 ## How the icons are organised
 
@@ -12,12 +12,12 @@
   - Platform (9) — The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
   - Solutions (8) — The Azion Solutions, one icon each: the five By Need Solutions and the three By Industry Solutions, named after the Solution's short name.
   - Services (8) — Support plans and professional services.
-- **Interface** (313) — Generic glyphs for the interface. They name an action, an object or a state, never a product.
+- **Interface** (315) — Generic glyphs for the interface. They name an action, an object or a state, never a product.
   - Arrows (50) — Arrows, chevrons, carets, sorting and moving.
   - Actions (37) — Things a person does: edit, copy, delete, search, share, download, zoom.
   - Status (24) — Alerts, information, success, help and states such as on, off or loading.
   - Files (17) — Files, folders, documents and attachments.
-  - Media (20) — Playback, sound, images, video and recording.
+  - Media (22) — Playback, sound, images, video and recording.
   - Communication (13) — Mail, chat, notifications, calls, feeds and webhooks.
   - Commerce (18) — Money, currencies, carts, shops, payment and billing.
   - People (10) — People, accounts and identity.
@@ -321,6 +321,8 @@ Playback, sound, images, video and recording.
 | `az az-image` | Image or photo | A picture frame with a sun and a mountain |  |
 | `az az-images` | Image gallery or multiple images | Two overlapping picture frames |  |
 | `az az-microphone` | Microphone, voice input or recording | A microphone on a stand |  |
+| `az az-microphone-off` | Muted or disabled microphone | A microphone with a diagonal slash through it |  |
+| `az az-audio-lines` | Live voice conversation or audio waveform | Five vertical audio waveform bars of varying height |  |
 | `az az-pause` | Pause | Two vertical bars |  |
 | `az az-play` | Play | A right-pointing triangle |  |
 | `az az-skip-back` | Skip to the start or previous track | A left-pointing triangle with a vertical bar on its left |  |

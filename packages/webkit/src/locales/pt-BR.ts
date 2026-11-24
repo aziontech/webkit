@@ -96,6 +96,7 @@ export const ptBR: Messages = {
     noMatch: 'Nenhum resultado',
     menuReferences: 'Referências',
     voice: 'Iniciar conversa por voz',
+    voiceEnd: 'Encerrar conversa por voz',
     attach: 'Anexar arquivos',
     drop: 'Solte os arquivos para anexar',
     rejectedAccept: {

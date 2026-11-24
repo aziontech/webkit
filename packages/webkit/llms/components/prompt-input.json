@@ -132,6 +132,13 @@
    "doc": "Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`."
   },
   {
+   "name": "voiceActive",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks a live voice conversation as active: swaps the voice control to End voice conversation (`voice-end`) and disables `PromptInput.DictateButton` with a muted microphone icon."
+  },
+  {
    "name": "queueable",
    "type": "boolean",
    "default": "false",
@@ -173,6 +180,11 @@
   },
   {
    "name": "voice-start",
+   "payload": "(event: MouseEvent)",
+   "notes": ""
+  },
+  {
+   "name": "voice-end",
    "payload": "(event: MouseEvent)",
    "notes": ""
   },

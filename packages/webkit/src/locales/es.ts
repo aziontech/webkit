@@ -96,6 +96,7 @@ export const es: Messages = {
     noMatch: 'Sin resultados',
     menuReferences: 'Referencias',
     voice: 'Iniciar conversación por voz',
+    voiceEnd: 'Finalizar conversación por voz',
     attach: 'Adjuntar archivos',
     drop: 'Suelta los archivos para adjuntarlos',
     rejectedAccept: {

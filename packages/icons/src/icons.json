@@ -2198,6 +2198,26 @@
       "legacy": ["ai ai-microphone", "pi pi-microphone"]
     },
     {
+      "name": "microphone-off",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "A microphone with a diagonal slash through it",
+      "means": "Muted or disabled microphone",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "audio-lines",
+      "set": "mono",
+      "group": "interface",
+      "category": "media",
+      "shows": "Five vertical audio waveform bars of varying height",
+      "means": "Live voice conversation or audio waveform",
+      "status": "stable",
+      "legacy": []
+    },
+    {
       "name": "pause",
       "set": "mono",
       "group": "interface",

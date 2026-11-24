@@ -41,6 +41,7 @@
   const toolKeys = defineModel<string[]>('toolKeys', { required: true })
 
   const inputEl = ref<InstanceType<typeof PromptInput> | null>(null)
+  const voiceActive = ref(false)
 
   defineExpose({ focus: () => inputEl.value?.focus() })
 </script>
@@ -58,10 +59,17 @@
     :max-file-size="maxFileSize"
     :max-rows="4"
     :voice="voice"
+    :voice-active="voiceActive"
     placeholder="Ask about storefront"
     @submit="(event, { value }) => emit('submit', event, value)"
     @stop="emit('stop', $event)"
-    @voice-start="emit('voice-start', $event)"
+    @voice-start="
+      (event) => {
+        voiceActive = true
+        emit('voice-start', event)
+      }
+    "
+    @voice-end="voiceActive = false"
   >
     <template
       v-if="attachable"

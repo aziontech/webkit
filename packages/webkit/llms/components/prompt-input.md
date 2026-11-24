@@ -58,6 +58,7 @@
 | `maxFiles` | `number` | `0` | false | Most files attached at once; files past it are rejected. `0` means no limit. |
 | `maxFileSize` | `number` | `0` | false | Largest file in bytes; larger files are rejected. `0` means no limit. |
 | `voice` | `boolean` | `false` | false | Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`. |
+| `voiceActive` | `boolean` | `false` | false | Marks a live voice conversation as active: swaps the voice control to End voice conversation (`voice-end`) and disables `PromptInput.DictateButton` with a muted microphone icon. |
 | `queueable` | `boolean` | `false` | false | While `status` is `pending` or `streaming`, keeps Submit beside Stop and lets Enter submit, so the owner queues the prompt for after the response. |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 | `references` | `PromptInputReference[]` | `() => []` | false | Two-way value (`v-model:references`). |
@@ -70,6 +71,7 @@
 | `submit` | `(event: MouseEvent \| KeyboardEvent, payload: { value: string; references: PromptInputReference[]; files: PromptInputFile[] })` |  |
 | `stop` | `(event: MouseEvent)` |  |
 | `voice-start` | `(event: MouseEvent)` |  |
+| `voice-end` | `(event: MouseEvent)` |  |
 | `reject` | `(event: Event, payload: { files: File[]; reason: PromptInputRejectReason })` |  |
 
 ## Slots
@@ -96,7 +98,7 @@ Compound API through `index.ts` (`PromptInput.AttachButton`, `PromptInput.Dictat
 `PromptInput.ModelPicker`, `PromptInput.ContextPicker`, `PromptInput.Tools`); standalone entries
 `prompt-input-root`, `prompt-input-attach-button`, `prompt-input-dictate-button`,
 `prompt-input-model-picker`, `prompt-input-context-picker`, `prompt-input-tools`. The root provides
-the composer context (`injection-key.ts`): `disabled`, `accept`, `maxFiles`, `maxFileSize`,
+the composer context (`injection-key.ts`): `disabled`, `voiceActive`, `accept`, `maxFiles`, `maxFileSize`,
 `fileCount`, the text (read and write), `appendFiles`, `reject`, `setRejection`, `setDragging`,
 `registerAttach(handlers)`, `setChips(count)`, `focus()`. `usePromptInputContext()` throws outside a `PromptInput`.
 Every part disables with the composer. The compound attaches the three pickers as async
@@ -203,7 +205,7 @@ packages/webkit/src/components/ai/prompt-input/
 
 - `data-status` mirrors `status`; `data-disabled`; `data-invalid` while over `maxLength`; `data-dragging` on the box while files are dragged over it (only with an `AttachButton`).
 - `data-multiline` on the root and the box while the composer is stacked (text on its own row): the prompt took a second line (kept until it is cleared), `minRows` is above 1, files, references, the `attachments` slot or a turned-on tool chip of the `AttachButton` are shown, or a shortcut menu is open. Absent, it is the single bar.
-- `ready`: Submit (primary `IconButton`, large, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (primary `IconButton`, `az az-headphones`) takes its place.
+- `ready`: Submit (primary `IconButton`, large, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (secondary `IconButton`, `az az-audio-lines`) takes its place. While `voiceActive` is `true` and there is nothing to send, End voice conversation (primary `IconButton`, `az az-x`) takes its place and `PromptInput.DictateButton` is disabled with `az az-microphone-off`.
 - `pending` / `streaming`: Stop (secondary `IconButton`, `az az-stop`) replaces Submit; Enter does nothing.
 - `pending` / `streaming` with `queueable`: Stop stays, and Submit (primary, after Stop at the inline end) shows beside it while there is something to send; Enter and Submit emit `submit` as in `ready`. With nothing to send only Stop shows, and the voice control never does.
 - Near the limit (the prompt holds 80% of `maxLength` or more): the `n/max` counter shows before Submit and the text area is described by it; below 80% it is not rendered.
@@ -231,7 +233,7 @@ packages/webkit/src/components/ai/prompt-input/
 ## Right-to-left
 
 - Layout: logical utilities; actions at the inline start, the end slot and Submit at the inline end (`ms-auto` when stacked); the footer row starts at the inline start.
-- Icons: the arrow-up, stop, plus, microphone, headphones, folder, wrench, camera, image, paperclip and chevron glyphs are not mirrored.
+- Icons: the arrow-up, stop, plus, microphone, microphone-off, audio-lines, folder, wrench, camera, image, paperclip and chevron glyphs are not mirrored.
 - Keyboard: arrows move in the shortcut menu only while it is open; vertical, so not mirrored. The pickers' arrow keys come from `DropdownMenu`.
 - User data: the text area follows the document direction; mixed prompts render with the browser's bidi. File names render in `FileTokenGroup`'s `<bdi>`.
 
@@ -249,6 +251,7 @@ packages/webkit/src/components/ai/prompt-input/
 | `promptInput.noMatch`          | `No matches`                                               | —                             |
 | `promptInput.menuReferences`   | `References`                                               | —                             |
 | `promptInput.voice`            | `Start voice conversation`                                 | —                             |
+| `promptInput.voiceEnd`         | `End voice conversation`                                   | —                             |
 | `promptInput.attach`           | `Attach files`                                             | `ariaLabel` (AttachButton)    |
 | `promptInput.drop`             | `Drop files to attach`                                     | —                             |
 | `promptInput.rejectedAccept`   | `{count} file(s) not added: not an accepted type` (plural) | —                             |
@@ -303,7 +306,6 @@ packages/webkit/src/components/ai/prompt-input/
   const tools = ref([])
   const last = ref('')
   const voiceActive = ref(false)
-  const muted = ref(false)
 
   const models = [
     { value: 'sol', label: 'Sol 6.1', description: 'Best for everyday tasks' },
@@ -346,49 +348,36 @@ packages/webkit/src/components/ai/prompt-input/
     >
       <div class="flex items-center gap-(--spacing-sm)">
         <i
-          class="az az-wave-pulse shrink-0 text-(--text-default)"
+          class="az az-audio-lines shrink-0 text-(--text-default)"
           aria-hidden="true"
         />
         <StatusIndicator
-          :severity="muted ? 'neutral' : 'info'"
-          :label="muted ? 'Microphone muted' : 'Listening…'"
-          :loading="!muted"
+          severity="info"
+          label="Listening…"
+          loading
         />
       </div>
-      <div class="flex items-center gap-(--spacing-xs)">
-        <Button
-          :label="muted ? 'Unmute' : 'Mute'"
-          :icon="muted ? 'az az-volume-off' : 'az az-microphone'"
-          variant="ghost"
-          size="small"
-          @click="muted = !muted"
-        />
-        <Button
-          label="End voice"
-          icon="az az-x"
-          variant="secondary"
-          size="small"
-          @click="
-            () => {
-              voiceActive = false
-              muted = false
-              last = 'Voice conversation ended'
-            }
-          "
-        />
-      </div>
+      <span class="text-body-xs text-(--text-muted)">
+        Microphone dictation is disabled while live voice is active.
+      </span>
     </div>
     <PromptInput
-      v-else
       v-model="prompt"
       v-model:files="files"
       :max-files="5"
       voice
+      :voice-active="voiceActive"
       @submit="send"
       @voice-start="
         () => {
           voiceActive = true
           last = 'Voice conversation started'
+        }
+      "
+      @voice-end="
+        () => {
+          voiceActive = false
+          last = 'Voice conversation ended'
         }
       "
     >

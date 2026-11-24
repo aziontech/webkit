@@ -617,6 +617,39 @@ describe('PromptInput', () => {
       expect(getByRole('button', { name: 'Submit' })).toBeEnabled()
     })
 
+    it('swaps voice to End voice conversation and disables dictate while voiceActive is true', async () => {
+      const { getByRole, queryByRole, events } = composer(
+        { active: false, listening: false },
+        (scope, record) => ({
+          props: {
+            voice: true,
+            voiceActive: Boolean(scope.active!.value),
+            'onVoice-start': () => (scope.active!.value = true),
+            'onVoice-end': (event: Event) => {
+              record('voice-end', event)
+              scope.active!.value = false
+            }
+          },
+          slots: {
+            end: () =>
+              h(P.DictateButton, { ...bind(scope, 'listening', 'listening'), transcriber: 'app' })
+          }
+        })
+      )
+      const dictate = getByRole('button', { name: 'Dictate' })
+      expect(dictate).toBeEnabled()
+      await userEvent.click(getByRole('button', { name: 'Start voice conversation' }))
+      await nextTick()
+      expect(queryByRole('button', { name: 'Start voice conversation' })).toBeNull()
+      expect(dictate).toBeDisabled()
+      expect(dictate.querySelector('.az-microphone-off')).toBeTruthy()
+      await userEvent.click(getByRole('button', { name: 'End voice conversation' }))
+      await nextTick()
+      expect(events.map((event) => event.name)).toEqual(['voice-end'])
+      expect(events[0]!.args[0]).toBeInstanceOf(MouseEvent)
+      expect(dictate).toBeEnabled()
+    })
+
     it('moves focus to the text area when the focused control swaps', async () => {
       const { getByRole, scope } = composer({ text: 'Hello' }, (scope) => ({
         props: { ...bind(scope, 'text'), voice: true, onSubmit: () => (scope.text!.value = '') }

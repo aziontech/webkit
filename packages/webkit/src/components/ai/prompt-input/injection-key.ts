@@ -12,6 +12,8 @@ export interface PromptInputAttachHandlers {
 export interface PromptInputContext {
   /** Whether the composer is disabled; every part disables with it. */
   disabled: ComputedRef<boolean>
+  /** Whether a live voice conversation is active; disables dictation. */
+  voiceActive: ComputedRef<boolean>
   /** File filter for picked, dropped and pasted files. */
   accept: ComputedRef<string>
   /** Most files attached at once; `0` means no limit. */

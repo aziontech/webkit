@@ -4,7 +4,7 @@
 
 yout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry (the font); the colour logos come with the WebKit stylesheet, compiled only for the classes written whole in your sources. An `icon` prop takes the class string.
 
-558 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+560 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
 Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifact-preview.md), [Avatar](../components/avatar.md), [Button](../components/button.md), [Combobox](../components/combobox.md), [CopyButton](../components/copy-button.md), [DocCard](../components/doc-card.md), [DocItem](../components/doc-item.md), [DocPrompt](../components/doc-prompt.md), [EmptyState](../components/empty-state.md), [FeatureItem](../components/feature-item.md), [FileDropzone](../components/file-dropzone.md), [HighlightButton](../components/highlight-button.md), [IconButton](../components/icon-button.md), [Link](../components/link.md), [SettingsGroup](../components/settings-group.md), [SplitButton](../components/split-button.md), [Tag](../components/tag.md).
 
@@ -286,6 +286,8 @@ Generic glyphs for the interface. They name an action, an object or a state, nev
 | `az az-image` | Image or photo | picture, media |
 | `az az-images` | Image gallery or multiple images | pictures, photos, media |
 | `az az-microphone` | Microphone, voice input or recording | audio, record |
+| `az az-microphone-off` | Muted or disabled microphone | audio, voice, record |
+| `az az-audio-lines` | Live voice conversation or audio waveform | media |
 | `az az-pause` | Pause | stop, hold |
 | `az az-play` | Play | start, run, video |
 | `az az-skip-back` | Skip to the start or previous track | next, fast backward, step backward alt |

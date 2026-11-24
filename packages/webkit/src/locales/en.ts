@@ -1473,6 +1473,7 @@ export const promptInput = {
   noMatch: 'No matches',
   menuReferences: 'References',
   voice: 'Start voice conversation',
+  voiceEnd: 'End voice conversation',
   attach: 'Attach files',
   drop: 'Drop files to attach',
   rejectedAccept: {

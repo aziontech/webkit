@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 9
 template: 2
-checksum: 7deb80a1c44234ef742bf3df15962d8a17b0717cbe9f84660d17ef3cc1bf0e1b
+checksum: 7be92e2ac5f617df3d60276b46c5ad86fa45b9caad892d07accabb7a13f2b098
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -181,7 +181,7 @@ Compound API through `index.ts` (`PromptInput.AttachButton`, `PromptInput.Dictat
 `PromptInput.ModelPicker`, `PromptInput.ContextPicker`, `PromptInput.Tools`); standalone entries
 `prompt-input-root`, `prompt-input-attach-button`, `prompt-input-dictate-button`,
 `prompt-input-model-picker`, `prompt-input-context-picker`, `prompt-input-tools`. The root provides
-the composer context (`injection-key.ts`): `disabled`, `accept`, `maxFiles`, `maxFileSize`,
+the composer context (`injection-key.ts`): `disabled`, `voiceActive`, `accept`, `maxFiles`, `maxFileSize`,
 `fileCount`, the text (read and write), `appendFiles`, `reject`, `setRejection`, `setDragging`,
 `registerAttach(handlers)`, `setChips(count)`, `focus()`. `usePromptInputContext()` throws outside a `PromptInput`.
 Every part disables with the composer. The compound attaches the three pickers as async
@@ -292,6 +292,7 @@ packages/webkit/src/components/ai/prompt-input/
 | `maxFiles`    | `number`                              | `0`       | false    | Most files attached at once; files past it are rejected. `0` means no limit.                                                                                                                   |
 | `maxFileSize` | `number`                              | `0`       | false    | Largest file in bytes; larger files are rejected. `0` means no limit.                                                                                                                          |
 | `voice`       | `boolean`                             | `false`   | false    | Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`.                                                                            |
+| `voiceActive` | `boolean`                             | `false`   | false    | Marks a live voice conversation as active: swaps the voice control to End voice conversation (`voice-end`) and disables `PromptInput.DictateButton` with a muted microphone icon.               |
 | `queueable`   | `boolean`                             | `false`   | false    | While `status` is `pending` or `streaming`, keeps Submit beside Stop and lets Enter submit, so the owner queues the prompt for after the response.                                             |
 
 Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInputMenuOption[] }`, `PromptInputMenuOption = { value: string; label: string; description?: string; icon?: string }` (also the option shape of the model, mode, context and tools pickers), `PromptInputReference = { trigger: string; value: string; label: string }`, `PromptInputFile = FileTokenGroupItem` (`{ file: File | FileTokenGroupFile; loading?: boolean; progress?: number; error?: string; warning?: string }`), `PromptInputRejectReason = 'accept' | 'max-files' | 'max-file-size'`, `PromptInputDictateTranscriber = 'browser' | 'app'`.
@@ -311,6 +312,7 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 | `submit`      | `(event: MouseEvent \| KeyboardEvent, payload: { value: string; references: PromptInputReference[]; files: PromptInputFile[] })` | Enter (without Shift, outside an IME composition) or Submit, while `status` is `ready` (or any status with `queueable`), the prompt is within the limit, it has text or files, and no file is loading or failed. `event` is the Enter keydown or the Submit click; `payload.value` is trimmed; `payload.references` holds the references whose `<trigger><label>` is still in the text; `payload.files` is `files`. |
 | `stop`        | `(event: MouseEvent)`                                                                                                            | Stop pressed while `pending` or `streaming`.                                                                                                                                                                                                                                                                                                                                                                        |
 | `voice-start` | `(event: MouseEvent)`                                                                                                            | The Start voice conversation control was pressed (`voice`, nothing to send, `status` `ready`). The app opens and owns the audio session.                                                                                                                                                                                                                                                                            |
+| `voice-end`   | `(event: MouseEvent)`                                                                                                            | The End voice conversation control was pressed (`voiceActive`, nothing to send, `status` `ready`). The app closes the live audio session.                                                                                                                                                                                                                                                                           |
 | `reject`      | `(event: Event, payload: { files: File[]; reason: PromptInputRejectReason })`                                                    | Picked, dropped or pasted files were not attached: they do not match `accept`, are larger than `maxFileSize`, or are past `maxFiles`. Once per reason; `event` is the change, drop or paste event. The composer also shows the reason under the box.                                                                                                                                                                |
 
 ## Slots
@@ -327,7 +329,7 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 
 - `data-status` mirrors `status`; `data-disabled`; `data-invalid` while over `maxLength`; `data-dragging` on the box while files are dragged over it (only with an `AttachButton`).
 - `data-multiline` on the root and the box while the composer is stacked (text on its own row): the prompt took a second line (kept until it is cleared), `minRows` is above 1, files, references, the `attachments` slot or a turned-on tool chip of the `AttachButton` are shown, or a shortcut menu is open. Absent, it is the single bar.
-- `ready`: Submit (primary `IconButton`, large, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (primary `IconButton`, `az az-headphones`) takes its place.
+- `ready`: Submit (primary `IconButton`, large, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (secondary `IconButton`, `az az-audio-lines`) takes its place. While `voiceActive` is `true` and there is nothing to send, End voice conversation (primary `IconButton`, `az az-x`) takes its place and `PromptInput.DictateButton` is disabled with `az az-microphone-off`.
 - `pending` / `streaming`: Stop (secondary `IconButton`, `az az-stop`) replaces Submit; Enter does nothing.
 - `pending` / `streaming` with `queueable`: Stop stays, and Submit (primary, after Stop at the inline end) shows beside it while there is something to send; Enter and Submit emit `submit` as in `ready`. With nothing to send only Stop shows, and the voice control never does.
 - Near the limit (the prompt holds 80% of `maxLength` or more): the `n/max` counter shows before Submit and the text area is described by it; below 80% it is not rendered.
@@ -391,6 +393,7 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 | `promptInput.noMatch`          | `No matches`                                               | —                             |
 | `promptInput.menuReferences`   | `References`                                               | —                             |
 | `promptInput.voice`            | `Start voice conversation`                                 | —                             |
+| `promptInput.voiceEnd`         | `End voice conversation`                                   | —                             |
 | `promptInput.attach`           | `Attach files`                                             | `ariaLabel` (AttachButton)    |
 | `promptInput.drop`             | `Drop files to attach`                                     | —                             |
 | `promptInput.rejectedAccept`   | `{count} file(s) not added: not an accepted type` (plural) | —                             |
@@ -419,7 +422,7 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 ## Right-to-left
 
 - Layout: logical utilities; actions at the inline start, the end slot and Submit at the inline end (`ms-auto` when stacked); the footer row starts at the inline start.
-- Icons: the arrow-up, stop, plus, microphone, headphones, folder, wrench, camera, image, paperclip and chevron glyphs are not mirrored.
+- Icons: the arrow-up, stop, plus, microphone, microphone-off, audio-lines, folder, wrench, camera, image, paperclip and chevron glyphs are not mirrored.
 - Keyboard: arrows move in the shortcut menu only while it is open; vertical, so not mirrored. The pickers' arrow keys come from `DropdownMenu`.
 - User data: the text area follows the document direction; mixed prompts render with the browser's bidi. File names render in `FileTokenGroup`'s `<bdi>`.
 

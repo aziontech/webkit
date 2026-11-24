@@ -12,10 +12,12 @@
     canSubmit: boolean
     /** Start voice shows in place of Submit. */
     showVoice: boolean
+    /** Live voice conversation is active; shows End voice in place of Start voice. */
+    voiceActive: boolean
     /** Disables every control. */
     disabled: boolean
     /** Accessible names from the locale catalog. */
-    labels: { stop: string; submit: string; voice: string }
+    labels: { stop: string; submit: string; voice: string; voiceEnd: string }
     /** Test id of the owning PromptInput; each control appends its own part. */
     testId: string
   }
@@ -26,6 +28,7 @@
     stop: [event: MouseEvent]
     submit: [event: MouseEvent]
     'voice-start': [event: MouseEvent]
+    'voice-end': [event: MouseEvent]
   }>()
 </script>
 
@@ -52,9 +55,20 @@
     @click="(event: MouseEvent) => emit('submit', event)"
   />
   <IconButton
+    v-else-if="!busy && voiceActive && !canSubmit"
+    key="voice-end"
+    icon="az az-x"
+    variant="primary"
+    size="large"
+    :ariaLabel="labels.voiceEnd"
+    :disabled="disabled"
+    :data-testid="`${testId}__voice-end`"
+    @click="(event: MouseEvent) => emit('voice-end', event)"
+  />
+  <IconButton
     v-else-if="showVoice"
     key="voice"
-    icon="az az-wave-pulse"
+    icon="az az-audio-lines"
     variant="secondary"
     size="large"
     :ariaLabel="labels.voice"

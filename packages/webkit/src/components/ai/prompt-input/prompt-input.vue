@@ -8,6 +8,7 @@
   import { type PromptInputQuery, usePromptInputMenu } from './composables/use-prompt-input-menu'
   import { usePromptInputSubmit } from './composables/use-prompt-input-submit'
   import { focusFromBox } from './lib/box-focus'
+  import { BOX_CLASS, DROP_CLASS, TEXTAREA_CLASS } from './lib/classes'
   import { withoutReference } from './lib/references'
   import PromptInputMenuList from './parts/prompt-input-menu-list.vue'
   import PromptInputSend from './parts/prompt-input-send.vue'
@@ -63,6 +64,8 @@
     maxFileSize?: number
     /** Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`. */
     voice?: boolean
+    /** A live voice conversation is active: disables dictation (`PromptInput.DictateButton`) and swaps Start voice for End voice (`voice-end`). */
+    voiceActive?: boolean
     /** While `status` is `pending` or `streaming`, keeps Submit beside Stop and lets Enter submit, so the owner queues the prompt for after the response. */
     queueable?: boolean
   }
@@ -80,6 +83,7 @@
     maxFiles: 0,
     maxFileSize: 0,
     voice: false,
+    voiceActive: false,
     queueable: false
   })
 
@@ -97,6 +101,8 @@
     stop: [event: MouseEvent]
     /** The reader pressed Start voice conversation; the app opens and owns the audio session. */
     'voice-start': [event: MouseEvent]
+    /** The reader pressed End voice conversation while `voiceActive` is true. */
+    'voice-end': [event: MouseEvent]
     /** Picked, dropped or pasted files were not attached, once per reason. */
     reject: [event: Event, payload: { files: File[]; reason: PromptInputRejectReason }]
   }>()
@@ -219,6 +225,7 @@
   const { paste } = usePromptInputAttach({
     boxEl,
     disabled: () => props.disabled,
+    voiceActive: () => props.voiceActive,
     accept: () => props.accept,
     maxFiles: () => props.maxFiles,
     maxFileSize: () => props.maxFileSize,
@@ -232,24 +239,6 @@
   })
 
   defineExpose({ focus })
-
-  const BOX_CLASS =
-    'group/prompt-input-box relative flex w-full cursor-text flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-input) ' +
-    'bg-[color-mix(in_srgb,var(--bg-surface-raised)_88%,transparent)] p-(--spacing-xs) shadow-(--shadow-lg) backdrop-blur-md transition-colors ' +
-    'duration-fast-02 ease-productive-entrance motion-reduce:transition-none ' +
-    '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) ' +
-    'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas) ' +
-    'data-[invalid]:border-(--danger-border) ' +
-    'data-[disabled]:bg-(--bg-disabled)'
-
-  const DROP_CLASS =
-    'pointer-events-none absolute inset-0 z-2 flex items-center justify-center rounded-[inherit] border-2 border-dashed border-(--border-selected) bg-(--bg-surface) text-label-md ' +
-    "text-(--text-default) before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-selected) before:content-['']"
-
-  const TEXTAREA_CLASS =
-    'min-h-10 min-w-0 flex-1 basis-0 resize-none bg-transparent px-(--spacing-xs) py-(--spacing-xs) text-body-md text-(--text-default) ' +
-    'placeholder:text-(--text-muted) outline-none disabled:cursor-not-allowed disabled:text-(--text-disabled) ' +
-    'group-data-[multiline]/prompt-input-box:order-first group-data-[multiline]/prompt-input-box:basis-full'
 </script>
 
 <template>
@@ -316,7 +305,9 @@
         :test-id="testId"
         @select="(_event: Event, option: PromptInputMenuOption) => choose(option)"
       />
-      <div class="flex flex-wrap items-end gap-(--spacing-2xs)">
+      <div
+        class="flex flex-wrap items-center gap-(--spacing-2xs) group-data-[multiline]/prompt-input-box:items-end"
+      >
         <div
           v-if="slots.actions"
           class="flex min-h-10 min-w-0 items-center"
@@ -379,16 +370,19 @@
             :queueable="queueable"
             :can-submit="canSubmit"
             :show-voice="showVoice"
+            :voice-active="voiceActive"
             :disabled="disabled"
             :labels="{
               stop: t('promptInput.stop'),
               submit: t('promptInput.submit'),
-              voice: t('promptInput.voice')
+              voice: t('promptInput.voice'),
+              voiceEnd: t('promptInput.voiceEnd')
             }"
             :test-id="testId"
             @stop="(event: MouseEvent) => emit('stop', event)"
             @submit="submit"
             @voice-start="(event: MouseEvent) => emit('voice-start', event)"
+            @voice-end="(event: MouseEvent) => emit('voice-end', event)"
           />
         </div>
       </div>

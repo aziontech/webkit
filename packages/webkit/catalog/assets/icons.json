@@ -2598,6 +2598,30 @@
    ]
   },
   {
+   "name": "az-microphone-off",
+   "class": "az az-microphone-off",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Muted or disabled microphone",
+   "keywords": [
+    "audio",
+    "voice",
+    "record"
+   ]
+  },
+  {
+   "name": "az-audio-lines",
+   "class": "az az-audio-lines",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Live voice conversation or audio waveform",
+   "keywords": [
+    "media"
+   ]
+  },
+  {
    "name": "az-pause",
    "class": "az az-pause",
    "set": "azionicons",

@@ -818,6 +818,7 @@ export const sampleDeleteMessages: AiChatMessage[] = [
   const modeKey = ref('medium')
   const contextKey = ref('storefront')
   const toolKeys = ref<string[]>([])
+  const voiceActive = ref(false)
 
   const models: PromptInputMenuOption[] = [
     { value: 'auto', label: 'Auto', description: 'Decides how long to think' },
@@ -863,9 +864,16 @@ export const sampleDeleteMessages: AiChatMessage[] = [
     :max-file-size="10485760"
     accept="image/*,application/pdf"
     voice
+    :voice-active="voiceActive"
     @submit="(event, { value }) => send(event, value)"
     @stop="emit('stop', $event)"
-    @voice-start="emit('voice-start', $event)"
+    @voice-start="
+      (event) => {
+        voiceActive = true
+        emit('voice-start', event)
+      }
+    "
+    @voice-end="voiceActive = false"
   >
     <template
       v-if="attachable"

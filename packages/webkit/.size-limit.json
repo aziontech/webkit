@@ -1262,13 +1262,13 @@
   {
     "name": "prompt-input",
     "path": "src/components/ai/prompt-input/index.ts",
-    "limit": "15.85 KB",
+    "limit": "15.95 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-root",
     "path": "src/components/ai/prompt-input/prompt-input.vue",
-    "limit": "11.95 KB",
+    "limit": "12.05 KB",
     "entryOnly": true
   },
   {
@@ -1280,7 +1280,7 @@
   {
     "name": "prompt-input-dictate-button",
     "path": "src/components/ai/prompt-input/prompt-input-dictate-button/prompt-input-dictate-button.vue",
-    "limit": "5.6 KB",
+    "limit": "5.7 KB",
     "entryOnly": true
   },
   {
@@ -1292,7 +1292,7 @@
   {
     "name": "prompt-input-context-picker",
     "path": "src/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue",
-    "limit": "15.7 KB",
+    "limit": "15.75 KB",
     "entryOnly": true
   },
   {

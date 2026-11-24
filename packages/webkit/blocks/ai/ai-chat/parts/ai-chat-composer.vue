@@ -64,10 +64,8 @@
   <AiChatVoice
     v-if="voiceActive"
     @send="(event, text) => emit('submit', event, text)"
-    @end="endVoice"
   />
   <PromptInput
-    v-else
     ref="inputEl"
     v-model="prompt"
     v-model:files="files"
@@ -79,9 +77,11 @@
     :max-file-size="maxFileSize"
     :max-length="4000"
     :voice="voice"
+    :voice-active="voiceActive"
     @submit="(event, { value }) => emit('submit', event, value)"
     @stop="emit('stop', $event)"
     @voice-start="startVoice"
+    @voice-end="endVoice"
   >
     <template
       v-if="attachable"

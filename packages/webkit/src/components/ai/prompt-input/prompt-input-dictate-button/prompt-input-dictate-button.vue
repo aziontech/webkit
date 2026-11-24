@@ -59,7 +59,7 @@
 
   const attrs = useAttrs()
   const { t, locale } = useLocale({ promptInput: en.promptInput })
-  const { disabled, getText, setText } = usePromptInputContext()
+  const { disabled, voiceActive, getText, setText } = usePromptInputContext()
 
   const engine = ref<RecognitionConstructor | null>(null)
   const status = ref<string>('')
@@ -139,9 +139,12 @@
   }
 
   watch(listening, (on) => (on ? begin() : end()))
-  watch(disabled, (off) => {
-    if (off && listening.value) listening.value = false
-  })
+  watch(
+    () => disabled.value || voiceActive.value,
+    (off) => {
+      if (off && listening.value) listening.value = false
+    }
+  )
 
   onScopeDispose(() => {
     if (!recognition) return
@@ -155,11 +158,11 @@
   <template v-if="available">
     <IconButton
       v-bind="$attrs"
-      :icon="listening ? 'az az-stop' : 'az az-microphone'"
-      :variant="listening ? 'secondary' : 'ghost'"
+      :icon="voiceActive ? 'az az-microphone-off' : listening ? 'az az-stop' : 'az az-microphone'"
+      :variant="voiceActive || listening ? 'secondary' : 'ghost'"
       size="medium"
       :ariaLabel="listening ? t('promptInput.dictateStop') : ariaLabel || t('promptInput.dictate')"
-      :disabled="disabled"
+      :disabled="disabled || voiceActive"
       :data-testid="testId"
       :data-listening="listening || null"
       @click="listening = !listening"

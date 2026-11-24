@@ -12,7 +12,6 @@
   const tools = ref([])
   const last = ref('')
   const voiceActive = ref(false)
-  const muted = ref(false)
 
   const models = [
     { value: 'sol', label: 'Sol 6.1', description: 'Best for everyday tasks' },
@@ -55,49 +54,36 @@
     >
       <div class="flex items-center gap-(--spacing-sm)">
         <i
-          class="az az-wave-pulse shrink-0 text-(--text-default)"
+          class="az az-audio-lines shrink-0 text-(--text-default)"
           aria-hidden="true"
         />
         <StatusIndicator
-          :severity="muted ? 'neutral' : 'info'"
-          :label="muted ? 'Microphone muted' : 'Listening…'"
-          :loading="!muted"
+          severity="info"
+          label="Listening…"
+          loading
         />
       </div>
-      <div class="flex items-center gap-(--spacing-xs)">
-        <Button
-          :label="muted ? 'Unmute' : 'Mute'"
-          :icon="muted ? 'az az-volume-off' : 'az az-microphone'"
-          variant="ghost"
-          size="small"
-          @click="muted = !muted"
-        />
-        <Button
-          label="End voice"
-          icon="az az-x"
-          variant="secondary"
-          size="small"
-          @click="
-            () => {
-              voiceActive = false
-              muted = false
-              last = 'Voice conversation ended'
-            }
-          "
-        />
-      </div>
+      <span class="text-body-xs text-(--text-muted)">
+        Microphone dictation is disabled while live voice is active.
+      </span>
     </div>
     <PromptInput
-      v-else
       v-model="prompt"
       v-model:files="files"
       :max-files="5"
       voice
+      :voice-active="voiceActive"
       @submit="send"
       @voice-start="
         () => {
           voiceActive = true
           last = 'Voice conversation started'
+        }
+      "
+      @voice-end="
+        () => {
+          voiceActive = false
+          last = 'Voice conversation ended'
         }
       "
     >

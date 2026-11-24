@@ -1223,10 +1223,8 @@ export const turnTime = (
   <AiChatVoice
     v-if="voiceActive"
     @send="(event, text) => emit('submit', event, text)"
-    @end="endVoice"
   />
   <PromptInput
-    v-else
     ref="inputEl"
     v-model="prompt"
     v-model:files="files"
@@ -1238,9 +1236,11 @@ export const turnTime = (
     :max-file-size="maxFileSize"
     :max-length="4000"
     :voice="voice"
+    :voice-active="voiceActive"
     @submit="(event, { value }) => emit('submit', event, value)"
     @stop="emit('stop', $event)"
     @voice-start="startVoice"
+    @voice-end="endVoice"
   >
     <template
       v-if="attachable"
@@ -2223,10 +2223,8 @@ export const turnTime = (
 
   const emit = defineEmits<{
     send: [event: MouseEvent, text: string]
-    end: [event: MouseEvent]
   }>()
 
-  const muted = ref(false)
   const spoken = ref('')
 
   function simulateSpeak(event: MouseEvent) {
@@ -2236,7 +2234,7 @@ export const turnTime = (
 
   const VOICE_CLASS =
     'flex flex-wrap items-center justify-between gap-(--spacing-sm) rounded-(--shape-card) ' +
-    'border border-(--border-input) bg-(--bg-surface-raised) px-(--spacing-md) py-(--spacing-sm) shadow-(--shadow-lg)'
+    'border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs)'
 </script>
 
 <template>
@@ -2248,46 +2246,27 @@ export const turnTime = (
   >
     <div class="flex min-w-0 items-center gap-(--spacing-sm)">
       <i
-        class="az az-wave-pulse shrink-0 text-(--text-default)"
+        class="az az-audio-lines shrink-0 text-(--text-default)"
         aria-hidden="true"
       />
-      <div class="flex min-w-0 flex-col gap-(--spacing-3xs)">
-        <StatusIndicator
-          :severity="muted ? 'neutral' : 'info'"
-          :label="muted ? 'Microphone muted' : 'Listening…'"
-          :loading="!muted"
-        />
-        <span
-          v-if="spoken"
-          class="truncate text-body-xs text-(--text-muted)"
-          >{{ spoken }}</span
-        >
-      </div>
+      <StatusIndicator
+        severity="info"
+        label="Listening…"
+        loading
+      />
+      <span
+        v-if="spoken"
+        class="truncate text-body-xs text-(--text-muted)"
+        >{{ spoken }}</span
+      >
     </div>
-    <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-      <Button
-        :label="muted ? 'Unmute' : 'Mute'"
-        :icon="muted ? 'az az-volume-off' : 'az az-microphone'"
-        variant="ghost"
-        size="small"
-        @click="muted = !muted"
-      />
-      <Button
-        label="Try sample question"
-        icon="az az-sparkles"
-        variant="outline"
-        size="small"
-        :disabled="muted"
-        @click="simulateSpeak"
-      />
-      <Button
-        label="End voice"
-        icon="az az-x"
-        variant="secondary"
-        size="small"
-        @click="emit('end', $event)"
-      />
-    </div>
+    <Button
+      label="Try sample question"
+      icon="az az-sparkles"
+      variant="outline"
+      size="small"
+      @click="simulateSpeak"
+    />
   </div>
 </template>
 ```
