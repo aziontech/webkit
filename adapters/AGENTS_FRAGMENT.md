@@ -73,6 +73,11 @@ product components in one file (`llms-full-site.txt` for the site and docs compo
 - **A form creates what it is missing.** A field that needs a resource that does not exist yet (the
   certificate of a new workload) offers `Create <noun>`, which opens that resource's create form in a
   drawer over the form and selects it on save. Never send the reader away to create it.
+- **API data shows its meaning.** A reference renders the referenced resource's name, never its bare
+  ID (embedded name, then the loaded options, then one batched fetch, then `Unknown <noun> (ID n)`);
+  a selected value is always listed in its picker; options loaded from an API are revalidated when a
+  form opens, after a save and on focus; records are typed from the API contract, with one formatter
+  per shape; codes become text through the API or one typed map (rule `webkit-api-data`).
 - **Blocks, then components.** Screens start from a block (above). Pieces reach for an
   `@aziontech/webkit` component before writing custom UI — find one via the `webkit` MCP
   (`suggest_component`), `node_modules/@aziontech/webkit/llms/llms.txt` or
@@ -172,6 +177,7 @@ before any polish:
 - **Polish:** `/webkit-motion-polish` · `/webkit-final-polish` (finish + earned delight)
 - **Verify + migrate:** `/webkit-ui-verify` (runtime axe + both themes + states) · `/webkit-adoption`
 - **End to end:** `/webkit-product-screens` (a product screen, with the problem → skill → enforcement routing table) · `/webkit-site-pages` (an Azion web page under the Web Design Guide, rule `webkit-site-pages`, SD-01 to SD-25)
+- **API data:** `/webkit-api-data` (references by name, remote pickers that keep the selected values, revalidated lookups, typed records and one formatter per shape, server-owned lists)
 - **Azion API:** `/webkit-azion-api` (CORS, the Vite dev proxy and a same-origin edge proxy, the personal token kept in memory or `sessionStorage`) · `/webkit-query-explorer` (a Metrics or Events GraphQL explorer: `DateRangePicker` + `useTimeRange`, `PropertyFilter`, `Chart`, `DataTable`, `CodeBlock`)
 
 Mechanics of consuming the package (imports, tokens, tree-shaking) live in `/webkit-usage`.

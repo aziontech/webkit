@@ -127,6 +127,7 @@ Sign-out clears it (`token.value = ''` and `sessionStorage.removeItem`). Tell th
 
 ## Hard rules
 
+- What the screen does with the answer (names instead of IDs, pickers, freshness, typed records) is `/webkit-api-data`.
 - Every browser call goes to your own origin; never `fetch('https://api.azion.com/…')` from the page.
 - The token comes from the person, at sign-in, and stays in memory or `sessionStorage`.
 - Proxies forward the person's `Authorization` header and allowlist paths; they hold no token.

@@ -118,6 +118,12 @@ export const FOUNDATIONS: FoundationPage[] = [
     title: 'Query explorer',
     summary: 'A Metrics and Events GraphQL explorer built from WebKit components.',
     markdown: 'skills/webkit-query-explorer/SKILL.md'
+  },
+  {
+    slug: 'api-data',
+    title: 'Showing API data',
+    summary: 'References by name, pickers that keep their values, fresh lookups and typed records.',
+    markdown: 'skills/webkit-api-data/SKILL.md'
   }
 ]
 

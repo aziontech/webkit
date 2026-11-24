@@ -139,6 +139,8 @@ Structure and states first, polish last:
   or rule owns each design problem, and what enforces it)
 - **An Azion web page (site, product or Solution page, campaign):** `/webkit-site-pages`, under rule
   `webkit-site-pages` (the Web Design Guide, SD-01 to SD-25)
+- **API data:** `/webkit-api-data` (references by name, remote pickers, fresh lookups, typed
+  records, server-owned lists; rule `webkit-api-data`)
 - **Azion API:** `/webkit-azion-api` (CORS, the dev and edge proxy, where the personal token
   lives) · `/webkit-query-explorer` (a Metrics or Events GraphQL explorer from WebKit pieces)
 

@@ -503,6 +503,7 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/rules/webkit-motion.md',
       '.claude/rules/webkit-testid.md',
       '.claude/rules/webkit-deprecation.md',
+      '.claude/rules/webkit-api-data.md',
       '.claude/skills/webkit-usage/SKILL.md',
       // UI-craft pack (18 skills: the redundancy/false-positive pass + webkit-tables +
       // webkit-lists (the index page around the table and its filter system) +
@@ -529,6 +530,7 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/skills/webkit-adoption/SKILL.md',
       '.claude/skills/webkit-azion-api/SKILL.md',
       '.claude/skills/webkit-query-explorer/SKILL.md',
+      '.claude/skills/webkit-api-data/SKILL.md',
       '.claude/skills/webkit-site-pages/SKILL.md',
       '.claude/skills/webkit-product-screens/SKILL.md',
       '.claude/agents/webkit-advisor.md',

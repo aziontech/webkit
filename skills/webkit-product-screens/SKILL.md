@@ -53,6 +53,7 @@ Read the whole owning file before deciding. **Enforced by** is the owning skill'
 | Consuming the package: find, import, keep bundles small                         | `/webkit-usage`, rules `webkit-imports`, `webkit-performance`                | imports, tokens, style-override, prefer-over-custom, performance, page-layout |
 | A component the system does not ship                                            | rule `webkit-construction-standards`, after `/webkit-adoption` files the gap | the construction rules it lists                                               |
 | The Azion API from the browser; a Metrics or Events explorer                    | `/webkit-azion-api`, `/webkit-query-explorer`                                | example-data, component-states, prefer-over-custom, review                    |
+| API data: references by name, remote pickers, fresh lookups, typed records      | `/webkit-api-data`, rule `webkit-api-data`                                   | api-data, component-states, ui-verify, review                                 |
 
 Which component exists, its API and import: the MCP (`suggest_component`, `get_component`) or
 `catalog.json`. A component that is not there does not exist.
