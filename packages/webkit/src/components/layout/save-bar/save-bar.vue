@@ -197,7 +197,7 @@
         </div>
         <div
           :data-testid="`${testId}__actions`"
-          class="flex items-center gap-(--spacing-sm) @max-md/save-bar:flex-col-reverse @max-md/save-bar:items-stretch @max-md/save-bar:gap-(--spacing-xs)"
+          class="flex items-center gap-(--spacing-sm) @max-md/save-bar:flex-col @max-md/save-bar:items-stretch @max-md/save-bar:gap-(--spacing-xs)"
         >
           <slot name="actions" />
         </div>
@@ -275,7 +275,7 @@
         </div>
         <div
           :data-testid="`${testId}__actions`"
-          class="flex flex-col-reverse gap-(--spacing-xs) @xl/save-bar:ms-auto @xl/save-bar:shrink-0 @xl/save-bar:flex-row @xl/save-bar:items-center @xl/save-bar:gap-(--spacing-sm)"
+          class="flex flex-col gap-(--spacing-xs) @xl/save-bar:ms-auto @xl/save-bar:shrink-0 @xl/save-bar:flex-row @xl/save-bar:items-center @xl/save-bar:gap-(--spacing-sm)"
         >
           <slot name="actions" />
         </div>

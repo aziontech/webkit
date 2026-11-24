@@ -209,6 +209,14 @@ describe('SaveBar', () => {
     })
   })
 
+  it('hides the Save shortcut chip in the default example on a touch screen', () => {
+    const view = render(Default)
+    const save = view.getByRole('button', { name: /Save/ })
+    const chip = within(save).getByTestId('kbd')
+
+    expect(chip.classList).toContain('pointer-coarse:hidden')
+  })
+
   describe('in a narrow box', () => {
     const mountIn = (width: number) =>
       render(SaveBar, {
@@ -225,11 +233,34 @@ describe('SaveBar', () => {
       const actions = view.getByTestId('save-bar__actions')
       const save = view.getByRole('button', { name: 'Save' })
 
-      expect(getComputedStyle(actions).flexDirection).toBe('column-reverse')
+      expect(getComputedStyle(actions).flexDirection).toBe('column')
       expect(Math.round(save.getBoundingClientRect().width)).toBe(
         Math.round(actions.getBoundingClientRect().width)
       )
     })
+
+    it.each(['plain', 'floating', 'docked'] as const)(
+      'stacks %s actions in focus order, Save below Discard',
+      (variant) => {
+        const view = render(SaveBar, {
+          props: { variant },
+          slots: {
+            default: 'You have unsaved changes',
+            actions: '<button type="button">Discard</button><button type="button">Save</button>'
+          },
+          container: boxOf(320)
+        })
+        const discard = view.getByRole('button', { name: 'Discard' })
+        const save = view.getByRole('button', { name: 'Save' })
+
+        expect(
+          discard.compareDocumentPosition(save) & Node.DOCUMENT_POSITION_FOLLOWING
+        ).toBeTruthy()
+        expect(save.getBoundingClientRect().top).toBeGreaterThan(
+          discard.getBoundingClientRect().top
+        )
+      }
+    )
 
     it('keeps the actions in a row in a wide box', () => {
       const view = mountIn(1024)

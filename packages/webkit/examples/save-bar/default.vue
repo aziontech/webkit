@@ -42,6 +42,7 @@
             meta
             size="small"
             aria-hidden="true"
+            class="pointer-coarse:hidden"
             >S</Kbd
           >
         </Button>

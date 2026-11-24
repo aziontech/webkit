@@ -3,7 +3,7 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: 1e4b99c9d431d35e8e2ea7d9c3e0cd2016d6bd5d8180b852757462755aed48dc
+checksum: 77f2a296948702df83d38860dc633f006ac65f358d90f3f660d7c22bae96013b
 spec_version: 5
 template: 2
 created: 2026-11-10
@@ -117,7 +117,7 @@ Each `variant` is one placement plus one surface, named for what a reader sees:
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop on the root
 - Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--save-bar-height` (so the `toaster` stacks above the bar, on top of any `--toast-offset-bottom` the app sets for its own bottom chrome, which the bar never overwrites), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it, whether the content scrolls in a scroll region of its own or the page itself scrolls; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. Every other variant sits at the bottom too, so it publishes `--save-bar-height` the same way (a toast never covers its Save or Discard) but no `--save-bar-inset` and no reserved height.
-- Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
+- Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Discard above Save, so the screen order is the focus order. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Motion & Animations
 
@@ -143,7 +143,7 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: owned by the action buttons.
-- Keyboard map: `Tab` reaches Discard, then Save, in reading order (the column is reversed visually on a phone so Save sits on top). With a `save` listener, `⌘ S` (`Ctrl S` off Apple) emits `save` from anywhere on the page, also while typing in a field (a shortcut with a modifier), and the browser's Save page dialog never opens; inside an open modal layer it fires only for a bar inside that layer (registered through `useShortcuts` with the bar as its element). Tests: `save-bar.test.ts` › save shortcut.
+- Keyboard map: `Tab` reaches Discard, then Save, in reading order; on a phone the actions stack in the same order, Save last at the bottom nearest the thumb, so the screen order matches the focus order. With a `save` listener, `⌘ S` (`Ctrl S` off Apple) emits `save` from anywhere on the page, also while typing in a field (a shortcut with a modifier), and the browser's Save page dialog never opens; inside an open modal layer it fires only for a bar inside that layer (registered through `useShortcuts` with the bar as its element). Tests: `save-bar.test.ts` › save shortcut.
 - ARIA: the root is a `footer`; the status glyph is `aria-hidden`. The message region (`__message`, the `leading` / default slot) is a polite live region (`role="status"`), so a bar that appears when the form turns dirty announces its status sentence (WCAG 4.1.3 Status Messages) without moving focus.
 - Contrast ≥4.5:1 for the status sentence.
 
@@ -167,7 +167,7 @@ The status sentence and the action labels come from the consumer's slots. One bu
 ## Responsive
 
 - Container queries: the root is `@container/save-bar`; `floating` and `docked` go to one row from `@xl`, `plain` stacks below `@md`.
-- Narrow (≤ 640 px or a narrow container): the actions stack full width under the message, Save on top; the bar keeps `env(safe-area-inset-bottom)` clear.
+- Narrow (≤ 640 px or a narrow container): the actions stack full width under the message, Save last at the bottom (screen order is focus order); the bar keeps `env(safe-area-inset-bottom)` clear.
 - Touch: the actions are `Button` at `medium`, full width when stacked; no hover-only affordance.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the floating bar reserves scroll room so it never hides the last field.
 
