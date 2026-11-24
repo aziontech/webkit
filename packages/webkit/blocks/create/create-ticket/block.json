@@ -27,10 +27,10 @@
     "criar ticket",
     "novo ticket",
     "novo chamado",
-    "abrir chamado para o cliente",
+    "abrir chamado em nome de alguém",
     "formulário de chamado",
     "criar chamado de suporte",
-    "registrar solicitação do cliente"
+    "registrar solicitação de suporte"
   ],
   "skills": ["webkit-create-surface", "webkit-form", "webkit-errors", "webkit-layout"],
   "primary": {
