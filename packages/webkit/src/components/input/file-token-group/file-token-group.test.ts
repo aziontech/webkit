@@ -166,6 +166,17 @@ describe('FileTokenGroup', () => {
     expect(view.getByText('a.txt').tagName).toBe('BDI')
   })
 
+  it('isolates the size and its unit as one run under rtl', () => {
+    const view = render(FileTokenGroup, {
+      props: { items: [{ file: { name: 'certificate-error.png', size: 248_000 } }] },
+      attrs: { dir: 'rtl' }
+    })
+    const size = view.getByTestId('file-token-group__meta').firstElementChild
+    expect(size?.tagName).toBe('BDI')
+    expect(size?.getAttribute('dir')).toBeNull()
+    expect(size?.textContent).toBe('242.2 kB')
+  })
+
   it('has no axe violations', async () => {
     for (const example of [Default, Uploading, Horizontal]) {
       const view = render(example)
