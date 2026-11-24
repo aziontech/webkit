@@ -1,0 +1,17 @@
+# Paths the Semgrep scan in .github/workflows/security.yml skips.
+# This file replaces Semgrep's default list, so the defaults are repeated here.
+node_modules/
+dist/
+build/
+coverage/
+.git/
+*.min.js
+
+# Generated files, checked by their own drift gates.
+packages/webkit/catalog/
+packages/webkit/catalog.json
+packages/webkit/llms/
+apps/visual/baselines/
+
+# Samples that must stay broken: each one proves a lint rule still fires.
+lint-canaries/

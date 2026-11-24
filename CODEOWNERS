@@ -8,9 +8,12 @@ eslint.config.js @robsongajunior
 /MAINTAINERS.md @aziontech/oss-review @aziontech/team-uxe
 /SECURITY.md @aziontech/oss-review @aziontech/security-office
 /.github/workflows/security.yml @aziontech/oss-review @aziontech/security-office
-/.github/workflows/release-supply-chain.yml @aziontech/oss-review @aziontech/security-office
+/.github/workflows/release-package.yml @aziontech/oss-review @aziontech/security-office
 /.azion-compliance.yml @aziontech/oss-review @aziontech/security-office
 
 /.gitleaksignore @aziontech/oss-review @aziontech/security-office
+/.gitleaks.toml @aziontech/oss-review @aziontech/security-office
+/.github/workflows/security-main.yml @aziontech/oss-review @aziontech/security-office
+/.github/dependency-review.yml @aziontech/oss-review @aziontech/security-office
 /.semgrepignore @aziontech/oss-review @aziontech/security-office
 /osv-scanner.toml @aziontech/oss-review @aziontech/security-office

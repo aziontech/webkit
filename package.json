@@ -57,6 +57,7 @@
     "format:webkit": "pnpm --filter @aziontech/webkit run format",
     "check:webkit:format": "pnpm --filter @aziontech/webkit run check:format",
     "check:audit": "pnpm audit",
+    "generate:sbom": "pnpm sbom --sbom-format cyclonedx --prod --lockfile-only --filter './packages/*' --sbom-supplier 'Azion Technologies' --out 'sbom/%s.cdx.json'",
     "check:workflows": "if command -v actionlint >/dev/null; then actionlint -no-color; else echo \"check:workflows: actionlint is not on PATH, skipped\"; fi && if command -v zizmor >/dev/null; then zizmor --offline --no-progress --color never .github/workflows; else echo \"check:workflows: zizmor is not on PATH, skipped\"; fi",
     "check:spelling": "typos --format brief",
     "check:unused": "npx --yes knip@5.88.1 --no-progress",

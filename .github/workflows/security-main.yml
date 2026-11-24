@@ -1,0 +1,93 @@
+# Runs the security suite (security.yml) on main after every merge and once a week, so a new
+# vulnerability or rule is found even when nothing changes. Findings go to the Security tab
+# (code scanning), and a failed run opens one issue that closes again when a run passes.
+name: Security on main
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '23 5 * * 1'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: security-main
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    name: Security
+    uses: ./.github/workflows/security.yml # zizmor: ignore[self-repository]
+    permissions:
+      contents: read
+      pull-requests: write
+
+  code-scanning:
+    name: Publish the findings to the Security tab
+    needs: scan
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Download the SARIF files
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          pattern: sarif-*
+          path: sarif
+
+      - name: Upload Semgrep
+        if: hashFiles('sarif/sarif-semgrep/semgrep.sarif') != ''
+        uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          sarif_file: sarif/sarif-semgrep/semgrep.sarif
+          category: semgrep
+
+      - name: Upload osv-scanner
+        if: hashFiles('sarif/sarif-osv-scanner/osv.sarif') != ''
+        uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          sarif_file: sarif/sarif-osv-scanner/osv.sarif
+          category: osv-scanner
+
+      - name: Upload Gitleaks
+        if: hashFiles('sarif/sarif-gitleaks/gitleaks.sarif') != ''
+        uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          sarif_file: sarif/sarif-gitleaks/gitleaks.sarif
+          category: gitleaks
+
+  issue:
+    name: Track a failed run in one issue
+    needs: scan
+    if: ${{ !cancelled() && github.event_name != 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    steps:
+      - name: Open, update or close the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SCAN_RESULT: ${{ needs.scan.result }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Security scan failed on main"
+          existing=$(gh issue list --state open --search "\"$title\" in:title" --json number,title \
+            --jq ".[] | select(.title == \"$title\") | .number" | head -n 1)
+          if [ "$SCAN_RESULT" = "success" ]; then
+            if [ -n "$existing" ]; then
+              gh issue close "$existing" --comment "The security scan passed again: $RUN_URL"
+            fi
+            exit 0
+          fi
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "Still failing: $RUN_URL"
+          else
+            gh issue create --title "$title" --body "The security scan on main failed ($SCAN_RESULT): $RUN_URL. Fix it or record the accepted risk in the scan's config, then close this issue."
+          fi

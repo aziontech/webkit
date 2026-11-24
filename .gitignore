@@ -127,3 +127,5 @@ sbom-*.json
 *.sigstore-bundle
 SHA256SUMS
 grype-report-sarif.json
+# CycloneDX SBOMs written by pnpm run generate:sbom
+/sbom/
