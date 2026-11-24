@@ -41,6 +41,7 @@ export type ProvideConversationHistoryContextOptions = Omit<
 > & {
   emit: ConversationHistoryEmit
   track: (origin: Event | Element | null, id: string) => void
+  follow: (origin: Event | Element | null, id: string) => void
 }
 
 const itemAct = (
@@ -70,7 +71,7 @@ const projectAct = (
 export function provideConversationHistoryContext(
   options: ProvideConversationHistoryContextOptions
 ): ConversationHistoryContext {
-  const { emit, track, ...shared } = options
+  const { emit, track, follow, ...shared } = options
   const context: ConversationHistoryContext = {
     ...shared,
     saveRename: (event, item, title) => emit('item-rename', event, { item, title }),
@@ -81,8 +82,14 @@ export function provideConversationHistoryContext(
     act: (event, action, item, project) => {
       if (action === 'rename') shared.startRename(item.id)
       else if (action === 'move') {
-        if (project) emit('item-move', event, { item, project })
-      } else itemAct(emit, event, action, item)
+        if (project) {
+          follow(event, item.id)
+          emit('item-move', event, { item, project })
+        }
+      } else {
+        if (action !== 'share') follow(event, item.id)
+        itemAct(emit, event, action, item)
+      }
     },
     actProject: (event, action, project) => projectAct(emit, event, action, project)
   }

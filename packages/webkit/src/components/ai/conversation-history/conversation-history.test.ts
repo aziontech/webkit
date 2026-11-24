@@ -584,6 +584,22 @@ describe('ConversationHistory', () => {
       expect(emitted.map(([, item]) => item.id)).toEqual(['b', 'c'])
     })
 
+    it('keeps focus on a chat that a menu action moves to another group', async () => {
+      const view = render(ConversationHistory, {
+        props: { items: chats, now, itemActions: ['pin'] }
+      })
+      const menu = await openMenu(view, 'More actions for Charlie')
+      await userEvent.click(within(menu).getByRole('menuitem', { name: /^Pin/ }))
+      await view.rerender({
+        items: chats.map((chat) => (chat.id === 'c' ? { ...chat, pinned: true } : chat))
+      })
+      await waitFor(() => {
+        const active = document.activeElement as HTMLElement | null
+        expect(active?.getAttribute('data-slot')).toBe('conversation-history-item')
+        expect(active?.dataset['key']).toBe('c')
+      })
+    })
+
     it('moves a chat to another project from the sub-menu', async () => {
       const view = render(ConversationHistory, {
         props: { items: chats, projects, now, openKeys: ['p1'], itemActions: ['move'] }

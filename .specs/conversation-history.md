@@ -3,9 +3,9 @@ name: conversation-history
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 9
+spec_version: 10
 template: 2
-checksum: e637275d2e45dd14af5aa740101951a6f7718d68a3e44fe04df59efbb4de3931
+checksum: b05c880ccd9b14e5421cd933c28da79a5574b0d86805a1364ec41c0b6ded934b
 created: 2026-11-11
 last_updated: 2026-11-23
 ---
@@ -175,7 +175,7 @@ Item fields (`ConversationHistoryItem`): `id`, `title`, `updatedAt` (sets the gr
 - The root is a `nav` named by `ariaLabel`; each group is a `ul` labelled by its heading (`aria-labelledby`).
 - A chat is a `button` named by its title (`aria-labelledby`), described by its description and end (`aria-describedby`: age, `Locked`, `Working`, `Failed`); the open one is `aria-current="page"`.
 - Section headers and project rows are `button`s with `aria-expanded` and `aria-controls`; the list they open is labelled by them. A header with a count is named `Working 2`.
-- Row actions are `IconButton`s named `Pin <title>` / `Unpin <title>`, `More actions for <title>`, `Delete <title>`, `New chat in <project>`; always in the tab order. More and Organize open a `menu` (arrow keys, `Enter`/`Space`, `ArrowRight` opens Move to project, `Esc` closes and returns focus).
+- Row actions are `IconButton`s named `Pin <title>` / `Unpin <title>`, `More actions for <title>`, `Delete <title>`, `New chat in <project>`; always in the tab order. More and Organize open a `menu` (arrow keys, `Enter`/`Space`, `ArrowRight` opens Move to project, `Esc` closes and returns focus). After Pin, Lock, Archive or Move to project, focus follows the chat to its new place (the row button, marked `data-key`); a chat that no longer shows hands focus to the nearest row, as Delete does.
 - The toolbar Search is a `SearchTrigger` (`aria-keyshortcuts`); the search field is a `searchbox` named `Search conversations`; the rename field is named `Rename <title>`.
 - Focus after a delete: when the removed row took focus with it, focus moves to the row in its place, else the last, else the list (`tabindex="-1"`).
 

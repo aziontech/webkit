@@ -200,7 +200,7 @@
     Boolean(needle.value) || openSectionKeys.value.includes(key)
 
   const navEl = ref<HTMLElement | null>(null)
-  const { track } = useConversationHistoryRemovalFocus(navEl, () =>
+  const { track, follow } = useConversationHistoryRemovalFocus(navEl, () =>
     props.items.map((item) => item.id)
   )
 
@@ -220,7 +220,8 @@
     select: (id) => (model.value = id),
     startRename: (id) => (renamingId.value = id),
     emit,
-    track
+    track,
+    follow
   })
 
   const NEW_CHAT_CLASS =

@@ -2,6 +2,7 @@ import { type MaybeRefOrGetter, onScopeDispose, type Ref, toValue, watch } from 
 
 export interface UseConversationHistoryRemovalFocusReturn {
   track: (origin: Event | Element | null, id: string) => void
+  follow: (origin: Event | Element | null, id: string) => void
 }
 
 const ROW = '[data-slot="conversation-history-item"]'
@@ -10,7 +11,7 @@ export function useConversationHistoryRemovalFocus(
   container: Ref<HTMLElement | null>,
   ids: MaybeRefOrGetter<readonly string[]>
 ): UseConversationHistoryRemovalFocusReturn {
-  let pending: { id: string; index: number } | null = null
+  let pending: { id: string; index: number; keep: boolean } | null = null
   let frame = 0
   let deadline = 0
 
@@ -21,7 +22,16 @@ export function useConversationHistoryRemovalFocus(
     const source = origin instanceof Element ? origin : (origin?.target ?? null)
     const target = source instanceof Element ? source : null
     const row = target?.closest('li')?.querySelector<HTMLElement>(ROW) ?? null
-    pending = { id, index: row ? rows().indexOf(row) : -1 }
+    pending = { id, index: row ? rows().indexOf(row) : -1, keep: false }
+  }
+
+  const follow = (origin: Event | Element | null, id: string) => {
+    track(origin, id)
+    if (!pending) return
+    pending.keep = true
+    cancelAnimationFrame(frame)
+    deadline = performance.now() + 1000
+    frame = requestAnimationFrame(refocus)
   }
 
   const refocus = () => {
@@ -34,17 +44,18 @@ export function useConversationHistoryRemovalFocus(
       else pending = null
       return
     }
-    const { index } = pending
+    const { id, index, keep } = pending
     pending = null
     const list = rows()
-    const next = list[Math.min(Math.max(index, 0), list.length - 1)] ?? container.value
+    const same = keep ? list.find((row) => row.dataset['key'] === id) : undefined
+    const next = same ?? list[Math.min(Math.max(index, 0), list.length - 1)] ?? container.value
     next.focus()
   }
 
   watch(
     () => [...toValue(ids)],
     (next) => {
-      if (!pending) return
+      if (!pending || pending.keep) return
       if (next.includes(pending.id)) {
         pending = null
         return
@@ -58,5 +69,5 @@ export function useConversationHistoryRemovalFocus(
 
   onScopeDispose(() => cancelAnimationFrame(frame))
 
-  return { track }
+  return { track, follow }
 }

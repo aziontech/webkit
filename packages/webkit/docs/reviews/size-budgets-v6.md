@@ -1689,3 +1689,4 @@ Budget-raise: config-provider 12.85 KB → 13.05 KB (measured 13 KB): the Englis
 Budget-raise: locales-pt-BR 12.05 KB → 12.25 KB (measured 12.21 KB): the ConversationHistory row-action, section and status strings in Portuguese, owner 2026-11-23.
 Budget-raise: locales-es 12.2 KB → 12.4 KB (measured 12.34 KB): the ConversationHistory row-action, section and status strings in Spanish, owner 2026-11-23.
 Budget-raise: console-layout 85.2 KB → 85.25 KB (measured 85.21 KB): a route change now also closes the compact navigation drawer, so a chat chosen from the AI Copilot panel on a phone shows the chat (2026-11-23 device validation).
+Budget-raise: conversation-history 17.25 KB → 17.4 KB (measured 17.35 KB): after Pin, Lock, Archive or Move to project, focus follows the chat to its new group instead of falling to the page (2026-11-23 device validation, keyboard and screen-reader users).

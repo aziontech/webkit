@@ -1,24 +1,20 @@
 <script setup lang="ts">
-  import type {
-    ConversationHistoryItem,
-    ConversationHistoryProject
-  } from '@aziontech/webkit/conversation-history'
+  import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
   import ConversationHistory from '@aziontech/webkit/conversation-history'
   import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import { sampleHistory, sampleHistoryNow, sampleProjects } from '../blocks/ai-chat.sample'
+  import { sampleHistoryNow } from '../blocks/ai-chat.sample'
+  import { copilotChats, copilotOpenKeys, copilotProjects } from '../lib/copilot-chats'
 
   const route = useRoute()
   const router = useRouter()
   const layout = useConsoleLayout({ optional: true })
 
-  const items = ref<ConversationHistoryItem[]>(sampleHistory.map((item) => ({ ...item })))
-  const projects = ref<ConversationHistoryProject[]>(
-    sampleProjects.map((project) => ({ ...project }))
-  )
-  const openKeys = ref<string[]>(['storefront'])
+  const items = copilotChats
+  const projects = copilotProjects
+  const openKeys = copilotOpenKeys
   const projectSort = ref<'recent' | 'name'>('recent')
 
   const active = computed<string | null>({
@@ -30,6 +26,20 @@
 
   function update(id: string, patch: Partial<ConversationHistoryItem>) {
     items.value = items.value.map((item) => (item.id === id ? { ...item, ...patch } : item))
+  }
+
+  function removeChat(id: string) {
+    items.value = items.value.filter((item) => item.id !== id)
+  }
+
+  function pinProject(id: string) {
+    projects.value = projects.value.map((entry) =>
+      entry.id === id ? { ...entry, pinned: !entry.pinned } : entry
+    )
+  }
+
+  function removeProject(id: string) {
+    projects.value = projects.value.filter((entry) => entry.id !== id)
   }
 
   function newChat() {
@@ -61,16 +71,9 @@
     @item-archive="(_event, item) => update(item.id, { archived: !item.archived })"
     @item-rename="(_event, { item, title }) => update(item.id, { title })"
     @item-move="(_event, { item, project }) => update(item.id, { projectId: project.id })"
-    @remove="(_event, id) => (items = items.filter((item) => item.id !== id))"
-    @project-pin="
-      (_event, project) =>
-        (projects = projects.map((entry) =>
-          entry.id === project.id ? { ...entry, pinned: !entry.pinned } : entry
-        ))
-    "
-    @project-remove="
-      (_event, project) => (projects = projects.filter((entry) => entry.id !== project.id))
-    "
+    @remove="(_event, id) => removeChat(id)"
+    @project-pin="(_event, project) => pinProject(project.id)"
+    @project-remove="(_event, project) => removeProject(project.id)"
     @project-chat-create="newChat"
   />
 </template>

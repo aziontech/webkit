@@ -143,6 +143,7 @@
       ref="buttonEl"
       type="button"
       data-slot="conversation-history-item"
+      :data-key="item.id"
       :data-active="active || null"
       :data-description="(item.description && !ctx.slots['item']) || null"
       :aria-current="active ? 'page' : undefined"
