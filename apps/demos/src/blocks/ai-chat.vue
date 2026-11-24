@@ -40,7 +40,6 @@
   import AiChatComposer from './ai-chat-composer.vue'
   import AiChatConnectionStatus from './ai-chat-connection-status.vue'
   import AiChatHeader, { type AiChatHeaderAction } from './ai-chat-header.vue'
-  import AiChatHistory from './ai-chat-history.vue'
   import AiChatSkeleton from './ai-chat-skeleton.vue'
   import AiChatStart from './ai-chat-start.vue'
   import AiChatTurn from './ai-chat-turn.vue'
@@ -167,7 +166,7 @@
   const composerEl = ref<InstanceType<typeof AiChatComposer> | null>(null)
   const stoppedIds = ref<Set<string>>(new Set())
   const answers = ref<Record<string, string>>({})
-  const historyPanel = ref(true)
+  const historyPanel = ref(false)
   const historyDrawer = ref(false)
 
   const turns = computed(() =>
@@ -297,12 +296,6 @@
     data-layout-fill
     class="flex min-h-0 w-full grow basis-0"
   >
-    <AiChatHistory
-      v-model="activeKey"
-      v-model:drawer-open="historyDrawer"
-      :panel-open="historyPanel"
-      @create="newChat"
-    />
     <div class="relative flex min-h-0 min-w-0 flex-1 flex-col">
       <AiChatHeader
         v-model:model-key="modelKey"

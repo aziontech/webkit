@@ -105,14 +105,14 @@
             />
           </Tooltip>
           <Tooltip
-            content="Agent"
+            content="AI Copilot"
             side="bottom"
           >
             <IconButton
               icon="az az-ask-azion"
               variant="outline"
               size="medium"
-              aria-label="Agent"
+              aria-label="AI Copilot"
               @click="router.push('/assistant')"
             />
           </Tooltip>
@@ -126,7 +126,7 @@
             @click="router.push('/resources/new')"
           />
           <HighlightButton
-            label="Agent"
+            label="AI Copilot"
             size="medium"
             icon="az az-ask-azion"
             @click="router.push('/assistant')"
