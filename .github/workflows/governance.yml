@@ -121,6 +121,13 @@ jobs:
       - name: Check every package uses one version of each shared dependency and the lockfile has no duplicate
         run: pnpm run check:versions
 
+  security-suite:
+    name: Security suite
+    uses: ./.github/workflows/security.yml # zizmor: ignore[self-repository]
+    permissions:
+      contents: read
+      pull-requests: write
+
   lint-canaries:
     name: Lint canaries (broken samples must stay broken)
     needs: changes
@@ -716,6 +723,7 @@ jobs:
       [
         changes,
         security,
+        security-suite,
         lint-canaries,
         lint,
         types,
@@ -735,6 +743,7 @@ jobs:
           declare -A results=(
             [changes]="${{ needs.changes.result }}"
             [security]="${{ needs.security.result }}"
+            [security-suite]="${{ needs.security-suite.result }}"
             [lint-canaries]="${{ needs.lint-canaries.result }}"
             [lint]="${{ needs.lint.result }}"
             [types]="${{ needs.types.result }}"

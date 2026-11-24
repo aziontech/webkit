@@ -57,8 +57,33 @@ test('Dependabot opens security updates for the npm dependencies, not version bu
   )
 })
 
-test('SECURITY.md gives a private path that works when private reporting is off', () => {
+test('SECURITY.md sends reports to the Azion Security Office by email', () => {
   const text = readFileSync(resolve(ROOT, 'SECURITY.md'), 'utf8')
-  assert.match(text, /Report a vulnerability/)
-  assert.match(text, /Security contact\s+request/)
+  assert.match(text, /mailto:security@azion\.com/)
+  assert.doesNotMatch(text, /Security contact\s+request/)
+})
+
+test('the security suite gates every pull request and runs on main every week', () => {
+  const suite = readFileSync(resolve(DIR, 'security.yml'), 'utf8')
+  for (const tool of [
+    'semgrep scan',
+    'osv-scanner scan source',
+    'gitleaks git',
+    'dependency-review-action',
+    'generate:sbom'
+  ]) {
+    assert.ok(suite.includes(tool), `security.yml runs ${tool}`)
+  }
+  assert.match(suite, /--log-opts=HEAD/)
+  const governance = readFileSync(resolve(DIR, 'governance.yml'), 'utf8')
+  assert.match(governance, /uses: \.\/\.github\/workflows\/security\.yml/)
+  assert.match(governance, /\[security-suite\]="\$\{\{ needs\.security-suite\.result \}\}"/)
+  const main = readFileSync(resolve(DIR, 'security-main.yml'), 'utf8')
+  assert.match(main, /schedule:\n {4}- cron: /)
+  assert.match(main, /branches: \[main\]/)
+})
+
+test('the OSSF Scorecard blocks below its threshold', () => {
+  const text = readFileSync(resolve(DIR, 'ossf-scorecard.yml'), 'utf8')
+  assert.match(text, /MODE: 'enforce'/)
 })

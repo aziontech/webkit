@@ -121,3 +121,6 @@ packages/webkit/skills/
 packages/webkit/rules/
 packages/webkit/adapters/
 packages/webkit/test/docs/.snippets-*/
+
+# CycloneDX SBOMs written by pnpm run generate:sbom
+/sbom/

@@ -1,0 +1,19 @@
+# Gitleaks configuration for the full-history secret scan (.github/workflows/security.yml).
+# The default rule set applies. The findings that already sit in the history are sample
+# values and are listed by fingerprint in .gitleaksignore; a new finding fails the scan.
+
+[extend]
+useDefault = true
+
+# Sample values that the current tree still shows on purpose (a block that displays a newly
+# created token, its test, and a console mock-up). They are not credentials. Listed by value
+# so a later commit that touches these files does not report them again.
+[[allowlists]]
+description = "Sample tokens and keys shown by blocks, examples and mock-ups"
+regexTarget = "secret"
+regexes = [
+  '''^pat_3f9c2a7e5b1d4c8a9e0f6b2d7c4a1e5f9b3d8c2a6e1f4b7d$''',
+  '''^pat_0123456789abcdef0123456789abcdef0123456789abcdef$''',
+  '''^ij9076f1ujik17a81f938yhru5g713422$''',
+  '''^crfe25d2-23j8-48gf-a9ks-6b75w3ska674$''',
+]

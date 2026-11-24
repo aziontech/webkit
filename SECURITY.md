@@ -12,20 +12,31 @@ upgrade with `npx @aziontech/webkit migrate v6`.
 
 ## Reporting a vulnerability
 
-Report it privately through GitHub. Do not open a public issue, pull request or discussion.
+Email **[security@azion.com](mailto:security@azion.com)**, the Azion Security Office. Do not open
+a public issue, pull request or discussion, and do not post details anywhere public.
 
-1. Open the repository's **Security** tab.
-2. Choose **Report a vulnerability** (GitHub private vulnerability reporting).
-3. Describe the problem: the affected package and version, how to reproduce it, and what an
-   attacker could do with it. A minimal reproduction helps most.
+Put this in the email:
 
-If the **Report a vulnerability** button is not there, open a new issue titled "Security contact
-request" with no details of the problem, and a maintainer will reach out to you privately.
+1. The affected package and version (for example `@aziontech/webkit` 6.0.0).
+2. How to reproduce it. A minimal reproduction helps most.
+3. What an attacker could do with it.
 
-Only the maintainers and you can see the report. We aim to acknowledge it within three business
-days, agree a fix and a disclosure date with you, and publish a GitHub security advisory (with a
-CVE where it applies) when the fixed version is on npm. We credit you in the advisory unless you
-ask us not to.
+If the repository's **Security** tab shows a **Report a vulnerability** button (GitHub private
+vulnerability reporting), you can use it instead; it reaches the same people. The email address
+always works.
+
+Only the Security Office, the maintainers and you see the report. We aim to acknowledge it within
+three business days, agree a fix and a disclosure date with you, and publish a GitHub security
+advisory (with a CVE where it applies) when the fixed version is on npm. We credit you in the
+advisory unless you ask us not to.
+
+## How the code is checked
+
+Every pull request and every merge to `main` runs the same scans as Azion's other repositories,
+and they run again every week: Semgrep (code scanning), osv-scanner (known vulnerabilities in the
+lockfiles), Gitleaks (secrets in the whole history), a review of every new dependency's
+vulnerabilities and license, `pnpm audit`, TruffleHog, the workflow linters actionlint and zizmor,
+and the OSSF Scorecard. Each release carries a CycloneDX SBOM and npm provenance.
 
 ## Scope
 
