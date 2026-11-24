@@ -31,7 +31,7 @@ While loading the title reads Customer, `Skeleton`s stand in for the avatar and 
 
 ### D. Details — `Card`, `KeyValueList`, `CopyButton`, `Link`, `Tag`
 
-A `Card` titled Details holding a one-column `KeyValueList`: Email and Phone each with a small `CopyButton`, Local time (the time where the customer is, then the zone), Language, Organization (a small `Link` to the organization page, plain text without one), Tags and Customer since. A value the customer does not have (no phone, no tags) shows the list's own Not set marker. Tags are a row of small neutral `Tag`s: `TagEditor` has no read-only mode yet, so this row is a display only and not the pattern for editing tags.
+A `Card` titled Details holding a one-column `KeyValueList`: Email and Phone each with a small `CopyButton`, Local time (the time where the customer is, then the zone), Language, Organization (an inline `Link` to the organization page, plain text without one), Tags and Customer since. A value the customer does not have (no phone, no tags) shows the list's own Not set marker. Tags are a row of small neutral `Tag`s: `TagEditor` has no read-only mode yet, so this row is a display only and not the pattern for editing tags.
 
 ### E. Satisfaction — `Card`, `Rating`
 
@@ -51,7 +51,7 @@ A `Timeline` with one `Timeline.Group` per day, labelled with the long date, new
 
 ### I. Notes — `MessageThread`, `Field`, `Textarea`, `Button`
 
-The internal notes, oldest first, as a `MessageThread` of `type="note"` items written by agents, each with the Internal note band. Under it a `Field` labelled Add a note with an auto-resizing `Textarea`, the description "Only agents can read notes." and a secondary Add note `Button`. Add note stays enabled: with an empty field it shows the `Field.Error`; otherwise it emits `add-note` and shows its loading state while `saving`.
+The internal notes, oldest first, as a `MessageThread` of `type="note"` items written by agents, each with the Internal note band and a relative time (the absolute one crowds the author name in a narrow column). Under it a `Field` labelled Add a note with an auto-resizing `Textarea`, the description "Only agents can read notes." and a secondary Add note `Button`. Add note stays enabled: with an empty field it shows the `Field.Error`; otherwise it emits `add-note` and shows its loading state while `saving`.
 
 ## Data
 
