@@ -9,7 +9,7 @@
     },
     {
       "name": "Actions",
-      "summary": "A complete response with its action row on one line: Copy, Good response and Bad response (the chosen thumb fills and the other hides; pressing it again clears it), Read aloud, Share, Try again (each press adds a version paged by `ResponseBranches` at the start of the row) and More with Branch in new chat, then the Sources pill. In a row narrower than 480 px the thumbs and Try again move into More.",
+      "summary": "A complete response with its action row on one line: Copy, Feedback (one button whose menu holds Good response and Bad response; the trigger shows the chosen thumb, and choosing it again clears it), Read aloud, Share, Try again (each press adds a version paged by `ResponseBranches` at the start of the row) and More with Branch in new chat, then the Sources pill. In a row narrower than 480 px Good response, Bad response and Try again move into More.",
       "file": "actions.vue"
     },
     {

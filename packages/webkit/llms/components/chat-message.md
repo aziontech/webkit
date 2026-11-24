@@ -1,6 +1,6 @@
 # Chat Message
 
-> One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the good / bad response thumbs, read aloud, share, try again, branch in new chat, the sources), and on the reader's own prompt Copy and Edit. It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). Assistant messages are plain text across the reading column at the prose reading size (`.text-body-prose-md`, 16 px on 26 px lines): no avatar, name, time or bubble. User messages are a filled bubble at the inline end, at most 70 % wide; system messages a muted centered line. A user message opens for editing (`v-model:editing`) and Send emits `edit` with the new text for the app's `setMessages` and `sendMessage`. Author and time live in the accessible name (the time also shows on hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
+> One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the a Feedback menu with good / bad response, read aloud, share, try again, branch in new chat, the sources), and on the reader's own prompt Copy and Edit. It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). Assistant messages are plain text across the reading column at the prose reading size (`.text-body-prose-md`, 16 px on 26 px lines): no avatar, name, time or bubble. User messages are a filled bubble at the inline end, at most 70 % wide; system messages a muted centered line. A user message opens for editing (`v-model:editing`) and Send emits `edit` with the new text for the app's `setMessages` and `sendMessage`. Author and time live in the accessible name (the time also shows on hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
 
 - Import: `import ChatMessageRoot from '@aziontech/webkit/chat-message-root'`
 - Compound import (dot notation, not tree-shakeable): `import ChatMessage from '@aziontech/webkit/chat-message'`
@@ -15,7 +15,7 @@
 ## Do
 
 - Pass `status` from your request: `pending` until the first token, `streaming` while tokens arrive, then `success` or `error`.
-- Turn on the built-in actions with props instead of composing buttons: `copyable`, `show-feedback`, `show-read-aloud`, `shareable`, `retryable`, `branchable` on a response; `copyable`, `editable` on a prompt. The row keeps one order and moves the thumbs and Try again into More when it is narrow.
+- Turn on the built-in actions with props instead of composing buttons: `copyable`, `show-feedback`, `show-read-aloud`, `shareable`, `retryable`, `branchable` on a response; `copyable`, `editable` on a prompt. The row keeps one order and moves Good response, Bad response and Try again into More when it is narrow.
 - Put the `Sources` pill in `#trailing` (it stays on the same line) and a `ResponseBranches` pager in `#leading` once a response or prompt has versions.
 - Raise a toast after a rating, and open `FeedbackReasonDialog` after Bad response; the row itself shows no confirmation text.
 - Use `grouped` for a second message by the same author so stacked messages read as one turn.
@@ -74,15 +74,15 @@ Compound API through `index.ts` (`ChatMessage.Actions`, `ChatMessage.Feedback`);
 `chat-message-root`, `chat-message-actions`, `chat-message-feedback`. The root provides
 `{ from, status, contentText }` (`injection-key.ts`; `contentText()` reads the `StreamingResponse` text, `lib/content-text.ts`); `useChatMessageContext()` throws outside a `ChatMessage`.
 
-- `chat-message-actions/chat-message-actions.vue` — `role="group"` row of actions on one line (it never wraps); renders nothing unless `status` is `success`. Built-in actions are turned on by props and keep one order: `leading`, Copy, Edit, Good response, Bad response, Read aloud, Share, Try again, `default`, More, `trailing`. It measures its own width: below 480 px (`data-compact`) the thumbs and Try again move into More, so a phone shows Copy, Read aloud, Share, More and the Sources pill. More is a `DropdownMenu` (an ellipsis `IconButton`, `More actions`) holding the moved actions and Branch in new chat; it renders only when it holds an item. On a user message the row sits at the inline end and is transparent until the message is hovered or holds focus (always visible on a coarse pointer).
-  - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`); `copyable?: boolean` (default `false` — shows Copy, a `CopyButton`); `copyText?: string` (default `''` — what Copy copies; empty copies `contentText()`); `editable?: boolean` (default `false` — shows Edit on a user message, which opens the root's editor); `showFeedback?: boolean` (default `false` — shows the thumbs, a `ChatMessage.Feedback` bound to `v-model:feedback`); `showReadAloud?: boolean` (default `false` — shows Read aloud); `readAloudText?: string` (default `''` — the text Read aloud speaks; empty reads `contentText()`); `shareable?: boolean` (default `false` — shows Share); `retryable?: boolean` (default `false` — shows Try again); `branchable?: boolean` (default `false` — adds Branch in new chat to More); `disabled?: boolean` (default `false` — locks Edit, Try again and Branch in new chat).
-  - v-model: `v-model:feedback` — `'up' | 'down' | null` through `defineModel('feedback')` (default `null`; emits `update:feedback`). Choosing the chosen thumb again clears it, in the row and in More.
+- `chat-message-actions/chat-message-actions.vue` — `role="group"` row of actions on one line (it never wraps); renders nothing unless `status` is `success`. Built-in actions are turned on by props and keep one order: `leading`, Copy, Edit, Feedback, Read aloud, Share, Try again, `default`, More, `trailing`. It measures its own width: below 480 px (`data-compact`) Feedback's two choices and Try again move into More, so a phone shows Copy, Read aloud, Share, More and the Sources pill. More is a `DropdownMenu` (an ellipsis `IconButton`, `More actions`) holding the moved actions and Branch in new chat; it renders only when it holds an item. On a user message the row sits at the inline end and is transparent until the message is hovered or holds focus (always visible on a coarse pointer).
+  - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`); `copyable?: boolean` (default `false` — shows Copy, a `CopyButton`); `copyText?: string` (default `''` — what Copy copies; empty copies `contentText()`); `editable?: boolean` (default `false` — shows Edit on a user message, which opens the root's editor); `showFeedback?: boolean` (default `false` — shows Feedback, a `ChatMessage.Feedback` bound to `v-model:feedback`); `showReadAloud?: boolean` (default `false` — shows Read aloud); `readAloudText?: string` (default `''` — the text Read aloud speaks; empty reads `contentText()`); `shareable?: boolean` (default `false` — shows Share); `retryable?: boolean` (default `false` — shows Try again); `branchable?: boolean` (default `false` — adds Branch in new chat to More); `disabled?: boolean` (default `false` — locks Edit, Try again and Branch in new chat).
+  - v-model: `v-model:feedback` — `'up' | 'down' | null` through `defineModel('feedback')` (default `null`; emits `update:feedback`). Choosing the chosen item again clears it, in Feedback and in More.
   - Events: `share` — `(event: MouseEvent)`, Share pressed; `retry` — `(event: MouseEvent | KeyboardEvent)`, Try again pressed or chosen in More; `branch` — `(event: MouseEvent | KeyboardEvent)`, Branch in new chat chosen.
   - Slots: `leading` — before Copy, a `ResponseBranches` pager; `default` — app actions after the built-in ones; `trailing` — the `Sources` pill, at the end of the same line (`__trailing`, which may shrink and clips past its end rather than widen the row; it keeps 4 px around the pill for its focus ring).
   - Test ids: `__copy`, `__edit`, `__feedback`, `__read-aloud`, `__share`, `__retry`, `__more`, `__trailing`.
   - Read aloud (private part `parts/chat-message-read-aloud.vue`, test id `chat-message-actions__read-aloud`): a 40 px ghost `IconButton` that speaks the text with `speechSynthesis` in the active locale; while speaking it is `Stop reading` (`data-speaking`). Pressing it again, another message's Read aloud or unmounting stops it. Rendered after mount, only where the browser has speech synthesis.
   - `data-testid` fallback: `chat-message-actions`.
-- `chat-message-feedback/chat-message-feedback.vue` — thumbs up / down (`aria-pressed`, medium ghost `IconButton`s), each with a tooltip (`Good response`, `Bad response`). Choosing one fills its icon and hides the other; pressing the filled thumb again clears the choice and brings the other back. A visually hidden `role="status"` line reads `Submitting feedback` (while `loading`) then `Thanks for your feedback`; nothing is written in the row.
+- `chat-message-feedback/chat-message-feedback.vue` — one medium ghost `IconButton` named `Feedback` (`__trigger`, a thumbs-up glyph) that opens a `DropdownMenu` (side `bottom`, align `start`) with two items: Good response (`__up`, thumbs up) and Bad response (`__down`, thumbs down). Choosing one closes the menu and sets the value; the chosen item is checked (`menuitemradio`, `aria-checked`) and the trigger shows its filled thumb with `data-selected`; choosing it again clears the choice. While `loading` the trigger shows a spinner and the menu stays shut. A visually hidden `role="status"` line reads `Submitting feedback` (while `loading`) then `Thanks for your feedback`; nothing is written in the row. The menu (`parts/chat-message-feedback-menu.vue`) loads as a lazy chunk; until then an inert copy of the trigger holds its place.
   - Props: `loading?: boolean` (default `false`).
   - v-model: `'up' | 'down' | null` through `defineModel` (default `null`; emits `update:modelValue`).
   - `data-testid` fallback: `chat-message-feedback`.
@@ -101,7 +101,10 @@ packages/webkit/src/components/ai/chat-message/
 ├── injection-key.ts
 ├── composables/use-chat-message-context.ts
 ├── lib/content-text.ts
+├── lib/feedback-icon.ts
 ├── parts/chat-message-read-aloud.vue
+├── parts/chat-message-more.vue
+├── parts/chat-message-feedback-menu.vue
 ├── chat-message-actions/chat-message-actions.vue
 └── chat-message-feedback/chat-message-feedback.vue
 ```
@@ -125,9 +128,9 @@ packages/webkit/src/components/ai/chat-message/
 ## Accessibility
 
 - Visible focus: the composed controls carry their own `focus-visible` rings.
-- Keyboard map: `Tab` through links in the content, then the actions in order; Enter / Space activate; More opens its menu (arrows move, `Esc` closes). In the editor, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
+- Keyboard map: `Tab` through links in the content, then the actions in order; Enter / Space activate; Feedback and More open their menus with Enter, Space or the arrow keys (arrows move, Enter chooses, `Esc` closes and returns focus to the button). In the editor, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
 - The user message's actions are transparent, never hidden from the tab order: focusing one shows the row.
-- ARIA: `<article aria-label="<author> at <time>">` so each message has a unique name (Cloudscape), repeated in a visually hidden line at its start for browse mode; `aria-busy` while loading or streaming; actions are a `role="group"` named `Message actions`; feedback thumbs use `aria-pressed`, the feedback status is a visually hidden `role="status"`; the editor field is named `Edit your message`.
+- ARIA: `<article aria-label="<author> at <time>">` so each message has a unique name (Cloudscape), repeated in a visually hidden line at its start for browse mode; `aria-busy` while loading or streaming; actions are a `role="group"` named `Message actions`; Feedback is a menu button (`aria-haspopup="menu"`, `aria-expanded`) whose chosen item is `aria-checked`, the feedback status is a visually hidden `role="status"`; the editor field is named `Edit your message`.
 - Announcement: when an assistant or system message turns `success` or `error` (or mounts finished after the conversation is ready), its text is read once through the `Conversation` live region.
 - Never rely on alignment alone: every message names its author in its accessible name and hidden line (or is `grouped` after one that does).
 - Contrast ≥4.5:1 on the muted time and system text.
@@ -152,7 +155,7 @@ packages/webkit/src/components/ai/chat-message/
 | `chatMessage.actions`            | `Message actions`                      | `ariaLabel` (Actions) |
 | `chatMessage.goodResponse`       | `Good response`                        | —                     |
 | `chatMessage.badResponse`        | `Bad response`                         | —                     |
-| `chatMessage.feedback`           | `Response feedback`                    | —                     |
+| `chatMessage.feedback`           | `Feedback`                             | —                     |
 | `chatMessage.feedbackSubmitting` | `Submitting feedback`                  | —                     |
 | `chatMessage.feedbackThanks`     | `Thanks for your feedback`             | —                     |
 | `chatMessage.readAloud`          | `Read aloud`                           | —                     |
@@ -170,7 +173,7 @@ packages/webkit/src/components/ai/chat-message/
 ## Responsive
 
 - Container queries: none; user bubbles cap at 70 % of the thread width, assistant content fills it.
-- Narrow: the action row stays one line; below 480 px of its own width it moves the thumbs and Try again into More (measured with a resize observer, so a response in a narrow drawer gets the phone row too).
+- Narrow: the action row stays one line; below 480 px of its own width it moves Good response, Bad response and Try again into More (measured with a resize observer, so a response in a narrow drawer gets the phone row too).
 - Touch: every action is a 40 px `IconButton`; the `Sources` pill has a 44 px hit area on coarse pointers; a prompt's Copy and Edit are always visible on a coarse pointer.
 - Reflow: long words break (`break-words`); code and tables scroll in their own blocks.
 

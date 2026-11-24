@@ -35,7 +35,7 @@
     copyText?: string
     /** Shows Edit after Copy on a user message: it opens the bubble as a field with Cancel and Send. */
     editable?: boolean
-    /** Shows the Good response and Bad response thumbs, bound to `v-model:feedback`; in a narrow row they move into More. */
+    /** Shows the Feedback button, a menu with Good response and Bad response bound to `v-model:feedback`; in a narrow row the two move into More. */
     showFeedback?: boolean
     /** Shows Read aloud after the thumbs: it speaks the response with the browser's speech synthesis, turns into Stop while speaking, and is hidden where the browser has none. */
     showReadAloud?: boolean

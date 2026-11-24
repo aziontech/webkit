@@ -201,8 +201,11 @@ describe('ai/ai-chat', () => {
   it('emits feedback with the value and the rated message', async () => {
     await page.viewport(1280, 900)
     const view = render(AiChat, { props: { messages: thread } })
-    const good = await view.findByRole('button', { name: 'Good response' })
-    await userEvent.click(good)
+    await waitFor(() =>
+      expect(view.getAllByRole('button', { name: 'Feedback' })[0]).not.toBeDisabled()
+    )
+    await userEvent.click(view.getAllByRole('button', { name: 'Feedback' })[0]!)
+    await userEvent.click(await view.findByRole('menuitem', { name: 'Good response' }))
     await page.viewport(414, 896)
     const [[value, message]] = view.emitted('feedback') as [[string, AiChatMessage]]
     expect(value).toBe('up')
@@ -303,14 +306,21 @@ describe('ai/ai-chat', () => {
       const view = render(AiChat, { props: { messages: thread } })
       const row = responseActions(view)
       await waitFor(() => expect(row).not.toHaveAttribute('data-compact'))
-      await userEvent.click(within(row).getByRole('button', { name: 'Bad response' }))
+      await waitFor(() =>
+        expect(within(row).getByRole('button', { name: 'Feedback' })).not.toBeDisabled()
+      )
+      await userEvent.click(within(row).getByRole('button', { name: 'Feedback' }))
+      await userEvent.click(await view.findByRole('menuitem', { name: 'Bad response' }))
       expect(view.emitted('feedback')![0]).toEqual([
         'down',
         expect.objectContaining({ id: 'a1' }),
         undefined
       ])
       const dialog = await view.findByRole('dialog', { name: 'What went wrong?' })
-      expect(within(row).queryByRole('button', { name: 'Good response' })).toBeNull()
+      expect(within(row).getByTestId('chat-message-actions__feedback')).toHaveAttribute(
+        'data-value',
+        'down'
+      )
       expect(within(row).getByTestId('chat-message-actions__feedback__status')).toHaveClass(
         'sr-only'
       )

@@ -44,7 +44,7 @@ The same layout as the full page: the reader's prompts in a bubble at the inline
 
 ### G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `ResponseBranches`, `FeedbackReasonDialog`
 
-The same prompt and response anatomy as the full page: loading, thinking, streaming with site-name citation chips, and `ChatMessage.Actions` with Copy, Good response, Bad response, Read aloud, Share, Try again and More (in the drawer's narrow column the thumbs and Try again sit in More), the Sources pill at its end on the same line, a `ResponseBranches` pager after Try again, and Copy and Edit under each prompt. The files a reader attached draw under their prompt as media does in a response (section K).
+The same prompt and response anatomy as the full page: loading, thinking, streaming with site-name citation chips, and `ChatMessage.Actions` with Copy, Feedback (Good response and Bad response in a menu), Read aloud, Share, Try again and More (in the drawer's narrow column Good response, Bad response and Try again sit in More), the Sources pill at its end on the same line, a `ResponseBranches` pager after Try again, and Copy and Edit under each prompt. The files a reader attached draw under their prompt as media does in a response (section K).
 
 ### H. Follow-up questions — `SuggestionGroup`
 

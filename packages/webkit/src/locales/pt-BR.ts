@@ -55,7 +55,7 @@ export const ptBR: Messages = {
     retry: 'Tentar novamente',
     goodResponse: 'Boa resposta',
     badResponse: 'Resposta ruim',
-    feedback: 'Avaliação da resposta',
+    feedback: 'Avaliação',
     feedbackSubmitting: 'Enviando avaliação',
     feedbackThanks: 'Obrigado pela sua avaliação',
     readAloud: 'Ler em voz alta',

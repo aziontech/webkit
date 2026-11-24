@@ -3,18 +3,18 @@ name: feedback-reason-dialog
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: f3ef2380c8705fff5fc7577ba433173d474780e16b6728853703868b98cbd919
+checksum: bbbfb4a3b98dd03b381d75719543c7fc84410d9c82eaa65b76502956501253d6
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-23
 ---
 
 # FeedbackReasonDialog — Component Spec
 
 ## Purpose
 
-Asks why an assistant response was not helpful, right after the thumbs-down in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.
+Asks why an assistant response was not helpful, right after Bad response in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.
 
 ## When to use
 
@@ -28,7 +28,7 @@ Asks why an assistant response was not helpful, right after the thumbs-down in `
 
 ## Related
 
-- `chat-message` — `ChatMessage.Feedback` holds the thumbs that open it.
+- `chat-message` — `ChatMessage.Feedback` holds the Bad response choice that opens it.
 - `confirm-dialog` — the same dialog anatomy for a yes/no decision.
 
 ## Best practices
@@ -112,7 +112,7 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- A modal `Dialog` named by its title and described by its one-line description; focus moves into it and returns to the thumbs-down on close.
+- A modal `Dialog` named by its title and described by its one-line description; focus moves into it and returns to the Feedback button on close.
 - The reasons are a `fieldset` with a `legend` (`Reason`), a `RadioGroup` with one `RadioGroup.Item` per reason and its label; the details `Textarea` is labelled `Details (optional)`.
 - Submitting without a reason marks the fieldset invalid, shows the error text and focuses the first radio; nothing is sent.
 - Keyboard: `Tab` through radios (arrows within the group), details, Cancel, Send feedback; `Enter` in a radio submits; `Escape` closes.
@@ -153,7 +153,7 @@ _none_
 
 ## Examples
 
-- Default — a response with thumbs; thumbs-down opens the dialog, Send feedback closes it and the thumbs read `Feedback sent`.
+- Default — a response with its Feedback menu; Bad response opens the dialog, Send feedback closes it and the hidden status reads `Thanks for your feedback`.
 
 ## Constraints — DO NOT
 

@@ -143,10 +143,27 @@ describe('ChatMessage', () => {
     expect(() => render(ChatMessageActions)).toThrow(/within a ChatMessage/)
   })
 
-  it('fills the chosen thumb, hides the other, confirms only to screen readers, and clears on a second press', async () => {
+  async function feedbackTrigger(
+    getByRole: (role: string, options: { name: string }) => HTMLElement
+  ) {
+    await vi.waitFor(() => expect(getByRole('button', { name: 'Feedback' })).not.toBeDisabled())
+    return getByRole('button', { name: 'Feedback' })
+  }
+
+  async function menuItem(name: string): Promise<HTMLElement> {
+    return vi.waitFor(() => {
+      const item = Array.from(
+        document.body.querySelectorAll<HTMLElement>('[role^="menuitem"]')
+      ).find((node) => node.textContent?.trim() === name)
+      expect(item).toBeTruthy()
+      return item as HTMLElement
+    })
+  }
+
+  function renderFeedback() {
     const value = ref<'up' | 'down' | null>(null)
     const loading = ref(false)
-    const { getByRole, getByTestId, queryByRole } = render(
+    const view = render(
       defineComponent({
         setup: () => () =>
           h(ChatMessageFeedback, {
@@ -159,24 +176,95 @@ describe('ChatMessage', () => {
           })
       })
     )
-    expect(getByRole('button', { name: 'Good response' })).toHaveAttribute('aria-pressed', 'false')
-    await userEvent.click(getByRole('button', { name: 'Bad response' }))
+    return { ...view, value, loading }
+  }
+
+  it('shows one Feedback button that opens a menu below it with Good response and Bad response', async () => {
+    const { getByRole, getAllByRole, getByTestId } = renderFeedback()
+    const trigger = await feedbackTrigger(getByRole)
+    expect(getAllByRole('button')).toHaveLength(1)
+    expect(trigger).toHaveAttribute('aria-haspopup', 'menu')
+    expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    expect(trigger).not.toHaveAttribute('data-selected')
+    expect(trigger.querySelector('.az-thumbs-up')).not.toBeNull()
+    expect(getByTestId('chat-message-feedback__trigger')).toBe(trigger)
+    await userEvent.click(trigger)
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
+    const items = await vi.waitFor(() => {
+      const found = Array.from(document.body.querySelectorAll('[role^="menuitem"]'))
+      expect(found).toHaveLength(2)
+      return found
+    })
+    expect(items.map((item) => item.textContent?.trim())).toEqual(['Good response', 'Bad response'])
+    expect(
+      document.querySelector('[data-testid="chat-message-feedback__up"] .az-thumbs-up')
+    ).not.toBeNull()
+    expect(
+      document.querySelector('[data-testid="chat-message-feedback__down"] .az-thumbs-down')
+    ).not.toBeNull()
+  })
+
+  it('rates from the menu, marks the choice, confirms only to screen readers, and clears on a second choice', async () => {
+    const { getByRole, getByTestId, value, loading } = renderFeedback()
+    await userEvent.click(await feedbackTrigger(getByRole))
+    await userEvent.click(await menuItem('Bad response'))
     expect(value.value).toBe('down')
+    expect(getByTestId('chat-message-feedback')).toHaveAttribute('data-value', 'down')
     expect(getByTestId('chat-message-feedback__status')).toHaveTextContent('Submitting feedback')
+    expect(getByTestId('chat-message-feedback__trigger')).toHaveAttribute('data-loading')
     loading.value = false
     await nextTick()
-    const down = getByRole('button', { name: 'Bad response' })
-    expect(down).toHaveAttribute('aria-pressed', 'true')
-    expect(down.querySelector('.az-thumbs-down-fill')).not.toBeNull()
-    expect(queryByRole('button', { name: 'Good response' })).toBeNull()
+    const trigger = getByRole('button', { name: 'Feedback' })
+    expect(trigger).toHaveAttribute('data-selected')
+    expect(trigger.querySelector('.az-thumbs-down-fill')).not.toBeNull()
     expect(getByTestId('chat-message-feedback__status')).toHaveTextContent(
       'Thanks for your feedback'
     )
     expect(getByTestId('chat-message-feedback__status')).toHaveClass('sr-only')
-    await userEvent.click(down)
+    await userEvent.click(trigger)
+    const bad = await menuItem('Bad response')
+    expect(bad).toHaveAttribute('role', 'menuitemradio')
+    expect(bad).toHaveAttribute('aria-checked', 'true')
+    await userEvent.click(bad)
     expect(value.value).toBeNull()
-    expect(getByRole('button', { name: 'Good response' })).toBeTruthy()
+    loading.value = false
+    await nextTick()
+    expect(getByRole('button', { name: 'Feedback' })).not.toHaveAttribute('data-selected')
     expect(getByTestId('chat-message-feedback__status')).toHaveTextContent('')
+  })
+
+  it('opens with the keyboard, moves with the arrows, chooses with Enter, and returns focus on Escape', async () => {
+    const { getByRole, value, loading } = renderFeedback()
+    const trigger = await feedbackTrigger(getByRole)
+    trigger.focus()
+    await userEvent.keyboard('{Enter}')
+    await menuItem('Good response')
+    await vi.waitFor(() =>
+      expect(document.activeElement?.textContent?.trim()).toBe('Good response')
+    )
+    await userEvent.keyboard('{ArrowDown}')
+    await vi.waitFor(() => expect(document.activeElement?.textContent?.trim()).toBe('Bad response'))
+    await userEvent.keyboard('{Enter}')
+    expect(value.value).toBe('down')
+    await vi.waitFor(() => expect(document.activeElement).toBe(trigger))
+    loading.value = false
+    await nextTick()
+    await userEvent.keyboard(' ')
+    await menuItem('Good response')
+    await userEvent.keyboard('{Escape}')
+    await vi.waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+    expect(document.activeElement).toBe(trigger)
+    expect(value.value).toBe('down')
+  })
+
+  it('keeps the menu shut while the choice is being sent', async () => {
+    const { getByRole, getByTestId, value } = renderFeedback()
+    await userEvent.click(await feedbackTrigger(getByRole))
+    await userEvent.click(await menuItem('Good response'))
+    expect(value.value).toBe('up')
+    const trigger = getByTestId('chat-message-feedback__trigger')
+    await userEvent.click(trigger)
+    expect(trigger).toHaveAttribute('aria-expanded', 'false')
   })
 
   it('reads author names from the provider locale', () => {
@@ -194,7 +282,7 @@ describe('ChatMessage', () => {
   })
 
   it('has no axe violations with actions and feedback', async () => {
-    const { container } = render(
+    const { container, getByRole } = render(
       defineComponent({
         setup: () => () =>
           h(
@@ -204,13 +292,16 @@ describe('ChatMessage', () => {
               default: () => 'Open Real-Time Purge.',
               actions: () =>
                 h(ChatMessageActions, null, {
-                  default: () => h(ChatMessageFeedback, { modelValue: null })
+                  default: () => h(ChatMessageFeedback, { modelValue: 'up' })
                 })
             }
           )
       })
     )
     await expectNoA11yViolations(container)
+    await userEvent.click(await feedbackTrigger(getByRole))
+    const item = await menuItem('Good response')
+    await expectNoA11yViolations(item.closest('[role="menu"]') as HTMLElement)
   })
 
   describe('action row', () => {
@@ -389,8 +480,7 @@ describe('ChatMessage', () => {
       await vi.waitFor(() => expect(row).not.toHaveAttribute('data-compact'))
       expect(namesIn(row)).toEqual([
         'Copy',
-        'Good response',
-        'Bad response',
+        'Feedback',
         'Share',
         'Try again',
         'More actions',
@@ -469,13 +559,13 @@ describe('ChatMessage', () => {
       expect(write).toHaveBeenCalledWith('Open Real-Time Purge.')
     })
 
-    it('rates from the row and clears on a second press', async () => {
-      const { getByRole, queryByRole, feedback } = renderBuiltIn(800)
-      await vi.waitFor(() => expect(getByRole('button', { name: 'Good response' })).toBeTruthy())
-      await userEvent.click(getByRole('button', { name: 'Good response' }))
+    it('rates from the Feedback menu and clears on a second choice', async () => {
+      const { getByRole, feedback } = renderBuiltIn(800)
+      await userEvent.click(await feedbackTrigger(getByRole))
+      await userEvent.click(await menuItem('Good response'))
       expect(feedback.value).toBe('up')
-      expect(queryByRole('button', { name: 'Bad response' })).toBeNull()
-      await userEvent.click(getByRole('button', { name: 'Good response' }))
+      await userEvent.click(getByRole('button', { name: 'Feedback' }))
+      await userEvent.click(await menuItem('Good response'))
       expect(feedback.value).toBeNull()
     })
 

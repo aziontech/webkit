@@ -55,7 +55,7 @@ export const es: Messages = {
     retry: 'Intentar de nuevo',
     goodResponse: 'Buena respuesta',
     badResponse: 'Mala respuesta',
-    feedback: 'Valoración de la respuesta',
+    feedback: 'Valoración',
     feedbackSubmitting: 'Enviando valoración',
     feedbackThanks: 'Gracias por tu valoración',
     readAloud: 'Leer en voz alta',

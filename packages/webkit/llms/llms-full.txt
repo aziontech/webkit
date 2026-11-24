@@ -3658,7 +3658,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - **Loading:** `Generating a response` (built in); `Loading <what>` when fetching data.
 - **Error:** what happened, in one sentence, e.g. "The connection was interrupted before the response finished.", with Try again.
 - **Stopped:** "You stopped this response."
-- **Feedback:** Good response, Bad response (built in); the toast says Thanks for your feedback.
+- **Feedback:** the Feedback menu with Good response and Bad response (built in); the toast says Thanks for your feedback.
 - Follow `skills/webkit-microcopy`: sentence case, "select" not "click", "response" not "answer", no "please".
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 - **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.
@@ -3669,7 +3669,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Each message is an `article` named by author and time; the author and time are visually hidden, never removed.
 - Responses are `aria-busy` while loading or streaming; the caret is hidden.
 - The composer is named Prompt, described by its counter and disclaimer; Enter submits and an IME composition never does.
-- Feedback thumbs are toggle buttons with `aria-pressed`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
+- Feedback is a menu button (`aria-haspopup="menu"`) whose chosen item is `aria-checked`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
 - A prompt's Copy and Edit are transparent until hover or focus, never removed from the tab order; the editor's field is named Edit your message, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
 - Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer. On the welcome page: header, heading, support prompts, composer.
 - The model picker and the More and "+" menus are `DropdownMenu`s: arrows, typeahead, Escape and focus return come from it; the model trigger's name is its visible text.
@@ -12623,7 +12623,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 
 # Chat Message
 
-> One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the good / bad response thumbs, read aloud, share, try again, branch in new chat, the sources), and on the reader's own prompt Copy and Edit. It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). Assistant messages are plain text across the reading column at the prose reading size (`.text-body-prose-md`, 16 px on 26 px lines): no avatar, name, time or bubble. User messages are a filled bubble at the inline end, at most 70 % wide; system messages a muted centered line. A user message opens for editing (`v-model:editing`) and Send emits `edit` with the new text for the app's `setMessages` and `sendMessage`. Author and time live in the accessible name (the time also shows on hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
+> One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the a Feedback menu with good / bad response, read aloud, share, try again, branch in new chat, the sources), and on the reader's own prompt Copy and Edit. It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). Assistant messages are plain text across the reading column at the prose reading size (`.text-body-prose-md`, 16 px on 26 px lines): no avatar, name, time or bubble. User messages are a filled bubble at the inline end, at most 70 % wide; system messages a muted centered line. A user message opens for editing (`v-model:editing`) and Send emits `edit` with the new text for the app's `setMessages` and `sendMessage`. Author and time live in the accessible name (the time also shows on hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
 
 - Import: `import ChatMessageRoot from '@aziontech/webkit/chat-message-root'`
 - Compound import (dot notation, not tree-shakeable): `import ChatMessage from '@aziontech/webkit/chat-message'`
@@ -12637,7 +12637,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 ## Do
 
 - Pass `status` from your request: `pending` until the first token, `streaming` while tokens arrive, then `success` or `error`.
-- Turn on the built-in actions with props instead of composing buttons: `copyable`, `show-feedback`, `show-read-aloud`, `shareable`, `retryable`, `branchable` on a response; `copyable`, `editable` on a prompt. The row keeps one order and moves the thumbs and Try again into More when it is narrow.
+- Turn on the built-in actions with props instead of composing buttons: `copyable`, `show-feedback`, `show-read-aloud`, `shareable`, `retryable`, `branchable` on a response; `copyable`, `editable` on a prompt. The row keeps one order and moves Good response, Bad response and Try again into More when it is narrow.
 - Put the `Sources` pill in `#trailing` (it stays on the same line) and a `ResponseBranches` pager in `#leading` once a response or prompt has versions.
 - Raise a toast after a rating, and open `FeedbackReasonDialog` after Bad response; the row itself shows no confirmation text.
 - Use `grouped` for a second message by the same author so stacked messages read as one turn.
@@ -12696,14 +12696,14 @@ Compound API through `index.ts` (`ChatMessage.Actions`, `ChatMessage.Feedback`);
 `{ from, status, contentText }` (`injection-key.ts`; `contentText()` reads the `StreamingResponse` text, `lib/content-text.ts`); `useChatMessageContext()` throws outside a `ChatMessage`.
 
 - `chat-message-actions/chat-message-actions.vue` — `role="group"` row of actions on one line (it never wraps); renders nothing unless `status` is `success`.
-  - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`); `copyable?: boolean` (default `false` — shows Copy, a `CopyButton`); `copyText?: string` (default `''` — what Copy copies; empty copies `contentText()`); `editable?: boolean` (default `false` — shows Edit on a user message, which opens the root's editor); `showFeedback?: boolean` (default `false` — shows the thumbs, a `ChatMessage.Feedback` bound to `v-model:feedback`); `showReadAloud?: boolean` (default `false` — shows Read aloud); `readAloudText?: string` (default `''` — the text Read aloud speaks; empty reads `contentText()`); `shareable?: boolean` (default `false` — shows Share); `retryable?: boolean` (default `false` — shows Try again); `branchable?: boolean` (default `false` — adds Branch in new chat to More); `disabled?: boolean` (default `false` — locks Edit, Try again and Branch in new chat).
-  - v-model: `v-model:feedback` — `'up' | 'down' | null` through `defineModel('feedback')` (default `null`; emits `update:feedback`). Choosing the chosen thumb again clears it, in the row and in More.
+  - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`); `copyable?: boolean` (default `false` — shows Copy, a `CopyButton`); `copyText?: string` (default `''` — what Copy copies; empty copies `contentText()`); `editable?: boolean` (default `false` — shows Edit on a user message, which opens the root's editor); `showFeedback?: boolean` (default `false` — shows Feedback, a `ChatMessage.Feedback` bound to `v-model:feedback`); `showReadAloud?: boolean` (default `false` — shows Read aloud); `readAloudText?: string` (default `''` — the text Read aloud speaks; empty reads `contentText()`); `shareable?: boolean` (default `false` — shows Share); `retryable?: boolean` (default `false` — shows Try again); `branchable?: boolean` (default `false` — adds Branch in new chat to More); `disabled?: boolean` (default `false` — locks Edit, Try again and Branch in new chat).
+  - v-model: `v-model:feedback` — `'up' | 'down' | null` through `defineModel('feedback')` (default `null`; emits `update:feedback`). Choosing the chosen item again clears it, in Feedback and in More.
   - Events: `share` — `(event: MouseEvent)`, Share pressed; `retry` — `(event: MouseEvent | KeyboardEvent)`, Try again pressed or chosen in More; `branch` — `(event: MouseEvent | KeyboardEvent)`, Branch in new chat chosen.
   - Slots: `leading` — before Copy, a `ResponseBranches` pager; `default` — app actions after the built-in ones; `trailing` — the `Sources` pill, at the end of the same line (`__trailing`, which may shrink and clips past its end rather than widen the row; it keeps 4 px around the pill for its focus ring).
   - Test ids: `__copy`, `__edit`, `__feedback`, `__read-aloud`, `__share`, `__retry`, `__more`, `__trailing`.
   - Read aloud (private part `parts/chat-message-read-aloud.vue`, test id `chat-message-actions__read-aloud`): a 40 px ghost `IconButton` that speaks the text with `speechSynthesis` in the active locale; while speaking it is `Stop reading` (`data-speaking`). Pressing it again, another message's Read aloud or unmounting stops it. Rendered after mount, only where the browser has speech synthesis.
   - `data-testid` fallback: `chat-message-actions`.
-- `chat-message-feedback/chat-message-feedback.vue` — thumbs up / down (`aria-pressed`, medium ghost `IconButton`s), each with a tooltip (`Good response`, `Bad response`).
+- `chat-message-feedback/chat-message-feedback.vue` — one medium ghost `IconButton` named `Feedback` (`__trigger`, a thumbs-up glyph) that opens a `DropdownMenu` (side `bottom`, align `start`) with two items: Good respo…
   - Props: `loading?: boolean` (default `false`).
   - v-model: `'up' | 'down' | null` through `defineModel` (default `null`; emits `update:modelValue`).
   - `data-testid` fallback: `chat-message-feedback`.
@@ -12722,7 +12722,10 @@ packages/webkit/src/components/ai/chat-message/
 ├── injection-key.ts
 ├── composables/use-chat-message-context.ts
 ├── lib/content-text.ts
+├── lib/feedback-icon.ts
 ├── parts/chat-message-read-aloud.vue
+├── parts/chat-message-more.vue
+├── parts/chat-message-feedback-menu.vue
 ├── chat-message-actions/chat-message-actions.vue
 └── chat-message-feedback/chat-message-feedback.vue
 ```
@@ -12746,9 +12749,9 @@ packages/webkit/src/components/ai/chat-message/
 ## Accessibility
 
 - Visible focus: the composed controls carry their own `focus-visible` rings.
-- Keyboard map: `Tab` through links in the content, then the actions in order; Enter / Space activate; More opens its menu (arrows move, `Esc` closes). In the editor, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
+- Keyboard map: `Tab` through links in the content, then the actions in order; Enter / Space activate; Feedback and More open their menus with Enter, Space or the arrow keys (arrows move, Enter chooses, `Esc` closes and returns focus to the button). In the editor, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
 - The user message's actions are transparent, never hidden from the tab order: focusing one shows the row.
-- ARIA: `<article aria-label="<author> at <time>">` so each message has a unique name (Cloudscape), repeated in a visually hidden line at its start for browse mode; `aria-busy` while loading or streaming; actions are a `role="group"` named `Message actions`; feedback thumbs use `aria-pressed`, the feedback status is a visually hidden `role="status"`; the editor field is named `Edit your message`.
+- ARIA: `<article aria-label="<author> at <time>">` so each message has a unique name (Cloudscape), repeated in a visually hidden line at its start for browse mode; `aria-busy` while loading or streaming; actions are a `role="group"` named `Message actions`; Feedback is a menu button (`aria-haspopup="menu"`, `aria-expanded`) whose chosen item is `aria-checked`, the feedback status is a visually hidden `role="status"`; the editor field is named `Edit your message`.
 - Announcement: when an assistant or system message turns `success` or `error` (or mounts finished after the conversation is ready), its text is read once through the `Conversation` live region.
 - Never rely on alignment alone: every message names its author in its accessible name and hidden line (or is `grouped` after one that does).
 - Contrast ≥4.5:1 on the muted time and system text.
@@ -13306,7 +13309,7 @@ never read as new.
 
 # Feedback Reason Dialog
 
-> Asks why an assistant response was not helpful, right after the thumbs-down in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.
+> Asks why an assistant response was not helpful, right after Bad response in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.
 
 - Import: `import FeedbackReasonDialog from '@aziontech/webkit/feedback-reason-dialog'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -13329,7 +13332,7 @@ never read as new.
 
 ## Related
 
-- `chat-message` — `ChatMessage.Feedback` holds the thumbs that open it.
+- `chat-message` — `ChatMessage.Feedback` holds the Bad response choice that opens it.
 - `confirm-dialog` — the same dialog anatomy for a yes/no decision.
 
 ## Props
@@ -13363,7 +13366,7 @@ never read as new.
 
 ## Accessibility
 
-- A modal `Dialog` named by its title and described by its one-line description; focus moves into it and returns to the thumbs-down on close.
+- A modal `Dialog` named by its title and described by its one-line description; focus moves into it and returns to the Feedback button on close.
 - The reasons are a `fieldset` with a `legend` (`Reason`), a `RadioGroup` with one `RadioGroup.Item` per reason and its label; the details `Textarea` is labelled `Details (optional)`.
 - Submitting without a reason marks the fieldset invalid, shows the error text and focuses the first radio; nothing is sent.
 - Keyboard: `Tab` through radios (arrows within the group), details, Cancel, Send feedback; `Enter` in a radio submits; `Escape` closes.

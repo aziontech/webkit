@@ -1196,7 +1196,8 @@
   {
     "name": "chat-message-feedback",
     "path": "src/components/ai/chat-message/chat-message-feedback/chat-message-feedback.vue",
-    "limit": "9.5 KB"
+    "limit": "4.95 KB",
+    "entryOnly": true
   },
   {
     "name": "citation",

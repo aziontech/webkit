@@ -1328,7 +1328,7 @@ export const chatMessage = {
   retry: 'Try again',
   goodResponse: 'Good response',
   badResponse: 'Bad response',
-  feedback: 'Response feedback',
+  feedback: 'Feedback',
   feedbackSubmitting: 'Submitting feedback',
   feedbackThanks: 'Thanks for your feedback',
   readAloud: 'Read aloud',
