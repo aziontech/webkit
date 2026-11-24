@@ -1,15 +1,15 @@
 {
   "/frame/block/account/account-onboarding-form/organization": [
-    "entry: focus starts on the page, not the first field input in input \"Your full name* (Required)\""
+    "entry: focus starts on the page, not the first field input in input \"Your full name*Required\""
   ],
   "/frame/block/auth/auth-sign-in/login": [
-    "entry: focus starts on the page, not the first field input in input \"Email* (Required)\""
+    "entry: focus starts on the page, not the first field input in input \"Email*Required\""
   ],
   "/frame/block/create/create-resource-picker/existing": [
     "entry: focus starts on the page, not the first field button[role=radio] in toggle-group__option \"Existing project\""
   ],
   "demos/onboarding": [
-    "entry: focus starts on the page, not the first field input in input \"Your full name* (Required)\""
+    "entry: focus starts on the page, not the first field input in input \"Your full name*Required\""
   ],
   "demos/onboarding/plan": [
     "entry: focus starts on the page, not the first field input in radio-group-item__control \"I'm working on personal projects. Free p\""

@@ -112,8 +112,8 @@ describe('SettingsRow', () => {
 
     const marker = getByTestId('settings-row__required')
     expect(getByTestId('settings-row__title').contains(marker)).toBe(true)
-    expect(marker.textContent?.replace(/\s+/g, ' ').trim()).toBe('* (Required)')
-    expect(marker.querySelector('[aria-hidden="true"]')?.textContent).toBe('*')
+    expect(marker.textContent?.trim()).toBe('*')
+    expect(marker.getAttribute('aria-hidden')).toBe('true')
     const optional = render(inList({ title: 'Region' })).container as HTMLElement
     expect(within(optional).queryByTestId('settings-row__required')).toBeNull()
     expect(queryByTestId('settings-row__required')).toBe(marker)

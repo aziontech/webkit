@@ -627,7 +627,7 @@
   {
     "name": "job-posting-section",
     "path": "src/components/section/job-posting-section/job-posting-section.vue",
-    "limit": "59.85 KB",
+    "limit": "59.9 KB",
     "entryOnly": true
   },
   {
@@ -1281,7 +1281,7 @@
   {
     "name": "feedback-reason-dialog",
     "path": "src/components/ai/feedback-reason-dialog/feedback-reason-dialog.vue",
-    "limit": "34.55 KB"
+    "limit": "34.6 KB"
   },
   {
     "name": "response-branches",
@@ -1311,7 +1311,7 @@
   {
     "name": "attribute-editor",
     "path": "src/components/input/attribute-editor/attribute-editor.vue",
-    "limit": "20.8 KB"
+    "limit": "20.85 KB"
   },
   {
     "name": "code-editor",
@@ -1331,7 +1331,7 @@
   {
     "name": "tag-editor",
     "path": "src/components/input/tag-editor/tag-editor.vue",
-    "limit": "22.7 KB"
+    "limit": "22.75 KB"
   },
   {
     "name": "schema-form",

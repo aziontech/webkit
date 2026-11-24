@@ -59,6 +59,6 @@ test('Dependabot opens security updates for the npm dependencies, not version bu
 
 test('SECURITY.md gives a private path that works when private reporting is off', () => {
   const text = readFileSync(resolve(ROOT, 'SECURITY.md'), 'utf8')
+  assert.match(text, /\*\*security@azion\.com\*\*/)
   assert.match(text, /Report a vulnerability/)
-  assert.match(text, /Security contact\s+request/)
 })

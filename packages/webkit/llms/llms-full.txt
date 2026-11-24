@@ -50,7 +50,7 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 ## Do
 
 - Use CSS variables from `@aziontech/theme` for color: `var(--primary)`, `var(--bg-surface)`, `var(--text-default)`, `var(--border-default)`, and the other semantic tokens.
-- Use one orange, the logo orange `#F3652B`, and never as a text colour: it misses WCAG AA as text on light surfaces. It is `var(--primary)`: a fill behind `--primary-foreground` text (the button, `Tag variant="highlight"`, the `HeroTitle` highlight), or a bar, underline, glyph or glow beside text in `--text-default` (the `Eyebrow` bar, the `Quote` name bar, `LinkDirectory` column underlines). A glow starts from `--primary` and fades to transparent, never to a lighter or darker orange.
+- Use one orange, the logo orange `#F3652B`, and never as a text colour: it misses WCAG AA as text on light surfaces. It is `var(--primary)`: a fill behind `--primary-foreground` text (the button, `Tag variant="highlight"`, the `HeroTitle` highlight), or a bar, underline, glyph or glow beside text in `--text-default` (the `Quote` name bar, `LinkDirectory` column underlines). The `Eyebrow` carries no orange mark: its only mark is the `//` prefix on marketing headers. A glow starts from `--primary` and fades to transparent, never to a lighter or darker orange.
 - Put text on a fill with that fill's pair: every fill colour has a `-foreground` text colour (`--primary` / `--primary-foreground`, `--danger` / `--danger-foreground`); the inverted surface `--bg-contrast` takes `--text-contrast`.
 - Use the theme's semantic spacing and radius tokens: `var(--spacing-xs)`, `var(--spacing-md)` (scale `2xs…2xl`), `var(--shape-button)`.
 - Use the generated typography classes / tokens for text (`text-button-lg`, and the other named type scales), not raw font sizes.
@@ -111,7 +111,7 @@ use it, so you can check a choice against a real one.
 | Second action | `--secondary`, `--secondary-foreground` | `Button variant="secondary"`, `IconButton`, `Badge variant="secondary"` |
 | Brand tint | `--primary-mask`, `--primary-selected` | `Tag variant="highlight"` surface, `RadioGroup` selected card |
 | Accent: a live state or connection, never an action | `--accent`, `--accent-foreground` | `Switch` on, `Slider` fill, `Tag variant="accent"`, resize handles in `Sidebar` and `Resizable`, a dragged `Table` row, `FlowDiagram` edges and ports |
-| Brand marks: the logo colours | `--primary`, `--brand-blue`, `--brand-blue-foreground` | the logo orange as a mark beside text in `--text-default` or a fill behind `--primary-foreground`, never as text (owner, 2026-11-22): the `Eyebrow` bar, the `Quote` name bar, `LinkDirectory` column underlines, the `HeroTitle` highlight fill, the `CompetitorComparisonSection` group bar, `Tag variant="highlight"`, the hovered linked `FeatureItem` underline; the `Eyebrow` cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
+| Brand marks: the logo colours | `--primary`, `--brand-blue`, `--brand-blue-foreground` | the logo orange as a mark beside text in `--text-default` or a fill behind `--primary-foreground`, never as text (owner, 2026-11-22): the `Quote` name bar, `LinkDirectory` column underlines, the `HeroTitle` highlight fill, the `CompetitorComparisonSection` group bar, `Tag variant="highlight"`, the hovered linked `FeatureItem` underline; the `Eyebrow` cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
 | Selected item | `--bg-selected`, `--border-selected` | selected rows and options in `Table`, `MenuItem`, `DropdownMenu`, `ToggleGroup`, `Select`, `Combobox`, `Trace`; `RadioGroup` card and `Chip` borders |
 | Selected tab | `--secondary-mask` | the sliding indicator in `Tabs` |
 | Hover and press | `--bg-hover`, `--bg-active`, `--bg-mask` | every interactive component (`--bg-mask` is the hover layer on `Button variant="outline"` and `variant="ghost"`) |
@@ -18301,7 +18301,7 @@ The frame is static apart from its resize handles.
 
 # Eyebrow
 
-> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in `--text-default` after a short bar in the logo orange (`--primary`, a decorative mark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`module-header`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
+> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in `--text-default`, optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`module-header`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
 
 - Import: `import Eyebrow from '@aziontech/webkit/eyebrow'`
 - Category: content · Surface: app · Structure: monolithic
@@ -18317,6 +18317,8 @@ The frame is static apart from its resize handles.
 - Keep the label to one or two words: it is set uppercase and, with the default `single-line`, stays on one line whenever it fits its container.
 - Turn `single-line` off only when the label can be longer than its container (narrow columns, translated copy); the label then wraps under `text-pretty`, which avoids a lone word on the last line.
 - Use a `prefix` from the preset set only (`//`, `<>`, `</>`); the prefix is decorative and hidden from screen readers (`aria-hidden="true"`), so never put meaning in it.
+- `//` marks marketing section headers (`module-header`, `call-to-action`, `media-split`, `hero-section`); `<>` / `</>` only for a band about code. No prefix in app or docs.
+- No colour mark (dash, bar) before the eyebrow (EB-1).
 - Use `cursor` for one eyebrow per view at most; it blinks four times and then stays solid, and never blinks under reduced motion.
 - Keep the semantic heading in the element after the Eyebrow; the Eyebrow itself carries no heading role.
 
@@ -18356,7 +18358,7 @@ The frame is static apart from its resize handles.
 - Cursor: a decorative, `aria-hidden` `span` (`${testId}__cursor`) is rendered only when `cursor` is set, inline at the end of the label, so a wrapped label keeps it after its last word; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
 - Wrapping: with `singleLine` (default) the root carries `data-single-line` and the prefix turns `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
-- Test ids: root `eyebrow` (consumer `data-testid` wins); the bar `<root>__mark`; the label `<root>__label`.
+- Test ids: root `eyebrow` (consumer `data-testid` wins); the label `<root>__label`.
 - Reflow: the root is capped at the width of its container, and a label that does not fit wraps instead of overflowing at any width, at 200% zoom and with translated copy (no viewport breakpoint involved).
 
 ## Accessibility
@@ -18364,7 +18366,7 @@ The frame is static apart from its resize handles.
 - Visible focus: not applicable — the component renders no focusable element.
 - Keyboard map: none; the component is not interactive.
 - ARIA: no role; the root is a plain `div` and the label is read as text. The prefix `span` is decorative and carries `aria-hidden="true"`, so only the label is announced; the cursor `span` is empty and contributes no text.
-- Contrast: the prefix and the label use `var(--text-default)` (≥4.5:1 on every surface). The logo orange appears only as the bar before them (`<root>__mark`, `aria-hidden`), a decorative mark with no contrast requirement; every part passes WCAG 2 AA with no exception (owner decision 2026-11-22).
+- Contrast: the prefix and the label use `var(--text-default)` (≥4.5:1 on every surface); every part passes WCAG 2 AA with no exception (owner decision 2026-11-22).
 - `motion-reduce:animate-none` on the cursor's `animate-blink-settle`.
 - Pause, Stop, Hide (WCAG 2.2.2): the cursor blinks four times and stops by itself after 4 seconds, resting solid, so it needs no pause control.
 - Touch target: not applicable (non-interactive).
@@ -24582,6 +24584,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 - Field labels: the visible Date label is a `<label for>` bound to its date field through `useId()`; the time field beside it carries its own `aria-label` (`Time`), so every field has a programmatic accessible name.
 - Keyboard map: the trigger toggles the popover with `Enter`/`Space` and exposes `aria-haspopup`/`aria-expanded`; `Escape` and click-outside close it and return focus to the trigger; focus is trapped in the open popover. Opening focuses the selected day (else today, else the first enabled day); `Shift+Tab` reaches the month controls. In the grid, `Tab` enters at the focused day, `Arrow` keys move focus (paging the visible month when crossing its first/last day), `Enter`/`Space` selects, `Home`/`End` move to the first/last day of the week (the grid starts on Sunday; logical, so the same under `dir="rtl"`), `PageUp`/`PageDown` change month, `Shift+PageUp`/`Shift+PageDown` change year. The caption's Month and Year selects keep the `select` keyboard map (`Enter`/`Space`/`ArrowDown` open the list, the arrows move, typing jumps to an option, `Escape` closes only the list and leaves the popover open). Tests: `date-picker.test.ts` › Home and End, Shift+PageDown and Shift+PageUp; jumps to the month and year picked in the caption selects; bounds the year list by min and max. Cancel, Apply, Clear and the fields are all reachable by `Tab`.
 - ARIA: the month grid uses `role="grid"` with `role="row"` and `role="gridcell"` descendants; the selected cell sets `aria-selected="true"`; the current date sets `aria-current="date"`; navigation buttons carry `aria-label`; the caption's Month and Year selects are `combobox` buttons named `Month` and `Year` from the catalog, showing the visible month and year; the popover is a `dialog` named by the catalog (`Choose date`); decorative icons are `aria-hidden="true"`.
+- In a required `Field`, the trigger's `aria-describedby` adds the Field's `requiredId`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:animate-none` on the popover and `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px (or justified deviation): day cells use a 32×32 px (`small`), 36×36 px (`medium`), or 40×40 px (`large`) hit area; `small`/`medium` are a justified deviation for dense month-grid layouts, `large` meets the 40 px target.
@@ -24708,7 +24711,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 - Visible focus: a 2 px `--ring-color` ring inset on each trigger segment; the quick ranges ring their row when the radio inside has focus.
 - Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select, down the first column and then the second, the order they are read in); Custom range is a link-variant button after them (`Enter`/`Space` shows the Duration and Unit fields and moves focus to Duration), and Back to quick ranges is the first button of that view (it returns to the list and focuses Custom range); on the Absolute tab the order is the grid (or the Start and End fields), End at now, then the view button: **Enter dates** (`Enter`/`Space` shows the fields and moves focus to the Start date) and **Show calendar** (`Enter`/`Space` shows the grid and moves focus to its focusable day); the End at now checkbox toggles with `Space`; then Refresh every, Cancel and Apply in the footer; Unit, Refresh every and the calendar's Month and Year are WebKit `Select`s (`Enter`/`Space`/`ArrowDown` open the list, the arrows move, typing jumps to an option, `Escape` closes only the list); the time zone selector is a `Combobox`; the range type lists Relative before Absolute; the grid keeps the `date-picker` keyboard map; a time field keeps the `combobox` keyboard map (focus or `ArrowDown` opens the 30-minute list, `Enter` takes the highlighted time or the typed one, `Escape` closes only the list); `Escape` closes without committing and returns focus to the trigger. On a phone a tap on the backdrop closes the sheet like Cancel.
-- ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range and, with auto refresh on, the interval (inside a `Field` with no `ariaLabel`, the Field label names it and the trigger also carries the Field's `aria-describedby` and `aria-invalid`); the panel is a named `dialog`; the custom duration is a `group` named "Custom range" whose duration and unit have visible labels; the quick ranges are a `fieldset` with a `legend`; End at now is a `checkbox` named by its visible `label`; the view switch is a native `button` named by its visible text; Unit is a `combobox` button (WebKit `Select`) labelled by its visible text through `aria-labelledby`, and Refresh every is a `combobox` button named "Refresh every" by `aria-label` (it shows only the glyph and the short interval); the calendar's Month and Year selects are named `Month` and `Year`; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons; the sheet backdrop is `aria-hidden`.
+- ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range and, with auto refresh on, the interval (inside a `Field` with no `ariaLabel`, the Field label names it and the trigger also carries the Field's `aria-describedby` and `aria-invalid`, plus `requiredId` when required); the panel is a named `dialog`; the custom duration is a `group` named "Custom range" whose duration and unit have visible labels; the quick ranges are a `fieldset` with a `legend`; End at now is a `checkbox` named by its visible `label`; the view switch is a native `button` named by its visible text; Unit is a `combobox` button (WebKit `Select`) labelled by its visible text through `aria-labelledby`, and Refresh every is a `combobox` button named "Refresh every" by `aria-label` (it shows only the glyph and the short interval); the calendar's Month and Year selects are named `Month` and `Year`; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons; the sheet backdrop is `aria-hidden`.
 - Targets: options are 32 px high (44 px on `pointer: coarse`); the selects are 44 px high and the step buttons 44 px wide on `pointer: coarse`.
 - The custom duration is one two-column grid (a third for the duration, two thirds for the Unit select); Refresh every, Cancel and Apply share the footer row, Refresh every at the start edge and the buttons at the end edge, in both directions (checked at 320, 390 and 1280 px, and right-to-left at 390 px, in `src/test/date-picker-readability.test.ts`).
 - Quick ranges layout: the `legend` and every option are padded `var(--spacing-xs)` inline, so the heading and the option labels start on one inline edge in both directions (checked left-to-right and right-to-left in `src/test/date-picker-readability.test.ts`).
@@ -24808,9 +24811,9 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ## Sub-components
 
-The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated `controlId`, the reactive `invalid` / `disabled` / `required` flags, `describedBy` (the ids of the mounted `Field.Description` and `Field.Error` parts), `labelledBy` (the ids of the mounted `Field.Title` parts) and `register`. Controls read it through the shared `useFieldControl` composable (`src/composables/use-field-control`); an explicit prop or attribute on the control always wins over the Field, except `aria-describedby`: the control's own ids are joined with the Field's description and error ids (deduplicated), so a consumer description never hides the Field's error. Composite controls (`Select`, `MultiSelect`, `PhoneInput`) consume the context on their root and provide `null` below it, so their inner search inputs never take the field id. Every part works outside a `Field` too (it then reads no state). Member names mirror the anatomy; there is no `Trigger`/`Content` pair because the field has no open/closed state.
+The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated `controlId`, the reactive `invalid` / `disabled` / `required` flags, `describedBy` (the ids of the mounted `Field.Description` and `Field.Error` parts), `labelledBy` (the ids of the mounted `Field.Title` parts), `requiredId` (id of the hidden "Required" text in `Field.Label`) and `register`. Controls read it through the shared `useFieldControl` composable (`src/composables/use-field-control`); an explicit prop or attribute on the control always wins over the Field, except `aria-describedby`: the control's own ids are joined with the Field's description and error ids (deduplicated), so a consumer description never hides the Field's error. Composite controls (`Select`, `MultiSelect`, `PhoneInput`) consume the context on their root and provide `null` below it, so their inner search inputs never take the field id. Every part works outside a `Field` too (it then reads no state). Member names mirror the anatomy; there is no `Trigger`/`Content` pair because the field has no open/closed state.
 
-- `field-label/field-label.vue` — `<label>` whose `for` defaults to the Field's `controlId`; appends the Required marker (`*` + "(Required)") when the Field is `required` or its own `required` prop is set (for a label s…
+- `field-label/field-label.vue` — `<label>` whose `for` defaults to the Field's `controlId`; appends the Required marker (a lone `*`, hidden from assistive tech) and, in a required Field, a `hidden` "Required" text (`re…
   - Props: `hint` (`string`, default `''`) — short explanation revealed by a `Hint` glyph.
   - Events: _none_.
   - Slots: `default` — label text, or a horizontal `Field` for a choice card.
@@ -24844,7 +24847,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 - Visible focus: the control keeps its own ring; a choice card shows `has-[:focus-visible]:ring-2 ring-(--ring-color) ring-offset-1 ring-offset-(--bg-canvas)` around the whole card.
 - Keyboard map: the Field adds no keys; `Tab` reaches the control, and clicking `Field.Label` focuses or toggles it.
-- ARIA: root `role="group"`; `Field.Label` `for` → control `id`; control `aria-describedby` → every mounted `Field.Description` and `Field.Error` id; control `aria-invalid` when the Field is `invalid` or a `Field.Error` is mounted; `required` / `aria-required` when it is `required`; `Field.Error` `role="alert"`; `Field.Set` is a native `fieldset` named by its `legend`; the Required marker's `*` is `aria-hidden` and the word "(Required)" is read.
+- ARIA: root `role="group"`; `Field.Label` `for` → control `id`; control `aria-describedby` → every mounted `Field.Description` and `Field.Error` id; control `aria-invalid` when the Field is `invalid` or a `Field.Error` is mounted; `required` / `aria-required` when it is `required`; `Field.Error` `role="alert"`; `Field.Set` is a native `fieldset` named by its `legend`; the `*` is `aria-hidden`; a control whose role cannot take `aria-required` (DatePicker, DateRangePicker, FileDropzone, TagEditor) adds `requiredId` to its `aria-describedby`.
 - Contrast ≥4.5:1 for label, description and error text in every tone, including disabled.
 - `motion-reduce:transition-none` on the choice card transition.
 - Touch target: the whole choice card is the target; a horizontal Field's label extends the control's target.
@@ -24973,7 +24976,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 - Keyboard map: none on the dropzone. Drag and drop from the OS is a pointer gesture with no keyboard equivalent on the target. The keyboard path is the consumer's Browse button, which opens a native file input and reaches the same outcome. `Escape` during a drag hides the overlay (window `keydown` fallback; browsers also cancel the drag natively).
 - No `@click` on the root: clicking the region does nothing, so there is no click-without-key handler. The Browse button is the click target.
 - ARIA, inline: the root is a `<div role="group">` with `aria-labelledby` pointing at the title and `aria-describedby` pointing at the description (only when `description` is non-empty), both ids from `useId()`. A screen reader therefore reads the slotted Browse button in context ("Drop files to upload, group, PNG or JPG, up to 5 MB each, Browse files, button"). The title is a `<p>`, not a heading: the page owns its heading outline. When `disabled`, the group carries `aria-disabled="true"`, so the dimmed title and description are announced as part of a disabled control and fall under the WCAG 1.4.3 exemption for inactive components.
-- Inside a `Field` (inline): the group reads the field through `useFieldControl` — it takes the field's `id`, prepends `Field.Title` to `aria-labelledby`, appends `Field.Description` / `Field.Error` to `aria-describedby`, sets `aria-invalid` from the field's (or its own) `invalid`, and the field's `disabled` disables it (`aria-disabled`, drops ignored).
+- Inside a `Field` (inline): the group reads the field through `useFieldControl` — it takes the field's `id`, prepends `Field.Title` to `aria-labelledby`, appends `Field.Description` / `Field.Error` to `aria-describedby`, sets `aria-invalid` from the field's (or its own) `invalid`, adds `requiredId` to `aria-describedby` when required, and the field's `disabled` disables it (`aria-disabled`, drops ignored).
 - ARIA, overlay: the root is `aria-hidden="true"`. It is a pointer-only duplicate of an affordance that must exist elsewhere on the page, and it renders no interactive content.
 - No `aria-live` in the component. Announcing every drag that crosses the window is noise, and the outcome that matters (files accepted or skipped) is the consumer's to announce from `drop` / `reject` (a `toast`, or a live region on its file list). `aria-dropeffect` / `aria-grabbed` are deprecated in WAI-ARIA 1.1 and are not used.
 - The icon is decorative: `aria-hidden="true"`.
@@ -26242,7 +26245,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | false | Disables both the dial-code Select and the internal input. |
 | `readonly` | `boolean` | `false` | false | Marks the internal input read-only; dial-code Select is also disabled while readonly. |
-| `required` | `boolean` | `false` | false | Applies the required border on the InputGroup and sets required on the input. |
+| `required` | `boolean` | `false` | false | Sets required and aria-required on the phone number input; it draws no border of its own. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border on the InputGroup and sets aria-invalid on the input. |
 | `name` | `string` | `''` | false | Form field name. Set, a hidden input submits the full E.164 number (dial code followed by the digits, empty while there are none) under this name; the visible input carries no name, so a native `form` never posts a national number without its country. |
 | `searchPlaceholder` | `string` | `''` | false | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). |
@@ -26317,7 +26320,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 </template>
 ```
 
-1 more example(s) in [components/phone-input.md](components/phone-input.md).
+2 more example(s) in [components/phone-input.md](components/phone-input.md).
 
 ---
 
@@ -27074,7 +27077,7 @@ packages/webkit/src/components/input/radio-group/
 - ARIA: rows, labels, errors and announcements come from `attribute-editor`; Undo is named "Undo removal of tag n"; a marked tag keeps a visible note ("This tag will be removed when you save.").
 - Contrast ≥4.5:1 from the semantic text tokens.
 - Touch target: Remove and Undo are 32 px buttons (`medium`).
-- Inside a `Field`: the root is a `role="group"` that reads the field through `useFieldControl` — `id` from the field, `aria-labelledby` from `Field.Title`, `aria-describedby` from `Field.Description` / `Field.Error`, `aria-invalid` + `data-invalid` from the field's `invalid`, and the field's `disabled` disables every row. Each cell keeps its own inner field from `attribute-editor`, so the row inputs never take the outer field's id.
+- Inside a `Field`: the root is a `role="group"` that reads the field through `useFieldControl` — `id` from the field, `aria-labelledby` from `Field.Title`, `aria-describedby` from `Field.Description` / `Field.Error` (plus `requiredId` when required), `aria-invalid` + `data-invalid` from the field's `invalid`, and the field's `disabled` disables every row. Each cell keeps its own inner field from `attribute-editor`, so the row inputs never take the outer field's id.
 
 ## Examples
 
@@ -29285,7 +29288,7 @@ context, so a consumer never wires one part to the other.
 
 ## States
 
-- Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set), `required` (after the title, the same marker a required `Field.Label` renders: a `*` hidden from assistive tech, then the `field.required` string, "(Required)" in English)
+- Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set), `required` (after the title, the same marker a required `Field.Label` renders: a lone `*` hidden from assistive tech)
 - `data-row-variant` mirrors `variant` and `data-depth` mirrors `depth` on the root; `data-stackable` is set when `stackable` is on
 - Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
 - Responsive: the row is the `@container/settings-row`. The description wraps in full at every width; it is never clamped or cut with an ellipsis. From `@md` of the row up, a `field` control keeps the end cell, capped at the 3xs container; below `@md` (a phone) it moves under the copy at full width. With `stackable` the move happens below `@lg` instead. A `compact` control stays at the end side at every width; a `stacked` control is always under the copy.
@@ -29296,7 +29299,7 @@ context, so a consumer never wires one part to the other.
 - Keyboard map: `Tab` reaches the control; the row is not interactive.
 - ARIA: the row is an `Item` (a `listitem` inside `Item.List`); the control carries `aria-label` equal to the title, and a message is linked with `aria-describedby`.
 - No truncation: the description shows its full text to every user at every width (WCAG 1.4.10 Reflow). `hint` holds the longer explanation: its glyph is a focusable button whose accessible name and tooltip are the hint text, reachable with `Tab` and revealed on hover or focus.
-- Contrast ≥4.5:1 for the title and the muted description. The required `*` is `var(--text-default)`, like the `Field.Label` asterisk (the logo orange is never a text colour); it is `aria-hidden`, and the "(Required)" text after it is what a screen reader reads. The control in the slot still sets its own `required`.
+- Contrast ≥4.5:1 for the title and the muted description. The required `*` is `var(--text-default)`, like the `Field.Label` asterisk (the logo orange is never a text colour); it is `aria-hidden`, so a screen reader learns it from the control in the slot, which sets its own `required`.
 
 ## Examples
 

@@ -67,7 +67,9 @@
     describedBy: fieldDescribedBy,
     labelledBy: fieldLabelledBy,
     invalid: isInvalid,
-    disabled: isDisabled
+    disabled: isDisabled,
+    required: isRequired,
+    field
   } = useFieldControl({
     id: () => attrs['id'] as string | undefined,
     describedBy: () => attrs['aria-describedby'] as string | undefined,
@@ -93,8 +95,13 @@
   const labelIds = computed(() => [fieldLabelledBy.value, titleId].filter(Boolean).join(' '))
   const descriptionIds = computed(
     () =>
-      [props.description ? descriptionId : '', fieldDescribedBy.value].filter(Boolean).join(' ') ||
-      undefined
+      [
+        props.description ? descriptionId : '',
+        fieldDescribedBy.value,
+        isRequired.value && field?.requiredId
+      ]
+        .filter(Boolean)
+        .join(' ') || undefined
   )
 
   watch(
