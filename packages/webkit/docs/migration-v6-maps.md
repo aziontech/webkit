@@ -880,7 +880,7 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 | legacy › manual | `templates/sign-up-card` | template removed; copy auth/auth-sign-in from the catalog |
 | legacy › manual | `testimonials-carousel` | work-in-progress section; use the QuoteTabs component or a marketing block |
 | legacy › manual | `textarea` | PrimeVue Textarea; use Textarea |
-| legacy › manual | `timeline` | PrimeVue Timeline; no v6 timeline, use Stepper (vertical) or an Item list |
+| legacy › manual | `timeline` | PrimeVue Timeline; use Timeline with Timeline.Item and Timeline.Group (different API) |
 | legacy › manual | `toast` | PrimeVue Toast; mount Toaster from @aziontech/webkit/toast once |
 | legacy › manual | `toolbar` | PrimeVue Toolbar; use PageHeader actions or a flex row |
 | legacy › manual | `tooltip` | v-tooltip directive; use the Tooltip component |

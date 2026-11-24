@@ -151,7 +151,7 @@ describe('FilePreview', () => {
       props: { fileName: 'a.json', mimeType: 'application/json', bytes: 182, content: '{}' }
     })
     const meta = view.getByTestId(`${TEST_ID}__meta`)
-    const [kind, , size] = Array.from(meta.children)
+    const [kind, , size] = Array.from(meta.firstElementChild!.children)
     expect(kind?.textContent).toBe('application/json')
     expect(kind?.classList.contains('truncate')).toBe(true)
     expect(size?.textContent).toBe('182 B')
