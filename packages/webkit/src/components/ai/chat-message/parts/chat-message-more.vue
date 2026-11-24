@@ -60,7 +60,7 @@
         icon="az az-ellipsis"
         :aria-label="t('chatMessage.more')"
         variant="ghost"
-        size="large"
+        size="medium"
         :data-testid="testId"
       />
     </DropdownMenuTrigger>

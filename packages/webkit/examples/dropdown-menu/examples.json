@@ -33,6 +33,11 @@
       "file": "option-affordances.vue"
     },
     {
+      "name": "WithLinks",
+      "summary": "Options with `href` render as links: `target=\"_blank\"` opens a new tab with `rel=\"noopener noreferrer\"`, the external-link glyph and a screen-reader new-tab hint, and `description` adds a muted second line that describes the option. Keyboard, hover and the inset row fill stay the menu's own.",
+      "file": "with-links.vue"
+    },
+    {
       "name": "WithHeaderAndFooter",
       "summary": "Click the trigger to open the panel with the root `header` and `footer` named slots in use — typically a search input at the top and a footer action at the bottom. Both regions stick to their edges and stay outside the scrollable group list.",
       "file": "with-header-and-footer.vue"

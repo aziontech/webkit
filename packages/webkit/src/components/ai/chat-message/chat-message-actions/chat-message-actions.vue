@@ -35,7 +35,7 @@
     copyText?: string
     /** Shows Edit after Copy on a user message: it opens the bubble as a field with Cancel and Send. */
     editable?: boolean
-    /** Shows the Good response and Bad response thumbs, bound to `v-model:feedback`; in a narrow row they move into More. */
+    /** Shows the Feedback button, a menu with Good response and Bad response bound to `v-model:feedback`; in a narrow row the two move into More. */
     showFeedback?: boolean
     /** Shows Read aloud after the thumbs: it speaks the response with the browser's speech synthesis, turns into Stop while speaking, and is hidden where the browser has none. */
     showReadAloud?: boolean
@@ -115,7 +115,7 @@
           icon: 'az az-ellipsis',
           ariaLabel: t('chatMessage.more'),
           variant: 'ghost',
-          size: 'large',
+          size: 'medium',
           disabled: true
         })
     },
@@ -147,6 +147,12 @@
   onScopeDispose(() => cancelAnimationFrame(frame))
   onMounted(refreshCopy)
   watch(() => props.copyText, refreshCopy)
+
+  const ACTIONS_CLASS =
+    'relative z-1 flex w-full min-w-0 flex-nowrap items-center gap-(--spacing-2xs) data-[from=user]:w-auto data-[from=user]:justify-end ' +
+    '[&_button[data-size=medium]_[data-transition]]:size-5 [&_button[data-size=medium]_i]:text-body-lg ' +
+    '[&_button[data-size=medium]:not([data-inert])_i]:text-(--text-muted) ' +
+    '[&_button[data-size=medium]:not([data-inert]):hover_i]:text-(--text-default)'
 </script>
 
 <template>
@@ -159,7 +165,7 @@
     :data-testid="testId"
     :data-from="from"
     :data-compact="compact || null"
-    class="flex w-full min-w-0 flex-nowrap items-center gap-(--spacing-2xs) data-[from=user]:w-auto data-[from=user]:justify-end"
+    :class="ACTIONS_CLASS"
     @focusin="refreshCopy"
     @pointerenter="refreshCopy"
   >
@@ -167,7 +173,7 @@
     <CopyButton
       v-if="copyable"
       :value="copyValue"
-      size="large"
+      size="medium"
       :data-testid="`${testId}__copy`"
     />
     <Tooltip
@@ -178,7 +184,7 @@
         icon="az az-pencil"
         :aria-label="t('chatMessage.edit')"
         variant="ghost"
-        size="large"
+        size="medium"
         :disabled="disabled"
         :data-testid="`${testId}__edit`"
         @click="edit"
@@ -203,7 +209,7 @@
         icon="az az-share"
         :aria-label="t('chatMessage.share')"
         variant="ghost"
-        size="large"
+        size="medium"
         :data-testid="`${testId}__share`"
         @click="(event: MouseEvent) => emit('share', event)"
       />
@@ -217,7 +223,7 @@
         icon="az az-refresh"
         :aria-label="t('chatMessage.retry')"
         variant="ghost"
-        size="large"
+        size="medium"
         :disabled="disabled"
         :data-testid="`${testId}__retry`"
         @click="(event: MouseEvent) => emit('retry', event)"

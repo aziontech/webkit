@@ -3,18 +3,18 @@ name: conversation-history
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 10
 template: 2
-checksum: 3b6dba241243633a0a81cc9d1e33e653306b787227cc38274e0caf00c48258e1
+checksum: b05c880ccd9b14e5421cd933c28da79a5574b0d86805a1364ec41c0b6ded934b
 created: 2026-11-11
-last_updated: 2026-11-22
+last_updated: 2026-11-23
 ---
 
 # ConversationHistory — Component Spec
 
 ## Purpose
 
-The list of past conversations with an assistant, in a side panel on wide screens or a `Drawer` on phones: plain rows of titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, an optional Delete per row, and at the top an optional New chat row and a search field that filters the titles. Choosing a row sets `v-model` to its id; the owner loads that conversation into `Conversation`.
+The chat list of an assistant, in a side panel or a `Drawer` on phones: rows grouped by last activity (Today, Yesterday, Previous 7 days, Previous 30 days, Older) or by status (Working, Settled), the open one current, pinned chats on top, an optional Projects section of folders that expand in place, and on top a New chat row, a search field or a toolbar whose Search button opens the app's palette. A row is a title or a rich row (tag, description, age, status); per-row actions (pin, rename, share, lock, move, archive, delete) sit on hover and in a `DropdownMenu`. Choosing a row sets `v-model` to its id.
 
 ## When to use
 
@@ -34,11 +34,12 @@ The list of past conversations with an assistant, in a side panel on wide screen
 
 ## Best practices
 
-- Title each conversation from its first prompt, short; the full title shows on hover through `title`.
-- Put it in a side panel beside the conversation on wide screens and in a `Drawer` (`side="start"`) opened from a menu button on phones; close the drawer from `update:modelValue` and `create` so the chosen conversation shows at once (the Default example).
-- Turn on `creatable` when the page has no other New chat control, and `searchable` once the list is long enough to scroll.
-- Fix the reference time so the groups match on the server and the client: set `now` on the app's `ConfigProvider` once (every time-relative component below reads it), or pass `now` here to override it for this list.
-- Never delete on the first tap: open a `ConfirmDialog` from the `remove` handler and remove the item from `@confirm` (the Default example), or remove it at once and offer Undo in a toast.
+- Title each conversation from its first prompt, short.
+- Put it beside the conversation on wide screens and in a start-side `Drawer` on phones; close the drawer from `update:modelValue` and `create`.
+- Fix `now` on the app's `ConfigProvider` (or here) so groups and ages match on the server and the client.
+- The component never changes `items`: apply each action event to the data (flip `pinned`, `archived`, `locked`, set `projectId`, the new `title`).
+- Never delete on the first tap: open a `ConfirmDialog` from `remove` / `project-remove`, or remove at once and offer Undo.
+- With `showToolbar`, open the app's `Command` palette from `search-open`; a mounted `Command` claims ⌘K, so the Search button does not bind it twice.
 
 ## Usage
 
@@ -47,74 +48,121 @@ The list of past conversations with an assistant, in a side panel on wide screen
   import ConversationHistory from '@aziontech/webkit/conversation-history'
   import { ref } from 'vue'
 
-  const items = [{ id: 'c1', title: 'Purge the cache', updatedAt: '2026-11-11T09:12:00Z' }]
+  const items = ref([
+    { id: 'c1', title: 'Purge the cache', updatedAt: '2026-11-11T09:12:00Z', pinned: true },
+    { id: 'c2', title: 'Fix the 502 errors', updatedAt: '2026-11-11T08:00:00Z', projectId: 'p1' }
+  ])
   const active = ref('c1')
+  const pin = (event, item) => {
+    items.value = items.value.map((c) => (c.id === item.id ? { ...c, pinned: !c.pinned } : c))
+  }
 </script>
 
 <template>
   <ConversationHistory
     v-model="active"
     :items="items"
+    :projects="[{ id: 'p1', title: 'storefront' }]"
+    :item-actions="['pin', 'rename', 'move', 'archive']"
     creatable
-    searchable
-    @create="active = null"
+    removable
+    show-toolbar
+    @item-pin="pin"
   />
 </template>
 ```
 
 ## Props
 
-| Prop         | Type                                                                   | Default     | Required | JSDoc                                                                                                                                                      |
-| ------------ | ---------------------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`      | `{ id: string; title: string; updatedAt: string \| number \| Date }[]` | `[]`        | false    | Conversations, any order; they are sorted newest first inside their group.                                                                                 |
-| `now`        | `string \| number \| Date`                                             | `undefined` | false    | Reference time for the groups. Empty uses the nearest `ConfigProvider`'s `now`, then the current time; set either when the list is rendered on the server. |
-| `removable`  | `boolean`                                                              | `false`     | false    | Shows a Delete button on each row that emits `remove`.                                                                                                     |
-| `creatable`  | `boolean`                                                              | `false`     | false    | Shows a New chat row at the top that emits `create`.                                                                                                       |
-| `searchable` | `boolean`                                                              | `false`     | false    | Shows a search field at the top that hides conversations whose title does not contain the typed text.                                                      |
-| `loading`    | `boolean`                                                              | `false`     | false    | Shows placeholder rows while the history loads.                                                                                                            |
-| `ariaLabel`  | `string`                                                               | `''`        | false    | Accessible name of the list. Empty uses the locale catalog (`Conversation history`).                                                                       |
+| Prop               | Type                                                                | Default     | Required | JSDoc                                                                                                                            |
+| ------------------ | ------------------------------------------------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `items`            | `ConversationHistoryItem[]`                                         | `[]`        | false    | Conversations, any order; sorted newest first in their group or project.                                                         |
+| `projects`         | `ConversationHistoryProject[]`                                      | `[]`        | false    | Projects shown in a Projects section above Recents; empty keeps the plain groups.                                                |
+| `now`              | `string \| number \| Date`                                          | `undefined` | false    | Reference time for groups and ages. Empty uses the nearest ConfigProvider now, then the current time.                            |
+| `removable`        | `boolean`                                                           | `false`     | false    | Lets each row be deleted (emits `remove`): a Delete button, or Delete in the row menu when `itemActions` is set.                 |
+| `creatable`        | `boolean`                                                           | `false`     | false    | Shows New chat (a row, or a toolbar button with `showToolbar`) that emits `create`.                                              |
+| `projectCreatable` | `boolean`                                                           | `false`     | false    | Shows New project (in the Projects header, or the toolbar) that emits `project-create`.                                          |
+| `searchable`       | `boolean`                                                           | `false`     | false    | Shows a search field that hides conversations whose title does not contain the typed text.                                       |
+| `showToolbar`      | `boolean`                                                           | `false`     | false    | Shows a top toolbar: a Search button that emits `search-open`, then New project and New chat as icon buttons.                    |
+| `itemActions`      | `('pin' \| 'rename' \| 'share' \| 'lock' \| 'move' \| 'archive')[]` | `[]`        | false    | Row actions: a Pin button and a More menu on each row; `move` needs `projects`.                                                  |
+| `projectActions`   | `('pin' \| 'settings' \| 'remove' \| 'chat-create')[]`              | `[]`        | false    | Project row actions: a More menu (pin, settings, remove) and a New chat button (`chat-create`).                                  |
+| `groupBy`          | `'date' \| 'status'`                                                | `'date'`    | false    | Groups chats outside projects by last activity, or into Working (`status: 'running'`) and Settled (the rest and archived chats). |
+| `showTime`         | `boolean`                                                           | `false`     | false    | Shows each chat's age (`10m`, `15h`, `3d`) at the end of its row.                                                                |
+| `loading`          | `boolean`                                                           | `false`     | false    | Shows placeholder rows while the history loads.                                                                                  |
+| `ariaLabel`        | `string`                                                            | `''`        | false    | Accessible name of the list. Empty uses the locale catalog (`Conversation history`).                                             |
+
+Item fields (`ConversationHistoryItem`): `id`, `title`, `updatedAt` (sets the group, the order and the age), and optional `projectId` (files it under that project), `pinned` (Pinned group on top), `archived` (hidden by date; under Settled by status), `locked` (lock glyph, Unlock in the menu), `status` (`'running' | 'success' | 'error'`, `ConversationHistoryStatus`: running shows a `Spinner`, error a danger mark), `tag` (a short `Tag` before the title) and `description` (a second line). A project (`ConversationHistoryProject`) has `id`, `title` and optional `pinned` (listed first).
 
 ## v-model
 
-| Model     | Type             | Default | Emits               | Notes                                                          |
-| --------- | ---------------- | ------- | ------------------- | -------------------------------------------------------------- |
-| `v-model` | `string \| null` | `null`  | `update:modelValue` | Id of the open conversation; its row is `aria-current="page"`. |
+| Model                     | Type                                                    | Default                  | Emits                    | Notes                                                                                                |
+| ------------------------- | ------------------------------------------------------- | ------------------------ | ------------------------ | ---------------------------------------------------------------------------------------------------- |
+| `v-model`                 | `string \| null`                                        | `null`                   | `update:modelValue`      | Id of the open conversation; its row is `aria-current="page"`.                                       |
+| `v-model:openKeys`        | `string[]`                                              | `[]`                     | `update:openKeys`        | Ids of the expanded projects.                                                                        |
+| `v-model:projectsOpen`    | `boolean`                                               | `true`                   | `update:projectsOpen`    | Whether the Projects section is expanded.                                                            |
+| `v-model:projectSort`     | `'recent' \| 'name'` (`ConversationHistoryProjectSort`) | `'recent'`               | `update:projectSort`     | Project order from the Organize menu: by newest chat (empty projects last) or by name; pinned first. |
+| `v-model:openSectionKeys` | `string[]`                                              | `['recents', 'working']` | `update:openSectionKeys` | Expanded sections, of `recents`, `working`, `settled` (`ConversationHistorySection`).                |
 
 ## Events
 
-| Event    | Payload                           | When                                                                                         |
-| -------- | --------------------------------- | -------------------------------------------------------------------------------------------- |
-| `remove` | `(event: MouseEvent, id: string)` | Delete pressed on a row (with `removable`); `id` is the row's item id. The owner removes it. |
-| `create` | `(event: MouseEvent)`             | New chat pressed (with `creatable`). The owner starts an empty conversation.                 |
+| Event                   | Payload                                                                     | When                                                                            |
+| ----------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `remove`                | `(event: MouseEvent \| KeyboardEvent, id: string)`                          | Delete chosen on a row (with `removable`).                                      |
+| `create`                | `(event: MouseEvent)`                                                       | New chat pressed (with `creatable`).                                            |
+| `project-create`        | `(event: MouseEvent)`                                                       | New project pressed (with `projectCreatable`).                                  |
+| `search-open`           | `(event: MouseEvent \| KeyboardEvent)`                                      | The toolbar Search button pressed, or ⌘K / Ctrl+K (with `showToolbar`).         |
+| `item-pin`              | `(event: MouseEvent \| KeyboardEvent, item: ConversationHistoryItem)`       | Pin or Unpin chosen; flip `item.pinned`.                                        |
+| `item-rename`           | `(event: KeyboardEvent \| FocusEvent, payload: { item; title: string })`    | A new title saved from the inline rename field (Enter or blur; Escape cancels). |
+| `item-share`            | `(event: MouseEvent \| KeyboardEvent, item: ConversationHistoryItem)`       | Share chosen.                                                                   |
+| `item-lock`             | `(event: MouseEvent \| KeyboardEvent, item: ConversationHistoryItem)`       | Lock or Unlock chosen; flip `item.locked`.                                      |
+| `item-move`             | `(event: MouseEvent \| KeyboardEvent, payload: { item; project })`          | A project chosen in Move to project; set `item.projectId`.                      |
+| `item-archive`          | `(event: MouseEvent \| KeyboardEvent, item: ConversationHistoryItem)`       | Archive or Unarchive chosen; flip `item.archived`.                              |
+| `project-pin`           | `(event: MouseEvent \| KeyboardEvent, project: ConversationHistoryProject)` | Pin or Unpin project chosen; flip `project.pinned`.                             |
+| `project-settings-open` | `(event: MouseEvent \| KeyboardEvent, project: ConversationHistoryProject)` | Project settings chosen.                                                        |
+| `project-remove`        | `(event: MouseEvent \| KeyboardEvent, project: ConversationHistoryProject)` | Delete project chosen.                                                          |
+| `project-chat-create`   | `(event: MouseEvent, project: ConversationHistoryProject)`                  | New chat in project pressed.                                                    |
 
 ## Slots
 
-_none_
+| Slot        | Scope                               | Notes                                                                                   |
+| ----------- | ----------------------------------- | --------------------------------------------------------------------------------------- |
+| `item`      | `{ item: ConversationHistoryItem }` | Replaces a chat row's tag, title and description; the row keeps its button and actions. |
+| `item-meta` | `{ item: ConversationHistoryItem }` | Replaces the end of a chat row (age, lock, status).                                     |
 
 ## States
 
-- Groups render only when they have items; inside a group, newest first.
-- Active row: `data-active` and `aria-current="page"`, the selected surface.
-- Empty: one muted line, `No conversations yet.`
-- No match: while the search field holds text that no title contains, one muted line, `No conversations match “{query}”.`; New chat and the search field stay.
-- Loading: `aria-busy="true"` and five skeleton rows; no group headings.
+- Order from the top: toolbar, New chat row and search, Pinned, Projects, then Recents (by date) or Working and Settled (by status). A group renders only with items; inside a group, newest first. Pinned (`pinned`, not `archived`) leaves its project or group. By date, archived chats show nowhere.
+- Sections: Projects, Recents (shown with Projects), Working and Settled are collapsible headers (`data-state="open|closed"`, chevron down when open, toward the inline end when closed); Working and Settled show their count. A collapsed section mounts no rows. Pinned and the date groups are labels.
+- Projects: one folder row per project (`az-folder`, `az-folder-open` expanded) whose chats indent under it, or `No chats in this project yet.`; a `projectId` matching no project stays outside. Organize (two or more projects) opens a `DropdownMenu` with Sort by, Recent activity and Name.
+- Search: matching projects and sections show expanded with only their matches; the models do not change.
+- Rows: the `SidebarMenuItem` menu row, 32 px (44 px on coarse pointers), fill inset 1 px top and bottom (`border-y border-transparent bg-clip-padding`, `forced-colors:border-y-0`) for a 2 px gap between filled rows, no list gap. A row with a `description` is 56 px: title over the description (`text-body-xs`, muted, one line), `var(--spacing-xs)` block padding. Hover and focus fill the row; the active row is `data-active`, the selected surface.
+- Row end: the age (`showTime`, narrow units in the active locale, `now` under a minute), a lock glyph (`locked`), a `Spinner` (running) or `az-circle-alert` in `var(--text-danger)` (error).
+- Row actions: Pin and More (`itemActions`), or Delete alone (`removable` only), at the inline end; with a fine pointer they show on hover, focus inside the row, the active row and an open menu, on touch always. More opens Pin (P), Rename (R), Share, Lock, Move to project (a sub-menu of the other projects), Archive (A), then Delete in `var(--text-danger)`; labels flip to Unpin, Unlock, Unarchive. Letter hints are `DropdownMenu.Item` `command`s, mounted only while the menu is open.
+- Project actions: New chat (`az-square-pen`) and More: Pin project, Project settings, then Delete project in danger.
+- Rename: the row becomes an `Input` holding the title; Enter or blur saves a changed, non-empty title, Escape cancels; Enter and Escape return focus to the row.
+- Cut-off title: the row's `title` holds the full title only while it is cut off.
+- Empty: `No conversations yet.`; no match: `No conversations match “{query}”.`. Loading: `aria-busy` and five skeleton rows.
 
 ## Motion & Animations
 
-| Trigger            | Animation / Transition               | Token                                       | Reduced-motion fallback         |
-| ------------------ | ------------------------------------ | ------------------------------------------- | ------------------------------- |
-| row hover / active | background colour                    | `duration-fast-02 ease-productive-entrance` | `motion-reduce:transition-none` |
-| row hover / focus  | Delete fades in (fine pointers only) | `duration-fast-02 ease-productive-entrance` | `motion-reduce:transition-none` |
+| Trigger                    | Animation / Transition              | Token                                           | Reduced-motion fallback         |
+| -------------------------- | ----------------------------------- | ----------------------------------------------- | ------------------------------- |
+| row hover / focus / active | background colour                   | `transition-colors` (the `SidebarMenuItem` row) | `motion-reduce:transition-none` |
+| row hover / focus          | row actions fade in (fine pointers) | `duration-fast-02 ease-productive-entrance`     | `motion-reduce:transition-none` |
+| section header hover       | background and text colour          | `transition-colors` (the `SidebarMenuItem` row) | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region      | Token                                                                                                                  |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------- |
-| group label | `.text-label-sm`, `var(--text-muted)`                                                                                  |
-| row         | `.text-label-md` (`.text-label-lg` on coarse pointers), `var(--text-default)`, `var(--bg-hover)`, `var(--bg-selected)` |
-| row radius  | `var(--shape-control)`                                                                                                 |
-| search      | `Input` (its own `var(--shape-control)`) with the `az-search` glyph                                                    |
-| empty       | `.text-body-sm`, `var(--text-muted)`                                                                                   |
+| Region                | Token                                                                                                                                                                                                                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| group label           | `min-h-8`, `var(--spacing-sm)` inline padding, `.text-label-sm`, `var(--text-muted)`                                                                                                                                                                                                             |
+| section header        | the row below with `.text-label-sm`, `var(--text-muted)`; `var(--bg-hover)` and `var(--text-default)` on hover                                                                                                                                                                                   |
+| project row, New chat | a 32 px icon box (`var(--spacing-2xs)` start padding), a 16 px glyph in `var(--text-muted)`; project chats indent `var(--spacing-md)`                                                                                                                                                            |
+| row                   | `h-8`, `pointer-coarse:min-h-11`, padding `var(--spacing-xs)` end, `var(--spacing-2xs)` block, `var(--spacing-sm)` start, `.text-label-md`, `var(--text-default)`, `var(--bg-hover)`, `var(--bg-selected)`, `var(--shape-control)`, ring `var(--ring-color)` 2 px offset 2 px `var(--bg-canvas)` |
+| rich row              | `min-h-14`, `var(--spacing-xs)` block padding; description `.text-body-xs` `var(--text-muted)`; age `.text-label-sm` `var(--text-muted)`; tag `Tag` `severity="neutral"` `size="small"`                                                                                                          |
+| actions, toolbar      | `IconButton` `variant="ghost"`, `small` on rows, `medium` beside the `SearchTrigger`; menus `DropdownMenu`; danger items `var(--text-danger)`                                                                                                                                                    |
+| search, rename        | `Input`                                                                                                                                                                                                                                                                                          |
+| empty                 | `.text-body-sm`, `var(--text-muted)`                                                                                                                                                                                                                                                             |
 
 ## Theme gaps
 
@@ -124,57 +172,93 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- The root is a `nav` named by `ariaLabel`; each group is a `ul` labelled by its visible heading (`aria-labelledby`).
-- Each conversation is a `button` with its title as the name; the open one carries `aria-current="page"`.
-- Delete is an `IconButton` named `Delete <title>` on every row. On touch it is always shown; with a fine pointer it fades in on hover, on keyboard focus inside the row and on the open row, and it is always in the tab order, so it is reachable by keyboard, pointer and touch.
-- New chat is a `button` named `New chat`, first in the list. The search field is an `Input` with `role="searchbox"` (and `enterkeyhint="search"`) named `Search conversations`; filtering announces nothing, the rows change in place.
-- Keyboard: `Tab` moves through rows and their Delete; `Enter`/`Space` open a conversation.
-- Focus after a delete: when the owner removes the item whose Delete was pressed and focus was lost with it (on `body`, or on the closed `ConfirmDialog`), focus moves to the conversation that took its place, else the last one, else the list itself (`tabindex="-1"`). Tests: `conversation-history.test.ts` › moves focus to the next row after a delete.
-- Loading sets `aria-busy` on the list.
+- The root is a `nav` named by `ariaLabel`; each group is a `ul` labelled by its heading (`aria-labelledby`).
+- A chat is a `button` named by its title (`aria-labelledby`), described by its description and end (`aria-describedby`: age, `Locked`, `Working`, `Failed`); the open one is `aria-current="page"`.
+- Section headers and project rows are `button`s with `aria-expanded` and `aria-controls`; the list they open is labelled by them. A header with a count is named `Working 2`.
+- Row actions are `IconButton`s named `Pin <title>` / `Unpin <title>`, `More actions for <title>`, `Delete <title>`, `New chat in <project>`; always in the tab order. More and Organize open a `menu` (arrow keys, `Enter`/`Space`, `ArrowRight` opens Move to project, `Esc` closes and returns focus). After Pin, Lock, Archive or Move to project, focus follows the chat to its new place (the row button, marked `data-key`); a chat that no longer shows hands focus to the nearest row, as Delete does.
+- The toolbar Search is a `SearchTrigger` (`aria-keyshortcuts`); the search field is a `searchbox` named `Search conversations`; the rename field is named `Rename <title>`.
+- Focus after a delete: when the removed row took focus with it, focus moves to the row in its place, else the last, else the list (`tabindex="-1"`).
 
 ## Internationalization
 
-| Key                              | English source                      | Override prop |
-| -------------------------------- | ----------------------------------- | ------------- |
-| `conversationHistory.label`      | `Conversation history`              | `ariaLabel`   |
-| `conversationHistory.today`      | `Today`                             | —             |
-| `conversationHistory.yesterday`  | `Yesterday`                         | —             |
-| `conversationHistory.previous7`  | `Previous 7 days`                   | —             |
-| `conversationHistory.previous30` | `Previous 30 days`                  | —             |
-| `conversationHistory.older`      | `Older`                             | —             |
-| `conversationHistory.emptyTitle` | `No conversations yet.`             | —             |
-| `conversationHistory.delete`     | `Delete {title}`                    | —             |
-| `conversationHistory.newChat`    | `New chat`                          | —             |
-| `conversationHistory.search`     | `Search conversations`              | —             |
-| `conversationHistory.noMatch`    | `No conversations match “{query}”.` | —             |
+| Key                                     | English source                      | Override prop |
+| --------------------------------------- | ----------------------------------- | ------------- |
+| `conversationHistory.label`             | `Conversation history`              | `ariaLabel`   |
+| `conversationHistory.today`             | `Today`                             | —             |
+| `conversationHistory.yesterday`         | `Yesterday`                         | —             |
+| `conversationHistory.previous7`         | `Previous 7 days`                   | —             |
+| `conversationHistory.previous30`        | `Previous 30 days`                  | —             |
+| `conversationHistory.older`             | `Older`                             | —             |
+| `conversationHistory.emptyTitle`        | `No conversations yet.`             | —             |
+| `conversationHistory.delete`            | `Delete {title}`                    | —             |
+| `conversationHistory.newChat`           | `New chat`                          | —             |
+| `conversationHistory.search`            | `Search conversations`              | —             |
+| `conversationHistory.noMatch`           | `No conversations match “{query}”.` | —             |
+| `conversationHistory.projects`          | `Projects`                          | —             |
+| `conversationHistory.recents`           | `Recents`                           | —             |
+| `conversationHistory.newProject`        | `New project`                       | —             |
+| `conversationHistory.organizeProjects`  | `Organize projects`                 | —             |
+| `conversationHistory.sortBy`            | `Sort by`                           | —             |
+| `conversationHistory.sortRecent`        | `Recent activity`                   | —             |
+| `conversationHistory.sortName`          | `Name`                              | —             |
+| `conversationHistory.projectEmptyTitle` | `No chats in this project yet.`     | —             |
+| `conversationHistory.pinned`            | `Pinned`                            | —             |
+| `conversationHistory.working`           | `Working`                           | —             |
+| `conversationHistory.settled`           | `Settled`                           | —             |
+| `conversationHistory.failed`            | `Failed`                            | —             |
+| `conversationHistory.locked`            | `Locked`                            | —             |
+| `conversationHistory.justNow`           | `now`                               | —             |
+| `conversationHistory.searchChats`       | `Search chats`                      | —             |
+| `conversationHistory.pin`               | `Pin`                               | —             |
+| `conversationHistory.unpin`             | `Unpin`                             | —             |
+| `conversationHistory.pinTitle`          | `Pin {title}`                       | —             |
+| `conversationHistory.unpinTitle`        | `Unpin {title}`                     | —             |
+| `conversationHistory.moreActions`       | `More actions for {title}`          | —             |
+| `conversationHistory.rename`            | `Rename`                            | —             |
+| `conversationHistory.renameTitle`       | `Rename {title}`                    | —             |
+| `conversationHistory.share`             | `Share`                             | —             |
+| `conversationHistory.lock`              | `Lock`                              | —             |
+| `conversationHistory.unlock`            | `Unlock`                            | —             |
+| `conversationHistory.moveToProject`     | `Move to project`                   | —             |
+| `conversationHistory.archive`           | `Archive`                           | —             |
+| `conversationHistory.unarchive`         | `Unarchive`                         | —             |
+| `conversationHistory.remove`            | `Delete`                            | —             |
+| `conversationHistory.pinProject`        | `Pin project`                       | —             |
+| `conversationHistory.unpinProject`      | `Unpin project`                     | —             |
+| `conversationHistory.projectSettings`   | `Project settings`                  | —             |
+| `conversationHistory.removeProject`     | `Delete project`                    | —             |
+| `conversationHistory.newChatIn`         | `New chat in {title}`               | —             |
 
-- Groups use calendar days in the browser's time zone, not 24-hour windows.
-- Search compares titles case-insensitively with `toLocaleLowerCase` in the active locale.
+- Groups use calendar days in the browser's time zone; ages use `Intl.NumberFormat` narrow units of the active locale (`10m`, `15h` in English, `10 min` in Portuguese), minutes to years.
+- Search compares with `toLocaleLowerCase`, project names sort with `localeCompare`, both in the active locale.
 
 ## Right-to-left
 
-- Layout: logical spacing; Delete sits at the inline end of the row.
-- Icons: the trash, pen and search glyphs are not mirrored.
-- Keyboard: none beyond `Tab`.
-- User data: titles render in `<bdi>` with `dir="auto"`.
+- Layout: logical spacing; actions and the age sit at the inline end; project chats indent from the inline start.
+- Icons: only the collapsed chevron (`az-chevron-right`) mirrors, with the stylesheet; the Move to project sub-menu opens toward the inline end.
+- Keyboard: `ArrowLeft` opens the sub-menu under `rtl` (the `DropdownMenu` rule).
+- User data: titles, descriptions and tags render in `<bdi>` with `dir="auto"`.
 
 ## Responsive
 
 - Container queries: none; it fills the width it is given.
-- Narrow: titles truncate on one line with the full title in `title`.
-- Touch: rows are 44 px tall on coarse pointers (36 px with a fine pointer), titles one step larger, so the row and its Delete button share one 44 px band; Delete keeps its 40 px touch target and is always shown.
+- Narrow: titles and descriptions truncate on one line, with the full title in `title` on hover.
+- Touch: rows are 44 px tall on coarse pointers (rich rows stay 56 px); row and project actions are always shown and keep their 40 px touch targets.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Performance
 
-- Bundle budget: 9 KB gzip for `./conversation-history` in `.size-limit.json` (includes `useLazyChunks` and the search `Input`).
-- Runtime budget: one linear grouping pass per `items` change. A group longer than 300 rows mounts in chunks of 100 (`useLazyChunks`): the first chunk renders, the rest are sized placeholders that mount as they scroll near the viewport. `conversation-history-5k` in `perf-budgets.json` holds mounting 5k conversations and selecting one.
+- Bundle budget: 17.25 KB gzip for `./conversation-history` in `.size-limit.json`, entry only (with `useLazyChunks`, `Input`, `Tag` and `Spinner`). The Organize, row and project menus (`DropdownMenu`) and the toolbar (`SearchTrigger`) are lazy chunks that load when a list needs them; until then a disabled button (or an empty 32 px row) holds their place. A row's menu items mount only while it is open.
+- Runtime budget: one linear partition and grouping pass per `items` change, plus one sort of the projects. A group longer than 300 rows mounts in chunks of 100 (`useLazyChunks`, 32 px placeholder rows). `conversation-history-5k` in `perf-budgets.json` holds mounting 5k conversations and selecting one.
 - Heavy parts: none.
 
 ## Examples
 
-- Default — a chat page: the history in a side panel beside the conversation on wide screens and in a start-side `Drawer` opened from a menu button on phones, with New chat, search, conversations across all five groups, one open, and Delete on each row that asks in a `ConfirmDialog` before it removes the conversation.
+- Default — a chat page: the history beside the conversation, in a start-side `Drawer` on phones, with New chat, search, all five date groups and Delete that asks in a `ConfirmDialog`.
 - States — Empty and Loading.
+- Projects — three projects (one expanded), New project, Organize and Recents; adds a project on `project-create`.
+- RichRows — the toolbar (Search, New project, New chat), Pinned, rows with a tag, a description, the age and a running status, and every row and project action applied to the data, Rename inline.
+- StatusGroups — `groupBy="status"`: Working with two running chats, Settled with finished and archived chats, collapsed.
 
 ## Constraints — DO NOT
 

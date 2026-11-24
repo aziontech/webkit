@@ -40,6 +40,9 @@ export type {
 } from './dropdown-menu.vue'
 export type { DropdownMenuProps } from './dropdown-menu.vue'
 export type { DropdownMenuGroupProps } from './dropdown-menu-group/dropdown-menu-group.vue'
-export type { DropdownMenuItemProps } from './dropdown-menu-item/dropdown-menu-item.vue'
+export type {
+  DropdownMenuItemProps,
+  DropdownMenuItemTarget
+} from './dropdown-menu-item/dropdown-menu-item.vue'
 export type { DropdownMenuSubProps } from './dropdown-menu-sub/dropdown-menu-sub.vue'
 export type { DropdownMenuSubTriggerProps } from './dropdown-menu-sub-trigger/dropdown-menu-sub-trigger.vue'

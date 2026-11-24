@@ -32,7 +32,7 @@ Before the first message there is no log: a welcome page with one question as it
 
 ### C. Message log — `Conversation`
 
-Fills the page and is the only part that scrolls, in a centered reading column; the header controls and the composer float over it. It follows the newest message while the reader is at the end, stops when they scroll up, and offers Scroll to the latest message. It announces each finished response once; streaming text is never read token by token.
+Fills the page and is the only part that scrolls, in a centered reading column 752px wide (`--container-2xl`), the composer as wide, with 36px between messages (28px on a phone); the header controls and the composer float over it. It follows the newest message while the reader is at the end, stops when they scroll up, and offers Scroll to the latest message. It announces each finished response once; streaming text is never read token by token.
 
 ### D. Prompt — `ChatMessage`, `ImageGallery`, `FilePreview`
 
@@ -40,7 +40,7 @@ The reader's prompt at the inline end in a filled bubble with the stacked compos
 
 ### E. Response — `ChatMessage`, `Reasoning`, `StreamingResponse`
 
-The assistant's response as plain text across the reading column, in the larger reading size, with no avatar, bubble or visible name. It shows the loading text while pending, a collapsed `Reasoning` that reads Thinking and then Thought for N seconds, and the Markdown answer in `StreamingResponse` with a caret while it streams. Each citation is a small chip with the source's site name that links to it. On failure the partial text stays with the error line and Try again.
+The assistant's response as plain text across the reading column, at the prose reading size (16px on 26px lines), with no avatar, bubble or visible name. It shows the loading text while pending, a collapsed `Reasoning` that reads Thinking and then Thought for N seconds, and the Markdown answer in `StreamingResponse` with a caret while it streams. Each citation is a small chip with the source's site name that links to it. On failure the partial text stays with the error line and Try again.
 
 ### F. Sources — `Sources`
 
@@ -48,7 +48,7 @@ At the end of the action row of a complete response that used documents: a pill 
 
 ### G. Response actions — `ChatMessage`, `ResponseBranches`, `FeedbackReasonDialog`
 
-`ChatMessage.Actions` under a complete response, always visible and always one line, with its built-in actions in ChatGPT's order: Copy, Good response, Bad response, Read aloud (hidden where the browser has no speech synthesis), Share, Try again (disabled while another response is generating), More (Branch in new chat), then the Sources pill in `#trailing`. When the row is narrower than 480px (a phone, the drawer) it keeps Copy, Read aloud, Share and More, and More also holds Good response, Bad response and Try again. A rating fills its thumb and hides the other; pressing it again clears it. Good response raises the toast Thanks for your feedback; Bad response opens `FeedbackReasonDialog`, and sending it emits `feedback` again with the reason, then the toast. After Try again the row starts with a `ResponseBranches` pager (`‹ 2/2 ›`) over the versions of that response. Icons draw at 16px inside a 40px target.
+`ChatMessage.Actions` under a complete response, always visible and always one line, with its built-in actions in ChatGPT's order: Copy, Feedback (one button whose menu holds Good response and Bad response), Read aloud (hidden where the browser has no speech synthesis), Share, Try again (disabled while another response is generating), More (Branch in new chat), then the Sources pill in `#trailing`. When the row is narrower than 480px (a phone, the drawer) it keeps Copy, Read aloud, Share and More, and More also holds Good response, Bad response and Try again. A rating shows its filled thumb on the Feedback button and checks its item in the menu; choosing it again clears it. Good response raises the toast Thanks for your feedback; Bad response opens `FeedbackReasonDialog`, and sending it emits `feedback` again with the reason, then the toast. After Try again the row starts with a `ResponseBranches` pager (`‹ 2/2 ›`) over the versions of that response. Icons draw at 18px in the muted grey inside 32px buttons, with a 44px target on a touch screen.
 
 ### H. Follow-up questions — `SuggestionGroup`
 
@@ -261,7 +261,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - **Loading:** `Generating a response` (built in); `Loading <what>` when fetching data.
 - **Error:** what happened, in one sentence, e.g. "The connection was interrupted before the response finished.", with Try again.
 - **Stopped:** "You stopped this response."
-- **Feedback:** Good response, Bad response (built in); the toast says Thanks for your feedback.
+- **Feedback:** the Feedback menu with Good response and Bad response (built in); the toast says Thanks for your feedback.
 - Follow `skills/webkit-microcopy`: sentence case, "select" not "click", "response" not "answer", no "please".
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 - **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.
@@ -272,7 +272,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - Each message is an `article` named by author and time; the author and time are visually hidden, never removed.
 - Responses are `aria-busy` while loading or streaming; the caret is hidden.
 - The composer is named Prompt, described by its counter and disclaimer; Enter submits and an IME composition never does.
-- Feedback thumbs are toggle buttons with `aria-pressed`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
+- Feedback is a menu button (`aria-haspopup="menu"`) whose chosen item is `aria-checked`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
 - A prompt's Copy and Edit are transparent until hover or focus, never removed from the tab order; the editor's field is named Edit your message, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
 - Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer. On the welcome page: header, heading, support prompts, composer.
 - The model picker and the More and "+" menus are `DropdownMenu`s: arrows, typeahead, Escape and focus return come from it; the model trigger's name is its visible text.

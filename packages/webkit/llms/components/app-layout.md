@@ -90,6 +90,7 @@ Unbound, each one keeps its own local state.
 - `data-navigation`, `data-tools`, `data-split-panel` on the root: `open` | `closed`.
 - `data-split-panel-position` on the root: `bottom` | `side` (always `bottom` while compact).
 - `data-resizing` on the split separator while it is dragged.
+- Fill: while the body holds an element with `data-layout-fill`, the body is a `flex flex-col min-h-0` item of the content region, so a page that fills (a chat, an editor) gets the exact height under the header and scrolls inside itself instead of scrolling the content region.
 - First render (server and client) is the wide layout; the compact layout applies after mount, once the layout has measured itself.
 
 ## Accessibility

@@ -3,11 +3,11 @@ name: conversation
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 17bed936fd2e8d714d7ecd4911760d42e8fbdf3040b6dd9d45e7791eb6e85204
+checksum: 4e5d104987b254f4dacf05b8d156b325402fbdbfcb8a01c10daae369264737a9
 created: 2026-11-11
-last_updated: 2026-11-22
+last_updated: 2026-11-23
 ---
 
 # Conversation — Component Spec
@@ -27,8 +27,8 @@ With `moreMessages`, a Load earlier messages button opens the thread and the log
 It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page,
 `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).
 
-The thread is a centred reading column (`--layout-measure-content`) with a 16 px gutter on a phone,
-and a larger gap before each user turn. The `composer` slot floats the composer over the bottom of
+The thread is a centred reading column 752 px wide (`--container-2xl`, closest to ChatGPT's 48 rem)
+inside a 16 px gutter, with one even gap between messages: 36 px from `sm`, 28 px on a phone. The `composer` slot floats the composer over the bottom of
 the column: the thread scrolls under it behind a fade and is padded by its height; the Scroll
 to latest button floats just above it.
 
@@ -152,9 +152,9 @@ never read as new.
 
 | Region                | Token                                                                                                                                |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| gap between messages  | `var(--spacing-lg)`; a user message that starts a turn adds `var(--spacing-lg)` above it                                             |
+| gap between messages  | `var(--spacing-lg)` + `var(--spacing-sm)` (36 px from `sm`, 28 px on a phone), the same before every message                         |
 | padding of the thread | `var(--spacing-md)`; bottom `var(--conversation-composer-height)` + `var(--spacing-md)`                                              |
-| reading width         | `var(--layout-measure-content)`                                                                                                      |
+| reading width         | `var(--container-2xl)` of content inside the `var(--spacing-md)` gutter, the thread and the composer alike                           |
 | scroll button surface | large `IconButton` (`var(--shape-button)`): `var(--bg-surface-raised)` at 88 %, `backdrop-blur-md`, `var(--shadow-md)`               |
 | composer area         | fade `linear-gradient` from `var(--conversation-composer-fade, var(--bg-canvas))`; padding `var(--spacing-lg)` / `var(--spacing-md)` |
 | focus ring of the log | `var(--ring-color)`                                                                                                                  |
@@ -196,7 +196,7 @@ _None._
 
 ## Responsive
 
-- Container queries: none; the thread and the composer centre at `--layout-measure-content` and fill narrower hosts with the `--spacing-md` gutter.
+- Container queries: none; the thread and the composer centre at `--container-2xl` and fill narrower hosts with the `--spacing-md` gutter.
 - Narrow (≤ 640 px or a drawer): full width; the owner should pass `layout="start"`.
 - Touch: the scroll button and the Load earlier messages button meet 44 px on coarse pointers (both through their own `pointer-coarse` hit area).
 - Safe area: the composer row keeps at least the bottom safe-area inset (`env(safe-area-inset-bottom)`) under it, so on a phone with a home indicator the composer stays above it while the thread scrolls behind.

@@ -3,11 +3,11 @@ name: streaming-response
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: 5888b57721aeec6f51393b70631b417148df2fe7f93d52cb1c732c58ab41f51d
+checksum: dff23fa9e2eab54f1daa002f49e59469f9a2611114839e1ece174fac2c98dcf6
 created: 2026-11-11
-last_updated: 2026-11-22
+last_updated: 2026-11-23
 ---
 
 # StreamingResponse — Component Spec
@@ -24,9 +24,11 @@ item's lines under it, to any depth), block quotes, GFM tables, rules and fenced
 streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>`
 until it closes (no highlighting churn), and a half-written link shows its text only.
 
-Text renders at the reading size (`.text-body-lg`) with a full step (`--spacing-md`) between blocks,
-the plain, wide answer column of a chat. Headings are bold, with an extra `--spacing-sm` above them so
-a section reads as a new start: `#` at `.text-heading-md`, every deeper level at the reading size. A
+Text renders at the prose reading size (`.text-body-prose-md`, 16 px on 26 px lines, ChatGPT's answer
+size) with a full step (`--spacing-md`) between blocks, the plain answer column of a chat. Headings are
+bold, one step larger than the text, 24 px below the block above and 8 px above their first line: `#` at `.text-heading-md`, every deeper level at `.text-body-lg`.
+Lists indent 32 px from `sm` (24 px on a phone) with no extra gap between items. Inline code is
+`.text-label-code-md` (14 px) in medium weight. A
 fenced code block is a filled `CodeBlock` card with the language and copy in a sticky header, the
 same while the fence is still open. Numbered citations become `Citation` chips resolved
 against `sources`: `[1]` one chip with the site's mark and name, and a run of markers (`[1][2]`,
@@ -110,7 +112,7 @@ _No slots — the content is the `content` string._
 - `data-slot="streaming-response"` on the root marks the answer text, which `ChatMessage.Actions` Read aloud speaks.
 - Caret: inside the last paragraph or heading, else after the last block; only while `streaming`.
 - Open fence while streaming: the card `data-testid="…__pending-code"` (language header over a `<pre>`); closed fence or stream ended: `CodeBlock` with `show-label`, `:bordered="false"` and no height cap (`--code-block-max-height: none`).
-- Lists: a nested list carries `data-nested` (top margin `--spacing-xs`, an unordered one uses circles); `data-ordered` switches to decimals.
+- Lists: a nested list carries `data-nested` (an unordered one uses circles); `data-ordered` switches to decimals.
 
 ## Motion & Animations
 
@@ -122,18 +124,19 @@ _No slots — the content is the `content` string._
 
 | Region      | Token                                                                                              |
 | ----------- | -------------------------------------------------------------------------------------------------- |
-| body        | `.text-body-lg`, `var(--text-default)`                                                             |
-| headings    | `.text-heading-md` (`#`), `.text-body-lg` (`##` and deeper), `font-semibold`, `--spacing-sm` above |
-| inline code | `.text-label-code-sm`, `var(--bg-surface-raised)`, `var(--shape-control)`                          |
+| body        | `.text-body-prose-md`, `var(--text-default)`                                                       |
+| headings    | `.text-heading-md` (`#`), `.text-body-lg` (`##` and deeper), `font-semibold`; `--spacing-xs` added above, taken from the gap below |
+| inline code | `.text-label-code-md`, `font-medium`, `var(--bg-surface-raised)`, `var(--shape-control)`           |
 | code block  | `var(--bg-surface-raised)`, `var(--shape-card)`, header `.text-label-code-sm` `var(--text-muted)`  |
 | links       | `var(--text-link)`                                                                                 |
 | quote       | `var(--border-strong)`, `var(--text-muted)`                                                        |
 | table       | `var(--border-default)`, `var(--border-muted)`, header `var(--bg-surface-raised)`, `.text-body-sm` |
-| block gap   | `var(--spacing-md)`; list items `var(--spacing-xs)`                                                |
+| block gap   | `var(--spacing-md)`; list items none; list indent `var(--spacing-lg)` + item `var(--spacing-xs)`   |
 
 ## Theme gaps
 
-- No `text-body-prose-lg`: the reading size uses `.text-body-lg` (16 px, 18 px from `md`) at `snug` leading; a relaxed-leading step at that size would read closer to a chat answer.
+- No flat 20 px heading class (ChatGPT's answer title, 20/28): `.text-heading-md` reaches 24 px from `md`.
+- `CodeBlock` has no size prop: its lines stay 12 px (`.text-label-code-sm`) under a 40 px header; ChatGPT's are 14–16 px under 48 px.
 
 ## Accessibility (WCAG 2.1 AA)
 

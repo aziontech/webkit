@@ -84,7 +84,7 @@
   - Props: `label: string` default `''` — section label rendered above the options. Omit for an unlabeled group.
   - Events: _none_.
   - Slots: `default` — one or more `<DropdownMenu.Item>`; `header` — inline region rendered between the group label and the options (e.g. a per-section search or description); `footer` — inline region rendered after the options (e.g. a "see all" link).
-- `dropdown-menu-item/dropdown-menu-item.vue` — selectable row, attached as `DropdownMenu.Item`. Renders the leading slot, the label, the trailing slot, an optional `command` hint and, when `selected`, a check mark. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`. Every row is `tabindex="-1"`; the root moves focus with the arrows and typeahead. Outside a group the row teleports itself into the panel body (`data-ungrouped`, with the group's horizontal inset).
+- `dropdown-menu-item/dropdown-menu-item.vue` — selectable row, attached as `DropdownMenu.Item`. Renders the leading slot, the label, the trailing slot, an optional `command` hint and, when `selected`, a check mark. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`. Every row is `tabindex="-1"`; the root moves focus with the arrows and typeahead. Outside a group the row teleports itself into the panel body (`data-ungrouped`, with the group's horizontal inset). With a `description` the row grows to two lines: the label (two lines) over the description (`text-body-xs`, `--text-muted`, two lines), the leading slot aligned to the top.
   - Props:
     - `value: string | number` (required) — identifier emitted on the root `select` event when this option is activated.
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
@@ -92,6 +92,8 @@
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
     - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `az az-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
+    - `target: '_self' | '_blank'` default `'_self'` — where the link opens; `_blank` (only with a safe `href`) adds `rel="noopener noreferrer"`, a trailing `aria-hidden` `az az-external-link` glyph (unless the `trailing` slot or `command` is set) and the sr-only `common.newTab` hint in the name. Exported as `DropdownMenuItemTarget`.
+    - `description: string` default `''` — secondary line under the label (`data-description`); the item is then named by the label (`aria-labelledby`) and described by this line (`aria-describedby`).
     - `type: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuItemType`.
   - Events: _none_ (root emits `select`).
   - Slots: `default` (override of the `label` prop, for rich label content), `leading` (icon / avatar before the label), `trailing` (icon / badge after the label; mutually exclusive with `command`).
@@ -121,6 +123,7 @@
 - `data-disabled` mirrors the `disabled` prop on root, trigger, and option
 - `data-selected` on option mirrors the `selected` prop
 - `data-type` on option mirrors the `type` prop (`default` | `checkbox` | `radio`)
+- `data-description` on option when `description` is set (the row grows to fit two lines)
 - `data-state` on sub, sub-trigger and sub-panel: `open` | `closed`; `data-disabled` on sub-trigger mirrors its `disabled` prop
 - `data-side` / `data-align` on the sub-panel mirror its resolved side and alignment (`end` or `start`, after flipping)
 - `data-side` / `data-align` on the root mirror the `side` / `align` props (`'auto'` stays as `'auto'`)
@@ -142,6 +145,7 @@
 - Teleported panel: the `role="menu"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it lays out and is announced in the provider's direction and language although it renders under `body`.
 - Touch target ≥40×40 px on the trigger; option and sub-menu rows are 32 px tall on a fine pointer and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer, full-row click targets whose fills stay inset 1 px so two filled rows never touch.
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): renders a plain item.
+- A `target="_blank"` link is announced with the `common.newTab` hint; the glyph is `aria-hidden`.
 
 ## Right-to-left
 
@@ -152,7 +156,7 @@
 
 ## Internationalization
 
-No built-in strings: every label comes from the consumer (`label` props and slots).
+Labels come from the consumer (`label` props and slots); the one built-in string is `common.newTab` (`(opens in a new tab)`), read after the label of a `target="_blank"` link.
 
 - Formatting: none.
 

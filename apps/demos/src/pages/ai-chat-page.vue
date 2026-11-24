@@ -1,8 +1,10 @@
 <script setup lang="ts">
   import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
   import { useChat } from '@tanstack/ai-vue'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
+  import { useRoute } from 'vue-router'
 
+  import { sampleLongThread } from '../blocks/ai-chat.sample'
   import AiChat from '../blocks/ai-chat.vue'
   import { answerFor } from '../lib/assistant'
   import { assistantConnection, assistantTools, deployWorkload } from '../lib/assistant-model'
@@ -35,6 +37,13 @@
   })
 
   const loadingOlder = ref(false)
+
+  const route = useRoute()
+  watch(
+    () => route.params.chatId,
+    (chatId) => setMessages(chatId ? sampleLongThread : []),
+    { immediate: true }
+  )
   const modelKey = ref('auto')
   const toolKeys = ref<string[]>([])
 

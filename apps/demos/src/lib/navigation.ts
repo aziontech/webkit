@@ -25,6 +25,7 @@ const tree: ConsoleLayoutNavGroup[] = [
   {
     items: [
       { id: 'home', label: 'Home', icon: 'az az-home', href: '/onboarding' },
+      { id: 'copilot', label: 'AI Copilot', icon: 'az az-ask-azion', href: '/assistant' },
       { id: 'projects', label: 'Projects', icon: 'az az-folder' },
       { id: 'deployments', label: 'Deployments', icon: 'az az-cloud-upload' }
     ]
