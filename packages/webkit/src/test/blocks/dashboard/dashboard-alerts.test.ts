@@ -57,6 +57,13 @@ describe('dashboard/dashboard-alerts', () => {
     expect(view.emitted('retry')).toHaveLength(1)
   })
 
+  it('lets the ghost period trigger size to its label instead of a fixed box', () => {
+    const view = render(DashboardAlerts)
+    const wrapper = view.getByRole('combobox', { name: 'Period' }).closest('div.shrink-0')
+    expect(wrapper).not.toBeNull()
+    expect(wrapper!.className).not.toMatch(/\bw-(?:\d|full)/)
+  })
+
   it('emits the period the reader picks', async () => {
     const view = render(DashboardAlerts)
     await userEvent.click(view.getByRole('combobox', { name: 'Period' }))

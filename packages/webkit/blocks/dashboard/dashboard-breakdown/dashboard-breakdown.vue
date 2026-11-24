@@ -91,7 +91,7 @@
 
   const period = defineModel<string>('period', { default: '12m' })
 
-  const comparison = 'vs previous month'
+  const comparison = 'this month vs previous month'
 
   const tiles: { metric: BreakdownDashboardMetric; label: string; description: string }[] = [
     {
@@ -242,7 +242,7 @@
         description="How the organization’s spend splits across categories and the resources that drive it."
       >
         <template #actions>
-          <div class="w-full md:w-48">
+          <div class="shrink-0">
             <Select
               variant="ghost"
               v-model="period"
@@ -313,7 +313,7 @@
           v-model:form="trendForm"
           :span="8"
           title="Spend by category"
-          hint="Monthly spend stacked by category; the top edge is the total. Legend totals sum the whole range."
+          hint="Monthly spend stacked by category over the period picked in the header; the top edge is the total. Legend totals sum the whole range."
           :forms="forms"
           :exportable="exportable"
           :error="error"

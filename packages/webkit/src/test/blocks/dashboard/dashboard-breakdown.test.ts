@@ -50,6 +50,20 @@ describe('dashboard/dashboard-breakdown', () => {
     expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
   })
 
+  it('says on screen that the tiles read this month, apart from the header period', () => {
+    const view = render(DashboardBreakdown)
+    const deltas = view.container.querySelectorAll('[data-testid="stat-tile__delta"]')
+    expect(deltas.length).toBe(4)
+    for (const delta of deltas) expect(delta.textContent).toContain('this month vs previous month')
+  })
+
+  it('lets the ghost period trigger size to its label instead of a fixed box', () => {
+    const view = render(DashboardBreakdown)
+    const wrapper = view.getByRole('combobox', { name: 'Period' }).closest('div.shrink-0')
+    expect(wrapper).not.toBeNull()
+    expect(wrapper!.className).not.toMatch(/\bw-(?:\d|full)/)
+  })
+
   it('hides the sample while loading', () => {
     const view = render(DashboardBreakdown, { props: { loading: true } })
     expect(view.container.textContent).not.toContain('worker-pool')

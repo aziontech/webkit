@@ -157,7 +157,7 @@
         description="How people experience each application: the overall score, the score per application and location, each hour of the period and the incidents still open."
       >
         <template #actions>
-          <div class="w-44 shrink-0">
+          <div class="shrink-0">
             <Select
               variant="ghost"
               v-model="period"

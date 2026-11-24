@@ -210,7 +210,7 @@
         description="What is open, how severe it is, what kind it is and who is involved."
       >
         <template #actions>
-          <div class="w-44 shrink-0">
+          <div class="shrink-0">
             <Select
               variant="ghost"
               v-model="period"

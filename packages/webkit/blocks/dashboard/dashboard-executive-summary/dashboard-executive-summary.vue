@@ -229,7 +229,7 @@
         description="Headline results for the quarter, progress on its goals, twelve-month trends and notes from the leads."
       >
         <template #actions>
-          <div class="w-36">
+          <div class="shrink-0">
             <Select
               variant="ghost"
               v-model="quarter"
