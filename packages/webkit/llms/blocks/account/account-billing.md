@@ -1090,6 +1090,7 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
                 <DropdownMenu.Item
                   value="remove"
                   label="Remove"
+                  severity="danger"
                   :disabled="row.default"
                 />
               </DropdownMenu.Group>

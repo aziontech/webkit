@@ -747,6 +747,7 @@ export const dnsZonePolicyLabel = (value: string) =>
                       <DropdownMenuItem
                         value="delete"
                         label="Delete"
+                        severity="danger"
                       >
                         <template #leading
                           ><i

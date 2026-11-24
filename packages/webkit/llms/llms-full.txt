@@ -2911,7 +2911,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-onb
 - Surface: app
 - Source: `blocks/account/account-payment-method-card/account-payment-method-card.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-payment-method-card")`
-- Components: Alert, Button, Card, Field, Input, PaymentBrand, Select
+- Components: Alert, Button, Card, Field, Input, PaymentBrand, Select, `use-escape-to-cancel`
 - Skills: `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -5320,7 +5320,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - G. Open by severity — `Card` (required)
 - H. Loading rows — `Skeleton` (required)
 - I. Severity — `SeverityTag` (required)
-- J. Empty regions — `EmptyState` (required)
+- J. Empty regions — `EmptyState`, `Button` (required)
 - K. Alerts by type — `BarList` (required)
 - L. Highest risk and Open alerts — `DataTable` (required)
 - M. Alert status — `TableCellStatus`, `Tag` (required)
@@ -5715,6 +5715,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - I. Time series cards — `Chart` (optional)
 - J. Load failure — `Alert` (required)
 - K. Move up and Move down — `IconButton` (required in edit mode on one column)
+- L. Empty dashboard — `EmptyState` (required)
 
 What each part takes: [blocks/dashboard/dashboard-configurable.md](blocks/dashboard/dashboard-configurable.md).
 
@@ -5943,7 +5944,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - B. Period — `Select` (required)
 - C. Cards — `ChartCard` (required)
 - D. Definitions — `Hint` (required)
-- E. Overall figure (required)
+- E. Overall figure — `Skeleton` (required)
 - F. Band — `Tag` (required)
 - G. Loading placeholders — `Skeleton` (required)
 - H. Score per hour — `Chart` (required)
@@ -21500,7 +21501,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
       { value: 'edit', label: 'Edit', icon: 'az az-pencil' },
       { value: 'duplicate', label: 'Duplicate', icon: 'az az-copy' }
     ],
-    [{ value: 'delete', label: 'Delete', icon: 'az az-trash' }]
+    [{ value: 'delete', label: 'Delete', icon: 'az az-trash', severity: 'danger' }]
   ]
 
   const statusSeverity = (status) =>
@@ -21552,6 +21553,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
             :key="option.value"
             :value="option.value"
             :label="option.label"
+            :severity="option.severity"
           >
             <template #leading
               ><i
@@ -25494,6 +25496,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
   - `[&>*:last-child]:rounded-r-(--shape-control)` and `[&>*:not(:last-child)]:rounded-r-none`
   - `[&>*:not(:last-child)]:border-r-(color:--border-default) [&>*:not(:last-child)]:border-r` — a single vertical seam between adjacent children, drawn on the left child so child components keep their own left border intact
   - Child components' own outer borders remain — the root's outer border sits on top, so double lines are avoided by the child selector removing the _inner-facing_ border only
+- No clip: the root does not set `overflow`, so the `aria-hidden` touch-target layers of the controls inside (`data-slot="touch-target"`, shown under `pointer-coarse:`) reach the 44 px hit height past the frame. Instead of being clipped to the rounded frame, fills stay inside it by rounding: the outer corners of the first and last child are the frame's `--shape-control` radius (`!` so a child `Button` cannot override them), and every control inside a child (`button`, `a`, `[role=combobox]`, `[data-slot=input]`) and every wrapper between them takes `rounded-[inherit]`, so a hover or selected fill follows the frame's corner.
 
 ## Accessibility
 
@@ -26345,7 +26348,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - Keyboard map: `Tab` moves from the dial-code `Select` to the tel input; inside the `Select`, arrows navigate, typing filters, `Enter` picks and returns focus to the input, `Esc` closes.
 - ARIA: the tel input has `type="tel"`, `inputmode="tel"`, `autocomplete="tel-national"`, `aria-invalid`, `aria-required`, and the `id` / `aria-describedby` of the enclosing `Field`; the dial-code trigger has `aria-label="PhoneInputCountry dial code"`. The control provides an empty Field context below it so the inner search input never takes the field id.
 - Contrast ≥4.5:1 for input and dial-code text.
-- Touch target follows the `size` (40px at `large`).
+- Touch target: the field is drawn 28 / 32 / 40 px tall by `size`; on a coarse pointer the number field carries an invisible `aria-hidden` layer (`data-slot="touch-target"`, shown only under `pointer-coarse:`) that extends its hit area to at least 44 px tall past the `InputGroup` frame, and a press on it focuses the field (not when disabled). The dial-code trigger carries the `Select` trigger's own touch target.
 - Direction: the tel input, each option's dial code and the closed trigger's dial code (a `dir="ltr"` span in the trigger's `#trailing` slot) render left-to-right, so a number and its `+` keep their order on a right-to-left page; the typed number still aligns to the inline start of the page (`rtl:text-end`, which resolves against the input's own `ltr` direction).
 
 ## Examples
@@ -29848,7 +29851,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   value="logout"
-                  label="Log Out"
+                  label="Log out"
                 >
                   <template #trailing
                     ><i

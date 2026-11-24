@@ -57,6 +57,10 @@
   const FIELD_COUNT_CLASS =
     'shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
     'hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none'
+
+  const COUNT_CLASS =
+    'inline-flex min-h-6 min-w-6 items-center justify-center rounded-(--shape-control) border ' +
+    'border-(--border-muted) px-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -108,7 +112,7 @@
         >
           <span
             data-testid="field-row__count"
-            class="inline-flex min-h-6 min-w-6 items-center justify-center rounded-(--shape-control) border border-(--border-muted) px-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+            :class="COUNT_CLASS"
             >{{ count }}</span
           >
         </Popover.Trigger>

@@ -86,6 +86,10 @@ Below `@3xl` of the grid the board is one column, so the span tags and the resiz
 each card offers ghost Move up and Move down buttons in place of the drag handle: native drag and
 drop does not work with touch. Each move is announced in the live region.
 
+### L. Empty dashboard — `EmptyState` (required)
+
+When no series has data yet, one bordered page-level `EmptyState` replaces the grid: `No requests yet`, what fills the board, and `Create Application` as the next step. Tiles that are truly zero print `0`; a dash stays only where nothing was reported.
+
 ## Data
 
 The block takes its series through props and emits every change; it fetches nothing. `ConfigurableDashboardProps` and `ConfigurableDashboardSeries` are exported from `dashboard-configurable.vue`, and `sample.ts` holds the sample period the block renders when a data prop is left out (and never while `loading` or `error` is set). The layout is a model, so the page can save it per user.

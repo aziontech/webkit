@@ -1,6 +1,6 @@
 import type { HtmlTagDescriptor, Plugin } from 'vite'
 
-export const PRELOADED_FONT = /(^|\/)rubik-latin-wght-normal-[\w-]+\.woff2$/
+const PRELOADED_FONT = /(^|\/)rubik-latin-wght-normal-[\w-]+\.woff2$/
 
 export function fontPreloadTags(files: string[], base = '/'): HtmlTagDescriptor[] {
   const file = files.find((name) => PRELOADED_FONT.test(name))

@@ -41,10 +41,22 @@ const SAVE_FAILURES = 0
 const SUBMIT_KEYS = 'meta+enter'
 const SAVE_KEYS = 'meta+s'
 
+const sendRequest = (request: { failuresLeft: number }) =>
+  new Promise<void>((resolve, reject) => {
+    setTimeout(() => {
+      if (request.failuresLeft > 0) {
+        request.failuresLeft -= 1
+        reject(new Error('The service did not answer. Check your connection and try again.'))
+        return
+      }
+      resolve()
+    }, 900)
+  })
+
 export function useCreateForm<T>(options: UseCreateFormOptions<T>): UseCreateFormReturn<T> {
   const submitting = ref(false)
   const failure = ref('')
-  let failuresLeft = SAVE_FAILURES
+  const request = { failuresLeft: SAVE_FAILURES }
 
   const guard = useUnsavedChanges(options.source, {
     enabled: () => !submitting.value
@@ -71,18 +83,6 @@ export function useCreateForm<T>(options: UseCreateFormOptions<T>): UseCreateFor
     'aria-keyshortcuts': `${toAriaKeyshortcuts(SUBMIT_KEYS)} ${toAriaKeyshortcuts(SAVE_KEYS)}`
   }))
 
-  const sendRequest = () =>
-    new Promise<void>((resolve, reject) => {
-      setTimeout(() => {
-        if (failuresLeft > 0) {
-          failuresLeft -= 1
-          reject(new Error('The service did not answer. Check your connection and try again.'))
-          return
-        }
-        resolve()
-      }, 900)
-    })
-
   const submit = async () => {
     if (submitting.value) return
     if (!options.validate()) {
@@ -92,7 +92,7 @@ export function useCreateForm<T>(options: UseCreateFormOptions<T>): UseCreateFor
     submitting.value = true
     failure.value = ''
     try {
-      await sendRequest()
+      await sendRequest(request)
       options.onCreated()
     } catch (error) {
       failure.value = error instanceof Error ? error.message : 'Try again.'

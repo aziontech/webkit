@@ -1051,6 +1051,7 @@ export const sampleTokens: PersonalTokensToken[] = [
               <DropdownMenu.Item
                 value="revoke"
                 label="Revoke"
+                severity="danger"
               />
             </DropdownMenu.Group>
             <DropdownMenu.Group
@@ -1060,6 +1061,7 @@ export const sampleTokens: PersonalTokensToken[] = [
               <DropdownMenu.Item
                 value="delete"
                 label="Delete"
+                severity="danger"
               />
             </DropdownMenu.Group>
           </TableCellActions>

@@ -4,7 +4,7 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 
 ## Components, types and parts
 
-`v6.json`, 923 entries.
+`v6.json`, 925 entries.
 
 | Where | Old | New |
 | --- | --- | --- |
@@ -32,6 +32,8 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 | components | `radio-cards` | `radio-group` |
 | components | `radio-button` | `radio-group-item` |
 | components | `assets/americamovil-extended-color.svg` | `assets/america-movil-extended-color.svg` |
+| components | `assets/gpa-photo.jpg` | `assets/gpa-photo.webp` |
+| components | `assets/netshoes-photo.jpg` | `assets/netshoes-photo.webp` |
 | components | `assets/calvinklein-extended-mono.svg` | `assets/calvin-klein-extended-mono.svg` |
 | components | `assets/calvinklein-extended-reversed.svg` | `assets/calvin-klein-extended-reversed.svg` |
 | components | `assets/cocacola-extended-color.svg` | `assets/coca-cola-extended-color.svg` |

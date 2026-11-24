@@ -12,7 +12,11 @@
   export type EmbedRatio = 'video' | 'square' | 'wide'
 
   export interface EmbedProps {
-    /** URL of the document to embed. Only an absolute https URL is framed; anything else renders the title as plain text. A page of the app's own origin is framed without allow-same-origin, so it cannot lift its sandbox. */
+    /**
+     * URL of the document to embed. Only an absolute https URL is framed; anything else renders
+     * the title as plain text. A page of the app's own origin is framed without allow-same-origin,
+     * so it cannot lift its sandbox.
+     */
     src: string
     /** Accessible name for the embedded document, announced before its content. */
     title: string

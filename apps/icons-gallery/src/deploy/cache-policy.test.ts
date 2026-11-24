@@ -3,8 +3,8 @@ import { createRequire } from 'node:module'
 
 import { describe, expect, it } from 'vitest'
 
-const require = createRequire(`${process.cwd()}/`)
-const azion = require('./azion.config.cjs')
+const require = createRequire(import.meta.url)
+const azion = require('../../azion.config.cjs')
 
 describe('deploy cache policy', () => {
   const app = azion.applications[0]

@@ -1,4 +1,4 @@
-export function defaultWeight(durations) {
+function defaultWeight(durations) {
   const values = Object.values(durations).sort((a, b) => a - b)
   return values.length ? values[Math.floor(values.length / 2)] : 1
 }

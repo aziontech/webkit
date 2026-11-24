@@ -2935,6 +2935,10 @@ export const pageDescription = (subject: string) =>
     commit: [refocus: boolean]
     cancel: []
   }>()
+
+  const STEP_BUTTONS_CLASS =
+    'flex items-center gap-(--spacing-2xs) opacity-0 transition-opacity ' +
+    'duration-fast-02 ease-productive-entrance focus-within:opacity-100 pointer-coarse:opacity-100 motion-reduce:transition-none [[data-reorder-row]:hover_&]:opacity-100'
 </script>
 
 <template>
@@ -3017,7 +3021,7 @@ export const pageDescription = (subject: string) =>
     </Tooltip>
     <span
       data-slot="step-buttons"
-      class="flex items-center gap-(--spacing-2xs) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance focus-within:opacity-100 pointer-coarse:opacity-100 motion-reduce:transition-none [[data-reorder-row]:hover_&]:opacity-100"
+      :class="STEP_BUTTONS_CLASS"
     >
       <Tooltip :content="lockReason || 'Move up'">
         <IconButton

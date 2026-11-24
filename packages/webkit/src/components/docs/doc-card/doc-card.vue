@@ -60,6 +60,10 @@
   const ROOT_CLASS =
     'group relative flex h-full flex-col bg-(--bg-surface) px-(--spacing-xl) py-5 no-underline transition-colors duration-150 ease-out ' +
     'hover:bg-(--bg-hover) focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none'
+
+  const LINK_GLYPH_CLASS =
+    'az absolute end-(--spacing-md) top-(--spacing-md) text-body-xs ' +
+    'text-(--text-muted) transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover:text-(--text-link) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -122,12 +126,12 @@
     <i
       v-else-if="isLink"
       :data-testid="`${testId}__link-glyph`"
-      :class="
+      :class="[
+        LINK_GLYPH_CLASS,
         isExternal
           ? 'az-arrow-up-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5'
           : 'az-chevron-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5'
-      "
-      class="az absolute end-(--spacing-md) top-(--spacing-md) text-body-xs text-(--text-muted) transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover:text-(--text-link) motion-reduce:transition-none"
+      ]"
       aria-hidden="true"
     />
   </component>

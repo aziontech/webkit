@@ -252,7 +252,7 @@ describe('account/account-team-permissions keyboard', () => {
     const create = buttonByText('Create')
     expect(create.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
     expect(create.querySelector('[data-testid="kbd"]')?.classList).toContain(
-      'pointer-coarse:hidden!'
+      'pointer-coarse:in-[button]:hidden'
     )
     await fireEvent.update(name, '')
     expect(pressShortcut('Enter', name).defaultPrevented).toBe(true)
@@ -263,7 +263,9 @@ describe('account/account-team-permissions keyboard', () => {
     const view = render(EditTeam)
     const save = view.getByRole('button', { name: 'Save changes' })
     expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+S Control+S')
-    expect(save.querySelector('[data-testid="kbd"]')?.classList).toContain('pointer-coarse:hidden!')
+    expect(save.querySelector('[data-testid="kbd"]')?.classList).toContain(
+      'pointer-coarse:in-[button]:hidden'
+    )
     pressShortcut('s')
     expect(save.getAttribute('aria-busy')).not.toBe('true')
     const name = view.getByLabelText(/^Name\b/) as HTMLInputElement

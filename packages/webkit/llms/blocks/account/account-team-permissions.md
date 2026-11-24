@@ -559,6 +559,7 @@ Each variant is the same screen in another state: `get_block("account/account-te
                     <DropdownMenu.Item
                       value="delete"
                       label="Delete"
+                      severity="danger"
                     />
                   </DropdownMenu.Group>
                 </TableCellActions>

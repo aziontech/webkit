@@ -1294,11 +1294,11 @@ export const sampleTools: PromptInputMenuOption[] = [
     () => props.models.find((option) => option.value === modelKey.value)?.label ?? ''
   )
 
-  const actions: { value: AiChatHeaderAction; label: string }[] = [
+  const actions: { value: AiChatHeaderAction; label: string; severity?: 'danger' }[] = [
     { value: 'share', label: 'Share' },
     { value: 'rename', label: 'Rename' },
     { value: 'archive', label: 'Archive' },
-    { value: 'remove', label: 'Delete' }
+    { value: 'remove', label: 'Delete', severity: 'danger' }
   ]
 
   function onModel(_event: MouseEvent | KeyboardEvent, value: string | number) {
@@ -1431,6 +1431,7 @@ export const sampleTools: PromptInputMenuOption[] = [
               :key="action.value"
               :value="action.value"
               :label="action.label"
+              :severity="action.severity"
             />
           </DropdownMenuGroup>
         </DropdownMenu>
@@ -1470,6 +1471,7 @@ export const sampleTools: PromptInputMenuOption[] = [
               :key="action.value"
               :value="action.value"
               :label="action.label"
+              :severity="action.severity"
             />
           </DropdownMenuGroup>
         </DropdownMenu>

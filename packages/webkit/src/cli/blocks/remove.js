@@ -5,7 +5,7 @@ import { appSourceFiles, specifiersIn } from '../css-sources.js'
 import { PACKAGE_NAME } from '../source.js'
 import { findInManifest, MANIFEST, read, readManifest, toPosix, writeManifest } from './manifest.js'
 
-export function insideProject(projectDir, path) {
+function insideProject(projectDir, path) {
   const rel = relative(resolve(projectDir), resolve(projectDir, path))
   return rel !== '' && !rel.startsWith('..') && !isAbsolute(rel)
 }

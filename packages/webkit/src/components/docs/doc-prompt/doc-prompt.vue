@@ -2,6 +2,7 @@
   import {
     computed,
     createTextVNode,
+    isVNode,
     nextTick,
     onBeforeUnmount,
     onMounted,
@@ -64,7 +65,10 @@
   }
 
   const promptNodes = (): VNode[] => {
-    const nodes = [...(slots['default']?.() ?? [createTextVNode(props.label)])] as VNode[]
+    const rendered: unknown = slots['default']?.()
+    const nodes = Array.isArray(rendered)
+      ? rendered.filter(isVNode)
+      : [createTextVNode(props.label)]
     trimEdge(nodes, 0, (value) => value.trimStart())
     trimEdge(nodes, nodes.length - 1, (value) => value.trimEnd())
     return nodes

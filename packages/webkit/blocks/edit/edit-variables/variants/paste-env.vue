@@ -44,7 +44,6 @@
       pasteText.value = sampleEnv
       pasteStatus.value = ''
       form.reset([form.createEntry('CACHE_TTL', '120')])
-      submitting.value = false
     },
     { immediate: true }
   )
@@ -57,7 +56,7 @@
     submitting.value = false
     drawerOpen.value = false
     toast.success(
-      created.length === 1 ? `${created[0].key} created.` : `${created.length} variables created.`
+      `${created.length === 1 ? created[0].key : plural(created.length, 'variable', 'variables')} created.`
     )
   }
 </script>
@@ -115,10 +114,8 @@
                 <p
                   class="sr-only"
                   role="status"
-                  aria-live="polite"
-                >
-                  {{ pasteStatus }}
-                </p>
+                  v-text="pasteStatus"
+                />
               </template>
             </VariablesEntries>
             <VariablesScopeGroup />

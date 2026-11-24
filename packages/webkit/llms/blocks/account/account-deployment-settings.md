@@ -1082,7 +1082,6 @@ export const savedDefaultsDescription = (
           <Kbd
             meta
             size="small"
-            class="pointer-coarse:hidden!"
             aria-hidden="true"
             >S</Kbd
           >
@@ -1876,6 +1875,7 @@ export const savedDefaultsDescription = (
                   <DropdownMenu.Item
                     value="delete"
                     label="Delete"
+                    severity="danger"
                   />
                 </DropdownMenu.Group>
               </TableCellActions>

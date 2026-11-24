@@ -1,4 +1,4 @@
-export const ACRONYMS: Record<string, string> = {
+const ACRONYMS: Record<string, string> = {
   ai: 'AI',
   api: 'API',
   cdn: 'CDN',
@@ -20,7 +20,7 @@ export const ACRONYMS: Record<string, string> = {
   waf: 'WAF'
 }
 
-export function words(value: string): string[] {
+function words(value: string): string[] {
   return value
     .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
     .split(/[\s-]+/)

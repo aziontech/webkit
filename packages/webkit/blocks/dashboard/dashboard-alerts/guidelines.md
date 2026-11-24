@@ -73,7 +73,7 @@ Holds the Open by severity rows while the period loads, so the column keeps its 
 The level, on the severity ramp, in Open by severity, Highest risk and as the lead column of Open
 alerts. The word is always visible; color never carries severity alone.
 
-### J. Empty regions — `EmptyState` (required)
+### J. Empty regions — `EmptyState`, `Button` (required)
 
 When the whole period is empty, the tiles print `0` (zero is the truth, never a dash) and one
 bordered page-level `EmptyState` replaces the cards: `No alerts in the last 30 days`, what fills the

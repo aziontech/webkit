@@ -413,7 +413,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   value="logout"
-                  label="Log Out"
+                  label="Log out"
                 >
                   <template #trailing
                     ><i

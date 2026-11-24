@@ -157,6 +157,10 @@
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
     '[&:not([data-state=active])]:hover:bg-(--bg-hover) ' +
     'hover:text-(--text-default) disabled:cursor-not-allowed disabled:text-(--text-disabled)!'
+
+  const INDICATOR_CLASS =
+    'pointer-events-none absolute top-0 z-0 rounded-(--shape-button) ' +
+    'bg-(--bg-selected) group-data-[disabled]:bg-(--bg-surface) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none'
 </script>
 
 <template>
@@ -176,7 +180,7 @@
       aria-hidden="true"
       :data-testid="`${testId}__indicator`"
       :style="indicator ?? undefined"
-      class="pointer-events-none absolute top-0 z-0 rounded-(--shape-button) bg-(--bg-selected) group-data-[disabled]:bg-(--bg-surface) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      :class="INDICATOR_CLASS"
     />
     <Tooltip
       v-for="(mode, index) in MODES"

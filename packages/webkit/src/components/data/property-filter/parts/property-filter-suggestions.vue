@@ -73,7 +73,8 @@
   }
 
   const SUGGESTIONS_CLASS =
-    'fixed z-(--z-control-overlay) flex w-[min(var(--property-filter-suggestions-width,100%),var(--container-md))] max-h-80 flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) ' +
+    'fixed z-(--z-control-overlay) flex w-[min(var(--property-filter-suggestions-width,100%),var(--container-md))] max-h-80 ' +
+    'flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) ' +
     'bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)'
 
   const OPTION_CLASS =

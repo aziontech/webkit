@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-payment-method-card/account-payment-method-card.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-payment-method-card")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), [Input](../../components/input.md), [PaymentBrand](../../components/payment-brand.md), [Select](../../components/select.md)
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), [Input](../../components/input.md), [PaymentBrand](../../components/payment-brand.md), [Select](../../components/select.md), `use-escape-to-cancel`
 - Skills: `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -157,6 +157,7 @@ Each variant is the same screen in another state: `get_block("account/account-pa
   import Input from '@aziontech/webkit/input'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { computed, nextTick, reactive, watch } from 'vue'
 
   import { sampleCard } from './sample'
@@ -280,11 +281,7 @@ Each variant is the same screen in another state: `get_block("account/account-pa
     editingCard.value = false
   }
 
-  const onFormKeydown = (event: KeyboardEvent) => {
-    if (event.key !== 'Escape' || event.defaultPrevented || locked.value) return
-    event.preventDefault()
-    cancelEditingCard()
-  }
+  useEscapeToCancel(cancelEditingCard, { enabled: () => editingCard.value && !locked.value })
 
   watch(editingCard, (editing, wasEditing) => {
     if (!editing && wasEditing) focusById('card-change')
@@ -338,7 +335,6 @@ Each variant is the same screen in another state: `get_block("account/account-pa
           aria-label="Change payment method"
           novalidate
           @submit.prevent="updateCard"
-          @keydown="onFormKeydown"
         >
           <Alert
             v-if="error"

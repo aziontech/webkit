@@ -227,30 +227,34 @@
               variant="stacked"
             >
               <div class="flex w-full min-w-0 flex-col gap-(--spacing-md)">
-                <RadioGroup
-                  v-model="form.mark"
-                  variant="card"
-                  orientation="horizontal"
-                  :options="MARKS"
-                  :disabled="submitting"
-                  aria-label="Organization mark"
-                  class="grid! w-full grid-cols-3 sm:grid-cols-6"
-                  data-testid="create-organization__marks"
+                <div
+                  class="w-full [&>[role=radiogroup]]:grid! [&>[role=radiogroup]]:grid-cols-3 sm:[&>[role=radiogroup]]:grid-cols-6"
                 >
-                  <template #option="{ option }">
-                    <span class="flex flex-col items-center gap-(--spacing-xs)">
-                      <Avatar
-                        :label="previewName"
-                        :alt="option.label"
-                        :colors="option.colors"
-                        pattern="marble"
-                        size="medium"
-                        variant="square"
-                      />
-                      <span class="text-body-xs text-(--text-muted)">{{ option.label }}</span>
-                    </span>
-                  </template>
-                </RadioGroup>
+                  <RadioGroup
+                    v-model="form.mark"
+                    variant="card"
+                    orientation="horizontal"
+                    :options="MARKS"
+                    :disabled="submitting"
+                    aria-label="Organization mark"
+                    class="w-full"
+                    data-testid="create-organization__marks"
+                  >
+                    <template #option="{ option }">
+                      <span class="flex flex-col items-center gap-(--spacing-xs)">
+                        <Avatar
+                          :label="previewName"
+                          :alt="option.label"
+                          :colors="option.colors"
+                          pattern="marble"
+                          size="medium"
+                          variant="square"
+                        />
+                        <span class="text-body-xs text-(--text-muted)">{{ option.label }}</span>
+                      </span>
+                    </template>
+                  </RadioGroup>
+                </div>
                 <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
                   <p class="m-0 text-label-sm text-(--text-muted)">In the header</p>
                   <span

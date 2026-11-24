@@ -43,24 +43,14 @@ const setTo =
     target.value = value
   }
 
-export function useAutoplayProgress(
-  options: UseAutoplayProgressOptions
-): UseAutoplayProgressReturn {
-  const reducedMotion = usePreferredReducedMotion()
-  const { t } = useTranslate({ common: en.common })
-
-  const paused = ref(false)
-  const pointerInside = ref(false)
-  const focusInside = ref(false)
+function observeVisibility(target: () => globalThis.Element | null | undefined): {
+  visible: Ref<boolean>
+  disconnect: () => void
+} {
   const visible = ref(true)
-  const cycle = ref(0)
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-  let startedAt = 0
-  let spent = 0
-
   let observer: globalThis.IntersectionObserver | undefined
   watch(
-    () => toValue(options.target),
+    target,
     (element) => {
       observer?.disconnect()
       if (!element) return
@@ -71,6 +61,55 @@ export function useAutoplayProgress(
     },
     { immediate: true }
   )
+  return { visible, disconnect: () => observer?.disconnect() }
+}
+
+function createSlideTimer(
+  interval: () => number,
+  onFire: () => void
+): { start: () => void; stop: () => void; reset: () => void } {
+  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
+  let startedAt = 0
+  let spent = 0
+  const stop = (): void => {
+    if (timer === null) return
+    globalThis.clearTimeout(timer)
+    timer = null
+    spent += Date.now() - startedAt
+  }
+  const start = (): void => {
+    if (timer !== null) return
+    startedAt = Date.now()
+    timer = globalThis.setTimeout(
+      () => {
+        timer = null
+        spent = 0
+        onFire()
+      },
+      Math.max(0, interval() - spent)
+    )
+  }
+  const reset = (): void => {
+    const running = timer !== null
+    stop()
+    spent = 0
+    if (running) start()
+  }
+  return { start, stop, reset }
+}
+
+export function useAutoplayProgress(
+  options: UseAutoplayProgressOptions
+): UseAutoplayProgressReturn {
+  const reducedMotion = usePreferredReducedMotion()
+  const { t } = useTranslate({ common: en.common })
+
+  const paused = ref(false)
+  const pointerInside = ref(false)
+  const focusInside = ref(false)
+  const cycle = ref(0)
+
+  const { visible, disconnect } = observeVisibility(() => toValue(options.target))
 
   const autoplayEnabled = computed(
     () => toValue(options.enabled) && reducedMotion.value !== 'reduce'
@@ -86,42 +125,24 @@ export function useAutoplayProgress(
     paused.value ? t('common.resumeRotation') : t('common.pauseRotation')
   )
 
-  function stop(): void {
-    if (timer === null) return
-    globalThis.clearTimeout(timer)
-    timer = null
-    spent += Date.now() - startedAt
-  }
-
-  function advance(): void {
-    timer = null
-    spent = 0
-    cycle.value += 1
-    options.onAdvance()
-    if (playing.value) start()
-  }
-
-  function start(): void {
-    if (timer !== null) return
-    startedAt = Date.now()
-    timer = globalThis.setTimeout(advance, Math.max(0, toValue(options.interval) - spent))
-  }
+  const { start, stop, reset } = createSlideTimer(
+    () => toValue(options.interval),
+    () => {
+      cycle.value += 1
+      options.onAdvance()
+      if (playing.value) start()
+    }
+  )
 
   function restartProgress(): void {
-    const running = timer !== null
-    stop()
-    spent = 0
     cycle.value += 1
-    if (running) start()
+    reset()
   }
 
-  function togglePause(): void {
-    paused.value = !paused.value
-  }
+  const togglePause = (): void => void (paused.value = !paused.value)
 
-  function enterFocus(event: globalThis.FocusEvent): void {
-    const target = event.target as globalThis.Element
-    focusInside.value = target.matches(':focus-visible')
+  const enterFocus = (event: globalThis.FocusEvent): void => {
+    focusInside.value = (event.target as globalThis.Element).matches(':focus-visible')
   }
 
   watch(playing, (on) => (on ? start() : stop()))
@@ -132,7 +153,7 @@ export function useAutoplayProgress(
 
   onScopeDispose(() => {
     stop()
-    observer?.disconnect()
+    disconnect()
   })
 
   return {

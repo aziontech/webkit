@@ -46,7 +46,7 @@ the reader.
 The overall score's `Hint` states the bands:
 `Average of every sample in the period, out of 100. Good is 80 or more, fair 50 to 79, poor under 50.`
 
-### E. Overall figure (required)
+### E. Overall figure — `Skeleton` (required)
 
 The overall score is the card's own figure, unboxed: the number in `text-heading-lg` with a muted
 `/ 100`, no second label (the card title already says `Overall score`) and no delta, with the top

@@ -1200,6 +1200,7 @@ export const destinationOptionsOf = (paths: string[]) => [
       <DropdownMenuItem
         value="delete"
         label="Delete"
+        severity="danger"
       >
         <template #leading
           ><i

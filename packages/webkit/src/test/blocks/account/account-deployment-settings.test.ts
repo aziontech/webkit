@@ -240,7 +240,9 @@ describe('account/account-deployment-settings save shortcut', () => {
     const view = render(BuildDeployment, { props: { defaultDraft: { bindingPolicy: 'FLEXIBLE' } } })
     const save = buttonByText('Save', view.container as HTMLElement)!
     expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+S Control+S')
-    expect(save.querySelector('[data-testid="kbd"]')?.classList).toContain('pointer-coarse:hidden!')
+    expect(save.querySelector('[data-testid="kbd"]')?.classList).toContain(
+      'pointer-coarse:in-[button]:hidden'
+    )
     const event = pressShortcut('s')
     expect(event.defaultPrevented).toBe(true)
     const [payload, values] = view.emitted<unknown[]>('save')?.[0] ?? []

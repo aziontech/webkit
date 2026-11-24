@@ -1199,6 +1199,7 @@ export const SIDEBAR_FRAME_CLASS =
                 <DropdownMenu.Item
                   value="delete"
                   label="Delete query"
+                  severity="danger"
                 >
                   <template #leading
                     ><i
@@ -1946,6 +1947,7 @@ export const SIDEBAR_FRAME_CLASS =
                 <DropdownMenu.Item
                   value="delete"
                   label="Delete table"
+                  severity="danger"
                 >
                   <template #leading
                     ><i

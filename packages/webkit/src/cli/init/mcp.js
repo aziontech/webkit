@@ -13,7 +13,7 @@ const MCP_SERVER_ENTRY = {
   args: ['-y', MCP_PACKAGE]
 }
 export const LEGACY_MCP_SERVER_ARGS = ['-y', '-p', '@aziontech/webkit', 'webkit-mcp']
-export const UNPINNED_MCP_SERVER_ARGS = ['-y', '@aziontech/webkit-mcp']
+const UNPINNED_MCP_SERVER_ARGS = ['-y', '@aziontech/webkit-mcp']
 
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b)
 

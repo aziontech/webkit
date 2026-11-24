@@ -280,6 +280,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-doma
                 <DropdownMenuItem
                   value="delete"
                   label="Delete"
+                  severity="danger"
                 >
                   <template #leading
                     ><i
