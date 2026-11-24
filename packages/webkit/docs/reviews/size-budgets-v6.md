@@ -1838,3 +1838,4 @@ Budget-raise: filter-menu 37.6 KB → 37.7 KB (measured 37.62 KB): Avatar presen
 Budget-raise: console-layout 85.95 KB → 86.45 KB (measured 86.38 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
 Budget-raise: llms-full.txt 2,415,000 → 2,600,000 bytes (measured 2,526,886): seven new components and five new blocks, all preview (SUP-01).
 Budget-raise: package tarball packed 8,640,000 → 9,100,000 bytes (measured 8,907,697), unpacked 34,650,000 → 36,000,000 (measured 35,330,850): the same components, blocks, four editor icons and their generated docs (SUP-01).
+Budget-raise: css-icons 15.25 KB → 15.35 KB (measured 15.28 KB): the four MarkdownEditor toolbar glyphs (az-bold, az-italic, az-list-ordered, az-quote) in the icon font CSS (SUP-ME-5).
