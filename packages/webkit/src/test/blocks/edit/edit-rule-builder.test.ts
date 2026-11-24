@@ -33,7 +33,7 @@ const openRuleDrawer = async (label: string) => {
 describe('edit-rule-builder behaviors', () => {
   it('waits on Add behavior while the last behavior ends the rule', async () => {
     render(EditRuleBuilder)
-    const panel = await openRuleDrawer('Add Rule')
+    const panel = await openRuleDrawer('Add rule')
     const behaviors = panel.querySelector('[aria-label="Behaviors"]') as HTMLElement
     expect(behaviors).not.toBeNull()
     expect(buttonIn(panel, 'Add behavior').disabled).toBe(true)
@@ -43,7 +43,7 @@ describe('edit-rule-builder behaviors', () => {
 
   it('reorders behaviors through the AttributeEditor controls', async () => {
     render(RuleBuilderComposed)
-    const panel = await openRuleDrawer('Edit Rule')
+    const panel = await openRuleDrawer('Edit rule')
     const behaviors = panel
       .querySelector('[aria-label="Behaviors"]')
       ?.closest('[data-mode]') as HTMLElement
@@ -58,11 +58,25 @@ describe('edit-rule-builder behaviors', () => {
     await waitFor(() => expect(rows()[0].textContent).toContain('Set Cache Policy'))
   })
 
+  it('shows the empty-name error as a Field.Error, the same look as the criteria errors', async () => {
+    render(EditRuleBuilder)
+    const panel = await openRuleDrawer('Add rule')
+    await fireEvent.click(buttonIn(panel, 'Save'))
+    await waitFor(() => {
+      const nameField = (panel.querySelector('#rule-name') as HTMLElement).closest(
+        '[data-slot="field"], [data-testid="field"]'
+      ) as HTMLElement
+      const error = nameField.querySelector('[data-slot="field-error"]')
+      expect(error?.textContent).toContain('Name is required.')
+      expect(error?.querySelector('.az-circle-alert')).not.toBeNull()
+    }, wait)
+  })
+
   it('keeps the drawer open with a danger alert when the save fails', async () => {
     render(EditRuleBuilder, {
       props: { rule: sampleRule, error: 'Rule not saved. You are offline.' }
     })
-    const panel = await openRuleDrawer('Edit Rule')
+    const panel = await openRuleDrawer('Edit rule')
     await fireEvent.click(buttonIn(panel, 'Save'))
     await waitFor(
       () =>
@@ -90,7 +104,7 @@ describe('edit-rule-builder data contract', () => {
     await waitFor(() => expect(dialog()).not.toBeNull())
     const panel = dialog() as HTMLElement
     expect((panel.querySelector('#rule-name') as HTMLInputElement).value).toBe('Block admin')
-    expect(panel.textContent).toContain('Edit Rule')
+    expect(panel.textContent).toContain('Edit rule')
   })
 
   it('states the locked phase as text, not as a disabled choice', async () => {
@@ -112,7 +126,7 @@ describe('edit-rule-builder data contract', () => {
         }
       }
     })
-    const panel = await openRuleDrawer('Edit Rule')
+    const panel = await openRuleDrawer('Edit rule')
     await fireEvent.click(buttonIn(panel, 'Save'))
     await waitFor(() => expect(emitted().submit).toHaveLength(1))
     const [[event, values]] = emitted().submit as [[Event, RuleBuilderRule]]

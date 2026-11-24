@@ -66,7 +66,7 @@
     <DrawerTrigger>
       <div class="w-full md:w-fit">
         <Button
-          label="Create Variable"
+          label="Create variable"
           icon="az az-plus"
           variant="primary"
           size="large"
@@ -75,7 +75,7 @@
       </div>
     </DrawerTrigger>
     <VariablesDrawerForm
-      title="Create Variable"
+      title="Create variable"
       description="Create one or more variables and define where they are available."
       shortcut-label="Save variable"
       :active="drawerOpen"

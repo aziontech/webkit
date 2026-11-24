@@ -116,7 +116,7 @@
             >
             <Button
               type="button"
-              label="Add Domain"
+              label="Add domain"
               variant="outline"
               size="medium"
               icon="az az-plus"

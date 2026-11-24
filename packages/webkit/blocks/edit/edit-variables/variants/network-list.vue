@@ -43,7 +43,7 @@
     <DrawerTrigger>
       <div class="w-full md:w-fit">
         <Button
-          label="Create Network List"
+          label="Create network list"
           icon="az az-plus"
           variant="primary"
           size="large"
@@ -52,7 +52,7 @@
       </div>
     </DrawerTrigger>
     <VariablesDrawerForm
-      title="Create Network List"
+      title="Create network list"
       description="A list of addresses, ASNs or countries that firewall rules allow or refuse."
       shortcut-label="Save network list"
       :active="drawerOpen"

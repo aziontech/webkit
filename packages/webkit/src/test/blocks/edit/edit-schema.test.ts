@@ -20,7 +20,7 @@ const submitButton = (label: string) =>
 
 const columnNames = () =>
   Array.from(drawer().querySelectorAll<HTMLInputElement>('input[placeholder="column_name"]'))
-describe('edit/edit-schema Create Table', () => {
+describe('edit/edit-schema Create table', () => {
   it('reads a CSV into columns with guessed types and previews the rows', async () => {
     render(ImportCsv)
     await waitFor(() => expect(drawer()).not.toBeNull())
@@ -64,7 +64,7 @@ describe('edit/edit-schema Create Table', () => {
     )!
     await fireEvent.click(add)
     const create = Array.from(drawer().querySelectorAll('button')).find(
-      (button) => button.textContent?.trim() === 'Create Table'
+      (button) => button.textContent?.trim() === 'Create table'
     )!
     await fireEvent.click(create)
     await waitFor(() =>
@@ -106,7 +106,7 @@ describe('edit/edit-schema data contract', () => {
     await waitFor(() => expect(drawer()).not.toBeNull())
     const name = drawer().querySelector<HTMLInputElement>('input[placeholder="users"]')!
     await fireEvent.update(name, 'events')
-    await fireEvent.click(submitButton('Create Table'))
+    await fireEvent.click(submitButton('Create table'))
     const [[event, table]] = emitted('create-table') as [
       [Event, { name: string; columns: { name: string }[] }]
     ]
@@ -118,7 +118,7 @@ describe('edit/edit-schema data contract', () => {
     await waitFor(() => expect(document.body.textContent).toContain('Table events created.'))
   })
 
-  it('shows a refused Create Table on the Name field and keeps the drawer', async () => {
+  it('shows a refused Create table on the Name field and keeps the drawer', async () => {
     render(EditSchema, {
       props: { defaultDraft: { name: 'invoices' }, error: 'A table named invoices already exists.' }
     })

@@ -6,7 +6,7 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 
 - A resource runs an ordered list of rules, each made of conditions and actions (request and response rules, firewall rules, routing).
 - Conditions combine with And inside a group and Or across groups, and the order of behaviors matters.
-- The rule is edited from a list inside the resource, so the drawer opens as `Add Rule` or `Edit Rule` and keeps the list in view behind it.
+- The rule is edited from a list inside the resource, so the drawer opens as `Add rule` or `Edit rule` and keeps the list in view behind it.
 
 ## When not to use
 
@@ -19,7 +19,7 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 
 ### A. Drawer and trigger — `Drawer`, `DrawerTrigger`, `Button`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 
-A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add Rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelBody` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
+A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelBody` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
 
 ### B. General — `SettingsGroup`, `Field`, `Input` (required)
 
@@ -51,7 +51,7 @@ The block takes the rule it edits through props and emits the values on Save; it
 
 | Prop          | Type                      | What it does                                                                                                |
 | ------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `rule`        | `RuleBuilderRule \| null` | The rule to edit: the drawer becomes Edit Rule with the phase locked. Left out, the drawer adds a new rule. |
+| `rule`        | `RuleBuilderRule \| null` | The rule to edit: the drawer becomes Edit rule with the phase locked. Left out, the drawer adds a new rule. |
 | `loading`     | `boolean`                 | The save is in flight: the form locks and Save spins. When it turns off with no `error`, the drawer closes. |
 | `error`       | `string`                  | Why the save failed, in the danger `Alert` at the top of the drawer; the form is kept so Save retries.      |
 | `defaultOpen` | `boolean`                 | The drawer starts open.                                                                                     |
@@ -103,7 +103,7 @@ With no `loading` set during the `submit` handler the block treats the save as d
 
 ## Copy
 
-- **Drawer title and trigger:** `Add Rule` for a new rule, `Edit Rule` for an existing one.
+- **Drawer title and trigger:** `Add rule` for a new rule, `Edit rule` for an existing one.
 - **Section hints:** one sentence saying what the section decides, e.g. "The conditions that decide whether the rule runs."
 - **Logic labels:** single words, e.g. "and", "or", "Then".
 - **Add buttons:** verb first, e.g. "Add condition", "Add OR group", "Add behavior".
@@ -121,9 +121,9 @@ With no `loading` set during the `submit` handler the block treats the save as d
 
 ## States
 
-- Default: `rule` left out; Add Rule with an empty Name, the Request phase, one empty condition and one empty behavior, Active on.
-- Composed: `rule` set to the sample; Edit Rule for the seeded Docs rewrite rule, the phase locked with its note, one URI condition and two behaviors.
-- In a list: `view/view-rule-list#EditRule` drives this drawer without its trigger (`v-model:open` from a rule's name and from Add Rule) and writes the saved rule back to its row.
+- Default: `rule` left out; Add rule with an empty Name, the Request phase, one empty condition and one empty behavior, Active on.
+- Composed: `rule` set to the sample; Edit rule for the seeded Docs rewrite rule, the phase locked with its note, one URI condition and two behaviors.
+- In a list: `view/view-rule-list#EditRule` drives this drawer without its trigger (`v-model:open` from a rule's name and from Add rule) and writes the saved rule back to its row.
 
 ## Related
 
