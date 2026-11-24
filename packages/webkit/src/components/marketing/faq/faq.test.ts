@@ -110,6 +110,23 @@ describe('Faq', () => {
     expect(queryByText(items[0].answer)).toBeNull()
   })
 
+  it('keeps a block-level answer inside the padded answer column', async () => {
+    const { getByRole, getByTestId } = render(Faq, {
+      props: { title: TITLE, items },
+      slots: {
+        answer: () => [h('p', 'Two steps:'), h('ul', [h('li', 'Build'), h('li', 'Deploy')])]
+      }
+    })
+
+    await userEvent.click(getByRole('button', { name: items[0].question }))
+
+    const list = await waitFor(() => getByRole('list'))
+    const answer = getByTestId('faq__answer')
+    expect(answer.tagName).toBe('DIV')
+    expect(answer.contains(list)).toBe(true)
+    expect(answer.querySelector('p')?.textContent).toBe('Two steps:')
+  })
+
   it('renders no question and no frame when items is empty', () => {
     const { getByTestId, queryAllByRole, queryByTestId } = render(Faq, {
       props: { title: TITLE, items: [] }
