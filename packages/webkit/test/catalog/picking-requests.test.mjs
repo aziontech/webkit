@@ -31,8 +31,12 @@ test('every request is well formed', () => {
 
 for (const r of requests) {
   const accepted = r.accept ?? [r.top1]
-  test(`${r.tool} "${r.query}" picks ${r.top1} first`, { skip: r.pending ?? false }, () => {
+  test(`${r.tool} "${r.query}" picks ${r.top1} first`, () => {
     const got = first(r.tool, r.query)
+    if (r.pending) {
+      assert.ok(!accepted.includes(got), `passes now: drop its pending field (${r.pending})`)
+      return
+    }
     assert.ok(accepted.includes(got), `got ${got ?? '(none)'}, want ${accepted.join(' or ')}`)
   })
 }
