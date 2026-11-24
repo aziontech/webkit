@@ -729,6 +729,31 @@ export const sidebarMenu = {
   expandNamed: 'Expand {label}'
 } as const
 
+export const messageThread = {
+  label: 'Conversation',
+  loading: 'Loading conversation',
+  loaded: 'Conversation loaded',
+  customer: 'Customer',
+  agent: 'Agent',
+  via: 'via {channel}',
+  email: 'Email',
+  chat: 'Chat',
+  phone: 'Phone',
+  web: 'Web form',
+  api: 'API',
+  internalNote: 'Internal note',
+  to: 'To: {addresses}',
+  cc: 'Cc: {addresses}',
+  showQuoted: 'Show quoted text',
+  hideQuoted: 'Hide quoted text',
+  showEarlier: {
+    one: 'Show {count} earlier message',
+    other: 'Show {count} earlier messages'
+  },
+  showEarlierAll: 'Show earlier messages',
+  earlier: 'Earlier messages'
+} as const
+
 export const multiSelect = {
   noMatch: 'No matches',
   loading: 'Loading options',
@@ -1689,6 +1714,7 @@ export const en = {
   logViewer,
   mapChart,
   sidebarMenu,
+  messageThread,
   multiSelect,
   navigationMenu,
   numberInput,

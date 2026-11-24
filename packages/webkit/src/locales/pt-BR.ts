@@ -898,6 +898,30 @@ export const ptBR: Messages = {
     expand: 'Expandir',
     expandNamed: 'Expandir {label}'
   },
+  messageThread: {
+    label: 'Conversa',
+    loading: 'Carregando conversa',
+    loaded: 'Conversa carregada',
+    customer: 'Cliente',
+    agent: 'Agente',
+    via: 'via {channel}',
+    email: 'E-mail',
+    chat: 'Chat',
+    phone: 'Telefone',
+    web: 'Formulário web',
+    api: 'API',
+    internalNote: 'Nota interna',
+    to: 'Para: {addresses}',
+    cc: 'Cc: {addresses}',
+    showQuoted: 'Mostrar texto citado',
+    hideQuoted: 'Ocultar texto citado',
+    showEarlier: {
+      one: 'Mostrar {count} mensagem anterior',
+      other: 'Mostrar {count} mensagens anteriores'
+    },
+    showEarlierAll: 'Mostrar mensagens anteriores',
+    earlier: 'Mensagens anteriores'
+  },
   multiSelect: {
     noMatch: 'Nenhum resultado',
     loading: 'Carregando opções',

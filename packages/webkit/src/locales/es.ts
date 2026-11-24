@@ -898,6 +898,30 @@ export const es: Messages = {
     expand: 'Expandir',
     expandNamed: 'Expandir {label}'
   },
+  messageThread: {
+    label: 'Conversación',
+    loading: 'Cargando conversación',
+    loaded: 'Conversación cargada',
+    customer: 'Cliente',
+    agent: 'Agente',
+    via: 'por {channel}',
+    email: 'Correo electrónico',
+    chat: 'Chat',
+    phone: 'Teléfono',
+    web: 'Formulario web',
+    api: 'API',
+    internalNote: 'Nota interna',
+    to: 'Para: {addresses}',
+    cc: 'Cc: {addresses}',
+    showQuoted: 'Mostrar texto citado',
+    hideQuoted: 'Ocultar texto citado',
+    showEarlier: {
+      one: 'Mostrar {count} mensaje anterior',
+      other: 'Mostrar {count} mensajes anteriores'
+    },
+    showEarlierAll: 'Mostrar mensajes anteriores',
+    earlier: 'Mensajes anteriores'
+  },
   multiSelect: {
     noMatch: 'Sin resultados',
     loading: 'Cargando opciones',

@@ -687,6 +687,22 @@
       "types": "./types/components/content/key-value-list/key-value-list-group/key-value-list-group.vue.d.ts",
       "default": "./src/components/content/key-value-list/key-value-list-group/key-value-list-group.vue"
     },
+    "./message-thread": {
+      "types": "./types/components/content/message-thread/index.d.ts",
+      "default": "./src/components/content/message-thread/index.ts"
+    },
+    "./message-thread-root": {
+      "types": "./types/components/content/message-thread/message-thread.vue.d.ts",
+      "default": "./src/components/content/message-thread/message-thread.vue"
+    },
+    "./message-thread-item": {
+      "types": "./types/components/content/message-thread/message-thread-item/message-thread-item.vue.d.ts",
+      "default": "./src/components/content/message-thread/message-thread-item/message-thread-item.vue"
+    },
+    "./message-thread-group": {
+      "types": "./types/components/content/message-thread/message-thread-group/message-thread-group.vue.d.ts",
+      "default": "./src/components/content/message-thread/message-thread-group/message-thread-group.vue"
+    },
     "./network-map": {
       "types": "./types/components/content/network-map/network-map.vue.d.ts",
       "default": "./src/components/content/network-map/network-map.vue"
@@ -3078,6 +3094,18 @@
       ],
       "key-value-list-group": [
         "./types/components/content/key-value-list/key-value-list-group/key-value-list-group.vue.d.ts"
+      ],
+      "message-thread": [
+        "./types/components/content/message-thread/index.d.ts"
+      ],
+      "message-thread-root": [
+        "./types/components/content/message-thread/message-thread.vue.d.ts"
+      ],
+      "message-thread-item": [
+        "./types/components/content/message-thread/message-thread-item/message-thread-item.vue.d.ts"
+      ],
+      "message-thread-group": [
+        "./types/components/content/message-thread/message-thread-group/message-thread-group.vue.d.ts"
       ],
       "network-map": [
         "./types/components/content/network-map/network-map.vue.d.ts"
