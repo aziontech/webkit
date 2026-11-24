@@ -45,7 +45,7 @@ const composedBands = `
       <a href="https://github.com/aziontech" aria-label="Azion on GitHub"><svg viewBox="0 0 10 10"><rect width="10" height="10" /></svg></a>
     </template>
     <template #status>
-      <a href="https://status.azion.com/">All Systems Operational</a>
+      <a href="https://status.azion.com/">All systems operational</a>
     </template>
     <template #language>
       <button type="button">EN</button>
@@ -131,7 +131,7 @@ describe('Footer', () => {
       expect(getByTestId('footer__brand').querySelector('a[aria-label="Azion home"]')).toBeTruthy()
       expect(start.contains(getByTestId('footer__brand'))).toBe(true)
       expect(start.querySelector('a[aria-label="Azion on GitHub"]')).toBeTruthy()
-      expect(end.contains(getByText('All Systems Operational'))).toBe(true)
+      expect(end.contains(getByText('All systems operational'))).toBe(true)
       expect(end.contains(getByText('EN'))).toBe(true)
     })
 
@@ -146,7 +146,7 @@ describe('Footer', () => {
     it('reads the status before the language, so the language closes the bar', () => {
       const { getByTestId, getByText } = renderComposed()
       const end = getByTestId('footer__status')
-      const status = getByText('All Systems Operational')
+      const status = getByText('All systems operational')
       const language = getByText('EN')
       expect(end.contains(status) && end.contains(language)).toBe(true)
       expect(status.compareDocumentPosition(language) & Node.DOCUMENT_POSITION_FOLLOWING).toBe(
@@ -191,7 +191,7 @@ describe('Footer', () => {
         template: `
           <Footer>
             <template v-if="shown" #brand><a href="/" aria-label="Azion home">Azion</a></template>
-            <template v-if="shown" #status><span>All Systems Operational</span></template>
+            <template v-if="shown" #status><span>All systems operational</span></template>
           </Footer>
         `
       })
@@ -381,7 +381,14 @@ describe('Footer', () => {
       expect(getAllByTestId('footer-column')).toHaveLength(4)
       expect(getByTestId('footer__brand')).toBeTruthy()
       expect(getByTestId('footer__social')).toBeTruthy()
-      expect(getByTestId('footer__status')).toBeTruthy()
+      expect(getByTestId('footer__status').textContent).toContain('All systems operational')
+    })
+
+    it('Default story lists current product names', () => {
+      const { getByTestId } = render(DefaultFooter)
+      const text = getByTestId('footer').textContent ?? ''
+      expect(text).toContain('Object Storage')
+      expect(text).not.toMatch(/Edge (Application|Firewall|Storage)/)
     })
 
     it('Default story has no a11y violations', async () => {
