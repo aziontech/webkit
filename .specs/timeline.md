@@ -2,11 +2,11 @@
 name: timeline
 category: content
 structure: composition
-status: approved
+status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: d24027083a04d8634f266868aae6e4e5a1dbdad495160a837678047c0e732cbe
+checksum: 20b98af9811e0b4049afd1f16871d85836a94a35d1a77567cb1de14e7bfb33d3
 created: 2026-11-23
 last_updated: 2026-11-23
 ---
@@ -170,9 +170,9 @@ The same change rewrites the `timeline` entry of `packages/webkit/src/cli/migrat
 
 ## Events
 
-| Event  | Payload | Notes                                                                                   |
-| ------ | ------- | --------------------------------------------------------------------------------------- |
-| _none_ | —       | Read-only display; a `Timestamp` and any content in the slots emit their own events. |
+| _none_ | — | — |
+
+Read-only display; a `Timestamp` and any content in the slots emit their own events.
 
 ## Slots
 

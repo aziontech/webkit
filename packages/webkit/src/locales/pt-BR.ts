@@ -1240,6 +1240,10 @@ export const ptBR: Messages = {
     dark: 'Escuro',
     light: 'Claro'
   },
+  timeline: {
+    label: 'Atividade',
+    loading: 'Carregando atividade'
+  },
   timestamp: {
     title: 'Detalhes do horário',
     utc: 'UTC',

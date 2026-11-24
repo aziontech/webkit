@@ -1473,7 +1473,7 @@
       "templates/sign-up-card": "template removed; copy auth/auth-sign-in from the catalog",
       "testimonials-carousel": "work-in-progress section; use the QuoteTabs component or a marketing block",
       "textarea": "PrimeVue Textarea; use Textarea",
-      "timeline": "PrimeVue Timeline; no v6 timeline, use Stepper (vertical) or an Item list",
+      "timeline": "PrimeVue Timeline; use Timeline with Timeline.Item and Timeline.Group (different API)",
       "toast": "PrimeVue Toast; mount Toaster from @aziontech/webkit/toast once",
       "toolbar": "PrimeVue Toolbar; use PageHeader actions or a flex row",
       "tooltip": "v-tooltip directive; use the Tooltip component",

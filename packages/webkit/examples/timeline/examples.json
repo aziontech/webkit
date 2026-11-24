@@ -1,0 +1,36 @@
+{
+  "component": "timeline",
+  "title": "Components/Content/Timeline",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The activity of one support ticket, newest first: an SLA breach with a clock icon in danger, a status change, an assignment with a note in the default slot, and the ticket being opened.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Groups",
+      "summary": "A deployment history grouped by day with Timeline.Group, each deploy's outcome as its severity and icon.",
+      "file": "groups.vue"
+    },
+    {
+      "name": "Severities",
+      "summary": "One event per severity, as dots and as icons side by side; most events stay neutral so the coloured ones stand out.",
+      "file": "severities.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The same three events at small (a side panel or drawer) and medium (a page body).",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "Three placeholder events while the history loads; the list is aria-busy and a screen reader hears Loading activity.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "With marker",
+      "summary": "An audit trail where the people matter: the marker slot holds a small Avatar of each actor.",
+      "file": "with-marker.vue"
+    }
+  ]
+}
