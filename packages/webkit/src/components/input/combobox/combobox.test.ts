@@ -385,6 +385,7 @@ describe('Combobox', () => {
   describe('States example', () => {
     it('renders a disabled, an invalid and a loading field', async () => {
       const view = render(States)
+      await nextTick()
       const fields = view.getAllByRole('combobox') as HTMLInputElement[]
       expect(fields[0]!.disabled).toBe(true)
       expect(fields[1]!.getAttribute('aria-invalid')).toBe('true')

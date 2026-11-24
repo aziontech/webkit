@@ -237,7 +237,6 @@ describe('Textarea', () => {
       const control = getByTestId('textarea')
       expect(control).toHaveAttribute('data-invalid')
       expect(control).toHaveAttribute('aria-invalid', 'true')
-      expect(describedText(control)).toContain('Use at least 20 characters')
     })
 
     it('does not set data-invalid or aria-invalid by default', () => {
@@ -308,13 +307,15 @@ describe('Textarea', () => {
       expect(control).toBeDisabled()
     })
 
-    it('composes the Invalid story with invalid semantics and a filled value', () => {
+    it('composes the Invalid story with invalid semantics, a filled value and its error', async () => {
       const { getByTestId } = render(Invalid)
+      await nextTick()
 
       const control = getByTestId('textarea')
       expect(control).toHaveAttribute('data-invalid')
       expect(control).toHaveAttribute('data-filled')
       expect(control).toHaveAttribute('aria-invalid', 'true')
+      expect(describedText(control)).toContain('Use at least 20 characters')
     })
 
     it('composes the Required story with required semantics', () => {

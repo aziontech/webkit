@@ -101,8 +101,9 @@ const Harness = defineComponent({
 })
 
 describe('MultiSelect', () => {
-  it('pairs the Invalid example with a Field.Error the trigger is described by', () => {
+  it('pairs the Invalid example with a Field.Error the trigger is described by', async () => {
     const view = render(Invalid)
+    await nextTick()
     const trigger = view.getByRole('combobox', { name: 'Regions' })
     expect(trigger.getAttribute('aria-invalid')).toBe('true')
     const ids = (trigger.getAttribute('aria-describedby') ?? '').split(' ').filter(Boolean)

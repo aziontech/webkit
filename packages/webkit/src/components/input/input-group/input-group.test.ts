@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, h, ref } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/input-group/default.vue'
 import Disabled from '../../../../examples/input-group/disabled.vue'
@@ -100,7 +100,6 @@ describe('InputGroup', () => {
         template: '<InputGroup invalid><InputGroupInput aria-label="Domain" /></InputGroup>'
       })
       expect(getByRole('textbox', { name: 'Domain' }).getAttribute('aria-invalid')).toBe('true')
-      expect(describedText(getByRole('textbox', { name: 'Domain' }))).toContain('no spaces')
     })
 
     it('omits both attributes when invalid is false', () => {
@@ -344,10 +343,12 @@ describe('InputGroup', () => {
       expect(groups.map((g) => g.getAttribute('data-size'))).toEqual(['small', 'medium', 'large'])
     })
 
-    it('renders the Invalid story with data-invalid on the root', () => {
+    it('renders the Invalid story with data-invalid on the root and its error', async () => {
       const { getByTestId, getByRole } = render(Invalid)
+      await nextTick()
       expect(getByTestId('input-group').getAttribute('data-invalid')).toBe('true')
       expect(getByRole('textbox', { name: 'Domain' }).getAttribute('aria-invalid')).toBe('true')
+      expect(describedText(getByRole('textbox', { name: 'Domain' }))).toContain('no spaces')
     })
 
     it('renders the Required story with data-required on the root', () => {

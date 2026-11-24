@@ -375,7 +375,6 @@ describe('NumberInput', () => {
     it('sets aria-invalid when invalid', () => {
       const { getByTestId } = render(NumberInput, { props: { invalid: true } })
       expect(getByTestId('number-input').getAttribute('aria-invalid')).toBe('true')
-      expect(describedText(getByTestId('number-input'))).toContain('Use 10 instances or fewer')
     })
 
     it('sets aria-required when required', () => {
@@ -470,9 +469,11 @@ describe('NumberInput', () => {
       await expectNoA11yViolations(container)
     })
 
-    it('renders the Invalid story with aria-invalid', () => {
+    it('renders the Invalid story with aria-invalid and its error', async () => {
       const { getByTestId } = render(Invalid)
+      await nextTick()
       expect(getByTestId('number-input').getAttribute('aria-invalid')).toBe('true')
+      expect(describedText(getByTestId('number-input'))).toContain('Use 10 instances or fewer')
     })
   })
 

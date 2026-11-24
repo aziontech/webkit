@@ -39,7 +39,9 @@ describe('ConfirmDialog', () => {
 
     const dialog = document.body.querySelector<HTMLElement>('[role="alertdialog"]')
     expect(dialog).toBeTruthy()
-    expect(within(dialog as HTMLElement).getByText('Remove domain')).toBeTruthy()
+    expect(
+      within(dialog as HTMLElement).getByRole('heading', { name: 'Remove domain' })
+    ).toBeTruthy()
     expect(
       within(dialog as HTMLElement).getByRole('button', { name: 'Remove domain' })
     ).toBeTruthy()
