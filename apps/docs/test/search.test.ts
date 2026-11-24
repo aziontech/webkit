@@ -46,7 +46,7 @@ test('no search hint carries a benchmark note meant for reviewers', () => {
 test('a block title keeps its acronyms', () => {
   const title = (id: string) => blocks.find((block) => block.id === id)?.title
   assert.equal(title('ai/ai-chat'), 'AI Chat')
-  assert.equal(title('ai/ai-api-key'), 'AI API Key')
+  assert.equal(title('settings/settings-api-key'), 'Settings API Key')
   assert.equal(title('account/account-mfa-settings'), 'Account MFA Settings')
   assert.deepEqual(
     blocks.filter((block) => /\b(Ai|Api|Mfa|Dns|Cli|Waf)\b/.test(block.title)).map((b) => b.id),

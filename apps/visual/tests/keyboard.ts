@@ -62,7 +62,7 @@ export const DEMO_ROUTES: { name: string; path: string; target: KeyboardTarget }
   { name: 'onboarding-plan', path: '/onboarding/plan', target: { entry: 'field' } },
   { name: 'onboarding-profile', path: '/onboarding/profile', target: { entry: 'field' } },
   { name: 'assistant', path: '/assistant', target: { entry: 'prompt' } },
-  { name: 'ai-keys', path: '/settings/ai-keys', target: { entry: 'page' } }
+  { name: 'api-keys', path: '/settings/api-keys', target: { entry: 'page' } }
 ]
 
 type BlockKeyboard = { entry?: KeyboardEntry; escape?: 'cancel' }

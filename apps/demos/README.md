@@ -27,7 +27,7 @@ pnpm preview:demos   # preview the build on http://localhost:4174
 | `/settings`                          | `settings/settings-form`                                     | Account settings with save all / per group / per card                                              |
 | `/onboarding` → `/plan` → `/profile` | `account/account-onboarding-form`                            | One wizard, its step bound to the route; creating the organization goes to the list                |
 | `/assistant`                         | `ai/ai-chat`                                                 | AI assistant: prompt, streamed answer with reasoning and sources, suggestions                      |
-| `/settings/ai-keys`                  | `ai/ai-api-key`                                              | Bring your own key: pick a provider, save, test and remove a key, kept in memory                   |
+| `/settings/api-keys`                 | `settings/settings-api-key`                                  | Integration API keys: pick a provider (GitHub, OpenAI, etc.), save, test and remove a key          |
 | `/support`                           | `view/view-ticket-inbox`                                     | Ticket inbox: saved views with live counts, filters, bulk Assign, Change status, Merge and Close   |
 | `/support/tickets/new`               | `create/create-ticket`                                       | Create a ticket: adds it, toasts with Open ticket and opens it; Create and add another stays       |
 | `/support/tickets/:id`               | `detail/detail-ticket`                                       | One ticket: send a reply or a note, change status and properties, insert a canned response, Reopen |

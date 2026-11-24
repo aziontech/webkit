@@ -125,7 +125,7 @@ const tree: ConsoleLayoutNavGroup[] = [
               { id: 'settings-environments', label: 'Environments' },
               { id: 'settings-users', label: 'Users management' },
               { id: 'settings-teams', label: 'Teams and permissions' },
-              { id: 'settings-ai-keys', label: 'AI provider keys', href: '/settings/ai-keys' }
+              { id: 'settings-api-keys', label: 'Integration keys', href: '/settings/api-keys' }
             ]
           },
           {

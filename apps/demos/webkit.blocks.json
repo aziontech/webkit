@@ -21,26 +21,6 @@
         }
       ]
     },
-    "ai/ai-api-key": {
-      "version": "5.13.0",
-      "files": [
-        {
-          "path": "src/blocks/ai-api-key.sample.ts",
-          "source": "blocks/ai/ai-api-key/sample.ts",
-          "variant": "Data",
-          "checksum": "sha256:fb899366711dc7a2760f114800b148cae4abe71246ffb3d4121fb2160b1db49b"
-        },
-        {
-          "path": "src/blocks/ai-api-key.vue",
-          "source": "blocks/ai/ai-api-key/ai-api-key.vue",
-          "variant": "Saved",
-          "imports": {
-            "./sample": "./ai-api-key.sample"
-          },
-          "checksum": "sha256:e57f261215541ea96db3289f1a34e172a1c682176831caddd83e5928cea1e272"
-        }
-      ]
-    },
     "ai/ai-chat": {
       "version": "5.13.0",
       "files": [
@@ -535,6 +515,26 @@
             "./sample": "./edit-resource.sample"
           },
           "checksum": "sha256:d28f33e2822be3bcf8c61a3b89a203d5f225d3139ca3ebb9c4597987b920a7c6"
+        }
+      ]
+    },
+    "settings/settings-api-key": {
+      "version": "5.13.0",
+      "files": [
+        {
+          "path": "src/blocks/settings-api-key.sample.ts",
+          "source": "blocks/settings/settings-api-key/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:3ef0cf6d6d6ff5b918ae67493f750065ae6a2275ac8448e505874a7fb8d2112b"
+        },
+        {
+          "path": "src/blocks/settings-api-key.vue",
+          "source": "blocks/settings/settings-api-key/settings-api-key.vue",
+          "variant": "Saved",
+          "imports": {
+            "./sample": "./settings-api-key.sample"
+          },
+          "checksum": "sha256:262e01d80510a7c2097cc3ba9d4ca2d67fc4691793702c0fc0938ec6e6905905"
         }
       ]
     },

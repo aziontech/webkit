@@ -315,7 +315,7 @@
   "src/test/blocks/account/account-team-permissions.test.ts": 1439,
   "src/test/blocks/account/account-users.test.ts": 2270,
   "src/test/blocks/ai.test.ts": 493,
-  "src/test/blocks/ai/ai-api-key.test.ts": 1083,
+  "src/test/blocks/settings/settings-api-key.test.ts": 1083,
   "src/test/blocks/ai/ai-chat.test.ts": 4331,
   "src/test/blocks/auth/auth-sign-in.test.ts": 7203,
   "src/test/blocks/create/create-deploy-drawer.test.ts": 371,

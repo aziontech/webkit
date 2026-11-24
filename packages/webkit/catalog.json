@@ -33763,80 +33763,6 @@
    ],
    "file": "catalog/blocks/ai/ai-action-approval.json"
   },
-  "ai/ai-api-key": {
-   "name": "AiApiKey",
-   "title": "Blocks/Ai/AiApiKey",
-   "source": "blocks/ai/ai-api-key/ai-api-key.vue",
-   "surface": "app",
-   "summary": "Bring your own key: the reader picks a model provider in a `Select`, pastes a key in a masked `PasswordInput` (never prefilled, cleared once saved) and saves it; a status row shows whether a key is saved (only its masked tail) and the result of Test connection, a failure shows in an `Alert`, and Remove key asks in a `ConfirmDialog`. The block stores nothing: it emits save, test and remove for the app's key store (TanStack AI's `useByok`). Built from `PageHeader`, `Subheader`, `Card`, `Item`, `SettingsRow`, `Select`, `PasswordInput`, `FieldError`, `StatusIndicator`, `Alert`, `Button` and `ConfirmDialog`. A page body for ConsoleLayout.",
-   "intents": [
-    "bring your own key",
-    "byok",
-    "model provider api key",
-    "use my own openai key",
-    "test api key",
-    "usar minha própria chave de api",
-    "chave de api do provedor de ia",
-    "usar mi propia clave de api"
-   ],
-   "skills": [
-    "webkit-form",
-    "webkit-ai-surfaces",
-    "webkit-ui-states",
-    "webkit-errors"
-   ],
-   "components": [
-    "Alert",
-    "Button",
-    "Card",
-    "ConfirmDialog",
-    "FieldError",
-    "Item",
-    "PageHeader",
-    "PasswordInput",
-    "Select",
-    "SettingsRow",
-    "StatusIndicator",
-    "Subheader"
-   ],
-   "imports": [
-    "@aziontech/webkit/alert",
-    "@aziontech/webkit/button",
-    "@aziontech/webkit/card",
-    "@aziontech/webkit/confirm-dialog",
-    "@aziontech/webkit/field-error",
-    "@aziontech/webkit/item",
-    "@aziontech/webkit/page-header",
-    "@aziontech/webkit/password-input",
-    "@aziontech/webkit/select",
-    "@aziontech/webkit/settings-row",
-    "@aziontech/webkit/status-indicator",
-    "@aziontech/webkit/subheader"
-   ],
-   "primary": "Saved",
-   "guidelinesSummary": "The place a reader brings their own key: they connect their own model provider account so the AI features of the app run on it. They pick a provider, paste the key once, check that it works, and can remove it later. The key is never shown again after it is saved; only its masked tail says which key is in place. The block stores nothing and calls no provider: it emits `save`, `test` and `remove`, and the app's key store does the work (TanStack AI's `useByok`, or the app's own server). It is a page body for `ConsoleLayout`, rendered in the layout's default slot; the same body fits a settings tab.",
-   "variants": [
-    {
-     "name": "Empty"
-    },
-    {
-     "name": "Saving"
-    },
-    {
-     "name": "Testing"
-    },
-    {
-     "name": "Success"
-    },
-    {
-     "name": "Error"
-    },
-    {
-     "name": "SaveError"
-    }
-   ],
-   "file": "catalog/blocks/ai/ai-api-key.json"
-  },
   "ai/ai-chat": {
    "name": "AiChat",
    "title": "Blocks/Ai/AiChat",
@@ -38466,6 +38392,87 @@
    ],
    "file": "catalog/blocks/edit/edit-variables.json"
   },
+  "settings/settings-api-key": {
+   "name": "SettingsApiKey",
+   "title": "Blocks/Settings/SettingsApiKey",
+   "source": "blocks/settings/settings-api-key/settings-api-key.vue",
+   "surface": "app",
+   "summary": "Integration API key management: the reader picks an external provider or integration (such as GitHub, an AI model provider, or an observability service) in a `Select`, pastes a key in a masked `PasswordInput` (never prefilled, cleared once saved) and saves or replaces it; a status row shows whether a key is saved (only its masked tail) and the result of Test connection, a failure shows in an `Alert`, and Remove key asks in a `ConfirmDialog`. The block stores nothing: it emits save, test and remove for the app's key store (a backend integration store or TanStack AI's `useByok`). Built from `PageHeader`, `Subheader`, `Card`, `Item`, `SettingsRow`, `Select`, `PasswordInput`, `FieldError`, `StatusIndicator`, `Alert`, `Button` and `ConfirmDialog`. A page body for ConsoleLayout.",
+   "intents": [
+    "integration api key",
+    "provider api key",
+    "external api key",
+    "github integration key",
+    "github api key",
+    "connect third party integration",
+    "bring your own key",
+    "byok",
+    "model provider api key",
+    "test api key",
+    "chave de api de integração",
+    "chave de api do github",
+    "usar minha própria chave de api",
+    "chave de api do provedor",
+    "clave de api de integración",
+    "usar mi propia clave de api"
+   ],
+   "skills": [
+    "webkit-form",
+    "webkit-ui-states",
+    "webkit-errors"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "ConfirmDialog",
+    "FieldError",
+    "Item",
+    "PageHeader",
+    "PasswordInput",
+    "Select",
+    "SettingsRow",
+    "StatusIndicator",
+    "Subheader"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/field-error",
+    "@aziontech/webkit/item",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/password-input",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/settings-row",
+    "@aziontech/webkit/status-indicator",
+    "@aziontech/webkit/subheader"
+   ],
+   "primary": "Saved",
+   "guidelinesSummary": "The place a reader connects an external service or platform integration with an API key — such as GitHub, an AI model provider (bring your own key), an observability tool, or any future third-party integration. They pick a provider, paste the key once, check that it works, and can replace or remove it later. The key is never shown again after it is saved; only its masked tail says which key is in place. The block stores nothing and calls no provider: it emits `save`, `test` and `remove`, and the app's key store does the work (a backend integration store, or TanStack AI's `useByok` for browser-held model keys). It is a page body for `ConsoleLayout`, rendered in the layout's default slot; the same body fits a settings tab.",
+   "variants": [
+    {
+     "name": "Empty"
+    },
+    {
+     "name": "Saving"
+    },
+    {
+     "name": "Testing"
+    },
+    {
+     "name": "Success"
+    },
+    {
+     "name": "Error"
+    },
+    {
+     "name": "SaveError"
+    }
+   ],
+   "file": "catalog/blocks/settings/settings-api-key.json"
+  },
   "settings/settings-canned-responses": {
    "name": "SettingsCannedResponses",
    "title": "Blocks/Settings/SettingsCannedResponses",
@@ -40935,6 +40942,7 @@
   "account/personal-tokens": "account/account-personal-tokens",
   "account/team-permissions": "account/account-team-permissions",
   "account/users": "account/account-users",
+  "ai/ai-api-key": "settings/settings-api-key",
   "auth/sign-in": "auth/auth-sign-in",
   "create/deploy-drawer": "create/create-deploy-drawer",
   "create/deploy-progress-dialog": "create/create-deploy-progress-dialog",

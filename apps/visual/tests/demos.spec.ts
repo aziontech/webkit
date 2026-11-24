@@ -18,7 +18,7 @@ const ROUTES = [
   { name: 'onboarding-plan', path: '/onboarding/plan' },
   { name: 'onboarding-profile', path: '/onboarding/profile' },
   { name: 'assistant', path: '/assistant' },
-  { name: 'ai-keys', path: '/settings/ai-keys' },
+  { name: 'api-keys', path: '/settings/api-keys' },
   { name: 'support', path: '/support' },
   { name: 'support-ticket-create', path: '/support/tickets/new' },
   { name: 'support-ticket', path: `/support/tickets/${TICKET}` },

@@ -94,12 +94,12 @@ const routes: RouteRecordRaw[] = [
     meta: { shell: 'copilot', title: 'AI Copilot' }
   },
   {
-    path: '/settings/ai-keys',
-    name: 'ai-keys',
-    component: () => import('./pages/ai-api-key-page.vue'),
+    path: '/settings/api-keys',
+    name: 'api-keys',
+    component: () => import('./pages/settings-api-key-page.vue'),
     meta: {
-      title: 'AI provider keys - Account settings',
-      breadcrumbs: [{ label: 'Account settings' }, { label: 'AI provider keys' }]
+      title: 'Integration keys - Account settings',
+      breadcrumbs: [{ label: 'Account settings' }, { label: 'Integration keys' }]
     }
   },
   {

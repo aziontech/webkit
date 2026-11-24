@@ -62,7 +62,7 @@
 
   const ACCOUNT_ROUTES: Record<string, string> = {
     settings: '/settings',
-    'ai-keys': '/settings/ai-keys',
+    'api-keys': '/settings/api-keys',
     upgrade: '/onboarding/plan',
     logout: '/onboarding'
   }
@@ -248,8 +248,8 @@
             </template>
           </DropdownMenu.Item>
           <DropdownMenu.Item
-            value="ai-keys"
-            label="AI provider keys"
+            value="api-keys"
+            label="Integration keys"
           >
             <template #trailing>
               <i
