@@ -2,7 +2,7 @@
   import ConfigProvider from '@aziontech/webkit/config-provider'
 
   export interface CustomerClockProps {
-    /** A fixed reference time for every countdown and relative time inside; left out, the page reads the real clock and keeps the app's own provider. */
+    /** A fixed reference time for every countdown and relative time inside; left out, the page reads the real clock or the app provider's. */
     now?: string | number | Date
   }
 
@@ -16,11 +16,9 @@
 
 <template>
   <ConfigProvider
-    v-if="now !== undefined"
     :now="now"
     class="min-w-0 flex-1"
   >
     <slot />
   </ConfigProvider>
-  <slot v-else />
 </template>
