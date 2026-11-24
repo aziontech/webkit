@@ -106,7 +106,11 @@
           tabindex="0"
           :aria-label="`Filter by ${field.label}, ${count} values`"
         >
-          {{ count }}
+          <span
+            data-testid="field-row__count"
+            class="inline-flex min-h-6 min-w-6 items-center justify-center rounded-(--shape-control) border border-(--border-muted) px-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+            >{{ count }}</span
+          >
         </Popover.Trigger>
       </div>
 
