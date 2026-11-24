@@ -6,6 +6,7 @@ import { page } from 'vitest/browser'
 import { h } from 'vue'
 
 import EmbedPageEntry from '../../examples/embed/page-entry.vue'
+import FeatureWidgetsDefault from '../../examples/feature-widgets-section/default.vue'
 import ConsoleShowcaseSection from '../components/section/console-showcase-section/console-showcase-section.vue'
 
 const WIDE = 1280
@@ -64,5 +65,24 @@ describe('ConsoleShowcaseSection keeps its scene off the band edge', () => {
     expect(
       gapUnder(getByTestId('console-showcase-section__frame'), getByTestId('console-scene'))
     ).toBeLessThan(1)
+  })
+})
+
+describe('FeatureWidgetsSection keeps every illustration off the cell frame', () => {
+  it('insets each illustration from the top and start edges of its cell', async () => {
+    await wide()
+    const { container } = render(FeatureWidgetsDefault)
+    const cells = [...container.querySelectorAll<HTMLElement>('[data-testid="bento-grid-cell"]')]
+    expect(cells).toHaveLength(3)
+    await vi.waitFor(() => {
+      for (const cell of cells) {
+        const art = cell.querySelector('svg, img')
+        expect(art).not.toBeNull()
+        const box = cell.getBoundingClientRect()
+        const drawn = art!.getBoundingClientRect()
+        expect(drawn.top - box.top).toBeGreaterThanOrEqual(spacingXl() - 1)
+        expect(drawn.left - box.left).toBeGreaterThanOrEqual(spacingXl() - 1)
+      }
+    })
   })
 })
