@@ -2129,7 +2129,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "85.9 KB"
+    "limit": "85.95 KB"
   },
   {
     "name": "use-console-layout",

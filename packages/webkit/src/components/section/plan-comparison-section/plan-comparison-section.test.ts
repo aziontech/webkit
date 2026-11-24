@@ -119,7 +119,7 @@ describe('PlanComparisonSection', () => {
     expect(
       getAllByRole('rowheader')
         .filter((cell) => !isBandHead(cell))
-        .map((cell) => cell.textContent?.replace(/\s+/g, ' ').trim())
+        .map((cell) => cell.innerText.replace(/\s+/g, ' ').trim())
     ).toEqual([
       'Applications',
       'Rules Engine',

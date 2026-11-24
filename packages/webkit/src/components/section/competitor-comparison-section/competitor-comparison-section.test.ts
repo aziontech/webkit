@@ -86,7 +86,7 @@ describe('CompetitorComparisonSection', () => {
   it('renders one category head and one row head per capability, in order', () => {
     const { getAllByRole } = band()
 
-    const heads = getAllByRole('rowheader').map((cell) => cell.textContent?.trim())
+    const heads = getAllByRole('rowheader').map((cell) => cell.innerText.trim())
     expect(heads).toEqual(['Bot management', 'Zero Trust', 'AI inference'])
     expect(getAllByRole('columnheader').length).toBeGreaterThanOrEqual(3)
   })

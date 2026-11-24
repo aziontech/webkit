@@ -1366,13 +1366,16 @@ describe('ConsoleLayout', () => {
       expect(onClick).toHaveBeenCalledTimes(1)
     })
 
-    it('renders the help info example open, closes from the region and has no axe violations', async () => {
+    it('opens the help info example from its Info link, closes from the region and has no axe violations', async () => {
       const { container, getByRole, findByRole } = render(
         defineComponent({
           render: () => h('div', { style: { width: '1200px' } }, [h(HelpInfoExample)])
         })
       )
       const trigger = getByRole('button', { name: 'Info about workloads' })
+      expect(trigger.getAttribute('aria-expanded')).toBe('false')
+      await expectNoA11yViolations(container)
+      await userEvent.click(trigger)
       const panel = await findByRole('complementary', { name: 'Help: Workloads' })
       expect(trigger.getAttribute('aria-expanded')).toBe('true')
       expect(

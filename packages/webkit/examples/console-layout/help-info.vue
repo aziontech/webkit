@@ -16,7 +16,7 @@
     }
   ]
 
-  const helpOpen = ref(true)
+  const helpOpen = ref(false)
 </script>
 
 <template>
