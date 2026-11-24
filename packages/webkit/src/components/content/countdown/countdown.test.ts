@@ -197,6 +197,21 @@ describe('Countdown', () => {
     expect(screen.getByTestId('countdown__label')).toHaveAttribute('dir', 'auto')
   })
 
+  it('orders the label and the phrase by the language of the phrase on right-to-left pages', () => {
+    render(inProvider({ deadline: NOW - 20 * MINUTE, label: 'Next reply' }, { dir: 'rtl' }))
+    const run = screen.getByTestId('countdown__label').parentElement
+    expect(run).toHaveAttribute('dir', 'auto')
+    expect(run?.matches(':dir(ltr)')).toBe(true)
+    expect(run?.textContent).toMatch(/^Next reply: Overdue by 20m/)
+  })
+
+  it('keeps the phrase direction when the label is in another script', () => {
+    render(inProvider({ deadline: NOW + 2 * HOUR, label: 'الرد التالي' }, { dir: 'rtl' }))
+    const label = screen.getByTestId('countdown__label')
+    expect(label.matches(':dir(rtl)')).toBe(true)
+    expect(label.parentElement?.matches(':dir(ltr)')).toBe(true)
+  })
+
   it('is not a live region and has no role', () => {
     render(inProvider({ deadline: NOW - MINUTE }))
     const root = screen.getByTestId('countdown')

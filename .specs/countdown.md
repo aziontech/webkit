@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 stability: preview
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 6ccfc82ffd7514e1eac00e9ffac6f5562a9029f628c6419eb768a9856e29d614
+checksum: b130d28d7bd507cb1e55474f2a011807d5e040a8c3d8f9b747609fb6f5874de6
 created: 2026-11-23
 last_updated: 2026-11-23
 ---
@@ -165,10 +165,10 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 
 ## Right-to-left
 
-- Layout: inherits `Tag` (gap, no physical side); the icon leads and the label comes before the phrase in the reading order.
+- Layout: inherits `Tag` (gap, no physical side); the icon leads and the label comes before the phrase in the reading order. The label and the phrase sit in one run with `dir="auto"`, so their order follows the language of the phrase (the locale text), not the page: an English phrase on a right-to-left page reads `Next reply: Overdue by 20m`, never `Overdue by 20m Next reply:`. The label, isolated with its own `dir="auto"`, does not count toward that direction, so a label in another script never flips the order of the phrase.
 - Icons: clock, triangle, circle alert and pause are not directional and do not mirror.
 - Keyboard: no keyboard logic.
-- User data: the label is isolated with `dir="auto"`; the phrase is locale text.
+- User data: the label is isolated with `dir="auto"`; the phrase is locale text and sets the direction of the run that holds both.
 
 ## Responsive
 

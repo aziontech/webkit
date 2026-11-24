@@ -119,7 +119,10 @@
     :size="size"
     :icon="ICONS[state]"
   >
-    <span class="inline-flex items-center gap-(--spacing-2xs) whitespace-nowrap">
+    <span
+      dir="auto"
+      class="inline-flex items-center gap-(--spacing-2xs) whitespace-nowrap"
+    >
       <span
         v-if="label"
         :data-testid="`${testId}__label`"
