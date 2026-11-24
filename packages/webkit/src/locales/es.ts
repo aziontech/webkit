@@ -1524,5 +1524,27 @@ export const es: Messages = {
     reorderMoved: '{name} movido a la posición {position} de {total}.',
     reorderDropped: '{name} soltado en la posición {position} de {total}.',
     reorderCancelled: 'Reordenación cancelada.'
+  },
+  markdownEditor: {
+    label: 'Mensaje',
+    write: 'Escribir',
+    preview: 'Vista previa',
+    toolbar: 'Formato',
+    bold: 'Negrita',
+    italic: 'Cursiva',
+    link: 'Enlace',
+    bulletedList: 'Lista con viñetas',
+    numberedList: 'Lista numerada',
+    quote: 'Cita',
+    code: 'Código',
+    shortcut: '{label} ({keys})',
+    linkPlaceholder: 'url',
+    emptyTitle: 'Nada que previsualizar',
+    previewLoading: 'Cargando la vista previa',
+    mentionMenu: 'Personas',
+    mentionResults: {
+      one: '{count} persona',
+      other: '{count} personas'
+    }
   }
 }

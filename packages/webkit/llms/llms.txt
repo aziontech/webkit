@@ -300,6 +300,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Input](components/input.md): Single-line text input for forms and inline editing.
 - [InputGroup](components/input-group.md): Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field (an input group, as other UI kits call it).
 - [LanguageSelect](components/language-select.md): A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a BCP 47 language tag (`en`, `pt-BR`, `es`, `en-GB`), shown with its country's round flag and the lan…
+- [MarkdownEditor](components/markdown-editor.md): Preview. The text area of a reply composer: a person writes Markdown in a `Textarea`, formats it from a toolbar (bold, italic, link, bulleted list, numbered list, quote, code) or with Ctrl/⌘+B, I and K, checks the result on a…
 - [MultiSelect](components/multi-select.md): Select control specialised for choosing many options from a list.
 - [NumberInput](components/number-input.md): Numeric input field with optional increment/decrement spinner buttons.
 - [OtpInput](components/otp-input.md): The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS.

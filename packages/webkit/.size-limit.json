@@ -2050,6 +2050,12 @@
     "limit": "2.05 KB"
   },
   {
+    "name": "markdown-editor",
+    "path": "src/components/input/markdown-editor/markdown-editor.vue",
+    "limit": "31.8 KB",
+    "entryOnly": true
+  },
+  {
     "name": "context-menu",
     "path": "src/components/navigation/context-menu/index.ts",
     "limit": "11.7 KB"
