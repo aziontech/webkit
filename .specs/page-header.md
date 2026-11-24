@@ -3,11 +3,11 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: 2b966a6bb295cad4dd51fa68f71a73196b37d3dc3940d45d633d7c27e3a89f2e
-spec_version: 8
+checksum: 28c8265f68d5f6fa9ccae95833f827bec2d03a5faa7aa21972e3722965bd5161
+spec_version: 9
 template: 2
 created: 2026-11-10
-last_updated: 2026-11-20
+last_updated: 2026-11-23
 ---
 
 # PageHeader — Component Spec
@@ -35,6 +35,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 - `page-tabs` — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.
 - `breadcrumb` — the usual content of the `breadcrumbs` slot.
 - `tag` — the usual content of the `meta` slot (a status, an environment, a version).
+- `console-layout` — `ConsoleLayout.ToolsTrigger`, the page's `Info` link, goes first in the `meta` slot and opens the page's `HelpPanel` in the layout's tools region.
 - `button` — the usual content of the `actions` slot (`size="medium"`; the create action primary, the others outlined).
 
 ## Best practices
@@ -46,6 +47,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 - `breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
 - `icon`: one decorative glyph or a square `Avatar`, at most 32 px; it is `aria-hidden` by default, since the title already names the page.
 - `meta`: one or two small `Tag`s (status, environment). Longer facts (owner, created date) belong in the page body, not the header.
+- Page help: put `ConsoleLayout.ToolsTrigger` first in `meta`, so the `Info` link sits right after the title on the same line and opens the page's `HelpPanel` in the console's tools region. One per page. Never a boxed `IconButton`, a typed `?` or a `Tooltip` beside the title; a one-line explanation is the `description`.
 - `tabs`: a `Tabs` row of the page's sections. A page that already shows `PageTabs` above the header leaves this slot empty; never both.
 
 ## Usage
@@ -136,14 +138,14 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 
 ## Slots
 
-| Slot          | Scope | Notes                                                                                               |
-| ------------- | ----- | --------------------------------------------------------------------------------------------------- |
-| `description` | —     | Rich description content (links, inline buttons); replaces the `description` prop.                  |
-| `actions`     | —     | The actions the page owns, Documentation first and the create action on the outer edge.             |
-| `breadcrumbs` | —     | The trail back to the parent pages, above the title row; usually a `Breadcrumb` with `items`.       |
-| `icon`        | —     | A leading glyph or square avatar before the title, decorative (`aria-hidden`).                      |
-| `meta`        | —     | Short facts beside the title, such as a status `Tag`; wraps under the title when the row is narrow. |
-| `tabs`        | —     | The tabs of the page's sections, across the full width under the title and actions.                 |
+| Slot          | Scope | Notes                                                                                                                                                                 |
+| ------------- | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `description` | —     | Rich description content (links, inline buttons); replaces the `description` prop.                                                                                    |
+| `actions`     | —     | The actions the page owns, Documentation first and the create action on the outer edge.                                                                               |
+| `breadcrumbs` | —     | The trail back to the parent pages, above the title row; usually a `Breadcrumb` with `items`.                                                                         |
+| `icon`        | —     | A leading glyph or square avatar before the title, decorative (`aria-hidden`).                                                                                        |
+| `meta`        | —     | Short facts beside the title, such as a status `Tag`, and the page's `Info` link (`ConsoleLayout.ToolsTrigger`, first); wraps under the title when the row is narrow. |
+| `tabs`        | —     | The tabs of the page's sections, across the full width under the title and actions.                                                                                   |
 
 ## States
 
@@ -216,6 +218,7 @@ No built-in strings: the title, description and every region come from the consu
 - Sizes — every `size` value stacked.
 - DetailPage — justified: the `breadcrumbs`, `icon`, `meta` and `tabs` regions only appear together on a resource detail header, which none of the other examples shows.
 - RichDescription — the `description` slot with inline buttons; justified because a hub description carries inline controls.
+- WithInfo — `ConsoleLayout.ToolsTrigger` first in `meta`, the `Info` link right after the title; justified because page help is placed through this slot and no other example shows it.
 
 ## Constraints — DO NOT
 

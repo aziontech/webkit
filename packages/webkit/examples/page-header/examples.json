@@ -26,6 +26,11 @@
       "name": "RichDescription",
       "summary": "The `description` slot carries inline actions — Buttons with `variant=\"link\"` — when one plain sentence is not enough.",
       "file": "rich-description.vue"
+    },
+    {
+      "name": "WithInfo",
+      "summary": "Page help: `ConsoleLayout.ToolsTrigger` first in the `meta` slot puts the `Info` link right after the title, on the same line. Inside `ConsoleLayout` it opens the page's `HelpPanel` in the tools region; here, rendered alone, it only emits `click`.",
+      "file": "with-info.vue"
     }
   ]
 }
