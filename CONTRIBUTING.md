@@ -50,6 +50,28 @@ PR. Each step stops the run on failure. The steps, owners and commands are in
 [Adding a component or block (AI flow)](#adding-a-component-or-block-ai-flow). When the PR is
 built, the spec moves to `implemented`.
 
+### Preview and GA
+
+Every new component and block ships as **preview**; the owner marks it **GA** by hand. The field
+is `stability`, separate from the spec `status` (which tracks the authoring pipeline):
+
+| Where                           | Preview                  | GA                               |
+| ------------------------------- | ------------------------ | -------------------------------- |
+| Component: `.specs/<name>.md`   | `stability: preview`     | `stability: ga`, or no field     |
+| Block: `blocks/<id>/block.json` | `"stability": "preview"` | `"stability": "ga"`, or no field |
+
+- **Preview**: the API (props, events, slots, models, parts, exports) may still change in a minor
+  release. Name the change in the commit body; no `!`, no `BREAKING CHANGE:`, no codemod and no
+  deprecation cycle. `api-diff` and `check:migrations` exempt the part. The catalog, the llms
+  pages, the MCP (`stability: "preview"` with a note) and the docs site (a Preview tag) mark it, so
+  agents and readers know the API is not frozen yet.
+- **GA**: the API is frozen. Change it under [Change](#change) and remove it only through
+  [Deprecate](#deprecate) and [Remove](#remove). Every part that existed before 2026-11-23 is GA.
+- **Promote** a part with one PR titled `feat(webkit): promote <Name> to GA`: set `stability: ga`
+  in its spec (or block.json) and rebuild the catalog and llms pages. Only the owner approves it.
+  A part's sub-components follow their root.
+- **Never demote** GA to preview: `api-diff` fails, because it would unfreeze a stable API.
+
 ### Change
 
 An issue from **Change a component** (`.github/ISSUE_TEMPLATE/change-component.yml`), or
@@ -116,7 +138,8 @@ Two more gates hold the Change and Remove stages to their rules:
   with the PR's base branch. A breaking change fails without `!` in the PR title and a
   migration: a codemod entry, or a new line naming the component in
   `packages/webkit/MIGRATION_V<N>.md`. Any API change, breaking or not, fails without a
-  `spec_version` bump in that component's spec. Run it locally with
+  `spec_version` bump in that component's spec. A preview part is exempt from the `!` and the
+  migration (see [Preview and GA](#preview-and-ga)); GA → preview fails. Run it locally with
   `PR_TITLE='feat(webkit)!: …' pnpm --filter @aziontech/webkit run check:api-diff`.
 - The PR title must pass commitlint; CI checks it.
 - A `locked` spec passes CI but blocks edits to its component: bump `spec_version`, set it back

@@ -16,6 +16,11 @@ app once: read `MIGRATION_V6.md` in `@aziontech/webkit` and run
 follows the same lifecycle this rule asks of you: a part is marked `@deprecated`, kept for at
 least one major, then removed, and `webkit/no-deprecated-component` tells you before it goes.
 
+A WebKit component or block marked **preview** (a Preview tag on the docs page,
+`stability: "preview"` from the MCP) is not frozen yet: its API may change in a minor release,
+named in the changelog, with no deprecation cycle. Pin the WebKit version, or expect to adapt,
+when you build on one. The cycle above starts when it becomes GA.
+
 ## Do
 
 - Write the tag as `@deprecated since <version> — use <replacement> instead. Removed in
