@@ -42,6 +42,16 @@ describe('CopyButton', () => {
       expect(queryByRole('button', { name: 'Copied' })).toBeNull()
     })
 
+    it('draws the copy glyph by default and the icon prop when set', () => {
+      const plain = render(CopyButton, { props: { value: 'token' } })
+      expect(plain.getByRole('button').querySelector('.az-copy')).toBeTruthy()
+      plain.unmount()
+
+      const link = render(CopyButton, { props: { value: 'token', icon: 'az az-link' } })
+      expect(link.getByRole('button').querySelector('.az-link')).toBeTruthy()
+      expect(link.getByRole('button').querySelector('.az-copy')).toBeNull()
+    })
+
     it('uses a custom ariaLabel when provided', () => {
       const { getByRole } = render(CopyButton, {
         props: { value: 'token', ariaLabel: 'Copy token' }

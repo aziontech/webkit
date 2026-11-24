@@ -216,9 +216,10 @@
             size="large"
             class="w-full"
             aria-label="Name"
-            placeholder="office-ranges"
+            placeholder="For example, office-ranges"
             autocomplete="off"
             required
+            invalid
             aria-describedby="resource-name-message"
           />
           <FieldError id="resource-name-message">This field is required.</FieldError>

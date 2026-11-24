@@ -2132,7 +2132,7 @@ yout, objects, git) and External (frameworks, AI models, developer tools, langua
 
 554 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
-Used by: Alert, ArtifactPreview, Avatar, Button, Combobox, DocCard, DocItem, DocPrompt, EmptyState, FeatureItem, FileDropzone, HighlightButton, IconButton, Link, SettingsGroup, SplitButton, Tag.
+Used by: Alert, ArtifactPreview, Avatar, Button, Combobox, CopyButton, DocCard, DocItem, DocPrompt, EmptyState, FeatureItem, FileDropzone, HighlightButton, IconButton, Link, SettingsGroup, SplitButton, Tag.
 
 ## Names
 
@@ -11244,12 +11244,17 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | `variant` | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'danger'` | `'ghost'` | false | Visual variant forwarded to `IconButton`. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token forwarded to `IconButton`. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| `icon` | `string` | `'az az-copy'` | false | Idle glyph; `az az-link` when the value is a link to a section. The check glyph replaces it after a copy. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `copy` | `(event: MouseEvent, value: string)` | Emitted after a successful clipboard write; `value` is the copied text. |
+
+## Assets
+
+- Icons: every valid name is in icons.md (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
 
 ## States
 
@@ -15495,7 +15500,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 ## Accessibility
 
 - The card is a `role="group"` named by its title (`aria-labelledby`) or by `ariaLabel`; it is not a region landmark, so ten cards on a dashboard add no landmarks.
-- The drag and resize handles draw 24 px but take pointer input over 40 px (a transparent `before:` hit area 8 px around them).
+- The drag and resize handles draw 24 px but take pointer input over 40 px (a transparent `before:` hit area 8 px around them), 44 px on a coarse pointer (10 px around them).
 - Drag handle: a real `<button>` named "Move" plus the card title ("Move card" without a title), described by the arrow-key hint. Keyboard map: arrow keys emit `move` with the direction; the page reorders and keeps focus on the handle, and the handle announces "Moved to position 2 of 3" through the shared polite live region. Dragging never requires a pointer.
 - Resize handle: `role="separator"`, one tab stop, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` such as "6 of 12 columns, 552 pixels tall". Keyboard map: Left / Right change the span by one column, Up / Down change the height by 24 pixels, Home / End jump to the smallest and largest span, Escape cancels a pointer resize in progress.
 - Both handles are at least 24px with a visible focus ring `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
@@ -28494,7 +28499,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
     <template #status>
       <StatusIndicator
         severity="success"
-        label="All Systems Operational"
+        label="All systems operational"
       />
     </template>
     <template #language>
@@ -28851,12 +28856,12 @@ context, so a consumer never wires one part to the other.
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop on the root
 - Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--save-bar-height` (so the `toaster` stacks above the bar, on top of any `--toast-offset-bottom` the app sets for its own bottom chrome, which the bar never overwrites), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it, whether the content scrolls in a scroll region of its own or the page itself scrolls; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. Every other variant sits at the bottom too, so it publishes `--save-bar-height` the same way (a toast never covers its Save or Discard) but no `--save-bar-inset` and no reserved height.
-- Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
+- Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Discard above Save, so the screen order is the focus order. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Accessibility
 
 - Visible focus: owned by the action buttons.
-- Keyboard map: `Tab` reaches Discard, then Save, in reading order (the column is reversed visually on a phone so Save sits on top). With a `save` listener, `⌘ S` (`Ctrl S` off Apple) emits `save` from anywhere on the page, also while typing in a field (a shortcut with a modifier), and the browser's Save page dialog never opens; inside an open modal layer it fires only for a bar inside that layer (registered through `useShortcuts` with the bar as its element). Tests: `save-bar.test.ts` › save shortcut.
+- Keyboard map: `Tab` reaches Discard, then Save, in reading order; on a phone the actions stack in the same order, Save last at the bottom nearest the thumb, so the screen order matches the focus order. With a `save` listener, `⌘ S` (`Ctrl S` off Apple) emits `save` from anywhere on the page, also while typing in a field (a shortcut with a modifier), and the browser's Save page dialog never opens; inside an open modal layer it fires only for a bar inside that layer (registered through `useShortcuts` with the bar as its element). Tests: `save-bar.test.ts` › save shortcut.
 - ARIA: the root is a `footer`; the status glyph is `aria-hidden`. The message region (`__message`, the `leading` / default slot) is a polite live region (`role="status"`), so a bar that appears when the form turns dirty announces its status sentence (WCAG 4.1.3 Status Messages) without moving focus.
 - Contrast ≥4.5:1 for the status sentence.
 
@@ -28905,12 +28910,14 @@ context, so a consumer never wires one part to the other.
           @click="save"
         >
           Save
-          <Kbd
-            meta
-            size="small"
-            aria-hidden="true"
-            >S</Kbd
-          >
+          <span class="inline-flex pointer-coarse:hidden">
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </span>
         </Button>
       </template>
     </SaveBar>
@@ -28990,6 +28997,20 @@ context, so a consumer never wires one part to the other.
 ```vue
 <script setup>
   import ScrollArea from '@aziontech/webkit/scroll-area'
+
+  const lines = [
+    { time: '14:02:11', text: 'Build started for acme-store (commit 4f2a9c1)' },
+    { time: '14:02:13', text: 'Installing dependencies' },
+    { time: '14:02:41', text: 'Dependencies installed in 28s' },
+    { time: '14:02:42', text: 'Running build script' },
+    { time: '14:03:05', text: 'Bundled 214 modules into 3 files' },
+    { time: '14:03:06', text: 'Uploading static assets to site-assets' },
+    { time: '14:03:19', text: 'Uploaded 86 files (4.2 MB)' },
+    { time: '14:03:20', text: 'Creating function instance for the storefront API' },
+    { time: '14:03:24', text: 'Function instance ready' },
+    { time: '14:03:25', text: 'Propagating to the edge network' },
+    { time: '14:03:58', text: 'Deployed to production at acme-store.example.com' }
+  ]
 </script>
 
 <template>
@@ -28998,16 +29019,19 @@ context, so a consumer never wires one part to the other.
   >
     <ScrollArea
       orientation="vertical"
-      aria-label="Scrollable content"
+      aria-label="Deployment log"
       class="h-full"
     >
-      <div class="p-(--spacing-4) text-body-sm text-(--text-default)">
-        Jokester began sneaking into the castle in the middle of the night and leaving jokes all
-        over the place: under the king's pillow, in his soup, even in the royal toilet. The king was
-        furious, but he couldn't seem to stop Jokester. And then one day, the king tripped over one
-        of Jokester's whoopee cushions and fell into the moat. He was so embarrassed that he decided
-        to make Jokester the official court jester.
-      </div>
+      <ol class="flex flex-col gap-(--spacing-2xs) p-(--spacing-sm) text-label-code-sm">
+        <li
+          v-for="line in lines"
+          :key="line.time + line.text"
+          class="flex gap-(--spacing-sm)"
+        >
+          <span class="shrink-0 text-(--text-muted)">{{ line.time }}</span>
+          <span class="min-w-0 text-(--text-default)">{{ line.text }}</span>
+        </li>
+      </ol>
     </ScrollArea>
   </div>
 </template>
@@ -29729,7 +29753,6 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             icon="az az-sql-database"
             href="/sql-database"
             tag-value="Preview"
-            tag-variant="primary"
           />
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Account">
@@ -29858,7 +29881,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - `page-header` — the page's h1.
 - `settings-group` — the settings band with a Hint, a gutter copy-link and an optional disclosure; use it, not this, for a band of `SettingsRow`s.
 - `module-header` — the marketing section heading (centred, left or horizontal); use it on site pages, this one in the console.
-- `copy-button` — the copy-link affordance it renders.
+- `copy-button` — the copy-link affordance it renders, with the `az az-link` glyph that `settings-group` uses for the same action.
 
 ## Props
 
@@ -30289,6 +30312,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
         <ContextMenu.Item
           value="delete"
           label="Delete"
+          severity="danger"
         />
       </ContextMenu.Group>
     </ContextMenu>
@@ -30400,6 +30424,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
     - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `az az-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
     - `type: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuItemType`.
+    - `severity: 'neutral' | 'danger'` default `'neutral'` — colour meaning of the row. `danger` marks a destructive action (Delete, Remove): the label and leading glyph take `--text-danger` (`data-severity="danger"`) on the same hover fill, so the row reads as destructive before it is activated. Exported as `DropdownMenuItemSeverity` (derived from `Severity`).
   - Events: _none_ (root emits `select`).
   - Slots: `default` (override of the `label` prop, for rich label content), `leading` (icon / avatar before the label), `trailing` (icon / badge after the label; mutually exclusive with `command`).
 - `dropdown-menu-sub/dropdown-menu-sub.vue` — sub-menu scope.
@@ -30428,6 +30453,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - `data-disabled` mirrors the `disabled` prop on root, trigger, and option
 - `data-selected` on option mirrors the `selected` prop
 - `data-type` on option mirrors the `type` prop (`default` | `checkbox` | `radio`)
+- `data-severity` on option mirrors the `severity` prop (`neutral` | `danger`)
 - `data-state` on sub, sub-trigger and sub-panel: `open` | `closed`; `data-disabled` on sub-trigger mirrors its `disabled` prop
 - `data-side` / `data-align` on the sub-panel mirror its resolved side and alignment (`end` or `start`, after flipping)
 - `data-side` / `data-align` on the root mirror the `side` / `align` props (`'auto'` stays as `'auto'`)
@@ -30720,7 +30746,7 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
 - ARIA: the root is a `nav` landmark. A panel trigger is a disclosure button: `aria-expanded` reflects its panel and, while open, `aria-controls` names the panel (`role="region"`); it carries no `aria-haspopup`, since the panel is navigation, not a menu. A link trigger carries `aria-current="page"` when `active`. Tests: `navigation-menu.test.ts` › axe on the closed bar, the open panel and the vertical menu.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target ≥40×40 px where the control is interactive.
+- Touch target ≥40×40 px where the control is interactive; a `Trigger` grows to 44 px tall on a coarse pointer (`pointer-coarse:min-h-11`), like `Tabs.Trigger` and the `SidebarMenu` rows.
 
 ## Examples
 
@@ -30775,6 +30801,32 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
                         close-on-click
                       >
                         See all solutions
+                      </NavigationMenu.Item>
+                    </NavigationMenu.List>
+                    <NavigationMenu.List label="By industry">
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/retail/"
+                        description="Keep stores fast through peak sales"
+                        close-on-click
+                      >
+                        Retail and e-commerce
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/financial-services/"
+                        description="Protect transactions and customer data"
+                        close-on-click
+                      >
+                        Financial services
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/media/"
+                        description="Stream live and on-demand video"
+                        close-on-click
+                      >
+                        Media and entertainment
                       </NavigationMenu.Item>
                     </NavigationMenu.List>
                   </div>
@@ -31643,7 +31695,7 @@ even when the row carries nothing but its title.
 - Root: `data-tabs-root` (and the legacy `data-tab-view-root`, kept for selectors written against the v5 name).
 - Panel motion: the incoming panel's inner element carries `data-motion="enter"` and `data-slide="start|end"` for the frame before it slides in; the attributes drop on the next animation frame.
 - Dirty: `data-dirty` on a `Tabs.Trigger` with `dirty`; the dot is not the only cue for assistive tech (a hidden "Unsaved changes" joins the tab's name).
-- Responsive: the tab list (`Tabs.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. The indicator always sits exactly on the active tab: it is measured in the list's own layout pixels (the on-screen box divided by the list's scale), so a list inside a CSS-scaled or transformed container (a console mock-up drawn at a scale) keeps it on its label, and it re-measures whenever the list or any tab changes size (late web fonts, a label change, a resize). Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest. On mount and whenever the value changes, the list scrolls itself (never the page) so the active tab is in view, clear of the edge fade; a page that opens on its eighth tab on a phone shows that tab. Tests: `tabs.test.ts` › scrolls the active tab into the strip.
+- Responsive: the tab list (`Tabs.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. The indicator always sits exactly on the active tab: it is measured in the list's own layout pixels (the on-screen box divided by the list's scale), so a list inside a CSS-scaled or transformed container (a console mock-up drawn at a scale) keeps it on its label, and it re-measures whenever the list or any tab changes size (late web fonts, a label change, a resize). Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest. On mount and whenever the value changes, the list scrolls itself (never the page) so the active tab is in view, clear of the edge fade; a page that opens on its eighth tab on a phone shows that tab. A tab that takes focus (the arrow keys in `manual` activation, or `Tab`) is scrolled clear of the edge fade the same way. Tests: `tabs.test.ts` › scrolls the active tab into the strip, keeps a tab reached with the arrow keys clear of the end fade.
 
 ## Accessibility
 
@@ -31956,8 +32008,8 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
   import { ref } from 'vue'
 
   const step = ref(0)
-  const name = ref('storefront-api')
-  const region = ref('south-america')
+  const name = ref('')
+  const region = ref('')
   const environment = ref('production')
   const logging = ref(true)
   const path = ref('/api/*')
@@ -31999,7 +32051,10 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
         </Field>
         <Field>
           <Field.Label> Region </Field.Label>
-          <Select v-model="region">
+          <Select
+            v-model="region"
+            placeholder="Choose a region"
+          >
             <Select.Trigger />
             <Select.Content>
               <Select.Item

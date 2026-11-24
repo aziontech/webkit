@@ -12,7 +12,7 @@
   },
   {
    "name": "NavigationOpen",
-   "summary": "`v-model:navigation-open` binds the rail: a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot folds and restores it, and the app can persist the value.",
+   "summary": "`v-model:navigation-open` binds the rail: a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot folds and restores it, and the app can persist the value. Press ⌘K (Ctrl K off Apple) and choose Collapse sidebar to fold the rail.",
    "file": "examples/console-layout/navigation-open.vue"
   }
  ]

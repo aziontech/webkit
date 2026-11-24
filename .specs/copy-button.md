@@ -3,9 +3,9 @@ name: copy-button
 category: action
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
-checksum: 9e2209b7a63e1ec215cdbfa38b21859f86625142a54172893e112b78b937cf24
+checksum: 4f8d06143f57f86f293e57c5ce830746dcfa333f048027e19e7d06f78c847579
 created: 2026-06-02
 last_updated: 2026-11-16
 ---
@@ -44,14 +44,15 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 ## Props
 
-| Prop          | Type                                                           | Default   | Required | JSDoc                                                                                      |
-| ------------- | -------------------------------------------------------------- | --------- | -------- | ------------------------------------------------------------------------------------------ |
-| `value`       | `string`                                                       | `—`       | true     | Text copied to the clipboard on activation.                                                |
-| `ariaLabel`   | `string`                                                       | `''`      | false    | Accessible name while idle. Empty uses the locale catalog (`Copy`).                        |
-| `copiedLabel` | `string`                                                       | `''`      | false    | Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`). |
-| `variant`     | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'danger'` | `'ghost'` | false    | Visual variant forwarded to `IconButton`.                                                  |
-| `size`        | `'small' \| 'medium' \| 'large'`                               | `'large'` | false    | Size token forwarded to `IconButton`.                                                      |
-| `disabled`    | `boolean`                                                      | `false`   | false    | Disables interaction and applies disabled tokens.                                          |
+| Prop          | Type                                                           | Default        | Required | JSDoc                                                                                                     |
+| ------------- | -------------------------------------------------------------- | -------------- | -------- | --------------------------------------------------------------------------------------------------------- |
+| `value`       | `string`                                                       | `—`            | true     | Text copied to the clipboard on activation.                                                               |
+| `ariaLabel`   | `string`                                                       | `''`           | false    | Accessible name while idle. Empty uses the locale catalog (`Copy`).                                       |
+| `copiedLabel` | `string`                                                       | `''`           | false    | Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`).                |
+| `variant`     | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'danger'` | `'ghost'`      | false    | Visual variant forwarded to `IconButton`.                                                                 |
+| `size`        | `'small' \| 'medium' \| 'large'`                               | `'large'`      | false    | Size token forwarded to `IconButton`.                                                                     |
+| `disabled`    | `boolean`                                                      | `false`        | false    | Disables interaction and applies disabled tokens.                                                         |
+| `icon`        | `string`                                                       | `'az az-copy'` | false    | Idle glyph; `az az-link` when the value is a link to a section. The check glyph replaces it after a copy. |
 
 ## Events
 
@@ -124,7 +125,7 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 ## Right-to-left
 
-- Layout: a single icon button; nothing to mirror. The copy and check glyphs do not mirror.
+- Layout: a single icon button; nothing to mirror. The copy, link and check glyphs do not mirror.
 - Keyboard: no arrow-key logic.
 - User data: the copied value is not rendered.
 

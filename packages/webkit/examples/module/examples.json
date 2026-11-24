@@ -14,7 +14,7 @@
     },
     {
       "name": "Divided",
-      "summary": "Two modules, the first undivided. A shared edge is invisible on a single module — the stack is what proves the rule is drawn once.",
+      "summary": "Two modules, the first undivided (`:divided=\"false\"`): its top edge belongs to the hero above it. The second draws the one rule between them. A shared edge is invisible on a single module — the stack is what proves the rule is drawn once.",
       "file": "divided.vue"
     },
     {

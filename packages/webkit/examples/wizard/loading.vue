@@ -8,7 +8,7 @@
 
   const step = ref(3)
   const name = ref('storefront-api')
-  const region = ref('south-america')
+  const region = ref('north-america')
   const environment = ref('production')
   const logging = ref(true)
   const path = ref('/api/*')

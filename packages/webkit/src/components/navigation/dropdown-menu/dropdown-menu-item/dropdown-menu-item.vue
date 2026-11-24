@@ -3,7 +3,7 @@
 
   import { safeHref } from '../../../../utils/safe-href'
   import { useDropdownContext } from '../composables/use-dropdown-context'
-  import type { DropdownMenuItemType } from '../injection-key'
+  import type { DropdownMenuItemSeverity, DropdownMenuItemType } from '../injection-key'
   import { DropdownMenuGroupInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -36,6 +36,8 @@
     href?: string
     /** Item role: a plain action that closes the menu, or a checkbox or radio item that keeps it open. */
     type?: DropdownMenuItemType
+    /** Colour meaning of the row: danger marks a destructive action such as Delete. */
+    severity?: DropdownMenuItemSeverity
   }
 
   const props = withDefaults(defineProps<DropdownMenuItemProps>(), {
@@ -44,7 +46,8 @@
     disabled: false,
     selected: false,
     href: '',
-    type: 'default'
+    type: 'default',
+    severity: 'neutral'
   })
 
   const attrs = useAttrs()
@@ -130,6 +133,7 @@
     'forced-colors:border-y-0 px-(--spacing-sm) py-(--spacing-2xs) text-label-sm text-(--text-default) no-underline outline-none transition-colors duration-150 ease-out ' +
     'motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) ' +
     'data-[type=default]:data-[selected]:bg-(--bg-selected) ' +
+    'data-[severity=danger]:text-(--text-danger) ' +
     'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) ' +
     'data-[ungrouped]:mx-(--spacing-2xs)'
 </script>
@@ -150,6 +154,7 @@
       :aria-disabled="disabled || undefined"
       :data-testid="testId"
       :data-type="type"
+      :data-severity="severity"
       :data-selected="selected || null"
       :data-disabled="disabled || null"
       :data-ungrouped="inGroup ? null : ''"

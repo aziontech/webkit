@@ -78,7 +78,7 @@
       <div class="layout-column">
         <PageHeader
           title="Workloads"
-          description="The account switcher sits in the rail under the wordmark, and in the header when the layout is compact."
+          description="Applications and functions running in this account."
         />
       </div>
     </div>

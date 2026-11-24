@@ -48,6 +48,32 @@
                         See all solutions
                       </NavigationMenu.Item>
                     </NavigationMenu.List>
+                    <NavigationMenu.List label="By industry">
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/retail/"
+                        description="Keep stores fast through peak sales"
+                        close-on-click
+                      >
+                        Retail and e-commerce
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/financial-services/"
+                        description="Protect transactions and customer data"
+                        close-on-click
+                      >
+                        Financial services
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/media/"
+                        description="Stream live and on-demand video"
+                        close-on-click
+                      >
+                        Media and entertainment
+                      </NavigationMenu.Item>
+                    </NavigationMenu.List>
                   </div>
                 </NavigationMenu.Content>
               </NavigationMenu.Item>

@@ -649,6 +649,28 @@ describe('NavigationMenu', () => {
         const { getByRole } = render(Default)
         expect(getByRole('navigation', { name: 'Acme' })).toBeTruthy()
       })
+
+      it('fills both columns of the Solutions panel', async () => {
+        const { getByRole } = render(Default)
+        await userEvent.click(getByRole('button', { name: /Solutions/ }))
+        await waitFor(
+          () => {
+            expect(within(document.body).getByText('By use case')).toBeTruthy()
+            expect(within(document.body).getByText('By industry')).toBeTruthy()
+          },
+          { timeout: OPEN_TIMEOUT }
+        )
+      })
+
+      it('grows every trigger to the 44px touch height on a coarse pointer', () => {
+        const { getByRole } = render(Default)
+        for (const trigger of [
+          getByRole('button', { name: /Solutions/ }),
+          getByRole('button', { name: /Products/ }),
+          getByRole('link', { name: /Pricing/ })
+        ])
+          expect(trigger.classList).toContain('pointer-coarse:min-h-11')
+      })
     })
   })
 

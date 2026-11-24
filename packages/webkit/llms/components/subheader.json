@@ -23,7 +23,7 @@
   "`page-header` — the page's h1.",
   "`settings-group` — the settings band with a Hint, a gutter copy-link and an optional disclosure; use it, not this, for a band of `SettingsRow`s.",
   "`module-header` — the marketing section heading (centred, left or horizontal); use it on site pages, this one in the console.",
-  "`copy-button` — the copy-link affordance it renders."
+  "`copy-button` — the copy-link affordance it renders, with the `az az-link` glyph that `settings-group` uses for the same action."
  ],
  "bestPractices": [
   "Keep the description to one sentence; put longer guidance in the band body.",

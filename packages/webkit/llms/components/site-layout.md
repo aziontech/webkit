@@ -182,7 +182,7 @@
     socials: [
       { icon: 'az az-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
     ],
-    statusLabel: 'All Systems Operational',
+    statusLabel: 'All systems operational',
     languages: ['EN', 'PT-BR', 'ES']
   }
 </script>
@@ -289,7 +289,7 @@
     socials: [
       { icon: 'az az-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
     ],
-    statusLabel: 'All Systems Operational',
+    statusLabel: 'All systems operational',
     languages: ['EN', 'PT-BR', 'ES']
   }
 </script>

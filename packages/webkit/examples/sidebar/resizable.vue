@@ -146,7 +146,6 @@
                 icon="az az-sql-database"
                 href="/sql-database"
                 tag-value="Preview"
-                tag-variant="primary"
               />
             </SidebarMenuGroup>
             <SidebarMenuGroup label="Account">

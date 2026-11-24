@@ -7,8 +7,8 @@
   import { ref } from 'vue'
 
   const step = ref(0)
-  const name = ref('storefront-api')
-  const region = ref('south-america')
+  const name = ref('')
+  const region = ref('')
   const environment = ref('production')
   const logging = ref(true)
   const path = ref('/api/*')
@@ -50,7 +50,10 @@
         </Field>
         <Field>
           <Field.Label> Region </Field.Label>
-          <Select v-model="region">
+          <Select
+            v-model="region"
+            placeholder="Choose a region"
+          >
             <Select.Trigger />
             <Select.Content>
               <Select.Item

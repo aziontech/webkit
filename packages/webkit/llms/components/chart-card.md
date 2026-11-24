@@ -131,7 +131,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 ## Accessibility
 
 - The card is a `role="group"` named by its title (`aria-labelledby`) or by `ariaLabel`; it is not a region landmark, so ten cards on a dashboard add no landmarks.
-- The drag and resize handles draw 24 px but take pointer input over 40 px (a transparent `before:` hit area 8 px around them).
+- The drag and resize handles draw 24 px but take pointer input over 40 px (a transparent `before:` hit area 8 px around them), 44 px on a coarse pointer (10 px around them).
 - Drag handle: a real `<button>` named "Move" plus the card title ("Move card" without a title), described by the arrow-key hint. Keyboard map: arrow keys emit `move` with the direction; the page reorders and keeps focus on the handle, and the handle announces "Moved to position 2 of 3" through the shared polite live region. Dragging never requires a pointer.
 - Resize handle: `role="separator"`, one tab stop, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` such as "6 of 12 columns, 552 pixels tall". Keyboard map: Left / Right change the span by one column, Up / Down change the height by 24 pixels, Home / End jump to the smallest and largest span, Escape cancels a pointer resize in progress.
 - Both handles are at least 24px with a visible focus ring `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.

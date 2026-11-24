@@ -182,6 +182,7 @@ No built-in strings: item labels and the panel's `aria-label` come from the cons
         <ContextMenu.Item
           value="delete"
           label="Delete"
+          severity="danger"
         />
       </ContextMenu.Group>
     </ContextMenu>
@@ -267,6 +268,7 @@ No built-in strings: item labels and the panel's `aria-label` come from the cons
       <ContextMenu.Item
         value="delete"
         label="Delete"
+        severity="danger"
       />
     </ContextMenu.Group>
   </ContextMenu>

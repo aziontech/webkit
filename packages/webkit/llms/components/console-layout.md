@@ -402,7 +402,7 @@ packages/webkit/src/components/layout/console-layout/
       <div class="layout-column flex flex-col gap-(--layout-group-gap)">
         <PageHeader
           title="Workloads"
-          description="Open the same palette as the header search, from the page."
+          description="Find a workload by name, domain or tag."
         >
           <template #actions>
             <FindWorkload />
@@ -467,7 +467,7 @@ packages/webkit/src/components/layout/console-layout/
       <div class="layout-column">
         <PageHeader
           title="Workloads"
-          description="Press ⌘K or Ctrl K and choose Collapse sidebar to fold the rail."
+          description="Applications and functions running in this account."
         />
       </div>
     </div>

@@ -2004,7 +2004,7 @@
   {
     "name": "context-menu",
     "path": "src/components/navigation/context-menu/index.ts",
-    "limit": "11.7 KB"
+    "limit": "11.75 KB"
   },
   {
     "name": "context-menu-root",

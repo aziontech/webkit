@@ -1785,3 +1785,4 @@ Budget-raise: copy-text 10.5 KB → 10.65 KB (measured 10.61 KB): middle truncat
 While `loading`, StatTile now reserves the delta line (when `deltaLabel` is set) and the sparkline (when `trend` has two or more points) with Skeletons, as its spec already promised, so a row of KPI tiles no longer grows by about 80 px when the data lands.
 
 Budget-raise: stat-tile 9.35 KB → 9.4 KB (measured 9.39 KB): two loading Skeletons that reserve the delta line and the sparkline height (A5P3-138), so dashboards do not shift on arrival.
+Budget-raise: context-menu 11.7 KB → 11.75 KB (measured 11.71 KB): its items gain the danger severity for destructive actions such as Delete (A5P3-066, A5P3-L04-2); the shared item row carries one more prop and one class.

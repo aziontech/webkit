@@ -256,8 +256,8 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
   import { ref } from 'vue'
 
   const step = ref(0)
-  const name = ref('storefront-api')
-  const region = ref('south-america')
+  const name = ref('')
+  const region = ref('')
   const environment = ref('production')
   const logging = ref(true)
   const path = ref('/api/*')
@@ -299,7 +299,10 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
         </Field>
         <Field>
           <Field.Label> Region </Field.Label>
-          <Select v-model="region">
+          <Select
+            v-model="region"
+            placeholder="Choose a region"
+          >
             <Select.Trigger />
             <Select.Content>
               <Select.Item
@@ -412,8 +415,8 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
   import { ref } from 'vue'
 
   const step = ref(0)
-  const name = ref('storefront-api')
-  const region = ref('south-america')
+  const name = ref('')
+  const region = ref('')
   const logging = ref(true)
 
   const regions = [
@@ -442,7 +445,10 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
         </Field>
         <Field>
           <Field.Label> Region </Field.Label>
-          <Select v-model="region">
+          <Select
+            v-model="region"
+            placeholder="Choose a region"
+          >
             <Select.Trigger />
             <Select.Content>
               <Select.Item
@@ -503,7 +509,7 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 
   const step = ref(3)
   const name = ref('storefront-api')
-  const region = ref('south-america')
+  const region = ref('north-america')
   const environment = ref('production')
   const logging = ref(true)
   const path = ref('/api/*')

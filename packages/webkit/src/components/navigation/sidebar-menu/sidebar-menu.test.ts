@@ -5,6 +5,7 @@ import { defineComponent, nextTick, ref } from 'vue'
 import { compileTemplate, parse } from 'vue/compiler-sfc'
 
 import ClientRouting from '../../../../examples/sidebar-menu/client-routing.vue'
+import DrillExample from '../../../../examples/sidebar-menu/drill.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SidebarMenu, {
   SidebarMenuBack,
@@ -838,5 +839,10 @@ describe('SidebarMenu', () => {
       await fireEvent.click(getByTestId('sidebar-menu-sub-trigger__control'))
       await waitFor(() => expect(openKeys.value).toContain('guides'))
     })
+  })
+
+  it('gives the drill example trigger an icon, so its label lines up with the icon rows', () => {
+    const { getByTestId } = render(DrillExample)
+    expect(getByTestId('sidebar-menu-sub-trigger__icon').querySelector('.az-settings')).toBeTruthy()
   })
 })

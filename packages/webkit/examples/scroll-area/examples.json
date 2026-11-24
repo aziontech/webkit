@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Vertical scroll region sized via `class`, with a themed thin scrollbar.",
+      "summary": "A deployment log in a vertical scroll region sized via `class`, with a themed thin scrollbar.",
       "file": "default.vue"
     },
     {

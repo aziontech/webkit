@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import { h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/dashboard-grid/default.vue'
+import Editing from '../../../../examples/dashboard-grid/editing.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ChartCard, {
   ChartCardContent,
@@ -269,5 +270,19 @@ describe('DashboardGrid', () => {
         .filter((el) => el.getBoundingClientRect().width >= width * 0.8)
       expect(frames).toHaveLength(1)
     }
+  })
+
+  it.each([
+    [390, false],
+    [1280, true]
+  ])('shows the editing span badge at %ipx only where spans apply', (width, visible) => {
+    const box = document.body.appendChild(document.createElement('div'))
+    box.style.width = `${width}px`
+    const view = render(Editing, { container: box })
+    expect(view.getByRole('button', { name: 'Done' })).toBeTruthy()
+    const badges = view.getAllByText(/\d+\/12/)
+    expect(badges.length).toBeGreaterThan(0)
+    for (const badge of badges) expect(badge.checkVisibility()).toBe(visible)
+    box.remove()
   })
 })

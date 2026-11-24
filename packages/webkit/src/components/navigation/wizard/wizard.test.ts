@@ -6,6 +6,8 @@ import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { page } from 'vitest/browser'
 import { defineComponent, nextTick } from 'vue'
 
+import Default from '../../../../examples/wizard/default.vue'
+import Optional from '../../../../examples/wizard/optional.vue'
 import Validation from '../../../../examples/wizard/validation.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
@@ -606,5 +608,16 @@ describe('Wizard', () => {
 
       expect(progressOf(view).textContent?.trim()).toBe('Etapa 1 de 3')
     })
+  })
+
+  it.each([
+    ['default', Default],
+    ['optional', Optional],
+    ['validation', Validation]
+  ])('opens the %s example on a blank first step', (_, Example) => {
+    const view = render(Example)
+    expect((view.getByRole('textbox', { name: /Name/ }) as HTMLInputElement).value).toBe('')
+    expect(view.container.textContent).toContain('Choose a region')
+    expect(view.container.textContent).not.toContain('South America')
   })
 })

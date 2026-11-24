@@ -41,7 +41,7 @@ const footer = (props: Record<string, unknown> = {}) =>
       home: '/',
       columns,
       socials,
-      statusLabel: 'All Systems Operational',
+      statusLabel: 'All systems operational',
       languages: ['EN', 'PT-BR', 'ES'],
       ...props
     }
@@ -144,7 +144,7 @@ describe('SiteFooterSection', () => {
     const { getByRole, getByTestId, getByText } = footer()
 
     const bar = getByTestId('footer__status')
-    const status = getByText('All Systems Operational')
+    const status = getByText('All systems operational')
     const select = getByRole('combobox', { name: 'Language' })
     expect(bar).toContainElement(status)
     expect(bar).toContainElement(select)
@@ -167,11 +167,11 @@ describe('SiteFooterSection', () => {
   it('renders the status line when set and nothing when empty', () => {
     const { getByText, unmount } = footer()
 
-    expect(getByText('All Systems Operational')).toBeInTheDocument()
+    expect(getByText('All systems operational')).toBeInTheDocument()
     unmount()
 
     const { queryByText } = footer({ statusLabel: '' })
-    expect(queryByText('All Systems Operational')).toBeNull()
+    expect(queryByText('All systems operational')).toBeNull()
   })
 
   it('selects the first language and switches to another one', async () => {

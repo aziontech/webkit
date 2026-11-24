@@ -7,7 +7,7 @@
 
   const step = ref(0)
   const name = ref('')
-  const region = ref('south-america')
+  const region = ref('')
   const environment = ref('production')
   const nameMissing = ref(false)
   const nameEl = ref(null)
@@ -60,7 +60,10 @@
         </Field>
         <Field>
           <Field.Label> Region </Field.Label>
-          <Select v-model="region">
+          <Select
+            v-model="region"
+            placeholder="Choose a region"
+          >
             <Select.Trigger />
             <Select.Content>
               <Select.Item
