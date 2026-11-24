@@ -14,7 +14,7 @@ body:
     id: name
     attributes:
       label: Proposed name
-      description: kebab-case, in the shadcn/Radix vocabulary when one exists (e.g. `date-picker`, `combobox`). The spec reviewer may rename it.
+      description: kebab-case English, singular, whole words, modifier first and noun last (`icon-button`), in the shadcn/Radix vocabulary when one exists (`date-picker`, `combobox`, `dialog` not `modal`, `drawer` not `sheet`). A docs piece starts with `doc-`, a marketing page section ends in `-section` (`.claude/rules/naming.md`). The spec reviewer may rename it.
       placeholder: date-picker
     validations:
       required: true
@@ -54,9 +54,10 @@ body:
     id: surface
     attributes:
       label: Surface
+      description: Where it is used first; a content component works in all three (`rules/webkit-content-channels.md`).
       options:
-        - product
-        - marketing
+        - app
+        - site
         - docs
     validations:
       required: true

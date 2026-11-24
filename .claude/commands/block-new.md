@@ -30,7 +30,8 @@ docs sidebar lists its full title ("Dashboard Alerts" under Dashboard); see
 <folder>/
 ├── block.json          id (= folder path under blocks/), name, title, surface, summary, preview,
 │                       stability: "preview" (until the owner marks it GA), intents (en + pt-BR),
-│                       skills, primary { name, file }, variants[], steps?
+│                       skills, primary { name, file }, variants[], files,
+│                       keyboard (entry field of a task screen), steps?
 ├── <name>.vue          the primary state, a copyable SFC that takes its data through typed props
 ├── sample.ts           the sample records the primary renders when its data props are left out
 │                       (listed in block.json "files", with any adapter next to it)
@@ -69,6 +70,23 @@ of 60 lines or more that copies 60 % or more of the primary and adds its own cod
 misses every later fix to the primary) (`scripts/blocks-data-baseline.json` freezes the legacy
 findings and only shrinks). The exemplar is
 `view/view-table`.
+
+### What else the gates hold a block to
+
+- **Size** (`.claude/docs/CODE_QUALITY.md` § 3.1, § 3.12): the page file stays under 400 lines and
+  each variant under 120; logic two blocks share moves to the package (`check:duplication`), and
+  blocks and examples own no raw native control or ARIA widget role (`webkit/no-unowned-element`).
+- **Copy**: the block's PascalCase name appears only in code, `name`, `title` and the guidelines
+  H1, never in text a person reads (`check:blocks`, `scripts/lib/block-code-names.mjs`).
+- **Sample data** follows `rules/webkit-example-data.md` (`example.com`, Acme, no national
+  formats, blank forms start empty).
+- **Overlays** start closed; only a variant whose job is to show the overlay renders it open
+  (`rules/webkit-overlays-closed-on-load.md`).
+- **Keyboard**: a task screen declares `"keyboard": { "entry": "field" }` in `block.json` (plus
+  `"escape": "cancel"` for a full-page create) and every control is reachable with a visible ring
+  (`apps/visual/tests/keyboard.spec.ts`).
+- **Textures and regions** follow `.claude/rules/styling.md` (text only on a `Texture`, one
+  hairline between surfaces, the group gap between regions).
 
 The catalog (`build:catalog`), the MCP (`get_block` returns `guidelines.md` with the SFC),
 `check:blocks` (consumer lint on every SFC, and `guidelines.md` against the SFC), the
@@ -118,7 +136,7 @@ fresh reviewer, three returns stop the run. Exit condition: `approve`.
    `.claude/skills/ui-craft` "Start here", and follows the data contract above (the primary
    plus its `files` run on their own; a variant needs only them).
 2. `pnpm --filter @aziontech/webkit build:catalog` and
-   commit `catalog.json` and `catalog/`. The docs page and the visual test follow from the files;
+   commit `catalog.json`, `catalog/` and `llms/`. The docs page and the visual test follow from the files;
    baselines for a new block come from the `Visual baselines` workflow (`/baselines-regenerate`).
 3. Exit condition: `node packages/webkit/scripts/check-naming.mjs` and
    `node packages/webkit/scripts/check-blocks.mjs` pass (the latter fails when `guidelines.md`
@@ -138,7 +156,7 @@ blocker.
 ## Step 8 — Usage check
 
 `pnpm --filter @aziontech/webkit run check:usage -- <category-path>/<name> "<prompt>" --report usage-report.md`
-(for example `settings/api-tokens`), or the `usage-check.yml` workflow. The prompt asks for
+(for example `settings/settings-api-tokens`), or the `usage-check.yml` workflow. The prompt asks for
 the screen by its job, never by the block id. Pass: the generated `src/**/*.vue` imports at least
 80 % of the components the block's primary SFC imports (the session copied it through
 `get_block`) and `webkit doctor` passes.
