@@ -1,6 +1,6 @@
 # EditSchema (`edit/edit-schema`)
 
-> The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `DataTable` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an `AttributeEditor` of column rows (reorderable by grip, Move up and down or Alt+Arrow; name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the state-form-validation rule. Add column is a large drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a large drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create Table drawer also imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys in a second `AttributeEditor` (column, referenced table and column, On delete). A page body for ConsoleLayout.
+> The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `DataTable` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create table, Truncate table). Create table is a large right `Drawer` with the table Name and an `AttributeEditor` of column rows (reorderable by grip, Move up and down or Alt+Arrow; name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the state-form-validation rule. Add column is a large drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a large drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create table drawer also imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys in a second `AttributeEditor` (column, referenced table and column, On delete). A page body for ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/edit/edit-schema/edit-schema.vue` in `@aziontech/webkit`
@@ -12,7 +12,7 @@
 
 schema editor; create table; add column; insert row; alter column; change column type; truncate table; table schema; database schema; column types; criar tabela; adicionar coluna; inserir linha; alterar coluna; esvaziar tabela; esquema do banco
 
-The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create Table, Add column, Insert and table menu buttons of `view/view-query-editor`. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
+The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create table, Add column, Insert and table menu buttons of `view/view-query-editor`. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
 
 ## When to use
 
@@ -31,11 +31,11 @@ The table schema of a SQL database: the definition of one table and the drawers 
 
 ### A. Definition surface — `Card`, `DataTable`, `TableCellActions`, `Tag`, `Button`, `DropdownMenu`, `Tooltip`, `IconButton` (required)
 
-One `Card :padded="false"` around a `DataTable :bordered="false"` named `Columns of <table>`. The toolbar slot holds the table glyph and name, a small secondary `Tag` with the row count, an outlined Add column `Button`, the primary Insert row `Button` and a Table actions `IconButton` (with its `Tooltip`) that opens a `DropdownMenu`: Create Table in the first group, Truncate table alone in the last. The rows are the columns: the name in the code font, the type as a secondary `Tag`, the constraints in muted text (`PRIMARY KEY, NOT NULL, DEFAULT now()`, or `None`), and a per-column `TableCellActions` ("Actions for <column>") with Change type.
+One `Card :padded="false"` around a `DataTable :bordered="false"` named `Columns of <table>`. The toolbar slot holds the table glyph and name, a small secondary `Tag` with the row count, an outlined Add column `Button`, the primary Insert row `Button` and a Table actions `IconButton` (with its `Tooltip`) that opens a `DropdownMenu`: Create table in the first group, Truncate table alone in the last. The rows are the columns: the name in the code font, the type as a secondary `Tag`, the constraints in muted text (`PRIMARY KEY, NOT NULL, DEFAULT now()`, or `None`), and a per-column `TableCellActions` ("Actions for <column>") with Change type.
 
-### B. Create Table drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsGroup`, `Alert`, `Field`, `Input` (required)
+### B. Create table drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsGroup`, `Alert`, `Field`, `Input` (required)
 
-A large right `Drawer` whose content is a `form` named Create Table. The `PanelHeader` holds the `DrawerTitle`, one muted sentence (the database and how to reorder) and the drawer's own close button. A `fieldset` disabled while the request runs holds two `SettingsGroup`s. General has one `Field` with the table Name in the code font and why it cannot be renamed lightly. A rejection from the server goes above it as a danger `Alert` that says what happened and that the columns are kept, and on the field as its `Field.Error`, per `state/state-form-validation` (SectionRejected).
+A large right `Drawer` whose content is a `form` named Create table. The `PanelHeader` holds the `DrawerTitle`, one muted sentence (the database and how to reorder) and the drawer's own close button. A `fieldset` disabled while the request runs holds two `SettingsGroup`s. General has one `Field` with the table Name in the code font and why it cannot be renamed lightly. A rejection from the server goes above it as a danger `Alert` that says what happened and that the columns are kept, and on the field as its `Field.Error`, per `state/state-form-validation` (SectionRejected).
 
 ### C. Column rows — `AttributeEditor`, `Select`, `Checkbox`, `FieldError` (required)
 
@@ -43,7 +43,7 @@ The Columns section is an `AttributeEditor` (`v-model:items`, large, `reorderabl
 
 ### D. CSV import and foreign keys — `FileDropzone`, `FileTokenGroup` (optional)
 
-Two optional sections in the Create Table drawer. Import data from CSV: a `FileDropzone` (one .csv) with a Browse files button that opens the system picker through `useFilePicker`; once read, the file is a `FileTokenGroup` token (Remove clears it), the columns are rebuilt from the header with types guessed from the values (`int8`, `numeric`, `bool`, `timestamptz`, else `text`; `id` becomes the primary key) and stay editable, an empty name takes the file's, and a bordered `DataTable` previews the first five rows under a line that counts columns and rows. A header with an empty name or a non-CSV file is an error on the token and blocks Create. Foreign keys: a second `AttributeEditor` named Foreign keys (no minimum, `No foreign keys.` when empty) with Column (the named columns), References table, References column (enabled once a table is picked) and On delete (No action, Cascade, Set null) cells as `Select`s; the editor owns Remove foreign key and Add foreign key. After Create, an incomplete row shows `Choose the column, the table and the column it references.` under its first empty cell. The success toast counts the imported rows and the keys. The drawer imports into a new table; an existing empty table imports from its own page (M2.10 row).
+Two optional sections in the Create table drawer. Import data from CSV: a `FileDropzone` (one .csv) with a Browse files button that opens the system picker through `useFilePicker`; once read, the file is a `FileTokenGroup` token (Remove clears it), the columns are rebuilt from the header with types guessed from the values (`int8`, `numeric`, `bool`, `timestamptz`, else `text`; `id` becomes the primary key) and stay editable, an empty name takes the file's, and a bordered `DataTable` previews the first five rows under a line that counts columns and rows. A header with an empty name or a non-CSV file is an error on the token and blocks Create. Foreign keys: a second `AttributeEditor` named Foreign keys (no minimum, `No foreign keys.` when empty) with Column (the named columns), References table, References column (enabled once a table is picked) and On delete (No action, Cascade, Set null) cells as `Select`s; the editor owns Remove foreign key and Add foreign key. After Create, an incomplete row shows `Choose the column, the table and the column it references.` under its first empty cell. The success toast counts the imported rows and the keys. The drawer imports into a new table; an existing empty table imports from its own page (M2.10 row).
 
 ### E. Add column drawer — `Switch` (required)
 
@@ -63,7 +63,7 @@ A medium `ConfirmDialog` titled `Truncate <table>`, following `edit/edit-delete-
 
 ### Outcome toasts — through `toast`
 
-Raised through `toast` with one id, so each change replaces the last toast. Schema changes are not deploys: each success names what changed and offers the next thing to do with the table, never Edit and Redeploy or View deployments. Create Table: `Table events created.` with Insert row and Add column. Add column: `Column phone added to customers.` with Change type. Insert row: `Row inserted into customers.` with Insert another. Change type: `email is now text.` with Change again. Truncate: `customers truncated. 3 rows removed.` with Insert row. The toasts show when `loading` turns off with no `error`. A failed Add column, Insert row, Change type or Truncate is a danger toast with the `error` text and Retry that keeps the form; a refused Create Table is the General `Alert` and the Name field error. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Raised through `toast` with one id, so each change replaces the last toast. Schema changes are not deploys: each success names what changed and offers the next thing to do with the table, never Edit and Redeploy or View deployments. Create table: `Table events created.` with Insert row and Add column. Add column: `Column phone added to customers.` with Change type. Insert row: `Row inserted into customers.` with Insert another. Change type: `email is now text.` with Change again. Truncate: `customers truncated. 3 rows removed.` with Insert row. The toasts show when `loading` turns off with no `error`. A failed Add column, Insert row, Change type or Truncate is a danger toast with the `error` text and Retry that keeps the form; a refused Create table is the General `Alert` and the Name field error. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -74,11 +74,11 @@ The block takes its tables through props and emits every change; it runs no SQL 
 | `tables`             | `SchemaEditorTable[]`             | The database's tables; the selected one fills the definition table, every one feeds the foreign key selects.                                               |
 | `database`           | `string`                          | The database name the drawers and messages name.                                                                                                           |
 | `loading`            | `boolean`                         | A change is in flight: the open drawer or dialog locks and its submit spins. When it turns off with no `error`, the change is applied and its toast shows. |
-| `error`              | `string`                          | Why the change failed: on the Name field and in an `Alert` for Create Table, in a danger toast with Retry for the others.                                  |
+| `error`              | `string`                          | Why the change failed: on the Name field and in an `Alert` for Create table, in a danger toast with Retry for the others.                                  |
 | `v-model:dialog`     | `SchemaEditorDialog`              | The open drawer or dialog (`create`, `column`, `row`, `alter`, `truncate` or `none`); defaults to `create`.                                                |
 | `v-model:table`      | `string`                          | The selected table's name; empty picks the first table.                                                                                                    |
-| `defaultDraft`       | `{ name?, relations? }`           | The Create Table name and foreign keys the drawer opens with.                                                                                              |
-| `defaultCsv`         | `SchemaEditorCsv`                 | A CSV file the Create Table drawer opens with, already read.                                                                                               |
+| `defaultDraft`       | `{ name?, relations? }`           | The Create table name and foreign keys the drawer opens with.                                                                                              |
+| `defaultCsv`         | `SchemaEditorCsv`                 | A CSV file the Create table drawer opens with, already read.                                                                                               |
 | `defaultColumn`      | `Partial<SchemaEditorColumnForm>` | The Add column values the drawer opens with.                                                                                                               |
 | `defaultRow`         | `Record<string, string>`          | The Insert row values the drawer opens with.                                                                                                               |
 | `defaultAlterColumn` | `string`                          | The column the Change type dialog opens on.                                                                                                                |
@@ -86,7 +86,7 @@ The block takes its tables through props and emits every change; it runs no SQL 
 
 | Event          | Payload                            | When                                                               |
 | -------------- | ---------------------------------- | ------------------------------------------------------------------ |
-| `create-table` | `(event, table)`                   | Create Table, valid: name, columns, foreign keys and the CSV rows. |
+| `create-table` | `(event, table)`                   | Create table, valid: name, columns, foreign keys and the CSV rows. |
 | `add-column`   | `(event, { table, column })`       | Add column, valid.                                                 |
 | `insert-row`   | `(event, { table, values })`       | Insert row, valid; values keyed by column name.                    |
 | `change-type`  | `(event, { table, column, type })` | Change type in the dialog.                                         |
@@ -137,16 +137,16 @@ Then delete `sample.ts` and its import.
 - Don't put a deploy action (Edit, Redeploy, View deployments) on a schema change.
 - Don't let a primary key be nullable; lock Not null while Primary key is on.
 - Don't drop rows on a type change silently; warn that values that don't fit make it fail.
-- Don't close the Create Table drawer on a server error.
+- Don't close the Create table drawer on a server error.
 
 ## Copy
 
-- **Titles:** `Create Table`, `Add column`, `Insert row`, `Change the type of <column>`, `Truncate <table>`.
-- **Buttons:** the title's verb and object: `Create Table`, `Add column`, `Insert row`, `Change type`, `Truncate table`; Cancel beside each.
+- **Titles:** `Create table`, `Add column`, `Insert row`, `Change the type of <column>`, `Truncate <table>`.
+- **Buttons:** the title's verb and object: `Create table`, `Add column`, `Insert row`, `Change type`, `Truncate table`; Cancel beside each.
 - **Errors:** `This field is required.`, `Start with a letter or an underscore; use letters, numbers and underscores.`, `Another column is also named email.`, `Add at least one named column.`, `customers already has a column named email.`, `email cannot be NULL. Enter a value.`
 - **Server rejection:** `The table wasn't created. A table named customers already exists in acme-store. Your columns are kept; pick another name and create it again.`
 - **Toasts:** as in building block H.
-- Follow `skills/webkit-microcopy`: sentence case except the product's object names (`Create Table`), no em dash, no "please", no exclamation marks.
+- Follow `skills/webkit-microcopy`: sentence case except the product's object names (`Create table`), no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -159,13 +159,13 @@ Then delete `sample.ts` and its import.
 
 ## States
 
-- CreateTable: `dialog` left at `create`: the Create Table drawer open on a new table, with the default id and created_at columns.
+- CreateTable: `dialog` left at `create`: the Create table drawer open on a new table, with the default id and created_at columns.
 - AddColumn: `dialog="column"` with `defaultColumn` phone as varchar, in the Add column drawer.
 - InsertRow: `dialog="row"` with `defaultRow` and `defaultSubmitted`: the Insert row drawer after a submit with email empty, showing the NOT NULL error.
 - ChangeType: `dialog="alter"` with `defaultAlterColumn` email: the Change type dialog with the statements that will run.
 - TruncateTable: `dialog="truncate"`: the Truncate customers dialog waiting for the typed name.
-- ImportCsv: `defaultCsv` and `defaultDraft.relations`: Create Table with subscribers.csv read (six columns, six rows, a quoted comma) and one foreign key, customer_id to customers.id on delete cascade.
-- Error: `error` with `defaultDraft.name` customers: Create Table refused by the server because customers already exists; Alert in General and the Name field invalid.
+- ImportCsv: `defaultCsv` and `defaultDraft.relations`: Create table with subscribers.csv read (six columns, six rows, a quoted comma) and one foreign key, customer_id to customers.id on delete cascade.
+- Error: `error` with `defaultDraft.name` customers: Create table refused by the server because customers already exists; Alert in General and the Name field invalid.
 
 ## Related
 
@@ -183,8 +183,8 @@ Then delete `sample.ts` and its import.
 - `InsertRow` — The Insert row drawer for customers after Insert was pressed with email empty: one field per column in table order, id generated and disabled, created_at falling back to now(), and email invalid because it is NOT NULL.
 - `ChangeType` — The Change type dialog for email: a warning that the table is rebuilt, the New type select, and the BEGIN … COMMIT statements that will run in a read-only CodeEditor; Change type is disabled until the type differs.
 - `TruncateTable` — The Truncate customers dialog: a warning, the row count that goes, the TRUNCATE TABLE statement and a field that must match the table name before the danger button enables.
-- `ImportCsv` — Create Table started from a CSV: subscribers.csv as a `FileTokenGroup` token, the columns rebuilt from its header with guessed types, a five-row `DataTable` preview, and a foreign key from customer_id to customers.id with On delete Cascade.
-- `Error` — Create Table came back from the server: a table named customers already exists, so a danger Alert in the General section says nothing else was lost and the Name field is invalid with the same reason; the columns stay as they were.
+- `ImportCsv` — Create table started from a CSV: subscribers.csv as a `FileTokenGroup` token, the columns rebuilt from its header with guessed types, a five-row `DataTable` preview, and a foreign key from customer_id to customers.id with On delete Cascade.
+- `Error` — Create table came back from the server: a table named customers already exists, so a danger Alert in the General section says nothing else was lost and the Name field is invalid with the same reason; the columns stay as they were.
 
 Each variant is the same screen in another state: `get_block("edit/edit-schema", { variant })`, or the file under `blocks/edit/edit-schema/variants/`.
 
@@ -229,7 +229,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
     rowCount: number
   }
 
-  /** One foreign key row of the Create Table drawer. */
+  /** One foreign key row of the Create table drawer. */
   export interface SchemaEditorRelation {
     /** Stable key of the row. */
     key: string
@@ -243,7 +243,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
     onDelete: string
   }
 
-  /** A CSV file the Create Table drawer reads. */
+  /** A CSV file the Create table drawer reads. */
   export interface SchemaEditorCsvFile {
     /** File name. */
     name: string
@@ -261,7 +261,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
     text: string
   }
 
-  /** The table Create Table sends. */
+  /** The table Create table sends. */
   export interface SchemaEditorNewTable {
     /** Table name. */
     name: string
@@ -297,11 +297,11 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
     database?: string
     /** A change is in flight: the open drawer or dialog locks and its submit spins. When it turns off with no error, the change is applied and the success toast shows. */
     loading?: boolean
-    /** Why the change failed. Create Table shows it on the Name field and in an Alert; the other changes show a danger toast with Retry. */
+    /** Why the change failed. Create table shows it on the Name field and in an Alert; the other changes show a danger toast with Retry. */
     error?: string
-    /** The Create Table name and foreign keys the drawer opens with. */
+    /** The Create table name and foreign keys the drawer opens with. */
     defaultDraft?: { name?: string; relations?: SchemaEditorRelation[] }
-    /** A CSV file the Create Table drawer opens with, already read. */
+    /** A CSV file the Create table drawer opens with, already read. */
     defaultCsv?: SchemaEditorCsv
     /** The Add column values the drawer opens with. */
     defaultColumn?: Partial<SchemaEditorColumnForm>
@@ -1230,7 +1230,7 @@ export const createdDescription = (rows: number, relations: number) =>
       />
       <Button
         label="Change type"
-        variant="primary"
+        variant="danger"
         size="medium"
         :loading="submitting"
         :disabled="type === current?.type"
@@ -1546,13 +1546,13 @@ export const createdDescription = (rows: number, relations: number) =>
     <DrawerContent>
       <form
         class="flex min-h-0 flex-1 flex-col"
-        aria-label="Create Table"
+        aria-label="Create table"
         novalidate
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>Create Table</DrawerTitle>
+            <DrawerTitle>Create table</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               Define the table name and its columns in {{ database }}, or start from a CSV file.
               Drag a column's grip, or focus it and use the arrow keys, to reorder.
@@ -1565,7 +1565,7 @@ export const createdDescription = (rows: number, relations: number) =>
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
           >
-            <legend class="sr-only">Create Table</legend>
+            <legend class="sr-only">Create table</legend>
             <SettingsGroup
               label="General"
               hint="Names the table inside this database."
@@ -1626,7 +1626,7 @@ export const createdDescription = (rows: number, relations: number) =>
         </PanelBody>
 
         <DrawerFormFooter
-          submit-label="Create Table"
+          submit-label="Create table"
           :submitting="submitting"
           @cancel="open = false"
         />
@@ -1952,7 +1952,9 @@ export const createdDescription = (rows: number, relations: number) =>
                 size="large"
                 class="w-full"
                 :placeholder="
-                  isAuto(column) ? 'Automatically generated' : column.defaultValue || 'NULL'
+                  isAuto(column)
+                    ? 'Automatically generated'
+                    : column.defaultValue || (column.notNull ? '' : 'NULL')
                 "
                 autocomplete="off"
               />
@@ -2077,7 +2079,7 @@ export const createdDescription = (rows: number, relations: number) =>
                 <DropdownMenu.Group>
                   <DropdownMenu.Item
                     value="create"
-                    label="Create Table"
+                    label="Create table"
                   >
                     <template #leading
                       ><i

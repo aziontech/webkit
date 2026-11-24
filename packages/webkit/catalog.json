@@ -33811,7 +33811,7 @@
    "title": "Blocks/Create/CreateDeploySuccess",
    "source": "blocks/create/create-deploy-success/create-deploy-success.vue",
    "surface": "app",
-   "summary": "The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `Subheader`, `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.",
+   "summary": "The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button (Manage resource when nothing serves it yet). Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `Subheader`, `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.",
    "intents": [
     "deploy success",
     "deployment successful",
@@ -34461,6 +34461,7 @@
     "Field",
     "Input",
     "Kbd",
+    "KeyValueList",
     "OverflowCount",
     "PageHeader",
     "SaveBar",
@@ -34486,6 +34487,7 @@
     "@aziontech/webkit/field",
     "@aziontech/webkit/input",
     "@aziontech/webkit/kbd",
+    "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/overflow-count",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/save-bar",
@@ -36897,6 +36899,7 @@
     "Textarea",
     "toast",
     "Tooltip",
+    "use-locale",
     "use-unsaved-changes",
     "utils/focus-invalid"
    ],
@@ -36942,6 +36945,7 @@
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale",
     "@aziontech/webkit/use-unsaved-changes",
     "@aziontech/webkit/utils/focus-invalid"
    ],
@@ -36989,7 +36993,7 @@
    "title": "Blocks/Edit/EditRuleBuilder",
    "source": "blocks/edit/edit-rule-builder/edit-rule-builder.vue",
    "surface": "app",
-   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows the Required marker from the start and turns invalid only after Save is pressed with it empty. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsGroup`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant=\"card\"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.",
+   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows the Required marker from the start and turns invalid only after Save is pressed with it empty. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add rule or Edit rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsGroup`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant=\"card\"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.",
    "intents": [
     "rules engine",
     "rule form",
@@ -37067,7 +37071,7 @@
    "title": "Blocks/Edit/EditSchema",
    "source": "blocks/edit/edit-schema/edit-schema.vue",
    "surface": "app",
-   "summary": "The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `DataTable` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an `AttributeEditor` of column rows (reorderable by grip, Move up and down or Alt+Arrow; name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the state-form-validation rule. Add column is a large drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a large drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create Table drawer also imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys in a second `AttributeEditor` (column, referenced table and column, On delete). A page body for ConsoleLayout.",
+   "summary": "The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `DataTable` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create table, Truncate table). Create table is a large right `Drawer` with the table Name and an `AttributeEditor` of column rows (reorderable by grip, Move up and down or Alt+Arrow; name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the state-form-validation rule. Add column is a large drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a large drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create table drawer also imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys in a second `AttributeEditor` (column, referenced table and column, On delete). A page body for ConsoleLayout.",
    "intents": [
     "schema editor",
     "create table",
@@ -37158,7 +37162,7 @@
     "@aziontech/webkit/utils/csv"
    ],
    "primary": "CreateTable",
-   "guidelinesSummary": "The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create Table, Add column, Insert and table menu buttons of `view/view-query-editor`. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
+   "guidelinesSummary": "The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create table, Add column, Insert and table menu buttons of `view/view-query-editor`. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
    "variants": [
     {
      "name": "AddColumn"
@@ -37186,7 +37190,7 @@
    "title": "Blocks/Edit/EditVariables",
    "source": "blocks/edit/edit-variables/edit-variables.vue",
    "surface": "app",
-   "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the view-table recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a state-first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of edit-delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsGroup`, `DataTable`, `Card`, `EmptyState`, `TableCellId`, `TableCellLink`, `TableCellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `FieldError` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.",
+   "summary": "A key/value editor, drawn as a variables list page and the Create variable drawer its heading action opens. The list follows the view-table recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a state-first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of edit-delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsGroup`, `DataTable`, `Card`, `EmptyState`, `TableCellId`, `TableCellLink`, `TableCellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `FieldError` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.",
    "intents": [
     "variables",
     "environment variables",
@@ -37322,7 +37326,7 @@
     "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "List",
-   "guidelinesSummary": "A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
+   "guidelinesSummary": "A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
    "variants": [
     {
      "name": "Create"
@@ -37916,7 +37920,7 @@
    "title": "Blocks/State/StateEdgeErrorPage",
    "source": "blocks/state/state-edge-error-page/state-edge-error-page.vue",
    "surface": "edge",
-   "summary": "The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `FlowDiagram` (one data card per hop, `uniform` so every card has the same width and height, each with its status dot and text; side by side on a wide screen, stacked with `orientation=\"vertical\"` on a phone or tablet), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, data center, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/state-error-page` instead.",
+   "summary": "The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `FlowDiagram` (one data card per hop, `uniform` so every card has the same width and height, each with its status dot and text; one `orientation=\"responsive\"` diagram, side by side when the row fits and stacked when it does not), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, data center, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/state-error-page` instead.",
    "intents": [
     "edge error page",
     "502 bad gateway page",

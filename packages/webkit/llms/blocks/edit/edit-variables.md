@@ -1,6 +1,6 @@
 # EditVariables (`edit/edit-variables`)
 
-> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the view-table recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a state-first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of edit-delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsGroup`, `DataTable`, `Card`, `EmptyState`, `TableCellId`, `TableCellLink`, `TableCellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `FieldError` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.
+> A key/value editor, drawn as a variables list page and the Create variable drawer its heading action opens. The list follows the view-table recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a state-first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of edit-delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsGroup`, `DataTable`, `Card`, `EmptyState`, `TableCellId`, `TableCellLink`, `TableCellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `FieldError` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
@@ -12,7 +12,7 @@
 
 variables; environment variables; env vars; secrets; create variable; edit variable; variables list; variáveis; variáveis de ambiente; segredos; criar variável; key value editor; attribute editor; .env upload; editor de chave e valor; delete variable; clone variable; paste .env; paste env file; import .env; colar .env; importar variáveis; dotenv; network list; ip list; asn list; country list; bulk paste; lista de rede; lista de ips; lista de red; variables page; variables block; environment variables page; list of variables; página de variáveis
 
-A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
+A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
 
 ## When to use
 
@@ -32,7 +32,7 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-`PageHeader` titled Variables with a one-sentence description and two actions: an outlined medium Documentation and the primary medium `Create Variable`, the same height as Documentation, which opens the drawer.
+`PageHeader` titled Variables with a one-sentence description and two actions: an outlined medium Documentation and the primary medium `Create variable`, the same height as Documentation, which opens the drawer.
 
 ### B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
@@ -48,7 +48,7 @@ The same controls row as `view/view-table`, all bound to one client-mode `useCol
 
 ### E. Create and edit drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 
-A right-side `Drawer` whose content is one `form` labeled Create Variable or Edit Variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelBody` scrolls the Variables and Scope sections. The form resets every time the drawer opens: from Create Variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
+A right-side `Drawer` whose content is one `form` labeled Create variable or Edit variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelBody` scrolls the Variables and Scope sections. The form resets every time the drawer opens: from Create variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
 
 ### F. Variables section — `SettingsGroup`, `Button`, `ToggleGroup` (required)
 
@@ -76,7 +76,7 @@ A `SettingsGroup` titled Scope with one large `InputGroupRoot` per scope type: a
 
 ### L. List states — `EmptyState`, `Button` (required)
 
-With no variables at all, the card holds a state-first-use `EmptyState` (`No variables yet`) with Create Variable and Documentation. When the filter matches nothing, the table's `#empty` slot holds a no-match `EmptyState` (`No matching variables`) with an outlined Clear filters `Button`.
+With no variables at all, the card holds a state-first-use `EmptyState` (`No variables yet`) with Create variable and Documentation. When the filter matches nothing, the table's `#empty` slot holds a no-match `EmptyState` (`No matching variables`) with an outlined Clear filters `Button`.
 
 ### M. Delete confirmation — `ConfirmDialog`, `Alert`, `Input`, `Button` (required)
 
@@ -161,14 +161,14 @@ Then delete the sample variables from `sample.ts` and their import. With no `sav
 
 ## Copy
 
-- **Title and create action:** "Variables" and "Create Variable"; the drawer title repeats "Create Variable", or reads "Edit Variable" from a row.
+- **Title and create action:** "Variables" and "Create variable"; the drawer title repeats "Create variable", or reads "Edit variable" from a row.
 - **Empty states:** "No variables yet" / "Create a variable to store a value your services read at runtime."; "No matching variables" / "No variable matches these filters."
 - **Delete dialog:** title and danger button "Delete variable"; the prompt reads "Type API_BASE_URL to confirm."
 - **Field placeholders:** show the format, e.g. "MY_VARIABLE" for the key, "my-variable-value" for the value.
 - **Toasts:** "API_KEY created.", "3 variables created.", "API_KEY updated.", "API_KEY cloned as API_KEY_COPY.", "API_KEY deleted."; save failure "Variables not saved. You are offline; check your connection and save again."
 - **Errors:** short and specific, e.g. "Key is required.", "Use only uppercase letters, numbers, and underscores.", "Select at least one resource for this scope."
 - **Secret control:** "Mark as secret" and "Unmark as secret"; the hint states the rule, e.g. "Secret values are hidden and write-only after saving."
-- **Network list:** title "Create Network List"; types "IP/CIDR", "ASN", "Countries"; panel label "Paste one address per line"; report "7 entries found. Text after # is kept as the comment.", "Lines 4 and 8 are not an IPv4 or IPv6 address, or a CIDR range; they are added with an error to fix.", "Line 7 is already in the list and will be skipped."; row error "198.51.100.300 is not an IPv4 or IPv6 address, or a CIDR range."; toast "Office and partners created."
+- **Network list:** title "Create network list"; types "IP/CIDR", "ASN", "Countries"; panel label "Paste one address per line"; report "7 entries found. Text after # is kept as the comment.", "Lines 4 and 8 are not an IPv4 or IPv6 address, or a CIDR range; they are added with an error to fix.", "Line 7 is already in the list and will be skipped."; row error "198.51.100.300 is not an IPv4 or IPv6 address, or a CIDR range."; toast "Office and partners created."
 - **Paste panel:** label "Paste .env contents"; report "3 variables found. Lines starting with # are ignored.", "Line 5 is not KEY=value with an uppercase key and will be skipped.", "CACHE_TTL is already in the list; its value will be replaced."; buttons "Paste .env", "Add 3 variables", "Cancel".
 - **Buttons:** verb first, three words or fewer, e.g. "Upload", "Add variable", "Save".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
@@ -181,7 +181,7 @@ Then delete the sample variables from `sample.ts` and their import. With no `sav
 - The `ToggleGroup` is labeled "Variables view"; the Upload button opens the system file picker through `useFilePicker`, so no hidden input sits in the tab order.
 - Adding a pair moves focus to its new Key field; removing one moves focus to the pair now in its place (or Add variable); both are announced in a polite live region by `AttributeEditor`.
 - The paste panel's `Textarea` is described by its report, so skipped lines and replaced keys are read with the field; Paste .env exposes `aria-expanded`, and applying announces how many variables were added.
-- The drawer traps focus while open and returns it to Create Variable on close.
+- The drawer traps focus while open and returns it to Create variable on close.
 - `/` focuses the property filter from anywhere on the page, except while typing in a field.
 - The table rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter opens the focused variable in the edit drawer as the row menu's Edit does, and Delete or Backspace opens the delete dialog. After a delete, focus lands on the next row.
 - `⌘ Enter` (`Ctrl Enter` off Apple) submits the open drawer's form from any field, the same as Save, in the create and edit drawer, the Paste .env drawer and the network list drawer. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
@@ -189,14 +189,14 @@ Then delete the sample variables from `sample.ts` and their import. With no `sav
 ## States
 
 - List: the variables list page with the controls row and table, from `variables` (the sample when left out); the drawer is closed. `loading` spins Refresh and puts the table in its loading state.
-- First use: `variables` is `[]`; the card holds the state-first-use `EmptyState` with Create Variable.
+- First use: `variables` is `[]`; the card holds the state-first-use `EmptyState` with Create variable.
 - No match: the filter matches nothing; the table shows the no-match `EmptyState` with Clear filters.
 - Edit: a row's Edit opens the drawer on that variable; Save emits `save` with the variable and replaces it in the list and raises "<KEY> updated.".
 - Save failed: `saveError` is set when the save ends; the drawer stays open with its rows and a danger `Alert` above the sections.
 - Delete: a row's Delete opens the typed confirmation; confirming emits `delete`, removes the row and raises "<KEY> deleted.".
 - Create: `defaultOpen`; the drawer open with one empty pair, the Form view and Global on; errors appear only after Save.
-- PasteEnv: Create Variable opens the drawer with one pair and the Paste .env panel holding a pasted file with a comment, an `export`, a skipped lowercase line and a repeated key that is already in the list; Add 3 variables merges them.
-- NetworkList: Create Network List opens the drawer named Office and partners, type IP/CIDR, with the Paste list panel holding nine lines: a comment line, two lines that are not valid addresses and one already pasted above; Add 7 entries appends them as rows, the two invalid ones showing their errors.
+- PasteEnv: Create variable opens the drawer with one pair and the Paste .env panel holding a pasted file with a comment, an `export`, a skipped lowercase line and a repeated key that is already in the list; Add 3 variables merges them.
+- NetworkList: Create network list opens the drawer named Office and partners, type IP/CIDR, with the Paste list panel holding nine lines: a comment line, two lines that are not valid addresses and one already pasted above; Add 7 entries appends them as rows, the two invalid ones showing their errors.
 
 ## Related
 
@@ -211,8 +211,8 @@ Then delete the sample variables from `sample.ts` and their import. With no `sav
 
 - `List` — primary (the code below)
 - `Create` — The list page with the create drawer open on load (`defaultOpen`): one empty Key and Value pair in an `AttributeEditor`, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Add variable waits for the last pair to be filled; Save flags the empty or malformed fields only after it is pressed, then emits `save` with the pairs and their scope.
-- `PasteEnv` — Create Variable opens the drawer with the Paste .env panel open on a pasted file: the report counts the pairs found, names the line that will be skipped, the key repeated in the text and the key already in the list whose value will be replaced, and Add 3 variables merges them into the rows, announces the count and returns focus to Paste .env.
-- `NetworkList` — Create Network List opens a drawer with a Name, a type `ToggleGroup` (IP/CIDR, ASN, Countries) and the entries as an `AttributeEditor` of address and comment rows; Paste list holds a pasted list of nine lines whose report counts 7 entries, names the 2 lines that are not valid addresses and the line already in the list, and Add 7 entries appends them as rows where each invalid line shows its own error. Countries is a `MultiSelect`; Save checks every row and raises a success toast.
+- `PasteEnv` — The Variables page header with its drawer already open, so the state shows what it names: Create variable opens the drawer with the Paste .env panel open on a pasted file: the report counts the pairs found, names the line that will be skipped, the key repeated in the text and the key already in the list whose value will be replaced, and Add 3 variables merges them into the rows, announces the count and returns focus to Paste .env.
+- `NetworkList` — A Network lists page header with its drawer already open, so the state shows what it names: Create network list opens a drawer with a Name, a type `ToggleGroup` (IP/CIDR, ASN, Countries) and the entries as an `AttributeEditor` of address and comment rows; Paste list holds a pasted list of nine lines whose report counts 7 entries, names the 2 lines that are not valid addresses and the line already in the list, and Add 7 entries appends them as rows where each invalid line shows its own error. Countries is a `MultiSelect`; Save checks every row and raises a success toast.
 
 Each variant is the same screen in another state: `get_block("edit/edit-variables", { variant })`, or the file under `blocks/edit/edit-variables/variants/`.
 
@@ -395,7 +395,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
   const saveError = ref(props.defaultOpen ? props.saveError : '')
   const pendingSave = ref<VariablesSavePayload | null>(null)
 
-  const drawerTitle = computed(() => (editing.value ? 'Edit Variable' : 'Create Variable'))
+  const drawerTitle = computed(() => (editing.value ? 'Edit variable' : 'Create variable'))
   const drawerDescription = computed(() => {
     if (!editing.value) return 'Create one or more variables and define where they are available.'
     if (editing.value.secret) return 'Leave the value empty to keep the saved secret.'
@@ -488,7 +488,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
           size="medium"
         />
         <Button
-          label="Create Variable"
+          label="Create variable"
           icon="az az-plus"
           variant="primary"
           size="medium"
@@ -1784,7 +1784,7 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
               <template #actions>
                 <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
                   <Button
-                    label="Create Variable"
+                    label="Create variable"
                     icon="az az-plus"
                     variant="secondary"
                     size="small"

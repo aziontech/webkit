@@ -1,6 +1,6 @@
 # CreateDeploySuccess (`create/create-deploy-success`)
 
-> The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `Subheader`, `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.
+> The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button (Manage resource when nothing serves it yet). Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `Subheader`, `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.
 
 - Surface: app
 - Source: `blocks/create/create-deploy-success/create-deploy-success.vue` in `@aziontech/webkit`
@@ -35,7 +35,7 @@ A large `h1` stating the outcome and one muted lead sentence under it. For a Git
 
 ### B. Deployment card — `Card`, `Tag`, `Button`, `Link`, `Tooltip` (required)
 
-The live service: a decorative preview tile (hidden from assistive technology; Visit site is the link), the service name as an `h2` with a small success `Tag` reading Live, and its creation time. An outlined medium `Button` Visit site opens the domain in a new tab. Under it, one row for the domain (a small `Link` with `target="_blank"`) with Add custom domain beside it (a small `Button variant="link"` with `href`), and one row for the repository (a small `Link`) with its branch. Each external `Link` carries a `Tooltip` naming where it goes and its external-link glyph. Never hand-roll the anchors. Leave the card out when nothing serves the resource yet.
+The live service: the service name as an `h2` with a small success `Tag` reading Live, and its creation time. An outlined medium `Button` Visit site opens the domain in a new tab. Under it, one row for the domain (a small `Link` with `target="_blank"`) with Add custom domain beside it (a small `Button variant="link"` with `href`), and one row for the repository (a small `Link`) with its branch. Each external `Link` carries a `Tooltip` naming where it goes and its external-link glyph. Never hand-roll the anchors. Leave the card out when nothing serves the resource yet.
 
 ### C. Resources list — `Card`, `Item`, `Tag` (required)
 
@@ -43,7 +43,7 @@ A small heading, "Resources", over `Card :padded="false"` holding an `Item` list
 
 ### D. Next steps — `IntegrationCard` (required)
 
-`IntegrationCard` tiles in a row from the small breakpoint, each with a glyph (`logo`), a title and one sentence. A step with `href` is a link stretched over the tile; a step that acts in place (Deploy this resource) has no `href`, and its title is a button that emits `select`. Mark at most one with a primary Recommended badge (`badges`). Docs steps open in the same tab, so no new-tab notice is needed.
+`IntegrationCard` tiles stacked one per row, each the full width of the column so its title and sentence never clip, each with a glyph (`logo`), a title and one sentence. A step with `href` is a link stretched over the tile; a step that acts in place (Deploy this resource) has no `href`, and its title is a button that emits `select`. Mark at most one with a primary Recommended badge (`badges`). Docs steps open in the same tab, so no new-tab notice is needed.
 
 ### E. Get started — `Subheader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
 
@@ -51,7 +51,7 @@ Only for a resource nothing serves yet (`getStarted` set to its name): a `Subhea
 
 ### F. Manage — `Button` (required)
 
-One full-width secondary large `Button`, "Manage service", at the end of the column that opens the resource. It is the only exit; do not add a second.
+One full-width secondary large `Button` at the end of the column that opens the resource: "Manage service" when a service serves it, "Manage resource" when nothing serves it yet (`deployment` is null). It is the only exit; do not add a second.
 
 ## Data
 
@@ -69,7 +69,7 @@ The block takes what the flow made through props and emits its actions; it fetch
 | Event       | Payload         | When                                           |
 | ----------- | --------------- | ---------------------------------------------- |
 | `next-step` | `(event, step)` | A next-step tile without `href` was activated. |
-| `manage`    | `(event)`       | Manage service.                                |
+| `manage`    | `(event)`       | Manage service, or Manage resource.            |
 
 To go live, render the block from the page the create flow ends on and pass what the flow returned:
 
@@ -115,13 +115,12 @@ Then delete `sample.ts` and its import.
 - **Status tag:** one word, e.g. "Live"; resource tags "Created" or "Bound".
 - **Links:** verb first, e.g. "Visit site", "Add custom domain"; tooltips name the target, e.g. "Open acme/web-app in a new tab".
 - **Next steps:** title verb first in two or three words, e.g. "Customize domain", "View analytics"; description one sentence with a period.
-- **Exit:** "Manage service", the verb and its object.
+- **Exit:** "Manage service", or "Manage resource" when nothing serves it yet: the verb and its object.
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no ampersand, no "please".
 
 ## Accessibility
 
 - The heading is the page's only `h1`; the service name and the section titles are `h2`.
-- The preview tile is decorative (`aria-hidden`); Visit site names the address.
 - Links that open a new tab say so in their `Tooltip`, not only with the external-link glyph.
 - Glyphs in rows and cards are decorative and carry `aria-hidden="true"`; the Created or Bound tag gives the state in words.
 - A next-step card is one focusable link or button with a visible focus ring; its title and description are its name.
@@ -202,7 +201,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   const emit = defineEmits<{
     /** A next-step tile without href was activated. */
     'next-step': [event: MouseEvent, step: DeploySuccessNextStep]
-    /** Manage service was pressed. */
+    /** Manage service, or Manage resource when nothing serves it yet, was pressed. */
     manage: [event: MouseEvent]
   }>()
 
@@ -215,6 +214,9 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   const lead = computed(() => (source.value ? `${props.description} Source:` : props.description))
   const currentResources = computed(() => props.resources ?? sampleResources)
   const currentNextSteps = computed(() => props.nextSteps ?? sampleNextSteps)
+  const manageLabel = computed(() =>
+    currentDeployment.value ? 'Manage service' : 'Manage resource'
+  )
 </script>
 
 <template>
@@ -291,7 +293,10 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
             <section class="flex flex-col gap-(--spacing-sm)">
               <h2 class="text-label-md text-(--text-default)">Next steps</h2>
-              <div class="grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-3">
+              <div
+                class="grid grid-cols-1 gap-(--spacing-sm)"
+                data-testid="create-deploy-success__next-steps"
+              >
                 <IntegrationCard
                   v-for="step in currentNextSteps"
                   :key="step.title"
@@ -312,7 +317,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
             <Button
               class="w-full"
-              label="Manage service"
+              :label="manageLabel"
               variant="secondary"
               size="large"
               @click="(event: MouseEvent) => emit('manage', event)"
@@ -423,7 +428,7 @@ export const sampleCliNextSteps: DeploySuccessNextStep[] = [
     icon: 'az az-cloud-upload',
     title: 'Deploy this resource',
     description:
-      'Provision a service for it and deploy, without leaving this flow. The platform names the domain, and you can change it after.',
+      'Provision a service and deploy it here. The platform names the domain, and you can change it later.',
     recommended: true
   },
   {
@@ -673,112 +678,96 @@ jobs:
 <template>
   <Card>
     <template #default>
-      <div class="flex flex-col gap-(--spacing-md) sm:flex-row">
-        <div
-          aria-hidden="true"
-          class="relative flex aspect-16/10 w-full shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border border-(--border-muted) bg-(--bg-canvas) sm:w-56"
-        >
-          <span
-            class="relative flex size-10 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface)"
-          >
-            <i
-              class="az az-globe text-body-md leading-none text-(--text-default)"
-              aria-hidden="true"
-            />
-          </span>
-        </div>
-
-        <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
-          <div class="flex flex-wrap items-start justify-between gap-(--spacing-sm)">
-            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-              <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-                <h2 class="min-w-0 truncate text-heading-xs text-(--text-default)">
-                  {{ deployment.name }}
-                </h2>
-                <Tag
-                  label="Live"
-                  severity="success"
-                  size="small"
-                />
-              </div>
-              <span class="text-body-sm text-(--text-muted)">{{ deployment.created }}</span>
+      <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+        <div class="flex flex-wrap items-start justify-between gap-(--spacing-sm)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+            <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+              <h2 class="min-w-0 truncate text-heading-xs text-(--text-default)">
+                {{ deployment.name }}
+              </h2>
+              <Tag
+                label="Live"
+                severity="success"
+                size="small"
+              />
             </div>
-
-            <Button
-              label="Visit site"
-              aria-label="Visit site (opens in a new tab)"
-              variant="outline"
-              size="medium"
-              icon="az az-external-link"
-              icon-position="trailing"
-              :href="deployment.url"
-              target="_blank"
-            />
+            <span class="text-body-sm text-(--text-muted)">{{ deployment.created }}</span>
           </div>
 
-          <ul class="flex flex-col gap-(--spacing-xs)">
-            <li class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-md)">
-              <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <i
-                  class="az az-globe shrink-0 text-(--text-muted)"
-                  aria-hidden="true"
-                />
-                <div class="min-w-0">
-                  <Tooltip
-                    :content="`Open ${deployment.domain} in a new tab`"
-                    class="w-full"
-                  >
-                    <Link
-                      :label="deployment.domain"
-                      :href="deployment.url"
-                      target="_blank"
-                      size="small"
-                    />
-                  </Tooltip>
-                </div>
-              </span>
-              <Button
-                label="Add custom domain"
-                variant="link"
-                size="small"
-                icon="az az-circle-plus"
-                :href="deployment.addDomainHref"
-              />
-            </li>
-            <li
-              v-if="source"
-              class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-md)"
-            >
-              <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <i
-                  :class="source.icon"
-                  class="shrink-0 text-(--text-muted)"
-                  aria-hidden="true"
-                />
-                <div class="min-w-0">
-                  <Tooltip
-                    :content="`Open ${source.repository} in a new tab`"
-                    class="w-full"
-                  >
-                    <Link
-                      :label="source.repository"
-                      :href="source.href"
-                      target="_blank"
-                      size="small"
-                    />
-                  </Tooltip>
-                </div>
-              </span>
-              <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
-                <i
-                  class="az az-git-branch shrink-0 text-(--text-muted)"
-                  aria-hidden="true"
-                />
-                <span class="truncate text-body-sm text-(--text-default)">{{ source.branch }}</span>
-              </span>
-            </li>
-          </ul>
+          <Button
+            label="Visit site"
+            aria-label="Visit site (opens in a new tab)"
+            variant="outline"
+            size="medium"
+            icon="az az-external-link"
+            icon-position="trailing"
+            :href="deployment.url"
+            target="_blank"
+          />
         </div>
+
+        <ul class="flex flex-col gap-(--spacing-xs)">
+          <li class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-md)">
+            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <i
+                class="az az-globe shrink-0 text-(--text-muted)"
+                aria-hidden="true"
+              />
+              <div class="min-w-0">
+                <Tooltip
+                  :content="`Open ${deployment.domain} in a new tab`"
+                  class="w-full"
+                >
+                  <Link
+                    :label="deployment.domain"
+                    :href="deployment.url"
+                    target="_blank"
+                    size="small"
+                  />
+                </Tooltip>
+              </div>
+            </span>
+            <Button
+              label="Add custom domain"
+              variant="link"
+              size="small"
+              icon="az az-circle-plus"
+              :href="deployment.addDomainHref"
+            />
+          </li>
+          <li
+            v-if="source"
+            class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-md)"
+          >
+            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <i
+                :class="source.icon"
+                class="shrink-0 text-(--text-muted)"
+                aria-hidden="true"
+              />
+              <div class="min-w-0">
+                <Tooltip
+                  :content="`Open ${source.repository} in a new tab`"
+                  class="w-full"
+                >
+                  <Link
+                    :label="source.repository"
+                    :href="source.href"
+                    target="_blank"
+                    size="small"
+                  />
+                </Tooltip>
+              </div>
+            </span>
+            <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
+              <i
+                class="az az-git-branch shrink-0 text-(--text-muted)"
+                aria-hidden="true"
+              />
+              <span class="truncate text-body-sm text-(--text-default)">{{ source.branch }}</span>
+            </span>
+          </li>
+        </ul>
       </div>
     </template>
   </Card>

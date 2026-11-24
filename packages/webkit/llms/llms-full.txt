@@ -4269,7 +4269,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 
 # CreateDeploySuccess (`create/create-deploy-success`)
 
-> The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a…
+> The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with the service name with a Live Tag and its…
 
 - Surface: app
 - Source: `blocks/create/create-deploy-success/create-deploy-success.vue` in `@aziontech/webkit`
@@ -4340,13 +4340,12 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - **Status tag:** one word, e.g. "Live"; resource tags "Created" or "Bound".
 - **Links:** verb first, e.g. "Visit site", "Add custom domain"; tooltips name the target, e.g. "Open acme/web-app in a new tab".
 - **Next steps:** title verb first in two or three words, e.g. "Customize domain", "View analytics"; description one sentence with a period.
-- **Exit:** "Manage service", the verb and its object.
+- **Exit:** "Manage service", or "Manage resource" when nothing serves it yet: the verb and its object.
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no ampersand, no "please".
 
 ## Accessibility
 
 - The heading is the page's only `h1`; the service name and the section titles are `h2`.
-- The preview tile is decorative (`aria-hidden`); Visit site names the address.
 - Links that open a new tab say so in their `Tooltip`, not only with the external-link glyph.
 - Glyphs in rows and cards are decorative and carry `aria-hidden="true"`; the Created or Bound tag gives the state in words.
 - A next-step card is one focusable link or button with a visible focus ring; its title and description are its name.
@@ -4841,7 +4840,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-page.
 
 - **Escape on the page = Cancel.** `useEscapeToCancel(onCancel)` runs the same path as the Cancel button: a clean form leaves at once, an edited one opens the Unsaved changes dialog. It stays inert while the create request is in flight, while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open (the open Select or DatePicker closes first, and Escape on the Unsaved changes dialog only keeps editing) and when focus is in a control that uses Escape itself (an open combobox, a search field). Edit and settings pages are places, not tasks: Escape stays inert there.
 - **The page opens with the cursor in the first field.** `onMounted` focuses Name (CreatePurge: the chosen Layer card), so a keyboard user types at once.
-- **⌘ Enter submits (`Ctrl Enter` off Apple).** `useShortcuts` binds `meta+enter` to the form's `requestSubmit()`, the same path as the bar's submit button, from any field and from the Purge list textarea, where a bare Enter only adds a line. It stays inert while the request is in flight and lists the action (Create domain, Purge…) in the `?` dialog. The submit button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd` that prints the platform's key.
+- **⌘ Enter and ⌘ S submit (`Ctrl` off Apple).** The bar reads as a save bar, so ⌘ S saves too instead of opening the browser's Save page dialog. `useShortcuts` binds `meta+enter` and `meta+s` to the form's `requestSubmit()`, the same path as the bar's submit button, from any field and from the Purge list textarea, where a bare Enter only adds a line. It stays inert while the request is in flight and lists the action (Create domain, Purge…) in the `?` dialog. The submit button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd` that prints the platform's key.
 - One `main` landmark holding one `form`, labelled by the `PageHeader` title through `aria-labelledby`, with `novalidate` so the page's own messages replace the browser's.
 - A `fieldset` with a visually hidden `legend` groups the sections.
 - Each message is tied to its control with `aria-describedby` and appears only on submit; `required` and `invalid` are announced through the control's own state.
@@ -4853,7 +4852,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-page.
 
 - Default: the Create Domain page at rest (no `defaultValues`, not `loading`); General holds Name and Domain name, Advanced is collapsed, the bar shows Cancel and Save. `loading` locks the form and spins Save, and `error` raises the error toast with Retry. Importing a zone file belongs to CreateZone, not to this page.
 - CreateZone: Create Zone after a zone file is imported; a Records section lists each imported record (type `Tag`, value, TTL) with a Remove `IconButton` per row and Discard import in the card footer; each removal and the discard confirm in a toast with Undo, which puts the records back. Import in the bar and a paste into Domain name both read a BIND zone file, skip the SOA and nameserver records, fill an empty Name and Domain name from `$ORIGIN`, and confirm in a toast; a file with no records raises an error toast. The list previews the first 50 records with an "and N more" line, and a re-import skips records already listed.
-- CreateOrganization: General with Name and a Mark color chosen from six `RadioGroup` cards (`variant="card"`) (each color built from semantic tokens: primary, warning, danger, success, info and the text grays, never palette primitives), each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
+- CreateOrganization: General with Name and a Mark color chosen from six compact `RadioGroup` cards (`variant="card"`, three per row on a phone and one row of six from the small breakpoint) (each color built from semantic tokens: primary, warning, danger, success, info and the text grays, never palette primitives), each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
 - CreateService: a long create with a small `PageHeader` (Create Service, breadcrumb Services / Create Service) and five groups of rows, each under an `h2`, under the same centred `SaveBar` with Cancel and Save.
 - RequiredFields: Create Service after Save on the empty form; Name and Address show "This field is required." until edited.
@@ -4882,7 +4881,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-page.
 - Surface: app
 - Source: `blocks/create/create-release-impact/create-release-impact.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-release-impact")`
-- Components: Accordion, Alert, Badge, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, Input, Kbd, OverflowCount, PageHeader, SaveBar, Select, Skeleton, Spinner, Switch, Tag, Toast, ToggleGroup, Tooltip, `use-shortcuts`
+- Components: Accordion, Alert, Badge, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, Input, Kbd, KeyValueList, OverflowCount, PageHeader, SaveBar, Select, Skeleton, Spinner, Switch, Tag, Toast, ToggleGroup, Tooltip, `use-shortcuts`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -4909,7 +4908,7 @@ The Review and deploy page of a release that carries several resources at once: 
 - A. Page heading — `PageHeader` (required)
 - B. Outcome — `Alert`, `Button` (required after a run)
 - C. Resource cards — `Card`, `Switch`, `Tag`, `Tooltip` (required)
-- D. Resource and version — `Field`, `Input`, `Select`, `Tag` (required)
+- D. Resource and version — `KeyValueList`, `Field`, `Select`, `Tag` (required)
 - E. Dependencies — `Badge`, `Accordion`, `Alert`, `Tag`, `Tooltip`, `Select` (required when a resource references others)
 - F. Impact — `Card`, `ToggleGroup`, `Spinner`, `Skeleton`, `Alert`, `Button` (required)
 - G. Footer and commit — `SaveBar`, `Button`, `ConfirmDialog` (required)
@@ -5213,13 +5212,13 @@ What each prop and event does, and the go-live code: [blocks/create/create-wizar
 - WhereItRuns: the first step (the default `defaultStep`); the chooser of policies with search, module tags and the two escape routes.
 - ModuleOff: acme-staging was chosen with IP filtering off (`defaultStep="module"`, `defaultPolicy="acme-staging"`), so the IP filtering step shows the warning, the switch card and the note.
 - ListSettings: the settings step (`defaultStep="settings"`, a `defaultPolicy` and a Name in `defaultValues`); Type as radio choice cards and the List textarea, with Previous and Next (Review follows). Next with an empty list stays and shows the message.
-- Review: the last step (`defaultStep="review"` with a `defaultPolicy` and `defaultValues`), read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created pairs each value with the property it is sent as and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error; on success it emits `submit`, `loading` spins it and `error` raises the error toast with Retry.
+- Review: the last step (`defaultStep="review"` with a `defaultPolicy` and `defaultValues`), read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created lists each value under its plain label (never the API property name) and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error; on success it emits `submit`, `loading` spins it and `error` raises the error toast with Retry.
 - CreateAndDeploy: Create Service on its Project step with the paged project list; Next is gated on the project, and step two ends on Create and deploy with its loading state. Cancel and Back to Services emit `cancel`, asking first once anything is answered.
 
 ## Review step
 
 - Add a Review step when the create has three or more steps or binds the resource to something; skip it for a one-step create.
-- Show values as they will be sent, with the property name under each, and never show secrets in clear.
+- Show values as they will be sent, under plain labels (no API property names or dotted paths), and never show secrets in clear.
 - Put Edit on each band, and on a value whose step differs from its band's (Name, on General); after the edit, Next walks forward through the later steps, already filled, back to Review.
 - Say plainly when nothing will read the resource yet (unbound, or a module off) with a warning `Alert`, not a disabled create.
 
@@ -7803,7 +7802,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-function.
 - Surface: app
 - Source: `blocks/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-resource")`
-- Components: Alert, AttributeEditor, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`, `utils/focus-invalid`
+- Components: Alert, AttributeEditor, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-locale`, `use-unsaved-changes`, `utils/focus-invalid`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -7981,7 +7980,7 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 
 - A resource runs an ordered list of rules, each made of conditions and actions (request and response rules, firewall rules, routing).
 - Conditions combine with And inside a group and Or across groups, and the order of behaviors matters.
-- The rule is edited from a list inside the resource, so the drawer opens as `Add Rule` or `Edit Rule` and keeps the list in view behind it.
+- The rule is edited from a list inside the resource, so the drawer opens as `Add rule` or `Edit rule` and keeps the list in view behind it.
 
 ## When not to use
 
@@ -8034,7 +8033,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-rule-buil
 
 ## Copy
 
-- **Drawer title and trigger:** `Add Rule` for a new rule, `Edit Rule` for an existing one.
+- **Drawer title and trigger:** `Add rule` for a new rule, `Edit rule` for an existing one.
 - **Section hints:** one sentence saying what the section decides, e.g. "The conditions that decide whether the rule runs."
 - **Logic labels:** single words, e.g. "and", "or", "Then".
 - **Add buttons:** verb first, e.g. "Add condition", "Add OR group", "Add behavior".
@@ -8052,9 +8051,9 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-rule-buil
 
 ## States
 
-- Default: `rule` left out; Add Rule with an empty Name, the Request phase, one empty condition and one empty behavior, Active on.
-- Composed: `rule` set to the sample; Edit Rule for the seeded Docs rewrite rule, the phase locked with its note, one URI condition and two behaviors.
-- In a list: `view/view-rule-list#EditRule` drives this drawer without its trigger (`v-model:open` from a rule's name and from Add Rule) and writes the saved rule back to its row.
+- Default: `rule` left out; Add rule with an empty Name, the Request phase, one empty condition and one empty behavior, Active on.
+- Composed: `rule` set to the sample; Edit rule for the seeded Docs rewrite rule, the phase locked with its note, one URI condition and two behaviors.
+- In a list: `view/view-rule-list#EditRule` drives this drawer without its trigger (`v-model:open` from a rule's name and from Add rule) and writes the saved rule back to its row.
 
 ## Related
 
@@ -8087,7 +8086,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-rule-buil
 
 schema editor; create table; add column; insert row; alter column; change column type; truncate table; table schema; database schema; column types; criar tabela; adicionar coluna; inserir linha; alterar coluna; esvaziar tabela; esquema do banco
 
-The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create Table, Add column, Insert and table menu buttons of `view/view-query-editor`. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
+The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create table, Add column, Insert and table menu buttons of `view/view-query-editor`. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
 
 ## When to use
 
@@ -8105,7 +8104,7 @@ The table schema of a SQL database: the definition of one table and the drawers 
 ## Building blocks
 
 - A. Definition surface — `Card`, `DataTable`, `TableCellActions`, `Tag`, `Button`, `DropdownMenu`, `Tooltip`, `IconButton` (required)
-- B. Create Table drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsGroup`, `Alert`, `Field`, `Input` (required)
+- B. Create table drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsGroup`, `Alert`, `Field`, `Input` (required)
 - C. Column rows — `AttributeEditor`, `Select`, `Checkbox`, `FieldError` (required)
 - D. CSV import and foreign keys — `FileDropzone`, `FileTokenGroup` (optional)
 - E. Add column drawer — `Switch` (required)
@@ -8141,16 +8140,16 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-schema.md
 - Don't put a deploy action (Edit, Redeploy, View deployments) on a schema change.
 - Don't let a primary key be nullable; lock Not null while Primary key is on.
 - Don't drop rows on a type change silently; warn that values that don't fit make it fail.
-- Don't close the Create Table drawer on a server error.
+- Don't close the Create table drawer on a server error.
 
 ## Copy
 
-- **Titles:** `Create Table`, `Add column`, `Insert row`, `Change the type of <column>`, `Truncate <table>`.
-- **Buttons:** the title's verb and object: `Create Table`, `Add column`, `Insert row`, `Change type`, `Truncate table`; Cancel beside each.
+- **Titles:** `Create table`, `Add column`, `Insert row`, `Change the type of <column>`, `Truncate <table>`.
+- **Buttons:** the title's verb and object: `Create table`, `Add column`, `Insert row`, `Change type`, `Truncate table`; Cancel beside each.
 - **Errors:** `This field is required.`, `Start with a letter or an underscore; use letters, numbers and underscores.`, `Another column is also named email.`, `Add at least one named column.`, `customers already has a column named email.`, `email cannot be NULL. Enter a value.`
 - **Server rejection:** `The table wasn't created. A table named customers already exists in acme-store. Your columns are kept; pick another name and create it again.`
 - **Toasts:** as in building block H.
-- Follow `skills/webkit-microcopy`: sentence case except the product's object names (`Create Table`), no em dash, no "please", no exclamation marks.
+- Follow `skills/webkit-microcopy`: sentence case except the product's object names (`Create table`), no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -8163,13 +8162,13 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-schema.md
 
 ## States
 
-- CreateTable: `dialog` left at `create`: the Create Table drawer open on a new table, with the default id and created_at columns.
+- CreateTable: `dialog` left at `create`: the Create table drawer open on a new table, with the default id and created_at columns.
 - AddColumn: `dialog="column"` with `defaultColumn` phone as varchar, in the Add column drawer.
 - InsertRow: `dialog="row"` with `defaultRow` and `defaultSubmitted`: the Insert row drawer after a submit with email empty, showing the NOT NULL error.
 - ChangeType: `dialog="alter"` with `defaultAlterColumn` email: the Change type dialog with the statements that will run.
 - TruncateTable: `dialog="truncate"`: the Truncate customers dialog waiting for the typed name.
-- ImportCsv: `defaultCsv` and `defaultDraft.relations`: Create Table with subscribers.csv read (six columns, six rows, a quoted comma) and one foreign key, customer_id to customers.id on delete cascade.
-- Error: `error` with `defaultDraft.name` customers: Create Table refused by the server because customers already exists; Alert in General and the Name field invalid.
+- ImportCsv: `defaultCsv` and `defaultDraft.relations`: Create table with subscribers.csv read (six columns, six rows, a quoted comma) and one foreign key, customer_id to customers.id on delete cascade.
+- Error: `error` with `defaultDraft.name` customers: Create table refused by the server because customers already exists; Alert in General and the Name field invalid.
 
 ## Related
 
@@ -8190,7 +8189,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-schema.md
 
 # EditVariables (`edit/edit-variables`)
 
-> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens.
+> A key/value editor, drawn as a variables list page and the Create variable drawer its heading action opens.
 
 - Surface: app
 - Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
@@ -8202,7 +8201,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-schema.md
 
 variables; environment variables; env vars; secrets; create variable; edit variable; variables list; variáveis; variáveis de ambiente; segredos; criar variável; key value editor; attribute editor; .env upload; editor de chave e valor; delete variable; clone variable; paste .env; paste env file; import .env; colar .env; importar variáveis; dotenv; network list; ip list; asn list; country list; bulk paste; lista de rede; lista de ips; lista de red; variables page; variables block; environment variables page; list of variables; página de variáveis
 
-A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
+A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
 
 ## When to use
 
@@ -8273,14 +8272,14 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-variables
 
 ## Copy
 
-- **Title and create action:** "Variables" and "Create Variable"; the drawer title repeats "Create Variable", or reads "Edit Variable" from a row.
+- **Title and create action:** "Variables" and "Create variable"; the drawer title repeats "Create variable", or reads "Edit variable" from a row.
 - **Empty states:** "No variables yet" / "Create a variable to store a value your services read at runtime."; "No matching variables" / "No variable matches these filters."
 - **Delete dialog:** title and danger button "Delete variable"; the prompt reads "Type API_BASE_URL to confirm."
 - **Field placeholders:** show the format, e.g. "MY_VARIABLE" for the key, "my-variable-value" for the value.
 - **Toasts:** "API_KEY created.", "3 variables created.", "API_KEY updated.", "API_KEY cloned as API_KEY_COPY.", "API_KEY deleted."; save failure "Variables not saved. You are offline; check your connection and save again."
 - **Errors:** short and specific, e.g. "Key is required.", "Use only uppercase letters, numbers, and underscores.", "Select at least one resource for this scope."
 - **Secret control:** "Mark as secret" and "Unmark as secret"; the hint states the rule, e.g. "Secret values are hidden and write-only after saving."
-- **Network list:** title "Create Network List"; types "IP/CIDR", "ASN", "Countries"; panel label "Paste one address per line"; report "7 entries found. Text after # is kept as the comment.", "Lines 4 and 8 are not an IPv4 or IPv6 address, or a CIDR range; they are added with an error to fix.", "Line 7 is already in the list and will be skipped."; row error "198.51.100.300 is not an IPv4 or IPv6 address, or a CIDR range."; toast "Office and partners created."
+- **Network list:** title "Create network list"; types "IP/CIDR", "ASN", "Countries"; panel label "Paste one address per line"; report "7 entries found. Text after # is kept as the comment.", "Lines 4 and 8 are not an IPv4 or IPv6 address, or a CIDR range; they are added with an error to fix.", "Line 7 is already in the list and will be skipped."; row error "198.51.100.300 is not an IPv4 or IPv6 address, or a CIDR range."; toast "Office and partners created."
 - **Paste panel:** label "Paste .env contents"; report "3 variables found. Lines starting with # are ignored.", "Line 5 is not KEY=value with an uppercase key and will be skipped.", "CACHE_TTL is already in the list; its value will be replaced."; buttons "Paste .env", "Add 3 variables", "Cancel".
 - **Buttons:** verb first, three words or fewer, e.g. "Upload", "Add variable", "Save".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
@@ -8293,7 +8292,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-variables
 - The `ToggleGroup` is labeled "Variables view"; the Upload button opens the system file picker through `useFilePicker`, so no hidden input sits in the tab order.
 - Adding a pair moves focus to its new Key field; removing one moves focus to the pair now in its place (or Add variable); both are announced in a polite live region by `AttributeEditor`.
 - The paste panel's `Textarea` is described by its report, so skipped lines and replaced keys are read with the field; Paste .env exposes `aria-expanded`, and applying announces how many variables were added.
-- The drawer traps focus while open and returns it to Create Variable on close.
+- The drawer traps focus while open and returns it to Create variable on close.
 - `/` focuses the property filter from anywhere on the page, except while typing in a field.
 - The table rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter opens the focused variable in the edit drawer as the row menu's Edit does, and Delete or Backspace opens the delete dialog. After a delete, focus lands on the next row.
 - `⌘ Enter` (`Ctrl Enter` off Apple) submits the open drawer's form from any field, the same as Save, in the create and edit drawer, the Paste .env drawer and the network list drawer. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
@@ -8301,14 +8300,14 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-variables
 ## States
 
 - List: the variables list page with the controls row and table, from `variables` (the sample when left out); the drawer is closed. `loading` spins Refresh and puts the table in its loading state.
-- First use: `variables` is `[]`; the card holds the state-first-use `EmptyState` with Create Variable.
+- First use: `variables` is `[]`; the card holds the state-first-use `EmptyState` with Create variable.
 - No match: the filter matches nothing; the table shows the no-match `EmptyState` with Clear filters.
 - Edit: a row's Edit opens the drawer on that variable; Save emits `save` with the variable and replaces it in the list and raises "<KEY> updated.".
 - Save failed: `saveError` is set when the save ends; the drawer stays open with its rows and a danger `Alert` above the sections.
 - Delete: a row's Delete opens the typed confirmation; confirming emits `delete`, removes the row and raises "<KEY> deleted.".
 - Create: `defaultOpen`; the drawer open with one empty pair, the Form view and Global on; errors appear only after Save.
-- PasteEnv: Create Variable opens the drawer with one pair and the Paste .env panel holding a pasted file with a comment, an `export`, a skipped lowercase line and a repeated key that is already in the list; Add 3 variables merges them.
-- NetworkList: Create Network List opens the drawer named Office and partners, type IP/CIDR, with the Paste list panel holding nine lines: a comment line, two lines that are not valid addresses and one already pasted above; Add 7 entries appends them as rows, the two invalid ones showing their errors.
+- PasteEnv: Create variable opens the drawer with one pair and the Paste .env panel holding a pasted file with a comment, an `export`, a skipped lowercase line and a repeated key that is already in the list; Add 3 variables merges them.
+- NetworkList: Create network list opens the drawer named Office and partners, type IP/CIDR, with the Paste list panel holding nine lines: a comment line, two lines that are not valid addresses and one already pasted above; Add 7 entries appends them as rows, the two invalid ones showing their errors.
 
 ## Related
 
@@ -8990,7 +8989,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-edge-er
 ## Related
 
 - `state/state-error-page` — the error pages of Azion's own console, site and docs.
-- `FlowDiagram` — the request path (`nodes` + `edges`, `uniform`), with `orientation="vertical"` on a phone.
+- `FlowDiagram` — the request path (`nodes` + `edges`, `uniform`, `orientation="responsive"`).
 - `state/state-async-submit` — a failed build or deploy inside the console.
 
 ## Variants
@@ -31811,7 +31810,7 @@ The root composes, and does not re-implement:
 - `Button` (`@aziontech/webkit/button`) for the three footer actions, all at the house default size
   (`large`, 40px):
   - Cancel is `variant="ghost"`, at the start of the footer.
-  - Previous is `variant="secondary"`, at the end. It is not rendered (`v-if`, not hidden) on step 1.
+  - Previous is `variant="outline"`, at the end, so it reads lighter than the primary Next beside it. It is not rendered (`v-if`, not hidden) on step 1.
   - Next is `variant="primary"`, at the end. On the last step its label becomes `submitLabel`, it emits
     `submit` instead of `next`, and it carries `loading`.
 
@@ -31820,7 +31819,8 @@ The root composes, and does not re-implement:
   always renders its own root (a `<div role="group">` labelled by its heading), so document-order
   registration works. When inactive, that root is `hidden` and its content is not mounted (`v-if`).
   When active, it renders:
-  - The header: the counter `Step {n} of {N}` as an overline paragraph with an id from `useId()`.
+  - The header: the counter `Step {n} of {N}` as a plain muted body-text paragraph (sentence case, not an
+    overline kicker) with an id from `useId()`.
   - The title as an `<h2 tabindex="-1">` with `aria-describedby` pointing at the counter, followed by
     `Optional` when `optional` is set.
   - The `description` paragraph, only when non-empty.
@@ -31892,7 +31892,7 @@ State matrix:
 | next blocked | `next` handler calls `preventDefault` | The wizard stays on the step. The consumer renders the reason inside the step's slot. |
 | invalid step | `Wizard.Step` `invalid` | The step root carries `data-invalid`. Its rail step carries `data-invalid` and renders the `Stepper.Step` `error` state: the danger dot with the warning glyph and the screen-reader word `Needs attention`. |
 | step reached | the `v-model` index once held a step | That step and every step before it stay reachable from the rail after the reader goes back. |
-| narrow box | wizard box under `@2xl` | The rail is not displayed (`@max-2xl/wizard:hidden`). The root shows its own `Step n of N` progress line (`wizard.stepOf`, `aria-live="polite"`, `data-testid="<testid>__progress"`) at the top of the content column in place of the step header's overline, which hides at that width; the step title follows it and the footer stays below. |
+| narrow box | wizard box under `@2xl` | The rail is not displayed (`@max-2xl/wizard:hidden`). The root shows its own `Step n of N` progress line (`wizard.stepOf`, `aria-live="polite"`, `data-testid="<testid>__progress"`) at the top of the content column in place of the step header's counter, which hides at that width; the step title follows it and the footer stays below. |
 | narrow footer | wizard box under `@sm` (408 px) | The footer wraps: Cancel and Previous share the first row (Cancel at the start, Previous at the end) and the primary action takes the full width on its own row below, so a long `submitLabel` is never cut off. The order on screen is the DOM and focus order: Cancel, Previous, primary. |
 
 Layout from `@2xl` of the wizard's own box (`@container/wizard`, so a wizard in a drawer or split view follows that box): a row with the rail column (`@2xl/wizard:w-(--container-3xs) @2xl/wizard:shrink-0`) on the start

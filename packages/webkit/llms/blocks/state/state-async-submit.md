@@ -42,7 +42,7 @@ The toasts are raised through `toast` with one id per run so each state replaces
 
 ### B. Page heading — `PageHeader` (required)
 
-`size="large"`, the page title and one sentence on what the run does. Its `#actions` slot carries the run status as a `Tag`, so the state of the run is readable from the heading in every state.
+`size="large"`, the page title and one sentence on what the run does. Its `#meta` slot carries the run status as a `Tag` beside the title, at its own width, so the state of the run is readable from the heading in every state and never stretches into a button-like bar on a phone (`#actions` is for buttons).
 
 ### C. Run status — `Tag` (required)
 
@@ -343,11 +343,12 @@ Each variant is the same screen in another state: `get_block("state/state-async-
         description="Builds acme/web-app and publishes it to production. A deploy takes about half a minute and keeps running if you leave this page; the result reports back wherever you are."
         size="large"
       >
-        <template #actions>
+        <template #meta>
           <Tag
             :label="statusTag.label"
             :severity="statusTag.severity"
             size="medium"
+            data-testid="state-async-submit__status"
           />
         </template>
       </PageHeader>

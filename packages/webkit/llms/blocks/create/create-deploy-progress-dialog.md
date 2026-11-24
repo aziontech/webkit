@@ -35,15 +35,15 @@ Titled "New production deployment" (the environment in lower case), with the dia
 
 ### B. Progress frame — `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `OutcomeIcon` (required)
 
-`size="medium"` and always `dismissible`: the run keeps going in the background, and the toast reports it once the dialog is hidden. The title counts: "Deploying… 2 of 5 done" while running (the settled count, never the position of the one in progress), "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and the rule that the ones that succeeded stay live. Once settled a large `OutcomeIcon` stands before the title: success when all deployed, warning when some failed.
+`size="medium"` and always `dismissible`: the run keeps going in the background, and the toast reports it once the dialog is hidden. The title counts: "Deploying… 2 of 5 done" while running (the settled count, never the position of the one in progress), "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and, while running or after a failure, the rule that the ones that succeeded stay live; a run where every deploy succeeded just says they are all live. Once settled a large `OutcomeIcon` stands before the title: success when all deployed, warning when some failed.
 
 ### C. Progress — `PanelBody`, `Progress` (required)
 
-The share of settled settings, named "Deploy progress", with "Deploying <name>" under it while one runs.
+The share of settled settings while the run goes on, named "Deploy progress", with "Deploying <name>" under it while one runs. Once settled the bar shows the share that succeeded, so a partial failure never reads as a full, successful bar.
 
 ### D. Filter — `ToggleGroup` (required)
 
-Small, named "Filter deploys by status": All, Remaining n (deploying and queued), Failed n, Done n. An empty filter shows a small `EmptyState` ("Nothing failed.").
+Small, named "Filter deploys by status": All, Remaining n (deploying and queued), Failed n, Done n. It shows while the run goes on and after a failure; a run where everything succeeded has nothing to filter, so it hides. An empty filter shows a small `EmptyState` ("Nothing failed.").
 
 ### E. Rows — `Item`, `OutcomeIcon`, `Spinner`, `Tag`, `EmptyState` (required)
 
@@ -51,7 +51,7 @@ An `Item.List` with one small `Item variant="outline"` per Deployment Setting: i
 
 ### F. Footer — `PanelFooter`, `Button` (required)
 
-Retry failed (outlined) appears only when the run settled with failures; the primary button reads Hide while the run goes on and Close once it settled; both close the dialog, and Show progress reopens it.
+Retry failed appears only when the run settled with failures, and is then the primary action with Close outlined beside it; otherwise the primary button reads Hide while the run goes on and Close once it settled; both close the dialog, and Show progress reopens it.
 
 ### Outcome toast — through `toast`
 
@@ -146,8 +146,8 @@ Then delete `sample.ts` and its import.
 
 - `Running` — primary (the code below)
 - `Drop` — The drop-to-deploy confirm: New production deployment, the service with a Production `Tag`, what the files replace, and the dropped folder with its file count, total size and a scrollable list of up to 100 paths (an 'and N more' line counts the rest) with sizes formatted by `Intl.NumberFormat`. Cancel closes; Deploy to Production opens the progress dialog and starts the run.
-- `PartialError` — Settled with one failure: Deployed 4 of 5 Deployment Settings with a warning `OutcomeIcon`, staging-settings marked Failed with the reason, Retry failed beside Close, and no toast while the dialog shows the outcome; a run that settles while the dialog is hidden raises an error toast with Edit (reopens the dialog on the failed rows) and Redeploy.
-- `Success` — Every Deployment Setting deployed: a large animated success `OutcomeIcon` beside Deployed 5 Deployment Settings, every row Done, Close enabled, and no toast while the dialog shows the outcome; a run that settles while the dialog is hidden raises a success toast with Edit and Redeploy.
+- `PartialError` — Settled with one failure: Deployed 4 of 5 Deployment Settings with a warning `OutcomeIcon`, staging-settings marked Failed with the reason, the bar at the 4 of 5 that succeeded, Retry failed as the primary action beside an outlined Close, and no toast while the dialog shows the outcome; a run that settles while the dialog is hidden raises an error toast with Edit (reopens the dialog on the failed rows) and Redeploy.
+- `Success` — Every Deployment Setting deployed: a large animated success `OutcomeIcon` beside Deployed 5 Deployment Settings, every row Done, no filter (nothing to filter), Close enabled, and no toast while the dialog shows the outcome; a run that settles while the dialog is hidden raises a success toast with Edit and Redeploy.
 
 Each variant is the same screen in another state: `get_block("create/create-deploy-progress-dialog", { variant })`, or the file under `blocks/create/create-deploy-progress-dialog/variants/`.
 
@@ -254,9 +254,13 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     () => items.value.find((item) => item.status === 'deploying')?.name ?? ''
   )
 
-  const percent = computed(() =>
-    counts.value.total ? Math.round((counts.value.settled / counts.value.total) * 100) : 0
-  )
+  const percent = computed(() => {
+    const { total, settled, done } = counts.value
+    if (!total) return 0
+    return Math.round(((running.value ? settled : done) / total) * 100)
+  })
+
+  const partial = computed(() => !running.value && counts.value.failed > 0)
 
   const filterOptions = computed(() => [
     { value: 'all', label: 'All' },
@@ -281,9 +285,10 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     return `Deployed ${total} ${noun(total)}`
   })
 
-  const tally = computed(
-    () =>
-      `${counts.value.done} succeeded, ${counts.value.failed} failed. Each Deployment Setting deploys on its own, and the ones that succeeded stay live.`
+  const tally = computed(() =>
+    counts.value.failed || running.value
+      ? `${counts.value.done} succeeded, ${counts.value.failed} failed. Each Deployment Setting deploys on its own, and the ones that succeeded stay live.`
+      : `All ${counts.value.done} succeeded and are live.`
   )
 
   const outcomeSeverity = computed(() => (counts.value.failed ? 'warning' : 'success'))
@@ -413,6 +418,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
             <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
               <Progress
                 :value="percent"
+                data-testid="create-deploy-progress-dialog__progress"
                 aria-label="Deploy progress"
                 size="small"
               />
@@ -425,6 +431,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
             </div>
 
             <ToggleGroup
+              v-if="running || counts.failed"
               v-model="filter"
               :options="filterOptions"
               aria-label="Filter deploys by status"
@@ -505,7 +512,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
               <Button
                 class="w-full"
                 label="Retry failed"
-                variant="outline"
+                variant="primary"
                 size="medium"
                 icon="az az-refresh"
                 @click="retryFailed"
@@ -515,7 +522,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
               <Button
                 class="w-full"
                 :label="running ? 'Hide' : 'Close'"
-                variant="primary"
+                :variant="partial ? 'outline' : 'primary'"
                 size="medium"
                 @click="open = false"
               />

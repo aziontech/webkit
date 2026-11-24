@@ -1,6 +1,6 @@
 # StateEdgeErrorPage (`state/state-edge-error-page`)
 
-> The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `FlowDiagram` (one data card per hop, `uniform` so every card has the same width and height, each with its status dot and text; side by side on a wide screen, stacked with `orientation="vertical"` on a phone or tablet), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, data center, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/state-error-page` instead.
+> The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `FlowDiagram` (one data card per hop, `uniform` so every card has the same width and height, each with its status dot and text; one `orientation="responsive"` diagram, side by side when the row fits and stacked when it does not), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, data center, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/state-error-page` instead.
 
 - Surface: edge
 - Source: `blocks/state/state-edge-error-page/state-edge-error-page.vue` in `@aziontech/webkit`
@@ -43,7 +43,7 @@ The HTTP code as a `StatusCode` (4xx warning, 5xx danger) followed by the reason
 
 ### B. Request path — `FlowDiagram`
 
-Three hops, always in this order: You (the browser), Azion (the code of the data center that answered) and Application (the site's host). Each hop is a `FlowDiagram` data card: an icon and the hop's name in the header with its state as a status dot and text (Working, Error, Timed out, Unavailable, Blocked, Rate limited, Not reached, Not found), the browser, data center or host as the card's name, and a one-line explanation of the hop when the card is opened. The edges give one node per column and `uniform` gives every card the same width and height. On wide screens (`lg` and up) the cards sit side by side joined by the diagram's connectors; below that they stack at full width with `orientation="vertical"`, joined by a dashed rail, so the path never scrolls sideways. The path answers "whose fault is it" before the visitor reads a word.
+Three hops, always in this order: You (the browser), Azion (the data center that answered: its place, then its code, Ashburn, US (IAD)) and Application (the site's host). Each hop is a `FlowDiagram` data card: an icon and the hop's name in the header with its state as a status dot and text (Working, Error, Timed out, Unavailable, Blocked, Rate limited, Not reached, Not found), the browser, data center or host as the card's name, and a one-line explanation of the hop when the card is opened. The edges give one node per column and `uniform` gives every card the same width and height. One `FlowDiagram` with `orientation="responsive"` draws it: the cards sit side by side joined by the connectors when the whole row fits, and stack at full width joined by a dashed rail when it does not, so the path never scrolls sideways and the page mounts the diagram once. The path answers "whose fault is it" before the visitor reads a word.
 
 ### C. Next steps — `Button`
 
@@ -63,19 +63,19 @@ Four facts in a two-column `KeyValueList` (one column on a phone): the request I
 
 The block fetches nothing: Azion fills the props from the request it failed to serve.
 
-| Prop        | Type                     | What it does                                                           |
-| ----------- | ------------------------ | ---------------------------------------------------------------------- |
-| `code`      | `number`                 | HTTP status (`502`).                                                   |
-| `reason`    | `string`                 | Reason phrase beside the code (`Bad gateway`).                         |
-| `title`     | `string`                 | What happened, in the visitor's words; the page's `h1`.                |
-| `cause`     | `string`                 | The answer to What happened?                                           |
-| `advice`    | `string`                 | The answer to What can I do?; never an account action.                 |
-| `host`      | `string`                 | The host the visitor asked for; the Application hop and the Host fact. |
-| `requestId` | `string`                 | The request ID to quote.                                               |
-| `time`      | `string`                 | When the request was answered, ISO 8601.                               |
-| `location`  | `string`                 | The code of the Azion data center (`IAD`); the Azion hop and its fact. |
-| `path`      | `StateEdgeErrorPagePath` | `{ visitor, azion, application }`, each `{ status, severity }`.        |
-| `recovery`  | `'retry' \| 'home'`      | The primary button: Try again, or Go to home page.                     |
+| Prop        | Type                     | What it does                                                                                      |
+| ----------- | ------------------------ | ------------------------------------------------------------------------------------------------- |
+| `code`      | `number`                 | HTTP status (`502`).                                                                              |
+| `reason`    | `string`                 | Reason phrase beside the code (`Bad gateway`).                                                    |
+| `title`     | `string`                 | What happened, in the visitor's words; the page's `h1`.                                           |
+| `cause`     | `string`                 | The answer to What happened?                                                                      |
+| `advice`    | `string`                 | The answer to What can I do?; never an account action.                                            |
+| `host`      | `string`                 | The host the visitor asked for; the Application hop and the Host fact.                            |
+| `requestId` | `string`                 | The request ID to quote.                                                                          |
+| `time`      | `string`                 | When the request was answered, ISO 8601.                                                          |
+| `location`  | `string`                 | The Azion data center, its place then its code (`Ashburn, US (IAD)`); the Azion hop and its fact. |
+| `path`      | `StateEdgeErrorPagePath` | `{ visitor, azion, application }`, each `{ status, severity }`.                                   |
+| `recovery`  | `'retry' \| 'home'`      | The primary button: Try again, or Go to home page.                                                |
 
 | Event   | Payload   | When                                                                         |
 | ------- | --------- | ---------------------------------------------------------------------------- |
@@ -129,7 +129,7 @@ The block fetches nothing: Azion fills the props from the request it failed to s
 ## Related
 
 - `state/state-error-page` — the error pages of Azion's own console, site and docs.
-- `FlowDiagram` — the request path (`nodes` + `edges`, `uniform`), with `orientation="vertical"` on a phone.
+- `FlowDiagram` — the request path (`nodes` + `edges`, `uniform`, `orientation="responsive"`).
 - `state/state-async-submit` — a failed build or deploy inside the console.
 
 ## Variants
@@ -200,7 +200,7 @@ Each variant is the same screen in another state: `get_block("state/state-edge-e
     requestId?: string
     /** When the request was answered, as an ISO string. */
     time?: string
-    /** The code of the Azion data center that answered (IAD). */
+    /** The Azion data center that answered: its place, then its code (Ashburn, US (IAD)). */
     location?: string
     /** The state of each hop of the request path. */
     path?: StateEdgeErrorPagePath
@@ -219,7 +219,7 @@ Each variant is the same screen in another state: `get_block("state/state-edge-e
     host: 'www.example.com',
     requestId: '8f3c91ab2e4d7a10',
     time: '2026-11-18T14:02:11Z',
-    location: 'IAD',
+    location: 'Ashburn, US (IAD)',
     path: () => ({
       visitor: { status: 'Working', severity: 'success' },
       azion: { status: 'Working', severity: 'success' },
@@ -310,24 +310,14 @@ Each variant is the same screen in another state: `get_block("state/state-edge-e
         >
           Request path
         </h2>
-        <div class="-mx-(--spacing-md) hidden lg:block">
+        <div class="-mx-(--spacing-md)">
           <FlowDiagram
             :nodes="nodes"
             :edges="edges"
-            orientation="horizontal"
+            orientation="responsive"
             uniform
             :aria-labelledby="pathId"
             data-testid="state-edge-error-page__path"
-          />
-        </div>
-        <div class="-mx-(--spacing-md) lg:hidden">
-          <FlowDiagram
-            :nodes="nodes"
-            :edges="edges"
-            orientation="vertical"
-            uniform
-            :aria-labelledby="pathId"
-            data-testid="state-edge-error-page__path-stacked"
           />
         </div>
       </div>

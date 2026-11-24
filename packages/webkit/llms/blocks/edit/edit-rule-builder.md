@@ -1,6 +1,6 @@
 # EditRuleBuilder (`edit/edit-rule-builder`)
 
-> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows the Required marker from the start and turns invalid only after Save is pressed with it empty. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsGroup`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
+> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows the Required marker from the start and turns invalid only after Save is pressed with it empty. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add rule or Edit rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsGroup`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
 
 - Surface: app
 - Source: `blocks/edit/edit-rule-builder/edit-rule-builder.vue` in `@aziontech/webkit`
@@ -18,7 +18,7 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 
 - A resource runs an ordered list of rules, each made of conditions and actions (request and response rules, firewall rules, routing).
 - Conditions combine with And inside a group and Or across groups, and the order of behaviors matters.
-- The rule is edited from a list inside the resource, so the drawer opens as `Add Rule` or `Edit Rule` and keeps the list in view behind it.
+- The rule is edited from a list inside the resource, so the drawer opens as `Add rule` or `Edit rule` and keeps the list in view behind it.
 
 ## When not to use
 
@@ -31,7 +31,7 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 
 ### A. Drawer and trigger — `Drawer`, `DrawerTrigger`, `Button`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 
-A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add Rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelBody` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
+A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelBody` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
 
 ### B. General — `SettingsGroup`, `Field`, `Input` (required)
 
@@ -63,7 +63,7 @@ The block takes the rule it edits through props and emits the values on Save; it
 
 | Prop          | Type                      | What it does                                                                                                |
 | ------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `rule`        | `RuleBuilderRule \| null` | The rule to edit: the drawer becomes Edit Rule with the phase locked. Left out, the drawer adds a new rule. |
+| `rule`        | `RuleBuilderRule \| null` | The rule to edit: the drawer becomes Edit rule with the phase locked. Left out, the drawer adds a new rule. |
 | `loading`     | `boolean`                 | The save is in flight: the form locks and Save spins. When it turns off with no `error`, the drawer closes. |
 | `error`       | `string`                  | Why the save failed, in the danger `Alert` at the top of the drawer; the form is kept so Save retries.      |
 | `defaultOpen` | `boolean`                 | The drawer starts open.                                                                                     |
@@ -115,7 +115,7 @@ With no `loading` set during the `submit` handler the block treats the save as d
 
 ## Copy
 
-- **Drawer title and trigger:** `Add Rule` for a new rule, `Edit Rule` for an existing one.
+- **Drawer title and trigger:** `Add rule` for a new rule, `Edit rule` for an existing one.
 - **Section hints:** one sentence saying what the section decides, e.g. "The conditions that decide whether the rule runs."
 - **Logic labels:** single words, e.g. "and", "or", "Then".
 - **Add buttons:** verb first, e.g. "Add condition", "Add OR group", "Add behavior".
@@ -133,9 +133,9 @@ With no `loading` set during the `submit` handler the block treats the save as d
 
 ## States
 
-- Default: `rule` left out; Add Rule with an empty Name, the Request phase, one empty condition and one empty behavior, Active on.
-- Composed: `rule` set to the sample; Edit Rule for the seeded Docs rewrite rule, the phase locked with its note, one URI condition and two behaviors.
-- In a list: `view/view-rule-list#EditRule` drives this drawer without its trigger (`v-model:open` from a rule's name and from Add Rule) and writes the saved rule back to its row.
+- Default: `rule` left out; Add rule with an empty Name, the Request phase, one empty condition and one empty behavior, Active on.
+- Composed: `rule` set to the sample; Edit rule for the seeded Docs rewrite rule, the phase locked with its note, one URI condition and two behaviors.
+- In a list: `view/view-rule-list#EditRule` drives this drawer without its trigger (`v-model:open` from a rule's name and from Add rule) and writes the saved rule back to its row.
 
 ## Related
 
@@ -149,7 +149,7 @@ With no `loading` set during the `submit` handler the block treats the save as d
 ## Variants
 
 - `Default` — primary (the code below)
-- `Composed` — Editing the seeded Docs rewrite rule: the drawer titled Edit Rule, the phase locked with its note, one condition on the URI, and two behaviors that rewrite the path and set the Static Assets cache policy.
+- `Composed` — Editing the seeded Docs rewrite rule: the drawer titled Edit rule, the phase locked with its note, one condition on the URI, and two behaviors that rewrite the path and set the Static Assets cache policy.
 
 Each variant is the same screen in another state: `get_block("edit/edit-rule-builder", { variant })`, or the file under `blocks/edit/edit-rule-builder/variants/`.
 
@@ -218,7 +218,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-rule-bui
   }
 
   export interface RuleBuilderProps {
-    /** The rule to edit: the drawer becomes Edit Rule with the phase locked. Left out, it adds a new rule. */
+    /** The rule to edit: the drawer becomes Edit rule with the phase locked. Left out, it adds a new rule. */
     rule?: RuleBuilderRule | null
     /** The save is in flight: the form locks and Save spins; when it ends with no error the drawer closes. */
     loading?: boolean
@@ -264,7 +264,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-rule-bui
     { immediate: true }
   )
 
-  const title = computed(() => (editing.value ? 'Edit Rule' : 'Add Rule'))
+  const title = computed(() => (editing.value ? 'Edit rule' : 'Add rule'))
   const lockedPhase = computed(() => PHASES.find((phase) => phase.value === form.phase))
 
   watch(
@@ -342,7 +342,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-rule-bui
     <DrawerTrigger>
       <Button
         v-if="editing"
-        label="Edit Rule"
+        label="Edit rule"
         icon="az az-pencil"
         variant="outline"
         size="medium"
@@ -352,7 +352,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-rule-bui
         class="w-full md:w-fit"
       >
         <Button
-          label="Add Rule"
+          label="Add rule"
           icon="az az-plus"
           variant="outline"
           size="medium"
@@ -410,7 +410,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-rule-bui
                     size="large"
                     placeholder="My rule"
                   />
-                  <Field.Description v-if="nameError">Name is required.</Field.Description>
+                  <Field.Error v-if="nameError">Name is required.</Field.Error>
                 </Field>
 
                 <Field :disabled="submitting">
