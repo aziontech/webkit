@@ -90,7 +90,12 @@ function lineRange({ value, start, end }: Selection): [number, number] {
 function prefixLines(selection: Selection, format: MarkdownFormat): MarkdownEdit {
   const [from, to] = lineRange(selection)
   const lines = selection.value.slice(from, to).split('\n')
-  const pattern = format === 'numbered-list' ? NUMBERED : LINE_PREFIX[format as 'quote']
+  const pattern =
+    format === 'numbered-list'
+      ? NUMBERED
+      : format === 'quote'
+        ? LINE_PREFIX.quote
+        : LINE_PREFIX['bulleted-list']
   const remove = lines.every((line) => pattern.test(line))
   const prefix = (index: number): string =>
     format === 'numbered-list' ? `${index + 1}. ` : format === 'quote' ? '> ' : '- '

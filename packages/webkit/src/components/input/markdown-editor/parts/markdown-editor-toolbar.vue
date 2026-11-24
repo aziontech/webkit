@@ -2,6 +2,7 @@
   import { computed, onMounted, ref } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../../composables/use-direction'
+  import { useElementListener } from '../../../../composables/use-element-listener'
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import IconButton from '../../../action/icon-button/icon-button.vue'
@@ -81,6 +82,8 @@
     else return
     event.preventDefault()
   }
+
+  useElementListener(toolbarEl, 'keydown', onKeydown)
 </script>
 
 <template>
@@ -92,7 +95,6 @@
     :data-testid="`${testId}__toolbar`"
     data-slot="toolbar"
     class="ms-auto flex flex-wrap items-center gap-(--spacing-2xs)"
-    @keydown="onKeydown"
   >
     <Tooltip
       v-for="(tool, index) in tools"

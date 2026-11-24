@@ -371,51 +371,51 @@ describe('MarkdownEditor', () => {
       await expectNoA11yViolations(container)
     })
   })
-})
 
-describe('formatMarkdown', () => {
-  const at = (value: string, start: number, end = start) => ({ value, start, end })
+  describe('formatMarkdown', () => {
+    const at = (value: string, start: number, end = start) => ({ value, start, end })
 
-  it('inserts empty markers with the caret between them', () => {
-    expect(formatMarkdown(at('', 0), 'italic', 'url')).toMatchObject({
-      text: '__',
-      selectStart: 1,
-      selectEnd: 1
+    it('inserts empty markers with the caret between them', () => {
+      expect(formatMarkdown(at('', 0), 'italic', 'url')).toMatchObject({
+        text: '__',
+        selectStart: 1,
+        selectEnd: 1
+      })
     })
-  })
 
-  it('unwraps a selection already wrapped in the markers', () => {
-    expect(formatMarkdown(at('a **b** c', 4, 5), 'bold', 'url')).toMatchObject({
-      from: 2,
-      to: 7,
-      text: 'b'
+    it('unwraps a selection already wrapped in the markers', () => {
+      expect(formatMarkdown(at('a **b** c', 4, 5), 'bold', 'url')).toMatchObject({
+        from: 2,
+        to: 7,
+        text: 'b'
+      })
     })
-  })
 
-  it('writes an empty link with the caret inside the brackets', () => {
-    expect(formatMarkdown(at('', 0), 'link', 'url')).toMatchObject({
-      text: '[](url)',
-      selectStart: 1
+    it('writes an empty link with the caret inside the brackets', () => {
+      expect(formatMarkdown(at('', 0), 'link', 'url')).toMatchObject({
+        text: '[](url)',
+        selectStart: 1
+      })
     })
-  })
 
-  it('numbers each line, and strips the numbers when every line has one', () => {
-    expect(formatMarkdown(at('a\nb', 0, 3), 'numbered-list', 'url').text).toBe('1. a\n2. b')
-    expect(formatMarkdown(at('1. a\n2. b', 0, 9), 'numbered-list', 'url').text).toBe('a\nb')
-  })
-
-  it('quotes the whole line around the caret', () => {
-    expect(formatMarkdown(at('first\nsecond', 8), 'quote', 'url')).toMatchObject({
-      from: 6,
-      to: 12,
-      text: '> second',
-      selectStart: 10
+    it('numbers each line, and strips the numbers when every line has one', () => {
+      expect(formatMarkdown(at('a\nb', 0, 3), 'numbered-list', 'url').text).toBe('1. a\n2. b')
+      expect(formatMarkdown(at('1. a\n2. b', 0, 9), 'numbered-list', 'url').text).toBe('a\nb')
     })
-  })
 
-  it('makes inline code for one line and a fenced block for several', () => {
-    expect(formatMarkdown(at('run npm i', 4, 9), 'code', 'url').text).toBe('`npm i`')
-    expect(formatMarkdown(at('see\na\nb', 4, 7), 'code', 'url').text).toBe('```\na\nb\n```')
-    expect(formatMarkdown(at('x a\nb', 2, 5), 'code', 'url').text).toBe('\n```\na\nb\n```')
+    it('quotes the whole line around the caret', () => {
+      expect(formatMarkdown(at('first\nsecond', 8), 'quote', 'url')).toMatchObject({
+        from: 6,
+        to: 12,
+        text: '> second',
+        selectStart: 10
+      })
+    })
+
+    it('makes inline code for one line and a fenced block for several', () => {
+      expect(formatMarkdown(at('run npm i', 4, 9), 'code', 'url').text).toBe('`npm i`')
+      expect(formatMarkdown(at('see\na\nb', 4, 7), 'code', 'url').text).toBe('```\na\nb\n```')
+      expect(formatMarkdown(at('x a\nb', 2, 5), 'code', 'url').text).toBe('\n```\na\nb\n```')
+    })
   })
 })

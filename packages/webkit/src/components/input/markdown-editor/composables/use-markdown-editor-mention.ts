@@ -39,6 +39,32 @@ export interface UseMarkdownEditorMentionReturn {
   onKeydown: (event: KeyboardEvent) => boolean
 }
 
+interface MentionKeyContext {
+  open: () => boolean
+  matches: () => MarkdownEditorMention[]
+  activeIndex: Ref<number>
+  pick: (event: KeyboardEvent, mention: MarkdownEditorMention) => void
+  close: () => void
+}
+
+function onMentionKeydown(event: KeyboardEvent, context: MentionKeyContext): boolean {
+  if (!context.open()) return false
+  const matches = context.matches()
+  const count = matches.length
+  const { key } = event
+  if (key === 'ArrowDown' || key === 'ArrowUp')
+    context.activeIndex.value =
+      (context.activeIndex.value + (key === 'ArrowDown' ? 1 : count - 1)) % count
+  else if ((key === 'Enter' || key === 'Tab') && !event.isComposing)
+    context.pick(event, matches[Math.min(context.activeIndex.value, count - 1)]!)
+  else if (key === 'Escape') {
+    context.close()
+    event.stopPropagation()
+  } else return false
+  event.preventDefault()
+  return true
+}
+
 export function useMarkdownEditorMention(
   options: UseMarkdownEditorMentionOptions
 ): UseMarkdownEditorMentionReturn {
@@ -84,21 +110,14 @@ export function useMarkdownEditorMention(
     options.onPick(event, mention)
   }
 
-  function onKeydown(event: KeyboardEvent): boolean {
-    if (!open.value) return false
-    const count = matches.value.length
-    const { key } = event
-    if (key === 'ArrowDown' || key === 'ArrowUp')
-      activeIndex.value = (activeIndex.value + (key === 'ArrowDown' ? 1 : count - 1)) % count
-    else if ((key === 'Enter' || key === 'Tab') && !event.isComposing)
-      pick(event, matches.value[Math.min(activeIndex.value, count - 1)]!)
-    else if (key === 'Escape') {
-      close()
-      event.stopPropagation()
-    } else return false
-    event.preventDefault()
-    return true
+  const keyContext: MentionKeyContext = {
+    open: () => open.value,
+    matches: () => matches.value,
+    activeIndex,
+    pick,
+    close
   }
+  const onKeydown = (event: KeyboardEvent): boolean => onMentionKeydown(event, keyContext)
 
   return {
     matches,

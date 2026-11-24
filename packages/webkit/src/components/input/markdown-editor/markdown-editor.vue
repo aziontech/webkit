@@ -5,7 +5,6 @@
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import { cn } from '../../../utils/cn'
   import Tabs from '../../navigation/tabs'
   import type { TabsValue } from '../../navigation/tabs/injection-key'
   import Textarea from '../textarea/textarea.vue'
@@ -97,18 +96,21 @@
     }
   })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'markdown-editor')
-  const fieldId = computed(
-    () => (attrs['id'] as string | undefined) || control.field?.controlId || `${uid}-field`
-  )
+  const testId = computed(() => String(attrs['data-testid'] ?? 'markdown-editor'))
+  const fieldId = computed(() => {
+    const id = attrs['id']
+    return (typeof id === 'string' && id) || control.field?.controlId || `${uid}-field`
+  })
   const listId = `${uid}-mentions`
   const editable = computed(() => !control.disabled.value && !props.readonly)
   const previewBusy = computed(
     () => tab.value === 'preview' && !!model.value && !previewReady.value && !previewFailed.value
   )
 
-  const fieldEl = (): HTMLTextAreaElement | null =>
-    (textareaEl.value?.$el as HTMLTextAreaElement | undefined) ?? null
+  const fieldEl = (): HTMLTextAreaElement | null => {
+    const el: unknown = textareaEl.value?.$el
+    return el instanceof HTMLTextAreaElement ? el : null
+  }
 
   const mention = useMarkdownEditorMention({
     field: fieldEl,
@@ -190,9 +192,7 @@
 
 <template>
   <div
-    :class="
-      cn('flex w-full min-w-0 flex-col gap-(--spacing-xs)', attrs.class as string | undefined)
-    "
+    :class="['flex w-full min-w-0 flex-col gap-(--spacing-xs)', attrs.class]"
     data-slot="markdown-editor"
     :data-testid="testId"
     :data-tab="tab"
