@@ -188,6 +188,7 @@
         class="flex size-4 shrink-0 items-center justify-center"
       >
         <i
+          aria-hidden="true"
           v-if="type === 'checkbox' && selected"
           class="az az-check text-[length:inherit] leading-none"
         />

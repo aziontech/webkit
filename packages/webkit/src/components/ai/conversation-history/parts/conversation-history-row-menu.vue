@@ -84,7 +84,11 @@
           command="P"
           :label="label(Boolean(item.pinned), 'unpin', 'pin')"
         >
-          <template #leading><i class="az az-pin" /></template>
+          <template #leading
+            ><i
+              aria-hidden="true"
+              class="az az-pin"
+          /></template>
         </DropdownMenuItem>
         <DropdownMenuItem
           key="rename"
@@ -93,7 +97,11 @@
           command="R"
           :label="ctx.t('conversationHistory.rename')"
         >
-          <template #leading><i class="az az-pencil" /></template>
+          <template #leading
+            ><i
+              aria-hidden="true"
+              class="az az-pencil"
+          /></template>
         </DropdownMenuItem>
         <DropdownMenuItem
           key="share"
@@ -101,7 +109,11 @@
           value="share"
           :label="ctx.t('conversationHistory.share')"
         >
-          <template #leading><i class="az az-share" /></template>
+          <template #leading
+            ><i
+              aria-hidden="true"
+              class="az az-share"
+          /></template>
         </DropdownMenuItem>
         <DropdownMenuItem
           key="lock"
@@ -110,12 +122,18 @@
           :label="label(Boolean(item.locked), 'unlock', 'lock')"
         >
           <template #leading
-            ><i :class="item.locked ? 'az az-lock-open' : 'az az-lock'"
+            ><i
+              aria-hidden="true"
+              :class="item.locked ? 'az az-lock-open' : 'az az-lock'"
           /></template>
         </DropdownMenuItem>
         <DropdownMenuSub v-if="movable">
           <DropdownMenuSubTrigger :label="ctx.t('conversationHistory.moveToProject')">
-            <template #leading><i class="az az-folder" /></template>
+            <template #leading
+              ><i
+                aria-hidden="true"
+                class="az az-folder"
+            /></template>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <DropdownMenuGroup>
@@ -124,7 +142,11 @@
                 :key="project.id"
                 :value="`move:${project.id}`"
               >
-                <template #leading><i class="az az-folder" /></template>
+                <template #leading
+                  ><i
+                    aria-hidden="true"
+                    class="az az-folder"
+                /></template>
                 <bdi dir="auto">{{ project.title }}</bdi>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -137,7 +159,11 @@
           command="A"
           :label="label(Boolean(item.archived), 'unarchive', 'archive')"
         >
-          <template #leading><i class="az az-inbox" /></template>
+          <template #leading
+            ><i
+              aria-hidden="true"
+              class="az az-inbox"
+          /></template>
         </DropdownMenuItem>
       </DropdownMenuGroup>
       <DropdownMenuGroup
@@ -147,6 +173,7 @@
         <DropdownMenuItem value="remove">
           <template #leading
             ><i
+              aria-hidden="true"
               :class="DANGER_CLASS"
               class="az az-trash"
           /></template>

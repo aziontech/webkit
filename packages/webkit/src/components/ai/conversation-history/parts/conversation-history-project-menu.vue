@@ -67,7 +67,11 @@
             )
           "
         >
-          <template #leading><i class="az az-pin" /></template>
+          <template #leading
+            ><i
+              aria-hidden="true"
+              class="az az-pin"
+          /></template>
         </DropdownMenuItem>
         <DropdownMenuItem
           key="settings"
@@ -75,7 +79,11 @@
           value="settings"
           :label="ctx.t('conversationHistory.projectSettings')"
         >
-          <template #leading><i class="az az-settings" /></template>
+          <template #leading
+            ><i
+              aria-hidden="true"
+              class="az az-settings"
+          /></template>
         </DropdownMenuItem>
       </DropdownMenuGroup>
       <DropdownMenuGroup
@@ -85,6 +93,7 @@
         <DropdownMenuItem value="remove">
           <template #leading
             ><i
+              aria-hidden="true"
               :class="DANGER_CLASS"
               class="az az-trash"
           /></template>

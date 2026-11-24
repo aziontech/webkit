@@ -3,11 +3,11 @@ name: console-layout
 category: layout
 structure: composition
 status: implemented
-spec_version: 13
+spec_version: 14
 template: 2
-checksum: 1b4ee4c4fddc73863ee031e7c0d332a170a6f9f769c2b5b1b43f6fa536fa15a2
+checksum: 487a69c8ef8dcdb2a110808e9da77032e5423b99bffb47715c1e005dce7b16df
 created: 2026-11-12
-last_updated: 2026-11-20
+last_updated: 2026-11-23
 ---
 
 # ConsoleLayout — Component Spec
@@ -230,7 +230,7 @@ packages/webkit/src/components/layout/console-layout/
 - Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the rail account trigger (`Account menu`, an icon button) come from the locale catalog; the avatar carries the account name. The header avatar trigger shows the initials, so its name starts with them and then says whose menu it is (`JD, Jane Doe, account menu`, `consoleLayout.accountMenuFor`; the initials are the first letters of the first and last words of the name, as `Avatar` draws them) to meet WCAG 2.5.3 Label in Name (a speech user says what they see); with an account image it has no visible text and is named `Account menu`.
 - Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
-- Choosing a row in the compact drawer closes it.
+- Choosing a row in the compact drawer closes it, and so does any route change, so a link or a list in `sidebar-header` (a chat history) that navigates also closes the drawer and shows the page.
 - A page's control crumb is the last item of the header's `Breadcrumb` list (while compact, the only items of a `Breadcrumb` list that holds just the controls); it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
 
 ## Internationalization

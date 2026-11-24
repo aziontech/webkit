@@ -267,6 +267,7 @@
           aria-hidden="true"
         >
           <i
+            aria-hidden="true"
             class="az az-square-pen size-4 shrink-0 text-[length:inherit] leading-none text-(--text-muted) group-hover:text-(--text-default) group-focus-visible:text-(--text-default)"
           />
         </span>
@@ -284,7 +285,10 @@
         :data-testid="`${testId}__search`"
       >
         <template #leading>
-          <i class="az az-search" />
+          <i
+            aria-hidden="true"
+            class="az az-search"
+          />
         </template>
       </Input>
     </div>

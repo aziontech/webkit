@@ -100,6 +100,7 @@
           aria-hidden="true"
         >
           <i
+            aria-hidden="true"
             :class="open ? 'az az-folder-open' : 'az az-folder'"
             class="size-4 shrink-0 text-[length:inherit] leading-none text-(--text-muted) group-hover/project:text-(--text-default)"
           />
