@@ -68,7 +68,7 @@
 <template>
   <StatusIndicator
     severity="success"
-    label="Status"
+    label="Healthy"
   />
 </template>
 ```
@@ -84,23 +84,23 @@
   <div class="flex flex-wrap items-center gap-(--spacing-3)">
     <StatusIndicator
       severity="success"
-      label="Status"
+      label="Healthy"
     />
     <StatusIndicator
       severity="info"
-      label="Status"
+      label="Updating"
     />
     <StatusIndicator
       severity="neutral"
-      label="Status"
+      label="Stopped"
     />
     <StatusIndicator
       severity="warning"
-      label="Status"
+      label="Degraded"
     />
     <StatusIndicator
       severity="danger"
-      label="Status"
+      label="Failed"
     />
   </div>
 </template>
@@ -116,7 +116,7 @@
 <template>
   <StatusIndicator
     severity="success"
-    label="Status"
+    label="Deploying"
     loading
   />
 </template>

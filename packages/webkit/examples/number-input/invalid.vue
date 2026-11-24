@@ -1,4 +1,5 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import NumberInput from '@aziontech/webkit/number-input'
   import { ref } from 'vue'
 
@@ -6,12 +7,13 @@
 </script>
 
 <template>
-  <div class="w-full max-w-80">
-    <NumberInput
-      v-model="value"
-      aria-label="Quantity"
-      invalid
-      required
-    />
-  </div>
+  <Field
+    invalid
+    required
+    class="w-full max-w-(--container-xs)"
+  >
+    <Field.Label>Instances</Field.Label>
+    <NumberInput v-model="value" />
+    <Field.Error>Use 10 instances or fewer on this plan.</Field.Error>
+  </Field>
 </template>

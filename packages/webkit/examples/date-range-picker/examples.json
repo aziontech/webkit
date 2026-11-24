@@ -34,7 +34,7 @@
     },
     {
       "name": "TimeZone",
-      "summary": "`v-model:time-zone` and `show-time-zone` with a short list of zones: the panel shows the zone selector, the absolute range is typed and shown in the chosen zone, and the stored value stays the same ISO instants, printed under the picker. Without `show-time-zone` the panel says nothing about the zone; the page shows it beside the picker.",
+      "summary": "`v-model:time-zone` and `show-time-zone` with a short list of zones: the panel shows the zone selector, the absolute range is typed and shown in the chosen zone, and the stored `v-model` value stays the same ISO instants (`{ type: 'absolute', start: '2026-11-10T11:00:00.000Z', end: … }`). Without `show-time-zone` the panel says nothing about the zone; the page shows it beside the picker.",
       "file": "time-zone.vue"
     },
     {

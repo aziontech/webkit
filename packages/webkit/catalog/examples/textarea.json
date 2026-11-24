@@ -12,7 +12,7 @@
   },
   {
    "name": "Invalid",
-   "summary": "",
+   "summary": "Invalid state inside a Field: the danger border and a Field.Error saying what to fix.",
    "file": "examples/textarea/invalid.vue"
   }
  ]

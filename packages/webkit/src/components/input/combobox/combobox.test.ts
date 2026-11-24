@@ -10,6 +10,12 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import Field from '../field'
 import Combobox from './combobox.vue'
 
+const describedText = (control: Element) =>
+  (control.getAttribute('aria-describedby') ?? '')
+    .split(' ')
+    .map((id) => (id ? document.getElementById(id)?.textContent?.trim() : ''))
+    .join(' ')
+
 const options = [
   { value: 'API_URL', description: 'Suggested' },
   { value: 'API_TOKEN' },
@@ -382,6 +388,8 @@ describe('Combobox', () => {
       const fields = view.getAllByRole('combobox') as HTMLInputElement[]
       expect(fields[0]!.disabled).toBe(true)
       expect(fields[1]!.getAttribute('aria-invalid')).toBe('true')
+      expect(view.getByRole('combobox', { name: 'Region' })).toBe(fields[1])
+      expect(describedText(fields[1]!)).toContain('Choose a region.')
       await expectNoA11yViolations(view.container)
     })
   })

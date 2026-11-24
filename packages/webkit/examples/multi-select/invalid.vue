@@ -1,36 +1,41 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import MultiSelectContent from '@aziontech/webkit/multi-select-content'
   import MultiSelectItem from '@aziontech/webkit/multi-select-item'
   import MultiSelectRoot from '@aziontech/webkit/multi-select-root'
   import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   const value = ref([])
-  const options = [
-    { value: 'opt-1', label: 'Option 1' },
-    { value: 'opt-2', label: 'Option 2' },
-    { value: 'opt-3', label: 'Option 3' },
-    { value: 'opt-4', label: 'Option 4' }
+  const regions = [
+    { value: 'us-east', label: 'US East' },
+    { value: 'us-west', label: 'US West' },
+    { value: 'eu-central', label: 'EU Central' },
+    { value: 'ap-southeast', label: 'Asia Pacific Southeast' }
   ]
+  const invalid = computed(() => value.value.length === 0)
 </script>
 
 <template>
-  <div class="w-full max-w-70">
+  <Field
+    :invalid="invalid"
+    class="w-full max-w-(--container-xs)"
+  >
+    <Field.Label>Regions</Field.Label>
     <MultiSelectRoot
-      aria-label="Options"
       v-model="value"
-      placeholder="Select options"
-      invalid
+      placeholder="Select regions"
     >
       <MultiSelectTrigger />
       <MultiSelectContent>
         <MultiSelectItem
-          v-for="o in options"
-          :key="o.value"
-          :value="o.value"
-          >{{ o.label }}</MultiSelectItem
+          v-for="option in regions"
+          :key="option.value"
+          :value="option.value"
+          >{{ option.label }}</MultiSelectItem
         >
       </MultiSelectContent>
     </MultiSelectRoot>
-  </div>
+    <Field.Error v-if="invalid">Choose at least one region.</Field.Error>
+  </Field>
 </template>

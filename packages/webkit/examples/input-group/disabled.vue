@@ -4,6 +4,7 @@
 
 <template>
   <InputGroup
+    class="w-full max-w-(--container-xs)"
     dir="ltr"
     :disabled="true"
   >

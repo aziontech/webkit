@@ -41,7 +41,7 @@ describe('ConfirmDialog', () => {
     expect(dialog).toBeTruthy()
     expect(within(dialog as HTMLElement).getByText('Remove domain')).toBeTruthy()
     expect(
-      within(dialog as HTMLElement).getByRole('button', { name: 'Remove Domain' })
+      within(dialog as HTMLElement).getByRole('button', { name: 'Remove domain' })
     ).toBeTruthy()
   })
 

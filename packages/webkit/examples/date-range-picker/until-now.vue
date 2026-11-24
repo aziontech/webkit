@@ -7,16 +7,11 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-start gap-(--spacing-xs)">
-    <DateRangePicker
-      v-model="range"
-      time-zone="UTC"
-      show-step
-      aria-label="Incident time range"
-      @refresh="runQuery"
-    />
-    <p class="text-body-sm m-0 text-(--text-muted)">
-      <code>{{ JSON.stringify(range) }}</code>
-    </p>
-  </div>
+  <DateRangePicker
+    v-model="range"
+    time-zone="UTC"
+    show-step
+    aria-label="Incident time range"
+    @refresh="runQuery"
+  />
 </template>

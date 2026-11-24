@@ -127,6 +127,7 @@
 | `schemaForm.optionsError`         | Couldn't load the options.                     | —                      |
 | `schemaForm.writeOnlyPlaceholder` | Leave empty to keep the current value          | `ui[path].placeholder` |
 | `schemaForm.item`                 | Item {index}                                   | item schema `title`    |
+| `schemaForm.addItem`              | Add {item}                                     | —                      |
 | `schemaForm.advanced`             | Advanced settings                              | section `title`        |
 | `schemaForm.mapKey`               | Key                                            | —                      |
 | `schemaForm.mapValue`             | Value                                          | —                      |

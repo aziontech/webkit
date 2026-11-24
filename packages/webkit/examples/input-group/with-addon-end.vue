@@ -3,7 +3,10 @@
 </script>
 
 <template>
-  <InputGroup dir="ltr">
+  <InputGroup
+    dir="ltr"
+    class="w-full max-w-(--container-xs)"
+  >
     <InputGroup.Input
       aria-label="Domain"
       placeholder="domain"

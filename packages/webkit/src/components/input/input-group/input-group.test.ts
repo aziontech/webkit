@@ -14,11 +14,31 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import Field from '../field/field.vue'
 import InputGroup, { InputGroupAddon, InputGroupInput } from './index'
 
+const describedText = (control: Element) =>
+  (control.getAttribute('aria-describedby') ?? '')
+    .split(' ')
+    .map((id) => (id ? document.getElementById(id)?.textContent?.trim() : ''))
+    .join(' ')
+
 // The middle input is a consumer-provided raw <input>; aria-label gives it an
 // accessible name so composed trees are axe-clean (the group does not name it).
 const LABELLED_INPUT = '<input aria-label="Domain" placeholder="domain" />'
 
 describe('InputGroup', () => {
+  describe('examples', () => {
+    it.each([
+      ['Default', Default],
+      ['WithButton', WithButton],
+      ['WithAddons', WithAddons],
+      ['Disabled', Disabled]
+    ])('caps the %s example at a realistic field width', (_name, example) => {
+      const view = render(example)
+      expect((view.container.firstElementChild as HTMLElement).classList).toContain(
+        'max-w-(--container-xs)'
+      )
+    })
+  })
+
   describe('compound API', () => {
     it('attaches Addon to the compound root for dot-notation', () => {
       expect(InputGroup.Addon).toBe(InputGroupAddon)
@@ -80,6 +100,7 @@ describe('InputGroup', () => {
         template: '<InputGroup invalid><InputGroupInput aria-label="Domain" /></InputGroup>'
       })
       expect(getByRole('textbox', { name: 'Domain' }).getAttribute('aria-invalid')).toBe('true')
+      expect(describedText(getByRole('textbox', { name: 'Domain' }))).toContain('no spaces')
     })
 
     it('omits both attributes when invalid is false', () => {

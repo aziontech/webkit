@@ -9,7 +9,7 @@
     },
     {
       "name": "Groups",
-      "summary": "Three labeled groups — the central grouping anatomy — showing both spacings: `--spacing-sm` above a `CommandSeparator` and `--spacing-xs` below it, and `--spacing-sm` between two groups with no separator between them. Half the items carry a `prefix` icon and half do not; the leading box is rendered only by the rows that supply a glyph, so an icon-less row puts no empty element in the DOM and carries no indent. Opens from a button; `shortcut=\"\"` opts out of the global binding so only Default owns ⌘K on this page.",
+      "summary": "Three labeled groups — the central grouping anatomy — showing both spacings: `--spacing-sm` above a `CommandSeparator` and `--spacing-xs` below it, and `--spacing-sm` between two groups with no separator between them. Half the items carry a `leading` icon and half do not; the leading box is rendered only by the rows that supply a glyph, so an icon-less row puts no empty element in the DOM and carries no indent. Opens from a button; `shortcut=\"\"` opts out of the global binding so only Default owns ⌘K on this page.",
       "file": "groups.vue"
     },
     {

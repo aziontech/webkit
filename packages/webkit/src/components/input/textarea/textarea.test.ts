@@ -13,6 +13,12 @@ import Required from '../../../../examples/textarea/required.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Textarea from './textarea.vue'
 
+const describedText = (control: Element) =>
+  (control.getAttribute('aria-describedby') ?? '')
+    .split(' ')
+    .map((id) => (id ? document.getElementById(id)?.textContent?.trim() : ''))
+    .join(' ')
+
 describe('Textarea', () => {
   it('renders a <textarea> root carrying the default data-testid', () => {
     const { getByTestId } = render(Textarea)
@@ -231,6 +237,7 @@ describe('Textarea', () => {
       const control = getByTestId('textarea')
       expect(control).toHaveAttribute('data-invalid')
       expect(control).toHaveAttribute('aria-invalid', 'true')
+      expect(describedText(control)).toContain('Use at least 20 characters')
     })
 
     it('does not set data-invalid or aria-invalid by default', () => {

@@ -4,7 +4,7 @@
 
   const range = ref({ type: 'relative', amount: 5, unit: 'minute', key: 'last-5-minutes' })
   const refreshInterval = ref(60)
-  const refreshes = ref(0)
+  const runQuery = () => {}
   const quickRanges = [
     { key: 'today', amount: 1, unit: 'day', snap: true },
     { key: 'this-week', amount: 1, unit: 'week', snap: true },
@@ -18,18 +18,13 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-start gap-(--spacing-xs)">
-    <DateRangePicker
-      v-model="range"
-      v-model:refresh-interval="refreshInterval"
-      :relative-options="quickRanges"
-      time-zone="UTC"
-      show-step
-      aria-label="Events time range"
-      @refresh="refreshes += 1"
-    />
-    <p class="text-body-sm m-0 text-(--text-muted)">
-      Refresh interval: {{ refreshInterval }} s · refreshed {{ refreshes }} times
-    </p>
-  </div>
+  <DateRangePicker
+    v-model="range"
+    v-model:refresh-interval="refreshInterval"
+    :relative-options="quickRanges"
+    time-zone="UTC"
+    show-step
+    aria-label="Events time range"
+    @refresh="runQuery"
+  />
 </template>

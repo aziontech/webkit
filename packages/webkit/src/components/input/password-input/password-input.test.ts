@@ -392,6 +392,8 @@ describe('PasswordInput', () => {
       const input = getByLabelText('Personal token') as HTMLInputElement
       expect(input.getAttribute('autocomplete')).toBe('off')
       expect(input.getAttribute('spellcheck')).toBe('false')
+      expect(input.readOnly).toBe(true)
+      expect(container.querySelector('[data-testid="copy-button"]')).not.toBeNull()
       expect(container.querySelector('[data-monospace]')).not.toBeNull()
       await expectNoA11yViolations(container)
     })

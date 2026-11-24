@@ -91,7 +91,7 @@ packages/webkit/src/components/overlay/command/
   - Props: `placeholder: string` default `''` — input placeholder text; empty uses the locale catalog (`Search everything` in English). `ariaLabel: string` default `''` — accessible name for the search field; when empty it falls back to `placeholder`, so the field keeps its name after the placeholder disappears on the first keystroke.
   - Events: _none_ (the query lives in the injected context).
   - Slots: _none_.
-- `command-list/command-list.vue` — the scrollable results region. `role="listbox"` while at least one item is visible; with no visible item it drops the role (an empty listbox fails `aria-required-children`) and shows the `Empty` part. While the query is not empty it carries `data-ranked` and becomes a flex column, so groups and ungrouped items take their rank as a CSS `order`, and the root also moves the visible groups and rows in the DOM into that ranked order (nothing is re-created), so a screen reader reads the results in the order they are seen (WCAG 1.3.2). When the query empties, every moved node goes back to its original place.
+- `command-list/command-list.vue` — the scrollable results region. `role="listbox"` while at least one item is visible, named `Command menu` from the locale catalog (`command.title`, `aria-label`); with no visible item it drops the role (an empty listbox fails `aria-required-children`) and shows the `Empty` part. While the query is not empty it carries `data-ranked` and becomes a flex column, so groups and ungrouped items take their rank as a CSS `order`, and the root also moves the visible groups and rows in the DOM into that ranked order (nothing is re-created), so a screen reader reads the results in the order they are seen (WCAG 1.3.2). When the query empties, every moved node goes back to its original place.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — one or more `<Command.Group>` / `<Command.Item>` / `<Command.Separator>`, plus an optional `<Command.Empty>`.
@@ -175,7 +175,7 @@ packages/webkit/src/components/overlay/command/
 
 - The panel width and max height come from `Dialog`; the list scrolls inside `max-h-[24rem]`. From `md` up the panel sits 15% of the viewport height from the top (`15dvh`, a viewport-relative offset no spacing token expresses), so typing never moves its top edge; below `md` it is the Dialog's sheet.
 - The back control truncates a long page heading (`truncate`, `max-w-[40%]`) so the field keeps room to type.
-- Touch: rows are full-width, 44 px tall on a coarse pointer; the back control is 32px tall. No hover-only affordance: the highlight follows the active row and taps activate.
+- Touch: rows are full-width, 44 px tall on a coarse pointer; the back control is 32px tall. No hover-only affordance: the highlight follows the active row and taps activate. The keycaps (the input's `Esc` hint and every item `shortcut` hint) hide on a coarse pointer (`pointer-coarse:hidden`), since a phone has no key to press.
 
 ## Examples
 
@@ -205,9 +205,9 @@ packages/webkit/src/components/overlay/command/
     <CommandInput placeholder="Search commands…" />
     <CommandList>
       <CommandGroup label="Suggestions">
-        <CommandItem value="deploy">Deploy Project</CommandItem>
-        <CommandItem value="new-app">Create Application</CommandItem>
-        <CommandItem value="settings">Go to Settings</CommandItem>
+        <CommandItem value="deploy">Deploy project</CommandItem>
+        <CommandItem value="new-app">Create application</CommandItem>
+        <CommandItem value="settings">Go to settings</CommandItem>
       </CommandGroup>
       <CommandSeparator />
       <CommandGroup label="Commands">
@@ -219,12 +219,12 @@ packages/webkit/src/components/overlay/command/
         <CommandItem
           value="new-app-cmd"
           shortcut="meta+n"
-          >New Application</CommandItem
+          >New application</CommandItem
         >
         <CommandItem
           value="toggle-theme"
           shortcut="meta+shift+l"
-          >Toggle Theme</CommandItem
+          >Toggle theme</CommandItem
         >
       </CommandGroup>
     </CommandList>
@@ -268,9 +268,9 @@ packages/webkit/src/components/overlay/command/
               class="az az-cloud-upload"
               aria-hidden="true"
           /></template>
-          Deploy Project
+          Deploy project
         </CommandItem>
-        <CommandItem value="new-app">Create Application</CommandItem>
+        <CommandItem value="new-app">Create application</CommandItem>
       </CommandGroup>
       <CommandSeparator />
       <CommandGroup label="Navigation">
@@ -280,9 +280,9 @@ packages/webkit/src/components/overlay/command/
               class="az az-settings"
               aria-hidden="true"
           /></template>
-          Go to Settings
+          Go to settings
         </CommandItem>
-        <CommandItem value="billing">Go to Billing</CommandItem>
+        <CommandItem value="billing">Go to billing</CommandItem>
       </CommandGroup>
       <CommandGroup label="Account">
         <CommandItem value="profile">
@@ -291,9 +291,9 @@ packages/webkit/src/components/overlay/command/
               class="az az-user"
               aria-hidden="true"
           /></template>
-          View Profile
+          View profile
         </CommandItem>
-        <CommandItem value="logout">Log Out</CommandItem>
+        <CommandItem value="logout">Log out</CommandItem>
       </CommandGroup>
     </CommandList>
   </CommandRoot>
@@ -332,17 +332,17 @@ packages/webkit/src/components/overlay/command/
         <CommandItem
           value="command"
           shortcut="meta+k"
-          >Open Command Menu</CommandItem
+          >Open command menu</CommandItem
         >
         <CommandItem
           value="command-palette"
           shortcut="meta+shift+p"
-          >Open Command Palette</CommandItem
+          >Open command palette</CommandItem
         >
         <CommandItem
           value="close"
           shortcut="esc"
-          >Close Overlay</CommandItem
+          >Close overlay</CommandItem
         >
       </CommandGroup>
     </CommandList>

@@ -34,7 +34,7 @@
     },
     {
       "name": "Monospace",
-      "summary": "An API token field: `monospace` draws the value in the code face, so the revealed token reads character by character; `autocomplete=\"off\"` keeps password managers away.",
+      "summary": "A token shown once: `readonly` keeps the only copy from being edited, a CopyButton beside it copies it without revealing it, and `monospace` draws the revealed token in the code face so it reads character by character; `autocomplete=\"off\"` keeps password managers away.",
       "file": "monospace.vue"
     },
     {
