@@ -64,6 +64,15 @@ describe('RuntimeApiScene', () => {
     expect(items[0]).toHaveTextContent('fetch')
   })
 
+  it('sets every global in the code token, so identifiers keep their case', () => {
+    const { getAllByRole } = render(host())
+
+    getAllByRole('listitem').forEach((pill) => {
+      expect(pill.classList.contains('text-label-code-sm')).toBe(true)
+      expect(pill.classList.contains('text-overline-sm')).toBe(false)
+    })
+  })
+
   it('opens with the seeded highlight and keeps the Azion globals lit', () => {
     const { getByTestId } = render(host({ animated: false }))
     const lit = litLabels(getByTestId(`${SCENE}__cloud`))
