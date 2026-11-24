@@ -26,6 +26,8 @@
     size?: IconButtonSize
     /** Disables interaction and applies disabled tokens. */
     disabled?: boolean
+    /** Idle glyph; az az-link when the value is a link to a section. The check glyph replaces it after a copy. */
+    icon?: string
   }
 
   const props = withDefaults(defineProps<CopyButtonProps>(), {
@@ -33,7 +35,8 @@
     copiedLabel: '',
     variant: 'ghost',
     size: 'large',
-    disabled: false
+    disabled: false,
+    icon: 'az az-copy'
   })
 
   const emit = defineEmits<{
@@ -54,7 +57,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'copy-button')
 
-  const icon = computed(() => (copied.value ? 'az az-check' : 'az az-copy'))
+  const icon = computed(() => (copied.value ? 'az az-check' : props.icon))
 
   const label = computed(() =>
     copied.value ? props.copiedLabel || t('common.copied') : props.ariaLabel || t('common.copy')

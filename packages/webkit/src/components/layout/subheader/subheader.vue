@@ -75,6 +75,7 @@
           >
             <CopyButton
               :value="anchorUrl"
+              icon="az az-link"
               :data-testid="`${testId}__copy-link`"
               variant="ghost"
               size="small"
