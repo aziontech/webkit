@@ -47,7 +47,7 @@
     },
     {
       key: 'move-all-to-target',
-      icon: 'az az-arrow-right-to-line',
+      icon: 'az az-chevrons-right',
       label: t('transferList.moveAllToTarget'),
       disabled: locked.value || ctx.count('source') === 0,
       all: true,
@@ -63,7 +63,7 @@
     },
     {
       key: 'move-all-to-source',
-      icon: 'az az-arrow-left-to-line',
+      icon: 'az az-chevrons-left',
       label: t('transferList.moveAllToSource'),
       disabled: locked.value || ctx.count('target') === 0,
       all: true,

@@ -427,4 +427,25 @@ describe('ToggleGroup', () => {
       expect(getComputedStyle(disabled).backgroundColor).toBe('rgba(0, 0, 0, 0)')
     })
   })
+
+  it('dims the selected option of a disabled group like the rest, not in the active colour', () => {
+    const { getAllByTestId, container } = render(ToggleGroup, {
+      props: {
+        options: [
+          { label: 'Match all', value: 'and' },
+          { label: 'Match any', value: 'or' }
+        ],
+        modelValue: 'and',
+        disabled: true
+      }
+    })
+    const probe = document.createElement('span')
+    probe.style.color = 'var(--text-disabled)'
+    container.appendChild(probe)
+    const dimmed = getComputedStyle(probe).color
+    const [active, inactive] = getAllByTestId('toggle-group__option') as HTMLElement[]
+    expect(active?.dataset['state']).toBe('active')
+    expect(getComputedStyle(active as HTMLElement).color).toBe(dimmed)
+    expect(getComputedStyle(inactive as HTMLElement).color).toBe(dimmed)
+  })
 })

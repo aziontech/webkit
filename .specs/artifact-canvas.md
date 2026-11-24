@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: f43e1676747cd2eacc5256a97462c3611f50bd4176c5f18d47a16a05ae898de1
+checksum: ba609d1d9be366ed54e19a2e0e672f5bb1181ce059d28b32a65d9feac58bb94f
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -177,14 +177,14 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
 | `artifactCanvas.content`   | `{title} content`          | —             |
 | `artifactCanvas.streaming` | `Generating a new version` | —             |
 
-- The title and the meta are the owner's text; the title has `dir="auto"`.
+- The title and the meta are the owner's text; the title sits in page direction and its text is wrapped in `bdi`, so it stays beside the icon in right-to-left while a left-to-right file name keeps its own order.
 
 ## Right-to-left
 
 - Layout: logical utilities only; the panel's inner layout mirrors, Close sits at the inline end.
 - Icons: the pager chevrons mirror through `ResponseBranches`; the other icons are not directional.
 - Keyboard: none beyond the inner controls.
-- User data: code bodies keep their own direction (`CodeBlock` is LTR); the title is `dir="auto"`.
+- User data: code bodies keep their own direction (`CodeBlock` is LTR); the title text is isolated in `bdi`; the heading itself follows the page direction.
 
 ## Responsive
 

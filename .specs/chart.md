@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: b5031a4401b6b23e4ea86e1d036e80488ec274f097dfa3d4a507e1554c62a00b
+checksum: 54d186223dceac8a5a1d4cf4a408ffea5cc1f5cc7dd443f6ffe3d02e6349547e
 spec_version: 14
 template: 2
 created: 2026-10-20
@@ -55,7 +55,7 @@ A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, a
 - While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).
 - Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.
 - Use `labelScale="linear"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced.
-- Name every `Chart.Reference` with a `label` (`SLO 300 ms`, `Quota`): the label is drawn at the inline end of the line and read in the chart summary, so the limit never rests on a dashed line alone. Color it with a `severity` only when crossing it means that state (`danger` for a hard limit, `warning` for an alert threshold); a plain target stays `neutral`.
+- Name every `Chart.Reference` with a `label` (`SLO 300 ms`, `Quota`): the label is drawn at the inline end of the line and read in the chart summary, so the limit never rests on a dashed line alone. Color it with a `severity` only when crossing it means that state (`danger` for a hard limit, `warning` for an alert threshold); a plain target stays `neutral`. Place a labelled `Chart.Reference` after the series it frames: parts paint in order, so the label's canvas halo then sits over the line instead of under it, and the band's light tint does not hide the line.
 - Place a band (`from` + `to`) before the marks so it sits under them, and a line after the marks so it stays readable over them.
 - Draw event volume over contiguous time buckets (a log's histogram, requests per minute) with `Chart.Bar type="histogram"`: solid columns that touch, segments without gaps, the tallest column at the top. Keep the default bars for separate categories that are compared one against another.
 

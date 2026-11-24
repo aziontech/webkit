@@ -4,7 +4,7 @@ category: data
 structure: composition
 status: implemented
 spec_version: 6
-checksum: d90f923824ee8ede7fd04c73fe68f89772120fe7c0cbfaf81c7d57e8f993c7ce
+checksum: 675590666c3aecf97d1f412ef4ec3e5ed0dfc80ff1307038f67abcd2d97636e2
 created: 2026-06-25
 last_updated: 2026-11-21
 ---
@@ -85,7 +85,7 @@ Each part is also a standalone import (`import TransferListSource from '@azionte
 
 - `transfer-list-source/transfer-list-source.vue` — The source listbox (the left/top list). Reads its items and selection from the injected context. Props: `title` (heading text / accessible name), `loading` (shows a spinner in place of options and locks its controls). Slots: `item` (`{ item, index, list }`) renders one option row; `title` overrides the heading content. Double-clicking an option moves it to the target (driven by the root via the injected context).
 - `transfer-list-target/transfer-list-target.vue` — The target listbox (the right/bottom list). Same anatomy, props, and slots as `transfer-list-source`, bound to the target side of the pair; double-clicking an option moves it back to the source.
-- `transfer-list-controls/transfer-list-controls.vue` — The context-aware control column between the lists. Renders the four move buttons (move selected / move all, in each direction) as `IconButton`s (`ghost`, `large`) with the `az-arrow-right`, `az-arrow-right-to-line`, `az-arrow-left` and `az-arrow-left-to-line` glyphs; reads selection, item counts, loading, and disabled from the injected context and drives the moves. Takes no props. The arrows point toward the target list when the lists are side by side (mirrored in right-to-left, where the target list is on the left, like every directional glyph) and rotate to up/down when they stack on narrow viewports, in both reading directions.
+- `transfer-list-controls/transfer-list-controls.vue` — The context-aware control column between the lists. Renders the four move buttons (move selected / move all, in each direction) as `IconButton`s (`ghost`, `large`) with the `az-arrow-right`, `az-chevrons-right`, `az-arrow-left` and `az-chevrons-left` glyphs (a single arrow moves the selection, a double chevron moves every item; never the arrow-to-line glyph, which reads as download); reads selection, item counts, loading, and disabled from the injected context and drives the moves. Takes no props. The arrows point toward the target list when the lists are side by side (mirrored in right-to-left, where the target list is on the left, like every directional glyph) and rotate to up/down when they stack on narrow viewports, in both reading directions.
 
 <!-- Resulting layout (composition):
 

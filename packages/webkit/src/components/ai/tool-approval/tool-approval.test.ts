@@ -227,4 +227,20 @@ describe('ToolApproval', () => {
     const resolved = render(ToolApproval, { props: { ...base, status: 'approved' } })
     await expectNoA11yViolations(resolved.container)
   })
+
+  it('wraps the title only between words, and the example keeps each flag with its value', async () => {
+    const view = render(ToolApproval, {
+      props: { title: 'Allow `azion deploy --env production`?' }
+    })
+    const title = view.getByTestId('tool-approval__title')
+    expect(title.classList.contains('[overflow-wrap:break-word]')).toBe(true)
+    expect(title.classList.contains('[overflow-wrap:anywhere]')).toBe(false)
+    view.unmount()
+    const { default: Example } = await import('../../../../examples/tool-approval/default.vue')
+    const example = render(Example)
+    const runs = Array.from(example.container.querySelectorAll('code .whitespace-nowrap')).map(
+      (run) => run.textContent
+    )
+    expect(runs).toEqual(['--env production', '--workload storefront'])
+  })
 })

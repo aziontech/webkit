@@ -80,7 +80,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 - Layout: logical utilities; actions at the inline end.
 - Icons: maximize (Open, which opens the in-page canvas, not a new tab) and download are not mirrored.
 - Keyboard: none.
-- User data: the title is `dir="auto"` (file names).
+- User data: the title text (a file name) is isolated in `bdi`; the heading follows the page direction, so it stays beside the icon in right-to-left.
 
 ## Internationalization
 

@@ -1,6 +1,6 @@
 # Code Block
 
-> Use CodeBlock to show code, config or JSON the person reads or copies, including read-only diffs (a tab's `original`); for code the person edits use CodeEditor, and for build, deploy or runtime log lines use LogViewer. Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** type (`type="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks. The **label header holds the copy control** at its end (`data-copy-gutter` marks the root only while the copy sits in a column of its own at the end of the code instead, so no line runs under it) and is `sticky` at the top of the nearest scroller, so a long block keeps its language and copy in view. Its divider shows only when `bordered`; unbordered, header and code share one fill (the `StreamingResponse` look). The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-syntax-*` palette:
+> Use CodeBlock to show code, config or JSON the person reads or copies, including read-only diffs (a tab's `original`); for code the person edits use CodeEditor, and for build, deploy or runtime log lines use LogViewer. Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** type (`type="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks. The **label header holds the copy control** at its end, and so does the tab strip, or the filename bar when there is one, so the control never covers the first lines of code on a phone (`data-copy-gutter` marks the root only while the copy floats over the code instead, which happens only when the block has no header at all) and is `sticky` at the top of the nearest scroller, so a long block keeps its language and copy in view. Its divider shows only when `bordered`; unbordered, header and code share one fill (the `StreamingResponse` look). The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-syntax-*` palette:
 
 - Import: `import CodeBlock from '@aziontech/webkit/code-block'`
 - Category: code · Surface: app · Structure: monolithic
@@ -86,7 +86,7 @@
 - `data-state` on code lines: `default` | `added` | `removed` | `highlighted`; in the split view a side with no line opposite a change is `empty` (`var(--bg-canvas)`)
 - `data-split` on the panel when the active tab with an `original` draws side by side. A `split` diff draws unified while the content is narrower than 640px (an unmeasured block, as in the server render, draws split)
 - `data-disabled` not used (tabs are not disabled in v2)
-- `data-copy-gutter` on the root while the copy control floats over the code (no label header); the scroll area and every line keep its width free
+- `data-copy-gutter` on the root while the copy control floats over the code (no label header, tab strip or filename bar); the scroll area and every line keep its width free
 - `data-type` on the root: `code` | `output`; `output` paints the shell `--bg-canvas` and every line flat in `--text-muted`
 
 #### Layout rules (derived from Figma)
@@ -101,11 +101,11 @@
 | Split diff (two columns, Original and Modified, rows aligned, a change paired line for line)                             | active tab has an `original` and `diffView="split"`                      |
 | Line highlight (info background + 2 px leading bar)                                                                      | active tab `highlightedLine` is set                                      |
 
-When only one tab is provided and it has no `fileName`, the shell is code content + copy only (minimal block).
+When only one tab is provided and it has no `fileName`, the shell is code content + copy only (minimal block). With a tab strip or a filename bar the copy control (`variant="ghost"` `size="small"`) sits at the end of that header row, the filename bar first.
 
 Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
 
-**The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `variant="outline"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
+**The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. In a block with no header, the copy control (a `CopyButton`, `variant="outline"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
 
 - Computed diff: the common head and tail are trimmed, then the middle runs the Myers line diff; past 1,000 edits it falls back to the whole middle removed then added, so a rewrite stays linear. A 5,000-line pair with a few hundred edits diffs in a few milliseconds.
 
@@ -159,10 +159,10 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 
   const tabs = [
     {
-      label: 'Javascript',
+      label: 'JavaScript',
       value: 'js',
       language: 'javascript',
-      fileName: 'file name.js',
+      fileName: 'main.js',
       code:
         'export default {\n' +
         '  async fetch(request) {\n' +
@@ -181,10 +181,10 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
         '}'
     },
     {
-      label: 'Typescript',
+      label: 'TypeScript',
       value: 'ts',
       language: 'typescript',
-      fileName: 'file name.ts',
+      fileName: 'main.ts',
       code:
         'export default {\n' +
         '  async fetch(request: Request) {\n' +
@@ -224,10 +224,10 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 
   const tabs = [
     {
-      label: 'Javascript',
+      label: 'JavaScript',
       value: 'js',
       language: 'javascript',
-      fileName: 'file name.js',
+      fileName: 'main.js',
       code:
         'export default {\n' +
         '  async fetch(request) {\n' +
@@ -246,10 +246,10 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
         '}'
     },
     {
-      label: 'Typescript',
+      label: 'TypeScript',
       value: 'ts',
       language: 'typescript',
-      fileName: 'file name.ts',
+      fileName: 'main.ts',
       code:
         'export default {\n' +
         '  async fetch(request: Request) {\n' +
@@ -289,10 +289,10 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 
   const tabs = [
     {
-      label: 'Javascript',
+      label: 'JavaScript',
       value: 'js',
       language: 'javascript',
-      fileName: 'file name.js',
+      fileName: 'main.js',
       code:
         'export default {\n' +
         '  async fetch(request) {\n' +
@@ -311,10 +311,10 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
         '}'
     },
     {
-      label: 'Typescript',
+      label: 'TypeScript',
       value: 'ts',
       language: 'typescript',
-      fileName: 'file name.ts',
+      fileName: 'main.ts',
       code:
         'export default {\n' +
         '  async fetch(request: Request) {\n' +

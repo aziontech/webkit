@@ -1108,4 +1108,27 @@ describe('LogViewer', () => {
       }
     )
   })
+
+  it('keeps the first lines clear of the floating copy control', async () => {
+    await page.viewport(1280, 900)
+    try {
+      const { container } = render(() => h('div', { style: 'width: 720px' }, [h(Default)]))
+      const anchor = await vi.waitFor(() => {
+        const found = container.querySelector<HTMLElement>('[data-testid$="__copy-anchor"]')
+        expect(found).toBeTruthy()
+        return found as HTMLElement
+      })
+      const lines = Array.from(
+        container.querySelectorAll<HTMLElement>('[data-testid="log-viewer__line"]')
+      ).slice(0, 2)
+      expect(lines).toHaveLength(2)
+      const control = anchor.getBoundingClientRect()
+      for (const line of lines) {
+        const message = line.querySelector<HTMLElement>('[data-testid="log-viewer__line-message"]')
+        expect(message!.getBoundingClientRect().right).toBeLessThanOrEqual(control.left + 0.5)
+      }
+    } finally {
+      await page.viewport(414, 896)
+    }
+  })
 })

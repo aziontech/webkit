@@ -27,16 +27,17 @@ describe('PropertyFilter', () => {
     const input = view.getByRole('combobox')
     await fireEvent.focus(input)
     await fireEvent.update(input, 'Sta')
-    expect(options().map((o) => o.textContent)).toContain('StatusProperties')
+    expect(options().map((o) => o.textContent)).toContain('Status')
+    const sections = Array.from(
+      document.body.querySelectorAll('[data-testid="property-filter__section"]')
+    ).map((s) => s.textContent)
+    expect(sections).toEqual(['Properties'])
     await fireEvent.click(options()[0] as HTMLElement)
     expect((input as HTMLInputElement).value).toBe('Status ')
     expect(options().some((o) => o.textContent?.includes('Status !='))).toBe(true)
     await fireEvent.update(input, 'Status = ')
     await nextTick()
-    expect(options().map((o) => o.textContent)).toEqual([
-      'Status = ActiveValues',
-      'Status = InactiveValues'
-    ])
+    expect(options().map((o) => o.textContent)).toEqual(['Status = Active', 'Status = Inactive'])
     await fireEvent.keyDown(input, { key: 'ArrowDown' })
     expect(input.getAttribute('aria-activedescendant')).toBe(options()[0]?.id)
     await fireEvent.keyDown(input, { key: 'Enter' })
@@ -45,6 +46,26 @@ describe('PropertyFilter', () => {
       operation: 'and'
     })
     expect(view.getByTestId('property-filter__token').textContent).toContain('Status = Active')
+  })
+
+  it('names the properties once and caps the list width at the start of a wide field', async () => {
+    const view = render(PropertyFilter, {
+      props: { properties, style: 'width: 1200px' }
+    })
+    const input = view.getByRole('combobox')
+    await fireEvent.focus(input)
+    await waitFor(() => expect(options().length).toBe(2))
+    expect(options().map((o) => o.textContent)).toEqual(['Status', 'Requests'])
+    const list = document.body.querySelector<HTMLElement>(
+      '[data-testid="property-filter__suggestions"]'
+    ) as HTMLElement
+    expect(list.style.width).toBe('')
+    await waitFor(() =>
+      expect(list.style.getPropertyValue('--property-filter-suggestions-width')).toBe('1200px')
+    )
+    expect(list.className).toContain(
+      'w-[min(var(--property-filter-suggestions-width,100%),var(--container-md))]'
+    )
   })
 
   it('commits typed text, a typed property value, and free text on Enter', async () => {
@@ -288,7 +309,7 @@ describe('PropertyFilter', () => {
       expect(optionText()).toContain('=Equals')
       await fireEvent.click(options().find((o) => o.textContent === '=Equals') as HTMLElement)
       expect(input.value).toBe('status = ')
-      expect(optionText()).toEqual(['ActiveValues', 'InactiveValues'])
+      expect(optionText()).toEqual(['Active', 'Inactive'])
       await fireEvent.keyDown(input, { key: 'ArrowDown' })
       expect(input.getAttribute('aria-activedescendant')).toBe(options()[0]?.id)
       await fireEvent.keyDown(input, { key: 'Enter' })
@@ -307,7 +328,7 @@ describe('PropertyFilter', () => {
       await fireEvent.update(input, 'status = Act AND requests > 10')
       input.setSelectionRange(12, 12)
       await fireEvent.click(input)
-      expect(optionText()).toEqual(['ActiveValues', 'InactiveValues'])
+      expect(optionText()).toEqual(['Active', 'Inactive'])
       await fireEvent.keyDown(input, { key: 'ArrowDown' })
       await fireEvent.keyDown(input, { key: 'Enter' })
       expect(input.value).toBe('status = Active AND requests > 10')

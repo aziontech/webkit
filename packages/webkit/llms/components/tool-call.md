@@ -96,7 +96,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 ## Responsive
 
 - Container queries: none.
-- Narrow: when the row has less than 12rem for the title beside the status, the status drops to its own line under the title, so the title keeps the row's width. The title wraps to two lines before it clamps, and the tool name drops to its own line under it when the row has no room for both, breaking anywhere instead of truncating, so the whole name always shows; the status stays visible.
+- Narrow: the title wraps to two lines before it clamps, and the tool name drops to its own line under it when the row has no room for both, and an identifier longer than the row wraps inside the chip instead of truncating, so it is read whole at 320 px; the status stays visible.
 - Touch: 40 px row.
 - Reflow: code in details scrolls inside its block.
 

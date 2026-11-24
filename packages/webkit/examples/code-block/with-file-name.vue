@@ -3,10 +3,10 @@
 
   const tabs = [
     {
-      label: 'Javascript',
+      label: 'JavaScript',
       value: 'js',
       language: 'javascript',
-      fileName: 'file name.js',
+      fileName: 'main.js',
       code:
         'export default {\n' +
         '  async fetch(request) {\n' +

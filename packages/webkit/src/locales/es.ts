@@ -178,6 +178,8 @@ export const es: Messages = {
     },
     empty: 'No hay mensajes en cola',
     remove: 'Quitar de la cola',
+    showMore: 'Mostrar más',
+    showLess: 'Mostrar menos',
     attachments: {
       one: '{count} adjunto',
       other: '{count} adjuntos'
@@ -482,6 +484,8 @@ export const es: Messages = {
     previous30: 'Últimos 30 días',
     older: 'Más antiguas',
     emptyTitle: 'Aún no hay conversaciones.',
+    emptyDescription:
+      'Tus conversaciones con el asistente aparecen aquí después de que le preguntes algo.',
     delete: 'Eliminar {title}',
     newChat: 'Nuevo chat',
     search: 'Buscar conversaciones',
@@ -1165,8 +1169,8 @@ export const es: Messages = {
   table: {
     selectAll: 'Seleccionar todas las filas',
     selectRow: 'Seleccionar la fila {row}',
-    emptyTitle: 'Aún no hay resultados',
-    emptyDescription: 'Empieza creando tu primer recurso.',
+    emptyTitle: 'Aún no hay datos',
+    emptyDescription: 'Las filas aparecen aquí cuando haya datos para mostrar.',
     errorTitle: 'No se pudieron cargar los datos'
   },
   tableExportButton: {

@@ -35,14 +35,14 @@
     <Chart.Grid />
     <Chart.Axis type="y" />
     <Chart.Axis type="x" />
+    <Chart.Line
+      :ids="['p95']"
+      curve="monotone"
+    />
     <Chart.Reference
       :from="200"
       :to="260"
       label="Normal range"
-    />
-    <Chart.Line
-      :ids="['p95']"
-      curve="monotone"
     />
     <Chart.Reference
       :value="400"

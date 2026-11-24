@@ -69,7 +69,7 @@
     },
     {
       "name": "ErrorState",
-      "summary": "The request failed. A danger Alert takes the plot; the card around it keeps its title and controls.",
+      "summary": "The request failed. The error slot shows the cause and a Try again button in place of the plot, the same error state as BarList and DataTable; the card around it keeps its title and controls.",
       "file": "error-state.vue"
     },
     {

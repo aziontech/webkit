@@ -61,7 +61,7 @@
 
 - Groups render only when they have items; inside a group, newest first.
 - Active row: `data-active` and `aria-current="page"`, the selected surface.
-- Empty: one muted line, `No conversations yet.`
+- Empty: a title, `No conversations yet.`, over one muted line that says chats appear here after the first question; compact enough for a sidebar.
 - No match: while the search field holds text that no title contains, one muted line, `No conversations match “{query}”.`; New chat and the search field stay.
 - Loading: `aria-busy="true"` and five skeleton rows; no group headings.
 
@@ -84,19 +84,20 @@
 
 ## Internationalization
 
-| Key                              | English source                      | Override prop |
-| -------------------------------- | ----------------------------------- | ------------- |
-| `conversationHistory.label`      | `Conversation history`              | `ariaLabel`   |
-| `conversationHistory.today`      | `Today`                             | —             |
-| `conversationHistory.yesterday`  | `Yesterday`                         | —             |
-| `conversationHistory.previous7`  | `Previous 7 days`                   | —             |
-| `conversationHistory.previous30` | `Previous 30 days`                  | —             |
-| `conversationHistory.older`      | `Older`                             | —             |
-| `conversationHistory.emptyTitle` | `No conversations yet.`             | —             |
-| `conversationHistory.delete`     | `Delete {title}`                    | —             |
-| `conversationHistory.newChat`    | `New chat`                          | —             |
-| `conversationHistory.search`     | `Search conversations`              | —             |
-| `conversationHistory.noMatch`    | `No conversations match “{query}”.` | —             |
+| Key                                    | English source                                                          | Override prop |
+| -------------------------------------- | ----------------------------------------------------------------------- | ------------- |
+| `conversationHistory.label`            | `Conversation history`                                                  | `ariaLabel`   |
+| `conversationHistory.today`            | `Today`                                                                 | —             |
+| `conversationHistory.yesterday`        | `Yesterday`                                                             | —             |
+| `conversationHistory.previous7`        | `Previous 7 days`                                                       | —             |
+| `conversationHistory.previous30`       | `Previous 30 days`                                                      | —             |
+| `conversationHistory.older`            | `Older`                                                                 | —             |
+| `conversationHistory.emptyTitle`       | `No conversations yet.`                                                 | —             |
+| `conversationHistory.emptyDescription` | `Your chats with the assistant appear here after you ask it something.` | —             |
+| `conversationHistory.delete`           | `Delete {title}`                                                        | —             |
+| `conversationHistory.newChat`          | `New chat`                                                              | —             |
+| `conversationHistory.search`           | `Search conversations`                                                  | —             |
+| `conversationHistory.noMatch`          | `No conversations match “{query}”.`                                     | —             |
 
 - Groups use calendar days in the browser's time zone, not 24-hour windows.
 - Search compares titles case-insensitively with `toLocaleLowerCase` in the active locale.

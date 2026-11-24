@@ -167,6 +167,17 @@ describe('TransferList', () => {
         ).toBe(false)
       })
 
+      it('draws move-all as a double chevron, never the download-like arrow to a line', () => {
+        const { getByTestId } = render(Harness())
+        const glyph = (key: string) =>
+          getByTestId(`transfer-list-controls__${key}`).querySelector('i')?.className ?? ''
+        expect(glyph('move-all-to-target')).toContain('az-chevrons-right')
+        expect(glyph('move-all-to-source')).toContain('az-chevrons-left')
+        expect(glyph('move-to-target')).toContain('az-arrow-right')
+        for (const key of ['move-all-to-target', 'move-all-to-source'])
+          expect(glyph(key)).not.toContain('to-line')
+      })
+
       it('enables move-to-target once a source option is selected (hasSelection via inject)', async () => {
         const { getByTestId } = render(Harness())
         const moveSelected = getByTestId(

@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: cbe1534fcea39e076a8de3e900dcb7b952cf6f4068cf50583ae3ab685e338546
+checksum: 6e655dba5338bd924f694aef30c74be66bbfdbdac14f21fd22e829fb21b2e679
 created: 2026-11-15
 last_updated: 2026-11-24
 ---
@@ -355,8 +355,8 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 | -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------- |
 | `table.selectAll`                                                                                                                      | `Select all rows`                                                            | —             |
 | `table.selectRow`                                                                                                                      | `Select row {row}`                                                           | —             |
-| `table.emptyTitle`                                                                                                                     | `No results yet`                                                             | `empty` slot  |
-| `table.emptyDescription`                                                                                                               | `Get started by creating your first resource.`                               | `empty` slot  |
+| `table.emptyTitle`                                                                                                                     | `No data yet`                                                                | `empty` slot  |
+| `table.emptyDescription`                                                                                                               | `Rows appear here once there is data to show.`                               | `empty` slot  |
 | `table.errorTitle`                                                                                                                     | `Could not load the data`                                                    | `error` slot  |
 | `dataTable.reorderColumn` / `reorderHandle` / `reorderHint` / `reorderLocked` / `reorderMoved` / `reorderDropped` / `reorderCancelled` | `Order`, the grip name, the hint, the lock reason and the move announcements | —             |
 | `dataTable.loadMore` / `dataTable.loadingMore` / `dataTable.noMoreRows`                                                                | `Load more` · `Loading more rows` · `No more rows`                           | —             |

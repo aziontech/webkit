@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
   import { usePlacement } from '../../../../composables/use-placement'
   import { usePortalLocale, useTranslate } from '../../../../composables/use-translate'
@@ -33,6 +33,17 @@
   const { t, locale } = useTranslate({ propertyFilter: en.propertyFilter })
   const portalLocale = usePortalLocale()
   const panelEl = ref<HTMLElement | null>(null)
+  const anchorWidth = ref(0)
+  const readAnchor = (): void => {
+    anchorWidth.value = props.anchor?.getBoundingClientRect().width ?? 0
+  }
+  watch(
+    () => props.open,
+    (open) => {
+      if (open) readAnchor()
+    },
+    { immediate: true, flush: 'sync' }
+  )
 
   const sections = computed(() => groupSections(props.suggestions, props.uid, t))
   const numberFormat = computed(() => new Intl.NumberFormat(locale.value))
@@ -43,9 +54,16 @@
     isOpen: () => props.open,
     side: 'bottom',
     align: 'start',
-    sideOffset: 4,
-    matchTriggerWidth: true
+    sideOffset: 4
   })
+
+  watch(panelStyle, readAnchor, { flush: 'sync' })
+
+  const style = computed(() =>
+    anchorWidth.value > 0
+      ? { ...panelStyle.value, '--property-filter-suggestions-width': `${anchorWidth.value}px` }
+      : panelStyle.value
+  )
 
   const groupLabel = (group: Suggestion['group']): string => {
     if (group === 'properties') return t('propertyFilter.properties')
@@ -55,7 +73,7 @@
   }
 
   const SUGGESTIONS_CLASS =
-    'fixed z-(--z-control-overlay) flex max-h-80 flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) ' +
+    'fixed z-(--z-control-overlay) flex w-[min(var(--property-filter-suggestions-width,100%),var(--container-md))] max-h-80 flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) ' +
     'bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)'
 
   const OPTION_CLASS =
@@ -84,7 +102,7 @@
         :data-testid="`${testId}__suggestions`"
         :data-side="resolvedSide"
         :data-align="resolvedAlign"
-        :style="panelStyle"
+        :style="style"
         :class="SUGGESTIONS_CLASS"
       >
         <li
@@ -135,7 +153,7 @@
                 >{{ item.description }}</span
               >
               <span
-                v-else-if="groupLabel(item.group)"
+                v-else-if="!section.title && groupLabel(item.group)"
                 class="shrink-0 text-label-sm text-(--text-muted)"
                 >{{ groupLabel(item.group) }}</span
               >

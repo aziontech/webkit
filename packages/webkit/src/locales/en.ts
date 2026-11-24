@@ -289,6 +289,7 @@ export const conversationHistory = {
   previous30: 'Previous 30 days',
   older: 'Older',
   emptyTitle: 'No conversations yet.',
+  emptyDescription: 'Your chats with the assistant appear here after you ask it something.',
   delete: 'Delete {title}',
   newChat: 'New chat',
   search: 'Search conversations',
@@ -1015,8 +1016,8 @@ export const dataGrid = {
 export const table = {
   selectAll: 'Select all rows',
   selectRow: 'Select row {row}',
-  emptyTitle: 'No results yet',
-  emptyDescription: 'Get started by creating your first resource.',
+  emptyTitle: 'No data yet',
+  emptyDescription: 'Rows appear here once there is data to show.',
   errorTitle: 'Could not load the data'
 } as const
 
@@ -1457,6 +1458,8 @@ export const promptQueue = {
   },
   empty: 'No messages queued',
   remove: 'Remove from queue',
+  showMore: 'Show more',
+  showLess: 'Show less',
   attachments: {
     one: '{count} attachment',
     other: '{count} attachments'

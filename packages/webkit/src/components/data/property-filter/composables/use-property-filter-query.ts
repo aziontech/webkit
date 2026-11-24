@@ -86,6 +86,7 @@ const valueSuggestions = (context: QueryContext, needle: string, insert: Insert)
       group: 'values',
       label: quoteValue(o.value),
       description: o.label && o.label !== o.value ? o.label : '',
+      section: 'values',
       apply: () => insert(quoteValue(o.value))
     }))
 

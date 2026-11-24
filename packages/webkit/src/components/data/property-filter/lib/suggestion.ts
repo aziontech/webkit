@@ -12,7 +12,7 @@ export type Suggestion = {
   label: string
   description: string
   count?: number
-  section?: OperatorSection
+  section?: OperatorSection | 'properties' | 'values'
   apply: () => void
 }
 

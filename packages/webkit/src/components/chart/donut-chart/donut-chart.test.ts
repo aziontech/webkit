@@ -36,6 +36,23 @@ describe('DonutChart', () => {
     expect(mount({ 'data-testid': 'countries' }).getByTestId('countries')).toBeTruthy()
   })
 
+  it('keeps each legend value within one glance of its name on a wide container', async () => {
+    await page.viewport(1400, 900)
+    const { getByTestId, container } = render(() =>
+      h('div', { style: 'width: 1280px' }, [
+        h(DonutChart, { series: countries, ariaLabel: 'Top WAF threat requests by country' })
+      ])
+    )
+    const probe = document.createElement('div')
+    probe.style.width = 'var(--container-sm)'
+    container.appendChild(probe)
+    const cap = probe.getBoundingClientRect().width
+    expect(cap).toBeGreaterThan(0)
+    expect(getByTestId('donut-chart__legend').getBoundingClientRect().width).toBeLessThanOrEqual(
+      cap + 0.5
+    )
+  })
+
   it('maps type and size to data attributes', () => {
     const root = mount({ type: 'pie', size: 'large' }).getByTestId('donut-chart')
     expect(root.getAttribute('data-type')).toBe('pie')

@@ -151,7 +151,13 @@
 
   const copyInHeader = computed(() => canCopy.value && showLabelBar.value)
 
-  const copyGutter = computed(() => canCopy.value && !showLabelBar.value)
+  const copyInFileName = computed(() => canCopy.value && showFileNameBar.value)
+
+  const copyInTabs = computed(() => canCopy.value && showTabHeader.value && !showFileNameBar.value)
+
+  const copyGutter = computed(
+    () => canCopy.value && !showLabelBar.value && !showFileNameBar.value && !showTabHeader.value
+  )
 
   const labelText = computed(() => {
     if (props.title) return props.title
@@ -294,6 +300,19 @@
           :tab="tab"
         />
       </template>
+      <template
+        v-if="copyInTabs"
+        #actions
+      >
+        <CopyButton
+          :value="copyValue"
+          :ariaLabel="copyAriaLabel || t('codeBlock.copy')"
+          variant="ghost"
+          size="small"
+          :data-testid="`${testId}__copy`"
+          @copy="(event: MouseEvent, code: string) => emit('copy', event, code)"
+        />
+      </template>
     </CodeBlockTabs>
 
     <div
@@ -316,6 +335,15 @@
       >
         {{ activeTab.fileName }}
       </span>
+      <CopyButton
+        v-if="copyInFileName"
+        :value="copyValue"
+        :ariaLabel="copyAriaLabel || t('codeBlock.copy')"
+        variant="ghost"
+        size="small"
+        :data-testid="`${testId}__copy`"
+        @copy="(event: MouseEvent, code: string) => emit('copy', event, code)"
+      />
     </div>
 
     <div

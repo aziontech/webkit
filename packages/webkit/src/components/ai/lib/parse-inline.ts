@@ -77,9 +77,23 @@ function scanEmphasis(char: string): boolean {
   return true
 }
 
+function destinationEnd(from: number): number {
+  let depth = 0
+  for (let index = from; index < text.length; index += 1) {
+    const char = text[index]
+    if (char === '\\') index += 1
+    else if (char === '(') depth += 1
+    else if (char === ')') {
+      if (depth === 0) return index
+      depth -= 1
+    }
+  }
+  return text.indexOf(')', from)
+}
+
 function scanLink(close: number): boolean {
   flushPlain()
-  const end = text.indexOf(')', close + 2)
+  const end = destinationEnd(close + 2)
   const label = parseInline(text.slice(at + 1, close))
   if (end === -1) {
     out.push(...label)

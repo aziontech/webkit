@@ -79,10 +79,9 @@
       <div class="flex min-w-0 flex-1 flex-col">
         <h3
           :id="titleId"
-          dir="auto"
           class="m-0 truncate text-label-md text-(--text-default)"
         >
-          {{ title }}
+          <bdi>{{ title }}</bdi>
         </h3>
         <p
           v-if="description || meta"
