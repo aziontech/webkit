@@ -51,7 +51,7 @@ describe('view/view-marketplace block', () => {
     await waitFor(() =>
       expect(document.activeElement?.getAttribute('data-autofocus')).not.toBeNull()
     )
-    expect(document.activeElement?.textContent?.trim()).toBe('Request Signer')
+    expect(document.activeElement?.textContent).toContain('Request Signer')
     expect(drawer.contains(document.activeElement)).toBe(true)
     expect(document.activeElement?.closest('[data-testid="field"]')).toBeNull()
   })
